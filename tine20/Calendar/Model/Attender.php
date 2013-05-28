@@ -69,8 +69,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     protected $_validators = array(
         // tine record fields
         'id'                   => array('allowEmpty' => true,  'Alnum'),
-        /*
-        'created_by'           => array('allowEmpty' => true,  'Int'  ),
+        'created_by'           => array('allowEmpty' => true          ),
         'creation_time'        => array('allowEmpty' => true          ),
         'last_modified_by'     => array('allowEmpty' => true          ),
         'last_modified_time'   => array('allowEmpty' => true          ),
@@ -78,7 +77,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         'deleted_time'         => array('allowEmpty' => true          ),
         'deleted_by'           => array('allowEmpty' => true          ),
         'seq'                  => array('allowEmpty' => true,  'Int'  ),
-        */
         
         'cal_event_id'         => array('allowEmpty' => true/*,  'Alnum'*/),
         'user_id'              => array('allowEmpty' => false,        ),
@@ -562,7 +560,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     /**
      * get a single attendee from set of attendee
      * 
-     * @param Tinebase_Record_RecordSet $_attendee
+     * @param Tinebase_Record_RecordSet $_attendeeSet
+     * @param Calendar_Model_Attender $_attendee
      * @return Calendar_Model_Attender|NULL
      */
     public static function getAttendee($_attendeeSet, $_attendee)

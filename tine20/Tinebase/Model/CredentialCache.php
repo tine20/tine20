@@ -82,7 +82,7 @@ class Tinebase_Model_CredentialCache extends Tinebase_Record_Abstract
     {
         $array = parent::toArray($_recursive);
         
-        // remove highly sensitive data to prevent acidential apperance in logs etc.
+        // remove highly sensitive data to prevent accidental apperance in logs etc.
         unset($array['key']);
         unset($array['username']);
         unset($array['password']);

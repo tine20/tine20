@@ -172,7 +172,8 @@ abstract class Syncroton_Model_AXMLEntry extends Syncroton_Model_AEntry implemen
                 if (!ctype_print($value)) {
                     $value = $this->_removeControlChars($value);
                 }
-                $element->appendChild($element->ownerDocument->createTextNode($value));
+                
+                $element->appendChild($element->ownerDocument->createTextNode($this->_enforeUTF8($value)));
             }
         }
     }
@@ -186,6 +187,29 @@ abstract class Syncroton_Model_AXMLEntry extends Syncroton_Model_AEntry implemen
     protected function _removeControlChars($dirty)
     {
         return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $dirty);
+    }
+    
+    /**
+     * enforce >valid< utf-8 encoding
+     * 
+     * @param  string  $dirty  the string with maybe invalid utf-8 data
+     * @return string  string with valid utf-8
+     */
+    protected function _enforeUTF8($dirty)
+    {
+        if (function_exists('iconv')) {
+            if (($clean = @iconv('UTF-8', 'UTF-8//IGNORE', $dirty)) !== false) {
+                return $clean;
+            }
+        }
+        
+        if (function_exists('mb_convert_encoding')) {
+            if (($clean = mb_convert_encoding($dirty, 'UTF-8', 'UTF-8')) !== false) {
+                return $clean;
+            }
+        }
+    
+        return $dirty;
     }
     
     /**

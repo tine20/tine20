@@ -1,6 +1,6 @@
 # 
 # Translators:
-#   <sahkari@saunalahti.fi>, 2012.
+# sahkari <sahkari@saunalahti.fi>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -525,7 +525,7 @@ msgstr "Kutsun osallistuja on vastannut kutsuun."
 msgid "Unsupported method"
 msgstr "Ei tuettu metodi"
 
-#: js/PagingToolbar.js:300 js/MainScreenCenterPanel.js:196
+#: js/PagingToolbar.js:300 js/MainScreenCenterPanel.js:205
 msgid "Week"
 msgstr "Viikko"
 
@@ -533,139 +533,139 @@ msgstr "Viikko"
 msgid "Loading events, please wait..."
 msgstr "Ladataan tapahtumia, odota hetki..."
 
-#: js/MainScreenCenterPanel.js:149
+#: js/MainScreenCenterPanel.js:158
 msgid "Print Page"
 msgstr "Tulosta sivu"
 
-#: js/MainScreenCenterPanel.js:162
+#: js/MainScreenCenterPanel.js:171
 msgid "Sheet"
 msgstr "Arkki"
 
-#: js/MainScreenCenterPanel.js:177
+#: js/MainScreenCenterPanel.js:186
 msgid "Grid"
 msgstr "Ruudukko"
 
-#: js/MainScreenCenterPanel.js:187
+#: js/MainScreenCenterPanel.js:196
 msgid "Day"
 msgstr "Päivä"
 
-#: js/MainScreenCenterPanel.js:205
+#: js/MainScreenCenterPanel.js:214
 msgid "Month"
 msgstr "Kuukausi"
 
-#: js/MainScreenCenterPanel.js:484
+#: js/MainScreenCenterPanel.js:493
 msgid "Set my response"
 msgstr "Aseta vastaukseni"
 
-#: js/MainScreenCenterPanel.js:513
+#: js/MainScreenCenterPanel.js:522
 msgid "Copy {0}"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:527
+#: js/MainScreenCenterPanel.js:536
 msgid "Updating event in the past"
 msgstr "Päivitetyt tapahtumat "
 
-#: js/MainScreenCenterPanel.js:528
+#: js/MainScreenCenterPanel.js:537
 msgid "Update this event"
 msgstr "Päivitä tämä tapahtuma"
 
-#: js/MainScreenCenterPanel.js:529
+#: js/MainScreenCenterPanel.js:538
 msgid "Do not update this event"
 msgstr "Älä päivitä tätä tapahtumaa"
 
-#: js/MainScreenCenterPanel.js:533
+#: js/MainScreenCenterPanel.js:542
 msgid "Creating event in the past"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:534
+#: js/MainScreenCenterPanel.js:543
 msgid "Create this event"
 msgstr "Luo tämä tapahtuma"
 
-#: js/MainScreenCenterPanel.js:535
+#: js/MainScreenCenterPanel.js:544
 msgid "Do not create this event"
 msgstr "Älä luo tätä tapahtumaa"
 
-#: js/MainScreenCenterPanel.js:656
+#: js/MainScreenCenterPanel.js:665
 msgid "Update Event"
 msgstr "Päivitä tapahtuma"
 
-#: js/MainScreenCenterPanel.js:660
+#: js/MainScreenCenterPanel.js:669
 msgid "Update this event only"
 msgstr "Päivitä tämä tapahtuma ainoastaan"
 
-#: js/MainScreenCenterPanel.js:661
+#: js/MainScreenCenterPanel.js:670
 msgid "Update this and all future events"
 msgstr "Päivitä tämä ja tulevat tapahtumat"
 
-#: js/MainScreenCenterPanel.js:662
+#: js/MainScreenCenterPanel.js:671
 msgid "Update whole series"
 msgstr "Päivitä koko sarja"
 
-#: js/MainScreenCenterPanel.js:663
+#: js/MainScreenCenterPanel.js:672
 msgid "Update nothing"
 msgstr "Älä päivitä mitään"
 
-#: js/MainScreenCenterPanel.js:796
+#: js/MainScreenCenterPanel.js:805
 msgid "Please Change Selection"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:797
+#: js/MainScreenCenterPanel.js:806
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:810
+#: js/MainScreenCenterPanel.js:819
 msgid "Delete Event"
 msgstr "Poista tapahtuma"
 
-#: js/MainScreenCenterPanel.js:814
+#: js/MainScreenCenterPanel.js:823
 msgid "Delete this event only"
 msgstr "Poista tämä tapahtuma ainoastaan"
 
-#: js/MainScreenCenterPanel.js:815
+#: js/MainScreenCenterPanel.js:824
 msgid "Delete this and all future events"
 msgstr "Poista tämä ja tulevat tapahtumat"
 
-#: js/MainScreenCenterPanel.js:816
+#: js/MainScreenCenterPanel.js:825
 msgid "Delete whole series"
 msgstr "Poista kaikki sarjat"
 
-#: js/MainScreenCenterPanel.js:817
+#: js/MainScreenCenterPanel.js:826
 msgid "Delete nothing"
 msgstr "Älä poista mitään"
 
-#: js/MainScreenCenterPanel.js:868
+#: js/MainScreenCenterPanel.js:877
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Haluatko poistaa tämän tapahtuman?"
 msgstr[1] "Haluatko poistaa {0} valittua tapahtumaa?"
 
-#: js/MainScreenCenterPanel.js:1012
+#: js/MainScreenCenterPanel.js:1021
 msgid "Could not Print"
 msgstr "Tulostus epäonnistui"
 
-#: js/MainScreenCenterPanel.js:1012
+#: js/MainScreenCenterPanel.js:1021
 msgid "Sorry, your current view does not support printing."
 msgstr "Valittu näkymä ei tue tulostamista."
 
-#: js/MainScreenCenterPanel.js:1165
+#: js/MainScreenCenterPanel.js:1174
 msgid "Scheduling Conflict"
 msgstr "Aikataulu konflikti"
 
-#: js/MainScreenCenterPanel.js:1167
+#: js/MainScreenCenterPanel.js:1176
 msgid "The following attendee are busy at the requested time:"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1171
+#: js/MainScreenCenterPanel.js:1180
 msgid "Ignore Conflict"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1172
+#: js/MainScreenCenterPanel.js:1181
 msgid "Edit Event"
 msgstr "Muokkaa tapahtumaa"
 
-#: js/MainScreenCenterPanel.js:1173
+#: js/MainScreenCenterPanel.js:1182
 msgid "Cancel this action"
 msgstr "Peruuta tämä toiminto"
 
@@ -701,7 +701,7 @@ msgid "recurring event exception"
 msgstr ""
 
 #: js/EventDetailsPanel.js:294 js/AttendeeFilterModel.js:35
-#: js/AttendeeGridPanel.js:82 js/WestPanel.js:82 js/Model.js:373
+#: js/AttendeeGridPanel.js:82 js/WestPanel.js:90 js/Model.js:373
 msgid "Attendee"
 msgstr "Osallistuja"
 
@@ -947,42 +947,42 @@ msgstr ""
 msgid "Event details"
 msgstr "Tapahtuman tiedot"
 
-#: Controller/EventNotifications.php:256
+#: Controller/EventNotifications.php:261
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:259
+#: Controller/EventNotifications.php:264
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:263
+#: Controller/EventNotifications.php:268
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr ""
 
-#: Controller/EventNotifications.php:271
+#: Controller/EventNotifications.php:276
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:278
+#: Controller/EventNotifications.php:283
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr ""
 
-#: Controller/EventNotifications.php:289
+#: Controller/EventNotifications.php:294
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:293
+#: Controller/EventNotifications.php:298
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:297
+#: Controller/EventNotifications.php:302
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:301
+#: Controller/EventNotifications.php:306
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:305
+#: Controller/EventNotifications.php:310
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr ""

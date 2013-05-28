@@ -1,8 +1,8 @@
 # 
 # Translators:
-# Björn Balazs <transifex@lazs.de>, 2013.
-#  <p.schuele@metaways.de>, 2013.
-#   <p.schuele@metaways.de>, 2012.
+# Björn Balazs <transifex@lazs.de>, 2013
+# pschuele <p.schuele@metaways.de>, 2013
+# pschuele <p.schuele@metaways.de>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

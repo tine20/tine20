@@ -361,7 +361,7 @@ class Tinebase_Core
         Tinebase_Core::setupSession();
         
         if (Zend_Session::sessionExists()) {
-            Tinebase_Core::startSession('tinebase');
+            Tinebase_Core::startSession();
         }
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
@@ -608,11 +608,13 @@ class Tinebase_Core
                     case 'Redis':
                         $host = $config->caching->host ? $config->caching->host : ($config->caching->redis->host ? $config->caching->redis->host : 'localhost');
                         $port = $config->caching->port ? $config->caching->port : ($config->caching->redis->port ? $config->caching->redis->port : 6379);
+                        $prefix = (Setup_Controller::getInstance()->isInstalled('Tinebase')) ? Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() : 'TINESETUP';
+                        $prefix .= '_CACHE_';
                         $backendOptions = array(
                             'servers' => array(
                                 'host'   => $host,
                                 'port'   => $port,
-                                'prefix' =>  Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '_CACHE_'
+                                'prefix' => $prefix
                         ));
                         break;
                         
@@ -881,8 +883,10 @@ class Tinebase_Core
 
             switch($dbBackend) {
                 case self::PDO_MYSQL:
-                    if (! defined('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY')) {
-                        throw new Tinebase_Exception_Backend_Database('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY is not defined. Please check PDO extension.');
+                    foreach (array('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY', 'PDO::MYSQL_ATTR_INIT_COMMAND') as $pdoConstant) {
+                        if (! defined($pdoConstant)) {
+                            throw new Tinebase_Exception_Backend_Database($pdoConstant . ' is not defined. Please check PDO extension.');
+                        }
                     }
                     
                     // force some driver options
@@ -1005,7 +1009,9 @@ class Tinebase_Core
             && ($session->userLocale->toString() === $localeString || $localeString === 'auto')
         ) {
             $locale = $session->userLocale;
-            if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value: " . (string)$locale);
+
+            if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Got locale from session : " . (string)$locale);
             
         // ... create new locale object
         } else {
@@ -1020,6 +1026,9 @@ class Tinebase_Core
                     $localeString = self::getPreference()->getValue(Tinebase_Preference::LOCALE, 'auto');
                     if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                         . " Got locale from preference: '$localeString'");
+                } else {
+                    if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . " Try to detect the locale of the user (browser, environment, default)");
                 }
             }
             

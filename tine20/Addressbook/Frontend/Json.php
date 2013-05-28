@@ -159,9 +159,13 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function parseAddressData($address)
     {
         $result = Addressbook_Controller_Contact::getInstance()->parseAddressData($address);
+        $contactData = $this->_recordToJson($result['contact']);
+        
+        unset($contactData['jpegphoto']);
+        unset($contactData['salutation']);
         
         return array(
-            'contact'             => $this->_recordToJson($result['contact']),
+            'contact'             => $contactData,
             'unrecognizedTokens'  => $result['unrecognizedTokens'],
         );
     }

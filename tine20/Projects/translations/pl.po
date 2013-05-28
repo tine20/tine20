@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013.
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -123,7 +123,7 @@ msgstr "Proszę wybrać rolę uczestnika"
 msgid "Select Project"
 msgstr "Wybierz projekt"
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
 msgid "Role"
 msgstr "Rola"
 
@@ -139,19 +139,19 @@ msgstr "Dodawanie {0} uczestników do projektu"
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:134
+#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:135
 msgid "Number"
 msgstr "Ilość"
 
-#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:129
+#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:130
 msgid "Title"
 msgstr "Tytuł"
 
-#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:140
+#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:141
 msgid "Status"
 msgstr "Status"
 
-#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
+#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekt"
@@ -173,7 +173,7 @@ msgstr "Listy projektów"
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:170
+#: js/Model.js:75 js/ProjectEditDialog.js:171
 msgid "Description"
 msgstr "Opis"
 
@@ -193,7 +193,7 @@ msgstr "Czas utworzenia"
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "Uczestnik"
 
@@ -201,6 +201,6 @@ msgstr "Uczestnik"
 msgid "Attendee Role"
 msgstr "Rola uczestnika"
 
-#: js/ProjectEditDialog.js:184
+#: js/ProjectEditDialog.js:185
 msgid "Enter description"
 msgstr "Wprowadź opis"

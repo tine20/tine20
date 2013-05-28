@@ -13,14 +13,10 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Filesystem_StreamWrapperTest::main');
-}
-
 /**
  * Test class for Tinebase_User
  */
-class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
+class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -70,7 +66,7 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_FileSystem::getInstance()->clearStatCache();
-        Tinebase_FileSystem::getInstance()->clearDeletedFiles();
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
     }
     
     public function testMkdir()
@@ -177,9 +173,4 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(in_array('phpunit2.txt', $children));
     }
-}        
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Filesystem_StreamWrapperTest::main') {
-    Tinebase_Filesystem_StreamWrapperTest::main();
 }

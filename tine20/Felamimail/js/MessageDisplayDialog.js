@@ -251,13 +251,14 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
 });
 
 Tine.Felamimail.MessageDisplayDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
-    var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 700,
-        name: 'TineFelamimailMessageDisplayDialog_' + id,
-        contentPanelConstructor: 'Tine.Felamimail.MessageDisplayDialog',
-        contentPanelConstructorConfig: config
-    });
+    var record = (Ext.isString(config.record)) ? Ext.util.JSON.decode(config.record) : config.record,
+        id = (record && record.id) ? record.id : 0,
+        window = Tine.WindowFactory.getWindow({
+            width: 800,
+            height: 700,
+            name: 'TineFelamimailMessageDisplayDialog_' + id,
+            contentPanelConstructor: 'Tine.Felamimail.MessageDisplayDialog',
+            contentPanelConstructorConfig: config
+        });
     return window;
 };

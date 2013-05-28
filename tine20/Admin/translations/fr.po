@@ -1,7 +1,7 @@
 # 
 # Translators:
-#   <c.blin@decalog.net>, 2012.
-#   <inscription@arrakeen.net>, 2012.
+# cblin_decalog <c.blin@decalog.net>, 2012
+# Gurney <inscription@arrakeen.net>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

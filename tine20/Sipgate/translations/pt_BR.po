@@ -1,10 +1,11 @@
 # 
 # Translators:
+# DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-11-30 14:44+0000\n"
+"PO-Revision-Date: 2013-03-12 21:32+0000\n"
 "Last-Translator: DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -1518,7 +1519,7 @@ msgstr "A conta ainda não foi salva!"
 
 #: js/AccountEditDialog.js:96
 msgid "Please save yout account before syncing!"
-msgstr ""
+msgstr "Favor salvar sua conta antes da sincronização"
 
 #: js/AccountEditDialog.js:109
 msgid "The lines have been synced sucessfully!"
@@ -1552,7 +1553,7 @@ msgstr "Senha"
 
 #: js/AccountEditDialog.js:296
 msgid "Passwort Repeat"
-msgstr ""
+msgstr "Repetir a Senha"
 
 #: js/AccountEditDialog.js:302
 msgid "Is Validated"

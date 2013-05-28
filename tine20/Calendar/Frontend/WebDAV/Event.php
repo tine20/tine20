@@ -73,6 +73,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      * 
      * @param  Tinebase_Model_Container  $container
      * @param  stream|string             $vobjectData
+     * @return Calendar_Frontend_WebDAV_Event
      */
     public static function create(Tinebase_Model_Container $container, $name, $vobjectData)
     {
@@ -94,6 +95,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         }
         
         $event->setId($id);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Event to create: " . print_r($event->toArray(), TRUE));
         
         $filter =  new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId())
@@ -171,7 +175,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
                 Calendar_Controller_MSEventFacade::getInstance()->delete($event->getId());
             }
         }
-        
         // implicitly DECLINE event 
         else {
             $attendee = $event->attendee instanceof Tinebase_Record_RecordSet ? 
@@ -179,7 +182,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
                 NULL;
             
             // NOTE: don't allow organizer to instantly delete after update, otherwise we can't handle move @see{Calendar_Frontend_WebDAV_EventTest::testMoveOriginPersonalToShared}
-            if ($attendee && $attendee->user_id != $event->organizer || Tinebase_DateTime::now()->subSecond(10) > $event->last_modified_time) {
+            if ($attendee && ($attendee->user_id != $event->organizer || Tinebase_DateTime::now()->subSecond(20) > $event->last_modified_time)) {
                 $attendee->status = Calendar_Model_Attender::STATUS_DECLINED;
                 
                 $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
@@ -344,7 +347,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendat_Convert_Event_VCalendar_Factory for supported clients.");
-            throw new Sabre_DAV_Exception_Forbidden('Update denied for unknow client');
+            throw new Sabre_DAV_Exception_Forbidden('Update denied for unknown client');
         }
         
         if (is_resource($cardData)) {

@@ -1,12 +1,13 @@
 # 
 # Translators:
-#   <hyalavi@yahoo.com>, 2013.
+# hyalavi <hyalavi@yahoo.com>, 2013
+# ninja2006 <ninja2006@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:51+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-03-24 07:47+0000\n"
+"Last-Translator: ninja2006 <ninja2006@gmail.com>\n"
 "Language-Team: Persian (Iran) (http://www.transifex.com/projects/p/tine20/language/fa_IR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,11 +20,11 @@ msgstr ""
 
 #: Acl/Rights.php:91
 msgid "Manage shared project favorites"
-msgstr ""
+msgstr "مدیریت پروژه‌های مشترک موردعلاقه"
 
 #: Acl/Rights.php:92
 msgid "Create new shared project favorites"
-msgstr ""
+msgstr "ایجاد پروژه مشترک مورد علاقه جدید"
 
 #: Controller.php:79
 #, python-format
@@ -123,7 +124,7 @@ msgstr "لطفا نقش حاضرین در پروژه را انتخاب نمای�
 msgid "Select Project"
 msgstr "انتخاب پروژه"
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
 msgid "Role"
 msgstr "سِمَت"
 
@@ -139,19 +140,19 @@ msgstr "افزودن {0} شرکت کننده به پروژه"
 msgid "Tags"
 msgstr "برچسب"
 
-#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:134
+#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:135
 msgid "Number"
 msgstr "شماره"
 
-#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:129
+#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:130
 msgid "Title"
 msgstr "عنوان"
 
-#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:140
+#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:141
 msgid "Status"
 msgstr "وضعیت"
 
-#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
+#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Pluralized Translations\none: پروژه\nother: پروژه"
@@ -169,7 +170,7 @@ msgstr "فهرست پروژه ها"
 msgid "Quick search"
 msgstr "جستجوی سریع"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:170
+#: js/Model.js:75 js/ProjectEditDialog.js:171
 msgid "Description"
 msgstr "توضیحات"
 
@@ -189,7 +190,7 @@ msgstr "زمان ساخت"
 msgid "Created By"
 msgstr "ساخته شده توسط"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "شرکت کنندگان"
 
@@ -197,6 +198,6 @@ msgstr "شرکت کنندگان"
 msgid "Attendee Role"
 msgstr "نقش شرکت کنندگان"
 
-#: js/ProjectEditDialog.js:184
+#: js/ProjectEditDialog.js:185
 msgid "Enter description"
 msgstr "توضیحات"

@@ -1,11 +1,12 @@
 # 
 # Translators:
+# DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-11-28 11:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-03-12 21:35+0000\n"
+"Last-Translator: DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -173,7 +174,7 @@ msgstr "Campos personalizados"
 
 #: js/Admin.js:137
 msgid "Server Information"
-msgstr ""
+msgstr "Informações do Servidor"
 
 #: js/Admin.js:172
 msgid "Admin"
@@ -181,7 +182,7 @@ msgstr "Administrador"
 
 #: js/Admin.js:256
 msgid "Refresh"
-msgstr ""
+msgstr "Atualizar"
 
 #: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
 msgid "Computer Name"
@@ -655,7 +656,7 @@ msgstr "Diretório Inicial"
 
 #: js/user/EditDialog.js:381
 msgid "Login Shell"
-msgstr ""
+msgstr "Acessar o Shell"
 
 #: js/user/EditDialog.js:387
 msgid "Windows"

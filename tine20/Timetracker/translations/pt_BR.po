@@ -1,11 +1,12 @@
 # 
 # Translators:
+# DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:52+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-03-12 22:21+0000\n"
+"Last-Translator: DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,19 +31,19 @@ msgstr "Adicionar planilhas de tempo"
 
 #: Acl/Rights.php:128
 msgid "Manage shared timeaccount favorites"
-msgstr ""
+msgstr "Gerenciar contagem de tempo compartilhado de favoritos"
 
 #: Acl/Rights.php:129
 msgid "Create or update shared timeaccount favorites"
-msgstr ""
+msgstr "Criar ou atualizar contagem de tempo compartilhadas favoritas"
 
 #: Acl/Rights.php:132
 msgid "Manage shared timesheet favorites"
-msgstr ""
+msgstr "Gerenciar planilhas favoritas compartilhadas"
 
 #: Acl/Rights.php:133
 msgid "Create or update shared timesheet favorites"
-msgstr ""
+msgstr "Criar ou atualizar planilhas compartilhadas favoritas"
 
 #: Model/Timeaccount.php:43 js/TimeaccountEditDialog.js:117
 msgid "Cost Center"
@@ -398,7 +399,7 @@ msgstr "Atualização campo:"
 
 #: js/TimeAccountBilledFilterModel.js:24
 msgid "Time Account - Billed"
-msgstr ""
+msgstr "Hora da Conta - Faturado"
 
 #: js/DurationSlider.js:94
 msgid "{0}"

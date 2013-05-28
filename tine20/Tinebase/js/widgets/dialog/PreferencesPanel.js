@@ -135,7 +135,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                             }
                             
                             if (type == 'int') {
-                                return !! String(value).match(/\d+/);
+                                return !! String(value).match(/^\d+$/);
                             }
                             
                             return true;

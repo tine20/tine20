@@ -146,7 +146,7 @@ abstract class Syncroton_Data_AData implements Syncroton_Data_IData
      * (non-PHPdoc)
      * @see Syncroton_Data_IData::emptyFolderContents()
      */
-    public function emptyFolderContents($folderId)
+    public function emptyFolderContents($folderId, $options)
     {
         return true;
     }

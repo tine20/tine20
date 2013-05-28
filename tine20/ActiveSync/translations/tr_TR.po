@@ -1,6 +1,6 @@
 # 
 # Translators:
-#   <mail@demiveo.de>, 2012.
+# demiveo <mail@demiveo.de>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

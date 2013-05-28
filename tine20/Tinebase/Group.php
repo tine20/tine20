@@ -228,8 +228,7 @@ class Tinebase_Group
     }
     
     /**
-     * import groups from sync backend
-     *
+     * import and sync groups from sync backend
      */
     public static function syncGroups()
     {
@@ -238,13 +237,30 @@ class Tinebase_Group
         $groups = $groupBackend->getGroupsFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
         
         foreach ($groups as $group) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' sync group: ' . $group->name);
-            // update or create user in local sql backend
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                ' Sync group: ' . $group->name . ' - update or create group in local sql backend');
             try {
                 $sqlGroup = $groupBackend->getGroupById($group);
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                    ' Merge missing properties and update group.');
                 $groupBackend->mergeMissingProperties($group, $sqlGroup);
                 $groupBackend->updateGroupInSqlBackend($group);
+                
             } catch (Tinebase_Exception_Record_NotDefined $tern) {
+                // try to find group by name
+                try {
+                    $sqlGroup = $groupBackend->getGroupByName($group->name);
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                        ' Delete current sql group as it has the wrong id. Merge missing properties and create new group.');
+                    $groupBackend->mergeMissingProperties($group, $sqlGroup);
+                    $groupBackend->deleteGroupsInSqlBackend(array($sqlGroup->getId()));
+                    
+                } catch (Tinebase_Exception_Record_NotDefined $tern2) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                        ' Group not found by ID and name, adding new group.');
+                }
                 $groupBackend->addGroupInSqlBackend($group);
             }
         }

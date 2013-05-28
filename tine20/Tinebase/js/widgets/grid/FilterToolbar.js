@@ -221,7 +221,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }, this);
         
         // render static action buttons
-        for (action in this.actions) {
+        for (var action in this.actions) {
             this.actions[action].hidden = true;
             this.actions[action].render(this.bwrap);
         }
@@ -752,7 +752,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             var firstFilter = this.addFilter();
             
             // save buttons somewhere
-            for (action in this.actions) {
+            for (var action in this.actions) {
                 this.actions[action].hide();
                 this.bwrap.insertFirst(action == 'startSearch' ? this.searchButtonWrap : this.actions[action].getEl());
             }
@@ -904,7 +904,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 
                 // add non existing filters only if they where not created implicitly by server
                 else if (! filterData.implicit) {
-                    filterRecord = new this.record(filterData, filterData.id);
+                    // NOTE: don't use filterData.id here, it's a ext-comp-* which comes from a different session
+                    // and might be a totally different element yet.
+                    filterRecord = new this.record(filterData);
                     this.addFilter(filterRecord);
                 }
             }

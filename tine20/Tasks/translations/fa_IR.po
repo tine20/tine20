@@ -1,11 +1,12 @@
 # 
 # Translators:
+# ninja2006 <ninja2006@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-11-28 11:49+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-03-24 07:50+0000\n"
+"Last-Translator: ninja2006 <ninja2006@gmail.com>\n"
 "Language-Team: Persian (Iran) (http://www.transifex.com/projects/p/tine20/language/fa_IR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,11 +19,11 @@ msgstr ""
 
 #: Acl/Rights.php:96
 msgid "manage shared task lists"
-msgstr ""
+msgstr "مدیریت لیست وظایف مشترک"
 
 #: Acl/Rights.php:97
 msgid "Create new shared tasks lists"
-msgstr ""
+msgstr "ایجاد لیست وظایف مشترک جدید"
 
 #: Acl/Rights.php:100
 msgid "manage shared tasks favorites"

@@ -114,18 +114,21 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'label'      => 'Warranty', // _('Warranty')
                 'hidden'     => TRUE,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'type'       => 'datetime'
             ),
             'added_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Item added', // _('Item added')
                 'hidden'     => TRUE,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'type'       => 'datetime'
             ),
             'removed_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Item removed', // _('Item removed')
                 'hidden'     => TRUE,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'type'       => 'datetime'
             ),
             'active_number' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),

@@ -516,6 +516,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
             $event = new Calendar_Model_Event(array(), true);
         }
         
+        if($data instanceof Syncroton_Model_Event) {
+            $data->copyFieldsFromParent();
+        }
+        
         foreach($this->_mapping as $syncrotonProperty => $tine20Property) {
             if (!isset($data->$syncrotonProperty)) {
                 $event->$tine20Property = null;
@@ -914,7 +918,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
             $filter->addFilter($containerFilter);
         }
         
-        if(in_array($_filterType, $this->_filterArray)) {
+        if (in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
                 case Syncroton_Command_Sync::FILTER_2_WEEKS_BACK:
                     $from = Tinebase_DateTime::now()->subWeek(2);

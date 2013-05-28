@@ -21,7 +21,9 @@ ini_set('display_errors', 1);
 ini_set('log_errors', 1);
 
 // set default internal encoding
-iconv_set_encoding("internal_encoding", "UTF-8");
+if (extension_loaded('iconv')) {
+    iconv_set_encoding("internal_encoding", "UTF-8");
+}
 
 // set include path
 $paths = array(

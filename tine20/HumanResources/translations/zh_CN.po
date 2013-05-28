@@ -1,11 +1,12 @@
 # 
 # Translators:
+# yinxiaodong <xindev@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:52+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-03-10 04:47+0000\n"
+"Last-Translator: yinxiaodong <xindev@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/tine20/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,21 +19,21 @@ msgstr ""
 
 #: Acl/Rights.php:93
 msgid "edit private employee data"
-msgstr ""
+msgstr "编辑私人雇员数据"
 
 #: Acl/Rights.php:94
 msgid ""
 "Edit birthday, account data and other private information of employee "
 "records"
-msgstr ""
+msgstr "编辑的生日，雇员记录客户资料及其他私人信息"
 
 #: Controller.php:74
 msgid "You do not have admin rights on HumanResources"
-msgstr ""
+msgstr "你没有人力资源的管理权限"
 
 #: Config.php:48
 msgid "Freetime Type"
-msgstr ""
+msgstr "空余时间 Type"
 
 #: Config.php:50
 msgid "Possible free time definitions"
@@ -116,41 +117,41 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: js/EmployeeGridPanel.js:98 js/EmployeeEditDialog.js:227
+#: js/EmployeeGridPanel.js:98 js/EmployeeEditDialog.js:228
 msgid "Number"
-msgstr ""
+msgstr "号码"
 
-#: js/EmployeeGridPanel.js:105 js/EmployeeEditDialog.js:287
+#: js/EmployeeGridPanel.js:105 js/EmployeeEditDialog.js:288
 msgid "Full Name"
-msgstr ""
+msgstr "全名"
 
-#: js/EmployeeGridPanel.js:111 js/EmployeeEditDialog.js:292 js/Models.js:116
+#: js/EmployeeGridPanel.js:111 js/EmployeeEditDialog.js:293 js/Models.js:116
 msgid "Salutation"
-msgstr ""
+msgstr "称呼"
 
-#: js/EmployeeGridPanel.js:118 js/EmployeeEditDialog.js:300 js/Models.js:113
+#: js/EmployeeGridPanel.js:118 js/EmployeeEditDialog.js:301 js/Models.js:113
 msgid "Title"
-msgstr ""
+msgstr "头衔"
 
-#: js/EmployeeGridPanel.js:125 js/EmployeeEditDialog.js:304 js/Models.js:112
+#: js/EmployeeGridPanel.js:125 js/EmployeeEditDialog.js:305 js/Models.js:112
 msgid "First Name"
-msgstr ""
+msgstr "名"
 
-#: js/EmployeeGridPanel.js:132 js/EmployeeEditDialog.js:313 js/Models.js:115
+#: js/EmployeeGridPanel.js:132 js/EmployeeEditDialog.js:314 js/Models.js:115
 msgid "Last Name"
-msgstr ""
+msgstr "姓"
 
-#: js/EmployeeGridPanel.js:139 js/EmployeeEditDialog.js:382 js/Models.js:108
+#: js/EmployeeGridPanel.js:139 js/EmployeeEditDialog.js:383 js/Models.js:108
 msgid "Employment begin"
 msgstr ""
 
-#: js/EmployeeGridPanel.js:146 js/EmployeeEditDialog.js:387 js/Models.js:109
+#: js/EmployeeGridPanel.js:146 js/EmployeeEditDialog.js:388 js/Models.js:109
 msgid "Employment end"
 msgstr ""
 
 #: js/EmployeeGridPanel.js:153 js/EmployeeEditDialog.js:171
 msgid "Supervisor"
-msgstr ""
+msgstr "管理者"
 
 #: js/EmployeeGridPanel.js:162 js/EmployeeEditDialog.js:186 js/Models.js:117
 msgid "Health Insurance"
@@ -162,19 +163,19 @@ msgstr ""
 
 #: js/AdminPanel.js:68
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: js/AdminPanel.js:76
 msgid "OK"
-msgstr ""
+msgstr "确定"
 
 #: js/AdminPanel.js:204 js/ContractGridPanel.js:108
 msgid "Calendar"
-msgstr ""
+msgstr "日历"
 
 #: js/AdminPanel.js:205 js/ContractGridPanel.js:109
 msgid "Calendars"
-msgstr ""
+msgstr "日历"
 
 #: js/EmployeeEditDialog.js:118
 msgid "Dependent Windows"
@@ -186,104 +187,104 @@ msgid ""
 "cancel them before closing this one!"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:200 js/Models.js:333
+#: js/EmployeeEditDialog.js:201 js/Models.js:333
 msgid "Free Time"
 msgid_plural "Free Times"
-msgstr[0] ""
+msgstr[0] "空闲时间"
 
-#: js/EmployeeEditDialog.js:208 js/EmployeeEditDialog.js:221
+#: js/EmployeeEditDialog.js:209 js/EmployeeEditDialog.js:222
 #: js/FreeTimeEditDialog.js:130 js/FreeDayGridPanel.js:114
 #: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:166 js/Models.js:69
 msgid "Employee"
 msgid_plural "Employees"
-msgstr[0] ""
+msgstr[0] "员工"
 
-#: js/EmployeeEditDialog.js:239 js/Models.js:110
+#: js/EmployeeEditDialog.js:240 js/Models.js:110
 msgid "Account"
-msgstr ""
+msgstr "帐户"
 
-#: js/EmployeeEditDialog.js:258
+#: js/EmployeeEditDialog.js:259
 msgid "Apply contact data on form"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:327
+#: js/EmployeeEditDialog.js:328
 msgid "Personal Information"
-msgstr ""
+msgstr "个人信息"
 
-#: js/EmployeeEditDialog.js:337
+#: js/EmployeeEditDialog.js:338
 msgid "Country"
-msgstr ""
+msgstr "国家"
 
-#: js/EmployeeEditDialog.js:340
+#: js/EmployeeEditDialog.js:341
 msgid "Locality"
-msgstr ""
+msgstr "地区"
 
-#: js/EmployeeEditDialog.js:343
+#: js/EmployeeEditDialog.js:344
 msgid "Postalcode"
-msgstr ""
+msgstr "邮政编码"
 
-#: js/EmployeeEditDialog.js:346
+#: js/EmployeeEditDialog.js:347
 msgid "Region"
-msgstr ""
+msgstr "省/自治区/直辖市"
 
-#: js/EmployeeEditDialog.js:349
+#: js/EmployeeEditDialog.js:350
 msgid "Street"
-msgstr ""
+msgstr "街道"
 
-#: js/EmployeeEditDialog.js:352
+#: js/EmployeeEditDialog.js:353
 msgid "Street2"
-msgstr ""
+msgstr "街道2"
 
-#: js/EmployeeEditDialog.js:355
+#: js/EmployeeEditDialog.js:356
 msgid "E-Mail"
-msgstr ""
+msgstr "电子邮件"
 
-#: js/EmployeeEditDialog.js:358
+#: js/EmployeeEditDialog.js:359
 msgid "Telephone Number"
-msgstr ""
+msgstr "电话号码"
 
-#: js/EmployeeEditDialog.js:361
+#: js/EmployeeEditDialog.js:362
 msgid "Cell Phone Number"
-msgstr ""
+msgstr "手机号码"
 
-#: js/EmployeeEditDialog.js:365
+#: js/EmployeeEditDialog.js:366
 msgid "Birthday"
-msgstr ""
+msgstr "生日"
 
-#: js/EmployeeEditDialog.js:373
+#: js/EmployeeEditDialog.js:374
 msgid "Internal Information"
-msgstr ""
+msgstr "内部信息"
 
-#: js/EmployeeEditDialog.js:390 js/Models.js:114
+#: js/EmployeeEditDialog.js:391 js/Models.js:114
 msgid "Profession"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:398
+#: js/EmployeeEditDialog.js:399
 msgid "Banking Information"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:407
+#: js/EmployeeEditDialog.js:408
 msgid "Account Holder"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:410
+#: js/EmployeeEditDialog.js:411
 msgid "Account Number"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:413
+#: js/EmployeeEditDialog.js:414
 msgid "Bank Name"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:416
+#: js/EmployeeEditDialog.js:417
 msgid "Code Number"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:437 js/FreeTimeEditDialog.js:273
+#: js/EmployeeEditDialog.js:438 js/FreeTimeEditDialog.js:273
 #: js/FreeTimeGridPanel.js:170 js/Models.js:118 js/Models.js:381
 msgid "Description"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:451 js/FreeTimeEditDialog.js:287
+#: js/EmployeeEditDialog.js:452 js/FreeTimeEditDialog.js:287
 msgid "Enter description"
 msgstr ""
 
@@ -298,23 +299,23 @@ msgstr[0] ""
 
 #: js/ContractGridPanel.js:128
 msgid "Working Time Model"
-msgstr ""
+msgstr "工作模式"
 
 #: js/ContractGridPanel.js:131
 msgid "Vacation Days"
-msgstr ""
+msgstr "假期"
 
 #: js/ContractGridPanel.js:133
 msgid "Start Date"
-msgstr ""
+msgstr "开始日期"
 
 #: js/ContractGridPanel.js:136
 msgid "End Date"
-msgstr ""
+msgstr "结束日期"
 
 #: js/ContractGridPanel.js:139
 msgid "Feast Calendar"
-msgstr ""
+msgstr "Feast 日历"
 
 #: js/ContractGridPanel.js:177
 msgid "Edit Working Time"
@@ -363,11 +364,11 @@ msgstr ""
 
 #: js/DatePicker.js:42
 msgid "WK"
-msgstr ""
+msgstr "WK"
 
 #: js/DatePicker.js:63
 msgid "Loading calendar data..."
-msgstr ""
+msgstr "加载的日历数据…"
 
 #: js/WorkingTimeEditDialog.js:74
 msgid "Edit working time for {0} ({1} - {2})"

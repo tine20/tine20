@@ -1,11 +1,13 @@
 # 
 # Translators:
+# antacs <antonio-carlos.silva@serpro.gov.br>, 2013
+# DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-26 08:57+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-05-08 12:53+0000\n"
+"Last-Translator: antacs <antonio-carlos.silva@serpro.gov.br>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -266,7 +268,7 @@ msgstr "Números mínimos"
 
 #: js/AuthenticationPanel.js:604
 msgid "Forbid part of username in password"
-msgstr ""
+msgstr "Não é permitido usar parte do nome do usuário na senha"
 
 #: js/AuthenticationPanel.js:613
 msgid "Redirect Settings"
@@ -482,7 +484,7 @@ msgstr "Notificação para cliente local (servidor ou endereço IP)"
 
 #: js/EmailPanel.js:384
 msgid "SIEVE"
-msgstr "PENEIRA"
+msgstr "SIEVE"
 
 #: js/EmailPanel.js:425
 msgid "MySql Hostname"
@@ -628,7 +630,7 @@ msgstr "Caminho"
 
 #: js/ConfigManagerPanel.js:349
 msgid "Queue"
-msgstr ""
+msgstr "Fila"
 
 #: js/ConfigManagerPanel.js:390
 msgid "Session"

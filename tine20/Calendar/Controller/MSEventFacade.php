@@ -344,7 +344,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         // update exceptions
         foreach($exceptions as $exception) {
-            // do not attemt to set status of an deleted instance
+            // do not attempt to set status of an deleted instance
             if ($exception->is_deleted) continue;
             
             $exceptionAttendee = Calendar_Model_Attender::getAttendee($exception->attendee, $_attendee);
@@ -543,7 +543,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     protected function _toiTIP($_event)
     {
         if ($_event instanceof Tinebase_Record_RecordSet) {
-            foreach($_event as $idx => $event) {
+            foreach ($_event as $idx => $event) {
                 try {
                     $_event[$idx] = $this->_toiTIP($event);
                 } catch (Tinebase_Exception_AccessDenied $ade) {
@@ -567,16 +567,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
         
-        // filter out attendee w.o. email
-        $attendeeClone = clone $_event->attendee;
-        $filteredAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-        Calendar_Model_Attender::resolveAttendee($attendeeClone, FALSE);
-        foreach($_event->attendee->getEmail() as $idx => $email) {
-            if ($email) {
-                $filteredAttendee->addRecord($_event->attendee[$idx]);
-            }
-        }
-        $_event->attendee = $filteredAttendee;
+        $this->_filterAttendeeWithoutEmail($_event);
         
         // get alarms for baseEvents w.o. exdate
         if (! $_event->isRecurException() && ! $_event->exdate) {
@@ -600,6 +591,58 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         return $_event;
+    }
+    
+    /**
+     * filter out attendee w.o. email
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    protected function _filterAttendeeWithoutEmail($event)
+    {
+        $this->_fillResolvedAttendeeCache($event);
+        
+        $filteredAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        foreach ($event->attendee->getEmail() as $idx => $email) {
+            if ($email) {
+                $filteredAttendee->addRecord($event->attendee[$idx]);
+            }
+        }
+        $event->attendee = $filteredAttendee;
+    }
+
+    /**
+     * re add attendee w.o. email
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    protected function _addAttendeeWithoutEmail($event, $currentEvent)
+    {
+        if (! $currentEvent->attendee instanceof Tinebase_Record_RecordSet) {
+            return;
+        }
+        
+        $this->_fillResolvedAttendeeCache($currentEvent);
+        
+        if (! $event->attendee instanceof Tinebase_Record_RecordSet) {
+            $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        }
+        foreach ($currentEvent->attendee->getEmail() as $idx => $email) {
+            if (! $email) {
+                $event->attendee->addRecord($currentEvent->attendee[$idx]);
+            }
+        }
+    }
+    
+    /**
+     * this fills the resolved attendee cache without changing the event attendee recordset
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    protected function _fillResolvedAttendeeCache($event)
+    {
+        $attendeeClone = clone $event->attendee;
+        Calendar_Model_Attender::resolveAttendee($attendeeClone, FALSE);
     }
     
     /**
@@ -650,17 +693,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         // assert organizer
         $_event->organizer = $_event->organizer ?: ($_currentEvent->organizer ?: Tinebase_Core::getUser()->contact_id);
         
-        // re add attendee w.o. email
-        if ($_currentEvent->attendee instanceof Tinebase_Record_RecordSet) {
-            $attendeeClone = clone $_currentEvent->attendee;
-            $filteredAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-            Calendar_Model_Attender::resolveAttendee($attendeeClone, FALSE);
-            foreach($_currentEvent->attendee->getEmail() as $idx => $email) {
-                if (! $email) {
-                    $_event->attendee->addRecord($_currentEvent->attendee[$idx]);
-                }
-            }
-        }
+        $this->_addAttendeeWithoutEmail($_event, $_currentEvent);
         
         $CUAttendee = Calendar_Model_Attender::getAttendee($_event->attendee, $this->_calendarUser);
         $currentCUAttendee  = Calendar_Model_Attender::getAttendee($_currentEvent->attendee, $this->_calendarUser);
@@ -733,10 +766,17 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         // get ids for toUpdate
         $idxIdMap = $this->_filterEventsByDTStarts($_currentPersistentExceptions, $toUpdateDtSTart)->getId();
-        $migration['toUpdate']->setByIndices('id', $idxIdMap);
+        try {
+            $migration['toUpdate']->setByIndices('id', $idxIdMap);
+        } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+            // some debugging for 0008182: event with lots of exceptions breaks calendar sync
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($idxIdMap, TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($migration['toUpdate']->toArray(), TRUE));
+            throw $ternd;
+        }
         
         // filter exceptions marked as don't touch 
-        foreach($migration['toUpdate'] as $toUpdate) {
+        foreach ($migration['toUpdate'] as $toUpdate) {
             if ($toUpdate->seq === -1) {
                 $migration['toUpdate']->removeRecord($toUpdate);
             }
@@ -746,14 +786,14 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     }
     
     /**
-     * prepares an exception instance for persitence
+     * prepares an exception instance for persistence
      * 
      * @param  Calendar_Model_Event $_baseEvent
      * @param  Calendar_Model_Event $_exception
      * @return void
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _prepareException($_baseEvent, $_exception)
+    protected function _prepareException(Calendar_Model_Event $_baseEvent, Calendar_Model_Event $_exception)
     {
         if (! $_baseEvent->uid) {
             throw new Tinebase_Exception_InvalidArgument('base event has no uid');

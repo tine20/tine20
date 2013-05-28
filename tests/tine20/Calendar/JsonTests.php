@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -49,13 +49,15 @@ class Calendar_JsonTests extends Calendar_TestCase
     
     /**
      * testCreateEvent
+     * 
+     * @param $now should the current date be used
      */
-    public function testCreateEvent()
+    public function testCreateEvent($now = FALSE)
     {
         $scleverDisplayContainerId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_personas['sclever']->getId());
         $contentSeqBefore = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
         
-        $eventData = $this->_getEvent()->toArray();
+        $eventData = $this->_getEvent($now)->toArray();
         
         $tag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
             'name' => 'phpunit-' . substr(Tinebase_Record_Abstract::generateUID(), 0, 10),
@@ -84,7 +86,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     
     public function testStripWindowsLinebreaks()
     {
-        $e = $this->_getEvent();
+        $e = $this->_getEvent(TRUE);
         $e->description = 'Hello my friend,' . chr(13) . chr(10) .'bla bla bla.'  . chr(13) . chr(10) .'good bye.';
         $persistentEventData = $this->_uit->saveEvent($e->toArray());
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
@@ -97,7 +99,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testCreateEventWithNonExistantAttender()
     {
         $testEmail = 'unittestnotexists@example.org';
-        $eventData = $this->_getEvent()->toArray();
+        $eventData = $this->_getEvent(TRUE)->toArray();
         $eventData['attendee'][] = $this->_getUserTypeAttender($testEmail);
         
         $persistentEventData = $this->_uit->saveEvent($eventData);
@@ -133,7 +135,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testCreateEventWithAlarm()
     {
-        $eventData = $this->_getEventWithAlarm()->toArray();
+        $eventData = $this->_getEventWithAlarm(TRUE)->toArray();
         $persistentEventData = $this->_uit->saveEvent($eventData);
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
         
@@ -184,7 +186,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         $event->dtend->addHour(5);
         $event->description = 'are you kidding?';
         
-        
         $eventData = $event->toArray();
         foreach ($eventData['attendee'] as $key => $attenderData) {
             if ($eventData['attendee'][$key]['user_id'] != $this->_testUserContact->getId()) {
@@ -216,19 +217,33 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testSearchEvents()
     {
-        $eventData = $this->testCreateEvent();
+        $eventData = $this->testCreateEvent(TRUE); 
         
-        $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-        );
-        
+        $filter = $this->_getEventFilterArray();
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $resultEventData = $searchResultData['results'][0];
         
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
         return $searchResultData;
     }
-
+    
+    /**
+     * get filter array with container and period filter
+     * 
+     * @param string|int $containerId
+     * @return multitype:multitype:string Ambigous <number, multitype:>  multitype:string multitype:string
+     */
+    protected function _getEventFilterArray($containerId = NULL)
+    {
+        $containerId = ($containerId) ? $containerId : $this->_testCalendar->getId();
+        return array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $containerId),
+            array('field' => 'period', 'operator' => 'within', 'value' =>
+                array("from" => '2009-03-20 06:15:00', "until" => Tinebase_DateTime::now()->addDay(1)->toString())
+            )
+        );
+    }
+    
     /**
      * testSearchEvents with period filter
      * 
@@ -252,6 +267,24 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
     }
+    
+    /**
+     * #7688: Internal Server Error on calendar search
+     * 
+     * add period filter if none is given
+     * 
+     * https://forge.tine20.org/mantisbt/view.php?id=7688
+     */
+    public function testSearchEventsWithOutPeriodFilter()
+    {
+        $eventData = $this->testCreateRecurEvent();
+        $filter = array(array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()));
+        
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $returnedFilter = $searchResultData['filter'];
+        $this->assertEquals(2, count($returnedFilter), 'Two filters shoud have been returned!');
+        $this->assertTrue($returnedFilter[1]['field'] == 'period' || $returnedFilter[0]['field'] == 'period', 'One returned filter shoud be a period filter');
+    }
 
     /**
      * testSearchEvents with organizer = me filter
@@ -260,20 +293,19 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testSearchEventsWithOrganizerMeFilter()
     {
-        $eventData = $this->testCreateEvent();
+        $eventData = $this->testCreateEvent(TRUE);
         
-        $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-            array('field' => 'organizer', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CURRENTCONTACT),
-        );
+        $filter = $this->_getEventFilterArray();
+        $filter[] = array('field' => 'organizer', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CURRENTCONTACT);
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $resultEventData = $searchResultData['results'][0];
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
         
         // check organizer filter resolving
-        $this->assertTrue(is_array($searchResultData['filter'][1]['value']), 'organizer should be resolved: ' . print_r($searchResultData['filter'][1], TRUE));
-        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $searchResultData['filter'][1]['value']['id']);
+        $organizerfilter = $searchResultData['filter'][2];
+        $this->assertTrue(is_array($organizerfilter['value']), 'organizer should be resolved: ' . print_r($organizerfilter, TRUE));
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $organizerfilter['value']['id']);
     }
     
     /**
@@ -282,14 +314,10 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testSearchEventsWithAlarm()
     {
-        $eventData = $this->_getEventWithAlarm()->toArray();
+        $eventData = $this->_getEventWithAlarm(TRUE)->toArray();
         $persistentEventData = $this->_uit->saveEvent($eventData);
         
-        $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-        );
-        
-        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $searchResultData = $this->_uit->searchEvents($this->_getEventFilterArray(), array());
         $resultEventData = $searchResultData['results'][0];
         
         $this->_assertJsonEvent($persistentEventData, $resultEventData, 'failed to search event with alarm');
@@ -443,6 +471,61 @@ class Calendar_JsonTests extends Calendar_TestCase
     }
     
     /**
+     * testCreateRecurExceptionWithOtherUser
+     * 
+     * @see 0008172: displaycontainer_id not set when recur exception is created
+     */
+    public function testCreateRecurExceptionWithOtherUser()
+    {
+        $recurSet = array_value('results', $this->testSearchRecuringIncludes());
+        
+        // create persistent exception (just status update)
+        $persistentException = $recurSet[1];
+        $scleverAttender = $this->_findAttender($persistentException['attendee'], 'sclever');
+        $attendeeBackend = new Calendar_Backend_Sql_Attendee();
+        $status_authkey = $attendeeBackend->get($scleverAttender['id'])->status_authkey;
+        $scleverAttender['status'] = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $scleverAttender['status_authkey'] = $status_authkey;
+        foreach ($persistentException['attendee'] as $key => $attender) {
+            if ($attender['id'] === $scleverAttender['id']) {
+                $persistentException['attendee'][$key] = $scleverAttender;
+                break;
+            }
+        }
+        
+        // sclever has only READ grant
+        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_testUser->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_ADD      => true,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        ), array(
+            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        ))), TRUE);
+        
+        $unittestUser = Tinebase_Core::getUser();
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        
+        // create persistent exception
+        $createdException = $this->_uit->createRecurException($persistentException, FALSE, FALSE);
+        Tinebase_Core::set(Tinebase_Core::USER, $unittestUser);
+        
+        $sclever = $this->_findAttender($createdException['attendee'], 'sclever');
+        $this->assertEquals('Susan Clever', $sclever['user_id']['n_fn']);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $sclever['status'], 'status mismatch: ' . print_r($sclever, TRUE));
+        $this->assertTrue(is_array($sclever['displaycontainer_id']));
+        $this->assertEquals($this->_personasDefaultCals['sclever']['id'], $sclever['displaycontainer_id']['id']);
+    }
+    
+    /**
      * testUpdateRecurSeries
      */
     public function testUpdateRecurSeries()
@@ -547,15 +630,13 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testMeAsAttenderFilter()
     {
-        $eventData = $this->testCreateEvent();
+        $eventData = $this->testCreateEvent(TRUE);
         
-        $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-            array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT,
-            ))
-        );
+        $filter = $this->_getEventFilterArray();
+        $filter[] = array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT,
+        ));
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $resultEventData = $searchResultData['results'][0];
@@ -569,7 +650,8 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testFreeBusyCleanup()
     {
         // give fb grants from sclever
-        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['sclever'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        $scleverCal = Tinebase_Container::getInstance()->getContainerById($this->_personasDefaultCals['sclever']);
+        Tinebase_Container::getInstance()->setGrants($scleverCal->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas['sclever']->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
@@ -582,31 +664,30 @@ class Calendar_JsonTests extends Calendar_TestCase
         ), array(
             'account_id'    => $this->_testUser->getId(),
             'account_type'  => 'user',
-            Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ))), TRUE);
         
-        $eventData = $this->testCreateEvent();
-        $eventData['container_id'] = $this->_personasDefaultCals['sclever']->getId();
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        $eventData = $this->_getEvent()->toArray();
+        unset($eventData['organizer']);
+        $eventData['container_id'] = $scleverCal->getId();
         $eventData['attendee'] = array(array(
             'user_id' => $this->_personasContacts['sclever']->getId()
         ));
         $eventData['organizer'] = $this->_personasContacts['sclever']->getId();
-        
-        try {
-            $eventData = $this->_uit->saveEvent($eventData);
-        } catch (Exception $e) {
-            // add but not read
-        }
-        
-        $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_personasDefaultCals['sclever']->getId()),
-        );
-        
+        $eventData = $this->_uit->saveEvent($eventData);
+        $filter = $this->_getEventFilterArray($this->_personasDefaultCals['sclever']->getId());
         $searchResultData = $this->_uit->searchEvents($filter, array());
+        $this->assertTrue(! empty($searchResultData['results']), 'expected event in search result (search by sclever): ' 
+            . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
+        
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: ' 
+            . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         $eventData = $searchResultData['results'][0];
         
-        $this->assertFalse(array_key_exists('summary', $eventData), 'summary not empty');
+        $this->assertFalse(array_key_exists('summary', $eventData), 'summary not empty: ' . print_r($eventData, TRUE));
         $this->assertFalse(array_key_exists('description', $eventData), 'description not empty');
         $this->assertFalse(array_key_exists('tags', $eventData), 'tags not empty');
         $this->assertFalse(array_key_exists('notes', $eventData), 'notes not empty');
@@ -866,7 +947,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $editableResoureData = $this->testSaveResource();
         $nonEditableResoureData = $this->testSaveResource(array('readGrant'));
         
-        $event = $this->_getEvent();
+        $event = $this->_getEvent(TRUE);
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
                 'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
@@ -986,6 +1067,28 @@ class Calendar_JsonTests extends Calendar_TestCase
             }
         }
     }
+
+    /**
+     * testExdateUpdateThisAndFutureWithRruleUntil
+     * 
+     * @see 0008244: "rrule until must not be before dtstart" when updating recur exception (THISANDFUTURE)
+     */
+    public function testExdateUpdateThisAndFutureWithRruleUntil()
+    {
+        $events = $this->testCreateRecurException();
+        
+        $exception = $this->_getException($events, 1);
+        $exception['dtstart'] = Tinebase_DateTime::now()->toString();
+        $exception['dtend'] = Tinebase_DateTime::now()->addHour(1)->toString();
+        
+        // move exception
+        $updatedEvent = $this->_uit->saveEvent($exception);
+        // try to update the whole series
+        $updatedEvent['summary'] = 'new summary';
+        $updatedEvent = $this->_uit->saveEvent($updatedEvent, FALSE, Calendar_Model_Event::RANGE_THISANDFUTURE);
+        
+        $this->assertEquals('new summary', $updatedEvent['summary'], 'summary not changed in event: ' . print_r($updatedEvent, TRUE));
+    }
     
     /**
      * testExdateUpdateThisAndFutureRemoveAttendee
@@ -1094,13 +1197,9 @@ class Calendar_JsonTests extends Calendar_TestCase
      * 
      * @see 0007690: allow to update the whole series / thisandfuture when updating recur exceptions
      * @see 0007826: add attendee changes to modlog
-     * 
-     * @todo activate!
      */
     public function testExdateUpdateAllWithModlogAddAttender()
     {
-        $this->markTestSkipped('need to resolve #7826 first');
-        
         $events = $this->testCreateRecurException();
         $baseEvent = $events['results'][0];
         $exception = $this->_getException($events, 1);
@@ -1114,7 +1213,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         // check recent changes (needs to contain attendee change)
         $exdate = Calendar_Controller_Event::getInstance()->get($exception['id']);
         $recentChanges = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Calendar', $baseEvent['id'], NULL, 'Sql', $exdate->creation_time);
-        $this->assertEquals(4, count($recentChanges), 'Did not get all recent changes: ' . print_r($recentChanges->toArray(), TRUE));
+        $this->assertGreaterThan(2, count($recentChanges), 'Did not get all recent changes: ' . print_r($recentChanges->toArray(), TRUE));
         $this->assertTrue(in_array('attendee', $recentChanges->modified_attribute), 'Attendee change missing: ' . print_r($recentChanges->toArray(), TRUE));
         
         $exception['attendee'][] = $this->_getUserTypeAttender('unittestnotexists@example.com');
@@ -1127,6 +1226,78 @@ class Calendar_JsonTests extends Calendar_TestCase
             } else {
                 $this->assertEquals(4, count($event['attendee']), 'Attendee count mismatch: ' . print_r($event, TRUE));
             }
+        }
+    }
+
+    /**
+     * testConcurrentAttendeeChangeAdd
+     * 
+     * @see 0008078: concurrent attendee change should be merged
+     */
+    public function testConcurrentAttendeeChangeAdd()
+    {
+        $eventData = $this->testCreateEvent();
+        $numAttendee = count($eventData['attendee']);
+        $eventData['attendee'][$numAttendee] = array(
+            'user_id' => $this->_personasContacts['pwulf']->getId(),
+        );
+        $this->_uit->saveEvent($eventData);
+        
+        $eventData['attendee'][$numAttendee] = array(
+            'user_id' => $this->_personasContacts['jsmith']->getId(),
+        );
+        $event = $this->_uit->saveEvent($eventData);
+        
+        $this->assertEquals(4, count($event['attendee']), 'both new attendee (pwulf + jsmith) should be added: ' . print_r($event['attendee'], TRUE));
+    }
+
+    /**
+     * testConcurrentAttendeeChangeRemove
+     * 
+     * @see 0008078: concurrent attendee change should be merged
+     */
+    public function testConcurrentAttendeeChangeRemove()
+    {
+        $eventData = $this->testCreateEvent();
+        $currentAttendee = $eventData['attendee'];
+        unset($eventData['attendee'][1]);
+        $event = $this->_uit->saveEvent($eventData);
+        
+        $eventData['attendee'] = $currentAttendee;
+        $numAttendee = count($eventData['attendee']);
+        $eventData['attendee'][$numAttendee] = array(
+            'user_id' => $this->_personasContacts['pwulf']->getId(),
+        );
+        $event = $this->_uit->saveEvent($eventData);
+        
+        $this->assertEquals(2, count($event['attendee']), 'one attendee should added and one removed: ' . print_r($event['attendee'], TRUE));
+    }
+
+    /**
+     * testConcurrentAttendeeChangeUpdate
+     * 
+     * @see 0008078: concurrent attendee change should be merged
+     */
+    public function testConcurrentAttendeeChangeUpdate()
+    {
+        $eventData = $this->testCreateEvent();
+        $currentAttendee = $eventData['attendee'];
+        $adminIndex = ($eventData['attendee'][0]['user_id']['n_fn'] === 'Susan Clever') ? 1 : 0;
+        $eventData['attendee'][$adminIndex]['status'] = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $event = $this->_uit->saveEvent($eventData);
+        
+        $loggedMods = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(new Calendar_Model_Attender($eventData['attendee'][$adminIndex]), 1);
+        $this->assertEquals(1, count($loggedMods), 'attender modification has not been logged');
+        
+        $eventData['attendee'] = $currentAttendee;
+        $scleverIndex = ($adminIndex === 1) ? 0 : 1;
+        $attendeeBackend = new Calendar_Backend_Sql_Attendee();
+        $eventData['attendee'][$scleverIndex]['status_authkey'] = $attendeeBackend->get($eventData['attendee'][$scleverIndex]['id'])->status_authkey;
+        $eventData['attendee'][$scleverIndex]['status'] = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $event = $this->_uit->saveEvent($eventData);
+
+        foreach ($event['attendee'] as $attender) {
+            $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $attender['status'], 'both attendee status should be TENTATIVE: ' . print_r($attender, TRUE));
         }
     }
 }

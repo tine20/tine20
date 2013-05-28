@@ -198,7 +198,11 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
                 $this->fail('Expected Tinebase_Exception_PasswordPolicyViolation with message: ' . $expectedMessage . ' / used pw: ' . $pw);
             }
         } catch (Tinebase_Exception_PasswordPolicyViolation $tppv) {
-            $this->assertContains('Password failed to match the following policy requirements: ' . $expectedMessage, $tppv->getMessage());
+            if ($pwIsValid) {
+                $this->fail('pw is valid, got message: ' . $tppv->getMessage());
+            } else {
+                $this->assertContains('Password failed to match the following policy requirements: ' . $expectedMessage, $tppv->getMessage());
+            }
         }
     }
 
@@ -217,5 +221,6 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         $this->_assertPolicy('cle', 'pwPolicyForbidUsername');
         $this->_assertPolicy('ver', 'pwPolicyForbidUsername');
         $this->_assertPolicy('sclever123', '', TRUE); // valid
+        $this->_assertPolicy('', '', TRUE); // valid
     }
 }

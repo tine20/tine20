@@ -1,8 +1,8 @@
 # 
 # Translators:
-# Michael Spahn <ms@ansta.lt>, 2013.
-#   <ms@ansta.lt>, 2012.
-#  <p.schuele@metaways.de>, 2013.
+# mspahn <ms@ansta.lt>, 2013
+# mspahn <ms@ansta.lt>, 2012
+# pschuele <p.schuele@metaways.de>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -62,35 +62,35 @@ msgstr "Beschreibung"
 msgid "Location"
 msgstr "Standort"
 
-#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:290
+#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:291
 msgid "Invoice date"
 msgstr "Rechnungsdatum"
 
-#: Model/InventoryItem.php:106 js/InventoryItemEditDialog.js:284
+#: Model/InventoryItem.php:107 js/InventoryItemEditDialog.js:285
 msgid "Invoice"
 msgstr "Rechnung"
 
-#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:264
+#: Model/InventoryItem.php:112 js/InventoryItemEditDialog.js:264
 msgid "Price"
 msgstr "Preis"
 
-#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:269
+#: Model/InventoryItem.php:117 js/InventoryItemEditDialog.js:269
 msgid "Cost centre"
 msgstr "Kostenstelle"
 
-#: Model/InventoryItem.php:121 js/InventoryItemEditDialog.js:175
+#: Model/InventoryItem.php:122 js/InventoryItemEditDialog.js:175
 msgid "Warranty"
 msgstr "Garantie"
 
-#: Model/InventoryItem.php:126
+#: Model/InventoryItem.php:128
 msgid "Item added"
 msgstr "Aufgenommen"
 
-#: Model/InventoryItem.php:131
+#: Model/InventoryItem.php:134
 msgid "Item removed"
 msgstr "Entfernt"
 
-#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:296
+#: Model/InventoryItem.php:148 js/InventoryItemEditDialog.js:297
 msgid "Depreciate"
 msgstr "Abschreibung"
 

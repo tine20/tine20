@@ -27,6 +27,9 @@ class Syncroton_Model_EventException extends Syncroton_Model_AXMLEntry
     protected $_dateTimeFormat = "Ymd\THis\Z";
     
     protected $_properties = array(
+        'AirSyncBase' => array(
+            'body'                    => array('type' => 'container', 'class' => 'Syncroton_Model_EmailBody')
+        ),
         'Calendar' => array(
             'allDayEvent'             => array('type' => 'number'),
             'appointmentReplyTime'    => array('type' => 'datetime'),

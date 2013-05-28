@@ -61,6 +61,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * 
      * @param Felamimail_Model_Message $_message
      * @return Felamimail_Model_Message
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function sendMessage(Felamimail_Model_Message $_message)
     {
@@ -75,7 +76,17 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $this->_resolveOriginalMessage($_message);
 
         $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
-        $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients);
+        
+        try {
+            $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients);
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $e);
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            $message = sprintf($translation->_('Error: %s'), $e->getMessage());
+            $tesg = new Tinebase_Exception_SystemGeneric($message);
+            $tesg->setTitle($translation->_('Could not send message'));
+            throw $tesg;
+        }
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);

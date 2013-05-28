@@ -546,6 +546,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $messageBody = $this->_getAndDecodeMessageBody($message, $_partId, $_contentType, $_account);
         
+        // activate garbage collection (@see 0008216: HTMLPurifier/TokenFactory.php : Allowed memory size exhausted)
+        $cycles = gc_collect_cycles();
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Current mem usage after gc_collect_cycles(' . $cycles . ' ): ' . memory_get_usage()/1024/1024);
+        
         if ($cacheBody) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Put message body into Tinebase cache (for 24 hours).');
             $cache->save($messageBody, $cacheId, array('getMessageBody'), 86400);
@@ -773,7 +778,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $path = ($config->caching && $config->caching->active && $config->caching->path) 
             ? $config->caching->path : Tinebase_Core::getTempDir();
 
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Purifying html body. (cache path: ' . $path .')');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Purifying html body. (cache path: ' . $path .')');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Current mem usage before purify: ' . memory_get_usage()/1024/1024);
         
         $config = HTMLPurifier_Config::createDefault();
         $config->set('HTML.DefinitionID', 'purify message body contents');
@@ -805,7 +813,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $purifier = new HTMLPurifier($config);
         $content = $purifier->purify($_content);
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Current mem usage after purify: ' . memory_get_usage()/1024/1024);
+
         return $content;
     }
     

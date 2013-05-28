@@ -115,7 +115,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ' . print_r($responses, TRUE));
         
         $responseString = ($responses) ? implode(',', array_keys($responses)) : 'NULL';
-        echo "\nTine 2.0 scheduler run (" . $responseString . ') complete.';
+        echo "Tine 2.0 scheduler run (" . $responseString . ") complete.\n";
         
         return TRUE;
     }
@@ -223,15 +223,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         foreach ($args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
-                    if ($dateString) {
-                        echo "\nRemoving all access log entries before {$dateString} ...";
-                        $where = array(
-                            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $dateString)
-                        );
-                        $db->delete(SQL_TABLE_PREFIX . $table, $where);
-                    } else {
-                        $db->query('TRUNCATE ' . SQL_TABLE_PREFIX . $table);
-                    }
+                    $date = ($dateString) ? new Tinebase_DateTime($dateString) : NULL;
+                    Tinebase_AccessLog::getInstance()->clearTable($date);
                     break;
                 case 'async_job':
                     $where = ($dateString) ? array(
@@ -247,7 +240,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable($dateString);
                     break;
                 case 'temp_files':
-                    Tinebase_TempFile::getInstance()->clearTable($dateString);
+                    Tinebase_TempFile::getInstance()->clearTableAndTempdir($dateString);
                     break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
@@ -401,10 +394,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if ($dbcheck) {
             echo "DB CONNECTION OK | connecttime={$time}ms;;;;\n";
             return 0;
-        } else {
-            echo $message . "\n";
-            return 2;
-        }
+        } 
+        
+        echo $message . "\n";
+        return 2;
     }
     
     /**
@@ -448,7 +441,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     * nagios monitoring for tine 2.0 async cronjob run
     *
     * @return integer
+    * 
     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+    * @see 0008038: monitoringCheckCron -> check if cron did run in the last hour
     */
     public function monitoringCheckCron()
     {
@@ -475,6 +470,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $result = 1;
                 } else if ($lastJob->status === Tinebase_Model_AsyncJob::STATUS_FAILURE) {
                     $message .= ': LAST JOB FAILED';
+                    $result = 1;
+                } else if (Tinebase_DateTime::now()->isLater($lastJob->start_time->addHour(1))) {
+                    $message .= ': NO JOB IN THE LAST HOUR';
                     $result = 1;
                 } else {
                     $message = 'CRON OK';
@@ -522,6 +520,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
      * 
+     * example: $ php tine20.php --username pschuele --method Tinebase.undo -d 
+     *   -- record_type=Addressbook_Model_Contact modification_time=2013-05-08 modification_account=3263
+     * 
      * @param Zend_Console_Getopt $opts
      */
     public function undo(Zend_Console_Getopt $opts)
@@ -530,18 +531,22 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return FALSE;
         }
         
-        $data = $this->_parseArgs($opts, array('record_type', 'modification_time', 'modification_account'));
+        $data = $this->_parseArgs($opts, array('modification_time'));
         
         // build filter from params
         $filterData = array();
+        $allowedFilters = array('record_type', 'modification_time', 'modification_account', 'record_id');
         foreach ($data as $key => $value) {
-            $operator = ($key === 'modification_time') ? 'within' : 'equals';
-            $filterData[] = array('field' => $key, 'operator' => $operator, 'value' => $value);
+            if (in_array($key, $allowedFilters)) {
+                $operator = ($key === 'modification_time') ? 'within' : 'equals';
+                $filterData[] = array('field' => $key, 'operator' => $operator, 'value' => $value);
+            }
         }
         $filter = new Tinebase_Model_ModificationLogFilter($filterData);
         
         $dryrun = $opts->d;
-        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, FALSE, $dryrun);
+        $overwrite = (isset($data['overwrite']) && $data['overwrite']) ? TRUE : FALSE;
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $overwrite, $dryrun);
         
         if (! $dryrun) {
             echo 'Reverted ' . $result['totalcount'] . " change(s)\n";
@@ -565,6 +570,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function createAllDemoData($_opts)
     {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+        
         // fetch all applications
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
         
@@ -593,5 +602,23 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $class->createDemoData($_opts);
             }
         }
+    }
+    
+    /**
+     * clears deleted files from filesystem + database
+     * @return boolean
+     */
+    public function clearDeletedFiles()
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+        
+        $writer = new Zend_Log_Writer_Stream('php://output');
+        $writer->addFilter(new Zend_Log_Filter_Priority(6));
+        Tinebase_Core::getLogger()->addWriter($writer);
+        
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
     }
 }

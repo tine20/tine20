@@ -74,10 +74,11 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
      * @return {Boolean} false if flag was already set before, else true
      */
     addFlag: function(flag) {
+        Tine.log.info('Tine.Felamimail.Model.Message::addFlag - add flag ' + flag);
+
         if (! this.hasFlag(flag)) {
             var flags = Ext.unique(this.get('flags'));
             flags.push(flag);
-            
             this.set('flags', flags);
             return true;
         }
@@ -104,12 +105,23 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
         if (this.hasFlag(flag)) {
             var flags = Ext.unique(this.get('flags'));
             flags.remove(flag);
-            
             this.set('flags', flags);
             return true;
         }
         
         return false;
+    },
+    
+    /**
+     * returns true if given record obsoletes this one
+     * 
+     * NOTE: this does only work for Tine.widgets.grid.GridPanel::onStoreBeforeLoadRecords record comparison
+     * 
+     * @param {Tine.Tinebase.data.Record} record
+     * @return {Boolean}
+     */
+    isObsoletedBy: function(record) {
+        return record.mtime || record.ctime > this.ctime;
     }
 });
 

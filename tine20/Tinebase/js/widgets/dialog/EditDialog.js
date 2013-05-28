@@ -668,7 +668,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // we need to sync record before validating to let (sub) panels have 
         // current data of other panels
         this.onRecordUpdate();
-
+        
+        // quit copy mode
+        this.copyRecord = false;
+        
         if (this.isValid()) {
             if (this.mode !== 'local') {
                 this.recordProxy.saveRecord(this.record, {

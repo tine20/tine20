@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -219,5 +219,23 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
             $this->assertEquals(2, count($foundDestinations));
             $this->assertTrue($foundDestinations == $destinations, print_r($destinations, TRUE));
         }
+    }
+    
+    /**
+     * testLotsOfAliases
+     * 
+     * @see 0007194: alias table in user admin dialog truncated
+     */
+    public function testLotsOfAliases()
+    {
+        $user = $this->testAddUser();
+        $aliases = array();
+        for ($i = 0; $i < 100; $i++) {
+            $aliases[] = 'blablablablablablablablalbalbbl' . $i . '@' . $this->_mailDomain;
+        }
+        $user->smtpUser->emailAliases = $aliases;
+        $testUser = $this->_backend->updateUser($user);
+        
+        $this->assertEquals(100, count($testUser->smtpUser->emailAliases));
     }
 }

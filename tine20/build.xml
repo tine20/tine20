@@ -62,9 +62,9 @@
         <reflexive>
             <filterchain>
                 <replaceregexp>
-                    <regexp pattern="Tine\.clientVersion\.buildType[^;]*" replace='Tine.clientVersion.buildType="RELEASE"' modifiers="i" />
-                    <regexp pattern="Tine\.clientVersion\.buildDate[^;]*" replace='Tine.clientVersion.buildDate="${buildDate}"' modifiers="i"/>
-                    <regexp pattern="Tine\.clientVersion\.buildRevision[^;]*" replace='Tine.clientVersion.codeName="${buildRevision}"' modifiers="i"/>
+                    <regexp pattern="Tine\.clientVersion\.buildType\s*=[^=]{1}[^;]*" replace='Tine.clientVersion.buildType="RELEASE"' modifiers="i" />
+                    <regexp pattern="Tine\.clientVersion\.buildDate\s*=[^=]{1}[^;]*" replace='Tine.clientVersion.buildDate="${buildDate}"' modifiers="i"/>
+                    <regexp pattern="Tine\.clientVersion\.buildRevision\s*=[^=]{1}[^;]*" replace='Tine.clientVersion.codeName="${buildRevision}"' modifiers="i"/>
                 </replaceregexp>
             </filterchain>
             
@@ -77,7 +77,7 @@
         <reflexive>
             <filterchain>
                 <replaceregexp>
-                    <regexp pattern="Tine\.clientVersion\.buildType[^;]*" replace="Tine.clientVersion.buildType = 'DEBUG'"/>
+                    <regexp pattern="Tine\.clientVersion\.buildType\s*=[^=]{1}[^;]*" replace="Tine.clientVersion.buildType = 'DEBUG'"/>
                 </replaceregexp>
             </filterchain>
             
@@ -224,12 +224,19 @@
             function main() {
                 if (! file_exists('${builddir}/' . "{$this->appName}/js")) return;
                 $availableTranslations = Tinebase_Translation::getAvailableTranslations();
-    
+                
                 foreach ($availableTranslations as $translation) {
                     $localeString = $translation['locale'];
                     $locale = new Zend_Locale($localeString);
                     
                     $jsTranslation = Tinebase_Translation::getJsTranslations($locale, $this->appName);
+                    
+                    if ($this->appName == 'Tinebase' && file_exists('${project.basedir}/langstatistics.json')) {
+                        $langstatistics = json_decode(file_get_contents('${project.basedir}/langstatistics.json'), TRUE);
+                        $localeStats = array_values(array_filter($langstatistics['langStats'], function($stats) use ($localeString) {return $stats['locale'] == $localeString;}));
+                        $jsTranslation .= ("Locale.translationStats=" . json_encode($localeStats[0]) . ";\n");
+                    }
+                    
                     file_put_contents('${builddir}/' . "{$this->appName}/js/{$this->appName}-lang-{$locale}-debug.js", $jsTranslation);
                 }
                 

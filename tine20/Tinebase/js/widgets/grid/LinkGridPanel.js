@@ -149,25 +149,33 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
     },
     
     /**
-     * @param {Record} recordToAdd
+     * is called after selecting a record in the combo
+     * 
+     * @param {Tine.Tinebase.widgets.form.RecordPickerComboBox} picker the triggering combo box
+     * @param {Tine.Tinebase.data.Record} recordToAdd
      */
-    onAddRecordFromCombo: function(recordToAdd) {
+    onAddRecordFromCombo: function(picker, recordToAdd) {
+
+        // if no record is given, do nothing
+        if (! recordToAdd) {
+            return;
+        }
+        
         var record = new Tine.Tinebase.Model.Relation(Ext.apply({
             related_record: new this.newRecordClass(recordToAdd.data, recordToAdd.id),
             related_id: recordToAdd.id,
             own_id: (this.record) ? this.record.id : null
-        }, this.relationDefaults), recordToAdd.id);
+        }, picker.relationDefaults), recordToAdd.id);
         
         Tine.log.debug('Adding new relation:');
         Tine.log.debug(record);
-        
+
         // check if already in
-        if (this.recordStore.findExact('related_id', recordToAdd.id) === -1) {
-            this.recordStore.add([record]);
+        if (this.store.findExact('related_id', recordToAdd.id) === -1) {
+            this.store.add([record]);
         }
-        this.collapse();
-        this.clearValue();
-        this.reset();
+        
+        picker.reset();
     },
     
     /**

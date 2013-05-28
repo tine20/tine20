@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>humanresources_employee</name>
-            <version>10</version>
+            <version>12</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -20,9 +20,7 @@
                 </field>
                 <field>
                     <name>description</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
+                    <type>clob</type>
                 </field>
                 <field>
                     <name>account_id</name>

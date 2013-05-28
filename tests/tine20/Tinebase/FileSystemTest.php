@@ -77,7 +77,7 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_FileSystem::getInstance()->clearStatCache();
-        Tinebase_FileSystem::getInstance()->clearDeletedFiles();
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
     }
     
     public function testMkdir()

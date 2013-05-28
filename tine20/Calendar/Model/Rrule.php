@@ -357,7 +357,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         if ($_from->isEarlier($_event->dtstart)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' from is ealier dtstart -> given event is next occurrence');
-            
             return $_event;
         }
         
@@ -367,13 +366,11 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         while (TRUE) {
             
             if ($_event->rrule_until instanceof DateTime && $from->isLater($_event->rrule_until)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' passed rrule_until -> no furthor occurrences');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' passed rrule_until -> no further occurrences');
                 return NULL;
             }
             
             $until   = ($_event->rrule_until instanceof DateTime && $until->isLater($_event->rrule_until)) ? $_event->rrule_until : $until;
-            
-            
             
             $recurSet->merge(self::computeRecurrenceSet($_event, $_exceptions, $from, $until));
             $attempts++;

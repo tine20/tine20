@@ -102,12 +102,13 @@ class Voipmanager_Controller_Asterisk_SipPeer extends Voipmanager_Controller_Abs
     
     /**
     * inspect update of one record (after update)
-     *
-    * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
-    * @param   Tinebase_Record_Interface $_record          the update record
+    *
+    * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+    * @param   Tinebase_Record_Interface $record          the update record
+    * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
     * @return  void
     */
-    protected function _inspectAfterUpdate($_updatedRecord, $_record)
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
         if (isset(Tinebase_Core::getConfig()->asterisk)) {
             self::publishConfiguration();

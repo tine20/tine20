@@ -41,7 +41,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         $this->_modelName   = 'Voipmanager_Model_Snom_Phone';
         $this->_backend     = new Voipmanager_Backend_Snom_Phone();
     }
-        
+    
     /**
      * don't clone. Use the singleton.
      *
@@ -49,7 +49,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
     private function __clone() 
     {
     }
-            
+    
     /**
      * the singleton pattern
      *
@@ -113,6 +113,13 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
             }
         }
         
+        $phoneSettings = $_phone->settings;
+        // force the right phone_id
+        if (! $phoneSettings instanceof Voipmanager_Model_Snom_PhoneSettings) {
+            throw new   Voipmanager_Exception_Validation('Phone Settings are required.');
+        }
+        $phoneRights = (isset($_phone->rights)) ? $_phone->rights : NULL;
+        
         // auto generate random http client username and password
         // limit length because of Snom phone limitations
         $_phone->http_client_user = Tinebase_Record_Abstract::generateUID(30);
@@ -122,33 +129,30 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
         try {
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-
-            $phone = $this->_backend->create($_phone);
             
-            // force the right phone_id
-            $_phoneSettings = $_phone->settings;
-            $_phoneSettings->setId($phone->getId());
+            $phone = $this->_backend->create($_phone);
+            $phoneSettings->setId($phone->getId());
             
             // set all settings which are equal to the default settings to NULL
             $template = Voipmanager_Controller_Snom_Template::getInstance()->get($phone->template_id);
             $settingDefaults = Voipmanager_Controller_Snom_Setting::getInstance()->get($template->setting_id);
             
-            foreach($_phoneSettings AS $key => $value) {
-                if($key == 'phone_id') {
+            foreach ($phoneSettings AS $key => $value) {
+                if ($key == 'phone_id') {
                     continue;
                 }
-                if($_phoneSettings->$key == $settingDefaults->$key) {
-                    $_phoneSettings->$key = NULL;
+                if ($phoneSettings->$key == $settingDefaults->$key) {
+                    $phoneSettings->$key = NULL;
                 }
             }
             
-            $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->create($_phoneSettings);
+            $phoneSettings = Voipmanager_Controller_Snom_PhoneSettings::getInstance()->create($phoneSettings);
             
             $this->_createLines($phone, $_phone->lines);
           
-            // save phone rights
-            if (isset($phone->rights)) {
-                $this->_backend->setPhoneRights($phone);
+            if ($phoneRights) {
+                $phone->rights = $phoneRights;
+                $this->_backend->setPhoneRights($_phone);
             }
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
@@ -305,7 +309,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      */
     protected function _createLines($_phone, $_lines)
     {
-        foreach($_lines as $line) {
+        foreach ($_lines as $line) {
             $line->snomphone_id = $_phone->getId();
             if (is_array($line->asteriskline_id)) {
                 $sippeer = new Voipmanager_Model_Asterisk_SipPeer($line->asteriskline_id);
@@ -313,6 +317,9 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
                 $line->asteriskline_id = $sippeer->getId();
             }
             
+            if (empty($line->asteriskline_id)) {
+                throw new Voipmanager_Exception_Validation('asteriskline_id is required.');
+            }
             $addedLine = Voipmanager_Controller_Snom_Line::getInstance()->create($line);
         }
     }

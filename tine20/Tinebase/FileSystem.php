@@ -342,7 +342,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                 $parent = $this->stat($dirName);
                 $node = $this->createFileTreeNode($parent, $fileName);
                 
-                $handle = tmpfile();
+                $handle = Tinebase_TempFile::getInstance()->openTempFile();
                 
                 break;
                 
@@ -375,7 +375,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                     $node = $this->stat($_path);
                 }
                 
-                $handle = tmpfile();
+                $handle = Tinebase_TempFile::getInstance()->openTempFile();
                 
                 break;
                 
@@ -383,9 +383,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
                 return false;
         }
         
-        stream_context_set_option ($handle, 'tine20', 'path', $_path);
-        stream_context_set_option ($handle, 'tine20', 'mode', $_mode);
-        stream_context_set_option ($handle, 'tine20', 'node', $node);
+        $contextOptions = array('tine20' => array(
+            'path' => $_path,
+            'mode' => $_mode,
+            'node' => $node
+        ));
+        stream_context_set_option($handle, $contextOptions);
         
         return $handle;
     }
@@ -873,7 +876,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      * 
      * @return integer number of deleted files
      */
-    public function clearDeletedFiles()
+    public function clearDeletedFilesFromFilesystem()
     {
         try {
             $dirIterator = new DirectoryIterator($this->_basePath);
@@ -882,7 +885,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Scanning ' . $this->_basePath . ' for deleted files.');
+            . ' Scanning ' . $this->_basePath . ' for deleted files ...');
         
         $deleteCount = 0;
         foreach ($dirIterator as $item) {
@@ -913,6 +916,38 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Deleted ' . $deleteCount . ' obsolete file(s).');
+        
+        return $deleteCount;
+    }
+    
+    /**
+     * removes deleted files that no longer exist in the filesystem from the database
+     * 
+     * @return integer number of deleted files
+     */
+    public function clearDeletedFilesFromDatabase()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Scanning database for deleted files ...');
+        
+        // get all file objects from db and check filesystem existance
+        $toDeleteIds = array();
+        $fileObjects = $this->_fileObjectBackend->getAll();
+        foreach ($fileObjects as $fileObject) {
+            if ($fileObject->hash && ! file_exists($fileObject->getFilesystemPath())) {
+                $toDeleteIds[] = $fileObject->getId();
+            }
+        }
+        
+        $nodeIdsToDelete = $this->_treeNodeBackend->search(new Tinebase_Model_Tree_Node_Filter(array(array(
+            'field'     => 'object_id',
+            'operator'  => 'in',
+            'value'     => $toDeleteIds
+        ))), NULL, Tinebase_Backend_Sql_Abstract::IDCOL);
+        
+        $deleteCount = $this->_treeNodeBackend->delete($nodeIdsToDelete);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed ' . $deleteCount . ' obsolete filenode(s) from the database.');
         
         return $deleteCount;
     }

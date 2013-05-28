@@ -1,6 +1,6 @@
 # 
 # Translators:
-#   <spacen_zj@hotmail.com>, 2012.
+# vehery <spacen_zj@hotmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

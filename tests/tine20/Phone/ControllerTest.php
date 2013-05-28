@@ -131,8 +131,8 @@ class Phone_ControllerTest extends PHPUnit_Framework_TestCase
         $disconnectedCall = $this->_backend->callDisconnected($call);
         
         $this->assertGreaterThan($duration, $disconnectedCall->duration);
-        $this->assertLessThan(4, $disconnectedCall->ringing);
-        $this->assertLessThan(9, $disconnectedCall->duration);
+        $this->assertLessThan(10, $disconnectedCall->ringing, 'wrong ringing duration');
+        $this->assertLessThan(15, $disconnectedCall->duration, 'wrong duration');
         $this->assertEquals(-1, $disconnectedCall->connected->compare($disconnectedCall->disconnected));
     }
 }

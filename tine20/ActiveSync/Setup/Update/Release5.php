@@ -337,33 +337,13 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
      */
     public function update_6()
     {
-        $this->_backend->dropForeignKey('acsync_folder', 'acsync_folder::device_id--acsync_device::id');
-        
-        $declaration = new Setup_Backend_Schema_Index_Xml('
-            <index>
-                <name>acsync_folder::device_id--acsync_device::id</name>
-                <field>
-                    <name>device_id</name>
-                </field>
-                <foreign>true</foreign>
-                <reference>
-                    <table>acsync_device</table>
-                    <field>id</field>
-                    <ondelete>cascade</ondelete>
-                    <onupdate>cascade</onupdate>
-                </reference>
-            </index> 
-        ');
-        $this->_backend->addForeignKey('acsync_folder', $declaration);
-
         $this->validateTableVersion('acsync_device', '2');
         
-        $this->_resetSyncKeyFK();
-
-        // drop acsync_content FK before truncating acsync_device -> @see 0005942: problems with update script 5.6 -> 5.7
-        $this->_backend->dropForeignKey('acsync_content', 'acsync_content::device_id--acsync_device::id');
+        $this->_dropDeviceFKs();
+        
         $this->_backend->truncateTable('acsync_device');
-        $this->_addContentDeviceFK();
+        
+        $this->_addDeviceFKs();
         
         $declaration = new Setup_Backend_Schema_Index_Xml('
             <index>
@@ -385,11 +365,40 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
     }
     
     /**
-     * reset acsync_synckey / device id FK
+     * drop FKs before truncating acsync_device -> @see 0005942: problems with update script 5.6 -> 5.7
      */
-    protected function _resetSyncKeyFK()
+    protected function _dropDeviceFKs()
     {
-        $this->_backend->dropForeignKey('acsync_synckey', 'acsync_synckey::device_id--acsync_device::id');
+        $keysToDrop = array(
+            'acsync_content' => 'acsync_content::device_id--acsync_device::id',
+            'acsync_folder'  => 'acsync_folder::device_id--acsync_device::id',
+            'acsync_synckey' => 'acsync_synckey::device_id--acsync_device::id',
+        );
+        foreach ($keysToDrop as $table => $name) {
+            try {
+                $this->_backend->dropForeignKey($table, $name);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                    " Error when dropping $name ->" . $zdse);
+            }
+        }
+    }
+    
+    /**
+     * add FKs to acsync_device -> @see 0005942: problems with update script 5.6 -> 5.7
+     */
+    protected function _addDeviceFKs()
+    {
+        $this->_addFolderFK();
+        $this->_addContentDeviceFK();
+        $this->_addSyncKeyFK();
+    }
+    
+    /**
+     * add acsync_synckey::device_id--acsync_device::id
+     */
+    protected function _addSyncKeyFK()
+    {
         $declaration = new Setup_Backend_Schema_Index_Xml('
         <index>
             <name>acsync_synckey::device_id--acsync_device::id</name>
@@ -407,6 +416,29 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
         ');
         $this->_backend->addForeignKey('acsync_synckey', $declaration);
     }
+
+    /**
+     * add acsync_folder::device_id--acsync_device::id
+     */
+    protected function _addFolderFK()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>acsync_folder::device_id--acsync_device::id</name>
+                <field>
+                    <name>device_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>acsync_device</table>
+                    <field>id</field>
+                    <ondelete>cascade</ondelete>
+                    <onupdate>cascade</onupdate>
+                </reference>
+            </index> 
+        ');
+        $this->_backend->addForeignKey('acsync_folder', $declaration);
+    }
     
     /**
      * update to 5.7
@@ -417,8 +449,6 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
      */
     public function update_7()
     {
-        $this->_resetSyncKeyFK();
-        
         $this->validateTableVersion('acsync_content', '4');
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
@@ -429,10 +459,14 @@ class ActiveSync_Setup_Update_Release5 extends Setup_Update_Abstract
             </field>
         ');
         $this->_backend->addCol('acsync_content', $declaration);
-                
+        
         $this->setTableVersion('acsync_content', '5');
         
+        $this->_dropDeviceFKs();
+        
         $this->_backend->truncateTable('acsync_device');
+        
+        $this->_addDeviceFKs();
         
         $this->setApplicationVersion('ActiveSync', '5.8');
     }

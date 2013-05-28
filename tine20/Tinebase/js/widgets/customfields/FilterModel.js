@@ -41,6 +41,10 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
                 this.defaultOperator = 'equals';
                 this.valueRenderer = this.cfValueRenderer;
                 break;
+            case 'integer':
+                this.operators = ['equals', 'greater', 'less'];
+                this.defaultOperator = 'equals';
+                break;
             case 'bool':
             case 'boolean':
                 this.valueType = 'bool';

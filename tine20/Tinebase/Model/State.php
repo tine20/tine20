@@ -41,5 +41,6 @@ class Tinebase_Model_State extends Tinebase_Record_Abstract
         'id'                => array('allowEmpty' => TRUE),
         'user_id'           => array('presence' => 'required'),
         'data'              => array('allowEmpty' => TRUE),
+        'state_id'          => array('allowEmpty' => FALSE)
     );
 }

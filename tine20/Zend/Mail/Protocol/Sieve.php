@@ -368,7 +368,7 @@ class Zend_Mail_Protocol_Sieve
         $response = $this->readResponse($dontParse);
 
         return $response;
-    }    
+    }
 
     /**
      * End communication with Sieve server (also closes socket)
@@ -416,12 +416,17 @@ class Zend_Mail_Protocol_Sieve
         
         $capabilities = array();
         
-        foreach($lines as $line) {
-            list($name, $value) = $line;
+        foreach ($lines as $line) {
+            if (count($line) === 1) {
+                $name = $line[0];
+                $value = '';
+            } else {
+                list($name, $value) = $line;
+            }
             
             $name = strtoupper($name);
             
-            switch($name) {
+            switch ($name) {
                 case 'SASL':
                 case 'SIEVE':
                 case 'NOTIFY':
@@ -574,7 +579,6 @@ class Zend_Mail_Protocol_Sieve
         return $script;
     }
     
-
     /**
      * Login to Sieve server
      *
@@ -590,5 +594,4 @@ class Zend_Mail_Protocol_Sieve
         $token = base64_encode(chr(0) . $username . chr(0) . $password);
         $result = $this->requestAndResponse('AUTHENTICATE',  $this->escapeString('PLAIN', $token));
     }
-
 }

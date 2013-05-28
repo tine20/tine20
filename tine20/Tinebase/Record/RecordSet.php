@@ -285,10 +285,14 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @param string $_name property name
      * @param array  $_values index => property value
+     * @throws Tinebase_Exception_Record_NotDefined
      */
     public function setByIndices($_name, array $_values)
     {
         foreach ($_values as $index => $value) {
+            if (! array_key_exists($index, $this->_listOfRecords)) {
+                throw new Tinebase_Exception_Record_NotDefined('Could not find record with index ' . $index);
+            }
             $this->_listOfRecords[$index]->$_name = $value;
         }
     }
@@ -615,8 +619,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function diff($recordSet)
     {
         if (! $recordSet instanceof Tinebase_Record_RecordSet) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' 
-                . ' Did not get Tinebase_Record_RecordSet, skipping diff()');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Did not get Tinebase_Record_RecordSet, skipping diff(' . $this->_recordClass . ')');
             return array();
         }
         

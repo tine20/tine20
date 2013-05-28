@@ -108,6 +108,14 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 collapseMode: 'mini',
                 header: false,
                 layout: 'fit',
+                listeners: {
+                    afterrender: function() {
+                        // add to scrollmanager
+                        if (arguments[0] && arguments[0].hasOwnProperty('body')) {
+                            Ext.dd.ScrollManager.register(arguments[0].body);
+                        }
+                    }
+                },
                 autoScroll: true,
                 tbar: [{
                     buttonAlign : 'center'

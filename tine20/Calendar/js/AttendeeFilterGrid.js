@@ -43,7 +43,7 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         
         this.store.on('add', this.onStoreAdd, this);
         this.store.on('remove', this.onStoreRemove, this);
-        this.store.on('update', this.onStoreUpdate, this /*, {buffer: 1000}*/);
+        this.store.on('update', this.onStoreUpdate, this, {buffer: 100});
     },
     
     initColumns: function() {
@@ -73,7 +73,6 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         // don't save initial 'add attendee' record
         if (this.store.getCount() > 1) {
             Ext.state.Manager.set(this.stateId, this.getState());
-            this.onStoreChange();
         }
     },
     
@@ -186,7 +185,8 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
     setValue: function(value) {
         var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(value),
             selections = this.getSelectionModel().getSelections(),
-            explicitAttendee = Ext.state.Manager.get(this.stateId);
+            explicitAttendee = Ext.state.Manager.get(this.stateId),
+            activeEditor = this.activeEditor;
         
         this.store.suspendEvents();
         this.applyState(explicitAttendee);
@@ -209,10 +209,15 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         this.store.applySort();
         
         this.store.resumeEvents();
+        
         this.getView().refresh();
         
+        if (activeEditor) {
+            this.startEditing(activeEditor.row, activeEditor.col);
+        }
+        
         Ext.each(selections, function(attendee) {
-            toSelect = Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(this.store, attendee);
+            var toSelect = Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(this.store, attendee);
             if (toSelect) {
                 this.getSelectionModel().selectRecords([toSelect], true);
             }

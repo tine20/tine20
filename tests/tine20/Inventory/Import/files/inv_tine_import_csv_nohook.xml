@@ -34,6 +34,14 @@
         <field>
             <source>Anschaffung</source>
             <destination>added_date</destination>
+            <typecast>datetime</typecast>
+            <datetime_pattern>!Y-m-d</datetime_pattern>
+        </field>
+        <field>
+            <source>Entfernt</source>
+            <destination>removed_date</destination>
+            <typecast>datetime</typecast>
+            <datetime_pattern>!d.m.y</datetime_pattern>
         </field>
         <field>
             <source>Inventarnummer</source>

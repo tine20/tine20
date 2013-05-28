@@ -83,6 +83,8 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     public function testImportOfCSVWithHook ()
     {
+        $this->markTestSkipped('@see 0008240: Inventory_Import_CsvTest::testImportOfCSVWithHook fails sometimes');
+        
         $filename = dirname(__FILE__) . '/files/inv_tine_import_csv.xml';
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId();
         $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
@@ -100,16 +102,16 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $translatedString = sprintf($translation->_("The following fields weren't imported: %s"), "\n");
         
         $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
-        $this->assertEquals($result['results'][0]['added_date'], '2013-01-11 00:00:00');
+        $this->assertEquals($result['results'][0]['added_date']->setTimezone('Europe/Berlin')->toString(), '2013-01-11 00:00:00');
         $this->assertEquals($result['results'][0]['inventory_id'], '12345');
         $this->assertContains($translatedString, $result['results'][0]['description']);
         
         $this->assertEquals($result['results'][1]['name'], 'Tine 2.0 für Tolle Leute - second mapping set');
-        $this->assertEquals($result['results'][1]['added_date'], '2012-01-11 00:00:00');
+        $this->assertEquals($result['results'][1]['added_date']->setTimezone('Europe/Berlin')->toString(), '2012-01-11 00:00:00');
         $this->assertEquals($result['results'][1]['inventory_id'], '1333431646');
         
         $this->assertEquals($result['results'][2]['name'], 'Tine 2.0 für Profis');
-        $this->assertEquals($result['results'][2]['added_date'], '2012-01-11 00:00:00');
+        $this->assertEquals($result['results'][2]['added_date']->setTimezone('Europe/Berlin')->toString(), '2012-01-11 00:00:00');
         $this->assertEquals($result['results'][2]['inventory_id'], '1333431666');
         $this->assertContains($translatedString, $result['results'][2]['description']);
         
@@ -137,13 +139,34 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $translatedString = sprintf($translation->_("The following fields weren't imported: %s"), "\n");
         
         $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
-        $this->assertEquals($result['results'][0]['added_date'], '2013-01-11 00:00:00');
+        $this->assertEquals($result['results'][0]['added_date']->setTimezone('Europe/Berlin')->toString(), '2013-01-11 00:00:00');
         $this->assertEquals($result['results'][0]['inventory_id'], '');
         $this->assertContains($translatedString, $result['results'][0]['description']);
         
         $this->assertEquals($result['results'][1]['name'], 'Tine 2.0 für Profis');
-        $this->assertEquals($result['results'][1]['added_date'], '2012-01-11 00:00:00');
+        $this->assertEquals($result['results'][1]['added_date']->setTimezone('Europe/Berlin')->toString(), '2012-01-11 00:00:00');
         $this->assertEquals($result['results'][1]['inventory_id'], '1333431666');
+    }
+    
+     /**
+     * Test if different Datetime formats are correctly imported, if datetime_pattern is set
+     */
+    public function testImportOfDatetimeFormats ()
+    {
+        $filename = dirname(__FILE__) . '/files/inv_tine_import_csv_nohook.xml';
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId();
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
+        
+        $this->_filename = dirname(__FILE__) . '/files/inv_tine_import_datetimes.csv';
+        $this->_deleteImportFile = FALSE;
+        
+        $result = $this->_doImport(array(), $definition);
+        $this->_deletePersonalInventoryItems = TRUE;
+        
+        $this->assertEquals('2013-12-31 00:00:00', $result['results'][0]['added_date']->setTimezone('Europe/Berlin')->toString(), 'Datetime and datetime_pattern should match');
+        $this->assertEquals('2013-12-31 00:00:00', $result['results'][0]['removed_date']->setTimezone('Europe/Berlin')->toString(), 'Datetime and datetime_pattern should match');
+        $this->assertNull($result['results'][1]['added_date'], 'Datetime and datetime_pattern do not match,  therefore should return null');
+        $this->assertNull( $result['results'][1]['added_date'], 'Datetime and datetime_pattern do not match,  therefore should return null');
     }
     
     /**
@@ -157,7 +180,6 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
     protected function _doImport(array $_options, $_definition, Inventory_Model_InventoryItemFilter $_exportFilter = NULL)
     {
         $definition = ($_definition instanceof Tinebase_Model_ImportExportDefinition) ? $_definition : Tinebase_ImportExportDefinition::getInstance()->getByName($_definition);
-        
         $this->_instance = Inventory_Import_Csv::createFromDefinition($definition, $_options);
         
         // export first

@@ -1,12 +1,12 @@
 # 
 # Translators:
-# sao sang <saosangmo@yahoo.com>, 2013.
+# saosangm <saosangmo@yahoo.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:51+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-04-19 06:24+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -120,10 +120,8 @@ msgid "Email Update Interval"
 msgstr "Khoảng thời gian cập nhật email"
 
 #: Preference.php:111
-msgid ""
-"How often should Felamimail check for new Emails (in minutes). \"0\" means "
-"never."
-msgstr "Felamimail sẽ kiểm tra email theo khoảng thời gian nào (theo phút). \"0\" nghĩa là không bao giờ."
+msgid "How often should Felamimail check for new Emails (in minutes)."
+msgstr ""
 
 #: Preference.php:114
 msgid "Use in Addressbook"
@@ -149,29 +147,29 @@ msgstr "Xác nhận xóa"
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Hiển thị cửa sổ xác nhận khi xóa thư."
 
-#: js/ContactGrid.js:110 js/AccountEditDialog.js:180
+#: js/ContactGrid.js:118 js/AccountEditDialog.js:180
 #: js/AccountEditDialog.js:221 js/AccountEditDialog.js:236
 #: js/AccountEditDialog.js:276
 msgid "None"
 msgstr "Không"
 
-#: js/ContactGrid.js:254
+#: js/ContactGrid.js:262
 msgid "Add as \"To\""
 msgstr "Thêm vào \"Đến\""
 
-#: js/ContactGrid.js:265
+#: js/ContactGrid.js:273
 msgid "Add as \"Cc\""
 msgstr "Thêm \"CC\""
 
-#: js/ContactGrid.js:276
+#: js/ContactGrid.js:284
 msgid "Add as \"Bcc\""
 msgstr "Thêm \"BCC\""
 
-#: js/ContactGrid.js:287
+#: js/ContactGrid.js:295
 msgid "Remove from recipients"
 msgstr "Xóa khỏi người nhận"
 
-#: js/ContactGrid.js:341 js/MessageEditDialog.js:536
+#: js/ContactGrid.js:349 js/MessageEditDialog.js:553
 msgid "Loading Mail Addresses"
 msgstr "Đang tải địa chỉ email"
 
@@ -188,7 +186,7 @@ msgid "New {0}"
 msgstr "Tạo {0}"
 
 #: js/TreeContextMenu.js:64 js/TreeContextMenu.js:67 js/TreeContextMenu.js:70
-#: js/FolderFilterModel.js:30 js/Model.js:54 js/Model.js:506
+#: js/FolderFilterModel.js:30 js/Model.js:55 js/Model.js:519
 #: js/GridPanel.js:532
 msgid "Folder"
 msgid_plural "Folders"
@@ -369,8 +367,8 @@ msgstr "Lưu lại"
 msgid "Print Message"
 msgstr "In nội dung"
 
-#: js/MessageDisplayDialog.js:85 js/GridPanel.js:317 js/GridPanel.js:1343
-#: js/GridPanel.js:1359
+#: js/MessageDisplayDialog.js:85 js/GridPanel.js:317 js/GridPanel.js:1346
+#: js/GridPanel.js:1362
 msgid "Print Preview"
 msgstr "Xem trước khi in"
 
@@ -420,81 +418,73 @@ msgstr "Vào {0}, {1} viết"
 msgid "Original message"
 msgstr "Nội dung gốc"
 
-#: js/MessageEditDialog.js:587
+#: js/MessageEditDialog.js:604
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#: js/MessageEditDialog.js:590
+#: js/MessageEditDialog.js:607
 msgid "{0} Message"
 msgstr "Nội dung {0}"
 
-#: js/MessageEditDialog.js:641 js/MessageEditDialog.js:775
+#: js/MessageEditDialog.js:658
 msgid "Failed"
 msgstr "Thất bại"
 
-#: js/MessageEditDialog.js:642
+#: js/MessageEditDialog.js:659
 msgid "{0} account setting empty."
 msgstr "{0} thiết lập tài khoản rỗng."
 
-#: js/MessageEditDialog.js:657
+#: js/MessageEditDialog.js:674
 msgid "Errors"
 msgstr "Lỗi"
 
-#: js/MessageEditDialog.js:657
+#: js/MessageEditDialog.js:674
 msgid "Please fix the errors noted."
 msgstr "Xin sửa lỗi được ghi chú."
 
-#: js/MessageEditDialog.js:706 js/MessageEditDialog.js:960
+#: js/MessageEditDialog.js:723 js/MessageEditDialog.js:974
 msgid "Compose email:"
 msgstr "Soạn email:"
 
-#: js/MessageEditDialog.js:776
-msgid "Could not send {0}."
-msgstr "Không thể gửi {0}."
-
-#: js/MessageEditDialog.js:777
-msgid "Error:"
-msgstr "Lỗi:"
-
-#: js/MessageEditDialog.js:790 js/GridDetailsPanel.js:347 js/GridPanel.js:471
+#: js/MessageEditDialog.js:804 js/GridDetailsPanel.js:347 js/GridPanel.js:471
 msgid "Attachments"
 msgstr "Đính kèm"
 
-#: js/MessageEditDialog.js:856 js/GridDetailsPanel.js:246
+#: js/MessageEditDialog.js:870 js/GridDetailsPanel.js:246
 msgid "From"
 msgstr "Từ"
 
-#: js/MessageEditDialog.js:925 Controller/Message/Send.php:250
+#: js/MessageEditDialog.js:939 Controller/Message/Send.php:250
 msgid "Body"
 msgstr "Nội dung"
 
-#: js/MessageEditDialog.js:950 js/GridDetailsPanel.js:245
-#: js/sieve/RuleConditionsPanel.js:72 js/Model.js:142 js/GridPanel.js:485
+#: js/MessageEditDialog.js:964 js/GridDetailsPanel.js:245
+#: js/sieve/RuleConditionsPanel.js:72 js/Model.js:155 js/GridPanel.js:485
 #: Controller/Message/Send.php:250
 msgid "Subject"
 msgstr "Tiêu đề"
 
-#: js/MessageEditDialog.js:987
+#: js/MessageEditDialog.js:1001
 msgid "Files are still uploading."
 msgstr "Files vẫn đang được upload."
 
-#: js/MessageEditDialog.js:1016
+#: js/MessageEditDialog.js:1030
 msgid "Empty subject"
 msgstr "Tiêu đề trống"
 
-#: js/MessageEditDialog.js:1017
+#: js/MessageEditDialog.js:1031
 msgid "Do you really want to send a message with an empty subject?"
 msgstr "Bạn có muốn gửi 1 email với tiêu đề trống?"
 
-#: js/MessageEditDialog.js:1038
+#: js/MessageEditDialog.js:1052
 msgid "Add Note"
 msgstr "Thêm ghi chú"
 
-#: js/MessageEditDialog.js:1039
+#: js/MessageEditDialog.js:1053
 msgid "Edit Email Note Text:"
 msgstr "Sửa văn bản ghi chú email:"
 
-#: js/MessageEditDialog.js:1062
+#: js/MessageEditDialog.js:1076
 msgid "No recipients set."
 msgstr "Không chỉ ra người nhận."
 
@@ -576,7 +566,7 @@ msgstr "Hủy thư"
 msgid "Keep mail"
 msgstr "Giữ email"
 
-#: js/sieve/RuleConditionsPanel.js:69 js/Model.js:143 js/GridPanel.js:491
+#: js/sieve/RuleConditionsPanel.js:69 js/Model.js:156 js/GridPanel.js:491
 msgid "From (Email)"
 msgstr "Từ (email)"
 
@@ -608,47 +598,47 @@ msgstr "Giá trị Header"
 msgid "Header regex"
 msgstr "Header regex"
 
-#: js/sieve/RulesGridPanel.js:78
+#: js/sieve/RulesGridPanel.js:81
 msgid "Move up"
 msgstr "Chuyển lên"
 
-#: js/sieve/RulesGridPanel.js:85
+#: js/sieve/RulesGridPanel.js:88
 msgid "Move down"
 msgstr "Chuyển xuống"
 
-#: js/sieve/RulesGridPanel.js:92
+#: js/sieve/RulesGridPanel.js:95
 msgid "Enable"
 msgstr "Mở"
 
-#: js/sieve/RulesGridPanel.js:99
+#: js/sieve/RulesGridPanel.js:102
 msgid "Disable"
 msgstr "Tắt"
 
-#: js/sieve/RulesGridPanel.js:200
+#: js/sieve/RulesGridPanel.js:203
 msgid "ID"
 msgstr "ID"
 
-#: js/sieve/RulesGridPanel.js:207
+#: js/sieve/RulesGridPanel.js:210
 msgid "Conditions"
 msgstr "Điều kiện"
 
-#: js/sieve/RulesGridPanel.js:215
+#: js/sieve/RulesGridPanel.js:218
 msgid "Action"
 msgstr "Hành động"
 
-#: js/sieve/RulesGridPanel.js:305
+#: js/sieve/RulesGridPanel.js:308
 msgid "is greater than"
 msgstr "lớn hơn"
 
-#: js/sieve/RulesGridPanel.js:305
+#: js/sieve/RulesGridPanel.js:308
 msgid "is less than"
 msgstr "nhỏ hơn"
 
-#: js/sieve/RulesGridPanel.js:316
+#: js/sieve/RulesGridPanel.js:319
 msgid "Header \"{0}\" contains \"{1}\""
 msgstr "Header \"{0}\" contains \"{1}\""
 
-#: js/sieve/RulesGridPanel.js:316
+#: js/sieve/RulesGridPanel.js:319
 msgid "Header \"{0}\" matches \"{1}\""
 msgstr "Header \"{0}\" matches \"{1}\""
 
@@ -732,94 +722,94 @@ msgstr "Quy tắc lọc Sieve"
 msgid "Sieve Filter Rules for {0}"
 msgstr "Quy tắc lọc Sieve cho {0}"
 
-#: js/Model.js:50
+#: js/Model.js:51
 msgid "Message"
 msgid_plural "Messages"
 msgstr[0] "one: Nội dung\nother: Nội dung"
 
-#: js/Model.js:141
+#: js/Model.js:154
 msgid "Subject/From"
 msgstr "Tiêu đề/Từ"
 
-#: js/Model.js:144 js/GridPanel.js:497
+#: js/Model.js:157 js/GridPanel.js:497
 msgid "From (Name)"
 msgstr "Từ (tên)"
 
-#: js/Model.js:145 js/GridPanel.js:510
+#: js/Model.js:158 js/GridPanel.js:510
 msgid "To"
 msgstr "Tới"
 
-#: js/Model.js:146
+#: js/Model.js:159
 msgid "Cc"
 msgstr "Cc"
 
-#: js/Model.js:147
+#: js/Model.js:160
 msgid "Bcc"
 msgstr "Bcc"
 
-#: js/Model.js:148 js/GridPanel.js:478
+#: js/Model.js:161 js/GridPanel.js:478
 msgid "Flags"
 msgstr "Cờ"
 
-#: js/Model.js:151 js/GridPanel.js:525
+#: js/Model.js:164 js/GridPanel.js:525
 msgid "Received"
 msgstr "Đã nhận"
 
-#: js/Model.js:361 js/AccountEditDialog.js:112
+#: js/Model.js:374 js/AccountEditDialog.js:112
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "one: Tài khoản\nother: Tài khoản"
 
-#: js/Model.js:364
+#: js/Model.js:377
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] "one: Tài khoản email\nother: Tài khoản email"
 
-#: js/Model.js:500
+#: js/Model.js:513
 msgid "INBOX"
 msgstr "Thư đến"
 
-#: js/Model.js:500
+#: js/Model.js:513
 msgid "Drafts"
 msgstr "Nháp"
 
-#: js/Model.js:500 js/GridPanel.js:517
+#: js/Model.js:513 js/GridPanel.js:517
 msgid "Sent"
 msgstr "Đã gửi"
 
-#: js/Model.js:500
+#: js/Model.js:513
 msgid "Templates"
 msgstr "Mẫu"
 
-#: js/Model.js:500
+#: js/Model.js:513
 msgid "Junk"
 msgstr "Thư rác"
 
-#: js/Model.js:500
+#: js/Model.js:513
 msgid "Trash"
 msgstr "Thùng rác"
 
-#: js/Model.js:509 js/Model.js:629 js/Model.js:694
+#: js/Model.js:522 js/Model.js:642 js/Model.js:707
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "one: danh sách biểu ghi\nother: danh sách biểu ghi"
 
-#: js/Model.js:626
+#: js/Model.js:639
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "one: Trả lời tự động\nother: Trả lời tự động"
 
-#: js/Model.js:691
+#: js/Model.js:704
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "one: Quy tắc\nother: Quy tắc"
 
-#: js/Model.js:817
+#: js/Model.js:830
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "one:Cờ\nother:Cờ"
 
-#: js/Model.js:820
+#: js/Model.js:833
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "one:Danh sách cờ\nother:Danh sách cờ"
@@ -832,23 +822,23 @@ msgstr "(thư mới)"
 msgid "Select recipients for \"{0}\""
 msgstr "Chọn người nhận cho \"{0}\""
 
-#: js/RecipientGrid.js:212
+#: js/RecipientGrid.js:220
 msgid "Click here to set To/CC/BCC."
 msgstr "Click vào đây để đặt To/CC/BCC"
 
-#: js/RecipientGrid.js:216 js/RecipientGrid.js:240
+#: js/RecipientGrid.js:224 js/RecipientGrid.js:248
 msgid "To:"
 msgstr "To:"
 
-#: js/RecipientGrid.js:219 js/RecipientGrid.js:241
+#: js/RecipientGrid.js:227 js/RecipientGrid.js:249
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/RecipientGrid.js:222 js/RecipientGrid.js:242
+#: js/RecipientGrid.js:230 js/RecipientGrid.js:250
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/RecipientGrid.js:356
+#: js/RecipientGrid.js:364
 msgid "Remove"
 msgstr "Xóa"
 
@@ -896,23 +886,23 @@ msgstr "Đã chuyển tiếp"
 msgid "Recent"
 msgstr "Gần đây"
 
-#: js/GridPanel.js:965
+#: js/GridPanel.js:968
 msgid "Send Reading Confirmation"
 msgstr ""
 
-#: js/GridPanel.js:966
+#: js/GridPanel.js:969
 msgid "Do you want to send a reading confirmation message?"
 msgstr ""
 
-#: js/GridPanel.js:1188
+#: js/GridPanel.js:1191
 msgid "{0} %"
 msgstr "{0} %"
 
-#: js/GridPanel.js:1196
+#: js/GridPanel.js:1199
 msgid "Your quota"
 msgstr "Hạn mức của bạn"
 
-#: js/GridPanel.js:1197
+#: js/GridPanel.js:1200
 msgid "{0} available (total: {1})"
 msgstr "có sẵn {0} (tổng số: {1})"
 
@@ -1071,6 +1061,6 @@ msgstr "Nháp"
 msgid "Flagged"
 msgstr "Đã cắm cờ"
 
-#: Controller/Sieve.php:335
+#: Controller/Sieve.php:338
 msgid "Out of Office reply from %1$s"
 msgstr "Trả lời bên ngoài cơ quan từ %1$s"

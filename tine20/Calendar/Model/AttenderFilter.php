@@ -116,7 +116,7 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                 if (!empty($group->list_id)) {
                     $contactList = Addressbook_Controller_List::getInstance()->get($group->list_id);
                     
-                    foreach($contactList->members as $member) {
+                    foreach ($contactList->members as $member) {
                         $attendee[] = array(
                             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                             'user_id'   => $member
