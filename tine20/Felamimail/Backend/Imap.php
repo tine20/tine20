@@ -79,6 +79,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function connectAndLogin($_params)
     {
+        // be careful, only activate this if you don't mind that pws are logged
+        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+        //    . ' LOGIN params: ' . print_r($_params, TRUE));
+        
         $timeStartConnect = microtime(true);
         try {
             $this->_protocol->connect($_params->host, $_params->port, $_params->ssl);
@@ -102,7 +106,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' CONNECT TIME: ' . $connectTime . ' seconds');
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' LOGIN TIME: ' . $loginTime . ' seconds');
-    }    
+    }
     
     /**
      * select given folder

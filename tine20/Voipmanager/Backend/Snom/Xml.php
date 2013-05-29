@@ -195,6 +195,9 @@ class Voipmanager_Backend_Snom_Xml
         $phoneSettings['advertisement']['value'] = 'off';
         $phoneSettings['advertisement']['perms'] = 'RO';
         
+        $phoneSettings['transfer_on_hangup']['perms'] = 'RO';
+        $phoneSettings['transfer_on_hangup']['value'] = 'on';
+        
         foreach($phoneSettings as $key => $value) {
             $child = $_xml->addChild($key, $value['value']);
             $child->addAttribute('perm', $value['perms']);

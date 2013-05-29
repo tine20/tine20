@@ -86,5 +86,6 @@ class Voipmanager_SnomTest extends PHPUnit_Framework_TestCase
         $out = ob_get_clean();
         
         $this->assertContains('<settings><phone-settings><firmware_interval perm="RO">0</firmware_interval><update_policy perm="RO">auto_update</update_policy>', $out);
+        $this->assertContains('<transfer_on_hangup perm="RO">on</transfer_on_hangup>', $out);
     }
 }
