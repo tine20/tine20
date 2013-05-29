@@ -23,6 +23,9 @@
             <source>password</source>
             <destination>password</destination>
         </field>
+        <field>
+            <source>email</source>
+            <destination>accountEmailAddress</destination>
+        </field>
     </mapping>
 </config>
-        

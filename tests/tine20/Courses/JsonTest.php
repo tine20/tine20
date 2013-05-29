@@ -503,7 +503,8 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
                     )
                 )
             );
-            $importer->importFile($_filename);
+            $tempFilename = TestServer::replaceEmailDomainInFile($_filename);
+            $importer->importFile($tempFilename);
         }
         $courseData = $this->_json->getCourse($courseData['id']);
 

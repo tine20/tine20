@@ -101,7 +101,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      */
     public function uploadTempFile()
     {
-        $path = $this->_getTempPath();
+        $path = self::getTempPath();
         
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload to path " . $path);
@@ -155,7 +155,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * @throws Tinebase_Exception_UnexpectedValue
      * @return string
      */
-    protected function _getTempPath()
+    public static function getTempPath()
     {
         $path = tempnam(Tinebase_Core::getTempDir(), 'tine_tempfile_');
         if (! $path) {
@@ -273,7 +273,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      */
     public function openTempFile()
     {
-        $path = $this->_getTempPath();
+        $path = self::getTempPath();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Opening temp file ' . $path);
