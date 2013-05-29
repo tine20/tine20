@@ -216,6 +216,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     if (o.record.getUserId() == attender.getUserId()
                             && o.record.get('user_type') == attender.get('user_type')
                             && o.record != attender) {
+                        attender.set('checked', true);
                         var row = this.getView().getRow(this.store.indexOf(attender));
                         Ext.fly(row).highlight();
                         isDuplicate = true;

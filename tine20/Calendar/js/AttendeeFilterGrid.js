@@ -43,7 +43,7 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         
         this.store.on('add', this.onStoreAdd, this);
         this.store.on('remove', this.onStoreRemove, this);
-        this.store.on('update', this.onStoreUpdate, this, {buffer: 100});
+        this.store.on('update', this.onStoreUpdate, this);
     },
     
     initColumns: function() {
@@ -82,7 +82,8 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
     },
     
     onStoreUpdate: function(store, attendee) {
-        if (attendee.get('user_id')) {
+        // skip updates from new attendee row
+        if (store.indexOf(attendee) +1 != store.getCount() || attendee.explicitlyAdded) {
             this.onStoreChange();
         }
     },
