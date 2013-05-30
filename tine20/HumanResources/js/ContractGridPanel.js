@@ -129,7 +129,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGri
                      quickaddField: this.workingTimeQuickAdd, editor: this.workingTimeEditor,
                      renderer: this.renderWorkingTime, scope: this
                 }, { dataIndex: 'vacation_days', id: 'vacation_days', type: 'integer', header: this.app.i18n._('Vacation Days'),
-                     quickaddField: new Ext.form.TextField({allowBlank: false, regex: /^\d+$/ }), width: 90, editor: new Ext.form.TextField({allowBlank: false, regex: /^\d+$/})
+                     quickaddField: new Ext.form.NumberField({minValue: 0, maxValue: 255, allowBlank: false, width: 90}), editor: new Ext.form.NumberField({allowBlank: false, minValue: 0, maxValue: 255})
                 }, { dataIndex: 'start_date',    id: 'start_date',    type: 'date',   header: this.app.i18n._('Start Date'),
                      quickaddField : new Ext.ux.form.ClearableDateField(), renderer: Tine.Tinebase.common.dateRenderer,
                      editor: new Ext.ux.form.ClearableDateField()
