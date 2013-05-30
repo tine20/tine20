@@ -60,8 +60,8 @@ Tine.Crm.AddressbookGridPanelHook = function(config) {
     });
     
     // register in contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-GridPanel-ContextMenu-New', this.addLeadAction, 80);
-    Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-GridPanel-ContextMenu-Add', this.updateLeadAction, 80);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-New', this.addLeadAction, 80);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-Add', this.updateLeadAction, 80);
 
 };
 

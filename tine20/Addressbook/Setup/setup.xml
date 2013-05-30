@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>7.2</version>
+    <version>7.1</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -495,7 +495,7 @@
         </table>
         <table>
             <name>addressbook_lists</name>
-            <version>3</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -574,7 +574,7 @@
                 </index>
                 <index>
                     <name>name</name>
-                    <unique>false</unique>
+                    <unique>true</unique>
                     <field>
                         <name>name</name>
                     </field>

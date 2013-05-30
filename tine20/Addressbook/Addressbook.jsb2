@@ -16,15 +16,7 @@
           "path": "js/"
         },
         {
-          "text": "ContactModel.js",
-          "path": "js/"
-        },
-        {
-          "text": "ListModel.js",
-          "path": "js/"
-        },
-        {
-          "text": "EmailModel.js",
+          "text": "Model.js",
           "path": "js/"
         },
         {
@@ -33,10 +25,6 @@
         },
         {
           "text": "ContactGridDetailsPanel.js",
-          "path": "js/"
-        },
-        {
-          "text": "ListGridDetailsPanel.js",
           "path": "js/"
         },
         {
@@ -49,18 +37,6 @@
         },
         {
           "text": "ContactEditDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "ListEditDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "ListMemberGridPanel.js",
-          "path": "js/"
-        },
-        {
-          "text": "ListGrid.js",
           "path": "js/"
         },
         {

@@ -34,13 +34,13 @@ class Addressbook_Model_ListHiddenFilter extends Tinebase_Model_Filter_Bool
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Query all lists.');
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Only query visible lists.');
-            $_select->joinLeft(
+            
+            $_select->join(
                 /* table  */ array('groupvisibility' => $db->table_prefix . 'groups'), 
                 /* on     */ $db->quoteIdentifier('groupvisibility.list_id') . ' = ' . $db->quoteIdentifier('addressbook_lists.id'),
                 /* select */ array()
             );
             $_select->where($db->quoteIdentifier('groupvisibility.visibility').' = ?', 'displayed');
-            $_select->orWhere($db->quoteInto($db->quoteIdentifier('addressbook_lists.type'). ' = ?', Addressbook_Model_List::LISTTYPE_LIST));
         }
     }
 }

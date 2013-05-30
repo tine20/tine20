@@ -164,7 +164,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
                 items: items/*,
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu'
+                    key:   this.app.appName + '-GridPanel-ContextMenu'
                 }]*/
             });
         }

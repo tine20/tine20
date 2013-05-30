@@ -60,45 +60,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchContacts($filter, $paging)
     {
         return $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
-    }    
-
-    /**
-     * Search for Email Addresses with the Email Model in Lists and Contacts
-     *
-     * @param  array $filter
-     * @param  array $paging
-     * @return array
-     *
-     * Record Proxy Pluralizer doesnt correctly pluralize EmailAddress, thus EmailAddresss is used
-     *
-     */
-    public function searchEmailAddresss($filter, $paging)
-    {
-        $results = array();
-        $contacts = $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
-        foreach ($contacts["results"] as $contact) {
-            array_push($results, array("n_fileas" => $contact["n_fileas"],"n_fn" => $contact["n_fn"],"org_unit" => $contact["org_unit"], "emails" => $contact["email"], "email" => $contact["email"], "email_home" => $contact["email_home"]));
-        }
-
-        $dont_add = false;
-        if (isset($paging["start"])) {
-            $paging["start"] = $paging["start"] - $contacts["totalcount"] + count($results);
-            $paging["limit"] = $paging["limit"] - count($results);
-            if (($paging["limit"] <= 0) || ($paging["start"] < 0)) {
-                $dont_add = true;
-                $paging["limit"] = 1;
-                $paging["start"] = 0;
-            }
-        }
-        
-        $lists = $this->_search($filter, $paging, Addressbook_Controller_List::getInstance(), 'Addressbook_Model_ListFilter');
-        if (!$dont_add) {
-            foreach ($lists["results"] as $list) {
-                array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
-            }
-         }
-         return array("results" => $results, "totalcount" => $lists["totalcount"]+$contacts["totalcount"]);
-    } 
+    }
     
     /**
      * return autocomplete suggestions for a given property and value
@@ -137,31 +99,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
     
-    /**
-     * get one list identified by $id
-     *
-     * @param string $id
-     * @return array
-     */
-    public function getList($id)
-    {
-        return $this->_get($id, Addressbook_Controller_List::getInstance());
-    }
-
-    /**
-     * save one list
-     *
-     * if $recordData['id'] is empty the list gets added, otherwise it gets updated
-     *
-     * @param  array $recordData an array of list properties
-     * @param  boolean $duplicateCheck
-     * @return array
-     */
-    public function saveList($recordData, $duplicateCheck = FALSE)
-    {
-        return $this->_save($recordData, Addressbook_Controller_List::getInstance(), 'List', 'id', array($duplicateCheck));
-    }
-
     /**
      * Search for lists matching given arguments
      *

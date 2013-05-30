@@ -1200,7 +1200,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     xtype: 'buttongroup',
                     plugins: [{
                         ptype: 'ux.itemregistry',
-                        key:   this.app.appName + '-' + this.recordClass.prototype.modelName+ '-GridPanel-ActionToolbar-leftbtngrp'
+                        key:   this.app.appName + '-GridPanel-ActionToolbar-leftbtngrp'
                     }],
                     items: items.concat(Ext.isArray(additionalItems) ? additionalItems : [])
                 }].concat(Ext.isArray(additionalItems) ? [] : [additionalItems])
@@ -1264,7 +1264,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items: [],
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName+ '-GridPanel-ContextMenu-New'
+                    key:   this.app.appName + '-GridPanel-ContextMenu-New'
                 }]
             });
 
@@ -1283,7 +1283,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items: [],
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu-Add'
+                    key:   this.app.appName + '-GridPanel-ContextMenu-Add'
                 }]
             });
 
@@ -1301,7 +1301,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items: items,
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName+  '-GridPanel-ContextMenu'
+                    key:   this.app.appName + '-GridPanel-ContextMenu'
                 }]
             });
         }
