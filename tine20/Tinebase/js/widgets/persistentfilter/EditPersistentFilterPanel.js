@@ -83,9 +83,18 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
 
     /**
      * initializes the buttons
+     * use preference settings for order of save and close buttons
      */
     initButtons : function() {
-        this.fbar = ['->', this.action_cancel, this.action_save];
+
+        this.fbar = ['->'];
+        
+        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
+            this.fbar.push(this.action_save, this.action_cancel);
+        }
+        else {
+            this.fbar.push(this.action_cancel, this.action_save);
+        }
     },
 
     /**

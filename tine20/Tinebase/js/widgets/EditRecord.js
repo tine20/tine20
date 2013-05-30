@@ -195,20 +195,22 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     },
     
     /**
-     * @private
+     * init buttons
+     * use preference settings for order of save and close buttons
      */
     initButtons: function () {
         var genericButtons = [
             this.action_delete
         ];
         
-        //this.tbarItems = genericButtons.concat(this.tbarItems);
+        this.buttons = [];
         
-        this.buttons = [
-            //this.action_applyChanges,
-            this.action_cancel,
-            this.action_saveAndClose
-        ];
+        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
+            this.buttons.push(this.action_saveAndClose, this.action_cancel);
+        }
+        else {
+            this.buttons.push(this.action_cancel, this.action_saveAndClose);
+        }
        
         if (this.tbarItems) {
             this.tbar = new Ext.Toolbar({

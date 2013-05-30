@@ -1001,6 +1001,24 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     initGrid: function() {
+        if (Tine.Tinebase.registry.containsKey('preferences')) {
+            this.gridConfig = Ext.applyIf(this.gridConfig || {}, {
+                stripeRows: Tine.Tinebase.registry.get('preferences').containsKey('gridStripeRows') ? Tine.Tinebase.registry.get('preferences').get('gridStripeRows') : false,
+                loadMask: Tine.Tinebase.registry.get('preferences').containsKey('gridLoadMask') ? Tine.Tinebase.registry.get('preferences').get('gridLoadMask') : false
+            });
+            
+            // added paging number of result read from settings
+            if (Tine.Tinebase.registry.get('preferences').containsKey('pageSize')) {
+                this.defaultPaging = {
+                    start: 0,
+                    limit: parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10)
+                };
+            }
+        }
+        
+        // generic empty text
+        this.i18nEmptyText = Tine.Tinebase.translation.gettext('No data to display');
+        
         // init sel model
         this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
             store: this.store,
@@ -1134,7 +1152,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             
             if (this.action_addInNewWindow) {
                 if (this.splitAddButton) {
-                    items.push(Ext.apply(
+                    items.push(Ext.applyIf(
                         new Ext.SplitButton(this.action_addInNewWindow), {
                             scale: 'medium',
                             rowspan: 2,

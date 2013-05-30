@@ -83,25 +83,35 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
     
     /**
      * init buttons
+     * use preference settings for order of yes and no buttons
      */
-    initButtons: function() {
-        this.fbar = ['->', 
-        {
+    initButtons: function () {
+        this.fbar = ['->'];
+        
+        var noBtn = {
             xtype: 'button',
             text: _('No'),
             minWidth: 70,
             scope: this,
             handler: this.onCancel,
             iconCls: 'action_cancel'
-        },
-        {
+        };
+        
+        var yesBtn = {
             xtype: 'button',
             text: _('Yes'),
             minWidth: 70,
             scope: this,
             handler: this.onOk,
             iconCls: 'action_applyChanges'
-        }];
+        }; 
+        
+        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
+            this.fbar.push(yesBtn, noBtn);
+        }
+        else {
+            this.fbar.push(noBtn, yesBtn);
+        }
     },
     
     onOk: function() {

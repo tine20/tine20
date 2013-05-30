@@ -133,17 +133,20 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     
     /**
      * init buttons
+     * use preference settings for order of save and close buttons
      */
-    initButtons: function() {
-        this.buttons = [
-            this.action_cancel,
-            this.action_saveAndClose
-        ];
+    initButtons: function () {
+        this.buttons = [];
+        
+        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
+            this.buttons.push(this.action_saveAndClose, this.action_cancel);
+        }
+        else {
+            this.buttons.push(this.action_cancel, this.action_saveAndClose);
+        }
        
         this.tbar = new Ext.Toolbar({
-            items: [
-                this.action_switchAdminMode
-            ]
+            items: [ this.action_switchAdminMode ]
         });
     },
     

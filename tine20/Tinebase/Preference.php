@@ -20,9 +20,39 @@
 class Tinebase_Preference extends Tinebase_Preference_Abstract
 {
     /**************************** application preferences/settings *****************/
-        
+    
     /**
-     * timezone pref const
+     * page size in grids
+     * 
+     */
+    const PAGE_SIZE = 'pageSize';
+    
+    /**
+     * strip rows in grids
+     * 
+     */
+    const GRID_STRIPE_ROWS = 'gridStripeRows';
+    
+    /**
+     * show load mask in grids
+     * 
+     */
+    const GRID_LOAD_MASK = 'gridLoadMask';
+    
+    /**
+     * order of buttons in dialogs
+     * 
+     */
+    const DIALOG_BUTTONS_ORDER_STYLE = 'dialogButtonsOrderStyle';
+    
+    /**
+     * auto search on filter change
+     * 
+     */
+    const FILTER_CHANGE_AUTO_SEARCH = 'filterChangeAutoSearch';
+   
+    /**
+     *  timezone pref const
      *
      */
     const TIMEZONE = 'timezone';
@@ -67,6 +97,11 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 self::DEFAULT_APP,
                 self::WINDOW_TYPE,
                 self::CONFIRM_LOGOUT,
+                self::PAGE_SIZE,
+                self::GRID_STRIPE_ROWS,
+                self::GRID_LOAD_MASK,
+                self::DIALOG_BUTTONS_ORDER_STYLE,
+                self::FILTER_CHANGE_AUTO_SEARCH,
             )
             : array();
             
@@ -82,7 +117,27 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
     {
         $translate = Tinebase_Translation::getTranslation($this->_application);
 
-        $prefDescriptions = array(            
+        $prefDescriptions = array(
+            self::PAGE_SIZE  => array(
+                'label'         => $translate->_('Page size'),
+                'description'   => $translate->_('Page size in grids'),
+            ),
+            self::GRID_STRIPE_ROWS  => array(
+                'label'         => $translate->_('Grid stripe rows'),
+                'description'   => $translate->_('Stripe rows in grids'),
+            ),
+            self::GRID_LOAD_MASK  => array(
+                'label'         => $translate->_('Grid load mask'),
+                'description'   => $translate->_('Show load mask in grids'),
+            ),
+            self::DIALOG_BUTTONS_ORDER_STYLE  => array(
+                'label'         => $translate->_('Dialog buttons order style'),
+                'description'   => $translate->_('Dialog buttons order style (Windows / Mac)'),
+            ),
+            self::FILTER_CHANGE_AUTO_SEARCH  => array(
+                'label'         => $translate->_('Auto search on filter change'),
+                'description'   => $translate->_('Perform auto search when filter is changed'),
+            ),
             self::TIMEZONE  => array(
                 'label'         => $translate->_('Timezone'),
                 'description'   => $translate->_('The timezone in which dates are shown in Tine 2.0.'),
@@ -119,6 +174,70 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
         switch($_preferenceName) {
+            case self::PAGE_SIZE:
+                $preference->value  = 50; 
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>15</label>
+                            <value>15</value>
+                        </option>
+                        <option>
+                            <label>30</label>
+                            <value>30</value>
+                        </option>
+                        <option>
+                            <label>50</label>
+                            <value>50</value>
+                        </option>
+                        <option>
+                            <label>100</label>
+                            <value>100</value>
+                        </option>
+                    </options>';
+                $preference->personal_only = FALSE;
+                break;
+
+            case self::GRID_STRIPE_ROWS:
+                $preference->value      = 0;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                  $preference->personal_only = FALSE;
+                break;
+            case self::GRID_LOAD_MASK:
+                $preference->value      = 0;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                  $preference->personal_only = FALSE;
+                break;
+
+            case self::DIALOG_BUTTONS_ORDER_STYLE:
+                $preference->value  = 'Macintosh'; 
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>Windows</label>
+                            <value>Windows</value>
+                        </option>
+                        <option>
+                            <label>Macintosh</label>
+                            <value>Macintosh</value>
+                        </option>
+                    </options>';
+                $preference->personal_only = FALSE;
+                break;
+            case self::FILTER_CHANGE_AUTO_SEARCH:
+                $preference->value      = 1;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                $preference->personal_only = FALSE;
+                break;
             case self::TIMEZONE:
                 $preference->value      = 'Europe/Berlin';
                 break;

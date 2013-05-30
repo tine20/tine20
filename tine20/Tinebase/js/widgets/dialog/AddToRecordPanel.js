@@ -118,10 +118,18 @@ Tine.widgets.dialog.AddToRecordPanel = Ext.extend(Ext.FormPanel, {
 
     /**
      * create the buttons
+     * use preference settings for order of save and close buttons
      */
     initButtons : function() {
-        this.fbar = [ '->', this.action_cancel, this.action_update ];
-    },
+        this.fbar = ['->'];
+        
+        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
+            this.fbar.push(this.action_update, this.action_cancel);
+        }
+        else {
+            this.fbar.push(this.action_cancel, this.action_update);
+        }
+    },    
     
     /**
      * is called on render, creates keymap
