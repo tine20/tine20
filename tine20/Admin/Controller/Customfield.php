@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -102,13 +102,34 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
      * @return  array
      * @throws Tinebase_Exception_NotFound|Tinebase_Exception
      */
-    public function delete($_ids)
+    public function delete($ids)
     {
-        foreach ( (array)$_ids as $id ) {
+        $this->_checkCFUsage($ids);
+        foreach ((array) $ids as $id) {
             $this->_customfieldController->deleteCustomField($id);
         }
         
-        return (array)$_ids;
+        return (array) $ids;
+    }
+    
+    /**
+     * checks if customfield(s) are still in use (have values)
+     * 
+     * @param array $ids
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkCFUsage($ids)
+    {
+        $filter = new Tinebase_Model_CustomField_ValueFilter(array(array(
+            'field'     => 'customfield_id',
+            'operator'  => 'in',
+            'value'     => (array) $ids
+        )));
+        
+        $result = $this->_customfieldController->search($filter, NULL, FALSE, TRUE);
+        if (! empty($result)) {
+            throw new Tinebase_Exception_SystemGeneric('Customfield is still in use!');
+        }
     }
     
     /**
