@@ -247,7 +247,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             callback : function(options, Success, response) {
                 // clear the authenticated mod_ssl session
                 if (document.all == null) {
-                    if (window.crypto) {
+                    if (window.crypto && Ext.isFunction(window.crypto.logout)) {
                         window.crypto.logout();
                     }
                 } else {
