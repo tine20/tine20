@@ -961,6 +961,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                     $diff[$fieldName] = $subdiff;
                 }
                 continue;
+            } else if ($recordField instanceof Tinebase_Record_Abstract && is_scalar($ownField)) {
+                // maybe we have the id of the record -> just compare the id
+                if ($recordField->getId() == $ownField) {
+                    continue;
+                } else {
+                    $recordField = $recordField->getId();
+                }
             } else if ($ownField == $recordField) {
                 continue;
             } else if (empty($ownField) && empty($recordField)) {
