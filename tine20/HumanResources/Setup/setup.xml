@@ -19,6 +19,10 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>description</name>
+                    <type>clob</type>
+                </field>
+                <field>
                     <name>account_id</name>
                     <type>text</type>
                     <length>40</length>
@@ -29,10 +33,6 @@
                     <type>text</type>
                     <length>64</length>
                     <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>description</name>
-                    <type>clob</type>
                 </field>
                 <field>
                     <name>locality</name>

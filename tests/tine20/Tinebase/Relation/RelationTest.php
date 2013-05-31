@@ -170,7 +170,20 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
             $this->assertFalse(empty($relation->related_id));
         }
     }
-
+    
+    /**
+     * test for 0008446: Allow getting relations for one related model only
+     * https://forge.tine20.org/mantisbt/view.php?id=8446
+     */
+    public function testGetRelationsWithRelatedModel()
+    {
+        $relations = $this->_object->getMultipleRelations($this->_crmId['model'], $this->_crmId['backend'], array($this->_crmId['id']), NULL, array(), FALSE, 'Addressbook_Model_Contact');
+        $this->assertEquals(1, count($relations));
+        $fr = $relations[0];
+        $this->assertEquals(1, $fr->count());
+        $this->assertEquals('Addressbook_Model_Contact', $fr->getFirstRecord()->related_model);
+    }
+    
     /**
      * Tests if updating succeeds when setting relations
      * 

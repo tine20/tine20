@@ -182,15 +182,16 @@ class Tinebase_Relation_Backend_Sql
     /**
      * returns all relations of a given record and optionally only of given role
      * 
-     * @param  string       $_model    own model to get all relations for
-     * @param  string       $_backend  own backend to get all relations for
-     * @param  string|array $_id       own id to get all relations for 
-     * @param  string       $_degree   only return relations of given degree
-     * @param  array        $_type     only return relations of given type
-     * @param  boolean      $_returnAll gets all relations (default: only get not deleted/broken relations)
+     * @param  string       $_model         own model to get all relations for
+     * @param  string       $_backend       own backend to get all relations for
+     * @param  string|array $_id            own id to get all relations for 
+     * @param  string       $_degree        only return relations of given degree
+     * @param  array        $_type          only return relations of given type
+     * @param  boolean      $_returnAll     gets all relations (default: only get not deleted/broken relations)
+     * @param  string       $_relatedModel  only return relations having this related model
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
-    public function getAllRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_returnAll = false)
+    public function getAllRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_returnAll = false, $_relatedModel = NULL)
     {
         $_id = $_id ? (array)$_id : array('');
         $where = array(
@@ -198,6 +199,10 @@ class Tinebase_Relation_Backend_Sql
             $this->_db->quoteInto($this->_db->quoteIdentifier('own_backend') .' = ?',$_backend),
             $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') .' IN (?)' , $_id),
         );
+        
+        if ($_relatedModel) {
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('related_model') .' = ?', $_relatedModel);
+        }
         
         if (!$_returnAll) {
             $where[] = $this->_db->quoteIdentifier('is_deleted') . ' = '.(int)FALSE;
