@@ -1614,9 +1614,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $filterClassName = $_fieldConfig['filterClassName'];
             $existing = new Tinebase_Record_RecordSet($recordClassName);
     
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->{$_property}, TRUE));
-            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($_record->{$_property}, TRUE));
             
             if (! empty($_record->{$_property}) && $_record->{$_property}) {
                 
