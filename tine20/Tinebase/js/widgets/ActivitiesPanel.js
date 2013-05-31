@@ -319,6 +319,14 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
                 scope: this
             });
            
+            this.buttons = [];
+            if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
+                this.buttons.push(this.okAction, this.cancelAction);
+            }
+            else {
+                this.buttons.push(this.cancelAction, this.okAction);
+            }
+            
             this.window = Tine.WindowFactory.getWindow({
                 title: this.translation.gettext('Add Note'),
                 width: 500,
@@ -327,10 +335,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
                 layout: 'fit',
                 buttonAlign: 'right',
                 border: false,    
-                buttons: [      
-                   this.cancelAction,
-                   this.okAction
-                ],
+                buttons: this.buttons,
                 items: this.formPanel
             });
         },       
