@@ -272,15 +272,15 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL) 
     {
+        $quotedName = $this->_db->quoteIdentifier($_declaration->name);
+        
         $baseStatement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
 
         // rename the column if needed
         if ($_oldName !== NULL) {
-            $statement = $baseStatement . ' RENAME COLUMN ' . $this->_db->quoteIdentifier($_oldName) . ' TO ' . $this->_db->quoteIdentifier($_declaration->name);
+            $statement = $baseStatement . ' RENAME COLUMN ' . $this->_db->quoteIdentifier($_oldName) . ' TO ' . $quotedName;
             $this->execQueryVoid($statement);
         }
-        
-        $quotedName = $this->_db->quoteIdentifier($_declaration->name);
 
         $fieldDeclaration = $this->getFieldDeclarations($_declaration);
         
@@ -289,16 +289,16 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         // cut of NOT NULL and DEFAULT from the end
         $type      = preg_replace(array('/ (NOT NULL|DEFAULT .*)/'), null, $type);
         
-        $statement = $baseStatement . ' ALTER COLUMN ' . $this->_db->quoteIdentifier($_declaration->name) . ' TYPE ' . $type;
+        $statement = $baseStatement . ' ALTER COLUMN ' . $quotedName . ' TYPE ' . $type . ' USING CAST(' . $quotedName . ' AS ' . $type . ')';
         $this->execQueryVoid($statement);
         
         if (preg_match('/NOT NULL/', $fieldDeclaration)) {
-            $statement = $baseStatement . ' ALTER COLUMN ' . $this->_db->quoteIdentifier($_declaration->name) . ' SET NOT NULL ';
+            $statement = $baseStatement . ' ALTER COLUMN ' . $quotedName . ' SET NOT NULL ';
             $this->execQueryVoid($statement);
         }
         
         if (preg_match('/(?P<DEFAULT>DEFAULT .*)/', $fieldDeclaration, $matches)) {
-            $statement = $baseStatement . ' ALTER COLUMN ' . $this->_db->quoteIdentifier($_declaration->name) . ' SET ' . $matches['DEFAULT'];
+            $statement = $baseStatement . ' ALTER COLUMN ' . $quotedName . ' SET ' . $matches['DEFAULT'];
             $this->execQueryVoid($statement);
         }
     }
