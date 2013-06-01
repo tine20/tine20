@@ -526,8 +526,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
         
         $filesToWatch = $this->_getFilesToWatch($_fileType);
+        $lastModified = $this->_getLastModified($filesToWatch);
         
-        $serverETag = hash('sha1', implode('', $filesToWatch));
+        // use last modified time also
+        $serverETag = hash('sha1', implode('', $filesToWatch) . $lastModified);
         
         $cache = new Zend_Cache_Frontend_File(array(
             'master_files' => $filesToWatch
@@ -552,9 +554,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             header("HTTP/1.0 304 Not Modified");
             header('Content-Length: 0');
         } else {
-            // recalculate etag
-            $lastModified = $this->_getLastModified($filesToWatch);
-            
+            // get new cacheId
             $cacheId = __CLASS__ . "_". __FUNCTION__ . hash('sha1', $serverETag . $lastModified);
             
             // do we need to update the cache? maybe the client did not send an etag
