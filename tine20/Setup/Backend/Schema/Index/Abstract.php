@@ -18,6 +18,13 @@ abstract class Setup_Backend_Schema_Index_Abstract extends Setup_Backend_Schema_
      * @var array
      */
     public $field = array();
+    
+    /**
+     * length for fields
+     * 
+     * @var array
+     */
+    public $fieldLength = array();
 
     /**
      * index defines primary key

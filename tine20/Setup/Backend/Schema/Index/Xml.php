@@ -33,6 +33,10 @@ class Setup_Backend_Schema_Index_Xml extends Setup_Backend_Schema_Index_Abstract
             } else if ($key == 'field') {
                 if ($val instanceof SimpleXMLElement) {
                     $this->field[] = (string) $val->name;
+                    
+                    if (isset($val->length)) {
+                        $this->fieldLength[(string) $val->name] = (int) $val->length;
+                    }
                 } else {
                     $this->field   = (string) $val;
                 }

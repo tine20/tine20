@@ -598,6 +598,10 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             if (!empty($keyfield->length)) {
                 $key .= ' (' . $keyfield->length . ')';
             }
+            // added
+            else if (array_key_exists((string)$keyfield, $_key->fieldLength)) {
+                $key .= ' (' . $_key->fieldLength[(string)$keyfield] . ')';
+            }
             $keys[] = $key;
         }
 
