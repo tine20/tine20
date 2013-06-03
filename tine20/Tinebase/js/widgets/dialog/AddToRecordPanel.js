@@ -154,6 +154,13 @@ Tine.widgets.dialog.AddToRecordPanel = Ext.extend(Ext.FormPanel, {
      */
     onCancel: function() {
         this.fireEvent('cancel');
+        this.onClose();
+    },
+    
+    /**
+     * closes the window
+     */
+    onClose: function() {
         this.purgeListeners();
         this.window.close();
     },
@@ -192,10 +199,10 @@ Tine.widgets.dialog.AddToRecordPanel = Ext.extend(Ext.FormPanel, {
      * is called when ok-button is pressed and edit dialog should be opened
      */
     onUpdate: function() {
-        if(this.isValid()) {
-            if(this.app) {
+        if (this.isValid()) {
+            if (this.app) {
                 var ms = this.app.getMainScreen();
-                if(ms) {
+                if (ms) {
                     var cp = ms.getCenterPanel();
                 }
             }
@@ -207,7 +214,7 @@ Tine.widgets.dialog.AddToRecordPanel = Ext.extend(Ext.FormPanel, {
                 callingApp:      this.callingApp,
                 callingModel:    this.callingModel
             }]);
-            this.onCancel();
+            this.onClose();
         }
     }
 });

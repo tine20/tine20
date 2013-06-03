@@ -20,6 +20,10 @@
           "path": "js/"
         },
         {
+          "text": "GenericContactGridPanelHook.js",
+          "path": "js/"
+        },
+        {
           "text": "Addressbook.js",
           "path": "js/"
         },
