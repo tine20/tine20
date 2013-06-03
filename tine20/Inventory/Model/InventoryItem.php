@@ -157,6 +157,9 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      */
     public static function getValidFields()
     {
+        if (static::$_configurationObject===NULL){
+            static::getConfiguration();
+        }
         return static::$_configurationObject->fieldKeys;
     }
 }

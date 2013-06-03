@@ -94,6 +94,19 @@ class Inventory_JsonTest extends Inventory_TestCase
     }
     
     /**
+     * test autoComplete of an InventoryItem
+     */
+    public function testAutoCompleteInventoryItems()
+    {
+        $inventoryRecord = $this->testCreateInventoryItem();
+        $inventoryRecordID = $inventoryRecord['id'];
+        
+        $returned = $this->_json->autoCompleteInventoryItemProperty('name', 'mini');
+        
+        $this->assertEquals('minimal inventory item by PHPUnit::Inventory_JsonTest', $returned['results'][0]['name']);
+    }
+    
+    /**
      * test deletetion of an InventoryItem
      */
     public function testDeleteInventoryItems()

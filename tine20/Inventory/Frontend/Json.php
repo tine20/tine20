@@ -96,6 +96,45 @@ class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * return autocomplete suggestions for a given property and value
+     *
+     * @todo have spechial controller/backend fns for this
+     * @todo move to abstract json class and have tests
+     * @todo make this work
+     *
+     * @param  string   $property
+     * @param  string   $startswith
+     * @return array
+     */
+    public function autoCompleteInventoryItemProperty($property, $startswith)
+    {
+        if (! in_array($property, Inventory_Model_InventoryItem::getValidFields())) {
+            // NOTE: it would be better to ask the model for property presece, but we can't atm.
+            // NOTE: Maybe we can .. not sure. - Michael
+            throw new Tinebase_Exception_UnexpectedValue('bad property name');
+        }
+        $filter = new Inventory_Model_InventoryItemFilter(array(
+            array('field' => $property, 'operator' => 'startswith', 'value' => $startswith),
+        ));
+        
+        $paging = new Tinebase_Model_Pagination(array('sort' => $property));
+        
+        $values = array_unique(Inventory_Controller_InventoryItem::getInstance()->search($filter, $paging)->{$property});
+        
+        $result = array(
+            'results'   => array(),
+            'totalcount' => count($values)
+        );
+        
+        foreach($values as $value) {
+            $result['results'][] = array($property => $value);
+        }
+        
+        return $result;
+    }
+    
+    
+    /**
      * get inventory import definitions
      *
      * @return Tinebase_Record_RecordSet
