@@ -841,7 +841,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                     
                 case 'VALARM':
-                    foreach($property as $valarm) {
+                    foreach ($property as $valarm) {
                         
                         if ($valarm->ACTION == 'NONE') {
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
@@ -849,7 +849,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                             continue;
                         }
                         
-                        if (! is_object($valarm->TRIGGER['VALUE'])) {
+                        $trigger = is_object($valarm->TRIGGER['VALUE']) ? $valarm->TRIGGER['VALUE'] : (is_object($valarm->TRIGGER['RELATED']) ? $valarm->TRIGGER['RELATED'] : NULL);
+                        if ($trigger === NULL) {
+                            // added Trigger/Related for eM Client alarms
                             // @see 0006110: handle iMIP messages from outlook
                             // @todo fix 0007446: handle broken alarm in outlook invitation message
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
@@ -857,10 +859,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                             continue;
                         }
                         
-                        switch (strtoupper($valarm->TRIGGER['VALUE']->value)) {
+                        switch (strtoupper($trigger->value)) {
                             # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
                             case 'DATE-TIME':
-                                //@TODO fixme
                                 $alarmTime = new Tinebase_DateTime($valarm->TRIGGER->value);
                                 $alarmTime->setTimezone('UTC');
                                 

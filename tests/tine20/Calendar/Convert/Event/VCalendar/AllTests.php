@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Convert_Event_VCalendar_AllTests::main');
-}
 
 class Calendar_Convert_Event_VCalendar_AllTests
 {
@@ -31,11 +27,8 @@ class Calendar_Convert_Event_VCalendar_AllTests
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_GenericTest');
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_MacOSXTest');
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_ThunderbirdTest');
+        $suite->addTestSuite('Calendar_Convert_Event_VCalendar_EMClientTest');
         
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Convert_Event_VCalendar_AllTests::main') {
-    Calendar_Convert_Event_VCalendar_AllTests::main();
 }
