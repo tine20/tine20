@@ -333,17 +333,18 @@ Zeile 3</AirSyncBase:Data>
         if ($syncrotonFolder === null) {
             $syncrotonFolder = $this->testCreateFolder();
         }
-    
+        
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_WEBOS), Tinebase_DateTime::now());
-    
-        $xml = new SimpleXMLElement($this->_testXMLInput);
+        
+        $now = Tinebase_DateTime::now();
+        $thisYear = $now->format('Y');
+        $xmlString = preg_replace('/2012/', $thisYear, $this->_testXMLInput);
+        $xml = new SimpleXMLElement($xmlString);
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
-    
+        
         $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
-    
+        
         $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
-    
-        #echo '----------------' . PHP_EOL; foreach ($syncrotonEvent as $key => $value) {echo "$key => "; var_dump($value);}
         
         $this->assertEquals(0,         $syncrotonEvent->allDayEvent, 'alldayEvent');
         $this->assertEquals(2,         $syncrotonEvent->busyStatus);
@@ -351,8 +352,8 @@ Zeile 3</AirSyncBase:Data>
         $this->assertEquals(15,        $syncrotonEvent->reminder);
         $this->assertTrue($syncrotonEvent->endTime instanceof DateTime);
         $this->assertTrue($syncrotonEvent->startTime instanceof DateTime);
-        $this->assertEquals('20121123T160000Z', $syncrotonEvent->endTime->format('Ymd\THis\Z'));
-        $this->assertEquals('20121123T130000Z', $syncrotonEvent->startTime->format('Ymd\THis\Z'));
+        $this->assertEquals($thisYear . '1123T160000Z', $syncrotonEvent->endTime->format('Ymd\THis\Z'));
+        $this->assertEquals($thisYear . '1123T130000Z', $syncrotonEvent->startTime->format('Ymd\THis\Z'));
         $this->assertEquals(1, count($syncrotonEvent->attendees), 'event: ' . var_export($syncrotonEvent->attendees, TRUE));
         $this->assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $syncrotonEvent->attendees[0]->email, 'event: ' . var_export($syncrotonEvent, TRUE));
         
@@ -365,19 +366,19 @@ Zeile 3</AirSyncBase:Data>
         $this->assertEquals(Syncroton_Model_EventRecurrence::TYPE_DAILY, $syncrotonEvent->recurrence->type);
         $this->assertEquals(1, $syncrotonEvent->recurrence->interval);
         $this->assertTrue($syncrotonEvent->recurrence->until instanceof DateTime);
-        $this->assertEquals('20121128T225959Z', $syncrotonEvent->recurrence->until->format('Ymd\THis\Z'));
+        $this->assertEquals($thisYear . '1128T225959Z', $syncrotonEvent->recurrence->until->format('Ymd\THis\Z'));
         
         // Exceptions
         $this->assertEquals(2, count($syncrotonEvent->exceptions));
         $this->assertTrue($syncrotonEvent->exceptions[0] instanceof Syncroton_Model_EventException);
         $this->assertFalse(isset($syncrotonEvent->exceptions[0]->deleted), 'exception deleted with value of 0 should not be set');
         $this->assertEquals('Repeat mal anders', $syncrotonEvent->exceptions[0]->subject);
-        $this->assertEquals('20121125T130000Z', $syncrotonEvent->exceptions[0]->exceptionStartTime->format('Ymd\THis\Z'));
-        $this->assertEquals('20121125T170000Z', $syncrotonEvent->exceptions[0]->endTime->format('Ymd\THis\Z'));
-        $this->assertEquals('20121125T140000Z', $syncrotonEvent->exceptions[0]->startTime->format('Ymd\THis\Z'));
+        $this->assertEquals($thisYear . '1125T130000Z', $syncrotonEvent->exceptions[0]->exceptionStartTime->format('Ymd\THis\Z'));
+        $this->assertEquals($thisYear . '1125T170000Z', $syncrotonEvent->exceptions[0]->endTime->format('Ymd\THis\Z'));
+        $this->assertEquals($thisYear . '1125T140000Z', $syncrotonEvent->exceptions[0]->startTime->format('Ymd\THis\Z'));
         
         $this->assertEquals(1, $syncrotonEvent->exceptions[1]->deleted);
-        $this->assertEquals('20121124T130000Z', $syncrotonEvent->exceptions[1]->exceptionStartTime->format('Ymd\THis\Z'));
+        $this->assertEquals($thisYear . '1124T130000Z', $syncrotonEvent->exceptions[1]->exceptionStartTime->format('Ymd\THis\Z'));
         
         return array($serverId, $syncrotonEvent);
     }
@@ -595,6 +596,8 @@ Zeile 3</AirSyncBase:Data>
         
         $XMLMeetingResponse = $this->_testXMLMeetingResponse;
         
+        $thisYear = Tinebase_DateTime::now()->format('Y');
+        $XMLMeetingResponse = str_replace('2012', $thisYear, $XMLMeetingResponse);
         $XMLMeetingResponse = str_replace('<CollectionId>17</CollectionId>', '<CollectionId>' . $syncrotonFolder->serverId . '</CollectionId>', $XMLMeetingResponse);
         $XMLMeetingResponse = str_replace('<RequestId>f0c79775b6b44be446f91187e24566aa1c5d06ab</RequestId>', '<RequestId>' . $serverId . '</RequestId>', $XMLMeetingResponse);
         
@@ -621,6 +624,8 @@ Zeile 3</AirSyncBase:Data>
         
         $XMLMeetingResponse = $this->_testXMLMeetingResponse;
         
+        $thisYear = Tinebase_DateTime::now()->format('Y');
+        $XMLMeetingResponse = str_replace('2012', $thisYear, $XMLMeetingResponse);
         $XMLMeetingResponse = str_replace('<CollectionId>17</CollectionId>', '<CollectionId>' . $syncrotonFolder->serverId . '</CollectionId>', $XMLMeetingResponse);
         $XMLMeetingResponse = str_replace('<RequestId>f0c79775b6b44be446f91187e24566aa1c5d06ab</RequestId>', '<RequestId>' . $serverId . '</RequestId>', $XMLMeetingResponse);
         $XMLMeetingResponse = str_replace('<InstanceId>20121125T130000Z</InstanceId>', '<InstanceId>20121126T130000Z</InstanceId>', $XMLMeetingResponse);
@@ -832,25 +837,5 @@ Zeile 3</AirSyncBase:Data>
         
         #var_dump(Calendar_Controller_Event::getInstance()->get($serverId)->toArray());
         $this->assertEquals(1, count(Calendar_Controller_Event::getInstance()->get($serverId)->attendee), 'count after update');
-    }
-
-    /**
-     * test get changed entries
-     * 
-     * @todo enable again (by removing)
-     */
-    public function testGetChangedEntries()
-    {
-        $this->markTestSkipped('@see 0008412: fix ActiveSync_Controller_CalendarTests.testGetChangedEntries');
-    }
-    
-    /**
-     * test get changed entries for android
-     * 
-     * @todo enable again (by removing)
-     */
-    public function testGetChangedEntriesAndroid()
-    {
-        $this->markTestSkipped('@see 0008412: fix ActiveSync_Controller_CalendarTests.testGetChangedEntries');
     }
 }
