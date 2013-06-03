@@ -376,7 +376,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 app: this.app,
                 recordClass: this.recordClass,
                 allowSaving: true,
-                filterModels: this.modelConfig ? [] : this.recordClass.getFilterModel(),
+                filterModels: this.modelConfig ? this.getCustomfieldFilters() : this.recordClass.getFilterModel(),
                 defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
                 filters: this.defaultFilters || []
             }, config || {}));
@@ -422,6 +422,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     columns.push(config);
                 }
             }, this);
+            
+            if (this.modelConfig.hasCustomFields) {
+                columns = columns.concat(this.getCustomfieldColumns());
+            }
             
             this.gridConfig.cm = new Ext.grid.ColumnModel({
                 defaults: {

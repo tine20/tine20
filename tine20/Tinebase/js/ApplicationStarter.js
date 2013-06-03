@@ -165,7 +165,7 @@ Tine.Tinebase.ApplicationStarter = {
                 case 'boolean':
                     gridRenderer = Tine.Tinebase.common.booleanRenderer;
                     break;
-                 default:
+                default:
                     gridRenderer = Ext.util.Format.htmlEncode;
                  }
            }
@@ -177,75 +177,63 @@ Tine.Tinebase.ApplicationStarter = {
      * 
      * @type 
      */
-    filterMap: {
-        'boolean': function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            filter.valueType = 'bool'
-            filter.defaultValue = false;
-            return filter;
-        },
-        record: function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            filterconfig.options.modelName = filterconfig.options.modelName.replace(/_/, '');
-            var foreignApp = filterconfig.options.appName;
-            var foreignModel = filterconfig.options.modelName;
-            
-            // create generic foreign id filter
-            var filterclass = Ext.extend(Tine.widgets.grid.ForeignRecordFilter, {
-                foreignRecordClass: foreignApp + '.' + foreignModel,
-                linkType: 'foreignId',
-                ownField: fieldconfig.key,
-                label: filter.label
-            });
-            // register foreign id field as appName.modelName.fieldKey
-            var fc = appName + '.' + modelName + '.' + fieldconfig.key;
-            Tine.widgets.grid.FilterToolbar.FILTERS[fc] = filterclass;
-            filter = {filtertype: fc};
-            return filter;
-        },
-        tag: function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            return {filtertype: 'tinebase.tag', app: appName};
-        },
-        container: function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            var applicationName = filterconfig.appName ? filterconfig.appName : appName;
-            var modelName = filterconfig.modelName ? filterconfig.modelName : modelName;
-            return {
-                filtertype: 'tine.widget.container.filtermodel', 
-                app: applicationName, 
-                recordClass: applicationName + '.' + modelName,
-                field: fieldconfig.key,
-                label: fieldconfig.label,
-                callingApp: appName
-            };
-        },
-        keyfield: function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            filter.filtertype = 'tine.widget.keyfield.filter';
-            filter.app = {name: appName};
-            filter.keyfieldName = fieldconfig.name;
-            return filter;
-        },
-        'string' :  function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            return filter;
-        },
-        'user':     function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            return filter;
-        },
-        'date':     function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            filter.valueType = 'date';
-            return filter;
-        },
-        'datetime': function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            filter.valueType = 'date';
-            return filter;
-        },
-        'text':     function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            return filter;
-        },
-        'integer':  function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            filter.valueType = 'number';
-            return filter;
-        },
-        'default':  function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            return filter;
+    filterMap: function(type, fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
+        switch (type) {
+            case 'string':
+            case 'text':
+            case 'user':
+                break;
+            case 'boolean': 
+                filter.valueType = 'bool'
+                filter.defaultValue = false;
+                break;
+            case 'record':
+                filterconfig.options.modelName = filterconfig.options.modelName.replace(/_/, '');
+                var foreignApp = filterconfig.options.appName;
+                var foreignModel = filterconfig.options.modelName;
+                
+                // create generic foreign id filter
+                var filterclass = Ext.extend(Tine.widgets.grid.ForeignRecordFilter, {
+                    foreignRecordClass: foreignApp + '.' + foreignModel,
+                    linkType: 'foreignId',
+                    ownField: fieldconfig.key,
+                    label: filter.label
+                });
+                // register foreign id field as appName.modelName.fieldKey
+                var fc = appName + '.' + modelName + '.' + fieldconfig.key;
+                Tine.widgets.grid.FilterToolbar.FILTERS[fc] = filterclass;
+                filter = {filtertype: fc};
+                break;
+            case 'tag': 
+                filter = {filtertype: 'tinebase.tag', app: appName};
+                break;
+            case 'container':
+                var applicationName = filterconfig.appName ? filterconfig.appName : appName;
+                var modelName = filterconfig.modelName ? filterconfig.modelName : modelName;
+                filter = {
+                    filtertype: 'tine.widget.container.filtermodel', 
+                    app: applicationName, 
+                    recordClass: applicationName + '.' + modelName,
+                    field: fieldconfig.key,
+                    label: fieldconfig.label,
+                    callingApp: appName
+                };
+                break;
+            case 'keyfield':
+                filter.filtertype = 'tine.widget.keyfield.filter';
+                filter.app = {name: appName};
+                filter.keyfieldName = fieldconfig.name;
+                break;
+            case 'date':
+                filter.valueType = 'date';
+                break;
+            case 'datetime':
+                filter.valueType = 'date';
+                break;
+            case 'integer':
+                filter.valueType = 'number';
         }
+        return filter;
     },
     
     /**
@@ -287,7 +275,7 @@ Tine.Tinebase.ApplicationStarter = {
             } 
             
             try {
-                filter = this.filterMap[fieldTypeKey](fieldconfig, filter, filterconfig, appName, modelName, modelConfig);
+                filter = this.filterMap(fieldTypeKey, fieldconfig, filter, filterconfig, appName, modelName, modelConfig);
             } catch (e) {
                 var keys = filterconfig.filter.split('_'),
                     filterkey = keys[0].toLowerCase() + '.' + keys[2].toLowerCase();
