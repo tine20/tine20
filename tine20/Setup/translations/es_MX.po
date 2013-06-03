@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Miguel Gutierrez <>, 2012.
+# Miguel Gutierrez <>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

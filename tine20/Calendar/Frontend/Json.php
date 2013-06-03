@@ -148,22 +148,29 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $decodedPagination = is_array($paging) ? $paging : Zend_Json::decode($paging);
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
         $clientFilter = $filter = $this->_decodeFilter($filter, 'Calendar_Model_EventFilter');
+
+        // find out if fixed calendars should be used
+        $fixedCalendars = Calendar_Config::getInstance()->get(Calendar_Config::FIXED_CALENDARS, new Tinebase_Config_Struct(array()))->toArray();
+        $useFixedCalendars = is_array($fixedCalendars) && ! empty($fixedCalendars);
+        
+        $periodFilter = $filter->getFilter('period');
+        
+        // add period filter per default to prevent endless search
+        if (! $periodFilter) {
+            $now = Tinebase_DateTime::now()->setTime(0,0,0);
+            $inAmonth = clone $now;
+            $inAmonth->addMonth(1);
+            $periodFilter = new Calendar_Model_PeriodFilter(array('field' => 'period', 'operator' => 'within', 'value' => array("from" => $now, "until" => $inAmonth)));
+            // periodFilter will be added to fixed filter when using fixed calendars
+            if (! $useFixedCalendars) {
+                $filter->addFilter($periodFilter);
+            }
+        }
         
         // add fixed calendar on demand
-        $fixedCalendars = Calendar_Config::getInstance()->get(Calendar_Config::FIXED_CALENDARS, new Tinebase_Config_Struct(array()))->toArray();
-        if (is_array($fixedCalendars) && ! empty($fixedCalendars)) {
+        if ($useFixedCalendars) {
             $fixed = new Calendar_Model_EventFilter(array(), 'AND');
             $fixed->addFilter( new Tinebase_Model_Filter_Text('container_id', 'in', $fixedCalendars));
-            
-            $periodFilter = $filter->getFilter('period');
-            
-            // add period filter per default to prevent endless search
-            if (!$periodFilter) {
-                $now = new Tinebase_DateTime();
-                $inAmonth = clone $now;
-                $inAmonth->addMonth(1);
-                $periodFilter = new Calendar_Model_PeriodFilter(array('field' => 'period', 'operator' => 'within', 'value' => array("from" => $now, "until" => $inAmonth)));
-            }
             
             $fixed->addFilter($periodFilter);
             

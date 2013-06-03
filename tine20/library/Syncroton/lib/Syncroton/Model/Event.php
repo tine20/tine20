@@ -65,32 +65,45 @@ class Syncroton_Model_Event extends Syncroton_Model_AXMLEntry
         )
     );
     
-    public function setFromArray(array $properties)
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Model_IEntry::appendXML()
+     * @todo handle Attendees element
+     */
+    public function appendXML(DOMElement $domParrent, Syncroton_Model_IDevice $device)
     {
-        parent::setFromArray($properties);
-        
-        $this->_copyFieldsFromParent();
+        parent::appendXML($domParrent, $device);
+
+        $exceptionElements = $domParrent->getElementsByTagName('Exception');
+        $parentFields      = array('AllDayEvent'/*, 'Attendees'*/, 'Body', 'BusyStatus'/*, 'Categories'*/, 'DtStamp', 'EndTime', 'Location', 'MeetingStatus', 'Reminder', 'ResponseType', 'Sensitivity', 'StartTime', 'Subject');
+
+        if ($exceptionElements->length > 0) {
+            $mainEventElement = $exceptionElements->item(0)->parentNode->parentNode;
+
+            foreach ($mainEventElement->childNodes as $childNode) {
+                if (in_array($childNode->localName, $parentFields)) {
+                    foreach ($exceptionElements as $exception) {
+                        $elementsToLeftOut = $exception->getElementsByTagName($childNode->localName);
+
+                        foreach ($elementsToLeftOut as $elementToLeftOut) {
+                            if ($elementToLeftOut->nodeValue == $childNode->nodeValue) {
+                                $exception->removeChild($elementToLeftOut);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     /**
-     * set properties from SimpleXMLElement object
-     *
-     * @param SimpleXMLElement $xmlCollection
-     * @throws InvalidArgumentException
+     * some elements of an exception can be left out, if they have the same value 
+     * like the main event
+     * 
+     * this function copies these elements to the exception for backends which need
+     * this elements in the exceptions too. Tine 2.0 needs this for example.
      */
-    public function setFromSimpleXMLElement(SimpleXMLElement $properties)
-    {
-        parent::setFromSimpleXMLElement($properties);
-        
-        $this->_copyFieldsFromParent();
-    }
-    
-    /**
-     * copy some fileds of the main event to the exception if they are missing
-     * these fields can be left out, if they have the same value in the main event
-     * and the exception 
-     */
-    protected function _copyFieldsFromParent()
+    public function copyFieldsFromParent()
     {
         if (isset($this->_elements['exceptions']) && is_array($this->_elements['exceptions'])) {
             foreach ($this->_elements['exceptions'] as $exception) {
@@ -99,7 +112,7 @@ class Syncroton_Model_Event extends Syncroton_Model_AXMLEntry
                     continue;
                 }
         
-                $parentFields = array('allDayEvent', 'attendees', 'busyStatus', 'meetingStatus', 'sensitivity', 'subject');
+                $parentFields = array('allDayEvent', 'attendees', 'body', 'busyStatus', 'categories', 'dtStamp', 'endTime', 'location', 'meetingStatus', 'reminder', 'responseType', 'sensitivity', 'startTime', 'subject');
         
                 foreach ($parentFields as $field) {
                     if (!isset($exception->$field) && isset($this->_elements[$field])) {

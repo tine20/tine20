@@ -69,6 +69,13 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     protected $_otherUserContainer;
     
     /**
+     * the test user
+     * 
+     * @var Tinebase_Model_FullUser
+     */
+    protected $_originalTestUser;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -93,6 +100,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $this->_json = new Filemanager_Frontend_Json();
         $this->_fsController = Tinebase_FileSystem::getInstance();
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
+        $this->_originalTestUser = Tinebase_Core::getUser();
         
         $this->_setupTestContainers();
     }
@@ -168,6 +176,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        
         if (isset($this->_objects['paths'])) {
             foreach ($this->_objects['paths'] as $path) {
                 try {
@@ -393,16 +403,16 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      * 
      * @return array created node
      */
-    public function testCreateContainerNodeInPersonalFolder()
+    public function testCreateContainerNodeInPersonalFolder($containerName = 'testcontainer')
     {
-        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
+        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $containerName;
         $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, array(), FALSE);
         $createdNode = $result[0];
         
         $this->_objects['containerids'][] = $createdNode['name']['id'];
         
         $this->assertTrue(is_array($createdNode['name']));
-        $this->assertEquals('testcontainer', $createdNode['name']['name']);
+        $this->assertEquals($containerName, $createdNode['name']['name']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $createdNode['created_by']['accountId']);
         
         return $createdNode;
@@ -514,6 +524,24 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         
         return $result;
     }
+    
+    /**
+     * testCreateFileCountTempDir
+     * 
+     * @see 0007370: Unable to upload files
+     */
+    public function testCreateFileCountTempDir()
+    {
+        $tmp = Tinebase_Core::getTempDir();
+        $filecountInTmpBefore = count(scandir($tmp));
+        
+        $this->testCreateFileNodeWithTempfile();
+        
+        // check if tempfile has been created in tine20 tempdir
+        $filecountInTmpAfter = count(scandir($tmp));
+        
+        $this->assertEquals($filecountInTmpBefore + 2, $filecountInTmpAfter, '2 tempfiles should have been created');
+    }
 
     /**
      * testCreateDirectoryNodesInShared
@@ -586,7 +614,45 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         
         return $dirpaths;
     }
+    
+    /**
+     * testCreateDirectoryNodeInPersonalWithSameNameAsOtherUsersDir
+     * 
+     * @see 0008044: could not create a personal folder with the name of a folder of another user
+     */
+    public function testCreateDirectoryNodeInPersonalWithSameNameAsOtherUsersDir()
+    {
+        $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
         
+        $personas = Zend_Registry::get('personas');
+        Tinebase_Core::set(Tinebase_Core::USER, $personas['sclever']);
+        $personalContainerNodeOfsclever = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $this->assertEquals('/personal/sclever/testcontainer', $personalContainerNodeOfsclever['path']);
+    }
+    
+    /**
+     * testRenameDirectoryNodeInPersonalToSameNameAsOtherUsersDir
+     * 
+     * @see 0008046: Rename personal folder to personal folder of another user
+     */
+    public function testRenameDirectoryNodeInPersonalToSameNameAsOtherUsersDir()
+    {
+        $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $personas = Zend_Registry::get('personas');
+        Tinebase_Core::set(Tinebase_Core::USER, $personas['sclever']);
+        $personalContainerNodeOfsclever = $this->testCreateContainerNodeInPersonalFolder('testcontainer2');
+        
+        $this->assertEquals('/personal/sclever/testcontainer2', $personalContainerNodeOfsclever['path']);
+        
+        // rename
+        $newPath = '/personal/sclever/testcontainer';
+        $result = $this->_json->moveNodes(array($personalContainerNodeOfsclever['path']), array($newPath), FALSE);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($newPath, $result[0]['path']);
+    }
+    
     /**
      * testCopyFolderNodes
      */
@@ -944,9 +1010,9 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test cleanup of deleted files
+     * test cleanup of deleted files (filesystem)
      */
-    public function testDeletedFileCleanup()
+    public function testDeletedFileCleanupFromFilesystem()
     {
         // remove all files with size 0 first
         $size0Nodes = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(array(
@@ -957,15 +1023,44 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         }
         
         $this->testDeleteFileNodes();
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFiles();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         $this->assertGreaterThan(0, $result, 'should cleanup one file or more');
         $this->tearDown();
         
         $this->testDeleteFileNodes();
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFiles();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         $this->assertEquals(1, $result, 'should cleanup one file');
     }
 
+    /**
+     * test cleanup of deleted files (database)
+     * 
+     * @see 0008062: add cleanup script for deleted files
+     */
+    public function testDeletedFileCleanupFromDatabase()
+    {
+        $fileNode = $this->testCreateFileNodeWithTempfile();
+        
+        // get "real" filesystem path + unlink
+        $fileObjectBackend = new Tinebase_Tree_FileObject();
+        $fileObject = $fileObjectBackend->get($fileNode['object_id']);
+        unlink($fileObject->getFilesystemPath());
+        
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
+        $this->assertEquals(1, $result, 'should cleanup one file');
+
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
+        $this->assertEquals(0, $result, 'should cleanup no file');
+        
+        // node should no longer be found
+        try {
+            $this->_json->getNode($fileNode['id']);
+            $this->fail('tree node still exists: ' . print_r($fileNode, TRUE));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->assertEquals('Tinebase_Model_Tree_Node record with id = ' . $fileNode['id'] . ' not found!', $tenf->getMessage());
+        }
+    }
+    
     /**
      * testDeleteDirectoryNodes
      */

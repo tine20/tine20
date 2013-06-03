@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Tamás Faragó <>, 2012.
+# Tamás Faragó <>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -123,7 +123,7 @@ msgstr "Kérlek válaszd ki a résztvevők szerepét"
 msgid "Select Project"
 msgstr "Projekt kiválasztás"
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
 msgid "Role"
 msgstr "Szerep"
 
@@ -139,19 +139,19 @@ msgstr "{0} résztvevő hozzáadása a projekthez"
 msgid "Tags"
 msgstr "Címkék"
 
-#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:134
+#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:135
 msgid "Number"
 msgstr "Szám"
 
-#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:129
+#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:130
 msgid "Title"
 msgstr "Cím"
 
-#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:140
+#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:141
 msgid "Status"
 msgstr "Státusz"
 
-#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
+#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekt"
@@ -171,7 +171,7 @@ msgstr "Projekt listák"
 msgid "Quick search"
 msgstr "Gyors keresés"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:170
+#: js/Model.js:75 js/ProjectEditDialog.js:171
 msgid "Description"
 msgstr "Leírás"
 
@@ -191,7 +191,7 @@ msgstr "Készítés ideje"
 msgid "Created By"
 msgstr "Készítette"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "Résztvevő"
 
@@ -199,6 +199,6 @@ msgstr "Résztvevő"
 msgid "Attendee Role"
 msgstr "Résztvevő szerep"
 
-#: js/ProjectEditDialog.js:184
+#: js/ProjectEditDialog.js:185
 msgid "Enter description"
 msgstr "Leírás megadása"

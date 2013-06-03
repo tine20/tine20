@@ -55,7 +55,6 @@ try {
         'newlang=s'       => 'Add new language',
         'overwrite'       => '  overwrite existing lang files',
         'git'             => 'Add new/updated lang files to git',
-        'lp:merge=s'      => 'merge langpackage from launchpad',
         'help|h'          => 'Display this help Message',
         
         //'filter=s'        => 'Filter for applications'
@@ -100,7 +99,7 @@ if (count($opts->toArray()) === 0  || $opts->h) {
     exit;
 }
 
-if ($opts->u || $opts->contribute || $opts->{'lp:merge'}) {
+if ($opts->u || $opts->contribute) {
     $opts->pot = $opts->potmerge = $opts->mo = $opts->c = true;
 }
 
@@ -138,19 +137,6 @@ if($opts->contribute) {
     }
     contributorsMerge($opts->v, $opts->language, $opts->contribute);
     echo "merging completed :-) \n";
-}
-
-if ($opts->{'lp:merge'}) {
-    if (! isset ($opts->{'lp:merge'})) {
-        echo "You need to specify an archive of the lang updates!  \n";
-        exit;
-    }
-    if (! is_readable($opts->{'lp:merge'})) {
-        echo "Archive file '" . $opts->{'lp:merge'} . "' could not be found! \n";
-        exit;
-    }
-    
-    launchpadMerge($opts->v, $opts->{'lp:merge'}, $opts->git);
 }
 
 if ($opts->mo) {
@@ -427,73 +413,6 @@ function contributorsMerge($_verbose, $_language, $_archive)
         }
         `msgmerge --no-fuzzy-matching --update '$contributedPoFile'  $tinePoFile $output`;
         `cp '$contributedPoFile' $tinePoFile`;
-    }
-}
-/**
- * lanuchpad merge
- *
- * @TODO add auto git support
- * 
- * @param bool   $_verbose
- * @param string $_archive
- * @param bool   $_git
- */
-function launchpadMerge($_verbose, $_archive, $_git)
-{
-    global $tine20path;
-    
-    if (is_dir($_archive)) {
-        $contributionDir = $_archive;
-        
-        if (is_dir("$contributionDir/.bzr")) {
-            `cd $contributionDir
-            bzr merge --pull`;
-        }
-    } else {
-        $contributionDir = '/tmp/tinetranslations/';
-        `rm -Rf $contributionDir`;
-        `mkdir $contributionDir`;
-        
-        switch (substr($_archive, -7)) {
-            case '.tar.gz':
-                `tar -xz -C $contributionDir -f $_archive`;
-                break;
-            default:
-                echo "Error: Only tar.gz archives are supported \n";
-            exit;
-            break;
-        }
-    }
-    
-    foreach (scandir($contributionDir) as $appName) {
-        if ($appName{0} == '.' || $appName{0} == '_') continue;
-        
-        if( ! checkAppName($appName, $_verbose)) {
-            continue;
-        }
-        
-        if ($_verbose) echo "Processing translation updates for $appName \n";
-        
-        foreach (scandir("$contributionDir/$appName") as $poFile) {
-            if (substr($poFile, -3) != '.po') continue;
-            
-            $lang = str_ireplace(array("$appName-", '.po'), '', $poFile);
-            if ($_verbose) echo "Processing language '$lang' \n";
-            
-            $tinePoFile        = "$tine20path/$appName/translations/$lang.po";
-            $contributedPoFile = "$contributionDir/$appName/$poFile";
-            
-            if (! is_file($tinePoFile)) {
-                echo "Error: could not find Tine 2.0's langfile $tinePoFile\n";
-                continue;
-                exit;
-            }
-            
-            // do the actual merging
-            $output = $_verbose ? '' : '2> /dev/null';
-            `msgmerge --no-fuzzy-matching --update '$contributedPoFile'  $tinePoFile $output`;
-            `cp '$contributedPoFile' $tinePoFile`;
-        }
     }
 }
 
@@ -861,7 +780,12 @@ function getPluralForm($_languageName)
         case 'Slovenian' :
             $pluralForm = 'nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;';
             break;
-            
+        
+        // Mixed
+        case 'Persian' :
+                $pluralForm = 'nplurals=1; plural=0;';
+                break;
+        
         default :
             die ("Error: Plural form of $_languageName is not defined! \n");
             

@@ -321,4 +321,121 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
             ' Finished modlog sequence update for ' . $model);
     }
+    
+    /**
+     * update to 7.4
+     * 
+     * - save each state_id in an own field
+     */
+    public function update_3()
+    {
+        // add a default value of "false", as PGSQL does allow notnull columns with default value null
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>state_id</name>
+                <type>text</type>
+                <length>128</length>
+                <notnull>true</notnull>
+                <default>false</default>
+            </field>
+        ');
+        
+        $this->_backend->addCol('state', $declaration);
+        
+        $this->_backend->dropIndex('state', 'user_id');
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>user_id--state_id</name>
+                <unique>true</unique>
+                <field>
+                    <name>user_id</name>
+                </field>
+                <field>
+                    <name>state_id</name>
+                </field>
+            </index>
+        ');
+        
+        $this->_backend->addIndex('state', $declaration);
+        
+        
+        $be = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_State', 
+            'tableName' => 'state',
+        ));
+        
+        $allStates = $be->getAll();
+        foreach ($allStates as $oldState) {
+            $oldData = Zend_Json::decode($oldState->data);
+            foreach ($oldData as $stateId => $data) {
+                
+                $filter = new Tinebase_Model_StateFilter(array(
+                    array('field' => 'state_id', 'operator' => 'equals', 'value' => $stateId),
+                    array('field' => 'user_id', 'operator' => 'equals', 'value' => $oldState->user_id)
+                ));
+                $result = $be->search($filter);
+                
+                try {
+                    if ($result->count()) {
+                        $record = $result->getFirstRecord();
+                        $record->data = $data;
+                        $be->update($record);
+                    } else {
+                        $record = new Tinebase_Model_State(array(
+                            'user_id'   => $oldState->user_id,
+                            'state_id'  => $stateId,
+                            'data'      => $data
+                        ));
+                        $be->create($record);
+                    }
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Could not transfer old state: ' . $stateId . ': ' . print_r($data, 1));
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Exception Message: ' . $e->getMessage()) ;
+                    }
+                }
+            }
+            $be->delete($oldState->getId());
+        }
+        
+        // remove the default value "false" again
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>state_id</name>
+                <type>text</type>
+                <length>128</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        
+        $this->_backend->alterCol('state', $declaration);
+        
+        $this->setApplicationVersion('Tinebase', '7.4');
+        $this->setTableVersion('state', 2);
+    }
+    
+    /**
+     * update to 7.5
+     * 
+     * - rename scheduler task (just add again for param / function name change)
+     */
+    public function update_4()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '7.5');
+    }
+
+    /**
+     * update to 7.6
+     * 
+     * @see 0008318: add clear accesslog to scheduler
+     */
+    public function update_5()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addAccessLogCleanupTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '7.6');
+    }
 }

@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -103,7 +103,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         $event->setTimezone($event->originator_tz);
         
         $vevent = new Sabre_VObject_Component('VEVENT');
-                
+        
         $lastModifiedDatTime = $event->last_modified_time ? $event->last_modified_time : $event->creation_time;
         
         $created = new Sabre_VObject_Element_DateTime('CREATED');
@@ -350,7 +350,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         }
         
         // find the main event - the main event has no RECURRENCE-ID
-        foreach($vcalendar->VEVENT as $vevent) {
+        foreach ($vcalendar->VEVENT as $vevent) {
             if(!isset($vevent->{'RECURRENCE-ID'})) {
                 $this->_convertVevent($vevent, $event);
                 
@@ -363,10 +363,28 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             throw new Tinebase_Exception_UnexpectedValue('no main VEVENT component found in VCALENDAR');
         }
         
-        // parse the event exceptions
-        $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate->filter('is_deleted', false) : new Tinebase_Record_RecordSet('Calendar_Model_Events');
+        // TODO only do this for events with rrule?
+        // if (! empty($event->rrule)) {
+        
+        $this->_parseEventExceptions($event, $vcalendar);
+        $event->isValid(true);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($event->toArray(), true));
+        
+        return $event;
+    }
+    
+    /**
+     * parse event exceptions and add them to tine event record
+     * 
+     * @param Calendar_Model_Event $event
+     * @param Sabre_VObject_Component $vcalendar
+     */
+    protected function _parseEventExceptions($event, $vcalendar)
+    {
+        $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate->filter('is_deleted', false) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         foreach ($vcalendar->VEVENT as $vevent) {
-            if(isset($vevent->{'RECURRENCE-ID'}) && $event->uid == $vevent->UID) {
+            if (isset($vevent->{'RECURRENCE-ID'}) && $event->uid == $vevent->UID) {
                 $recurException = $this->_getRecurException($oldExdates, $vevent);
                 
                 // initialize attendee with attendee from base events for new exceptions
@@ -385,19 +403,39 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 }
                 
                 $this->_convertVevent($vevent, $recurException);
-                    
+                
                 if (! $event->exdate instanceof Tinebase_Record_RecordSet) {
                     $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
                 }
                 $event->exdate->addRecord($recurException);
             }
         }
+    }
+    
+    /**
+     * converts vcalendar to Tinebase_Record_RecordSet of Calendar_Model_Event
+     * 
+     * @param  mixed                 $_blob   the vcalendar to parse
+     * @return Tinebase_Record_RecordSet
+     */
+    public function toTine20RecordSet($_blob)
+    {
+        $vcalendar = self::getVcal($_blob);
         
-        $event->isValid(true);
+        $result = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($event->toArray(), true));
+        foreach ($vcalendar->VEVENT as $vevent) {
+            if (! isset($vevent->{'RECURRENCE-ID'})) {
+                $event = new Calendar_Model_Event();
+                $this->_convertVevent($vevent, $event);
+                if (! empty($event->rrule)) {
+                    $this->_parseEventExceptions($event, $vcalendar);
+                }
+                $result->addRecord($event);
+            }
+        }
         
-        return $event;
+        return $result;
     }
     
     /**
@@ -438,6 +476,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     public static function readVCalBlob($blob, $failcount = 0, $spacecount = 0, $lastBrokenLineNumber = 0, $lastLines = array())
     {
+        // convert to utf-8
+        $blob = mbConvertTo($blob);
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
             ' ' . $blob);
         
@@ -529,6 +570,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     protected function _getAttendee(Sabre_VObject_Property $_attendee)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' attendee ' . $_attendee->serialize());
+        
         if (isset($_attendee['CUTYPE']) && in_array($_attendee['CUTYPE']->value, array('INDIVIDUAL', Calendar_Model_Attender::USERTYPE_GROUP, Calendar_Model_Attender::USERTYPE_RESOURCE))) {
             $type = $_attendee['CUTYPE']->value == 'INDIVIDUAL' ? Calendar_Model_Attender::USERTYPE_USER : $_attendee['CUTYPE']->value;
         } else {
@@ -590,6 +633,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     protected function _convertVevent(Sabre_VObject_Component $_vevent, Calendar_Model_Event $_event)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vevent ' . $_vevent->serialize());
+        
         $event = $_event;
         $newAttendees = array();
         
@@ -602,8 +647,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             }
         }
         
-        foreach($_vevent->children() as $property) {
-            switch($property->name) {
+        foreach ($_vevent->children() as $property) {
+            switch ($property->name) {
                 case 'CREATED':
                 case 'DTSTAMP':
                     // do nothing
@@ -739,15 +784,15 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     if (isset($_vevent->EXDATE)) {
                         $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
                         
-                        foreach($_vevent->EXDATE as $exdate) {
-                            foreach($exdate->getDateTimes() as $exception) {
+                        foreach ($_vevent->EXDATE as $exdate) {
+                            foreach ($exdate->getDateTimes() as $exception) {
                                 if (isset($exdate['VALUE']) && strtoupper($exdate['VALUE']) == 'DATE') {
                                     $recurid = new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
                                 } else {
                                     $recurid = new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), $exception->getTimezone());
                                 }
                                 $recurid->setTimezone(new DateTimeZone('UTC'));
-                                                        
+                                
                                 $eventException = new Calendar_Model_Event(array(
                                     'recurid'    => $recurid,
                                     'is_deleted' => true
@@ -758,8 +803,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                         }
                     
                         $event->exdate = $exdates;
-                    }     
-                                   
+                    }
+                    
                     break;
                     
                 case 'TRANSP':
@@ -852,12 +897,18 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                     
                 default:
-                
+                    // thunderbird saves snooze time for recurring event occurrences in properties with names like this -
+                    // we just assume that the event/recur series has only one snooze time 
+                    if (preg_match('/^X-MOZ-SNOOZE-TIME-[0-9]+$/', $property->name)) {
+                        $snoozeTime = $this->_convertToTinebaseDateTime($property);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                            . ' Found snooze time for recur occurrence: ' . $snoozeTime->toString());
+                    }
                     break;
             }
         }
         
-        // merge old and new attendees
+        // merge old and new attendee
         Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
         
         if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
@@ -884,23 +935,26 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
     /**
      * get datetime from sabredav datetime property (user TZ is fallback)
      * 
-     * @param Sabre_VObject_Element_DateTime $dateTime
+     * @param Sabre_VObject_Property $dateTimeProperty
      * @param boolean $_useUserTZ
      * @return Tinebase_DateTime
      * 
      * @todo try to guess some common timezones
      */
-    protected function _convertToTinebaseDateTime(Sabre_VObject_Element_DateTime $dateTimeProperty, $_useUserTZ = FALSE)
+    protected function _convertToTinebaseDateTime(Sabre_VObject_Property $dateTimeProperty, $_useUserTZ = FALSE)
     {
         $defaultTimezone = date_default_timezone_get();
         date_default_timezone_set((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        $dateTime = $dateTimeProperty->getDateTime();
         
-        // convert to Tinebase_DateTime
+        if ($dateTimeProperty instanceof Sabre_VObject_Element_DateTime) {
+            $dateTime = $dateTimeProperty->getDateTime();
+            $tz = ($_useUserTZ) ? (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : $dateTime->getTimezone();
+            $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
+        } else {
+            $result = new Tinebase_DateTime($dateTimeProperty->value);
+        }
+        
         date_default_timezone_set($defaultTimezone);
-        
-        $tz = ($_useUserTZ) ? (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : $dateTime->getTimezone();
-        $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
         
         return $result;
     }

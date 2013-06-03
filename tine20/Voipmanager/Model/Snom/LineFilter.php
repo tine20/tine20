@@ -29,6 +29,7 @@ class Voipmanager_Model_Snom_LineFilter extends Tinebase_Model_Filter_FilterGrou
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'snomphone_id'         => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'snomphone_id'   => array('filter' => 'Tinebase_Model_Filter_Id'),
     );
 }

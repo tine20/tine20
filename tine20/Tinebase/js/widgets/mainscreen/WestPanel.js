@@ -158,7 +158,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         }, this);
         
         for(var i = 0, len = collection.length; i < len; i++){
-            if (c[i]) {
+            if (c[i] && c[i].value) {
                 items[i] = c[i].value;
                 k[i] = c[i].key;
             }
@@ -166,7 +166,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         collection.fireEvent('sort', collection);
         
         collection.each(function(item, idx) {
-            if (typeof item.addFill === 'function') return;
+            if ((! item) || typeof item.addFill === 'function') return;
             if (item.getEl()) {
                 item[state.collapsed[idx] ? 'collapse' : 'expand'](false);
             } else {
@@ -345,7 +345,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                 this.portalColumn.items.each(function(item) {
                     item.setWidth(width);
                 }, this);
-            }, this)
+            }, this);
         }
         
         return this.portalColumn;

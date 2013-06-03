@@ -1,6 +1,6 @@
 # 
 # Translators:
-#   <brankablag@gmail.com>, 2012.
+# brankablag <brankablag@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

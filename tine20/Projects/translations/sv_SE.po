@@ -1,8 +1,8 @@
 # 
 # Translators:
-# Markus  <markus.henriksson@marinex.se>, 2012.
-# Niklas Ye <niklas@idontgetlaid.com>, 2013.
-#   <tulken_hultan@hotmail.com>, 2012.
+# Markus Henriksson <markus.henriksson@marinex.se>, 2012
+# niklasye <niklas@idontgetlaid.com>, 2013
+# BrianLuckBad <tulken_hultan@hotmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -125,7 +125,7 @@ msgstr "Vänligen välj deltagarens roll"
 msgid "Select Project"
 msgstr "Välj projekt"
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:80
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
 msgid "Role"
 msgstr "Roll"
 
@@ -141,19 +141,19 @@ msgstr "Lägger till {0} deltagare till projektet"
 msgid "Tags"
 msgstr "Taggar"
 
-#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:134
+#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:135
 msgid "Number"
 msgstr "Nummer"
 
-#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:129
+#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:130
 msgid "Title"
 msgstr "Titel"
 
-#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:140
+#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:141
 msgid "Status"
 msgstr "Status"
 
-#: js/Model.js:33 js/ProjectEditDialog.js:104 js/ProjectEditDialog.js:117
+#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekt"
@@ -173,7 +173,7 @@ msgstr "Projektlistor"
 msgid "Quick search"
 msgstr "Snabbsök"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:170
+#: js/Model.js:75 js/ProjectEditDialog.js:171
 msgid "Description"
 msgstr "Beskrivning"
 
@@ -193,7 +193,7 @@ msgstr "Skapelsetid"
 msgid "Created By"
 msgstr "Skapad av"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:79
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
 msgstr "Deltagare"
 
@@ -201,6 +201,6 @@ msgstr "Deltagare"
 msgid "Attendee Role"
 msgstr "Deltaganderoll"
 
-#: js/ProjectEditDialog.js:184
+#: js/ProjectEditDialog.js:185
 msgid "Enter description"
 msgstr "Ange beskrivning"

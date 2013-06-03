@@ -73,6 +73,16 @@ class Tinebase_Model_ModificationLog extends Tinebase_Record_Abstract
             case 'application_id':
                 $_value = Tinebase_Model_Application::convertApplicationIdToInt($_value);
         }
+        
+        /**
+         * @TODO
+         * - ask model for datatype
+         * - cope with record/recordSet
+         */
+        if (is_string($_value) && strlen($_value) == 19 && preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $_value)) {
+            $_value = new Tinebase_DateTime($_value);
+        }
+        
         parent::__set($_name, $_value);
     }
 }

@@ -4,7 +4,7 @@
  * 
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Filemanager_AllTests::main');
-}
 
 class Filemanager_AllTests
 {
@@ -31,8 +27,4 @@ class Filemanager_AllTests
         
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Filemanager_AllTests::main') {
-    Filemanager_AllTests::main();
 }

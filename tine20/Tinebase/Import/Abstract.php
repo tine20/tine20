@@ -491,17 +491,13 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                         $data[$key] = (string) $_data[$key];
                         break;
                     case 'datetime':
-                        if (isset($field["datetime_pattern"]) && isset($data[$key])) {
-                            $datetime = DateTime::createFromFormat($field["datetime_pattern"], $data[$key]);
-                            $datetime = $datetime->format('Y-m-d H:i:s');
-                        } elseif (isset($data[$key])) {
-                            $datetime = new DateTime($data[$key]);
-                            $datetime = $datetime->format('Y-m-d H:i:s');
-                        } else {
-                            $data[$key] = null;
+                        if (isset($_data[$key])) {
+                            $datetime = isset($field["datetime_pattern"]) ?
+                                DateTime::createFromFormat($field["datetime_pattern"], $_data[$key]) :
+                                new DateTime($_data[$key]);
+                            
+                            $data[$key] = $datetime instanceof DateTime ? $datetime->format('Y-m-d H:i:s') : null;
                         }
-                        
-                        $data[$key] = $datetime;
                         break;
                     default:
                         $data[$key] = $_data[$key];

@@ -1,9 +1,9 @@
 # 
 # Translators:
-# Alexander Stintzing <a.stintzing@metaways.de>, 2012.
-# Björn Balazs <transifex@lazs.de>, 2013.
-#   <info@kay-strobach.de>, 2012.
-#   <p.schuele@metaways.de>, 2012.
+# Alexander Stintzing <a.stintzing@metaways.de>, 2012
+# Björn Balazs <transifex@lazs.de>, 2013
+# kaystrobach <info@kay-strobach.de>, 2012
+# pschuele <p.schuele@metaways.de>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

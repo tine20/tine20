@@ -485,23 +485,19 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $groupIds = array();
         
-        if(is_array($_groupId) or $_groupId instanceof Tinebase_Record_RecordSet) {
-            foreach($_groupId as $groupId) {
+        if (is_array($_groupId) or $_groupId instanceof Tinebase_Record_RecordSet) {
+            foreach ($_groupId as $groupId) {
                 $groupIds[] = Tinebase_Model_Group::convertGroupIdToInt($groupId);
             }
         } else {
             $groupIds[] = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         }
-                        
+        
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
-            $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' IN (?)', $groupIds);
-            $this->groupMembersTable->delete($where);
-            $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $groupIds);
-            $this->groupsTable->delete($where);
-            
-            if($this instanceof Tinebase_Group_Interface_SyncAble) {
+            $this->deleteGroupsInSqlBackend($groupIds);
+            if ($this instanceof Tinebase_Group_Interface_SyncAble) {
                 $this->deleteGroupsInSyncBackend($groupIds);
             }
             
@@ -511,6 +507,19 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw new Tinebase_Exception_Backend($e->getMessage());
         }
+    }
+    
+    /**
+     * delete groups in sql backend
+     * 
+     * @param array $groupIds
+     */
+    public function deleteGroupsInSqlBackend($groupIds)
+    {
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' IN (?)', (array) $groupIds);
+        $this->groupMembersTable->delete($where);
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', (array) $groupIds);
+        $this->groupsTable->delete($where);
     }
     
     /**

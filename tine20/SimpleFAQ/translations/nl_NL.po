@@ -1,6 +1,6 @@
 # 
 # Translators:
-#   <bertjan.meinders@bjsoft.nl>, 2012.
+# BJ <bertjan.meinders@bjsoft.nl>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

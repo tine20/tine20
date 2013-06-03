@@ -150,6 +150,13 @@ function activateReleaseMode()
     sed -i -e "s/Tine.clientVersion.releaseTime[^;]*/Tine.clientVersion.releaseTime = '$DATETIME'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
 }
 
+function buildLangStats()
+{
+    echo -n "building lang stats ... "
+    php -f $TEMPDIR/tine20/langHelper.php -- --statistics
+    echo "done"
+}
+
 function buildClient()
 {
     echo -n "building javascript clients ... "
@@ -222,6 +229,9 @@ function createArchives()
 
                     # cleanup jsb2tk
                     (cd $TEMPDIR/tine20/library/jsb2tk;  rm -rf JSBuilder2 tests)
+                    
+                    # save langStats
+                    (mv $TEMPDIR/tine20/langstatistics.json $TEMPDIR/tine20/Tinebase/translations/langstatistics.json)
                     
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase Zend images library styles docs config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES CREDITS setup.php tine20.php bootstrap.php worker.php"
@@ -373,6 +383,7 @@ createDirectories
 checkout "$GITURL" "$GITBRANCH"
 setupPackageDir
 activateReleaseMode
+buildLangStats
 buildClient
 createArchives
 createSpecialArchives

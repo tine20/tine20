@@ -1,12 +1,13 @@
 # 
 # Translators:
-#   <v.anzisi@gurusys.it>, 2012.
+# sambar <samuel.barbera@email.it>, 2013
+# gurusys <v.anzisi@gurusys.it>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-11-04 01:25+0000\n"
-"Last-Translator: gurusys <v.anzisi@gurusys.it>\n"
+"PO-Revision-Date: 2013-03-20 13:43+0000\n"
+"Last-Translator: sambar <samuel.barbera@email.it>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,7 +40,7 @@ msgstr "Rubrica predefinita"
 
 #: Preference.php:76
 msgid "The default addressbook to create new contacts in."
-msgstr ""
+msgstr "Rubrica predefinita per la creazione dei nuovi contatti"
 
 #: Preference.php:79
 msgid "Default Calendar"
@@ -47,7 +48,7 @@ msgstr "Calendario predefinito"
 
 #: Preference.php:80
 msgid "The default calendar to create new events in."
-msgstr ""
+msgstr "Il calendario predefinito per la creazione di nuovi eventi"
 
 #: Preference.php:83
 msgid "Default Task List"
@@ -55,7 +56,7 @@ msgstr "Elenco Attività predefinito"
 
 #: Preference.php:84
 msgid "The default task list to create new tasks in."
-msgstr ""
+msgstr "Lista predefinita di attività in cui crearne una nuova."
 
 #: js/Model.js:42
 msgid "Device"
@@ -81,15 +82,15 @@ msgstr "Nessun Device registrato in ActiveSync"
 
 #: js/Application.js:65
 msgid "Set as {0} Filter"
-msgstr ""
+msgstr "Imposta come filtro {0}"
 
 #: js/Application.js:90
 msgid "Resetted Sync Filter"
-msgstr ""
+msgstr "Filtro Sync Resettato"
 
 #: js/Application.js:91 js/Application.js:103
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr ""
+msgstr "{0} filtro per il dispositivo \"{1}\" è ora \"{2}\""
 
 #: js/Application.js:94
 msgid "resetted"
@@ -97,4 +98,4 @@ msgstr "resettato"
 
 #: js/Application.js:102
 msgid "Set Sync Filter"
-msgstr ""
+msgstr "Imposta Filtro Sync"

@@ -18,6 +18,13 @@
 class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
+     * All full configured models
+     * 
+     * @var array
+     */
+    protected $_configuredModels = array('Call', 'MyPhone');
+    protected $_defaultModel = 'Call';
+    /**
      * app name
      * 
      * @var string
@@ -50,23 +57,23 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array $paging
      * @return array
      */
-    public function searchCalls($filter, $paging)
+    public function searchMyPhones($filter, $paging)
     {
-        $filter = new Phone_Model_CallFilter($filter);
-        $pagination = new Tinebase_Model_Pagination($paging);
-        
-        $calls = Phone_Controller::getInstance()->searchCalls($filter, $pagination);
-        
-        // set timezone
-        $calls->setTimezone(Tinebase_Core::get('userTimeZone'));
-                
-        return array(
-            'results'       => $calls->toArray(),
-            'totalcount'    => Phone_Controller::getInstance()->searchCallsCount($filter)
-        );
+        return $this->_search($filter, $paging, Phone_Controller_MyPhone::getInstance(), 'Phone_Model_MyPhoneFilter');
     }
     
-
+    /**
+     * Search for calls matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchCalls($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Phone_Controller_Call::getInstance(), 'Phone_Model_CallFilter');
+    }
+    
     /**
      * get one phone identified by phoneId
      *
@@ -79,8 +86,7 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     } 
     
     /**
-     * save one phone
-     * -  if $recordData['id'] is empty the phone gets added, otherwise it gets updated
+     * save user phone
      *
      * @param array $recordData an array of phone properties
      * @return array
@@ -88,7 +94,7 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveMyPhone($recordData)
     {
         $voipController = Phone_Controller_MyPhone::getInstance();
-        
+        unset($recordData['template_id']);
         $phone = new Phone_Model_MyPhone();
         $phone->setFromArray($recordData);
         

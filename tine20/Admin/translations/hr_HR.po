@@ -1,9 +1,9 @@
 # 
 # Translators:
-#   <AirMike23@gmail.com>, 2012.
-#   <ivana.horvat@globalnet.hr>, 2012.
-#   <onebeat.hr@gmail.com>, 2012.
-#   <visicfilip@gmail.com>, 2012.
+# AirMike <AirMike23@gmail.com>, 2012
+# ihorvat <ivana.horvat@globalnet.hr>, 2012
+# onebeat <onebeat.hr@gmail.com>, 2012
+# fvisic <visicfilip@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

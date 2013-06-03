@@ -187,7 +187,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.action_toggleReadingConfirmation = new Ext.Action({
             text: this.app.i18n._('Reading Confirmation'),
             handler: this.onToggleReadingConfirmation,
-            iconCls: 'notes_noteIcon',
+            iconCls: 'felamimail-action-reading-confirmation',
             disabled: false,
             scope: this,
             enableToggle: true
@@ -377,12 +377,14 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Tine.Felamimail.Model.Account} account
      */
     addSignature: function(account) {
-        if (this.draftOrTemplate || ! account) {
+        if (this.draftOrTemplate) {
             return;
         }
-
-        var signaturePosition = (account.get('signature_position')) ? account.get('signature_position') : 'below',
-            signature = Tine.Felamimail.getSignature(this.record.get('account_id'));
+        
+        var accountId = account ? this.record.get('account_id') : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'),
+            account = account ? account :this.app.getAccountStore().getById(accountId),
+            signaturePosition = (account && account.get('signature_position')) ? account.get('signature_position') : 'below',
+            signature = Tine.Felamimail.getSignature(accountId);
         if (signaturePosition == 'below') {
             this.msgBody += signature;
         } else {
@@ -592,7 +594,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     setReplySubject: function() {
         var replyPrefix = 'Re: ',
             replySubject = (this.replyTo.get('subject')) ? this.replyTo.get('subject') : '',
-            replySubject = replySubject.replace(/^((re|aw|antw|fwd|odp|sv|wg|tr):\s*)*/i, replyPrefix);
+            replySubject = replySubject.replace(/^((re|aw|antw|fwd|odp|sv|wg|tr|rép):\s*)*/i, replyPrefix);
             
         this.subject = replySubject;
     },
@@ -775,26 +777,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // need to sync once again to make sure we have the correct recipients
         this.recipientGrid.syncRecipientsToRecord();
-    },
-    
-    /**
-     * show error if request fails
-     * 
-     * @param {} response
-     * @param {} request
-     * @private
-     * 
-     * TODO mark field(s) invalid if for example email is incorrect
-     * TODO add exception dialog on critical errors?
-     */
-    onRequestFailed: function(response, request) {
-        Ext.MessageBox.alert(
-            this.app.i18n._('Failed'), 
-            String.format(this.app.i18n._('Could not send {0}.'), this.i18nRecordName) 
-                + ' ( ' + this.app.i18n._('Error:') + ' ' + response.message + ')'
-        );
-        this.saving = false;
-        this.loadMask.hide();
     },
 
     /**

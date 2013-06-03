@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Nikolay Parukhin <parukhin@gmail.com>, 2012-2013.
+# Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -61,35 +61,35 @@ msgstr "Описание"
 msgid "Location"
 msgstr "Расположение"
 
-#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:290
+#: Model/InventoryItem.php:97 js/InventoryItemEditDialog.js:291
 msgid "Invoice date"
 msgstr ""
 
-#: Model/InventoryItem.php:106 js/InventoryItemEditDialog.js:284
+#: Model/InventoryItem.php:107 js/InventoryItemEditDialog.js:285
 msgid "Invoice"
 msgstr "Счёт"
 
-#: Model/InventoryItem.php:111 js/InventoryItemEditDialog.js:264
+#: Model/InventoryItem.php:112 js/InventoryItemEditDialog.js:264
 msgid "Price"
 msgstr "Цена"
 
-#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:269
+#: Model/InventoryItem.php:117 js/InventoryItemEditDialog.js:269
 msgid "Cost centre"
 msgstr ""
 
-#: Model/InventoryItem.php:121 js/InventoryItemEditDialog.js:175
+#: Model/InventoryItem.php:122 js/InventoryItemEditDialog.js:175
 msgid "Warranty"
 msgstr "Гарантия"
 
-#: Model/InventoryItem.php:126
+#: Model/InventoryItem.php:128
 msgid "Item added"
 msgstr ""
 
-#: Model/InventoryItem.php:131
+#: Model/InventoryItem.php:134
 msgid "Item removed"
 msgstr ""
 
-#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:296
+#: Model/InventoryItem.php:148 js/InventoryItemEditDialog.js:297
 msgid "Depreciate"
 msgstr ""
 

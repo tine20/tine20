@@ -59,17 +59,17 @@ Tine.Tinebase.ApplicationStarter = {
     /**
      * returns the field
      * 
-     * @param {Object} fieldconfig
+     * @param {Object} fieldDefinition
      * @return {Object}
      */
-    getField: function(fieldconfig, key) {
+    getField: function(fieldDefinition, key) {
         // default type is auto
         var field = {name: key};
         
-        if (fieldconfig.type) {
+        if (fieldDefinition.type) {
             // add pre defined type
-            field.type = this.types[fieldconfig.type];
-            switch (fieldconfig.type) {
+            field.type = this.types[fieldDefinition.type];
+            switch (fieldDefinition.type) {
                 case 'datetime':
                     field.dateFormat = Date.patterns.ISO8601Long;
                     break;
@@ -78,13 +78,16 @@ Tine.Tinebase.ApplicationStarter = {
                     break;
                 case 'time':
                     field.dateFormat = Date.patterns.ISO8601Time;
-                case 'foreign':
-                    field.type = fieldconfig.options.app + '.' + fieldconfig.options.model;
+                    break;
+                case 'record':
+                case 'records':
+                    fieldDefinition.config.modelName = fieldDefinition.config.modelName.replace(/_/, '');
+                    field.type = fieldDefinition.config.appName + '.' + fieldDefinition.config.modelName;
                     break;
             }
             // allow overwriting date pattern in model
-            if (fieldconfig.hasOwnProperty('dateFormat')) {
-                field.dateFormat = fieldconfig.dateFormat;
+            if (fieldDefinition.hasOwnProperty('dateFormat')) {
+                field.dateFormat = fieldDefinition.dateFormat;
             }
         }
         
@@ -113,7 +116,7 @@ Tine.Tinebase.ApplicationStarter = {
                         switch (config.specialType) {
                             case 'bytes1000':
                                 gridRenderer = function(a,b,c) {
-                                    return Tine.Tinebase.common.byteRenderer(a, b, c, 2, false);
+                                    return Tine.Tinebase.common.byteRenderer(a, b, c, 2, true);
                                 };
                                 break;
                             case 'bytes':
@@ -175,14 +178,16 @@ Tine.Tinebase.ApplicationStarter = {
      * @type 
      */
     filterMap: {
-        bool: function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
+        'boolean': function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
             filter.valueType = 'bool'
             filter.defaultValue = false;
             return filter;
         },
         record: function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
+            filterconfig.options.modelName = filterconfig.options.modelName.replace(/_/, '');
             var foreignApp = filterconfig.options.appName;
             var foreignModel = filterconfig.options.modelName;
+            
             // create generic foreign id filter
             var filterclass = Ext.extend(Tine.widgets.grid.ForeignRecordFilter, {
                 foreignRecordClass: foreignApp + '.' + foreignModel,
@@ -218,9 +223,6 @@ Tine.Tinebase.ApplicationStarter = {
             return filter;
         },
         'string' :  function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
-            return filter;
-        },
-        'boolean':  function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
             return filter;
         },
         'user':     function(fieldconfig, filter, filterconfig, appName, modelName, modelConfig) {
@@ -310,9 +312,9 @@ Tine.Tinebase.ApplicationStarter = {
             var appName = app.name;
             Ext.namespace('Tine.' + appName);
             
-            var models = Tine[appName].registry.get('models');
+            var models = Tine[appName].registry ? Tine[appName].registry.get('models') : null;
             
-            if (Tine[appName].registry && models) {
+            if (models) {
                 
                 Tine[appName].isAuto = true;
                 var contentTypes = [];
@@ -324,6 +326,8 @@ Tine.Tinebase.ApplicationStarter = {
                 // iterate models of this app
                 Ext.iterate(models, function(modelName, modelConfig) {
                     var containerProperty = modelConfig.hasOwnProperty('containerProperty') ? modelConfig.containerProperty : null;
+                    
+                    modelName = modelName.replace(/_/, '');
                     
                     Ext.namespace('Tine.' + appName, 'Tine.' + appName + '.Model');
                     
@@ -361,11 +365,13 @@ Tine.Tinebase.ApplicationStarter = {
                     }
                     
                     // collect the filterModel
+                    var filterModel = [];
                     Ext.iterate(modelConfig.filterModel, function(key, filter) {
                         var f = this.getFilter(key, filter, modelConfig);
                         
                         if (f) {
                             Tine.widgets.grid.FilterRegistry.register(appName, modelName, f);
+                            filterModel.push(f);
                         }
                     }, this);
                     
@@ -381,6 +387,9 @@ Tine.Tinebase.ApplicationStarter = {
                             Ext.copyTo({}, modelConfig, 
                                'defaultFilter,appName,modelName,recordName,recordsName,titleProperty,containerProperty,containerName,containersName,group')
                         );
+                        Tine[appName].Model[modelName].getFilterModel = function() {
+                            return filterModel;
+                        }
                     }
                     
                     Ext.namespace('Tine.' + appName);
@@ -397,8 +406,23 @@ Tine.Tinebase.ApplicationStarter = {
                     
                     // overwrite function
                     Tine[appName].Model[modelName].getDefaultData = function() {
-                        if (!dd) {
+                        if (! dd) {
                             var dd = Ext.decode(Ext.encode(modelConfig.defaultData));
+                        }
+                        
+                        // find container by selection or use defaultContainer by registry
+                        if (modelConfig.containerProperty) {
+                            if (! dd.hasOwnProperty(modelConfig.containerProperty)) {
+                                var app = Tine.Tinebase.appMgr.get(appName),
+                                    registry = app.getRegistry(),
+                                    ctp = app.getMainScreen().getWestPanel().getContainerTreePanel();
+                                    
+                                var container = (ctp ? ctp.getDefaultContainer() : null) || (registry ? registry.get("default" + modelName + "Container") : null);
+                                
+                                if (container) {
+                                    dd[modelConfig.containerProperty] = container;
+                                }
+                            }
                         }
                         return dd;
                     };

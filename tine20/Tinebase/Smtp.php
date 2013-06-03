@@ -55,7 +55,11 @@ class Tinebase_Smtp
         )))->toArray();
         
         // set default transport none is set yet
-        if (! self::getDefaultTransport() && array_key_exists('hostname', $config)) {
+        if (! self::getDefaultTransport()) {
+            if (empty($config['hostname'])) {
+                $config['hostname'] = 'localhost';
+            }
+            
             // don't try to login if no username is given or if auth set to 'none'
             if (! isset($config['auth']) || $config['auth'] == 'none' || empty($config['username'])) {
                 unset($config['username']);
@@ -71,7 +75,7 @@ class Tinebase_Smtp
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($config, TRUE));
             
             self::setDefaultTransport(new Zend_Mail_Transport_Smtp($config['hostname'], $config));
-        }        
+        }
     }
     
     /**

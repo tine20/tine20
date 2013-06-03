@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -38,9 +38,13 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
     
     /**
      * minutes_before value for custom alarm time
-     * 
      */
     const OPTION_CUSTOM = 'custom';
+    
+    /**
+     * default minutes_before value
+     */
+    const DEFAULT_MINUTES_BEFORE = 15;
     
     /**
      * identifier field name
@@ -96,7 +100,9 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
     public function setTime(DateTime $_date)
     {
         if (! isset($this->minutes_before)) {
-            throw new Tinebase_Exception_Record_Validation('minutes_before is needed to set the alarm_time!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' minutes_before not set, reverting to default value(' . self::DEFAULT_MINUTES_BEFORE . ')');
+            $this->minutes_before = self::DEFAULT_MINUTES_BEFORE;
         }
         
         if ($this->minutes_before !== self::OPTION_CUSTOM) {

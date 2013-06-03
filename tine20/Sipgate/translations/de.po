@@ -1,8 +1,8 @@
 # 
 # Translators:
-#   <info@kay-strobach.de>, 2012.
-# Juergen Heine <transifex.com@sysdef.de>, 2013.
-#   <ms@ansta.lt>, 2013.
+# kaystrobach <info@kay-strobach.de>, 2012
+# sysdef <transifex.com@sysdef.de>, 2013
+# mspahn <ms@ansta.lt>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

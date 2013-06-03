@@ -41,7 +41,7 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
         
         'createModule'      => TRUE,
         'containerProperty' => NULL,
-      
+        
         'titleProperty'     => 'employee_id.n_fn',
         'appName'           => 'HumanResources',
         'modelName'         => 'Account',

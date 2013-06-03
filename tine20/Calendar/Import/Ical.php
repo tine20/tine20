@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        use more functionality of Tinebase_Import_Abstract (import() and other fns)
  */
@@ -18,12 +18,6 @@
  * @subpackage  Import
  * 
  * @see for german holidays http://www.sunbird-kalender.de/extension/kalender/
- * 
- * @todo add support for rrule exceptions
- * @todo add support for alarms
- * @todo add support for attendee / organizer
- * @todo add support for categories
- *
  */
 class Calendar_Import_Ical extends Tinebase_Import_Abstract
 {
@@ -97,38 +91,27 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
      *  'totalcount'        => int,
      *  'failcount'         => int,
      *  'duplicatecount'    => int,
+     *  
+     *  @throws Calendar_Exception_IcalParser
+     *  
+     *  @see 0008334: use vcalendar converter for ics import
      */
     public function import($_resource = NULL, $_clientRecordData = array())
     {
-        // force correct line ends
-        require_once 'StreamFilter/StringReplace.php';
-        $filter = stream_filter_append($_resource, 'str.replace', STREAM_FILTER_READ, array(
-            'search'            => '/(?<!\r)\n/',
-            'replace'           => "\r\n",
-            'searchIsRegExp'    => TRUE
-        ));
-        
         if (! $this->_options['importContainerId']) {
             throw new Tinebase_Exception_InvalidArgument('you need to define a importContainerId');
         }
         
-        $icalData = stream_get_contents($_resource);
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $parser = new qCal_Parser();
         try {
-            $ical = $parser->parse($icalData);
+            $events = $converter->toTine20RecordSet($_resource);
         } catch (Exception $e) {
-            // rethrow a mal formated ics
             $isce = new Calendar_Exception_IcalParser();
             $isce->setParseError($e);
             throw $isce;
         }
         
-        $events = $this->_importResult['results'] = $this->_getEvents($ical);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . count($events) . ' events for import.');
-//        print_r($events->toArray());
-        
-        // set container
         $events->container_id = $this->_options['importContainerId'];
         
         $cc = Calendar_Controller_Event::getInstance();
@@ -142,7 +125,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         
         // insert one by one in a single transaction
         $existingEvents->addIndices(array('uid'));
-        foreach($events as $event) {
+        foreach ($events as $event) {
             $existingEvent = $existingEvents->find('uid', $event->uid);
             try {
                 if (! $existingEvent) {
@@ -163,99 +146,5 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         $cc->sendNotifications($sendNotifications);
         
         return $this->_importResult;
-    }
-    
-    /**
-     * converts VEVENT to an Calendar_Model_Event
-     * 
-     * @param   qCal_Component $vevent
-     * @return  Calendar_Model_Event
-     */
-    protected function _getEvent(qCal_Component $vevent)
-    {
-        $eventData = array();
-        
-        // timezone
-        if ($vevent->hasComponent('VTIMEZONE')) {
-            $tz = array_value(0, $vevent->getComponent('VTIMEZONE'));
-            $eventData['originator_tz'] = array_value(0, $tz->getProperty('TZID'))->getValue();
-        } else {
-            $eventData['originator_tz'] = $this->_defaultTimezoneId;
-        }
-        
-        foreach($this->_eventPropertyMap as $tineName => $icalName) {
-            if ($vevent->hasProperty($icalName)) {
-                $icalValue = array_value(0, $vevent->getProperty($icalName));
-                
-                switch ($icalValue->getType()) {
-                    case 'DATE':
-                        $value = new Tinebase_DateTime($icalValue->getValue() . 'T000000', $eventData['originator_tz']);
-                        
-                        // events with dtstart given as date are allday events!
-                        if ($tineName == 'dtstart') {
-                            $eventData['is_all_day_event'] = true;
-                        }
-                        
-                        if ($tineName == 'dtend') {
-                            $value = $value->addSecond(-1);
-                        } 
-                        break;
-                    case 'DATE-TIME':
-                        $value = new Tinebase_DateTime($icalValue->getValue(), $eventData['originator_tz']);
-                    case 'TEXT':
-                        $value = str_replace(array('\\,', '\\n'), array(',', "\n"), $icalValue->getValue());
-                        break;
-                    default:
-                        $value = $icalValue->getValue();
-                        break;
-                }
-                $eventData[$tineName] = $value;
-            }
-        }
-        
-        // truncate string
-        if (array_key_exists('uid', $eventData) && strlen($eventData['uid']) > 40) {
-            $eventData['uid'] = substr($eventData['uid'], 0, 40);
-        }
-        
-        $event = new Calendar_Model_Event($eventData);
-        $event->setTimezone('UTC');
-                        
-        return $event;
-    }
-    
-    /**
-     * convert a VCALENDAR into a Tinebase_Record_RecordSet of Calendar_Model_Event
-     * 
-     * @param   qCal_Component_Vcalendar $component
-     * @return  Tinebase_Record_RecordSet of Calendar_Model_Event
-     */
-    protected function _getEvents(qCal_Component_Vcalendar $component)
-    {
-        $events = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        
-        // do we have a generic timezone?
-        if ($component->hasComponent('VTIMEZONE')) {
-            $tz = array_value(0, $component->getComponent('VTIMEZONE'));
-            $this->_defaultTimezoneId = array_value(0, $tz->getProperty('TZID'))->getValue();
-        } else {
-            $this->_defaultTimezoneId = (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
-        }
-        
-        foreach ($component->getChildren() as $children) {
-            if (is_array($children)) {
-                foreach ($children as $child) {
-                    if ($child->getName() === 'VEVENT') {
-                        $events->addRecord($this->_getEvent($child));
-                    }
-                }
-            } else {
-                if ($children->getName() === 'VEVENT') {
-                    $events->addRecord($this->_getEvent($children));
-                }
-            }
-        }
-        
-        return $events;
     }
 }

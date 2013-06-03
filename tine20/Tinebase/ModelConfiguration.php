@@ -230,6 +230,8 @@ class Tinebase_ModelConfiguration {
      *
      * - shy: If this is set to true, the row for this field won't be shown in the grid, but can be activated
      * 
+     * - sortable: If this is set to false, no sort by this field is possible in the gridpanel, defaults to true
+     * 
      *   // TODO: generalize, currently only in ContractGridPanel, take it from there:
      * - showInDetailsPanel: auto show in details panel if any is defined in the js gridpanel class
      * 
@@ -601,7 +603,8 @@ class Tinebase_ModelConfiguration {
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {
             $this->{'_' . $propertyName} = $propertyValue;
         }
-
+        
+        $this->_filters = array();
         $this->_fields[$this->_idProperty] = array('label' => NULL, 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
 
         if ($this->_hasCustomFields) {
@@ -628,7 +631,13 @@ class Tinebase_ModelConfiguration {
         }
 
         if ($this->_hasTags) {
-            $this->_fields['tags'] = array('label' => 'Tags', 'type' => 'tag', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL), 'useGlobalTranslation' => TRUE);
+            $this->_fields['tags'] = array(
+                'label' => 'Tags',
+                'sortable' => false,
+                'type' => 'tag', 
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL), 
+                'useGlobalTranslation' => TRUE
+            );
         }
 
         if ($this->_modlogActive) {

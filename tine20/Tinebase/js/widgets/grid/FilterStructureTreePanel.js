@@ -126,7 +126,7 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onNodeInsert: function(tree, parent, node) {
         
-        var clickEl = Ext.EventObject.getTarget('.x-tree-node-el', 10),
+        var clickEl = Ext.EventObject.target ? Ext.EventObject.getTarget('.x-tree-node-el', 10) : null,
             isUserActionInsert = clickEl && Ext.fly(clickEl, '_treeEvents').getAttribute('tree-node-id', 'ext') == 'addFilterPanel' ? true : false,
             nodeCount = this.getRootNode().childNodes.length;
         

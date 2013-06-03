@@ -113,79 +113,60 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
     public function handle()
     {
         // input xml
-        $xml = simplexml_import_dom($this->_requestBody);
+        $requestXML = simplexml_import_dom($this->_mergeSyncRequest($this->_requestBody, $this->_device));
         
-        if (isset($xml->HeartbeatInterval)) {
-            $this->_heartbeatInterval = (int)$xml->HeartbeatInterval;
-        } elseif (isset($xml->Wait)) {
-            $this->_heartbeatInterval = (int)$xml->Wait * 60;
+        if (! isset($requestXML->Collections)) {
+            $this->_outputDom->documentElement->appendChild(
+                $this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_RESEND_FULL_XML)
+            );
+            
+            return $this->_outputDom;
         }
         
-        $this->_globalWindowSize = isset($xml->WindowSize) ? (int)$xml->WindowSize : 100;
         
+        if (isset($requestXML->HeartbeatInterval)) {
+            $this->_heartbeatInterval = (int)$requestXML->HeartbeatInterval;
+        } elseif (isset($requestXML->Wait)) {
+            $this->_heartbeatInterval = (int)$requestXML->Wait * 60;
+        }
+        
+        $this->_globalWindowSize = isset($requestXML->WindowSize) ? (int)$requestXML->WindowSize : 100;
         
         if ($this->_globalWindowSize > $this->_maxWindowSize) {
             $this->_globalWindowSize = $this->_maxWindowSize;
         }
+
+        // load options from lastsynccollection
+        $lastSyncCollection = array('options' => array());
+        if (!empty($this->_device->lastsynccollection)) {
+            $lastSyncCollection = Zend_Json::decode($this->_device->lastsynccollection);
+            if (!array_key_exists('options', $lastSyncCollection) || !is_array($lastSyncCollection['options'])) {
+                $lastSyncCollection['options'] = array();
+            }
+        }
         
         $collections = array();
-        $isPartialRequest = isset($xml->Partial);
         
-        $lastSyncCollections = null;
-        $lastSyncOptions     = null;
-        if (!empty($this->_device->lastsynccollection)) {
-            $lastSyncCollections = Zend_Json::decode($this->_device->lastsynccollection);
-            if (isset($lastSyncCollections['options'])) {
-                $lastSyncOptions     = $lastSyncCollections['options'];
-                $lastSyncCollections = $lastSyncCollections['collections'];
-            }
-        }
-        
-        // try to restore collections from previous request
-        if ($isPartialRequest) {
-            if (is_array($lastSyncCollections)) {
-                foreach ($lastSyncCollections as $collection) {
-                    $collections[$collection['collectionId']] = new Syncroton_Model_SyncCollection($collection);
-                }
-            }
-        }
-        
-        // Collections element is optional when Partial element is sent
-        if (isset($xml->Collections)) {
-            foreach ($xml->Collections->Collection as $xmlCollection) {
-                $collectionId = (string)$xmlCollection->CollectionId;
-                
-                // do we have to update a collection sent in previous sync request?
-                if ($isPartialRequest && isset($collections[$collectionId])) {
-                    $collections[$collectionId]->setFromSimpleXMLElement($xmlCollection);
-                } else {
-                    $collections[$collectionId] = new Syncroton_Model_SyncCollection($xmlCollection);
-                }
-                
-                // do we have to reuse the options from the previous request?
-                if (!isset($xmlCollection->Options) && is_array($lastSyncOptions) && array_key_exists($collectionId, $lastSyncOptions)) {
-                    $collections[$collectionId]->options = $lastSyncOptions[$collectionId];
-                    if ($this->_logger instanceof Zend_Log)
-                        $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " restored options to " . print_r($collections[$collectionId]->options, TRUE));
-                }
+        foreach ($requestXML->Collections->Collection as $xmlCollection) {
+            $collectionId = (string)$xmlCollection->CollectionId;
+            
+            $collections[$collectionId] = new Syncroton_Model_SyncCollection($xmlCollection);
+            
+            // do we have to reuse the options from the previous request?
+            if (!isset($xmlCollection->Options) && array_key_exists($collectionId, $lastSyncCollection['options'])) {
+                $collections[$collectionId]->options = $lastSyncCollection['options'][$collectionId];
+                if ($this->_logger instanceof Zend_Log)
+                    $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " restored options to " . print_r($collections[$collectionId]->options, TRUE));
             }
             
-            // store current value of $collections for next Sync command request
-            $collectionsToSave = array(
-                'collections' => array(),
-                'options'     => is_array($lastSyncOptions) ? $lastSyncOptions : array()
-            );
-            
-            foreach ($collections as $collection) {
-                $collectionsToSave['collections'][$collection->collectionId] = $collection->toArray();
-                $collectionsToSave['options']    [$collection->collectionId] = $collectionsToSave['collections'][$collection->collectionId]['options'];
-            }
+            // store current options for next Sync command request (sticky options)
+            $lastSyncCollection['options'][$collectionId] = $collections[$collectionId]->options;
+        }
         
-            $this->_device->lastsynccollection = Zend_Json::encode($collectionsToSave);
+        $this->_device->lastsynccollection = Zend_Json::encode($lastSyncCollection);
         
-            if ($this->_device->isDirty()) {
-                Syncroton_Registry::getDeviceBackend()->update($this->_device);
-            }
+        if ($this->_device->isDirty()) {
+            Syncroton_Registry::getDeviceBackend()->update($this->_device);
         }
         
         foreach ($collections as $collectionData) {
@@ -431,13 +412,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
     {
         $sync = $this->_outputDom->documentElement;
         
-        if (count($this->_collections) == 0) {
-            $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Status', self::STATUS_RESEND_FULL_XML));
-            
-            return $this->_outputDom;
-        }
-        
-        $collections = $sync->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collections'));
+        $collections = $this->_outputDom->createElementNS('uri:AirSync', 'Collections');
 
         $totalChanges = 0;
         
@@ -507,7 +482,8 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                         
                         
                         // safe battery time by skipping folders which got synchronied less than Syncroton_Command_Ping::$quietTime seconds ago
-                        if (($now->getTimestamp() - $collectionData->syncState->lastsync->getTimestamp()) < Syncroton_Registry::getQuietTime()) {
+                        if ( ! $collectionData->syncState instanceof Syncroton_Model_SyncState ||
+                             ($now->getTimestamp() - $collectionData->syncState->lastsync->getTimestamp()) < Syncroton_Registry::getQuietTime()) {
                             continue;
                         }
                         
@@ -673,7 +649,7 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 }
 
                 // collection header
-                $collection = $collections->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Collection'));
+                $collection = $this->_outputDom->createElementNS('uri:AirSync', 'Collection');
                 if (!empty($collectionData->folder->class)) {
                     $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Class', $collectionData->folder->class));
                 }
@@ -892,29 +868,35 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                 
                 // increase SyncKey if needed
                 if ((
-                        // sent the clients updates?
+                        // sent the clients updates... ?
                         !empty($clientModifications['added']) ||
                         !empty($clientModifications['changed']) ||
                         !empty($clientModifications['deleted'])
                     ) || (
-                        // sends the server updates to the client?
+                        // is the server sending updates to the client... ?
                         $commands->hasChildNodes() === true
                     ) || (
-                        // changed the pending data?
+                        // changed the pending data... ?
                         $collectionData->syncState->pendingdata != $serverModifications
                     )
                 ) {
-                    // then increase SyncKey
+                    // ...then increase SyncKey
                     $collectionData->syncState->counter++;
                 }
                 $syncKeyElement->appendChild($this->_outputDom->createTextNode($collectionData->syncState->counter));
                 
-                if ($this->_logger instanceof Zend_Log) 
-                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " new synckey is ". $collectionData->syncState->counter);
+                if ($this->_logger instanceof Zend_Log)
+                    $this->_logger->info(__METHOD__ . '::' . __LINE__ . " current synckey is ". $collectionData->syncState->counter);
+                
+                if ($collection->childNodes->length > 4 || $collectionData->syncState->counter != $collectionData->syncKey) {
+                     $collections->appendChild($collection);
+                }
             }
             
-            if (isset($collectionData->syncState) && $collectionData->syncState instanceof Syncroton_Model_ISyncState && 
-                $collectionData->syncState->counter != $collectionData->syncKey) {
+            if (isset($collectionData->syncState) && 
+                $collectionData->syncState instanceof Syncroton_Model_ISyncState &&
+                $collectionData->syncState->counter != $collectionData->syncKey 
+            ) {
                 
                 if ($this->_logger instanceof Zend_Log)
                     $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " update syncState for collection: " . $collectionData->collectionId);
@@ -975,23 +957,144 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                     
                     throw $zdse;
                 }
-                    
+            }
+            
+            // store current filter type
+            try {
+                $folderState = $this->_folderBackend->get($collectionData->folder);
+                $folderState->lastfiltertype = $collectionData->options['filterType'];
+                if ($folderState->isDirty()) {
+                    $this->_folderBackend->update($folderState);
+                }
+            } catch (Syncroton_Exception_NotFound $senf) {
+                // failed to get folderstate => should not happen but is also no problem in this state
+                if ($this->_logger instanceof Zend_Log) 
+                    $this->_logger->warn(__METHOD__ . '::' . __LINE__ . ' failed to get folder state for: ' . $collectionData->collectionId);
+            }
+        }
+        
+        if ($collections->hasChildNodes() === true) {
+            $sync->appendChild($collections);
+        }
+        
+        if ($sync->hasChildNodes()) {
+            return $this->_outputDom;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * remove Commands and Supported from collections XML tree
+     * 
+     * @param  DOMDocument $document
+     * @return DOMDocument
+     */
+    protected function _cleanUpXML(DOMDocument $document)
+    {
+        $cleanedDocument = clone $document;
+        
+        $xpath = new DomXPath($cleanedDocument);
+        $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        
+        $collections = $xpath->query("//AirSync:Sync/AirSync:Collections/AirSync:Collection");
+        
+        // remove Commands and Supported elements
+        foreach ($collections as $collection) {
+            foreach (array('Commands', 'Supported') as $element) {
+                $childrenToRemove = $collection->getElementsByTagName($element);
                 
-                // store current filter type
-                try {
-                    $folderState = $this->_folderBackend->getFolder($this->_device, $collectionData->collectionId);
-                    $folderState->lastfiltertype = $collectionData->options['filterType'];
-                    if ($folderState->isDirty()) {
-                        $this->_folderBackend->update($folderState);
-                    }
-                } catch (Syncroton_Exception_NotFound $senf) {
-                    // failed to get folderstate => should not happen but is also no problem in this state
-                    if ($this->_logger instanceof Zend_Log) 
-                        $this->_logger->crit(__METHOD__ . '::' . __LINE__ . ' failed to get content state for: ' . $collectionData->collectionId);
+                foreach ($childrenToRemove as $childToRemove) {
+                    $collection->removeChild($childToRemove);
                 }
             }
         }
         
-        return $this->_outputDom;
+        return $cleanedDocument;
+    }
+    
+    /**
+     * merge a partial XML document with the XML document from the previous request
+     * 
+     * @param  DOMDocument|null  $requestBody
+     * @return SimpleXMLElement
+     */
+    protected function _mergeSyncRequest($requestBody, Syncroton_Model_Device $device)
+    {
+        $lastSyncCollection = array();
+        
+        if (!empty($device->lastsynccollection)) {
+            $lastSyncCollection = Zend_Json::decode($device->lastsynccollection);
+            if (!empty($lastSyncCollection['lastXML'])) {
+                $lastXML = new DOMDocument();
+                $lastXML->loadXML($lastSyncCollection['lastXML']);
+            }
+        }
+        
+        if (! $requestBody instanceof DOMDocument && isset($lastXML) && $lastXML instanceof DOMDocument) {
+            $requestBody = $lastXML;
+        } elseif (! $requestBody instanceof DOMDocument) {
+            throw new Syncroton_Exception_UnexpectedValue('no xml body found');
+        }
+        
+        if ($requestBody->getElementsByTagName('Partial')->length > 0) {
+            $partialBody = clone $requestBody;
+            $requestBody = $lastXML;
+            
+            $xpath = new DomXPath($requestBody);
+            $xpath->registerNamespace('AirSync', 'uri:AirSync');
+            
+            foreach ($partialBody->documentElement->childNodes as $child) {
+                if (! $child instanceof DOMElement) {
+                    continue;
+                }
+                
+                if ($child->tagName == 'Partial') {
+                    continue;
+                }
+                
+                if ($child->tagName == 'Collections') {
+                    foreach ($child->getElementsByTagName('Collection') as $updatedCollection) {
+                        $collectionId = $updatedCollection->getElementsByTagName('CollectionId')->item(0)->nodeValue;
+                        
+                        $existingCollections = $xpath->query("//AirSync:Sync/AirSync:Collections/AirSync:Collection[AirSync:CollectionId='$collectionId']");
+                        
+                        if ($existingCollections->length > 0) {
+                            $existingCollection = $existingCollections->item(0);
+                            foreach ($updatedCollection->childNodes as $updatedCollectionChild) {
+                                if (! $updatedCollectionChild instanceof DOMElement) {
+                                    continue;
+                                }
+                                
+                                $duplicateChild = $existingCollection->getElementsByTagName($updatedCollectionChild->tagName);
+                                
+                                if ($duplicateChild->length > 0) {
+                                    $existingCollection->replaceChild($requestBody->importNode($updatedCollectionChild, TRUE), $duplicateChild->item(0));
+                                } else {
+                                    $existingCollection->appendChild($requestBody->importNode($updatedCollectionChild, TRUE));
+                                }
+                            }
+                        } else {
+                            $importedCollection = $requestBody->importNode($updatedCollection, TRUE);
+                        }
+                    }
+                    
+                } else {
+                    $duplicateChild = $xpath->query("//AirSync:Sync/AirSync:{$child->tagName}");
+                    
+                    if ($duplicateChild->length > 0) {
+                        $requestBody->documentElement->replaceChild($requestBody->importNode($child, TRUE), $duplicateChild->item(0));
+                    } else {
+                        $requestBody->documentElement->appendChild($requestBody->importNode($child, TRUE));
+                    }
+                }
+            }
+        }
+        
+        $lastSyncCollection['lastXML'] = $this->_cleanUpXML($requestBody)->saveXML();
+        
+        $device->lastsynccollection = Zend_Json::encode($lastSyncCollection);
+        
+        return $requestBody;
     }
 }

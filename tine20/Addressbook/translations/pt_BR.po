@@ -1,11 +1,13 @@
 # 
 # Translators:
+# antacs <antonio-carlos.silva@serpro.gov.br>, 2013
+# DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:51+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-05-07 17:18+0000\n"
+"Last-Translator: antacs <antonio-carlos.silva@serpro.gov.br>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -73,7 +75,7 @@ msgstr "Arquivo CSV do Outlook 2007 em Alemão"
 
 #: Config.php:45
 msgid "Contact duplicate check fields"
-msgstr ""
+msgstr "Contato dupliado: verifique as informações"
 
 #: Config.php:47
 msgid ""
@@ -89,7 +91,7 @@ msgstr "Saudações de Contato disponível"
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
-msgstr ""
+msgstr "Saudações de contatos possíveis. Note que valores adicionais poderiam impactar em Catálogos de Endereços de outros sistemas durante a exportação ou sincronização."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
@@ -113,10 +115,10 @@ msgstr "Sra"
 
 #: Setup/Update/Release5.php:196 Setup/Initialize.php:65 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/ContactEditDialog.js:125
-#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441 js/Model.js:27
+#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449 js/Model.js:27
 #: js/Model.js:141
 msgid "Company"
-msgstr ""
+msgstr "Empresa"
 
 #: Setup/Update/Release3.php:37 Setup/Initialize.php:135
 msgid "All contacts I have read grants for"
@@ -200,7 +202,7 @@ msgstr "Fax"
 
 #: Export/Pdf.php:67
 msgid "Telephone Page"
-msgstr ""
+msgstr "Página do Telefone"
 
 #: Export/Pdf.php:70
 msgid "URL"
@@ -227,7 +229,7 @@ msgstr "Telefone do Assistente"
 msgid "Private Contact Data"
 msgstr "Informação Pessoal do Contato"
 
-#: Export/Pdf.php:88 js/ContactEditDialog.js:288 js/Model.js:43
+#: Export/Pdf.php:88 js/ContactEditDialog.js:296 js/Model.js:43
 #: js/Model.js:155 js/Model.js:156 js/Model.js:157 js/Model.js:158
 #: js/Model.js:159
 msgid "Private Address"
@@ -280,7 +282,7 @@ msgid "Salutation"
 msgstr "Saudação"
 
 #: js/ContactGrid.js:108 js/ContactEditDialog.js:119
-#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441 js/Model.js:19
+#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr "Sobrenome"
@@ -304,31 +306,31 @@ msgid "Unit"
 msgstr "Unidade"
 
 #: js/ContactGrid.js:115 js/ContactEditDialog.js:139 js/Model.js:31
-#: js/Model.js:145
+#: js/Model.js:148
 msgid "Job Role"
 msgstr "Função"
 
-#: js/ContactGrid.js:117 js/ContactEditDialog.js:262
-#: js/ContactEditDialog.js:291 js/Model.js:150 js/Model.js:155
+#: js/ContactGrid.js:117 js/ContactEditDialog.js:270
+#: js/ContactEditDialog.js:299 js/Model.js:150 js/Model.js:155
 msgid "Street"
 msgstr "Rua"
 
-#: js/ContactGrid.js:118 js/ContactEditDialog.js:278
-#: js/ContactEditDialog.js:307 js/Model.js:153 js/Model.js:158
+#: js/ContactGrid.js:118 js/ContactEditDialog.js:286
+#: js/ContactEditDialog.js:315 js/Model.js:153 js/Model.js:158
 msgid "City"
 msgstr "Cidade"
 
-#: js/ContactGrid.js:119 js/ContactEditDialog.js:270
-#: js/ContactEditDialog.js:299 js/Model.js:151 js/Model.js:156
+#: js/ContactGrid.js:119 js/ContactEditDialog.js:278
+#: js/ContactEditDialog.js:307 js/Model.js:151 js/Model.js:156
 msgid "Region"
-msgstr "Município"
+msgstr "Estado"
 
 #: js/ContactGrid.js:120
 msgid "Postalcode"
 msgstr "Código Postal"
 
-#: js/ContactGrid.js:121 js/ContactEditDialog.js:283
-#: js/ContactEditDialog.js:312 js/Model.js:154 js/Model.js:159
+#: js/ContactGrid.js:121 js/ContactEditDialog.js:291
+#: js/ContactEditDialog.js:320 js/Model.js:154 js/Model.js:159
 msgid "Country"
 msgstr "País"
 
@@ -448,7 +450,7 @@ msgstr "Importar contatos"
 
 #: js/ContactGrid.js:292
 msgid "Contact of a user account"
-msgstr ""
+msgstr "Contado da conta do usuário"
 
 #: js/ContactGrid.js:292 js/ContactFilterModel.js:35 js/Model.js:94
 #: js/Model.js:133
@@ -466,7 +468,7 @@ msgid "Select contact"
 msgstr "Selecionar contato"
 
 #: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
-#: js/ContactEditDialog.js:213 js/Model.js:62 js/Model.js:147
+#: js/ContactEditDialog.js:213 js/Model.js:62 js/Model.js:146
 msgid "E-Mail"
 msgstr "E-mail"
 
@@ -514,49 +516,49 @@ msgstr "Informação de Contato"
 msgid "E-Mail (private)"
 msgstr "-mail (particular)"
 
-#: js/ContactEditDialog.js:259 js/Model.js:34 js/Model.js:150 js/Model.js:151
+#: js/ContactEditDialog.js:267 js/Model.js:34 js/Model.js:150 js/Model.js:151
 #: js/Model.js:152 js/Model.js:153 js/Model.js:154
 msgid "Company Address"
 msgstr "Endereço da Empresa"
 
-#: js/ContactEditDialog.js:266 js/ContactEditDialog.js:295
+#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303
 msgid "Street 2"
 msgstr "Rua 2"
 
-#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303 js/Model.js:152
+#: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311 js/Model.js:152
 #: js/Model.js:157
 msgid "Postal Code"
 msgstr "Código Postal"
 
-#: js/ContactEditDialog.js:333 js/Model.js:68 js/Model.js:146
+#: js/ContactEditDialog.js:341 js/Model.js:68 js/Model.js:145
 msgid "Description"
 msgstr "Descrição"
 
-#: js/ContactEditDialog.js:347
+#: js/ContactEditDialog.js:355
 msgid "Enter description"
 msgstr "Informar descrição"
 
-#: js/ContactEditDialog.js:391
+#: js/ContactEditDialog.js:399
 msgid "Export as pdf"
 msgstr "Exportar como pdf"
 
-#: js/ContactEditDialog.js:399 js/ContactEditDialog.js:484
+#: js/ContactEditDialog.js:407 js/ContactEditDialog.js:492
 msgid "Parse address"
 msgstr "Analisar endereço"
 
-#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441
+#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449
 msgid "Either {0} or {1} must be given"
 msgstr "Ou {0} ou deve ser dado"
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:484
 msgid "Paste address"
 msgstr "Colar endereço"
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:484
 msgid "Please paste an address that should be parsed:"
 msgstr "Favor colar um endereço que possa ser analisado:"
 
-#: js/ContactEditDialog.js:510
+#: js/ContactEditDialog.js:520
 msgid "End token mode"
 msgstr "Finalizar o modo de símbolos"
 
@@ -574,7 +576,7 @@ msgstr "Membro da Lista (Endereço Comercial)"
 
 #: js/CardDAVContainerPropertiesHookField.js:35
 msgid "CardDAV URL"
-msgstr ""
+msgstr "URL do CardDAV"
 
 #: js/Model.js:19
 msgid "Name"

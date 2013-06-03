@@ -1,8 +1,8 @@
 # 
 # Translators:
-#   <arturmon82@gmail.com>, 2012.
-# Nikolay Parukhin <parukhin@gmail.com>, 2012.
-#   <parukhin@gmail.com>, 2012.
+# артур Мудрых <arturmon82@gmail.com>, 2012
+# Nikolay Parukhin <parukhin@gmail.com>, 2012
+# Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -76,18 +76,18 @@ msgstr "Описание"
 msgid "Enter description"
 msgstr "Введите описание"
 
-#: js/NodeTreePanel.js:666 js/NodeTreePanel.js:776 js/NodeGridPanel.js:651
+#: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:651
 #: js/NodeGridPanel.js:803
 msgid "Upload Failed"
 msgstr "Сбой загрузки"
 
-#: js/NodeTreePanel.js:667 js/NodeGridPanel.js:652
+#: js/NodeTreePanel.js:661 js/NodeGridPanel.js:652
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr "Не удалось загрузить файл. Размер файла может быть слишком большим. Пожалуйста, сообщите администратору. Максимальный загружаемый размер:"
 
-#: js/NodeTreePanel.js:777 js/NodeGridPanel.js:804
+#: js/NodeTreePanel.js:771 js/NodeGridPanel.js:804
 msgid "Putting files in this folder is not allowed!"
 msgstr "Помещение файлов в этой папке не допускается!"
 

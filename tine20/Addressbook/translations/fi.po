@@ -1,12 +1,13 @@
 # 
 # Translators:
-#   <sahkari@saunalahti.fi>, 2012.
+# maukka <huru_ukko@hotmail.com>, 2013
+# sahkari <sahkari@saunalahti.fi>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:51+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-03-04 19:42+0000\n"
+"Last-Translator: maukka <huru_ukko@hotmail.com>\n"
 "Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,16 +28,16 @@ msgstr "Luo uusi jaettu osoitekirja kansio"
 
 #: Acl/Rights.php:109
 msgid "manage shared addressbook favorites"
-msgstr ""
+msgstr "hallinnoi jaettuja osoitekirjasuosikkeja"
 
 #: Acl/Rights.php:110
 msgid "Create or update shared addressbook favorites"
-msgstr ""
+msgstr "Luo tai muokkaa jaettuaja osoitekirjasuosikkeja"
 
 #: Controller.php:103
 #, python-format
 msgid "%s's personal addressbook"
-msgstr ""
+msgstr "%s henkilökohtainen osoitekirja"
 
 #: Import/definitions/adb_outlook_import_csv.xml:13
 msgid "Contact CSV import from Outlook address book"
@@ -52,13 +53,13 @@ msgstr "CSV Yhteystietojen tuonti"
 
 #: Import/definitions/adb_tine_import_csv.xml:18
 msgid "Import list (###CURRENTDATE###)"
-msgstr ""
+msgstr "Tuo lista (###CURRENTDATE###)"
 
 #: Import/definitions/adb_tine_import_csv.xml:20
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
-msgstr ""
+msgstr "###USERFULLNAME### toi yhteystiedot  ###CURRENTDATE###  ###CURRENTTIME###"
 
 #: Import/definitions/adb_mac_import_csv.xml:17
 msgid "Contact CSV import from mac address book"
@@ -74,31 +75,31 @@ msgstr "CSV Outlook 2007 tuonti"
 
 #: Config.php:45
 msgid "Contact duplicate check fields"
-msgstr ""
+msgstr "Kontakti on jo olemassa, tarkista kentät"
 
 #: Config.php:47
 msgid ""
 "These fields are checked when a new contact is created. If a record with the"
 " same data in the fields is found, a duplicate exception is thrown."
-msgstr ""
+msgstr "Kentät tarkistetaan uutta kontaktia luotaessa. Jos vastaava merkintä on jo olemassa, annetaan virhe kaksoismerkinnästä. "
 
 #: Config.php:59
 msgid "Contact salutations available"
-msgstr ""
+msgstr "Kontaktin mahdolliset tittelit"
 
 #: Config.php:61
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
-msgstr ""
+msgstr "Mahdolliset tittelit. Huomioi, että lisätyt arvot voivat näkyä väärin muissa osoitekirjaympäristöissä viennin tai synkronoinnin yhteydessä."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
-msgstr ""
+msgstr "Osoitteiden jäsennyssäännöt"
 
 #: Config.php:71
 msgid "Path to a XML file with address parsing rules."
-msgstr ""
+msgstr "Polku XML-tiedostoon, joka sisältää osoitteen jäsentämissäännöt."
 
 #: Setup/setup.xml:654
 msgid "Internal Contacts"
@@ -114,7 +115,7 @@ msgstr "Neiti"
 
 #: Setup/Update/Release5.php:196 Setup/Initialize.php:65 js/ContactGrid.js:112
 #: js/ContactGridDetailsPanel.js:131 js/ContactEditDialog.js:125
-#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441 js/Model.js:27
+#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449 js/Model.js:27
 #: js/Model.js:141
 msgid "Company"
 msgstr "Yritys"
@@ -157,15 +158,15 @@ msgstr "Oletus osoitekirja"
 
 #: Preference.php:66
 msgid "The default addressbook for new contacts"
-msgstr ""
+msgstr "Osoitekirja, johon uudet kontaktit lisätään"
 
 #: Preference.php:69
 msgid "Default Favorite"
-msgstr ""
+msgstr "Oletussuosikki"
 
 #: Preference.php:70
 msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
+msgstr "Oletussuosikki, joka ladataan osoitekirjan käynnistyessä"
 
 #: Export/Pdf.php:37
 msgid "Business Contact Data"
@@ -228,7 +229,7 @@ msgstr "Avustajan puhelin"
 msgid "Private Contact Data"
 msgstr "Yhteystiedot koti"
 
-#: Export/Pdf.php:88 js/ContactEditDialog.js:288 js/Model.js:43
+#: Export/Pdf.php:88 js/ContactEditDialog.js:296 js/Model.js:43
 #: js/Model.js:155 js/Model.js:156 js/Model.js:157 js/Model.js:158
 #: js/Model.js:159
 msgid "Private Address"
@@ -281,7 +282,7 @@ msgid "Salutation"
 msgstr "Tervehdys"
 
 #: js/ContactGrid.js:108 js/ContactEditDialog.js:119
-#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441 js/Model.js:19
+#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449 js/Model.js:19
 #: js/Model.js:140
 msgid "Last Name"
 msgstr "Sukunimi"
@@ -305,31 +306,31 @@ msgid "Unit"
 msgstr "Yksikkö"
 
 #: js/ContactGrid.js:115 js/ContactEditDialog.js:139 js/Model.js:31
-#: js/Model.js:145
+#: js/Model.js:148
 msgid "Job Role"
 msgstr "Työn kuvaus"
 
-#: js/ContactGrid.js:117 js/ContactEditDialog.js:262
-#: js/ContactEditDialog.js:291 js/Model.js:150 js/Model.js:155
+#: js/ContactGrid.js:117 js/ContactEditDialog.js:270
+#: js/ContactEditDialog.js:299 js/Model.js:150 js/Model.js:155
 msgid "Street"
 msgstr "Osoite"
 
-#: js/ContactGrid.js:118 js/ContactEditDialog.js:278
-#: js/ContactEditDialog.js:307 js/Model.js:153 js/Model.js:158
+#: js/ContactGrid.js:118 js/ContactEditDialog.js:286
+#: js/ContactEditDialog.js:315 js/Model.js:153 js/Model.js:158
 msgid "City"
 msgstr "Toimipaikka"
 
-#: js/ContactGrid.js:119 js/ContactEditDialog.js:270
-#: js/ContactEditDialog.js:299 js/Model.js:151 js/Model.js:156
+#: js/ContactGrid.js:119 js/ContactEditDialog.js:278
+#: js/ContactEditDialog.js:307 js/Model.js:151 js/Model.js:156
 msgid "Region"
-msgstr ""
+msgstr "Alue"
 
 #: js/ContactGrid.js:120
 msgid "Postalcode"
 msgstr "Postinumero"
 
-#: js/ContactGrid.js:121 js/ContactEditDialog.js:283
-#: js/ContactEditDialog.js:312 js/Model.js:154 js/Model.js:159
+#: js/ContactGrid.js:121 js/ContactEditDialog.js:291
+#: js/ContactEditDialog.js:320 js/Model.js:154 js/Model.js:159
 msgid "Country"
 msgstr "Maa"
 
@@ -343,7 +344,7 @@ msgstr "Kaupunki (yksityinen)"
 
 #: js/ContactGrid.js:124
 msgid "Region (private)"
-msgstr ""
+msgstr "Alue (henkilökohtainen)"
 
 #: js/ContactGrid.js:125
 msgid "Postalcode (private)"
@@ -415,7 +416,7 @@ msgstr "Aikavyöhyke"
 
 #: js/ContactGrid.js:141
 msgid "Geo"
-msgstr ""
+msgstr "Geo"
 
 #: js/ContactGrid.js:152 js/ContactGrid.js:153 js/ContactGrid.js:154
 msgid "Export {0}"
@@ -449,14 +450,14 @@ msgstr "Tuo yhteystiedot"
 
 #: js/ContactGrid.js:292
 msgid "Contact of a user account"
-msgstr ""
+msgstr "Tilin yhteystieto"
 
 #: js/ContactGrid.js:292 js/ContactFilterModel.js:35 js/Model.js:94
 #: js/Model.js:133
 msgid "Contact"
 msgid_plural "Contacts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kontakti"
+msgstr[1] "Kontaktit"
 
 #: js/ContactGridDetailsPanel.js:62 js/Model.js:94
 msgid "Contacts"
@@ -467,7 +468,7 @@ msgid "Select contact"
 msgstr "Valitse yhteystieto"
 
 #: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
-#: js/ContactEditDialog.js:213 js/Model.js:62 js/Model.js:147
+#: js/ContactEditDialog.js:213 js/Model.js:62 js/Model.js:146
 msgid "E-Mail"
 msgstr "E-Mail"
 
@@ -481,11 +482,11 @@ msgstr "Info"
 
 #: js/ContactGridDetailsPanel.js:214
 msgid "Insecure link"
-msgstr ""
+msgstr "Varmentamaton linkki"
 
 #: js/ContactGridDetailsPanel.js:214
 msgid "Please review this link in edit dialog."
-msgstr ""
+msgstr "Tarkista ikkunassa näkyvä linkki."
 
 #: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
 msgid "Map"
@@ -505,61 +506,61 @@ msgstr "Keski nimi"
 
 #: js/ContactEditDialog.js:135 js/Model.js:23
 msgid "Suffix"
-msgstr ""
+msgstr "Pääte"
 
 #: js/ContactEditDialog.js:178
 msgid "Contact Information"
-msgstr ""
+msgstr "Yhteystiedot"
 
 #: js/ContactEditDialog.js:219 js/Model.js:63
 msgid "E-Mail (private)"
 msgstr "E-Mail (yksityinen)"
 
-#: js/ContactEditDialog.js:259 js/Model.js:34 js/Model.js:150 js/Model.js:151
+#: js/ContactEditDialog.js:267 js/Model.js:34 js/Model.js:150 js/Model.js:151
 #: js/Model.js:152 js/Model.js:153 js/Model.js:154
 msgid "Company Address"
 msgstr "Yrityksen osoite"
 
-#: js/ContactEditDialog.js:266 js/ContactEditDialog.js:295
+#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303
 msgid "Street 2"
 msgstr "Osoite 2"
 
-#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303 js/Model.js:152
+#: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311 js/Model.js:152
 #: js/Model.js:157
 msgid "Postal Code"
 msgstr "Postinumero"
 
-#: js/ContactEditDialog.js:333 js/Model.js:68 js/Model.js:146
+#: js/ContactEditDialog.js:341 js/Model.js:68 js/Model.js:145
 msgid "Description"
 msgstr "Kuvaus"
 
-#: js/ContactEditDialog.js:347
+#: js/ContactEditDialog.js:355
 msgid "Enter description"
 msgstr "Syötä kuvaus"
 
-#: js/ContactEditDialog.js:391
+#: js/ContactEditDialog.js:399
 msgid "Export as pdf"
 msgstr "Vie PDF:nä"
 
-#: js/ContactEditDialog.js:399 js/ContactEditDialog.js:484
+#: js/ContactEditDialog.js:407 js/ContactEditDialog.js:492
 msgid "Parse address"
 msgstr "Parsi osoite"
 
-#: js/ContactEditDialog.js:423 js/ContactEditDialog.js:441
+#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449
 msgid "Either {0} or {1} must be given"
-msgstr ""
+msgstr "Anna joko {0} tai {1}"
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:484
 msgid "Paste address"
 msgstr "Liitä osoite"
 
-#: js/ContactEditDialog.js:476
+#: js/ContactEditDialog.js:484
 msgid "Please paste an address that should be parsed:"
-msgstr ""
+msgstr "Liimaa osoite, jonka haluat jäsenneltävän:"
 
-#: js/ContactEditDialog.js:510
+#: js/ContactEditDialog.js:520
 msgid "End token mode"
-msgstr ""
+msgstr "Lopun merkitsemistapa"
 
 #: js/MapPanel.js:58
 msgid "Company address"
@@ -571,7 +572,7 @@ msgstr "Kotiosoite"
 
 #: js/ListMemberFilterModel.js:37
 msgid "Member of List"
-msgstr ""
+msgstr "Listan jäsen"
 
 #: js/CardDAVContainerPropertiesHookField.js:35
 msgid "CardDAV URL"
@@ -631,11 +632,11 @@ msgstr "Maa ( Koti)"
 
 #: js/Model.js:51
 msgid "Company Communication"
-msgstr ""
+msgstr "Yritysviestintä"
 
 #: js/Model.js:57
 msgid "Private Communication"
-msgstr ""
+msgstr "Yksityinen viestintä"
 
 #: js/Model.js:65
 msgid "Web (private)"
@@ -691,4 +692,4 @@ msgstr "Uusi yhteystieto"
 
 #: Controller/Contact.php:329
 msgid "Uploaded new contact image."
-msgstr ""
+msgstr "Uusi kuva lähetetty"

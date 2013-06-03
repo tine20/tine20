@@ -1,13 +1,14 @@
 # 
 # Translators:
-#   <ivana.horvat@globalnet.hr>, 2012.
-#   <visicfilip@gmail.com>, 2012.
+# ihorvat <ivana.horvat@globalnet.hr>, 2012
+# onebeat <onebeat.hr@gmail.com>, 2013
+# fvisic <visicfilip@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-26 08:57+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-03-27 09:58+0000\n"
+"Last-Translator: onebeat <onebeat.hr@gmail.com>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -268,7 +269,7 @@ msgstr "Minimalan broj znamenki"
 
 #: js/AuthenticationPanel.js:604
 msgid "Forbid part of username in password"
-msgstr ""
+msgstr "Zabranjen dio u imena u lozinci"
 
 #: js/AuthenticationPanel.js:613
 msgid "Redirect Settings"
@@ -631,7 +632,7 @@ msgstr "Putanja"
 
 #: js/ConfigManagerPanel.js:349
 msgid "Queue"
-msgstr ""
+msgstr "U redu"
 
 #: js/ConfigManagerPanel.js:390
 msgid "Session"

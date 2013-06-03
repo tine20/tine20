@@ -865,16 +865,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.movingOrDeleting = false;
         
-        // only load grid if no record is selected (as this would break onRowSelection) and no other delete requests are running
-        if (this.getGrid().getSelectionModel().getCount() === 0 && this.noDeleteRequestInProgress()) {
-            Tine.log.debug('Loading grid data after delete.');
-            this.loadGridData({
-                removeStrategy: 'keepBuffered',
-                autoRefresh: true
-            });
-        } else {
-            this.pagingToolbar.refresh.enable();
-        }
+        Tine.log.debug('Tine.Felamimail.GridPanel::onAfterDelete() -> Loading grid data after delete.');
+        this.loadGridData({
+            removeStrategy: 'keepBuffered',
+            autoRefresh: true
+        });
     },
     
     /**
@@ -953,7 +948,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *       and the next one is selected automatically
      */
     onRowSelection: function(sm, rowIndex, record, retryCount) {
-        if (sm.getCount() > 0 && (! retryCount || retryCount < 5) && ! record.bodyIsFetched()) {
+        if (sm.getCount() == 1 && (! retryCount || retryCount < 5) && ! record.bodyIsFetched()) {
             Tine.log.debug('Tine.Felamimail.GridPanel::onRowSelection() -> Deferring onRowSelection');
             retryCount = (retryCount) ? retryCount++ : 1;
             return this.onRowSelection.defer(250, this, [sm, rowIndex, record, retryCount+1]);
@@ -964,6 +959,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Tine.log.debug(record);
             
             record.addFlag('\\Seen');
+            record.mtime = new Date().getTime();
             Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
             this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
             
@@ -1097,6 +1093,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
         var action = flagCount >= Math.round(msgs.getCount()/2) ? 'clear' : 'add';
         
+        Tine.log.info('Tine.Felamimail.GridPanel::onToggleFlag - Toggle flag for ' + msgs.getCount() + ' message(s): ' + flag);
+        
         // mark messages in UI and add to edit buffer
         msgs.each(function(msg) {
             // update unreadcount
@@ -1109,7 +1107,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 if (folder) {
                     folder.set('cache_unreadcount', folder.get('cache_unreadcount') + diff);
                     if (sm.isFilterSelect && sm.getCount() > 50 && folder.get('cache_status') !== 'pending') {
-                        Tine.log.debug('Tine.Felamimail.GridPanel::moveOrDeleteMessages - Set cache status to pending for folder ' + folder.get('globalname'));
+                        Tine.log.debug('Tine.Felamimail.GridPanel::onToggleFlag - Set cache status to pending for folder ' + folder.get('globalname'));
                         folder.set('cache_status', 'pending');
                     }
                     folder.commit();

@@ -1,6 +1,6 @@
 # 
 # Translators:
-#   <v.anzisi@gurusys.it>, 2012.
+# gurusys <v.anzisi@gurusys.it>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -74,18 +74,18 @@ msgstr "Descrizione"
 msgid "Enter description"
 msgstr "Inserisci descrizione"
 
-#: js/NodeTreePanel.js:666 js/NodeTreePanel.js:776 js/NodeGridPanel.js:651
+#: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:651
 #: js/NodeGridPanel.js:803
 msgid "Upload Failed"
 msgstr "Caricamento fallito"
 
-#: js/NodeTreePanel.js:667 js/NodeGridPanel.js:652
+#: js/NodeTreePanel.js:661 js/NodeGridPanel.js:652
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr "Non posso caricare il file. Le dimensioni sono eccessive. Per favore notificalo al tuo Amministratore. Massime dimensioni di caricamento:"
 
-#: js/NodeTreePanel.js:777 js/NodeGridPanel.js:804
+#: js/NodeTreePanel.js:771 js/NodeGridPanel.js:804
 msgid "Putting files in this folder is not allowed!"
 msgstr "Non è consentito inserire file in questa cartella!"
 

@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -71,5 +71,20 @@ class Calendar_Convert_Event_VCalendar_ThunderbirdTest extends PHPUnit_Framework
         $this->assertEquals('Hamburg',                           $event->location);
         $this->assertEquals('l.kneschke@metaways.de',            $organizer->email);
         $this->assertGreaterThan(0, count($event->attendee->filter('user_id', $event->organizer)), 'Organizer must be attendee too');
+    }
+
+    /**
+     * testXMozSnooze
+     * 
+     * @see 0007682: CalDav - Tine - Thunderbird - Palm Pre
+     */
+    public function testXMozSnooze()
+    {
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_snooze.ics');
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD);
+        
+        $event = $converter->toTine20Model($vcalendarStream);
+        $this->assertTrue(isset($event->attendee[0]->alarm_snooze_time));
+        $this->assertEquals('2013-04-12 06:24:46', $event->attendee[0]->alarm_snooze_time->toString());
     }
 }

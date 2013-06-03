@@ -442,7 +442,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $cache = Tinebase_Core::getCache();
         $result = $cache->load($cacheId);
 
-        if($result === FALSE) {
+        if ($result === FALSE) {
             $result = $this->get($containerId, $_getDeleted);
             $cache->save($result, $cacheId, array('container'));
         }

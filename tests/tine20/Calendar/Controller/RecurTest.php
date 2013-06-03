@@ -335,7 +335,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertEquals(1, count($weekviewEvents), '17.6. is an exception date and must not be part of this weekview');
     }
     
-    public function testCreateRecurExceptionPreservAttendeeStatus()
+    public function testCreateRecurExceptionPreserveAttendeeStatus()
     {
         $from = new Tinebase_DateTime('2012-03-01 00:00:00');
         $until = new Tinebase_DateTime('2012-03-31 23:59:59');

@@ -601,7 +601,6 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-
     }
 
     /**
@@ -658,7 +657,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Updated record: ' . print_r($updatedRecord->toArray(), TRUE));
             
-            $this->_inspectAfterUpdate($updatedRecord, $_record);
+            $this->_inspectAfterUpdate($updatedRecord, $_record, $currentRecord);
             $updatedRecordWithRelatedData = $this->_setRelatedData($updatedRecord, $_record, TRUE);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Updated record with related data: ' . print_r($updatedRecordWithRelatedData->toArray(), TRUE));
@@ -753,7 +752,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Writing modlog');
+            . ' Writing modlog for ' . get_class($_newRecord));
     
         $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName, $this->_getBackendType(), $_newRecord->getId());
         
@@ -824,11 +823,12 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * inspect update of one record (after update)
      *
-     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
-     * @param   Tinebase_Record_Interface $_record          the update record
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
      * @return  void
      */
-    protected function _inspectAfterUpdate($_updatedRecord, $_record)
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
     }
 

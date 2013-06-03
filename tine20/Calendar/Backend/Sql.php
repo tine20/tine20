@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -676,5 +676,145 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function deleteAttendee(array $_ids)
     {
         return $this->_attendeeBackend->delete($_ids);
+    }
+
+    /**
+     * delete duplicate events defined by an event filter
+     * 
+     * @param Calendar_Model_EventFilter $filter
+     * @param boolean $dryrun
+     * @return integer number of deleted events
+     */
+    public function deleteDuplicateEvents($filter, $dryrun = TRUE)
+    {
+        if ($dryrun && Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' - Running in dry run mode -');
+                
+        $duplicateFields = array('summary', 'dtstart', 'dtend');
+        
+        $select = $this->_db->select();
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $duplicateFields);
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
+            
+        $this->_addFilter($select, $filter);
+        
+        $select->group($duplicateFields)
+               ->having('count(*) > 1');
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+           . ' ' . $select);
+        
+        $rows = $this->_fetch($select, self::FETCH_ALL);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+           . ' ' . print_r($rows, TRUE));
+        
+        $toDelete = array();
+        foreach ($rows as $row) {
+            $index = $row['summary'] . ' / ' . $row['dtstart'] . ' - ' . $row['dtend'];
+            
+            $events = $this->search(new Calendar_Model_EventFilter(array(array(
+                'field'    => 'summary',
+                'operator' => 'equals',
+                'value'    => $row['summary'],
+            ), array(
+                'field'    => 'dtstart',
+                'operator' => 'equals',
+                'value'    => new Tinebase_DateTime($row['dtstart']),
+            ), array(
+                'field'    => 'dtend',
+                'operator' => 'equals',
+                'value'    => new Tinebase_DateTime($row['dtend']),
+            ))), new Tasks_Model_Pagination(array('sort' => $this->_tableName . '.creation_time')));
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' ' . print_r($events->toArray(), TRUE));
+            
+            $deleteIds = $events->getArrayOfIds();
+            // keep the first
+            array_shift($deleteIds);
+            
+            if (! empty($deleteIds)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' Deleting ' . count($deleteIds) . ' duplicates of: ' . $index);
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                    . ' ' . print_r($deleteIds, TRUE));
+                
+                $toDelete = array_merge($toDelete, $deleteIds);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                   . ' No duplicates found for ' . $index);
+            }
+        }
+        
+        if (empty($toDelete)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' No duplicates found.');
+            $result = 0;
+        } else {
+            $result = ($dryrun) ? count($toDelete) : $this->delete($toDelete);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * repair dangling attendee records (no displaycontainer_id)
+     *
+     * @see https://forge.tine20.org/mantisbt/view.php?id=8172
+     */
+    public function repairDanglingDisplaycontainerEvents()
+    {
+        $filter = new Tinebase_Model_Filter_FilterGroup();
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array(
+            'field'     => 'user_type',
+            'operator'  => 'in', 
+            'value'     => array(
+                Calendar_Model_Attender::USERTYPE_USER,
+                Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
+                Calendar_Model_Attender::USERTYPE_RESOURCE
+            )
+        )));
+        
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array(
+                'field'     => 'displaycontainer_id',
+                'operator'  => 'isnull',
+                'value'     => null
+        )));
+        
+        $danglingAttendee = $this->_attendeeBackend->search($filter);
+        $danglingContactAttendee = $danglingAttendee->filter('user_type', '/'. Calendar_Model_Attender::USERTYPE_USER . '|'. Calendar_Model_Attender::USERTYPE_GROUPMEMBER .'/', TRUE);
+        $danglingContactIds = array_unique($danglingContactAttendee->user_id);
+        $danglingContacts = Addressbook_Controller_Contact::getInstance()->getMultiple($danglingContactIds, TRUE);
+        $danglingResourceAttendee = $danglingAttendee->filter('user_type', Calendar_Model_Attender::USERTYPE_RESOURCE);
+        $danglingResourceIds =  array_unique($danglingResourceAttendee->user_id);
+        $danglingResources = Calendar_Controller_Resource::getInstance()->getMultiple($danglingResourceIds, TRUE);
+        
+        // repair contacts
+        foreach($danglingContactIds as $danglingContactId) {
+            // get account_id
+            $danglingContact = $danglingContacts->getById($danglingContactId);
+            if ($danglingContact && $danglingContact->account_id) {
+                // get display calendar
+                $displayCalId = Calendar_Controller_Event::getDefaultDisplayContainerId($danglingContact->account_id);
+                if ($displayCalId) {
+                    // finaly repair attendee records
+                    $attendeeRecords = $danglingContactAttendee->filter('user_id', $danglingContactId);
+                    $this->_attendeeBackend->updateMultiple($attendeeRecords->getId(), array('displaycontainer_id' => $displayCalId));
+                    Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . " repaired the following contact attendee " . print_r($attendeeRecords->toArray(), TRUE));
+                }
+            }
+        }
+        
+        // repair resources
+        foreach($danglingResourceIds as $danglingResourceId) {
+            $resource = $danglingResources->getById($danglingResourceId);
+            if ($resource && $resource->container_id) {
+                $displayCalId = $resource->container_id;
+                $attendeeRecords = $danglingResourceAttendee->filter('user_id', $danglingResourceId);
+                $this->_attendeeBackend->updateMultiple($attendeeRecords->getId(), array('displaycontainer_id' => $displayCalId));
+                Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . " repaired the following resource attendee " . print_r($attendeeRecords->toArray(), TRUE));
+            }
+        }
     }
 }

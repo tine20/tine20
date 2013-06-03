@@ -118,6 +118,10 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
             array('type' => 'CUSTOMER', 'degree' => 'parent', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')
             ),
             'default' => array('type' => 'CUSTOMER', 'own_degree' => 'parent')
+        ),
+        array('relatedApp' => 'Tasks', 'relatedModel' => 'Task', 'config' => array(
+            array('type' => 'TASK', 'degree' => 'sibling', 'text' => 'Task', 'max' => '1:0'), // _('Task')
+        ),
         )
     );
 

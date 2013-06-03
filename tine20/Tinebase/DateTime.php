@@ -260,7 +260,7 @@ class Tinebase_DateTime extends DateTime
     public function compare($_date, $_part = 'c')
     {
         if (! $_date instanceof DateTime) {
-            throw new Tinebase_Exception_Date('given $_date is not an instance of DateTime');
+            throw new Tinebase_Exception_Date(var_export($_date, TRUE) . ' is not an instance of DateTime');
         }
         
         $cmpTZ = $this->getTimezone();

@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Backend_SqlTest::main');
-}
-
 /**
  * Test class for Calendar_Backend_Sql
  * 
@@ -24,10 +20,10 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Calendar_Backend_SqlTest extends Calendar_TestCase
 {
-    
     public function testCreateEvent()
     {
         $event = $this->_getEvent();
+        $event->creation_time = Tinebase_DateTime::now();
         $persistentEvent = $this->_backend->create($event);
         
         $event->attendee->cal_event_id = $persistentEvent->getId();
@@ -38,6 +34,8 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
         $loadedPersitentEvent = $this->_backend->get($persistentEvent->getId());
         $this->assertEquals($event->summary, $loadedPersitentEvent->summary);
         $this->_assertAttendee($event->attendee, $loadedPersitentEvent->attendee);
+        
+        return $loadedPersitentEvent;
     }
     
     public function testUpdateEvent()
@@ -274,9 +272,30 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
         $this->assertEquals(count($_expected), count($_actual));
     }
     
-}
-    
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Backend_SqlTest::main') {
-    Calendar_Backend_SqlTest::main();
+    /**
+     * testDeleteDuplicateEvents
+     * 
+     * @see 0008182: event with lots of exceptions breaks calendar sync
+     */
+    public function testDeleteDuplicateEvents()
+    {
+        $this->_backend->deleteByProperty('Wakeup', 'summary');
+        
+        $event1 = $this->testCreateEvent();
+        sleep(1);
+        $event2 = $this->testCreateEvent();
+        sleep(1);
+        $event3 = $this->testCreateEvent();
+        
+        $filter = new Calendar_Model_EventFilter(array(array(
+            'field'    => 'summary',
+            'operator' => 'equals',
+            'value'    => 'Wakeup',
+        )));
+        $deletedDuplicates = $this->_backend->deleteDuplicateEvents($filter, FALSE);
+        
+        $this->assertGreaterThan(1, $deletedDuplicates);
+        $this->_backend->get($event1->getId());
+        $this->assertEquals(0, $event1->is_deleted);
+    }
 }

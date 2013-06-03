@@ -1,6 +1,6 @@
 # 
 # Translators:
-# sao sang <saosangmo@yahoo.com>, 2013.
+# saosangm <saosangmo@yahoo.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -74,18 +74,18 @@ msgstr "Mô tả"
 msgid "Enter description"
 msgstr "Nhập mô tả"
 
-#: js/NodeTreePanel.js:666 js/NodeTreePanel.js:776 js/NodeGridPanel.js:651
+#: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:651
 #: js/NodeGridPanel.js:803
 msgid "Upload Failed"
 msgstr "Lỗi upload"
 
-#: js/NodeTreePanel.js:667 js/NodeGridPanel.js:652
+#: js/NodeTreePanel.js:661 js/NodeGridPanel.js:652
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr "Không thể upload file"
 
-#: js/NodeTreePanel.js:777 js/NodeGridPanel.js:804
+#: js/NodeTreePanel.js:771 js/NodeGridPanel.js:804
 msgid "Putting files in this folder is not allowed!"
 msgstr "Đặt file vào thư mục này là không được phép!"
 

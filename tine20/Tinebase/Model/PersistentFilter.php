@@ -62,7 +62,7 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
      * name of fields containing datetime or an array of datetime information
      *
      * @var array list of datetime fields
-     */    
+     */
     protected $_datetimeFields = array(
         'creation_time',
         'last_modified_time',
@@ -75,12 +75,16 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
      * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
      *
      * @param array $_data            the new data to set
-     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
     public function setFromArray(array $_data)
     {
         if (isset($_data['filters']) && ! $_data['filters'] instanceof Tinebase_Model_Filter_FilterGroup) {
-            $_data['filters'] = $this->getFilterGroup($_data['model'], $_data['filters']);
+            try {
+                $_data['filters'] = $this->getFilterGroup($_data['model'], $_data['filters']);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Sort out missing ' . $_data['model'] . ' filter: ' . $tenf->getMessage());
+            }
         }
         
         return parent::setFromArray($_data);

@@ -13,16 +13,11 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_DateTimeTest::main');
-}
-
 /**
- * Test class for Tinebase_AsyncJob
+ * Test class for Tinebase_DateTimeTest
  */
 class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
 {
-    
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -117,8 +112,3 @@ class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('2012-01-16 15:30:00', $tdt->toString());
     }
 }
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_DateTimeTest::main') {
-    Tinebase_DateTimeTest::main();
-}
-

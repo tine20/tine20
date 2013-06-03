@@ -149,21 +149,22 @@ class Tinebase_Relations
      * get all relations of a given record
      * - cache result if caching is activated
      * 
-     * @param  string       $_model     own model to get relations for
-     * @param  string       $_backend   own backend to get relations for
-     * @param  string|array $_id        own id to get relations for
-     * @param  string       $_degree    only return relations of given degree
-     * @param  array        $_type      only return relations of given type
-     * @param  bool         $_ignoreACL get relations without checking permissions
+     * @param  string       $_model         own model to get relations for
+     * @param  string       $_backend       own backend to get relations for
+     * @param  string|array $_id            own id to get relations for
+     * @param  string       $_degree        only return relations of given degree
+     * @param  array        $_type          only return relations of given type
+     * @param  bool         $_ignoreACL     get relations without checking permissions
+     * @param  string       $_relatedModel  only return relations having this related model
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
-    public function getRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE)
+    public function getRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE, $_relatedModel = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  model: '$_model' backend: '$_backend' " 
             // . 'ids: ' . print_r((array)$_id, true)
         );
     
-        $result = $this->_backend->getAllRelations($_model, $_backend, $_id, $_degree, $_type);
+        $result = $this->_backend->getAllRelations($_model, $_backend, $_id, $_degree, $_type, FALSE, $_relatedModel);
         $this->resolveAppRecords($result, $_ignoreACL);
         
         return $result;
@@ -172,15 +173,16 @@ class Tinebase_Relations
     /**
      * get all relations of all given records
      * 
-     * @param  string $_model     own model to get relations for
-     * @param  string $_backend   own backend to get relations for
-     * @param  array  $_ids       own ids to get relations for
-     * @param  string $_degree    only return relations of given degree
-     * @param  array  $_type      only return relations of given type
-     * @param  bool   $_ignoreACL get relations without checking permissions
+     * @param  string $_model         own model to get relations for
+     * @param  string $_backend       own backend to get relations for
+     * @param  array  $_ids           own ids to get relations for
+     * @param  string $_degree        only return relations of given degree
+     * @param  array  $_type          only return relations of given type
+     * @param  bool   $_ignoreACL     get relations without checking permissions
+     * @param  string $_relatedModel  only return relations having this related model
      * @return array  key from $_ids => Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
-    public function getMultipleRelations($_model, $_backend, $_ids, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE)
+    public function getMultipleRelations($_model, $_backend, $_ids, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE, $_relatedModel = NULL)
     {
         // prepare a record set for each given id
         $result = array();
@@ -189,7 +191,7 @@ class Tinebase_Relations
         }
         
         // fetch all relations in a single set
-        $relations = $this->getRelations($_model, $_backend, $_ids, $_degree, $_type, $_ignoreACL);
+        $relations = $this->getRelations($_model, $_backend, $_ids, $_degree, $_type, $_ignoreACL, $_relatedModel);
         
         // sort relations into corrensponding sets
         foreach ($relations as $relation) {
@@ -317,7 +319,7 @@ class Tinebase_Relations
                     }
                 } catch (Tinebase_Exception_AccessDenied $tea) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                        . ' Removing relations from result. Got exception: ' . $tea);
+                        . ' Removing relations from result. Got exception: ' . $tea->getMessage());
                     $_relations->removeRecords($relations);
                     continue;
                 }

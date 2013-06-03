@@ -112,10 +112,14 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
         foreach($result as $idx => $recordArray) {
             $recordIdx = $_records->getIndexById($recordArray['id']);
             try {
+                if (! is_object($_records[$recordIdx]->filters)) {
+                    throw new Tinebase_Exception_UnexpectedValue('no filter group found');
+                }
                 $result[$idx]['filters'] = $_records[$recordIdx]->filters->toArray(TRUE);
             } catch (Exception $e) {
-                // skip filter
-                unset ($result[$idx]);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Skipping filter: ' . $e->getMessage());
+                unset($result[$idx]);
             }
         }
         

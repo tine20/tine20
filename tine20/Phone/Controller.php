@@ -146,22 +146,6 @@ class Phone_Controller extends Tinebase_Controller_Abstract
      * Search for calls matching given filter
      *
      * @param Phone_Model_CallFilter $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-     * 
-     * @return Tinebase_Record_RecordSet
-     */
-    public function searchCalls(Phone_Model_CallFilter $_filter, Tinebase_Model_Pagination $_pagination)
-    {
-        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
-        $calls = $backend->search($_filter, $_pagination);
-        
-        return $calls;
-    }
-    
-    /**
-     * Search for calls matching given filter
-     *
-     * @param Phone_Model_CallFilter $_filter
      * 
      * @return Tinebase_Record_RecordSet
      */

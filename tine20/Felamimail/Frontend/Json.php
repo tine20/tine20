@@ -229,22 +229,14 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param  array $recordData
      * @return array
-     * 
      */
     public function saveMessage($recordData)
     {
         $message = new Felamimail_Model_Message();
         $message->setFromJsonInUsersTimezone($recordData);
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r(Zend_Json::decode($recordData), TRUE));
-        
-        try {
-            $result = Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
-            $result = $this->_recordToJson($result);
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $zmpe->getMessage());
-            throw $zmpe;
-        }
+        $result = Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
+        $result = $this->_recordToJson($result);
         
         return $result;
     }
@@ -359,9 +351,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             
         } else if ($_record instanceof Felamimail_Model_Account) {
-            // add usernames (imap + smtp)
-            $_record->resolveCredentials();
-            $_record->resolveCredentials(TRUE, FALSE, TRUE);
+            // add usernames
+            $_record->resolveCredentials();                   // imap
+            $_record->resolveCredentials(TRUE, FALSE, TRUE); // smtp
             
         } else if ($_record instanceof Felamimail_Model_Sieve_Vacation) {
             if (! $_record->mime) {

@@ -31,10 +31,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     windowHeight: 470,
     windowWidth: 800,
     
-    
-    initContainerSelector: function() {
-        Tine.Inventory.InventoryItemEditDialog.superclass.initContainerSelector.call(this);
-    },
     /**
      * check validity of activ number field
      */

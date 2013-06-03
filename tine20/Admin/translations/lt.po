@@ -1,7 +1,7 @@
 # 
 # Translators:
-#   <hezmars@gmail.com>, 2012.
-#   <r.zemblys@svako.lt>, 2012.
+# d3r <hezmars@gmail.com>, 2012
+# r.zemblys <r.zemblys@svako.lt>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

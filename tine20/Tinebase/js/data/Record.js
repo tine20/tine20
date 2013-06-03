@@ -19,6 +19,7 @@ Tine.Tinebase.data.Record = function(data, id) {
         this.id = ++Ext.data.Record.AUTO_ID;
     }
     this.data = data;
+    this.ctime = new Date().getTime();
 };
 
 /**
@@ -88,8 +89,9 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      * @return {Object} The value of the field.
      */
     get: function(name) {
+        var cfName = String(name).match(this.cfExp);
         
-        if (cfName = String(name).match(this.cfExp)) {
+        if (cfName) {
             return this.data.customfields ? this.data.customfields[cfName[1]] : null;
         }
         
@@ -103,7 +105,8 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      */
     set : function(name, value) {
         var encode = Ext.isPrimitive(value) ? String : Ext.encode,
-            current = this.get(name);
+            current = this.get(name),
+            cfName;
             
         if (encode(current) == encode(value)) {
             return;
@@ -151,6 +154,24 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      */
     toString: function() {
         return Ext.encode(this.data);
+    },
+    
+    /**
+     * returns true if given record obsoletes this one
+     * 
+     * @param {Tine.Tinebase.data.Record} record
+     * @return {Boolean}
+     */
+    isObsoletedBy: function(record) {
+        if (record.modelName !== this.modelName || record.getId() !== this.getId()) {
+            throw new Ext.Error('Records could not be compared');
+        }
+        
+        if (this.constructor.hasField('seq') && record.get('seq') != this.get('seq')) {
+            return record.get('seq') > this.get('seq');
+        }
+        
+        return (this.constructor.hasField('last_modified_time')) ? record.get('last_modified_time') > this.get('last_modified_time') : true;
     }
 });
 
@@ -223,25 +244,25 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
         return p.fields.indexOfKey(n) >= 0;
     };
     f.getRecordName = function() {
-        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+        var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
             
         return i18n.n_(p.recordName, p.recordsName, 1);
     };
     f.getRecordsName = function() {
-        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+        var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
             
         return i18n.n_(p.recordName, p.recordsName, 50);
     };
     f.getContainerName = function() {
-        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+        var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
             
         return i18n.n_(p.containerName, p.containersName, 1);
     };
     f.getContainersName = function() {
-        var app = i18n = Tine.Tinebase.appMgr.get(p.appName),
+        var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
             
         return i18n.n_(p.containerName, p.containersName, 50);

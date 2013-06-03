@@ -250,12 +250,20 @@ Tine.Tinebase.ExceptionHandler = function() {
                 
             // user in no role
             case 610:
-            Ext.MessageBox.show(Ext.apply(defaults, {
+                Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('No Role Memberships'), 
                     msg: _('Your user account has no role memberships. Please contact your administrator.')
                 }));
                 break;
                 
+            // lost/insufficent permissions for api call or bad api call
+            case -32601:
+                Ext.MessageBox.show(Ext.apply(defaults, {
+                    title: _('Method Not Found / Insufficent Permissions'), 
+                    msg: _('You tried to access a function that is not available. Please reload your browser, try again or contact your administrator.')
+                }));
+                break;
+            
             // generic failure -> notify developers
             default:
                 var windowHeight = 400;

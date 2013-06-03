@@ -421,12 +421,9 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 }
             } else {
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
-                    . ' Something went wrong with the CredentialsCache / use given imap username/password instead.'
-                );
-                $userCredentialCache = new Tinebase_Model_CredentialCache(array(
-                    'username' => $this->user,
-                    'password' => $this->password,
-                ));
+                    . ' Something went wrong with the CredentialsCache! Forcing logout ...');
+                Zend_Session::destroy();
+                return FALSE;
             }
             
             if ($this->type == self::TYPE_USER) {
@@ -455,9 +452,20 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
                 
                 $credentials = $userCredentialCache;
+                
+                // allow to set credentials in config
                 if (array_key_exists('user', $imapConfig) && array_key_exists('password', $imapConfig) && ! empty($imapConfig['user'])) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Using credentials from config for system account.');
                     $credentials->username = $imapConfig['user'];
                     $credentials->password = $imapConfig['password'];
+                }
+                
+                // allow to set pw suffix in config
+                if (array_key_exists('pwsuffix', $imapConfig)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Appending configured pwsuffix to system account password.');
+                    $credentials->password .= $imapConfig['pwsuffix'];
                 }
             }
             

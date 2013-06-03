@@ -502,6 +502,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             'feast_calendar_id'  => $feastCalendar ? $feastCalendar->toArray() : NULL,
             'vacation_days'      => isset($contractData['vacationDays']) ? $contractData['vacationDays'] : NULL,
             'workingtime_json'   => $workingTimeModel ? $workingTimeModel->json : '',
+            'start_date'         => $contractData['startDate']
         );
     }
 }

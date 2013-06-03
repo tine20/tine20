@@ -954,9 +954,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } else if ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
                 continue;
             } else if ($ownField instanceof Tinebase_Record_Abstract || $ownField instanceof Tinebase_Record_RecordSet) {
-                $subdiv = $ownField->diff($recordField);
-                if (is_object($subdiv) && ! $subdiv->isEmpty()) {
-                    $diff[$fieldName] = $subdiv;
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
+                    ' Doing subdiff for field ' . $fieldName);
+                $subdiff = $ownField->diff($recordField);
+                if (is_object($subdiff) && ! $subdiff->isEmpty()) {
+                    $diff[$fieldName] = $subdiff;
                 }
                 continue;
             } else if ($ownField == $recordField) {
@@ -980,6 +982,27 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function isDirty()
     {
         return $this->_isDirty;
+    }
+    
+    /**
+     * returns TRUE if given record obsoletes this one
+     * 
+     * @param  Tinebase_Record_Interface $_record
+     * @return bool
+     */
+    public function isObsoletedBy($_record)
+    {
+        if (get_class($_record) !== get_class($this)) {
+            throw new Tinebase_Exception_InvalidArgument('Records could not be compared');
+        } else if ($this->getId() && $_record->getId() !== $this->getId()) {
+            throw new Tinebase_Exception_InvalidArgument('Record id mismatch');
+        }
+        
+        if ($this->has('seq') && $_record->seq != $this->seq) {
+            return $_record->seq > $this->seq;
+        }
+        
+        return ($this->has('last_modified_time')) ? $_record->last_modified_time > $this->last_modified_time : TRUE;
     }
     
     /**

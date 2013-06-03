@@ -52,10 +52,11 @@ interface Syncroton_Data_IData
     
     /**
      * empty folder
-     * 
+     *
      * @param string $folderId
+     * @param array  $options
      */
-    public function emptyFolderContents($folderId);
+    public function emptyFolderContents($folderId, $options);
     
     /**
      * return list off all folders

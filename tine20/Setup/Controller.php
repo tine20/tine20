@@ -1201,7 +1201,10 @@ class Setup_Controller
         
         foreach ($this->_emailConfigKeys as $configName => $configKey) {
             if (array_key_exists($configName, $_data)) {
-                Tinebase_Config::getInstance()->set($configKey, $_data[$configName]);
+                // fetch current config first and preserve all values that aren't in $_data array
+                $currentConfig = Tinebase_Config::getInstance()->get($configKey, new Tinebase_Config_Struct(array()))->toArray();
+                $newConfig = array_merge($_data[$configName], array_diff_key($currentConfig, $_data[$configName]));
+                Tinebase_Config::getInstance()->set($configKey, $newConfig);
             }
         }
     }
@@ -1721,11 +1724,8 @@ class Setup_Controller
      */
     public function isInstalled($appname)
     {
-        $result = TRUE;
         try {
-            $app = Tinebase_Application::getInstance()->getApplicationByName($appname);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            $result = FALSE;
+            $result = Tinebase_Application::getInstance()->isInstalled($appname);
         } catch (Exception $e) {
             Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Application ' . $appname . ' is not installed.');
             Setup_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e);

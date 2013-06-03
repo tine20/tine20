@@ -71,6 +71,8 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             $this->_subFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customfield_id', 'operator' => 'equals', 'value' => $_fieldOrData['value']['cfId'])));
             $valueFilter = new Tinebase_Model_Filter_Date(array('field' => 'value', 'operator' => $_fieldOrData['operator'], 'value' => $_fieldOrData['value']['value']));
             $this->_subFilter->addFilter($valueFilter);
+        } elseif ($type == 'integer') {
+       	    $valueFilter = new Tinebase_Model_Filter_Int($_fieldOrData, $_operator, $_value, $_options);
         } else {
             $valueFilter = new Tinebase_Model_Filter_Text($_fieldOrData, $_operator, $_value, $_options);
         }

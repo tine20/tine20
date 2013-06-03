@@ -459,7 +459,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param  array|string|boolean                 $_cols columns to get, * per default / use self::IDCOL or TRUE to get only ids
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')    
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
     {
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
@@ -1035,7 +1035,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $recordArray = array_intersect_key($recordArray, $this->_schema);
         
         $this->_prepareData($recordArray);
-                
+        
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' = ?', $id),
         );
@@ -1046,7 +1046,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if ($_record->has('customfields')) {
             Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
         }
-                
+        
         $this->_updateForeignKeys('update', $_record);
         
         $result = $this->get($id, true);
