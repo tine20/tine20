@@ -135,18 +135,23 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * @param {Object} result
      */
     onFeastDaysLoad: function(result, freetime) {
+        var lfd = this.editDialog.localFreedays || [] ;
+        var lsd = this.editDialog.localSicknessdays || [];
+        var exdates = result.results.excludeDates || [];
+        this.disabledDates = [];
         
-        if (result.totalcount > 0) {
-            this.disabledDates = [];
-            Ext.each(result.results.excludeDates, function(date) {
+        Ext.each([lfd, lsd, exdates], function(d){
+            Ext.each(d, function(date) {
                 var split = date.date.split(' '), dateSplit = split[0].split('-');
                 var date = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
                 this.disabledDates.push(date);
             }, this);
-            this.setDisabledDates(this.disabledDates);
-        }
+        }, this);
+        
+        this.setDisabledDates(this.disabledDates);
+        
         if (this.freetimeType == 'VACATION') {
-            this.editDialog.getForm().findField('remaining_vacation_days').setValue(result.results.remainingVacation);
+            this.editDialog.getForm().findField('remaining_vacation_days').setValue(result.results.remainingVacation - lfd.length);
         }
         
         var split = result.results.firstDay.date.split(' '), dateSplit = split[0].split('-');

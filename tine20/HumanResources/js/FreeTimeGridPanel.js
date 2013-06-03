@@ -135,17 +135,38 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * 
      * @param {Object} button
      * @param {Tine.Tinebase.data.Record} record
-     * @param {Array} addRelations
+     * @param {Array} plugins
      */
-    onEditInNewWindow: function(button, record, addRelations) {
+    onEditInNewWindow: function(button, record, plugins) {
         // the name 'button' should be changed as this can be called in other ways also
         button.fixedFields = {
             'employee_id': this.editDialog.record.data,
             'type':        this.freetimeType
         };
+        
+        // collect free days not saved already
+        var localFreedays = [], localSicknessdays = [];
+        
+        this.editDialog.vacationGridPanel.store.each(function(record) {
+            if (record.id && record.id.length == 13) {
+                localFreedays = localFreedays.concat(record.data.freedays ? record.data.freedays : []);
+            }
+        }, this);
+        
+        this.editDialog.sicknessGridPanel.store.each(function(record) {
+            if (record.id && record.id.length == 13) {
+                localSicknessdays = localSicknessdays.concat(record.data.freedays ? record.data.freedays : []);
+            }
+        });
+        
+        var additionalConfig = {
+            localFreedays: localFreedays,
+            localSicknessdays: localSicknessdays
+        };
+        
         this.editDialogClass = (this.freetimeType == 'SICKNESS') ? Tine.HumanResources.SicknessEditDialog : Tine.HumanResources.VacationEditDialog;
             
-        Tine.HumanResources.FreeTimeGridPanel.superclass.onEditInNewWindow.call(this, button, record, addRelations);
+        Tine.HumanResources.FreeTimeGridPanel.superclass.onEditInNewWindow.call(this, button, record, plugins, additionalConfig);
     },
     /**
      * overwrites the default function, no refactoring needed, this file will be deleted in the next release

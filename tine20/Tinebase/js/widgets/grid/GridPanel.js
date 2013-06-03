@@ -1558,9 +1558,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Object} actionButton the button the action was called from
      * @param {Tine.Tinebase.data.Record} record the record to display/edit in the dialog
      * @param {Array} plugins the plugins used for the edit dialog
+     * @param {Object} additionalConfig plain Object, which will be applied to the edit dialog on initComponent
      * @return {Boolean}
      */
-    onEditInNewWindow: function(button, record, plugins) {
+    onEditInNewWindow: function(button, record, plugins, additionalConfig) {
         if (! record) {
             if (button.actionType == 'edit' || button.actionType == 'copy') {
                 if (! this.action_editInNewWindow || this.action_editInNewWindow.isDisabled()) {
@@ -1580,7 +1581,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         var totalcount = this.selectionModel.getCount(),
             selectedRecords = [],
             fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isObject(button.fixedFields)) ? Ext.encode(button.fixedFields) : null,
-            editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'];
+            editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'],
+            additionalConfig = additionalConfig ? additionalConfig : {};
         
         // add "multiple_edit_dialog" plugin to dialog, if required
         if (((totalcount > 1) && (this.multipleEdit) && (button.actionType == 'edit'))) {
@@ -1601,13 +1603,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.editDialogConfig || {}, {
                 plugins: plugins ? Ext.encode(plugins) : null,
                 fixedFields: fixedFields,
+                additionalConfig: Ext.encode(additionalConfig),
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'record,listeners,fixedFields,copyRecord,plugins')
+            }, 'record,listeners,fixedFields,copyRecord,plugins,additionalConfig')
         );
         return true;
     },

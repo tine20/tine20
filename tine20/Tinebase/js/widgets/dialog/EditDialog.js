@@ -142,7 +142,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * Disable adding cf tab even if model has support for customfields
      * @type Boolean
      */
-    disableCfs: false,    
+    disableCfs: false,
     
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
@@ -167,6 +167,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     fixedFields: null,
 
+    /**
+     * Plain Object with additional configuration (JSON-encoded)
+     * 
+     * @type {Object}
+     */
+    additionalConfig: null,
+    
     // private
     bodyStyle:'padding:5px',
     layout: 'fit',
@@ -231,6 +238,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         if (Ext.isString(this.modelConfig)) {
             this.modelConfig = Ext.decode(this.modelConfig);
+        }
+        
+        if (Ext.isString(this.additionalConfig)) {
+            Ext.apply(this, Ext.decode(this.additionalConfig));
         }
         
         if (Ext.isString(this.fixedFields)) {

@@ -313,7 +313,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $first = FALSE;
             }
             
-            $remainingVacation += HumanResources_Controller_Contract::getInstance()->calculateVacationDays($contract, $minDate, $maxDate);
+            $remainingVacation += $cController->calculateVacationDays($contract, $minDate, $maxDate);
             
             if (is_object($json)) {
                 foreach($json->days as $index => $hours) {
@@ -348,7 +348,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $otherFreeDays = HumanResources_Controller_FreeDay::getInstance()->search($filter);
         
-        $remainingVacation += $otherFreeDays->count();
+        $remainingVacation -= $otherFreeDays->count();
         
         if ($_freeTimeId) {
             $ownFreeDays   = $otherFreeDays->filter('freetime_id', $_freeTimeId);
