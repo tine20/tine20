@@ -747,7 +747,6 @@ class Tinebase_Core
         
         self::set(self::SESSION, $session);
         self::set(self::SESSIONID, session_id());
-        
     }
     /**
      * set session options
