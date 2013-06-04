@@ -70,6 +70,10 @@ class HumanResources_Model_ExtraFreeTime extends Tinebase_Record_Abstract
                 'label' => 'Days', // _('Days')
                 'type'       => 'integer'
             ),
+            'expires' => array(
+                'label' => 'Expiration date', //_('Expiration date')
+                'type'  => 'date',
+            ),
         )
     );
 }

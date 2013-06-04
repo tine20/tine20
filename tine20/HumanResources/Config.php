@@ -40,6 +40,13 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const DEFAULT_FEAST_CALENDAR = 'defaultFeastCalendar';
     
     /**
+     * Defines the date when vacation booked from last year can't be taken anymore
+     * 
+     * @var string
+     */
+    const VACATION_EXPIRES = 'vacationExpires';
+    
+    /**
      * types for extra free times
      * 
      * @var string
@@ -98,6 +105,16 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'options'               => array('recordModel' => 'HumanResources_Model_ExtraFreeTimeType'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'PAYED'
+        ),
+        self::VACATION_EXPIRES => array(
+            // _('Vacation expires')
+            'label'                 => 'Vacation expires',
+            // _('Here you can define the day, when the vacation days taken from last year expires, the format is MM-DD.')
+            'description'           => 'Here you can define the day, when the vacation days taken from last year expires, the format is MM-DD.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default' => '03-15'
         )
     );
 
@@ -151,5 +168,29 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     public static function getProperties()
     {
         return self::$_properties;
+    }
+    
+    /**
+     * returns the date of vacation expiration for the given year 
+     * or for the current year, if no year is given or null, if no expiration is defined
+     * 
+     * @param string $year
+     * @return Tinebase_DateTime|NULL
+     */
+    public function getVacationExpirationDate($year)
+    {
+        if (! $year) {
+            $year = Tinebase_DateTime::now()->format('Y');
+        }
+        
+        $expires = self::getInstance()->get(self::VACATION_EXPIRES, 0);
+        
+        if ($expires != 0) {
+            $split = explode('-', $expires);
+            $date = Tinebase_DateTime::now();
+            $date->setDate($year, intval($split[0]), intval($split[1]));
+        } else {
+            return null;
+        }
     }
 }

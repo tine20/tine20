@@ -627,3 +627,15 @@ msgstr "Zusammenfassung"
 
 msgid "Account is disabled or deleted!"
 msgstr "Benutzer nicht mehr vorhanden!"
+
+msgid "Booking has been successfull!"
+msgstr "Buchung erfolgreich!"
+
+msgid "The remaining vacation days of the selected accounts have been booked successfully!"
+msgstr "Die übrigen Urlaubstage wurden erfolgreich umgebucht!"
+
+msgid "Not allowed!"
+msgstr "Nicht erlaubt!"
+
+msgid "It's only allowed to book remaining vacation days from years in the past!"
+msgstr "Es können nur übrige Urlaubstage von vergangenen Jahren umgebucht werden!"

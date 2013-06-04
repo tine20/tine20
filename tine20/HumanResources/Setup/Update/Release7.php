@@ -271,7 +271,7 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         $this->_backend->createTable($tableDeclaration, 'HumanResources');
         $tableDeclaration = new Setup_Backend_Schema_Table_Xml('
             <table>
-                <name>humanresources_extra_freetime</name>
+                <name>humanresources_extrafreetime</name>
                 <version>1</version>
                 <declaration>
                     <field>
@@ -437,5 +437,46 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
     {
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('HumanResources'));
         $this->setApplicationVersion('HumanResources', '7.11');
+    }
+    
+    /**
+     * update 7.11 -> 7.12
+     *
+     * - add expiration date to extra freetimes
+     */
+    public function update_11()
+    {
+        $field = '<field>
+                    <name>expires</name>
+                    <type>datetime</type>
+                    <notnull>false</notnull>
+                </field>';
+    
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('humanresources_extrafreetime', $declaration);
+        $this->setTableVersion('humanresources_extrafreetime', '2');
+        
+        $field = '<field>
+                    <name>date</name>
+                    <type>date</type>
+                    <notnull>false</notnull>
+                </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('humanresources_freeday', $declaration);
+        $this->setTableVersion('humanresources_freeday', '2');
+        
+        $field = '<field>
+            <name>account_id</name>
+            <type>text</type>
+            <length>40</length>
+            <notnull>false</notnull>
+        </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('humanresources_freetime', $declaration);
+        $this->setTableVersion('humanresources_freetime', '6');
+        
+        $this->setApplicationVersion('HumanResources', '7.12');
     }
 }

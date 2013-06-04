@@ -36,24 +36,12 @@ Tine.Filemanager.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     initComponent: function(){
         this.recordClass = Tine.Filemanager.Model.Node;
         this.recordProxy = Tine.Filemanager.recordBackend;
-        
+        this.additionalFilters = [
+            {field: 'recursive', operator: 'equals', value: true },
+            {field: 'path', operator: 'equals', value: '/' }
+        ];
         this.initTemplate();
         Tine.Filemanager.SearchCombo.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * use beforequery to set query filter
-     * 
-     * @param {Event} qevent
-     */
-    onBeforeQuery: function(qevent) {
-        Tine.Filemanager.SearchCombo.superclass.onBeforeQuery.apply(this, arguments);
-        this.store.baseParams.filter.push(
-            {field: 'recursive', operator: 'equals', value: true }
-        );
-        this.store.baseParams.filter.push(
-            {field: 'path', operator: 'equals', value: '/' }
-        );
     },
     
     /**

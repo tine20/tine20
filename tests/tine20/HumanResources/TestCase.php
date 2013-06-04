@@ -239,25 +239,43 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
     /**
      * adds feast days to feast calendar
      *
-     * @param Tinebase_DateTime $date
+     * @param array|Tinebase_DateTime $date
      */
-    protected function _createFeastDay(Tinebase_DateTime $date)
+    protected function _createFeastDay($date)
     {
         if (! $this->_feast_calendar) {
             $this->_getFeastCalendar();
         }
         $organizer = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
     
+        if (is_array($date)) {
+            $allDay = TRUE;
+            if (count($date) == 1) {
+                $dtstart = $date[0]->setTime(0,0,0);
+                $dtend   = clone $dtstart;
+                $dtend   = $dtend->addDay(1)->subSecond(1);
+            } else {
+                $dtstart = $date[0]->setTime(0,0,0);
+                $dtend   = clone $dtstart;
+                $dtend   = $dtend->addDay(count($date))->subSecond(1);
+            }
+        } else {
+            $allDay = FALSE;
+            $dtstart = $date->setTime(6,0,0);
+            $dtend   = clone $dtstart;
+            $dtend->addMinute(15);
+        }
+        
         $event = new Calendar_Model_Event(array(
             'summary'     => 'Wakeup',
-            'dtstart'     => $date->format('Y-m-d') .' 06:00:00',
-            'dtend'       => $date->format('Y-m-d') .' 06:15:00',
+            'dtstart'     => $dtstart->format('Y-m-d H:i:s'),
+            'dtend'       => $dtend->format('Y-m-d H:i:s'),
             'description' => Tinebase_Record_Abstract::generateUID(10),
     
             'container_id' => $this->_feast_calendar->getId(),
             'organizer'    => $organizer->getId(),
             'uid'          => Calendar_Model_Event::generateUID(),
-    
+            'is_all_day_event' => $allDay,
             'attendee' => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(array(
                 'user_id'        => $organizer->getId(),
                 'user_type'      => Calendar_Model_Attender::USERTYPE_USER,

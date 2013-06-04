@@ -365,17 +365,47 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals(25, $account2013['possible_vacation_days']);
         $this->assertEquals(226, $account2013['working_days']);
         
-        // add 5 extra free days to the account
-        $eft1 = new HumanResources_Model_ExtraFreeTime(array('days' => 2, 'account_id' => $accountId2013));
-        $eft2 = new HumanResources_Model_ExtraFreeTime(array('days' => 3, 'account_id' => $accountId2013));
+        // add 5 extra free days to the account with different expiration dates, 2 days aren't expired already
+        $tomorrow = Tinebase_DateTime::now()->addDay(1);
+        $yesterday = Tinebase_DateTime::now()->subDay(1);
+        
+        $eft1 = new HumanResources_Model_ExtraFreeTime(array('days' => 2, 'account_id' => $accountId2013, 'expires' => $tomorrow));
+        $eft2 = new HumanResources_Model_ExtraFreeTime(array('days' => 3, 'account_id' => $accountId2013, 'expires' => $yesterday));
         
         $eftController = HumanResources_Controller_ExtraFreeTime::getInstance();
         $eftController->create($eft1);
         $eftController->create($eft2);
         
         $account2013 = $json->getAccount($accountId2013);
-        $this->assertEquals(30, $account2013['possible_vacation_days']);
-        $this->assertEquals(221, $account2013['working_days']);
+        $this->assertEquals(27, $account2013['possible_vacation_days']);
+        $this->assertEquals(27, $account2013['remaining_vacation_days']);
+        $this->assertEquals(224, $account2013['working_days']);
+        $this->assertEquals(3, $account2013['expired_vacation_days'], 'There should be 3 expired vacation days at first!');
+        // now add 3 vacation days before the expiration day of the second extra free time
+        // #8202: Allow to book remaining free days from last years' account, respect expiration
+
+        $freetime = array(
+            'account_id' => $accountId2013,
+            'employee_id' => $employee->getId(),
+            'type' => 'vacation',
+            'status' => 'ACCEPTED',
+            'firstday_date' => $yesterday->subWeek(1)->toString()
+        );
+        
+        $freetime['freedays'] = array(
+            array('duration' => '1', 'date' => $yesterday->toString()),
+            array('duration' => '1', 'date' => $yesterday->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $yesterday->addDay(1)->toString()),
+        );
+        
+        $freetime = $this->_json->saveFreeTime($freetime);
+        
+        // so the 3 days haven't been expired, because 3 vacation days have been booked before
+        $account2013 = $json->getAccount($accountId2013);
+        $this->assertEquals(30, $account2013['possible_vacation_days'], 'There should be 30 possible vacation days after all!');
+        $this->assertEquals(27, $account2013['remaining_vacation_days'], 'There should be 27 remaining vacation days after all!');
+        $this->assertEquals(0, $account2013['expired_vacation_days'], 'There should be no expired vacation days after all!');
+        $this->assertEquals(3, $account2013['taken_vacation_days'], 'He took 3 vacation days');
     }
     
     /**

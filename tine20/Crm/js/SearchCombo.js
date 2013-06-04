@@ -46,16 +46,6 @@ Tine.Crm.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBo
     },
     
     /**
-     * use beforequery to set query filter
-     * 
-     * @param {Event} qevent
-     */
-    onBeforeQuery: function(qevent){
-        Tine.Crm.SearchCombo.superclass.onBeforeQuery.apply(this, arguments);
-        var filter = this.store.baseParams.filter;
-    },
-    
-    /**
      * init template
      * @private
      */

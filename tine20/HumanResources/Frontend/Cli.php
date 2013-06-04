@@ -46,15 +46,29 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         ),
         'create_missing_accounts' => array(
             'description'   => 'Creates missing accounts for this and next year, if a valid contract has been found.',
+            'params' => array(
+                'year'     => 'just create accounts for this year'
+            )
         ),
     );
 
     /**
      * creates missing accounts
+     * 
+     * @param Zend_Console_Getopt $_opts
+     * @return integer
      */
-    public function create_missing_accounts()
+    public function create_missing_accounts($_opts)
     {
-        HumanResources_Controller_Account::getInstance()->createMissingAccounts(NULL);
+        $args = $this->_parseArgs($_opts, array());
+        $year = array_key_exists('year', $args) ? intval($args['year']) : 0;
+        
+        if ($year !==0 && $year < 2010 || $year > 2100) {
+            echo 'Please use a valid year with 4 digits!' . PHP_EOL;
+            return;
+        }
+        
+        HumanResources_Controller_Account::getInstance()->createMissingAccounts($year);
     }
     
     /**

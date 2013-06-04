@@ -43,6 +43,13 @@ Tine.HumanResources.handleRequestException = function(exception, callback, callb
                     icon: Ext.MessageBox.ERROR
                 }));
             break;
+        case 913:
+            Ext.MessageBox.show(Ext.apply(defaults, {
+                    title: app.i18n._('Not allowed!'), 
+                    msg: app.i18n._(exception.message),
+                    icon: Ext.MessageBox.ERROR
+                }));
+            break;
         default:
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
     }

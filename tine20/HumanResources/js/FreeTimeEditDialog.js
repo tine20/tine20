@@ -48,6 +48,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
         this.initDatePicker();
         this.mode = 'local';
+        
         Tine.HumanResources.FreeTimeEditDialog.superclass.initComponent.call(this);
     },
     
@@ -149,14 +150,27 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     value: 'REQUESTED',
                     columnWidth: 2/3
                 }, statusBoxDefaults);
+        var year = new Date();
+        year = parseInt(year.format('Y'));
+        year = year - 2;
         
-        var firstRow = [this.statusBox];
+        this.accountBox = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Account', {
+            name: 'account_id',
+            fieldLabel: this.app.i18n._('Year'),
+            additionalFilters: [
+                {field: 'employee_id', operator: 'AND', value: [
+                    { field: ':id', operator: 'equals', value: this.fixedFields.get('employee_id')}
+                ]},
+                {field: 'year', operator: 'greater', 'value': year }
+            ]
+        });
+        var firstRow = [this.statusBox, this.accountBox];
         var freeTimeTypeName = 'Sickness Days';
         if (this.freetimeType == 'VACATION') {
             firstRow.push({columnWidth: 1/3, name: 'remaining_vacation_days', readOnly: true, fieldLabel: this.app.i18n._('Remaining')});
             freeTimeTypeName = 'Vacation Days';
         }
-                
+
         return {
             xtype: 'tabpanel',
             border: false,

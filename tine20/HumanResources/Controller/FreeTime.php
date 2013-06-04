@@ -90,7 +90,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
        $fc->delete($deleteFreedays->id);
        $_record->freedays = $freeDays->toArray();
    }
-
+   
    /**
     * inspect creation of one record (before create)
     *
@@ -103,10 +103,10 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
        if (is_array($_record->employee_id)) {
            $_record->employee_id = $_record->employee_id['id'];
        }
-       if ($_record->freedays && !empty($_record->freedays)) {
-           foreach($_record->freedays as $freedayArray) {
-               $freedayArray['freetime_id'] = 'ffffffffffffffffffffffffffffffffff';
-               $this->_freedaysToCreate->addRecord(new HumanResources_Model_FreeDay($freedayArray));
+       
+       if ($_record->freedays && ! empty($_record->freedays)) {
+           foreach($_record->freedays as $fd) {
+               $this->_freedaysToCreate->addRecord($fd);
            }
            $this->_freedaysToCreate->sort('date', 'ASC');
            $_record->firstday_date = $this->_freedaysToCreate->getFirstRecord()->date;
