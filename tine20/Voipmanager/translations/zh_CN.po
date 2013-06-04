@@ -202,7 +202,7 @@ msgstr "打开手机的Web GUI"
 #: js/Snom/LocationGridPanel.js:48 js/Asterisk/VoicemailGridPanel.js:49
 #: js/Asterisk/SipPeerGridPanel.js:48 js/Asterisk/ContextGridPanel.js:49
 #: js/Asterisk/MeetmeGridPanel.js:49
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "快速查找"
 
 #: js/Snom/PhoneGridPanel.js:83 js/Snom/SettingGridPanel.js:67

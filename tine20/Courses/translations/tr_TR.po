@@ -177,7 +177,7 @@ msgid_plural "record lists"
 msgstr[0] "one: Liste\n\nother: Listeler"
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Hızlı Arama"
 
 #: js/Models.js:107

@@ -181,7 +181,7 @@ msgstr[1] "listy kursów"
 msgstr[2] "listy kursów"
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Szybkie wyszukiwanie"
 
 #: js/Models.js:107

@@ -1564,7 +1564,7 @@ msgid "Please validate the account settings before saving!"
 msgstr "Xin hãy xác nhận các thiết lập tài khoản trước khi lưu lại!"
 
 #: js/Models.js:97 js/Models.js:144 js/Models.js:321
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Tìm nhanh"
 
 #: js/Models.js:98

@@ -66,7 +66,7 @@ Tine.Courses.Model.Course.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Courses');
     
     return [
-        {label: _('Quick search'),    field: 'query',       operators: ['contains']},
+        {label: _('Quick Search'),    field: 'query',       operators: ['contains']},
         {label: app.i18n._('Name'),   field: 'name'},
         {
             label: app.i18n._('Internet Access'),

@@ -100,7 +100,7 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
 Tine.Crm.Model.Lead.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Crm'),
         filters = [
-            {label: _('Quick search'),  field: 'query',    operators: ['contains']},
+            {label: _('Quick Search'),  field: 'query',    operators: ['contains']},
             {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Crm.Model.Lead},
             {label: app.i18n._('Lead name'),   field: 'lead_name' },
             {filtertype: 'crm.leadstate', app: app},

@@ -420,7 +420,7 @@ msgstr[0] "Listado de Hojas de Asistencia"
 msgstr[1] "Listados de Hojas de Asistencia"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Búsqueda rápida"
 
 #: js/Models.js:93 js/Models.js:172

@@ -171,7 +171,7 @@ msgid "Project lists"
 msgstr "Liste projekta"
 
 #: js/Model.js:72
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Brzo pretraživanje"
 
 #: js/Model.js:75 js/ProjectEditDialog.js:171

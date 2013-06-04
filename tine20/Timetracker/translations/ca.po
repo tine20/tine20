@@ -419,7 +419,7 @@ msgstr[0] "llista de fulls de temps"
 msgstr[1] "llistes de fulls de temps"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Cerca ràpida"
 
 #: js/Models.js:93 js/Models.js:172

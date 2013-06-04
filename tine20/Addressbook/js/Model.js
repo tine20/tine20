@@ -133,7 +133,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
     var typeStore = [['contact', app.i18n._('Contact')], ['user', app.i18n._('User Account')]];
     
     return [
-        {label: _('Quick search'),                                                      field: 'query',              operators: ['contains']},
+        {label: _('Quick Search'),                                                      field: 'query',              operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {filtertype: 'addressbook.listMember', app: app},
         {label: app.i18n._('First Name'),                                               field: 'n_given' },

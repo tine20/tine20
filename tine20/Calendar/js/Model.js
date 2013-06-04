@@ -198,7 +198,7 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar');
     
     return [
-        {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {label: _('Quick Search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Summary'), field: 'summary'},
         {label: app.i18n._('Location'), field: 'location'},
         {label: app.i18n._('Description'), field: 'description'},

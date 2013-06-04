@@ -143,7 +143,7 @@ msgid "FAQ Lists"
 msgstr "FAQ Overzichten"
 
 #: js/Model.js:72
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Snel zoeken"
 
 #: js/FaqEditDialog.js:109

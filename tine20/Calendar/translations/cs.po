@@ -801,7 +801,7 @@ msgid "Calendars"
 msgstr "Kalendáře"
 
 #: js/Model.js:201
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Rychlé hledání"
 
 #: js/Model.js:208

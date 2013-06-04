@@ -180,7 +180,7 @@ msgstr[1] "seznamy záznamů"
 msgstr[2] "seznamů záznamů"
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Rychlé hledání"
 
 #: js/Models.js:107

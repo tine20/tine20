@@ -419,7 +419,7 @@ msgid "lead lists"
 msgstr ""
 
 #: js/Model.js:103
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Model.js:105 js/LeadGridPanel.js:123

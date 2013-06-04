@@ -179,7 +179,7 @@ msgstr[0] "lista dati"
 msgstr[1] "liste dati"
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Ricerca veloce"
 
 #: js/Models.js:107

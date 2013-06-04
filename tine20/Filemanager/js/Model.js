@@ -526,7 +526,7 @@ Tine.Filemanager.Model.Node.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Filemanager');
        
     return [
-        {label : _('Quick search'), field : 'query', operators : [ 'contains' ]}, 
+        {label : _('Quick Search'), field : 'query', operators : [ 'contains' ]}, 
 //        {label: app.i18n._('Type'), field: 'type'}, // -> should be a combo
         {label: app.i18n._('Contenttype'), field: 'contenttype'},
         {label: app.i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},

@@ -2255,7 +2255,7 @@ msgid "History"
 msgstr "Historia"
 
 #: js/widgets/ActivitiesPanel.js:592 js/ApplicationStarter.js:222
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Szybkie wyszukiwanie"
 
 #: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594

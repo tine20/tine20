@@ -423,7 +423,7 @@ msgstr[1] "listy kart czasu pracy"
 msgstr[2] "listy kart czasu pracy"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Szybkie wyszukiwanie"
 
 #: js/Models.js:93 js/Models.js:172

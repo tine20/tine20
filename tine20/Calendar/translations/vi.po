@@ -794,7 +794,7 @@ msgid "Calendars"
 msgstr "Lịch"
 
 #: js/Model.js:201
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Tìm nhanh"
 
 #: js/Model.js:208

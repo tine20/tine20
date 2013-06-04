@@ -419,7 +419,7 @@ msgstr[0] "Listado de Hoja de Hora"
 msgstr[1] "Listado de Hojas de Horas"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Búsqueda Rápida"
 
 #: js/Models.js:93 js/Models.js:172

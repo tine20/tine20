@@ -795,7 +795,7 @@ msgid "Calendars"
 msgstr "日历"
 
 #: js/Model.js:201
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "快速查找"
 
 #: js/Model.js:208

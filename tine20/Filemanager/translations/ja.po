@@ -206,7 +206,7 @@ msgid "Please wait"
 msgstr ""
 
 #: js/Model.js:520
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Model.js:521

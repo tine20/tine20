@@ -420,7 +420,7 @@ msgstr[0] "lista tabelle del tempo"
 msgstr[1] "liste schede attività"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Ricerca veloce"
 
 #: js/Models.js:93 js/Models.js:172

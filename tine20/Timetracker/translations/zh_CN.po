@@ -416,7 +416,7 @@ msgid_plural "timesheets lists"
 msgstr[0] "时间表列表"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Models.js:93 js/Models.js:172

@@ -76,8 +76,8 @@ msgstr[0] "example record list"
 msgstr[1] "example record lists"
 
 #: js/Model.js:69
-msgid "Quick search"
-msgstr "Quick search"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 #: js/Model.js:79
 msgid "Last modified"

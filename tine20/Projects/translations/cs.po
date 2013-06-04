@@ -169,7 +169,7 @@ msgid "Project lists"
 msgstr ""
 
 #: js/Model.js:72
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Rychlé hledání"
 
 #: js/Model.js:75 js/ProjectEditDialog.js:171

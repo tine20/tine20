@@ -267,7 +267,7 @@ msgid "to do lists"
 msgstr "списки работ"
 
 #: js/Models.js:103
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Быстрый поиск"
 
 #: js/Models.js:118

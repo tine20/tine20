@@ -132,7 +132,7 @@ msgid "Please wait"
 msgstr "Molimo pričekajte"
 
 #: js/Model.js:529
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Brza pretraga"
 
 #: js/Model.js:531 js/NodeGridPanel.js:147

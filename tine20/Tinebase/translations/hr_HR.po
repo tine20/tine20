@@ -2259,7 +2259,7 @@ msgid "History"
 msgstr "Povijest"
 
 #: js/widgets/ActivitiesPanel.js:592 js/ApplicationStarter.js:222
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Brzo pretraživanje"
 
 #: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594

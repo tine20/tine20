@@ -130,7 +130,7 @@ msgid "Please wait"
 msgstr "Kérlek várj"
 
 #: js/Model.js:529
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Gyors keresés"
 
 #: js/Model.js:531 js/NodeGridPanel.js:147

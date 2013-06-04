@@ -75,7 +75,7 @@ msgstr[0] "Liste von Beispieleinträgen"
 msgstr[1] "Listen von Beispieleinträgen"
 
 #: js/Model.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Schnellsuche"
 
 #: js/Model.js:79

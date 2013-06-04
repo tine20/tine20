@@ -420,7 +420,7 @@ msgstr[0] "munkaidő nyílvántartás lista"
 msgstr[1] "munkaidő nyílvántartás listák"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Gyors keresés"
 
 #: js/Models.js:93 js/Models.js:172

@@ -1357,8 +1357,8 @@ msgid "The account you've configured is already in use. Please contact your admi
 msgstr "The account you've configured is already in use. Please contact your administrator or activate the account again if it's yours."
 
 #: js/Models.js:99 js/Models.js:149 js/Models.js:330
-msgid "Quick search"
-msgstr "Quick search"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 #: js/Models.js:100
 msgid "Created By"

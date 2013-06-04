@@ -208,8 +208,8 @@ msgid "Please wait"
 msgstr "Please wait"
 
 #: js/Model.js:520
-msgid "Quick search"
-msgstr "Quick search"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 #: js/Model.js:521
 msgid "Type"

@@ -419,7 +419,7 @@ msgstr[0] "листа на нанесени работни часове"
 msgstr[1] "листи на нанесени работни часове"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Models.js:93 js/Models.js:172

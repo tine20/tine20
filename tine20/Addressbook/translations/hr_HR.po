@@ -662,7 +662,7 @@ msgid "User Account"
 msgstr "Korisnički račun"
 
 #: js/Model.js:136
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Brza pretraga"
 
 #: js/Model.js:161

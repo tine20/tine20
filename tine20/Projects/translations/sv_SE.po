@@ -170,7 +170,7 @@ msgid "Project lists"
 msgstr "Projektlistor"
 
 #: js/Model.js:72
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Snabbsök"
 
 #: js/Model.js:75 js/ProjectEditDialog.js:171

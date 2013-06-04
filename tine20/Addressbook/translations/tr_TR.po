@@ -655,7 +655,7 @@ msgid "User Account"
 msgstr "Kullanıcı hesabı"
 
 #: js/Model.js:136
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Hızlı arama"
 
 #: js/Model.js:161

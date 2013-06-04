@@ -450,7 +450,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/Models.js:106 js/Models.js:199 js/Models.js:297 js/Models.js:365
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Models.js:107
@@ -605,7 +605,7 @@ msgid "Working Times"
 msgid_plural "Working Times"
 msgstr[0] ""
 msgstr[1] ""
-msgid "Quick search"
+msgid "Quick Search"
 msgid "Feast Calendar"
 msgid "Start Date"
 msgid "End Date"

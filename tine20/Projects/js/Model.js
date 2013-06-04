@@ -69,7 +69,7 @@ Tine.Projects.Model.Project.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Projects');
     
     return [ 
-        {label: _('Quick search'),    field: 'query',       operators: ['contains']},
+        {label: _('Quick Search'),    field: 'query',       operators: ['contains']},
         {label: app.i18n._('Title'),    field: 'title'},
         {label: app.i18n._('Number'),    field: 'number'},
         {label: app.i18n._('Description'),    field: 'description'},

@@ -58,8 +58,8 @@ msgstr[0] "timesheets list"
 msgstr[1] "timesheets lists"
 
 #: js/Models.js:84 js/Models.js:155
-msgid "Quick search"
-msgstr "Quick search"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 #: js/Models.js:85 js/TimesheetEditDialog.js:186 js/TimesheetGridPanel.js:110
 msgid "Account"

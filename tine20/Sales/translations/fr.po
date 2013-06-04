@@ -181,7 +181,7 @@ msgstr[0] "liste d'enregistrement"
 msgstr[1] "listes d'enregistrements"
 
 #: js/Models.js:76 js/Models.js:142 js/Models.js:198 js/Models.js:235
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Recherche rapide"
 
 #: js/Models.js:77

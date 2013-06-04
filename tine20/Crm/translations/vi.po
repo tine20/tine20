@@ -420,7 +420,7 @@ msgid "lead lists"
 msgstr "danh sách lãnh đạo"
 
 #: js/Model.js:103
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Tìm nhanh"
 
 #: js/Model.js:105 js/LeadGridPanel.js:123

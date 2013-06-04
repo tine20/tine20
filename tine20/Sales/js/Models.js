@@ -73,7 +73,7 @@ Tine.Sales.Model.Product.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Sales');
     
     return [
-        {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {label: _('Quick Search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Product name'),   field: 'name' },
         {filtertype: 'tinebase.tag', app: app},
         {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'}
@@ -139,7 +139,7 @@ Tine.Sales.Model.Contract.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Sales');
     
     return [
-        {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {label: _('Quick Search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Contract name'),   field: 'name' },
         {label: app.i18n._('Creator'), field: 'created_by', valueType: 'user'},
         {
@@ -195,7 +195,7 @@ Tine.Sales.Model.CostCenter.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Sales');
     
     return [
-        {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {label: _('Quick Search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Number'), field: 'number' },
         {label: app.i18n._('Remark'), field: 'remark' }
     ];
@@ -232,7 +232,7 @@ Tine.Sales.Model.Division.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Sales');
     
     return [
-        {label: _('Quick search'), field: 'query', operators: ['contains']},
+        {label: _('Quick Search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Title'), field: 'title' }
     ];
 };

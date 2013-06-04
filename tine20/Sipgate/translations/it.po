@@ -1563,7 +1563,7 @@ msgid "Please validate the account settings before saving!"
 msgstr ""
 
 #: js/Models.js:97 js/Models.js:144 js/Models.js:321
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Models.js:98

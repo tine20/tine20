@@ -260,8 +260,8 @@ msgstr[0] "Employees"
 msgstr[1] "Employees"
 
 #: js/Models.js:106 js/Models.js:199 js/Models.js:298 js/Models.js:368
-msgid "Quick search"
-msgstr "Quick search"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 #: js/Models.js:107
 msgid "Employee name"

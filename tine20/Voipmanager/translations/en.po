@@ -38,8 +38,8 @@ msgstr "Description"
 #: js/Snom/LocationGridPanel.js:48 js/Snom/PhoneGridPanel.js:65
 #: js/Snom/SettingGridPanel.js:49 js/Snom/SoftwareGridPanel.js:49
 #: js/Snom/TemplateGridPanel.js:49
-msgid "Quick search"
-msgstr "Quick search"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 #: js/Asterisk/ContextGridPanel.js:67 js/Asterisk/MeetmeGridPanel.js:67
 #: js/Asterisk/VoicemailGridPanel.js:67 js/Snom/LocationGridPanel.js:122

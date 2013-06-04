@@ -804,7 +804,7 @@ msgid "Calendars"
 msgstr "Kalendari"
 
 #: js/Model.js:201
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Brza pretraga"
 
 #: js/Model.js:208

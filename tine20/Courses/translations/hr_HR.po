@@ -181,7 +181,7 @@ msgstr[1] "liste zapisa"
 msgstr[2] "liste zapisa"
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Brza pretraga"
 
 #: js/Models.js:107

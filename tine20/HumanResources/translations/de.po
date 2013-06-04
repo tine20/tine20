@@ -529,7 +529,7 @@ msgstr "Krankheitstage"
 msgid "Vacation Day"
 msgstr "Urlaubstag"
 
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Schnellsuche"
 
 msgid "Free Times"

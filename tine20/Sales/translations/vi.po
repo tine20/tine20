@@ -179,7 +179,7 @@ msgid_plural "record lists"
 msgstr[0] "one: danh sách biểu ghi\nother: danh sách biểu ghi"
 
 #: js/Models.js:76 js/Models.js:142 js/Models.js:198 js/Models.js:235
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Tìm nhanh"
 
 #: js/Models.js:77

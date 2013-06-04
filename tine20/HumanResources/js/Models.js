@@ -56,7 +56,7 @@ Tine.HumanResources.Model.WorkingTime.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('HumanResources');
     
     return [
-        {label: _('Quick search'), field: 'query', operators: ['contains']}
+        {label: _('Quick Search'), field: 'query', operators: ['contains']}
     ];
 };
 

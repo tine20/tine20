@@ -814,7 +814,7 @@ class Tinebase_ModelConfiguration {
         
         // set some default filters
         if (count($queryFilters)) {
-            $this->_filterModel['query'] = array('label' => 'Quick search', 'field' => 'query', 'filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => $queryFilters), 'useGlobalTranslation' => true);
+            $this->_filterModel['query'] = array('label' => 'Quick Search', 'field' => 'query', 'filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => $queryFilters), 'useGlobalTranslation' => true);
         }
         $this->_filterModel[$this->_idProperty] = array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => $this->_appName . '_Model_' . $this->_modelName));
         $this->_fieldKeys = array_keys($this->_fields);

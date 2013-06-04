@@ -423,7 +423,7 @@ msgstr[0] "Stundenzettel-Liste"
 msgstr[1] "Stundenzettel-Listen"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Schnellsuche"
 
 #: js/Models.js:93 js/Models.js:172

@@ -135,8 +135,8 @@ msgid "FAQ Lists"
 msgstr "FAQ Lists"
 
 #: js/Model.js:72
-msgid "Quick search"
-msgstr "Quick search"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 #: Preference.php:28
 msgid "All my FAQs"

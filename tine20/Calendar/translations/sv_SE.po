@@ -800,7 +800,7 @@ msgid "Calendars"
 msgstr "Kalendrar"
 
 #: js/Model.js:201
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Snabb sök"
 
 #: js/Model.js:208

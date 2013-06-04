@@ -58,7 +58,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/Models.js:84 js/Models.js:156
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Models.js:85 js/TimesheetEditDialog.js:186 js/TimesheetGridPanel.js:110

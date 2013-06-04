@@ -131,7 +131,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Models.js:107

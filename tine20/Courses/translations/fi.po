@@ -180,7 +180,7 @@ msgstr[0] "Suorituslista"
 msgstr[1] "Suorituslistat"
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Pikahaku"
 
 #: js/Models.js:107

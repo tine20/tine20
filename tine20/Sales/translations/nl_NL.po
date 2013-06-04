@@ -180,7 +180,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/Models.js:76 js/Models.js:142 js/Models.js:198 js/Models.js:235
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Models.js:77

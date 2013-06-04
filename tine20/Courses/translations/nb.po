@@ -178,7 +178,7 @@ msgstr[0] "opptaks liste"
 msgstr[1] "opptaks lister"
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Hurtig søk"
 
 #: js/Models.js:107

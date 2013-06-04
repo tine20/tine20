@@ -656,7 +656,7 @@ msgid "User Account"
 msgstr "Cuenta de Usuario"
 
 #: js/Model.js:136
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Búsqueda Rápida"
 
 #: js/Model.js:161

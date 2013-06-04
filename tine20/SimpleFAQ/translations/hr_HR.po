@@ -147,7 +147,7 @@ msgid "FAQ Lists"
 msgstr "FAQ liste"
 
 #: js/Model.js:72
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Brzo pretraživanje"
 
 #: js/FaqEditDialog.js:109

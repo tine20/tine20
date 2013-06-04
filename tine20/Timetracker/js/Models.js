@@ -85,7 +85,7 @@ Tine.Timetracker.Model.Timesheet.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Timetracker');
     
     return [
-        {label: app.i18n._('Quick search'), field: 'query',    operators: ['contains']}, // query only searches description
+        {label: app.i18n._('Quick Search'), field: 'query',    operators: ['contains']}, // query only searches description
         {label: app.i18n._('Account'),      field: 'account_id', valueType: 'user'},
         {label: app.i18n._('Date'),         field: 'start_date', valueType: 'date', pastOnly: true},
         {label: app.i18n._('Description'),  field: 'description', defaultOperator: 'contains'},
@@ -165,7 +165,7 @@ Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Timetracker');
 
     var filters = [
-        {label: _('Quick search'),              field: 'query',       operators: ['contains']},
+        {label: _('Quick Search'),              field: 'query',       operators: ['contains']},
         {label: app.i18n._('Number'),           field: 'number'       },
         {label: app.i18n._('Title'),            field: 'title'        },
         {label: app.i18n._('Description'),      field: 'description', operators: ['contains']},

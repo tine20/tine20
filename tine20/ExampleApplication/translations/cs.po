@@ -75,7 +75,7 @@ msgstr[1] "seznamy ukázkových záznamů"
 msgstr[2] "seznamů ukázkových záznamů"
 
 #: js/Model.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Rychlé hledání"
 
 #: js/Model.js:79

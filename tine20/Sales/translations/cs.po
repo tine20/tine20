@@ -182,7 +182,7 @@ msgstr[1] "seznamy záznamů"
 msgstr[2] "seznamů záznamů"
 
 #: js/Models.js:76 js/Models.js:142 js/Models.js:198 js/Models.js:235
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Rychlé hledání"
 
 #: js/Models.js:77

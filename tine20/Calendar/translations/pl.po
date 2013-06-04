@@ -802,7 +802,7 @@ msgid "Calendars"
 msgstr "kalendarze"
 
 #: js/Model.js:201
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Szybkie wyszukiwanie"
 
 #: js/Model.js:208

@@ -176,7 +176,7 @@ msgid_plural "record lists"
 msgstr[0] "成绩表"
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "快速搜索"
 
 #: js/Models.js:107

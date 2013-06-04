@@ -177,8 +177,8 @@ msgid "to do lists"
 msgstr "to do lists"
 
 #: js/Tasks.js:146
-msgid "Quick search"
-msgstr "Quick search"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 #: js/Tasks.js:161
 msgid "Last modified"

@@ -656,7 +656,7 @@ msgid "User Account"
 msgstr "Felhasználói fiók"
 
 #: js/Model.js:136
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Gyors keresés"
 
 #: js/Model.js:161

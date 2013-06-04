@@ -74,7 +74,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/Model.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Búsqueda Rápida"
 
 #: js/Model.js:79

@@ -139,7 +139,7 @@ msgid "FAQ Lists"
 msgstr "Danh sách hỏi đáp"
 
 #: js/Model.js:72
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Tìm kiếm nhanh"
 
 #: js/FaqEditDialog.js:109

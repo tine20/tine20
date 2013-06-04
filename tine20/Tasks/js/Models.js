@@ -100,7 +100,7 @@ Tine.Tasks.Model.Task.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Tasks');
 
     return [
-        {label: _('Quick search'),                  field: 'query',    operators: ['contains']},
+        {label: _('Quick Search'),                  field: 'query',    operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Tasks.Model.Task},
         {label: app.i18n._('Summary'),         field: 'summary' },
         {label: app.i18n._('Due Date'),        field: 'due', valueType: 'date', operators: ['within', 'before', 'after']},

@@ -181,7 +181,7 @@ msgstr[1] "списка записей"
 msgstr[2] "списков записей"
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Быстрый поиск"
 
 #: js/Models.js:107

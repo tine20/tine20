@@ -264,7 +264,7 @@ msgid "to do lists"
 msgstr "seznamy úkolů"
 
 #: js/Models.js:103
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Rychlé hledání"
 
 #: js/Models.js:118

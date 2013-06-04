@@ -564,8 +564,8 @@ msgid "Calendars"
 msgstr "Calendars"
 
 #: js/Model.js:200
-msgid "Quick search"
-msgstr "Quick search"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 #: js/Model.js:207
 msgid "Attendee Status"

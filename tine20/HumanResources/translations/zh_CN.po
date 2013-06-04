@@ -450,7 +450,7 @@ msgid_plural "Employees"
 msgstr[0] ""
 
 #: js/Models.js:106 js/Models.js:199 js/Models.js:297 js/Models.js:365
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Models.js:107

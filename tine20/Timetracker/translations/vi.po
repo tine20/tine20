@@ -417,7 +417,7 @@ msgid_plural "timesheets lists"
 msgstr[0] "one: danh sách nhật ký chấm công\nother: danh sách nhật ký chấm công"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Tìm nhanh"
 
 #: js/Models.js:93 js/Models.js:172

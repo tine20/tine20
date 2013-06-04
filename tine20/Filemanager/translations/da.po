@@ -130,7 +130,7 @@ msgid "Please wait"
 msgstr "Vent venligst"
 
 #: js/Model.js:529
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "hurtig søgning"
 
 #: js/Model.js:531 js/NodeGridPanel.js:147

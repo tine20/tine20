@@ -455,7 +455,7 @@ msgstr[0] "Funcionários"
 msgstr[1] "Funcionários"
 
 #: js/Models.js:106 js/Models.js:199 js/Models.js:297 js/Models.js:365
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Pesquisa rápida"
 
 #: js/Models.js:107

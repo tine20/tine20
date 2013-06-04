@@ -1359,7 +1359,7 @@ msgid "The account you've configured is already in use. Please contact your admi
 msgstr ""
 
 #: js/Models.js:99 js/Models.js:149 js/Models.js:330
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Models.js:100

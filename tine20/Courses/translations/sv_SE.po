@@ -180,7 +180,7 @@ msgstr[0] "post lista"
 msgstr[1] "post listor"
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Snabb sök"
 
 #: js/Models.js:107

@@ -425,7 +425,7 @@ msgid "lead lists"
 msgstr "listes de prospects"
 
 #: js/Model.js:103
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Recherche rapide"
 
 #: js/Model.js:105 js/LeadGridPanel.js:123

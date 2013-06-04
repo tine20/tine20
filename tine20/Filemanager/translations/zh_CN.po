@@ -129,7 +129,7 @@ msgid "Please wait"
 msgstr "请等待"
 
 #: js/Model.js:529
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "快速查找"
 
 #: js/Model.js:531 js/NodeGridPanel.js:147

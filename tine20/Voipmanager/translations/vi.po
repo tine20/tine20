@@ -201,7 +201,7 @@ msgstr "Mở giao diện web đồ họa trên điện thoại"
 #: js/Snom/LocationGridPanel.js:48 js/Asterisk/VoicemailGridPanel.js:49
 #: js/Asterisk/SipPeerGridPanel.js:48 js/Asterisk/ContextGridPanel.js:49
 #: js/Asterisk/MeetmeGridPanel.js:49
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Tìm nhanh"
 
 #: js/Snom/PhoneGridPanel.js:83 js/Snom/SettingGridPanel.js:67

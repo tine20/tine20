@@ -37,7 +37,7 @@ Tine.Voipmanager.SnomLocationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: _('Quick search'),    field: 'query',    operators: ['contains']}
+                {label: _('Quick Search'),    field: 'query',    operators: ['contains']}
             ],
             defaultFilter: 'query',
             filters: [],

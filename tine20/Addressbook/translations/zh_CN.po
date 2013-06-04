@@ -653,7 +653,7 @@ msgid "User Account"
 msgstr "用户帐户"
 
 #: js/Model.js:136
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "快速搜索"
 
 #: js/Model.js:161

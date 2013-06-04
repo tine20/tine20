@@ -179,7 +179,7 @@ msgstr[0] "rekord lista"
 msgstr[1] "rekord listák"
 
 #: js/Models.js:69
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Gyors keresés"
 
 #: js/Models.js:107

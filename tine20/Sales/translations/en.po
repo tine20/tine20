@@ -193,8 +193,8 @@ msgstr[0] "record list"
 msgstr[1] "record lists"
 
 #: js/Models.js:77 js/Models.js:140
-msgid "Quick search"
-msgstr "Quick search"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 #: js/Models.js:78
 msgid "Product name"

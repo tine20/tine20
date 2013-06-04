@@ -1063,8 +1063,8 @@ msgid "History"
 msgstr "History"
 
 #: js/widgets/ActivitiesPanel.js:592
-msgid "Quick search"
-msgstr "Quick search"
+msgid "Quick Search"
+msgstr "Quick Search"
 
 #: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
 msgid "Time"

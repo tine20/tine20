@@ -126,7 +126,7 @@ msgid "Please wait"
 msgstr ""
 
 #: js/Model.js:529
-msgid "Quick search"
+msgid "Quick Search"
 msgstr ""
 
 #: js/Model.js:531 js/NodeGridPanel.js:147

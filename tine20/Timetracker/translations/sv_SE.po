@@ -421,7 +421,7 @@ msgstr[0] "lista över tidrapporter"
 msgstr[1] "listor över tidrapporter"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Snabbsök"
 
 #: js/Models.js:93 js/Models.js:172

@@ -181,7 +181,7 @@ msgstr[0] "Postlista"
 msgstr[1] "postlistor"
 
 #: js/Models.js:76 js/Models.js:142 js/Models.js:198 js/Models.js:235
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Snabbsök"
 
 #: js/Models.js:77

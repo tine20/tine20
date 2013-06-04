@@ -422,7 +422,7 @@ msgstr[1] "seznamy pracovních výkazů"
 msgstr[2] "seznamů pracovních výkazů"
 
 #: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
+msgid "Quick Search"
 msgstr "Rychlé hledání"
 
 #: js/Models.js:93 js/Models.js:172
