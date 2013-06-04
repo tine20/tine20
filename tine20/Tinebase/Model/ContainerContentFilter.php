@@ -41,7 +41,7 @@ class Tinebase_Model_ContainerContentFilter extends Tinebase_Model_Filter_Filter
     protected $_filterModel = array(
         'record_id'         => array('filter' => 'Tinebase_Model_Filter_Id'),
         'content_seq'       => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'container_id'      => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'container_id'      => array('filter' => 'Tinebase_Model_Filter_IntId'),
         'action'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'time'              => array('filter' => 'Tinebase_Model_Filter_DateTime'),
     );

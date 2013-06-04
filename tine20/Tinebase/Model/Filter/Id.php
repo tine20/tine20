@@ -50,14 +50,14 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
      * @param Zend_Db_Select                $_select
      * @param Tinebase_Backend_Sql_Abstract $_backend
      */
-     public function appendFilterSql($_select, $_backend)
-     {
-         $action = $this->_opSqlMap[$this->_operator];
+    public function appendFilterSql($_select, $_backend)
+    {
+        $action = $this->_opSqlMap[$this->_operator];
          
-         // quote field identifier
-         $field = $this->_getQuotedFieldName($_backend);
+        // quote field identifier
+        $field = $this->_getQuotedFieldName($_backend);
          
-         if (empty($this->_value) && $this->_value != '0') {
+        if (empty($this->_value) && $this->_value != '0') {
              // prevent sql error
              if ($this->_operator == 'in' || $this->_operator == 'equals') {
                  if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
@@ -65,17 +65,29 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
                      . (isset($this->_options['modelName']) ? $this->_options['modelName'] : 'unknown / no modelName defined in filter options'). ')');
                  $_select->where('1=0');
              }
-         } else if ($this->_operator == 'equals' && is_array($this->_value)) {
+        } else if ($this->_operator == 'equals' && is_array($this->_value)) {
              if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                  . ' Unexpected array value with "equals" operator (model: ' 
                  . (isset($this->_options['modelName']) ? $this->_options['modelName'] : 'unknown / no modelName defined in filter options') . ')');
              $_select->where('1=0');
-         } else {
-             // finally append query to select object
-             $_select->where($field . $action['sqlop'], $this->_value);
-         }
-     }
-     
+        } else {
+            // finally append query to select object
+            $_select->where($field . $action['sqlop'], $this->_value);
+        }
+    }
+    
+    /**
+     * sets value
+     *
+     * @param string $_value
+     */
+    public function setValue($_value)
+    {
+        parent::setValue($_value);
+        
+        $this->_enforceType();
+    }
+    
     /**
      * returns array with the filter settings of this filter
      *
@@ -97,6 +109,20 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         }
         
         return $result;
+    }
+    
+    /**
+     * enforce string data type for correct sql quoting
+     */
+    protected function _enforceType()
+    {
+        if (is_array($this->_value)) {
+            foreach ($this->_value as &$value) {
+                $value = (string) $value;
+            }
+        } else {
+            $this->_value = (string) $this->_value;
+        }
     }
     
     /**

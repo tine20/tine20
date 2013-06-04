@@ -171,7 +171,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
         
         $filter = new Tinebase_Model_Filter_FilterGroup(array());
         // NOTE: use id filter instead of container filter because of poor performance of container filter (setValue)
-        $filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'in', $containerIds));
+        $filter->addFilter(new Tinebase_Model_Filter_IntId('container_id', 'in', $containerIds));
 
         $backend = new Timetracker_Backend_Timeaccount();
         $result = $backend->search($filter);
