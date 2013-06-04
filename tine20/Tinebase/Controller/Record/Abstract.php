@@ -946,12 +946,12 @@ abstract class Tinebase_Controller_Record_Abstract
         $this->_newRelations = NULL;
         $this->_removeRelations = NULL;
         
-        foreach($_data as $key => $value) {
-            if(stristr($key,'#')) {
+        foreach ($_data as $key => $value) {
+            if (stristr($key,'#')) {
                 $_data['customfields'][substr($key,1)] = $value;
                 unset($_data[$key]);
             }
-            if(stristr($key, '%')) {
+            if (stristr($key, '%')) {
                 $getRelations = true;
                 $this->_handleRelations($key, $value);
                 unset($_data[$key]);
@@ -964,16 +964,12 @@ abstract class Tinebase_Controller_Record_Abstract
             'totalcount'        => 0,
             'failcount'         => 0,
         );
-        // TODO: idProperty should be callable statically
-        $model = new $this->_modelName();
-        $idProperty = $model->getIdProperty();
-        unset($model);
         
         $iterator = new Tinebase_Record_Iterator(array(
             'iteratable' => $this,
             'controller' => $this,
             'filter'     => $_filter,
-            'options'    => array('idProperty' => $idProperty, 'getRelations' => $getRelations),
+            'options'    => array('getRelations' => $getRelations),
             'function'   => 'processUpdateMultipleIteration',
         ));
         $result = $iterator->iterate($_data);

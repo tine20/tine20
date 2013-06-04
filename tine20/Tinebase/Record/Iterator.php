@@ -113,6 +113,13 @@ class Tinebase_Record_Iterator
             $this->_options = array_merge($this->_options, $_params['options']);
         }
         
+        if (! array_key_exists('idProperty', $this->_options)) {
+            // TODO:resolve this by modelconfiguration when mc has been applied to all models
+            $mn = $this->_filter->getModelName();
+            $model = new $mn();
+            $this->_options['idProperty'] = $model->getIdProperty();
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Created new Iterator with options: ' . print_r($this->_options, TRUE));
     }
