@@ -23,7 +23,14 @@ class SimpleFAQ_Model_FaqFilter extends Tinebase_Model_Filter_FilterGroup
      * @var string name of model this filter group is designed for
      */
     protected $_modelName = 'SimpleFAQ_Model_Faq';
-
+    
+    /**
+     * @var string class name of this filter group
+     *      this is needed to overcome the static late binding
+     *      limitation in php < 5.3
+     */
+    protected $_className = 'SimpleFAQ_Model_FaqFilter';
+    
     /**
      * @var array filter model fieldName => definition
      */
