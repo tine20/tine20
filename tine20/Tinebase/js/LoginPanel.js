@@ -64,11 +64,11 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     getLoginPanel: function () {
 
         var modSsl = Tine.Tinebase.registry.get('modSsl');
-        
+
         if (! this.loginPanel) {
             this.loginPanel = new Ext.FormPanel({
                 width: 460,
-                height: 250,
+                height: 290,
                 frame: true,
                 labelWidth: 90,
                 cls: 'tb-login-panel',
@@ -118,6 +118,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     listeners: {
                         render: this.setLastLoginUser.createDelegate(this) 
                     }
+                    
                 }, {
                     xtype: 'displayfield',
                     style: {
@@ -126,7 +127,31 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     },
                     value: _('Certificate detected. Please, press Login button to proceed.'),
                     hidden: modSsl ? false : true
-                }],
+                }, {
+                    xtype: 'container',
+                    id:'contImgCaptcha',
+                    layout: 'form',
+                    style: { visibility:'hidden' },
+                    items:[{
+                       xtype: 'textfield',
+                       width: 170,
+                       labelSeparator: '',
+                       id: 'security_code',
+                       value: null,
+                       name: 'securitycode'
+                    }, {
+                       fieldLabel:(' '),
+                       labelSeparator: '',
+                       items:[
+                           new Ext.Component({
+                               autoEl: { 
+                                   tag: 'img',
+                                   id: 'imgCaptcha'
+                               }
+                           })]
+                    }]
+                  },
+                ],
                 buttonAlign: 'right',
                 buttons: [{
                     xtype: 'button',
@@ -413,7 +438,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 params : {
                     method: this.loginMethod,
                     username: values.username,
-                    password: values.password
+                    password: values.password,
+                    securitycode: values.securitycode
                 },
                 timeout: 60000, // 1 minute
                 callback: function (request, httpStatus, response) {
@@ -440,6 +466,12 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                                 icon: Ext.MessageBox.ERROR,
                                 fn: function () {
                                     this.getLoginPanel().getForm().findField('password').focus(true);
+                                    if(document.getElementById('useCaptcha')) {
+                                        if(typeof responseData.c1 != 'undefined') {
+                                            document.getElementById('imgCaptcha').src = 'data:image/png;base64,' + responseData.c1;
+                                            document.getElementById('contImgCaptcha').style.visibility = 'visible';  
+                                        }
+                                    }                                    
                                 }.createDelegate(this)
                             });
                         }

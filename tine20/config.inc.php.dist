@@ -6,6 +6,8 @@
 
 // minimal configuration
 return array(
+    // set 'count' equal zero to disable captcha, or set to number of invalid logins before request captcha.
+    'captcha' => array('count'=>0), 
     'database' => array(
         'host'          => 'ENTER DATABASE HOSTNAME',
         'dbname'	    => 'ENTER DATABASE NAME',

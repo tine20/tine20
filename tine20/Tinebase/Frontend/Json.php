@@ -434,15 +434,33 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param  string $username the username
      * @param  string $password the password
+     * @param  string $securitycode the security code(captcha)
      * @return array
      */
-    public function login($username, $password)
+    public function login($username, $password, $securitycode=NULL)
     {
         Tinebase_Core::startSession('tinebase');
-
+        
+        $captcha = (isset(Tinebase_Core::getConfig()->captcha->count) && Tinebase_Core::getConfig()->captcha->count != 0) ? TRUE : FALSE; 
+        if ($captcha) {
+            $config_count = Tinebase_Core::getConfig()->captcha->count;
+            $count = (isset($_SESSION['captcha']['count']) ? $_SESSION['captcha']['count'] : 1);
+            if ($count >= $config_count) {
+                $aux = isset($_SESSION['captcha']['code']) ? $_SESSION['captcha']['code'] : NULL;
+                if ($aux != $securitycode) {
+                    $rets = Tinebase_Controller::getInstance()->makeCaptcha(); 
+                    $response = array(
+                        'success'      => FALSE,
+                        'errorMessage' => "Wrong username or password!",
+                        'c1' => $rets['1']
+                    );
+                    return $response;
+                   }
+            }
+        }
         // try to login user
-        $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineJson') === TRUE);
-
+        $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineJson', $securitycode) === TRUE);
+        
         if ($success == true) {
             $response = array(
                 'success'        => TRUE,
@@ -451,7 +469,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'welcomeMessage' => "Welcome to Tine 2.0!"
             );
              
-            if(Tinebase_Config::getInstance()->get(Tinebase_Config::REUSEUSERNAME_SAVEUSERNAME, 0)){
+            if (Tinebase_Config::getInstance()->get(Tinebase_Config::REUSEUSERNAME_SAVEUSERNAME, 0)) {
                 // save in cookie (expires in 2 weeks)
                 setcookie('TINE20LASTUSERID', $username, time()+60*60*24*14);
             } else {
@@ -461,14 +479,30 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $this->_setCredentialCacheCookie();
             
         } else {
-            Zend_Session::destroy();
-            
-            Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
-
             $response = array(
                 'success'      => FALSE,
-                'errorMessage' => "Wrong username or password!"
+                'errorMessage' => "Wrong username or password!",
             );
+            Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
+            if ($captcha) {
+                $config_count = Tinebase_Core::getConfig()->captcha->count;
+                if (!isset($_SESSION['captcha']['count'])) {
+                    $_SESSION['captcha']['count'] = 1;
+                } else {
+                    $_SESSION['captcha']['count'] = $_SESSION['captcha']['count'] + 1;
+                }
+                if ($_SESSION['captcha']['count'] >= $config_count) {
+                    $rets = Tinebase_Controller::getInstance()->makeCaptcha(); 
+                    $response = array(
+                        'success'      => FALSE,
+                        'errorMessage' => "Wrong username or password!",
+                        'c1' => $rets['1']
+                    );
+                }
+            } else {
+                Zend_Session::destroy(false,true);
+            }
+            
         }
 
         return $response;

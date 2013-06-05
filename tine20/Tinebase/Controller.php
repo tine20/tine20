@@ -59,7 +59,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         
         return self::$_instance;
     }
-    
+  
     /**
      * create new user session
      *
@@ -67,9 +67,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param   string $_password
      * @param   string $_ipAddress
      * @param   string $_clientIdString
+     * @param   string $securitycode the security code(captcha)
      * @return  bool
      */
-    public function login($_loginname, $_password, $_ipAddress, $_clientIdString = NULL)
+    public function login($_loginname, $_password, $_ipAddress, $_clientIdString = NULL, $securitycode = NULL)
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($_loginname, $_password);
         $authResultCode = $authResult->getCode();
@@ -266,6 +267,70 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         sleep(mt_rand(2,5));
     }
     
+     /**
+     * renders and send to browser one captcha image
+     *
+     * @return void
+     */
+    public function makeCaptcha()
+    {
+        return $this->_makeImage();
+    }
+
+    /**
+     * renders and send to browser one captcha image
+     *
+     * @return void
+     */
+    protected function _makeImage()
+    {
+        $result = array();
+        $width='170';
+        $height='40';
+        $characters= mt_rand(5,7);
+        $possible = '123456789aAbBcCdDeEfFgGhHIijJKLmMnNpPqQrRstTuUvVwWxXyYZz';
+        $code = '';
+        $i = 0;
+        while ($i < $characters) {
+            $code .= substr($possible, mt_rand(0, strlen($possible)-1), 1);
+            $i++;
+        }
+        $font = './fonts/Milonga-Regular.ttf';
+        /* font size will be 70% of the image height */
+        $font_size = $height * 0.67;
+        try {
+            $image = @imagecreate($width, $height);
+            /* set the colours */
+            $background_color = imagecolorallocate($image, 255, 255, 255);
+            $text_color = imagecolorallocate($image, 20, 40, 100);
+            $noise_color = imagecolorallocate($image, 100, 120, 180);
+            /* generate random dots in background */
+            for( $i=0; $i<($width*$height)/3; $i++ ) {
+                imagefilledellipse($image, mt_rand(0,$width), mt_rand(0,$height), 1, 1, $noise_color);
+            }
+            /* generate random lines in background */
+            for( $i=0; $i<($width*$height)/150; $i++ ) {
+                imageline($image, mt_rand(0,$width), mt_rand(0,$height), mt_rand(0,$width), mt_rand(0,$height), $noise_color);
+            }
+            /* create textbox and add text */
+            $textbox = imagettfbbox($font_size, 0, $font, $code);
+            $x = ($width - $textbox[4])/2;
+            $y = ($height - $textbox[5])/2;
+            imagettftext($image, $font_size, 0, $x, $y, $text_color, $font , $code);
+            ob_start();
+            imagejpeg($image);
+            $image_code = ob_get_contents ();
+            ob_end_clean();
+            imagedestroy($image);
+            $result = array();
+            $result['1'] = base64_encode($image_code);
+            $_SESSION['captcha']['code'] = $code;
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+        }
+        return $result;
+    }
+
     /**
      * authenticate user but don't log in
      *
