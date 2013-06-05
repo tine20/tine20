@@ -83,8 +83,6 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     public function testImportOfCSVWithHook ()
     {
-        $this->markTestSkipped('@see 0008240: Inventory_Import_CsvTest::testImportOfCSVWithHook fails sometimes');
-        
         $filename = dirname(__FILE__) . '/files/inv_tine_import_csv.xml';
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId();
         $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
