@@ -298,7 +298,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             if (Ext.isIE6 || Ext.isGecko2) {
                 browserSupport = 'incompatible';
             } else if (
-                ! (Ext.isWebKit || Ext.isGecko || Ext.isIE)
+                ! (Ext.isWebKit || Ext.isGecko || Ext.isIE || Ext.isNewIE)
             ) {
                 // yepp we also mean -> Ext.isOpera
                 browserSupport = 'unknown';

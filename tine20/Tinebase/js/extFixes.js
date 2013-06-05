@@ -1,3 +1,19 @@
+(function(){
+    var ua = navigator.userAgent.toLowerCase(),
+        check = function(r){
+            return r.test(ua);
+        },
+        docMode = document.documentMode,
+        isIE10 = ((check(/msie 10/) && docMode != 7 && docMode != 8  && docMode != 9) || docMode == 10),
+        isNewIE = (Ext.isIE9 || isIE10);
+
+    Ext.apply(Ext, {
+        isIE10 : isIE10,
+
+        isNewIE : isNewIE
+    })
+})();
+
 Ext.override(Ext.data.Store, {
     /**
      * String cast the id, as otherwise the entries are not found
