@@ -917,6 +917,31 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testSendMessageWithAttachmentWithoutExtension
+     * 
+     * @see 0008328: email attachment without file extension is not sent properly
+     */
+    public function testSendMessageWithAttachmentWithoutExtension()
+    {
+        $subject = 'attachment test';
+        $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain, $subject);
+        $tempfileName = 'jsontest' . Tinebase_Record_Abstract::generateUID(10);
+        $tempfilePath = Tinebase_Core::getTempDir() . $tempfileName;
+        file_put_contents($tempfilePath, 'some content');
+        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
+        $messageToSend['attachments'] = array(array('tempFile' => array('id' => $tempFile->getId())));
+        $this->_json->saveMessage($messageToSend);
+        $forwardMessage = $this->_searchForMessageBySubject($subject);
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+        
+        $fullMessage = $this->_json->getMessage($forwardMessage['id']);
+        $this->assertTrue(count($fullMessage['attachments']) === 1);
+        $attachment = $fullMessage['attachments'][0];
+        $this->assertContains($tempfileName, $attachment['filename'], 'wrong attachment filename: ' . print_r($attachment, TRUE));
+        $this->assertEquals(16, $attachment['size'], 'wrong attachment size: ' . print_r($attachment, TRUE));
+    }
+    
+    /**
      * save message in folder (draft) test
      * 
      * @see 0007178: BCC does not save the draft message

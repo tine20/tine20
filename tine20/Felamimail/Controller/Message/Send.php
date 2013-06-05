@@ -546,7 +546,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Adding attachment: ' . (is_object($attachment) ? print_r($attachment->toArray(), TRUE) : print_r($attachment, TRUE)));
             
-            if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_message->original_id instanceof Felamimail_Model_Message) {
+            if (isset($attachment['type']) && $attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_message->original_id instanceof Felamimail_Model_Message) {
                 $part = $this->getMessagePart($_message->original_id, ($_message->original_part_id) ? $_message->original_part_id : NULL);
                 $part->decodeContent();
                 
@@ -578,8 +578,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 $type = $tempFile->type;
             }
             
-            $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
             $name = Zend_Mime::encodeQuotedPrintableHeader($name, 'utf-8');
+            $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT . '; filename="' . $name . '"';
             $partTypeString = $type . '; name="' . $name . '"';
             $part->type = $partTypeString;
             
