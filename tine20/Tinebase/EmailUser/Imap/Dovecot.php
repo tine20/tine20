@@ -322,56 +322,13 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
                     case 'emailAddress':
                         // do nothing
                         break;
-                        
                     case 'emailMailQuota':
                     case 'emailSieveQuota':
                         $data[$keyMapping] = $value > 0 ? $value : null;
                         break;
-                        
                     case 'emailMailSize':
                         $data[$keyMapping] = $value > 0 ? round($value/1048576, 2) : 0;
                         break;
-                        
-                    /* 
-                     * emailHome, emailScheme, emailUID, emailGID are currently broken
-                     * home and scheme are understandable, uid and gid not so much
-                     * the admin page does not save and return the uid and gid
-                     * need to look to see if there are any ways to extend 
-                     * the admin page dynamicly
-                     * 
-                    // set home from preconfigured home if not already set
-                    case 'emailHome':
-                        if (!empty($value)){
-                            $this->_config[$keyMapping] = $value;
-                        } else {
-                            $this->_config[$keyMapping] = $this->_config['home'];
-                        }
-                        break;
-                    // set scheme from preconfigured scheme if not already set
-                    case 'emailScheme':
-                        if (!empty($value)){
-                            $this->_config[$keyMapping] = $value;
-                        } else {
-                            $this->_config[$keyMapping] = $this->_config['scheme'];
-                        }
-                        break;
-                    // set uid from preconfigured uid if not already set
-                    case 'emailUID':
-                        if (!empty($value)){
-                            $data[$keyMapping] = $value;
-                        } else {
-                            $data[$keyMapping] = $this->_config['uid'];
-                        }
-                        break;
-                    // set gid from preconfigured gid if not already set
-                    case 'emailGID':
-                        if (!empty($value)){
-                            $data[$keyMapping] = $value;
-                        } else {
-                            $data[$keyMapping] = $this->_config['gid'];
-                        }
-                        break;
-                    */
                     default: 
                         $data[$keyMapping] = $value;
                         break;
