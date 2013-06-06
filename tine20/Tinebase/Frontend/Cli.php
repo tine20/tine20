@@ -535,7 +535,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         // build filter from params
         $filterData = array();
-        $allowedFilters = array('record_type', 'modification_time', 'modification_account', 'record_id');
+        $allowedFilters = array(
+            'record_type',
+            'modification_time',
+            'modification_account',
+            'record_id',
+            'modified_attribute'
+        );
         foreach ($data as $key => $value) {
             if (in_array($key, $allowedFilters)) {
                 $operator = ($key === 'modification_time') ? 'within' : 'equals';
