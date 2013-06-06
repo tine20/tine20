@@ -485,7 +485,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             'group_id'                      => $course->group_id,
             'accountEmailDomain'            => (isset($this->_config->domain)) ? $this->_config->domain : '',
             'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
-            'userNameSchema'                => 0, // only lastname (10 chars)
+            'userNameSchema'                => $this->_config->get(Courses_Config::STUDENTS_USERNAME_SCHEMA, 1),
             'password'                      => strtolower($course->name),
             'course'                        => $course,
             'accountLoginShell'             => '/bin/false',
