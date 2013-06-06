@@ -114,8 +114,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
         
-        // don't check if event is transparent
+        // 
         if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP || count($_event->attendee) < 1) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Skipping free/busy check because event is transparent");
             return;
         }
         
@@ -143,6 +145,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             throw $busyException;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Free/busy check: no conflict found");
     }
     
     /**
@@ -272,13 +277,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // finaly create filter
         $filter = new Calendar_Model_EventFilter($filterData);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
+            . ' free/busy fitler: ' . print_r($filter->toArray(), true));
+        
         $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
         
         foreach ($_periods as $period) {
             Calendar_Model_Rrule::mergeRecurrenceSet($events, $period['from'], $period['until']);
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($events->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
+            . ' value: ' . print_r($events->toArray(), true));
         
         // create a typemap
         $typeMap = array();
@@ -289,10 +298,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $typeMap[$attender['user_type']][$attender['user_id']] = array();
         }
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($typeMap, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
+            . ' value: ' . print_r($typeMap, true));
         
         // generate freeBusyInfos
-        foreach($events as $event) {
+        foreach ($events as $event) {
             // skip events with ignoreUID
             if (in_array($event->uid, $_ignoreUIDs)) {
                 continue;
@@ -442,20 +452,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $this->_inspectEvent($_record);
                
                 if ($_checkBusyConflicts) {
-                    // only do free/busy check if start/endtime changed  or attendee added or rrule changed
                     if ($event->isRescheduled($_record) ||
-                           count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0 // attendee add
+                           count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0
                        ) {
-                        
-                        // ensure that all attendee are free
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . " Ensure that all attendee are free with free/busy check ... ");
                         $this->checkBusyConflicts($_record);
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . " Skipping free/busy check because event has not been rescheduled and no new attender has been added");
                     }
                 }
                 
                 parent::update($_record);
                 
             } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
                 foreach ($_record->attendee as $attender) {
                     if ($attender->status_authkey) {
                         $this->attenderStatusUpdate($_record, $attender, $attender->status_authkey);
