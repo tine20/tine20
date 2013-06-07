@@ -985,6 +985,28 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $complete = $this->_json->getMessage($message['id']);
         $this->assertContains($translate->_('Was read by:') . ' ' . $this->_account->from, $complete['body']);
     }
+
+    /**
+     * save message in non-existant folder (templates) test
+     * 
+     * @see 0008476: Drafts are not working
+     */
+    public function testSaveMessageInNonExistantTemplatesFolder()
+    {
+        $messageToSave = $this->_getMessageData();
+        
+        $templatesFolder = $this->_getFolder($this->_account->templates_folder, FALSE);
+        if ($templatesFolder) {
+            $this->_json->deleteFolder($templatesFolder['id'], $this->_account->getId());
+        }
+        $returned = $this->_json->saveMessageInFolder($this->_account->templates_folder, $messageToSave);
+        $this->_foldersToClear = array($this->_account->templates_folder);
+        
+        // check if message is in templates folder
+        $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->templates_folder);
+        $this->assertEquals($messageToSave['subject'],  $message['subject']);
+        $this->assertEquals($messageToSave['to'][0],    $message['to'][0], 'recipient not found');
+    }
     
     /*********************** sieve tests ****************************/
     
@@ -1343,16 +1365,17 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get mailbox
      *
-     * @param string $_name
-     * @return Felamimail_Model_Folder
+     * @param string $name
+     * @param boolean $createFolder
+     * @return Felamimail_Model_Folder|NULL
      */
-    protected function _getFolder($_name)
+    protected function _getFolder($name, $createFolder = TRUE)
     {
         Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
         try {
-            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $_name);
+            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $name);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $folder = Felamimail_Controller_Folder::getInstance()->create($this->_account, $_name);
+            $folder = ($createFolder) ? Felamimail_Controller_Folder::getInstance()->create($this->_account, $name) : NULL;
         }
         
         return $folder;

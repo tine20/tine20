@@ -53,6 +53,13 @@ class Courses_Config extends Tinebase_Config_Abstract
     const STUDENTS_IMPORT_DEFINITION = 'students_import_definition';
 
     /**
+    * students username schema
+    *
+    * @var string
+    */
+    const STUDENTS_USERNAME_SCHEMA = 'students_username_schema';
+
+    /**
     * fields for samba settings of course members
     *
     * @var string
@@ -118,6 +125,15 @@ class Courses_Config extends Tinebase_Config_Abstract
             'description'           => 'Student login name prefix',
             'type'                  => 'int',
             'clientRegistryInclude' => TRUE,
+        ),
+        self::STUDENTS_USERNAME_SCHEMA => array(
+        //_('Student username schema')
+            'label'                 => 'Student username schema',
+        //_('Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname')
+            'description'           => 'Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname',
+            'type'                  => 'int',
+            'default'               => 1,
+            'clientRegistryInclude' => FALSE,
         ),
         self::SAMBA => array(
                                    //_('Samba user settings')

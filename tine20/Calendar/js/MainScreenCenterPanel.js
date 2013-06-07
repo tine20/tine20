@@ -694,7 +694,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             options.failure = this.onProxyFail.createDelegate(this, [event, Tine.Calendar.backend.updateRecurSeries.createDelegate(Tine.Calendar.backend, [event, false, options])], true);
                             
                             if (event.isRecurException()) {
-                                Tine.Calendar.backend.saveRecord(event, options, {range: 'ALL', checkBusyConflicts: false});
+                                Tine.Calendar.backend.saveRecord(event, options, {range: 'ALL', checkBusyConflicts: true});
                             } else {
                                 Tine.Calendar.backend.updateRecurSeries(event, true, options);
                             }
@@ -714,7 +714,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                             options.failure = this.onProxyFail.createDelegate(this, [event, Tine.Calendar.backend.createRecurException.createDelegate(Tine.Calendar.backend, [event, false, option == 'future', false, options])], true);
                             
                             if (event.isRecurException()) {
-                                Tine.Calendar.backend.saveRecord(event, options, {range: (option === 'this' ? 'THIS' : 'THISANDFUTURE'), checkBusyConflicts: false});
+                                Tine.Calendar.backend.saveRecord(event, options, {range: (option === 'this' ? 'THIS' : 'THISANDFUTURE'), checkBusyConflicts: true});
                             } else {
                                 Tine.Calendar.backend.createRecurException(event, false, option === 'future', true, options);
                             }

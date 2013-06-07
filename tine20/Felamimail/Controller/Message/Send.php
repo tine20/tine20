@@ -134,7 +134,17 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     public function saveMessageInFolder($_folder, $_message)
     {
         $sourceAccount = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
-        $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_message->account_id, $_folder);
+        
+        if (is_string($_folder) && ($_folder === $sourceAccount->templates_folder || $_folder === $sourceAccount->drafts_folder)) {
+            // make sure that system folder exists
+            $systemFolder = $_folder === $sourceAccount->templates_folder ? Felamimail_Model_Folder::FOLDER_TEMPLATES : Felamimail_Model_Folder::FOLDER_DRAFTS;
+            $folder = Felamimail_Controller_Account::getInstance()->getSystemFolder($sourceAccount, $systemFolder);
+        } else if ($_folder instanceof Felamimail_Model_Folder) {
+            $folder = $_folder;
+        } else {
+            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_message->account_id, $_folder);
+        }
+        
         $targetAccount = ($_message->account_id == $folder->account_id) ? $sourceAccount : Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
         $mailToAppend = $this->createMailForSending($_message, $sourceAccount);

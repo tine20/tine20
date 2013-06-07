@@ -1305,4 +1305,28 @@ class Calendar_JsonTests extends Calendar_TestCase
             $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $attender['status'], 'both attendee status should be TENTATIVE: ' . print_r($attender, TRUE));
         }
     }
+
+    /**
+     * testFreeBusyCheckForExdates
+     * 
+     * @see 0008464: freebusy check does not work when creating recur exception
+     */
+    public function testFreeBusyCheckForExdates()
+    {
+        $events = $this->testCreateRecurException();
+        $exception = $this->_getException($events, 1);
+        
+        $anotherEvent = $this->_getEvent(TRUE);
+        $anotherEvent = $this->_uit->saveEvent($anotherEvent->toArray());
+        
+        $exception['dtstart'] = $anotherEvent['dtstart'];
+        $exception['dtend'] = $anotherEvent['dtend'];
+        
+        try {
+            $event = $this->_uit->saveEvent($exception, TRUE);
+            $this->fail('Calendar_Exception_AttendeeBusy expected when saving exception: ' . print_r($exception, TRUE));
+        } catch (Calendar_Exception_AttendeeBusy $ceab) {
+            $this->assertEquals('Calendar_Exception_AttendeeBusy', get_class($ceab));
+        }
+    }
 }

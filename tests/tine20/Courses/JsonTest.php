@@ -4,7 +4,7 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -235,7 +235,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(25, count($result['members']), 'import failed');
         $found = FALSE;
         foreach($result['members'] as $member) {
-            if ($member['name'] === 'Kućuk, Orkide' && $member['data'] === 'kuuk') {
+            if ($member['name'] === 'Kućuk, Orkide' && $member['data'] === 'kuukor') {
                 $found = TRUE;
             }
         }
@@ -356,7 +356,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($id !== NULL);
         
         $newUser = Tinebase_User::getInstance()->getFullUserById($id);
-        $this->assertEquals('hot', $newUser->accountLoginName);
+        $this->assertEquals('hotja', $newUser->accountLoginName);
         $this->assertEquals('/bin/false', $newUser->accountLoginShell);
         
         $newUserMemberships = Tinebase_Group::getInstance()->getGroupMemberships($newUser);
