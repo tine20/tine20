@@ -105,7 +105,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        $_record->uid           = $_record->uid           ? $_record->uid           : Tinebase_Record_Abstract::generateUID();
+        $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
     }
     
     /**
@@ -117,7 +117,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        $_record->uid           = $_oldRecord->uid        ? $_oldRecord->uid        : Tinebase_Record_Abstract::generateUID();
+        $_record->uid = $_oldRecord->uid ? $_oldRecord->uid        : Tinebase_Record_Abstract::generateUID();
     }
     
     /**
