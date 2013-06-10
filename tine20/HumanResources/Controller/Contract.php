@@ -251,7 +251,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $lastDate->addSecond(1);
         
         $filter = new Calendar_Model_EventFilter(array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_IntId(array('field' => 'container_id', 'operator' => 'equals', 'value' => $contract->feast_calendar_id)));
+        $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'container_id', 'operator' => 'equals', 'value' => $contract->feast_calendar_id)));
         $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'after', 'value' => $firstDate)));
         $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'before', 'value' => $lastDate)));
         

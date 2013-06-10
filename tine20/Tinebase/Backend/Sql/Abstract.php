@@ -192,6 +192,16 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         return $this->_modlogActive;
     }
     
+    /**
+     * returns the db schema
+     * 
+     * @return array
+     */
+    public function getSchema()
+    {
+        return $this->_schema;
+    }
+    
     /*************************** get/search funcs ************************************/
 
     /**

@@ -38,4 +38,11 @@ interface Tinebase_Backend_Sql_Interface
      * @return Zend_Db_Adapter_Abstract
      */
     public function getAdapter();
+
+    /**
+     * returns the db schema
+     * 
+     * @return array
+     */
+    public function getSchema();
 }

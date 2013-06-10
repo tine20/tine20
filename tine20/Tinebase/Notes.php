@@ -126,6 +126,16 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         return $this->_db;
     }
     
+    /**
+     * returns the db schema
+     * 
+     * @return array
+     */
+    public function getSchema()
+    {
+        return Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . 'notes', $this->_db);
+    }
+    
     /************************** get notes ************************/
 
     /**

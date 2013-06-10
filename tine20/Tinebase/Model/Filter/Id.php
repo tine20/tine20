@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -54,9 +54,6 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
     {
         $action = $this->_opSqlMap[$this->_operator];
          
-        // quote field identifier
-        $field = $this->_getQuotedFieldName($_backend);
-         
         if (empty($this->_value) && $this->_value != '0') {
              // prevent sql error
              if ($this->_operator == 'in' || $this->_operator == 'equals') {
@@ -70,24 +67,56 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
                  . ' Unexpected array value with "equals" operator (model: ' 
                  . (isset($this->_options['modelName']) ? $this->_options['modelName'] : 'unknown / no modelName defined in filter options') . ')');
              $_select->where('1=0');
-        } else {
-            // finally append query to select object
-            $_select->where($field . $action['sqlop'], $this->_value);
-        }
-    }
-    
-    /**
-     * sets value
-     *
-     * @param string $_value
-     */
-    public function setValue($_value)
-    {
-        parent::setValue($_value);
-        
-        $this->_enforceType();
-    }
-    
+         } else {
+             $type = $this->_getFieldType($_backend);
+             $this->_enforceValueType($type);
+             
+             $field = $this->_getQuotedFieldName($_backend);
+             // finally append query to select object
+             $_select->where($field . $action['sqlop'], $this->_value, $type);
+         }
+     }
+     
+     /**
+      * get field type from schema
+      * 
+      * @param Tinebase_Backend_Sql_Abstract $backend
+      */
+     protected function _getFieldType($backend)
+     {
+         $schema = $backend->getSchema();
+         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+             . ' schema: ' . print_r($schema, TRUE));
+         
+         $type = (array_key_exists($this->_field, $schema)) ? $schema[$this->_field]['DATA_TYPE'] : NULL;
+         return $type;
+     }
+     
+     /**
+      * enforce value typecast
+      * 
+      * @param string $type
+      * 
+      * @todo add more type strings / move to db adapter?
+      */
+     protected function _enforceValueType($type)
+     {
+         switch (strtoupper($type)) {
+             case 'VARCHAR':
+             case 'TEXT':
+                 $this->_enforceStringValue();
+                 break;
+             case 'INTEGER':
+             case 'TINYINT':
+             case 'SMALLINT':
+             case 'INT':
+                 $this->_enforceIntValue();
+                 break;
+             default:
+                 // do not cast / enforce type
+         }
+     }
+     
     /**
      * returns array with the filter settings of this filter
      *
@@ -114,7 +143,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
     /**
      * enforce string data type for correct sql quoting
      */
-    protected function _enforceType()
+    protected function _enforceStringValue()
     {
         if (is_array($this->_value)) {
             foreach ($this->_value as &$value) {
@@ -122,6 +151,26 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
             }
         } else {
             $this->_value = (string) $this->_value;
+        }
+    }
+    
+    /**
+     * enforce integer data type for correct sql quoting
+     */
+    protected function _enforceIntValue()
+    {
+        if (is_array($this->_value)) {
+            foreach ($this->_value as &$value) {
+                if (! ctype_digit($value)) {
+                    throw new Tinebase_Exception_UnexpectedValue("$value is not a number");
+                } 
+                $value = (int) $value;
+            }
+        } else {
+            if (! ctype_digit($this->_value)) {
+                throw new Tinebase_Exception_UnexpectedValue("$this->_value is not a number");
+            } 
+            $this->_value = (int) $this->_value;
         }
     }
     
