@@ -149,6 +149,30 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             field.focus(false,250);
         }
     },
+    
+    getVersionPanel: function () {
+        if (! this.versionPanel) {
+            var version = (Tine.Tinebase.registry.get('version')) ? Tine.Tinebase.registry.get('version') : {
+                codeName: 'unknown',
+                packageString: 'unknown'
+            };
+            
+            var versionHtml = '<label class="tb-version-label">' + _('Version') + ':</label> ' +
+                              '<label class="tb-version-codename">' + version.codeName + '</label> ' +
+                              '<label class="tb-version-packagestring">(' + version.packageString + ')</label>';
+            this.versionPanel = new Ext.Container({
+                layout: 'fit',
+                cls: 'tb-version-tinepanel',
+                border: false,
+                defaults: {xtype: 'label'},
+                items: [{
+                    html: versionHtml
+                }]
+            })
+        }
+
+        return this.versionPanel;
+    },
      
     getCommunityPanel: function () {
         if (! this.communityPanel) {
@@ -368,7 +392,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             border: false,
             items: [
                 this.getLoginPanel(),
-                this.infoPanel
+                this.infoPanel,
+                this.getVersionPanel()
             ]
         }];
     },
