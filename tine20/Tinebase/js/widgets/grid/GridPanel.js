@@ -1156,7 +1156,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             
             if (this.action_addInNewWindow) {
                 if (this.splitAddButton) {
-                    items.push(Ext.applyIf(
+                    items.push(Ext.apply(
                         new Ext.SplitButton(this.action_addInNewWindow), {
                             scale: 'medium',
                             rowspan: 2,
