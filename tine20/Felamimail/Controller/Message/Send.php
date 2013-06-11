@@ -470,7 +470,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 $this->_addReplyHeaders($_message);
             }
             
-            //set the header request response
+            // set the header request response
             if ($_message->reading_conf) {
                 $_mail->addHeader('Disposition-Notification-To', $_message->from_email);
             }
