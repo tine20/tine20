@@ -51,6 +51,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'cleared_at'           => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'is_open'              => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'contract'    => array('filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord', 'options' => array(
