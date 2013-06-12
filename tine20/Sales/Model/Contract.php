@@ -101,5 +101,9 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             array('type' => 'PRODUCT', 'degree' => 'sibling', 'text' => 'Product', 'max' => '0:0'),
             )
         ),
+        array('relatedApp' => 'Sales', 'relatedModel' => 'CostCenter', 'config' => array(
+            array('type' => 'LEAD_COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '0:0'),
+        )
+        ),
     );
 }

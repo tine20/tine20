@@ -32,6 +32,10 @@
           "path": "js/"
         },
         {
+          "text": "ContractCostCenterFilterModel.js",
+          "path": "js/"
+        },
+        {
           "text": "ContractGridPanel.js",
           "path": "js/"
         },

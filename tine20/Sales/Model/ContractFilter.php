@@ -45,5 +45,10 @@ class Sales_Model_ContractFilter extends Tinebase_Model_Filter_FilterGroup
         'cleared_in'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'number'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'costcenter'           => array('filter' => 'Sales_Model_ContractCostCenterFilter', 'options' => array(
+            'related_model'     => 'Sales_Model_CostCenter',
+            'idProperty'        => 'id',
+            'filtergroup'       => 'Sales_Model_CostCenterFilter'
+        )),
     );
 }

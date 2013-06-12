@@ -157,8 +157,8 @@ Tine.Sales.Model.Contract.getFilterModel = function() {
             keyfieldName: 'contractCleared'
         },
         {label: app.i18n._('Cleared in'), field: 'cleared_in' },
-        {filtertype: 'tinebase.tag', app: app}
-        
+        {filtertype: 'tinebase.tag', app: app },
+        {filtertype: 'sales.contract.costcenter' }
     ];
 };
 
