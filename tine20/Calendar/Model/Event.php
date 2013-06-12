@@ -126,10 +126,14 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         //'rdate'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'rrule'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // calendar helper fields
+
         'is_all_day_event'      => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'rrule_until'           => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'originator_tz'         => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-    
+
+        // relations
+        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+
         // grant helper fields
         Tinebase_Model_Grants::GRANT_FREEBUSY => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_READ     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
