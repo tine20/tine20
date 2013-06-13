@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -249,12 +249,12 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
         $exceptionData['message'] = htmlentities($exception->getMessage(), ENT_COMPAT, 'UTF-8');
         $exceptionData['code']    = $exception->getCode();
-
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
-        if (Tinebase_Core::getConfig()->suppressExceptionTraces !== TRUE) {
-            $exceptionData['trace'] = $this->_getTraceAsArray($exception);
-            $this->_logExceptionTrace($exception);
+        $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
+        if ($suppressTrace !== TRUE) {
+            $exceptionData['trace'] = Tinebase_Exception::getTraceAsArray($exception);
         }
+        
+        Tinebase_Exception::log($exception, $suppressTrace);
         
         $server->fault($exceptionData['message'], $exceptionData['code'], $exceptionData);
         
@@ -267,80 +267,6 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         }
     
         return $response;
-    }
-    
-    /**
-     * get exception trace as array (remove confidential information)
-     * 
-     * @param Exception $_exception
-     * @return array
-     */
-    protected function _getTraceAsArray(Exception $_exception)
-    {
-        $trace = $_exception->getTrace();
-        $traceArray = array();
-        
-        foreach($trace as $part) {
-            if (array_key_exists('file', $part)) {
-                // don't send full paths to the client
-                $part['file'] = $this->_replaceBasePath($part['file']);
-            }
-            // unset args to make sure no passwords are shown
-            unset($part['args']);
-            $traceArray[] = $part;
-        }
-        
-        return $traceArray;
-    }
-    
-    /**
-     * replace base path in string
-     * 
-     * @param string|array $_string
-     * @return string
-     */
-    protected function _replaceBasePath($_string)
-    {
-        $basePath = dirname(dirname(dirname(__FILE__)));
-        return str_replace($basePath, '...', $_string);
-    }
-    
-    /**
-     * log trace of exception (remove confidential information)
-     * 
-     * @param Exception $_exception
-     */
-    protected function _logExceptionTrace(Exception $_exception)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-            $traceString = $_exception->getTraceAsString();
-            $traceString = $this->_replaceBasePath($traceString);
-            $traceString = $this->_removeCredentials($traceString);
-             
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $traceString);
-        }
-    }
-    
-    /**
-     * remove credentials/passwords from trace 
-     * 
-     * @param string $_traceString
-     * @return string
-     */
-    protected function _removeCredentials($_traceString)
-    {
-        $passwordPatterns = array(
-            "/->login\('([^']*)', '[^']*'/",
-            "/->validate\('[^']*', '[^']*'/",
-            "/->authenticate\('[^']*', '[^']*'/",
-        );
-        $replacements = array(
-            "->login('$1', '********'",
-            "->validate('$1', '********'",
-            "->authenticate('$1', '********'",
-        );
-        
-        return preg_replace($passwordPatterns, $replacements, $_traceString);
     }
     
     /**

@@ -212,7 +212,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
         
         for (var i=dayCell.childNodes.length; i<=pos; i++) {
             Ext.DomHelper.insertAfter(dayCell.lastChild, '<div class="cal-monthview-eventslice"/>');
-            //console.log('inserted slice: ' + i);
         }
         
         // make sure cell is empty
@@ -603,16 +602,21 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
             Ext.fly(cell.lastChild.lastChild).remove();
         }
         
+        Tine.log.debug('Tine.Calendar.MonthView::layoutDayCell() - cell:');
+        Tine.log.debug(cell);
+        
         for (var j=0, height=0, hideCount=0; j<cell.lastChild.childNodes.length; j++) {
             var eventEl = Ext.get(cell.lastChild.childNodes[j]);
             height += eventEl.getHeight();
             
             eventEl[height > this.dayCellsHeight && hideOverflow ? 'hide' : 'show']();
 
-            if (height > this.dayCellsHeight && hideOverflow) {
+            if (height > this.dayCellsHeight && hideOverflow && cell.lastChild.childNodes[j].innerHTML !== '') {
                 hideCount++;
             }
         }
+        
+        Tine.log.debug('Tine.Calendar.MonthView::layoutDayCell() - hideCount:' + hideCount);
         
         if (updateHeader) {
             cell.firstChild.firstChild.innerHTML = hideCount > 0 ? String.format(this.moreString, hideCount) : '';

@@ -926,7 +926,8 @@ class Setup_Controller
      */
     protected function _updateAuthentication($_authenticationData)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_authenticationData, TRUE));
+        // this is a dangerous TRACE as there might be passwords in here!
+        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_authenticationData, TRUE));
 
         $this->_enableCaching();
         
@@ -1234,7 +1235,8 @@ class Setup_Controller
      */
     public function saveEmailConfig($_data)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, TRUE));
+        // this is a dangerous TRACE as there might be passwords in here!
+        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, TRUE));
         
         $this->_enableCaching();
         

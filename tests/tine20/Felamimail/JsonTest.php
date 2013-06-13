@@ -967,11 +967,12 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * testSendReadingConfirmation
      * 
      * @see 0007736: ask user before sending reading confirmation
+     * @see 0008402: Wrong recipient with read confirmation
      */
     public function testSendReadingConfirmation()
     {
         $messageToSave = $this->_getMessageData();
-        $messageToSave['headers']['disposition-notification-to'] = $this->_account->email;
+        $messageToSave['headers']['disposition-notification-to'] = '"' . Tinebase_Core::getUser()->accountFullName . '" <' . $this->_account->email . '>';
         $returned = $this->_json->saveMessageInFolder($this->_testFolderName, $messageToSave);
         $messageWithReadingConfirmationHeader = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_testFolderName);
         $this->_messageIds[] = $messageWithReadingConfirmationHeader['id'];

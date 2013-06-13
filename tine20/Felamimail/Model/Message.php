@@ -257,15 +257,21 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->headers = Felamimail_Controller_Message::getInstance()->getMessageHeaders($this->getId(), NULL, TRUE);
         }
         
-        if (array_key_exists('disposition-notification-to', $this->headers) && $this->headers['disposition-notification-to']/* && !$this->hasSeenFlag() */) {
+        if (array_key_exists('disposition-notification-to', $this->headers) && $this->headers['disposition-notification-to']) {
             $translate = Tinebase_Translation::getTranslation($this->_application);
             $from = Felamimail_Controller_Account::getInstance()->get($this->account_id);
-
+            
             $message = new Felamimail_Model_Message();
             $message->account_id = $this->account_id;
-
+            
+            $punycodeConverter = Felamimail_Controller_Message::getInstance()->getPunycodeConverter();
+            $to = Felamimail_Message::convertAddresses($this->headers['disposition-notification-to'], $punycodeConverter);
+            if (empty($to)) {
+                throw new Felamimail_Exception('disposition-notification-to header does not contain a valid email address');
+            }
+             
             $message->content_type = Felamimail_Model_Message::CONTENT_TYPE_HTML;
-            $message->to           = $this->headers['disposition-notification-to'];
+            $message->to           = $to[0]['email'];
             $message->subject      = $translate->_('Reading Confirmation:') . ' '. $this->subject;
             $message->body         = $translate->_('Your message:'). ' ' . $this->subject . "\n" .
                                      $translate->_('Received on')  . ' ' . $this->received . "\n" .
