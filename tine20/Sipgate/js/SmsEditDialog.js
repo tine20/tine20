@@ -278,7 +278,21 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
                         ref: '../../../../textEditor',
                         emptyText: this.app.i18n._('enter the text...'),
                         height: 125,
-                        name: 'message'
+                        name: 'message',
+                        enableKeyEvents: true,
+                        setFieldLabel : function(text) {
+                            if (this.rendered) {
+                                this.el.up('.x-form-item', 10, true).child('.x-form-item-label').update(text);
+                            }
+                            this.fieldLabel = text;
+                        },
+                        listeners: {
+                            scope: this,
+                            keyup: function(textarea, event) {
+                                var length = textarea.getValue().length;
+                                textarea.setFieldLabel( this.app.i18n._('The message') + ': ' + this.app.i18n._('Character') + " " + length % 160 + '/160 ( ' + this.app.i18n._('Message') + " " + Math.ceil( length / 160 ) + " )");
+                            }
+                        }
                     }]
                 ]
             }]
