@@ -59,10 +59,15 @@ Tine.Tinebase.AppManager = function() {
     );
     
     
-    // fill this.apps with registry data
-    var enabledApps = Tine.Tinebase.registry.get('userApplications');
-    var app;
-    for(var i=0; i<enabledApps.length; i++) {
+    // fill this.apps with registry data 
+    // do it the other way round because add() always adds records at the beginning of the MixedCollection
+    var enabledApps = Tine.Tinebase.registry.get('userApplications'),
+        app;
+        
+    Tine.log.debug('Tine.Tinebase.AppManager - enabled Apps: ');
+    Tine.log.debug(enabledApps);
+    
+    for (var i = (enabledApps.length - 1); i >= 0; i--) {
         app = enabledApps[i];
         
         // if the app is not in the namespace, we don't initialise it
@@ -70,13 +75,8 @@ Tine.Tinebase.AppManager = function() {
         if (Tine[app.name] && ! app.name.match(/(Tinebase)/)) {
             app.appName = app.name;
             app.isInitialised = false;
-            
             this.apps.add(app.appName, app);
         }
-        
-        this.apps.sort("ASC", function (app1, app2) {
-            return parseInt(app1.order, 10) - parseInt(app2.order, 10);
-        });
     }
 };
 

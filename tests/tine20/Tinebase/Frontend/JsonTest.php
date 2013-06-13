@@ -481,6 +481,7 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      * @return void
      * 
      * @see 0007934: change pw button active even if it is not allowed
+     * @see 0008310: apps should be sorted the other way round in menu
      */
     public function testGetAllRegistryData()
     {
@@ -499,6 +500,9 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $changepwValue = $registryData['Tinebase']['config']['changepw']['value'];
         $this->assertEquals(FALSE, $changepwValue, 'changepw should be (bool) false');
         $this->assertTrue(is_bool($changepwValue), 'changepw should be (bool) false: ' . var_export($changepwValue, TRUE));
+        
+        $userApps = $registryData['Tinebase']['userApplications'];
+        $this->assertEquals('Admin', $userApps[0]['name'], 'first app should be Admin: ' . print_r($userApps, TRUE));
     }
     
     /**
