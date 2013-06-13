@@ -81,9 +81,16 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     /**
      * the editDialog, the form is nested in. Just needed if this.allowLinkingItself is set to false
      * 
-     * @cfg Tine.widgets.dialog.EditDialog editDialog
+     * @type Tine.widgets.dialog.EditDialog editDialog
      */
     editDialog: null,
+    
+    /**
+     * always use additional filter
+     * 
+     * @type {Array}
+     */
+    additionalFilters: null,
     
     triggerAction: 'all',
     pageSize: 10,
@@ -174,9 +181,15 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      * @param {Object} qevent
      */
     onBeforeQuery: function (qevent) {
-        this.store.baseParams.filter = [
+        var filter = [
             {field: 'query', operator: 'contains', value: qevent.query }
         ];
+        if (this.additionalFilters !== null && this.additionalFilters.length > 0) {
+            for (var i = 0; i < this.additionalFilters.length; i++) {
+                filter.push(this.additionalFilters[i]);
+            }
+        }
+        this.store.baseParams.filter = filter;
     },
     
     /**
