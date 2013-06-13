@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -52,7 +52,7 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
                     $_REQUEST['method'] = 'Tinebase.mainScreen';
                 }
                 
-                $applicationParts = explode('.', $_REQUEST['method']);
+                $applicationParts = explode('.', $this->getRequestMethod());
                 $applicationName = ucfirst($applicationParts[0]);
                 
                 if(Tinebase_Core::getUser() && Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
@@ -75,7 +75,7 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
                 }
             }
             
-            $this->_method = $_REQUEST['method'];
+            $this->_method = $this->getRequestMethod();
             
             $server->handle($_REQUEST);
             
@@ -95,7 +95,7 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
                 die('Service Unavailable');
             }
             
-            Tinebase_Core::getLogger()->info($exception);
+            Tinebase_Exception::log($exception);
             
             try {
                 // check if setup is required
@@ -103,9 +103,6 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
                 if ($setupController->setupRequired()) {
                     $this->_method = 'Tinebase.setupRequired';
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(
-                        __METHOD__ . '::' . __LINE__ . ' (' . __LINE__ .') Http-Api exception: ' . print_r($exception, true));
-                    
                     $this->_method = 'Tinebase.exception';
                 }
                 
@@ -126,7 +123,7 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
     */
     public function getRequestMethod()
     {
-        if ($this->_method && isset($_REQUEST['method'])) {
+        if ($this->_method === NULL && isset($_REQUEST['method'])) {
             $this->_method = $_REQUEST['method'];
         }
         

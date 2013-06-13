@@ -153,8 +153,9 @@ class Tinebase_User
     {
         $options = self::getBackendConfiguration();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
-            . print_r($options, TRUE));
+        // this is a dangerous TRACE as there might be passwords in here!
+        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+        //    . print_r($options, TRUE));
         
         $options['plugins'] = array();
         
