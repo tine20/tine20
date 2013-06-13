@@ -39,7 +39,7 @@ class Tinebase_Record_AutoRecord extends Tinebase_Record_Abstract
         'hasCustomFields'   => true,
         'hasNotes'          => true,
         'hasTags'           => true,
-        'useModlog'         => true,
+        'modlogActive'      => true,
     );
 
     /**

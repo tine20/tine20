@@ -41,7 +41,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'hasCustomFields'   => true,
         'hasNotes'          => true,
         'hasTags'           => true,
-        'useModlog'         => true,
+        'modlogActive'      => true,
 
         'createModule'    => true,
 
