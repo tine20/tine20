@@ -291,7 +291,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     public function parseHeaders(array $_headers)
     {
         // remove duplicate headers (which can't be set twice in real life)
-        foreach (array('date', 'from', 'to', 'cc', 'bcc', 'subject', 'sender') as $field) {
+        foreach (array('date', 'from', 'subject', 'sender') as $field) {
             if (isset($_headers[$field]) && is_array($_headers[$field])) {
                 $_headers[$field] = $_headers[$field][0];
             }
@@ -309,23 +309,30 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         
         foreach (array('to', 'cc', 'bcc', 'from', 'sender') as $field) {
             if (isset($_headers[$field])) {
-                $value = Felamimail_Message::convertAddresses($_headers[$field], $punycodeConverter);
-                
-                switch($field) {
-                    case 'from':
-                        $this->from_email = (isset($value[0]) && array_key_exists('email', $value[0])) ? $value[0]['email'] : '';
-                        $this->from_name = (isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
-                        break;
-                        
-                    case 'sender':
-                        $this->sender = (isset($value[0]) && array_key_exists('email', $value[0])) ? '<' . $value[0]['email'] . '>' : '';
-                        if ((isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name']))) {
-                            $this->sender = '"' . $value[0]['name'] . '" ' . $this->sender;
-                        }
-                        break;
-                        
-                    default:
-                        $this->$field = $value;
+                if (is_array($_headers[$field])) {
+                    $value = array();
+                    foreach ($_headers[$field] as $headerValue) {
+                        $value = array_merge($value, Felamimail_Message::convertAddresses($headerValue, $punycodeConverter));
+                    }
+                    $this->$field = $value;
+                } else {
+                    $value = Felamimail_Message::convertAddresses($_headers[$field], $punycodeConverter);
+                    switch ($field) {
+                        case 'from':
+                            $this->from_email = (isset($value[0]) && array_key_exists('email', $value[0])) ? $value[0]['email'] : '';
+                            $this->from_name = (isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
+                            break;
+                            
+                        case 'sender':
+                            $this->sender = (isset($value[0]) && array_key_exists('email', $value[0])) ? '<' . $value[0]['email'] . '>' : '';
+                            if ((isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name']))) {
+                                $this->sender = '"' . $value[0]['name'] . '" ' . $this->sender;
+                            }
+                            break;
+                            
+                        default:
+                            $this->$field = $value;
+                    }
                 }
             }
         }
