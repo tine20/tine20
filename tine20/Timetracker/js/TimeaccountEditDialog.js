@@ -90,7 +90,11 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 ['not yet billed', this.app.i18n._('not yet billed')], 
                 ['to bill', this.app.i18n._('to bill')],
                 ['billed', this.app.i18n._('billed')]
-            ]
+            ],
+            listeners: {
+                scope: this,
+                select: this.onBilledChange.createDelegate(this)
+            }
         }, {
             //disabled: true,
             //emptyText: this.app.i18n._('not cleared yet...'),
@@ -109,6 +113,10 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 ['none', this.app.i18n._('none')], 
                 ['lastweek', this.app.i18n._('last week')]
             ]
+        }, {
+            xtype: 'extuxclearabledatefield',
+            name: 'cleared_at',
+            fieldLabel: this.app.i18n._('Cleared at')
         }];
         
         if(Tine.Tinebase.appMgr.get('Sales')) {
@@ -289,6 +297,17 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             });
         }
         return this.grantsGrid;
+    },
+    
+    /**
+     * is called is billed field changes
+     */
+    onBilledChange: function(combo, record, index) {
+        if (combo.getValue() == 'billed') {
+            if (! this.getForm().findField('cleared_at').getValue()) {
+                this.getForm().findField('cleared_at').setValue(new Date());
+            }
+        }
     }
 });
 

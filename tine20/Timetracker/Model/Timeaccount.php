@@ -85,6 +85,7 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'is_billable'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'billed_in'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'not yet billed'),
+        'cleared_at'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // how long can users book timesheets for this timeaccount 
         'deadline'              => array(
             Zend_Filter_Input::ALLOW_EMPTY      => true, 
@@ -116,7 +117,8 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
     protected $_datetimeFields = array(
         'creation_time',
         'last_modified_time',
-        'deleted_time'
+        'deleted_time',
+        'cleared_at'
     );
     
     /**

@@ -36,4 +36,25 @@ class Timetracker_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Timetracker', '7.1');
     }
+    
+    /**
+     * update to 7.1
+     * 
+     *  - add cleared_at field to timeaccount
+     */
+    
+    public function update_1()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>cleared_at</name>
+                <type>datetime</type>
+            </field>
+        ');
+
+        $this->_backend->addCol('timetracker_timeaccount', $declaration);
+        
+        $this->setTableVersion('timetracker_timeaccount', 9);
+        $this->setApplicationVersion('Timetracker', '7.2');
+    }
 }

@@ -102,6 +102,11 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 width: 100,
                 dataIndex: 'deadline'
             },{
+                id: 'cleared_at',
+                header: this.app.i18n._("Cleared at"),
+                dataIndex: 'cleared_at',
+                renderer: Tine.Tinebase.common.dateRenderer
+            },{
                 id: 'is_open',
                 header: this.app.i18n._("Status"),
                 width: 150,
