@@ -562,6 +562,27 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
+     * sort function by requirement
+     * 
+     * @param array $a
+     * @param array $b
+     */
+    protected function _sortApplicationsByRequirementSF($a, $b) {
+        if (in_array($b['appName'], $a['required']) && (in_array($a['appName'], $b['required']))) {
+            die('Circular dependencies detected! Terminating.' . PHP_EOL);
+        } else if (in_array($b['appName'], $a['required'])) {
+            return -1;
+        } else if (in_array($a['appName'], $b['required'])) {
+            return 1;
+        }
+        
+        return 0;
+    }
+    protected function _sortApplicationsByRequirements() {
+        uasort($this->_applicationsToWorkOn, array($this, '_sortApplicationsByRequirementSF'));
+        $this->_applicationsToWorkOn = array_reverse($this->_applicationsToWorkOn);
+    }
+    /**
      * creates demo data for all applications
      * accepts same arguments as Tinebase_Frontend_Cli_Abstract::createDemoData
      * and the additional argument "skipAdmin" to force no user/group/role creation
@@ -574,32 +595,43 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return FALSE;
         }
         
-        // fetch all applications
+        // fetch all applications and check if required are installed, otherwise remove app from array
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
+        foreach($applications as $appName) {
+            echo 'Searching for DemoData in application "' . $appName . '"...' . PHP_EOL;
+            $className = $appName.'_Setup_DemoData';
+            if (class_exists($className)) {
+                echo 'DemoData in application "' . $appName . '" found!' . PHP_EOL;
+                $required = $className::getRequiredApplications();
+                foreach($required as $requiredApplication) {
+                    if (! in_array_case($applications, $requiredApplication)) {
+                        echo 'Creating DemoData for Application ' . $appName . ' is impossible, because application "' . $requiredApplication . '" is not installed.' . PHP_EOL;
+                        continue 2;
+                    }
+                }
+                $this->_applicationsToWorkOn[$appName] = array('appName' => $appName, 'required' => $required);
+            } else {
+                echo 'DemoData in application "' . $appName . '" not found.' . PHP_EOL . PHP_EOL;
+            }
+        }
         
-        // remove Admin and Addressbook first, ensure, they get called at first
-        $applications = array_flip($applications);
-        unset($applications['Admin']);
-        unset($applications['Addressbook']);
-        $applications = array_flip($applications);
-        
-        // push Addressbook again
-        array_unshift($applications, 'Addressbook');
+        $this->_sortApplicationsByRequirements();
         
         // push Admin again
         $otherArgs = $_opts->getRemainingArgs();
-        
-        if (! in_array('skipAdmin', $otherArgs)) {
-            array_unshift($applications, 'Admin');
+        if (in_array('skipAdmin', $otherArgs)) {
+            unset($this->_applicationsToWorkOn['Admin']);
         }
-        
+
         // call cli of each app
-        foreach ($applications as $app) {
+        foreach ($this->_applicationsToWorkOn as $app => $requiredApps) {
             $className = $app . '_Frontend_Cli';
-            if (@class_exists($className)) {
-                echo 'Searching for Demo Data in Application "' . $app . '"...' . PHP_EOL;
+            if (class_exists($className)) {
+                echo 'Creating DemoData in application "' . $app . '"...' . PHP_EOL;
                 $class = new $className();
-                $class->createDemoData($_opts);
+                $class->createDemoData($_opts, FALSE);
+            } else {
+                echo 'Could not found ' . $className . ', so DemoData for application "' . $app . '" could not be created!';
             }
         }
     }

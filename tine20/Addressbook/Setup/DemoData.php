@@ -36,6 +36,13 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected $_addresses = NULL;
     
     /**
+     * 
+     * required apps
+     * @var array
+     */
+    protected static $_requiredApplications = array('Admin');
+    
+    /**
      * holds indexes of male images in $this->_images
      * 
      * @var array
@@ -90,7 +97,24 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         return self::$_instance;
     }
-
+    
+    /**
+     * this is required for other applications needing demo data of this application
+     * if this returns true, this demodata has been run already
+     * 
+     * @return boolean
+     */
+    public static function hasBeenRun()
+    {
+        $c = Addressbook_Controller_Contact::getInstance();
+        
+        $f = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'url', 'operator' => 'contains', 'value' => 'brillenstobercstober.com'),
+        ), 'AND');
+        
+        return ($c->search($f)->count() > 50) ? true : false;
+    }
+    
     /**
      * @see Tinebase_Setup_DemoData_Abstract
      * 

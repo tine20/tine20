@@ -17,7 +17,7 @@
 class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 {
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Admin_Setup_DemoData
      */
@@ -31,6 +31,23 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
     }
 
+    /**
+     * this is required for other applications needing demo data of this application
+     * if this returns true, this demodata has been run already
+     * 
+     * @return boolean
+     */
+    public static function hasBeenRun()
+    {
+        try {
+            Tinebase_Group::getInstance()->getGroupByName('Secretary');
+        } catch (Tinebase_Exception_Record_NotDefined $e) {
+            return false;
+        }
+        
+        return true;
+    }
+    
     /**
      * maps contact data for the personas
      */

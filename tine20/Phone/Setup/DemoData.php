@@ -24,6 +24,13 @@ class Phone_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     private static $_instance = NULL;
 
     /**
+     * 
+     * required apps
+     * @var array
+     */
+    protected static $_requiredApplications = array('Voipmanager');
+    
+    /**
      * the application name to work on
      * 
      * @var string

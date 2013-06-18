@@ -117,45 +117,67 @@ class Tinebase_Frontend_Cli_Abstract
      * (1) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz locale=de users=pwulf,rwright // Creates demo events for pwulf and rwright with the locale de, just de and en is supported at the moment
      * (2) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz models=Calendar,Event sharedonly // Creates shared calendars and events with the default locale en                
      * (3) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz // Creates all demo calendars and events for all users
-     * 
+     *
      * @param Zend_Console_Getopt $_opts
+     * @param boolean $checkDependencies
      */
     
-    public function createDemoData($_opts)
+    public function createDemoData($_opts, $checkDependencies = TRUE)
     {
         // just admins can perform this action
         if (! $this->_checkAdminRight()) {
             return FALSE;
         }
-        $args = $this->_parseArgs($_opts, array());
-
-        if (array_key_exists('other', $args)) {
-            $createUsers  = in_array('sharedonly', $args['other']) ? FALSE : TRUE;
-            $createShared = in_array('noshared',   $args['other']) ? FALSE : TRUE;
-        } else {
-            $createUsers = $createShared = TRUE;
-        }
         
-        // locale defaults to de
-        $locale     = isset($args['locale'])   ? $args['locale']   : 'de';
-        
-        // password defaults to empty password
-        $password   = isset($args['password']) ? $args['password'] : '';
-        
-        if (isset($args['users'])) {
-            $users = is_array($args['users']) ? $args['users'] : array($args['users']);
-        } else {
-            $users = null;
-        }
-        
-        if (isset($args['models'])) {
-            $models = is_array($args['models']) ? $args['models'] : array($args['models']);
-        } else {
-            $models = null;
-        }
         $className = $this->_applicationName . '_Setup_DemoData';
         
         if (class_exists($className)) {
+
+            if ($checkDependencies) {
+                foreach($className::getRequiredApplications() as $appName) {
+                    $cname = $appName . '_Setup_DemoData';
+                    if (class_exists($cname)) {
+                        if (! $cname::hasBeenRun()) {
+                            $className2 = $appName . '_Frontend_Cli';
+                            if (class_exists($className2)) {
+                                echo 'Creating required DemoData of application "' . $appName . '"...' . PHP_EOL;
+                                $class = new $className2();
+                                $class->createDemoData($_opts, TRUE);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            
+            $args = $this->_parseArgs($_opts, array());
+            
+            if (array_key_exists('other', $args)) {
+                $createUsers  = in_array('sharedonly', $args['other']) ? FALSE : TRUE;
+                $createShared = in_array('noshared',   $args['other']) ? FALSE : TRUE;
+            } else {
+                $createUsers = $createShared = TRUE;
+            }
+            
+            // locale defaults to de
+            $locale     = isset($args['locale'])   ? $args['locale']   : 'de';
+            
+            // password defaults to empty password
+            $password   = isset($args['password']) ? $args['password'] : '';
+            
+            if (isset($args['users'])) {
+                $users = is_array($args['users']) ? $args['users'] : array($args['users']);
+            } else {
+                $users = null;
+            }
+            
+            if (isset($args['models'])) {
+                $models = is_array($args['models']) ? $args['models'] : array($args['models']);
+            } else {
+                $models = null;
+            }
+            
+
             if ($className::getInstance()->createDemoData($locale, $models, $users, $createShared, $createUsers, $password)) {
                 echo 'Demo Data was created successfully' . chr(10) . chr(10);
             } else {

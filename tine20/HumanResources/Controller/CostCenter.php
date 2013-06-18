@@ -88,4 +88,44 @@ class HumanResources_Controller_CostCenter extends Tinebase_Controller_Record_Ab
     {
         $this->_flatCostCenter($_record);
     }
+    
+    /**
+     * returns the current or by date valid costcenter for an employee
+     *
+     * @param HumanResources_Model_Employee|string $employeeId
+     * @param Tinebase_DateTime $date
+     * @param boolean $getSalesCostCenter if true, this returns the sales costcenter, not the mm-table like hr costcenter
+     * 
+     * @return HumanResources_Model_CostCenter|Sales_Model_CostCenter
+     */
+    public function getValidCostCenter($employeeId, $date = NULL, $getSalesCostCenter = FALSE)
+    {
+        if (! $employeeId) {
+            throw new Tinebase_Exception_InvalidArgument('You have to set an employee at least');
+        }
+        if (! is_string($employeeId)) {
+            $employeeId = $employeeId->getId();
+        }
+        $date = $date ? new Tinebase_DateTime($date) : new Tinebase_DateTime();
+        
+        $filter = new HumanResources_Model_CostCenterFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $date)));
+        
+        $result = $this->search($filter);
+        
+        if ($result->count()) {
+            $result->sort('start_date', 'ASC');
+            $cc = $result->getFirstRecord();
+            
+            if ($getSalesCostCenter) {
+                return Sales_Controller_CostCenter::getInstance()->get($cc->cost_center_id);
+            } else {
+                return $cc;
+            }
+            
+        } else {
+            return NULL;
+        }
+    }
 }

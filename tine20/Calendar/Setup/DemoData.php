@@ -24,6 +24,13 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     private static $_instance = NULL;
 
     /**
+     * 
+     * required apps
+     * @var array
+     */
+    protected static $_requiredApplications = array('Admin', 'Addressbook');
+    
+    /**
      * models to work on
      * 
      * @var array
@@ -67,6 +74,24 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         return self::$_instance;
     }
 
+    /**
+     * this is required for other applications needing demo data of this application
+     * if this returns true, this demodata has been run already
+     * 
+     * @return boolean
+     */
+    public static function hasBeenRun()
+    {
+        $c = Calendar_Controller_Event::getInstance();
+        
+        $f = new Calendar_Model_EventFilter(array(
+            array('field' => 'summary', 'operator' => 'equals', 'value' => 'Meeting for further education'),
+            array('field' => 'summary', 'operator' => 'equals', 'value' => 'Fortbildungsveranstaltung')
+        ), 'OR');
+        
+        return ($c->search($f)->count() > 0) ? true : false;
+    }
+    
     /**
      * @see Tinebase_Setup_DemoData_Abstract
      */
