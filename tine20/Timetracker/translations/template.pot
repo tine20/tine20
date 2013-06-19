@@ -441,5 +441,8 @@ msgid_plural "timeaccount lists"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Responsible person"
+msgstr ""
+
 msgid "Cleared at"
 msgstr ""
