@@ -59,6 +59,9 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             border: false,
             plain: true,
             activeTab: 0,
+            defaults: {
+                hideMode: 'offsets'
+            },
             items: [{
                 //Start first tab
                 title: this.app.i18n._('General'),

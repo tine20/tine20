@@ -194,6 +194,9 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
             }],
+            defaults: {
+                hideMode: 'offsets'
+            },
             activeTab: 0,
             border: false,
             items: [{

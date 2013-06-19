@@ -106,11 +106,13 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
-            layoutOnTabChange: true,
             border: false,
             plain:true,
             activeTab: 0,
             border: false,
+            defaults: {
+                hideMode: 'offsets'
+            },
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
             }],

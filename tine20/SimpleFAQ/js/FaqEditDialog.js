@@ -82,6 +82,9 @@ Tine.SimpleFAQ.FaqEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             plain: true,
             activeTab: 0,
+            defaults: {
+                hideMode: 'offsets'
+            },
             items:[{
                 title: this.app.i18n.n_('FAQ', 'FAQs', 1),
                 autoScroll: true,

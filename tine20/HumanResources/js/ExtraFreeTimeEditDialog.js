@@ -90,6 +90,9 @@ Tine.HumanResources.ExtraFreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.Edi
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
             }],
+            defaults: {
+                hideMode: 'offsets'
+            },
             activeTab: 0,
             border: false,
             items:[{
