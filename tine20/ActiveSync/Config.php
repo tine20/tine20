@@ -21,7 +21,14 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DEFAULT_POLICY = 'defaultPolicy';
-    
+
+    /**
+     * DISABLE_ACCESS_LOG
+     *
+     * @var string
+     */
+    const DISABLE_ACCESS_LOG = 'disableaccesslog';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -36,6 +43,17 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => FALSE,
+        ),
+        self::DISABLE_ACCESS_LOG => array(
+        //_('Disable Access Log')
+            'label'                 => 'Disable Access Log creation',
+        //_('Disable ActiveSync Access Log creation.')
+            'description'           => 'Disable ActiveSync Access Log creation.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => FALSE,
         ),
     );
     

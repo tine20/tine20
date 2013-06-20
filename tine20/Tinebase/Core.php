@@ -190,7 +190,8 @@ class Tinebase_Core
         } elseif((isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') ||
                  (isset($_GET['frontend']) && $_GET['frontend'] == 'activesync')) {
             $server = new ActiveSync_Server_Http();
-            
+            self::set('serverclassname', get_class($server));
+
         /**************************** WebDAV / CardDAV / CalDAV API **********************************
          * RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
          * RewriteRule ^/$            /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]

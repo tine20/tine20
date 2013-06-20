@@ -101,9 +101,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $this->_loginFailed($_loginname ? $_loginname : $authResultIdentity, $accessLog);
             $result = false;
         } 
-        
-        Tinebase_AccessLog::getInstance()->create($accessLog);
-        
+
+        if (Tinebase_Core::get('serverclassname') !== 'ActiveSync_Server_Http' || !(ActiveSync_Config::getInstance()->get(ActiveSync_Config::DISABLE_ACCESS_LOG))) {
+            Tinebase_AccessLog::getInstance()->create($accessLog);
+        }
+
         return $result;
     }
     
@@ -385,8 +387,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function logout($_ipAddress)
     {
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
-            Tinebase_AccessLog::getInstance()->setLogout(Tinebase_Core::get(Tinebase_Core::SESSIONID), $_ipAddress);
+        if (Tinebase_Core::get('serverclassname') !== 'ActiveSync_Server_Http' || !(ActiveSync_Config::getInstance()->get(ActiveSync_Config::DISABLE_ACCESS_LOG))) {
+            if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
+                Tinebase_AccessLog::getInstance()->setLogout(Tinebase_Core::get(Tinebase_Core::SESSIONID), $_ipAddress);
+            }
         }
     }
     
