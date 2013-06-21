@@ -1,241 +1,236 @@
 # 
 # Translators:
-# Aleksdem <aleksdem@aleksdem.com>, 2013
-# артур Мудрых <arturmon82@gmail.com>, 2012
-# Nikolay Parukhin <parukhin@gmail.com>, 2012
-# Nikolay Parukhin <parukhin@gmail.com>, 2012
+# Theodosios Filippou <tf1974@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-06-20 17:11+0000\n"
-"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
+"PO-Revision-Date: 2013-05-30 05:40+0000\n"
+"Last-Translator: Theodosios Filippou <tf1974@gmail.com>\n"
+"Language-Team: Greek (Greece) (http://www.transifex.com/projects/p/tine20/language/el_GR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: el_GR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Acl/Rights.php:97
 msgid "manage shared folders"
-msgstr "управление общими папками"
+msgstr ""
 
 #: Acl/Rights.php:98
 msgid "Create new shared folders"
-msgstr "Создание новых  общих папок"
+msgstr ""
 
 #: Controller.php:100
 #, python-format
 msgid "%s's personal files"
-msgstr "Личные файлы %s"
+msgstr ""
 
 #: js/PathFilterModel.js:50
 msgid "path"
-msgstr "путь"
+msgstr "διαδρομή"
 
 #: js/NodeEditDialog.js:44 js/Filemanager.js:34 js/NodeGridPanel.js:344
 msgid "Save locally"
-msgstr "Сохранить локально"
+msgstr ""
 
 #: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
 msgid "Node"
-msgstr "Узел"
+msgstr "Κόμβος"
 
 #: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
 msgid "Name"
-msgstr "Имя"
+msgstr "Όνομα"
 
 #: js/NodeEditDialog.js:121 js/Model.js:530
 msgid "Type"
-msgstr "Тип"
+msgstr ""
 
 #: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
 msgid "Created By"
-msgstr "Создана"
+msgstr ""
 
 #: js/NodeEditDialog.js:132 js/Model.js:532 js/NodeGridPanel.js:179
 msgid "Creation Time"
-msgstr "Время создания"
+msgstr ""
 
 #: js/NodeEditDialog.js:141
 msgid "Modified By"
-msgstr "Изменено"
+msgstr ""
 
 #: js/NodeEditDialog.js:144
 msgid "Last Modified"
-msgstr "Последнее изменение"
+msgstr ""
 
 #: js/NodeEditDialog.js:167
 msgid "Description"
-msgstr "Описание"
+msgstr "Περιγραφή"
 
 #: js/NodeEditDialog.js:181
 msgid "Enter description"
-msgstr "Введите описание"
+msgstr ""
 
 #: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:651
 #: js/NodeGridPanel.js:803
 msgid "Upload Failed"
-msgstr "Сбой загрузки"
+msgstr ""
 
 #: js/NodeTreePanel.js:661 js/NodeGridPanel.js:652
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
-msgstr "Не удалось загрузить файл. Размер файла может быть слишком большим. Пожалуйста, сообщите администратору. Максимальный загружаемый размер:"
+msgstr ""
 
 #: js/NodeTreePanel.js:771 js/NodeGridPanel.js:804
 msgid "Putting files in this folder is not allowed!"
-msgstr "Помещение файлов в этой папке не допускается!"
+msgstr ""
 
 #: js/GridContextMenu.js:34
 msgid "Please enter the new name of the {0}:"
-msgstr "Введите новое имя для {0}:"
+msgstr ""
 
 #: js/GridContextMenu.js:40
 msgid "Not renamed {0}"
-msgstr "Не переименовано {0}"
+msgstr ""
 
 #: js/GridContextMenu.js:40 js/NodeGridPanel.js:503
 msgid "You have to supply a {0} name!"
-msgstr "Вы должны указать имя {0}!"
+msgstr ""
 
 #: js/GridContextMenu.js:144 js/NodeGridPanel.js:544
 msgid "Do you really want to delete the following files?"
-msgstr "Вы действительно хотите удалить следующие файлы?"
+msgstr ""
 
 #: js/Model.js:40
 msgid "File"
 msgid_plural "Files"
-msgstr[0] "Файл"
-msgstr[1] "Файла"
-msgstr[2] "Файлов"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Model.js:43 js/NodeGridPanel.js:155
 msgid "Folder"
 msgid_plural "Folders"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Папка"
+msgstr[0] "Φάκελος"
+msgstr[1] "Φάκελοι"
 
 #: js/Model.js:281 js/Model.js:297
 msgid "Copying data .. {0}"
-msgstr "Копирование данных... {0}"
+msgstr ""
 
 #: js/Model.js:284 js/Model.js:299
 msgid "Moving data .. {0}"
-msgstr "Перемещение данных... {0}"
+msgstr ""
 
 #: js/Model.js:303
 msgid "Please wait"
-msgstr "Пожалуйста, подождите"
+msgstr ""
 
 #: js/Model.js:529
 msgid "Quick search"
-msgstr "Быстрый поиск"
+msgstr "Γρήγορη αναζήτηση"
 
 #: js/Model.js:531 js/NodeGridPanel.js:147
 msgid "Contenttype"
-msgstr "Тип содержимого"
+msgstr ""
 
 #: js/Filemanager.js:26
 msgid "Filemanager"
-msgstr "Менеджер файлов"
+msgstr ""
 
 #: js/Filemanager.js:81
 msgid "Service Unavailable"
-msgstr "Сервис не доступен"
+msgstr ""
 
 #: js/Filemanager.js:82
 msgid ""
 "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
 " Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "Менеджер файлов не настроен правильно. Пожалуйста, обратитесь к {0} ЧАВО администратора Tine 2.0 {1} для рекомендаций по настройке  или к администратору."
+msgstr ""
 
 #: js/Filemanager.js:104
 msgid "Files already exists"
-msgstr "Файлы уже существуют"
+msgstr ""
 
 #: js/Filemanager.js:104
 msgid "Do you want to replace the following file(s)?"
-msgstr "Вы хотите заменить следующий(е) файл(ы)?"
+msgstr ""
 
 #: js/Filemanager.js:137
 msgid "Failure on create folder"
-msgstr "Сбой при создании папки"
+msgstr ""
 
 #: js/Filemanager.js:138
 msgid "Item with this name already exists!"
-msgstr "Элемент с таким именем уже существует!"
+msgstr ""
 
 #: js/NodeGridPanel.js:125
 msgid "Tags"
-msgstr "Теги"
+msgstr "Ετικέτες"
 
 #: js/NodeGridPanel.js:140
 msgid "Size"
-msgstr "Размер"
+msgstr "Μέγεθος"
 
 #: js/NodeGridPanel.js:164
 msgid "Revision"
-msgstr "Ревизия"
+msgstr ""
 
 #: js/NodeGridPanel.js:194
 msgid "Last Modified Time"
-msgstr "Время последнего изменения"
+msgstr ""
 
 #: js/NodeGridPanel.js:201
 msgid "Last Modified By"
-msgstr "Последнее изменение:"
+msgstr ""
 
 #: js/NodeGridPanel.js:249
 msgid "The max. Upload Filesize is {0} MB"
-msgstr "Макс. размер файла для отправки - {0} MB"
+msgstr ""
 
 #: js/NodeGridPanel.js:287
 msgid "Upload"
-msgstr "Загрузить"
+msgstr ""
 
 #: js/NodeGridPanel.js:311
 msgid "Edit Properties"
-msgstr "Изменить свойства"
+msgstr ""
 
 #: js/NodeGridPanel.js:322
 msgid "Create Folder"
-msgstr "Создать папку"
+msgstr "Δημιουργία Φακέλου"
 
 #: js/NodeGridPanel.js:333
 msgid "Folder Up"
-msgstr "Вверх на уровень"
+msgstr ""
 
 #: js/NodeGridPanel.js:354 js/NodeGridPanel.js:355 js/NodeGridPanel.js:357
 msgid "Delete"
-msgstr "Удалить"
+msgstr "Διαγραφή"
 
 #: js/NodeGridPanel.js:499
 msgid "New Folder"
-msgstr "Новая папка"
+msgstr ""
 
 #: js/NodeGridPanel.js:499
 msgid "Please enter the name of the new folder:"
-msgstr "Введите имя новой папки:"
+msgstr ""
 
 #: js/NodeGridPanel.js:503
 msgid "No {0} added"
-msgstr "{0} не добавлен"
+msgstr ""
 
 #: Controller/Node.php:318
 msgid "My folders"
-msgstr "Мои папки"
+msgstr "Οι Φάκελοι μου"
 
 #: Controller/Node.php:325
 msgid "Shared folders"
-msgstr "Общие папки"
+msgstr "Κοινόχρηστοι Φάκελοι"
 
 #: Controller/Node.php:332
 msgid "Other users folders"
-msgstr "Папки других пользователей"
+msgstr ""

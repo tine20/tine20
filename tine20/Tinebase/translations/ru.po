@@ -1,13 +1,14 @@
 # 
 # Translators:
+# Aleksdem <aleksdem@aleksdem.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-04-19 06:23+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-06-20 19:32+0000\n"
+"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -175,7 +176,7 @@ msgstr ""
 
 #: Config.php:331
 msgid "User Configuration"
-msgstr ""
+msgstr "Настройки пользователя"
 
 #: Config.php:333
 msgid "User backend configuration."
@@ -183,11 +184,11 @@ msgstr ""
 
 #: Config.php:342
 msgid "Cronuser ID"
-msgstr ""
+msgstr "Идентификатор пользователя cron"
 
 #: Config.php:344
 msgid "User ID of the cron user."
-msgstr ""
+msgstr "Идентификатор пользователя cron"
 
 #: Config.php:352
 msgid "Title Postfix"
@@ -640,7 +641,7 @@ msgstr "около {0} минут"
 
 #: js/LoginPanel.js:205 js/LoginPanel.js:430
 msgid "Tine 2.0 needs your help"
-msgstr ""
+msgstr "Tine 2.0 нужна твоя помощь"
 
 #: js/LoginPanel.js:207 js/LoginPanel.js:432
 msgid ""
@@ -823,11 +824,11 @@ msgstr "Выход"
 
 #: js/MainMenu.js:146
 msgid "Logout from {0}"
-msgstr ""
+msgstr "Выход из {0}"
 
 #: js/MainMenu.js:153
 msgid "Allow desktop notifications"
-msgstr ""
+msgstr "Разрешить уведомления"
 
 #: js/MainMenu.js:154
 msgid "Request permissions for webkit desktop notifications."
@@ -993,11 +994,11 @@ msgstr "удалить"
 
 #: js/widgets/tags/TagToggleBox.js:52
 msgid "Detach Tags"
-msgstr ""
+msgstr "Удалить тэги"
 
 #: js/widgets/tags/TagToggleBox.js:52
 msgid "Attach Tags"
-msgstr ""
+msgstr "Добавить теги"
 
 #: js/widgets/tags/TagToggleBox.js:140
 msgid "No Tags to detach found in the selected records"
@@ -1009,7 +1010,7 @@ msgstr "Минуточку..."
 
 #: js/widgets/tags/TagToggleBox.js:152
 msgid "Detaching Tags"
-msgstr ""
+msgstr "Удаление тегов"
 
 #: js/widgets/tags/TagsPanel.js:105
 msgid "Add a new personal tag"
@@ -1149,7 +1150,7 @@ msgstr "Выбрать тег"
 
 #: js/widgets/tags/TagsMassAttachAction.js:128
 msgid "Attaching Tag"
-msgstr ""
+msgstr "Добавить тег"
 
 #: js/widgets/tags/TagFilter.js:30 js/Models.js:141
 msgid "Tag"
@@ -1160,11 +1161,11 @@ msgstr[2] "Теги"
 
 #: js/widgets/tags/TagsMassDetachAction.js:18
 msgid "Detach tag(s)"
-msgstr ""
+msgstr "Удалить тег(и)"
 
 #: js/widgets/tags/TagsMassDetachAction.js:84
 msgid "Select Tag(s) to detach"
-msgstr ""
+msgstr "Выбрать тег(и) для удаления"
 
 #: js/widgets/tags/TagCombo.js:46
 msgid "tag name"
@@ -1194,7 +1195,7 @@ msgstr "Удалить запись"
 #: js/widgets/grid/FilterModelMultiSelect.js:214
 #: js/widgets/container/FilterModel.js:249
 msgid "Selected  {0}"
-msgstr ""
+msgstr "Выбрано {0}"
 
 #: js/widgets/grid/PickerGridPanel.js:296
 msgid "Search for records ..."
@@ -1376,11 +1377,11 @@ msgstr "Удалить файл"
 
 #: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:116
 msgid "Pause upload"
-msgstr ""
+msgstr "Приостановить загрузку"
 
 #: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:100
 msgid "Resume upload"
-msgstr ""
+msgstr "Продолжить загрузку"
 
 #: js/widgets/grid/FileUploadGrid.js:244
 msgid "Add file"
@@ -1470,7 +1471,7 @@ msgstr ""
 
 #: js/widgets/grid/FilterStructureTreePanel.js:55
 msgid "Add alternative filter"
-msgstr ""
+msgstr "Добавить другой фильтр"
 
 #: js/widgets/grid/FilterStructureTreePanel.js:61
 msgid "Remove Filter"
@@ -1486,13 +1487,13 @@ msgstr ""
 #: js/widgets/grid/GridPanel.js:475 js/widgets/grid/GridPanel.js:476
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Редактировать {0}"
+msgstr[1] "Редактировать {0}"
+msgstr[2] "Редактировать {0}"
 
 #: js/widgets/grid/GridPanel.js:489 js/widgets/dialog/EditDialog.js:484
 msgid "Copy {0}"
-msgstr ""
+msgstr "Копировать {0}"
 
 #: js/widgets/grid/GridPanel.js:500 js/widgets/tree/ContextMenu.js:35
 msgid "Add {0}"
@@ -1672,7 +1673,7 @@ msgstr "Свойства {0}"
 
 #: js/widgets/tree/ContextMenu.js:78
 msgid "Set {0} color"
-msgstr ""
+msgstr "Выбрать {0} цвет"
 
 #: js/widgets/tree/ContextMenu.js:92
 msgid "Reload {0}"
@@ -1684,7 +1685,7 @@ msgstr "Изменить свойства"
 
 #: js/widgets/tree/ContextMenu.js:124
 msgid "Download"
-msgstr ""
+msgstr "Загрузка"
 
 #: js/widgets/tree/ContextMenu.js:185
 msgid "New {0}"
@@ -1732,7 +1733,7 @@ msgstr "Выберите файл и формат"
 
 #: js/widgets/dialog/ImportDialog.js:232
 msgid "Choose Import File"
-msgstr ""
+msgstr "Выбрать файл для импорта"
 
 #: js/widgets/dialog/ImportDialog.js:236
 msgid ""
@@ -1765,11 +1766,11 @@ msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:283 js/widgets/dialog/ImportDialog.js:315
 msgid "Download example file"
-msgstr ""
+msgstr "Загрузить файл для примера"
 
 #: js/widgets/dialog/ImportDialog.js:286
 msgid "Import description"
-msgstr ""
+msgstr "Импортировать описание"
 
 #: js/widgets/dialog/ImportDialog.js:336
 msgid "Set Import Options"
@@ -1781,11 +1782,11 @@ msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:396
 msgid "Checking Import"
-msgstr ""
+msgstr "Проверить импорт"
 
 #: js/widgets/dialog/ImportDialog.js:425
 msgid "Resolve Conflicts"
-msgstr ""
+msgstr "Разрешить конфликты"
 
 #: js/widgets/dialog/ImportDialog.js:434
 msgid "There are {0} {1} that might already exist."
@@ -1817,7 +1818,7 @@ msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:456
 msgid "Resolve all conflicts"
-msgstr ""
+msgstr "Разрешить все конфликты"
 
 #: js/widgets/dialog/ImportDialog.js:550
 msgid "Processing Conflict Data"
@@ -1974,15 +1975,15 @@ msgstr ""
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:223
 msgid "First {0}"
-msgstr ""
+msgstr "Первый {0}"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:224
 msgid "Second {0}"
-msgstr ""
+msgstr "Второй {0}"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:225
 msgid "Final {0}"
-msgstr ""
+msgstr "Последний {0}"
 
 #: js/widgets/dialog/PreferencesPanel.js:185
 msgid "There are no preferences for this application."
@@ -1998,7 +1999,7 @@ msgstr ""
 #: js/widgets/dialog/MultiOptionsDialog.js:141
 #: js/widgets/dialog/FileListDialog.js:32
 msgid "You need to select an option!"
-msgstr ""
+msgstr "Вам нужно выбрать опцию!"
 
 #: js/widgets/dialog/FileListDialog.js:91
 msgid "No"
@@ -2047,7 +2048,7 @@ msgstr "Редактировать {0} \"{1}\""
 
 #: js/widgets/dialog/EditDialog.js:553
 msgid "Transferring {0}..."
-msgstr ""
+msgstr "Передано {0}..."
 
 #: js/widgets/dialog/EditDialog.js:698
 msgid "Do you really want to delete this {0}?"
@@ -2093,7 +2094,7 @@ msgstr[2] "Экспорт"
 
 #: js/widgets/dialog/ExportDialog.js:84
 msgid "Export {0} {1}"
-msgstr ""
+msgstr "Экспортировано {0} {1}"
 
 #: js/widgets/dialog/ExportDialog.js:111
 msgid "Export definition"
@@ -2114,7 +2115,7 @@ msgstr "Отменить изменения для выделенных запи
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:487
 msgid "Edit {0} {1}"
-msgstr ""
+msgstr "Редактировать {0} {1}"
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:540
 msgid "Different Values"
@@ -2156,7 +2157,7 @@ msgstr "Завершить"
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:41
 msgid "The record you try to add might already exist."
-msgstr ""
+msgstr "Запись, которую вы пытаетесь добавить, уже существует."
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:132
 msgid "Field Group"
@@ -2192,7 +2193,7 @@ msgstr ""
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:198
 msgid "Keep both records"
-msgstr ""
+msgstr "Оставить обе записи"
 
 #: js/widgets/TimezoneChooser.js:77
 msgid "setting new timezone..."
@@ -2361,11 +2362,11 @@ msgstr "Поиск группы"
 
 #: js/widgets/account/PickerGridPanel.js:170
 msgid "Add Anyone"
-msgstr ""
+msgstr "Добавить кого-нибудь"
 
 #: js/widgets/account/PickerGridPanel.js:213
 msgid "Anyone"
-msgstr ""
+msgstr "Кто-нибудь"
 
 #: js/widgets/account/PickerGridPanel.js:229
 msgid "Search for users ..."
@@ -2434,7 +2435,7 @@ msgstr "Свойства"
 
 #: js/widgets/container/PropertiesDialog.js:119
 msgid "My Grants"
-msgstr ""
+msgstr "Мои права"
 
 #: js/widgets/container/TreePanel.js:142
 msgid "container"
@@ -2445,7 +2446,7 @@ msgstr[2] "контейнеров"
 
 #: js/widgets/container/TreePanel.js:546
 msgid "You are not allowed to select the {0} '{1}':"
-msgstr ""
+msgstr "Вы не можете выбрать {0} '{1}':"
 
 #: js/widgets/container/TreePanel.js:547
 msgid "{0} grant is required for desired action"
@@ -2481,7 +2482,7 @@ msgstr ""
 
 #: js/widgets/container/GrantsGrid.js:53
 msgid "Sync"
-msgstr ""
+msgstr "Синхронизация"
 
 #: js/widgets/container/GrantsGrid.js:54
 msgid "The grant to synchronise records with this container"
@@ -2497,7 +2498,7 @@ msgstr ""
 
 #: js/widgets/container/GrantsGrid.js:58
 msgid "Free Busy"
-msgstr ""
+msgstr "Свободен/Занят"
 
 #: js/widgets/container/GrantsGrid.js:59
 msgid "The grant to access free busy information of events in this calendar"
@@ -2529,7 +2530,7 @@ msgstr "Сохранить конфигурацию"
 
 #: js/widgets/form/ConfigPanel.js:264
 msgid "Reload config"
-msgstr ""
+msgstr "Перезагрузить настройки"
 
 #: js/widgets/form/FileUploadButton.js:65
 msgid "Wrong File Type"
@@ -2642,7 +2643,7 @@ msgstr ""
 
 #: js/ux/Percentage.js:190
 msgid "(paused)"
-msgstr ""
+msgstr "(приостановлено)"
 
 #: js/ux/SearchField.js:44
 msgid "enter searchfilter"
@@ -2666,7 +2667,7 @@ msgstr "Инвертировать выбор"
 
 #: js/ux/ConnectionStatus.js:56
 msgid "online"
-msgstr "онлайн"
+msgstr "в сети"
 
 #: js/ux/ConnectionStatus.js:57
 msgid "offline"
@@ -2751,13 +2752,13 @@ msgstr[2] "Отделы"
 #: js/Models.js:447
 msgid "Config"
 msgid_plural "Configs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Настройки"
+msgstr[1] "Настройки"
+msgstr[2] "Настройки"
 
 #: js/Models.js:447
 msgid "Configs"
-msgstr ""
+msgstr "Настройки"
 
 #: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."
