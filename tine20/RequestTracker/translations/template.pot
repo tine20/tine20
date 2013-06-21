@@ -13,6 +13,12 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: js/Model.js:41 js/TicketGridPanel.js:42
+msgid "Ticket"
+msgid_plural "Tickets"
+msgstr[0] ""
+msgstr[1] ""
+
 #: js/StatusCombo.js:25
 msgid "New"
 msgstr ""
@@ -49,16 +55,6 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: js/TreePanel.js:23
-msgid "All Queues"
-msgstr ""
-
-#: js/Model.js:41 js/TicketGridPanel.js:42
-msgid "Ticket"
-msgid_plural "Tickets"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/TicketGridPanel.js:43 js/TicketGridPanel.js:68
 msgid "Ticket ID"
 msgstr ""
@@ -89,4 +85,8 @@ msgstr ""
 
 #: js/TicketGridPanel.js:107
 msgid "Due"
+msgstr ""
+
+#: js/TreePanel.js:23
+msgid "All Queues"
 msgstr ""
