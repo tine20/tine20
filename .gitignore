@@ -20,3 +20,4 @@ scripts/syncuuids/conf.php
 tine20/*/translations/*.mo
 tine20/.htaccess
 tine20/vendor
+tine20/composer.lock
