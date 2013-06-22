@@ -1,4 +1,7 @@
 <?php
+
+use Sabre\VObject;
+
 /**
  * Tine 2.0
  *
@@ -36,13 +39,13 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * converts vcard to Addressbook_Model_Contact
      * 
-     * @param  Sabre_VObject_Component|stream|string  $_blob   the vcard to parse
+     * @param  Sabre\VObject\Component|stream|string  $_blob   the vcard to parse
      * @param  Tinebase_Record_Abstract               $_record  update existing contact
      * @return Addressbook_Model_Contact
      */
     public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
     {
-        if ($_blob instanceof Sabre_VObject_Component) {
+        if ($_blob instanceof VObject\Component) {
             $vcard = $_blob;
         } else {
             if (is_resource($_blob)) {
@@ -50,7 +53,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' vcard data: ' . $_blob);
-            $vcard = Sabre_VObject_Reader::read($_blob);
+            $vcard = VObject\Reader::read($_blob);
         }
         
         if ($_record instanceof Addressbook_Model_Contact) {
@@ -73,36 +76,39 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     $type = null;
                     foreach($property['TYPE'] as $typeProperty) {
                         // delete ,PREF added by eM Client
-                        $typeProperty = str_replace(",pref","",strtolower($typeProperty));
+                        $typeProperty = str_replace(",pref","",strtolower($typeProperty->value));
                         if (($typeProperty == 'home') || ($typeProperty == 'work')) {
                             $type = $typeProperty;
                             break;
                         }
                     }
                     
+                    $parts = $property->getParts();
+                    
                     if ($type == 'home') {
                         // home address
-                        $data['adr_two_street2']     = $property->value[1];
-                        $data['adr_two_street']      = $property->value[2];
-                        $data['adr_two_locality']    = $property->value[3];
-                        $data['adr_two_region']      = $property->value[4];
-                        $data['adr_two_postalcode']  = $property->value[5];
-                        $data['adr_two_countryname'] = $property->value[6];
+                        $data['adr_two_street2']     = $parts[1];
+                        $data['adr_two_street']      = $parts[2];
+                        $data['adr_two_locality']    = $parts[3];
+                        $data['adr_two_region']      = $parts[4];
+                        $data['adr_two_postalcode']  = $parts[5];
+                        $data['adr_two_countryname'] = $parts[6];
                     } elseif ($type == 'work') {
                         // work address
-                        $data['adr_one_street2']     = $property->value[1];
-                        $data['adr_one_street']      = $property->value[2];
-                        $data['adr_one_locality']    = $property->value[3];
-                        $data['adr_one_region']      = $property->value[4];
-                        $data['adr_one_postalcode']  = $property->value[5];
-                        $data['adr_one_countryname'] = $property->value[6];
+                        $data['adr_one_street2']     = $parts[1];
+                        $data['adr_one_street']      = $parts[2];
+                        $data['adr_one_locality']    = $parts[3];
+                        $data['adr_one_region']      = $parts[4];
+                        $data['adr_one_postalcode']  = $parts[5];
+                        $data['adr_one_countryname'] = $parts[6];
                     }
                     break;
                     
                 case 'CATEGORIES':
                     $tags = $property->value;
                     
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($tags, true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' cardData ' . print_r($tags, true));
                     break;
                     
                 case 'EMAIL':
@@ -114,13 +120,13 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     break;
                     
                 case 'N':
-                    #$components = Sabre_VObject_Property::splitCompoundValues($property->value);
+                    $parts = $property->getParts();
                     
-                    $data['n_family'] = $property->value[0];
-                    $data['n_given']  = $property->value[1];
-                    $data['n_middle'] = isset($property->value[2]) ? $property->value[2] : null;
-                    $data['n_prefix'] = isset($property->value[3]) ? $property->value[3] : null;
-                    $data['n_suffix'] = isset($property->value[4]) ? $property->value[4] : null;
+                    $data['n_family'] = $parts[0];
+                    $data['n_given']  = $parts[1];
+                    $data['n_middle'] = isset($parts[2]) ? $parts[2] : null;
+                    $data['n_prefix'] = isset($parts[3]) ? $parts[3] : null;
+                    $data['n_suffix'] = isset($parts[4]) ? $parts[4] : null;
                     break;
                     
                 case 'NOTE':
@@ -128,10 +134,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     break;
                     
                 case 'ORG':
-                    #$components = Sabre_VObject_Property::splitCompoundValues($property->value);
+                    $parts = $property->getParts();
                     
-                    $data['org_name'] = $property->value[0];
-                    $data['org_unit'] = isset($property->value[1]) ? $property->value[1] : null;
+                    $data['org_name'] = $parts[0];
+                    $data['org_unit'] = isset($parts[1]) ? $parts[1] : null;
                     break;
                     
                 case 'PHOTO':
@@ -164,12 +170,14 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     break;
                     
                 default:
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . $property->name);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' cardData ' . $property->name);
                     break;
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($data, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' data ' . print_r($data, true));
         
         if (empty($data['n_family'])) {
             $parts = explode(' ', $data['n_fn']);
@@ -179,7 +187,8 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         
         $contact->setFromArray($data);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($contact->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' data ' . print_r($contact->toArray(), true));
         
         return $contact;
     }
@@ -198,9 +207,9 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * parse telephone
      * 
      * @param array $data
-     * @param Sabre_VObject_Element $property
+     * @param Sabre\VObject\Property $property
      */
-    protected function _toTine20ModelParseTel(&$data, $property)
+    protected function _toTine20ModelParseTel(&$data, VObject\Property $property)
     {
         $telField = null;
         $types    = array();
@@ -252,9 +261,9 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * parse email
      * 
      * @param array $_data
-     * @param Sabre_VObject_Element $_property
+     * @param Sabre\VObject\Property $_property
      */
-    protected function _toTine20ModelParseEmail(&$_data, $_property)
+    protected function _toTine20ModelParseEmail(&$_data, VObject\Property $_property)
     {
         $type = null;
         foreach ($_property['TYPE'] as $typeProperty) {
@@ -288,9 +297,9 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * parse birthday
      * 
      * @param array $data
-     * @param Sabre_VObject_Element $property
+     * @param Sabre\VObject\Property $property
      */
-    protected function _toTine20ModelParseBday(&$_data, $_property)
+    protected function _toTine20ModelParseBday(&$_data, VObject\Property $_property)
     {
     }
 }

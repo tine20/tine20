@@ -1,4 +1,7 @@
 <?php
+
+use Sabre\VObject;
+
 /**
  * Tine 2.0
  *
@@ -6,8 +9,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Pawassarat <tomp@topanet.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2013-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -81,86 +83,100 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
      * converts Addressbook_Model_Contact to vcard
      * 
      * @param  Addressbook_Model_Contact  $_record
-     * @return Sabre_VObject_Component
+     * @return Sabre\VObject\Component
      */
     public function fromTine20Model(Tinebase_Record_Abstract $_record)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_record->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_record->toArray(), true));
         
-        $card = new Sabre_VObject_Component('VCARD');
+        $card = new VObject\Component('VCARD');
         
         // required vcard fields
-        $card->add(new Sabre_VObject_Property('VERSION', '3.0'));
-        $card->add(new Sabre_VObject_Property('FN', $_record->n_fileas));
-        $card->add(new Sabre_VObject_Element_MultiValue('N', array($_record->n_family, $_record->n_given, $_record->n_middle, $_record->n_prefix, $_record->n_suffix)));
+        $card->VERSION = '3.0';
+        $card->FN = $_record->n_fileas;
         
-        $card->add(new Sabre_VObject_Property('PRODID', '-//tine20.org//Tine 2.0//EN'));
-        $card->add(new Sabre_VObject_Property('UID', $_record->getId()));
+        $card->N = new VObject\Property\Compound('N');
+        $card->N->setParts(array($_record->n_family, $_record->n_given, $_record->n_middle, $_record->n_prefix, $_record->n_suffix));
+        
+        $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
+        $card->add(new VObject\Property('PRODID', "-//tine20.org//Tine 2.0 Addressbook V$version//EN"));
+        $card->add(new VObject\Property('UID', $_record->getId()));
 
         // optional fields
-        $card->add(new Sabre_VObject_Element_MultiValue('ORG', array($_record->org_name, $_record->org_unit)));
-        $card->add(new Sabre_VObject_Property('TITLE', $_record->title));
+        $org = new VObject\Property\Compound('ORG');
+        $org->setParts(array($_record->org_name, $_record->org_unit));
+        $card->add($org);
         
-        $tel = new Sabre_VObject_Property('TEL', $_record->tel_work);
+        $card->add(new VObject\Property('TITLE', $_record->title));
+        
+        $tel = new VObject\Property('TEL', $_record->tel_work);
         $tel->add('TYPE', 'WORK');
         $tel->add('TYPE', 'VOICE');
         $card->add($tel);
         
-        $tel = new Sabre_VObject_Property('TEL', $_record->tel_home);
+        $tel = new VObject\Property('TEL', $_record->tel_home);
         $tel->add('TYPE', 'HOME');
         $tel->add('TYPE', 'VOICE');
         $card->add($tel);
         
-        $tel = new Sabre_VObject_Property('TEL', $_record->tel_cell);
+        $tel = new VObject\Property('TEL', $_record->tel_cell);
         $tel->add('TYPE', 'CELL');
         $card->add($tel);
         
-        $tel = new Sabre_VObject_Property('TEL', $_record->tel_cell_private);
+        $tel = new VObject\Property('TEL', $_record->tel_cell_private);
         $tel->add('TYPE', 'OTHER');
         $card->add($tel);
         
-        $tel = new Sabre_VObject_Property('TEL', $_record->tel_fax);
+        $tel = new VObject\Property('TEL', $_record->tel_fax);
         $tel->add('TYPE', 'WORK');
         $tel->add('TYPE', 'FAX');
         $card->add($tel);
         
-        $tel = new Sabre_VObject_Property('TEL', $_record->tel_fax_home);
+        $tel = new VObject\Property('TEL', $_record->tel_fax_home);
         $tel->add('TYPE', 'HOME');
         $tel->add('TYPE', 'FAX');
         $card->add($tel);
         
-        $adr = new Sabre_VObject_Element_MultiValue('ADR', array(null, $_record->adr_one_street2, $_record->adr_one_street, $_record->adr_one_locality, $_record->adr_one_region, $_record->adr_one_postalcode, $_record->adr_one_countryname));
+        $adr = new VObject\Property\Compound('ADR');
+        $adr->setParts(array(null, $_record->adr_one_street2, $_record->adr_one_street, $_record->adr_one_locality, $_record->adr_one_region, $_record->adr_one_postalcode, $_record->adr_one_countryname));
         $adr->add('TYPE', 'WORK');
         $card->add($adr);
         
-        $adr = new Sabre_VObject_Element_MultiValue('ADR', array(null, $_record->adr_two_street2, $_record->adr_two_street, $_record->adr_two_locality, $_record->adr_two_region, $_record->adr_two_postalcode, $_record->adr_two_countryname));
+        $adr = new VObject\Property\Compound('ADR');
+        $adr->setParts(array(null, $_record->adr_two_street2, $_record->adr_two_street, $_record->adr_two_locality, $_record->adr_two_region, $_record->adr_two_postalcode, $_record->adr_two_countryname));
         $adr->add('TYPE', 'HOME');
         $card->add($adr);
         
-        $email = new Sabre_VObject_Property('EMAIL', $_record->email);
+        $email = new VObject\Property('EMAIL', $_record->email);
         $email->add('TYPE', 'PREF');
         $card->add($email);
         
-        $email = new Sabre_VObject_Property('EMAIL', $_record->email_home);
+        $email = new VObject\Property('EMAIL', $_record->email_home);
         $card->add($email);
         
-        $card->add(new Sabre_VObject_Property('URL;TYPE=work', $_record->url));
-        $card->add(new Sabre_VObject_Property('URL;TYPE=home', $_record->url_home));
+        $url = new VObject\Property('URL', $_record->url);
+        $url->add('TYPE', 'WORK');
+        $card->add($url);
         
-        $card->add(new Sabre_VObject_Property('NOTE', $_record->note));
+        $url = new VObject\Property('URL', $_record->url_home);
+        $url->add('TYPE', 'HOME');
+        $card->add($url);
+                
+        $card->add(new VObject\Property('NOTE', $_record->note));
         
         if ($_record->bday instanceof Tinebase_DateTime) {
             $date = $_record->bday;
             $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
             $date = $date->format('Y-m-d');
-            $card->add(new Sabre_VObject_Property('BDAY', $date));
+            $card->add(new VObject\Property('BDAY', $date));
         }
         
         if(! empty($_record->jpegphoto)) {
             try {
                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_record->getId());
                 $jpegData = $image->getBlob('image/jpeg');
-                $photo = new Sabre_VObject_Property('PHOTO', $jpegData);
+                $photo = new VObject\Property('PHOTO', $jpegData);
                 $photo->add('ENCODING', 'b');
                 $photo->add('TYPE', 'JPEG');
                 $card->add($photo);
@@ -170,16 +186,24 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
         
         
         }
-        if(isset($_record->tags) && count($_record->tags) > 0) {
-            $card->add(new Sabre_VObject_Property('CATEGORIES', Sabre_VObject_Element_List((array) $_record->tags->name)));
+        
+        // categories
+        if (isset($_record->tags) && count($_record->tags) > 0) {
+            $card->CATEGORIES = VObject\Property::create('CATEGORIES');
+            $card->CATEGORIES->setParts((array) $_record->tags->name);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' card ' . $card->serialize());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' card ' . $card->serialize());
         
         return $card;
     }
     
-    protected function _toTine20ModelParseEmail(&$_data, $_property)
+    /**
+     * (non-PHPdoc)
+     * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseEmail()
+     */
+    protected function _toTine20ModelParseEmail(&$_data, VObject\Property $_property)
     {
         $type = null;
         if (isset($_property['TYPE'])) {
@@ -203,7 +227,11 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
         }
     }
     
-    protected function _toTine20ModelParseTel(&$_data, $_property)
+    /**
+     * (non-PHPdoc)
+     * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseTel()
+     */
+    protected function _toTine20ModelParseTel(&$_data, VObject\Property $_property)
     {
         $telField = null;
         $types    = array();
@@ -249,9 +277,9 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
      * parse birthday
      * 
      * @param array $data
-     * @param Sabre_VObject_Element $property
+     * @param Sabre\VObject\Property $property
      */
-    protected function _toTine20ModelParseBday(&$_data, $_property)
+    protected function _toTine20ModelParseBday(&$_data, VObject\Property $_property)
     {
         $tzone = new DateTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_data['bday'] = new Tinebase_DateTime($_property->value, $tzone);

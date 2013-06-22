@@ -115,7 +115,9 @@ class Addressbook_Convert_Contact_VCard_EMClientTest extends PHPUnit_Framework_T
         
         // required fields
         $this->assertContains('VERSION:3.0', $vcard, $vcard);
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0//EN', $vcard, $vcard);
+        
+        $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
+        $this->assertContains("PRODID:-//tine20.org//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
         
         // @todo can not test for folded lines
         $this->assertContains('ADR;TYPE=HOME:;;Address Privat;City Privat;;98765;COUNTRY PRIVAT', $vcard, $vcard);

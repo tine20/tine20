@@ -114,12 +114,13 @@ class Addressbook_Convert_Contact_VCard_SogoTest extends PHPUnit_Framework_TestC
         $contact = $this->testConvertToTine20Model();
         
         $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO);
-        
         $vcard = $converter->fromTine20Model($contact)->serialize();
         
         // required fields
         $this->assertContains('VERSION:3.0', $vcard, $vcard);
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0//EN', $vcard, $vcard);
+        
+        $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
+        $this->assertContains("PRODID:-//tine20.org//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
         
         // @todo can not test for folded lines
         $this->assertContains('ADR;TYPE=HOME:;Address Privat 2;Address Privat 1;City Privat;Region Privat;', $vcard, $vcard);
@@ -137,6 +138,6 @@ class Addressbook_Convert_Contact_VCard_SogoTest extends PHPUnit_Framework_TestC
         $this->assertContains('TITLE:Titel', $vcard, $vcard);
         $this->assertContains('URL;TYPE=WORK:http://www.tine20.com', $vcard, $vcard);
         $this->assertContains('URL;TYPE=HOME:http://www.tine20.org', $vcard, $vcard);
-        #$this->assertContains('BDAY:1975-01-16', $vcard, $vcard);
+        $this->assertContains('BDAY:1975-01-16', $vcard, $vcard);
     }
 }

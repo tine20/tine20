@@ -60,13 +60,15 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
     }
     
     /**
-     * test converting vcard from sogo connector to Addressbook_Model_Contact 
+     * test converting vcard from sogo connector to Addressbook_Model_Contact
+     * 
+     * @return Addressbook_Model_Contact
      */
     public function testConvertToTine20Model()
     {
         $vcardStream = fopen(dirname(__FILE__) . '/../../../Import/files/sogo_connector.vcf', 'r');
         
-        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO);
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC);
         
         $contact = $converter->toTine20Model($vcardStream);
         
@@ -101,7 +103,40 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         $this->assertEquals('+49 PAGER',               $contact->tel_pager);
         $this->assertEquals('+49 BUSINESS',            $contact->tel_work);
         $this->assertEquals('Titel',                   $contact->title);
-        $this->assertEquals('http://www.tine20.com',   $contact->url);
-        $this->assertEquals('http://www.tine20.org',   $contact->url_home);
-    }            
+        $this->assertEquals('http\://www.tine20.com',  $contact->url);
+        $this->assertEquals('http\://www.tine20.org',  $contact->url_home);
+        
+        return $contact;
+    }
+    
+    public function testConvertToVCard()
+    {
+        $contact = $this->testConvertToTine20Model();
+        
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC);
+        $vcard = $converter->fromTine20Model($contact)->serialize();
+        
+        // required fields
+        $this->assertContains('VERSION:3.0', $vcard, $vcard);
+        
+        $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
+        $this->assertContains("PRODID:-//tine20.org//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
+        
+        // @todo can not test for folded lines
+        $this->assertContains('ADR;TYPE=HOME:;Address Privat 2;Address Privat 1;City Privat;Region Privat;', $vcard, $vcard);
+        $this->assertContains('ADR;TYPE=WORK:;Address Business 2;Address Business 1;City Business;Region B', $vcard, $vcard);
+        $this->assertContains('EMAIL;TYPE=HOME:lars@kneschke.de', $vcard, $vcard);
+        $this->assertContains('EMAIL;TYPE=WORK:l.kneschke@metaways.de', $vcard, $vcard);
+        $this->assertContains('N:Kneschke;Lars', $vcard, $vcard);
+        $this->assertContains('NOTE:Notes\nwith\nLine Break', $vcard, $vcard);
+        $this->assertContains('ORG:Organisation;Business Unit', $vcard, $vcard);
+        $this->assertContains('TEL;TYPE=CELL;TYPE=WORK:+49 MOBIL', $vcard, $vcard);
+        $this->assertContains('TEL;TYPE=FAX;TYPE=WORK:+49 FAX', $vcard, $vcard);
+        $this->assertContains('TEL;TYPE=HOME:+49 PRIVAT', $vcard, $vcard);
+        $this->assertContains('TEL;TYPE=WORK:+49 BUSINESS', $vcard, $vcard);
+        $this->assertContains('TITLE:Titel', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=WORK:http\\\\://www.tine20.com', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=HOME:http\\\\://www.tine20.org', $vcard, $vcard);
+    }
+    
 }

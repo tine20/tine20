@@ -21,6 +21,7 @@ EMAIL;TYPE=home:lars@kneschke.de
 URL;TYPE=work:http\://www.tine20.com
 URL;TYPE=home:http\://www.tine20.org
 TITLE:Titel
+CATEGROIES:Tag1,Tag2
 BDAY:1975-01-16
 NOTE:Notes\nwith\nLine Break
 END:VCARD
