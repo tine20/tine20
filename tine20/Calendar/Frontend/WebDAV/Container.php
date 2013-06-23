@@ -1,4 +1,7 @@
 <?php
+
+use Sabre\VObject;
+
 /**
  * Tine 2.0
  *
@@ -6,8 +9,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -259,7 +261,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, Tinebase_Core::getUser()->getId());
 
         // create vcalendar object with timezone information
-        $vcalendar = new Sabre_VObject_Component('CALENDAR');
+        $vcalendar = new VObject\Component('CALENDAR');
         $vcalendar->add(new Sabre_VObject_Component_VTimezone($timezone));
         
         // Taking out \r to not screw up the xml output

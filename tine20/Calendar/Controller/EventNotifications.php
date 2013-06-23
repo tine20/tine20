@@ -1,11 +1,14 @@
 <?php
+
+use Sabre\VObject;
+
 /**
  * Calendar Event Notifications
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -345,7 +348,7 @@
                     foreach($vcalendar->children() as $component) {
                         if ($component->name == 'VEVENT') {
                             if (isset($component->{'ORGANIZER'})) {
-                                $component->{'ORGANIZER'}->add(new  Sabre_VObject_Parameter('SEND-BY', 'mailto:' . $_updater->accountEmailAddress));
+                                $component->{'ORGANIZER'}->add(new VObject\Parameter('SEND-BY', 'mailto:' . $_updater->accountEmailAddress));
                             }
                         }
                     }
