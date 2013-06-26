@@ -415,5 +415,41 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, $result['totalcount'], 'One Record should have been found where cf-record is not set (Rainer Blütenrein)');
         $this->assertEquals('Rainer', $result['results'][0]['n_given'], 'The Record should be Rainer Blütenrein');
+        
+        // search using the same cf filter in an or - filter
+        
+        $contract2 = Sales_Controller_Contract::getInstance()->create(
+            new Sales_Model_Contract(
+                array(
+                    'number' => Tinebase_Record_Abstract::generateUID(10),
+                    'title' => Tinebase_Record_Abstract::generateUID(10),
+                    'container_id' => Tinebase_Container::getInstance()->getDefaultContainer('Sales_Model_Contract')->getId()
+                )
+            )
+        );
+        $contact2->customfields = array($cf->name => $contract2->getId());
+        $contact2 = Addressbook_Controller_Contact::getInstance()->update($contact2, false);
+        
+        $result = $json->searchContacts(array(
+            array("condition" => "OR",
+                "filters" => array(
+                    array("condition" => "AND", 
+                        "filters" => array(
+                            array("field" => "customfield", "operator" => "equals", "value" => array("cfId" => $cf->getId(), "value" => $contract->getId())),
+                        )
+                    ),
+                    array("condition" => "AND", 
+                        "filters" => array(
+                            array("field" => "customfield", "operator" => "equals", "value" => array("cfId" => $cf->getId(), "value" => $contract2->getId())),
+                        )
+                    )
+                )
+            )
+        ), array());
+        
+        $this->assertEquals(2, $result['totalcount'], 'Rainer and Rita should have been found.');
+        
+        $this->assertEquals('Blütenrein', $result['results'][0]['n_family'], 'Rainer and Rita should have been found.');
+        $this->assertEquals('Blütenrein', $result['results'][1]['n_family'], 'Rainer and Rita should have been found.');
     }
 }
