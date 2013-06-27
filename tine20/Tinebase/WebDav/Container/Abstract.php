@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection implements Sabre_DAV_IProperties, Sabre_DAVACL_IACL
+abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection implements Sabre\DAV\IProperties, Sabre\DAVACL\IACL
 {
     /**
      * the current application object
@@ -57,7 +57,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
      *
      * @param string $name
      * @param resource $vcardData
-     * @return Sabre_DAV_File
+     * @return Sabre\DAV\File
      */
     public function createFile($name, $vobjectData = null) 
     {
@@ -65,19 +65,19 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
         
         $object = $objectClass::create($this->_container, $name, $vobjectData);
         
-        // avoid sending headers during unit tests
-        if (php_sapi_name() != 'cli') {
-            // @todo this belongs to DAV_Server, but is currently not supported
-            header('ETag: ' . $object->getETag());
-            #header('Location: /' . $object->getName());
-        }
+        #// avoid sending headers during unit tests
+        #if (php_sapi_name() != 'cli') {
+        #    // @todo this belongs to DAV_Server, but is currently not supported
+        #    header('ETag: ' . $object->getETag());
+        #    #header('Location: /' . $object->getName());
+        #}
         
-        return $object;
+        return $object->getETag();
     }
     
     /**
      * (non-PHPdoc)
-     * @see Sabre_DAV_Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($_name)
     {
@@ -102,7 +102,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
             $object = $this->_getController()->search($filter, null, false, false, 'sync')->getFirstRecord();
             
             if ($object == null) {
-                throw new Sabre_DAV_Exception_FileNotFound('Object not found');
+                throw new Sabre\DAV\Exception\NotFound('Object not found');
             }
         }
         
@@ -114,7 +114,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
     /**
      * Returns an array with all the child nodes
      *
-     * @return Sabre_DAV_INode[]
+     * @return Sabre\DAV\INode[]
      */
     function getChildren()
     {
@@ -290,7 +290,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
      */
     public function setACL(array $acl)
     {
-        throw new Sabre_DAV_Exception_MethodNotAllowed('Changing ACL is not yet supported');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
     
     /**
@@ -357,5 +357,13 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre_DAV_Collection i
         $id = ($pos = strrpos($_name, '.')) === false ? $_name : substr($_name, 0, $pos);
         
         return $id;
+    }
+    
+    /**
+     * 
+     */
+    public function getSupportedPrivilegeSet()
+    {
+        return null;
     }
 }

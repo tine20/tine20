@@ -1,13 +1,16 @@
 <?php
+
+use Sabre\DAV;
+use Sabre\DAVACL;
+
 /**
  * Tine 2.0
  * 
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * 
  */
 
 /**
@@ -28,7 +31,7 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
     protected $_body;
     
    /**
-    * @var Sabre_DAV_Server
+    * @var Sabre\DAV\Server
     */
     protected static $_server;
     
@@ -93,7 +96,7 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
             rewind($this->_body);
         }
         
-        self::$_server = new Sabre_DAV_Server(new Tinebase_WebDav_Root());
+        self::$_server = new DAV\Server(new Tinebase_WebDav_Root());
         self::$_server->httpRequest->setBody($this->_body);
         
         // compute base uri
@@ -101,23 +104,25 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
         
         $tempDir = Tinebase_Core::getTempDir();
         if (!empty($tempDir)) {
-            $lockBackend = new Sabre_DAV_Locks_Backend_File($tempDir . '/webdav.lock');
-            $lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
-            self::$_server->addPlugin($lockPlugin);
+            self::$_server->addPlugin(
+                new DAV\Locks\Plugin(new DAV\Locks\Backend\File($tempDir . '/webdav.lock'))
+            );
         }
         
-        $authPlugin = new Sabre_DAV_Auth_Plugin(new Tinebase_WebDav_Auth(), null);
-        self::$_server->addPlugin($authPlugin);
+        self::$_server->addPlugin(
+            new DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
+        );
         
-        $aclPlugin = new Sabre_DAVACL_Plugin();
+        $aclPlugin = new DAVACL\Plugin();
         $aclPlugin->defaultUsernamePath = 'principals/users';
         $aclPlugin->principalCollectionSet = array($aclPlugin->defaultUsernamePath/*, 'principals/groups'*/);
         self::$_server->addPlugin($aclPlugin);
         
-        self::$_server->addPlugin(new Sabre_CardDAV_Plugin());
-        self::$_server->addPlugin(new Sabre_CalDAV_Plugin());
-        self::$_server->addPlugin(new Sabre_CalDAV_Schedule_Plugin());
-        self::$_server->addPlugin(new Sabre_DAV_Browser_Plugin());
+        self::$_server->addPlugin(new Sabre\CardDAV\Plugin());
+        self::$_server->addPlugin(new Sabre\CalDAV\Plugin());
+        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginAutoSchedule());
+        #self::$_server->addPlugin(new DAV\Sync\Plugin());
+        self::$_server->addPlugin(new DAV\Browser\Plugin());
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             ob_start();
@@ -136,11 +141,11 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
    /**
     * helper to return request
     *
-    * @return Sabre_HTTP_Request
+    * @return Sabre\HTTP\Request
     */
     public static function getRequest()
     {
-        return self::$_server ? self::$_server->httpRequest : new Sabre_HTTP_Request();
+        return self::$_server ? self::$_server->httpRequest : new Sabre\HTTP\Request();
     }
     
     /**

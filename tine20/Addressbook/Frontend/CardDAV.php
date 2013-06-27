@@ -1,4 +1,8 @@
 <?php
+
+use Sabre\DAV;
+use Sabre\DAVACL;
+
 /**
  * Tine 2.0
  *
@@ -6,8 +10,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -16,7 +19,7 @@
  * @package     Addressbook
  * @subpackage  Frontend
  */
-class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre_DAV_IProperties, Sabre_DAVACL_IACL
+class Addressbook_Frontend_CardDAV extends DAV\Collection implements DAV\IProperties, DAVACL\IACL
 {
     /**
      * the current application object
@@ -51,7 +54,7 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
     
     /**
      * (non-PHPdoc)
-     * @see Sabre_DAV_Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($_name)
     {
@@ -66,14 +69,14 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
                 try {
                     $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerById($_name);
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                    throw new DAV\Exception\NotFound('Directory not found');
                 } catch (Tinebase_Exception_InvalidArgument $teia) {
                     // invalid container id provided
-                    throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                    throw new DAV\Exception\NotFound('Directory not found');
                 }
                 
                 if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
-                    throw new Sabre_DAV_Exception_FileNotFound('Directory permissions mismatch');
+                    throw new DAV\Exception\NotFound('Directory permissions mismatch');
                 }
                 
                 $objectClass = $this->_application->name . '_Frontend_WebDAV_Container';
@@ -83,7 +86,7 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
                 break;
             
             default:
-                throw new Sabre_DAV_Exception_FileNotFound('Child not found');
+                throw new DAV\Exception\NotFound('Child not found');
             
                 break;
         }
@@ -94,7 +97,7 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
     /**
      * Returns an array with all the child nodes
      *
-     * @return Sabre_DAV_INode[]
+     * @return Sabre\DAV\INode[]
      */
     function getChildren()
     {
@@ -112,7 +115,7 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
                 foreach ($containers as $container) {
                     try {
                         $children[] = $this->getChild($container);
-                    } catch (Sabre_DAV_Exception_FileNotFound $sdavfnf) {
+                    } catch (DAV\Exception\NotFound $defnf) {
                         // skip child => no read permissions
                     }
                 }
@@ -155,14 +158,14 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
         
         return array(
             array(
-                        'privilege' => '{DAV:}read',
-                        'principal' => $principal,
-                        'protected' => true,
+                'privilege' => '{DAV:}read',
+                'principal' => $principal,
+                'protected' => true,
             ),
             array(
-                        'privilege' => '{DAV:}write',
-                        'principal' => $principal,
-                        'protected' => true,
+                'privilege' => '{DAV:}write',
+                'principal' => $principal,
+                'protected' => true,
             )
         );
     
@@ -175,7 +178,7 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
      */
     public function getName()
     {
-        list(,$name) = Sabre_DAV_URLUtil::splitPath($this->_path);
+        list(,$name) = DAV\URLUtil::splitPath($this->_path);
         
         return $name;
     }
@@ -208,7 +211,7 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
         
         $children = array();
         
-        list(, $basename) = Sabre_DAV_URLUtil::splitPath($this->_path);
+        list(, $basename) = DAV\URLUtil::splitPath($this->_path);
         
         switch(count($pathParts)) {
             # path == /accountLoginName
@@ -231,7 +234,7 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
     
         foreach($requestedProperties as $prop) switch($prop) {
             case '{DAV:}owner' :
-                $response[$prop] = new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id);
+                $response[$prop] = new DAVACL\Property\Principal(DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id);
                 break;
                 
             default :
@@ -255,7 +258,7 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
      */
     public function setACL(array $acl)
     {
-        throw new Sabre_DAV_Exception_MethodNotAllowed('Changing ACL is not yet supported');
+        throw new DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
     
     /**
@@ -298,5 +301,13 @@ class Addressbook_Frontend_CardDAV extends Sabre_DAV_Collection implements Sabre
         return false;
         
         return $this->carddavBackend->updateAddressBook($this->addressBookInfo['id'], $mutations);
+    }
+    
+    /**
+     * 
+     */
+    public function getSupportedPrivilegeSet()
+    {
+        return null;
     }
 }

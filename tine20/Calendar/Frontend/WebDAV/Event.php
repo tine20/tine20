@@ -20,7 +20,7 @@ use Sabre\VObject;
  * @package     Calendar
  * @subpackage  Frontend
  */
-class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_CalDAV_ICalendarObject, Sabre_DAVACL_IACL
+class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\CalDAV\ICalendarObject, Sabre\DAVACL\IACL
 {
     /**
      * @var Tinebase_Model_Container
@@ -83,9 +83,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
             $vobjectData = stream_get_contents($vobjectData);
         }
         // Converting to UTF-8, if needed
-        $vobjectData = Sabre_DAV_StringUtil::ensureUTF8($vobjectData);
+        $vobjectData = Sabre\DAV\StringUtil::ensureUTF8($vobjectData);
         
-        Sabre_CalDAV_ICalendarUtil::validateICalendarObject($vobjectData, array('VEVENT', 'VFREEBUSY'));
+        #Sabre\CalDAV\ICalendarUtil::validateICalendarObject($vobjectData, array('VEVENT', 'VFREEBUSY'));
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
@@ -349,16 +349,16 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendat_Convert_Event_VCalendar_Factory for supported clients.");
-            throw new Sabre_DAV_Exception_Forbidden('Update denied for unknown client');
+            throw new Sabre\DAV\Exception\Forbidden('Update denied for unknown client');
         }
         
         if (is_resource($cardData)) {
             $cardData = stream_get_contents($cardData);
         }
         // Converting to UTF-8, if needed
-        $cardData = Sabre_DAV_StringUtil::ensureUTF8($cardData);
+        $cardData = Sabre\DAV\StringUtil::ensureUTF8($cardData);
         
-        Sabre_CalDAV_ICalendarUtil::validateICalendarObject($cardData, array('VEVENT', 'VFREEBUSY'));
+        #Sabre_CalDAV_ICalendarUtil::validateICalendarObject($cardData, array('VEVENT', 'VFREEBUSY'));
         
         $vobject = Calendar_Convert_Event_VCalendar_Abstract::getVcal($cardData);
         foreach ($vobject->children() as $component) {
@@ -416,7 +416,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         try {
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
-            throw new Sabre_DAV_Exception_PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
+            throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
         }
         
         // avoid sending headers during unit tests
@@ -473,7 +473,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
      */
     public function setACL(array $acl) 
     {
-        throw new Sabre_DAV_Exception_MethodNotAllowed('Changing ACL is not yet supported');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
     
     /**
@@ -518,5 +518,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre_DAV_File implements Sabre_Cal
         }
         
         return $this->_vevent->serialize();
+    }
+    
+    /**
+     * 
+     */
+    public function getSupportedPrivilegeSet()
+    {
+        return null;
     }
 }

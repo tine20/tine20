@@ -33,7 +33,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends PHPUnit_Framework_TestCase
      * @var Tinebase_WebDav_PrincipalBackend
      */
     protected $_backend;
-
+    
     /**
      * Runs the test methods of this class.
      *
@@ -45,7 +45,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends PHPUnit_Framework_TestCase
         $suite  = new PHPUnit_Framework_TestSuite('Tinebase_WebDav_PrincipalBackendTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
-
+    
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -56,7 +56,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends PHPUnit_Framework_TestCase
     {
         $this->_backend = new Tinebase_WebDav_PrincipalBackend();
     }
-
+    
     /**
      * Tears down the fixture
      * This method is called after a test is executed.
@@ -65,7 +65,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    }    
+    }
     
     public function testGetPrincipalByPath()
     {
@@ -75,8 +75,6 @@ class Tinebase_WebDav_PrincipalBackendTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('principals/users/' . Tinebase_Core::getUser()->contact_id, $principal['uri']);
         $this->assertEquals(Tinebase_Core::getUser()->accountDisplayName, $principal['{DAV:}displayname']);
-        $this->assertTrue(! empty($principal['{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL']));
-        $this->assertTrue(! empty($principal['{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL']));
     }
     
     public function testGetGroupMembership()
@@ -87,8 +85,17 @@ class Tinebase_WebDav_PrincipalBackendTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThanOrEqual(1, count($groupMemberships));
     }
-}        
     
+    public function testSearchPrincipals()
+    {
+        $uris = $this->_backend->searchPrincipals('principals/users/', array('{http://sabredav.org/ns}email-address' => Tinebase_Core::getUser()->accountEmailAddress));
+        
+        //var_dump($uris);
+        
+        $this->assertEquals(1, count($uris));
+        $this->assertContains('principals/users/' . Tinebase_Core::getUser()->contact_id, $uris);
+    }
+}
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_WebDav_PrincipalBackendTest::main') {
     Tinebase_WebDav_PrincipalBackendTest::main();

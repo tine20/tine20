@@ -789,10 +789,10 @@ class Tinebase_Core
         if (isset($_SERVER['REQUEST_URI'])) {
             // cut of path behind caldav/webdav (removeme when dispatching is refactored)
             if (isset($_SERVER['REDIRECT_WEBDAV']) && $_SERVER['REDIRECT_WEBDAV'] == 'true') {
-                $decodedUri = Sabre_DAV_URLUtil::decodePath($_SERVER['REQUEST_URI']);
+                $decodedUri = Sabre\DAV\URLUtil::decodePath($_SERVER['REQUEST_URI']);
                 $baseUri = '/' . substr($decodedUri, 0, strpos($decodedUri, 'webdav/') + strlen('webdav/'));
             } else if (isset($_SERVER['REDIRECT_CALDAV']) && $_SERVER['REDIRECT_CALDAV'] == 'true') {
-                $decodedUri = Sabre_DAV_URLUtil::decodePath($_SERVER['REQUEST_URI']);
+                $decodedUri = Sabre\DAV\URLUtil::decodePath($_SERVER['REQUEST_URI']);
                 $baseUri = '/' . substr($decodedUri, 0, strpos($decodedUri, 'caldav/') + strlen('caldav/'));
             } else {
                 $baseUri = dirname($_SERVER['REQUEST_URI']);

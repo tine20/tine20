@@ -45,6 +45,8 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
+        
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
@@ -61,6 +63,8 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
      */
     protected function tearDown()
     {
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(TRUE);
+        
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
@@ -123,7 +127,8 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
         
         $id = Tinebase_Record_Abstract::generateUID();
         
-        $contact = $container->createFile("$id.vcf", $vcardStream);
+        $etag = $container->createFile("$id.vcf", $vcardStream);
+        $contact = $container->getChild("$id.vcf");
         $record = $contact->getRecord();
         
         $this->assertTrue($contact instanceof Addressbook_Frontend_WebDAV_Contact);

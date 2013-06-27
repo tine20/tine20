@@ -14,7 +14,7 @@
  * 
  * @package     Tinebase
  */
-class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implements Sabre_DAV_IFile
+class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\IFile
 {
     public function get() 
     {
@@ -52,13 +52,13 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
     /**
      * Deleted the current node
      *
-     * @throws Sabre_DAV_Exception_Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @return void 
      */
     public function delete() 
     {
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
-            throw new Sabre_DAV_Exception_Forbidden('Forbidden to edit file: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
         }
         
         Tinebase_FileSystem::getInstance()->unlink($this->_path);
@@ -67,13 +67,13 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
     public function put($data)
     {
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
-            throw new Sabre_DAV_Exception_Forbidden('Forbidden to edit file: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
         }
         
         $handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'w');
         
         if (!is_resource($handle)) {
-            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file:' . $this->_path );
+            throw new Sabre\DAV\Exception\Forbidden('Permission denied to create file:' . $this->_path );
         }
         
         if (is_resource($data)) {

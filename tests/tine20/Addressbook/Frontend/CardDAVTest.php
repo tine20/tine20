@@ -104,7 +104,7 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
     {
         $collection = new Addressbook_Frontend_CardDAV();
         
-        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
         
         $collection->createFile('foobar');
     }
@@ -113,7 +113,7 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
     {
         $collection = new Addressbook_Frontend_CardDAV();
         
-        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
         
         $collection->createDirectory('foobar');
     }

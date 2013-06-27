@@ -29,7 +29,7 @@ abstract class Tinebase_Frontend_WebDAV_Abstract extends Tinebase_WebDav_Collect
      * Creates a new subdirectory
      *
      * @param  string  $name  name of the new subdirectory
-     * @throws Sabre_DAV_Exception_Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @return Tinebase_Model_Container
      */
     public function createDirectory($name) 

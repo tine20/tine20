@@ -104,7 +104,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
     {
         $collection = new Calendar_Frontend_CalDAV();
         
-        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
         
         $collection->createFile('foobar');
     }
@@ -113,7 +113,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
     {
         $collection = new Calendar_Frontend_CalDAV();
         
-        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
         
         $collection->createDirectory('foobar');
     }

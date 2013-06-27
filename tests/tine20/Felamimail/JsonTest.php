@@ -1,4 +1,7 @@
 <?php
+
+use Sabre\DAV;
+
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
@@ -219,7 +222,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // vfs cleanup
         foreach ($this->_pathsToDelete as $path) {
-            $webdavRoot = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
+            $webdavRoot = new DAV\ObjectTree(new Tinebase_WebDav_Root());
             //echo "delete $path";
             $webdavRoot->delete($path);
         }
@@ -1262,7 +1265,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _addVacationTemplateFile()
     {
-        $webdavRoot = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root());
+        $webdavRoot = new DAV\ObjectTree(new Tinebase_WebDav_Root());
         $path = '/webdav/Felamimail/shared/Vacation Templates';
         $node = $webdavRoot->getNodeForPath($path);
         $this->_pathsToDelete[] = $path . '/' . $this->_sieveVacationTemplateFile;

@@ -1,4 +1,6 @@
 <?php
+use \Sabre\DAV;
+
 /**
  * class to handle a single vcard
  *
@@ -18,7 +20,7 @@
  * @package     Addressbook
  * @subpackage  Frontend
  */
-class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabre_CardDAV_ICard, Sabre_DAVACL_IACL
+class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabre\CardDAV\ICard, Sabre\DAVACL\IACL
 {
     /**
      * @var Tinebase_Model_Container
@@ -241,7 +243,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
         if (get_class($this->_converter) == 'Addressbook_Convert_Contact_VCard_Generic') {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Addressbook_Convert_Contact_VCard_Factory for supported clients.");
-            throw new Sabre_DAV_Exception_Forbidden('Update denied for unknow client');
+            throw new DAV\Exception\Forbidden('Update denied for unknow client');
         }
         
         $contact = $this->_converter->toTine20Model($cardData, $this->getRecord());
@@ -266,7 +268,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
      */
     public function setACL(array $acl) 
     {
-        throw new Sabre_DAV_Exception_MethodNotAllowed('Changing ACL is not yet supported');
+        throw new DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
     
     /**
@@ -297,5 +299,13 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
         }
         
         return $this->_vcard->serialize();
+    }
+    
+    /**
+     * 
+     */
+    public function getSupportedPrivilegeSet()
+    {
+        return null;
     }
 }

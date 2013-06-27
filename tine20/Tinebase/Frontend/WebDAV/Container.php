@@ -64,7 +64,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      * Creates a new subdirectory
      *
      * @param string $name
-     * @throws Sabre_DAV_Exception_Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @return void
      */
     public function createDirectory($name)
@@ -72,7 +72,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
         
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
-            throw new Sabre_DAV_Exception_Forbidden('Forbidden to create folder: ' . $name);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to create folder: ' . $name);
         }
     
         $path = $this->_path . '/' . $name;
@@ -88,7 +88,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      *
      * @param string $name Name of the file
      * @param resource $data Initial payload, passed as a readable stream resource.
-     * @throws Sabre_DAV_Exception_Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @return void
      */
     public function createFile($name, $data = null)
@@ -96,7 +96,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
         
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_ADD)) {
-            throw new Sabre_DAV_Exception_Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
         }
         
         $path = $this->_path . '/' . $name;
@@ -105,7 +105,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
     
         if (!$handle = Tinebase_FileSystem::getInstance()->fopen($path, 'x')) {
-            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename file://' . $path . ')');
+            throw new Sabre\DAV\Exception\Forbidden('Permission denied to create file (filename file://' . $path . ')');
         }
     
         if (is_resource($data)) {
@@ -119,13 +119,13 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      * Deleted the current container
      *
      * @todo   use filesystem controller to delete directories recursive
-     * @throws Sabre_DAV_Exception_Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @return void
      */
     public function delete()
     {
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
-            throw new Sabre_DAV_Exception_Forbidden('Forbidden to delete directory: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to delete directory: ' . $this->_path);
         }
     
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
@@ -136,7 +136,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         }
     
         if (!Tinebase_FileSystem::getInstance()->rmdir($this->_path)) {
-            throw new Sabre_DAV_Exception_Forbidden('Permission denied to delete node');
+            throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete node');
         }
     
         Tinebase_Container::getInstance()->delete($this->_getContainer());
@@ -152,7 +152,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         try {
             $childNode = Tinebase_FileSystem::getInstance()->stat($this->_path . '/' . $name);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Sabre_DAV_Exception_FileNotFound('file not found: ' . $this->_path . '/' . $name);
+            throw new Sabre\DAV\Exception\NotFound('file not found: ' . $this->_path . '/' . $name);
         }
         
         if ($childNode->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
@@ -165,7 +165,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     /**
      * Returns an array with all the child nodes
      *
-     * @return Sabre_DAV_INode[]
+     * @return Sabre\DAV\INode[]
      */
     function getChildren()
     {
@@ -212,7 +212,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     /**
      * Renames the node
      * 
-     * @throws Sabre_DAV_Exception_Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @param string $name The new name
      * @return void
      */
@@ -221,7 +221,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
         
         if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
-            throw new Sabre_DAV_Exception_Forbidden('Forbidden to rename file: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
         }
         
         $this->_getContainer()->name = $name;

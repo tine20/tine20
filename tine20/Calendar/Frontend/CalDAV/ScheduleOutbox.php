@@ -1,6 +1,9 @@
 <?php
 
 use Sabre\VObject;
+use Sabre\DAV;
+use Sabre\DAVACL;
+use Sabre\CalDAV;
 
 /**
  * Tine 2.0
@@ -19,7 +22,7 @@ use Sabre\VObject;
  * @package     Calendar
  * @subpackage  Frontend
  */
-class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection implements Sabre_DAV_IProperties, Sabre_DAVACL_IACL, Sabre_CalDAV_ICalendar, Sabre_CalDAV_Schedule_IOutbox
+class Calendar_Frontend_CalDAV_ScheduleOutbox extends DAV\Collection implements DAV\IProperties, CalDAV\ICalendar, CalDAV\Schedule\IOutbox
 {
     /**
      * @var Tinebase_Model_FullUser
@@ -34,7 +37,7 @@ class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection imple
     /**
      * Returns an array with all the child nodes
      *
-     * @return Sabre_DAV_INode[]
+     * @return Sabre\DAV\INode[]
      */
     public function getChildren()
     {
@@ -88,18 +91,18 @@ class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection imple
             'id'                => 'schedule-outbox',
             'uri'               => 'schedule-outbox',
             '{DAV:}resource-id'    => 'urn:uuid:schedule-outbox',
-            '{DAV:}owner'       => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . $this->_user->contact_id),
+            '{DAV:}owner'       => new DAVACL\Property\Principal(DAVACL\Property\Principal::HREF, 'principals/users/' . $this->_user->contact_id),
             #'principaluri'      => $principalUri,
             '{DAV:}displayname' => 'Schedule Outbox',
             '{http://apple.com/ns/ical/}calendar-color' => '#666666',
-            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
-            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre_CalDAV_Property_SupportedCalendarData(),
-            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-description'               => 'Calendar schedule outbox',
-            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
+            '{' . CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
+            '{' . CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new CalDAV\Property\SupportedCalendarData(),
+            '{' . CalDAV\Plugin::NS_CALDAV . '}calendar-description'               => 'Calendar schedule outbox',
+            '{' . CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
         );
     
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            $properties['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-user-address-set'    ] = new Sabre_DAV_Property_HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
+            $properties['{' . CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set'    ] = new DAV\Property\HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
         }
     
         $response = array();
@@ -129,20 +132,20 @@ class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection imple
     {
         return array(
             array(
+                'privilege' => '{' . CalDAV\Plugin::NS_CALDAV . '}schedule-query-freebusy',
+                'principal' => 'principals/users/' . $this->_user->contact_id,
+                'protected' => true,
+            ),
+            array(
+                'privilege' => '{' . CalDAV\Plugin::NS_CALDAV . '}schedule-post-vevent',
+                'principal' => 'principals/users/' . $this->_user->contact_id,
+                'protected' => true,
+            ),
+            array(
                 'privilege' => '{DAV:}read',
                 'principal' => 'principals/users/' . $this->_user->contact_id,
                 'protected' => true,
             ),
-            array(
-                'privilege' => '{DAV:}write',
-                'principal' => 'principals/users/' . $this->_user->contact_id,
-                'protected' => true,
-            ),
-            array(
-                'privilege' => '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}schedule-query-freebusy',
-                'principal' => 'principals/users/' . $this->_user->contact_id,
-                'protected' => true,
-            )
         );
     }
     
@@ -154,9 +157,10 @@ class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection imple
      * @param array $acl
      * @return void
      */
-    public function setACL(array $acl) 
-    {
-        throw new Sabre_DAV_Exception_MethodNotAllowed('Changing ACL is not yet supported');
+    public function setACL(array $acl) {
+
+        throw new DAV\Exception\MethodNotAllowed('You\'re not allowed to update the ACL');
+
     }
     
     /**
@@ -209,5 +213,36 @@ class Calendar_Frontend_CalDAV_ScheduleOutbox extends Sabre_DAV_Collection imple
         
         // Taking out \r to not screw up the xml output
         return str_replace("\r","", $vcalendar->serialize());
+    }
+    
+    /**
+     * Returns the list of supported privileges for this node.
+     *
+     * The returned data structure is a list of nested privileges.
+     * See Sabre\DAVACL\Plugin::getDefaultSupportedPrivilegeSet for a simple
+     * standard structure.
+     *
+     * If null is returned from this method, the default privilege set is used,
+     * which is fine for most common usecases.
+     *
+     * @return array|null
+     */
+    public function getSupportedPrivilegeSet() {
+
+        $default = DAVACL\Plugin::getDefaultSupportedPrivilegeSet();
+        $default['aggregates'][] = array(
+            'privilege' => '{' . CalDAV\Plugin::NS_CALDAV . '}schedule-query-freebusy',
+        );
+        $default['aggregates'][] = array(
+            'privilege' => '{' . CalDAV\Plugin::NS_CALDAV . '}schedule-post-vevent',
+        );
+
+        return $default;
+
+    }
+    
+    public function calendarQuery(array $filters)
+    {
+        return array();
     }
 }

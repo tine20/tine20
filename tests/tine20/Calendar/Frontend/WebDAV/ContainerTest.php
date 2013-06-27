@@ -172,7 +172,8 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $id = Tinebase_Record_Abstract::generateUID();
         
-        $event = $container->createFile("$id.ics", $vcalendarStream);
+        $etag = $container->createFile("$id.ics", $vcalendarStream);
+        $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
         $record = $event->getRecord();
         
         $this->assertTrue($event instanceof Calendar_Frontend_WebDAV_Event);
@@ -200,6 +201,43 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, count($children));
         $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV_Event);
+    }
+    
+    public function testCalendarQuery()
+    {
+        $event = $this->testCreateFile()->getRecord();
+        
+        //var_dump($event->getId());
+        
+        // reschedule to match period filter
+        $event->dtstart = Tinebase_DateTime::now();
+        $event->dtend = Tinebase_DateTime::now()->addMinute(30);
+        Calendar_Controller_MSEventFacade::getInstance()->update($event);
+        
+        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        // Doing a calendar-query first, to make sure we get the most
+        // performance.
+        $urls = $container->calendarQuery(array(
+            'name' => 'VCALENDAR',
+            'comp-filters' => array(
+                array(
+                    'name' => 'VEVENT',
+                    'comp-filters' => array(),
+                    'prop-filters' => array(),
+                    'is-not-defined' => false,
+                    'time-range' => array(
+                        'start' => Tinebase_DateTime::now()->subHour(1),
+                        'end' => Tinebase_DateTime::now()->addHour(1),
+                    ),
+                ),
+            ),
+            'prop-filters' => array(),
+            'is-not-defined' => false,
+            'time-range' => null,
+        ));
+        
+        $this->assertContains($event->getId(), $urls);
     }
     
     /**

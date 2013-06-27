@@ -1,6 +1,8 @@
 <?php
 
 use Sabre\VObject;
+use Sabre\DAVACL;
+use Sabre\CalDAV;
 
 /**
  * Tine 2.0
@@ -18,7 +20,7 @@ use Sabre\VObject;
  * @package     Calendar
  * @subpackage  Frontend
  */
-class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements Sabre_CalDAV_ICalendar
+class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements Sabre\CalDAV\ICalendar
 {
     protected $_applicationName = 'Calendar';
     
@@ -28,7 +30,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     
     /**
      * (non-PHPdoc)
-     * @see Sabre_DAV_Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($_name)
     {
@@ -60,11 +62,11 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             $object = $this->_getController()->search($filter, null, false, false, 'sync')->getFirstRecord();
         
             if ($object == null) {
-                throw new Sabre_DAV_Exception_FileNotFound('Object not found');
+                throw new Sabre\DAV\Exception\NotFound('Object not found');
             }
         }
         
-        $httpRequest = new Sabre_HTTP_Request();
+        $httpRequest = new Sabre\HTTP\Request();
         
         // lie about existence of event of request is a PUT request from an ATTENDEE for an already existing event 
         // to prevent ugly (and not helpful) error messages on the client
@@ -73,7 +75,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                 $object->organizer != Tinebase_Core::getUser()->contact_id && 
                 Calendar_Model_Attender::getOwnAttender($object->attendee) !== null
             ) {
-                throw new Sabre_DAV_Exception_FileNotFound('Object not found');
+                throw new Sabre\DAV\Exception\NotFound('Object not found');
             }
         }
         
@@ -85,7 +87,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     /**
      * Returns an array with all the child nodes
      *
-     * @return Sabre_DAV_INode[]
+     * @return Sabre\DAV\INode[]
      */
     function getChildren()
     {
@@ -139,19 +141,19 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             'id'                => $this->_container->getId(),
             'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
             '{DAV:}resource-id'    => 'urn:uuid:' . $this->_container->getId(),
-            '{DAV:}owner'       => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
+            '{DAV:}owner'       => new Sabre\DAVACL\Property\Principal(Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
             #'principaluri'      => $principalUri,
             '{DAV:}displayname' => $displayName,
             '{http://apple.com/ns/ical/}calendar-color' => (empty($this->_container->color)) ? '#000000' : $this->_container->color,
             
-            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
-            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre_CalDAV_Property_SupportedCalendarData(),
-            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-description'               => 'Calendar ' . $displayName,
-            '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
+            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
+            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre\CalDAV\Property\SupportedCalendarData(),
+            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description'               => 'Calendar ' . $displayName,
+            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
         );
         
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            $properties['{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-user-address-set'    ] = new Sabre_DAV_Property_HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
+            $properties['{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set'    ] = new Sabre\DAV\Property\HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . print_r($properties, true));
@@ -207,7 +209,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     public function updateProperties($mutations)
     {
         if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_ADMIN)) {
-            throw new Sabre_DAV_Exception_Forbidden('permission to update container denied');
+            throw new Sabre\DAV\Exception\Forbidden('permission to update container denied');
         }
         
         $result = array(
@@ -222,12 +224,12 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     $result['200'][$key] = null;
                     break;
                     
-                case '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-description':
+                case '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description':
                     // fake success
                     $result['200'][$key] = null;
                     break;
                     
-                case '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}calendar-timezone':
+                case '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone':
                     // fake success
                     $result['200'][$key] = null;
                     break;
@@ -266,5 +268,102 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         // Taking out \r to not screw up the xml output
         return str_replace("\r","", $vcalendar->serialize());
+    }
+    
+    /**
+     * Performs a calendar-query on the contents of this calendar.
+     *
+     * The calendar-query is defined in RFC4791 : CalDAV. Using the
+     * calendar-query it is possible for a client to request a specific set of
+     * object, based on contents of iCalendar properties, date-ranges and
+     * iCalendar component types (VTODO, VEVENT).
+     *
+     * This method should just return a list of (relative) urls that match this
+     * query.
+     *
+     * The list of filters are specified as an array. The exact array is
+     * documented by \Sabre\CalDAV\CalendarQueryParser.
+     *
+     * @param array $filters
+     * @return array
+     */
+    public function calendarQuery(array $filters)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' filters ' . print_r($filters, true));
+        
+        //var_dump($filters['comp-filters'][0]);
+        
+        $filterArray = array(
+            array(
+                'field'    => 'attender',
+                'operator' => 'equals',
+                'value'    => array(
+                    'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'      => Tinebase_Core::getUser()->contact_id,
+                )
+            ),
+            array(
+                'field'    => 'container_id',
+                'operator' => 'equals',
+                'value'    => $this->_container->getId()
+            )
+        );
+        
+        if (isset($filters['comp-filters']) && isset($filters['comp-filters'][0]['time-range'])) {
+            if (isset($filters['comp-filters'][0]['time-range']['start'])) {
+                $filterArray[] = array(
+                    'field' => 'period', 
+                    'operator' => 'within', 
+                    'value' => array(
+                        'from'  => $filters['comp-filters'][0]['time-range']['start'],
+                        'until' => $filters['comp-filters'][0]['time-range']['end']
+                    )
+                );
+            }
+        }
+        
+        $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
+        $filter = new $filterClass($filterArray);
+    
+        /**
+         * see http://forge.tine20.org/mantisbt/view.php?id=5122
+         * we must use action 'sync' and not 'get' as
+         * otherwise the calendar also return events the user only can see because of freebusy
+         */
+        $ids = $this->_getController()->search($filter, null, false, true, 'sync');
+    
+        return $ids;
+    }
+    
+    /**
+     * Returns the list of supported privileges for this node.
+     *
+     * The returned data structure is a list of nested privileges.
+     * See \Sabre\DAVACL\Plugin::getDefaultSupportedPrivilegeSet for a simple
+     * standard structure.
+     *
+     * If null is returned from this method, the default privilege set is used,
+     * which is fine for most common usecases.
+     *
+     * @return array|null
+     */
+    public function getSupportedPrivilegeSet() {
+
+        $default = DAVACL\Plugin::getDefaultSupportedPrivilegeSet();
+
+        // We need to inject 'read-free-busy' in the tree, aggregated under
+        // {DAV:}read.
+        foreach($default['aggregates'] as &$agg) {
+
+            if ($agg['privilege'] !== '{DAV:}read') continue;
+
+            $agg['aggregates'][] = array(
+                'privilege' => '{' . CalDAV\Plugin::NS_CALDAV . '}read-free-busy',
+            );
+
+        }
+        
+        return $default;
     }
 }

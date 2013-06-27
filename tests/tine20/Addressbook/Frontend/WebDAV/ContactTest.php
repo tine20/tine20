@@ -43,16 +43,16 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
+        
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
         )));
-        
-        $this->objects['containerToDelete'][] = $this->objects['initialContainer'];
-        
-        $this->objects['contactsToDelete'] = array();
     }
 
     /**
@@ -63,19 +63,9 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->objects['contactsToDelete'] as $contact) {
-            $contact->delete();
-        }
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(TRUE);
         
-        foreach ($this->objects['containerToDelete'] as $containerId) {
-            $containerId = $containerId instanceof Tinebase_Model_Container ? $containerId->getId() : $containerId;
-            
-            try {
-                Tinebase_Container::getInstance()->deleteContainer($containerId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // do nothing
-            }
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -93,8 +83,6 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
         
         $id = Tinebase_Record_Abstract::generateUID();
         $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], "$id.vcf", $vcardStream);
-        
-        $this->objects['contactsToDelete'][] = $contact;
         
         $record = $contact->getRecord();
 
@@ -172,7 +160,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
     
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/mac_os_x_addressbook.vcf', 'r');
     
-        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
         
         $contact->put($vcardStream);
     }

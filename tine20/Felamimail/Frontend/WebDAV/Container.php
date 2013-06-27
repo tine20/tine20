@@ -1,4 +1,6 @@
 <?php
+use Sabre\DAV;
+
 /**
  * Tine 2.0
  *
@@ -38,11 +40,11 @@ class Felamimail_Frontend_WebDAV_Container extends Tinebase_Frontend_WebDAV_Cont
     * Creates a new subdirectory
     *
     * @param string $name
-    * @throws Sabre_DAV_Exception_Forbidden
+    * @throws Sabre\DAV\Exception\Forbidden
     * @return void
     */
     public function createDirectory($name)
     {
-        throw new Sabre_DAV_Exception_Forbidden('Forbidden to create folders here');
+        throw new DAV\Exception\Forbidden('Forbidden to create folders here');
     }
 }

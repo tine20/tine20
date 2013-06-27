@@ -1,4 +1,7 @@
 <?php
+use Sabre\DAVACL;
+use Sabre\CardDAV;
+
 /**
  * Tine 2.0
  *
@@ -16,7 +19,7 @@
  * @package     Addressbook
  * @subpackage  Frontend
  */
-class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements Sabre_CardDAV_IAddressBook
+class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements Sabre\CardDAV\IAddressBook
 {
     protected $_applicationName = 'Addressbook';
     
@@ -41,12 +44,12 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
             'id'                                     => $this->_container->getId(),
             'uri'                                    => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
             '{DAV:}resource-id'                      => 'urn:uuid:' . $this->_container->getId(),
-            '{DAV:}owner'                            => new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
+            '{DAV:}owner'                            => new DAVACL\Property\Principal(DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
             '{DAV:}displayname'                      => $displayName,
          
             #'principaluri'      => $principalUri,
-            '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}addressbook-description'    => 'Addressbook ' . $displayName,
-            '{' . Sabre_CardDAV_Plugin::NS_CARDDAV . '}supported-addressbook-data' => new Sabre_CardDAV_Property_SupportedAddressData(array(array('contentType' => 'text/vcard', 'version' => '3.0')))
+            '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description'    => 'Addressbook ' . $displayName,
+            '{' . CardDAV\Plugin::NS_CARDDAV . '}supported-addressbook-data' => new CardDAV\Property\SupportedAddressData(array(array('contentType' => 'text/vcard', 'version' => '3.0')))
         );
         
         $response = array();

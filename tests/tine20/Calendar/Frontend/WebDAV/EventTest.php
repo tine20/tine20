@@ -374,7 +374,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
         
-        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
         
         $event->put($vcalendarStream);
         

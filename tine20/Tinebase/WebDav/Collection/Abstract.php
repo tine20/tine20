@@ -1,4 +1,8 @@
 <?php
+
+use Sabre\DAV;
+use Sabre\DAVACL;
+
 /**
  * Tine 2.0
  *
@@ -6,8 +10,7 @@
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -16,7 +19,7 @@
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection implements Sabre_DAV_IProperties, Sabre_DAVACL_IACL
+abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implements DAV\IProperties, DAVACL\IACL
 {
     /**
      * the current application object
@@ -76,7 +79,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
      * Creates a new subdirectory
      *
      * @param  string  $name  name of the new subdirectory
-     * @throws Sabre_DAV_Exception_Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @return Tinebase_Model_Container
      */
     public function createDirectory($name) 
@@ -84,24 +87,24 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
         $containerType = $this->_pathParts[1];
         
         if (!in_array($containerType, array(Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Model_Container::TYPE_SHARED))) {
-            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
+            throw new Sabre\DAV\Exception\Forbidden('Permission denied to create directory');
         }
         
         if ($containerType == Tinebase_Model_Container::TYPE_SHARED &&
             !Tinebase_Core::getUser()->hasRight($this->_getApplication(), Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS)) {
-            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
+            throw new Sabre\DAV\Exception\Forbidden('Permission denied to create directory');
         }
         
         // is the loginname for personal folders set?
         if ($containerType == Tinebase_Model_Container::TYPE_PERSONAL && count($this->_pathParts) < 3) {
-            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
+            throw new Sabre\DAV\Exception\Forbidden('Permission denied to create directory');
         }
         
         try {
             Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $name, $containerType, Tinebase_Core::getUser());
             
             // container exists already => that's bad!
-            throw new Sabre_DAV_Exception_Forbidden('Folders exists already');
+            throw new Sabre\DAV\Exception\Forbidden('Folders exists already');
         } catch (Tinebase_Exception_NotFound $tenf) {
             // continue
         }
@@ -119,7 +122,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
     
     /**
      * (non-PHPdoc)
-     * @see Sabre_DAV_Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($_name)
     {
@@ -130,7 +133,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
             # return personal and shared folder
             case 1:
                 if (!in_array($_name, array(Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Model_Container::TYPE_SHARED))) {
-                    throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                    throw new Sabre\DAV\Exception\NotFound('Directory not found');
                 }
                 
                 $className = $this->_applicationName . '_Frontend_WebDAV';
@@ -145,10 +148,10 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
                     try {
                         $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $_name, Tinebase_Model_Container::TYPE_SHARED);
                     } catch (Tinebase_Exception_NotFound $tenf) {
-                        throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                        throw new Sabre\DAV\Exception\NotFound('Directory not found');
                     }
                     if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
-                        throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                        throw new Sabre\DAV\Exception\NotFound('Directory not found');
                     }
                     
                     $objectClass = $this->_applicationName . '_Frontend_WebDAV_Container';
@@ -156,7 +159,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
                     return new $objectClass($container);
                 } elseif ($this->_pathParts[1] == Tinebase_Model_Container::TYPE_PERSONAL) {
                     if ($_name != Tinebase_Core::getUser()->accountLoginName) {
-                        throw new Sabre_DAV_Exception_FileNotFound('Child not found');
+                        throw new Sabre\DAV\Exception\NotFound('Child not found');
                     }
                     
                     $className = $this->_applicationName . '_Frontend_WebDAV';
@@ -172,10 +175,10 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
                 try {
                     $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $_name, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                    throw new Sabre\DAV\Exception\NotFound('Directory not found');
                 }
                 if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
-                    throw new Sabre_DAV_Exception_FileNotFound('Directory not found');
+                    throw new Sabre\DAV\Exception\NotFound('Directory not found');
                 }
                 
                 $objectClass = $this->_applicationName . '_Frontend_WebDAV_Container';
@@ -185,7 +188,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
                 break;
                 
             default:
-                throw new Sabre_DAV_Exception_FileNotFound('Child not found');
+                throw new Sabre\DAV\Exception\NotFound('Child not found');
             
                 break;
         }
@@ -196,7 +199,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
     /**
      * Returns an array with all the child nodes
      *
-     * @return Sabre_DAV_INode[]
+     * @return Sabre\DAV\INode[]
      */
     function getChildren()
     {
@@ -292,7 +295,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
      */
     public function getName()
     {
-        list(,$name) = Sabre_DAV_URLUtil::splitPath($this->_path);
+        list(,$name) = Sabre\DAV\URLUtil::splitPath($this->_path);
         
         return $name;
     }
@@ -325,7 +328,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
         
         $children = array();
         
-        list(, $basename) = Sabre_DAV_URLUtil::splitPath($this->_path);
+        list(, $basename) = Sabre\DAV\URLUtil::splitPath($this->_path);
         
         switch(count($pathParts)) {
             # path == /accountLoginName
@@ -348,7 +351,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
     
         foreach($requestedProperties as $prop) switch($prop) {
             case '{DAV:}owner' :
-                $response[$prop] = new Sabre_DAVACL_Property_Principal(Sabre_DAVACL_Property_Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id);
+                $response[$prop] = new Sabre\DAVACL\Property\Principal(Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id);
                 break;
                 
             default :
@@ -372,7 +375,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
      */
     public function setACL(array $acl)
     {
-        throw new Sabre_DAV_Exception_MethodNotAllowed('Changing ACL is not yet supported');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
     
     /**
@@ -431,4 +434,11 @@ abstract class Tinebase_WebDav_Collection_Abstract extends Sabre_DAV_Collection 
         return $pathParts;
     }
     
+    /**
+     * 
+     */
+    public function getSupportedPrivilegeSet()
+    {
+        return null;
+    }
 }

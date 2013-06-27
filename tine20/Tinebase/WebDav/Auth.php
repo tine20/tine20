@@ -1,13 +1,15 @@
 <?php
+
+use Sabre\DAV;
+
 /**
  * Tine 2.0
  * 
  * @package     Tinebase
  * @subpackage  WebDav
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * 
  */
 
 /**
@@ -16,11 +18,11 @@
  * @package     Tinebase
  * @subpackage  WebDav
  */
-class Tinebase_WebDav_Auth implements Sabre_DAV_Auth_IBackend
+class Tinebase_WebDav_Auth implements DAV\Auth\Backend\BackendInterface
 {
     /**
      * (non-PHPdoc)
-     * @see Sabre_DAV_Auth_IBackend::getCurrentUser()
+     * @see Sabre\DAV\Auth\IBackend::getCurrentUser()
      */
     public function getCurrentUser()
     {
@@ -29,9 +31,9 @@ class Tinebase_WebDav_Auth implements Sabre_DAV_Auth_IBackend
     
     /**
      * (non-PHPdoc)
-     * @see Sabre_DAV_Auth_IBackend::authenticate()
+     * @see Sabre\DAV\Auth\IBackend::authenticate()
      */
-    public function authenticate(Sabre_DAV_Server $_server, $_realm) 
+    public function authenticate(DAV\Server $_server, $_realm) 
     {
         if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
             return true;

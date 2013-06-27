@@ -1,4 +1,10 @@
 <?php
+
+use Sabre\DAV;
+use Sabre\DAVACL;
+use Sabre\CardDAV;
+use Sabre\CalDAV;
+
 /**
  * Tine 2.0
  *
@@ -6,8 +12,7 @@
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,10 +22,8 @@
  *
  * @package     Tinebase
  * @subpackage  WebDAV
- * 
- * @todo this should look for webdav frontend in installed apps
  */
-class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
+class Tinebase_WebDav_Root extends DAV\SimpleCollection
 {
     public function __construct()
     {
@@ -38,20 +41,18 @@ class Tinebase_WebDav_Root extends Sabre_DAV_SimpleCollection
         
         foreach (array('Addressbook', 'Calendar', 'Felamimail', 'Filemanager') as $application) {
             $applicationClass = $application . '_Frontend_WebDAV';
-            if (Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN) && @class_exists($applicationClass)) {
+            if (Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN) && class_exists($applicationClass)) {
                 $webdavChildren[] = new $applicationClass($application);
             }
         }
         
         parent::__construct('root', array(
-            new Sabre_DAV_SimpleCollection(Sabre_CardDAV_Plugin::ADDRESSBOOK_ROOT, $carddavChildren),
-            new Sabre_DAV_SimpleCollection(Sabre_CalDAV_Plugin::CALENDAR_ROOT, $caldavChildren),
-            new Sabre_DAV_SimpleCollection('webdav', 
-                $webdavChildren
-            ),
-            new Sabre_DAV_SimpleCollection('principals', array(
-                new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/users'),
-                new Sabre_DAVACL_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/groups')
+            new DAV\SimpleCollection(CardDAV\Plugin::ADDRESSBOOK_ROOT, $carddavChildren),
+            new DAV\SimpleCollection(CalDAV\Plugin::CALENDAR_ROOT,     $caldavChildren),
+            new DAV\SimpleCollection('webdav',                         $webdavChildren),
+            new DAV\SimpleCollection('principals', array(
+                new DAVACL\PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/users'),
+                new DAVACL\PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/groups')
             ))
         ));
     }
