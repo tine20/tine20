@@ -19,7 +19,8 @@
 class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact_VCard_Abstract
 {
     // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13
-    const HEADER_MATCH = '/ Thunderbird\/(?P<version>.*)/';
+    // Mozilla/5.0 (X11; Linux i686; rv:17.0) Gecko/20130529 Icedove/17.0.5
+    const HEADER_MATCH = '/ (Thunderbird|Icedove)\/(?P<version>.*)/';
     
     protected $_emptyArray = array(
         'adr_one_countryname'   => null,
