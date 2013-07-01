@@ -1,5 +1,6 @@
 # 
 # Translators:
+# Aleksdem <aleksdem@aleksdem.com>, 2013
 # артур Мудрых <arturmon82@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
@@ -7,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-27 14:14+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-06-20 19:03+0000\n"
+"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,19 +22,19 @@ msgstr ""
 
 #: Acl/Rights.php:103
 msgid "manage shared calendars"
-msgstr "управление общими календарями"
+msgstr "управление общими папками"
 
 #: Acl/Rights.php:104
 msgid "Create new shared calendars"
-msgstr "Создать новый общий календарь"
+msgstr "Создание новых  общих папок"
 
 #: Acl/Rights.php:107
 msgid "manage shared calendars favorites"
-msgstr ""
+msgstr "управление общими календарями"
 
 #: Acl/Rights.php:108
 msgid "Create or update shared calendars favorites"
-msgstr ""
+msgstr "Создание или обновление избранных в общих адресных книгах"
 
 #: Acl/Rights.php:111
 msgid "manage resources"
@@ -41,7 +42,7 @@ msgstr "управление ресурсами"
 
 #: Acl/Rights.php:112
 msgid "All Rights to administrate resources"
-msgstr ""
+msgstr "Все права на управление ресурсами"
 
 #: Controller.php:109
 #, python-format
@@ -50,12 +51,12 @@ msgstr "личный календарь %s"
 
 #: Model/Attender.php:170
 msgid "unknown"
-msgstr ""
+msgstr "неизвестно"
 
 #: Model/Attender.php:446
 msgid ""
 "This contact has been automatically added by the system as an event attender"
-msgstr ""
+msgstr "На этот контакт система создала событие"
 
 #: Model/Event.php:290
 msgid "Start"
@@ -67,7 +68,7 @@ msgstr "Окончание"
 
 #: Model/Event.php:292 js/GridView.js:127 js/EventDetailsPanel.js:262
 msgid "Blocking"
-msgstr ""
+msgstr "Блокировано"
 
 #: Model/Event.php:293
 msgid "Classification"
@@ -109,15 +110,15 @@ msgstr "URL"
 
 #: Model/Event.php:301
 msgid "Recurrance rule"
-msgstr ""
+msgstr "Правило повторений"
 
 #: Model/Event.php:302
 msgid "Is all day event"
-msgstr ""
+msgstr "Событие на весь день"
 
 #: Model/Event.php:303
 msgid "Organizer timezone"
-msgstr ""
+msgstr "Часовой пояс организатора"
 
 #: Model/Event.php:328
 msgid "No"
@@ -129,17 +130,17 @@ msgstr "Да"
 
 #: Config.php:45
 msgid "Fixed Calendars"
-msgstr ""
+msgstr "Закреплённые календари"
 
 #: Config.php:47
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
-msgstr ""
+msgstr "Календари всегда отображаются в не зависимости от данных фильтра. Это может быть полезно при наличии праздничных календарей."
 
 #: Config.php:55
 msgid "Attendee Status Available"
-msgstr ""
+msgstr "Доступна роль участника"
 
 #: Config.php:57
 msgid ""
@@ -149,7 +150,7 @@ msgstr ""
 
 #: Config.php:65
 msgid "Attendee Roles Available"
-msgstr ""
+msgstr "Доступна роль участника"
 
 #: Config.php:67
 msgid ""
@@ -191,23 +192,23 @@ msgstr "Предполагается"
 
 #: Setup/Update/Release3.php:164 Setup/Initialize.php:34
 msgid "All events I attend"
-msgstr ""
+msgstr "События, которые я отслеживаю"
 
 #: Setup/Initialize.php:47
 msgid "Awaiting response"
-msgstr ""
+msgstr "Подождите ответа"
 
 #: Setup/Initialize.php:48
 msgid "Events I have not yet responded to"
-msgstr ""
+msgstr "События, на которые я ещё не ответил"
 
 #: Setup/Initialize.php:63
 msgid "Declined events"
-msgstr ""
+msgstr "Отклонённые события"
 
 #: Setup/Initialize.php:64
 msgid "Events I have declined"
-msgstr ""
+msgstr "События, которые я отклонил"
 
 #: Setup/Initialize.php:77
 msgid "I'm organizer"
@@ -215,7 +216,7 @@ msgstr "Я организатор"
 
 #: Setup/Initialize.php:78
 msgid "Events I'm the organizer of"
-msgstr ""
+msgstr "Организованные мной события"
 
 #: Preference.php:31
 msgid "All my events"
@@ -236,19 +237,19 @@ msgstr "Календарь по умолчанию"
 
 #: Preference.php:96
 msgid "The default calendar for invitations and new events"
-msgstr ""
+msgstr "Основной календарь для приглашений и новых событий"
 
 #: Preference.php:99
 msgid "Default Favorite"
-msgstr ""
+msgstr "Избранный по умолчанию"
 
 #: Preference.php:100
 msgid "The default favorite which is loaded on calendar startup"
-msgstr ""
+msgstr "Как избранное при загрузке календарей"
 
 #: Preference.php:103
 msgid "Get Notification Emails"
-msgstr ""
+msgstr "Получить уведомления на электронную почту"
 
 #: Preference.php:104
 msgid ""
@@ -259,7 +260,7 @@ msgstr ""
 
 #: Preference.php:107
 msgid "Send Notifications Emails of own Actions"
-msgstr ""
+msgstr "Отправлять уведомление при собственных действиях"
 
 #: Preference.php:108
 msgid "Get notifications emails for actions you did yourself"
@@ -267,15 +268,15 @@ msgstr ""
 
 #: Preference.php:111
 msgid "Enable Standard Alarm"
-msgstr ""
+msgstr "Включено оповещение по-умолчанию"
 
 #: Preference.php:112
 msgid "New events get a standard alarm as defined below"
-msgstr ""
+msgstr "Новый события будут иметь настройки оповещения по-умолчанию"
 
 #: Preference.php:115
 msgid "Standard Alarm Time"
-msgstr ""
+msgstr "Время оповещения по-умолчанию"
 
 #: Preference.php:116
 msgid "Minutes before the event starts"
@@ -337,7 +338,7 @@ msgstr "Email"
 
 #: js/ResourceEditDialog.js:79 js/ResourceEditDialog.js:80
 msgid "Is a location"
-msgstr ""
+msgstr "Местоположение"
 
 #: js/ResourceEditDialog.js:85
 msgid "Enter description..."
@@ -345,15 +346,15 @@ msgstr "Введите описание..."
 
 #: js/ResourceEditDialog.js:117
 msgid "Grants"
-msgstr ""
+msgstr "Права"
 
 #: js/PerspectiveCombo.js:84 js/EventEditDialog.js:179
 msgid "non-blocking"
-msgstr ""
+msgstr "Свободно"
 
 #: js/PerspectiveCombo.js:110
 msgid "Displayed in"
-msgstr ""
+msgstr "Отобразить на"
 
 #: js/AddToEventPanel.js:35
 msgid "Please choose the Event to add the contacts to"
@@ -373,7 +374,7 @@ msgstr "Выбрать Состояние"
 
 #: js/AddToEventPanel.js:109
 msgid "Adding {0} Attendee to event"
-msgstr ""
+msgstr "Добавлен {0} участник в событие"
 
 #: js/RrulePanel.js:28
 msgid "Recurrances"
@@ -405,7 +406,7 @@ msgstr "Ежегодно"
 
 #: js/RrulePanel.js:178
 msgid "Exceptions of reccuring events can't have recurrences themselves."
-msgstr ""
+msgstr "Нельзя задать повторение повторяющимся событиям."
 
 #: js/RrulePanel.js:240
 msgid "at"
@@ -417,7 +418,7 @@ msgstr "никогда"
 
 #: js/RrulePanel.js:261
 msgid "after {0} occurrences"
-msgstr ""
+msgstr "после {0} вхождений"
 
 #: js/RrulePanel.js:380
 msgid "Until has to be after event start"
@@ -425,15 +426,15 @@ msgstr ""
 
 #: js/RrulePanel.js:411
 msgid "Every {0}. Day"
-msgstr ""
+msgstr "Каждый {0}. день"
 
 #: js/RrulePanel.js:444
 msgid "Every {0}. Week at"
-msgstr ""
+msgstr "Каждую {0}. неделю"
 
 #: js/RrulePanel.js:514
 msgid "Every {0}. Month"
-msgstr ""
+msgstr "Каждый {0}. месяц"
 
 #: js/RrulePanel.js:520 js/RrulePanel.js:569 js/RrulePanel.js:701
 #: js/RrulePanel.js:751
@@ -462,7 +463,7 @@ msgstr "последний"
 
 #: js/RrulePanel.js:694
 msgid "Every {0}. Year"
-msgstr ""
+msgstr "Каждый {0}. год"
 
 #: js/RrulePanel.js:792 js/RrulePanel.js:800
 msgid "of"
@@ -474,35 +475,35 @@ msgstr "Проверка данных Календаря ..."
 
 #: js/iMIPDetailsPanel.js:95
 msgid "Reply to Recurring Event"
-msgstr ""
+msgstr "Ответить на повторяющееся событие"
 
 #: js/iMIPDetailsPanel.js:96
 msgid "You are responding to an recurring event. What would you like to do?"
-msgstr ""
+msgstr "Вы повторяете на периодическое событие. Вы уверены, что хотите это сделать?"
 
 #: js/iMIPDetailsPanel.js:100
 msgid "Respond to whole series"
-msgstr ""
+msgstr "Ответить на всю серию"
 
 #: js/iMIPDetailsPanel.js:101
 msgid "Do not respond"
-msgstr ""
+msgstr "Не отвечать"
 
 #: js/iMIPDetailsPanel.js:197
 msgid "The event of this message does not exist"
-msgstr ""
+msgstr "События для этого сообщения не существует"
 
 #: js/iMIPDetailsPanel.js:202
 msgid "The sender is not authorised to update the event"
-msgstr ""
+msgstr "Отправитель не имеет доступ для обновления события"
 
 #: js/iMIPDetailsPanel.js:207
 msgid "This message is already processed"
-msgstr ""
+msgstr "Сообщение обработано"
 
 #: js/iMIPDetailsPanel.js:212
 msgid "You are not an attendee of this event"
-msgstr ""
+msgstr "Вы не участник этого события"
 
 #: js/iMIPDetailsPanel.js:216
 msgid "Unsupported message"
@@ -510,19 +511,19 @@ msgstr "Неподдерживаемое сообщение"
 
 #: js/iMIPDetailsPanel.js:226
 msgid "This is an event invitation for someone else."
-msgstr ""
+msgstr "Приглашение на событие для кого-либо."
 
 #: js/iMIPDetailsPanel.js:228
 msgid "You have already replied to this event invitation."
-msgstr ""
+msgstr "Вы уже ответили на приглашение"
 
 #: js/iMIPDetailsPanel.js:230
 msgid "You received an event invitation. Set your response to:"
-msgstr ""
+msgstr "Вы получили приглашение. Ваш ответ:"
 
 #: js/iMIPDetailsPanel.js:238
 msgid "An invited attendee responded to the invitation."
-msgstr ""
+msgstr "Участник ответил на приглашение"
 
 #: js/iMIPDetailsPanel.js:242
 msgid "Unsupported method"
@@ -558,7 +559,7 @@ msgstr "Месяц"
 
 #: js/MainScreenCenterPanel.js:493
 msgid "Set my response"
-msgstr ""
+msgstr "Изменить мой ответ"
 
 #: js/MainScreenCenterPanel.js:522
 msgid "Copy {0}"
@@ -566,7 +567,7 @@ msgstr "Копировать {0}"
 
 #: js/MainScreenCenterPanel.js:536
 msgid "Updating event in the past"
-msgstr ""
+msgstr "Обновление прошедшего события"
 
 #: js/MainScreenCenterPanel.js:537
 msgid "Update this event"
@@ -578,7 +579,7 @@ msgstr "Не обновлять это событие"
 
 #: js/MainScreenCenterPanel.js:542
 msgid "Creating event in the past"
-msgstr ""
+msgstr "Создание события в прошедшем времени"
 
 #: js/MainScreenCenterPanel.js:543
 msgid "Create this event"
@@ -616,7 +617,7 @@ msgstr "Пожалуйста, измените выбор"
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
-msgstr ""
+msgstr "Вы выбрали повторяющееся событие. Их нужно удалять отдельно!"
 
 #: js/MainScreenCenterPanel.js:819
 msgid "Delete Event"
@@ -647,11 +648,11 @@ msgstr[2] "Вы действительно хотите удалить {0} вы�
 
 #: js/MainScreenCenterPanel.js:1021
 msgid "Could not Print"
-msgstr ""
+msgstr "Не удалось вывести на печать"
 
 #: js/MainScreenCenterPanel.js:1021
 msgid "Sorry, your current view does not support printing."
-msgstr ""
+msgstr "Извините, этот вид не поддерживает вывод на печать."
 
 #: js/MainScreenCenterPanel.js:1174
 msgid "Scheduling Conflict"
@@ -659,7 +660,7 @@ msgstr "Конфликт планирования"
 
 #: js/MainScreenCenterPanel.js:1176
 msgid "The following attendee are busy at the requested time:"
-msgstr ""
+msgstr "Эти участники заняты в данное время:"
 
 #: js/MainScreenCenterPanel.js:1180
 msgid "Ignore Conflict"
@@ -671,16 +672,16 @@ msgstr "Изменить событие"
 
 #: js/MainScreenCenterPanel.js:1182
 msgid "Cancel this action"
-msgstr ""
+msgstr "Закончить действие"
 
 #: js/calendarRenderer.js:30
 msgid ""
 "This event is originally stored in a calendar you don't have access to."
-msgstr ""
+msgstr "Событие изначально сохранено в календаре, к которому вы не имеете доступ."
 
 #: js/calendarRenderer.js:31
 msgid "This event is originally stored in {0}"
-msgstr ""
+msgstr "Это событие изначально сохранено в {0}"
 
 #: js/calendarRenderer.js:33
 msgid "This event is additionally displayed in your personal calendar {0}"
@@ -694,15 +695,15 @@ msgstr "Нет информации"
 
 #: js/EventDetailsPanel.js:65
 msgid "{0} {1} o'clock"
-msgstr ""
+msgstr "{0} {1} часов"
 
 #: js/EventDetailsPanel.js:89 js/EventUI.js:242
 msgid "recurring event"
-msgstr ""
+msgstr "периодическое событие"
 
 #: js/EventDetailsPanel.js:91 js/EventUI.js:247
 msgid "recurring event exception"
-msgstr ""
+msgstr "повторяющееся событие исключено"
 
 #: js/EventDetailsPanel.js:294 js/AttendeeFilterModel.js:35
 #: js/AttendeeGridPanel.js:82 js/WestPanel.js:90 js/Model.js:373
@@ -723,7 +724,7 @@ msgstr "{0} ещё..."
 
 #: js/AttendeeFilterModel.js:100
 msgid "Select Attendee"
-msgstr ""
+msgstr "Выбор участника"
 
 #: js/Printer/DaysView.js:36
 msgid "Week {0} :"
@@ -731,11 +732,11 @@ msgstr "Неделя {0} :"
 
 #: js/AttendeeFilterGrid.js:28
 msgid "Add attendee"
-msgstr ""
+msgstr "Добавить участника"
 
 #: js/AttendeeFilterGrid.js:59
 msgid "Check to filter for this attendee"
-msgstr ""
+msgstr "Добавить в фильтр этого участника"
 
 #: js/AttendeeGridPanel.js:26
 msgid "Click here to invite another attender..."
@@ -782,7 +783,7 @@ msgstr "(как член группы)"
 
 #: js/AttendeeGridPanel.js:586
 msgid "External Attendee"
-msgstr ""
+msgstr "Внешний участник"
 
 #: js/WestPanel.js:32
 msgid "Mini Calendar"
@@ -809,23 +810,23 @@ msgstr "Быстрый поиск"
 
 #: js/Model.js:208
 msgid "Attendee Status"
-msgstr ""
+msgstr "Состояние участника"
 
 #: js/Model.js:217
 msgid "Attendee Role"
-msgstr ""
+msgstr "Роль участника"
 
 #: js/Model.js:233
 msgid "Event (as attendee)"
-msgstr ""
+msgstr "Событие (как участник)"
 
 #: js/Model.js:240
 msgid "Event (as organizer)"
-msgstr ""
+msgstr "Событие (как организатор)"
 
 #: js/Model.js:250
 msgid "Event attendee"
-msgstr ""
+msgstr "Событие участника"
 
 #: js/Model.js:373
 msgid "Attender"
@@ -840,15 +841,15 @@ msgstr "Ресурсы"
 
 #: js/EventEditDialog.js:92
 msgid "View"
-msgstr ""
+msgstr "Вид"
 
 #: js/EventEditDialog.js:108
 msgid "Details"
-msgstr ""
+msgstr "Детали"
 
 #: js/EventEditDialog.js:157
 msgid "Saved in"
-msgstr ""
+msgstr "Сохранено в"
 
 #: js/EventEditDialog.js:267
 msgid "Enter description"
@@ -896,7 +897,7 @@ msgstr ""
 
 #: js/EventUI.js:256
 msgid "has alarm"
-msgstr ""
+msgstr "уведомление"
 
 #: js/CalendarSelectWidget.js:124
 msgid "Originally"
@@ -904,7 +905,7 @@ msgstr "Изначально"
 
 #: js/SearchCombo.js:70
 msgid "no events found"
-msgstr ""
+msgstr "события не найдены"
 
 #: js/SearchCombo.js:71
 msgid "Searching..."
@@ -916,7 +917,7 @@ msgstr "Поиск события"
 
 #: views/eventNotification.php:12
 msgid "Updates"
-msgstr ""
+msgstr "Обновления"
 
 #: views/eventNotification.php:20
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
@@ -924,19 +925,19 @@ msgstr ""
 
 #: views/eventNotification.php:27
 msgid "%1$s has been invited"
-msgstr ""
+msgstr "%1$s был приглашён"
 
 #: views/eventNotification.php:32
 msgid "%1$s has been removed"
-msgstr ""
+msgstr "%1$s был удалён"
 
 #: views/eventNotification.php:39
 msgid "%1$s accepted invitation"
-msgstr ""
+msgstr "%1$s принял приглашение"
 
 #: views/eventNotification.php:43
 msgid "%1$s declined invitation"
-msgstr ""
+msgstr "%1$s отклонил приглашение"
 
 #: views/eventNotification.php:47
 msgid "Tentative response from %1$s"
@@ -956,11 +957,11 @@ msgstr "Детали события"
 
 #: Controller/EventNotifications.php:261
 msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr ""
+msgstr "Напоминание для события \"%1$s\" на %2$s"
 
 #: Controller/EventNotifications.php:264
 msgid "Event invitation \"%1$s\" at %2$s"
-msgstr ""
+msgstr "Приглашение на событие \"%1$s\" в %2$s"
 
 #: Controller/EventNotifications.php:268
 msgid "Event \"%1$s\" at %2$s has been canceled"
@@ -976,11 +977,11 @@ msgstr "Событие \"%1$s\" в %2$s было обновлено"
 
 #: Controller/EventNotifications.php:294
 msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "%1$s присоединился к событию \"%2$s\" в %3$s"
 
 #: Controller/EventNotifications.php:298
 msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "%1$s отклонил событие \"%2$s\" на %3$s"
 
 #: Controller/EventNotifications.php:302
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
@@ -988,8 +989,8 @@ msgstr ""
 
 #: Controller/EventNotifications.php:306
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "Нет ответа от %1$s для события \"%2$s\" в %3$s"
 
 #: Controller/EventNotifications.php:310
 msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr ""
+msgstr "Участник изменил событие \"%1$s\" в %2$s"

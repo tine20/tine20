@@ -1,13 +1,14 @@
 # 
 # Translators:
+# Aleksdem <aleksdem@aleksdem.com>, 2013
 # артур Мудрых <arturmon82@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-26 08:57+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-06-20 17:51+0000\n"
+"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -107,7 +108,7 @@ msgstr "Порт"
 
 #: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:469
 msgid "Login name"
-msgstr ""
+msgstr "Имя"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
 #: js/EmailPanel.js:190 js/ConfigManagerPanel.js:214
@@ -160,7 +161,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:426
 msgid "Accounts storage"
-msgstr ""
+msgstr "Хранилище учётных записей"
 
 #: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:539
 msgid "Default user group name"

@@ -1,0 +1,251 @@
+# 
+# Translators:
+# Theodosios Filippou <tf1974@gmail.com>, 2013
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2013-05-28 09:18+0000\n"
+"Last-Translator: Theodosios Filippou <tf1974@gmail.com>\n"
+"Language-Team: Greek (Greece) (http://www.transifex.com/projects/p/tine20/language/el_GR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: el_GR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:103
+msgid "manage products"
+msgstr ""
+
+#: Acl/Rights.php:104
+msgid "add, edit and delete products"
+msgstr ""
+
+#: Controller.php:83 Controller.php:103
+msgid "You do not have admin rights on Sales"
+msgstr ""
+
+#: Model/Contract.php:91
+msgid "Responsible"
+msgstr ""
+
+#: Model/Contract.php:92
+msgid "Customer"
+msgstr "Πελάτης"
+
+#: Model/Contract.php:93
+msgid "Partner"
+msgstr "Συνεργάτης"
+
+#: Config.php:51
+msgid "Contract Number Creation"
+msgstr ""
+
+#: Config.php:53
+msgid "Should the contract number be set manually or be auto-created?"
+msgstr ""
+
+#: Config.php:56
+msgid "automatically"
+msgstr ""
+
+#: Config.php:57
+msgid "manually"
+msgstr ""
+
+#: Config.php:64
+msgid "Contract Number Validation"
+msgstr ""
+
+#: Config.php:66
+msgid "The Number can be validated as text or number."
+msgstr ""
+
+#: Config.php:69 js/Models.js:199 js/ContractEditDialog.js:136
+msgid "Number"
+msgstr "Αριθμός"
+
+#: Config.php:70
+msgid "Text"
+msgstr "Κείμενο"
+
+#: Config.php:77
+msgid "Contract Status Available"
+msgstr ""
+
+#: Config.php:79
+msgid ""
+"Possible Contract status. Please note that additional contract status might "
+"impact other Sales systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:87
+msgid "Contract Cleared State Available"
+msgstr ""
+
+#: Config.php:89
+msgid "Possible Contract cleared states."
+msgstr ""
+
+#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
+msgid "My Products"
+msgstr ""
+
+#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
+msgid "Products created by myself"
+msgstr ""
+
+#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
+msgid "My Contracts"
+msgstr ""
+
+#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
+msgid "Contracts created by myself"
+msgstr ""
+
+#: js/AdminPanel.js:61
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+#: js/AdminPanel.js:69
+msgid "OK"
+msgstr "ΟΚ"
+
+#: js/AdminPanel.js:90
+msgid "Loading..."
+msgstr ""
+
+#: js/ContractGridPanel.js:82
+msgid "Contract number"
+msgstr ""
+
+#: js/ContractGridPanel.js:88 js/Models.js:236 js/ContractEditDialog.js:143
+msgid "Title"
+msgstr "Τίτλος"
+
+#: js/ContractGridPanel.js:94 js/Models.js:146 js/ContractEditDialog.js:176
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: js/ContractGridPanel.js:101 js/Models.js:153 js/ContractEditDialog.js:183
+msgid "Cleared"
+msgstr ""
+
+#: js/ContractGridPanel.js:108 js/Models.js:159 js/ContractEditDialog.js:187
+msgid "Cleared in"
+msgstr ""
+
+#: js/ProductEditDialog.js:93 js/ProductGridPanel.js:121
+msgid "Name"
+msgstr "Όνομα"
+
+#: js/ProductEditDialog.js:99 js/ProductGridPanel.js:125
+msgid "Price"
+msgstr "Τιμή"
+
+#: js/ProductEditDialog.js:106 js/ProductGridPanel.js:122
+msgid "Manufacturer"
+msgstr ""
+
+#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:123
+msgid "Category"
+msgstr ""
+
+#: js/ProductEditDialog.js:114 js/ProductGridPanel.js:124
+#: js/ContractEditDialog.js:193
+msgid "Description"
+msgstr "Περιγραφή"
+
+#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:194
+msgid "Enter description..."
+msgstr ""
+
+#: js/ProductGridPanel.js:120
+msgid "Tags"
+msgstr ""
+
+#: js/Models.js:39
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Προϊόντα"
+msgstr[1] "Προϊόντα"
+
+#: js/Models.js:42 js/Models.js:225
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:76 js/Models.js:142 js/Models.js:198 js/Models.js:235
+msgid "Quick search"
+msgstr "Γρήγορη αναζήτηση"
+
+#: js/Models.js:77
+msgid "Product name"
+msgstr "Όνομα Προϊόντος"
+
+#: js/Models.js:79 js/Models.js:144
+msgid "Creator"
+msgstr ""
+
+#: js/Models.js:112
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:116
+msgid "All Contracts"
+msgid_plural "contracts lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:143
+msgid "Contract name"
+msgstr ""
+
+#: js/Models.js:185
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:188
+msgid "All CostCenters"
+msgid_plural "All CostCenters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:200
+msgid "Remark"
+msgstr ""
+
+#: js/Models.js:222
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ContractEditDialog.js:96
+msgid "Please use a decimal number here!"
+msgstr ""
+
+#: js/ContractEditDialog.js:149
+msgid "Contract Contact"
+msgstr ""
+
+#: js/ContractEditDialog.js:161
+msgid "Account Manager"
+msgstr ""
+
+#: js/ContractEditDialog.js:170
+msgid "Company"
+msgstr "Εταιρεία"
+
+#: Controller/Contract.php:83
+msgid "The number you have tried to set is already in use!"
+msgstr ""

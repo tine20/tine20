@@ -43,6 +43,20 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
     const RELATION_TYPE_RESPONSIBLE = 'RESPONSIBLE';
     
     /**
+     * if foreign Id fields should be resolved on search and get from json
+     * should have this format:
+     *     array('Calendar_Model_Contact' => 'contact_id', ...)
+     * or for more fields:
+     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
+     * (e.g. resolves contact_id with the corresponding Model)
+     *
+     * @var array
+     */
+    protected static $_resolveForeignIdFields = array(
+        'Tinebase_Model_User' => array('created_by', 'last_modified_by')
+    );
+    
+    /**
      * list of zend validator
      *
      * this validators get used when validating user generated content with Zend_Input_Filter
@@ -59,7 +73,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'cleared'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'cleared_in'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // modlog information
+        // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -68,7 +82,9 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // relations (linked users/groups and customers
+        // tags, notes, relations
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
     );
 

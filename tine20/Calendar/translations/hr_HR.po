@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-05-17 10:42+0000\n"
+"PO-Revision-Date: 2013-05-24 21:21+0000\n"
 "Last-Translator: ihorvat <ivana.horvat@globalnet.hr>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
@@ -135,7 +135,7 @@ msgstr "Fiksni kalendar"
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
-msgstr "Kalendari uvijek izabrani bezobzira na sve parametre filtera"
+msgstr "Kalendari su uvijek odabrani bez obzira na parametare u filtru. Stoga postoji mogućnost da se uporno prikazuju određeni neradni dani u kalendaru."
 
 #: Config.php:55
 msgid "Attendee Status Available"
@@ -149,7 +149,7 @@ msgstr "Mogući statusi sudionika sastanka. Imajte na umu da bi dodatni sudionic
 
 #: Config.php:65
 msgid "Attendee Roles Available"
-msgstr ""
+msgstr "Raspoložive uloge sudionika"
 
 #: Config.php:67
 msgid ""
@@ -228,7 +228,7 @@ msgstr "Početno vrijeme"
 
 #: Preference.php:92
 msgid "Position on the left time axis, day and week view should start with"
-msgstr ""
+msgstr "Pozicija na lijevoj strani vremenske osi, dan i tjedan s kojim bi pregled trebao započeti"
 
 #: Preference.php:95
 msgid "Default Calendar"
