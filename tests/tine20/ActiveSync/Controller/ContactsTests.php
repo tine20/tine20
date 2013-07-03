@@ -140,6 +140,32 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
         
         return array($serverId, $syncrotonContact);
     }
+    
+    public function testCreateEntryWithNoFamilyName($syncrotonFolder = null)
+    {
+        if ($syncrotonFolder === null) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $xml = new SimpleXMLElement($this->_testXMLInput);
+        $syncrotonContact = new Syncroton_Model_Contact($xml->Collections->Collection->Commands->Add[0]->ApplicationData);
+        unset($syncrotonContact->lastName);
+        
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonContact);
+        
+        $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        
+        $this->assertEquals('asdf',                   $syncrotonContact->firstName);
+        $this->assertEquals('imported',               $syncrotonContact->lastName);
+        $this->assertEquals('l.kneschke@example.com', $syncrotonContact->email1Address);
+        $this->assertEquals('c.weiss@example.de',     $syncrotonContact->email2Address);
+        $this->assertEquals('20001224T230000Z',       $syncrotonContact->birthday->format('Ymd\THis\Z'));
+        $this->assertEquals(NULL,                     $syncrotonContact->webPage, 'facebook url should be removed');
+        
+        return array($serverId, $syncrotonContact);
+    }
 
     public function testUpdateEntry($syncrotonFolder = null)
     {

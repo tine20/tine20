@@ -322,6 +322,11 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
             'org_name'  => $contact->org_name
         ));
         
+        // either "org_name" or "n_family" must be given!
+        if (empty($contact->org_name) && empty($contact->n_family)) {
+            $contact->n_family = 'imported';
+        }
+        
         // contact should be valid now
         $contact->isValid();
         
