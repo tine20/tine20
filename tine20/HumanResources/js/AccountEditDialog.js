@@ -82,6 +82,9 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
             }],
+            defaults: {
+                hideMode: 'offsets'
+            },
             activeTab: 0,
             border: false,
             items: [{

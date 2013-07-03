@@ -119,7 +119,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             fieldLabel: this.app.i18n._('Cleared at')
         }];
         
-        if(Tine.Tinebase.appMgr.get('Sales')) {
+        if (Tine.Tinebase.appMgr.get('Sales')) {
             secondRow.push({
                 xtype: 'tinerelationpickercombo',
                 fieldLabel: this.app.i18n._('Cost Center'),
@@ -134,12 +134,25 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         }
         
         secondRow.push({
+            columnWidth: 1/3,
+            editDialog: this,
+            xtype: 'tinerelationpickercombo',
+            fieldLabel: this.app.i18n._('Responsible person'),
+            allowBlank: true,
+            app: 'Addressbook',
+            recordClass: Tine.Addressbook.Model.Contact,
+            relationType: 'RESPONSIBLE',
+            relationDegree: 'sibling',
+            modelUnique: true
+        });
+        
+        secondRow.push({
             hideLabel: true,
             boxLabel: this.app.i18n._('Timesheets are billable'),
             name: 'is_billable',
             xtype: 'checkbox',
             columnWidth: .666
-        })
+        });
         
         return {
             xtype: 'tabpanel',
@@ -149,6 +162,9 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
             }],
+            defaults: {
+                hideMode: 'offsets'
+            },
             items:[{
                 title: this.app.i18n.ngettext('Time Account', 'Time Accounts', 1),
                 autoScroll: true,

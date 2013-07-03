@@ -106,11 +106,13 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
-            layoutOnTabChange: true,
             border: false,
             plain:true,
             activeTab: 0,
             border: false,
+            defaults: {
+                hideMode: 'offsets'
+            },
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
             }],
@@ -144,7 +146,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'title',
                         allowBlank: false
                     }], [{
-                            columnWidth: .5,
+                            columnWidth: 1/3,
                             xtype: 'tinerelationpickercombo',
                             fieldLabel: this.app.i18n._('Contract Contact'),
                             editDialog: this,
@@ -155,7 +157,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             relationDegree: 'sibling',
                             modelUnique: true
                         }, {
-                            columnWidth: .5,
+                            columnWidth: 1/3,
                             editDialog: this,
                             xtype: 'tinerelationpickercombo',
                             fieldLabel: this.app.i18n._('Account Manager'),
@@ -163,6 +165,17 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             app: 'Addressbook',
                             recordClass: Tine.Addressbook.Model.Contact,
                             relationType: 'RESPONSIBLE',
+                            relationDegree: 'sibling',
+                            modelUnique: true
+                        }, {
+                            columnWidth: 1/3,
+                            editDialog: this,
+                            xtype: 'tinerelationpickercombo',
+                            fieldLabel: this.app.i18n._('Lead Cost Center'),
+                            allowBlank: true,
+                            app: 'Sales',
+                            recordClass: Tine.Sales.Model.CostCenter,
+                            relationType: 'LEAD_COST_CENTER',
                             relationDegree: 'sibling',
                             modelUnique: true
                         }/*, {

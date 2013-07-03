@@ -159,6 +159,7 @@ Tine.Sales.Model.Contract.getFilterModel = function() {
         },
         {label: app.i18n._('Cleared in'), field: 'cleared_in' },
         {filtertype: 'tinebase.tag', app: app},
+        {filtertype: 'sales.contract.costcenter' },
         {label: _('Last Modified Time'), field: 'last_modified_time', valueType: 'date'},
         {label: _('Last Modified By'), field: 'last_modified_by',   valueType: 'user'},
         {label: _('Creation Time'), field: 'creation_time',      valueType: 'date'},

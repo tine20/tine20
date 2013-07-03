@@ -484,10 +484,46 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             allowBlank: false,
             displayField: 'value',
             valueField: 'id',
-            mode: 'local'
+            mode: 'local',
+            constrainsConfig: config,
+            listeners: {
+                scope: this,
+                select: this.onTypeChange
+            }
         });
     },
 
+    /**
+     * is called on type change, sets the relationpickercombos accordingly
+     * 
+     * @param {Ext.form.ComboBox} combo
+     * @param {Tine.Tinebase.data.Record} record
+     * @param {Number} index
+     */
+    onTypeChange: function(combo, record, index) {
+        
+        var newType = combo.getValue();
+        var oldType = combo.startValue;
+        
+        var rp = this.editDialog.relationPickers;
+        if (rp && rp.length) {
+            var relatedRecord;
+            Ext.each(rp, function(picker) {
+                // remove record from old combo
+                if (picker.relationType == oldType) {
+                    relatedRecord = picker.combo.selectedRecord;
+                    picker.clear();
+                }
+            }, this);
+            
+            Ext.each(rp, function(picker) {
+                if (picker.relationType == newType) {
+                    picker.setValue(relatedRecord);
+                }
+            }, this);
+        }
+    },
+    
     /**
      * related record renderer
      *
@@ -496,7 +532,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     relatedRecordRenderer: function (recData, meta, relRec) {
         var relm = relRec.get('related_model');
-        if(!relm) {
+        if (! relm) {
             return '';
         }
         var split = relm.split('_'); 

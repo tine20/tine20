@@ -42,6 +42,10 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         array('relatedApp' => 'Sales', 'relatedModel' => 'CostCenter', 'config' => array(
             array('type' => 'COST_CENTER', 'degree' => 'sibling', 'text' => 'Cost Center', 'max' => '1:0'), // _('Cost Center')
             )
+        ),
+        array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
+            array('type' => 'RESPONSIBLE', 'degree' => 'sibling', 'text' => 'Responsible person', 'max' => '1:0'), // _('Cost Center')
+        )
         )
     );
     

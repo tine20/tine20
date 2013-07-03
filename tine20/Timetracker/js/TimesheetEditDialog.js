@@ -122,6 +122,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
             }],
+            defaults: {
+                hideMode: 'offsets'
+            },
             items:[
                 {
                 title: this.app.i18n.ngettext('Timesheet', 'Timesheets', 1),

@@ -450,3 +450,6 @@ msgstr[1] "Stundenzettel-Listen"
 
 msgid "Cleared at"
 msgstr "Abgerechnet am"
+
+msgid "Responsible person"
+msgstr "Verantwortlicher"

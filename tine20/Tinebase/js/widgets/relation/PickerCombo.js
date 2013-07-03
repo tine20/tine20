@@ -50,7 +50,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
      */
     deferredLoading: function() {
 
-        if(!this.editDialog.relationsPanel) {
+        if (!this.editDialog.relationsPanel) {
             this.deferredLoading.defer(100, this);
             return;
         }
@@ -61,7 +61,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
         this.combo.on('select', function() {
             var value = this.combo.getValue();
 
-            if(value.length) {
+            if (value.length) {
                 var recordToAdd = this.combo.selectedRecord;
 
                 // check if another relationPicker has the same record selected
@@ -80,7 +80,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
                     }, this);
                 }
 
-                if(hasDuplicate) {
+                if (hasDuplicate) {
                     if(this.combo.startRecord) {
                         var split = this.fullModelName.split('_Model_');
                         var startRecord = this.combo.startRecord;
@@ -94,11 +94,11 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
                     return false;
                 }
 
-                if(value != this.combo.startValue) {
+                if (value != this.combo.startValue) {
                     this.removeIdFromStore(this.combo.startValue);
                 }
 
-                if(this.store.findBy(function(record, id) {
+                if (this.store.findBy(function(record, id) {
                     if(record) {
                         if(record.get('related_id') == value && record.get('type') == this.relationType) return true;
                     }
@@ -119,7 +119,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
             }
         }, this);
 
-        if(!this.editDialog.relationPickers) this.editDialog.relationPickers = [];
+        if (!this.editDialog.relationPickers) this.editDialog.relationPickers = [];
         this.editDialog.relationPickers.push(this);
 
         Tine.widgets.relation.PickerCombo.superclass.initComponent.call(this);

@@ -251,3 +251,6 @@ msgstr "Firma"
 #: Controller/Contract.php:83
 msgid "The number you have tried to set is already in use!"
 msgstr "Diese Nummer ist bereits vergeben!"
+
+msgid "Lead Cost Center"
+msgstr "Lead-Kostenstelle"

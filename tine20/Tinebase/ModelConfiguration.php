@@ -502,7 +502,7 @@ class Tinebase_ModelConfiguration {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent',
-        'hasCustomFields'
+        'hasCustomFields', 'modlogActive'
     );
 
     /**

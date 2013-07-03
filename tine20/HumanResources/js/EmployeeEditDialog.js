@@ -462,6 +462,9 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         return {
             xtype: 'tabpanel',
+            defaults: {
+                hideMode: 'offsets'
+            },
             border: false,
             plain: true,
             activeTab: 0,

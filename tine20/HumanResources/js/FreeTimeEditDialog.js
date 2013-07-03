@@ -161,6 +161,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             xtype: 'tabpanel',
             border: false,
             plain:true,
+            defaults: {
+                hideMode: 'offsets'
+            },
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
             }],

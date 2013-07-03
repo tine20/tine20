@@ -401,7 +401,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
                 
                 // don't show parent property in dependency of an editDialog
-                
                 if (this.editDialog && fieldConfig.hasOwnProperty('config') && fieldConfig.config.isParent) {
                     return true;
                 }
