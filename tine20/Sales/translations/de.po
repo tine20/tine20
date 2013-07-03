@@ -254,3 +254,6 @@ msgstr "Diese Nummer ist bereits vergeben!"
 
 msgid "Lead Cost Center"
 msgstr "Lead-Kostenstelle"
+
+msgid "Time Account"
+msgstr "Zeitkonto"

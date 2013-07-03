@@ -148,7 +148,10 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             this.getNodeById(this.filterMountId).appendChild(this.filterNode);
         }
         // due to dependencies isues we need to wait after render
-        this.getFilterToolbar().on('change', this.onFilterChange, this);
+        var ft = this.getFilterToolbar();
+        if (ft) {
+            ft.on('change', this.onFilterChange, this);
+        }
     },
 
     /**

@@ -245,3 +245,10 @@ msgstr ""
 #: Controller/Contract.php:83
 msgid "The number you have tried to set is already in use!"
 msgstr ""
+
+msgid "Lead Cost Center"
+msgstr ""
+
+msgid "Time Account"
+msgstr ""
+

@@ -155,7 +155,7 @@ class Tinebase_Frontend_Cli_Abstract
         }
         $className = $this->_applicationName . '_Setup_DemoData';
         
-        if (@class_exists($className)) {
+        if (class_exists($className)) {
             if ($className::getInstance()->createDemoData($locale, $models, $users, $createShared, $createUsers, $password)) {
                 echo 'Demo Data was created successfully' . chr(10) . chr(10);
             } else {
