@@ -161,13 +161,13 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
     {
         if (is_array($this->_value)) {
             foreach ($this->_value as &$value) {
-                if (! ctype_digit($value)) {
+                if (! is_numeric($value)) {
                     throw new Tinebase_Exception_UnexpectedValue("$value is not a number");
                 } 
                 $value = (int) $value;
             }
         } else {
-            if (! ctype_digit($this->_value)) {
+            if (! is_numeric($this->_value)) {
                 throw new Tinebase_Exception_UnexpectedValue("$this->_value is not a number");
             } 
             $this->_value = (int) $this->_value;
