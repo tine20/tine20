@@ -63,7 +63,6 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     }
 
     /**
-<<<<<<< HEAD
      * resolves single record fields (Tinebase_ModelConfiguration._recordsFields)
      * 
      * @param Tinebase_Record_RecordSet $_records the records
