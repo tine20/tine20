@@ -29,7 +29,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
      * handle request
      * 
      * @return void
-     */    
+     */
     public function handle()
     {
         // handle CORS requests
@@ -50,6 +50,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
                 }
             } else {
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " forbidden CORS request from {$_SERVER['HTTP_ORIGIN']}");
+                Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " allowed origins: " . print_r($allowedOrigins, TRUE));
                 header("HTTP/1.1 403 Access Forbidden");
                 exit;
             }

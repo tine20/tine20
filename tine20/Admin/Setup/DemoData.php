@@ -17,7 +17,7 @@
 class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 {
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Admin_Setup_DemoData
      */
@@ -77,7 +77,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createGroups()
     {
         $fe = new Admin_Frontend_Json();
-        foreach($this->_groups as $groupArray) {
+        foreach ($this->_groups as $groupArray) {
             $members = array();
             foreach($groupArray['groupMembers'] as $member) {
                 $members[] = $this->_personas[$member]->getId();
@@ -99,7 +99,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createRoles()
     {
         $fe = new Admin_Frontend_Json();
-        foreach($this->_roles as $roleArray) {
+        foreach ($this->_roles as $roleArray) {
             
             // resolve members
             $members = array();
@@ -208,5 +208,46 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         $this->_createGroups();
         $this->_createRoles();
+        $this->_createSharedTags();
+    }
+    
+    /**
+     * create some shared tags
+     */
+    protected function _createSharedTags()
+    {
+        for ($i = 0; $i < 105; $i++) {
+            $sharedTag = new Tinebase_Model_Tag(array(
+                'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+                'name'  => 'tag::shared #' . $i,
+                'description' => 'this is a shared tag',
+                'color' => '#' . $this->_generateRandomColor(),
+            ));
+            $savedSharedTag = Tinebase_Tags::getInstance()->createTag($sharedTag);
+    
+            $right = new Tinebase_Model_TagRight(array(
+                'tag_id'        => $savedSharedTag->getId(),
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                'account_id'    => 0,
+                'view_right'    => TRUE,
+                'use_right'     => TRUE,
+            ));
+            Tinebase_Tags::getInstance()->setRights($right);
+        }
+    }
+    
+    /**
+     * generate a random html color code
+     * 
+     * @return string
+     */
+    protected function _generateRandomColor ()
+    {
+        mt_srand((double)microtime()*1000000);
+        $color = '';
+        while (strlen($color) < 6) {
+            $color .= sprintf("%02X", mt_rand(0, 255));
+        }
+        return $color;
     }
 }
