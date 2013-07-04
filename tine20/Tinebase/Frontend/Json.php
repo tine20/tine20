@@ -706,16 +706,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $registryData[$application->name]['config'] = isset($clientConfig[$application->name]) ? $clientConfig[$application->name]->toArray() : array();
                     $registryData[$application->name]['models'] = $applicationJson->getModelsConfiguration();
                     $registryData[$application->name]['defaultModel'] = $applicationJson->getDefaultModel();
-                    foreach ($applicationJson->getRelatableModels() as $app => $relModels) {
-                        if (! array_key_exists($app, $registryData)) {
-                            $registryData[$app] = array();
-                        }
-                        if (! array_key_exists('relatableModels', $registryData[$app])) {
-                            $registryData[$app]['relatableModels'] = array();
-                        }
-                        if (! empty($relModels)) {
-                            $registryData[$app]['relatableModels'] = array_merge_recursive($registryData[$app]['relatableModels'], $relModels);
-                        }
+                    
+                    foreach ($applicationJson->getRelatableModels() as $relModel) {
+                        $registryData[$relModel['ownApp']]['relatableModels'][] = $relModel;
                     }
 
                     // @todo do we need this for all apps?
@@ -757,7 +750,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $registryData['Tinebase'] = $this->getRegistryData();
         }
-        
         return $registryData;
     }
 

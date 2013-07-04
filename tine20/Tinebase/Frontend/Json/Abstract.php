@@ -69,52 +69,69 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $ret = array();
         
         if (property_exists($this, '_relatableModels') && is_array($this->_relatableModels)) {
-            $i = 0;
+            // iterates relatable models of this app
             foreach ($this->_relatableModels as $model) {
-                if (! class_exists($model)) {
+                
+                $ownModel = explode('_Model_', $model);
+                
+                if (! class_exists($model) || $ownModel[0] != $this->_applicationName) {
                     continue;
                 }
                 $cItems = $model::getRelatableConfig();
-                $ownModel = explode('_Model_', $model);
+                
                 $ownModel = $ownModel[1];
                 
-                foreach($cItems as $cItem) {
-                    $cItem['ownModel'] = $ownModel;
-                    $cItem['ownApp'] = $this->_applicationName;
-                    $ret[$this->_applicationName][$i] = $cItem;
-                    $ret[$cItem['relatedApp']][$i] = array(
-                        'reverted'     => true,
-                        'ownApp'       => $cItem['relatedApp'],
-                        'ownModel'     => $cItem['relatedModel'], 
-                        'relatedModel' => $cItem['ownModel'],
-                        'relatedApp'   => $this->_applicationName
-                    );
-                    // KeyfieldConfigs
-                    if (array_key_exists('keyfieldConfig', $cItem)) {
-                        $ret[$cItem['relatedApp']][$i]['keyfieldConfig'] = $cItem['keyfieldConfig'];
-                        if ($cItem['keyfieldConfig']['from']){
-                            $ret[$cItem['relatedApp']][$i]['keyfieldConfig']['from'] = $cItem['keyfieldConfig']['from'] == 'foreign' ? 'own' : 'foreign';
+                if (is_array($cItems)) {
+                    foreach($cItems as $cItem) {
+                        
+                        if (! array_key_exists('config', $cItem)) {
+                            continue;
                         }
-                    }
-                    $j=0;
-                    if (array_key_exists('config', $cItem)) {
+                        
+                        // own side
+                        $ownConfigItem = $cItem;
+                        $ownConfigItem['ownModel'] = $ownModel;
+                        $ownConfigItem['ownApp'] = $this->_applicationName;
+                        
+                        $foreignConfigItem = array(
+                            'reverted'     => true,
+                            'ownApp'       => $cItem['relatedApp'],
+                            'ownModel'     => $cItem['relatedModel'], 
+                            'relatedModel' => $ownModel,
+                            'relatedApp'   => $this->_applicationName,
+                            'default'      => array_key_exists('default', $cItem) ? $cItem['default'] : NULL
+                        );
+                        
+                        // KeyfieldConfigs
+                        if (array_key_exists('keyfieldConfig', $cItem)) {
+                            $foreignConfigItem['keyfieldConfig'] = $cItem['keyfieldConfig'];
+                            if ($cItem['keyfieldConfig']['from']){
+                                $foreignConfigItem['keyfieldConfig']['from'] = $cItem['keyfieldConfig']['from'] == 'foreign' ? 'own' : 'foreign';
+                            }
+                        }
+                        
+                        $j=0;
                         foreach ($cItem['config'] as $conf) {
                             $max = explode(':',$conf['max']);
-                            $ret[$this->_applicationName][$i]['config'][$j]['max'] = $max[0];
-                            $ret[$cItem['relatedApp']][$i]['config'][$j] = $conf;
-                            $ret[$cItem['relatedApp']][$i]['config'][$j]['max'] = $max[1];
+                            $ownConfigItem['config'][$j]['max'] = $max[0];
+                            
+                            $foreignConfigItem['config'][$j] = $conf;
+                            $foreignConfigItem['config'][$j]['max'] = $max[1];
                             if ($conf['degree'] == 'sibling') {
-                                $ret[$cItem['relatedApp']][$i]['config'][$j]['degree'] = $conf['degree'];
+                                $foreignConfigItem['config'][$j]['degree'] = $conf['degree'];
                             } else {
-                                $ret[$cItem['relatedApp']][$i]['config'][$j]['degree'] = $conf['degree'] == 'parent' ? 'child' : 'parent';
+                                $foreignConfigItem['config'][$j]['degree'] = $conf['degree'] == 'parent' ? 'child' : 'parent';
                             }
                             $j++;
                         }
+                        
+                        $ret[] = $ownConfigItem;
+                        $ret[] = $foreignConfigItem;
                     }
-                    $i++;
                 }
             }
         }
+        
         return $ret;
     }
     

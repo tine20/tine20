@@ -36,4 +36,25 @@ class Sales_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Sales', '7.1');
     }
+    
+    /**
+     * update to 7.2
+     * 
+     * get all contracts with linked Sales_Model_CostCenter and set type for all to LEAD_COST_CENTER
+     * 
+     * @see 0008532: Fix relations constrains handling
+     */
+    public function update_1()
+    {
+        $where = '(' 
+            . $this->_db->quoteInto($this->_db->quoteIdentifier('related_model') . ' = ?', 'Sales_Model_CostCenter')
+            . ' AND '
+            . $this->_db->quoteInto($this->_db->quoteIdentifier('own_model') . ' = ?', 'Sales_Model_Contract') 
+        . ') OR ('
+            . $this->_db->quoteInto($this->_db->quoteIdentifier('own_model') . ' = ?', 'Sales_Model_CostCenter')
+            . ' AND '
+            . $this->_db->quoteInto($this->_db->quoteIdentifier('related_model') . ' = ?', 'Sales_Model_Contract') 
+        . ')';
+        $this->_db->update(SQL_TABLE_PREFIX . 'relations', array('type' => 'LEAD_COST_CENTER'), $where);
+    }
 }

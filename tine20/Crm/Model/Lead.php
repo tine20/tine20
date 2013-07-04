@@ -123,7 +123,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         ),
         array('relatedApp' => 'Tasks', 'relatedModel' => 'Task', 'config' => array(
             array('type' => 'TASK', 'degree' => 'sibling', 'text' => 'Task', 'max' => '1:0'), // _('Task')
-        ),
+            ),
         )
     );
 

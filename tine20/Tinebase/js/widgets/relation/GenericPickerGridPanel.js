@@ -245,7 +245,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @return {String}
      */
     getViewRowClass: function(record, index, rowParams, store) {
-        if(this.invalidRowRecords && this.invalidRowRecords.indexOf(record.id) !== -1) {
+        if (this.invalidRowRecords && this.invalidRowRecords.indexOf(record.id) !== -1) {
+            
             var model = record.get('related_model').split('_Model_');
             model = Tine[model[0]].Model[model[1]];
             rowParams.body = '<div style="height: 19px; margin-top: -19px" ext:qtip="' +
@@ -448,7 +449,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             case 'type':
                 var editor = null;
                 if (this.constrainsConfig[app+model]) {
-                    editor = this.getTypeEditor(this.constrainsConfig[app+model]);
+                    editor = this.getTypeEditor(this.constrainsConfig[app+model], this.app);
                 } else if (this.keyFieldConfigs[app+model]) {
                     editor = new Tine.Tinebase.widgets.keyfield.ComboBox({
                         app: app,
@@ -468,14 +469,18 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
 
     /**
      * returns the type editors for each row in the grid
-     * @param {} relation
+     * 
+     * @param {Object} config
+     * @param {Tine.Tinebase.Application}
+     * 
      * @return {}
      */
-    getTypeEditor: function(config) {
+    getTypeEditor: function(config, app) {
         var data = [];
         Ext.each(config, function(c){
-            data.push([c.type.toUpperCase(), c.text]);
+            data.push([c.type.toUpperCase(), app.i18n._hidden(c.text)]);
         });
+        
         return new Ext.form.ComboBox({
             store: new Ext.data.ArrayStore({
                 fields: ['id', 'value'],
@@ -614,7 +619,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @return {String}
      */
     typeRenderer: function(value, row, rec) {
-        if(!rec.get('own_model') || !rec.get('related_model')) {
+        if(! rec.get('own_model') || ! rec.get('related_model')) {
             return '';
         }
         var o = rec.get('own_model').split('_Model_').join('');
@@ -623,8 +628,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var renderer = Ext.util.Format.htmlEncode;
         if (this.constrainsConfig[f]) {
             Ext.each(this.constrainsConfig[f], function(c){
-                if(c.type == value) value = c.text;
-            });
+                if(c.type == value) value = this.app.i18n._hidden(c.text);
+            }, this);
         } else if(this.keyFieldConfigs[o]) {
             renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(this.keyFieldConfigs[o].app, this.keyFieldConfigs[o].name);
         } else if(this.keyFieldConfigs[f]) {
@@ -720,13 +725,11 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                             if (! this.view.invalidRowRecords) {
                                 this.view.invalidRowRecords = [];
                             }
-                            this.view.invalidRowRecords.push(relationRecord.get('id'));
+                            this.view.invalidRowRecords.push(relationRecord.get('related_id'));
                         }
                     } 
                 }, this);
             }
-            
-            
             
             // add if not already in
             if (this.store.findExact('related_id', record.id) === -1) {

@@ -118,8 +118,12 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             )
         ),
         array('relatedApp' => 'Sales', 'relatedModel' => 'CostCenter', 'config' => array(
-            array('type' => 'LEAD_COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '0:0'),
-        )
+            array('type' => 'LEAD_COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '0:0'), // _('Lead Cost Center')
+            )
+        ),
+        array('relatedApp' => 'Timetracker', 'relatedModel' => 'Timeaccount', 'config' => array(
+            array('type' => 'TIME_ACCOUNT', 'degree' => 'sibling', 'text' => 'Time Account', 'max' => '0:1'), // _('Time Account')
+            )
         ),
     );
 }
