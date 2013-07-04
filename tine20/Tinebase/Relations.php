@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Relations
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        re-enable the caching (but check proper invalidation first) -> see task #232
@@ -39,6 +39,7 @@ class Tinebase_Relations
     {
         $this->_backend = new Tinebase_Relation_Backend_Sql();
     }
+    
     /**
      * the singleton pattern
      *
@@ -51,6 +52,7 @@ class Tinebase_Relations
         }
         return self::$instance;
     }
+    
     /**
      * set all relations of a given record
      * 
@@ -129,20 +131,19 @@ class Tinebase_Relations
                     'notes',
                 )
             )) {
-//              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($current->related_record->toArray(), true));
-//              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($update->related_record->toArray(), true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Related record diff: ' . print_r($current->related_record->diff($update->related_record)->toArray(), true));
+                
                 $this->_setAppRecord($update);
             }
             
-            if (!$current->isEqual($update, array('related_record'))) {
+            if (! $current->isEqual($update, array('related_record'))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Relation diff: ' . print_r($current->diff($update)->toArray(), true));
+                
                 $this->_updateRelation($update);
             }
-            
         }
-        
-        // remove relations from cache
-        #$cache = Tinebase_Core::get('cache');
-        #$result = $cache->remove('getRelations' . $_model . $_backend . $_id);
     }
     
     /**
