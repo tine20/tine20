@@ -234,8 +234,6 @@ class Tinebase_Relations
      * 
      * @param   Tinebase_Record_RecordSet of Tinebase_Model_Relation
      * @throws  Tinebase_Exception_UnexpectedValue
-     * 
-     * @todo    allowed related models should not be defined here
      */
     protected function _setAppRecord($_relation)
     {
@@ -258,7 +256,7 @@ class Tinebase_Relations
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Relation: ' . print_r($_relation->toArray(), TRUE));
         
-        $record = $appController->$method($_relation->related_record);
+        $record = $appController->$method($_relation->related_record, FALSE);
         $_relation->related_id = $record->getId();
         
         switch ($_relation->related_model) {

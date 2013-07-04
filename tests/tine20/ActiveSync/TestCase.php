@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -211,19 +211,27 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey($this->_specialFolderName, $allSyncrotonFolders, "key {$this->_specialFolderName} not found in " . print_r($allSyncrotonFolders, true));
     }
     
+    /**
+     * testDeleteEntry
+     */
     public function testDeleteEntry()
     {
         $syncrotonFolder = $this->testCreateFolder();
-    
+        
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
-    
+        
         list($serverId, $syncrotonContact) = $this->testCreateEntry($syncrotonFolder);
-    
+        
         $controller->deleteEntry($syncrotonFolder->serverId, $serverId, null);
-    
-        $this->setExpectedException('Syncroton_Exception_NotFound');
-    
-        $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        
+        try {
+            $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+            $this->fail('should have thrown Syncroton_Exception_NotFound: '
+                . var_export($syncrotonContact, TRUE)
+                . ' tine contact: ' . print_r(Addressbook_Controller_Contact::getInstance()->get($serverId)->toArray(), TRUE));
+        } catch (Syncroton_Exception_NotFound $senf) {
+            $this->assertEquals('Syncroton_Exception_NotFound', get_class($senf));
+        }
     }
     
     public function testGetInvalidEntry()
@@ -497,5 +505,4 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
     
         return $device;
     }
-    
 }

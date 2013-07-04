@@ -279,7 +279,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $contact->setId($savedLead['id']);
         
         $contact->tags = array($tag);
-        $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact);
+        $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
         $tag = $savedContact->tags->getFirstRecord();
         
         $filter = array(

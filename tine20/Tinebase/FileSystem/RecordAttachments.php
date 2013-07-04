@@ -77,7 +77,7 @@ class Tinebase_FileSystem_RecordAttachments
             $record->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && count($record->attachments) > 0) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Found ' . count($record->attachments) . ' attachment(s).');
         
         return $record->attachments;

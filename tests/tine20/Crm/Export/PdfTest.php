@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -14,10 +14,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Crm_Export_PdfTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -49,7 +45,9 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-       $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
+        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Crm', 
             Zend_Registry::get('currentAccount'), 
@@ -135,19 +133,8 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
             'summary'               => 'task test',
         ));
         
-        try {
-            $lead = Crm_Controller_Lead::getInstance()->create($this->objects['leadWithLink']);
-        } catch ( Exception $e ) {
-            // already there
-        }
-        try {
-            $this->objects['linkedContact'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['linkedContact']);
-        } catch ( Exception $e ) {
-            // already there
-        }
-        
-        return;
-        
+        $lead = Crm_Controller_Lead::getInstance()->create($this->objects['leadWithLink']);
+        $this->objects['linkedContact'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['linkedContact'], FALSE);
     }
 
     /**
@@ -158,19 +145,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        // delete the db entries
-        try {
-            Crm_Controller_Lead::getInstance()->delete($this->objects['leadWithLink']);
-        } catch ( Exception $e ) {
-            // access denied ?
-        }
-        
-        try {
-            Addressbook_Controller_Contact::getInstance()->delete($this->objects['linkedContact']);
-        } catch ( Exception $e ) {
-            // access denied ?
-        }
-        
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -190,7 +165,6 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to create a pdf with a linked contact
-     *
      */
     public function testLeadPdfLinkedContact()
     {
@@ -212,8 +186,6 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
         $pdf->generate($lead);
         $pdfOutput = $pdf->render();
         
-        //$pdf->save("test.pdf");
-                
         $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), "no pdf generated");
         $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), "no contact data/fullname found");
 
@@ -224,7 +196,6 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to create a pdf with a linked task
-     *
      */
     public function testLeadPdfLinkedTask()
     {
@@ -247,12 +218,12 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
         $pdf = new Crm_Export_Pdf();
         $pdf->generate($lead);
         $pdfOutput = $pdf->render();
-                
+        
         //$pdf->save("test.pdf");
-                
+        
         $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), "no pdf generated");
         $this->assertEquals(1, preg_match("/".$task->summary."/", $pdfOutput), "no summary found");
-                
+        
         // remove
         Tasks_Controller_Task::getInstance()->delete($task->getId());
         
@@ -260,10 +231,4 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
         $backend = new Tinebase_Relation_Backend_Sql();
         $backend->purgeAllRelations('Crm_Model_Lead', 'Sql', $this->objects['leadWithLink']->getId());
     }
-    
-}        
-    
-
-if (PHPUnit_MAIN_METHOD == 'Crm_Export_PdfTest::main') {
-    Addressbook_ControllerTest::main();
 }

@@ -192,9 +192,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             return;
         }
         
-        if (method_exists($controller, 'modlogActive')) {
-            $modlogActive = $controller->modlogActive(FALSE);
-        }
+        // 2013-07-04, ps: removing this as i don't think that this is correct here
+        // (and it breaks the tests)
+//         if (method_exists($controller, 'modlogActive')) {
+//             $modlogActive = $controller->modlogActive(FALSE);
+//         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Fetching ' . $foreignRecordClassName . ' by id: ' . print_r($foreignIds, TRUE));
