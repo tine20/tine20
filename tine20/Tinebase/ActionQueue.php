@@ -106,7 +106,7 @@
      */
     public function executeAction($message)
     {
-        if (! is_array($message) || ! array_key_exists('action', $message) || strpos($message['action'], '.' === FALSE)) {
+        if (! is_array($message) || ! array_key_exists('action', $message) || strpos($message['action'], '.') === FALSE) {
             throw new Tinebase_Exception_NotFound('Could not execute action, invalid message/action param');
         }
 
