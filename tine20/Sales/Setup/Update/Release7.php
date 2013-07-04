@@ -56,5 +56,7 @@ class Sales_Setup_Update_Release7 extends Setup_Update_Abstract
             . $this->_db->quoteInto($this->_db->quoteIdentifier('related_model') . ' = ?', 'Sales_Model_Contract') 
         . ')';
         $this->_db->update(SQL_TABLE_PREFIX . 'relations', array('type' => 'LEAD_COST_CENTER'), $where);
+        
+        $this->setApplicationVersion('Sales', '7.2');
     }
 }
