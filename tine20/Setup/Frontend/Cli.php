@@ -48,10 +48,11 @@ class Setup_Frontend_Cli
     {
         Setup_Core::set(Setup_Core::USER, 'setupuser');
         
-        if(isset($_opts->install)) {
+        $result = 0;
+        if (isset($_opts->install)) {
             $this->_install($_opts);
         } elseif(isset($_opts->update)) {
-            $this->_update($_opts);
+            $result = $this->_update($_opts);
         } elseif(isset($_opts->uninstall)) {
             $this->_uninstall($_opts);
         } elseif(isset($_opts->list)) {
@@ -69,6 +70,8 @@ class Setup_Frontend_Cli
         } elseif(isset($_opts->create_admin)) {
             $this->_createAdminUser($_opts);
         }
+        
+        exit($result);
     }
     
     /**
@@ -179,46 +182,56 @@ class Setup_Frontend_Cli
      * update existing applications
      *
      * @param Zend_Console_Getopt $_opts
+     * @return integer
      */
     protected function _update(Zend_Console_Getopt $_opts)
     {
-        $controller = Setup_Controller::getInstance();
-        
-        if ($_opts->update === true) {
-            $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-        } else {
-            $applications = new Tinebase_Record_RecordSet('Tinebase_Model_Application');
-            $applicationNames = explode(',', $_opts->update);
-            foreach($applicationNames as $applicationName) {
-                $applicationName = ucfirst(trim($applicationName));
-                try {
-                    $application = Tinebase_Application::getInstance()->getApplicationByName($applicationName);
-                    $applications->addRecord($application);
-                } catch (Tinebase_Exception_NotFound $e) {
-                    //echo "Application $applicationName is not installed! Skipped...\n";
+        $maxLoops = 50;
+        do {
+            $result = $this->_updateApplications();
+            if ($_opts->v && ! empty($result['messages'])) {
+                echo "Messages:\n";
+                foreach ($result['messages'] as $message) {
+                    echo "  " . $message . "\n";
                 }
             }
-        }
+            $maxLoops--;
+        } while ($result['updated'] > 0 && $maxLoops > 0);
+        
+        return ($maxLoops > 0) ? 0 : 1;
+    }
+    
+    /**
+     * update all applications
+     * 
+     * @return array
+     */
+    protected function _updateApplications()
+    {
+        $controller = Setup_Controller::getInstance();
+        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
         
         foreach ($applications as $key => &$application) {
             try {
-                if (!$controller->updateNeeded($application)) {
-                    //echo "Application $application is already up to date! Skipped...\n";
+                if (! $controller->updateNeeded($application)) {
                     unset($applications[$key]);
                 }
             } catch (Setup_Exception_NotFound $e) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to check if an application needs an update:' . $e->getMessage());
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                    . ' Failed to check if an application needs an update:' . $e->getMessage());
                 unset($applications[$key]);
             }
         }
 
-        $updatecount = 0;
+        $result = array();
         if (count($applications) > 0) {
             $result = $controller->updateApplications($applications);
-            $updatecount = $result['updated'];
+            echo "Updated " . $result['updated'] . " application(s).\n";
+        } else {
+            $result['updated'] = 0;
         }
         
-        echo "Updated " . $updatecount . " applications.\n";
+        return $result;
     }
 
     /**
@@ -241,7 +254,6 @@ class Setup_Frontend_Cli
                     $application = Tinebase_Application::getInstance()->getApplicationByName($applicationName);
                     $applications->addRecord($application);
                 } catch (Tinebase_Exception_NotFound $e) {
-                    //echo "Application $applicationName is not installed! Skipped...\n";
                 }
             }
         }
@@ -253,7 +265,6 @@ class Setup_Frontend_Cli
 
     /**
      * list installed apps
-     *
      */
     protected function _listInstalled()
     {
