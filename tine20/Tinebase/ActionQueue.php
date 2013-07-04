@@ -101,11 +101,15 @@
     /**
      * execute action defined in queue message
      * 
-     * @param  string  $message  action
+     * @param  array  $message  action
      * @return mixed
      */
     public function executeAction($message)
     {
+        if (! is_array($message) || ! array_key_exists('action', $message) || strpos($message['action'], '.' === FALSE)) {
+            throw new Tinebase_Exception_NotFound('Could not execute action, invalid message/action param');
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " executing action: '{$message['action']}'");
         
