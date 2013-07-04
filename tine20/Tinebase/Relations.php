@@ -230,7 +230,7 @@ class Tinebase_Relations
     }
     
     /**
-     * creates application records which do not exist
+     * creates/updates application records
      * 
      * @param   Tinebase_Record_RecordSet of Tinebase_Model_Relation
      * @throws  Tinebase_Exception_UnexpectedValue
@@ -240,6 +240,8 @@ class Tinebase_Relations
     protected function _setAppRecord($_relation)
     {
         if (! $_relation->related_record instanceof Tinebase_Record_Abstract) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Relation: ' . print_r($_relation->toArray(), TRUE));
             throw new Tinebase_Exception_UnexpectedValue('Related record is missing from relation.');
         }
         
@@ -251,8 +253,10 @@ class Tinebase_Relations
             $method = 'update';
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . ucfirst($method) . ' ' . $_relation->related_model . ' record.');
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_relation->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' ' . ucfirst($method) . ' ' . $_relation->related_model . ' record.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Relation: ' . print_r($_relation->toArray(), TRUE));
         
         $record = $appController->$method($_relation->related_record);
         $_relation->related_id = $record->getId();
@@ -264,11 +268,7 @@ class Tinebase_Relations
             case 'Tasks_Model_Task':
                 $_relation->related_backend = Tasks_Backend_Factory::SQL;
                 break;
-            case 'Sales_Model_Product':
-                $_relation->related_backend = Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND;
-                break;
             default:
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Unsupported related model ' . $_relation->related_model . '. Using default backend (Sql).');
                 $_relation->related_backend = Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND;
                 break;
         }
