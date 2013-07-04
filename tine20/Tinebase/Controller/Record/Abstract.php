@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -365,6 +365,9 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         if ($this->resolveCustomfields()) {
             Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record);
+        }
+        if ($record->has('attachments')) {
+            Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
         }
     }
 
@@ -780,7 +783,11 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($record->has('alarms') && isset($record->alarms)) {
             $this->_saveAlarms($record);
         }
-
+        if ($record->has('attachments') && isset($record->attachments)) {
+            $updatedRecord->attachments = $record->attachments;
+            Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($updatedRecord);
+        }
+        
         if ($returnUpdatedRelatedData) {
             $this->_getRelatedData($updatedRecord);
         }
@@ -1268,6 +1275,9 @@ abstract class Tinebase_Controller_Record_Abstract
                     }
                 }
             }
+        }
+        if ($_record->has('attachments')) {
+            Tinebase_FileSystem_RecordAttachments::getInstance()->deleteRecordAttachments($_record);
         }
     }
 

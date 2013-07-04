@@ -34,7 +34,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     protected $_json;
     
     /**
-     * uit
+     * fs controller
      *
      * @var Tinebase_FileSystem
      */

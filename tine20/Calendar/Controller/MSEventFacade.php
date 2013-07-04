@@ -27,7 +27,7 @@
  * 
  * In iTIP Event handling is based on the perspective of a certain user. This user is the 
  * current user per default, but can be switched with
- * Calendar_Controller_MSEventFacade::setCalendarUser(Calendar_Model_Attendee $_calUser)
+ * Calendar_Controller_MSEventFacade::setCalendarUser(Calendar_Model_Attender $_calUser)
  * 
  * @package     Calendar
  * @subpackage  Controller

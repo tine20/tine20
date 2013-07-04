@@ -6,7 +6,7 @@
  * @subpackage  FileSystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo 0007376: Tinebase_FileSystem / Node model refactoring: move all container related functionality to Filemanager
  */
@@ -19,6 +19,13 @@
  */
 class Tinebase_FileSystem implements Tinebase_Controller_Interface
 {
+    /**
+     * folder name/type for record attachments
+     * 
+     * @var string
+     */
+    const FOLDER_TYPE_RECORDS = 'records';
+    
     /**
      * @var Tinebase_Tree_FileObject
      */
@@ -112,11 +119,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function getApplicationBasePath($_application, $_type = NULL)
     {
-        $application = $_application instanceof Tinebase_Model_Application ? $_application : Tinebase_Application::getInstance()->getApplicationById($_application);
+        $application = $_application instanceof Tinebase_Model_Application 
+            ? $_application : Tinebase_Application::getInstance()->getApplicationById($_application);
         
         $result = '/' . $application->getId();
         if ($_type !== NULL) {
-            if (! in_array($_type, array(Tinebase_Model_Container::TYPE_SHARED, Tinebase_Model_Container::TYPE_PERSONAL))) {
+            if (! in_array($_type, array(Tinebase_Model_Container::TYPE_SHARED, Tinebase_Model_Container::TYPE_PERSONAL, self::FOLDER_TYPE_RECORDS))) {
                 throw new Tinebase_Exception_UnexpectedValue('Type can only be shared or personal.');
             }
             
@@ -512,7 +520,8 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function mkdir($_path)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating directory ' . $_path);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Creating directory ' . $_path);
         
         $path = '/';
         $parentNode = null;
@@ -542,7 +551,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         $node = $this->stat($_path);
         
-        $children = $this->_getTreeNodeChildren($node);
+        $children = $this->getTreeNodeChildren($node);
         
         // check if child entries exists and delete if $_recursive is true
         if (count($children) > 0) {
@@ -580,7 +589,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     {
         $node = $this->stat($_path);
         
-        $children = $this->_getTreeNodeChildren($node);
+        $children = $this->getTreeNodeChildren($node);
         
         foreach ($children as $child) {
             $this->_statCache[$_path . '/' . $child->name] = $child;
@@ -717,22 +726,28 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     /**
      * get tree node children
      * 
-     * @param string $_nodeId
+     * @param string|Tinebase_Model_Tree_Node|Tinebase_Record_RecordSet $_nodeId
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
-    protected function _getTreeNodeChildren($_nodeId)
+    public function getTreeNodeChildren($_nodeId)
     {
-        $nodeId = $_nodeId instanceof Tinebase_Model_Tree_Node ? $_nodeId->getId() : $_nodeId;
-        $children = array();
-        
+        if ($_nodeId instanceof Tinebase_Model_Tree_Node) {
+            $nodeId = $_nodeId->getId();
+            $operator = 'equals';
+        } else if ($_nodeId instanceof Tinebase_Record_RecordSet) {
+            $nodeId = $_nodeId->getArrayOfIds();
+            $operator = 'in';
+        } else {
+            $nodeId = $_nodeId;
+            $operator = 'equals';
+        }
         $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
                 'field'     => 'parent_id',
-                'operator'  => 'equals',
+                'operator'  => $operator,
                 'value'     => $nodeId
             )
         ));
-        
         $children = $this->searchNodes($searchFilter);
         
         return $children;
@@ -950,5 +965,35 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             . ' Removed ' . $deleteCount . ' obsolete filenode(s) from the database.');
         
         return $deleteCount;
+    }
+
+    /**
+     * copy tempfile data to file path
+     * 
+     * @param string|Tinebase_Model_TempFile $tempFile
+     * @param string $path
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function copyTempfile($tempFile, $path)
+    {
+        if (! $handle = $this->fopen($path, 'w')) {
+            throw new Tinebase_Exception_AccessDenied('Permission denied to create file (filename ' . $path . ')');
+        }
+        
+        if ($tempFile !== NULL) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Reading data from tempfile ...');
+        
+            $tempFile = ($tempFile instanceof Tinebase_Model_TempFile) ? $tempFile : Tinebase_TempFile::getInstance()->getTempFile($tempFile);
+            $tempData = fopen($tempFile->path, 'r');
+            if ($tempData) {
+                stream_copy_to_stream($tempData, $handle);
+                fclose($tempData);
+            } else {
+                throw new Tinebase_Exception_AccessDenied('Could not read tempfile ' . $tempFile->path);
+            }
+            $this->clearStatCache($path);
+        }
+        $this->fclose($handle);
     }
 }

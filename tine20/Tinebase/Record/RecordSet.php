@@ -62,17 +62,21 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * creates new Tinebase_Record_RecordSet
      *
      * @param string $_className the required classType
-     * @param array $_records array of record objects
+     * @param array|Tinebase_Record_RecordSet $_records array of record objects
      * @param bool $_bypassFilters {@see Tinebase_Record_Interface::__construct}
      * @param bool $_convertDates {@see Tinebase_Record_Interface::__construct}
      * @return void
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function __construct($_className, array $_records = array(),  $_bypassFilters = false, $_convertDates = true)
+    public function __construct($_className, $_records = array(), $_bypassFilters = false, $_convertDates = true)
     {
+        if (! class_exists($_className)) {
+            throw new Tinebase_Exception_InvalidArgument('Class ' . $_className . ' does not exist');
+        }
         $this->_recordClass = $_className;
-
-        foreach($_records as $record) {
-            $toAdd = is_array($record) ? new $this->_recordClass($record, $_bypassFilters, $_convertDates) : $record;
+        
+        foreach ($_records as $record) {
+            $toAdd = $record instanceof Tinebase_Record_Abstract ? $record : new $this->_recordClass($record, $_bypassFilters, $_convertDates);
             $this->addRecord($toAdd);
         }
     }
