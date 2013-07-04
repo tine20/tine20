@@ -146,4 +146,24 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         
         $this->assertFalse(array_key_exists('SMTP', $clientConfig->Tinebase), 'SMTP is not a client config');
     }
+    
+    /**
+     * test if config returns empty array if it's empty
+     */
+    public function testReturnEmptyValue() {
+        // Hold original value for further tests of sieve.
+        $keepOriginalValue = $this->_instance->get("sieve");
+        
+        // Ensure  sieve key is null
+        $this->_instance->set("sieve", null);
+        
+        // If key is null it throws an exception, so return empty array if it's null.
+        $this->assertTrue($this->_instance->get("sieve") instanceof Tinebase_Config_Struct);
+        
+        // Check common function of the getFunction
+        $this->assertTrue(is_numeric($this->_instance->get("acceptedTermsVersion")));
+        
+        // restore value
+        $this->_instance->set("sieve", $keepOriginalValue);
+    }
 }
