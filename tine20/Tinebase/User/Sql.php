@@ -932,7 +932,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * Get multiple users
      *
-     * @param     string|array $_id Ids
+     * @param   string|array $_id Ids
      * @param   string  $_accountClass  type of model to return
      * @return Tinebase_Record_RecordSet of 'Tinebase_Model_User' or 'Tinebase_Model_FullUser'
      */
@@ -941,8 +941,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if (empty($_id)) {
             return new Tinebase_Record_RecordSet($_accountClass);
         }
-
-        $select = $this->_getUserSelectObject()            
+        
+        $select = $this->_getUserSelectObject()
             ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.id') . ' in (?)', (array) $_id);
         
         $stmt = $this->_db->query($select);

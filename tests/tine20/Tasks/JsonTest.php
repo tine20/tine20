@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -65,6 +65,8 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->_backend = new Tasks_Frontend_Json();
         $this->_smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         $this->_smtpTransport = Tinebase_Smtp::getDefaultTransport();
@@ -78,12 +80,12 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        parent::tearDown();
-        
         if ($this->_smtpConfigChanged) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $this->_smtpConfig);
             Tinebase_Smtp::setDefaultTransport($this->_smtpTransport);
         }
+        
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -346,7 +348,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $task->organizer = $organizer;
         $returned = $this->_backend->saveTask($task->toArray());
         $taskId = $returned['id'];
-               
+        
         // check search tasks- organizer exists
         $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
         $this->assertEquals(1, $tasks['totalcount'], 'more (or less) than one tasks found');
@@ -356,21 +358,20 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $task = $this->_backend->getTask($taskId);
         $this->assertEquals($task['organizer']['accountId'], $organizerId);
 
-        // delete user
         Tinebase_User::getInstance()->deleteUser($organizerId);
 
         // test seach search tasks - organizer is deleted
         $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
         $this->assertEquals(1, $tasks['totalcount'], 'more (or less) than one tasks found');
 
-        $this->assertEquals($tasks['results'][0]['organizer']['accountDisplayName'], Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName);
+        $organizer = $tasks['results'][0]['organizer'];
+        $this->assertTrue(is_array($organizer), 'organizer not resolved: ' . print_r($tasks['results'][0], TRUE));
+        $this->assertEquals($organizer['accountDisplayName'], Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName,
+            'accountDisplayName not found in organizer: ' . print_r($organizer, TRUE));
 
         // test get single task - organizer is deleted
         $task = $this->_backend->getTask($taskId);
         $this->assertEquals($task['organizer']['accountDisplayName'], Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName);
-        
-        //Cleanup test objects
-        $this->_backend->deleteTasks(array($taskId));
     }
     
     /**
@@ -380,17 +381,20 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _createUser()
     {
-        $user = new Tinebase_Model_FullUser(array(
-//            'accountId'             => 100,
-            'accountLoginName'      => 'creator',
-            'accountStatus'         => 'enabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
-            'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'Creator',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
-        ));
-        Tinebase_User::getInstance()->addUser($user);
+        try {
+            $user = Tinebase_User::getInstance()->getUserByLoginName('creator');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $user = new Tinebase_Model_FullUser(array(
+                'accountLoginName'      => 'creator',
+                'accountStatus'         => 'enabled',
+                'accountExpires'        => NULL,
+                'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
+                'accountLastName'       => 'Tine 2.0',
+                'accountFirstName'      => 'Creator',
+                'accountEmailAddress'   => 'phpunit@metaways.de'
+            ));
+            $user = Tinebase_User::getInstance()->addUser($user);
+        }
         
         return $user;
     }

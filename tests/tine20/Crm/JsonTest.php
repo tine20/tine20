@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -20,11 +20,23 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 class Crm_JsonTest extends Crm_AbstractTest
 {
     /**
+     * @var array test objects
+     */
+    protected $_objects = array();
+    
+    /**
      * Backend
      *
      * @var Crm_Frontend_Json
      */
     protected $_instance;
+    
+    /**
+     * fs controller
+     *
+     * @var Tinebase_FileSystem
+     */
+    protected $_fsController;
     
     /**
      * Runs the test methods of this class.
@@ -47,7 +59,10 @@ class Crm_JsonTest extends Crm_AbstractTest
     protected function setUp()
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
         $this->_instance = new Crm_Frontend_Json();
+        $this->_fsController = Tinebase_FileSystem::getInstance();
+        
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
     }
 
@@ -59,6 +74,16 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     protected function tearDown()
     {
+        if (isset($this->_objects['paths'])) {
+            foreach ($this->_objects['paths'] as $path) {
+                try {
+                    $this->_fsController->rmdir($path, TRUE);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // already deleted
+                }
+            }
+        }
+        
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(TRUE);
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
@@ -543,5 +568,73 @@ class Crm_JsonTest extends Crm_AbstractTest
                     $this->fail('Invalid modification: ' . print_r($modification->toArray(), TRUE));
             }
         }
+    }
+    
+    /**
+     * testCreateLeadWithAttachment
+     * 
+     * @see 0005024: allow to attach external files to records
+     */
+    public function testCreateLeadWithAttachment()
+    {
+        $tempFileBackend = new Tinebase_TempFile();
+        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/Filemanager/files/test.txt');
+        
+        $lead = $this->_getLead()->toArray();
+        $lead['attachments'] = array(array('tempFile' => array('id' => $tempFile->getId())));
+        
+        $savedLead = $this->_instance->saveLead($lead);
+        // add path to files to remove
+        $this->_objects['paths'][] = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath(new Crm_Model_Lead($savedLead, TRUE)) . '/' . $tempFile->name;
+        
+        $this->assertTrue(isset($savedLead['attachments']), 'no attachments found');
+        $this->assertEquals(1, count($savedLead['attachments']));
+        $attachment = $savedLead['attachments'][0];
+        $this->assertEquals('text/plain', $attachment['contenttype'], print_r($attachment, TRUE));
+        $this->assertEquals(17, $attachment['size']);
+        $this->assertTrue(is_array($attachment['created_by']), 'user not resolved: ' . print_r($attachment['created_by'], TRUE));
+        $this->assertEquals(Tinebase_Core::getUser()->accountFullName, $attachment['created_by']['accountFullName'], 'user not resolved: ' . print_r($attachment['created_by'], TRUE));
+        
+        return $savedLead;
+    }
+    
+    /**
+     * testUpdateLeadWithAttachment
+     * 
+     * @see 0005024: allow to attach external files to records
+     */
+    public function testUpdateLeadWithAttachment()
+    {
+        $lead = $this->testCreateLeadWithAttachment();
+        $savedLead = $this->_instance->saveLead($lead);
+        $this->assertTrue(isset($savedLead['attachments']), 'no attachments found');
+        $this->assertEquals(1, count($savedLead['attachments']));
+    }
+    
+    /**
+     * testRemoveAttachmentFromLead
+     * 
+     * @see 0005024: allow to attach external files to records
+     */
+    public function testRemoveAttachmentFromLead()
+    {
+        $lead = $this->testCreateLeadWithAttachment();
+        $lead['attachments'] = array();
+    
+        $savedLead = $this->_instance->saveLead($lead);
+        $this->assertEquals(0, count($savedLead['attachments']));
+        $this->assertFalse($this->_fsController->fileExists($this->_objects['paths'][0]));
+    }
+    
+    /**
+     * testDeleteLeadWithAttachment
+     * 
+     * @see 0005024: allow to attach external files to records
+     */
+    public function testDeleteLeadWithAttachment()
+    {
+        $lead = $this->testCreateLeadWithAttachment();
+        $this->_instance->deleteLeads(array($lead['id']));
+        $this->assertFalse($this->_fsController->fileExists($this->_objects['paths'][0]));
     }
 }

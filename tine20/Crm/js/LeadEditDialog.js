@@ -219,7 +219,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.combo_probability = new Ext.ux.PercentCombo({
             fieldLabel: this.app.i18n._('Probability'), 
             id: 'combo_probability',
-            anchor:'95%',            
+            anchor:'95%',
             name:'probability'
         });
         
@@ -462,11 +462,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ]} // end of accordion panel (east)
                     ] // end of lead tabpanel items
             }, new Tine.widgets.activities.ActivitiesTabPanel({
-                    app: this.appName,
-                    record_id: this.record.id,
-                    record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-               }) // end of activities tabpanel
-            ] // end of main tabpanel items
+                app: this.appName,
+                record_id: this.record.id,
+                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+            })] // end of main tabpanel items
         }; // end of return
     } // end of getFormItems
 });

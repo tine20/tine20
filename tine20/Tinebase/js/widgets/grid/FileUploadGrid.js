@@ -93,8 +93,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             }
             this.contextMenu.showAt(e.getXY());
         }, this);
-        
-               
     },
     
     /**
@@ -188,7 +186,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             text: _('Pause upload'),
             iconCls: 'action_pause',
             scope: this,
-//            disabled: true,
             handler: this.onPause,
             actionUpdater: this.isPauseEnabled
         });
@@ -197,7 +194,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             text: _('Resume upload'),
             iconCls: 'action_resume',
             scope: this,
-//            disabled: true,
             handler: this.onResume,
             actionUpdater: this.isResumeEnabled
         });
@@ -217,7 +213,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         
         this.actionUpdater.addActions([
             this.action_pause,
-            this.action_resume                                      
+            this.action_resume
         ]);
 
     },

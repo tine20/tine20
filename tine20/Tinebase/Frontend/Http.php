@@ -803,4 +803,27 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
     }
     
+    /**
+     * download file attachment
+     * 
+     * @param string $nodeId
+     * @param string $recordId
+     * @param string $modelName
+     */
+    public function downloadRecordAttachment($nodeId, $recordId, $modelName)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Downloading attachment of ' . $modelName . ' record with id ' . $recordId);
+        
+        $recordController = Tinebase_Core::getApplicationInstance($modelName);
+        $record = $recordController->get($recordId);
+        
+        $node = Tinebase_FileSystem::getInstance()->get($nodeId);
+        $path = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX
+            . Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($record)
+            . '/' . $node->name;
+        
+        $this->_downloadFileNode($node, $path);
+        exit;
+    }
 }

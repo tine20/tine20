@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.dialog');
 
@@ -106,6 +106,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     hideRelationsPanel: false,
     
     /**
+     * when a record has the attachments-property the attachments-panel can be disabled here
+     * @cfg {Boolean} hideAttachmentsPanel
+     */
+    hideAttachmentsPanel: false,
+    
+    /**
      * Registry for other relationgridpanels than the generic one,
      * handling special types of relations the generic one will not.
      * Panels registered here must have a store with the relation records.
@@ -158,10 +164,24 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     deferredRender: false,
     buttonAlign: null,
     bufferResize: 500,
-    // the relationsPanel
+    
+    /**
+     * relations panel
+     * 
+     * @type Tine.widgets.relation.GenericPickerGridPanel
+     */
     relationsPanel: null,
+    
     // Array of Relation Pickers
     relationPickers: null,
+    
+    /**
+     * attachments panel
+     * 
+     * @type Tine.widgets.dialog.AttachmentsGridPanel
+     */
+    attachmentsPanel: null,
+    
     //private
     initComponent: function() {
         this.relationPanelRegistry = this.relationPanelRegistry ? this.relationPanelRegistry : [];
@@ -257,6 +277,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.items = this.getFormItems();
         // init relations panel if relations are defined
         this.initRelationsPanel();
+        // init attachments panel
+        this.initAttachmentsPanel();
 
         Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
         // set fields readOnly if set
@@ -458,12 +480,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     doCopyRecord: function() {
         var omitFields = this.recordClass.getMeta('copyOmitFields') || [];
-        // always omit id + notes
-        omitFields = omitFields.concat(['id', 'notes']);
+        // always omit id + notes + attachments
+        omitFields = omitFields.concat(['id', 'notes', 'attachments']);
         
         var fieldsToCopy = this.recordClass.getFieldNames().diff(omitFields),
             recordData = Ext.copyTo({}, this.record.data, fieldsToCopy);
-
+        
         this.record = new this.recordClass(recordData, 0);
     },
     
@@ -786,9 +808,19 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * creates the relations panel, if relations are defined
      */
     initRelationsPanel: function() {
-        if(!this.relationsPanel && !this.hideRelationsPanel && this.recordClass && this.recordClass.hasField('relations')) {
+        if (! this.relationsPanel && ! this.hideRelationsPanel && this.recordClass && this.recordClass.hasField('relations')) {
             this.relationsPanel = new Tine.widgets.relation.GenericPickerGridPanel({ anchor: '100% 100%', editDialog: this }); 
             this.items.items.push(this.relationsPanel);
+        }
+    },
+    
+    /**
+     * creates attachments panel
+     */
+    initAttachmentsPanel: function() {
+        if (! this.attachmentsPanel && ! this.hideAttachmentsPanel && this.recordClass && this.recordClass.hasField('attachments')) {
+            this.attachmentsPanel = new Tine.widgets.dialog.AttachmentsGridPanel({ anchor: '100% 100%', editDialog: this }); 
+            this.items.items.push(this.attachmentsPanel);
         }
     }
 });

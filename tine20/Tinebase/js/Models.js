@@ -448,3 +448,31 @@ Tine.Tinebase.Model.Config = Tine.Tinebase.data.Record.create([
     recordName: 'Config',
     recordsName: 'Configs'
 });
+
+
+/**
+ * @namespace   Tine.Tinebase.Model
+ * @class       Tine.Tinebase.Model.Node
+ * @extends     Tine.Tinebase.data.Record
+ */
+Tine.Tinebase.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
+    { name: 'id' },
+    { name: 'name' },
+    { name: 'path' },
+    { name: 'size' },
+    { name: 'revision' },
+    { name: 'type' },
+    { name: 'contenttype' },
+    { name: 'description' },
+    { name: 'account_grants' },
+    { name: 'description' },
+    { name: 'object_id'}
+]), {
+    appName: 'Tinebase',
+    modelName: 'Node',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('File', 'Files', n); gettext('File');
+    recordName: 'File',
+    recordsName: 'Files'
+});
