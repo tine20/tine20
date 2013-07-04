@@ -418,7 +418,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $path = (strpos($_path, '/') === 0) ? $_path : '/' . $_path;
         // only add base path once
         $result = (! preg_match('@^' . preg_quote($basePath) . '@', $path)) ? $basePath . $path : $path;
-                
+        
         return $result;
     }
     
@@ -617,14 +617,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         switch ($_type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
-                if (! $handle = $this->_backend->fopen($_statpath, 'w')) {
-                    throw new Tinebase_Exception_AccessDenied('Permission denied to create file (filename ' . $_statpath . ')');
-                }
-                if ($_tempFileId !== NULL) {
-                    $this->_copyTempfile($_tempFileId, $handle);
-                    $this->_backend->clearStatCache($_statpath);
-                }
-                $this->_backend->fclose($handle);
+                $this->_backend->copyTempfile($_tempFileId, $_statpath);
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
                 $this->_backend->mkdir($_statpath);
@@ -632,28 +625,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         }
         
         return $this->_backend->stat($_statpath);
-    }
-    
-    /**
-     * copy tempfile data to file handle
-     * 
-     * @param string $_tempFileId
-     * @param resource $_fileHandle
-     * @throws Filemanager_Exception
-     */
-    protected function _copyTempfile($_tempFileId, $_fileHandle)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' Reading data from tempfile ...');
-        
-        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($_tempFileId);
-        $tempData = fopen($tempFile->path, 'r');
-        if ($tempData) {
-            stream_copy_to_stream($tempData, $_fileHandle);
-            fclose($tempData);
-        } else {
-            throw new Filemanager_Exception('Could not read tempfile ' . $tempFile->path);
-        }
     }
     
     /**

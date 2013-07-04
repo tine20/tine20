@@ -542,6 +542,10 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "AttachmentsGridPanel.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "PickerGridPanel.js",
           "path": "js/widgets/grid/"
         },

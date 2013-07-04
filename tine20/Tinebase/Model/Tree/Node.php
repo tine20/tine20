@@ -108,9 +108,10 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'size'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // not persistent
         'container_name' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        // this is needed for ACL handling and should be sent by / delivered to client (not persistent in db atm)
+        // this is needed should be sent by / delivered to client (not persistent in db atm)
         'path'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'account_grants' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tempFile'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**

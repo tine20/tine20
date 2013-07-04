@@ -40,7 +40,8 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.gener
         {name: 'products'},
         {name: 'tags'},
         {name: 'notes'},
-        {name: 'customfields', omitDuplicateResolving: true}
+        {name: 'customfields', omitDuplicateResolving: true},
+        {name: 'attachments'}
     ]), {
     appName: 'Crm',
     modelName: 'Lead',

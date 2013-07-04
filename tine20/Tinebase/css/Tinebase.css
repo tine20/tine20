@@ -775,6 +775,16 @@ span:hover.tinebase-download-link {
     color: #4444ff;
 }
 
+.action_download {
+    background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
+}
+.x-btn-medium .action_download {
+    background-image:url(../../images/oxygen/22x22/actions/save-all.png) !important;
+}
+.x-btn-large .action_download {
+    background-image:url(../../images/oxygen/32x32/actions/save-all.png) !important;
+}
+
 /********* uploads ************/
 
 .x-tinebase-uploading {

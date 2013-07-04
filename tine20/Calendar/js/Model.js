@@ -35,6 +35,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'alarms'},
     { name: 'tags' },
     { name: 'notes'},
+    { name: 'attachments'},
     //{ name: 'contact' },
     //{ name: 'related' },
     //{ name: 'resources' },

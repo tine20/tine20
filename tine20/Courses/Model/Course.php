@@ -58,7 +58,7 @@ class Courses_Model_Course extends Tinebase_Record_Abstract
         'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // relations (linked Courses_Model_Course records) and other metadata
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 

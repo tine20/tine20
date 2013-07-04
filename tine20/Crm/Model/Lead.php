@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -42,7 +42,8 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_resolveForeignIdFields = array(
-        'Tinebase_Model_User' => array('created_by', 'last_modified_by')
+        'Tinebase_Model_User'     => array('created_by', 'last_modified_by'),
+        'recursive'               => array('attachments' => 'Tinebase_Model_Tree_Node'),
     );
     
     /**
@@ -81,6 +82,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     // linked objects
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
     // modlog information

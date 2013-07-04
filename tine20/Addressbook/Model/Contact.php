@@ -107,7 +107,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_resolveForeignIdFields = array(
-        'Tinebase_Model_User' => array('created_by', 'last_modified_by')
+        'Tinebase_Model_User' => array('created_by', 'last_modified_by'),
+        'recursive'           => array('attachments' => 'Tinebase_Model_Tree_Node'),
     );
     
     /**
@@ -203,6 +204,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
         'type'                  => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,

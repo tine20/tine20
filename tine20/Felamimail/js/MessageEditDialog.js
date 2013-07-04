@@ -118,6 +118,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Felamimail.messageBackend,
     loadRecord: false,
     evalGrants: false,
+    hideAttachmentsPanel: true,
     
     bodyStyle:'padding:0px',
     
@@ -784,7 +785,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     initAttachmentGrid: function() {
         if (! this.attachmentGrid) {
-        
             this.attachmentGrid = new Tine.widgets.grid.FileUploadGrid({
                 fieldLabel: this.app.i18n._('Attachments'),
                 hideLabel: true,

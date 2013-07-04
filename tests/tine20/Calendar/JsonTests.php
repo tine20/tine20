@@ -552,18 +552,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $someRecurInstance['seq'] = 2;
         $this->_uit->updateRecurSeries($someRecurInstance, FALSE, FALSE);
         
-        $from = $recurSet[0]['dtstart'];
-        $until = new Tinebase_DateTime($from);
-        $until->addWeek(5)->addHour(10);
-        $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
-        
-        $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
-            array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
-        );
-        
-        $searchResultData = $this->_uit->searchEvents($filter, array());
-        
+        $searchResultData = $this->_searchRecurSeries($recurSet[0]);
         $this->assertEquals(6, count($searchResultData['results']));
         
         $summaryMap = array();
@@ -579,6 +568,27 @@ class Calendar_JsonTests extends Calendar_TestCase
         foreach ($fishings as $dtstart) {
             $this->assertEquals('10:00:00', substr($dtstart, -8), 'all fishing events should start at 10:00');
         }
+    }
+    
+    /**
+     * search updated recur set
+     * 
+     * @param array $firstInstance
+     * @return array
+     */
+    protected function _searchRecurSeries($firstInstance)
+    {
+        $from = $firstInstance['dtstart'];
+        $until = new Tinebase_DateTime($from);
+        $until->addWeek(5)->addHour(10);
+        $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
+        );
+        
+        return $this->_uit->searchEvents($filter, array());
     }
     
     /**
@@ -1327,6 +1337,32 @@ class Calendar_JsonTests extends Calendar_TestCase
             $this->fail('Calendar_Exception_AttendeeBusy expected when saving exception: ' . print_r($exception, TRUE));
         } catch (Calendar_Exception_AttendeeBusy $ceab) {
             $this->assertEquals('Calendar_Exception_AttendeeBusy', get_class($ceab));
+        }
+    }
+    
+    /**
+     * testAddAttachmentToRecurSeries
+     * 
+     * @see 0005024: allow to attach external files to records
+     */
+    public function testAddAttachmentToRecurSeries()
+    {
+        $tempFileBackend = new Tinebase_TempFile();
+        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/Filemanager/files/test.txt');
+        
+        $recurSet = array_value('results', $this->testSearchRecuringIncludes());
+        // update recurseries 
+        $someRecurInstance = $recurSet[2];
+        $someRecurInstance['attachments'] = array(array('tempFile' => array('id' => $tempFile->getId())));
+        $someRecurInstance['seq'] = 2;
+        $this->_uit->updateRecurSeries($someRecurInstance, FALSE, FALSE);
+        
+        $searchResultData = $this->_searchRecurSeries($recurSet[0]);
+        foreach ($searchResultData['results'] as $recurInstance) {
+            $this->assertTrue(isset($recurInstance['attachments']), 'no attachments found in event: ' . print_r($recurInstance, TRUE));
+            $this->assertEquals(1, count($recurInstance['attachments']));
+            $attachment = $recurInstance['attachments'][0];
+            $this->assertEquals('text/plain', $attachment['contenttype'], print_r($attachment, TRUE));
         }
     }
 }

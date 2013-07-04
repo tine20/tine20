@@ -53,7 +53,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $this->_resolveMultipleRecordFields($records);
         
         // resolve the traditional way, if model hasn't been configured with Tinebase_ModelConfiguration
-        $this->_resolveMultipleIdFields($records);
+        self::resolveMultipleIdFields($records);
         
         $_record = $records->getFirstRecord();
         $_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
@@ -134,40 +134,99 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @deprecated use Tinebase_ModelConfiguration to configure your models, so this won't be used anymore 
      * @param Tinebase_Record_RecordSet $_records the records
+     * @param array $resolveFields
      */
-    protected function _resolveMultipleIdFields(Tinebase_Record_RecordSet $_records)
+    public static function resolveMultipleIdFields($records, $resolveFields = NULL)
     {
-        $ownRecordClass = $_records->getRecordClassName();
-        if (! $resolveFields = $ownRecordClass::getResolveForeignIdFields()) {
+        if (! $records instanceof Tinebase_Record_RecordSet) {
             return;
         }
         
-        foreach ($resolveFields as $foreignRecordClassName => $fields) {
-            $foreignIds = array();
-            $fields = (array) $fields;
-    
-            foreach ($fields as $field) {
-                $foreignIds = array_unique(array_merge($foreignIds, $_records->{$field}));
+        $ownRecordClass = $records->getRecordClassName();
+        if ($resolveFields === NULL) {
+            $resolveFields = $ownRecordClass::getResolveForeignIdFields();
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Resolving ' . $ownRecordClass . ' fields: ' . print_r($resolveFields, TRUE));
+        
+        foreach ((array) $resolveFields as $foreignRecordClassName => $fields) {
+            if ($foreignRecordClassName === 'recursive') {
+                foreach ($fields as $field => $model) {
+                    foreach ($records->$field as $subRecords) {
+                        self::resolveMultipleIdFields($subRecords);
+                    }
+                }
+            } else {
+                self::_resolveForeignIdFields($records, $foreignRecordClassName, (array) $fields);
             }
+        }
+    }
     
-            if (! Tinebase_Core::getUser()->hasRight(substr($foreignRecordClassName, 0, strpos($foreignRecordClassName, "_")), Tinebase_Acl_Rights_Abstract::RUN))
-                continue;
-    
+    /**
+     * resolve foreign fields for records
+     * 
+     * @param Tinebase_Record_RecordSet $records
+     * @param string $foreignRecordClassName
+     * @param array $fields
+     */
+    protected static function _resolveForeignIdFields($records, $foreignRecordClassName, $fields)
+    {
+        $options = array_key_exists('options', $fields) ? $fields['options'] : array();
+        $fields = array_key_exists('fields', $fields) ? $fields['fields'] : $fields;
+        
+        $foreignIds = array();
+        foreach ($fields as $field) {
+            $foreignIds = array_unique(array_merge($foreignIds, $records->{$field}));
+        }
+        
+        if (! Tinebase_Core::getUser()->hasRight(substr($foreignRecordClassName, 0, strpos($foreignRecordClassName, "_")), Tinebase_Acl_Rights_Abstract::RUN)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Not resolving ' . $foreignRecordClassName . ' records because user has no right to run app.');
+            return;
+        }
+        
+        try {
             $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
-    
-            if (method_exists($controller, 'modlogActive')) {
-                $modlogActive = $controller->modlogActive(FALSE);
-            }
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            return;
+        }
+        
+        if (method_exists($controller, 'modlogActive')) {
+            $modlogActive = $controller->modlogActive(FALSE);
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Fetching ' . $foreignRecordClassName . ' by id: ' . print_r($foreignIds, TRUE));
+        
+        if (array_key_exists('ignoreAcl', $options) && $options['ignoreAcl']) {
+            // @todo make sure that second param of getMultiple() is $ignoreAcl
+            $foreignRecords = $controller->getMultiple($foreignIds, TRUE);
+        } else {
             $foreignRecords = $controller->getMultiple($foreignIds);
-            $foreignRecords->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-            $foreignRecords->convertDates = true;
-            
-            if ($foreignRecords->count()) {
-                foreach ($_records as $record) {
-                    foreach ($fields as $field) {
-                        $idx = $foreignRecords->getIndexById($record->{$field});
-                        if (isset($idx) && $idx !== FALSE) {
-                            $record->{$field} = $foreignRecords[$idx];
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Foreign records found: ' . print_r($foreignRecords->toArray(), TRUE));
+        
+        if (count($foreignRecords) === 0) {
+            return;
+        }
+        
+        foreach ($records as $record) {
+            foreach ($fields as $field) {
+                if (is_scalar($record->{$field})) {
+                    $idx = $foreignRecords->getIndexById($record->{$field});
+                    if (isset($idx) && $idx !== FALSE) {
+                        $record->{$field} = $foreignRecords[$idx];
+                    } else {
+                        switch ($foreignRecordClassName) {
+                            case 'Tinebase_Model_User':
+                            case 'Tinebase_Model_FullUser':
+                                $record->{$field} = Tinebase_User::getInstance()->getNonExistentUser();
+                                break;
+                            default:
+                                // skip
                         }
                     }
                 }
@@ -254,11 +313,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
         
         Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records);
-
-        $this->_resolveMultipleIdFields($_records);
+        
+        self::resolveMultipleIdFields($_records);
         $this->_resolveSingleRecordFields($_records);
         $this->_resolveMultipleRecordFields($_records);
-
+        
         $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_records->convertDates = true;
 

@@ -1071,6 +1071,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
+     * get by id
+     *
+     * @param string $_id
+     * @param int $_containerId
+     * @return Tinebase_Record_Interface
+     */
+    public function get($_id, $_containerId = NULL)
+    {
+        if (preg_match('/^fakeid/', $_id)) {
+            // get base event when trying to fetch a non-persistent recur instance
+            return $this->getRecurBaseEvent(new Calendar_Model_Event(array('uid' => substr(str_replace('fakeid', '', $_id), 0, 40))), TRUE);
+        } else {
+            return parent::get($_id, $_containerId);
+        }
+    }
+    
+    /**
      * returns base event of a recurring series
      *
      * @param  Calendar_Model_Event $_event

@@ -106,4 +106,35 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
     }
+
+    /**
+     * download (fpassthru) file node
+     * 
+     * @param Tinebase_Model_Tree_Node $node
+     * @param string $filesystemPath
+     */
+    protected function _downloadFileNode($node, $filesystemPath)
+    {
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Download file node ' . print_r($node->toArray(), TRUE));
+        
+        // cache for 3600 seconds
+        $maxAge = 3600;
+        header('Cache-Control: private, max-age=' . $maxAge);
+        header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
+        
+        // overwrite Pragma header from session
+        header("Pragma: cache");
+        
+        header('Content-Disposition: attachment; filename="' . $node->name . '"');
+        header("Content-Type: " . $node->contenttype);
+        
+        $handle = fopen($filesystemPath, 'r');
+        fpassthru($handle);
+        fclose($handle);
+
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
+    }
 }

@@ -386,7 +386,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event = $this->testConvertToTine20Model();
         $event->creation_time      = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
         $event->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
-        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attendee');
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         

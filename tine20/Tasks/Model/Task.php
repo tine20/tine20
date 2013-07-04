@@ -30,6 +30,21 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     protected $_identifier = 'id';
     
     /**
+     * if foreign Id fields should be resolved on search and get from json
+     * should have this format: 
+     *     array('Calendar_Model_Contact' => 'contact_id', ...)
+     * or for more fields:
+     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
+     * (e.g. resolves contact_id with the corresponding Model)
+     * 
+     * @var array
+     */
+    protected static $_resolveForeignIdFields = array(
+        'Tinebase_Model_User'     => array('created_by', 'last_modified_by', 'organizer'),
+        'recursive'               => array('attachments' => 'Tinebase_Model_Tree_Node'),
+    );
+    
+    /**
      * application the record belongs to
      *
      * @var string
@@ -43,56 +58,57 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         // tine record fields
-        'container_id'         => array('allowEmpty' => true,  'Int' ),
-        'created_by'           => array('allowEmpty' => true,        ),
-        'creation_time'        => array('allowEmpty' => true         ),
-        'last_modified_by'     => array('allowEmpty' => true         ),
-        'last_modified_time'   => array('allowEmpty' => true         ),
-        'is_deleted'           => array('allowEmpty' => true         ),
-        'deleted_time'         => array('allowEmpty' => true         ),
-        'deleted_by'           => array('allowEmpty' => true         ),
-        'seq'                  => array('allowEmpty' => true         ),
+        'container_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int' ),
+        'created_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true,        ),
+        'creation_time'        => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'last_modified_by'     => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'last_modified_time'   => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'is_deleted'           => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'deleted_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'deleted_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'seq'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // task only fields
-        'id'                   => array('allowEmpty' => true, 'Alnum'),
-        'percent'              => array('allowEmpty' => true, 'default' => 0),
-        'completed'            => array('allowEmpty' => true         ),
-        'due'                  => array('allowEmpty' => true         ),
+        'id'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Alnum'),
+        'percent'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'default' => 0),
+        'completed'            => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'due'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // ical common fields
         'class'                => array(
-            'allowEmpty' => true,
+            Zend_Filter_Input::ALLOW_EMPTY => true,
             array('InArray', array(self::CLASS_PUBLIC, self::CLASS_PRIVATE, /*self::CLASS_CONFIDENTIAL*/)),
         ),
-        'description'          => array('allowEmpty' => true         ),
-        'geo'                  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'location'             => array('allowEmpty' => true         ),
-        'organizer'            => array('allowEmpty' => true,        ),
-        'originator_tz'        => array('allowEmpty' => true         ),
-        'priority'             => array('allowEmpty' => true, 'default' => 1),
-        'status'               => array('allowEmpty' => false        ),
+        'description'          => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'geo'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'location'             => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'organizer'            => array(Zend_Filter_Input::ALLOW_EMPTY => true,        ),
+        'originator_tz'        => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'priority'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'default' => 1),
+        'status'               => array(Zend_Filter_Input::ALLOW_EMPTY => false        ),
         'summary'              => array('presence' => 'required'     ),
-        'url'                  => array('allowEmpty' => true         ),
+        'url'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // ical common fields with multiple appearance
-        'attach'                => array('allowEmpty' => true        ),
-        'attendee'              => array('allowEmpty' => true        ),
-        'tags'                  => array('allowEmpty' => true        ), //originally categories
-        'comment'               => array('allowEmpty' => true        ),
-        'contact'               => array('allowEmpty' => true        ),
-        'related'               => array('allowEmpty' => true        ),
-        'resources'             => array('allowEmpty' => true        ),
-        'rstatus'               => array('allowEmpty' => true        ),
+        'attach'               => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'attendee'             => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'tags'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true        ), //originally categories
+        'comment'              => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'contact'              => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'related'              => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'resources'            => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'rstatus'              => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
         // scheduleable interface fields
-        'dtstart'               => array('allowEmpty' => true        ),
-        'duration'              => array('allowEmpty' => true        ),
-        'recurid'               => array('allowEmpty' => true        ),
+        'dtstart'              => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'duration'             => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'recurid'              => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
         // scheduleable interface fields with multiple appearance
-        'exdate'                => array('allowEmpty' => true        ),
-        'exrule'                => array('allowEmpty' => true        ),
-        'rdate'                 => array('allowEmpty' => true        ),
-        'rrule'                 => array('allowEmpty' => true        ),
+        'exdate'               => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'exrule'               => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'rdate'                => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'rrule'                => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
         // tine 2.0 notes, alarms and relations
-        'notes'                 => array('allowEmpty' => true        ),
-        'alarms'                => array('allowEmpty' => true        ), // RecordSet of Tinebase_Model_Alarm
-        'relations'             => array('allowEmpty' => true        ),
+        'notes'                => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'alarms'               => array(Zend_Filter_Input::ALLOW_EMPTY => true        ), // RecordSet of Tinebase_Model_Alarm
+        'relations'            => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
+        'attachments'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**

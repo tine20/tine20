@@ -72,71 +72,73 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         // tine record fields
-        'id'                   => array('allowEmpty' => true,  /*'Alnum'*/),
-        'container_id'         => array('allowEmpty' => true,  'Int'  ),
-        'created_by'           => array('allowEmpty' => true,         ),
-        'creation_time'        => array('allowEmpty' => true          ),
-        'last_modified_by'     => array('allowEmpty' => true          ),
-        'last_modified_time'   => array('allowEmpty' => true          ),
-        'is_deleted'           => array('allowEmpty' => true          ),
-        'deleted_time'         => array('allowEmpty' => true          ),
-        'deleted_by'           => array('allowEmpty' => true          ),
-        'seq'                  => array('allowEmpty' => true,  'Int'  ),
+        'id'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true,  /*'Alnum'*/),
+        'container_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int'  ),
+        'created_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true,         ),
+        'creation_time'        => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'last_modified_by'     => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'last_modified_time'   => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'is_deleted'           => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'deleted_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'deleted_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'seq'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int'  ),
         // calendar only fields
-        'dtend'                => array('allowEmpty' => true          ),
+        'dtend'                => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'transp'               => array(
-            'allowEmpty' => true,
+            Zend_Filter_Input::ALLOW_EMPTY => true,
             array('InArray', array(self::TRANSP_OPAQUE, self::TRANSP_TRANSP))
         ),
         // ical common fields
         'class'                => array(
-            'allowEmpty' => true,
+            Zend_Filter_Input::ALLOW_EMPTY => true,
             array('InArray', array(self::CLASS_PUBLIC, self::CLASS_PRIVATE, /*self::CLASS_CONFIDENTIAL*/))
         ),
-        'description'          => array('allowEmpty' => true          ),
-        'geo'                  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'location'             => array('allowEmpty' => true          ),
-        'organizer'            => array('allowEmpty' => false,         ),
-        'priority'             => array('allowEmpty' => true, 'Int'   ),
+        'description'          => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'geo'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'location'             => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'organizer'            => array(Zend_Filter_Input::ALLOW_EMPTY => false,        ),
+        'priority'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int'   ),
         'status'            => array(
-            'allowEmpty' => true,
+            Zend_Filter_Input::ALLOW_EMPTY => true,
             array('InArray', array(self::STATUS_CONFIRMED, self::STATUS_TENTATIVE, self::STATUS_CANCELED))
         ),
-        'summary'              => array('allowEmpty' => true          ),
-        'url'                  => array('allowEmpty' => true          ),
-        'uid'                  => array('allowEmpty' => true          ),
+        'summary'              => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'url'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'uid'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         // ical common fields with multiple appearance
-        //'attach'                => array('allowEmpty' => true         ),
-        'attendee'              => array('allowEmpty' => true         ), // RecordSet of Calendar_Model_Attender
-        'alarms'                => array('allowEmpty' => true         ), // RecordSet of Tinebase_Model_Alarm
-        'tags'                  => array('allowEmpty' => true         ), // originally categories handled by Tinebase_Tags
-        'notes'                 => array('allowEmpty' => true         ), // originally comment handled by Tinebase_Notes
-        'relations'             => array('allowEmpty' => true         ),
-        //'contact'               => array('allowEmpty' => true         ),
-        //'related'               => array('allowEmpty' => true         ),
-        //'resources'             => array('allowEmpty' => true         ),
-        //'rstatus'               => array('allowEmpty' => true         ),
+        //'attach'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'attendee'              => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // RecordSet of Calendar_Model_Attender
+        'alarms'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // RecordSet of Tinebase_Model_Alarm
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // originally categories handled by Tinebase_Tags
+        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // originally comment handled by Tinebase_Notes
+        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        
+        //'contact'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        //'related'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        //'resources'             => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        //'rstatus'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // ical scheduleable interface fields
-        'dtstart'               => array('allowEmpty' => true         ),
-        'recurid'               => array('allowEmpty' => true         ),
+        'dtstart'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'recurid'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // ical scheduleable interface fields with multiple appearance
-        'exdate'                => array('allowEmpty' => true         ), //  array of Tinebase_DateTimeTinebase_DateTime's
-        //'exrule'                => array('allowEmpty' => true         ),
-        //'rdate'                 => array('allowEmpty' => true         ),
-        'rrule'                 => array('allowEmpty' => true         ),
+        'exdate'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), //  array of Tinebase_DateTimeTinebase_DateTime's
+        //'exrule'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        //'rdate'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'rrule'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // calendar helper fields
-        'is_all_day_event'      => array('allowEmpty' => true         ),
-        'rrule_until'           => array('allowEmpty' => true         ),
-        'originator_tz'         => array('allowEmpty' => true         ),
+        'is_all_day_event'      => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'rrule_until'           => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'originator_tz'         => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
     
         // grant helper fields
-        Tinebase_Model_Grants::GRANT_FREEBUSY  => array('allowEmpty' => true),
-        Tinebase_Model_Grants::GRANT_READ    => array('allowEmpty' => true),
-        Tinebase_Model_Grants::GRANT_SYNC    => array('allowEmpty' => true),
-        Tinebase_Model_Grants::GRANT_EXPORT  => array('allowEmpty' => true),
-        Tinebase_Model_Grants::GRANT_EDIT    => array('allowEmpty' => true),
-        Tinebase_Model_Grants::GRANT_DELETE  => array('allowEmpty' => true),
-        Tinebase_Model_Grants::GRANT_PRIVATE => array('allowEmpty' => true),
+        Tinebase_Model_Grants::GRANT_FREEBUSY => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        Tinebase_Model_Grants::GRANT_READ     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        Tinebase_Model_Grants::GRANT_SYNC     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        Tinebase_Model_Grants::GRANT_EXPORT   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        Tinebase_Model_Grants::GRANT_EDIT     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        Tinebase_Model_Grants::GRANT_DELETE   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        Tinebase_Model_Grants::GRANT_PRIVATE  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -563,7 +565,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     /**
      * checks if given attendee is organizer of this event
      * 
-     * @param Calendar_Model_Attendee $_attendee
+     * @param Calendar_Model_Attender $_attendee
      */
     public function isOrganizer($_attendee=NULL)
     {
