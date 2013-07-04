@@ -41,6 +41,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      */
     private function __construct() 
     {
+        $this->_modelName = 'Felamimail_Model_Message';
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
     }
     
