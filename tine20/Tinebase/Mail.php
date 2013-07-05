@@ -49,120 +49,52 @@ class Tinebase_Mail extends Zend_Mail
         rewind($contentStream);
         
         $mp = new Zend_Mime_Part($contentStream);
-        
-        if ($_zmm->headerExists('content-transfer-encoding')) {
-            $mp->encoding = $_zmm->getHeader('content-transfer-encoding');
-            $mp->decodeContent();
-        } else {
-            $mp->encoding = Zend_Mime::ENCODING_7BIT;
-        }
+        self::_getMetaDataFromZMM($_zmm, $mp);
         
         // append old body when no multipart/mixed
         if ($_replyBody !== null && $_zmm->headerExists('content-transfer-encoding')) {
             $mp = self::_appendReplyBody($mp, $_replyBody);
-            $mp->encoding = $_zmm->getHeader('content-transfer-encoding');
-        }
-        
-        if ($_zmm->headerExists('content-type')) {
-            $contentTypeHeader = Zend_Mime_Decode::splitHeaderField($_zmm->getHeader('content-type'));
-            
-            $mp->type = $contentTypeHeader[0];
-            
-            if (isset($contentTypeHeader['boundary'])) {
-                $mp->boundary = $contentTypeHeader['boundary'];
-            }
-            
-            if (isset($contentTypeHeader['charset'])) {
-                $mp->charset = $contentTypeHeader['charset'];
-            }
-        } else {
-            $mp->type = Zend_Mime::TYPE_TEXT;
         }
         
         $result = new Tinebase_Mail('utf-8');
-        
         $result->setBodyText($mp);
-        
-        foreach ($_zmm->getHeaders() as $header => $values) {
-            foreach ((array)$values as $value) {
-                switch ($header) {
-                    case 'content-transfer-encoding':
-                    // these are implicitly set by Zend_Mail_Transport_Abstract::_getHeaders()
-                    case 'content-type':
-                    case 'mime-version':
-                        // do nothing
-                        
-                        break;
-                        
-                    case 'bcc':
-                        $addresses = self::parseAdresslist($value);
-                        foreach ($addresses as $address) {
-                            $result->addBcc($address['address'], $address['name']);
-                        }
-                        
-                        break;
-                        
-                    case 'cc':
-                        $addresses = self::parseAdresslist($value);
-                        foreach ($addresses as $address) {
-                            $result->addCc($address['address'], $address['name']);
-                        }
-                        
-                        break;
-                        
-                    case 'date':
-                        try {
-                            $result->setDate($value);
-                        } catch (Zend_Mail_Exception $zme) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
-                                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Could not set date: " . $value);
-                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
-                                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " " . $zme);
-                            $result->setDate();
-                        }
-                        
-                        break;
-                        
-                    case 'from':
-                        $addresses = self::parseAdresslist($value);
-                        foreach ($addresses as $address) {
-                            $result->setFrom($address['address'], $address['name']);
-                        }
-                        
-                        break;
-                        
-                    case 'message-id':
-                        $result->setMessageId($value);
-                        
-                        break;
-                        
-                    case 'return-path':
-                        $result->setReturnPath($value);
-                        
-                        break;
-                        
-                    case 'subject':
-                        $result->setSubject($value);
-                        
-                        break;
-                        
-                    case 'to':
-                        $addresses = self::parseAdresslist($value);
-                        foreach ($addresses as $address) {
-                            $result->addTo($address['address'], $address['name']);
-                        }
-                        
-                        break;
-                        
-                    default:
-                        $result->addHeader($header, $value);
-                        
-                        break;
-                }
-            }
-        }
+        $result->setHeadersFromZMM($_zmm);
         
         return $result;
+    }
+    
+    /**
+     * get meta data (like contentype, charset, ...) from zmm and set it in zmp
+     * 
+     * @param Zend_Mail_Message $zmm
+     * @param Zend_Mime_Part $zmp
+     */
+    protected static function _getMetaDataFromZMM(Zend_Mail_Message $zmm, Zend_Mime_Part $zmp)
+    {
+        if ($zmm->headerExists('content-transfer-encoding')) {
+            $zmp->encoding = $zmm->getHeader('content-transfer-encoding');
+        } else {
+            $zmp->encoding = Zend_Mime::ENCODING_7BIT;
+        }
+        
+        if ($zmm->headerExists('content-type')) {
+            $contentTypeHeader = Zend_Mime_Decode::splitHeaderField($zmm->getHeader('content-type'));
+            
+            $zmp->type = $contentTypeHeader[0];
+            
+            if (isset($contentTypeHeader['boundary'])) {
+                $zmp->boundary = $contentTypeHeader['boundary'];
+            }
+            
+            if (isset($contentTypeHeader['charset'])) {
+                $zmp->charset = $contentTypeHeader['charset'];
+            }
+        } else {
+            $zmp->type = Zend_Mime::TYPE_TEXT;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Encoding: ' . $zmp->encoding . ' / type: ' . $zmp->type . ' / charset: ' . $zmp->charset);
     }
     
     /**
@@ -174,37 +106,29 @@ class Tinebase_Mail extends Zend_Mail
      */
     protected static function _appendReplyBody(Zend_Mime_Part $mp, $replyBody)
     {
+        $decodedContent = Tinebase_Mail::getDecodedContent($mp, NULL, FALSE);
+        $type = $mp->type;
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " mp content: " . $decodedContent);
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " reply body: " . $replyBody);
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " mp content: " . $mp->getRawStream());
-            rewind($mp->getRawStream());
         }
         
-        $contentStream = fopen("php://temp", 'r+');
-        stream_copy_to_stream($mp->getRawStream(), $contentStream);
-        
-        // check if html message, append before </body></html>
-        // @todo might check content-type, too
-        rewind($mp->getRawStream());
-        if (preg_match('/(<\/body>[\s\r\n]*<\/html>)/i', $mp->getContent(), $matches)) {
+        if ($type === Zend_Mime::TYPE_HTML && preg_match('/(<\/body>[\s\r\n]*<\/html>)/i', $decodedContent, $matches)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Appending reply body to html body.');
             
-            require_once 'StreamFilter/StringReplace.php';
-            $filter = stream_filter_append($contentStream, 'str.replace', STREAM_FILTER_READ, array(
-                'search'            => $matches[1],
-                'replace'           => $replyBody . $matches[1]
-            ));
+            $decodedContent = str_replace($matches[1], $replyBody . $matches[1], $decodedContent);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Appending reply body to mime text part.");
             
-            fputs($contentStream, $replyBody);
+            $decodedContent .= $replyBody;
         }
         
-        // create decoded stream
-        rewind($contentStream);
-        $mp = new Zend_Mime_Part($contentStream);
+        $mp = new Zend_Mime_Part($decodedContent);
+        $mp->charset = 'utf-8';
+        $mp->type = $type;
         
         return $mp;
     }
@@ -264,6 +188,86 @@ class Tinebase_Mail extends Zend_Mail
         
         $this->_bodyText = $mp;
 
+        return $this;
+    }
+    
+    /**
+     * set headers
+     * 
+     * @param Zend_Mail_Message $_zmm
+     * @return Zend_Mail Provides fluent interface
+     */
+    public function setHeadersFromZMM(Zend_Mail_Message $_zmm)
+    {
+        foreach ($_zmm->getHeaders() as $header => $values) {
+            foreach ((array)$values as $value) {
+                switch ($header) {
+                    case 'content-transfer-encoding':
+                    // these are implicitly set by Zend_Mail_Transport_Abstract::_getHeaders()
+                    case 'content-type':
+                    case 'mime-version':
+                        // do nothing
+                        break;
+                        
+                    case 'bcc':
+                        $addresses = self::parseAdresslist($value);
+                        foreach ($addresses as $address) {
+                            $this->addBcc($address['address'], $address['name']);
+                        }
+                        break;
+                        
+                    case 'cc':
+                        $addresses = self::parseAdresslist($value);
+                        foreach ($addresses as $address) {
+                            $this->addCc($address['address'], $address['name']);
+                        }
+                        break;
+                        
+                    case 'date':
+                        try {
+                            $this->setDate($value);
+                        } catch (Zend_Mail_Exception $zme) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Could not set date: " . $value);
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " " . $zme);
+                            $this->setDate();
+                        }
+                        break;
+                        
+                    case 'from':
+                        $addresses = self::parseAdresslist($value);
+                        foreach ($addresses as $address) {
+                            $this->setFrom($address['address'], $address['name']);
+                        }
+                        break;
+                        
+                    case 'message-id':
+                        $this->setMessageId($value);
+                        break;
+                        
+                    case 'return-path':
+                        $this->setReturnPath($value);
+                        break;
+                        
+                    case 'subject':
+                        $this->setSubject($value);
+                        break;
+                        
+                    case 'to':
+                        $addresses = self::parseAdresslist($value);
+                        foreach ($addresses as $address) {
+                            $this->addTo($address['address'], $address['name']);
+                        }
+                        break;
+                        
+                    default:
+                        $this->addHeader($header, $value);
+                        break;
+                }
+            }
+        }
+        
         return $this;
     }
     
@@ -328,46 +332,51 @@ class Tinebase_Mail extends Zend_Mail
     /**
      * get decoded body content
      * 
-     * @param Zend_Mime_Part $_bodyPart
+     * @param Zend_Mime_Part $zmp
      * @param array $partStructure
+     * @param boolean $appendCharsetFilter
      * @return string
-     * 
-     * @todo reduce complexity
      */
-    public static function getDecodedBodyContent(Zend_Mime_Part $_bodyPart, $_partStructure = NULL)
+    public static function getDecodedContent(Zend_Mime_Part $zmp, $_partStructure = NULL, $appendCharsetFilter = TRUE)
     {
-        $charset = self::_appendCharsetFilter($_bodyPart, $_partStructure);
-        $encoding = ($_partStructure && ! empty($_partStructure['encoding'])) ? $_partStructure['encoding'] : $_bodyPart->encoding;
+        $charset = self::_getCharset($zmp, $_partStructure);
+        if ($appendCharsetFilter) {
+            $charset = self::_appendCharsetFilter($zmp, $charset);
+        }
+        $encoding = ($_partStructure && ! empty($_partStructure['encoding'])) ? $_partStructure['encoding'] : $zmp->encoding;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Trying to decode mime part content. Encoding/charset: " . $encoding . ' / ' . $charset);
         
         // need to set error handler because stream_get_contents just throws a E_WARNING
         set_error_handler('Tinebase_Mail::decodingErrorHandler', E_WARNING);
         try {
-            $body = $_bodyPart->getDecodedContent();
+            $body = $zmp->getDecodedContent();
             restore_error_handler();
             
         } catch (Tinebase_Exception $e) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . " Decoding of " . $_bodyPart->encoding . '/' . $encoding . ' encoded message failed: ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . " Decoding of " . $zmp->encoding . '/' . $encoding . ' encoded message failed: ' . $e->getMessage());
             
             // trying to fix decoding problems
             restore_error_handler();
-            $_bodyPart->resetStream();
+            $zmp->resetStream();
             if (preg_match('/convert\.quoted-printable-decode/', $e->getMessage())) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Trying workaround for http://bugs.php.net/50363.');
-                $body = quoted_printable_decode(stream_get_contents($_bodyPart->getRawStream()));
+                $body = quoted_printable_decode(stream_get_contents($zmp->getRawStream()));
                 $body = iconv($charset, 'utf-8', $body);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
-                $_bodyPart->appendDecodeFilter(self::_getDecodeFilter());
+                $zmp->appendDecodeFilter(self::_getDecodeFilter());
                 set_error_handler('Tinebase_Mail::decodingErrorHandler', E_WARNING);
                 try {
-                    $body = $_bodyPart->getDecodedContent();
+                    $body = $zmp->getDecodedContent();
                     restore_error_handler();
                 } catch (Tinebase_Exception $e) {
                     restore_error_handler();
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
-                    $_bodyPart->resetStream();
-                    $body = base64_decode(stream_get_contents($_bodyPart->getRawStream()));
+                    $zmp->resetStream();
+                    $body = base64_decode(stream_get_contents($zmp->getRawStream()));
                     $body = iconv($charset, 'utf-8', $body);
                 }
             }
@@ -375,7 +384,6 @@ class Tinebase_Mail extends Zend_Mail
         
         return $body;
     }
-    
     /**
      * convert charset (and return charset)
      *
@@ -383,12 +391,22 @@ class Tinebase_Mail extends Zend_Mail
      * @param  array           $_structure
      * @return string   
      */
-    protected static function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure = NULL)
+    protected static function _getCharset(Zend_Mime_Part $_part, $_structure = NULL)
     {
-        $charset = ($_structure && isset($_structure['parameters']['charset'])) 
+        return ($_structure && isset($_structure['parameters']['charset'])) 
             ? $_structure['parameters']['charset']
-            : ($_bodyPart->charset ? $_bodyPart->charset : self::DEFAULT_FALLBACK_CHARSET);
-        
+            : ($_part->charset ? $_part->charset : self::DEFAULT_FALLBACK_CHARSET);
+    }
+    
+    /**
+     * convert charset (and return charset)
+     *
+     * @param  Zend_Mime_Part  $_part
+     * @param  string          $charset
+     * @return string   
+     */
+    protected static function _appendCharsetFilter(Zend_Mime_Part $_part, $charset)
+    {
         if ($charset == 'utf8') {
             $charset = 'utf-8';
         } else if ($charset == 'us-ascii') {

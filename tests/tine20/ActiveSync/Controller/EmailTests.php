@@ -71,6 +71,8 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     
     /**
      * set up test environment
+     * 
+     * @todo move setup to abstract test case
      */
     protected function setUp()
     {
@@ -93,12 +95,12 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         Syncroton_Registry::set(Syncroton_Registry::SYNCSTATEBACKEND,    new Syncroton_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set(Syncroton_Registry::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set('loggerBackend',                         Tinebase_Core::getLogger());
+        Syncroton_Registry::set(Syncroton_Registry::POLICYBACKEND,       new Syncroton_Backend_Policy(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         
         Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
         Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
         Syncroton_Registry::setEmailDataClass('ActiveSync_Controller_Email');
         Syncroton_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
-        
     }
 
     /**
@@ -114,6 +116,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         }
         
         Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+        Felamimail_Controller_Message::getInstance()->delete($this->_createdMessages->getArrayOfIds());
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
@@ -211,8 +214,6 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $testDoc->encoding     = 'utf-8';
         
         $syncrotonEmail->appendXML($testDoc->documentElement, $device);
-        
-        #echo $testDoc->saveXML();
         
         $xml = $testDoc->saveXML();
         
@@ -378,6 +379,108 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->assertContains('Sebastian
 The attached list notes all of the packages that were added or removed
 from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->body, 'reply body has not been appended correctly');
+    }
+    
+    /**
+     * testReplyEmailNexus
+     * 
+     * @see 0008572: email reply text garbled
+     */
+    public function testReplyEmailNexus1()
+    {
+        $originalMessage = $this->_createTestMessage();
+        
+        $xml = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<SmartReply xmlns="uri:ComposeMail">
+  <ClientId>SendMail-78543534540370</ClientId>
+  <SaveInSentItems/>
+  <Source>
+    <ItemId>' . $originalMessage->getId() . '</ItemId>
+    <FolderId>' . $originalMessage->folder_id .  '</FolderId>
+  </Source>
+  <Mime>Date: Fri, 05 Jul 2013 09:14:15 +0200&#13;
+Subject: Re: email test&#13;
+Message-ID: &lt;hw6umldu85v6efjai6i9vqci.1373008455202@email.android.com&gt;&#13;
+From: l.kneschke@metaways.de&#13;
+To: ' . $this->_emailTestClass->getEmailAddress() . '&gt;&#13;
+MIME-Version: 1.0&#13;
+X-Tine20TestMessage: smartreply.eml&#13;
+Content-Type: text/plain; charset=utf-8&#13;
+Content-Transfer-Encoding: base64&#13;
+&#13;
+TW9pbiEKCk1hbCB3YXMgbWl0IMOWIQoKTGFycwoKUGhpbGlwcCBTY2jDvGxlIDxwLnNjaHVlbGVA&#13;
+bWV0YXdheXMuZGU+IHNjaHJpZWI6Cgo=&#13;
+</Mime>
+</SmartReply>';
+        $messageId = '<hw6umldu85v6efjai6i9vqci.1373008455202@email.android.com>';
+        $stringToCheck = 'Mal was mit Ö!';
+        
+        $this->_replyTestHelper($xml, $messageId, $stringToCheck);
+    }
+    
+    /**
+     * testReplyEmailNexus
+     * 
+     * @see 0008572: email reply text garbled
+     */
+    public function testReplyEmailNexus2()
+    {
+        $originalMessage = $this->_createTestMessage();
+        
+        $xml = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<SmartReply xmlns="uri:ComposeMail">
+  <ClientId>SendMail-90061070551109</ClientId>
+  <SaveInSentItems/>
+  <Source>
+    <ItemId>' . $originalMessage->getId() . '</ItemId>
+    <FolderId>' . $originalMessage->folder_id .  '</FolderId>
+  </Source>
+  <Mime>Date: Fri, 05 Jul 2013 13:14:19 +0200&#13;
+Subject: Re: email test&#13;
+Message-ID: &lt;xs9f5842m44v6exce8v8swox.1373022859201@email.android.com&gt;&#13;
+From: l.kneschke@metaways.de&#13;
+To: ' . $this->_emailTestClass->getEmailAddress() . '&#13;
+MIME-Version: 1.0&#13;
+Content-Type: text/plain; charset=utf-8&#13;
+Content-Transfer-Encoding: base64&#13;
+&#13;
+TGFycyBsw7ZzY2h0IG5peC4uLgoKV2lya2xpY2ghCgpQaGlsaXBwIFNjaMO8bGUgPHAuc2NodWVs&#13;
+ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
+</Mime>
+</SmartReply>';
+        $messageId = '<xs9f5842m44v6exce8v8swox.1373022859201@email.android.com>';
+        
+        $stringToCheck = 'Lars löscht nix...';
+        
+        $this->_replyTestHelper($xml, $messageId, $stringToCheck);
+    }
+    
+    /**
+     * _replyTestHelper
+     * 
+     * @param string $xml
+     * @param string $messageId
+     * @param string $stringToCheck
+     */
+    protected function _replyTestHelper($xml, $messageId, $stringToCheck)
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML($xml);
+        $device = $this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40);
+        $sync = new Syncroton_Command_SmartReply($doc, $device, $device->policykey);
+        
+        $sync->handle();
+        $sync->getResponse();
+        
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $message = $this->_emailTestClass->searchAndCacheMessage($messageId, $inbox, TRUE, 'Message-ID');
+        $this->_createdMessages->addRecord($message);
+        
+        $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        
+        $this->assertContains($stringToCheck, $completeMessage->body);
     }
     
     /**

@@ -597,7 +597,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         foreach ($bodyParts as $partId => $partStructure) {
             $bodyPart = $this->getMessagePart($_message, $partId, TRUE, $partStructure);
             
-            $body = Tinebase_Mail::getDecodedBodyContent($bodyPart, $partStructure);
+            $body = Tinebase_Mail::getDecodedContent($bodyPart, $partStructure);
             
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
                 $bodyCharCountBefore = strlen($body);
