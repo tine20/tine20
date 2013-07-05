@@ -55,13 +55,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected $_punycodeConverter = NULL;
     
     /**
-     * fallback charset constant
-     * 
-     * @var string
-     */
-    const DEFAULT_FALLBACK_CHARSET = 'iso-8859-15';
-    
-    /**
      * foreign application content types
      * 
      * @var array
@@ -500,7 +493,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $part->description = array_key_exists('description', $_partStructure) ? $_partStructure['description'] : null;
         $part->charset     = array_key_exists('charset', $_partStructure['parameters']) 
             ? $_partStructure['parameters']['charset'] 
-            : self::DEFAULT_FALLBACK_CHARSET;
+            : Tinebase_Mail::DEFAULT_FALLBACK_CHARSET;
         $part->boundary    = array_key_exists('boundary', $_partStructure['parameters']) ? $_partStructure['parameters']['boundary'] : null;
         $part->location    = $_partStructure['location'];
         $part->language    = $_partStructure['language'];
@@ -604,7 +597,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         foreach ($bodyParts as $partId => $partStructure) {
             $bodyPart = $this->getMessagePart($_message, $partId, TRUE, $partStructure);
             
-            $body = $this->_getDecodedBodyContent($bodyPart, $partStructure);
+            $body = Tinebase_Mail::getDecodedBodyContent($bodyPart, $partStructure);
             
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
                 $bodyCharCountBefore = strlen($body);
@@ -638,128 +631,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return $messageBody;
-    }
-    
-    /**
-     * get decoded body content
-     * 
-     * @param Zend_Mime_Part $_bodyPart
-     * @param array $partStructure
-     * @return string
-     * 
-     * @todo reduce complexity
-     */
-    protected function _getDecodedBodyContent(Zend_Mime_Part $_bodyPart, $_partStructure)
-    {
-        $charset = $this->_appendCharsetFilter($_bodyPart, $_partStructure);
-        
-        // need to set error handler because stream_get_contents just throws a E_WARNING
-        set_error_handler('Felamimail_Controller_Message::decodingErrorHandler', E_WARNING);
-        try {
-            $body = $_bodyPart->getDecodedContent();
-            restore_error_handler();
-            
-        } catch (Felamimail_Exception $e) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . " Decoding of " . $_bodyPart->encoding . '/' . $_partStructure['encoding'] . ' encoded message failed: ' . $e->getMessage());
-            
-            // trying to fix decoding problems
-            restore_error_handler();
-            $_bodyPart->resetStream();
-            if (preg_match('/convert\.quoted-printable-decode/', $e->getMessage())) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Trying workaround for http://bugs.php.net/50363.');
-                $body = quoted_printable_decode(stream_get_contents($_bodyPart->getRawStream()));
-                $body = iconv($charset, 'utf-8', $body);
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
-                $_bodyPart->appendDecodeFilter($this->_getDecodeFilter());
-                set_error_handler('Felamimail_Controller_Message::decodingErrorHandler', E_WARNING);
-                try {
-                    $body = $_bodyPart->getDecodedContent();
-                    restore_error_handler();
-                } catch (Felamimail_Exception $e) {
-                    restore_error_handler();
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
-                    $_bodyPart->resetStream();
-                    $body = base64_decode(stream_get_contents($_bodyPart->getRawStream()));
-                    $body = iconv($charset, 'utf-8', $body);
-                }
-            }
-        }
-        
-        return $body;
-    }
-    
-    /**
-     * error exception handler for iconv decoding errors / only gets E_WARNINGs
-     *
-     * NOTE: PHP < 5.3 don't throws exceptions for Catchable fatal errors per default,
-     * so we convert them into exceptions manually
-     *
-     * @param integer $severity
-     * @param string $errstr
-     * @param string $errfile
-     * @param integer $errline
-     * @throws Felamimail_Exception
-     */
-    public static function decodingErrorHandler($severity, $errstr, $errfile, $errline)
-    {
-        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
-        
-        throw new Felamimail_Exception($errstr);
-    }
-    
-    /**
-     * convert charset (and return charset)
-     *
-     * @param  Zend_Mime_Part  $_part
-     * @param  array           $_structure
-     * @param  string          $_contentType
-     * @return string   
-     */
-    protected function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
-        
-        $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : self::DEFAULT_FALLBACK_CHARSET;
-        
-        if ($charset == 'utf8') {
-            $charset = 'utf-8';
-        } else if ($charset == 'us-ascii') {
-            // us-ascii caused problems with iconv encoding to utf-8
-            $charset = self::DEFAULT_FALLBACK_CHARSET;
-        } else if (strpos($charset, '.') !== false) {
-            // the stream filter does not like charsets with a dot in its name
-            // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
-            $charset = self::DEFAULT_FALLBACK_CHARSET;
-        } else if (iconv($charset, 'utf-8', '') === false) {
-            // check if charset is supported by iconv
-            $charset = self::DEFAULT_FALLBACK_CHARSET;
-        }
-        
-        $_part->appendDecodeFilter($this->_getDecodeFilter($charset));
-        
-        return $charset;
-    }
-    
-    /**
-     * get decode filter for stream_filter_append
-     * 
-     * @param string $_charset
-     * @return string
-     */
-    protected function _getDecodeFilter($_charset = self::DEFAULT_FALLBACK_CHARSET)
-    {
-        if (in_array(strtolower($_charset), array('iso-8859-1', 'windows-1252', 'iso-8859-15')) && extension_loaded('mbstring')) {
-            require_once 'StreamFilter/ConvertMbstring.php';
-            $filter = 'convert.mbstring';
-        } else {
-            $filter = "convert.iconv.$_charset/utf-8//IGNORE";
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);
-        
-        return $filter;
     }
     
     /**
@@ -868,7 +739,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Fetched Headers: ' . $rawHeaders);
-                    
+        
         Zend_Mime_Decode::splitMessage($rawHeaders, $headers, $null);
         
         $cache->save($headers, $cacheId, array('getMessageHeaders'), 86400);

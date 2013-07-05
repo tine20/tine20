@@ -45,49 +45,6 @@ class Felamimail_Message extends Zend_Mail_Message
         parent::__construct($params);
     }
     
-    /**
-     * parse address list
-     *
-     * @param string $_adressList
-     * @return array
-     */
-    public static function parseAdresslist($_addressList)
-    {
-        if (strpos($_addressList, ',') !== FALSE && substr_count($_addressList, '@') == 1) {
-            // we have a comma in the name -> do not split string!
-            $addresses = array($_addressList);
-        } else {
-            // create stream to be used with fgetcsv
-            $stream = fopen("php://temp", 'r+');
-            fputs($stream, $_addressList);
-            rewind($stream);
-            
-            // alternative solution to create stream; yet untested
-            #$stream = fopen('data://text/plain;base64,' . base64_encode($_addressList), 'r');
-            
-            // split addresses
-            $addresses = fgetcsv($stream);
-        }
-        
-        if (! is_array($addresses)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
-                ' Could not parse addresses: ' . var_export($addresses, TRUE));
-            return array();
-        }
-        
-        foreach ($addresses as $key => $address) {
-            if (preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
-                $name = trim(trim($matches[1]), '"');
-                $address = trim($matches[2]);
-                $addresses[$key] = array('name' => substr($name, 0, 250), 'address' => $address);
-            } else {
-                $address = preg_replace('/[,;]*/i', '', $address);
-                $addresses[$key] = array('name' => null, 'address' => $address);
-            }
-        }
-
-        return $addresses;
-    }
 
     /**
      * convert text
@@ -161,7 +118,7 @@ class Felamimail_Message extends Zend_Mail_Message
     {
         $result = array();
         if (!empty($_addresses)) {
-            $addresses = self::parseAdresslist($_addresses);
+            $addresses = Tinebase_Mail::parseAdresslist($_addresses);
             if (is_array($addresses)) {
                 foreach($addresses as $address) {
                     if ($_punycodeConverter !== NULL && preg_match('/@xn--/', $address['address'])) {
@@ -365,7 +322,7 @@ class Felamimail_Message extends Zend_Mail_Message
                 case 'cc':
                     $receipients = array();
                     
-                    $addresses = Felamimail_Message::parseAdresslist($headerValue);
+                    $addresses = Tinebase_Mail::parseAdresslist($headerValue);
                     foreach ($addresses as $address) {
                         $receipients[] = $address['address'];
                     }

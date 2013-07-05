@@ -29,6 +29,13 @@ class Tinebase_Mail extends Zend_Mail
     protected $_sender = null;
     
     /**
+     * fallback charset constant
+     * 
+     * @var string
+     */
+    const DEFAULT_FALLBACK_CHARSET = 'iso-8859-15';
+    
+    /**
      * create Tinebase_Mail from Zend_Mail_Message
      * 
      * @param  Zend_Mail_Message  $_zmm
@@ -88,7 +95,7 @@ class Tinebase_Mail extends Zend_Mail
                         break;
                         
                     case 'bcc':
-                        $addresses = Felamimail_Message::parseAdresslist($value);
+                        $addresses = self::parseAdresslist($value);
                         foreach ($addresses as $address) {
                             $result->addBcc($address['address'], $address['name']);
                         }
@@ -96,11 +103,11 @@ class Tinebase_Mail extends Zend_Mail
                         break;
                         
                     case 'cc':
-                        $addresses = Felamimail_Message::parseAdresslist($value);
+                        $addresses = self::parseAdresslist($value);
                         foreach ($addresses as $address) {
                             $result->addCc($address['address'], $address['name']);
                         }
-                                                
+                        
                         break;
                         
                     case 'date':
@@ -117,7 +124,7 @@ class Tinebase_Mail extends Zend_Mail
                         break;
                         
                     case 'from':
-                        $addresses = Felamimail_Message::parseAdresslist($value);
+                        $addresses = self::parseAdresslist($value);
                         foreach ($addresses as $address) {
                             $result->setFrom($address['address'], $address['name']);
                         }
@@ -140,7 +147,7 @@ class Tinebase_Mail extends Zend_Mail
                         break;
                         
                     case 'to':
-                        $addresses = Felamimail_Message::parseAdresslist($value);
+                        $addresses = self::parseAdresslist($value);
                         foreach ($addresses as $address) {
                             $result->addTo($address['address'], $address['name']);
                         }
@@ -169,7 +176,7 @@ class Tinebase_Mail extends Zend_Mail
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " reply body: " . $replyBody);
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " mp content: " . $mp->getContent());
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " mp content: " . $mp->getRawStream());
             rewind($mp->getRawStream());
         }
         
@@ -316,5 +323,173 @@ class Tinebase_Mail extends Zend_Mail
         }
         
         return FALSE;
+    }
+    
+    /**
+     * get decoded body content
+     * 
+     * @param Zend_Mime_Part $_bodyPart
+     * @param array $partStructure
+     * @return string
+     * 
+     * @todo reduce complexity
+     */
+    public static function getDecodedBodyContent(Zend_Mime_Part $_bodyPart, $_partStructure = NULL)
+    {
+        $charset = self::_appendCharsetFilter($_bodyPart, $_partStructure);
+        $encoding = ($_partStructure && ! empty($_partStructure['encoding'])) ? $_partStructure['encoding'] : $_bodyPart->encoding;
+        
+        // need to set error handler because stream_get_contents just throws a E_WARNING
+        set_error_handler('Tinebase_Mail::decodingErrorHandler', E_WARNING);
+        try {
+            $body = $_bodyPart->getDecodedContent();
+            restore_error_handler();
+            
+        } catch (Tinebase_Exception $e) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . " Decoding of " . $_bodyPart->encoding . '/' . $encoding . ' encoded message failed: ' . $e->getMessage());
+            
+            // trying to fix decoding problems
+            restore_error_handler();
+            $_bodyPart->resetStream();
+            if (preg_match('/convert\.quoted-printable-decode/', $e->getMessage())) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Trying workaround for http://bugs.php.net/50363.');
+                $body = quoted_printable_decode(stream_get_contents($_bodyPart->getRawStream()));
+                $body = iconv($charset, 'utf-8', $body);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
+                $_bodyPart->appendDecodeFilter(self::_getDecodeFilter());
+                set_error_handler('Tinebase_Mail::decodingErrorHandler', E_WARNING);
+                try {
+                    $body = $_bodyPart->getDecodedContent();
+                    restore_error_handler();
+                } catch (Tinebase_Exception $e) {
+                    restore_error_handler();
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
+                    $_bodyPart->resetStream();
+                    $body = base64_decode(stream_get_contents($_bodyPart->getRawStream()));
+                    $body = iconv($charset, 'utf-8', $body);
+                }
+            }
+        }
+        
+        return $body;
+    }
+    
+    /**
+     * convert charset (and return charset)
+     *
+     * @param  Zend_Mime_Part  $_part
+     * @param  array           $_structure
+     * @return string   
+     */
+    protected static function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure = NULL)
+    {
+        $charset = ($_structure && isset($_structure['parameters']['charset'])) 
+            ? $_structure['parameters']['charset']
+            : ($_bodyPart->charset ? $_bodyPart->charset : self::DEFAULT_FALLBACK_CHARSET);
+        
+        if ($charset == 'utf8') {
+            $charset = 'utf-8';
+        } else if ($charset == 'us-ascii') {
+            // us-ascii caused problems with iconv encoding to utf-8
+            $charset = self::DEFAULT_FALLBACK_CHARSET;
+        } else if (strpos($charset, '.') !== false) {
+            // the stream filter does not like charsets with a dot in its name
+            // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
+            $charset = self::DEFAULT_FALLBACK_CHARSET;
+        } else if (iconv($charset, 'utf-8', '') === false) {
+            // check if charset is supported by iconv
+            $charset = self::DEFAULT_FALLBACK_CHARSET;
+        }
+        
+        $_part->appendDecodeFilter(self::_getDecodeFilter($charset));
+        
+        return $charset;
+    }
+    
+    /**
+     * get decode filter for stream_filter_append
+     * 
+     * @param string $_charset
+     * @return string
+     */
+    protected static function _getDecodeFilter($_charset = self::DEFAULT_FALLBACK_CHARSET)
+    {
+        if (in_array(strtolower($_charset), array('iso-8859-1', 'windows-1252', 'iso-8859-15')) && extension_loaded('mbstring')) {
+            require_once 'StreamFilter/ConvertMbstring.php';
+            $filter = 'convert.mbstring';
+        } else {
+            $filter = "convert.iconv.$_charset/utf-8//IGNORE";
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);
+        
+        return $filter;
+    }
+    
+    /**
+     * error exception handler for iconv decoding errors / only gets E_WARNINGs
+     *
+     * NOTE: PHP < 5.3 don't throws exceptions for Catchable fatal errors per default,
+     * so we convert them into exceptions manually
+     *
+     * @param integer $severity
+     * @param string $errstr
+     * @param string $errfile
+     * @param integer $errline
+     * @throws Tinebase_Exception
+     * 
+     * @todo maybe we can remove that because php 5.3+ is required now
+     */
+    public static function decodingErrorHandler($severity, $errstr, $errfile, $errline)
+    {
+        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+        
+        throw new Tinebase_Exception($errstr);
+    }
+    
+    /**
+     * parse address list
+     *
+     * @param string $_adressList
+     * @return array
+     */
+    public static function parseAdresslist($_addressList)
+    {
+        if (strpos($_addressList, ',') !== FALSE && substr_count($_addressList, '@') == 1) {
+            // we have a comma in the name -> do not split string!
+            $addresses = array($_addressList);
+        } else {
+            // create stream to be used with fgetcsv
+            $stream = fopen("php://temp", 'r+');
+            fputs($stream, $_addressList);
+            rewind($stream);
+            
+            // alternative solution to create stream; yet untested
+            #$stream = fopen('data://text/plain;base64,' . base64_encode($_addressList), 'r');
+            
+            // split addresses
+            $addresses = fgetcsv($stream);
+        }
+        
+        if (! is_array($addresses)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+                ' Could not parse addresses: ' . var_export($addresses, TRUE));
+            return array();
+        }
+        
+        foreach ($addresses as $key => $address) {
+            if (preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
+                $name = trim(trim($matches[1]), '"');
+                $address = trim($matches[2]);
+                $addresses[$key] = array('name' => substr($name, 0, 250), 'address' => $address);
+            } else {
+                $address = preg_replace('/[,;]*/i', '', $address);
+                $addresses[$key] = array('name' => null, 'address' => $address);
+            }
+        }
+
+        return $addresses;
     }
 }
