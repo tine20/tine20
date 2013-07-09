@@ -118,7 +118,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      */
     protected $_contentControllerName;
     
-    protected $_devicesWithMultipleFolders = array('iphone', 'ipad', 'thundertine', 'windowsphone', 'playbook');
+    protected $_devicesWithMultipleFolders = array('iphone', 'ipad', 'thundertine', 'windowsphone', 'playbook', 'bb10');
     
     /**
      * the constructor
