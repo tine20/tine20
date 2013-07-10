@@ -624,3 +624,6 @@ msgstr "Als Urlaub buchen"
 
 msgid "Summary"
 msgstr "Zusammenfassung"
+
+msgid "Account is disabled or deleted!"
+msgstr "Benutzer nicht mehr vorhanden!"

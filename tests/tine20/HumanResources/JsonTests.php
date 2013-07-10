@@ -19,6 +19,13 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 class HumanResources_JsonTests extends HumanResources_TestCase
 {
     /**
+     * the frontend
+     * 
+     * @var HumanResources_Frontend_Json
+     */
+    protected $_json = NULL;
+    
+    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -139,6 +146,31 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $r = $this->_json->getEmployee($savedEmployee['id']);
         
         $this->assertTrue(is_array($r['contracts'][0]['feast_calendar_id']));
+    }
+    
+    /**
+     * test if no account is found, id should stay
+     * 
+     * 0008608: After an account got deleted, opening of the corresponding employee fails
+     * rt111840: https://service.metaways.net/Ticket/Display.html?id=111840
+     */
+    public function testResolveDeactivatedAccounts()
+    {
+        $e = $this->_getEmployee('rwright');
+        $e = $this->_json->saveEmployee($e->toArray());
+        
+        $this->assertType('array', $e['account_id']);
+        
+        $ui = Tinebase_User::getInstance();
+        $a = $ui->getFullUserById($e['account_id']['accountId']);
+        
+        $a->accountStatus = 'disabled';
+        $ui->updateUser($a);
+        
+        $e = $this->_json->getEmployee($e['id']);
+        
+        $this->assertNotType('array', $e['account_id']);
+        $this->assertEquals($a->accountId, $e['account_id']);
     }
     
     /**
