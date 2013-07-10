@@ -291,7 +291,40 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($completeMessage->headers['content-type']));
     }
     
-/**
+    /**
+     * Test wether Base64Decoded Messages can be send or not
+     * 
+     * @see 0008572: email reply text garbled
+     */
+    public function testSendBase64DecodedMessage () {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        
+        $messageId = '<j4wxaho1t8ggvk5cef7kqc6i.1373048280847@email.android.com>';
+        
+        $email = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<SendMail xmlns="uri:ComposeMail">
+  <ClientId>SendMail-158383807994574</ClientId>
+  <SaveInSentItems/>
+  <Mime>Date: Fri, 05 Jul 2013 20:18:00 +0200&#13;
+Subject: Fgh&#13;
+Message-ID: ' . htmlspecialchars($messageId) . '&#13;
+From: l.kneschke@metaways.de&#13;
+To: ' . $this->_emailTestClass->getEmailAddress() . '&gt;&#13;
+MIME-Version: 1.0&#13;
+Content-Type: text/plain; charset=utf-8&#13;
+Content-Transfer-Encoding: base64&#13;
+&#13;
+dGVzdAo=&#13;
+</Mime>
+</SendMail>';
+        
+        $stringToCheck = 'test';
+        
+        $this->_replyTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail");
+    }
+    
+    /**
      * testCalendarInvitation (should not be sent)
      * 
      * @see 0007568: do not send iMIP-messages via ActiveSync
@@ -464,12 +497,12 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
      * @param string $messageId
      * @param string $stringToCheck
      */
-    protected function _replyTestHelper($xml, $messageId, $stringToCheck)
+    protected function _replyTestHelper($xml, $messageId, $stringToCheck, $command = "Syncroton_Command_SmartReply")
     {
         $doc = new DOMDocument();
         $doc->loadXML($xml);
         $device = $this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40);
-        $sync = new Syncroton_Command_SmartReply($doc, $device, $device->policykey);
+        $sync = new $command($doc, $device, $device->policykey);
         
         $sync->handle();
         $sync->getResponse();

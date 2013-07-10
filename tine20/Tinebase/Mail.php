@@ -54,6 +54,9 @@ class Tinebase_Mail extends Zend_Mail
         // append old body when no multipart/mixed
         if ($_replyBody !== null && $_zmm->headerExists('content-transfer-encoding')) {
             $mp = self::_appendReplyBody($mp, $_replyBody);
+        } else {
+            $mp->decodeContent();
+            $mp->encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
         }
         
         $result = new Tinebase_Mail('utf-8');
