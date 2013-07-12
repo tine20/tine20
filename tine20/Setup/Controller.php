@@ -1493,7 +1493,12 @@ class Setup_Controller
     protected function _uninstallApplication(Tinebase_Model_Application $_application)
     {
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Uninstall ' . $_application);
-        $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
+        try {
+            $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $zdse);
+            throw new Setup_Exception('Could not uninstall ' . $_application . ' (you might need to remove the tables by yourself): ' . $zdse->getMessage());
+        }
         $disabledFK = FALSE;
         $db = Tinebase_Core::getDb();
         
@@ -1556,6 +1561,7 @@ class Setup_Controller
         
         if ($disabledFK) {
             if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Enabling foreign key checks again... ");
                 $db->query("SET FOREIGN_KEY_CHECKS=1");
             }
         }
