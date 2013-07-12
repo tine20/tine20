@@ -319,7 +319,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * 
      * @param string tableName 
      * @param Setup_Backend_Schema_Index_Abstract declaration
-     */         
+     */
     public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
     {
         $this->addIndex($_tableName, $_declaration);
@@ -329,7 +329,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * removes a primary key from database table
      * 
      * @param string tableName (there is just one primary key...)
-     */         
+     */
     public function dropPrimaryKey($_tableName)
     {
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " DROP PRIMARY KEY " ;
@@ -357,17 +357,48 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */
     public function dropForeignKey($_tableName, $_name)
     {
-        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) 
-            . " DROP FOREIGN KEY `" . $_name . "`" ;
-        
         try {
-            $this->execQueryVoid($statement);
+            $this->_dropForeignKey($_tableName, SQL_TABLE_PREFIX . $_name);
         } catch (Zend_Db_Statement_Exception $zdse) {
-            // try it again with table prefix
-            $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) 
-                . " DROP FOREIGN KEY `" . SQL_TABLE_PREFIX . $_name . "`" ;
-            $this->execQueryVoid($statement);
+            // try it again without table prefix
+            try {
+                $this->_dropForeignKey($_tableName, $_name);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' ' . $zdse);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' At first remove constraint, then remove key ...');
+                
+                $constraint = str_replace(array(
+                    '::',
+                    '--'
+                ), '??', $_name);
+                try {
+                    $this->_dropForeignKey($_tableName, SQL_TABLE_PREFIX . $constraint);
+                    $this->_dropForeignKey($_tableName, SQL_TABLE_PREFIX . $_name, FALSE);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    // do it again without prefix
+                    $this->_dropForeignKey($_tableName, $constraint);
+                    $this->_dropForeignKey($_tableName, $_name, FALSE);
+                }
+            }
         }
+    }
+    
+    /**
+     * helper function for removing (foreign) keys
+     * 
+     * @param string tableName
+     * @param string $keyName
+     * @param boolean $foreign
+     */
+    protected function _dropForeignKey($tableName, $keyName, $foreign = TRUE)
+    {
+        $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $tableName) 
+            . " DROP" . ($foreign ? ' FOREIGN' : '') . " KEY `" . $keyName . "`" ;
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' ' . $statement);
+        $this->execQueryVoid($statement);
     }
     
     /**
