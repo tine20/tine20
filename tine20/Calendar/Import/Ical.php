@@ -140,6 +140,9 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
                     $this->_importResult['duplicatecount'] += 1;
                 }
             } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__ . ' Import failed for Event ' . $event->summary);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' . print_r($event->toArray(), TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' . $e);
                 $this->_importResult['failcount'] += 1;
             }
         }
