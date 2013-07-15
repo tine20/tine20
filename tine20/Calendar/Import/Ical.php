@@ -114,8 +114,8 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         
         $events->container_id = $this->_options['importContainerId'];
         
-        $cc = Calendar_Controller_Event::getInstance();
-        $sendNotifications = $cc->sendNotifications(FALSE);
+        $cc = Calendar_Controller_MSEventFacade::getInstance();
+        $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
         
         // search uid's and remove already existing -> only in import cal?
         $existingEvents = $cc->search(new Calendar_Model_EventFilter(array(
@@ -146,7 +146,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
                 $this->_importResult['failcount'] += 1;
             }
         }
-        $cc->sendNotifications($sendNotifications);
+        Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
         
         return $this->_importResult;
     }
