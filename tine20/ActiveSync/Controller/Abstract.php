@@ -535,7 +535,16 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         
         return $allowedFolders;
     }
-    
+
+    /**
+     * 
+     * @return int     Syncroton_Command_Sync::FILTER...
+     */
+    public function getMaxFilterType()
+    {
+        return Syncroton_Command_Sync::FILTER_NOTHING;
+    }
+
     /**
      * 
      * @param  string  $folderId
@@ -544,6 +553,13 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      */
     public function getServerEntries($folderId, $filterType)
     {
+        $maxFilterType = $this->getMaxFilterType();
+        if ($maxFilterType !== Syncroton_Command_Sync::FILTER_NOTHING) {
+            if ($filterType === Syncroton_Command_Sync::FILTER_NOTHING || $maxFilterType < $filterType) {
+                $filterType = $maxFilterType;
+            }
+        }
+
         $filter = $this->_getContentFilter($filterType);
         $this->_addContainerFilter($filter, $folderId);
         

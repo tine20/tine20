@@ -30,6 +30,20 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
     const DISABLE_ACCESS_LOG = 'disableaccesslog';
 
     /**
+     * MAX_FILTER_TYPE_EMAIL
+     * 
+     * @var string
+     */
+    const MAX_FILTER_TYPE_EMAIL = 'maxfiltertypeemail';
+
+    /**
+     * MAX_FILTER_TYPE_CALENDAR
+     * 
+     * @var string
+     */
+    const MAX_FILTER_TYPE_CALENDAR = 'maxfiltertypecalendar';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -54,6 +68,48 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => FALSE,
+        ),
+    self::MAX_FILTER_TYPE_EMAIL => array(
+        //_('Filter timeslot for emails')
+            'label'                 => 'Filter timeslot for emails',
+        //_('For how long in the past the emails should be synchronized.')
+            'description'           => 'For how long in the past the emails should be synchronized.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            // @todo options is not used yet (only for TYPE_KEYFIELD configs),
+            //  but this is helpful to see which values are possible here
+            'options'               => array(
+                Syncroton_Command_Sync::FILTER_NOTHING,
+                Syncroton_Command_Sync::FILTER_6_MONTHS_BACK,
+                Syncroton_Command_Sync::FILTER_3_MONTHS_BACK,
+                Syncroton_Command_Sync::FILTER_1_MONTH_BACK,
+                Syncroton_Command_Sync::FILTER_2_WEEKS_BACK,
+                Syncroton_Command_Sync::FILTER_1_WEEK_BACK,
+                Syncroton_Command_Sync::FILTER_3_DAYS_BACK,
+                Syncroton_Command_Sync::FILTER_1_DAY_BACK
+            ),
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => Syncroton_Command_Sync::FILTER_NOTHING,
+        ),
+        self::MAX_FILTER_TYPE_CALENDAR => array(
+        //_('Filter timeslot for events')
+            'label'                 => 'Filter timeslot for events',
+        //_('For how long in the past the events should be synchronized.')
+            'description'           => 'For how long in the past the events should be synchronized.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            // @todo options is not used yet (only for TYPE_KEYFIELD configs),
+            //  but this is helpful to see which values are possible here
+            'options'               => array(
+                Syncroton_Command_Sync::FILTER_6_MONTHS_BACK,
+                Syncroton_Command_Sync::FILTER_3_MONTHS_BACK,
+                Syncroton_Command_Sync::FILTER_1_MONTH_BACK,
+                Syncroton_Command_Sync::FILTER_2_WEEKS_BACK
+            ),
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => Syncroton_Command_Sync::FILTER_6_MONTHS_BACK,
         ),
     );
     

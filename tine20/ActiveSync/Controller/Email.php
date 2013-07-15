@@ -1033,4 +1033,13 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             $_containerId
         ));
     }
+
+    /**
+     * 
+     * @return int     Syncroton_Command_Sync::FILTER...
+     */
+    public function getMaxFilterType()
+    {
+        return ActiveSync_Config::getInstance()->get(ActiveSync_Config::MAX_FILTER_TYPE_EMAIL);
+    }
 }

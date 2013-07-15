@@ -952,4 +952,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
         
         return $filter;
     }
+
+    /**
+     * 
+     * @return int     Syncroton_Command_Sync::FILTER...
+     */
+    public function getMaxFilterType()
+    {
+        return ActiveSync_Config::getInstance()->get(ActiveSync_Config::MAX_FILTER_TYPE_CALENDAR);
+    }
 }
