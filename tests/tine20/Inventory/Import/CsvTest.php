@@ -83,6 +83,8 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     public function testImportOfCSVWithHook ()
     {
+        $this->markTestSkipped('@see 0008240: Inventory_Import_CsvTest::testImportOfCSVWithHook fails sometimes');
+        
         $filename = dirname(__FILE__) . '/files/inv_tine_import_csv.xml';
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId();
         $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
@@ -112,7 +114,6 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result['results'][2]['added_date']->setTimezone('Europe/Berlin')->toString(), '2012-01-11 00:00:00');
         $this->assertEquals($result['results'][2]['inventory_id'], '1333431666');
         $this->assertContains($translatedString, $result['results'][2]['description']);
-        
     }
     
     /**
