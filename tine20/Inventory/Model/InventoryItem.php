@@ -37,13 +37,14 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'titleProperty'     => 'name',
         'containerName'     => 'Inventory item list', // _('Inventory item list')
         'containersName'    => 'Inventory items lists', // _('Inventory items lists')
-        'hasRelations'      => true,
-        'hasCustomFields'   => true,
-        'hasNotes'          => true,
-        'hasTags'           => true,
-        'modlogActive'      => true,
+        'hasRelations'      => TRUE,
+        'hasCustomFields'   => TRUE,
+        'hasNotes'          => TRUE,
+        'hasTags'           => TRUE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => TRUE,
 
-        'createModule'    => true,
+        'createModule'    => TRUE,
 
         'appName'         => 'Inventory',
         'modelName'       => 'InventoryItem',
@@ -52,53 +53,53 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             'name' => array(
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                 'label'       => 'Name', // _('Name')
-                'queryFilter' => true
+                'queryFilter' => TRUE
             ),
             'status' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label' => 'Status', // _('Status')
                 'type' => 'keyfield',
                 'name' => 'inventoryStatus',
                 'default' => 'UNKNOWN'
             ),
             'inventory_id' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Inventory ID' // _('Inventory ID')
             ),
             'description' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      =>'Description' // _('Description')
             ),
             'location' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Location', // _('Location')
             ),
             'invoice_date' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Invoice date', // _('Invoice date')
                 'hidden'     => TRUE,
                 'default'    => NULL,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'total_number' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => NULL,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'default'    => 1,
             ),
             'invoice' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Invoice', // _('Invoice')
                 'hidden'     => TRUE
             ),
             'price' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Price', // _('Price')
                 'hidden'     => TRUE,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'costcentre' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Cost centre', // _('Cost centre')
                 'hidden'     => TRUE,
                 'type'  => 'record',
@@ -110,34 +111,34 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 )
             ),
             'warranty' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Warranty', // _('Warranty')
                 'hidden'     => TRUE,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'type'       => 'datetime'
             ),
             'added_date' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Item added', // _('Item added')
                 'hidden'     => TRUE,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'type'       => 'datetime'
             ),
             'removed_date' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Item removed', // _('Item removed')
                 'hidden'     => TRUE,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'type'       => 'datetime'
             ),
             'active_number' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Available number', // _(Available number)
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'default'    => 1,
             ),
             'depreciate_status' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 //'label' => 'Depreciate', // _('Depreciate')
                 'label'      => NULL,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),

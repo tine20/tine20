@@ -114,6 +114,13 @@ class Tinebase_ModelConfiguration {
     protected $_hasTags = NULL;
 
     /**
+     * If this is true, the record has file attachments
+     *
+     * @var boolean
+     */
+    protected $_hasAttachments = NULL;
+    
+    /**
      * If this is true, a modlog will be created
      *
      * @var boolean
@@ -502,7 +509,7 @@ class Tinebase_ModelConfiguration {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent',
-        'hasCustomFields', 'modlogActive'
+        'hasCustomFields', 'modlogActive', 'hasAttachments'
     );
 
     /**
@@ -535,7 +542,7 @@ class Tinebase_ModelConfiguration {
 
     /*
      * mappings
-    */
+     */
 
     /**
      * This defines the filters use for all known types
@@ -641,6 +648,14 @@ class Tinebase_ModelConfiguration {
             );
         }
 
+        if ($this->_hasAttachments) {
+            $this->_fields['attachments'] = array(
+                'label' => NULL,
+                'type'  => 'attachments'
+            );
+        }
+        
+        
         if ($this->_modlogActive) {
             // notes are needed if modlog is active
             $this->_fields['notes']              = array('label' => NULL,                 'type' => 'note',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL), 'useGlobalTranslation' => TRUE);

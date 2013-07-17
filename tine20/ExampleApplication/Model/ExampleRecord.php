@@ -38,11 +38,12 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
         'containerName'     => 'example record list', // _('example record list')
         'containersName'    => 'example record lists', // _('example record lists')
         'defaultFilter'     => 'query',
-        'hasRelations'      => true,
-        'hasCustomFields'   => true,
-        'hasNotes'          => true,
-        'hasTags'           => true,
-        'modlogActive'         => true,
+        'hasRelations'      => TRUE,
+        'hasCustomFields'   => TRUE,
+        'hasNotes'          => TRUE,
+        'hasTags'           => TRUE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => TRUE,
     );
     
     /**
@@ -51,15 +52,15 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
      */
     protected static $_fields = array(
         'id'     => array(
-            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
             'label' => NULL
         ),
         'name'   => array(
-            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
             'label' => 'Name',    // _('Name')
             ),
         'status' => array(
-            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
             'label' => 'Status',    // _('Status')
             'type' => 'keyfield',
             'name' => 'exampleStatus'
