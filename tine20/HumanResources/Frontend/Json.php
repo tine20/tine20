@@ -62,9 +62,14 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getEmployee($id)
     {
         $employee = $this->_get($id, HumanResources_Controller_Employee::getInstance());
-        $contactId = @$employee['account_id']['contact_id'];
-        $contact = $contactId ? Addressbook_Controller_Contact::getInstance()->get($contactId)->toArray() : null;
-        $employee['account_id']['contact_id'] = $contact;
+
+        if (array_key_exists('account_id', $employee) && ! empty($employee['account_id']['contact_id'])) {
+            try {
+                $employee['account_id']['contact_id'] = Addressbook_Controller_Contact::getInstance()->get($employee['account_id']['contact_id']);
+            } catch (Tinebase_Exception_NotFound $e) {
+                // do nothing
+            }
+        }
         
         // TODO: resolve this in controller
         if (! empty($employee['costcenters']) && is_array($employee['costcenters'])) {

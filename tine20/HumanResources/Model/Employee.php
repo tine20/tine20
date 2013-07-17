@@ -38,7 +38,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'hasNotes'          => TRUE,
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
-        
+        'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
       

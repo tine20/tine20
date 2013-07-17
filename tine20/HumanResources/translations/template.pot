@@ -651,3 +651,5 @@ msgid "Remaining"
 msgid "Book as vacation"
 
 msgid "Summary"
+
+msgid "Account is disabled or deleted!"
