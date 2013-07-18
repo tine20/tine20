@@ -196,7 +196,7 @@ class Tinebase_Timemachine_ModificationLog
             array('field' => 'record_type',    'operator' => 'equals',  'value' => get_class($newRecord)),
             array('field' => 'record_id',      'operator' => 'equals',  'value' => $newRecord->getId()),
         ));
-        $paging = new Tasks_Model_Pagination(array(
+        $paging = new Tinebase_Model_Pagination(array(
             'sort' => 'seq'
         ));
         
