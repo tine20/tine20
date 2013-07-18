@@ -4,18 +4,13 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 /**
  * Test helper
  */
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'AllTests::main');
-}
 
 class AllTests
 {
@@ -46,12 +41,9 @@ class AllTests
         $suite->addTest(HumanResources_AllTests::suite());
         $suite->addTest(Inventory_AllTests::suite());
         $suite->addTest(Sipgate_AllTests::suite());
+        $suite->addTest(SimpleFAQ_AllTests::suite());
         $suite->addTest(Zend_AllTests::suite());
         
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'AllTests::main') {
-    AllTests::main();
 }

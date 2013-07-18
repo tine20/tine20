@@ -697,6 +697,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $_toConvert[$field] = $value->format($_format);
             } elseif (is_array($value)) {
                 $this->_convertDateTimeToString($value, $_format);
+            } elseif (! $value && in_array($field, $this->_datetimeFields)) {
+                $_toConvert[$field] = NULL;
             }
         }
     }

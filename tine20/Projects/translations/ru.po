@@ -1,13 +1,14 @@
 # 
 # Translators:
+# Aleksdem <aleksdem@aleksdem.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:51+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-06-29 07:31+0000\n"
+"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,16 +21,11 @@ msgstr ""
 
 #: Acl/Rights.php:91
 msgid "Manage shared project favorites"
-msgstr ""
+msgstr "Управление общими избранными проектами"
 
 #: Acl/Rights.php:92
 msgid "Create new shared project favorites"
-msgstr ""
-
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "Персональные проекты %s"
+msgstr "Создание новых общих избранных проектов"
 
 #: Config.php:38
 msgid "Project Status Available"
@@ -52,69 +48,14 @@ msgid ""
 "syncronisation."
 msgstr ""
 
-#: Setup/setup.xml:4 js/Projects.js:24
-msgid "Projects"
-msgstr "Проекты"
-
-#: Setup/Initialize.php:34
-msgid "On hold"
-msgstr ""
-
-#: Setup/Initialize.php:35
-msgid "Completed"
-msgstr "Завершен"
-
-#: Setup/Initialize.php:36
-msgid "Cancelled"
-msgstr "Отменён"
-
-#: Setup/Initialize.php:37
-msgid "In process"
-msgstr ""
-
-#: Setup/Initialize.php:50
-msgid "Coworker"
-msgstr "Коллега"
-
-#: Setup/Initialize.php:51
-msgid "Responsible"
-msgstr "Ответственный"
-
-#: Setup/Initialize.php:79
-msgid "All my open projects"
-msgstr "Все мои открытые проекты"
-
-#: Setup/Initialize.php:99
-msgid "My projects that I'm responsible for"
-msgstr "Проекты, за которые я отвечаю"
-
-#: Setup/Initialize.php:100
-msgid "All my open projects that I am responsible for"
-msgstr "Все открытые проекты, за которые я отвечаю"
-
-#: Setup/Initialize.php:120
-msgid "My waiting projects"
-msgstr "Мои ожидающие проекты"
-
-#: Setup/Initialize.php:121
-msgid "My projects that are on hold"
-msgstr ""
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Все мои проекты"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr ""
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "Персональные проекты %s"
 
 #: js/AddToProjectPanel.js:34
 msgid "Please choose the Project to add the contacts to"
-msgstr ""
+msgstr "Пожалуйста, выберите проект для добавления контактов"
 
 #: js/AddToProjectPanel.js:38
 msgid "Please select the attenders' role"
@@ -135,22 +76,6 @@ msgstr "Выберите роль"
 #: js/AddToProjectPanel.js:102
 msgid "Adding {0} Participants to project"
 msgstr ""
-
-#: js/ProjectGridPanel.js:85
-msgid "Tags"
-msgstr "Теги"
-
-#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:135
-msgid "Number"
-msgstr "Номер"
-
-#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:130
-msgid "Title"
-msgstr "Заголовок"
-
-#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:141
-msgid "Status"
-msgstr "Статус"
 
 #: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
 msgid "Project"
@@ -174,9 +99,21 @@ msgstr "Списки проектов"
 msgid "Quick Search"
 msgstr "Быстрый поиск"
 
+#: js/Model.js:73 js/ProjectEditDialog.js:130 js/ProjectGridPanel.js:95
+msgid "Title"
+msgstr "Заголовок"
+
+#: js/Model.js:74 js/ProjectEditDialog.js:135 js/ProjectGridPanel.js:88
+msgid "Number"
+msgstr "Номер"
+
 #: js/Model.js:75 js/ProjectEditDialog.js:171
 msgid "Description"
 msgstr "Описание"
+
+#: js/Model.js:77 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:101
+msgid "Status"
+msgstr "Статус"
 
 #: js/Model.js:86
 msgid "Last Modified Time"
@@ -205,3 +142,67 @@ msgstr "Роль участника"
 #: js/ProjectEditDialog.js:185
 msgid "Enter description"
 msgstr "Введите описание"
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
+msgstr "Теги"
+
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Проекты"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Все мои проекты"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Избранный по умолчанию"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Будет загружено по-умолчанию при загрузке Проектов"
+
+#: Setup/Initialize.php:34
+msgid "On hold"
+msgstr "на удержании"
+
+#: Setup/Initialize.php:35
+msgid "Completed"
+msgstr "Завершен"
+
+#: Setup/Initialize.php:36
+msgid "Cancelled"
+msgstr "Отменён"
+
+#: Setup/Initialize.php:37
+msgid "In process"
+msgstr "в работе"
+
+#: Setup/Initialize.php:50
+msgid "Coworker"
+msgstr "Коллега"
+
+#: Setup/Initialize.php:51
+msgid "Responsible"
+msgstr "Ответственный"
+
+#: Setup/Initialize.php:79
+msgid "All my open projects"
+msgstr "Все мои открытые проекты"
+
+#: Setup/Initialize.php:99
+msgid "My projects that I'm responsible for"
+msgstr "Проекты, за которые я отвечаю"
+
+#: Setup/Initialize.php:100
+msgid "All my open projects that I am responsible for"
+msgstr "Все открытые проекты, за которые я отвечаю"
+
+#: Setup/Initialize.php:120
+msgid "My waiting projects"
+msgstr "Мои ожидающие проекты"
+
+#: Setup/Initialize.php:121
+msgid "My projects that are on hold"
+msgstr "Мои приостановленные проекты"

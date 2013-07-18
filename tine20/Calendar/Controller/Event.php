@@ -536,7 +536,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $this->_applyExdateDiffToRecordSet($exdate, $diff, $events);
         } else if ($range === Calendar_Model_Event::RANGE_THISANDFUTURE) {
             $nextRegularRecurEvent = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $exdate->dtstart);
-            if ($nextRegularRecurEvent !== NULL && ! $nextRegularRecurEvent->dtstart->isEarlier($exdate->dtstart)) {
+            
+            if ($nextRegularRecurEvent == $baseEvent) {
+                // NOTE if a fist instance exception takes place before the
+                //      series would start normally, $nextOccurence is the
+                //      baseEvent of the series. As createRecurException can't
+                //      deal with this situation we update whole series here
+                $this->_updateExdateRange($exdate, Calendar_Model_Event::RANGE_ALL, $oldExdate);
+            } else if ($nextRegularRecurEvent !== NULL && ! $nextRegularRecurEvent->dtstart->isEarlier($exdate->dtstart)) {
                 $this->_applyDiff($nextRegularRecurEvent, $diff, $exdate, FALSE);
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -666,7 +673,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * @param   array $_ids array of record identifiers
      * @param   string $range
-     * @return  Tinebase_Record_RecordSet
+     * @return  NULL
      * @throws Tinebase_Exception_NotFound|Tinebase_Exception
      */
     public function delete($_ids, $range = Calendar_Model_Event::RANGE_THIS)
@@ -738,13 +745,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $baseEvent = $this->getRecurBaseEvent($exdate);
         
         if ($range === Calendar_Model_Event::RANGE_ALL) {
-            $exceptions = $this->getRecurExceptions($baseEvent);
-            $this->delete($exceptions->getArrayOfIds());
-            $this->delete($baseEvent->getId());
-            
+            $this->deleteRecurSeries($exdate);
         } else if ($range === Calendar_Model_Event::RANGE_THISANDFUTURE) {
             $nextRegularRecurEvent = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $exdate->dtstart);
-            $this->createRecurException($nextRegularRecurEvent, TRUE, TRUE);
+            
+            if ($nextRegularRecurEvent == $baseEvent) {
+                // NOTE if a fist instance exception takes place before the
+                //      series would start normally, $nextOccurence is the
+                //      baseEvent of the series. As createRecurException can't
+                //      deal with this situation we delete whole series here
+                $this->_deleteExdateRange($exdate, Calendar_Model_Event::RANGE_ALL);
+            } else {
+                $this->createRecurException($nextRegularRecurEvent, TRUE, TRUE);
+            }
         }
     }
     

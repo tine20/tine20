@@ -28,69 +28,56 @@ msgstr "управление общими папками"
 msgid "Create new shared folders"
 msgstr "Создание новых  общих папок"
 
+#: Controller/Node.php:318
+msgid "My folders"
+msgstr "Мои папки"
+
+#: Controller/Node.php:325
+msgid "Shared folders"
+msgstr "Общие папки"
+
+#: Controller/Node.php:332
+msgid "Other users folders"
+msgstr "Папки других пользователей"
+
 #: Controller.php:100
 #, python-format
 msgid "%s's personal files"
 msgstr "Личные файлы %s"
 
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "путь"
+#: js/Filemanager.js:26
+msgid "Filemanager"
+msgstr "Менеджер файлов"
 
-#: js/NodeEditDialog.js:44 js/Filemanager.js:34 js/NodeGridPanel.js:344
+#: js/Filemanager.js:34 js/NodeEditDialog.js:44 js/NodeGridPanel.js:344
 msgid "Save locally"
 msgstr "Сохранить локально"
 
-#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
-msgid "Node"
-msgstr "Узел"
+#: js/Filemanager.js:81
+msgid "Service Unavailable"
+msgstr "Сервис не доступен"
 
-#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
-msgid "Name"
-msgstr "Имя"
-
-#: js/NodeEditDialog.js:121 js/Model.js:530
-msgid "Type"
-msgstr "Тип"
-
-#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
-msgid "Created By"
-msgstr "Создана"
-
-#: js/NodeEditDialog.js:132 js/Model.js:532 js/NodeGridPanel.js:179
-msgid "Creation Time"
-msgstr "Время создания"
-
-#: js/NodeEditDialog.js:141
-msgid "Modified By"
-msgstr "Изменено"
-
-#: js/NodeEditDialog.js:144
-msgid "Last Modified"
-msgstr "Последнее изменение"
-
-#: js/NodeEditDialog.js:167
-msgid "Description"
-msgstr "Описание"
-
-#: js/NodeEditDialog.js:181
-msgid "Enter description"
-msgstr "Введите описание"
-
-#: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:651
-#: js/NodeGridPanel.js:803
-msgid "Upload Failed"
-msgstr "Сбой загрузки"
-
-#: js/NodeTreePanel.js:661 js/NodeGridPanel.js:652
+#: js/Filemanager.js:82
 msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr "Не удалось загрузить файл. Размер файла может быть слишком большим. Пожалуйста, сообщите администратору. Максимальный загружаемый размер:"
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
+" Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr "Менеджер файлов не настроен правильно. Пожалуйста, обратитесь к {0} ЧАВО администратора Tine 2.0 {1} для рекомендаций по настройке  или к администратору."
 
-#: js/NodeTreePanel.js:771 js/NodeGridPanel.js:804
-msgid "Putting files in this folder is not allowed!"
-msgstr "Помещение файлов в этой папке не допускается!"
+#: js/Filemanager.js:104
+msgid "Files already exists"
+msgstr "Файлы уже существуют"
+
+#: js/Filemanager.js:104
+msgid "Do you want to replace the following file(s)?"
+msgstr "Вы хотите заменить следующий(е) файл(ы)?"
+
+#: js/Filemanager.js:137
+msgid "Failure on create folder"
+msgstr "Сбой при создании папки"
+
+#: js/Filemanager.js:138
+msgid "Item with this name already exists!"
+msgstr "Элемент с таким именем уже существует!"
 
 #: js/GridContextMenu.js:34
 msgid "Please enter the new name of the {0}:"
@@ -138,39 +125,45 @@ msgstr "Пожалуйста, подождите"
 msgid "Quick Search"
 msgstr "Быстрый поиск"
 
+#: js/Model.js:530 js/NodeEditDialog.js:121
+msgid "Type"
+msgstr "Тип"
+
 #: js/Model.js:531 js/NodeGridPanel.js:147
 msgid "Contenttype"
 msgstr "Тип содержимого"
 
-#: js/Filemanager.js:26
-msgid "Filemanager"
-msgstr "Менеджер файлов"
+#: js/Model.js:532 js/NodeEditDialog.js:132 js/NodeGridPanel.js:179
+msgid "Creation Time"
+msgstr "Время создания"
 
-#: js/Filemanager.js:81
-msgid "Service Unavailable"
-msgstr "Сервис не доступен"
+#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
+msgid "Node"
+msgstr "Узел"
 
-#: js/Filemanager.js:82
-msgid ""
-"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
-" Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "Менеджер файлов не настроен правильно. Пожалуйста, обратитесь к {0} ЧАВО администратора Tine 2.0 {1} для рекомендаций по настройке  или к администратору."
+#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
+msgid "Name"
+msgstr "Имя"
 
-#: js/Filemanager.js:104
-msgid "Files already exists"
-msgstr "Файлы уже существуют"
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
+msgid "Created By"
+msgstr "Создана"
 
-#: js/Filemanager.js:104
-msgid "Do you want to replace the following file(s)?"
-msgstr "Вы хотите заменить следующий(е) файл(ы)?"
+#: js/NodeEditDialog.js:141
+msgid "Modified By"
+msgstr "Изменено"
 
-#: js/Filemanager.js:137
-msgid "Failure on create folder"
-msgstr "Сбой при создании папки"
+#: js/NodeEditDialog.js:144
+msgid "Last Modified"
+msgstr "Последнее изменение"
 
-#: js/Filemanager.js:138
-msgid "Item with this name already exists!"
-msgstr "Элемент с таким именем уже существует!"
+#: js/NodeEditDialog.js:167
+msgid "Description"
+msgstr "Описание"
+
+#: js/NodeEditDialog.js:181
+msgid "Enter description"
+msgstr "Введите описание"
 
 #: js/NodeGridPanel.js:125
 msgid "Tags"
@@ -228,14 +221,21 @@ msgstr "Введите имя новой папки:"
 msgid "No {0} added"
 msgstr "{0} не добавлен"
 
-#: Controller/Node.php:318
-msgid "My folders"
-msgstr "Мои папки"
+#: js/NodeGridPanel.js:651 js/NodeGridPanel.js:803 js/NodeTreePanel.js:660
+#: js/NodeTreePanel.js:770
+msgid "Upload Failed"
+msgstr "Сбой загрузки"
 
-#: Controller/Node.php:325
-msgid "Shared folders"
-msgstr "Общие папки"
+#: js/NodeGridPanel.js:652 js/NodeTreePanel.js:661
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "Не удалось загрузить файл. Размер файла может быть слишком большим. Пожалуйста, сообщите администратору. Максимальный загружаемый размер:"
 
-#: Controller/Node.php:332
-msgid "Other users folders"
-msgstr "Папки других пользователей"
+#: js/NodeGridPanel.js:804 js/NodeTreePanel.js:771
+msgid "Putting files in this folder is not allowed!"
+msgstr "Помещение файлов в этой папке не допускается!"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "путь"

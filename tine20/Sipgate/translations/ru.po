@@ -1,13 +1,14 @@
 # 
 # Translators:
+# Aleksdem <aleksdem@aleksdem.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-04-01 20:01+0000\n"
-"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
+"PO-Revision-Date: 2013-06-22 08:59+0000\n"
+"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,29 +19,9 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Exception/NoConnection.php:29
-msgid "Could not connect to sipgate."
-msgstr ""
-
-#: Exception/Authorization.php:29
-msgid "Could not authenticate to sipgate."
-msgstr ""
-
-#: Exception/ResolveCredentials.php:29
-msgid "Could not resolve account settings."
-msgstr ""
-
-#: Exception/Backend.php:29
-msgid "General Backend Exception."
-msgstr ""
-
-#: Exception/MissingConfig.php:29
-msgid "The configuration is missing."
-msgstr ""
-
 #: Acl/Rights.php:94
 msgid "manage accounts"
-msgstr ""
+msgstr "управлять учётными записями"
 
 #: Acl/Rights.php:95
 msgid "enables the account module in the application"
@@ -56,11 +37,11 @@ msgstr ""
 
 #: Acl/Rights.php:102
 msgid "manage shared accounts"
-msgstr ""
+msgstr "управление общими учётными записями"
 
 #: Acl/Rights.php:103
 msgid "add, edit and delete shared accounts"
-msgstr ""
+msgstr "добавить, редактировать или удалить общие учётные записи"
 
 #: Acl/Rights.php:106
 msgid "manage private accounts"
@@ -70,17 +51,9 @@ msgstr ""
 msgid "add, edit and delete private accounts"
 msgstr ""
 
-#: Controller.php:95
-msgid "You do not have admin rights on Sales"
-msgstr ""
-
-#: Controller.php:117
-msgid "You do not have admin rights on Sipgate"
-msgstr ""
-
 #: Config.php:48
 msgid "Connection Status"
-msgstr ""
+msgstr "Статус соединения"
 
 #: Config.php:50
 msgid "Possible connection states"
@@ -94,9 +67,9 @@ msgstr ""
 msgid "Possible connection type of services"
 msgstr ""
 
-#: Config.php:68 js/AccountGridPanel.js:98 js/AccountEditDialog.js:261
+#: Config.php:68 js/AccountEditDialog.js:261 js/AccountGridPanel.js:98
 msgid "Account Type"
-msgstr ""
+msgstr "Тип учётной записи"
 
 #: Config.php:70
 msgid ""
@@ -112,41 +85,532 @@ msgstr ""
 msgid "The type of your account as defined in the contract"
 msgstr ""
 
-#: Setup/Update/Release1.php:50 Setup/Initialize.php:34
-msgid "accepted"
+#: Controller/Connection.php:242
+msgid "anonymous"
 msgstr ""
 
-#: Setup/Update/Release1.php:51 Setup/Initialize.php:35
-msgid "outgoing"
+#: Controller.php:95
+msgid "You do not have admin rights on Sales"
 msgstr ""
 
-#: Setup/Update/Release1.php:52 Setup/Initialize.php:36
-msgid "missed"
+#: Controller.php:117
+msgid "You do not have admin rights on Sipgate"
 msgstr ""
 
-#: Setup/Update/Release1.php:66 Setup/Initialize.php:50
-msgid "Telephone Call"
+#: Exception/Authorization.php:29
+msgid "Could not authenticate to sipgate."
+msgstr "Невозможно залогиниться к провайдеру SIP"
+
+#: Exception/Backend.php:29
+msgid "General Backend Exception."
 msgstr ""
 
-#: Setup/Update/Release1.php:67 Setup/Initialize.php:51
-msgid "Facsimile"
+#: Exception/MissingConfig.php:29
+msgid "The configuration is missing."
+msgstr "Неправильные настройки."
+
+#: Exception/NoConnection.php:29
+msgid "Could not connect to sipgate."
+msgstr "Не могу подключиться к провайдеру SIP"
+
+#: Exception/ResolveCredentials.php:29
+msgid "Could not resolve account settings."
 msgstr ""
 
-#: Setup/Update/Release1.php:91 Setup/Initialize.php:65
-msgid "basic/plus"
+#: js/AccountEditDialog.js:43
+msgid "Validating account..."
 msgstr ""
 
-#: Setup/Update/Release1.php:92 Setup/Initialize.php:66
-msgid "team"
+#: js/AccountEditDialog.js:44
+msgid "Synchronizing lines..."
 msgstr ""
 
-#: Setup/Update/Release1.php:106 Setup/Initialize.php:80
-msgid "private"
+#: js/AccountEditDialog.js:60
+msgid "Save Account"
 msgstr ""
 
-#: Setup/Update/Release1.php:107 Setup/Initialize.php:81
-msgid "shared"
+#: js/AccountEditDialog.js:62
+msgid "Saves the account (without closing window)"
 msgstr ""
+
+#: js/AccountEditDialog.js:68 js/LineGridPanel.js:189
+msgid "Synchronize Lines"
+msgstr ""
+
+#: js/AccountEditDialog.js:70
+msgid ""
+"Synchronizes the selected account (creates or updates the associated lines)"
+msgstr ""
+
+#: js/AccountEditDialog.js:76
+msgid "Validate Account"
+msgstr ""
+
+#: js/AccountEditDialog.js:78
+msgid ""
+"Validates the selected account (creates or updates the associated lines)"
+msgstr ""
+
+#: js/AccountEditDialog.js:95
+msgid "The account is not saved already!"
+msgstr ""
+
+#: js/AccountEditDialog.js:96
+msgid "Please save yout account before syncing!"
+msgstr ""
+
+#: js/AccountEditDialog.js:109
+msgid "The lines have been synced sucessfully!"
+msgstr ""
+
+#: js/AccountEditDialog.js:110
+msgid ""
+"The account has now {0} lines. Go on assigning user accounts to the new "
+"lines in the next tab."
+msgstr ""
+
+#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:340
+msgid "Errors"
+msgstr "Ошибки"
+
+#: js/AccountEditDialog.js:257
+msgid "Description"
+msgstr "Описание"
+
+#: js/AccountEditDialog.js:278 js/AccountGridPanel.js:89
+#: js/AssignLinesGrid.js:100 js/LineGridPanel.js:82
+msgid "Type"
+msgstr "Тип"
+
+#: js/AccountEditDialog.js:285 js/AccountGridPanel.js:107
+msgid "Mobile Number"
+msgstr ""
+
+#: js/AccountEditDialog.js:288
+msgid "Sipgate Username"
+msgstr ""
+
+#: js/AccountEditDialog.js:290
+msgid "Hidden due to security reasons."
+msgstr ""
+
+#: js/AccountEditDialog.js:292
+msgid "Password"
+msgstr "Пароль"
+
+#: js/AccountEditDialog.js:296
+msgid "Passwort Repeat"
+msgstr "Повтор пароля"
+
+#: js/AccountEditDialog.js:302
+msgid "Is Validated"
+msgstr ""
+
+#: js/AccountEditDialog.js:340
+msgid "Please validate the account settings before saving!"
+msgstr ""
+
+#: js/AccountFilterModel.js:38 js/LineGridPanel.js:90
+msgid "Account"
+msgstr ""
+
+#: js/AccountGridPanel.js:54
+msgid "Telephone"
+msgstr ""
+
+#: js/AccountGridPanel.js:55 js/SearchAddressDialog.js:134
+#: js/SearchAddressDialog.js:156
+msgid "Fax"
+msgstr "Факс"
+
+#: js/AccountGridPanel.js:115 js/AssignLinesGrid.js:101
+#: js/LineGridPanel.js:105
+msgid "Uri Alias"
+msgstr ""
+
+#: js/AccountGridPanel.js:124 js/ConnectionGridPanel.js:203
+#: js/LineGridPanel.js:180
+msgid "Dial number"
+msgstr "Набор номера"
+
+#: js/AccountGridPanel.js:125 js/ConnectionGridPanel.js:204
+#: js/LineGridPanel.js:181
+msgid "Initiates a new outgoing call"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:38
+msgid "Call contact"
+msgstr "Позвонить"
+
+#: js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
+msgstr "Создать SMS"
+
+#: js/AddressbookGridPanelHook.js:260
+msgid "Work"
+msgstr "Рабочий"
+
+#: js/AddressbookGridPanelHook.js:270
+msgid "Home"
+msgstr "Домашний"
+
+#: js/AddressbookGridPanelHook.js:280 js/AddressbookGridPanelHook.js:325
+msgid "Cell"
+msgstr "Мобильный"
+
+#: js/AddressbookGridPanelHook.js:290 js/AddressbookGridPanelHook.js:335
+msgid "Cell private"
+msgstr "Мобильный личный"
+
+#: js/AssignLinesGrid.js:57
+msgid "Assign Lines"
+msgstr ""
+
+#: js/AssignLinesGrid.js:99
+msgid "Id"
+msgstr ""
+
+#: js/AssignLinesGrid.js:102
+msgid "Sip Uri"
+msgstr ""
+
+#: js/AssignLinesGrid.js:103 js/LineGridPanel.js:125
+msgid "Outgoing"
+msgstr ""
+
+#: js/AssignLinesGrid.js:104 js/LineGridPanel.js:117
+msgid "Incoming"
+msgstr ""
+
+#: js/AssignLinesGrid.js:107
+msgid "Assigned User"
+msgstr ""
+
+#: js/CallStateWindow.js:106 js/DialNumberDialog.js:89
+#: js/SearchAddressDialog.js:63 js/SmsEditDialog.js:74
+msgid "Cancel"
+msgstr "Отмена"
+
+#: js/CallStateWindow.js:138
+msgid "The call can't be observed anymore. Lost SessionID."
+msgstr ""
+
+#: js/CallStateWindow.js:142
+msgid "The call can't be observed anymore due to an unknown error."
+msgstr ""
+
+#: js/CallStateWindow.js:151
+msgid "Please pick up your phone to get connected to {0}."
+msgstr ""
+
+#: js/CallStateWindow.js:155
+msgid "Connecting to {0}."
+msgstr ""
+
+#: js/CallStateWindow.js:162
+msgid "Connected to {0}."
+msgstr ""
+
+#: js/CallStateWindow.js:167
+msgid "call 1 busy"
+msgstr "Номер 1 занят"
+
+#: js/CallStateWindow.js:174
+msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
+msgstr ""
+
+#: js/CallStateWindow.js:180
+msgid "hungup before other called"
+msgstr ""
+
+#: js/CallStateWindow.js:183
+msgid "hungup"
+msgstr ""
+
+#: js/CallStateWindow.js:221
+msgid "Initializing call to {0}"
+msgstr ""
+
+#: js/CallStateWindow.js:244
+msgid "Connecting to: "
+msgstr "Соединение с: "
+
+#: js/ConnectionGridPanel.js:81 js/Models.js:332
+msgid "TOS"
+msgstr ""
+
+#: js/ConnectionGridPanel.js:89 js/Models.js:107 js/Models.js:325
+msgid "Status"
+msgstr "Статус"
+
+#: js/ConnectionGridPanel.js:97
+msgid "Remote Number"
+msgstr ""
+
+#: js/ConnectionGridPanel.js:103
+msgid "Local Number"
+msgstr ""
+
+#: js/ConnectionGridPanel.js:109 js/LineFilterModel.js:32
+msgid "Line"
+msgstr "Линия"
+
+#: js/ConnectionGridPanel.js:116
+msgid "Call started"
+msgstr "Звоним...."
+
+#: js/ConnectionGridPanel.js:123
+msgid "Contact"
+msgstr "Контакт"
+
+#: js/ConnectionGridPanel.js:195
+msgid "Save number"
+msgstr "Сохранить номер"
+
+#: js/ConnectionGridPanel.js:196
+msgid "Adds this number to the Addressbook"
+msgstr "Добавит этот номер в адресную книгу"
+
+#: js/ConnectionGridPanel.js:213 js/LineGridPanel.js:220
+msgid "Add Account"
+msgstr ""
+
+#: js/DialNumberDialog.js:97
+msgid "Ok"
+msgstr ""
+
+#: js/DialNumberDialog.js:161
+msgid "Select Line"
+msgstr ""
+
+#: js/DialNumberDialog.js:166
+msgid "Number to call"
+msgstr "Номер телефона"
+
+#: js/DialNumberDialog.js:171
+msgid "Please use a valid telephone number!"
+msgstr ""
+
+#: js/DialNumberDialog.js:211
+msgid "Dial Number {0}"
+msgstr ""
+
+#: js/ExceptionHandler.js:18
+msgid ""
+"A general backend error occurred. If this is a permanent error, please "
+"contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:26
+msgid ""
+"The application could not connect to the sipgate server. If this is a "
+"permanent error, please contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:34
+msgid ""
+"The authentication data provided are not valid. Please configure or contact "
+"your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:42
+msgid ""
+"The saved credentials and config data could not be resolved properly. Please"
+" reconfigure or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:50
+msgid ""
+"There are missing parameters to connect to sipgate. Please reconfigure or "
+"contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:60
+msgid ""
+"The account you've configured is already in use. Please contact your "
+"administrator or activate the account again if it's yours."
+msgstr ""
+
+#: js/LineGridPanel.js:98
+msgid "User"
+msgstr "Пользователь"
+
+#: js/LineGridPanel.js:111
+msgid "SIP Uri"
+msgstr ""
+
+#: js/LineGridPanel.js:131
+msgid "Created"
+msgstr ""
+
+#: js/LineGridPanel.js:187 js/LineGridPanel.js:188
+msgid "Synchronize Line"
+msgstr ""
+
+#: js/LineGridPanel.js:191
+msgid "Synchronizes the selected line(s)"
+msgstr ""
+
+#: js/LineGridPanel.js:246
+msgid "Synchronizing..."
+msgstr ""
+
+#: js/Models.js:97 js/Models.js:144 js/Models.js:321
+msgid "Quick search"
+msgstr "Быстрый поиск"
+
+#: js/Models.js:98
+msgid "Created By"
+msgstr "Создан"
+
+#: js/Models.js:100
+msgid "Account-Type"
+msgstr ""
+
+#: js/Models.js:146
+msgid "Assigned to"
+msgstr ""
+
+#: js/Models.js:303
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "список записей"
+msgstr[1] "списка записей"
+msgstr[2] "списков записей"
+
+#: js/SearchAddressDialog.js:55
+msgid "Add Number"
+msgstr "Добавить номер"
+
+#: js/SearchAddressDialog.js:71 js/SmsEditDialog.js:81
+msgid "Close"
+msgstr "Закрыть"
+
+#: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
+msgid "Phone"
+msgstr "Телефон"
+
+#: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
+msgid "Mobile"
+msgstr "Мобильный"
+
+#: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
+msgid "Car phone"
+msgstr "Автомобильный телефон"
+
+#: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
+msgid "Pager"
+msgstr "Пейджер"
+
+#: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
+msgid "Phone (private)"
+msgstr "Телефон (личный)"
+
+#: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
+msgid "Fax (private)"
+msgstr "Факс (личный)"
+
+#: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
+msgid "Mobile (private)"
+msgstr "Мобильный (личный)"
+
+#: js/SearchAddressDialog.js:144
+msgid "-- create new --"
+msgstr "-- создать новый --"
+
+#: js/SearchAddressDialog.js:145
+msgid "Select existing contact or create a new one"
+msgstr ""
+
+#: js/SearchAddressDialog.js:180
+msgid "Choose Device"
+msgstr "Выберите устройство"
+
+#: js/SearchAddressDialog.js:211
+msgid "Add number {0} to the addressbook"
+msgstr ""
+
+#: js/SmsEditDialog.js:67
+msgid "Send"
+msgstr "Отправить"
+
+#: js/SmsEditDialog.js:112
+msgid "Loading contact..."
+msgstr ""
+
+#: js/SmsEditDialog.js:113
+msgid "Sending message..."
+msgstr "Отправка сообщения..."
+
+#: js/SmsEditDialog.js:250
+msgid "Recipient"
+msgstr "Получатель"
+
+#: js/SmsEditDialog.js:259
+msgid "Recipient's phone number"
+msgstr ""
+
+#: js/SmsEditDialog.js:263
+msgid "please choose the recipient's phone number..."
+msgstr ""
+
+#: js/SmsEditDialog.js:267
+msgid "Your phone number"
+msgstr "Ваш номер телефона"
+
+#: js/SmsEditDialog.js:270
+msgid "please choose your phone number..."
+msgstr ""
+
+#: js/SmsEditDialog.js:276
+msgid "The message"
+msgstr "Сообщение"
+
+#: js/SmsEditDialog.js:279
+msgid "enter the text..."
+msgstr "введите текст..."
+
+#: js/SmsEditDialog.js:302
+msgid "Send message to \"{0}\""
+msgstr "Отправить сообщение \"{0}\""
+
+#: js/SmsEditDialog.js:302
+msgid "Send message"
+msgstr "Отправить сообщение"
+
+#: Preference.php:78
+msgid "Your phone"
+msgstr "Ваш телефон"
+
+#: Preference.php:79
+msgid "This is your phone"
+msgstr "Это ваш телефон"
+
+#: Preference.php:82
+msgid "Your fax"
+msgstr "Ваш факс"
+
+#: Preference.php:83
+msgid "This is your fax"
+msgstr "Это ваш факс"
+
+#: Preference.php:87
+msgid "Your mobile number"
+msgstr "Ваш мобильный номер"
+
+#: Preference.php:88
+msgid "Used when sending SMS"
+msgstr "Используется при отправке SMS"
+
+#: Preference.php:92
+msgid "International calling code"
+msgstr "Международный телефонный код"
+
+#: Preference.php:93
+msgid ""
+"Your international calling code (e.g. +1 in the United States, +49 in "
+"Germany)"
+msgstr "Ваш международный телефонный код (например, +7 в России, +49 в Германии)"
 
 #: Setup/calling-codes.xml:6
 msgid "+93 (Afghanistan)"
@@ -182,15 +646,15 @@ msgstr ""
 
 #: Setup/calling-codes.xml:46
 msgid "+54 (Argentine Republic)"
-msgstr ""
+msgstr "+54 (Аргентина)"
 
 #: Setup/calling-codes.xml:51
 msgid "+374 (Armenia (Republic of))"
-msgstr ""
+msgstr "+374 (Армения)"
 
 #: Setup/calling-codes.xml:56
 msgid "+297 (Aruba)"
-msgstr ""
+msgstr "+297 (Аруба)"
 
 #: Setup/calling-codes.xml:61
 msgid "+247 (Ascension)"
@@ -198,7 +662,7 @@ msgstr ""
 
 #: Setup/calling-codes.xml:66
 msgid "+61 (Australia)"
-msgstr ""
+msgstr "+61 (Австралия)"
 
 #: Setup/calling-codes.xml:71
 msgid "+672 (Australian External Territories)"
@@ -350,7 +814,7 @@ msgstr ""
 
 #: Setup/calling-codes.xml:256
 msgid "+385 (Croatia (Republic of))"
-msgstr ""
+msgstr "+385 (Хорватия)"
 
 #: Setup/calling-codes.xml:261
 msgid "+53 (Cuba)"
@@ -370,7 +834,7 @@ msgstr ""
 
 #: Setup/calling-codes.xml:281
 msgid "+243 (Democratic Republic of the Congo)"
-msgstr ""
+msgstr "+243 (Демократическая Республика Конго)"
 
 #: Setup/calling-codes.xml:286
 msgid "+670 (Democratic Republic of Timor-Leste)"
@@ -566,7 +1030,7 @@ msgstr "+870 (Инмарсат SNAQ (Общий код доступа к сет�
 
 #: Setup/calling-codes.xml:526
 msgid "+800 (International Freephone Service)"
-msgstr ""
+msgstr "+800 (Международная служба бесплатных телефонов)"
 
 #: Setup/calling-codes.xml:531
 msgid "+881 (International Mobile, shared code)"
@@ -634,11 +1098,11 @@ msgstr "+82 (Корея (Республика))"
 
 #: Setup/calling-codes.xml:611
 msgid "+965 (Kuwait (State of))"
-msgstr ""
+msgstr "+965 (Кувейт())"
 
 #: Setup/calling-codes.xml:616
 msgid "+996 (Kyrgyz Republic)"
-msgstr ""
+msgstr "+996 (Киргизия)"
 
 #: Setup/calling-codes.xml:621
 msgid "+856 (Lao People's Democratic Republic)"
@@ -1116,501 +1580,38 @@ msgstr "+260 (Замбия (Республика))"
 msgid "+263 (Zimbabwe (Republic of))"
 msgstr "+263 (Зимбабве (Республика))"
 
-#: Preference.php:78
-msgid "Your phone"
-msgstr "Ваш телефон"
+#: Setup/Initialize.php:34 Setup/Update/Release1.php:50
+msgid "accepted"
+msgstr "Принято"
 
-#: Preference.php:79
-msgid "This is your phone"
-msgstr "Это ваш телефон"
-
-#: Preference.php:82
-msgid "Your fax"
-msgstr "Ваш факс"
-
-#: Preference.php:83
-msgid "This is your fax"
-msgstr "Это ваш факс"
-
-#: Preference.php:87
-msgid "Your mobile number"
-msgstr "Ваш мобильный номер"
-
-#: Preference.php:88
-msgid "Used when sending SMS"
-msgstr "Используется при отправке SMS"
-
-#: Preference.php:92
-msgid "International calling code"
-msgstr "Международный телефонный код"
-
-#: Preference.php:93
-msgid ""
-"Your international calling code (e.g. +1 in the United States, +49 in "
-"Germany)"
-msgstr "Ваш международный телефонный код (например, +7 в России, +49 в Германии)"
-
-#: js/ConnectionGridPanel.js:81 js/Models.js:332
-msgid "TOS"
-msgstr ""
-
-#: js/ConnectionGridPanel.js:89 js/Models.js:107 js/Models.js:325
-msgid "Status"
-msgstr ""
-
-#: js/ConnectionGridPanel.js:97
-msgid "Remote Number"
-msgstr ""
-
-#: js/ConnectionGridPanel.js:103
-msgid "Local Number"
-msgstr ""
-
-#: js/ConnectionGridPanel.js:109 js/LineFilterModel.js:32
-msgid "Line"
-msgstr "Линия"
-
-#: js/ConnectionGridPanel.js:116
-msgid "Call started"
-msgstr ""
-
-#: js/ConnectionGridPanel.js:123
-msgid "Contact"
-msgstr "Контакт"
-
-#: js/ConnectionGridPanel.js:195
-msgid "Save number"
-msgstr "Сохранить номер"
-
-#: js/ConnectionGridPanel.js:196
-msgid "Adds this number to the Addressbook"
-msgstr "Добавит этот номер в адресную книгу"
-
-#: js/ConnectionGridPanel.js:203 js/LineGridPanel.js:180
-#: js/AccountGridPanel.js:124
-msgid "Dial number"
-msgstr "Набор номера"
-
-#: js/ConnectionGridPanel.js:204 js/LineGridPanel.js:181
-#: js/AccountGridPanel.js:125
-msgid "Initiates a new outgoing call"
-msgstr ""
-
-#: js/ConnectionGridPanel.js:213 js/LineGridPanel.js:220
-msgid "Add Account"
-msgstr ""
-
-#: js/SmsEditDialog.js:67
-msgid "Send"
-msgstr ""
-
-#: js/SmsEditDialog.js:74 js/SearchAddressDialog.js:63
-#: js/DialNumberDialog.js:89 js/CallStateWindow.js:106
-msgid "Cancel"
-msgstr "Отмена"
-
-#: js/SmsEditDialog.js:81 js/SearchAddressDialog.js:71
-msgid "Close"
-msgstr "Закрыть"
-
-#: js/SmsEditDialog.js:112
-msgid "Loading contact..."
-msgstr ""
-
-#: js/SmsEditDialog.js:113
-msgid "Sending message..."
-msgstr "Отправка сообщения..."
-
-#: js/SmsEditDialog.js:250
-msgid "Recipient"
-msgstr "Получатель"
-
-#: js/SmsEditDialog.js:259
-msgid "Recipient's phone number"
-msgstr ""
-
-#: js/SmsEditDialog.js:263
-msgid "please choose the recipient's phone number..."
-msgstr ""
-
-#: js/SmsEditDialog.js:267
-msgid "Your phone number"
-msgstr "Ваш номер телефона"
-
-#: js/SmsEditDialog.js:270
-msgid "please choose your phone number..."
-msgstr ""
-
-#: js/SmsEditDialog.js:276
-msgid "The message"
-msgstr "Сообщение"
-
-#: js/SmsEditDialog.js:279
-msgid "enter the text..."
-msgstr "введите текст..."
-
-#: js/SmsEditDialog.js:302
-msgid "Send message to \"{0}\""
-msgstr "Отправить сообщение \"{0}\""
-
-#: js/SmsEditDialog.js:302
-msgid "Send message"
-msgstr "Отправить сообщение"
-
-#: js/SearchAddressDialog.js:55
-msgid "Add Number"
-msgstr "Добавить номер"
-
-#: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
-msgid "Phone"
-msgstr "Телефон"
-
-#: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
-msgid "Mobile"
-msgstr "Мобильный"
-
-#: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
-#: js/AccountGridPanel.js:55
-msgid "Fax"
-msgstr "Факс"
-
-#: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
-msgid "Car phone"
-msgstr "Автомобильный телефон"
-
-#: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
-msgid "Pager"
-msgstr "Пейджер"
-
-#: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
-msgid "Phone (private)"
-msgstr "Телефон (личный)"
-
-#: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
-msgid "Fax (private)"
-msgstr "Факс (личный)"
-
-#: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
-msgid "Mobile (private)"
-msgstr "Мобильный (личный)"
-
-#: js/SearchAddressDialog.js:144
-msgid "-- create new --"
-msgstr "-- создать новый --"
-
-#: js/SearchAddressDialog.js:145
-msgid "Select existing contact or create a new one"
-msgstr ""
-
-#: js/SearchAddressDialog.js:180
-msgid "Choose Device"
-msgstr "Выберите устройство"
-
-#: js/SearchAddressDialog.js:211
-msgid "Add number {0} to the addressbook"
-msgstr ""
-
-#: js/LineGridPanel.js:82 js/AssignLinesGrid.js:100 js/AccountGridPanel.js:89
-#: js/AccountEditDialog.js:278
-msgid "Type"
-msgstr "Тип"
-
-#: js/LineGridPanel.js:90 js/AccountFilterModel.js:38
-msgid "Account"
-msgstr ""
-
-#: js/LineGridPanel.js:98
-msgid "User"
-msgstr "Пользователь"
-
-#: js/LineGridPanel.js:105 js/AssignLinesGrid.js:101
-#: js/AccountGridPanel.js:115
-msgid "Uri Alias"
-msgstr ""
-
-#: js/LineGridPanel.js:111
-msgid "SIP Uri"
-msgstr ""
-
-#: js/LineGridPanel.js:117 js/AssignLinesGrid.js:104
-msgid "Incoming"
-msgstr ""
-
-#: js/LineGridPanel.js:125 js/AssignLinesGrid.js:103
-msgid "Outgoing"
-msgstr ""
-
-#: js/LineGridPanel.js:131
-msgid "Created"
-msgstr ""
-
-#: js/LineGridPanel.js:187 js/LineGridPanel.js:188
-msgid "Synchronize Line"
-msgstr ""
-
-#: js/LineGridPanel.js:189 js/AccountEditDialog.js:68
-msgid "Synchronize Lines"
-msgstr ""
-
-#: js/LineGridPanel.js:191
-msgid "Synchronizes the selected line(s)"
-msgstr ""
-
-#: js/LineGridPanel.js:246
-msgid "Synchronizing..."
-msgstr ""
-
-#: js/AssignLinesGrid.js:57
-msgid "Assign Lines"
-msgstr ""
-
-#: js/AssignLinesGrid.js:99
-msgid "Id"
-msgstr ""
-
-#: js/AssignLinesGrid.js:102
-msgid "Sip Uri"
-msgstr ""
-
-#: js/AssignLinesGrid.js:107
-msgid "Assigned User"
-msgstr ""
-
-#: js/AccountGridPanel.js:54
-msgid "Telephone"
-msgstr ""
-
-#: js/AccountGridPanel.js:107 js/AccountEditDialog.js:285
-msgid "Mobile Number"
-msgstr ""
-
-#: js/DialNumberDialog.js:97
-msgid "Ok"
-msgstr ""
-
-#: js/DialNumberDialog.js:161
-msgid "Select Line"
-msgstr ""
-
-#: js/DialNumberDialog.js:166
-msgid "Number to call"
-msgstr ""
-
-#: js/DialNumberDialog.js:171
-msgid "Please use a valid telephone number!"
-msgstr ""
-
-#: js/DialNumberDialog.js:211
-msgid "Dial Number {0}"
-msgstr ""
-
-#: js/ExceptionHandler.js:18
-msgid ""
-"A general backend error occurred. If this is a permanent error, please "
-"contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:26
-msgid ""
-"The application could not connect to the sipgate server. If this is a "
-"permanent error, please contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:34
-msgid ""
-"The authentication data provided are not valid. Please configure or contact "
-"your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:42
-msgid ""
-"The saved credentials and config data could not be resolved properly. Please"
-" reconfigure or contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:50
-msgid ""
-"There are missing parameters to connect to sipgate. Please reconfigure or "
-"contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:60
-msgid ""
-"The account you've configured is already in use. Please contact your "
-"administrator or activate the account again if it's yours."
-msgstr ""
-
-#: js/CallStateWindow.js:138
-msgid "The call can't be observed anymore. Lost SessionID."
-msgstr ""
-
-#: js/CallStateWindow.js:142
-msgid "The call can't be observed anymore due to an unknown error."
-msgstr ""
-
-#: js/CallStateWindow.js:151
-msgid "Please pick up your phone to get connected to {0}."
-msgstr ""
-
-#: js/CallStateWindow.js:155
-msgid "Connecting to {0}."
-msgstr ""
-
-#: js/CallStateWindow.js:162
-msgid "Connected to {0}."
-msgstr ""
-
-#: js/CallStateWindow.js:167
-msgid "call 1 busy"
-msgstr ""
-
-#: js/CallStateWindow.js:174
-msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
-msgstr ""
-
-#: js/CallStateWindow.js:180
-msgid "hungup before other called"
-msgstr ""
-
-#: js/CallStateWindow.js:183
-msgid "hungup"
-msgstr ""
-
-#: js/CallStateWindow.js:221
-msgid "Initializing call to {0}"
-msgstr ""
-
-#: js/CallStateWindow.js:244
-msgid "Connecting to: "
-msgstr "Соединение с: "
-
-#: js/AccountEditDialog.js:43
-msgid "Validating account..."
-msgstr ""
-
-#: js/AccountEditDialog.js:44
-msgid "Synchronizing lines..."
-msgstr ""
-
-#: js/AccountEditDialog.js:60
-msgid "Save Account"
-msgstr ""
-
-#: js/AccountEditDialog.js:62
-msgid "Saves the account (without closing window)"
-msgstr ""
-
-#: js/AccountEditDialog.js:70
-msgid ""
-"Synchronizes the selected account (creates or updates the associated lines)"
-msgstr ""
-
-#: js/AccountEditDialog.js:76
-msgid "Validate Account"
-msgstr ""
-
-#: js/AccountEditDialog.js:78
-msgid ""
-"Validates the selected account (creates or updates the associated lines)"
-msgstr ""
-
-#: js/AccountEditDialog.js:95
-msgid "The account is not saved already!"
-msgstr ""
-
-#: js/AccountEditDialog.js:96
-msgid "Please save yout account before syncing!"
+#: Setup/Initialize.php:35 Setup/Update/Release1.php:51
+msgid "outgoing"
 msgstr ""
 
-#: js/AccountEditDialog.js:109
-msgid "The lines have been synced sucessfully!"
-msgstr ""
-
-#: js/AccountEditDialog.js:110
-msgid ""
-"The account has now {0} lines. Go on assigning user accounts to the new "
-"lines in the next tab."
-msgstr ""
-
-#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:340
-msgid "Errors"
-msgstr "Ошибки"
-
-#: js/AccountEditDialog.js:257
-msgid "Description"
-msgstr "Описание"
-
-#: js/AccountEditDialog.js:288
-msgid "Sipgate Username"
-msgstr ""
-
-#: js/AccountEditDialog.js:290
-msgid "Hidden due to security reasons."
-msgstr ""
-
-#: js/AccountEditDialog.js:292
-msgid "Password"
-msgstr "Пароль"
-
-#: js/AccountEditDialog.js:296
-msgid "Passwort Repeat"
-msgstr "Повтор пароля"
+#: Setup/Initialize.php:36 Setup/Update/Release1.php:52
+msgid "missed"
+msgstr "утерян"
 
-#: js/AccountEditDialog.js:302
-msgid "Is Validated"
-msgstr ""
-
-#: js/AccountEditDialog.js:340
-msgid "Please validate the account settings before saving!"
-msgstr ""
+#: Setup/Initialize.php:50 Setup/Update/Release1.php:66
+msgid "Telephone Call"
+msgstr "Телефонный звонок"
 
-#: js/Models.js:97 js/Models.js:144 js/Models.js:321
-msgid "Quick Search"
-msgstr "Быстрый поиск"
+#: Setup/Initialize.php:51 Setup/Update/Release1.php:67
+msgid "Facsimile"
+msgstr "Факсимилие"
 
-#: js/Models.js:98
-msgid "Created By"
-msgstr "Создан"
-
-#: js/Models.js:100
-msgid "Account-Type"
+#: Setup/Initialize.php:65 Setup/Update/Release1.php:91
+msgid "basic/plus"
 msgstr ""
 
-#: js/Models.js:146
-msgid "Assigned to"
+#: Setup/Initialize.php:66 Setup/Update/Release1.php:92
+msgid "team"
 msgstr ""
-
-#: js/Models.js:303
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "список записей"
-msgstr[1] "списка записей"
-msgstr[2] "списков записей"
 
-#: js/AddressbookGridPanelHook.js:38
-msgid "Call contact"
+#: Setup/Initialize.php:80 Setup/Update/Release1.php:106
+msgid "private"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:61
-msgid "Compose SMS"
-msgstr "Создать SMS"
-
-#: js/AddressbookGridPanelHook.js:260
-msgid "Work"
-msgstr "Рабочий"
-
-#: js/AddressbookGridPanelHook.js:270
-msgid "Home"
-msgstr "Домашний"
-
-#: js/AddressbookGridPanelHook.js:280 js/AddressbookGridPanelHook.js:325
-msgid "Cell"
-msgstr "Мобильный"
-
-#: js/AddressbookGridPanelHook.js:290 js/AddressbookGridPanelHook.js:335
-msgid "Cell private"
-msgstr "Мобильный личный"
-
-#: Controller/Connection.php:242
-msgid "anonymous"
-msgstr ""
+#: Setup/Initialize.php:81 Setup/Update/Release1.php:107
+msgid "shared"
+msgstr "общий"
