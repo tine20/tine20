@@ -410,52 +410,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-     * handles attendee
-     */
-    handleRelations: function() {
-        if(this.record.data.hasOwnProperty('relations')) {
-            var addAttendee = [],
-                addRelationConfig = {};
-                
-            Ext.each(this.plugins, function(plugin) {
-                if(plugin.ptype == 'addrelations_edit_dialog') {
-                    addRelationConfig = plugin.relationConfig;
-                }
-            }, this);
-
-            Ext.each(this.record.data.relations, function(relation) {
-                var add = true;
-                Ext.each(this.record.data.attendee, function(attender) {
-                    if(attender.user_id.id == relation.related_record.id) {
-                        add = false;
-                        return false;
-                    }
-                }, this);
-                
-                if(add) {
-                    var att = new Tine.Calendar.Model.Attender(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), addRelationConfig), 'new-' + Ext.id());
-                    att.set('user_id', relation.related_record);
-                    var attIsCurrentUser = (relation.related_record.account_id == Tine.Tinebase.registry.get('currentAccount').accountId);
-                    if (!relation.related_record.account_id || attIsCurrentUser) {
-                        att.set('status_authkey', 1);
-                        if(attIsCurrentUser) {
-                            att.set('status', 'ACCEPTED');
-                        }
-                    }
-                    addAttendee.push(att.data);
-                }
-            }, this);
-            var att = this.record.get('id') ? this.record.data.attendee.concat(addAttendee) : addAttendee;
-            this.record.set('attendee', att);
-            delete this.record.data.relations;
-        }
-    },
-    
-    /**
      * is called after all subpanels have been loaded
      */
     onAfterRecordLoad: function() {
-        this.handleRelations();
         Tine.Calendar.EventEditDialog.superclass.onAfterRecordLoad.call(this);
         
         this.attendeeGridPanel.onRecordLoad(this.record);
