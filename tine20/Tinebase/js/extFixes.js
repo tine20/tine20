@@ -287,3 +287,42 @@ Ext.ButtonToggleMgr = function(){
 Ext.data.Store.prototype.loadRecords = Ext.data.Store.prototype.loadRecords.createInterceptor(function(o, options, success) {
     return this.fireEvent('beforeloadrecords', o, options, success, this);
 });
+
+/**
+ * add beforeloadrecords event
+ */
+Ext.data.Store.prototype.loadRecords = Ext.data.Store.prototype.loadRecords.createInterceptor(function(o, options, success) {
+    return this.fireEvent('beforeloadrecords', o, options, success, this);
+});
+
+
+/**
+ * fix focus related emptyText problems
+ * 0008616: emptyText gets inserted into ComboBoxes when the Box gets Hidden while focused 
+ */
+Ext.form.TriggerField.prototype.cmpRegforFocusFix = [];
+
+Ext.form.TriggerField.prototype.initComponent = Ext.form.TriggerField.prototype.initComponent.createSequence(function() {
+    if (this.emptyText) {
+        Ext.form.TriggerField.prototype.cmpRegforFocusFix.push(this);
+    }
+});
+
+Ext.form.TriggerField.prototype.onDestroy = Ext.form.TriggerField.prototype.onDestroy.createInterceptor(function() {
+    Ext.form.TriggerField.prototype.cmpRegforFocusFix.remove(this);
+});
+
+Ext.form.TriggerField.prototype.taskForFocusFix = new Ext.util.DelayedTask(function(){
+    Ext.each(Ext.form.TriggerField.prototype.cmpRegforFocusFix, function(cmp) {
+        if (cmp.rendered && cmp.el.dom == document.activeElement) {
+            if(cmp.el.dom.value == cmp.emptyText){
+                cmp.preFocus();
+                cmp.hasFocus = true;
+                cmp.setRawValue('');
+            }
+        }
+    });
+    Ext.form.TriggerField.prototype.taskForFocusFix.delay(1000);
+});
+
+Ext.form.TriggerField.prototype.taskForFocusFix.delay(1000);
