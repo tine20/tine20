@@ -991,32 +991,49 @@ class Tinebase_Core
 
     /**
      * get db profiling
+     * 
+     * Enable db profiling like this (in config.inc.php):
+     * 
+     *   'database' => 
+     *      array(
+     *         [...] // db connection params  
+     *         'profiler' => TRUE
+     *      ),
+     *   'profiler' =>
+     *      array(
+     *         'queryProfiles' => TRUE,
+     *         'queryProfilesDetails' => TRUE,
+     *         //'profilerFilterElapsedSecs' => 1,
+     *      )
+     *    ),
+     * 
      */
     public static function getDbProfiling()
     {
-        if (! self::getConfig() || ! self::getConfig()->database) {
+        if (! self::getConfig() || ! self::getConfig()->database || ! (bool) self::getConfig()->database->profiler) {
             return;
         }
         
-        $config = self::getConfig()->database;
+        $config = self::getConfig()->profiler;
 
-        if ((bool) $config->profiler) {
-            $profiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
+        $profiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
 
-            if (! empty($config->profilerFilterElapsedSecs)) {
-                $profiler->setFilterElapsedSecs($config->profilerFilterElapsedSecs);
-            }
+        if (! empty($config->profilerFilterElapsedSecs)) {
+            $profiler->setFilterElapsedSecs($config->profilerFilterElapsedSecs);
+        }
 
-            $data = array(
-                'totalNumQueries' => $profiler->getTotalNumQueries(),
-                'totalElapsedSec' => $profiler->getTotalElapsedSecs(),
-                'longestTime'        => 0,
-                'longestQuery'       => ''
-            );
+        $data = array(
+            'totalNumQueries' => $profiler->getTotalNumQueries(),
+            'totalElapsedSec' => $profiler->getTotalElapsedSecs(),
+            'longestTime'        => 0,
+            'longestQuery'       => ''
+        );
 
-            if ((bool) $config->queryProfiles) {
+        if ($config && (bool) $config->queryProfiles) {
+            $queryProfiles = $profiler->getQueryProfiles();
+            if (is_array($queryProfiles)) {
                 $data['queryProfiles'] = array();
-                foreach($profiler->getQueryProfiles() as $profile) {
+                foreach ($queryProfiles as $profile) {
                     if ((bool) $config->queryProfilesDetails) {
                         $data['queryProfiles'][] = array(
                             'query'       => $profile->getQuery(),
@@ -1030,9 +1047,9 @@ class Tinebase_Core
                     }
                 }
             }
-
-            self::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($data, true));
         }
+
+        self::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($data, true));
     }
 
     /**
