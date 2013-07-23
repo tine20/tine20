@@ -73,11 +73,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
-        $this->_resolveOriginalMessage($_message);
-
-        $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
-        
         try {
+            $this->_resolveOriginalMessage($_message);
+            $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
             $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $e);
