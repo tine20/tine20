@@ -45,6 +45,27 @@ abstract class Tinebase_Setup_DemoData_Abstract
     protected $_defaultCliIp = '127.0.0.1';
 
     /**
+     * holds the costcenter for "marketing"
+     * 
+     * @var Sales_Model_CostCenter
+     */
+    protected $_marketingCostCenter;
+    
+    /**
+     * holds names of required applications to create demo data before this app
+     * 
+     * @var array
+     */
+    protected static $_requiredApplications;
+    
+    /**
+     * holds the costcenter for "development"
+     * 
+     * @var Sales_Model_CostCenter
+     */
+    protected $_developmentCostCenter;
+    
+    /**
      * the personas to create demodata for
      * http://www.tine20.org/wiki/index.php/Personas
      * will be resolved to array of accounts
@@ -354,6 +375,20 @@ abstract class Tinebase_Setup_DemoData_Abstract
     protected $_userGrants = array('readGrant','addGrant','editGrant','deleteGrant');
 
     /**
+     * RecordSet with all sales.costcenter, loaded by this._loadCostCenters
+     *
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_costCenters;
+    
+    /**
+     * the ids of all costcenters in an array, loaded by this._loadCostCenters
+     *
+     * @var array
+     */
+    protected $_costCenterKeys;
+    
+    /**
      * the locale, the demodata should created with
      * @var string
      */
@@ -425,6 +460,49 @@ abstract class Tinebase_Setup_DemoData_Abstract
         $this->_friday2week->addWeek(1);
     }
 
+    /**
+     * loads all costcenters to this._costCenters property
+     * 
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _loadCostCenters()
+    {
+        $filter = new Sales_Model_CostCenterFilter(array());
+        $this->_costCenters  = Sales_Controller_CostCenter::getInstance()->search($filter)->sort('number');
+        $this->_costCenterKeys[] = array();
+        
+        foreach($this->_costCenters as $cc) {
+            if ($cc->remark == 'Marketing') {
+                $this->_marketingCostCenter = $cc;
+            }
+            if ($cc->remark == 'Development' || $cc->remark == 'Entwicklung') {
+                $this->_developmentCostCenter = $cc;
+            }
+            $this->_costCenterKeys[] = $cc->getId();
+        }
+        return $this->_costCenters;
+    }
+    
+    /**
+     * 
+     * @return multitype:array|null
+     */
+    public static function getRequiredApplications()
+    {
+        return static::$_requiredApplications ? static::$_requiredApplications : array();
+    }
+    
+    /**
+     * this is required for other applications needing demo data of this application
+     * if this returns true, this demodata has been run already
+     * 
+     * @return boolean
+     */
+    public static function hasBeenRun()
+    {
+        return false;
+    }
+    
     /**
      * creates the demo data and is called from the Frontend_Cli
      *

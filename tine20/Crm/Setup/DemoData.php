@@ -37,6 +37,13 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected $_models = array('lead');
 
     /**
+     * 
+     * required apps
+     * @var array
+     */
+    protected static $_requiredApplications = array('Admin', 'Addressbook');
+        
+    /**
      * private containers
      * 
      * @var Array
@@ -69,6 +76,21 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         }
 
         return self::$_instance;
+    }
+    
+    /**
+     * this is required for other applications needing demo data of this application
+     * if this returns true, this demodata has been run already
+     * 
+     * @return boolean
+     */
+    public static function hasBeenRun()
+    {
+        $c = Sales_Controller_Contract::getInstance();
+        $f = new Sales_Model_ContractFilter(array(
+            array('field' => 'lead_name', 'operator' => 'equals', 'value' => 'Relauch Reseller Platform')
+        ));
+        return ($c->search($f)->count() > 0) ? true : false;
     }
     
     /**
@@ -199,7 +221,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $wed2weeksago->subWeek(1);
         
         $this->_createLead(array(
-            'lead_name'     => 'Relauch Reseller Plattform',
+            'lead_name'     => 'Relauch Reseller Platform',
             'status'        => 'ACCEPTED',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,

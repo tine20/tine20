@@ -36,6 +36,12 @@ class Voipmanager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * @var Voipmanager_Model_Snom_Phone
      */
     protected $_phone = NULL;
+
+    /**
+     * required apps
+     * @var array
+     */
+    protected static $_requiredApplications = array('Admin');
     
     /**
      * the constructor
@@ -58,6 +64,23 @@ class Voipmanager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         }
 
         return self::$_instance;
+    }
+    
+    /**
+     * this is required for other applications needing demo data of this application
+     * if this returns true, this demodata has been run already
+     * 
+     * @return boolean
+     */
+    public static function hasBeenRun()
+    {
+        $c = Voipmanager_Controller_Snom_Phone::getInstance();
+        
+        $f = new Voipmanager_Model_Snom_PhoneFilter(array(
+            array('field' => 'description', 'operator' => 'equals', 'value' => 'Created by Tine 2.0 DEMO DATA'),
+        ), 'AND');
+        
+        return ($c->search($f)->count() > 0) ? true : false;
     }
     
     /**
@@ -135,7 +158,7 @@ class Voipmanager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ));
         
         $this->_phone = Voipmanager_Controller_Snom_Phone::getInstance()->create(new Voipmanager_Model_Snom_Phone(array(
-            'description'       => Tinebase_Record_Abstract::generateUID(),
+            'description'       => 'Created by Tine 2.0 DEMO DATA',
             'macaddress'        => substr(Tinebase_Record_Abstract::generateUID(), 0, 12),
             'location_id'       => $returnedLocation['id'],
             'template_id'       => $returnedTemplate['id'],

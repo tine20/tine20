@@ -38,6 +38,20 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected $_models = array('employee');
     
+    /**
+     * 
+     * required apps
+     * @var array
+     */
+    protected static $_requiredApplications = array('Admin', 'Addressbook', 'Calendar');
+    
+    /**
+     * the start date of contracts costcenters, employees
+     * 
+     * @var Tinebase_DateTime
+     */
+    protected $_startDate = NULL;
+    
     protected $_dataMapping = array(
         'pwulf' => array(
             'health_insurance' => 'NHS', 'bank_name' => 'Barclays', 'supervisor_id' => NULL,
@@ -68,7 +82,9 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     private function __construct()
     {
-
+        // set start date to start date of june 1st before last year
+        $date = Tinebase_DateTime::now();
+        $this->_startDate = $date->setDate($date->format('Y') - 2, 6, 1);
     }
 
     /**
@@ -79,10 +95,27 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     public static function getInstance()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new HumanResources_Setup_DemoData;
+            self::$_instance = new self();
         }
 
         return self::$_instance;
+    }
+    
+    /**
+     * this is required for other applications needing demo data of this application
+     * if this returns true, this demodata has been run already
+     * 
+     * @return boolean
+     */
+    public static function hasBeenRun()
+    {
+        $c = HumanResources_Controller_Employee::getInstance();
+        
+        $f = new HumanResources_Model_EmployeeFilter(array(
+            array('field' => 'n_fn', 'operator' => 'equals', 'value' => 'Paul Wulf'),
+        ), 'AND');
+        
+        return ($c->search($f)->count() == 1) ? true : false;
     }
     
     /**
@@ -95,8 +128,8 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $controller = Sales_Controller_CostCenter::getInstance();
         $this->_costcenters = new Tinebase_Record_RecordSet('Sales_Model_CostCenter');
         $ccs = (static::$_de)
-            ? array('Management', 'Marketing', 'Public Relations', 'Produktion', 'Verwaltung',     'Controlling')
-            : array('Management', 'Marketing', 'Public Relations', 'Production', 'Administration', 'Controlling')
+            ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
+            : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
         ;
         
         $id = 1;
@@ -150,8 +183,12 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         $i = 0;
         
+        $sdate = new Tinebase_DateTime();
+        $sdate->subMonth(6);
+        
         $defaultData = array(
-            'supervisor_id' => $pwulf->getId(), 'countryname' => 'GB', 'region' => 'East Sussex', 'locality' => 'Brighton'
+            'supervisor_id' => $pwulf->getId(), 'countryname' => 'GB', 'region' => 'East Sussex', 'locality' => 'Brighton',
+            'employment_begin' => $sdate
             );
             
         foreach($employees as $employee) {
@@ -177,7 +214,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $employee->costcenters = array($hrc);
             
             // add contract
-            $contract = $this->_getContract()->toArray();
+            $contract = $this->_getContract($sdate)->toArray();
             $employee->contracts = array($contract);
             
             // add division
@@ -234,13 +271,18 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     }
     /**
      * returns a new contract
-     * return HumanResources_Model_Contract
+     * 
+     * @var Tinebase_DateTime $sdate date begins
+     * 
+     * @return HumanResources_Model_Contract
      */
-    protected function _getContract()
+    protected function _getContract($sdate = NULL)
     {
-        $sdate = new Tinebase_DateTime();
-        $sdate->subMonth(6);
-
+        if (! $sdate) {
+            $sdate = new Tinebase_DateTime();
+            $sdate->subMonth(6);
+        }
+        
         $c = new HumanResources_Model_Contract(array(
             'start_date' => $sdate,
             'end_date'   => null,
