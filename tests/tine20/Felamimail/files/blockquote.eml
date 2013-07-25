@@ -1,0 +1,120 @@
+Return-Path: <unittest@tine20.org>
+Delivered-To: <lkneschke@metaways.de>
+Received: from mail01.metaways.net ([10.129.3.233])
+	by mail02.metaways.net (Dovecot) with LMTP id Ju5vArVo0VGbZQAAk4785w
+	for <lkneschke@metaways.de>; Mon, 01 Jul 2013 13:38:32 +0200
+Received: from mx01.metaways.net ([127.0.0.1])
+	by mail01.metaways.net (Dovecot) with LMTP id /GdiAE1p0VEcZgAAiWCYmA
+	; Mon, 01 Jul 2013 13:38:32 +0200
+Received: from [10.100.11.79] (unknown [194.12.218.135])
+	by mx01.metaways.net (Postfix) with ESMTPSA id 67562C08D
+	for <l.kneschke@metaways.de>; Mon,  1 Jul 2013 13:38:32 +0200 (CEST)
+Message-ID: <51D16A37.7090508@metaways.de>
+Date: Mon, 01 Jul 2013 13:38:31 +0200
+From: Unittest <unittest@tine20.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20130518 Icedove/17.0.5
+MIME-Version: 1.0
+To: Lars Kneschke <l.kneschke@metaways.de>
+Subject: Re: Tine Suche Speicherplatz mit Vertrag
+X-Tine20TestMessage: blockquote.eml
+References: <51CB142C.4000900@metaways.de> <f70f00b0285201337bfccca6581d796a6b7eac18@metaways.de>
+In-Reply-To: <f70f00b0285201337bfccca6581d796a6b7eac18@metaways.de>
+Content-Type: multipart/alternative;
+ boundary="------------030005090405030508030509"
+
+This is a multi-part message in MIME format.
+--------------030005090405030508030509
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+On 07/01/2013 12:47 PM, Lars Kneschke wrote:
+> Am 26.06.2013 18:17:48, schrieb Unittest:
+> Moin!
+>
+>     wie am Tel. mitgeteilt wäre es schön wenn man Speicherplatz mit dem
+>     Filter "Vertrag" "ist ungleich" "ohne Vertrag" suchen könnte. um
+>     nochmal
+>     zu schauen das alle Pfade mit Verträgen verknüpft sind. Auch die
+>     Möglichkeit als Spalte die Verknüpfte Vertragsnummer anzuzeigen
+>     wäre toll.
+>
+>
+> Wenn Du nach "Vertrag" "ist gleich" "ohne Vertrag" suchst, dann 
+> müsstest alle Pfade angezeigt bekommen die noch keinem Vertrag 
+> zugeordnet sind. Das müsste Deine erste Anforderung eigentlich erfüllen.
+Nein, das ist leider ein Unterschied, wenn auch nur ein kleiner:
+
+Bei der Suche "Vertrag" "ist gleich" "ohne Vertrag" bekomme ich die 
+angezeigt, die keinen Vertrag haben. Wenn ich aber Überprüfen will, das 
+von einer Liste von Pfaden alle zugeordnet wurden, ist die Annahme, das 
+alle Pfade zugeordnet wurden, wenn keine Pfad in der Liste der Pfade 
+ohne Verträge auftaucht nur dann korrekt wenn alle Pfade existieren. 
+Außerdem kann man wenn man die  Vertragsnummer als Spalte angezeigt 
+bekommt auch gleich überprüfen, das der Pfad der korrekten 
+Vertragsnummer zugeordnet ist.
+
+--------------030005090405030508030509
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    <div class="moz-cite-prefix">On 07/01/2013 12:47 PM, Lars Kneschke
+      wrote:<br>
+    </div>
+    <blockquote
+      cite="mid:f70f00b0285201337bfccca6581d796a6b7eac18@metaways.de"
+      type="cite">
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title></title>
+      <style type="text/css">.felamimail-body-blockquote {margin: 5px 10px 0 3px;padding-left: 10px;border-left: 2px solid #000088;} </style>Am
+      26.06.2013 18:17:48, schrieb Unittest:
+      <div>Moin!</div>
+      <div><br>
+        <blockquote class="felamimail-body-blockquote" style="font-size:
+          13px;">
+          <meta http-equiv="Content-Type" content="text/html;
+            charset=UTF-8">
+          wie am Tel. mitgeteilt wäre es schön wenn man Speicherplatz
+          mit dem <br>
+          Filter "Vertrag" "ist ungleich" "ohne Vertrag" suchen könnte.
+          um nochmal <br>
+          zu schauen das alle Pfade mit Verträgen verknüpft sind. Auch
+          die <br>
+          Möglichkeit als Spalte die Verknüpfte Vertragsnummer
+          anzuzeigen wäre toll.</blockquote>
+        <div><br>
+        </div>
+        Wenn Du nach "Vertrag" "ist gleich" "ohne Vertrag" suchst, dann
+        müsstest alle Pfade angezeigt bekommen die noch keinem Vertrag
+        zugeordnet sind. Das müsste Deine erste Anforderung eigentlich
+        erfüllen.</div>
+    </blockquote>
+    Nein, das ist leider ein Unterschied, wenn auch nur ein kleiner:<br>
+    <br>
+    Bei der Suche "Vertrag" "ist gleich" "ohne Vertrag" bekomme ich die
+    angezeigt, die keinen Vertrag haben. Wenn ich aber Überprüfen will,
+    das von einer Liste von Pfaden alle zugeordnet wurden, ist die
+    Annahme, das alle Pfade zugeordnet wurden, wenn keine Pfad in der
+    Liste der Pfade ohne Verträge auftaucht nur dann korrekt wenn alle
+    Pfade existieren. Außerdem kann man wenn man die  Vertragsnummer als
+    Spalte angezeigt bekommt auch gleich überprüfen, das der Pfad der
+    korrekten Vertragsnummer zugeordnet ist.<br>
+    <br>
+    Grüße<br>
+    <br>
+    <br>
+    <pre class="moz-signature" cols="72">-- 
+Unittest
+Metaways Infosystems GmbH
+Pickhuben 2, D-20457 Hamburg
+
+Metaways Infosystems GmbH - Sitz: D-22967 Tremsbüttel
+Handelsregister: Amtsgericht Lübeck HRB 4508 AH
+Geschäftsführung: Hermann Thaele, Lüder-H. Thaele
+</pre>
+  </body>
+</html>

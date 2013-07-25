@@ -671,12 +671,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             'mailto' => true,
             'data' => true
         ));
-
-        // add target="_blank" to anchors
-        if ($def = $config->maybeGetRawHTMLDefinition()) {
-            $a = $def->addBlankElement('a');
-            $a->attr_transform_post[] = new Felamimail_HTMLPurifier_AttrTransform_AValidator();
-        }
+        
+        $this->_transformBodyTags($config);
         
         // add uri filter
         $uri = $config->getDefinition('URI');
@@ -689,6 +685,29 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             . ' Current mem usage after purify: ' . memory_get_usage()/1024/1024);
 
         return $content;
+    }
+    
+    /**
+     * transform some tags / attributes
+     * 
+     * @param HTMLPurifier_Config $config
+     */
+    protected function _transformBodyTags(HTMLPurifier_Config $config)
+    {
+        if ($def = $config->maybeGetRawHTMLDefinition()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Add target="_blank" to anchors');
+            $a = $def->addBlankElement('a');
+            $a->attr_transform_post[] = new Felamimail_HTMLPurifier_AttrTransform_AValidator();
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Add class="felamimail-body-blockquote" to blockquote tags that do not already have the class');
+            $bq = $def->addBlankElement('blockquote');
+            $bq->attr_transform_post[] = new Felamimail_HTMLPurifier_AttrTransform_BlockquoteValidator();
+        } else {
+             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Could not get HTMLDefinition, no transformation possible');
+        }
     }
     
     /**

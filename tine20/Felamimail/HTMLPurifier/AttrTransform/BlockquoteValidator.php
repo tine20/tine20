@@ -2,22 +2,22 @@
 /**
  * Tine 2.0
  * 
- * anchor validator/transformator for html purifier
+ * blockquote validator/transformator for html purifier
  *
  * @package     Felamimail
  * @subpackage  HTMLPurifier
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * Felamimail_HTMLPurifier_AttrTransform_AValidator
+ * Felamimail_HTMLPurifier_AttrTransform_BlockquoteValidator
  *
  */
-class Felamimail_HTMLPurifier_AttrTransform_AValidator extends HTMLPurifier_AttrTransform
+class Felamimail_HTMLPurifier_AttrTransform_BlockquoteValidator extends HTMLPurifier_AttrTransform
 {
-    var $name = "Link validation";
+    var $name = "Blockquote validation";
     
     /**
      * (non-PHPdoc)
@@ -25,7 +25,7 @@ class Felamimail_HTMLPurifier_AttrTransform_AValidator extends HTMLPurifier_Attr
      */
     function transform($attr, $config, $context)
     {
-        $attr['target'] = '_blank';
+        $attr['class'] = 'felamimail-body-blockquote';
         return $attr;
     }
 }
