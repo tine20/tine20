@@ -419,6 +419,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     emptyText: this.emptyText,
                     listeners: {
                         scope: this,
+                        change: function() { this.onFiltertrigger() },
                         specialkey: function(field, e){
                             if(e.getKey() == e.ENTER){
                                 this.onFiltertrigger();

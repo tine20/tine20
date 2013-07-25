@@ -137,14 +137,15 @@ Tine.widgets.grid.RendererManager = function() {
          * @param {String} fieldName
          * @param {Function} renderer
          * @param {String} category {gridPanel|displayPanel} optional.
+         * @param {Object} scope to call renderer in, optional.
          */
-        register: function(appName, modelName, fieldName, renderer, category) {
+        register: function(appName, modelName, fieldName, renderer, category, scope) {
             var appName = this.getAppName(appName),
                 modelName = this.getModelName(modelName),
                 categoryKey = this.getKey([appName, modelName, fieldName, category]),
                 genericKey = this.getKey([appName, modelName, fieldName]);
                 
-            renderers[category ? categoryKey : genericKey] = renderer;
+            renderers[category ? categoryKey : genericKey] = scope ? renderer.createDelegate(scope) : renderer;
         },
         
         /**
