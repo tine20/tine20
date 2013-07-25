@@ -561,7 +561,8 @@ Tine.Tinebase.tineInit = {
                     }
                 }
                 // reload mainscreen
-                window.location.reload(key == 'locale');
+                window.location.reload.defer(500,  window.location, [key == 'locale']);
+                
                 break;
         }
     },
