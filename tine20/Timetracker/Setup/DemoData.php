@@ -21,7 +21,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * required apps
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'Addressbook', 'HumanResources', 'Sales');
+    protected static $_requiredApplications = array('Admin', 'HumanResources', 'Sales');
     
     /**
      * holds the instance of the singleton
@@ -138,7 +138,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $c = Timetracker_Controller_Timeaccount::getInstance();
         
         $f = new Timetracker_Model_TimeaccountFilter(array(
-            array('field' => 'description', 'operator' => 'equals', 'value' => 'Created By Tine 2.0 DEMO DATA'),
+            array('field' => 'description', 'operator' => 'equals', 'value' => 'Created By Tine 2.0 DemoData'),
         ), 'AND');
         
         return ($c->search($f)->count() > 9) ? true : false;
@@ -208,12 +208,12 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $this->_timeAccounts[$costcenter->getId()] = new Tinebase_Record_RecordSet('Timetracker_Model_Timeaccount');
             $i=0;
             
-            $title = (self::$_de ? 'Zeitkonto mit Kostenstelle ' : 'Timeaccount for costcenter ') . $costcenter->number . ' - ' . $costcenter->remark . (self::$_de ? ' mit Vertrag ' : ' with contract ') . $contract->number;
-            
             while ($i < 10) {
                 $i++;
                 
                 $contract = $this->_contracts->getByIndex($contractsIndex);
+                $title = (self::$_de ? 'Zeitkonto mit Kostenstelle ' : 'Timeaccount for costcenter ') . $costcenter->number . ' - ' . $costcenter->remark . (self::$_de ? ' mit Vertrag ' : ' with contract ') . $contract->number;
+                
                 
                 if ($contractsIndex >= ($this->_contracts->count() - 1)) {
                     $contractsIndex = 0;
@@ -297,10 +297,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createTimesheets()
     {
         $cc = $this->_getCurrentUsersCostCenter();
-        
         $ownTimeAccountRecordSet = $this->_timeAccounts[$cc->getId()];
-        
-        
         $userId = Tinebase_Core::getUser()->accountId;
         
         $startDate = clone $this->_startDate;
@@ -310,7 +307,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $index     = 0;
         
         $mkccId = $this->_marketingCostCenter->getId();
-        $deccId   = $this->_developmentCostCenter->getId();
+        $deccId = $this->_developmentCostCenter->getId();
         
         $allMkccTimeAccountRecordSet = $this->_timeAccounts[$mkccId];
         $allDeccTimeAccountRecordSet = $this->_timeAccounts[$deccId];
@@ -347,7 +344,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'is_billable'    => false,
                     'start_date'     => $startDate,
                     'duration'       => 480,
-                    'description'    => static::$_de ? 'Demo Data eigenes Zeitkonto' : 'DemoData own timeaccount',
+                    'description'    => static::$_de ? 'DemoData eigenes Zeitkonto' : 'DemoData own timeaccount',
                     'is_cleared'     => (($ta->status == 'billed') ? true : false),
                     'cleared_time'   => (($ta->status == 'billed') ? $startDate : NULL)
                  ));
@@ -362,7 +359,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'is_billable'    => false,
                     'start_date'     => $startDate,
                     'duration'       => 240,
-                    'description'    => static::$_de ? ('Demo Data auf KST ' . $cc->number) : ('DemoData on costcenter ' . $cc->number),
+                    'description'    => static::$_de ? ('DemoData auf KST ' . $cc->number) : ('DemoData on costcenter ' . $cc->number),
                     'is_cleared'     => (($ta->status == 'billed') ? true : false),
                     'cleared_time'   => (($ta->status == 'billed') ? $startDate : NULL)
                 ));
@@ -378,7 +375,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'is_billable'    => false,
                     'start_date'     => $sd,
                     'duration'       => 240,
-                    'description'    => static::$_de ? ('Demo Data auf KST ' . $cc->number) : ('DemoData on costcenter ' . $cc->number),
+                    'description'    => static::$_de ? ('DemoData auf KST ' . $cc->number) : ('DemoData on costcenter ' . $cc->number),
                     'is_cleared'     => (($ta->status == 'billed') ? true : false),
                     'cleared_time'   => (($ta->status == 'billed') ? $startDate : NULL)
                 ));

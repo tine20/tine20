@@ -28,7 +28,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * required apps
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'Addressbook');
+    protected static $_requiredApplications = array('Admin');
     
     /**
      * models to work on

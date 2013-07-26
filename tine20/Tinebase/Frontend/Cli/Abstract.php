@@ -122,7 +122,7 @@ class Tinebase_Frontend_Cli_Abstract
      * @param boolean $checkDependencies
      */
     
-    public function createDemoData($_opts, $checkDependencies = TRUE)
+    public function createDemoData($_opts = NULL, $checkDependencies = TRUE)
     {
         // just admins can perform this action
         if (! $this->_checkAdminRight()) {
@@ -149,32 +149,37 @@ class Tinebase_Frontend_Cli_Abstract
                 }
             }
             
+            $createUsers = $createShared = TRUE;
+            $users = null;
+            $models = null;
+            $locale = 'de';
+            $password = '';
             
-            $args = $this->_parseArgs($_opts, array());
-            
-            if (array_key_exists('other', $args)) {
-                $createUsers  = in_array('sharedonly', $args['other']) ? FALSE : TRUE;
-                $createShared = in_array('noshared',   $args['other']) ? FALSE : TRUE;
-            } else {
-                $createUsers = $createShared = TRUE;
-            }
-            
-            // locale defaults to de
-            $locale     = isset($args['locale'])   ? $args['locale']   : 'de';
-            
-            // password defaults to empty password
-            $password   = isset($args['password']) ? $args['password'] : '';
-            
-            if (isset($args['users'])) {
-                $users = is_array($args['users']) ? $args['users'] : array($args['users']);
-            } else {
-                $users = null;
-            }
-            
-            if (isset($args['models'])) {
-                $models = is_array($args['models']) ? $args['models'] : array($args['models']);
-            } else {
-                $models = null;
+            if ($_opts) {
+                $args = $this->_parseArgs($_opts, array());
+                
+                if (array_key_exists('other', $args)) {
+                    $createUsers  = in_array('sharedonly', $args['other']) ? FALSE : TRUE;
+                    $createShared = in_array('noshared',   $args['other']) ? FALSE : TRUE;
+                }
+                
+                // locale defaults to de
+                if (isset($args['locale'])) {
+                    $locale = $args['locale'];
+                }
+                
+                // password defaults to empty password
+                if (isset($args['password'])) {
+                    $password = $args['password'];
+                }
+                
+                if (isset($args['users'])) {
+                    $users = is_array($args['users']) ? $args['users'] : array($args['users']);
+                }
+                
+                if (isset($args['models'])) {
+                    $models = is_array($args['models']) ? $args['models'] : array($args['models']);
+                }
             }
             
 

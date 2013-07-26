@@ -46,4 +46,14 @@ class Sales_Model_CostCenter extends Tinebase_Record_Abstract
         // relations (linked users/groups and customers
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
     );
+    
+    /**
+     * returns the title of the record
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->number . ' - ' . $this->remark;
+    }
 }
