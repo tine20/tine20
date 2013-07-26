@@ -269,4 +269,39 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
                 throw new Timetracker_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }
     }
+    /**
+     * 
+     * @param Sales_Model_CostCenter|string $costCenterId
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getTimeaccountsBySalesCostCenter($costCenterId)
+    {
+        $costCenterId = is_string($costCenterId) ? $costCenterId : $costCenterId->getId();
+        
+        $filter = new Tinebase_Model_RelationFilter(array(
+            array('field' => 'related_model', 'operator' => 'equals', 'value' => 'Sales_Model_CostCenter'),
+            array('field' => 'related_id', 'operator' => 'equals', 'value' => $costCenterId),
+            array('field' => 'own_model', 'operator' => 'equals', 'value' => 'Timetracker_Model_Timeaccount'),
+            array('field' => 'type', 'operator' => 'equals', 'value' => 'COST_CENTER'),
+        ), 'AND');
+        
+        return Timetracker_Controller_Timeaccount::getInstance()->getMultiple(Tinebase_Relations::getInstance()->search($filter)->own_id);
+    }
+    
+    /**
+     * @param Sales_Model_Contract $contractId
+     */
+    public function getTimeaccountsBySalesContract($contractId)
+    {
+        $contractId = is_string($contractId) ? $contractId : $contractId->getId();
+        
+        $filter = new Tinebase_Model_RelationFilter(array(
+            array('field' => 'related_model', 'operator' => 'equals', 'value' => 'Sales_Model_Contract'),
+            array('field' => 'related_id', 'operator' => 'equals', 'value' => $contractId),
+            array('field' => 'own_model', 'operator' => 'equals', 'value' => 'Timetracker_Model_Timeaccount'),
+            array('field' => 'type', 'operator' => 'equals', 'value' => 'TIME_ACCOUNT'),
+        ), 'AND');
+        
+        return Sales_Controller_Contract::getInstance()->getMultiple(Tinebase_Relations::getInstance()->search($filter)->own_id);
+    }
 }

@@ -484,4 +484,29 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             ),
         ));
     }
+    
+    /**
+     * tests the findTimesheetsByTimeaccountAndPeriod method of the timesheet controller
+     */
+    public function testFindTimesheetsByTimeaccountAndPeriod()
+    {
+        $i=0;
+        
+        $now = Tinebase_DateTime::now();
+        $data = array('account_id' => Tinebase_Core::getUser()->getId(), 'cleared_time' => $now,  'is_cleared' => true, 'timeaccount_id' => $this->_objects['timeaccount']->getId(), 'description' => 'test', 'duration' => 1, 'title' => 'test');
+        
+        while ($i<10) {
+            $data['start_date'] = $now->addHour(1);
+            $this->_timesheetController->create(new Timetracker_Model_Timesheet($data));
+            $i++;
+        }
+        
+        $sdate = Tinebase_DateTime::now();
+        $sdate->subDay(1);
+        $edate = $now->addDay(1);
+        
+        $result = $this->_timesheetController->findTimesheetsByTimeaccountAndPeriod($this->_objects['timeaccount']->getId(), $sdate, $edate);
+        
+        $this->assertEquals(10, count($result));
+    }
 }
