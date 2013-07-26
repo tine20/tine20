@@ -47,7 +47,7 @@ class AllTests
         $suite->addTest(Inventory_AllTests::suite());
         $suite->addTest(Sipgate_AllTests::suite());
         $suite->addTest(Zend_AllTests::suite());
-        
+        $suite->addTest(OpenDocument_AllTests::suite());
         return $suite;
     }
 }

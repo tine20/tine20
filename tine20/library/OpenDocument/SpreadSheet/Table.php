@@ -5,9 +5,8 @@
  * @package     OpenDocument
  * @subpackage  OpenDocument
  * @license     http://framework.zend.com/license/new-bsd     New BSD License
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  */
 
 /**
@@ -25,11 +24,21 @@ class OpenDocument_SpreadSheet_Table implements Iterator, Countable
     
     protected $_position = 0;
     
+    /**
+     * holds the representing xml
+     * 
+     * @var SimpleXMLElement
+     */
     protected $_table;
     
     public function __construct(SimpleXMLElement $_table)
     {
         $this->_table = $_table;
+    }
+    
+    public function getBody()
+    {
+        return $this->_table;
     }
     
     /**
@@ -45,12 +54,43 @@ class OpenDocument_SpreadSheet_Table implements Iterator, Countable
         return $row;
     }
     
+    /**
+     * inserts new row and return reference
+     *
+     * @param string|optional $_tableName
+     * @return OpenDocument_SpreadSheet_Row
+     */
+    public function insertRow($referenceRow, $position = 'after', $styleName = null)
+    {
+        $row = OpenDocument_SpreadSheet_Row::createRow($this->_table, $styleName, $referenceRow, $position);
+        
+        return $row;
+    }
+    
+    /**
+     * sets the title of the table
+     * 
+     * @param string $tile
+     */
+    public function setTitle($title)
+    {
+        $this->_table->attributes(OpenDocument_Document::NS_TABLE)->name = $title;
+    }
+    
+    /**
+     * creates a table
+     * 
+     * @param SimpleXMLElement $_parent
+     * @param string $_tableName
+     * @param string $_styleName
+     * @return OpenDocument_SpreadSheet_Table
+     */
     static public function createTable(SimpleXMLElement $_parent, $_tableName, $_styleName = null)
     {
         $tableElement = $_parent->addChild('table', null, OpenDocument_Document::NS_TABLE);
         $tableElement->addAttribute('table:name', $_tableName, OpenDocument_Document::NS_TABLE);
         
-        if($_styleName !== null) {
+        if ($_styleName !== null) {
             $tableElement->addAttribute('table:style-name', $_styleName, OpenDocument_Document::NS_TABLE);
         }
         

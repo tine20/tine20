@@ -117,7 +117,7 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         $spreadSheet = $this->_openDocumentObject->getBody();
         
         // append / use existing table
-        if($spreadSheet->tableExists($this->_getDataTableName()) === true) {
+        if ($spreadSheet->tableExists($this->_getDataTableName()) === true) {
             $this->_activeTable = $spreadSheet->getTable($this->_getDataTableName());
         } else {
             $this->_activeTable = $spreadSheet->appendTable($this->_getDataTableName());
@@ -154,7 +154,7 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
     {
         // check for template file
         $templateFile = $this->_getTemplateFilename();
-                        
+        
         $this->_openDocumentObject = new OpenDocument_Document(OpenDocument_Document::SPREADSHEET, $templateFile, Tinebase_Core::getTempDir(), $this->_userStyles);
     }
     
