@@ -1135,6 +1135,17 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
 
     /**
+     * returns the title of the record
+     * 
+     * @return string
+     */
+    public function getTitle()
+    {
+        $c = static::getConfiguration();
+        return $this->{($c ? $c->titleProperty : 'title')};
+    }
+    
+    /**
      * returns the foreignId fields (used in Tinebase_Convert_Json)
      * @return array
      */

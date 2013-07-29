@@ -129,6 +129,13 @@ Tine.Tinebase.ExceptionHandler = function() {
             exception = response.data;
         }
         
+        if (Tine.Tinebase.ExceptionHandlerRegistry.has(exception.appName)) {
+            // the registered function must return true to don't work on this generically
+            if (Tine.Tinebase.ExceptionHandlerRegistry.get(exception.appName)(exception)) {
+                return;
+            }
+        } 
+        
         var defaults = {
             buttons: Ext.Msg.OK,
             icon: Ext.MessageBox.WARNING,

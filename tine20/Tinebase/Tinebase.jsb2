@@ -350,6 +350,10 @@
           "path": "js/"
         },
         {
+          "text": "ExceptionHandlerRegistry.js",
+          "path": "js/"
+        },
+        {
           "text": "ExceptionDialog.js",
           "path": "js/"
         },
@@ -559,6 +563,10 @@
         },
         {
             "text": "Manager.js",
+            "path": "js/widgets/relation/"
+        },
+        {
+            "text": "GridRenderer.js",
             "path": "js/widgets/relation/"
         },
         {

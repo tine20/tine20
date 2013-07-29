@@ -18,6 +18,29 @@
 class Tinebase_Exception extends Exception
 {
     /**
+     * the name of the application, this exception belongs to
+     * 
+     * @var string
+     */
+    protected $_appName = NULL;
+    
+    /**
+     * the constructor
+     * 
+     * @param message[optional]
+     * @param code[optional]
+     * @param previous[optional]
+     */
+    public function __construct($message = null, $code = null, $previous = null)
+    {
+        if (! $this->_appName) {
+            $c = explode('_', get_class($this));
+            $this->_appName = $c[0];
+        }
+        parent::__construct($message, $code, $previous);
+    }
+    
+    /**
      * get exception trace as array (remove confidential information)
      * 
      * @param Exception $exception
@@ -97,4 +120,13 @@ class Tinebase_Exception extends Exception
         return preg_replace($passwordPatterns, $replacements, $_traceString);
     }
     
+    /**
+     * returns the name of the application, this exception belongs to
+     * 
+     * @return string
+     */
+    public function getAppName()
+    {
+        return $this->_appName;
+    }
 }

@@ -35,7 +35,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * required apps
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'Addressbook', 'HumanResources');
+    protected static $_requiredApplications = array('Admin', 'HumanResources');
     
     /**
      * The product controller
@@ -93,7 +93,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $c = Sales_Controller_Contract::getInstance();
         
         $f = new Sales_Model_ContractFilter(array(
-            array('field' => 'description', 'operator' => 'equals', 'value' => 'Created by Tine 2.0 DEMO DATA'),
+            array('field' => 'description', 'operator' => 'equals', 'value' => 'Created by Tine 2.0 DemoData'),
         ), 'AND');
         
         return ($c->search($f)->count() > 10) ? true : false;
@@ -116,40 +116,40 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         $container = $this->_contractController->getSharedContractsContainer();
         $cid = $container->getId();
+        $ccs = array($this->_developmentCostCenter, $this->_marketingCostCenter);
         
-        foreach($this->_costCenters as $costcenter) {
-            $i = 0;
+        $i = 0;
+        
+        while ($i < 12) {
+            $costcenter = $ccs[$i%2];
+            $i++;
             
             $title = self::$_de ? ('Vertrag für KST ' . $costcenter->number . ' - ' . $costcenter->remark) : ('Contract for costcenter ' . $costcenter->number . ' - ' . $costcenter->remark) . ' ' . Tinebase_Record_Abstract::generateUID(3);
             $ccid = $costcenter->getId();
             
-            while ($i < 2) {
-                $i++;
-                
-                $contract = new Sales_Model_Contract(array(
-                    'number'       => $cNumber,
-                    'title'        => $title,
-                    'description'  => 'Created by Tine 2.0 DEMO DATA',
-                    'container_id' => $cid
-                ));
-                
-                $relations = array(
-                    array(
-                        'own_model'              => 'Sales_Model_Contract',
-                        'own_backend'            => Tasks_Backend_Factory::SQL,
-                        'own_id'                 => NULL,
-                        'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                        'related_model'          => 'Sales_Model_CostCenter',
-                        'related_backend'        => Tasks_Backend_Factory::SQL,
-                        'related_id'             => $ccid,
-                        'type'                   => 'LEAD_COST_CENTER'
-                    )
-                );
-                $contract->relations = $relations;
-                
-                $this->_contractController->create($contract);
-                $cNumber++;
-            }
+            $contract = new Sales_Model_Contract(array(
+                'number'       => $cNumber,
+                'title'        => $title,
+                'description'  => 'Created by Tine 2.0 DemoData',
+                'container_id' => $cid
+            ));
+            
+            $relations = array(
+                array(
+                    'own_model'              => 'Sales_Model_Contract',
+                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_id'                 => NULL,
+                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_model'          => 'Sales_Model_CostCenter',
+                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_id'             => $ccid,
+                    'type'                   => 'LEAD_COST_CENTER'
+                )
+            );
+            $contract->relations = $relations;
+            
+            $this->_contractController->create($contract);
+            $cNumber++;
         }
     }
     

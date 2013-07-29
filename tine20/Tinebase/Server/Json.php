@@ -254,6 +254,9 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         if ($suppressTrace !== TRUE) {
             $exceptionData['trace'] = Tinebase_Exception::getTraceAsArray($exception);
         }
+        if ($exception instanceof Tinebase_Exception) {
+            $exceptionData['appName'] = $exception->getAppName();
+        }
         
         Tinebase_Exception::log($exception, $suppressTrace);
         

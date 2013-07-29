@@ -82,12 +82,46 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $filter = new Timetracker_Model_TimesheetFilter(array(
             array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
                 array('field' => 'id', 'operator' => 'equals', 'value' => $_timeaccountId),
-            ))           
+            ))
         ));
         
         $records = $this->search($filter);
         
         return $records;
+    }
+    
+    /**
+     * find timesheets by the given arguments. the result will be returned in an array
+     *
+     * @param string $timeaccountId
+     * @param Tinebase_DateTime $startDate
+     * @param Tinebase_DateTime $endDate
+     * @param string $destination
+     * @param string $taCostCenter
+     * @param string $cacheId
+     * @return array
+     */
+    public function findTimesheetsByTimeaccountAndPeriod($timeaccountId, $startDate, $endDate, $destination = NULL, $taCostCenter = NULL)
+    {
+        $filter = new Timetracker_Model_TimesheetFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $timeaccountId)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'cleared_time', 'operator' => 'before', 'value' => $endDate)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'cleared_time', 'operator' => 'after', 'value' => $startDate)));
+        $filter->addFilter(new Tinebase_Model_Filter_Bool(array('field' => 'is_cleared', 'operator' => 'equals', 'value' => true)));
+        
+        $timesheets = $this->search($filter);
+        
+        $matrix = array();
+        foreach($timesheets as $ts) {
+            $matrix[] = array(
+                'userAccountId' => $ts->account_id,
+                'amount' => ($ts->duration / 60),
+                'destination' => $destination,
+                'taCostCenter' => $taCostCenter
+            );
+        }
+        
+        return $matrix;
     }
     
     /**

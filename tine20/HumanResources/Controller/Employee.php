@@ -189,12 +189,14 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     protected function _checkContractsOverlap($record)
     {
         $exceptionMessage = 'The contracts must not overlap!';
-        
         if ($record->contracts) {
-            
             // get intervals
             $intervals = array();
             foreach ($record->contracts as $contract) {
+                if (is_array($contract)) {
+                    $contract['employee_id'] = $record->getId();
+                    $contract = new HumanResources_Model_Contract($contract);
+                }
                 if ($contract->start_date) {
                     $intervals[] = array(
                         'start' => $contract->start_date,
@@ -356,7 +358,48 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             return 0;
         }
     }
+    
+    /**
+     * returns employees currently belonging to the given cost center (id)
+     * 
+     * @param string|Sales_Model_CostCenter $costCenterId
+     * @return Tinebase_Record_RecordSet|NULL
+     */
+    public function getEmployeesBySalesCostCenter($costCenterId) {
+        $costCenterId = is_string($costCenterId) ? $costCenterId : $costCenterId->getId();
 
+        $ccController = HumanResources_Controller_CostCenter::getInstance();
+        $now = Tinebase_DateTime::now();
+        
+        $filter = new HumanResources_Model_CostCenterFilter();
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'cost_center_id', 'operator' => 'equals', 'value' => $costCenterId)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $now)));
+        
+        $hrccs = $ccController->search($filter);
+        
+        if ($hrccs->count()) {
+            $filter = new HumanResources_Model_EmployeeFilter(array(
+                array('field' => 'id', 'operator' => 'in', 'value' => $hrccs->employee_id)
+            ), 'AND');
+            
+            $filteredEmployees = new Tinebase_Record_RecordSet('HumanResources_Model_Employee');
+            
+            $employees = $this->search($filter);
+            
+            foreach($employees as $employee) {
+                $subCC = $hrccs->filter('employee_id', $employee->getId());
+                if ($subCC->sort('start_date', 'DESC')->getFirstRecord()->start_date <= $now) {
+                    $filteredEmployees->addRecord($employee);
+                }
+            }
+            
+            return $filteredEmployees;
+            
+        } else {
+            return NULL;
+        }
+    }
+    
     /**
      * transfers user accounts to employee records
      * 

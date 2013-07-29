@@ -65,4 +65,19 @@ class Timetracker_Controller extends Tinebase_Controller_Abstract
         }
         return self::$_instance;
     }
+    
+    /**
+     * calls Timetracker_Controller_Timesheet::findTimesheetsByTimeaccountAndPeriod arguments suitable for async job
+     * returns true if cache could be saved.
+     * 
+     * @param array $args
+     * @return boolean
+     */
+    public function findTimesheetsForReport(array $args)
+    {
+        $cache = Tinebase_Core::getCache();
+        $results = Timetracker_Controller_Timesheet::getInstance()->findTimesheetsByTimeaccountAndPeriod($args['timeaccountId'], $args['startDate'], $args['endDate'], $args['destination'], $args['taCostCenter']);
+        $m = str_replace('-','', $args['month']);
+        return $cache->save(array('results' => $results), $args['cacheId'], array($args['cacheId'] . '_' . $m));
+    }
 }

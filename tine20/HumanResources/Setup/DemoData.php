@@ -43,7 +43,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * required apps
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'Addressbook', 'Calendar');
+    protected static $_requiredApplications = array('Admin', 'Calendar');
     
     /**
      * the start date of contracts costcenters, employees
@@ -214,8 +214,8 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $employee->costcenters = array($hrc);
             
             // add contract
-            $contract = $this->_getContract($sdate)->toArray();
-            $employee->contracts = array($contract);
+            $contract = $this->_getContract($sdate);
+            $employee->contracts = array($contract->toArray());
             
             // add division
             $division = $this->_divisions[$i];
