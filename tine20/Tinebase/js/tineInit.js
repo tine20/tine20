@@ -703,7 +703,7 @@ Tine.Tinebase.tineInit = {
      * initialise application manager
      */
     initAppMgr: function () {
-        if (! Ext.isIE && ! window.isMainWindow) {
+        if (! Ext.isIE9 && ! Ext.isIE && ! window.isMainWindow) {
             // return app from main window for non-IE browsers
             Tine.Tinebase.appMgr = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr;
         } else {
