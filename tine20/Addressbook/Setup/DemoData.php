@@ -36,8 +36,8 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected $_addresses = NULL;
     
     /**
-     * 
      * required apps
+     * 
      * @var array
      */
     protected static $_requiredApplications = array('Admin');
@@ -55,6 +55,7 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * @var array
      */
     protected $_photosFemale = NULL;
+    
     /**
      * the corresponding images to the contacts
      */
@@ -77,7 +78,6 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     
     /**
      * the constructor
-     *
      */
     private function __construct()
     {
@@ -204,12 +204,14 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createSharedContacts()
     {
+        $count = static::$_createFullData ? 700 : 20;
+        
         $this->_createSharedContainer((static::$_en ? 'Customers' : 'Kunden'));
         $cid = $this->_sharedContainer->getId();
-        $i=0;
-        while ($i < 700) {
-            $data = array_merge($this->_addresses[($this->_createdContactIndex+$i)], array('container_id' => $cid));
-            $this->_createContact($data, $this->_images[($this->_createdContactIndex+$i)]);
+        $i = 0;
+        while ($i < $count) {
+            $data = array_merge($this->_addresses[($this->_createdContactIndex + $i)], array('container_id' => $cid));
+            $this->_createContact($data, $this->_images[($this->_createdContactIndex + $i)]);
             $i++;
         }
         $this->_createdContactIndex = $this->_createdContactIndex + $i;
@@ -221,7 +223,7 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createContactsForPwulf()
     {
         $i=0;
-        while ($i < 100) {
+        while ($i < (static::$_createFullData ? 100 : 10)) {
             $this->_createContact($this->_addresses[$this->_createdContactIndex+$i], $this->_images[($this->_createdContactIndex+$i)]);
             $i++;
         }
@@ -234,7 +236,7 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createContactsForRwright()
     {
         $i=0;
-        while ($i < 100) {
+        while ($i < (static::$_createFullData ? 100 : 10)) {
             $this->_createContact($this->_addresses[$this->_createdContactIndex+$i], $this->_images[($this->_createdContactIndex+$i)]);
             $i++;
         }
@@ -247,7 +249,7 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createContactsForSclever()
     {
         $i=0;
-        while ($i < 100) {
+        while ($i < (static::$_createFullData ? 100 : 10)) {
             $this->_createContact($this->_addresses[$this->_createdContactIndex+$i], $this->_images[($this->_createdContactIndex+$i)]);
             $i++;
         }

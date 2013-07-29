@@ -30,7 +30,7 @@ class Calendar_Setup_DemoDataTests extends PHPUnit_Framework_TestCase
     public function testCreateDemoCalendars() {
         
         ob_start();
-        Calendar_Setup_DemoData::getInstance()->createDemoData('en', NULL, NULL, true, true);
+        Calendar_Setup_DemoData::getInstance()->createDemoData(array('locale' => 'en'));
         ob_end_clean();
         
         $pwulf = Tinebase_User::getInstance()->getFullUserByLoginName('pwulf');
