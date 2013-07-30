@@ -248,10 +248,11 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * Sales Edit Popup
  */
 Tine.Sales.ContractEditDialog.openWindow = function (config) {
+    var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 470,
-        name: Tine.Sales.ContractEditDialog.prototype.windowNamePrefix + Ext.id(),
+        name: Tine.Sales.ContractEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Sales.ContractEditDialog',
         contentPanelConstructorConfig: config
     });
