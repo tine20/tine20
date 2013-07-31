@@ -837,10 +837,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $baseEvent = $this->getRecurBaseEvent($_event);
         
-        // only allow creation if recur instance if clone of base event
         if ($baseEvent->last_modified_time != $_event->last_modified_time) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . " It is not allowed to create recur instance if it is clone of base event");
             throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
         }
+        
         // check if this is an exception to the first occurence
         if ($baseEvent->getId() == $_event->getId()) {
             if ($_allFollowing) {
@@ -854,7 +856,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // just do attender status update if user has no edit grant
         if ($this->_doContainerACLChecks && !$baseEvent->{Tinebase_Model_Grants::GRANT_EDIT}) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: '{$baseEvent->getId()}'. Only creating exception for attendee status");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " user has no editGrant for event: '{$baseEvent->getId()}'. Only creating exception for attendee status");
             if ($_event->attendee instanceof Tinebase_Record_RecordSet) {
                 foreach ($_event->attendee as $attender) {
                     if ($attender->status_authkey) {
