@@ -42,6 +42,7 @@ if (version_compare($phpUnitVersion[1], "3.6.0") >= 0) {
 $path = array(
     PATH_TO_REAL_DIR,
     PATH_TO_TEST_DIR,
+    PATH_TO_TEST_DIR . PATH_SEPARATOR . 'library',
     PATH_TO_TINE_LIBRARY,
     get_include_path(),
 );

@@ -5,7 +5,7 @@
  * @package     OpenDocument
  * @subpackage  OpenDocument
  * @license     http://framework.zend.com/license/new-bsd     New BSD License
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -32,8 +32,18 @@ class OpenDocument_Document
     
     protected $_cellStyles = array();
     
+    /**
+     * the given template file
+     * 
+     * @var string
+     */
     protected $_templateFile;
     
+    /**
+     * the content.xml in an simplexml element
+     * 
+     * @var SimpleXMLElement 
+     */
     protected $_document;
         
     /**
@@ -43,6 +53,17 @@ class OpenDocument_Document
      */
     protected $_body;
     
+    /**
+     * 
+     * @var string
+     */
+    protected $_type;
+    
+    /**
+     * the content.xml as text
+     *
+     * @var string
+     */
     protected $_content = '<?xml version="1.0" encoding="UTF-8"?>
         <office:document-content 
             xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" 
@@ -154,7 +175,7 @@ class OpenDocument_Document
      */
     public function __construct($_type, $_fileName = null, $_tmpdir = NULL, $_userStyles = array())
     {
-        if($_fileName !== null) {
+        if ($_fileName !== null) {
             if (! file_exists($_fileName)) {
                 error_log('Template file not found: ' . $_fileName);
             } else {
@@ -195,7 +216,9 @@ class OpenDocument_Document
                 throw new Exception('unsupported documenttype: ' . $_type);
                 break;
         }
-    }    
+        
+        $this->_type = $_type;
+    }
     
     /**
      * get the body
@@ -207,97 +230,195 @@ class OpenDocument_Document
         return $this->_body;
     }
     
+    /**
+     * replaces a marker with a matrix
+     * 
+     * @param string $marker
+     * @param OpenDocument_Matrix $matrix
+     * @param bool $showLegend
+     * @return OpenDocument_Document
+     */
+    public function replaceMatrix($marker, $matrix, $showLegend = TRUE, $showLegendDescription = TRUE, $showSums = TRUE)
+    {
+        if ($xml = $this->_findMarkers($marker)) {
+            switch ($this->_type) {
+                case self::SPREADSHEET:
+                    foreach($xml as $xmlElement) {
+                        $this->_body->replaceMatrix($xmlElement, $matrix, $showLegend, $showLegendDescription, $showSums);
+                    }
+                    break;
+                default:
+                    throw new Exception('unsupported documenttype for matrix replace: ' . $this->_type);
+            }
+        }
+        return $this;
+    }
+    
+    /**
+     * 
+     * @param unknown $marker
+     * @param unknown $list
+     * @throws Exception
+     * @return OpenDocument_Document
+     */
+    public function replaceList($marker, $list, $type = OpenDocument_SpreadSheet_Cell::TYPE_STRING, $direction = 'horizontal')
+    {
+        if ($xml = $this->_findMarkers($marker)) {
+            switch ($this->_type) {
+                case self::SPREADSHEET:
+                    foreach($xml as $xmlElement) {
+                        $this->_body->replaceList($xmlElement, $list, $type, $direction);
+                    }
+                    break;
+                default:
+                    throw new Exception('unsupported documenttype for matrix replace: ' . $this->_type);
+            }
+        }
+        return $this;
+    }
+    
+    /**
+     * 
+     * @param string $marker
+     * @return array
+     */
+    protected function _findMarkers($marker)
+    {
+        return $this->_document->xpath("//text()[contains(., '<{".strtoupper($marker)."}>')]");
+    }
+    
+    /**
+     * replaces a marker
+     * 
+     * @param SimpleXMLElement $xml
+     * @param string $value
+     */
+    public function replaceMarker($marker, $value)
+    {
+        if ($xml = $this->_findMarkers($marker)) {
+            foreach($xml as $xmlElement) {
+                $xmlElement[0] = $value;
+            }
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * returns this _document (content.xml) as string
+     * 
+     * @return mixed
+     */
     public function asXML()
     {
         return $this->_document->asXML();
     }
     
+    /**
+     * adds additional user styles
+     * 
+     * @param string|array $_style
+     * @return OpenDocument_Document
+     */
     public function addStyle($_style)
     {
-        $this->_userStyles[] = $_style; 
+        if (! is_array($_style)) {
+            $_style = array($_style);
+        }
+        foreach($_style as $s) {
+            $this->_userStyles[] = $s;
+        }
+        return $this;
     }
     
+    /**
+     * creates the document
+     * 
+     * @param string $_filename
+     * @throws Exception
+     * @return string
+     */
     public function getDocument($_filename = null)
     {
         $this->_addStyles();
 
         $filename =  $_filename !== null ? $_filename : tempnam($this->_tmpdir, 'OpenDocument');
-        $tempDir = $this->_tmpdir . DIRECTORY_SEPARATOR . 'od_' . md5(uniqid(rand(), true));
-        
-        if (file_exists($tempDir)) {
-            throw new Exception('Directory already exists.');
-        }
-        mkdir($tempDir);
-        
-        if($this->_templateFile !== null) {
-            $templateZip = new ZipArchive();
-            if ($templateZip->open($this->_templateFile) === TRUE) {
-                $templateZip->extractTo($tempDir);
-                $templateZip->close();
-            }
-        }
         
         if($this->_templateFile === null) {
+            
+            $tempDir = $this->_tmpdir . DIRECTORY_SEPARATOR . 'od_' . md5(uniqid(rand(), true));
+        
+            if (file_exists($tempDir)) {
+                throw new Exception('Directory already exists.');
+            }
+            
+            mkdir($tempDir);
+            
             mkdir($tempDir . DIRECTORY_SEPARATOR . 'META-INF');
             file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'mimetype', $this->_body->getContentType());
             file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'meta.xml', $this->_meta);
             file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'settings.xml', $this->_settings);
             file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'META-INF/manifest.xml', $this->_manifest);
-        }
-        
-        // ObjectReplacements
-//        $images = $this->_document->xpath('//draw:image');
-//        foreach($images as $image) {
-//            $image_sxe = dom_import_simplexml($image);
-//            $image_sxe->parentNode->removeChild($image_sxe);
-//        }
-//        
-//        $images = $this->_document->xpath('//draw:image');
-//        Tinebase_Core::getLogger()->err(print_r($images, TRUE));
-        
-        file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'content.xml', $this->_document->saveXML());
-        file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'styles.xml', $this->_styles);
-        
-        $zip = new ZipArchive();
-        $opened = $zip->open($filename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
-        if( $opened !== true ) {
-            throw new Exception('could not open zip file');
-        }
-
-        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tempDir));
-        
-        foreach ($iterator as $fullFilename => $cur) {
-            // the second parameter of the addFile function needs always the unix directory separator
-            $localname = str_replace('\\', '/', substr($fullFilename, strlen($tempDir)+1));
-            if ($localname !== '.' && $localname !== '..') {
-                $zip->addFile($fullFilename, $localname);
+            
+            file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'content.xml', $this->_document->saveXML());
+            file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'styles.xml', $this->_styles);
+            
+            $zip = new ZipArchive();
+            $opened = $zip->open($filename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
+            
+            if( $opened !== true ) {
+                throw new Exception('could not open zip file');
+            }
+            
+            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tempDir));
+            
+            foreach ($iterator as $fullFilename => $cur) {
+                // the second parameter of the addFile function needs always the unix directory separator
+                $localname = str_replace('\\', '/', substr($fullFilename, strlen($tempDir)+1));
+                if ($localname !== 'mimetype' && $localname !== '.' && $localname !== '..') {
+                    $zip->addFile($fullFilename, $localname);
+                }
+            }
+    
+            $zip->close();
+            
+            // delete files / remove dir
+            removeDir($tempDir);
+            
+            
+        } else {
+            $templateZip = new ZipArchive();
+            if ($templateZip->open($this->_templateFile) === TRUE) {
+                $templateZip->close();
+                
+                copy($this->_templateFile, $filename);
+                
+                $templateZip->open($filename);
+                $templateZip->addFromString('content.xml', $this->_document->saveXML());
+                $templateZip->close();
             }
         }
-
-        $zip->close();
-        
-        // delete files / remove dir
-        removeDir($tempDir);
         
         return $filename;
     }
     
+    /**
+     * add styles to this document
+     */
     protected function _addStyles()
     {
         $styles = $this->_document->xpath('//office:automatic-styles');
         $domStyles = dom_import_simplexml($styles[0]);
 
         foreach($this->_userStyles as $userStyle) {
-            if($userStyle instanceof SimpleXMLElement) {
+            if ($userStyle instanceof SimpleXMLElement) {
                 $newChild = $userStyle;
             } else {
                 $newChild = new SimpleXMLElement($userStyle);
             }
             $dom_sxe = dom_import_simplexml($newChild);
             $newStyle = $domStyles->ownerDocument->importNode($dom_sxe, true);
-            $domStyles->appendChild($newStyle);        
+            $domStyles->appendChild($newStyle);
         }
-        
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $styles[0]->generateXML());
     }
 }

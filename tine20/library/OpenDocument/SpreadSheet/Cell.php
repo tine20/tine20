@@ -25,6 +25,7 @@ class OpenDocument_SpreadSheet_Cell
     const TYPE_FLOAT      = 'float';
     const TYPE_PERCENTAGE = 'percentage';
     const TYPE_STRING     = 'string';
+    const TYPE_FUNCTION   = 'function';
     
     /**
      * 
@@ -37,13 +38,56 @@ class OpenDocument_SpreadSheet_Cell
         $this->_cell = $_cell;
     }
     
-    static public function createCell($_parent, $_value, $_type = null)
+    /**
+     * creates a covered table cell
+     * 
+     * @param OpenDocument_SpreadSheet_Row|SimpleXMLElement $parent
+     */
+    static public function createCoveredCell($parent)
     {
+        if ($parent instanceof OpenDocument_SpreadSheet_Row) {
+            $parent = $parent->getBody();
+        }
+        
+        $parent->addChild('covered-table-cell', null, OpenDocument_Document::NS_TABLE);
+    }
+    
+    
+    /**
+     * 
+     * @param SimpleXMLElement|OpenDocument_SpreadSheet_Row $_parent
+     * @param scalar $_value
+     * @param string $_type
+     * @param array $additionalAttributes
+     * 
+     * @return OpenDocument_SpreadSheet_Cell
+     */
+    static public function createCell($_parent, $_value, $_type = null, $additionalAttributes = array())
+    {
+        if ($_parent instanceof OpenDocument_SpreadSheet_Row) {
+            $_parent = $_parent->getBody();
+        }
+        
         $cellElement = $_parent->addChild('table-cell', null, OpenDocument_Document::NS_TABLE);
         
         if($_value !== null) {
             if($_type !== null) {
-                $cellElement->addAttribute('office:value-type', $_type, OpenDocument_Document::NS_OFFICE);
+                if ($_type == self::TYPE_FUNCTION) {
+                    $cellElement->addAttribute('office:value-type', self::TYPE_FLOAT, OpenDocument_Document::NS_OFFICE);
+                    $cellElement->addAttribute('table:formula', self::_encodeValue($_value), OpenDocument_Document::NS_TABLE);
+                } else {
+                    $cellElement->addAttribute('office:value-type', $_type, OpenDocument_Document::NS_OFFICE);
+                }
+            }
+            
+            foreach ($additionalAttributes as $attName => $attValue) {
+                $ns = NULL;
+                if (strstr($attName, ':')) {
+                    $ex = explode(':', $attName);
+                    $cellElement->addAttribute($attName, self::_encodeValue($attValue), $ex[0]);
+                } else {
+                    $cellElement->addAttribute($attName, self::_encodeValue($attValue), $ns);
+                }
             }
             
             switch($_type) {
@@ -72,14 +116,15 @@ class OpenDocument_SpreadSheet_Cell
                     } else {
                         list($value, $currency) = explode(' ', $_value);
                     }
-                    if(isset($currency) && ! empty($$currency)) {                 
+                    if(isset($currency) && ! empty($$currency)) {
                         $cellElement->addAttribute('office:currency', self::_encodeValue($currency), OpenDocument_Document::NS_OFFICE);
-                    }                 
+                    }
                     $cellElement->addAttribute('office:value', self::_encodeValue($value), OpenDocument_Document::NS_OFFICE);
                     break;
             }
-            
-            if($_type != self::TYPE_CURRENCY && $_type != self::TYPE_PERCENTAGE) {
+            if ($_type == self::TYPE_FUNCTION) {
+                
+            } elseif ($_type != self::TYPE_CURRENCY && $_type != self::TYPE_PERCENTAGE) {
                 $cellElement->addChild('p', self::_encodeValue($_value), OpenDocument_Document::NS_TEXT);
             }
         }

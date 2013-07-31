@@ -43,7 +43,7 @@ class AllTests
         $suite->addTest(Sipgate_AllTests::suite());
         $suite->addTest(SimpleFAQ_AllTests::suite());
         $suite->addTest(Zend_AllTests::suite());
-        
+        $suite->addTest(OpenDocument_AllTests::suite());
         return $suite;
     }
 }

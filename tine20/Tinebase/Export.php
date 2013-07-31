@@ -36,7 +36,7 @@ class Tinebase_Export
             $_options = array(
                 'format' => $_options
             );
-        }  
+        }
         
         if (array_key_exists('definitionId', $_options)) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_options['definitionId']);

@@ -5,9 +5,8 @@
  * @package     OpenDocument
  * @subpackage  OpenDocument
  * @license     http://framework.zend.com/license/new-bsd     New BSD License
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  */
 
 /**
@@ -38,33 +37,64 @@ class OpenDocument_SpreadSheet_Row implements Iterator, Countable
         $this->_row = $_row;
     }
     
+    public function getBody()
+    {
+        return $this->_row;
+    }
+    
     /**
-     * add new row and return reference
+     * add new cell and return reference
      *
      * @param string|optional $_tableName
      * @return OpenDocument_SpreadSheet_Cell
      */
-    public function appendCell($_value, $_type = null)
+    public function appendCell($_value, $_type = null, $additionalAttributes = array())
     {
-        $cell = OpenDocument_SpreadSheet_Cell::createCell($this->_row, $_value, $_type);
-                
+        $cell = OpenDocument_SpreadSheet_Cell::createCell($this->_row, $_value, $_type, $additionalAttributes);
         return $cell;
     }
-        
+    
+    public function appendCoveredCell()
+    {
+        $cell = OpenDocument_SpreadSheet_Cell::createCoveredCell($this->_row);
+        return $cell;
+    }
+    
     public function setStyle($_styleName)
     {
         $this->_attributes['table:style-name'] = $_styleName;
     }
 
-    static public function createRow($_parent, $_styleName = null)
+    /**
+     * 
+     * @param SimpleXMLElement $_parent
+     * @param string $_styleName
+     * @param SimpleXMLElement $_referenceRow
+     * @param string $_position
+     * 
+     * @return OpenDocument_SpreadSheet_Row
+     */
+    static public function createRow($_parent, $_styleName = NULL, $_reference = NULL, $_refIndex = 0, $_position = 'after')
     {
-        $rowElement = $_parent->addChild('table-row', null, OpenDocument_Document::NS_TABLE);
-        
-        if($_styleName !== null) {
-            $rowElement->addAttribute('table:style-name', $_styleName, OpenDocument_Document::NS_TABLE);
+        if ($_reference == NULL) {
+            $rowElement = $_parent->addChild('table-row', NULL, OpenDocument_Document::NS_TABLE);
+            
+            if ($_styleName !== NULL) {
+                $rowElement->addAttribute('table:style-name', $_styleName, OpenDocument_Document::NS_TABLE);
+            }
+        } else {
+            
+            $rowElement = $_parent->addChild('table:table-row', NULL, OpenDocument_Document::NS_TABLE);
+            
+            if ($_position == 'after') {
+                $rowElement = OpenDocument_Shared_SimpleXML::simplexml_insert_after($rowElement, $_reference, $_refIndex);
+            } else {
+                $rowElement = OpenDocument_Shared_SimpleXML::simplexml_insert_before($rowElement, $_reference, $_refIndex);
+            }
+            
         }
         
-        $row = new OpenDocument_SpreadSheet_Row($rowElement);
+        $row = new self($rowElement);
         
         return $row;
     }
@@ -80,11 +110,6 @@ class OpenDocument_SpreadSheet_Row implements Iterator, Countable
             $cell->generateXML($row);
         }
     }
-    
-//    public function addStyle($_key, $_value)
-//    {
-//        $this->_styles[$_key] = $_value;
-//    }
     
     function rewind() {
         $this->_position = 0;
