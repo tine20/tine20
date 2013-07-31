@@ -107,9 +107,15 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             resizable: true
         },
         columns: [
-        {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer },
-        {   id: 'lead_name', header: this.app.i18n._('Lead'), dataIndex: 'relations', width: 175, sortable: false, hidden: true, renderer: this.leadRenderer },
-        {
+        {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer 
+        }, {
+            id: 'lead',
+            header: this.app.i18n._('Lead'),
+            width: 150,
+            dataIndex: 'relations',
+            renderer: Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'lead'),
+            sortable: false
+        }, {
             id: 'summary',
             header: this.app.i18n._("Summary"),
             width: 400,
@@ -204,32 +210,9 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 allowEmpty: true,
                 value: Tine.Tinebase.registry.get('currentAccount')
             })
-        }]
-        // TODO add customfields and modlog columns, atm they break the layout :(
-        //.concat(this.getModlogColumns().concat(this.getCustomfieldColumns()))
-        });
+          // TODO add customfields and modlog columns, atm they break the layout :(
+        }]/*.concat(this.getModlogColumns().concat(this.getCustomfieldColumns()))*/});
     },
-    
-    /**
-     * return lead name for first linked Crm_Model_Lead
-     * 
-     * @param {Object} data
-     * @return {String} lead name
-     */
-    leadRenderer: function(data) {
-    
-        if( Ext.isArray(data) && data.length > 0) {
-            var index = 0;
-            // get correct relation type from data (contact) array and show first matching record (org_name + n_fileas)
-            while (index < data.length && data[index].related_model != 'Crm_Model_Lead') {
-                index++;
-            }
-            if (data[index]) {
-                var name = (data[index].related_record.lead_name !== null ) ? data[index].related_record.lead_name : '';
-                return Ext.util.Format.htmlEncode(name);
-            }
-        }
-    },    
 
     /**
      * Return CSS class to apply to rows depending upon due status

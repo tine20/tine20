@@ -10,6 +10,21 @@
 
 Ext.ns('Tine', 'Tine.Tasks');
 
+
+
+Tine.Tasks.CrmLeadRenderer = new Tine.widgets.relation.GridRenderer({
+    appName: 'Tasks', type: 'TASK', foreignApp: 'Crm', foreignModel: 'Lead'
+});
+
+Tine.widgets.grid.RendererManager.register(
+    'Tasks',
+    'Task',
+    'lead',
+    Tine.Tasks.CrmLeadRenderer.render,
+    null,
+    Tine.Tasks.CrmLeadRenderer
+);
+
 /**
  * @namespace   Tine.Tasks
  * @class       Tine.Tasks.Application
