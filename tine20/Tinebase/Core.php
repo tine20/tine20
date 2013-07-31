@@ -77,6 +77,12 @@ class Tinebase_Core
      * constant for database adapter
      */
     const DB = 'dbAdapter';
+    
+    /**
+     * constant for database adapter name
+     * 
+     */
+    const DBNAME = 'dbAdapterName';
 
     /**
      * constant for database adapter
@@ -108,19 +114,17 @@ class Tinebase_Core
      */
     const METHOD = 'method';
     
-    /**************** other consts *************************/
-
     /**
      * const PDO_MYSQL
      *
      */
     const PDO_MYSQL = 'Pdo_Mysql';
-
+    
     /**
      * minimal version of MySQL supported
      */
     const MYSQL_MINIMAL_VERSION = '5.0.0';
-
+    
     /**
      * const PDO_PGSQL
      *
@@ -149,9 +153,9 @@ class Tinebase_Core
      * minimal version of Oracle supported
      */
     const ORACLE_MINIMAL_VERSION = '9.0.0';
-
+    
     /******************************* DISPATCH *********************************/
-
+    
     /**
      * dispatch request
      */
@@ -1433,6 +1437,32 @@ class Tinebase_Core
         }
         
         return self::get(self::DB);
+    }
+    
+    /**
+     * get db name
+     * 
+     * @return string
+     */
+    public static function getDbName()
+    {
+        if (! self::get(self::DBNAME)) {
+            $db = self::getDb();
+            $adapterName = get_class($db);
+    
+            if (empty($adapterName) || strpos($adapterName, '_') === FALSE) {
+                throw new Tinebase_Exception('Could not get DB adapter name.');
+            }
+    
+            $adapterNameParts = explode('_', $adapterName);
+            $type = array_pop($adapterNameParts);
+    
+            // special handling for Oracle
+            $type = str_replace('Oci', self::ORACLE, $type);
+            self::set(self::DBNAME, $type);
+        }
+        
+        return self::get(self::DBNAME);
     }
 
     /**

@@ -648,7 +648,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
 
     /**
      * Inserts a table row with specified data.
-     *
+     * Add support for CLOB/BLOB
      * Oracle does not support anonymous ('?') binds.
      *
      * @param mixed $table The table to insert data into.
@@ -657,38 +657,120 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
      */
     public function insert($table, array $bind)
     {
-        $i = 0;
-        // extract and quote col names from the array keys
-        $cols = array();
-        $vals = array();
-        foreach ($bind as $col => $val) {
-            $cols[] = $this->quoteIdentifier($col, true);
-            if ($val instanceof Zend_Db_Expr) {
-                $vals[] = $val->__toString();
-                unset($bind[$col]);
-            } else {
+        // Get the table metadata
+        $columns = Tinebase_Db_Table::getTableDescriptionFromCache($table);
+        // Check the columns in the array against the database table
+        // to identify BLOB (or CLOB) columns
+        foreach (array_keys($bind) as $column) {
+            if ( in_array($columns[$column]['DATA_TYPE'], array('BLOB', 'CLOB'))) {
+                $lobs[] = $column;
+            }
+        }
+        
+        // If there are no blob columns then use the normal insert procedure
+        if ( !isset($lobs)) {
+            $i = 0;
+            // extract and quote col names from the array keys
+            $cols = array();
+            $vals = array();
+            foreach ($bind as $col => $val) {
+                $cols[] = $this->quoteIdentifier($col, true);
+                if ($val instanceof Zend_Db_Expr) {
+                    $vals[] = $val->__toString();
+                    unset($bind[$col]);
+                } else {
+                    // MOD: add to_date for date column
+                    if ($val === date('Y-m-d H:i:s', strtotime($val))) {
+                        $vals[] = "TO_DATE(".':'.$col.$i.",'YYYY-MM-DD hh24:mi:ss')";
+                    } else {
+                        $vals[] = ':'.$col.$i;
+                    }
+                    
+                    unset($bind[$col]);
+                    $bind[':'.$col.$i] = $val;
+                }
+                $i++;
+            }
+                // build the statement
+                $sql = "INSERT INTO "
+                     . $this->quoteIdentifier($table, true)
+                     . ' (' . implode(', ', $cols) . ') '
+                     . 'VALUES (' . implode(', ', $vals) . ')';
+        
+                // execute the statement and return the number of affected rows
+                $stmt = $this->query($sql, $bind);
+                $result = $stmt->rowCount();
+        } else {
+            // There are blobs in the $bind array so insert them separately
+            $ociTypes = array('BLOB' => OCI_B_BLOB, 'CLOB' => OCI_B_CLOB);
 
-                if ($val == date('Y-m-d H:i:s',strtotime($val))) {
-                $vals[] = "TO_DATE(".':'.$col.$i.",'YYYY-MM-DD hh24:mi:ss')";
-            } else {
-                $vals[] = ':'.$col.$i;
+            // Extract and quote col names from the array keys
+            $i = 0;
+            $cols = array();
+            $vals = array();
+            $lobData = array();
+            $returning = array();
+            
+            foreach ($bind as $col => $val) {
+                $cols[] = $this->quoteIdentifier($col, true);
+                if (in_array($col, $lobs)) {
+                    
+                    $lobs[array_search($col, $lobs)] = $this->quoteIdentifier($col, true);
+                    $vals[] = 'EMPTY_' . $columns[$col]['DATA_TYPE'] . '()';
+                    $lobData[':'.$col.$i] = array('ociType' => $ociTypes[$columns[$col]['DATA_TYPE']],
+                                                  'data'    => $val);
+                    unset($bind[$col]);
+                    $lobDescriptors[':'.$col.$i] = oci_new_descriptor($this->_connection, OCI_D_LOB);
+                    $returning[] = ':'.$col.$i;
+                    $bind[':'.$col.$i] = $lobDescriptors[':'.$col.$i];
+                } elseif ($val instanceof Zend_Db_Expr) {
+                    $vals[] = $val->__toString();
+                    unset($bind[$col]);
+                } else {
+                    $vals[] = ':'.$col.$i;
+                    unset($bind[$col]);
+                    $bind[':'.$col.$i] = $val;
+                }
+                $i++;
             }
-                
-                unset($bind[$col]);
-                $bind[':'.$col.$i] = $val;
+            
+            // build the statement
+            $sql = "INSERT INTO "
+                 . $this->quoteIdentifier($table, true)
+                 . ' (' . implode(', ', $cols) . ') '
+                 . 'VALUES (' . implode(', ', $vals) . ') '
+                 . 'RETURNING ' . implode(', ', $lobs) . ' '
+                 . 'INTO '  . implode(', ', $returning);
+                 
+            //Tinebase_Core::getLogger()->debug("SQL INSERT\n" . $sql);
+            
+            // Execute the statement
+            $stmt = new Zend_Db_Statement_Oracle($this, $sql);
+
+            foreach (array_keys($bind) as $name) {
+                if (in_array($name, array_keys($lobData))) {
+                    $stmt->bindParam($name, $bind[$name], $lobData[$name]['ociType'], -1);
+                } else {
+                    $stmt->bindParam($name, $bind[$name]);
+                }
             }
-            $i++;
+            
+            $this->_setExecuteMode(OCI_DEFAULT);
+            //Execute without committing
+            $stmt->execute();
+            
+            $this->_setExecuteMode(OCI_COMMIT_ON_SUCCESS);
+            $result = $stmt->rowCount();
+            
+            // Write the LOB data & free the descriptor
+            if (isset($lobDescriptors)) {
+                foreach ( $lobDescriptors as $name => $lobDescriptor) {
+                    $lobDescriptor->write($lobData[$name]['data']);
+                    $lobDescriptor->free();
+                }
+            }        
         }
 
-        // build the statement
-        $sql = "INSERT INTO "
-             . $this->quoteIdentifier($table, true)
-             . ' (' . implode(', ', $cols) . ') '
-             . 'VALUES (' . implode(', ', $vals) . ')';
-
-        // execute the statement and return the number of affected rows
-        $stmt = $this->query($sql, $bind);
-        $result = $stmt->rowCount();
         return $result;
     }
     

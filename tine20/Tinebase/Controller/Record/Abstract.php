@@ -312,7 +312,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $currValue = $this->_backend->getModlogActive();
         if (func_num_args() === 1) {
             $paramValue = (bool) func_get_arg(0);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting modlog active to ' . (int) $paramValue);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Resetting modlog active to ' . (int) $paramValue);
             $this->_backend->setModlogActive($paramValue);
             $this->_omitModLog = ! $paramValue;
         }

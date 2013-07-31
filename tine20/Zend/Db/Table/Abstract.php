@@ -48,7 +48,7 @@ abstract class Zend_Db_Table_Abstract
 {
 
     const ADAPTER          = 'db';
-    const DEFINITION        = 'definition';
+    const DEFINITION       = 'definition';
     const DEFINITION_CONFIG_NAME = 'definitionConfigName';
     const SCHEMA           = 'schema';
     const NAME             = 'name';
@@ -961,7 +961,7 @@ abstract class Zend_Db_Table_Abstract
     /**
      * Returns table information.
      *
-     * You can elect to return only a part of this information by supplying its key name,
+     * You can select to return only a part of this information by supplying its key name,
      * otherwise all information is returned as an array.
      *
      * @param  $key The specific info part to return OPTIONAL

@@ -138,14 +138,27 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     
     public function getIncrementTrigger($_tableName) 
     {
-        $statement = 'CREATE OR REPLACE TRIGGER ' . $this->_db->quoteIdentifier($this->_getIncrementTriggerName($_tableName)) . '
+        $statement = '
+        CREATE OR REPLACE TRIGGER ' . $this->_db->quoteIdentifier($this->_getIncrementTriggerName($_tableName)) . '
             BEFORE INSERT ON "' .  SQL_TABLE_PREFIX . $_tableName . '"
             FOR EACH ROW
             BEGIN
-            SELECT "' . SQL_TABLE_PREFIX .  substr($_tableName, 0, 25) . self::$_sequence_postfix .'".NEXTVAL INTO :NEW."' . $this->_autoincrementId .'" FROM DUAL;
+            DECLARE
+                max_id number;
+                cur_seq number;
+            BEGIN
+                IF :NEW."' . $this->_autoincrementId .'" IS NULL THEN
+                    SELECT "' . SQL_TABLE_PREFIX .  substr($_tableName, 0, 25) . self::$_sequence_postfix .'".NEXTVAL INTO :NEW."' . $this->_autoincrementId .'" FROM DUAL;
+                ELSE
+                    SELECT greatest(nvl(max("' . $this->_autoincrementId .'"),0), :NEW."' . $this->_autoincrementId .'") INTO max_id FROM "'. SQL_TABLE_PREFIX . $_tableName.'";
+                    SELECT "' . SQL_TABLE_PREFIX .  substr($_tableName, 0, 25) . self::$_sequence_postfix .'".NEXTVAL INTO cur_seq FROM DUAL;
+                    WHILE cur_seq < max_id
+                    LOOP
+                        SELECT "' . SQL_TABLE_PREFIX .  substr($_tableName, 0, 25) . self::$_sequence_postfix .'".NEXTVAL INTO cur_seq FROM DUAL;
+                    END LOOP;
+                END IF;
             END;
-        ';
-    
+        END;';
         return $statement;
     }
     
@@ -378,6 +391,23 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
      */    
     public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL)
     {
+        $columns = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $_tableName);
+        $quotedName = $this->_db->quoteIdentifier($_declaration->name);
+        
+        foreach($columns as $column){
+            // first we need to rename column because use some column name
+            if ($column['COLUMN_NAME'] == $_declaration->name) {
+                $tempName = $_declaration->name . Tinebase_Record_Abstract::generateUID(3);
+                $this->_renameCol($_tableName, $_declaration->name, $tempName);
+                // add new column
+                $this->addCol($_tableName, $_declaration);
+                $updatevalue = 'UPDATE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) .' SET '. $quotedName .' = '.  $this->_db->quoteIdentifier($tempName);
+                $this->execQueryVoid($updatevalue);
+                $this->dropCol($_tableName, $tempName);
+                return;
+            }
+        }
+        
         if (isset($_oldName) && $_oldName != $_declaration->name) {
             $this->_renameCol($_tableName, $_oldName, $_declaration->name);
         }
@@ -598,9 +628,9 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             if (!empty($keyfield->length)) {
                 $key .= ' (' . $keyfield->length . ')';
             }
-            // added
             else if (array_key_exists((string)$keyfield, $_key->fieldLength)) {
-                $key .= ' (' . $_key->fieldLength[(string)$keyfield] . ')';
+            // TODO: need fix  Error: ORA-00904: "value": invalid identifier 00904. 00000 -  "%s: invalid identifier"
+            //    $key .= ' (' . $_key->fieldLength[(string)$keyfield] . ')';
             }
             $keys[] = $key;
         }
