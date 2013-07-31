@@ -1375,6 +1375,19 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('http://www.facebook.com/n/?notifications&amp;id=295475095891&amp;'
             . 'mid=7a0ffadG5af33a8a9c98Ga61c449Gdd&amp;bcode=1.1362559617.Abl6w95TdWQc0VVS&amp;n_m=tine20%40metaways.de', $message->body);
     }
+
+    /**
+     * testBlockquoteClass
+     * 
+     * @see 0008574: add class "felamimail-body-blockquote" to all blockquote tags in mail body
+     */
+    public function testBlockquoteClass()
+    {
+        $cachedMessage = $this->messageTestHelper('blockquote.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertNotContains('<blockquote>', $message->body);
+    }
     
     /********************************* protected helper funcs *************************************/
     

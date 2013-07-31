@@ -628,16 +628,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $from = new Tinebase_DateTime('2012-02-01 00:00:00');
         $until = new Tinebase_DateTime('2012-02-29 23:59:59');
         
-        $event = new Calendar_Model_Event(array(
-                    'summary'       => 'Some Daily Event',
-                    'dtstart'       => '2012-02-03 09:00:00',
-                    'dtend'         => '2012-02-03 10:00:00',
-                    'rrule'         => 'FREQ=DAILY;INTERVAL=1',
-                    'container_id'  => $this->_testCalendar->getId(),
-                    'attendee'      => $this->_getAttendee(),
-        ));
-        
-        $persistentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_getDailyEvent(new Tinebase_DateTime('2012-02-03 09:00:00'));
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
@@ -650,6 +641,25 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[5], FALSE, TRUE);
         
         $this->assertEquals(3, count($updatedPersistentEvent->attendee));
+    }
+    
+    /**
+     * create daily recur series
+     * 
+     * @param Tinebase_DateTime $dtstart
+     * @return Calendar_Model_Event
+     */
+    protected function _getDailyEvent(Tinebase_DateTime $dtstart)
+    {
+        $event = new Calendar_Model_Event(array(
+            'summary'       => 'Some Daily Event',
+            'dtstart'       => $dtstart->toString(),
+            'dtend'         => $dtstart->addHour(1)->toString(),
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1',
+            'container_id'  => $this->_testCalendar->getId(),
+            'attendee'      => $this->_getAttendee(),
+        ));
+        return $this->_controller->create($event);
     }
     
    /**
@@ -690,6 +700,35 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $this->assertEquals(2, count($weekviewEvents->filter('uid', $weekviewEvents[0]->uid)), 'shorten failed');
         $this->assertEquals(5, count($weekviewEvents), 'wrong total count');
+    }
+    
+    /**
+     * testMoveRecurException
+     * 
+     * @see 0008704: moving a recur exception twice creates concurrency exception
+     * - this has been a client problem, server did everything right
+     */
+    public function testMoveRecurException()
+    {
+        $from = new Tinebase_DateTime('2012-02-01 00:00:00');
+        $until = new Tinebase_DateTime('2012-02-29 23:59:59');
+        
+        $persistentEvent1 = $this->_getDailyEvent(new Tinebase_DateTime('2012-02-03 09:00:00'));
+        $persistentEvent2 = $this->_getDailyEvent(new Tinebase_DateTime('2012-02-03 13:00:00'));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent1, $exceptions, $from, $until);
+        
+        $recurSet[5]->dtstart = new Tinebase_DateTime('2012-02-09 13:00:00');
+        $recurSet[5]->dtend = new Tinebase_DateTime('2012-02-09 14:00:00');
+        
+        $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[5]);
+        
+        $updatedPersistentEvent->dtstart = new Tinebase_DateTime('2012-03-09 13:00:00');
+        $updatedPersistentEvent->dtend = new Tinebase_DateTime('2012-03-09 14:00:00');
+        
+        $this->setExpectedException('Tinebase_Timemachine_Exception_ConcurrencyConflict');
+        $updatedPersistentEvent = $this->_controller->createRecurException($updatedPersistentEvent);
     }
     
     /**
