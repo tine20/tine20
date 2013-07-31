@@ -12,6 +12,10 @@
  */
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
+// TODO: remove this after opendocument and timezone convert has been outsourced
+
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'OpenDocument' . DIRECTORY_SEPARATOR . 'AllTests.php';
+
 class AllTests
 {
     public static function main()
