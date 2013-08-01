@@ -136,7 +136,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         $freeTimes = $freetimeController->search($filter);
     
         $filter = new HumanResources_Model_FreeTimeFilter(array());
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'firstday_date', 'operator' => 'equals', 'value' => NULL)));
+        $filter->addFilter(new Tinebase_Model_Filter_DateTime(array('field' => 'firstday_date', 'operator' => 'isnull', 'value' => TRUE)));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
 
         $rebookedVacationTimes  = $freetimeController->search($filter);
@@ -165,7 +165,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         
         $filter = new HumanResources_Model_FreeDayFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $rebookedVacationTimes->id)));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'date', 'operator' => 'equals', 'value' => NULL)));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'date', 'operator' => 'isnull', 'value' => TRUE)));
         $rebookedVacationDays = $freedayController->search($filter);
         
         $datesToWorkOn = $this->_contractController->getDatesToWorkOn($contracts, $yearBegins, $yearEnds);
