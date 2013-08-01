@@ -244,6 +244,25 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         return this.communityPanel;
     },
     
+    getPoweredByPanel: function () {
+        if (! this.poweredByPanel) {
+            this.poweredByPanel = new Ext.Container({
+                layout: 'fit',
+                cls: 'powered-by-panel',
+                width: 200,
+                height: 50,
+                border: false,
+                defaults: {xtype: 'label'},
+                items: [{
+                    html: "<div class='tine-viewport-poweredby' style='position: absolute; bottom: 10px; right: 10px; font:normal 12px arial, helvetica,tahoma,sans-serif;'>" + 
+                        _("Powered by:") + " <a target='_blank' href='http://www.tine20.com/' title='" + _("online open source groupware and crm") + "'>Tine 2.0</a>"
+                }]
+            });
+        }
+        
+        return this.poweredByPanel;
+    },
+    
     getSurveyData: function (cb) {
         var ds = new Ext.data.Store({
             proxy: new Ext.data.ScriptTagProxy({
@@ -418,6 +437,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             items: [
                 this.getLoginPanel(),
                 this.infoPanel,
+                this.getPoweredByPanel(),
                 this.getVersionPanel()
             ]
         }];
@@ -516,6 +536,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 
         this.getLoginPanel().setPosition(loginLeft, top);
         this.infoPanel.setPosition(loginLeft + loginBox.width, top);
+        this.getPoweredByPanel().setPosition(box.width - this.poweredByPanel.width, box.height - this.poweredByPanel.height);
     },
     
     renderSurveyPanel: function (survey) {
