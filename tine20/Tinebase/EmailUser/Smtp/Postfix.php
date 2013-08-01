@@ -196,7 +196,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
         } else {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.client_idnr') . ' IS NULL');
         }
-            
+        
         return $select;
     }
     
