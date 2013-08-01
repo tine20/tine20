@@ -42,12 +42,6 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     userOnly: false,
     
     /**
-     * @property additionalFilters
-     * @type Array
-     */
-    additionalFilters: null,
-    
-    /**
      * use account objects/records in get/setValue
      * 
      * @cfg {Boolean} legacy
@@ -92,16 +86,8 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     onBeforeQuery: function(qevent){
         Tine.Addressbook.SearchCombo.superclass.onBeforeQuery.apply(this, arguments);
         
-        var filter = this.store.baseParams.filter;
-        
         if (this.userOnly) {
-            filter.push({field: 'type', operator: 'equals', value: 'user'});
-        }
-        
-        if (this.additionalFilters !== null && this.additionalFilters.length > 0) {
-            for (var i = 0; i < this.additionalFilters.length; i++) {
-                filter.push(this.additionalFilters[i]);
-            }
+            this.store.baseParams.filter.push({field: 'type', operator: 'equals', value: 'user'});
         }
     },
     

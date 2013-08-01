@@ -119,16 +119,21 @@ Tine.HumanResources.ExtraFreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.Edi
                                 allowBlank: false,
                                 columnWidth: 1
                             },
-                            items: [[
-                                {name: 'days', fieldLabel: this.app.i18n._('Days')}],[
-                                {   xtype: 'widget-keyfieldcombo',
+                            items: [[{
+                                    name: 'days', 
+                                    fieldLabel: this.app.i18n._('Days')
+                                }], [{
+                                    xtype: 'widget-keyfieldcombo',
                                     app: 'HumanResources',
                                     keyFieldName: 'extraFreetimeType',
                                     fieldLabel: this.app.i18n._('Type'),
                                     name: 'type'
-                                }
-                                ]
-                                ]
+                                }], [{
+                                    fieldLabel: this.app.i18n._('Expiration date'),
+                                    xtype: 'datefield',
+                                    name: 'expires'
+                                }]
+                            ]
                         }]
                     }]
                 }, 

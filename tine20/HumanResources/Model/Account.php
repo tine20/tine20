@@ -43,7 +43,7 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
         'createModule'      => TRUE,
         'containerProperty' => NULL,
         
-        'titleProperty'     => 'employee_id.n_fn',
+        'titleProperty'     => 'year',
         'appName'           => 'HumanResources',
         'modelName'         => 'Account',
         
@@ -97,7 +97,19 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                     'type' => 'integer'
                 )
             ),
+            'expired_vacation_days' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'integer'
+                )
+            ),
             'excused_sickness' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'integer'
+                )
+            ),
+            'rebooked_vacation_days' => array(
                 'type' => 'virtual',
                 'config' => array(
                     'type' => 'integer'

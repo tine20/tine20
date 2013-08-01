@@ -210,56 +210,90 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      * calculates the vacation days count of a contract for a period given by firstDate and lastDate. 
      * if the period exceeds the contracts' period, the contracts' period will be used
      * 
-     * @param HumanResources_Model_Contract $contract
+     * @param HumanResources_Model_Contract|Tinebase_Record_RecordSet $contracts
      * @param Tinebase_DateTime $firstDate
      * @param Tinebase_DateTime $lastDate
      * @return integer
      */
-    public function calculateVacationDays(HumanResources_Model_Contract $contract, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
+    public function calculateVacationDays($contracts, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
     {
-        $firstDate = $this->_getFirstDate($contract, $firstDate);
-        $lastDate = $this->_getLastDate($contract, $lastDate);
+        $contracts = $this->_convertToRecordSet($contracts);
         
-        // find out how many days the year does have
-        $januaryFirst = new Tinebase_DateTime($firstDate->format('Y') . '-01-01 00:00:00');
-        $decemberLast = new Tinebase_DateTime($firstDate->format('Y') . '-12-31 23:59:59');
+        $sum = 0;
         
-        $daysOfTheYear = ceil(($decemberLast->getTimestamp() - $januaryFirst->getTimestamp()) / 24 / 60 / 60);
+        foreach($contracts as $contract) {
+            
+            $firstDate = $this->_getFirstDate($contract, $firstDate);
+            $lastDate = $this->_getLastDate($contract, $lastDate);
+            
+            // find out how many days the year does have
+            $januaryFirst = new Tinebase_DateTime($firstDate->format('Y') . '-01-01 00:00:00');
+            $decemberLast = new Tinebase_DateTime($firstDate->format('Y') . '-12-31 23:59:59');
+            
+            $daysOfTheYear = ceil(($decemberLast->getTimestamp() - $januaryFirst->getTimestamp()) / 24 / 60 / 60);
+            
+            // find out how many days the contract does have
+            $daysOfTheContract = ceil(($lastDate->getTimestamp() - $firstDate->getTimestamp()) / 24 / 60 / 60);
+            
+            $sum = ($daysOfTheContract / $daysOfTheYear) * $contract->vacation_days;
+        }
         
-        // find out how many days the contract does have
-        $daysOfTheContract = ceil(($lastDate->getTimestamp() - $firstDate->getTimestamp()) / 24 / 60 / 60);
-        
-        return (int) round(($daysOfTheContract / $daysOfTheYear) * $contract->vacation_days);
+        return round($sum);
     }
     
     /**
      * returns feast days as array containing Tinebase_DateTime objects
-     * if the period exceeds the contracts' period, the contracts' period will be used
+     * if the period exceeds the contracts' period(s), the contracts' period(s) will be used
      * 
-     * @param HumanResources_Model_Contract $contract
+     * @param HumanResources_Model_Contract|Tinebase_Record_RecordSet $contracts
      * @param Tinebase_DateTime $firstDate
      * @param Tinebase_DateTime $lastDate
      * @return array
      */
-    public function getFeastDays(HumanResources_Model_Contract $contract, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
+    public function getFeastDays($contracts, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
     {
-        $firstDate = $this->_getFirstDate($contract, $firstDate);
-        $lastDate  = $this->_getLastDate($contract, $lastDate);
+        $contracts = $this->_convertToRecordSet($contracts);
         
-        // on calendar search we have to do this to get the right interval:
-        $firstDate->subSecond(1);
-        $lastDate->addSecond(1);
+        $dates = array();
+        foreach($contracts as $contract) {
         
-        $filter = new Calendar_Model_EventFilter(array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'container_id', 'operator' => 'equals', 'value' => $contract->feast_calendar_id)));
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'after', 'value' => $firstDate)));
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'dtstart', 'operator' => 'before', 'value' => $lastDate)));
+            $fd = $this->_getFirstDate($contract, $firstDate);
+            $ld = $this->_getLastDate($contract, $lastDate);
+            
+            // on calendar search we have to do this to get the right interval:
+            $fd->subSecond(1);
+            $ld->addSecond(1);
+            
+            $filter = new Calendar_Model_EventFilter(array(
+                array('field' => 'container_id', 'operator' => 'equals', 'value' => $contract->feast_calendar_id),
+            ), 'AND');
+            $periodFilter = new Calendar_Model_PeriodFilter(array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $fd, 'until' => $ld)));
+            $filter->addFilter($periodFilter);
+            
+            $events = Calendar_Controller_Event::getInstance()->search($filter);
+            $events->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            
+            foreach($events as $event) {
+                if (! $event->isInPeriod($periodFilter)) {
+                    continue;
+                }
+                if ($event->is_all_day_event) {
+                    $days = round(($event->dtend->getTimestamp() - $event->dtstart->getTimestamp()) / 86400);
+                    $i=0;
+                    
+                    while ($i < $days) {
+                        $dateOfEvent = clone $event->dtstart;
+                        $dateOfEvent->addDay($i);
+                        $dates[] = $dateOfEvent;
+                        $i++;
+                    }
+                } else {
+                    $dates[] = $event->dtstart;
+                }
+            }
+        }
         
-        $dates = Calendar_Controller_Event::getInstance()->search($filter);
-        
-        $dates->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        // TODO: allow whole days and dates with more days
-        return $dates->dtstart;
+        return array_unique($dates);
     }
     
     /**
@@ -294,52 +328,60 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      * returns all dates the employee have to work on by contract. the feast days are removed already
      * if the period exceeds the contracts' period, the contracts' period will be used. freetimes are not respected here
      * 
-     * @param HumanResources_Model_Contract $contract
+     * @param HumanResources_Model_Contract|Tinebase_Record_RecordSet $contracts
      * @param Tinebase_DateTime $firstDate
      * @param Tinebase_DateTime $lastDate
      * 
      * @return array
      */
-    public function getDatesToWorkOn(HumanResources_Model_Contract $contract, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
+    public function getDatesToWorkOn($contracts, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
     {
-        $firstDate = $this->_getFirstDate($contract, $firstDate);
-        $lastDate = $this->_getLastDate($contract, $lastDate);
+        $contracts = $this->_convertToRecordSet($contracts);
         
-        $date = clone $firstDate;
-        $json = $contract->getWorkingTimeJson();
-        $weekdays = $json->days;
-
         // find out feast days
-        $feastDays = $this->getFeastDays($contract, $firstDate, $lastDate);
+        $feastDays = $this->getFeastDays($contracts, $firstDate, $lastDate);
         $feastDayStrings = array();
         
         foreach($feastDays as $feastDay) {
             $feastDayStrings[] = $feastDay->format('Y-m-d');
         }
         
-        // datetime format w uses day 0 as sunday
-        $monday = array_pop($weekdays);
-        array_unshift($weekdays, $monday);
-
         $hoursToWorkOn = 0;
-        $daysToWorkOn = array();
+        $results = array();
         $sumHours = 0;
         
-        while ($date->isEarlier($lastDate)) {
-            // if calculated working day is not a feast day, add to days to work on
-            $ds = $date->format('Y-m-d');
-            $weekday = $date->format('w');
-            $hrs = $weekdays[$weekday];
+        foreach($contracts as $contract) {
+        
+            $firstDate = $this->_getFirstDate($contract, $firstDate);
+            $lastDate = $this->_getLastDate($contract, $lastDate);
             
-            if (! in_array($ds, $feastDayStrings) && $hrs > 0) {
-                $daysToWorkOn['results'][] = clone $date;
-                $sumHours += $hrs;
+            $date = clone $firstDate;
+            $json = $contract->getWorkingTimeJson();
+            $weekdays = $json->days;
+            
+            // datetime format w uses day 0 as sunday
+            $monday = array_pop($weekdays);
+            array_unshift($weekdays, $monday);
+            
+            while ($date->isEarlier($lastDate)) {
+                // if calculated working day is not a feast day, add to days to work on
+                $ds = $date->format('Y-m-d');
+                $weekday = $date->format('w');
+                $hrs = $weekdays[$weekday];
+                
+                if (! in_array($ds, $feastDayStrings) && $hrs > 0) {
+                    $results[] = clone $date;
+                    $sumHours += $hrs;
+                }
+                
+                $date->addDay(1);
             }
-            
-            $date->addDay(1);
         }
-        $daysToWorkOn['hours'] = $sumHours;
-        return $daysToWorkOn;
+        
+        return array(
+            'hours'   => $sumHours,
+            'results' => $results
+        );
     }
     
     /**

@@ -205,12 +205,13 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
             foreach(array_merge($defaultData, $this->_dataMapping[$user->accountLoginName]) as $key => $data) {
                 $employee->{$key} = $data;
+                $employee->employment_begin = $this->_startDate;
             }
             
             // add costcenter
             $scs = $this->_costcenters->getByIndex($i);
-            $sd = Tinebase_DateTime::now()->subMonth(6);
-            $hrc = array('cost_center_id' => $scs->getId(), 'start_date' => $sd);
+            
+            $hrc = array('cost_center_id' => $scs->getId(), 'start_date' => $this->_startDate);
             $employee->costcenters = array($hrc);
             
             // add contract
@@ -284,7 +285,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         }
         
         $c = new HumanResources_Model_Contract(array(
-            'start_date' => $sdate,
+            'start_date' => $this->_startDate,
             'end_date'   => null,
             'employee_id' => null,
             'vacation_days' => 30,

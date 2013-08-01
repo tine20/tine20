@@ -96,20 +96,33 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         
         // create feast days
         $feastDays2013 = array(
-            '2013-01-01', '2013-03-29', '2013-04-01', '2013-05-01', '2013-05-09',
-            '2013-05-20', '2013-10-03', '2013-12-25', '2013-12-26', '2013-12-31'
+            // two days after another in one date
+            array('2013-12-25', '2013-12-26'),
+            // a whole day event
+            array('2013-04-01'),
+            // normal dates
+            '2013-05-01', '2013-05-09', '2013-05-20', '2013-10-03', '2013-01-01', '2013-03-29' , '2013-12-31',
+            // additional date which has been accidentially inserted by the user (test filters in getFeastDays)
+            '2009-12-31'
         );
         
         $feastCalendar = $this->_getFeastCalendar();
         $contract->feast_calendar_id = $feastCalendar->getId();
         
         foreach($feastDays2013 as $day) {
-            $date = new Tinebase_DateTime($day . ' 12:00:00');
+            if (is_array($day)) {
+                $date = array();
+                foreach($day as $dayQ) {
+                    $date[] = new Tinebase_DateTime($dayQ . ' 06:00:00');
+                }
+            } else {
+                $date = new Tinebase_DateTime($day . ' 06:00:00');
+            }
+            
             $this->_createFeastDay($date);
         }
         
         // test "calculateVacationDays"
-        
         $start  = new Tinebase_DateTime('2013-01-01');
         $stop   = new Tinebase_DateTime('2013-12-31');
         
@@ -133,9 +146,9 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         
         // test "getFeastDays"
         $feastDays = $contractController->getFeastDays($contract, $start, $stop);
-        
+
         // we expect 10 here
-        $this->assertEquals(10, count($feastDays));
+        $this->assertEquals(10, count($feastDays), '10 feast days should have been found!');
     }
     
     /**

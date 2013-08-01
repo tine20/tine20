@@ -56,6 +56,17 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                     'isParent'    => TRUE
                 )
             ),
+            'account_id'       => array(
+                'label'      => 'Account',    // _('Account')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
+                'type'       => 'record',
+                'config' => array(
+                    'appName'     => 'HumanResources',
+                    'modelName'   => 'Account',
+                    'idProperty'  => 'id',
+                    'isParent'    => FALSE
+                )
+            ),
             'type'            => array(
                 'label' => 'Type', // _('Type')
                 'type'  => 'keyfield',

@@ -83,6 +83,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         // TODO: resolve this in controller
         // add feast calendars
+        $ids = array();
         if (! empty($employee['contracts'])) {
             for ($i = 0; $i < count($employee['contracts']); $i++) {
                 if (! $employee['contracts'][$i]['feast_calendar_id']) {
@@ -97,9 +98,41 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         
+        // TODO: resolve this in controller
+        foreach(array('vacation', 'sickness') as $type) {
+            if (! empty($employee[$type]) && is_array($employee[$type])) {
+                foreach($employee[$type] as $v) {
+                    $ids[] = $v['account_id'];
+                }
+            }
+        }
+        
+        $ids = array_unique($ids);
+        $acs = HumanResources_Controller_Account::getInstance()->getMultiple($ids);
+        
+        foreach(array('vacation', 'sickness') as $type) {
+            if (! empty($employee[$type]) && is_array($employee[$type])) {
+                for ($i = 0; $i < count($employee[$type]); $i++) {
+                    $account = $acs->filter('id', $employee[$type][$i]['account_id'])->getFirstRecord();
+                    if ($account) {
+                        $employee[$type][$i]['account_id'] = $account->toArray();
+                    }
+                }
+            }
+        }
+        
         return $employee;
     }
 
+    /**
+     * book remaining vacation days for the next year
+     * 
+     * @param array $ids
+     */
+    public function bookRemaining($ids) {
+        return array('success' => HumanResources_Controller_Account::getInstance()->bookRemainingVacation($ids));
+    }
+    
     /**
      * creates/updates a record
      *
@@ -404,8 +437,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         $data = parent::getRegistryData();
-        $calid = HumanResources_Config::getInstance()->get(HumanResources_Config::DEFAULT_FEAST_CALENDAR, NULL);
-        $data['defaultFeastCalendar'] = $calid ? Tinebase_Container::getInstance()->get($calid)->toArray() : NULL;
+        $ci = HumanResources_Config::getInstance();
+        $calid = $ci->get($ci::DEFAULT_FEAST_CALENDAR, NULL);
+        $data[$ci::DEFAULT_FEAST_CALENDAR] = $calid ? Tinebase_Container::getInstance()->get($calid)->toArray() : NULL;
+        $data[$ci::VACATION_EXPIRES] = $ci->get($ci::VACATION_EXPIRES);
         return $data;
     }
 }

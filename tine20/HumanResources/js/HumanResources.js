@@ -25,3 +25,10 @@ Tine.widgets.grid.RendererManager.register('HumanResources', 'Contract', 'workin
     return sum;
 });
 
+Tine.widgets.grid.RendererManager.register('HumanResources', 'FreeTime', 'account_id', function(v) {
+    if (! v) {
+        return '';
+    }
+    
+    return v.year;
+});

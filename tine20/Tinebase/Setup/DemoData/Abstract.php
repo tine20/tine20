@@ -560,7 +560,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
                 $this->_personas[$loginName] = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
             } catch (Tinebase_Exception_NotFound $e) {
                 echo 'Persona with login name ' . $loginName . ' does not exist or no demo data is defined!' . chr(10);
-                echo 'Have you run Admin.createDemoDate already?' . PHP_EOL;
+                echo 'Have you called Admin.createDemoDate already?' . PHP_EOL;
                 echo 'If not, do this!' . PHP_EOL;
                 return false;
             }

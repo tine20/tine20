@@ -50,12 +50,8 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
 
         // get items for this dialog
         this.items = this.getFormItems();
-
-        var id = Tine.HumanResources.registry.get('config').defaultFeastCalendar.value;
         
-        if(id) {
-            this.loadRecord(id);
-        }
+        this.loadRecord();
         
         Tine.HumanResources.AdminPanel.superclass.initComponent.call(this);
     },
@@ -97,7 +93,7 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
         Tine.HumanResources.AdminPanel.superclass.onRender.call(this, ct, position);
 
         // generalized keybord map for edit dlgs
-        var map = new Ext.KeyMap(this.el, [ {
+        new Ext.KeyMap(this.el, [ {
             key : [ 10, 13 ], // ctrl + return
             ctrl : true,
             fn : this.onUpdate,
@@ -120,7 +116,18 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
      * save record and close window
      */
     onUpdate : function() {
-        if(! this.loadMask) {
+        
+        // check date
+        var date = this.getForm().findField('vacationExpires').getValue();
+        dates = date.split(/-/);
+        var date = new Date(2013, parseInt(dates[0])-1, dates[1]);
+        
+        if (!(parseInt(date.format('m')) == parseInt(dates[0]) && parseInt(date.format('d')) == parseInt(dates[1]))) {
+            this.getForm().findField('vacationExpires').markInvalid(this.app.i18n._('Please use the following format: MM-DD'));
+            return;
+        }
+        
+        if (! this.loadMask) {
             this.loadMask = new Ext.LoadMask(this.loadMaskCt);
         }
         
@@ -133,7 +140,8 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
             params: {
                 method: 'HumanResources.setConfig',
                 config: {
-                    defaultFeastCalendar: this.getForm().findField('defaultFeastCalendar').getValue()
+                    defaultFeastCalendar: this.getForm().findField('defaultFeastCalendar').getValue(),
+                    vacationExpires: this.getForm().findField('vacationExpires').getValue()
                 }
             },
             success : function(_result, _request) {
@@ -144,32 +152,39 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
         });
     },
 
-    loadRecord: function(id) {
+    loadRecord: function() {
         
-        if(! this.rendered) {
-            this.loadRecord.defer(100, this, [id]);
+        if (! this.rendered) {
+            this.loadRecord.defer(100, this);
             return false;
         }
         
         this.loadMask = new Ext.LoadMask(this.loadMaskCt);
         this.loadMask.show();
         
-        var request = Ext.Ajax.request({
-            url: 'index.php',
-            scope: this,
-            params: {
-                method: 'Admin.getContainer',
-                id: id
-            },
-            success : function(_result, _request) {
-                this.onRecordLoad(Ext.decode(_result.responseText));
-            }
-        });
+        var config = Tine.HumanResources.registry.get('config');
+        
+        var calId = config.defaultFeastCalendar.value;
+        if (calId) {
+            var request = Ext.Ajax.request({
+                url: 'index.php',
+                scope: this,
+                params: {
+                    method: 'Admin.getContainer',
+                    id: calId
+                },
+                success : function(_result, _request) {
+                    this.onRecordLoad(Ext.decode(_result.responseText), config.vacationExpires.value);
+                }
+            });
+        } else {
+            this.onRecordLoad(null, config.vacationExpires.value);
+        }
     },
     
-    onRecordLoad: function(result) {
-        var field = this.getForm().findField('defaultFeastCalendar');
-        field.setValue(result);
+    onRecordLoad: function(defaultFeastCalendar, vacationExpires) {
+        this.getForm().findField('defaultFeastCalendar').setValue(defaultFeastCalendar);
+        this.getForm().findField('vacationExpires').setValue(vacationExpires);
         
         this.loadMask.hide();
     },
@@ -210,6 +225,10 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
                             fieldLabel: this.app.i18n._(dfc.definition.label),
                             name: 'defaultFeastCalendar',
                             blurOnSelect: true
+                        }),
+                        new Ext.form.TextField({
+                            fieldLabel: this.app.i18n._('Vacation expires'),
+                            name: 'vacationExpires'
                         })
                     ] 
                 }]

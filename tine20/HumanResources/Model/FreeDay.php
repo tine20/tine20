@@ -64,7 +64,8 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
             ),
             'duration' => array(
                 'label' => NULL,
-                'type' => 'float'
+                'type' => 'float',
+                'default' => 1
             ),
         ),
     );

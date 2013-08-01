@@ -73,11 +73,14 @@ class HumanResources_Controller extends Tinebase_Controller_Event
         if (! Tinebase_Core::getUser()->hasRight('HumanResources', 'admin')) {
             throw new Tinebase_Exception_AccessDenied(_('You do not have admin rights on HumanResources'));
         }
-
-        HumanResources_Config::getInstance()->set(
-            HumanResources_Config::DEFAULT_FEAST_CALENDAR,
-            $config[HumanResources_Config::DEFAULT_FEAST_CALENDAR]
-        );
+        
+        foreach(array(HumanResources_Config::VACATION_EXPIRES, HumanResources_Config::DEFAULT_FEAST_CALENDAR) as $cfg) {
+            if (! empty($config[$cfg])) {
+                HumanResources_Config::getInstance()->set($cfg, $config[$cfg]);
+            } else {
+                HumanResources_Config::getInstance()->delete($cfg);
+            }
+        }
 
         return array('SUCCESS' => TRUE);
     }
