@@ -150,7 +150,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                                }
                            })]
                     }]
-                  },
+                  }
                 ],
                 buttonAlign: 'right',
                 buttons: [{
