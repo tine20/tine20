@@ -373,7 +373,7 @@ class TimeZoneConvert_VTimeZone
                 $rdatesArray[] = $rdate->format('Ymd\THis');
             }
             
-            $rule = str_replace(' ', '', wordwrap('RDATE;VALUE=DATE-TIME:'. implode(', ', $rdatesArray), 90, self::EOL));
+            $rule = str_replace(array(' ', self::EOL), array('', self::EOL . ' '), wordwrap('RDATE;VALUE=DATE-TIME:'. implode(', ', $rdatesArray), 90, self::EOL));
         }
         
         $vTransitionRule  = "BEGIN:$zone" . self::EOL;
