@@ -85,7 +85,7 @@ class TestServer
     {
         $personas = $this->_getPersonas();
         if (empty($personas)) {
-            Admin_Setup_DemoData::getInstance()->createDemoData('en');
+            Admin_Setup_DemoData::getInstance()->createDemoData(array('en'));
             $personas = $this->_getPersonas();
         }
         

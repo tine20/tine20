@@ -66,6 +66,13 @@ abstract class Tinebase_Setup_DemoData_Abstract
     protected $_developmentCostCenter;
     
     /**
+     * creates soo many records, if set to true
+     * 
+     * @var boolean
+     */
+    protected static $_createFullData = FALSE;
+    
+    /**
      * the personas to create demodata for
      * http://www.tine20.org/wiki/index.php/Personas
      * will be resolved to array of accounts
@@ -409,7 +416,8 @@ abstract class Tinebase_Setup_DemoData_Abstract
      */
     protected static $_en = false;
 
-    protected function _getDays() {
+    protected function _getDays()
+    {
         // find out where we are
         $now = new Tinebase_DateTime();
         $weekday = $now->format('w');
@@ -506,43 +514,40 @@ abstract class Tinebase_Setup_DemoData_Abstract
     /**
      * creates the demo data and is called from the Frontend_Cli
      *
-     * @param string $_locale
-     * @param array $_models
-     * @param array $_users
-     * @param boolean $this->_createShared
-     * @param boolean $this->_createUsers
-     * @param string $_password
+     * @param array $options
      * @return boolean
      */
-    public function createDemoData($_locale, $_models = NULL, $_users = NULL, $_createShared = TRUE, $_createUsers = TRUE, $_password = '') {
+    public function createDemoData(array $options)
+    {
+        static::$_createFullData = array_key_exists('full', $options) ? TRUE : FALSE;
+        
+        $this->_createShared = array_key_exists('createShared', $options) ? $options['createShared'] : TRUE;
+        $this->_createUsers  = array_key_exists('createUsers', $options)  ? $options['createUsers']  : TRUE;
 
-        $this->_createShared = $_createShared;
-        $this->_createUsers  = $_createUsers;
-
-        if ($_locale) {
-            static::$_locale = $_locale;
+        if (array_key_exists('locale', $options)) {
+            static::$_locale = $options['locale'];
         }
         // just shortcuts
         static::$_de = (static::$_locale == 'de') ? true : false;
         static::$_en = ! static::$_de;
-        static::$_defaultPassword = $_password;
+        static::$_defaultPassword = array_key_exists('password', $options) ? $options['password'] : '';
         $this->_beforeCreate();
 
         // look for defined models
-        if(is_array($_models)) {
-            foreach($_models as $model) {
-                if(!in_array($model, $this->_models)) {
+        if (array_key_exists('models', $options) && is_array($options['models'])) {
+            foreach ($options['models'] as $model) {
+                if (! in_array($model, $this->_models)) {
                     echo 'Model ' . $model . ' is not defined for demo data creation!' . chr(10);
                     return false;
                 }
             }
-            $this->_models = array_intersect($_models, $this->_models);
+            $this->_models = array_intersect($options['models'], $this->_models);
         }
 
         // get User Accounts
-        if(is_array($_users)) {
-            foreach($_users as $user) {
-                if(!array_key_exists($user, $this->_personas)) {
+        if (array_key_exists('users', $options) && is_array($options['users'])) {
+            foreach ($options['users'] as $user) {
+                if (! array_key_exists($user, $this->_personas)) {
                     echo 'User ' . $user . ' is not defined for demo data creation!' . chr(10);
                     return false;
                 } else {
@@ -575,11 +580,11 @@ abstract class Tinebase_Setup_DemoData_Abstract
         $callQueue = array();
         $callQueueShared = array();
 
-        if(is_array($this->_models)) {
-            foreach($this->_models as $model) {
+        if (is_array($this->_models)) {
+            foreach ($this->_models as $model) {
                 $mname = ucfirst($model);
                 // shared records
-                if($this->_createShared) {
+                if ($this->_createShared) {
                     $methodName = '_createShared' . $mname . 's';
                     if(method_exists($this, $methodName)) {
                         $callQueueShared[] = array('methodName' => $methodName, 'modelName' => $mname);
@@ -587,11 +592,11 @@ abstract class Tinebase_Setup_DemoData_Abstract
                 }
 
                 // user records
-                if($this->_createUsers) {
-                    foreach($users as $userLogin => $userRecord) {
+                if ($this->_createUsers) {
+                    foreach ($users as $userLogin => $userRecord) {
                         $uname = ucfirst($userLogin);
                         $methodName = '_create' . $mname . 'sFor' . $uname;
-                        if(method_exists($this, $methodName)) {
+                        if (method_exists($this, $methodName)) {
                             $callQueue[$userLogin] = array('methodName' => $methodName, 'userName' => $uname, 'modelName' => $mname);
                         }
                     }
@@ -600,14 +605,14 @@ abstract class Tinebase_Setup_DemoData_Abstract
         }
         
         // call create shared method
-        foreach($callQueueShared as $info) {
+        foreach ($callQueueShared as $info) {
             echo 'Creating shared ' . $info['modelName'] . 's...' . PHP_EOL;
             $this->_modelName = $info['modelName'];
             $this->{$info['methodName']}();
         }
         
         // call create methods as the user itself
-        foreach($callQueue as $loginName => $info) {
+        foreach ($callQueue as $loginName => $info) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_personas[$loginName]);
             echo 'Creating personal ' . $info['modelName'] . 's for ' . $info['userName'] . '...' . PHP_EOL;
             $this->{$info['methodName']}();
@@ -653,7 +658,6 @@ abstract class Tinebase_Setup_DemoData_Abstract
 
     protected function _createContainer()
     {
-        
     }
     
     /**
@@ -718,22 +722,22 @@ abstract class Tinebase_Setup_DemoData_Abstract
     /**
      * is called on createDemoData before finding out which models and users to build
      */
-    protected function _beforeCreate() {
-
+    protected function _beforeCreate()
+    {
     }
     
     /**
      * is called on createDemoData after finding out which models
      * and users to build and before calling the demo data class methods
      */
-    protected function _onCreate() {
-
+    protected function _onCreate()
+    {
     }
     
     /**
      * is called on createDemoData after all demo data has been created
      */
-    protected function _afterCreate() {
-
+    protected function _afterCreate()
+    {
     }
 }

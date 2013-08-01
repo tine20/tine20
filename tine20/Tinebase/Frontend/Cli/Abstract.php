@@ -117,7 +117,8 @@ class Tinebase_Frontend_Cli_Abstract
      * (1) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz locale=de users=pwulf,rwright // Creates demo events for pwulf and rwright with the locale de, just de and en is supported at the moment
      * (2) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz models=Calendar,Event sharedonly // Creates shared calendars and events with the default locale en                
      * (3) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz // Creates all demo calendars and events for all users
-     *
+     * (4) $ php tine20.php --method=Calendar.createDemoData --username=admin --password=xyz full // Creates much more demo data than (3)
+     * 
      * @param Zend_Console_Getopt $_opts
      * @param boolean $checkDependencies
      */
@@ -132,7 +133,6 @@ class Tinebase_Frontend_Cli_Abstract
         $className = $this->_applicationName . '_Setup_DemoData';
         
         if (class_exists($className)) {
-
             if ($checkDependencies) {
                 foreach($className::getRequiredApplications() as $appName) {
                     $cname = $appName . '_Setup_DemoData';
@@ -149,41 +149,38 @@ class Tinebase_Frontend_Cli_Abstract
                 }
             }
             
-            $createUsers = $createShared = TRUE;
-            $users = null;
-            $models = null;
-            $locale = 'de';
-            $password = '';
+            $options = array('createUsers' => TRUE, 'createShared' => TRUE, 'models' => NULL, 'locale' => 'de', 'password' => '');
             
             if ($_opts) {
                 $args = $this->_parseArgs($_opts, array());
                 
                 if (array_key_exists('other', $args)) {
-                    $createUsers  = in_array('sharedonly', $args['other']) ? FALSE : TRUE;
-                    $createShared = in_array('noshared',   $args['other']) ? FALSE : TRUE;
+                    $options['createUsers']  = in_array('sharedonly', $args['other']) ? FALSE : TRUE;
+                    $options['createShared'] = in_array('noshared',   $args['other']) ? FALSE : TRUE;
+                    $options['full']         = in_array('full',       $args['other']) ? FALSE : TRUE;
                 }
                 
                 // locale defaults to de
                 if (isset($args['locale'])) {
-                    $locale = $args['locale'];
+                    $options['locale'] = $args['locale'];
                 }
                 
                 // password defaults to empty password
                 if (isset($args['password'])) {
-                    $password = $args['password'];
+                    $options['password'] = $args['password'];
                 }
                 
                 if (isset($args['users'])) {
-                    $users = is_array($args['users']) ? $args['users'] : array($args['users']);
+                    $options['users'] = is_array($args['users']) ? $args['users'] : array($args['users']);
                 }
                 
                 if (isset($args['models'])) {
-                    $models = is_array($args['models']) ? $args['models'] : array($args['models']);
+                    $options['models'] = is_array($args['models']) ? $args['models'] : array($args['models']);
                 }
             }
             
 
-            if ($className::getInstance()->createDemoData($locale, $models, $users, $createShared, $createUsers, $password)) {
+            if ($className::getInstance()->createDemoData($options)) {
                 echo 'Demo Data was created successfully' . chr(10) . chr(10);
             } else {
                 echo 'No Demo Data has been created' . chr(10) . chr(10);
