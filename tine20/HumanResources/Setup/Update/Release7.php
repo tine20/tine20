@@ -446,6 +446,11 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
      */
     public function update_11()
     {
+        if ((! $this->_backend->tableExists('humanresources_extrafreetime')) && $this->_backend->tableExists('humanresources_extra_freetime')) {
+            $this->_backend->renameTable('humanresources_extra_freetime', 'humanresources_extrafreetime');
+        }
+        
+        
         $field = '<field>
                     <name>expires</name>
                     <type>datetime</type>
