@@ -78,11 +78,18 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected $_timeAccounts;
     
     /**
-     * array of RecordSets with all contracts
+     * array of RecordSets with all contracts having the development costcenter assigned
      *
      * @var Tinebase_Record_RecordSet
      */
-    protected $_contracts;
+    protected $_contractsDevelopment;
+
+    /**
+     * array of RecordSets with all contracts having the marketing costcenter assigned
+     *
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_contractsMarketing;
     
     /**
      * cc controller
@@ -156,7 +163,12 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $this->_tsController->doContainerACLChecks(false);
         $this->_empController = HumanResources_Controller_Employee::getInstance();
         $this->_contractController    = Sales_Controller_Contract::getInstance();
-        $this->_contracts = $this->_contractController->getAll();
+        
+        $contracts = $this->_contractController->getAll();
+        $developmentString = self::$_de ? 'Entwicklung' : 'Development';
+        
+        $this->_contractsDevelopment = $contracts->filter('title', '/.' . $developmentString . '/', TRUE);
+        $this->_contractsMarketing = $contracts->filter('title', '/.Marketing/', TRUE);
         
         $this->_loadCostCenters();
         
@@ -181,11 +193,11 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createSharedTimeaccounts()
     {
-        // create 5 timeaccounts for each cc
+        // create 2 timeaccounts for each cc
         $taNumber = 1;
         
         $userGroup = Tinebase_Group::getInstance()->getGroupByName('Users');
-        
+        $developmentString = self::$_de ? 'Entwicklung' : 'Development';
         if (! $userGroup) {
             die('Could not find userGroup "Users", stopping.');
         }
@@ -205,54 +217,63 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $contractsIndex = 0;
         
         foreach($this->_costCenters as $costcenter) {
+            
             $this->_timeAccounts[$costcenter->getId()] = new Tinebase_Record_RecordSet('Timetracker_Model_Timeaccount');
             $i=0;
             
-            while ($i < 10) {
+            while ($i < 2) {
                 $i++;
                 
-                $contract = $this->_contracts->getByIndex($contractsIndex);
-                $title = (self::$_de ? 'Zeitkonto mit Kostenstelle ' : 'Timeaccount for costcenter ') . $costcenter->number . ' - ' . $costcenter->remark . (self::$_de ? ' mit Vertrag ' : ' with contract ') . $contract->number;
-                
-                
-                if ($contractsIndex >= ($this->_contracts->count() - 1)) {
-                    $contractsIndex = 0;
-                } else {
-                    $contractsIndex++;
-                }
-                
                 $ta = new Timetracker_Model_Timeaccount(array(
-                    'number' => $taNumber, 
-                    'title'  => $title . ' ' . Tinebase_Record_Abstract::generateUID(3),
-                    'grants' => $grants,
-                    'status' => ($i%2 == 1) ? 'billed' : 'not yet billed',
-                    'cleared_at' => ($i%2 == 1) ? $this->_clearedDate : NULL,
-                    'budget' =>  ($i%3 == 1) ? 100 : NULL,
+                    'number'      => $taNumber,
+                    'title'       => Tinebase_Record_Abstract::generateUID(3),
+                    'grants'      => $grants,
+                    'status'      => 'billed',
+                    'cleared_at'  => $this->_clearedDate,
+                    'budget'      => NULL,
                     'description' => 'Created By Tine 2.0 DEMO DATA'
                 ));
                 
-                $ta->relations = array(
-                    array(
-                        'own_model'              => 'Timetracker_Model_Timeaccount',
-                        'own_backend'            => 'SQL',
-                        'own_id'                 => NULL,
-                        'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                        'related_model'          => 'Sales_Model_CostCenter',
-                        'related_backend'        => Tasks_Backend_Factory::SQL,
-                        'related_id'             => $costcenter->getId(),
-                        'type'                   => 'COST_CENTER'
-                    ),
-                    array(
-                        'own_model'              => 'Timetracker_Model_Timeaccount',
-                        'own_backend'            => 'SQL',
-                        'own_id'                 => NULL,
-                        'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                        'related_model'          => 'Sales_Model_Contract',
-                        'related_backend'        => Tasks_Backend_Factory::SQL,
-                        'related_id'             => $contract->getId(),
-                        'type'                   => 'TIME_ACCOUNT'
-                    )
-                );
+                if (($costcenter->remark == 'Marketing') || ($costcenter->remark == $developmentString)) {
+                    $contract = $costcenter->remark == 'Marketing' ? $this->_contractsMarketing->getByIndex(rand(0, ($this->_contractsMarketing->count() -1))) : $this->_contractsDevelopment->getByIndex(rand(0, ($this->_contractsDevelopment->count() -1)));
+                    $ta->budget = $costcenter->remark == 'Marketing' ? 100 : NULL;
+                    $ta->relations = array(
+                        array(
+                            'own_model'              => 'Timetracker_Model_Timeaccount',
+                            'own_backend'            => 'SQL',
+                            'own_id'                 => NULL,
+                            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                            'related_model'          => 'Sales_Model_CostCenter',
+                            'related_backend'        => Tasks_Backend_Factory::SQL,
+                            'related_id'             => $costcenter->getId(),
+                            'type'                   => 'COST_CENTER'
+                        ),
+                        array(
+                            'own_model'              => 'Timetracker_Model_Timeaccount',
+                            'own_backend'            => 'SQL',
+                            'own_id'                 => NULL,
+                            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                            'related_model'          => 'Sales_Model_Contract',
+                            'related_backend'        => Tasks_Backend_Factory::SQL,
+                            'related_id'             => $contract->getId(),
+                            'type'                   => 'TIME_ACCOUNT'
+                        ));
+                    $ta->title = (self::$_de ? 'Zeitkonto mit ' : 'Timeaccount for ') . $contract->getTitle();
+                } else {
+                    $ta->title = (self::$_de ? 'Zeitkonto mit KST ' : 'Timeaccount for CC ') . $costcenter->getTitle();
+                    $ta->relations = array(
+                        array(
+                            'own_model'              => 'Timetracker_Model_Timeaccount',
+                            'own_backend'            => 'SQL',
+                            'own_id'                 => NULL,
+                            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                            'related_model'          => 'Sales_Model_CostCenter',
+                            'related_backend'        => Tasks_Backend_Factory::SQL,
+                            'related_id'             => $costcenter->getId(),
+                            'type'                   => 'COST_CENTER'
+                        )
+                    );
+                }
                 
                 $this->_timeAccounts[$costcenter->getId()]->addRecord($this->_taController->create($ta));
                 
@@ -297,20 +318,18 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createTimesheets()
     {
         $cc = $this->_getCurrentUsersCostCenter();
-        $ownTimeAccountRecordSet = $this->_timeAccounts[$cc->getId()];
+        $ownTimeAccountRecordSet = $this->_timeAccounts[$cc->getId()]->sort('number');
         $userId = Tinebase_Core::getUser()->accountId;
         
         $startDate = clone $this->_startDate;
         $endDate   = clone $startDate;
         $endDate->addMonth(3);
         
-        $index     = 0;
-        
         $mkccId = $this->_marketingCostCenter->getId();
         $deccId = $this->_developmentCostCenter->getId();
         
-        $allMkccTimeAccountRecordSet = $this->_timeAccounts[$mkccId];
-        $allDeccTimeAccountRecordSet = $this->_timeAccounts[$deccId];
+        $allMkccTimeAccountRecordSet = $this->_timeAccounts[$mkccId]->sort('number');
+        $allDeccTimeAccountRecordSet = $this->_timeAccounts[$deccId]->sort('number');
         
         $afterCleared = FALSE;
         $stopIndex = 8;
@@ -318,26 +337,10 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         while ($startDate < $endDate) {
             $wd = (int) $startDate->format('w');
             
-            if (! $afterCleared) {
-                if ($startDate > $this->_clearedDate) {
-                    $ownTimeAccountRecordSet = $ownTimeAccountRecordSet->filter('status', 'not yet billed');
-                    $allMkccTimeAccountRecordSet = $allMkccTimeAccountRecordSet->filter('status', 'not yet billed');
-                    $allDeccTimeAccountRecordSet = $allDeccTimeAccountRecordSet->filter('status', 'not yet billed');
-                    
-                    $stopIndex = 4;
-                    if ($index > $stopIndex) {
-                        $index = 0;
-                    }
-                    $afterCleared = TRUE;
-                }
-                
-            }
-            
             // create timesheets from tue -> fri, always a timeaccount of the users costcenter
-            
-            if (($wd < 6) && ($wd > 1)) {
+            if (($wd < 6) && ($wd > 2)) {
                 // 8 hrs
-                $ta = $ownTimeAccountRecordSet->getByIndex($index);
+                $ta = $ownTimeAccountRecordSet->getByIndex(rand(0, ($ownTimeAccountRecordSet->count() - 1)));
                 $ts = $this->_createTimesheet(array(
                     'account_id'     => $userId,
                     'timeaccount_id' => $ta->getId(),
@@ -348,10 +351,10 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'is_cleared'     => (($ta->status == 'billed') ? true : false),
                     'cleared_time'   => (($ta->status == 'billed') ? $startDate : NULL)
                  ));
-            } elseif ($wd == 1) {
+            } else {
                 
-                // create timesheets on monday
-                $ta = $allMkccTimeAccountRecordSet->getByIndex($index);
+                // create timesheets on monday and tuesday
+                $ta = $allMkccTimeAccountRecordSet->getByIndex(rand(0, ($allMkccTimeAccountRecordSet->count() - 1)));
                 // 4 hrs for a marketing costcenter timeaccount
                 $ts = $this->_createTimesheet(array(
                     'account_id'     => $userId,
@@ -366,7 +369,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 
                 $sd = clone $startDate;
                 $sd->addMinute(300);
-                $ta = $allDeccTimeAccountRecordSet->getByIndex($index);
+                $ta = $allDeccTimeAccountRecordSet->getByIndex(rand(0, ($allDeccTimeAccountRecordSet->count() - 1)));
                 
                 // 4 hrs for a development costcenter timeaccount
                 $ts = $this->_createTimesheet(array(
@@ -380,9 +383,8 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'cleared_time'   => (($ta->status == 'billed') ? $startDate : NULL)
                 ));
             }
-            
+        
             $startDate->addDay(1);
-            $index = ($index == $stopIndex) ? 0 : $index + 1;
         }
     }
     
