@@ -691,6 +691,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $eventData['organizer'] = $this->_personasContacts['sclever']->getId();
         $eventData = $this->_uit->saveEvent($eventData);
         $filter = $this->_getEventFilterArray($this->_personasDefaultCals['sclever']->getId());
+        $filter[] = array('field' => 'summary', 'operator' => 'equals', 'value' => 'Wakeup');
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected event in search result (search by sclever): ' 
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));

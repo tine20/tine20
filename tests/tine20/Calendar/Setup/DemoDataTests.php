@@ -37,14 +37,18 @@ class Calendar_Setup_DemoDataTests extends PHPUnit_Framework_TestCase
         
         $businessCalendar = Tinebase_Container::getInstance()->getContainerByName('Calendar', 'Business', Tinebase_Model_Container::TYPE_PERSONAL, $pwulf->getId());
         $sharedCalendar = Tinebase_Container::getInstance()->getContainerByName('Calendar', 'Shared Calendar', Tinebase_Model_Container::TYPE_SHARED);
-        
+        $cce = Calendar_Controller_Event::getInstance();
         $filter = new Calendar_Model_EventFilter(array(array('field' => 'container_id', 'operator' => 'equals', 'value' => $businessCalendar->getId())),'AND');
-        $businessEvents = Calendar_Controller_Event::getInstance()->search($filter);
+        $businessEvents = $cce->search($filter);
+        $cce->deleteByFilter($filter);
         
         $filter = new Calendar_Model_EventFilter(array(array('field' => 'container_id', 'operator' => 'equals', 'value' => $sharedCalendar->getId())),'AND');
-        $sharedEvents = Calendar_Controller_Event::getInstance()->search($filter);
+        $sharedEvents = $cce->search($filter);
+        $cce->deleteByFilter($filter);
         
         $this->assertEquals($businessEvents->count(), 1);
         $this->assertEquals($sharedEvents->count(), 10);
+        
+        
     }
 }

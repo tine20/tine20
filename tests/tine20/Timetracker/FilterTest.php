@@ -64,10 +64,10 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
      */
     public function testTimeaccountContractFilter()
     {
-        $this->_getTimeaccount(array('title' => 'TA1', 'number' => 12345), true);
+        $this->_getTimeaccount(array('title' => 'TA1', 'number' => 12345, 'description' => 'UnitTest'), true);
         $ta1 = $this->_timeaccountController->get($this->_lastCreatedRecord['id']);
         
-        $this->_getTimeaccount(array('title' => 'TA2', 'number' => 12346), true);
+        $this->_getTimeaccount(array('title' => 'TA2', 'number' => 12346, 'description' => 'UnitTest'), true);
         $ta2 = $this->_timeaccountController->get($this->_lastCreatedRecord['id']);
         
         $cId = Tinebase_Container::getInstance()->getDefaultContainer('Sales_Model_Contract')->getId();
@@ -87,13 +87,16 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
         $this->assertEquals('TA1', $result->getFirstRecord()->title);
         
         // test empty filter (without contract)
-        $f = new Timetracker_Model_TimeaccountFilter(array(array('field' => 'contract', 'operator' => 'AND', 'value' =>
+        $f = new Timetracker_Model_TimeaccountFilter(array(
+            array('field' => 'contract', 'operator' => 'AND', 'value' =>
             array(array('field' => ':id', 'operator' => 'equals', 'value' => null))
-        )));
+        ),
+            array('field' => 'description', 'operator' => 'equals', 'value' => 'UnitTest')
+        ));
 
         $result = $this->_timeaccountController->search($f);
 
-        $this->assertEquals(1, $result->count());
+        $this->assertEquals(1, $result->count(), 'Only one record should have been found!');
         $this->assertEquals('TA2', $result->getFirstRecord()->title);
         
         // test generic relation filter
