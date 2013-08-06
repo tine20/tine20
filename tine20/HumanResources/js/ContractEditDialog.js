@@ -127,6 +127,9 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     
     updateWorkingHours: function(formField, newValue, oldValue) {
         var sum = this.getForm().findField('working_hours').getValue();
+        if (! newValue) {
+            formField.setValue('0');
+        }
         this.getForm().findField('working_hours').setValue(sum - oldValue + newValue);
     },
     
@@ -179,7 +182,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
             anchor: '100%',
             labelSeparator: '',
-            allowBlank: false,
+            allowBlank: true,
             columnWidth: 1/7,
             listeners: {
                 scope:  this,
@@ -220,7 +223,6 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         items: [[
                             {xtype: 'datefield', name: 'start_date', fieldLabel: this.app.i18n._('Start Date'), allowBlank: false },
                             {xtype: 'extuxclearabledatefield', name: 'end_date',   fieldLabel: this.app.i18n._('End Date')},
-                        
                             
                             Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
                                 containerName: this.app.i18n._('Calendar'),
@@ -257,14 +259,14 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     }
                                 }), {
                                     fieldLabel: this.app.i18n._('Working Hours per week'),
-                                    xtype: 'numberfield',
+                                    xtype: 'displayfield',
+                                    style: { border: 'silver 1px solid', padding: '3px', height: '11px'},
                                     minValue: 1,
                                     decimalPrecision: 2,
                                     decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
                                     name: 'working_hours',
-                                    readOnly: true,
                                     columnWidth: 1/3
-                                },{name: 'vacation_days', fieldLabel: this.app.i18n._('Vacation Days'), columnWidth: 1/3}
+                                },{name: 'vacation_days', fieldLabel: this.app.i18n._('Vacation Days'), columnWidth: 1/3, allowBlank: false}
                             ],
                             
                             [Ext.apply({
