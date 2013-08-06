@@ -61,6 +61,34 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
     appName: null,
     
     /**
+     * default value for timeout on searches
+     * 
+     * @type Number
+     */
+    searchTimeout: 60000,
+    
+    /**
+     * default value for timeout on saving
+     * 
+     * @type Number
+     */
+    saveTimeout: 300000,
+    
+    /**
+     * default value for timeout on deleting by filter
+     * 
+     * @type Number
+     */
+    deleteByFilterTimeout: 300000,
+    
+    /**
+     * default value for timeout on deleting
+     * 
+     * @type Number
+     */
+    deleteTimeout: 120000,
+    
+    /**
      * @type String 
      * @property idProperty
      * property of the id of the record
@@ -143,7 +171,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         };
         
         // increase timeout as this can take a longer (1 minute)
-        options.timeout = 60000;
+        options.timeout = this.searchTimeout;
         
         return this.doXHTTPRequest(options);
     },
@@ -172,7 +200,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         }
         
         // increase timeout as this can take a longer (5 minutes)
-        options.timeout = 300000;
+        options.timeout = this.saveTimeout;
         
         return this.doXHTTPRequest(options);
     },
@@ -196,7 +224,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         }
         
         // increase timeout as this can take a long time (2 mins)
-        options.timeout = 120000;
+        options.timeout = this.deleteTimeout;
         
         return this.doXHTTPRequest(options);
     },
@@ -216,7 +244,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         options.params.filter = filter;
         
         // increase timeout as this can take a long time (5 mins)
-        options.timeout = 300000;
+        options.timeout = this.deleteByFilterTimeout;
         
         return this.doXHTTPRequest(options);
     },
