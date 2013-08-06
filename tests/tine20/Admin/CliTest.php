@@ -110,6 +110,39 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
                 </field>
             </mapping>
         </config>';
+        
+        $this->objects['configSemicolon'] = '<?xml version="1.0" encoding="UTF-8"?>
+        <config>
+            <model>Tinebase_Model_FullUser</model>
+            <plugin>Admin_Import_Csv</plugin>
+            <type>import</type>
+            <headline>1</headline>
+            <dryrun>0</dryrun>
+            <extension>csv</extension>
+            <delimiter>;</delimiter>
+            <mapping>
+            <field>
+                    <source>firstname</source>
+                    <destination>accountFirstName</destination>
+                </field>
+                <field>
+                    <source>lastname</source>
+                    <destination>accountLastName</destination>
+                </field>
+                <field>
+                    <source>loginname</source>
+                    <destination>accountLoginName</destination>
+                </field>
+                <field>
+                    <source>password</source>
+                    <destination>password</destination>
+                </field>
+                <field>
+                    <source>email</source>
+                    <destination>accountEmailAddress</destination>
+                </field>
+            </mapping>
+        </config>';
     }
 
     /**
@@ -129,15 +162,8 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
      */
     public function testImportUsers()
     {
-        $this->_importUsers($this->objects['config'], dirname(__FILE__) . '/files/test.csv', 'admin_user_import_csv_test');
-    }
-
-    /**
-     * test to import admin users
-     */
-    public function testImportUsersWithHeadline()
-    {
-        $this->_importUsers($this->objects['configWithHeadline'], dirname(__FILE__) . '/files/testHeadline.csv', 'admin_user_import_csv_test_headline');
+        $out = $this->_importUsers($this->objects['config'], dirname(__FILE__) . '/files/test.csv', 'admin_user_import_csv_test');
+        $this->_checkResult($out);
     }
     
     /**
@@ -174,14 +200,50 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
         $this->_cli->importUser($opts);
         $out = ob_get_clean();
         
+        return $out;
+    }
+    
+    /**
+     * check import result
+     * 
+     * @param string $out
+     */
+    protected function _checkResult($out, $username = 'hmoster')
+    {
         // check output
-        $this->assertEquals("Imported 3 records. Import failed for 0 records. \n", $out);
+        if ($username == 'hmoster') {
+            $this->assertEquals("Imported 3 records. Import failed for 0 records. \n", $out);
+        } else {
+            $this->assertEquals("Imported 1 records. Import failed for 2 records. \n", $out);
+        }
         
         // check if users (with their data) have been added to tine20
-        $hmoster = Tinebase_User::getInstance()->getFullUserByLoginName('hmoster');
-        $this->assertEquals('Hins', $hmoster->accountFirstName);
+        $user = Tinebase_User::getInstance()->getFullUserByLoginName($username);
+        if ($username == 'hmoster') {
+            $this->assertEquals('Hins', $user->accountFirstName);
+        }
         $config = TestServer::getInstance()->getConfig();
         $maildomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
-        $this->assertEquals('hmoster@' . $maildomain, $hmoster->accountEmailAddress);
+        $this->assertEquals($username . '@' . $maildomain, $user->accountEmailAddress);
+    }
+
+    /**
+     * test to import admin users
+     */
+    public function testImportUsersWithHeadline()
+    {
+        $out = $this->_importUsers($this->objects['configWithHeadline'], dirname(__FILE__) . '/files/testHeadline.csv', 'admin_user_import_csv_test_headline');
+        $this->_checkResult($out);
+    }
+    
+    /**
+     * testImportUsersWithEmailAndSemicolon
+     * 
+     * @see 0008300: Import User via CLI don't import all fields
+     */
+    public function testImportUsersWithEmailAndSemicolon()
+    {
+        $out = $this->_importUsers($this->objects['configSemicolon'], dirname(__FILE__) . '/files/tine_user3.csv', 'admin_user_import_csv_test_semicolon');
+        $this->_checkResult($out, 'irmeli');
     }
 }
