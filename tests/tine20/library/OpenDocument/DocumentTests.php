@@ -59,11 +59,9 @@ class OpenDocument_DocumentTests extends PHPUnit_Framework_TestCase
         
         $ccc = Sales_Controller_CostCenter::getInstance();
         
-        $uid = Tinebase_Record_Abstract::generateUID(4);
-        $cc1 = $ccc->create(new Sales_Model_CostCenter(array('number' => $uid, 'remark' => 'unittest-' . $uid)));
+        $cc1 = $ccc->create(new Sales_Model_CostCenter(array('number' => 'cc1', 'remark' => 'unittest-cc1')));
         
-        $uid = Tinebase_Record_Abstract::generateUID(4);
-        $cc2 = $ccc->create(new Sales_Model_CostCenter(array('number' => $uid, 'remark' => 'unittest-' . $uid)));
+        $cc2 = $ccc->create(new Sales_Model_CostCenter(array('number' => 'cc2', 'remark' => 'unittest-cc2')));
         
         $colInfo = array();
         $colInfo[$cc1->getId()] = $cc1->number;
@@ -89,6 +87,9 @@ class OpenDocument_DocumentTests extends PHPUnit_Framework_TestCase
         unlink($filename);
         
         $spreadSheets = $xml->xpath('//office:body/office:spreadsheet');
+        
+        $this->assertEquals(1, count($spreadSheets));
+        
         $spreadSheet  = $spreadSheets[0];
         
         $results = $spreadSheet->xpath("//text()[contains(., '$markerText')]");
