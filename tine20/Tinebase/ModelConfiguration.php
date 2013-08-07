@@ -697,8 +697,8 @@ class Tinebase_ModelConfiguration {
             }
 
             if ($fieldDef['type'] == 'virtual') {
-                $fieldDef['type'] = $fieldDef['config']['type'];
-                unset($fieldDef['config']['type']);
+                $fieldDef = $fieldDef['config'];
+                $fieldDef['sortable'] = FALSE;
                 $this->_virtualFields[] = $fieldDef;
                 continue;
             }

@@ -84,6 +84,7 @@ Tine.Tinebase.ApplicationStarter = {
                     fieldDefinition.config.modelName = fieldDefinition.config.modelName.replace(/_/, '');
                     field.type = fieldDefinition.config.appName + '.' + fieldDefinition.config.modelName;
                     break;
+                
             }
             // allow overwriting date pattern in model
             if (fieldDefinition.hasOwnProperty('dateFormat')) {
@@ -164,6 +165,15 @@ Tine.Tinebase.ApplicationStarter = {
                     break;
                 case 'boolean':
                     gridRenderer = Tine.Tinebase.common.booleanRenderer;
+                    break;
+                case 'relation':
+                var cc = config.config;
+                    gridRenderer = new Tine.widgets.relation.GridRenderer({
+                        appName: appName,
+                        type: cc.type,
+                        foreignApp: cc.appName,
+                        foreignModel: cc.modelName
+                        });
                     break;
                  default:
                     gridRenderer = Ext.util.Format.htmlEncode;
@@ -347,9 +357,14 @@ Tine.Tinebase.ApplicationStarter = {
                             // register grid renderer
                             if (initial) {
                                 var renderer = this.getGridRenderer(modelConfig.fields[key], key, appName, modelName);
-                                if (renderer) {
+                                
+                                if (Ext.isFunction(renderer)) {
                                     if (! Tine.widgets.grid.RendererManager.has(appName, modelName, key)) {
                                         Tine.widgets.grid.RendererManager.register(appName, modelName, key, renderer);
+                                    }
+                                } else if (Ext.isObject(renderer)) {
+                                    if (! Tine.widgets.grid.RendererManager.has(appName, modelName, key)) {
+                                        Tine.widgets.grid.RendererManager.register(appName, modelName, key, renderer.render, null, renderer);
                                     }
                                 }
                             }
