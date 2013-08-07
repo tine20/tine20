@@ -37,7 +37,8 @@ class Addressbook_AllTests
         $suite->addTestSuite('Addressbook_JsonTest');
         $suite->addTestSuite('Addressbook_CliTest');
         $suite->addTestSuite('Addressbook_Model_ContactIdFilterTest');
-        $suite->addTestSuite('Addressbook_Setup_DemoDataTests');
+        // TODO: enable this again, when its fast
+//         $suite->addTestSuite('Addressbook_Setup_DemoDataTests');
         return $suite;
     }
 }

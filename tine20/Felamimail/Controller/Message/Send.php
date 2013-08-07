@@ -586,13 +586,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 $type = $tempFile->type;
             }
             
-            $name = Zend_Mime::encodeQuotedPrintableHeader($name, 'utf-8');
-            $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT . '; filename="' . $name . '"';
-            $partTypeString = $type . '; name="' . $name . '"';
-            $part->type = $partTypeString;
+            $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+            $part->setTypeAndDispositionForAttachment($type, $name);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Adding attachment ' . $partTypeString);
+                . ' Adding attachment ' . $part->type);
             
             $_mail->addAttachment($part);
         }

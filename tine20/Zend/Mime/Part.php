@@ -146,7 +146,7 @@ class Zend_Mime_Part {
      */
     public function getDecodedStream()
     {
-        if (!$this->_isStream) {
+        if (! $this->_isStream) {
             require_once 'Zend/Mime/Exception.php';
             throw new Zend_Mime_Exception('Attempt to get a stream from a string part');
         }
@@ -183,11 +183,11 @@ class Zend_Mime_Part {
             STREAM_FILTER_READ,
             $_params
         );
-        if (!is_resource($filter)) {
+        if (! is_resource($filter)) {
             require_once 'Zend/Mime/Exception.php';
             throw new Zend_Mime_Exception('Failed to append ' . $_filterString . ' filter');
         }
-                
+        
         $this->_decodeFilterResources[] = $filter;
     }
     
@@ -335,5 +335,23 @@ class Zend_Mime_Part {
     public function decodeContent()
     {
         $this->_content = $this->getDecodedStream();
+    }
+    
+    /**
+     * set part type and disposition (with name if available)
+     * 
+     * @param string $type
+     * @param string $name
+     */
+    public function setTypeAndDispositionForAttachment($type, $name = NULL)
+    {
+        $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+        $partTypeString = $type;
+        if ($name) {
+            $name = Zend_Mime::encodeQuotedPrintableHeader($name, 'utf-8');
+            $partTypeString .= '; name="' . $name . '"';
+            $part->disposition .= '; filename="' . $name . '"';
+        }
+        $this->type = $partTypeString;
     }
 }
