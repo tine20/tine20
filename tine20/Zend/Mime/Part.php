@@ -345,12 +345,12 @@ class Zend_Mime_Part {
      */
     public function setTypeAndDispositionForAttachment($type, $name = NULL)
     {
-        $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+        $this->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
         $partTypeString = $type;
         if ($name) {
             $name = Zend_Mime::encodeQuotedPrintableHeader($name, 'utf-8');
             $partTypeString .= '; name="' . $name . '"';
-            $part->disposition .= '; filename="' . $name . '"';
+            $this->disposition .= '; filename="' . $name . '"';
         }
         $this->type = $partTypeString;
     }
