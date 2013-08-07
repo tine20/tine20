@@ -72,6 +72,8 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         }
         
         $json = file_get_contents('php://input');
+        $json = Tinebase_Core::filterInputForDatabase($json);
+        
         if (substr($json, 0, 1) == '[') {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' batched request');
             $isBatchedRequest = true;

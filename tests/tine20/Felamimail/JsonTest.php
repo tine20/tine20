@@ -137,6 +137,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_oldSieveVacationActiveState = $this->_account->sieve_vacation_active;
@@ -221,6 +223,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             //echo "delete $path";
             $webdavRoot->delete($path);
         }
+        
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
 
     /************************ test functions *********************************/
@@ -498,6 +502,21 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($message['bcc'][0],     $messageToSend['bcc'][0], 'bcc recipient not found');
         $this->assertEquals($message['subject'],    $messageToSend['subject']);
         
+        $this->_checkEmailNote($contact, $messageToSend['subject']);
+        
+        // reset sclevers original email address
+        $contact->email = $originalEmail;
+        Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
+    }
+    
+    /**
+     * check email note
+     * 
+     * @param Addressbook_Model_Contact $contact
+     * @param string $subject
+     */
+    protected function _checkEmailNote($contact, $subject)
+    {
         // check if email note has been added to contact(s)
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         $emailNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
@@ -506,7 +525,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $emailNoteIds = array();
         foreach ($contact->notes as $note) {
             if ($note->note_type_id == $emailNoteType->getId()) {
-                $this->assertEquals(1, preg_match('/' . $messageToSend['subject'] . '/', $note->note));
+                $this->assertContains($subject, $note->note, 'did not find note subject');
                 $this->assertEquals(Tinebase_Core::getUser()->getId(), $note->created_by);
                 $this->assertContains('aaaaaä', $note->note);
                 $emailNoteIds[] = $note->getId();
@@ -514,10 +533,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         }
         $this->assertGreaterThan(0, count($emailNoteIds), 'no email notes found');
         Tinebase_Notes::getInstance()->deleteNotes($emailNoteIds);
-        
-        // reset sclevers original email address
-        $contact->email = $originalEmail;
-        Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
     }
 
     /**
@@ -1008,6 +1023,38 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->templates_folder);
         $this->assertEquals($messageToSave['subject'],  $message['subject']);
         $this->assertEquals($messageToSave['to'][0],    $message['to'][0], 'recipient not found');
+    }
+    
+    /**
+     * testSaveMessageNoteWithInvalidChar
+     * 
+     * @see 0008644: error when sending mail with note (wrong charset)
+     */
+    public function testSaveMessageNoteWithInvalidChar()
+    {
+        $subject = Tinebase_Core::filterInputForDatabase("\xF0\x9F\x98\x8A"); // :-) emoji
+        $messageData = $this->_getMessageData('', $subject);
+        $messageData['note'] = TRUE;
+        $this->_foldersToClear[] = 'INBOX';
+        $this->_json->saveMessage($messageData);
+        $message = $this->_searchForMessageBySubject($subject);
+        
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $this->_checkEmailNote($contact, $subject);
+    }
+    
+    /**
+     * testSaveMessageNoteWithInvalidChar
+     * 
+     * @see 0008644: error when sending mail with note (wrong charset)
+     */
+    public function testSaveMessageWithInvalidChar()
+    {
+        $subject = "\xF0\x9F\x98\x8A"; // :-) emoji
+        $messageData = $this->_getMessageData('', $subject);
+        $this->_foldersToClear[] = 'INBOX';
+        $this->_json->saveMessage($messageData);
+        $message = $this->_searchForMessageBySubject(Tinebase_Core::filterInputForDatabase($subject));
     }
     
     /*********************** sieve tests ****************************/
