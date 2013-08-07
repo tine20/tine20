@@ -745,6 +745,17 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testRecuringAlarmAfterSeriesEnds()
     {
+        $this->_recurAlarmTestHelper();
+    }
+    
+    /**
+     * helper for recurring alarm tests
+     * 
+     * @param boolean $allFollowing
+     * @param integer $alarmMinutesBefore
+     */
+    protected function _recurAlarmTestHelper($allFollowing = TRUE, $alarmMinutesBefore = 60)
+    {
         $event = $this->_getEvent();
         
         // lets flush mailer so next flushing ist faster!
@@ -752,32 +763,69 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         self::flushMailer();
         
         // make sure next occurence contains now
-        // next occurance now+29min 
-        $event->dtstart = Tinebase_DateTime::now()->subDay(1)->addMinute(28);
+        $event->dtstart = Tinebase_DateTime::now()->subDay(2)->addHour(1);
         $event->dtend = clone $event->dtstart;
-        $event->dtend->addMinute(30);
+        $event->dtend->addMinute(60);
         $event->rrule = 'FREQ=DAILY;INTERVAL=1';
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
             new Tinebase_Model_Alarm(array(
-                'minutes_before' => 30
+                'minutes_before' => $alarmMinutesBefore
             ), TRUE)
         ));
         
+        // check alarm
         $persistentEvent = $this->_eventController->create($event);
-        
-        // save again with rrule until (stops 10 minutes before current dtstart)
-        $persistentEvent->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=' . $event->dtstart->addDay(1)->subMinute(10)->toString();
-        $persistentEvent = $this->_eventController->update($persistentEvent);
-        
         $this->assertEquals(1, count($persistentEvent->alarms));
-        $this->assertEquals('Nothing to send, series is over', $persistentEvent->alarms->getFirstRecord()->sent_message,
-            'alarm adoption failed: ' . print_r($persistentEvent->alarms->getFirstRecord()->toArray(), TRUE));
+        $alarm = $persistentEvent->alarms->getFirstRecord();
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $alarm->sent_status);
+        $persistentDtstart = clone $persistentEvent->dtstart;
+        $this->assertEquals($persistentDtstart->subMinute($alarmMinutesBefore), $alarm->alarm_time, print_r($alarm->toArray(), TRUE));
+        
+        // delete all following
+        $from = $event->dtstart;
+        $until = $event->dtend->addDay(3);
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+        $recurEvent = $recurSet[1]; // today
+        $persistentEvent = $this->_eventController->createRecurException($recurEvent, TRUE, $allFollowing);
+        
+        $baseEvent = $this->_eventController->getRecurBaseEvent($persistentEvent);
+        if ($allFollowing) {
+            $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=' . $baseEvent->dtstart->addDay(2)->subHour(1)->toString(), $baseEvent->rrule);
+            $this->assertEquals(1, count($baseEvent->alarms));
+            $this->assertEquals('Nothing to send, series is over', $baseEvent->alarms->getFirstRecord()->sent_message,
+                'alarm adoption failed: ' . print_r($baseEvent->alarms->getFirstRecord()->toArray(), TRUE));
+        } else {
+            $this->assertEquals('FREQ=DAILY;INTERVAL=1', $baseEvent->rrule);
+            $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $baseEvent->alarms->getFirstRecord()->sent_status);
+            $this->assertEquals('', $baseEvent->alarms->getFirstRecord()->sent_message);
+        }
         
         // assert no alarm
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
         $messages = self::getMessages();
-        $this->assertEquals(0, count($messages), 'no message should be sent');
+        $this->assertEquals(0, count($messages), 'no alarm message should be sent: ' . print_r($messages, TRUE));
+    }
+    
+    /**
+     * testRecuringAlarmWithRecurException
+     * 
+     * @see 0008386: alarm is sent for recur series that is already over
+     */
+    public function testRecuringAlarmWithRecurException()
+    {
+        $this->_recurAlarmTestHelper(FALSE);
+    }
+
+    /**
+     * testRecuringAlarmWithRecurException120MinutesBefore
+     * 
+     * @see 0008386: alarm is sent for recur series that is already over
+     */
+    public function testRecuringAlarmWithRecurException120MinutesBefore()
+    {
+        $this->_recurAlarmTestHelper(FALSE, 120);
     }
     
     /**
