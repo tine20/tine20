@@ -81,8 +81,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $object = new $class;
             if ($_opts->info) {
                 $result = $object->getHelp();
-            } else {
+            } else if (method_exists($object, $method)) {
                 $result = call_user_func(array($object, $method), $_opts);
+            } else {
+                $result = FALSE;
+                echo "Method $method not found.\n";
             }
         } else {
             echo "Class $class does not exist.\n";
