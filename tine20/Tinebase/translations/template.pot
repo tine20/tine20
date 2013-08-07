@@ -2745,3 +2745,9 @@ msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
 msgstr ""
+
+msgid "No Dialog"
+msgstr ""
+
+msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
+msgstr ""

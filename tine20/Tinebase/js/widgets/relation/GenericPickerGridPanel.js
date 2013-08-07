@@ -206,7 +206,6 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             
             record.set('relations', relations);
         } else {
-            Ext.Msg.alert(_('Relations failure'), _('There are invalid relations. Please check before saving.'));
             this.editDialog.loadMask.hide();
             return false;
         }
@@ -270,7 +269,17 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
 
         ms.activeContentType = model;
         var cp = ms.getCenterPanel(model);
-        cp.onEditInNewWindow({actionType: 'edit', mode: 'remote'}, record);
+        
+        if (Ext.isFunction(cp.onEditInNewWindow)) {
+            cp.onEditInNewWindow({actionType: 'edit', mode: 'remote'}, record);
+        } else {
+            Ext.MessageBox.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.WARNING,
+                title: _('No Dialog'), 
+                msg: _("The Record can't be opened. There doesn't exist any dialog for editing this Record!")
+            });
+        }
     },
     
     /**
