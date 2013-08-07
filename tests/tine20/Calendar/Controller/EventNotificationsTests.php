@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -98,6 +98,36 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persistentEvent = $this->_eventController->delete($persistentEvent);
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
+    }
+
+    /**
+     * testInvitationWithAttachment
+     * 
+     * @see 0008592: append event file attachments to invitation mail
+     */
+    public function testInvitationWithAttachment()
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = $this->_getPersonaAttendee('pwulf');
+        
+        $tempFileBackend = new Tinebase_TempFile();
+        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(__FILE__))) . '/Filemanager/files/test.txt');
+        $event->attachments = array(array('tempFile' => array('id' => $tempFile->getId())));
+        
+        self::flushMailer();
+        $persistentEvent = $this->_eventController->create($event);
+        
+        $messages = self::getMessages();
+        
+        $this->assertEquals(1, count($messages));
+        $parts = $messages[0]->getParts();
+        $this->assertEquals(2, count($parts));
+        $fileAttachment = $parts[1];
+        $this->assertEquals('text/plain; name="=?utf-8?Q?tempfile.tmp?="', $fileAttachment->type);
+        
+        // @todo assert attachment content (this seems to not work with array mailer, maybe we need a "real" email test here)
+//         $content = $fileAttachment->getDecodedContent();
+//         $this->assertEquals('test file content', $content);
     }
     
     /**

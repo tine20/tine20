@@ -940,13 +940,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if ($part['type'] == 'multipart') {
                 $attachments = $attachments + $this->getAttachments($message, $part['partId']);
             } else {
+                $filename = $this->_getAttachmentFilename($part);
+                
                 if ($part['type'] == 'text' && 
-                    (!is_array($part['disposition']) || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && !array_key_exists("parameters", $part['disposition'])))
+                    (! is_array($part['disposition']) || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && ! array_key_exists("parameters", $part['disposition'])))
                 ) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Skipping DISPOSITION_INLINE attachment with name ' . $filename);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' part: ' . print_r($part, TRUE));
                     continue;
                 }
                 
-                $filename = $this->_getAttachmentFilename($part);
                 $attachmentData = array(
                     'content-type' => $part['contentType'], 
                     'filename'     => $filename,

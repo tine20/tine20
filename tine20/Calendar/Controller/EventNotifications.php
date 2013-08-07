@@ -21,6 +21,8 @@
      const NOTIFICATION_LEVEL_EVENT_UPDATE              = 30;
      const NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE    = 40;
      
+     const INVITATION_ATTACHMENT_MAX_FILESIZE           = 2097152; // 2 MB
+     
     /**
      * @var Calendar_Controller_EventNotifications
      */
@@ -219,15 +221,14 @@
      * @param Calendar_Model_Attender    $_attender
      * @param Calendar_Model_Event       $_event
      * @param Tinebase_Model_FullAccount $_updater
-     * @param Sting                      $_action
-     * @param String                     $_notificationLevel
+     * @param string                     $_action
+     * @param string                     $_notificationLevel
      * @param array                      $_updates
      * @return void
      */
-    public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates=NULL)
+    public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates = NULL)
     {
         try {
-                
             // find organizer account
             if ($_event->organizer && $_event->resolveOrganizer()->account_id) {
                 $organizer = Tinebase_User::getInstance()->getFullUserById($_event->resolveOrganizer()->account_id);
@@ -251,76 +252,9 @@
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Preferred notification level not reached -> skipping notification for {$_attender->getEmail()}");
                 return;
             }
-    
-            // get date strings
-            $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
-            $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtend, $timezone, $locale);
             
-            switch ($_action) {
-                case 'alarm':
-                    $messageSubject = sprintf($translate->_('Alarm for event "%1$s" at %2$s'), $_event->summary, $startDateString);
-                    break;
-                case 'created':
-                    $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
-                    $method = Calendar_Model_iMIP::METHOD_REQUEST;
-                    break;
-                case 'deleted':
-                    $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been canceled' ), $_event->summary, $startDateString);
-                    $method = Calendar_Model_iMIP::METHOD_CANCEL;
-                    break;
-                case 'changed':
-                    switch ($_notificationLevel) {
-                        case self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE:
-                            if (array_key_exists('dtstart', $_updates)) {
-                                $oldStartDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtstart'], $timezone, $locale);
-                                $messageSubject = sprintf($translate->_('Event "%1$s" has been rescheduled from %2$s to %3$s' ), $_event->summary, $oldStartDateString, $startDateString);
-                                $method = Calendar_Model_iMIP::METHOD_REQUEST;
-                                break;
-                            }
-                            // fallthrough if dtstart didn't change
-                            
-                        case self::NOTIFICATION_LEVEL_EVENT_UPDATE:
-                            $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been updated' ), $_event->summary, $startDateString);
-                            $method = Calendar_Model_iMIP::METHOD_REQUEST;
-                            break;
-                            
-                        case self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE:
-                            if(! empty($_updates['attendee']) && ! empty($_updates['attendee']['toUpdate']) && count($_updates['attendee']['toUpdate']) == 1) {
-                                // single attendee status update
-                                $attender = $_updates['attendee']['toUpdate']->getFirstRecord();
-                                
-                                switch ($attender->status) {
-                                    case Calendar_Model_Attender::STATUS_ACCEPTED:
-                                        $messageSubject = sprintf($translate->_('%1$s accepted event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
-                                        break;
-                                        
-                                    case Calendar_Model_Attender::STATUS_DECLINED:
-                                        $messageSubject = sprintf($translate->_('%1$s declined event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
-                                        break;
-                                        
-                                    case Calendar_Model_Attender::STATUS_TENTATIVE:
-                                        $messageSubject = sprintf($translate->_('Tentative response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
-                                        break;
-                                        
-                                    case Calendar_Model_Attender::STATUS_NEEDSACTION:
-                                        $messageSubject = sprintf($translate->_('No response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
-                                        break;
-                                }
-                            } else {
-                                $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
-                            }
-                            
-                            // we don't send iMIP parts to organizers with an account cause event is already up to date
-                            if ($_event->organizer && !$_event->resolveOrganizer()->account_id) {
-                                $method = Calendar_Model_iMIP::METHOD_REPLY;
-                            }
-                            break;
-                    }
-                    break;
-                default:
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
-                    break;
-            }
+            $method = NULL;
+            $messageSubject = $this->_getSubject($_event, $_notificationLevel, $_action, $_updates, $timezone, $locale, $translate, $method);
             
             $view = new Zend_View();
             $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
@@ -334,48 +268,8 @@
             
             $messageBody = $view->render('eventNotification.php');
             
-            if (isset($method) && version_compare(PHP_VERSION, '5.3.0', '>=')) {
-                $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-                $converter->setMethod($method);
-                $vcalendar = $converter->fromTine20Model($_event);
-                
-                // in Tine 2.0 non organizers might be given the grant to update events
-                // @see rfc6047 section 2.2.1 & rfc5545 section 3.2.18
-                if ($method != Calendar_Model_iMIP::METHOD_REPLY && $_event->organizer !== $_updater->contact_id) {
-                    foreach($vcalendar->children() as $component) {
-                        if ($component->name == 'VEVENT') {
-                            if (isset($component->{'ORGANIZER'})) {
-                                $component->{'ORGANIZER'}->add(new  Sabre_VObject_Parameter('SEND-BY', 'mailto:' . $_updater->accountEmailAddress));
-                            }
-                        }
-                    }
-                }
-                
-                // @TODO in Tine 2.0 status updater might not be updater
-                if ($method == Calendar_Model_iMIP::METHOD_REPLY) {
-                    foreach($vcalendar->children() as $component) {
-                        if ($component->name == 'VEVENT') {
-                            $component->{'REQUEST-STATUS'} = '2.0;Success';
-                        }
-                    }
-                }
-                
-                $calendarPart           = new Zend_Mime_Part($vcalendar->serialize());
-                $calendarPart->charset  = 'UTF-8';
-                $calendarPart->type     = 'text/calendar; method=' . $method;
-                $calendarPart->encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
-                
-                $attachment = new Zend_Mime_Part($vcalendar->serialize());
-                $attachment->type     = 'application/ics';
-                $attachment->encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
-                $attachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
-                $attachment->filename = 'event.ics';
-                
-                $attachments = array($attachment);
-            } else {
-                $calendarPart = null;
-                $attachments = null;
-            }
+            $calendarPart = null;
+            $attachments = $this->_getAttachments($method, $_event, $_action, $_updater, $calendarPart);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: '{$_attender->getEmail()}'");
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
@@ -387,7 +281,201 @@
         
             Tinebase_Notification::getInstance()->send($sender, array($contact), $messageSubject, $messageBody, $calendarPart, $attachments);
         } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " exception: " . $e->getMessage());
             return;
         }
+    }
+    
+    /**
+     * get notification subject and method
+     * 
+     * @param Calendar_Model_Event $_event
+     * @param string $_notificationLevel
+     * @param string $_action
+     * @param array $_updates
+     * @param string $timezone
+     * @param Zend_Locale $locale
+     * @param Zend_Translate $translate
+     * @param atring $method
+     * @return string
+     */
+    protected function _getSubject($_event, $_notificationLevel, $_action, $_updates, $timezone, $locale, $translate, &$method)
+    {
+        $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
+        $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtend, $timezone, $locale);
+        
+        switch ($_action) {
+            case 'alarm':
+                $messageSubject = sprintf($translate->_('Alarm for event "%1$s" at %2$s'), $_event->summary, $startDateString);
+                break;
+            case 'created':
+                $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
+                $method = Calendar_Model_iMIP::METHOD_REQUEST;
+                break;
+            case 'deleted':
+                $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been canceled' ), $_event->summary, $startDateString);
+                $method = Calendar_Model_iMIP::METHOD_CANCEL;
+                break;
+            case 'changed':
+                switch ($_notificationLevel) {
+                    case self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE:
+                        if (array_key_exists('dtstart', $_updates)) {
+                            $oldStartDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtstart'], $timezone, $locale);
+                            $messageSubject = sprintf($translate->_('Event "%1$s" has been rescheduled from %2$s to %3$s' ), $_event->summary, $oldStartDateString, $startDateString);
+                            $method = Calendar_Model_iMIP::METHOD_REQUEST;
+                            break;
+                        }
+                        // fallthrough if dtstart didn't change
+                        
+                    case self::NOTIFICATION_LEVEL_EVENT_UPDATE:
+                        $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been updated' ), $_event->summary, $startDateString);
+                        $method = Calendar_Model_iMIP::METHOD_REQUEST;
+                        break;
+                        
+                    case self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE:
+                        if(! empty($_updates['attendee']) && ! empty($_updates['attendee']['toUpdate']) && count($_updates['attendee']['toUpdate']) == 1) {
+                            // single attendee status update
+                            $attender = $_updates['attendee']['toUpdate']->getFirstRecord();
+                            
+                            switch ($attender->status) {
+                                case Calendar_Model_Attender::STATUS_ACCEPTED:
+                                    $messageSubject = sprintf($translate->_('%1$s accepted event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    break;
+                                    
+                                case Calendar_Model_Attender::STATUS_DECLINED:
+                                    $messageSubject = sprintf($translate->_('%1$s declined event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    break;
+                                    
+                                case Calendar_Model_Attender::STATUS_TENTATIVE:
+                                    $messageSubject = sprintf($translate->_('Tentative response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    break;
+                                    
+                                case Calendar_Model_Attender::STATUS_NEEDSACTION:
+                                    $messageSubject = sprintf($translate->_('No response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    break;
+                            }
+                        } else {
+                            $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
+                        }
+                        
+                        // we don't send iMIP parts to organizers with an account cause event is already up to date
+                        if ($_event->organizer && !$_event->resolveOrganizer()->account_id) {
+                            $method = Calendar_Model_iMIP::METHOD_REPLY;
+                        }
+                        break;
+                }
+                break;
+            default:
+                $messageSubject = 'unknown action';
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
+                break;
+        }
+        
+        return $messageSubject;
+    }
+    
+    /**
+     * get notification attachments
+     * 
+     * @param string $method
+     * @param Calendar_Model_Event $_event
+     * @param string $_action
+     * @param Tinebase_Model_FullAccount $_updater
+     * @param Zend_Mime_Part $calendarPart
+     * @return array
+     */
+    protected function _getAttachments($method, $_event, $_action, $_updater, &$calendarPart)
+    {
+        if ($method === NULL) {
+            return array();
+        }
+        
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $converter->setMethod($method);
+        $vcalendar = $converter->fromTine20Model($_event);
+        
+        // in Tine 2.0 non organizers might be given the grant to update events
+        // @see rfc6047 section 2.2.1 & rfc5545 section 3.2.18
+        if ($method != Calendar_Model_iMIP::METHOD_REPLY && $_event->organizer !== $_updater->contact_id) {
+            foreach ($vcalendar->children() as $component) {
+                if ($component->name == 'VEVENT') {
+                    if (isset($component->{'ORGANIZER'})) {
+                        $component->{'ORGANIZER'}->add(new  Sabre_VObject_Parameter('SEND-BY', 'mailto:' . $_updater->accountEmailAddress));
+                    }
+                }
+            }
+        }
+        
+        // @TODO in Tine 2.0 status updater might not be updater
+        if ($method == Calendar_Model_iMIP::METHOD_REPLY) {
+            foreach ($vcalendar->children() as $component) {
+                if ($component->name == 'VEVENT') {
+                    $component->{'REQUEST-STATUS'} = '2.0;Success';
+                }
+            }
+        }
+        
+        $calendarPart           = new Zend_Mime_Part($vcalendar->serialize());
+        $calendarPart->charset  = 'UTF-8';
+        $calendarPart->type     = 'text/calendar; method=' . $method;
+        $calendarPart->encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
+        
+        $attachment = new Zend_Mime_Part($vcalendar->serialize());
+        $attachment->type     = 'application/ics';
+        $attachment->encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
+        $attachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+        $attachment->filename = 'event.ics';
+        
+        $attachments = array($attachment);
+        
+        // add other attachments (only on invitation)
+        if ($_action == 'created') {
+            $eventAttachments = $this->_getEventAttachments($_event);
+            $attachments = array_merge($attachments, $eventAttachments);
+        }
+        
+        return $attachments;
+    }
+    
+    /**
+     * get event attachments
+     * 
+     * @param Calendar_Model_Event $_event
+     * @return array of Zend_Mime_Part
+     */
+    protected function _getEventAttachments($_event)
+    {
+        $attachments = array();
+        foreach ($_event->attachments as $attachment) {
+            if ($attachment->size < self::INVITATION_ATTACHMENT_MAX_FILESIZE) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Adding attachment " . $attachment->name . ' to invitation mail');
+                
+                $path = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX
+                    . Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($_event)
+                    . '/' . $attachment->name;
+                
+                $handle = fopen($path, 'r');
+                $stream = fopen("php://temp", 'r+');
+                stream_copy_to_stream($handle, $stream);
+                rewind($stream);
+
+                $part              = new Zend_Mime_Part($stream);
+                $part->setType($attachment->contenttype, $attachment->name);
+                $part->encoding    = Zend_Mime::ENCODING_BASE64; // ?
+                $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+                $part->filename    = $attachment->name;
+                
+                fclose($handle);
+                
+                $attachments[] = $part;
+                
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Not adding attachment " . $attachment->name . ' to invitation mail (size: ' . convertToMegabytes($attachment-size) . ')');
+            }
+        }
+        
+        return $attachments;
     }
  }
