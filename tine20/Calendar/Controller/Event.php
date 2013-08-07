@@ -1376,6 +1376,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_record->dtend->subMinute($_record->dtend->get('i') == 0 ? 1 : 0);
         }
         $_record->setRruleUntil();
+        
+        if ($_record->isRecurException() && $_record->rrule !== NULL) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Removing invalid rrule from recur exception: ' . $_record->rrule);
+            $_record->rrule = NULL;
+        }
     }
     
     /**
@@ -1392,7 +1398,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // implicitly delete persistent recur instances of series
             if (! empty($event->rrule)) {
                 $exceptionIds = $this->getRecurExceptions($event)->getId();
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
                 $_ids = array_merge($_ids, $exceptionIds);
             }
         }

@@ -934,6 +934,7 @@ class Tinebase_Core
                 $dbConfigArray['driver_options'] = array(
                     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
                     // set utf8 charset
+                    // @todo set to utf8mb4 / @see 0008708: switch to mysql utf8mb4
                     PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8;",
                 );
                 $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
@@ -1550,5 +1551,31 @@ class Tinebase_Core
             self::set(self::SCHEDULER, $scheduler);
         }
         return self::get(self::SCHEDULER);
+    }
+
+    /**
+     * filter input string for database as some databases (looking at you, MySQL) can't cope with some chars
+     * 
+     * @param string $string
+     * @return string
+     *
+     * @see 0008644: error when sending mail with note (wrong charset)
+     * @see http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string/8215387#8215387
+     * @see http://stackoverflow.com/questions/8491431/remove-4-byte-characters-from-a-utf-8-string
+     */
+    public static function filterInputForDatabase($string)
+    {
+        $db = self::getDb();
+        if ($db && $db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            if (extension_loaded('mbstring')) {
+                $string = @mb_convert_encoding($string, 'UTF-8', 'UTF-8');
+            }
+            
+            $result = preg_replace('/[\xF0-\xF7].../s', '?', $string);
+        } else {
+            $result = $string;
+        }
+        
+        return $result;
     }
 }
