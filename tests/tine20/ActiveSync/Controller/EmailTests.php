@@ -321,7 +321,7 @@ dGVzdAo=&#13;
         
         $stringToCheck = 'test';
         
-        $this->_replyTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail");
+        $this->_sendMailTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail");
     }
     
     /**
@@ -449,7 +449,7 @@ bWV0YXdheXMuZGU+IHNjaHJpZWI6Cgo=&#13;
         $messageId = '<hw6umldu85v6efjai6i9vqci.1373008455202@email.android.com>';
         $stringToCheck = 'Mal was mit Ö!';
         
-        $this->_replyTestHelper($xml, $messageId, $stringToCheck);
+        $this->_sendMailTestHelper($xml, $messageId, $stringToCheck);
     }
     
     /**
@@ -487,21 +487,23 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         
         $stringToCheck = 'Lars löscht nix...';
         
-        $this->_replyTestHelper($xml, $messageId, $stringToCheck);
+        $this->_sendMailTestHelper($xml, $messageId, $stringToCheck);
     }
     
     /**
-     * _replyTestHelper
+     * _sendMailTestHelper
      * 
      * @param string $xml
      * @param string $messageId
      * @param string $stringToCheck
+     * @param string $command
+     * @param string $device
      */
-    protected function _replyTestHelper($xml, $messageId, $stringToCheck, $command = "Syncroton_Command_SmartReply")
+    protected function _sendMailTestHelper($xml, $messageId, $stringToCheck, $command = "Syncroton_Command_SmartReply", $device = Syncroton_Model_Device::TYPE_ANDROID_40)
     {
         $doc = new DOMDocument();
         $doc->loadXML($xml);
-        $device = $this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40);
+        $device = $this->_getDevice($device);
         $sync = new $command($doc, $device, $device->policykey);
         
         $sync->handle();
@@ -514,6 +516,61 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
         
         $this->assertContains($stringToCheck, $completeMessage->body);
+    }
+    
+    /**
+     * testForwardEmailiPhone
+     * 
+     * @see 0008572: email reply text garbled
+     */
+    public function testForwardEmailiPhone()
+    {
+        $originalMessage = $this->_createTestMessage();
+        
+        $xml = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<SmartForward xmlns="uri:ComposeMail">
+  <ClientId>1F7C3F2D-B920-404F-97FE-27FE721A9E08</ClientId>
+  <SaveInSentItems/>
+  <ReplaceMime/>
+  <Source>
+    <FolderId>' . $originalMessage->folder_id .  '</FolderId>
+    <ItemId>' . $originalMessage->getId() . '</ItemId>
+  </Source>
+  <Mime>Content-Type: multipart/alternative;&#13;
+        boundary=Apple-Mail-31383BDF-6B42-495A-89DE-A608A255C644&#13;
+Content-Transfer-Encoding: 7bit&#13;
+Subject: Fwd: AW: Termin&#13;
+From: l.kneschke@metaways.de&#13;
+Message-Id: &lt;1F7C3F2D-B920-404F-97FE-27FE721A9E08@tine20.org&gt;&#13;
+Date: Wed, 7 Aug 2013 15:27:46 +0200&#13;
+To: ' . $this->_emailTestClass->getEmailAddress() . '&#13;
+Mime-Version: 1.0 (1.0)&#13;
+&#13;
+&#13;
+--Apple-Mail-31383BDF-6B42-495A-89DE-A608A255C644&#13;
+Content-Type: text/plain;&#13;
+        charset=utf-8&#13;
+Content-Transfer-Encoding: base64&#13;
+&#13;
+TGFycyBsw7ZzY2h0IG5peC4uLgoKV2lya2xpY2ghCgpQaGlsaXBwIFNjaMO8bGUgPHAuc2NodWVs&#13;
+ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
+&#13;
+--Apple-Mail-31383BDF-6B42-495A-89DE-A608A255C644&#13;
+Content-Type: text/html;&#13;
+        charset=utf-8&#13;
+Content-Transfer-Encoding: base64&#13;
+&#13;
+TGFycyBsw7ZzY2h0IG5peC4uLgoKV2lya2xpY2ghCgpQaGlsaXBwIFNjaMO8bGUgPHAuc2NodWVs&#13;
+ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
+--Apple-Mail-31383BDF-6B42-495A-89DE-A608A255C644--&#13;
+</Mime>
+</SmartForward>';
+        $messageId = '<1F7C3F2D-B920-404F-97FE-27FE721A9E08@tine20.org>';
+        
+        $stringToCheck = 'Lars löscht nix...';
+        
+        $this->_sendMailTestHelper($xml, $messageId, $stringToCheck, 'Syncroton_Command_SmartForward', Syncroton_Model_Device::TYPE_IPHONE);
     }
     
     /**
