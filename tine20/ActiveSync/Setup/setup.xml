@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>7.2</version>
+    <version>7.3</version>
     <order>90</order>
     <depends>
         <application>Tinebase</application>
@@ -50,7 +50,7 @@
         </table>
         <table>
             <name>acsync_device</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -177,6 +177,10 @@
                     <name>lastsynccollection</name>
                     <type>blob</type>
                     <default>null</default>
+                </field>
+                <field>
+                    <name>lastping</name>
+                    <type>datetime</type>
                 </field>
                 <index>
                     <name>id</name>
