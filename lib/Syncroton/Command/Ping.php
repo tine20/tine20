@@ -78,10 +78,12 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
                 }
                 $this->_device->pingfolder = serialize(array_keys($folders));
             }
+        }
 
-            if ($this->_device->isDirty() && $status == self::STATUS_NO_CHANGES_FOUND) {
-                $this->_device = $this->_deviceBackend->update($this->_device);
-            }
+        $this->_device->lastping = new DateTime('now', new DateTimeZone('utc'));
+
+        if ($status == self::STATUS_NO_CHANGES_FOUND) {
+            $this->_device = $this->_deviceBackend->update($this->_device);
         }
         
         $lifeTime = $this->_device->pinglifetime;
@@ -106,21 +108,33 @@ class Syncroton_Command_Ping extends Syncroton_Command_Wbxml
             do {
                 // take a break to save battery lifetime
                 sleep(Syncroton_Registry::getPingTimeout());
-                
+
+                // if another Ping command updated lastping property, we can stop processing this Ping command request
+                $device = $this->_deviceBackend->get($this->_device->id);
+                if ((isset($device->lastping) && $device->lastping instanceof DateTime) &&
+                    $device->pingfolder === $this->_device->pingfolder &&
+                    $device->lastping->getTimestamp() > $this->_device->lastping->getTimestamp() ) {
+                    break;
+                }
+
                 $now = new DateTime('now', new DateTimeZone('utc'));
                 
                 foreach ($folders as $folderId) {
                     try {
                         $folder         = $this->_folderBackend->get($folderId);
                         $dataController = Syncroton_Data_Factory::factory($folder->class, $this->_device, $this->_syncTimeStamp);
+                        
                     } catch (Syncroton_Exception_NotFound $e) {
                         if ($this->_logger instanceof Zend_Log)
                             $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
                         $status = self::STATUS_FOLDER_NOT_FOUND;
+                        
                         break;
+                        
                     } catch (Exception $e) {
                         if ($this->_logger instanceof Zend_Log)
                             $this->_logger->err(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                        
                         // do nothing, maybe temporal issue, should we stop?
                         continue;
                     }

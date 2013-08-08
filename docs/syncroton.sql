@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `Syncroton_device` (
     `remotewipe` int(11) DEFAULT '0',
     `pingfolder` longblob,
     `lastsynccollection` longblob DEFAULT NULL,
+    `lastping` datetime DEFAULT NULL,
     'contactsfilter_id' varchar(40) DEFAULT NULL,
     'calendarfilter_id' varchar(40) DEFAULT NULL,
     'tasksfilter_id' varchar(40) DEFAULT NULL,
