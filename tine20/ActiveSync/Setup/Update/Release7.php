@@ -48,4 +48,27 @@ class ActiveSync_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('ActiveSync', '7.2');
     }
+
+     /**
+     * update to 7.3
+     * 
+     * @see 0008596: Redundant Ping commands running for long time
+     * 
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->validateTableVersion('acsync_device', '5');
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>lastping</name>
+                <type>datetime</type>
+            </field>
+        ');
+        $this->_backend->addCol('acsync_device', $declaration);
+
+        $this->setTableVersion('acsync_device', '6');
+        $this->setApplicationVersion('ActiveSync', '7.3');
+    }
 }
