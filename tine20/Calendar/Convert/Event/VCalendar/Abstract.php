@@ -958,10 +958,11 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
     {
         $defaultTimezone = date_default_timezone_get();
         date_default_timezone_set((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        
         if ($dateTimeProperty instanceof VObject\Property\DateTime) {
             $dateTime = $dateTimeProperty->getDateTime();
-            $tz = ($_useUserTZ) ? (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : $dateTime->getTimezone();
+            $tz = ($_useUserTZ || (isset($dateTimeProperty['VALUE']) && strtoupper($dateTimeProperty['VALUE']) == 'DATE')) ? 
+                (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : 
+                $dateTime->getTimezone();
             $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
         } else {
             $result = new Tinebase_DateTime($dateTimeProperty->value);
