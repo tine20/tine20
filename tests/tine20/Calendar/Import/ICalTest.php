@@ -83,21 +83,22 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         ));
         
         $importer->importFile(dirname(__FILE__) . '/files/horde.ics');
-        $this->_checkHordeImport();
+        $this->_checkImport();
     }
     
     /**
      * asserts succesful horde import
      * 
      * @param string $failMessage
+     * @param integer $assertNumber
      */
-    protected function _checkHordeImport($failMessage = '')
+    protected function _checkImport($failMessage = '', $assertNumber = 1)
     {
         $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
         )), NULL);
         
-        $this->assertEquals(1, $events->count(), 'events where not imported ' . $failMessage);
+        $this->assertEquals($assertNumber, $events->count(), 'events where not imported ' . $failMessage);
     }
     
     /**
@@ -148,6 +149,31 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         
         exec($cmd, $output);
         $failMessage = print_r($output, TRUE);
-        $this->_checkHordeImport($failMessage);
+        $this->_checkImport($failMessage);
+    }
+    
+    /**
+     * testImportTwice (forceUpdateExisting)
+     * 
+     * @see 0008652: Import von .ics-Dateien in Kalender schlägt fehl
+     */
+    public function testImportTwice()
+    {
+        $this->_testNeedsTransaction();
+        
+        $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.import ' .
+            'plugin=Calendar_Import_Ical forceUpdateExisting=1 importContainerId=' . $this->_testCalendar->getId() .
+            ' ' . dirname(__FILE__) . '/files/termine.ics';
+        
+        $cmd = TestServer::assembleCliCommand($cmd, TRUE);
+        
+        exec($cmd, $output);
+        $failMessage = print_r($output, TRUE);
+        $this->_checkImport($failMessage);
+        
+        // second time
+        exec($cmd, $output);
+        $failMessage = print_r($output, TRUE);
+        $this->_checkImport($failMessage);
     }
 }

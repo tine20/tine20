@@ -155,7 +155,7 @@ class TestServer
             '/--verbose /',
             '/--stop-on-failure /',
             '/[\S]+\.php$/',
-            '/ \S+Tests/',
+            '/ \S+Tests{0,1}/',
             '/--debug /',
             '/--filter [\S]+\D/',
             '/--configuration [\S]+\D/',

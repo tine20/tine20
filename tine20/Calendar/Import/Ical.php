@@ -133,7 +133,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
                     $this->_importResult['totalcount'] += 1;
                 } else if ($this->_options['forceUpdateExisting'] || ($this->_options['updateExisting'] && $event->seq > $existingEvent->seq)) {
                     $event->id = $existingEvent->getId();
-                    $event->last_modified_time = clone $existingEvent->last_modified_time;
+                    $event->last_modified_time = ($existingEvent->last_modified_time instanceof Tinebase_DateTime) ? clone $existingEvent->last_modified_time : NULL;
                     $cc->update($event, FALSE);
                     $this->_importResult['totalcount'] += 1;
                 } else {
