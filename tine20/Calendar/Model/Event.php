@@ -188,6 +188,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $_value = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_value);
         }
         
+        if ($_name == 'rrule' && is_string($_value) && ! empty($_value)) {
+            // normalize rrule
+            $_value = new Calendar_Model_Rrule($_value);
+            $_value = (string) $_value;
+        }
         parent::__set($_name, $_value);
     }
     
@@ -501,8 +506,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $_data['attendee'] = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_data['attendee'], $this->bypassFilters);
         }
         
-        if (isset($_data['rrule']) && is_array($_data['rrule'])) {
+        if (isset($_data['rrule']) && ! empty($_data['rrule']) && ! $_data['rrule'] instanceof Calendar_Model_Rrule) {
+            // normalize rrule
             $_data['rrule'] = new Calendar_Model_Rrule($_data['rrule'], $this->bypassFilters);
+            $_data['rrule'] = (string) $_data['rrule'];
         }
         
         if (isset($_data['alarms']) && is_array($_data['alarms'])) {

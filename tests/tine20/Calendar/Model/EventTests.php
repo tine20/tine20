@@ -92,4 +92,27 @@ class Calendar_Model_EventTests extends PHPUnit_Framework_TestCase
         $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         $this->assertEquals($userContact->n_fileas, $fileas);
     }
+    
+    public function testRruleDiff()
+    {
+        $event = $event = new Calendar_Model_Event(array(
+            'dtstart'   => new Tinebase_DateTime('2011-11-23 14:25:00'),
+            'dtend'     => new Tinebase_DateTime('2011-11-23 15:25:00'),
+            'rrule'     => 'FREQ=WEEKLY;INTERVAL=1;WKST=MO;BYDAY=TH',
+            'summary'   => 'test event',
+            'organizer' => Tinebase_Core::getUser()->contact_id
+        ));
+        
+        $update = clone $event;
+        
+        // parts order change
+        $update->rrule = 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TH;WKST=MO';
+        $diff = $event->diff($update);
+        $this->assertFalse(array_key_exists('rrule',$diff->diff));
+        
+        // real change
+        $update->rrule = 'FREQ=WEEKLY;INTERVAL=;BYDAY=TH;WKST=SU';
+        $diff = $event->diff($update);
+        $this->assertTrue(array_key_exists('rrule',$diff->diff));
+    }
 }
