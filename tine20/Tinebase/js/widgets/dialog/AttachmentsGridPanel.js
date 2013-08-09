@@ -61,6 +61,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         this.record = this.editDialog.record;
         this.app = this.editDialog.app;
         this.title = this.i18nTitle = _('Attachments');
+        this.i18nFileString = _('Attachment');
         
         Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
         

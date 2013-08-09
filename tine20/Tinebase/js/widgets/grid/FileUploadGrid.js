@@ -58,6 +58,8 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     autoExpandColumn: 'name',
     showProgress: true,
     
+    i18nFileString: null,
+    
     /**
      * init
      * @private
@@ -79,7 +81,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.initColumnModel();
         this.initSelectionModel();
         
-    
+        this.i18nFileString = _('File');
         this.plugins = [ new Ext.ux.grid.GridViewMenuPlugin({}) ];
         this.enableHdMenu = false;
       
@@ -175,7 +177,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.action_add = new Ext.Action(this.getAddAction());
 
         this.action_remove = new Ext.Action({
-            text: _('Remove file'),
+            text: String.format(_('Remove {0}'), this.i18nFileString),
             iconCls: 'action_remove',
             scope: this,
             disabled: true,
@@ -237,7 +239,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     getAddAction: function () {
         return {
-            text: _('Add file'),
+            text: String.format(_('Add {0}'), this.i18nFileString),
             iconCls: 'action_add',
             scope: this,
             plugins: [{
