@@ -257,6 +257,13 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             });
         }
         
+        if (! Ext.isEmpty(this.event.get('attachments'))) {
+            this.statusIcons.push({
+                status: 'attachment',
+                text: this.app.i18n._('has attachments')
+            });
+        }
+        
         var myAttenderRecord = this.event.getMyAttenderRecord(),
             myAttenderStatusRecord = myAttenderRecord ? Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').getById(myAttenderRecord.get('status')) : null;
             
