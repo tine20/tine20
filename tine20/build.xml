@@ -174,7 +174,6 @@
         class initTask extends Task {
             function main() {
                 echo `composer install`;
-                echo `composer update`;
                 require_once 'vendor/autoload.php';
             }
         }

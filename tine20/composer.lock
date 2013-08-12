@@ -1,0 +1,267 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "901bbd34ee940ceb3de9aa9a897400d0",
+    "packages": [
+        {
+            "name": "codeplex/phpexcel",
+            "version": "1.7.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/markushausammann/PHPExcel",
+                "reference": "1.7.8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/markushausammann/PHPExcel/archive/1.7.8.zip",
+                "reference": "1.7.8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-xml": "*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PHPExcel": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Maarten Balliauw",
+                    "homepage": "http://blog.maartenballiauw.be"
+                },
+                {
+                    "name": "Mark Baker"
+                },
+                {
+                    "name": "Erit Tilt"
+                }
+            ],
+            "description": "PHPExcel - OpenXML - Create Excel2007 documents in PHP - Spreadsheet engine",
+            "homepage": "http://phpexcel.codeplex.com",
+            "keywords": [
+                "OpenXML",
+                "excel",
+                "php",
+                "spreadsheet"
+            ],
+            "time": "2012-11-21 10:55:52"
+        },
+        {
+            "name": "ezyang/htmlpurifier",
+            "version": "v4.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezyang/htmlpurifier.git",
+                "reference": "v4.5.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/v4.5.0",
+                "reference": "v4.5.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "HTMLPurifier": "library/"
+                },
+                "files": [
+                    "library/HTMLPurifier.composer.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Edward Z. Yang",
+                    "email": "admin@htmlpurifier.org",
+                    "homepage": "http://ezyang.com"
+                }
+            ],
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
+            "time": "2013-02-18 00:04:08"
+        },
+        {
+            "name": "sabre/dav",
+            "version": "1.8.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fruux/sabre-dav.git",
+                "reference": "1.8.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fruux/sabre-dav/zipball/1.8.6",
+                "reference": "1.8.6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-date": "*",
+                "ext-dom": "*",
+                "ext-iconv": "*",
+                "ext-libxml": "*",
+                "ext-mbstring": "*",
+                "ext-pcre": "*",
+                "ext-simplexml": "*",
+                "ext-spl": "*",
+                "php": ">=5.3.1",
+                "sabre/vobject": "~2.1.0"
+            },
+            "provide": {
+                "evert/sabredav": "1.7.*"
+            },
+            "require-dev": {
+                "evert/phpdoc-md": "~0.0.7",
+                "phing/phing": "2.4.14",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "suggest": {
+                "ext-apc": "*",
+                "ext-curl": "*",
+                "ext-pdo": "*"
+            },
+            "bin": [
+                "bin/sabredav"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Sabre\\DAV": "lib/",
+                    "Sabre\\HTTP": "lib/",
+                    "Sabre\\DAVACL": "lib/",
+                    "Sabre\\CalDAV": "lib/",
+                    "Sabre\\CardDAV": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Evert Pot",
+                    "email": "evert@rooftopsolutions.nl",
+                    "homepage": "http://evertpot.com/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "WebDAV Framework for PHP",
+            "homepage": "http://code.google.com/p/sabredav/",
+            "keywords": [
+                "CalDAV",
+                "CardDAV",
+                "WebDAV",
+                "framework",
+                "iCalendar"
+            ],
+            "time": "2013-06-17 23:12:05"
+        },
+        {
+            "name": "sabre/vobject",
+            "version": "2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fruux/sabre-vobject.git",
+                "reference": "2.1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/2.1.2",
+                "reference": "2.1.2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3.1"
+            },
+            "bin": [
+                "bin/vobjectvalidate.php"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Sabre\\VObject": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Evert Pot",
+                    "email": "evert@rooftopsolutions.nl",
+                    "homepage": "http://evertpot.com/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The VObject library for PHP allows you to easily parse and manipulate iCalendar and vCard objects",
+            "homepage": "https://github.com/fruux/sabre-vobject",
+            "keywords": [
+                "VObject",
+                "iCalendar",
+                "vCard"
+            ],
+            "time": "2013-08-02 21:12:52"
+        },
+        {
+            "name": "syncroton/syncroton",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "http://git.syncroton.org/Syncroton",
+                "reference": "05c33c1a7b9b13a7184d5cf0b8d1e18acd16d99c"
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Syncroton": "lib/"
+                }
+            },
+            "license": [
+                "LGPL-3"
+            ],
+            "description": "Library to sync mobile phones",
+            "homepage": "http://www.syncroton.org",
+            "time": "2013-05-23 06:26:44"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "syncroton/syncroton": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}
