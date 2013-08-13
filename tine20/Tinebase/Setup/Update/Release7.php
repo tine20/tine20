@@ -438,4 +438,24 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addAccessLogCleanupTask($scheduler);
         $this->setApplicationVersion('Tinebase', '7.6');
     }
+    
+    /**
+     * update to 7.7
+     *
+     * @see 8700: state save/restore no longer works in attendee filter grid
+     */
+    public function update_6()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>data</name>
+                    <type>clob</type>
+                </field>
+            ');
+        
+        $this->_backend->alterCol('state', $declaration);
+        $this->setTableVersion('state', 3);
+        
+        $this->setApplicationVersion('Tinebase', '7.7');
+    }
 }
