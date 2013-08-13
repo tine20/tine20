@@ -409,7 +409,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 if (fieldConfig.label) {
                     var config = {
                         id: key,
-                        dataIndex: key,
+                        dataIndex: (fieldConfig.type == 'relation') ? 'relations' : key,
                         header: this.app.i18n._(fieldConfig.label),
                         hidden: fieldConfig.hasOwnProperty('shy') ? fieldConfig.shy : false,    // defaults to false
                         sortable: (fieldConfig.hasOwnProperty('sortable') && fieldConfig.sortable == false) ? false : true // defaults to true
