@@ -1336,7 +1336,7 @@ class Tinebase_Core
     {
         if (! self::get(self::LOGLEVEL)) {
             $config = self::getConfig();
-            $logLevel = Tinebase_Log::getMaxLogLevel($config->logger);
+            $logLevel = Tinebase_Log::getMaxLogLevel(isset($config->logger) ? $config->logger : NULL);
             self::set(self::LOGLEVEL, $logLevel);
         }
         return self::get(self::LOGLEVEL);
