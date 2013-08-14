@@ -775,10 +775,10 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                     
                 case 'RRULE':
-                    $event->rrule = $property->value;
+                    $rruleString = $property->value;
                     
                     // convert date format
-                    $event->rrule = preg_replace_callback('/UNTIL=([\dTZ]+)(?=;?)/', function($matches) {
+                    $rruleString = preg_replace_callback('/UNTIL=([\dTZ]+)(?=;?)/', function($matches) {
                         if (strlen($matches[1]) < 10) {
                             $dtUntil = date_create($matches[1], new DateTimeZone ((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)));
                             $dtUntil->setTimezone(new DateTimeZone('UTC'));
@@ -787,10 +787,12 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                         }
                         
                         return 'UNTIL=' . $dtUntil->format(Tinebase_Record_Abstract::ISO8601LONG);
-                    }, $event->rrule);
+                    }, $rruleString);
 
                     // remove additional days from BYMONTHDAY property
-                    $event->rrule = preg_replace('/(BYMONTHDAY=)([\d]+)([,\d]+)/', '$1$2', $event->rrule);
+                    $rruleString = preg_replace('/(BYMONTHDAY=)([\d]+)([,\d]+)/', '$1$2', $rruleString);
+                    
+                    $event->rrule = $rruleString;
                     
                     // process exceptions
                     if (isset($_vevent->EXDATE)) {

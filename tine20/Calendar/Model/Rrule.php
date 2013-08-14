@@ -78,6 +78,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
+        'id'                   => array('allowEmpty' => true,  /*'Alnum'*/),
         'freq'                 => array(
             'allowEmpty' => true,
             array('InArray', array(self::FREQ_DAILY, self::FREQ_MONTHLY, self::FREQ_WEEKLY, self::FREQ_YEARLY)),
@@ -107,6 +108,25 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @var array supported rrule parts
      */
     protected $_rruleParts = array('freq', 'interval', 'until', 'count', 'wkst', 'byday', 'bymonth', 'bymonthday');
+    
+    /**
+     * @see /Tinebase/Record/Abstract::__construct
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        $rruleString = NULL;
+        
+        if (is_string($_data)) {
+            $rruleString = $_data;
+            $_data = NULL;
+        }
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+        
+        if ($rruleString) {
+            $this->setFromString($rruleString);
+        }
+    }
     
     /**
      * set from ical rrule string
