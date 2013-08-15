@@ -38,13 +38,20 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * default record backend
      */
     const DEFAULT_RECORD_BACKEND = 'Sql';
-
+    
     /**
      * number of notes per record for activities panel
      * (NOT the tab panel)
      */
     const NUMBER_RECORD_NOTES = 8;
-        
+
+    /**
+     * max length of note text
+     * 
+     * @var integer
+     */
+    const MAX_NOTE_LENGTH = 10000;
+    
     /**
      * don't clone. Use the singleton.
      */
@@ -397,7 +404,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $noteType = $this->getNoteTypeByName($_type);
         $note = new Tinebase_Model_Note(array(
             'note_type_id'      => $noteType->getId(),
-            'note'              => $noteText,
+            'note'              => substr($noteText, 0, self::MAX_NOTE_LENGTH),
             'record_model'      => $modelName,
             'record_backend'    => ucfirst(strtolower($_backend)),
             'record_id'         => $id,
