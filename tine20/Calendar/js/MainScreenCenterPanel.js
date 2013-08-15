@@ -521,7 +521,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var copyAction = {
             text: String.format(_('Copy {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow.createDelegate(this, ["copy", event]),
-            iconCls: 'action_editcopy'
+            iconCls: 'action_editcopy',
+            // TODO allow to copy recurring events / exceptions
+            disabled: event.isRecurInstance() || event.isRecurException() || event.isRecurBase()
         };
         
         return copyAction;
