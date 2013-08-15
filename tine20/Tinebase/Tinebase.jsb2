@@ -70,6 +70,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "ExceptionHandlerDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "FieldLabeler.js",
           "path": "js/ux/"
         },

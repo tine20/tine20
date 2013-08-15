@@ -252,6 +252,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         
         if ($exception instanceof Tinebase_Exception) {
             $exceptionData['appName'] = $exception->getAppName();
+            $exceptionData['title'] = $exception->getTitle();
         }
         
         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());

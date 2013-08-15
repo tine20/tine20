@@ -25,6 +25,13 @@ class Tinebase_Exception extends Exception
     protected $_appName = NULL;
     
     /**
+     * the title of the Exception (may be shown in a dialog)
+     * 
+     * @var string
+     */
+    protected $_title = NULL;
+    
+    /**
      * the constructor
      * 
      * @param message[optional]
@@ -37,7 +44,12 @@ class Tinebase_Exception extends Exception
             $c = explode('_', get_class($this));
             $this->_appName = $c[0];
         }
-        parent::__construct($message, $code, $previous);
+        
+        if (! $this->_title) {
+            $this->_title = 'Exception ({0})'; // _('Exception ({0})')
+        }
+        
+        parent::__construct(($message ? $message : $this->message), $code, $previous);
     }
     
     /**
@@ -48,5 +60,15 @@ class Tinebase_Exception extends Exception
     public function getAppName()
     {
         return $this->_appName;
+    }
+    
+    /**
+     * returns the title of this exception
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->_title;
     }
 }

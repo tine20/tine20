@@ -26,4 +26,14 @@ class Tinebase_ExceptionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(123, $e->getCode());
         $this->assertEquals('test', $e->getMessage());
     }
+    
+    /**
+     * @see 0008794: Create Exception Handler Dialog with inputs
+     *      https://forge.tine20.org/mantisbt/view.php?id=8794
+     */
+    public function testTitle()
+    {
+        $e = new Tinebase_Exception('test', 321);
+        $this->assertEquals('Exception ({0})', $e->getTitle());
+    }
 }
