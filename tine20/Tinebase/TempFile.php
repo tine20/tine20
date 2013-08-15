@@ -295,7 +295,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         
         $handle = fopen($path, 'w+');
         if (! $handle) {
-            throw new Tinebase_Exception('Could not create temp file in ' . $tempdir);
+            throw new Tinebase_Exception('Could not create temp file in ' . dirname($path));
         }
         
         $this->createTempFile($path);
