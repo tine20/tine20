@@ -197,7 +197,7 @@ abstract class Tinebase_Config_Abstract
         $config = $this->_loadConfig($_name);
         if ($config) {
             $this->_getBackend()->delete($config->getId());
-            $this->clearCache();
+            $this->clearCache(array("name" => $_name));
         }
     }
     
@@ -212,7 +212,7 @@ abstract class Tinebase_Config_Abstract
     public function deleteConfigByApplicationId($_applicationId)
     {
         $count = $this->_getBackend()->deleteByProperty($_applicationId, 'application_id');
-        $this->clearCache();
+        $this->clearCache(array("id" => $_applicationId));
         
         return $count;
     }
@@ -315,7 +315,20 @@ abstract class Tinebase_Config_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' appName not set');
             $this->_cachedApplicationConfig = array();
         }
-        
+
+        $cache = Tinebase_Core::getCache();
+        if (!is_object($cache)) {
+           Tinebase_Core::setupCache();
+           $cache = Tinebase_Core::getCache();
+        }
+
+        if (Tinebase_Core::get(Tinebase_Core::SHAREDCACHE)) {
+            if ($cache->test('cachedAppConfig_' . $this->_appName)) {
+                $this->_cachedApplicationConfig = $cache->load('cachedAppConfig_' . $this->_appName);
+                return;
+            }
+        }
+
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
@@ -330,6 +343,10 @@ abstract class Tinebase_Config_Abstract
         
         foreach ($allConfigs as $config) {
             $this->_cachedApplicationConfig[$config->name] = $config;
+        }
+
+        if (Tinebase_Core::get(Tinebase_Core::SHAREDCACHE)) {
+            $cache->save($this->_cachedApplicationConfig, 'cachedAppConfig_' . $this->_appName);
         }
     }
     
@@ -363,14 +380,25 @@ abstract class Tinebase_Config_Abstract
         
         return $result;
     }
-    
+
     /**
      * clear the cache
+     * @param   array $appFilter
      */
-    public function clearCache()
+    public function clearCache($appFilter = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Clearing config cache');
         $this->_cachedApplicationConfig = NULL;
+
+        if (Tinebase_Core::get(Tinebase_Core::SHAREDCACHE)) {
+            if (isset($appFilter)) {
+                list($key, $value) = each($appFilter);
+                $appName = $key === 'name' ? $value : Tinebase_Application::getInstance()->getApplicationById($value)->name;
+            } else {
+                $appName = $this->_appName;
+            }
+            Tinebase_Core::getCache()->remove('cachedAppConfig_' . $appName);
+        }
     }
     
     /**

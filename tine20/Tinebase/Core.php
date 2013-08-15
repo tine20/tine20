@@ -53,6 +53,11 @@ class Tinebase_Core
      * constant for cache registry index
      */
     const CACHE = 'cache';
+    
+     /**
+     * constant for shared cache registry index
+     */
+    const SHAREDCACHE = 'sharedCache';
 
     /**
      * constant for session namespace (tinebase) registry index
@@ -562,7 +567,14 @@ class Tinebase_Core
     public static function setupCache($_enabled = true)
     {
         $config = self::getConfig();
-        
+        if ($config->caching && $config->caching->active) {
+            if (isset($config->caching->shared) && ($config->caching->shared === true)) {
+                self::set(self::SHAREDCACHE, true);
+            } else {
+                self::set(self::SHAREDCACHE, false);
+            }
+        }
+
         // create zend cache
         if ($_enabled === true && $config->caching && $config->caching->active) {
             $frontendOptions = array(
