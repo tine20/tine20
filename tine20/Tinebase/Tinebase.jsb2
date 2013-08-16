@@ -494,6 +494,10 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "MonthFilter.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "FilterPlugin.js",
           "path": "js/widgets/grid/"
         },

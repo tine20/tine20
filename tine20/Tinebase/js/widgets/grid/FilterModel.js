@@ -96,6 +96,20 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
     filterValueWidth: 200,
     
     /**
+     * holds the future operators of date filters. Auto set by getDateFutureOps
+     * 
+     * @type {Array}
+     */
+    dateFutureOps: null,
+    
+    /**
+     * holds the future operators of date filters. Auto set by getDatePastOps
+     * 
+     * @type {Array}
+     */
+    datePastOps: null,
+    
+    /**
      * @private
      */
     initComponent: function() {
@@ -151,6 +165,45 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     break;
             }
         }
+        
+        this.datePastOps = this.getDatePastOps();
+        this.dateFutureOps = this.getDateFutureOps();
+    },
+    
+    /**
+     * returns past operators for date fields, may be overridden
+     * 
+     * @return {Array}
+     */
+    getDatePastOps: function() {
+        return [
+            ['dayThis',         _('today')], 
+            ['dayLast',         _('yesterday')], 
+            ['weekThis',        _('this week')], 
+            ['weekLast',        _('last week')],
+            ['weekBeforeLast',  _('the week before last')],
+            ['monthThis',       _('this month')],
+            ['monthLast',       _('last month')],
+            ['quarterThis',     _('this quarter')],
+            ['quarterLast',     _('last quarter')],
+            ['yearThis',        _('this year')],
+            ['yearLast',        _('last year')]
+        ];
+    },
+    
+    /**
+     * returns future operators for date fields, may be overridden
+     * 
+     * @return {Array}
+     */
+    getDateFutureOps: function() {
+        return [
+            ['dayNext',         _('tomorrow')], 
+            ['weekNext',        _('next week')], 
+            ['monthNext',       _('next month')],
+            ['quarterNext',     _('next quarter')],
+            ['yearNext',        _('next year')]
+        ];
     },
     
     onDestroy: Ext.emptyFn,
@@ -458,29 +511,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 break;
         }
         
-        var pastOps = [
-            ['dayThis',         _('today')], 
-            ['dayLast',         _('yesterday')], 
-            ['weekThis',        _('this week')], 
-            ['weekLast',        _('last week')],
-            ['weekBeforeLast',  _('the week before last')],
-            ['monthThis',       _('this month')],
-            ['monthLast',       _('last month')],
-            ['quarterThis',     _('this quarter')],
-            ['quarterLast',     _('last quarter')],
-            ['yearThis',        _('this year')],
-            ['yearLast',        _('last year')]
-        ];
-        
-        var futureOps = [
-            ['dayNext',         _('tomorrow')], 
-            ['weekNext',        _('next week')], 
-            ['monthNext',       _('next month')],
-            ['quarterNext',     _('next quarter')],
-            ['yearNext',        _('next year')]
-        ];
-        
-        var comboOps = this.pastOnly ? pastOps : futureOps.concat(pastOps);
+        var comboOps = this.pastOnly ? this.datePastOps : this.dateFutureOps.concat(this.datePastOps);
         var comboValue = 'weekThis';
         if (filter.data.value && filter.data.value.toString().match(/^[a-zA-Z]+$/)) {
             comboValue = filter.data.value.toString();
