@@ -807,4 +807,48 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(1, $result['results'][0]['is_cleared'], print_r($result['results'][0], TRUE));
         $this->assertEquals(1, $result['results'][122]['is_cleared'], print_r($result['results'][122], TRUE));
     }
+    
+    /**
+     * test if relation record gets deleted on both sides on deleting the relation on one side
+     */
+    public function testDeleteTimeaccountWitContractRelation()
+    {
+        $taContainer = Tinebase_Container::getInstance()->getDefaultContainer('Timetracker_Model_Timeaccount');
+        $cContainer  = Tinebase_Container::getInstance()->getDefaultContainer('Sales_Model_Contract');
+        $ta = new Timetracker_Model_Timeaccount(array('number' => 83209, 'title' => 'unitttest', 'container_id' => $taContainer->getId()));
+        
+        $contract = new Sales_Model_Contract(array('number' => 83209, 'title' => 'unittest', 'container_id' => $cContainer->getId()));
+        $contract = Sales_Controller_Contract::getInstance()->create($contract);
+        $ta = Timetracker_Controller_Timeaccount::getInstance()->create($ta);
+        
+        $r = new Tinebase_Model_Relation(array(
+            'own_model' => 'Timetracker_Model_Timeaccount',
+            'own_backend' => 'Sql',
+            'own_degree' => 'sibling',
+            'own_id' => $ta->getId(),
+            'remark' => 'PHP UNITTEST',
+            'related_model' => 'Sales_Model_Contract',
+            'related_backend' => 'Sql',
+            'related_id' => $contract->getId(),
+            'type' => 'CONTRACT'
+        ));
+        
+        $ta->relations = array($r);
+        
+        $ta = Timetracker_Controller_Timeaccount::getInstance()->update($ta);
+        
+        $feTa = new Timetracker_Frontend_Json();
+        $feCo = new Sales_Frontend_Json();
+        
+        $jsonTa = $feTa->getTimeaccount($ta->getId());
+        $jsonCo = $feCo->getContract($contract->getId());
+        
+        $this->assertEquals(1, count($jsonTa['relations']));
+        $this->assertEquals(1, count($jsonCo['relations']));
+        
+        $feTa->deleteTimeaccounts(array($ta->getId()));
+        
+        $jsonCo = $feCo->getContract($contract->getId());
+        $this->assertEquals(0, count($jsonCo['relations']));
+    }
 }
