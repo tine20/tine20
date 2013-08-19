@@ -790,6 +790,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('First name'),
                         name: 'accountFirstName',
                         columnWidth: 0.5,
+                        tabIndex: 1,
                         listeners: {
                             render: function (field) {
                                 field.focus(false, 250);
@@ -800,11 +801,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('Last name'),
                         name: 'accountLastName',
                         allowBlank: false,
+                        tabIndex: 2,
                         columnWidth: 0.5
                     }], [{
                         fieldLabel: this.app.i18n.gettext('Login name'),
                         name: 'accountLoginName',
                         allowBlank: false,
+                        tabIndex: 3,
                         columnWidth: 0.5
                     }, {
                         fieldLabel: this.app.i18n.gettext('Password'),
@@ -812,6 +815,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'accountPassword',
                         inputType: 'password',
                         columnWidth: 0.5,
+                        tabIndex: 4,
                         passwordsMatch: true,
                         enableKeyEvents: true,
                         listeners: {
@@ -838,6 +842,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }], [{
                         vtype: 'email',
                         fieldLabel: this.app.i18n.gettext('Email'),
+                        tabIndex: 5,
                         name: 'accountEmailAddress',
                         id: 'accountEmailAddress',
                         columnWidth: 0.5
@@ -845,11 +850,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         //vtype: 'email',
                         fieldLabel: this.app.i18n.gettext('OpenID'),
                         emptyText: '(' + this.app.i18n.gettext('Login name') + ')',
+                        tabIndex: 6,
                         name: 'openid',
                         columnWidth: 0.5
                     }], [{
                         xtype: 'tinerecordpickercombobox',
                         fieldLabel: this.app.i18n.gettext('Primary group'),
+                        tabIndex: 7,
                         listWidth: 250,
                         name: 'accountPrimaryGroup',
                         blurOnSelect: true,
@@ -871,6 +878,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         mode: 'local',
                         triggerAction: 'all',
                         allowBlank: false,
+                        tabIndex: 8,
                         editable: false,
                         store: [
                             ['enabled',  this.app.i18n.gettext('enabled')],
@@ -908,12 +916,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         xtype: 'extuxclearabledatefield',
                         fieldLabel: this.app.i18n.gettext('Expires'),
                         name: 'accountExpires',
+                        tabIndex: 9,
                         emptyText: this.app.i18n.gettext('never')
                     }], [{
                         xtype: 'combo',
                         fieldLabel: this.app.i18n.gettext('Visibility'),
                         name: 'visibility',
                         mode: 'local',
+                        tabIndex: 10,
                         triggerAction: 'all',
                         allowBlank: false,
                         editable: false,
@@ -934,12 +944,25 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('Saved in Addressbook'),
                         name: 'container_id',
                         blurOnSelect: true,
+                        tabIndex: 11,
                         allowBlank: false,
                         forceSelection: true,
                         listWidth: 250,
                         recordClass: Tine.Tinebase.Model.Container,
                         disabled: this.record.get('visibility') === 'hidden',
-                        recordProxy: Tine.Admin.sharedAddressbookBackend
+                        recordProxy: Tine.Admin.sharedAddressbookBackend,
+                        listeners: {
+                            specialkey: function(combo, e) {
+                                if (e.getKey() == e.TAB && ! e.shiftKey) {
+                                    // move cursor to first input field (skip display fields)
+                                    // @see 0008226: when tabbing in user edit dialog, wrong tab content is displayed
+                                    e.preventDefault();
+                                    e.stopEvent();
+                                    this.getForm().findField('accountFirstName').focus();
+                                }
+                            },
+                            scope: this
+                        }
                     }]] 
                 }, {
                     xtype: 'fieldset',
