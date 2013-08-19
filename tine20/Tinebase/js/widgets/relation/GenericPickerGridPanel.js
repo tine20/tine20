@@ -463,7 +463,10 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 break;
             default: return;
         }
-        if(colModel.config[o.column].editor) colModel.config[o.column].editor.selectedRecord = null;
+        
+        if (colModel.config[o.column].editor) {
+            colModel.config[o.column].editor.selectedRecord = null;
+        }
     },
 
     /**
@@ -472,7 +475,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @return {}
      */
     getTypeEditor: function(config) {
-        var data = [];
+        var data = [['', '']];
         Ext.each(config, function(c){
             data.push([c.type.toUpperCase(), c.text]);
         });
@@ -481,10 +484,11 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 fields: ['id', 'value'],
                 data: data
             }),
-            allowBlank: false,
+            allowBlank: true,
             displayField: 'value',
             valueField: 'id',
-            mode: 'local'
+            mode: 'local',
+            tpl: '<tpl for="."><div class="x-combo-list-item">{value}&nbsp;</div></tpl>'
         });
     },
 
