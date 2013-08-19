@@ -329,8 +329,15 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     {
         $result = parent::_recordToRawData($_record);
         
-        if(isset($result['structure'])) {
-            $result['structure'] = Zend_Json::encode($result['structure']);
+        if (isset($result['structure'])) {
+            $jsonStructure = Zend_Json::encode($result['structure']);
+            if ($jsonStructure === FALSE) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                    . 'Could not encode structure: ' . print_r($result['structure'], TRUE));
+                $result['structure'] = NULL;
+            } else {
+                $result['structure'] = $jsonStructure;
+            }
         }
         
         return $result;
@@ -349,7 +356,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         }
         
         $result = parent::_rawDataToRecord($_rawData);
-                
+        
         return $result;
     }
     
