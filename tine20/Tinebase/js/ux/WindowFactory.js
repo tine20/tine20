@@ -167,6 +167,9 @@ ls[p].call(ls.scope, arguments[0], arguments[1], arguments[2], arguments[3], arg
             
             // finally construct the content panel
             items = new ref(config.contentPanelConstructorConfig);
+            
+            // remove x-window reference
+            config.contentPanelConstructorConfig.listeners = null;
         } else {
             items = config.items ? config.items : {};
         }
