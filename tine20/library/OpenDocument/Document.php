@@ -269,7 +269,11 @@ class OpenDocument_Document
         foreach ($iterator as $fullFilename => $cur) {
             // the second parameter of the addFile function needs always the unix directory separator
             $localname = str_replace('\\', '/', substr($fullFilename, strlen($tempDir)+1));
-            if ($localname !== '.' && $localname !== '..') {
+            
+            // exclude . and ..
+            $localname_parts = pathinfo($localname);
+            $localbasename = $localname_parts['basename'];
+            if ($localbasename !== '.' && $localbasename !== '..') {
                 $zip->addFile($fullFilename, $localname);
             }
         }
@@ -282,6 +286,9 @@ class OpenDocument_Document
         return $filename;
     }
     
+    /**
+     * add styles
+     */
     protected function _addStyles()
     {
         $styles = $this->_document->xpath('//office:automatic-styles');
