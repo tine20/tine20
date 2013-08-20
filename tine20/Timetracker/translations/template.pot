@@ -431,8 +431,16 @@ msgstr ""
 msgid "Creation Time"
 msgstr ""
 
+#: Setup/Initialize.php:126 Setup/Update/Release5.php:95
+msgid "Timeaccounts not yet billed"
+msgstr ""
+
 #: js/Models.js:96 js/Models.js:175
 msgid "Created By"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Timetracker"
 msgstr ""
 
 #: js/Models.js:145

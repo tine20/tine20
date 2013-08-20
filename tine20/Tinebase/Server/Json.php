@@ -252,13 +252,17 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
         $exceptionData['message'] = htmlentities($exception->getMessage(), ENT_COMPAT, 'UTF-8');
         $exceptionData['code']    = $exception->getCode();
-        $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
-        if ($suppressTrace !== TRUE) {
-            $exceptionData['trace'] = Tinebase_Exception::getTraceAsArray($exception);
-        }
+        
         if ($exception instanceof Tinebase_Exception) {
             $exceptionData['appName'] = $exception->getAppName();
             $exceptionData['title'] = $exception->getTitle();
+        }
+        
+        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
+        
+        $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
+        if ($suppressTrace !== TRUE) {
+            $exceptionData['trace'] = Tinebase_Exception::getTraceAsArray($exception);
         }
         
         Tinebase_Exception::log($exception, $suppressTrace);
