@@ -2763,3 +2763,6 @@ msgstr "Kein Dialog"
 
 msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
 msgstr "Der Datensatz kann nicht bearbeitet werden. Es existiert kein entsprechender Dialog."
+
+msgid "Exception ({0})"
+msgstr "Ausnahmefehler ({0})"

@@ -70,6 +70,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "ExceptionHandlerDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "FieldLabeler.js",
           "path": "js/ux/"
         },
@@ -491,6 +495,10 @@
         },
         {
           "text": "FilterModel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "MonthFilter.js",
           "path": "js/widgets/grid/"
         },
         {

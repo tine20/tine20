@@ -2751,3 +2751,6 @@ msgstr ""
 
 msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
 msgstr ""
+
+msgid "Exception ({0})"
+msgstr ""

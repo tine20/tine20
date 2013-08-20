@@ -121,8 +121,12 @@ Tine.Tinebase.ExceptionHandler = function() {
      * NOTE: status codes 9xx are reserved for applications and must not be handled here!
      * 
      * @param {Tine.Exception|Object} exception
+     * @param {Function} callback
+     * @param {Object}   callbackScope
+     * @param {Function} callbackOnOk
+     * @param {Object}   callbackOnOkScope
      */
-    var handleRequestException = function(exception, callback, callbackScope) {
+    var handleRequestException = function(exception, callback, callbackScope, callbackOnOk, callbackOnOkScope) {
          if (! exception.code && exception.responseText) {
             // we need to decode the exception first
             var response = Ext.util.JSON.decode(exception.responseText);
@@ -131,7 +135,7 @@ Tine.Tinebase.ExceptionHandler = function() {
         
         if (Tine.Tinebase.ExceptionHandlerRegistry.has(exception.appName)) {
             // the registered function must return true to don't work on this generically
-            if (Tine.Tinebase.ExceptionHandlerRegistry.get(exception.appName)(exception)) {
+            if (Tine.Tinebase.ExceptionHandlerRegistry.get(exception.appName)(exception, callback, callbackScope, callbackOnOk, callbackOnOkScope) === true) {
                 return;
             }
         } 
@@ -146,8 +150,8 @@ Tine.Tinebase.ExceptionHandler = function() {
         Tine.log.debug('Tine.Tinebase.ExceptionHandler::handleRequestException -> Exception:');
         Tine.log.debug(exception);
     
-        if (!callback) callback = Ext.emptyFn;
-        if (!callbackScope) callbackScope = this;
+        if (! callback) callback = Ext.emptyFn;
+        if (! callbackScope) callbackScope = this;
         
         switch (exception.code) {
             // not authorised
