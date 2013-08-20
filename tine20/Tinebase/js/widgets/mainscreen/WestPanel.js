@@ -197,9 +197,12 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      */
     getContainerTreePanel: function() {
         var panelName = this.app.getMainScreen().getActiveContentType() + 'TreePanel';
-        if(!this[panelName]) {
-            if(Tine[this.app.appName].hasOwnProperty(panelName)) this[panelName] = new Tine[this.app.appName][panelName]({app: this.app});
-            else this[panelName] = new Tine.widgets.persistentfilter.PickerPanel({app: this.app});
+        if (! this[panelName]) {
+            if (Tine[this.app.appName].hasOwnProperty(panelName)) {
+                this[panelName] = new Tine[this.app.appName][panelName]({app: this.app});
+            } else {
+                this[panelName] = new Tine.widgets.persistentfilter.PickerPanel({app: this.app});
+            }
             this[panelName].on('click', function (node, event) {
                 if(node != this.lastClickedNode) {
                     this.lastClickedNode = node;
