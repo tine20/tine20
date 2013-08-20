@@ -71,14 +71,12 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     {
         $select = $this->_getSelect('*');
         $select->where($this->_db->quoteIdentifier('id') . ' = ?', $_fileId)
-               ->where($this->_db->quoteIdentifier('session_id') . ' = ?', session_id());
+               ->where($this->_db->quoteIdentifier('session_id') . ' = ?', $this->_getSessionId());
 
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-            
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
-                
+        
         if (!$queryResult) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Could not fetch row with id $_fileId from temp_files table.");
             return NULL;
@@ -86,6 +84,23 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
 
         $result = new Tinebase_Model_TempFile($queryResult);
         return $result;
+    }
+    
+    /**
+     * get session id
+     * 
+     * @return string
+     * 
+     * @see 0008460: WebDAV File Upload fails "Tinebase_Exception_Record_Validation' with message 'some fields session_id have invalid content"
+     */
+    protected function _getSessionId()
+    {
+        $sessionId = Tinebase_Core::get(Tinebase_Core::SESSIONID);
+        if (empty($sessionId)) {
+            $sessionId = 'no_session_id';
+        }
+        
+        return $sessionId;
     }
     
     /**
@@ -101,7 +116,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      */
     public function uploadTempFile()
     {
-        $path = $this->_getTempPath();
+        $path = self::getTempPath();
         
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload to path " . $path);
@@ -155,7 +170,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * @throws Tinebase_Exception_UnexpectedValue
      * @return string
      */
-    protected function _getTempPath()
+    public static function getTempPath()
     {
         $path = tempnam(Tinebase_Core::getTempDir(), 'tine_tempfile_');
         if (! $path) {
@@ -182,13 +197,13 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         $id = Tinebase_Model_TempFile::generateUID();
         $tempFile = new Tinebase_Model_TempFile(array(
            'id'          => $id,
-           'session_id'  => session_id(),
+           'session_id'  => $this->_getSessionId(),
            'time'        => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
            'path'        => $_path,
            'name'        => $filename,
-           'type'        => !empty($_type) ? $_type : 'unknown',
-           'error'       => !empty($_error) ? $_error : 0,
-           'size'        => !empty($_size) ? $_size : filesize($_path),
+           'type'        => ! empty($_type)  ? $_type  : 'unknown',
+           'error'       => ! empty($_error) ? $_error : 0,
+           'size'        => ! empty($_size)  ? $_size  : filesize($_path),
         ));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -273,14 +288,14 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      */
     public function openTempFile()
     {
-        $path = $this->_getTempPath();
+        $path = self::getTempPath();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Opening temp file ' . $path);
         
         $handle = fopen($path, 'w+');
         if (! $handle) {
-            throw new Tinebase_Exception('Could not create temp file in ' . $tempdir);
+            throw new Tinebase_Exception('Could not create temp file in ' . dirname($path));
         }
         
         $this->createTempFile($path);

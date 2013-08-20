@@ -114,7 +114,6 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result['results'][2]['added_date']->setTimezone('Europe/Berlin')->toString(), '2012-01-11 00:00:00');
         $this->assertEquals($result['results'][2]['inventory_id'], '1333431666');
         $this->assertContains($translatedString, $result['results'][2]['description']);
-        
     }
     
     /**

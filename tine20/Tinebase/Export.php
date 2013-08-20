@@ -60,6 +60,8 @@ class Tinebase_Export
                 }
             }
         } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Export options: ' . print_r($_options, TRUE));
             throw new Tinebase_Exception_InvalidArgument('Export definition ID or format required in options');
         }
         

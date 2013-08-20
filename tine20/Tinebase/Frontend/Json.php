@@ -241,11 +241,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function updateMultipleRecords($appName, $modelName, $changes, $filter)
     {
+        // increase execution time to 30 minutes
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(1800);
+        
         $filterModel = $appName . '_Model_' . $modelName . 'Filter';
         foreach ($changes as $f) {
             $data[preg_replace('/^customfield_/','#', $f['name'])] = $f['value'];
         }
-
+        
         return $this->_updateMultiple($filter, $data, Tinebase_Core::getApplicationInstance($appName, $modelName), $filterModel);
     }
 

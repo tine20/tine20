@@ -1375,6 +1375,19 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('http://www.facebook.com/n/?notifications&amp;id=295475095891&amp;'
             . 'mid=7a0ffadG5af33a8a9c98Ga61c449Gdd&amp;bcode=1.1362559617.Abl6w95TdWQc0VVS&amp;n_m=tine20%40metaways.de', $message->body);
     }
+
+    /**
+     * testBlockquoteClass
+     * 
+     * @see 0008574: add class "felamimail-body-blockquote" to all blockquote tags in mail body
+     */
+    public function testBlockquoteClass()
+    {
+        $cachedMessage = $this->messageTestHelper('blockquote.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertNotContains('<blockquote>', $message->body);
+    }
     
     /********************************* protected helper funcs *************************************/
     
@@ -1418,12 +1431,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * @param string $_testHeaderValue
      * @param Felamimail_Model_Folder $_folder
      * @param boolean $assert
+     * @param string $testHeader
      * @return Felamimail_Model_Message|NULL
      */
-    public function searchAndCacheMessage($_testHeaderValue, $_folder = NULL, $assert = TRUE)
+    public function searchAndCacheMessage($_testHeaderValue, $_folder = NULL, $assert = TRUE, $testHeader = 'X-Tine20TestMessage')
     {
         $folder = ($_folder !== NULL) ? $_folder : $this->_folder;
-        $message = $this->_searchMessage($_testHeaderValue, $folder, $assert);
+        $message = $this->_searchMessage($_testHeaderValue, $folder, $assert, $testHeader);
         
         if ($message === NULL && ! $assert) {
             return NULL;
@@ -1451,20 +1465,21 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * @param string $_testHeaderValue
      * @param Felamimail_Model_Folder $_folder
      * @param boolean $_assert
+     * @param string $testHeader
      * @return array|NULL
      */
-    protected function _searchMessage($_testHeaderValue, $_folder, $_assert = TRUE)
+    protected function _searchMessage($_testHeaderValue, $_folder, $_assert = TRUE, $testHeader = 'X-Tine20TestMessage')
     {
         $imap = $this->_getImapFromFolder($_folder);
         
         $count = 0;
         do {
             sleep(1);
-            $result = $this->_searchOnImap($_testHeaderValue, $_folder, $imap);
+            $result = $this->_searchOnImap($_testHeaderValue, $_folder, $imap, $testHeader);
         } while (count($result) === 0 && $count++ < 5);
         
         if ($_assert) {
-            $this->assertGreaterThan(0, count($result), 'No messages with HEADER X-Tine20TestMessage: ' . $_testHeaderValue . ' in folder ' . $_folder->globalname . ' found.');
+            $this->assertGreaterThan(0, count($result), 'No messages with HEADER ' . $testHeader . ': ' . $_testHeaderValue . ' in folder ' . $_folder->globalname . ' found.');
         }
         $message = (! empty($result)) ? $imap->getSummary($result[0]) : NULL;
         
@@ -1492,9 +1507,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @param string $_testHeaderValue
      * @param Felamimail_Model_Folder $_folder
+     * @param Felamimail_Backend_ImapProxy $_imap
+     * @param string $testHeader
      * @return array
      */
-    protected function _searchOnImap($_testHeaderValue, $_folder, $_imap = NULL)
+    protected function _searchOnImap($_testHeaderValue, $_folder, $_imap = NULL, $testHeader = 'X-Tine20TestMessage')
     {
         if ($_imap === NULL) {
             $imap = $this->_getImapFromFolder($_folder);
@@ -1504,7 +1521,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $imap->expunge($_folder->globalname);
         $result = $imap->search(array(
-            'HEADER X-Tine20TestMessage ' . $_testHeaderValue
+            'HEADER ' . $testHeader . ' ' . $_testHeaderValue
         ));
         
         return $result;

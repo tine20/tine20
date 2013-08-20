@@ -257,15 +257,21 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->headers = Felamimail_Controller_Message::getInstance()->getMessageHeaders($this->getId(), NULL, TRUE);
         }
         
-        if (array_key_exists('disposition-notification-to', $this->headers) && $this->headers['disposition-notification-to']/* && !$this->hasSeenFlag() */) {
+        if (array_key_exists('disposition-notification-to', $this->headers) && $this->headers['disposition-notification-to']) {
             $translate = Tinebase_Translation::getTranslation($this->_application);
             $from = Felamimail_Controller_Account::getInstance()->get($this->account_id);
-
+            
             $message = new Felamimail_Model_Message();
             $message->account_id = $this->account_id;
-
+            
+            $punycodeConverter = Felamimail_Controller_Message::getInstance()->getPunycodeConverter();
+            $to = Felamimail_Message::convertAddresses($this->headers['disposition-notification-to'], $punycodeConverter);
+            if (empty($to)) {
+                throw new Felamimail_Exception('disposition-notification-to header does not contain a valid email address');
+            }
+             
             $message->content_type = Felamimail_Model_Message::CONTENT_TYPE_HTML;
-            $message->to           = $this->headers['disposition-notification-to'];
+            $message->to           = $to[0]['email'];
             $message->subject      = $translate->_('Reading Confirmation:') . ' '. $this->subject;
             $message->body         = $translate->_('Your message:'). ' ' . $this->subject . "\n" .
                                      $translate->_('Received on')  . ' ' . $this->received . "\n" .
@@ -285,13 +291,14 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     public function parseHeaders(array $_headers)
     {
         // remove duplicate headers (which can't be set twice in real life)
-        foreach (array('date', 'from', 'to', 'cc', 'bcc', 'subject', 'sender') as $field) {
+        foreach (array('date', 'from', 'subject', 'sender') as $field) {
             if (isset($_headers[$field]) && is_array($_headers[$field])) {
                 $_headers[$field] = $_headers[$field][0];
             }
         }
         
-        $this->subject = (isset($_headers['subject'])) ? Felamimail_Message::convertText($_headers['subject']) : null;
+        // @see 0008644: error when sending mail with note (wrong charset)
+        $this->subject = (isset($_headers['subject'])) ? Tinebase_Core::filterInputForDatabase(Felamimail_Message::convertText($_headers['subject'])) : null;
         
         if (array_key_exists('date', $_headers)) {
             $this->sent = Felamimail_Message::convertDate($_headers['date']);
@@ -303,23 +310,30 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         
         foreach (array('to', 'cc', 'bcc', 'from', 'sender') as $field) {
             if (isset($_headers[$field])) {
-                $value = Felamimail_Message::convertAddresses($_headers[$field], $punycodeConverter);
-                
-                switch($field) {
-                    case 'from':
-                        $this->from_email = (isset($value[0]) && array_key_exists('email', $value[0])) ? $value[0]['email'] : '';
-                        $this->from_name = (isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
-                        break;
-                        
-                    case 'sender':
-                        $this->sender = (isset($value[0]) && array_key_exists('email', $value[0])) ? '<' . $value[0]['email'] . '>' : '';
-                        if ((isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name']))) {
-                            $this->sender = '"' . $value[0]['name'] . '" ' . $this->sender;
-                        }
-                        break;
-                        
-                    default:
-                        $this->$field = $value;
+                if (is_array($_headers[$field])) {
+                    $value = array();
+                    foreach ($_headers[$field] as $headerValue) {
+                        $value = array_merge($value, Felamimail_Message::convertAddresses($headerValue, $punycodeConverter));
+                    }
+                    $this->$field = $value;
+                } else {
+                    $value = Felamimail_Message::convertAddresses($_headers[$field], $punycodeConverter);
+                    switch ($field) {
+                        case 'from':
+                            $this->from_email = (isset($value[0]) && array_key_exists('email', $value[0])) ? $value[0]['email'] : '';
+                            $this->from_name = (isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
+                            break;
+                            
+                        case 'sender':
+                            $this->sender = (isset($value[0]) && array_key_exists('email', $value[0])) ? '<' . $value[0]['email'] . '>' : '';
+                            if ((isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name']))) {
+                                $this->sender = '"' . $value[0]['name'] . '" ' . $this->sender;
+                            }
+                            break;
+                            
+                        default:
+                            $this->$field = $value;
+                    }
                 }
             }
         }
@@ -674,8 +688,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 $recordData[$field] = array_unique($recipients);
             }
         }
-    }    
-
+    }
+    
     /**
      * get body as plain text
      * 

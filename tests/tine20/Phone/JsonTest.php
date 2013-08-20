@@ -6,8 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
- * @todo        add test for saveMyPhone
  */
 
 /**
@@ -26,6 +24,13 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      * @var Phone_Frontend_Json
      */
     protected $_json;
+    
+    /**
+     * the admin user
+     * 
+     * @var Tinebase_Model_FullUser
+     */
+    protected $_adminUser;
     
     /**
      * @var array test objects
@@ -193,6 +198,8 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         // create calls
         $call = $phoneController->callStarted($this->_objects['call1']);
         $call = $phoneController->callStarted($this->_objects['call2']);
+        
+        $this->_adminUser = Tinebase_Core::getUser();
     }
 
     /**
@@ -204,6 +211,10 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+        
+        if ($this->_adminUser != Tinebase_Core::getUser()) {
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_adminUser);
+        }
     }
     
     /**
@@ -230,6 +241,58 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(1, $result['totalcount'], 'phone_id filter not working');
     }
 
+    /**
+     * #8380: write a test for saveMyPhone as unprivileged user
+     * https://forge.tine20.org/mantisbt/view.php?id=8380
+     */
+    public function testSaveMyPhoneAsUnprivilegedUser()
+    {
+        // first save the phone as privileged user
+        $userPhone = $this->_json->getMyPhone($this->_objects['phone']->getId());
+        $userPhone['lines'][0]['asteriskline_id']['cfi_mode'] = "number";
+        $userPhone['lines'][0]['asteriskline_id']['cfi_number'] = "+494949302111";
+        
+        // try to set a property which should be overwritten again
+        $userPhone['description'] = 'no phone';
+        
+        $phone = $this->_json->saveMyPhone($userPhone);
+        
+        $this->assertEquals('number', $phone['lines'][0]['asteriskline_id']['cfi_mode']);
+        $this->assertEquals('+494949302111', $phone['lines'][0]['asteriskline_id']['cfi_number']);
+        $this->assertEquals('user phone', $phone['description']);
+        
+        $additionalLine = array(
+            'id'                => Tinebase_Record_Abstract::generateUID(),
+            'snomphone_id'      => $this->_objects['phone']->getId(),
+            'asteriskline_id'   => $this->_objects['sippeer']->getId(),
+            'linenumber'        => 2,
+            'lineactive'        => 2
+        );
+        
+        // use another user which doesn't have access to the phone
+        Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()->getFullUserByLoginName('pwulf'));
+        
+        $e = new Exception('No Exception has been thrown!');
+        
+        try {
+            $this->_json->saveMyPhone($userPhone);
+        } catch (Exception $e) {
+            
+        }
+        
+        $this->assertEquals('Tinebase_Exception_AccessDenied', get_class($e));
+        
+        // try to save with a line removed
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_adminUser);
+        $snomLineBackend = new Voipmanager_Backend_Snom_Line();
+        $snomLineBackend->create(new Voipmanager_Model_Snom_Line($additionalLine));
+        $userPhone = $this->_json->getMyPhone($this->_objects['phone']->getId());
+
+        unset($userPhone['lines'][1]);
+        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $this->_json->saveMyPhone($userPhone);
+    }
+    
     /**
      * get and update user phone
      * 

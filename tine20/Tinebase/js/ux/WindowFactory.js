@@ -167,6 +167,9 @@ Ext.ux.WindowFactory.prototype = {
             
             // finally construct the content panel
             items = new ref(config.contentPanelConstructorConfig);
+            
+            // remove x-window reference
+            config.contentPanelConstructorConfig.listeners = null;
         } else {
             items = config.items ? config.items : {};
         }

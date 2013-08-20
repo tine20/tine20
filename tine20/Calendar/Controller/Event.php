@@ -114,8 +114,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
         
-        // don't check if event is transparent
+        // 
         if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP || count($_event->attendee) < 1) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Skipping free/busy check because event is transparent");
             return;
         }
         
@@ -143,6 +145,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             throw $busyException;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Free/busy check: no conflict found");
     }
     
     /**
@@ -272,13 +277,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // finaly create filter
         $filter = new Calendar_Model_EventFilter($filterData);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
+            . ' free/busy fitler: ' . print_r($filter->toArray(), true));
+        
         $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
         
         foreach ($_periods as $period) {
             Calendar_Model_Rrule::mergeRecurrenceSet($events, $period['from'], $period['until']);
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($events->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
+            . ' value: ' . print_r($events->toArray(), true));
         
         // create a typemap
         $typeMap = array();
@@ -289,10 +298,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $typeMap[$attender['user_type']][$attender['user_id']] = array();
         }
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($typeMap, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
+            . ' value: ' . print_r($typeMap, true));
         
         // generate freeBusyInfos
-        foreach($events as $event) {
+        foreach ($events as $event) {
             // skip events with ignoreUID
             if (in_array($event->uid, $_ignoreUIDs)) {
                 continue;
@@ -442,20 +452,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $this->_inspectEvent($_record);
                
                 if ($_checkBusyConflicts) {
-                    // only do free/busy check if start/endtime changed  or attendee added or rrule changed
                     if ($event->isRescheduled($_record) ||
-                           count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0 // attendee add
+                           count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0
                        ) {
-                        
-                        // ensure that all attendee are free
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . " Ensure that all attendee are free with free/busy check ... ");
                         $this->checkBusyConflicts($_record);
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . " Skipping free/busy check because event has not been rescheduled and no new attender has been added");
                     }
                 }
                 
                 parent::update($_record);
                 
             } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
                 foreach ($_record->attendee as $attender) {
                     if ($attender->status_authkey) {
                         $this->attenderStatusUpdate($_record, $attender, $attender->status_authkey);
@@ -523,7 +536,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $this->_applyExdateDiffToRecordSet($exdate, $diff, $events);
         } else if ($range === Calendar_Model_Event::RANGE_THISANDFUTURE) {
             $nextRegularRecurEvent = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $exdate->dtstart);
-            if ($nextRegularRecurEvent !== NULL && ! $nextRegularRecurEvent->dtstart->isEarlier($exdate->dtstart)) {
+            
+            if ($nextRegularRecurEvent == $baseEvent) {
+                // NOTE if a fist instance exception takes place before the
+                //      series would start normally, $nextOccurence is the
+                //      baseEvent of the series. As createRecurException can't
+                //      deal with this situation we update whole series here
+                $this->_updateExdateRange($exdate, Calendar_Model_Event::RANGE_ALL, $oldExdate);
+            } else if ($nextRegularRecurEvent !== NULL && ! $nextRegularRecurEvent->dtstart->isEarlier($exdate->dtstart)) {
                 $this->_applyDiff($nextRegularRecurEvent, $diff, $exdate, FALSE);
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -653,7 +673,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * @param   array $_ids array of record identifiers
      * @param   string $range
-     * @return  Tinebase_Record_RecordSet
+     * @return  NULL
      * @throws Tinebase_Exception_NotFound|Tinebase_Exception
      */
     public function delete($_ids, $range = Calendar_Model_Event::RANGE_THIS)
@@ -725,13 +745,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $baseEvent = $this->getRecurBaseEvent($exdate);
         
         if ($range === Calendar_Model_Event::RANGE_ALL) {
-            $exceptions = $this->getRecurExceptions($baseEvent);
-            $this->delete($exceptions->getArrayOfIds());
-            $this->delete($baseEvent->getId());
-            
+            $this->deleteRecurSeries($exdate);
         } else if ($range === Calendar_Model_Event::RANGE_THISANDFUTURE) {
             $nextRegularRecurEvent = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $exdate->dtstart);
-            $this->createRecurException($nextRegularRecurEvent, TRUE, TRUE);
+            
+            if ($nextRegularRecurEvent == $baseEvent) {
+                // NOTE if a fist instance exception takes place before the
+                //      series would start normally, $nextOccurence is the
+                //      baseEvent of the series. As createRecurException can't
+                //      deal with this situation we delete whole series here
+                $this->_deleteExdateRange($exdate, Calendar_Model_Event::RANGE_ALL);
+            } else {
+                $this->createRecurException($nextRegularRecurEvent, TRUE, TRUE);
+            }
         }
     }
     
@@ -811,10 +837,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $baseEvent = $this->getRecurBaseEvent($_event);
         
-        // only allow creation if recur instance if clone of base event
         if ($baseEvent->last_modified_time != $_event->last_modified_time) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . " It is not allowed to create recur instance if it is clone of base event");
             throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
         }
+        
         // check if this is an exception to the first occurence
         if ($baseEvent->getId() == $_event->getId()) {
             if ($_allFollowing) {
@@ -828,7 +856,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // just do attender status update if user has no edit grant
         if ($this->_doContainerACLChecks && !$baseEvent->{Tinebase_Model_Grants::GRANT_EDIT}) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: '{$baseEvent->getId()}'. Only creating exception for attendee status");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " user has no editGrant for event: '{$baseEvent->getId()}'. Only creating exception for attendee status");
             if ($_event->attendee instanceof Tinebase_Record_RecordSet) {
                 foreach ($_event->attendee as $attender) {
                     if ($attender->status_authkey) {
@@ -1169,22 +1198,25 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
    /**
-    * adopt alarm time to next occurance for recurring events
+    * adopt alarm time to next occurrence for recurring events
     *
     * @param Tinebase_Record_Abstract $_record
     * @param Tinebase_Model_Alarm $_alarm
     * @param bool $_nextBy {instance|time} set recurr alarm to next from given instance or next by current time
     * @return void
-    * @throws Tinebase_Exception_InvalidArgument
     */
     public function adoptAlarmTime(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm, $_nextBy = 'time')
     {
         if ($_record->rrule) {
-        
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                 ' Adopting alarm time for next recur occurrence (by ' . $_nextBy . ')');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+                 ' ' . print_r($_record->toArray(), TRUE));
+            
             if ($_nextBy == 'time') {
                 // NOTE: this also finds instances running right now
                 $from = Tinebase_DateTime::now();
-        
+            
             } else {
                 $recurid = $_alarm->getOption('recurid');
                 $instanceStart = $recurid ? new Tinebase_DateTime(substr($recurid, -19)) : clone $_record->dtstart;
@@ -1193,19 +1225,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 // make sure we hit the next instance
                 $from = $instanceStart->add($eventLength)->addMinute(1);
             }
-            // this would break if minutes_before > interval
-            //$from->addMinute((int) $_alarm->getOption('minutes_before'));
-        
+            
             // compute next
             $exceptions = $this->getRecurExceptions($_record);
             $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, $from);
-        
+            
+            if ($nextOccurrence === NULL && Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                 ' Recur series is over, no more alarms pending');
+            
             // save recurid so we know for which recurrance the alarm is for
             $_alarm->setOption('recurid', isset($nextOccurrence) ? $nextOccurrence->recurid : NULL);
-        
+            
             $_alarm->sent_status = $nextOccurrence ? Tinebase_Model_Alarm::STATUS_PENDING : Tinebase_Model_Alarm::STATUS_SUCCESS;
             $_alarm->sent_message = $nextOccurrence ?  '' : 'Nothing to send, series is over';
-        
+            
             $eventStart = $nextOccurrence ? clone $nextOccurrence->dtstart : $_record->dtstart;
         } else {
             $eventStart = clone $_record->dtstart;
@@ -1343,6 +1376,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_record->dtend->subMinute($_record->dtend->get('i') == 0 ? 1 : 0);
         }
         $_record->setRruleUntil();
+        
+        if ($_record->isRecurException() && $_record->rrule !== NULL) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Removing invalid rrule from recur exception: ' . $_record->rrule);
+            $_record->rrule = NULL;
+        }
     }
     
     /**
@@ -1359,7 +1398,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // implicitly delete persistent recur instances of series
             if (! empty($event->rrule)) {
                 $exceptionIds = $this->getRecurExceptions($event)->getId();
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Implicitly deleting ' . (count($exceptionIds) - 1 ) . ' persistent exception(s) for recurring series with uid' . $event->uid);
                 $_ids = array_merge($_ids, $exceptionIds);
             }
         }

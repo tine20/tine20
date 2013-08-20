@@ -38,4 +38,11 @@ class Sales_Backend_Contract extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_defaultCountCol = 'id';
+    
+    /**
+     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     *
+     * @var boolean
+     */
+    protected $_modlogActive = TRUE;
 }

@@ -93,8 +93,8 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveMyPhone($recordData)
     {
-        $voipController = Phone_Controller_MyPhone::getInstance();
         unset($recordData['template_id']);
+
         $phone = new Phone_Model_MyPhone();
         $phone->setFromArray($recordData);
         
@@ -108,9 +108,12 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             TRUE
         );
         
-        if (!empty($phone->id)) {
-            $phone = $voipController->update($phone);
-        } 
+        if (! empty($phone->id)) {
+            $phone = Phone_Controller_MyPhone::getInstance()->update($phone);
+        } else {
+            // will throw exception in any case
+            $phone = Phone_Controller_MyPhone::getInstance()->create($phone);
+        }
         
         return $this->getMyPhone($phone->getId());
     } 

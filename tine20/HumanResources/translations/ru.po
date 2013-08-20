@@ -1,12 +1,13 @@
 # 
 # Translators:
+# Aleksdem <aleksdem@aleksdem.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:52+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-06-29 07:40+0000\n"
+"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,10 +26,6 @@ msgstr ""
 msgid ""
 "Edit birthday, account data and other private information of employee "
 "records"
-msgstr ""
-
-#: Controller.php:74
-msgid "You do not have admin rights on HumanResources"
 msgstr ""
 
 #: Config.php:48
@@ -65,100 +62,8 @@ msgid ""
 "other free days in datepicker"
 msgstr ""
 
-#: Setup/Update/Release6.php:299 Setup/Initialize.php:89
-msgid "Excused"
-msgstr ""
-
-#: Setup/Update/Release6.php:300 Setup/Initialize.php:90
-msgid "Unexcused"
-msgstr ""
-
-#: Setup/Update/Release6.php:330 Setup/Initialize.php:33 js/Models.js:111
-msgid "Currently employed"
-msgstr ""
-
-#: Setup/Update/Release6.php:331 Setup/Initialize.php:34
-msgid "Employees which are currently employed"
-msgstr ""
-
-#: Setup/Initialize.php:54
-msgid "Sickness"
-msgstr "Больничный"
-
-#: Setup/Initialize.php:55
-msgid "Vacation"
-msgstr "Отпуск"
-
-#: Setup/Initialize.php:56
-msgid "Remaining Vacation"
-msgstr ""
-
-#: Setup/Initialize.php:57
-msgid "Extra Vacation"
-msgstr ""
-
-#: Setup/Initialize.php:71
-msgid "Requested"
-msgstr ""
-
-#: Setup/Initialize.php:72
-msgid "In process"
-msgstr ""
-
-#: Setup/Initialize.php:73
-msgid "Accepted"
-msgstr ""
-
-#: Setup/Initialize.php:74
-msgid "Declined"
-msgstr ""
-
-#: js/EmployeeGridPanel.js:95 js/FreeDayGridPanel.js:113
-msgid "Tags"
-msgstr "Теги"
-
-#: js/EmployeeGridPanel.js:98 js/EmployeeEditDialog.js:228
-msgid "Number"
-msgstr ""
-
-#: js/EmployeeGridPanel.js:105 js/EmployeeEditDialog.js:288
-msgid "Full Name"
-msgstr "Полное имя"
-
-#: js/EmployeeGridPanel.js:111 js/EmployeeEditDialog.js:293 js/Models.js:116
-msgid "Salutation"
-msgstr "Приветствие"
-
-#: js/EmployeeGridPanel.js:118 js/EmployeeEditDialog.js:301 js/Models.js:113
-msgid "Title"
-msgstr ""
-
-#: js/EmployeeGridPanel.js:125 js/EmployeeEditDialog.js:305 js/Models.js:112
-msgid "First Name"
-msgstr "Имя"
-
-#: js/EmployeeGridPanel.js:132 js/EmployeeEditDialog.js:314 js/Models.js:115
-msgid "Last Name"
-msgstr "Фамилия"
-
-#: js/EmployeeGridPanel.js:139 js/EmployeeEditDialog.js:383 js/Models.js:108
-msgid "Employment begin"
-msgstr ""
-
-#: js/EmployeeGridPanel.js:146 js/EmployeeEditDialog.js:388 js/Models.js:109
-msgid "Employment end"
-msgstr ""
-
-#: js/EmployeeGridPanel.js:153 js/EmployeeEditDialog.js:171
-msgid "Supervisor"
-msgstr ""
-
-#: js/EmployeeGridPanel.js:162 js/EmployeeEditDialog.js:186 js/Models.js:117
-msgid "Health Insurance"
-msgstr "Медицинская страховка"
-
-#: js/EmployeeGridPanel.js:168 js/EmployeeEditDialog.js:179
-msgid "Division"
+#: Controller.php:74
+msgid "You do not have admin rights on HumanResources"
 msgstr ""
 
 #: js/AdminPanel.js:68
@@ -176,125 +81,6 @@ msgstr "Календарь"
 #: js/AdminPanel.js:205 js/ContractGridPanel.js:109
 msgid "Calendars"
 msgstr "Календари"
-
-#: js/EmployeeEditDialog.js:118
-msgid "Dependent Windows"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:119
-msgid ""
-"There are still some windows active dependent to this one. Please save or "
-"cancel them before closing this one!"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:201 js/Models.js:333
-msgid "Free Time"
-msgid_plural "Free Times"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/EmployeeEditDialog.js:209 js/EmployeeEditDialog.js:222
-#: js/FreeTimeEditDialog.js:130 js/FreeDayGridPanel.js:114
-#: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:166 js/Models.js:69
-msgid "Employee"
-msgid_plural "Employees"
-msgstr[0] "Сотрудник"
-msgstr[1] "Сотрудника"
-msgstr[2] "Сотрудников"
-
-#: js/EmployeeEditDialog.js:240 js/Models.js:110
-msgid "Account"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:259
-msgid "Apply contact data on form"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:328
-msgid "Personal Information"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:338
-msgid "Country"
-msgstr "Страна"
-
-#: js/EmployeeEditDialog.js:341
-msgid "Locality"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:344
-msgid "Postalcode"
-msgstr "Почтовый индекс"
-
-#: js/EmployeeEditDialog.js:347
-msgid "Region"
-msgstr "Область"
-
-#: js/EmployeeEditDialog.js:350
-msgid "Street"
-msgstr "Улица"
-
-#: js/EmployeeEditDialog.js:353
-msgid "Street2"
-msgstr "Улица2"
-
-#: js/EmployeeEditDialog.js:356
-msgid "E-Mail"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:359
-msgid "Telephone Number"
-msgstr "Телефон"
-
-#: js/EmployeeEditDialog.js:362
-msgid "Cell Phone Number"
-msgstr "Мобильный телефон"
-
-#: js/EmployeeEditDialog.js:366
-msgid "Birthday"
-msgstr "Дата рождения"
-
-#: js/EmployeeEditDialog.js:374
-msgid "Internal Information"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:391 js/Models.js:114
-msgid "Profession"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:399
-msgid "Banking Information"
-msgstr "Банковская информация"
-
-#: js/EmployeeEditDialog.js:408
-msgid "Account Holder"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:411
-msgid "Account Number"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:414
-msgid "Bank Name"
-msgstr "Название банка"
-
-#: js/EmployeeEditDialog.js:417
-msgid "Code Number"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:438 js/FreeTimeEditDialog.js:273
-#: js/FreeTimeGridPanel.js:170 js/Models.js:118 js/Models.js:381
-msgid "Description"
-msgstr "Описание"
-
-#: js/EmployeeEditDialog.js:452 js/FreeTimeEditDialog.js:287
-msgid "Enter description"
-msgstr "Введите описание"
-
-#: js/HumanResources.js:25
-msgid "Human Resources"
-msgstr ""
 
 #: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:143 js/Models.js:261
 msgid "Contract"
@@ -325,20 +111,222 @@ msgstr "Календарь праздников"
 
 #: js/ContractGridPanel.js:177
 msgid "Edit Working Time"
+msgstr "Редактирование рабочего времени"
+
+#: js/CostCenterGridPanel.js:58 js/Models.js:230
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] "Траты"
+msgstr[1] "Траты"
+msgstr[2] "Траты"
+
+#: js/CostCenterGridPanel.js:104
+msgid "Cost Center"
+msgstr "Затраты"
+
+#: js/CostCenterGridPanel.js:107
+msgid "Startdate"
+msgstr "Первый день"
+
+#: js/DatePicker.js:42
+msgid "WK"
+msgstr ""
+
+#: js/DatePicker.js:63
+msgid "Loading calendar data..."
+msgstr "Загрузка данных календаря..."
+
+#: js/EmployeeEditDialog.js:118
+msgid "Dependent Windows"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:119
+msgid ""
+"There are still some windows active dependent to this one. Please save or "
+"cancel them before closing this one!"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:171 js/EmployeeGridPanel.js:153
+msgid "Supervisor"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:179 js/EmployeeGridPanel.js:168
+msgid "Division"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:186 js/EmployeeGridPanel.js:162 js/Models.js:117
+msgid "Health Insurance"
+msgstr "Медицинская страховка"
+
+#: js/EmployeeEditDialog.js:201 js/Models.js:333
+msgid "Free Time"
+msgid_plural "Free Times"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/EmployeeEditDialog.js:209 js/EmployeeEditDialog.js:222
+#: js/FreeDayGridPanel.js:114 js/FreeTimeEditDialog.js:130
+#: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:166 js/Models.js:69
+msgid "Employee"
+msgid_plural "Employees"
+msgstr[0] "Сотрудник"
+msgstr[1] "Сотрудника"
+msgstr[2] "Сотрудников"
+
+#: js/EmployeeEditDialog.js:228 js/EmployeeGridPanel.js:98
+msgid "Number"
+msgstr "Номер"
+
+#: js/EmployeeEditDialog.js:240 js/Models.js:110
+msgid "Account"
+msgstr "Счет"
+
+#: js/EmployeeEditDialog.js:259
+msgid "Apply contact data on form"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:288 js/EmployeeGridPanel.js:105
+msgid "Full Name"
+msgstr "Полное имя"
+
+#: js/EmployeeEditDialog.js:293 js/EmployeeGridPanel.js:111 js/Models.js:116
+msgid "Salutation"
+msgstr "Приветствие"
+
+#: js/EmployeeEditDialog.js:301 js/EmployeeGridPanel.js:118 js/Models.js:113
+msgid "Title"
+msgstr "Заголовок"
+
+#: js/EmployeeEditDialog.js:305 js/EmployeeGridPanel.js:125 js/Models.js:112
+msgid "First Name"
+msgstr "Имя"
+
+#: js/EmployeeEditDialog.js:314 js/EmployeeGridPanel.js:132 js/Models.js:115
+msgid "Last Name"
+msgstr "Фамилия"
+
+#: js/EmployeeEditDialog.js:328
+msgid "Personal Information"
+msgstr "Личная  информация"
+
+#: js/EmployeeEditDialog.js:338
+msgid "Country"
+msgstr "Страна"
+
+#: js/EmployeeEditDialog.js:341
+msgid "Locality"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:344
+msgid "Postalcode"
+msgstr "Почтовый индекс"
+
+#: js/EmployeeEditDialog.js:347
+msgid "Region"
+msgstr "Область"
+
+#: js/EmployeeEditDialog.js:350
+msgid "Street"
+msgstr "Улица"
+
+#: js/EmployeeEditDialog.js:353
+msgid "Street2"
+msgstr "Улица2"
+
+#: js/EmployeeEditDialog.js:356
+msgid "E-Mail"
+msgstr "Электронная почта"
+
+#: js/EmployeeEditDialog.js:359
+msgid "Telephone Number"
+msgstr "Телефон"
+
+#: js/EmployeeEditDialog.js:362
+msgid "Cell Phone Number"
+msgstr "Мобильный телефон"
+
+#: js/EmployeeEditDialog.js:366
+msgid "Birthday"
+msgstr "Дата рождения"
+
+#: js/EmployeeEditDialog.js:374
+msgid "Internal Information"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:383 js/EmployeeGridPanel.js:139 js/Models.js:108
+msgid "Employment begin"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:388 js/EmployeeGridPanel.js:146 js/Models.js:109
+msgid "Employment end"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:391 js/Models.js:114
+msgid "Profession"
+msgstr "Профессия"
+
+#: js/EmployeeEditDialog.js:399
+msgid "Banking Information"
+msgstr "Банковская информация"
+
+#: js/EmployeeEditDialog.js:408
+msgid "Account Holder"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:411
+msgid "Account Number"
+msgstr "Название учетной записи"
+
+#: js/EmployeeEditDialog.js:414
+msgid "Bank Name"
+msgstr "Название банка"
+
+#: js/EmployeeEditDialog.js:417
+msgid "Code Number"
+msgstr "Код"
+
+#: js/EmployeeEditDialog.js:438 js/FreeTimeEditDialog.js:273
+#: js/FreeTimeGridPanel.js:170 js/Models.js:118 js/Models.js:381
+msgid "Description"
+msgstr "Описание"
+
+#: js/EmployeeEditDialog.js:452 js/FreeTimeEditDialog.js:287
+msgid "Enter description"
+msgstr "Введите описание"
+
+#: js/EmployeeGridPanel.js:95 js/FreeDayGridPanel.js:113
+msgid "Tags"
+msgstr "Теги"
+
+#: js/ExceptionHandler.js:47
+msgid "No contract could be found."
+msgstr "Контакт не найден."
+
+#: js/ExceptionHandler.js:48
+msgid "Please create a contract for this employee!"
+msgstr ""
+
+#: js/FreeDayGridPanel.js:115 js/FreeTimeEditDialog.js:199
+#: js/FreeTimeGridPanel.js:167 js/Models.js:367
+msgid "Type"
+msgstr "Тип"
+
+#: js/FreeDayGridPanel.js:116 js/FreeTimeGridPanel.js:169
+msgid "Date Start"
+msgstr "Дата начала"
+
+#: js/FreeDayGridPanel.js:117
+msgid "Remark"
 msgstr ""
 
 #: js/FreeTimeEditDialog.js:170 js/FreeTimeEditDialog.js:182
 msgid "FreeTime"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:199 js/FreeDayGridPanel.js:115
-#: js/FreeTimeGridPanel.js:167 js/Models.js:367
-msgid "Type"
-msgstr "Тип"
-
 #: js/FreeTimeEditDialog.js:214 js/FreeTimeGridPanel.js:168 js/Models.js:375
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #: js/FreeTimeEditDialog.js:231
 msgid "First Day Length"
@@ -350,106 +338,10 @@ msgstr "Длительность последнего дня"
 
 #: js/FreeTimeEditDialog.js:256
 msgid "Select Days"
-msgstr ""
+msgstr "Выбрать дни"
 
-#: js/FreeDayGridPanel.js:116 js/FreeTimeGridPanel.js:169
-msgid "Date Start"
-msgstr "Дата начала"
-
-#: js/FreeDayGridPanel.js:117
-msgid "Remark"
-msgstr ""
-
-#: js/ExceptionHandler.js:47
-msgid "No contract could be found."
-msgstr ""
-
-#: js/ExceptionHandler.js:48
-msgid "Please create a contract for this employee!"
-msgstr ""
-
-#: js/DatePicker.js:42
-msgid "WK"
-msgstr ""
-
-#: js/DatePicker.js:63
-msgid "Loading calendar data..."
-msgstr "Загрузка данных календаря..."
-
-#: js/WorkingTimeEditDialog.js:74
-msgid "Edit working time for {0} ({1} - {2})"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:108 js/WorkingTimeEditDialog.js:120
-#: js/Models.js:162
-msgid "Working Time"
-msgid_plural "Working Times"
-msgstr[0] "Рабочее время"
-msgstr[1] "Рабочее время"
-msgstr[2] "Рабочее время"
-
-#: js/WorkingTimeEditDialog.js:135
-msgid "Choose the template"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:143
-msgid "Working Hours per week"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:153 js/WorkingTimeEditDialog.js:229
-msgid "Save working time as template"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:165
-msgid "Working Hours per weekday"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:184
-msgid "Mon."
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:187
-msgid "Tue."
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:190
-msgid "Wed."
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:193
-msgid "Thu."
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:196
-msgid "Fri."
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:199
-msgid "Sat."
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:202
-msgid "Sun."
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:229
-msgid "Please enter the title of the template"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:234
-msgid "Empty Title"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:235
-msgid "The title can't be empty!"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:301
-msgid "Duplicate Title"
-msgstr ""
-
-#: js/WorkingTimeEditDialog.js:302
-msgid "The title you have chosen is already in use. Please try another one!"
+#: js/HumanResources.js:25
+msgid "Human Resources"
 msgstr ""
 
 #: js/Models.js:72
@@ -467,6 +359,10 @@ msgstr "Быстрый поиск"
 msgid "Employee name"
 msgstr "Имя сотрудника"
 
+#: js/Models.js:111 Setup/Initialize.php:33 Setup/Update/Release6.php:330
+msgid "Currently employed"
+msgstr ""
+
 #: js/Models.js:120 js/Models.js:382
 msgid "Last Modified Time"
 msgstr "Время последнего изменения"
@@ -483,6 +379,14 @@ msgstr "Время создания"
 msgid "Created By"
 msgstr "Создано"
 
+#: js/Models.js:162 js/WorkingTimeEditDialog.js:108
+#: js/WorkingTimeEditDialog.js:120
+msgid "Working Time"
+msgid_plural "Working Times"
+msgstr[0] "Рабочее время"
+msgstr[1] "Рабочее время"
+msgstr[2] "Рабочее время"
+
 #: js/Models.js:165
 msgid "Working Times"
 msgid_plural "Working Times"
@@ -490,19 +394,12 @@ msgstr[0] "Рабочее время"
 msgstr[1] "Рабочее время"
 msgstr[2] "Рабочее время"
 
-#: js/Models.js:230 js/CostCenterGridPanel.js:58
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
 #: js/Models.js:234
 msgid "CostCenters"
 msgid_plural "CostCenters"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Траты"
+msgstr[1] "Траты"
+msgstr[2] "Траты"
 
 #: js/Models.js:264
 msgid "Contracts"
@@ -514,21 +411,125 @@ msgstr[2] "Контракты"
 #: js/Models.js:417
 msgid "Free Day"
 msgid_plural "Free Days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Свободные дни"
+msgstr[1] "Свободные дни"
+msgstr[2] "Свободные дни"
 
 #: js/Models.js:420
 msgid "Free Days"
 msgid_plural "Free Days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Свободные дни"
+msgstr[1] "Свободные дни"
+msgstr[2] "Свободные дни"
 
-#: js/CostCenterGridPanel.js:104
-msgid "Cost Center"
+#: js/WorkingTimeEditDialog.js:74
+msgid "Edit working time for {0} ({1} - {2})"
 msgstr ""
 
-#: js/CostCenterGridPanel.js:107
-msgid "Startdate"
+#: js/WorkingTimeEditDialog.js:135
+msgid "Choose the template"
+msgstr "Выберите шаблон"
+
+#: js/WorkingTimeEditDialog.js:143
+msgid "Working Hours per week"
+msgstr ""
+
+#: js/WorkingTimeEditDialog.js:153 js/WorkingTimeEditDialog.js:229
+msgid "Save working time as template"
+msgstr ""
+
+#: js/WorkingTimeEditDialog.js:165
+msgid "Working Hours per weekday"
+msgstr ""
+
+#: js/WorkingTimeEditDialog.js:184
+msgid "Mon."
+msgstr "Пн"
+
+#: js/WorkingTimeEditDialog.js:187
+msgid "Tue."
+msgstr "Вт"
+
+#: js/WorkingTimeEditDialog.js:190
+msgid "Wed."
+msgstr "Ср"
+
+#: js/WorkingTimeEditDialog.js:193
+msgid "Thu."
+msgstr "Чт"
+
+#: js/WorkingTimeEditDialog.js:196
+msgid "Fri."
+msgstr "Пт"
+
+#: js/WorkingTimeEditDialog.js:199
+msgid "Sat."
+msgstr "Суб."
+
+#: js/WorkingTimeEditDialog.js:202
+msgid "Sun."
+msgstr "Вс"
+
+#: js/WorkingTimeEditDialog.js:229
+msgid "Please enter the title of the template"
+msgstr "Пожалуйста, введите заголовок"
+
+#: js/WorkingTimeEditDialog.js:234
+msgid "Empty Title"
+msgstr "Пустой заголовок"
+
+#: js/WorkingTimeEditDialog.js:235
+msgid "The title can't be empty!"
+msgstr "Заголовок не может быть пустым!"
+
+#: js/WorkingTimeEditDialog.js:301
+msgid "Duplicate Title"
+msgstr ""
+
+#: js/WorkingTimeEditDialog.js:302
+msgid "The title you have chosen is already in use. Please try another one!"
+msgstr ""
+
+#: Setup/Initialize.php:34 Setup/Update/Release6.php:331
+msgid "Employees which are currently employed"
+msgstr ""
+
+#: Setup/Initialize.php:54
+msgid "Sickness"
+msgstr "Больничный"
+
+#: Setup/Initialize.php:55
+msgid "Vacation"
+msgstr "Отпуск"
+
+#: Setup/Initialize.php:56
+msgid "Remaining Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:57
+msgid "Extra Vacation"
+msgstr "Дополнительный отпуск"
+
+#: Setup/Initialize.php:71
+msgid "Requested"
+msgstr "Запрошено"
+
+#: Setup/Initialize.php:72
+msgid "In process"
+msgstr "в работе"
+
+#: Setup/Initialize.php:73
+msgid "Accepted"
+msgstr "Принято"
+
+#: Setup/Initialize.php:74
+msgid "Declined"
+msgstr "Отклонено"
+
+#: Setup/Initialize.php:89 Setup/Update/Release6.php:299
+msgid "Excused"
+msgstr ""
+
+#: Setup/Initialize.php:90 Setup/Update/Release6.php:300
+msgid "Unexcused"
 msgstr ""

@@ -45,8 +45,12 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
         
         Ext.ux.SearchField.superclass.initComponent.call(this);
         this.on('specialkey', function(f, e){
-            if(e.getKey() == e.ENTER){
-                this.onTrigger2Click();
+            if (e.getKey() == e.ENTER){
+                if (this.getValue() == '') {
+                    this.onTrigger1Click();
+                } else {
+                    this.onTrigger2Click();
+                }
             }
         }, this);
     },
@@ -54,7 +58,7 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
      * @private
      */
     onTrigger1Click : function(){
-        if(this.hasSearch){
+        if (this.hasSearch) {
             this.el.dom.value = '';
             this.fireEvent('change', this, this.getRawValue(), this.startValue);
             this.startValue = this.getRawValue();

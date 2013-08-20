@@ -1,12 +1,13 @@
 # 
 # Translators:
+# sardyna12 <sardyna12@gmail.com>, 2013
 # Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-23 20:54+0000\n"
-"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
+"PO-Revision-Date: 2013-06-21 08:13+0000\n"
+"Last-Translator: sardyna12 <sardyna12@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -493,16 +494,16 @@ msgstr[2] "czasy pracy"
 #: js/Models.js:230 js/CostCenterGridPanel.js:58
 msgid "CostCenter"
 msgid_plural "CostCenters"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Centrum kosztów"
+msgstr[1] "Centra kosztów"
+msgstr[2] "Centra kosztów"
 
 #: js/Models.js:234
 msgid "CostCenters"
 msgid_plural "CostCenters"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Centrum kosztów"
+msgstr[1] "Centra kosztów"
+msgstr[2] "Centra kosztów"
 
 #: js/Models.js:264
 msgid "Contracts"

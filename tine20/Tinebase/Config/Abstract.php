@@ -407,9 +407,8 @@ abstract class Tinebase_Config_Abstract
         if (! $definition) {
             return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
-        
         if ($definition['type'] === self::TYPE_OBJECT && isset($definition['class']) && @class_exists($definition['class'])) {
-            return new $definition['class']($_rawData);
+            return new $definition['class']($_rawData != "null" ? $_rawData : array());
         }
         
         switch ($definition['type']) {

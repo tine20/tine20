@@ -925,7 +925,8 @@ class Setup_Controller
      */
     protected function _updateAuthentication($_authenticationData)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_authenticationData, TRUE));
+        // this is a dangerous TRACE as there might be passwords in here!
+        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_authenticationData, TRUE));
 
         $this->_enableCaching();
         
@@ -1195,7 +1196,8 @@ class Setup_Controller
      */
     public function saveEmailConfig($_data)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, TRUE));
+        // this is a dangerous TRACE as there might be passwords in here!
+        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, TRUE));
         
         $this->_enableCaching();
         
@@ -1491,7 +1493,12 @@ class Setup_Controller
     protected function _uninstallApplication(Tinebase_Model_Application $_application)
     {
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Uninstall ' . $_application);
-        $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
+        try {
+            $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $zdse);
+            throw new Setup_Exception('Could not uninstall ' . $_application . ' (you might need to remove the tables by yourself): ' . $zdse->getMessage());
+        }
         $disabledFK = FALSE;
         $db = Tinebase_Core::getDb();
         
@@ -1554,6 +1561,7 @@ class Setup_Controller
         
         if ($disabledFK) {
             if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Enabling foreign key checks again... ");
                 $db->query("SET FOREIGN_KEY_CHECKS=1");
             }
         }

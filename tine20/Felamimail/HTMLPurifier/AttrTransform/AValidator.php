@@ -7,7 +7,7 @@
  * @package     Felamimail
  * @subpackage  HTMLPurifier
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
@@ -19,7 +19,12 @@ class Felamimail_HTMLPurifier_AttrTransform_AValidator extends HTMLPurifier_Attr
 {
     var $name = "Link validation";
     
-    function transform($attr, $config, $context) {
+    /**
+     * (non-PHPdoc)
+     * @see HTMLPurifier_AttrTransform::transform()
+     */
+    function transform($attr, $config, $context)
+    {
         $attr['target'] = '_blank';
         return $attr;
     }

@@ -137,6 +137,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_oldSieveVacationActiveState = $this->_account->sieve_vacation_active;
@@ -221,6 +223,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             //echo "delete $path";
             $webdavRoot->delete($path);
         }
+        
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
 
     /************************ test functions *********************************/
@@ -498,6 +502,21 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($message['bcc'][0],     $messageToSend['bcc'][0], 'bcc recipient not found');
         $this->assertEquals($message['subject'],    $messageToSend['subject']);
         
+        $this->_checkEmailNote($contact, $messageToSend['subject']);
+        
+        // reset sclevers original email address
+        $contact->email = $originalEmail;
+        Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
+    }
+    
+    /**
+     * check email note
+     * 
+     * @param Addressbook_Model_Contact $contact
+     * @param string $subject
+     */
+    protected function _checkEmailNote($contact, $subject)
+    {
         // check if email note has been added to contact(s)
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         $emailNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
@@ -506,7 +525,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $emailNoteIds = array();
         foreach ($contact->notes as $note) {
             if ($note->note_type_id == $emailNoteType->getId()) {
-                $this->assertEquals(1, preg_match('/' . $messageToSend['subject'] . '/', $note->note));
+                $this->assertContains($subject, $note->note, 'did not find note subject');
                 $this->assertEquals(Tinebase_Core::getUser()->getId(), $note->created_by);
                 $this->assertContains('aaaaaä', $note->note);
                 $emailNoteIds[] = $note->getId();
@@ -514,10 +533,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         }
         $this->assertGreaterThan(0, count($emailNoteIds), 'no email notes found');
         Tinebase_Notes::getInstance()->deleteNotes($emailNoteIds);
-        
-        // reset sclevers original email address
-        $contact->email = $originalEmail;
-        Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
     }
 
     /**
@@ -917,6 +932,31 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testSendMessageWithAttachmentWithoutExtension
+     * 
+     * @see 0008328: email attachment without file extension is not sent properly
+     */
+    public function testSendMessageWithAttachmentWithoutExtension()
+    {
+        $subject = 'attachment test';
+        $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain, $subject);
+        $tempfileName = 'jsontest' . Tinebase_Record_Abstract::generateUID(10);
+        $tempfilePath = Tinebase_Core::getTempDir() . $tempfileName;
+        file_put_contents($tempfilePath, 'some content');
+        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
+        $messageToSend['attachments'] = array(array('tempFile' => array('id' => $tempFile->getId())));
+        $this->_json->saveMessage($messageToSend);
+        $forwardMessage = $this->_searchForMessageBySubject($subject);
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+        
+        $fullMessage = $this->_json->getMessage($forwardMessage['id']);
+        $this->assertTrue(count($fullMessage['attachments']) === 1);
+        $attachment = $fullMessage['attachments'][0];
+        $this->assertContains($tempfileName, $attachment['filename'], 'wrong attachment filename: ' . print_r($attachment, TRUE));
+        $this->assertEquals(16, $attachment['size'], 'wrong attachment size: ' . print_r($attachment, TRUE));
+    }
+    
+    /**
      * save message in folder (draft) test
      * 
      * @see 0007178: BCC does not save the draft message
@@ -924,29 +964,31 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     public function testSaveMessageInFolder()
     {
         $messageToSave = $this->_getMessageData();
-        $messageToSave['bcc'] = array('bccaddress@email.org');
+        $messageToSave['bcc'] = array('bccaddress@email.org', 'bccaddress2@email.org');
         
         $draftsFolder = $this->_getFolder($this->_account->drafts_folder);
         $returned = $this->_json->saveMessageInFolder($this->_account->drafts_folder, $messageToSave);
         $this->_foldersToClear = array($this->_account->drafts_folder);
         
-        // check if message is in drafts folder
+        // check if message is in drafts folder and recipients are present
         $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
         $this->assertEquals($messageToSave['subject'],  $message['subject']);
         $this->assertEquals($messageToSave['to'][0],    $message['to'][0], 'recipient not found');
-        $this->assertEquals(1, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
-        $this->assertEquals($messageToSave['bcc'][0],   $message['bcc'][0], 'bcc recipient not found');
+        $this->assertEquals(2, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
+        $this->assertEquals($messageToSave['bcc'][0],   $message['bcc'][0], '1st bcc recipient not found');
+        $this->assertEquals($messageToSave['bcc'][1],   $message['bcc'][1], '2nd bcc recipient not found');
     }
     
     /**
      * testSendReadingConfirmation
      * 
      * @see 0007736: ask user before sending reading confirmation
+     * @see 0008402: Wrong recipient with read confirmation
      */
     public function testSendReadingConfirmation()
     {
         $messageToSave = $this->_getMessageData();
-        $messageToSave['headers']['disposition-notification-to'] = $this->_account->email;
+        $messageToSave['headers']['disposition-notification-to'] = '"' . Tinebase_Core::getUser()->accountFullName . '" <' . $this->_account->email . '>';
         $returned = $this->_json->saveMessageInFolder($this->_testFolderName, $messageToSave);
         $messageWithReadingConfirmationHeader = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_testFolderName);
         $this->_messageIds[] = $messageWithReadingConfirmationHeader['id'];
@@ -959,6 +1001,60 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $complete = $this->_json->getMessage($message['id']);
         $this->assertContains($translate->_('Was read by:') . ' ' . $this->_account->from, $complete['body']);
+    }
+
+    /**
+     * save message in non-existant folder (templates) test
+     * 
+     * @see 0008476: Drafts are not working
+     */
+    public function testSaveMessageInNonExistantTemplatesFolder()
+    {
+        $messageToSave = $this->_getMessageData();
+        
+        $templatesFolder = $this->_getFolder($this->_account->templates_folder, FALSE);
+        if ($templatesFolder) {
+            $this->_json->deleteFolder($templatesFolder['id'], $this->_account->getId());
+        }
+        $returned = $this->_json->saveMessageInFolder($this->_account->templates_folder, $messageToSave);
+        $this->_foldersToClear = array($this->_account->templates_folder);
+        
+        // check if message is in templates folder
+        $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->templates_folder);
+        $this->assertEquals($messageToSave['subject'],  $message['subject']);
+        $this->assertEquals($messageToSave['to'][0],    $message['to'][0], 'recipient not found');
+    }
+    
+    /**
+     * testSaveMessageNoteWithInvalidChar
+     * 
+     * @see 0008644: error when sending mail with note (wrong charset)
+     */
+    public function testSaveMessageNoteWithInvalidChar()
+    {
+        $subject = Tinebase_Core::filterInputForDatabase("\xF0\x9F\x98\x8A"); // :-) emoji
+        $messageData = $this->_getMessageData('', $subject);
+        $messageData['note'] = TRUE;
+        $this->_foldersToClear[] = 'INBOX';
+        $this->_json->saveMessage($messageData);
+        $message = $this->_searchForMessageBySubject($subject);
+        
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $this->_checkEmailNote($contact, $subject);
+    }
+    
+    /**
+     * testSaveMessageNoteWithInvalidChar
+     * 
+     * @see 0008644: error when sending mail with note (wrong charset)
+     */
+    public function testSaveMessageWithInvalidChar()
+    {
+        $subject = "\xF0\x9F\x98\x8A"; // :-) emoji
+        $messageData = $this->_getMessageData('', $subject);
+        $this->_foldersToClear[] = 'INBOX';
+        $this->_json->saveMessage($messageData);
+        $message = $this->_searchForMessageBySubject(Tinebase_Core::filterInputForDatabase($subject));
     }
     
     /*********************** sieve tests ****************************/
@@ -1318,16 +1414,17 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get mailbox
      *
-     * @param string $_name
-     * @return Felamimail_Model_Folder
+     * @param string $name
+     * @param boolean $createFolder
+     * @return Felamimail_Model_Folder|NULL
      */
-    protected function _getFolder($_name)
+    protected function _getFolder($name, $createFolder = TRUE)
     {
         Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
         try {
-            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $_name);
+            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $name);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $folder = Felamimail_Controller_Folder::getInstance()->create($this->_account, $_name);
+            $folder = ($createFolder) ? Felamimail_Controller_Folder::getInstance()->create($this->_account, $name) : NULL;
         }
         
         return $folder;

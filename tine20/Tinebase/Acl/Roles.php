@@ -157,12 +157,9 @@ class Tinebase_Acl_Roles
      */
     public function getApplications($_accountId, $_anyRight = FALSE)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_anyRight);
-        
         $roleMemberships = $this->getRoleMemberships($_accountId);
         
         if (empty($roleMemberships)) {
-            //throw new Tinebase_Exception_AccessDenied('User has no role memberships', 610);
             return new Tinebase_Record_RecordSet('Tinebase_Model_Application');
         }
 
@@ -177,7 +174,7 @@ class Tinebase_Acl_Roles
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('applications.status') . ' = ?', Tinebase_Application::ENABLED))
             ->group('role_rights.application_id')
-            ->order('order', 'ASC');
+            ->order('order ASC');
         
         if ($_anyRight) {
             $select->where($this->_db->quoteIdentifier('role_rights.right') . " IS NOT NULL");

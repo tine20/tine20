@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -80,6 +80,21 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $secondUpdatedEvent->originator_tz, 'originator_tz must be adopted if dtsart is updatet!');
     
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $currentTz);
+    }
+
+    /**
+     * testUpdateEventWithRruleAndRecurId
+     * 
+     * @see 0008696: do not allow both rrule and recurId in event
+     */
+    public function testUpdateEventWithRruleAndRecurId()
+    {
+        $persistentRecurEvent = $this->testCreateRecurException();
+        $persistentRecurEvent->rrule = 'FREQ=DAILY;INTERVAL=1';
+        
+        $updatedEvent = $this->_controller->update($persistentRecurEvent);
+        
+        $this->assertEquals(NULL, $updatedEvent->rrule);
     }
     
     public function testConcurrentUpdate()
@@ -835,14 +850,14 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         unset($exception->rrule);
         unset($exception->exdate);
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
-        $persitentException = $this->_controller->create($exception);
+        $persistentException = $this->_controller->create($exception);
         
         $persistentEvent->dtstart->addHour(5);
         $persistentEvent->dtend->addHour(5);
         
         $updatedEvent = $this->_controller->update($persistentEvent);
         
-        $updatedException = $this->_controller->get($persitentException->getId());
+        $updatedException = $this->_controller->get($persistentException->getId());
         
         $this->assertEquals(1, count($updatedEvent->exdate), 'failed to reset exdate');
         $this->assertEquals('2009-04-08 18:00:00', $updatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate');
@@ -853,7 +868,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedEvent->dtstart->subHour(5);
         $updatedEvent->dtend->subHour(5);
         $secondUpdatedEvent = $this->_controller->update($updatedEvent);
-        $secondUpdatedException = $this->_controller->get($persitentException->getId());
+        $secondUpdatedException = $this->_controller->get($persistentException->getId());
         $this->assertEquals('2009-04-08 13:00:00', $secondUpdatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate (sub)');
         $this->assertEquals('2009-04-08 13:00:00', substr($secondUpdatedException->recurid, -19), 'failed to update persistent exception (sub)');
     }
@@ -932,12 +947,12 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         unset($exception->rrule);
         unset($exception->exdate);
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
-        $persitentException = $this->_controller->create($exception);
+        $persistentException = $this->_controller->create($exception);
         
         unset($persistentEvent->rrule);
         $updatedEvent = $this->_controller->delete($persistentEvent);
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $this->_controller->get($persitentException->getId());
+        $this->_controller->get($persistentException->getId());
     }
     
     /**
@@ -976,11 +991,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         unset($exception->rrule);
         unset($exception->exdate);
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
-        $persitentException = $this->_controller->create($exception);
+        $persistentException = $this->_controller->create($exception);
         
         $this->_controller->delete($persistentEvent->getId());
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $this->_controller->get($persitentException->getId());
+        $this->_controller->get($persistentException->getId());
     }
     
     public function testCreateRecurException()
@@ -994,7 +1009,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exception->dtend->addDay(3);
         $exception->summary = 'Abendbrot';
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
-        $persitentException = $this->_controller->createRecurException($exception);
+        $persistentException = $this->_controller->createRecurException($exception);
         
         $persistentEvent = $this->_controller->get($persistentEvent->getId());
         $this->assertEquals(1, count($persistentEvent->exdate));
@@ -1004,7 +1019,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         )));
         $this->assertEquals(2, count($events));
         
-        return $persitentException;
+        return $persistentException;
     }
     
     public function testDeleteNonPersistentRecurException()
@@ -1041,9 +1056,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exception->dtend->addDay(3);
         $exception->summary = 'Abendbrot';
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
-        $persitentException = $this->_controller->createRecurException($exception);
+        $persistentException = $this->_controller->createRecurException($exception);
         
-        $this->_controller->delete($persitentException->getId());
+        $this->_controller->delete($persistentException->getId());
         
         $persistentEvent = $this->_controller->get($persistentEvent->getId());
         
@@ -1092,13 +1107,16 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ), TRUE)
         ));
         $persistentEvent = $this->_controller->create($event);
-        $this->assertEquals($event->dtstart->subMinute(30)->toString(), $persistentEvent->alarms->getFirstRecord()->alarm_time->toString(), 'inital alarm fails');
+        $alarm = $persistentEvent->alarms->getFirstRecord();
+        $this->assertEquals($event->dtstart->subMinute(30)->toString(), $alarm->alarm_time->toString(),
+            'inital alarm fails: ' . print_r($alarm->toArray(), TRUE));
         
         // move whole series
         $persistentEvent->dtstart->addHour(5);
         $persistentEvent->dtend->addHour(5);
         $updatedEvent = $this->_controller->update($persistentEvent);
-        $this->assertEquals($persistentEvent->dtstart->subMinute(30)->toString(), $updatedEvent->alarms->getFirstRecord()->alarm_time->toString(), 'update alarm fails');
+        $this->assertEquals($persistentEvent->dtstart->subMinute(30)->toString(), $updatedEvent->alarms->getFirstRecord()->alarm_time->toString(),
+            'update alarm fails');
     }
     
     /**
@@ -1138,19 +1156,19 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function testGetRecurExceptions()
     {
-        $persitentException = $this->testCreateRecurException();
+        $persistentException = $this->testCreateRecurException();
         
-        $baseEvent = $this->_controller->getRecurBaseEvent($persitentException);
+        $baseEvent = $this->_controller->getRecurBaseEvent($persistentException);
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, $baseEvent->dtstart);
         $this->_controller->createRecurException($nextOccurance, TRUE);
         
-        $exceptions = $this->_controller->getRecurExceptions($persitentException, TRUE);
+        $exceptions = $this->_controller->getRecurExceptions($persistentException, TRUE);
         $dtstarts = $exceptions->dtstart;
 
         $this->assertTrue(in_array($nextOccurance->dtstart, $dtstarts), 'deleted instance missing');
-        $this->assertTrue(in_array($persitentException->dtstart, $dtstarts), 'exception instance missing');
+        $this->assertTrue(in_array($persistentException->dtstart, $dtstarts), 'exception instance missing');
     }
     
     public function testPeriodFilter()

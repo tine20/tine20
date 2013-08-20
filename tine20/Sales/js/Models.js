@@ -92,7 +92,8 @@ Tine.Sales.Model.ContractArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'cleared' },
     { name: 'cleared_in' },
     // tine 2.0 notes field
-    { name: 'notes'},
+    {name: 'tags'},
+    {name: 'notes'},
     // linked contacts
     { name: 'relations' }
 ]);
@@ -157,8 +158,12 @@ Tine.Sales.Model.Contract.getFilterModel = function() {
             keyfieldName: 'contractCleared'
         },
         {label: app.i18n._('Cleared in'), field: 'cleared_in' },
-        {filtertype: 'tinebase.tag', app: app },
-        {filtertype: 'sales.contract.costcenter' }
+        {filtertype: 'tinebase.tag', app: app},
+        {filtertype: 'sales.contract.costcenter' },
+        {label: _('Last Modified Time'), field: 'last_modified_time', valueType: 'date'},
+        {label: _('Last Modified By'), field: 'last_modified_by',   valueType: 'user'},
+        {label: _('Creation Time'), field: 'creation_time',      valueType: 'date'},
+        {label: _('Created By'), field: 'created_by',         valueType: 'user'}
     ];
 };
 

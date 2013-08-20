@@ -250,7 +250,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
     
         $changedEntries = $controller->getChangedEntries($syncrotonFolder->serverId, new DateTime('2000-01-01'));
         
-        $this->assertContains($serverId, $changedEntries);
+        $this->assertContains($serverId, $changedEntries, 'did not get changed record id in ' . print_r($changedEntries, TRUE));
     }
     
     /**

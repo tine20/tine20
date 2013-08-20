@@ -1710,7 +1710,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             // don't show confirmation question for record deletion
             this.deleteRecords(sm, records);
         } else {
-            var recordNames = records[0].get(this.recordClass.getMeta('titleProperty'));
+            var recordNames = records[0].getTitle();
             if (records.length > 1) {
                 recordNames += ', ...';
             }

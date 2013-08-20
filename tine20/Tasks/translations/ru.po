@@ -1,5 +1,6 @@
 # 
 # Translators:
+# Aleksdem <aleksdem@aleksdem.com>, 2013
 # артур Мудрых <arturmon82@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
@@ -7,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-01-01 08:55+0000\n"
-"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
+"PO-Revision-Date: 2013-06-21 10:55+0000\n"
+"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,220 +30,40 @@ msgstr "Создать новый список общих задач"
 
 #: Acl/Rights.php:100
 msgid "manage shared tasks favorites"
-msgstr ""
+msgstr "управлять избранным в общих задачах"
 
 #: Acl/Rights.php:101
 msgid "Create or update shared tasks favorites"
-msgstr ""
-
-#: Controller.php:102
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s личные задания"
-
-#: Model/Task.php:188
-msgid "Due"
-msgstr ""
-
-#: Model/Task.php:189 js/TaskEditDialog.js:197
-msgid "Organizer"
-msgstr "Органайзер"
-
-#: Model/Task.php:190
-msgid "Description"
-msgstr "Описание"
-
-#: Model/Task.php:191 js/TaskGridPanel.js:136 js/TaskEditDialog.js:189
-msgid "Priority"
-msgstr "Приоритет"
-
-#: Model/Task.php:192 js/TaskGridPanel.js:165 js/TaskEditDialog.js:219
-#: js/Models.js:108 js/Models.js:166
-msgid "Status"
-msgid_plural "Status"
-msgstr[0] "Состояние"
-msgstr[1] "Состояния"
-msgstr[2] "Состояния"
-
-#: Model/Task.php:193 js/TaskGridPanel.js:152
-msgid "Percent"
-msgstr "Процент"
-
-#: Model/Task.php:200 js/TaskGridPanel.js:111
-msgid "Lead"
-msgstr ""
-
-#: Model/Task.php:206
-msgid "Telephone"
-msgstr "Телефон"
-
-#: Model/Task.php:207
-msgid "Email"
-msgstr "Электронная почта"
+msgstr "Создание или обновление избранных в общих задачах"
 
 #: Config.php:38
 msgid "Tasks status available"
-msgstr ""
+msgstr "Доступно состояние задач"
 
 #: Config.php:40
 msgid ""
 "Possible tasks status. Please note that additional attendee status might "
 "impact other Tasks systems on export or syncronisation."
-msgstr ""
+msgstr "Возможные состояния задач. Пожалуйста, обратите внимание, что дополнительные состояния задач могут повлиять на другие задачи при экспорте или синхронизации."
 
 #: Config.php:48
 msgid "Task priorities available"
-msgstr ""
+msgstr "Доступен приоритет задачи"
 
 #: Config.php:50
 msgid ""
 "Possible task priorities. Please note that additional priorities might "
 "impact other Tasks systems on export or syncronisation."
-msgstr ""
+msgstr "Возможные приоритеты задач. Обратите внимание, что дополнительные значения могут повлиять на другие задачи при экспорте или синхронизации."
 
-#: Setup/Update/Release5.php:74 Setup/Initialize.php:34
-msgid "No response"
-msgstr "Нет ответа"
+#: Controller/Task.php:164
+msgid "Notification for Task "
+msgstr "Напоминание для задачи "
 
-#: Setup/Update/Release5.php:75 Setup/Initialize.php:35
-#: js/TaskGridPanel.js:188 js/TaskEditDialog.js:226
-msgid "Completed"
-msgstr "Закончено"
-
-#: Setup/Update/Release5.php:76 Setup/Initialize.php:36
-msgid "Cancelled"
-msgstr "Отменено"
-
-#: Setup/Update/Release5.php:77 Setup/Initialize.php:37
-msgid "In process"
-msgstr ""
-
-#: Setup/Update/Release5.php:167 Setup/Initialize.php:50
-msgid "low"
-msgstr "низкий"
-
-#: Setup/Update/Release5.php:168 Setup/Initialize.php:51
-msgid "normal"
-msgstr "нормальный"
-
-#: Setup/Update/Release5.php:169 Setup/Initialize.php:52
-msgid "high"
-msgstr "высокий"
-
-#: Setup/Update/Release5.php:170 Setup/Initialize.php:53
-msgid "urgent"
-msgstr "неотложный"
-
-#: Setup/Update/Release3.php:65 Setup/Initialize.php:81
-msgid "All tasks of my taskslists"
-msgstr "Все задачи моих списков задач"
-
-#: Setup/Initialize.php:90
-msgid "My open tasks"
-msgstr "Мои открытые задачи"
-
-#: Setup/Initialize.php:99
-msgid "My open tasks this week"
-msgstr "Мои открытые задачи на этой неделе"
-
-#: Setup/Initialize.php:108
-msgid "All tasks for me"
-msgstr "Все задачи для меня"
-
-#: Setup/Initialize.php:109
-msgid "All tasks that I am responsible for"
-msgstr ""
-
-#: Setup/Initialize.php:116
-msgid "Last modified by me"
-msgstr ""
-
-#: Setup/Initialize.php:117
-msgid "All tasks that I have last modified"
-msgstr ""
-
-#: Setup/Initialize.php:126
-msgid "Tasks without responsible"
-msgstr ""
-
-#: Preference.php:24
-msgid "All my tasks"
-msgstr "Все мои задачи"
-
-#: Preference.php:66
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:67
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
-
-#: Preference.php:70
-msgid "Default Task List"
-msgstr "Список задач по умолчанию"
-
-#: Preference.php:71
-msgid "The default task list to create new tasks in."
-msgstr ""
-
-#: js/Tasks.js:24
-msgid "New Task"
-msgstr "Новая задача"
-
-#: js/TaskGridPanel.js:54
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Вы действительно хотите удалить выбранное задание"
-msgstr[1] "Вы действительно хотите удалить выбранные задания"
-msgstr[2] "Вы действительно хотите удалить выбранных заданий"
-
-#: js/TaskGridPanel.js:110
-msgid "Tags"
-msgstr "Теги"
-
-#: js/TaskGridPanel.js:114 js/TaskEditDialog.js:178 js/Models.js:105
-msgid "Summary"
-msgstr "Сводка"
-
-#: js/TaskGridPanel.js:118
-msgid "Add a task..."
-msgstr "Добавить задание..."
-
-#: js/TaskGridPanel.js:122 js/Models.js:106
-msgid "Due Date"
-msgstr "Дата завершения"
-
-#: js/TaskGridPanel.js:181 js/Models.js:120
-msgid "Creation Time"
-msgstr "Время создания"
-
-#: js/TaskGridPanel.js:195 js/Models.js:116
-msgid "Responsible"
-msgstr "Ответственный"
-
-#: js/TaskEditDialog.js:136
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr ""
-
-#: js/TaskEditDialog.js:185
-msgid "Due date"
-msgstr "Дата завершения"
-
-#: js/TaskEditDialog.js:198
-msgid "Add Responsible ..."
-msgstr "Добавить Ответственных ..."
-
-#: js/TaskEditDialog.js:205
-msgid "Notes"
-msgstr "Примечания"
-
-#: js/TaskEditDialog.js:206
-msgid "Enter description..."
-msgstr "Введите описание..."
-
-#: js/TaskEditDialog.js:212
-msgid "Percentage"
-msgstr "Процентное отношение"
+#: Controller.php:102
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s личные задания"
 
 #: js/Models.js:64
 msgid "Task"
@@ -270,18 +91,198 @@ msgstr "списки работ"
 msgid "Quick search"
 msgstr "Быстрый поиск"
 
+#: js/Models.js:105 js/TaskEditDialog.js:178 js/TaskGridPanel.js:114
+msgid "Summary"
+msgstr "Сводка"
+
+#: js/Models.js:106 js/TaskGridPanel.js:122
+msgid "Due Date"
+msgstr "Дата завершения"
+
+#: js/Models.js:108 js/Models.js:166 js/TaskEditDialog.js:219
+#: js/TaskGridPanel.js:165 Model/Task.php:192
+msgid "Status"
+msgid_plural "Status"
+msgstr[0] "Состояние"
+msgstr[1] "Состояния"
+msgstr[2] "Состояния"
+
+#: js/Models.js:116 js/TaskGridPanel.js:195
+msgid "Responsible"
+msgstr "Ответственный"
+
 #: js/Models.js:118
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Время последнего изменения"
 
 #: js/Models.js:119
 msgid "Last Modified By"
 msgstr "Последнее изменение"
 
+#: js/Models.js:120 js/TaskGridPanel.js:181
+msgid "Creation Time"
+msgstr "Время создания"
+
 #: js/Models.js:121
 msgid "Created By"
 msgstr "Создана"
 
-#: Controller/Task.php:164
-msgid "Notification for Task "
-msgstr "Напоминание для задачи "
+#: js/TaskEditDialog.js:136
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Вы должны поставить дату для оповещения!"
+
+#: js/TaskEditDialog.js:185
+msgid "Due date"
+msgstr "Дата завершения"
+
+#: js/TaskEditDialog.js:189 js/TaskGridPanel.js:136 Model/Task.php:191
+msgid "Priority"
+msgstr "Приоритет"
+
+#: js/TaskEditDialog.js:197 Model/Task.php:189
+msgid "Organizer"
+msgstr "Органайзер"
+
+#: js/TaskEditDialog.js:198
+msgid "Add Responsible ..."
+msgstr "Добавить Ответственных ..."
+
+#: js/TaskEditDialog.js:205
+msgid "Notes"
+msgstr "Примечания"
+
+#: js/TaskEditDialog.js:206
+msgid "Enter description..."
+msgstr "Введите описание..."
+
+#: js/TaskEditDialog.js:212
+msgid "Percentage"
+msgstr "Процентное отношение"
+
+#: js/TaskEditDialog.js:226 js/TaskGridPanel.js:188 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:75
+msgid "Completed"
+msgstr "Закончено"
+
+#: js/TaskGridPanel.js:54
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Вы действительно хотите удалить выбранное задание"
+msgstr[1] "Вы действительно хотите удалить выбранные задания"
+msgstr[2] "Вы действительно хотите удалить выбранных заданий"
+
+#: js/TaskGridPanel.js:110
+msgid "Tags"
+msgstr "Теги"
+
+#: js/TaskGridPanel.js:111 Model/Task.php:200
+msgid "Lead"
+msgstr "Предложение"
+
+#: js/TaskGridPanel.js:118
+msgid "Add a task..."
+msgstr "Добавить задание..."
+
+#: js/TaskGridPanel.js:152 Model/Task.php:193
+msgid "Percent"
+msgstr "Процент"
+
+#: js/Tasks.js:24
+msgid "New Task"
+msgstr "Новая задача"
+
+#: Model/Task.php:188
+msgid "Due"
+msgstr "Fälligkeit"
+
+#: Model/Task.php:190
+msgid "Description"
+msgstr "Описание"
+
+#: Model/Task.php:206
+msgid "Telephone"
+msgstr "Телефон"
+
+#: Model/Task.php:207
+msgid "Email"
+msgstr "Электронная почта"
+
+#: Preference.php:24
+msgid "All my tasks"
+msgstr "Все мои задачи"
+
+#: Preference.php:66
+msgid "Default Favorite"
+msgstr "Избранное по-умолчанию"
+
+#: Preference.php:67
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Будет загружено по-умолчанию при загрузке задач"
+
+#: Preference.php:70
+msgid "Default Task List"
+msgstr "Список задач по умолчанию"
+
+#: Preference.php:71
+msgid "The default task list to create new tasks in."
+msgstr "Список задач для создания новых задач по умолчанию"
+
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:74
+msgid "No response"
+msgstr "Нет ответа"
+
+#: Setup/Initialize.php:36 Setup/Update/Release5.php:76
+msgid "Cancelled"
+msgstr "Отменено"
+
+#: Setup/Initialize.php:37 Setup/Update/Release5.php:77
+msgid "In process"
+msgstr "в работе"
+
+#: Setup/Initialize.php:50 Setup/Update/Release5.php:167
+msgid "low"
+msgstr "низкий"
+
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:168
+msgid "normal"
+msgstr "нормальный"
+
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:169
+msgid "high"
+msgstr "высокий"
+
+#: Setup/Initialize.php:53 Setup/Update/Release5.php:170
+msgid "urgent"
+msgstr "неотложный"
+
+#: Setup/Initialize.php:81 Setup/Update/Release3.php:65
+msgid "All tasks of my taskslists"
+msgstr "Все задачи моих списков задач"
+
+#: Setup/Initialize.php:90
+msgid "My open tasks"
+msgstr "Мои открытые задачи"
+
+#: Setup/Initialize.php:99
+msgid "My open tasks this week"
+msgstr "Мои открытые задачи на этой неделе"
+
+#: Setup/Initialize.php:108
+msgid "All tasks for me"
+msgstr "Все задачи для меня"
+
+#: Setup/Initialize.php:109
+msgid "All tasks that I am responsible for"
+msgstr "Все задачи, за которые я отвечаю"
+
+#: Setup/Initialize.php:116
+msgid "Last modified by me"
+msgstr "Последний раз изменено мной"
+
+#: Setup/Initialize.php:117
+msgid "All tasks that I have last modified"
+msgstr "Все задачи, последний раз которые были изменены мной"
+
+#: Setup/Initialize.php:126
+msgid "Tasks without responsible"
+msgstr "Задача без ответственного лица"

@@ -1,4 +1,4 @@
-firstname,lastname,loginname,password
-Hans,Meister,hmeister,xyz
-Heins,Master,hmaster,123
-Hins,M�ster,hmoster,abc
+firstname,lastname,loginname,password,email
+Hans,Meister,hmeister,xyz,hmeister@tine20.org
+Heins,Master,hmaster,123,hmaster@tine20.org
+Hins,M�ster,hmoster,abc,hmoster@tine20.org

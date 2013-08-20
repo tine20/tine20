@@ -280,7 +280,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function addGroupMember($_groupId, $_accountId)
     {
-        if($this instanceof Tinebase_Group_Interface_SyncAble) {
+        if ($this instanceof Tinebase_Group_Interface_SyncAble) {
             $this->addGroupMemberInSyncBackend($_groupId, $_accountId);
         }
         
@@ -324,7 +324,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function removeGroupMember($_groupId, $_accountId)
     {
-        if($this instanceof Tinebase_Group_Interface_SyncAble) {
+        if ($this instanceof Tinebase_Group_Interface_SyncAble) {
             $this->removeGroupMemberInSyncBackend($_groupId, $_accountId);
         }
         

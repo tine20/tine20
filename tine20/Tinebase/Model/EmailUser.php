@@ -73,7 +73,7 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-        $this->_filters['emailForwardOnly'] = new Zend_Filter_Empty(false);
+        $this->_filters['emailForwardOnly'] = new Zend_Filter_Empty(0);
         $this->_filters['emailMailSize'] = new Zend_Filter_Empty(0);
         $this->_filters['emailMailQuota'] = new Zend_Filter_Empty(0);
         $this->_filters['emailForwards'] = new Zend_Filter_Empty(array());

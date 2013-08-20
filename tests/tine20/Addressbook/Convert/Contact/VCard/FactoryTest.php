@@ -68,7 +68,7 @@ class Addressbook_Convert_Contact_VCard_FactoryTest extends PHPUnit_Framework_Te
         
         $this->assertEquals(Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX, $backend);
         $this->assertEquals('10.7.1', $version);
-    }            
+    }
     
     /**
      * test factory with useragent string from thunderbird 
@@ -80,7 +80,18 @@ class Addressbook_Convert_Contact_VCard_FactoryTest extends PHPUnit_Framework_Te
         $this->assertEquals(Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO, $backend);
         $this->assertEquals('3.1.13', $version);
     }
-                
+    
+    /**
+     * test factory with useragent string from icedove 
+     */
+    public function testUserAgentIcedove()
+    {
+        list($backend, $version) = Addressbook_Convert_Contact_VCard_Factory::parseUserAgent('Mozilla/5.0 (X11; Linux i686; rv:17.0) Gecko/20130529 Icedove/17.0.5');
+        
+        $this->assertEquals(Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO, $backend);
+        $this->assertEquals('17.0.5', $version);
+    }
+    
     /**
      * test factory with useragent string from kde 
      */

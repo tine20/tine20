@@ -625,7 +625,9 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         if (! $recordSet instanceof Tinebase_Record_RecordSet) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Did not get Tinebase_Record_RecordSet, skipping diff(' . $this->_recordClass . ')');
-            return array();
+            return new Tinebase_Record_RecordSetDiff(array(
+                'model'    => $this->getRecordClassName()
+            ));
         }
         
         if ($this->getRecordClassName() !== $recordSet->getRecordClassName()) {

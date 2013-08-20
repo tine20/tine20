@@ -464,7 +464,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     }
     
     /**
-     * loop subfolders (recursive) and replace new localname in globalname path
+     * loop subfolders (recursive), replace new localname in globalname path and set new parent name
      * 
      * @param Felamimail_Model_Account $_account
      * @param string $_newGlobalName
@@ -480,6 +480,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                     . ' Renaming ... ' . $subfolder->globalname . ' -> ' . $newSubfolderGlobalname);
                 
                 $subfolder->globalname = $newSubfolderGlobalname;
+                $subfolder->parent = $_newGlobalName;
                 $this->update($subfolder);
             }
         }

@@ -112,6 +112,16 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     lastEditedRecord: null,
     
     /**
+     * grid view config
+     * - do not mark records as dirty
+     * 
+     * @type Object
+     */
+    viewConfig: {
+        markDirty: false
+    },
+    
+    /**
      * @private
      */
     initComponent: function() {

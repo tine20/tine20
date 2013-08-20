@@ -114,9 +114,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         }
         
         // make sure $correlationName is a string
-        $correlationName = Tinebase_Record_Abstract::generateUID() . $this->_value['cfId'] . 'cf';
-        // use only last 30 chars (oracle column name limit)
-        $correlationName = substr($correlationName, -30);
+        $correlationName = Tinebase_Record_Abstract::generateUID(30);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom field filter: ' . print_r($this->_value, true));
         

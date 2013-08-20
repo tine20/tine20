@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Model_AttenderTests::main');
-}
-
 /**
  * Test class for Calendar_Model_Event
  * 
@@ -25,7 +21,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Calendar_Model_EventTests extends PHPUnit_Framework_TestCase
 {
-    
     /**
      * test isObsoletedBy
      * => same event does not obsolete each other
@@ -50,6 +45,9 @@ class Calendar_Model_EventTests extends PHPUnit_Framework_TestCase
         $this->assertFalse($event1->isObsoletedBy($event2), 'failed same');
     }
     
+    /**
+     * testIsRescheduled
+     */
     public function testIsRescheduled()
     {
         $event1 = new Calendar_Model_Event(array(
@@ -71,5 +69,50 @@ class Calendar_Model_EventTests extends PHPUnit_Framework_TestCase
         $event2 = clone $event1;
         $event2->rrule = 'FREQ=DAILY;INTERVAL=1';
         $this->assertTrue($event1->isRescheduled($event2), 'failed by rrule');
+    }
+    
+    /**
+     * testGetTranslatedValue
+     * 
+     * @see 0008600: Fix fatal error in Calendar/Model/Event.php
+     */
+    public function testGetTranslatedValue()
+    {
+        $event = new Calendar_Model_Event(array(
+            'dtstart'   => new Tinebase_DateTime('2011-11-23 14:25:00'),
+            'dtend'     => new Tinebase_DateTime('2011-11-23 15:25:00'),
+            'summary'   => 'test event',
+            'organizer' => Tinebase_Core::getUser()->contact_id
+        ));
+        
+        $translation = Tinebase_Translation::getTranslation('Calendar');
+        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, Tinebase_Core::getUser()->getId());
+        $fileas = Calendar_Model_Event::getTranslatedValue('organizer', $event->organizer, $translation, $timezone);
+        
+        $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $this->assertEquals($userContact->n_fileas, $fileas);
+    }
+    
+    public function testRruleDiff()
+    {
+        $event = $event = new Calendar_Model_Event(array(
+            'dtstart'   => new Tinebase_DateTime('2011-11-23 14:25:00'),
+            'dtend'     => new Tinebase_DateTime('2011-11-23 15:25:00'),
+            'rrule'     => 'FREQ=WEEKLY;INTERVAL=1;WKST=MO;BYDAY=TH',
+            'summary'   => 'test event',
+            'organizer' => Tinebase_Core::getUser()->contact_id
+        ));
+        
+        $update = clone $event;
+        
+        // parts order change
+        $update->rrule = 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TH;WKST=MO';
+        $diff = $event->diff($update);
+        $this->assertFalse(array_key_exists('rrule',$diff->diff));
+        
+        // real change
+        $update->rrule = 'FREQ=WEEKLY;INTERVAL=;BYDAY=TH;WKST=SU';
+        $diff = $event->diff($update);
+        $this->assertTrue(array_key_exists('rrule',$diff->diff));
     }
 }

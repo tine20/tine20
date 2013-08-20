@@ -84,6 +84,9 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     public function update($_accountId, $_folderName = '', $_recursive = FALSE)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Updating folder cache of parent folder: ' . $_folderName . ')');
+        
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
@@ -327,7 +330,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $systemFolders[5] = strtolower($_account->trash_folder);
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemFolders, TRUE));
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folders, TRUE));
         
         // do some mapping and save folder in db (if it doesn't exist
@@ -342,6 +344,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 $folder->is_selectable = $isSelectable;
                 $folder->imap_status   = Felamimail_Model_Folder::IMAP_STATUS_OK;
                 $folder->has_children  = ($folderData['hasChildren'] == '1');
+                $folder->parent  = $parentFolder;
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update cached folder ' . $folderData['globalName']);
                 

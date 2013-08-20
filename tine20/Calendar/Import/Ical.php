@@ -114,8 +114,8 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         
         $events->container_id = $this->_options['importContainerId'];
         
-        $cc = Calendar_Controller_Event::getInstance();
-        $sendNotifications = $cc->sendNotifications(FALSE);
+        $cc = Calendar_Controller_MSEventFacade::getInstance();
+        $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
         
         // search uid's and remove already existing -> only in import cal?
         $existingEvents = $cc->search(new Calendar_Model_EventFilter(array(
@@ -133,17 +133,20 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
                     $this->_importResult['totalcount'] += 1;
                 } else if ($this->_options['forceUpdateExisting'] || ($this->_options['updateExisting'] && $event->seq > $existingEvent->seq)) {
                     $event->id = $existingEvent->getId();
-                    $event->last_modified_time = clone $existingEvent->last_modified_time;
+                    $event->last_modified_time = ($existingEvent->last_modified_time instanceof Tinebase_DateTime) ? clone $existingEvent->last_modified_time : NULL;
                     $cc->update($event, FALSE);
                     $this->_importResult['totalcount'] += 1;
                 } else {
                     $this->_importResult['duplicatecount'] += 1;
                 }
             } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__ . ' Import failed for Event ' . $event->summary);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' . print_r($event->toArray(), TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' . $e);
                 $this->_importResult['failcount'] += 1;
             }
         }
-        $cc->sendNotifications($sendNotifications);
+        Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
         
         return $this->_importResult;
     }

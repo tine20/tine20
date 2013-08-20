@@ -73,11 +73,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
-        $this->_resolveOriginalMessage($_message);
-
-        $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
-        
         try {
+            $this->_resolveOriginalMessage($_message);
+            $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
             $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $e);
@@ -134,7 +132,17 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     public function saveMessageInFolder($_folder, $_message)
     {
         $sourceAccount = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
-        $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_message->account_id, $_folder);
+        
+        if (is_string($_folder) && ($_folder === $sourceAccount->templates_folder || $_folder === $sourceAccount->drafts_folder)) {
+            // make sure that system folder exists
+            $systemFolder = $_folder === $sourceAccount->templates_folder ? Felamimail_Model_Folder::FOLDER_TEMPLATES : Felamimail_Model_Folder::FOLDER_DRAFTS;
+            $folder = Felamimail_Controller_Account::getInstance()->getSystemFolder($sourceAccount, $systemFolder);
+        } else if ($_folder instanceof Felamimail_Model_Folder) {
+            $folder = $_folder;
+        } else {
+            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_message->account_id, $_folder);
+        }
+        
         $targetAccount = ($_message->account_id == $folder->account_id) ? $sourceAccount : Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
         $mailToAppend = $this->createMailForSending($_message, $sourceAccount);
@@ -460,7 +468,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 $this->_addReplyHeaders($_message);
             }
             
-            //set the header request response
+            // set the header request response
             if ($_message->reading_conf) {
                 $_mail->addHeader('Disposition-Notification-To', $_message->from_email);
             }
@@ -546,7 +554,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Adding attachment: ' . (is_object($attachment) ? print_r($attachment->toArray(), TRUE) : print_r($attachment, TRUE)));
             
-            if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_message->original_id instanceof Felamimail_Model_Message) {
+            if (isset($attachment['type']) && $attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_message->original_id instanceof Felamimail_Model_Message) {
                 $part = $this->getMessagePart($_message->original_id, ($_message->original_part_id) ? $_message->original_part_id : NULL);
                 $part->decodeContent();
                 
@@ -579,7 +587,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             }
             
             $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
-            $part->setType($type, $name);
+            $part->setTypeAndDispositionForAttachment($type, $name);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Adding attachment ' . $part->type);

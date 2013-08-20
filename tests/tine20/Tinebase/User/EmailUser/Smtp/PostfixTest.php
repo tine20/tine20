@@ -222,20 +222,26 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
     }
     
     /**
-     * testLotsOfAliases
+     * testLotsOfAliasesAndForwards
      * 
      * @see 0007194: alias table in user admin dialog truncated
      */
-    public function testLotsOfAliases()
+    public function testLotsOfAliasesAndForwards()
     {
         $user = $this->testAddUser();
-        $aliases = array();
+        $aliases = $forwards = array();
         for ($i = 0; $i < 100; $i++) {
-            $aliases[] = 'blablablablablablablablalbalbbl' . $i . '@' . $this->_mailDomain;
+            $aliases[] = 'alias_blablablablablablablablalbalbbl' . $i . '@' . $this->_mailDomain;
         }
         $user->smtpUser->emailAliases = $aliases;
+        for ($i = 0; $i < 100; $i++) {
+            $forwards[] = 'forward_blablablablablablablablalbalbbl' . $i . '@' . $this->_mailDomain;
+        }
+        $user->smtpUser->emailForwards = $forwards;
         $testUser = $this->_backend->updateUser($user);
         
+        $testUser = Tinebase_User::getInstance()->getUserById($testUser->getId(), 'Tinebase_Model_FullUser');
         $this->assertEquals(100, count($testUser->smtpUser->emailAliases));
+        $this->assertEquals(100, count($testUser->smtpUser->emailForwards));
     }
 }

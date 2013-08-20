@@ -91,7 +91,9 @@ class Tinebase_Tags
         
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
-        return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
+        $tags = new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
+        
+        return $tags;
     }
 
     /**
@@ -154,12 +156,7 @@ class Tinebase_Tags
      */
     public function getSearchTagsCount($_filter)
     {
-        $select = $_filter->getSelect();
-        Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
-        
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
-        $tags = new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
+        $tags = $this->searchTags($_filter);
         return count($tags);
     }
 

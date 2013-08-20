@@ -123,6 +123,10 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             if (! $this->_options['use_headline']) {
                 // just read headline but do not use it
                 $this->_headline = array();
+            } else {
+                array_walk($this->_headline, function(&$value) {
+                    $value = trim($value);
+                });
             }
         }
     }

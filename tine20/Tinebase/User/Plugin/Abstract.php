@@ -88,6 +88,8 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      * set database
      * 
      * @param array $_config
+     * 
+     * @todo allow other db backends than mysql
      */
     protected function _getDb($_config)
     {
@@ -96,12 +98,12 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         if ($this->_config['host'] == $tine20DbConfig['host'] && 
             $this->_config['dbname'] == $tine20DbConfig['dbname'] &&
             $this->_config['username'] == $tine20DbConfig['username'] &&
-            Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            
+            Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql
+        ) {
             $this->_db = Tinebase_Core::getDb();
         } else {
             $dbConfig = array_intersect_key($_config, array_flip(array('host', 'dbname', 'username', 'password', 'prefix', 'port')));
-            $this->_db = Zend_Db::factory('Pdo_Mysql', $dbConfig);
+            $this->_db = Tinebase_Core::createAndConfigureDbAdapter($dbConfig, 'Pdo_Mysql');
         }
     }
     

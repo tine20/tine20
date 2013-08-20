@@ -747,7 +747,6 @@ class Tinebase_Core
         
         self::set(self::SESSION, $session);
         self::set(self::SESSIONID, session_id());
-        
     }
     /**
      * set session options
@@ -774,7 +773,10 @@ class Tinebase_Core
             }
             
             if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
-                $baseUri = '/' . $_SERVER['HTTP_HOST'] . (($baseUri == '/') ? '' : $baseUri);
+                $exploded = explode("/", $_SERVER['REQUEST_URI']);
+                if (strtolower($exploded[1]) == strtolower($_SERVER['HTTP_HOST'])) {
+                     $baseUri = '/' . $_SERVER['HTTP_HOST'] . (($baseUri == '/') ? '' : $baseUri);
+                }
             }
             
             // fix for windows server with backslash directory separator
@@ -856,96 +858,110 @@ class Tinebase_Core
     
     /**
      * initializes the database connection
-     *
-     * @throws  Tinebase_Exception_UnexpectedValue
-     * @throws  Tinebase_Exception_Backend_Database
      */
     public static function setupDatabaseConnection()
     {
         $config = self::getConfig();
-
+        
         if (isset($config->database)) {
             $dbConfig = $config->database;
-
+            
             if (! defined('SQL_TABLE_PREFIX')) {
                 define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
             }
-
-            $dbConfigArray = $dbConfig->toArray();
+            
+            $db = self::createAndConfigureDbAdapter($dbConfig->toArray());
+            Zend_Db_Table_Abstract::setDefaultAdapter($db);
+            
+            // place table prefix into the concrete adapter
+            $db->table_prefix = SQL_TABLE_PREFIX;
+            
+            self::set(self::DB, $db);
+            
+        } else {
+            die ('database section not found in central configuration file');
+        }
+    }
+    
+    /**
+     * create db adapter and configure it for Tine 2.0
+     * 
+     * @param array $dbConfigArray
+     * @param string $dbBackend
+     * @return Zend_Db_Adapter_Abstract
+     * @throws Tinebase_Exception_Backend_Database
+     * @throws Tinebase_Exception_UnexpectedValue
+     */
+    public static function createAndConfigureDbAdapter($dbConfigArray, $dbBackend = NULL)
+    {
+        if ($dbBackend === NULL) {
             $constName = 'self::' . strtoupper($dbConfigArray['adapter']);
             if (empty($dbConfigArray['adapter']) || ! defined($constName)) {
-                self::getLogger()->warn('Wrong db adapter configured (' . $dbConfigArray['adapter'] . '). Using default: ' . self::PDO_MYSQL);
+                self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Wrong/no db adapter configured (' . $dbConfigArray['adapter'] . '). Using default: ' . self::PDO_MYSQL);
                 $dbBackend = self::PDO_MYSQL;
                 $dbConfigArray['adapter'] = self::PDO_MYSQL;
             } else {
                 $dbBackend = constant($constName);
             }
-
-            switch($dbBackend) {
-                case self::PDO_MYSQL:
-                    foreach (array('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY', 'PDO::MYSQL_ATTR_INIT_COMMAND') as $pdoConstant) {
-                        if (! defined($pdoConstant)) {
-                            throw new Tinebase_Exception_Backend_Database($pdoConstant . ' is not defined. Please check PDO extension.');
-                        }
-                    }
-                    
-                    // force some driver options
-                    $dbConfigArray['driver_options'] = array(
-                        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
-                        // set utf8 charset
-                        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8;",
-                    );
-                    $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
-                    try {
-                        // set mysql timezone to utc and activate strict mode
-                        $db->query("SET time_zone ='+0:00';");
-                        $db->query("SET SQL_MODE = 'STRICT_ALL_TABLES'");
-                        $db->query("SET SESSION group_concat_max_len = 81920");
-                    } catch (Exception $e) {
-                        self::getLogger()->warn('Failed to set "SET SQL_MODE to STRICT_ALL_TABLES or timezone: ' . $e->getMessage());
-                    }
-                    break;
-                    
-                case self::PDO_OCI:
-                    $db = Zend_Db::factory('Pdo_Oci', $dbConfigArray);
-                    break;
-                    
-                case self::ORACLE:
-                    $db = Zend_Db::factory(self::ORACLE, $dbConfigArray);
-                    $db->supportPositionalParameters(true);
-                    $db->setLobAsString(true);
-                    break;
-                    
-                case self::PDO_PGSQL:
-                    unset($dbConfigArray['adapter']);
-                    unset($dbConfigArray['tableprefix']);
-                    $db = Zend_Db::factory('Pdo_Pgsql', $dbConfigArray);
-                    try {
-                        // set mysql timezone to utc and activate strict mode
-                        $db->query("SET timezone ='+0:00';");
-                        // PostgreSQL has always been strict about making sure data is valid before allowing it into the database
-                    } catch (Exception $e) {
-                        self::getLogger()->warn('Failed to set "SET timezone: ' . $e->getMessage());
-                    }
-                    break;
-                    
-                default:
-                    throw new Tinebase_Exception_UnexpectedValue('Invalid database adapter defined. Please set adapter to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.inc.php.');
-                    break;
-            }
-
-            Zend_Db_Table_Abstract::setDefaultAdapter($db);
-
-            // place table prefix into the concrete adapter
-            $db->table_prefix = SQL_TABLE_PREFIX;
-
-            self::set(self::DB, $db);
-
-        } else {
-            die ('database section not found in central configuration file');
         }
+        
+        switch ($dbBackend) {
+            case self::PDO_MYSQL:
+                foreach (array('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY', 'PDO::MYSQL_ATTR_INIT_COMMAND') as $pdoConstant) {
+                    if (! defined($pdoConstant)) {
+                        throw new Tinebase_Exception_Backend_Database($pdoConstant . ' is not defined. Please check PDO extension.');
+                    }
+                }
+                
+                // force some driver options
+                $dbConfigArray['driver_options'] = array(
+                    PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
+                    // set utf8 charset
+                    // @todo set to utf8mb4 / @see 0008708: switch to mysql utf8mb4
+                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8;",
+                );
+                $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
+                try {
+                    // set mysql timezone to utc and activate strict mode
+                    $db->query("SET time_zone ='+0:00';");
+                    $db->query("SET SQL_MODE = 'STRICT_ALL_TABLES'");
+                    $db->query("SET SESSION group_concat_max_len = 81920");
+                } catch (Exception $e) {
+                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to set "SET SQL_MODE to STRICT_ALL_TABLES or timezone: ' . $e->getMessage());
+                }
+                break;
+                
+            case self::PDO_OCI:
+                $db = Zend_Db::factory('Pdo_Oci', $dbConfigArray);
+                break;
+                
+            case self::ORACLE:
+                $db = Zend_Db::factory(self::ORACLE, $dbConfigArray);
+                $db->supportPositionalParameters(true);
+                $db->setLobAsString(true);
+                break;
+                
+            case self::PDO_PGSQL:
+                unset($dbConfigArray['adapter']);
+                unset($dbConfigArray['tableprefix']);
+                $db = Zend_Db::factory('Pdo_Pgsql', $dbConfigArray);
+                try {
+                    // set mysql timezone to utc and activate strict mode
+                    $db->query("SET timezone ='+0:00';");
+                    // PostgreSQL has always been strict about making sure data is valid before allowing it into the database
+                } catch (Exception $e) {
+                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to set "SET timezone: ' . $e->getMessage());
+                }
+                break;
+                
+            default:
+                throw new Tinebase_Exception_UnexpectedValue('Invalid database adapter defined. Please set adapter to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.inc.php.');
+                break;
+        }
+        
+        return $db;
     }
-
+    
     /**
      * get db profiling
      */
@@ -1388,5 +1404,30 @@ class Tinebase_Core
             self::set(self::SCHEDULER, $scheduler);
         }
         return self::get(self::SCHEDULER);
+    }
+
+    /**
+     * filter input string for database as some databases (looking at you, MySQL) can't cope with some chars
+     * 
+     * @param string $string
+     * @return string
+     *
+     * @see 0008644: error when sending mail with note (wrong charset)
+     * @see http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string/8215387#8215387
+     * @see http://stackoverflow.com/questions/8491431/remove-4-byte-characters-from-a-utf-8-string
+     */
+    public static function filterInputForDatabase($string)
+    {
+        $db = self::getDb();
+        if ($db && $db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $string = mbConvertTo($string);
+            
+            // remove 4 byte utf8
+            $result = preg_replace('/[\xF0-\xF7].../s', '?', $string);
+        } else {
+            $result = $string;
+        }
+        
+        return $result;
     }
 }

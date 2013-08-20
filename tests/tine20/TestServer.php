@@ -155,7 +155,7 @@ class TestServer
             '/--verbose /',
             '/--stop-on-failure /',
             '/[\S]+\.php$/',
-            '/ \S+Tests/',
+            '/ \S+Tests{0,1}/',
             '/--debug /',
             '/--filter [\S]+\D/',
             '/--configuration [\S]+\D/',
@@ -186,5 +186,23 @@ class TestServer
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Assembled commmand: ' . $cmd);
         
         return $cmd;
+    }
+
+    /**
+     * replace maildomain in input file
+     * 
+     * @param string $filename
+     * @return string filename
+     */
+    public static function replaceEmailDomainInFile($filename)
+    {
+        $config = TestServer::getInstance()->getConfig();
+        $maildomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $contents = file_get_contents($filename);
+        $contents = preg_replace('/tine20.org/', $maildomain, $contents);
+        file_put_contents($tempPath, $contents);
+        
+        return $tempPath;
     }
 }

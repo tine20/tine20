@@ -84,10 +84,46 @@ Ext.apply(Ext.form.VTypes, {
 
 /**
  * fix textfield allowBlank validation
+ * taken from ext, added trim
  */
 Ext.override(Ext.form.TextField, {
-    validator:function(text){
-        return this.allowBlank!==false || Ext.util.Format.trim(text).length > 0;
+    validateValue : function(value){
+        if(Ext.isFunction(this.validator)){
+            var msg = this.validator(value);
+            if(msg !== true){
+                this.markInvalid(msg);
+                return false;
+            }
+        }
+        if(Ext.util.Format.trim(value).length < 1 || value === this.emptyText){ // if it's blank
+             if(this.allowBlank){
+                 this.clearInvalid();
+                 return true;
+             }else{
+                 this.markInvalid(this.blankText);
+                 return false;
+             }
+        }
+        if(Ext.util.Format.trim(value).length < this.minLength){
+            this.markInvalid(String.format(this.minLengthText, this.minLength));
+            return false;
+        }
+        if(Ext.util.Format.trim(value).length > this.maxLength){
+            this.markInvalid(String.format(this.maxLengthText, this.maxLength));
+            return false;
+        }   
+        if(this.vtype){
+            var vt = Ext.form.VTypes;
+            if(!vt[this.vtype](value, this)){
+                this.markInvalid(this.vtypeText || vt[this.vtype +'Text']);
+                return false;
+            }
+        }
+        if(this.regex && !this.regex.test(value)){
+            this.markInvalid(this.regexText);
+            return false;
+        }
+        return true;
     }
 });
 
@@ -287,3 +323,42 @@ Ext.ButtonToggleMgr = function(){
 Ext.data.Store.prototype.loadRecords = Ext.data.Store.prototype.loadRecords.createInterceptor(function(o, options, success) {
     return this.fireEvent('beforeloadrecords', o, options, success, this);
 });
+
+/**
+ * add beforeloadrecords event
+ */
+Ext.data.Store.prototype.loadRecords = Ext.data.Store.prototype.loadRecords.createInterceptor(function(o, options, success) {
+    return this.fireEvent('beforeloadrecords', o, options, success, this);
+});
+
+
+/**
+ * fix focus related emptyText problems
+ * 0008616: emptyText gets inserted into ComboBoxes when the Box gets Hidden while focused 
+ */
+Ext.form.TriggerField.prototype.cmpRegforFocusFix = [];
+
+Ext.form.TriggerField.prototype.initComponent = Ext.form.TriggerField.prototype.initComponent.createSequence(function() {
+    if (this.emptyText) {
+        Ext.form.TriggerField.prototype.cmpRegforFocusFix.push(this);
+    }
+});
+
+Ext.form.TriggerField.prototype.onDestroy = Ext.form.TriggerField.prototype.onDestroy.createInterceptor(function() {
+    Ext.form.TriggerField.prototype.cmpRegforFocusFix.remove(this);
+});
+
+Ext.form.TriggerField.prototype.taskForFocusFix = new Ext.util.DelayedTask(function(){
+    Ext.each(Ext.form.TriggerField.prototype.cmpRegforFocusFix, function(cmp) {
+        if (cmp.rendered && cmp.el.dom == document.activeElement) {
+            if(cmp.el.dom.value == cmp.emptyText){
+                cmp.preFocus();
+                cmp.hasFocus = true;
+                cmp.setRawValue('');
+            }
+        }
+    });
+    Ext.form.TriggerField.prototype.taskForFocusFix.delay(1000);
+});
+
+Ext.form.TriggerField.prototype.taskForFocusFix.delay(1000);

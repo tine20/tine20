@@ -73,11 +73,16 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * returns cm
      * @private
-     * 
-     * @todo    add more columns
      */
     getColumns: function(){
         return [{
+            header: this.app.i18n._('Tags'),
+            id: 'tags',
+            dataIndex: 'tags',
+            width: 50,
+            renderer: Tine.Tinebase.common.tagsRenderer,
+            sortable: false
+        },{
             id: 'number',
             header: this.app.i18n._("Contract number"),
             width: 100,
@@ -109,7 +114,6 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 100,
             sortable: true,
             dataIndex: 'cleared_in'
-        }
-        ];
+        }].concat(this.getModlogColumns())
     }
 });

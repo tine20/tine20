@@ -299,12 +299,12 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * account name generation
      *
      * @param Tinebase_Model_FullUser $_account
-     * @param integer $_schema 1 = lastname + 2 chars of firstname / 2 = 1-x chars of firstname + lastname
+     * @param integer $_schema 0 = lastname (10 chars) / 1 = lastname + 2 chars of firstname / 2 = 1-x chars of firstname + lastname 
      * @return string
      */
     public function generateUserName($_account, $_schema = 1)
     {
-        if (! empty($_account->accountFirstName)) {
+        if (! empty($_account->accountFirstName) && $_schema > 0) {
             $userName = ($_schema === 1) ? $this->_generateUserWithSchema1($_account) : $this->_generateUserWithSchema2($_account);
         } else {
             $userName = strtolower(replaceSpecialChars(substr($_account->accountLastName, 0, 10)));

@@ -67,8 +67,8 @@ Tine.Admin.Applications.Main = function() {
                 if(_success === true) {
                     var result = Ext.util.JSON.decode(_response.responseText);
                     if(result.success === true) {
-                        //Ext.getCmp('gridAdminApplications').getStore().reload();
                         // reload mainscreen because apps have to be loaded / unloaded
+                        Tine.Tinebase.ApplicationStarter.init();
                         window.location = window.location.href.replace(/#+.*/, '');
                     }
                 }

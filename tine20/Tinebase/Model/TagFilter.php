@@ -66,7 +66,6 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
         $select = $db->select()
             ->from (array('tags' => SQL_TABLE_PREFIX . 'tags'))
             ->where($db->quoteIdentifier('is_deleted') . ' = 0')
-            //->order('type', 'DESC')
             ->order('name', 'ASC');
         
         if (!empty($this->application)) {
@@ -93,36 +92,8 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
         if ($this->type) {
             $select->where($db->quoteInto($db->quoteIdentifier('tags.type') . ' = ?', $this->type));
         }
+        
+        $select->group('tags.id');
         return $select;
     }
-    
-    // @todo use this when filter extends Tinebase_Model_Filter_FilterGroup
-//     /**
-//     * @var string class name of this filter group
-//     *      this is needed to overcome the static late binding
-//     *      limitation in php < 5.3
-//     */
-//     protected $_className = 'Tinebase_Model_TagFilter';
-    
-//     /**
-//      * @var string application of this filter group
-//      */
-//     protected $_applicationName = 'Tinebase';
-    
-//     /**
-//      * @var string name of model this filter group is designed for
-//      */
-//     protected $_modelName = 'Tinebase_Model_Tag';
-    
-//     /**
-//      * @var array filter model fieldName => definition
-//      */
-//     protected $_filterModel = array(
-//             'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
-//             'application'          => array('filter' => 'Tinebase_Model_Filter_Id'),
-//             'owner'                => array('filter' => 'Tinebase_Model_Filter_User'),
-//             'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-//             'description'          => array('filter' => 'Tinebase_Model_Filter_Text'),
-//             'grant'                => array('filter' => 'Tinebase_Model_Filter_Text'),
-//     );
 }

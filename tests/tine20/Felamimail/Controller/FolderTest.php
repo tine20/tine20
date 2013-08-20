@@ -196,6 +196,8 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
     
     /**
      * rename mail folder on the server
+     * 
+     * @see 0008516: child folders parent field is not updated when renaming folder
      */
     public function testRenameFolderWithSubfolder()
     {
@@ -209,11 +211,10 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('test_renamed', $renamedFolder->localname);
         
-        $resultTestSub = $this->_controller->search($this->_getFolderFilter('INBOX' . $this->_account->delimiter . 'test'));
+        $resultTestSub = $this->_controller->search($this->_getFolderFilter('INBOX' . $this->_account->delimiter . 'test_renamed'));
         $this->assertGreaterThan(0, count($resultTestSub), 'No subfolders found.');
         $testFolder = $resultTestSub->filter('localname', 'testsub')->getFirstRecord();
         
-        //print_r($testFolder->toArray());
         $this->assertFalse($testFolder === NULL, 'No renamed folder found.');
         $this->assertTrue(($testFolder->is_selectable == 1));
         $this->assertEquals('INBOX' . $this->_account->delimiter . 'test_renamed' . $this->_account->delimiter . 'testsub', $testFolder->globalname);
