@@ -545,19 +545,39 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         var fieldsToCopy = this.recordClass.getFieldNames().diff(omitFields),
             recordData = Ext.copyTo({}, this.record.data, fieldsToCopy);
+
+        var resetProperties = {
+            alarms:    ['id', 'record_id', 'sent_time', 'sent_message'],
+            relations: ['id', 'own_id', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time']
+        };
         
-        // handle alarms if any
-        if (recordData.hasOwnProperty('alarms')) {
-            var alarms = recordData.alarms;
-            for (var index = 0; index < alarms.length; index++) {
-                Ext.each(['id', 'record_id', 'sent_time', 'sent_message'],
-                    function(prop) {
-                        alarms[index][prop] = null;
-                    }
-                );
-                alarms[index].sent_status = 'pending';
+        var setProperties = {alarms: {sent_status: 'pending'}};
+        
+        Ext.iterate(resetProperties, function(property, properties) {
+            if (recordData.hasOwnProperty(property)) {
+                var r = recordData[property];
+                for (var index = 0; index < r.length; index++) {
+                    Ext.each(properties,
+                        function(prop) {
+                            r[index][prop] = null;
+                        }
+                    );
+                }
             }
-        }
+        });
+        
+        Ext.iterate(setProperties, function(property, properties) {
+            if (recordData.hasOwnProperty(property)) {
+                var r = recordData[property];
+                for (var index = 0; index < r.length; index++) {
+                    Ext.iterate(properties,
+                        function(prop, value) {
+                            r[index][prop] = value;
+                        }
+                    );
+                }
+            }
+        });
         
         this.record = new this.recordClass(recordData, 0);
     },
