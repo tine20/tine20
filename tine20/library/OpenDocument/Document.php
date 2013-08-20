@@ -375,7 +375,11 @@ class OpenDocument_Document
             foreach ($iterator as $fullFilename => $cur) {
                 // the second parameter of the addFile function needs always the unix directory separator
                 $localname = str_replace('\\', '/', substr($fullFilename, strlen($tempDir)+1));
-                if ($localname !== 'mimetype' && $localname !== '.' && $localname !== '..') {
+                
+                // exclude . and ..
+                $localname_parts = pathinfo($localname);
+                $localbasename = $localname_parts['basename'];
+                if ($localbasename !== 'mimetype' && $localbasename !== '.' && $localbasename !== '..') {
                     $zip->addFile($fullFilename, $localname);
                 }
             }

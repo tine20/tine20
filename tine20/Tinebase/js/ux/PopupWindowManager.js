@@ -52,11 +52,21 @@ Ext.ux.PopupWindowGroup = function(config) {
                 
             }
             if (! doc) {
+                list[id].destroy();
                 accessList.remove(list[id]);
+                list[id] = null;
                 delete list[id];
             }
         }
     };
+    
+    var cleanUpTask = function() {
+        cleanupClosedWindows();
+        cleanUpTask.defer(10000);
+    };
+    
+    cleanUpTask();
+    
     /*
     // private
     var sortWindows = function(d1, d2){
@@ -119,6 +129,7 @@ Ext.ux.PopupWindowGroup = function(config) {
         },
 
         unregister : function(win){
+            list[win.name] = null;
             delete list[win.name];
             //win.un('hide', activateLast);
             accessList.remove(win);

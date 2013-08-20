@@ -173,9 +173,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     close: function() {
         if(this.fireEvent("beforeclose", this) !== false){
             this.fireEvent('close', this);
-            this.purgeListeners();
-            this.windowManager.unregister(this);
-            this.popup.close();
+            this.destroy();
         }
     },
     
@@ -199,6 +197,18 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      */
     onClose: function() {
 
+    },
+    
+    /**
+     * @private
+     */
+    destroy: function() {
+        Ext.ux.PopupWindow.superclass.destroy.call(this);
+        
+        this.purgeListeners();
+        this.windowManager.unregister(this);
+        this.popup.close();
+        this.popup = null;
     }
 });
 

@@ -1567,10 +1567,9 @@ class Tinebase_Core
     {
         $db = self::getDb();
         if ($db && $db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            if (extension_loaded('mbstring')) {
-                $string = @mb_convert_encoding($string, 'UTF-8', 'UTF-8');
-            }
+            $string = mbConvertTo($string);
             
+            // remove 4 byte utf8
             $result = preg_replace('/[\xF0-\xF7].../s', '?', $string);
         } else {
             $result = $string;

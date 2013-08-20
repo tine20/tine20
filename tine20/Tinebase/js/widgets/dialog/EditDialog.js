@@ -546,6 +546,19 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         var fieldsToCopy = this.recordClass.getFieldNames().diff(omitFields),
             recordData = Ext.copyTo({}, this.record.data, fieldsToCopy);
         
+        // handle alarms if any
+        if (recordData.hasOwnProperty('alarms')) {
+            var alarms = recordData.alarms;
+            for (var index = 0; index < alarms.length; index++) {
+                Ext.each(['id', 'record_id', 'sent_time', 'sent_message'],
+                    function(prop) {
+                        alarms[index][prop] = null;
+                    }
+                );
+                alarms[index].sent_status = 'pending';
+            }
+        }
+        
         this.record = new this.recordClass(recordData, 0);
     },
     
