@@ -109,6 +109,24 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $result = $this->_controller->update($firstInstanceException, FALSE, Calendar_Model_Event::RANGE_THISANDFUTURE);
         $this->assertEquals($result->location, $location);
     }
+
+    /**
+     * testFirstInstanceExceptionUpdateRangeAll
+     * 
+     * @see 0008826: update range:all does not work on first occurrence exception
+     */
+    public function testFirstInstanceExceptionUpdateRangeAll()
+    {
+        $events = $this->testFirstInstanceException();
+        $firstInstanceException = $events->getFirstRecord();
+        $location = 'At Home';
+        $firstInstanceException->location = $location;
+    
+        $result = $this->_controller->update($firstInstanceException, FALSE, Calendar_Model_Event::RANGE_ALL);
+        $this->assertEquals($result->location, $location);
+        
+        // @todo check other instances?
+    }
     
     /**
      * @see #5802: moving last event of a recurring set with count part creates a instance a day later
