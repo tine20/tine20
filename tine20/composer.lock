@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "901bbd34ee940ceb3de9aa9a897400d0",
+    "hash": "87e4f04e379e92b239d5d686ea808a40",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -98,6 +98,73 @@
                 "html"
             ],
             "time": "2013-02-18 00:04:08"
+        },
+        {
+            "name": "metaways/opendocument",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "http://git.tine20.org/git/opendocument",
+                "reference": "0b57ad9d0d90371ea81c835e3f905c7e047d134d"
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-0": {
+                    "OpenDocument": [
+                        "lib/",
+                        "tests/"
+                    ]
+                }
+            },
+            "license": [
+                "New BSD License"
+            ],
+            "description": "Metaways Infosystems GmbH - Open Document Library",
+            "homepage": "http://www.tine20.org",
+            "keywords": [
+                "Office",
+                "OpenDocument",
+                "Template"
+            ],
+            "time": "2013-08-29 12:46:04"
+        },
+        {
+            "name": "metaways/timezoneconvert",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "http://git.tine20.org/git/timezoneconvert",
+                "reference": "149baa0b4a80966ef8f66ea42ee76a0aa7859b32"
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-0": {
+                    "TimeZoneConvert": [
+                        "lib/",
+                        "tests/"
+                    ]
+                }
+            },
+            "license": [
+                "MIT",
+                "BSD",
+                "GPL"
+            ],
+            "description": "Metaways Infosystems GmbH - TimeZoneConvert Library",
+            "homepage": "http://www.tine20.org",
+            "keywords": [
+                "Time",
+                "TimeZoneConvert",
+                "Timezones",
+                "UTC"
+            ],
+            "time": "2013-08-30 08:04:33"
         },
         {
             "name": "sabre/dav",
@@ -229,7 +296,7 @@
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "05c33c1a7b9b13a7184d5cf0b8d1e18acd16d99c"
+                "reference": "a6afdc1721582c44e91b5642aa8358cee7c7db39"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -245,7 +312,7 @@
             ],
             "description": "Library to sync mobile phones",
             "homepage": "http://www.syncroton.org",
-            "time": "2013-05-23 06:26:44"
+            "time": "2013-08-30 10:00:42"
         }
     ],
     "packages-dev": [
@@ -256,7 +323,9 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "syncroton/syncroton": 20
+        "syncroton/syncroton": 20,
+        "metaways/opendocument": 20,
+        "metaways/timezoneconvert": 20
     },
     "platform": [
 

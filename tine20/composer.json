@@ -8,12 +8,20 @@
     "repositories": [{
         "type": "git",
         "url": "http://git.syncroton.org/Syncroton"
+    }, {
+        "type": "git",
+        "url": "http://git.tine20.org/git/opendocument"
+    }, {
+        "type": "git",
+        "url": "http://git.tine20.org/git/timezoneconvert"
     }],
     "require": {
         "syncroton/syncroton": "dev-master",
         "ezyang/htmlpurifier": "v4.5.0",
         "codeplex/phpexcel": "1.7.8",
-        "sabre/dav" : "1.8.*"
+        "sabre/dav" : "1.8.*",
+        "metaways/opendocument": "dev-master",
+        "metaways/timezoneconvert": "dev-master"
     },
     "autoload": {
         "files": ["Tinebase/Helper.php"],
