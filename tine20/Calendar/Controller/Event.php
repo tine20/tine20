@@ -1213,8 +1213,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $exceptions = $this->getRecurExceptions($_record);
             $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, $from);
             
-            if ($nextOccurrence === NULL && Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-                 ' Recur series is over, no more alarms pending');
+            if ($nextOccurrence === NULL) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                    ' Recur series is over, no more alarms pending');
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' Found next occurrence, adopting alarm to dtstart ' . $nextOccurrence->dtstart->toString());
+            }
             
             // save recurid so we know for which recurrance the alarm is for
             $_alarm->setOption('recurid', isset($nextOccurrence) ? $nextOccurrence->recurid : NULL);
@@ -2023,6 +2028,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             parent::_inspectAlarmSet($event, $_alarm);
             $this->adoptAlarmTime($event, $_alarm, 'instance');
             
+            // sent_status might have changed in adoptAlarmTime()
+            if ($_alarm->sent_status !== Tinebase_Model_Alarm::STATUS_PENDING) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Not sending alarm for event at ' . $event->dtstart->toString() . ' with status ' . $_alarm->sent_status);
+                return;
+            }
+            
             if ($recurid) {
                 // NOTE: In case of recuring events $event is always the baseEvent,
                 //       so we might need to adopt event time to recur instance.
@@ -2034,8 +2046,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $event->dtend->add($diff);
             }
             
-            // don't send alarm if instance is an exception
             if ($event->exdate && in_array($event->dtstart, $event->exdate)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . " Not sending alarm because instance at " . $event->dtstart->toString() . ' is an exception.');
                 return;
             }
         }
