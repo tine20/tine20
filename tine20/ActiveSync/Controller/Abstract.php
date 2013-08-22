@@ -243,7 +243,9 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         }
         
         try {
-            $entry = $this->_contentController->create($entry);
+            // create record (without duplicate check)
+            // @see 0008486: Contacts deleted on Android device after new created contact via ActiveSync
+            $entry = $this->_contentController->create($entry, FALSE);
         } catch (Tinebase_Exception_AccessDenied $tead) {
             throw new Syncroton_Exception_AccessDenied();
         }
