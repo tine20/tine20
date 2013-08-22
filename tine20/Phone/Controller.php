@@ -74,7 +74,8 @@ class Phone_Controller extends Tinebase_Controller_Abstract
      * @param   string $_lineId
      * @throws  Phone_Exception_NotFound
      * 
-     * @todo check dial right here?
+     * @todo check dial right here
+     * @todo move to MyPhone controller
      */
     public function dialNumber($_number, $_phoneId = NULL, $_lineId = NULL)
     {
@@ -129,7 +130,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
             $asteriskLine = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($asteriskLineId);
             $asteriskContext = Voipmanager_Controller_Asterisk_Context::getInstance()->get($asteriskLine->context_id);
             
-            $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskContext->name, $number, 1, "WD <$number>");
+            $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskContext->name, $number, 1, "WD $number");
         }
     }
     
