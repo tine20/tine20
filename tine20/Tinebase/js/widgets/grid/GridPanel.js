@@ -372,11 +372,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initFilterPanel: function(config) {
         if (! this.filterToolbar) {
+            var filterModels = [];
+            if (this.modelConfig) {
+                filterModels = this.getCustomfieldFilters();
+            } else if (Ext.isFunction(this.recordClass.getFilterModel)) {
+                filterModels = this.recordClass.getFilterModel();
+            }
             this.filterToolbar = new Tine.widgets.grid.FilterPanel(Ext.apply({}, {
                 app: this.app,
                 recordClass: this.recordClass,
                 allowSaving: true,
-                filterModels: this.modelConfig ? this.getCustomfieldFilters() : this.recordClass.getFilterModel(),
+                filterModels: filterModels,
                 defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
                 filters: this.defaultFilters || []
             }, config || {}));
