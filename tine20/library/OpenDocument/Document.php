@@ -284,7 +284,7 @@ class OpenDocument_Document
      */
     protected function _findMarkers($marker)
     {
-        return $this->_document->xpath("//text()[contains(., '<{".strtoupper($marker)."}>')]");
+        return $this->_document->xpath("//text()[contains(., '###".strtoupper($marker)."###')]");
     }
     
     /**
