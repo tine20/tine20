@@ -194,6 +194,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         // update from relationsPanel if any
         if (this.isValid()) {
             if (record.data.hasOwnProperty('relations')) {
+                record.data.relations = null;
                 delete record.data.relations;
             }
             var relations = [];
@@ -215,7 +216,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     
     /**
      * updates the title ot the tab
-     * @param {Integer} count
+     * @param {Number} count
      */
     updateTitle: function(count) {
         count = Ext.isNumber(count) ? count : this.store.getCount();
@@ -333,31 +334,30 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 mode: 'local',
                 triggerAction: 'all',
                 selectOnFocus: true,
-                getActiveData: function() {
-                    var rec = this.getStore().getAt(this.getValue());
-                    if(rec) {
-                        return rec.data;
-                    } else {
-                        return null;
-                    }
-                },
                 listeners: {
                     scope: this,
-                    select: function(combo) {
-                        var value = combo.getActiveData();
-                        if(value) {
-                            this.showSearchCombo(value.appName, value.modelName);
-                        }
-                    }
+                    select: this.onModelComboSelect
                 }
             });
 
         }
         return this.modelCombo;
     },
+    
+    /**
+     * is called on change listener of this.modelCombo
+     * 
+     * @param {Ext.form.ComboBox} combo the calling combo
+     * @param {Ext.data.record} selected the selected record
+     * @param {Number} index the selection index
+     */
+    onModelComboSelect: function(combo, selected, index) {
+        this.showSearchCombo(selected.get('appName'), selected.get('modelName'));
+    },
+    
     /**
      * creates the searchcombos for the models
-     * @return {}
+     * @return {Tine.Tinebase.widgets.form.RecordPickerComboBox}
      */
     createSearchCombos: function() {
         var sc = [];
@@ -380,6 +380,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         this.showSearchCombo(this.possibleRelations[0].relatedApp, this.possibleRelations[0].relatedModel);
         return sc;
     },
+    
     /**
      * shows the active model searchcombo
      * @param {String} appName
@@ -638,6 +639,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 relconf = {};
             }
             if (record.data.hasOwnProperty('relations')) {
+                record.data.relations = null;
                 delete record.data.relations;
             }
             var rc = this.getActiveSearchCombo().recordClass;
@@ -886,6 +888,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         store = store ? store : this.store;
         var relations = [];
         store.each(function(record) {
+            record.data.related_record.relations = null;
+            record.data.related_record.relation = null;
             delete record.data.related_record.relations;
             delete record.data.related_record.relation;
             relations.push(record.data);
