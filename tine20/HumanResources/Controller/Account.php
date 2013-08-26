@@ -63,8 +63,9 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
      *
      * @param integer $year
      * @param HumanResources_Model_Employee
+     * @param boolean $useBackend Use Backend instead of this Controller (may called by setup also, skips rigts, creating modlog etc.)
      */
-    public function createMissingAccounts($year = NULL, $employee = NULL)
+    public function createMissingAccounts($year = NULL, $employee = NULL, $useBackend = FALSE)
     {
         // if no year is given, call myself with this year and just go on with the next year
         if (! $year) {
@@ -95,8 +96,16 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         
         $validEmployeeIds = array_diff($validEmployeeIds, $result);
         $createdAccounts = new Tinebase_Record_RecordSet('HumanResources_Model_Account');
-        foreach($validEmployeeIds as $id) {
-            $createdAccounts->addRecord($this->create(new HumanResources_Model_Account(array('employee_id' => $id, 'year' => $year))));
+        
+        if ($useBackend) {
+            $be = new HumanResources_Backend_Account();
+            foreach($validEmployeeIds as $id) {
+                $createdAccounts->addRecord($be->create(new HumanResources_Model_Account(array('employee_id' => $id, 'year' => $year))));
+            }
+        } else {
+            foreach($validEmployeeIds as $id) {
+                $createdAccounts->addRecord($this->create(new HumanResources_Model_Account(array('employee_id' => $id, 'year' => $year))));
+            }
         }
         
         return $createdAccounts;

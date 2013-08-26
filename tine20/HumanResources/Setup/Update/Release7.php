@@ -484,4 +484,20 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('HumanResources', '7.12');
     }
+    
+    /**
+     * update 7.12 -> 7.13
+     *
+     * - create accounts for this and next year
+     */
+    public function update_12()
+    {
+        $date = Tinebase_DateTime::now();
+        HumanResources_Controller_Account::getInstance()->createMissingAccounts((int) $date->format('Y'), NULL, TRUE);
+        
+        $date->addYear(1);
+        HumanResources_Controller_Account::getInstance()->createMissingAccounts((int) $date->format('Y'), NULL, TRUE);
+        
+        $this->setApplicationVersion('HumanResources', '7.13');
+    }
 }

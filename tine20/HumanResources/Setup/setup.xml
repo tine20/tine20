@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>7.12</version>
+    <version>7.13</version>
     <order>51</order>
     <depends>
         <application>Calendar</application>
