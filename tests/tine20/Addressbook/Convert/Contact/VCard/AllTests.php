@@ -32,6 +32,7 @@ class Addressbook_Convert_Contact_VCard_AllTests
         $suite->addTestSuite('Addressbook_Convert_Contact_VCard_IOSTest');
         $suite->addTestSuite('Addressbook_Convert_Contact_VCard_MacOSXTest');
         $suite->addTestSuite('Addressbook_Convert_Contact_VCard_SogoTest');
+        $suite->addTestSuite('Addressbook_Convert_Contact_VCard_WebDAVCollaboratorTest');
         
         return $suite;
     }

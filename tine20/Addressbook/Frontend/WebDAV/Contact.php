@@ -75,6 +75,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
         $contact->container_id = $container->getId();
         
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
+        $id = strlen($id) > 40 ? sha1($id) : $id;
         $contact->setId($id);
         
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
@@ -278,8 +279,9 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre_DAV_File implements Sabr
     {
         if (! $this->_contact instanceof Addressbook_Model_Contact) {
             $id = ($pos = strpos($this->_contact, '.')) === false ? $this->_contact : substr($this->_contact, 0, $pos);
+            $id = strlen($id) > 40 ? sha1($id) : $id;
             
-            $this->_contact = Addressbook_Controller_Contact::getInstance()->get($this->id);
+            $this->_contact = Addressbook_Controller_Contact::getInstance()->get($id);
         }
         
         return $this->_contact;

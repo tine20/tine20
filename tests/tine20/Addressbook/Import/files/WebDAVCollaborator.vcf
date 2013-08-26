@@ -1,0 +1,46 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID://WebDAV Collaborator 1.1.40-629//Import from Outlook//EN
+UID:93e1e937b15c5df61fb87348861855e692640ef3
+N:Nachname;Vorname;Middle;salutation;name suffix;
+FN:Nachname\;  salutation Vorname Middle name suffix
+NICKNAME:nickname
+ORG:Firma;department;
+TITLE:Position
+TEL;TYPE=PREF,WORK,VOICE:+49 (040) 12345 - 0
+TEL;TYPE=PREF,HOME,VOICE:+49 (040) 12345 - 1
+TEL;TYPE=CELL,VOICE:+49 (040) 12345 - 3
+TEL;TYPE=PAGER:
+TEL;TYPE=PREF,WORK,FAX:+49 (040) 12345 - 2
+TEL;TYPE=HOME,FAX:
+ADR;TYPE=WORK,PREF:Office;;business street 2;businesscity;businessarea;45734;Deutschland;
+ADR;TYPE=HOME:;;private street 44;private cyty;private area;44322;Deutschland;
+URL:websi.te
+ROLE:job description
+BDAY:1980-08-09
+EMAIL;TYPE=PREF,INTERNET:mail@example.com
+NOTE:Nots \nWith \nLine\nBreaks\n
+AGENT:BEGIN:VCARD\nVERSION:3.0\nFN:assistent\nN:assistent\nEND:VCARD
+X-OUTLOOK-INITIALS:V.M.N.
+IMPP;TYPE=PERSONAL:
+X-OUTLOOK-IM-ADDRESS:
+OFFICE:office
+X-OUTLOOK-OFFICE-LOCATION:office
+ASSNAME:assistent
+MANNAME:boss
+X-OUTLOOK-MANAGER-NAME:boss
+SPOUSNAME:partner
+X-OUTLOOK-SPOUSE-NAME:partner
+ANNIVERSARY:2013-08-16
+X-OUTLOOK-WEDDING-ANNIVERSARY:2013-08-16
+X-OUTLOOK-EMAIL-DISPLAY;TYPE=PREF,INTERNET:Nachname\, Vorname (mail@example.com)
+X-OUTLOOK-EMAIL-FLAG:32769
+EMAIL;TYPE=INTERNET:mail2@example.com
+X-OUTLOOK-EMAIL-2;TYPE=INTERNET:mail2@example.com
+X-OUTLOOK-EMAIL-2-DISPLAY;TYPE=INTERNET:Vorname Middle Nachname name suffix (mail2@example.com)
+EMAIL;TYPE=INTERNET:mail3@example.com
+X-OUTLOOK-EMAIL-3;TYPE=INTERNET:mail3@example.com
+X-OUTLOOK-EMAIL-3-DISPLAY;TYPE=INTERNET:Vorname Middle Nachname name suffix (mail3@example.com)
+X-OUTLOOK-CREATE-TIME:20130826T102228Z
+REV:20130826T121706Z
+END:VCARD

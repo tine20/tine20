@@ -18,11 +18,13 @@
  */
 class Addressbook_Convert_Contact_VCard_Factory
 {
-    const CLIENT_GENERIC = 'generic';
-    const CLIENT_IOS     = 'ios';
-    const CLIENT_KDE     = 'kde';
-    const CLIENT_MACOSX  = 'macosx';
-    const CLIENT_SOGO    = 'sogo';
+    const CLIENT_GENERIC          = 'generic';
+    const CLIENT_IOS              = 'ios';
+    const CLIENT_KDE              = 'kde';
+    const CLIENT_MACOSX           = 'macosx';
+    const CLIENT_SOGO             = 'sogo';
+    const CLIENT_COLLABORATOR     = 'WebDAVCollaborator';
+    
     
     /**
      * factory function to return a selected phone backend class
@@ -56,9 +58,14 @@ class Addressbook_Convert_Contact_VCard_Factory
                 
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO:
                 return new Addressbook_Convert_Contact_VCard_Sogo($_version);
-                 
+                
                 break;
-                     
+                 
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR:
+                return new Addressbook_Convert_Contact_VCard_WebDAVCollaborator($_version);
+                
+                break;
+                 
         }
     }
     
@@ -89,6 +96,11 @@ class Addressbook_Convert_Contact_VCard_Factory
         // KDE addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_KDE::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE;
+            $version = $matches['version'];
+        
+        // Outlook WebDAV Collaborator
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_WebDAVCollaborator::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR;
             $version = $matches['version'];
         
         // generic client

@@ -179,8 +179,15 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
         
         return $card;
     }
-        
-    protected function _toTine20ModelParseEmail(&$_data, $_property)
+    
+    /**
+     * parse email
+     *
+     * @param array                     $_data        reference to tine20 data array
+     * @param Sabre_VObject_Element     $_property    mail property
+     * @param Sabre_VObject_Component   $vcard        complete vcard
+     */
+    protected function _toTine20ModelParseEmail(&$_data, $_property, $vcard)
     {
         $type = null;
         foreach($_property['TYPE'] as $typeProperty) {
