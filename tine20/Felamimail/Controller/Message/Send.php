@@ -587,7 +587,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             }
             
             $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
-            $part->setTypeAndDispositionForAttachment($type, $name);
+            $part->setType($type, $name);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Adding attachment ' . $part->type);
