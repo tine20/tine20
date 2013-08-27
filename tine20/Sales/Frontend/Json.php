@@ -37,7 +37,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * @see Tinebase_Frontend_Json_Abstract
      */
-    protected $_relatableModels = array('Sales_Model_Contract');
+    protected $_relatableModels = array('Sales_Model_Contract', 'Sales_Model_CostCenter');
 
     /**
      * the constructor

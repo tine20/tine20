@@ -249,8 +249,18 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             
             var model = record.get('related_model').split('_Model_');
             model = Tine[model[0]].Model[model[1]];
+            
             rowParams.body = '<div style="height: 19px; margin-top: -19px" ext:qtip="' +
                 String.format(_('The maximum number of {0} with the type {1} is reached. Please change the type of this relation'), model.getRecordsName(), this.grid.typeRenderer(record.get('type'), null, record))
+                + '"></div>';
+            return 'tine-editorgrid-row-invalid';
+        } else if (this.invalidRelatedRecords && this.invalidRelatedRecords.indexOf(record.id) !== -1) {
+            
+            var model = record.get('own_model').split('_Model_');
+            model = Tine[model[0]].Model[model[1]];
+            
+            rowParams.body = '<div style="height: 19px; margin-top: -19px" ext:qtip="' +
+                String.format(_('The maximum number of {0}s with the type {1} is reached at the {2} you added. Please change the type of this relation or edit the {2}'), model.getRecordsName(), this.grid.typeRenderer(record.get('type'), null, record), model.getRecordName())
                 + '"></div>';
             return 'tine-editorgrid-row-invalid';
         }
@@ -558,7 +568,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * renders the remark
      * @param {String} value
      * @param {Object} row
-     * @param {String} Tine.Tinebase.data.Record
+     * @param {Tine.Tinebase.data.Record} record
      * @return {String}
      */
     remarkRenderer: function(value, row, record) {
@@ -680,6 +690,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
 
     /**
      * call to add relation from an external component
+     * 
      * @param {Tine.Tinebase.data.Record} record
      * @param {Object} relconf
      */
@@ -688,20 +699,14 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             if (! relconf) {
                 relconf = {};
             }
-            if (record.data.hasOwnProperty('relations')) {
-                delete record.data.relations;
-            }
-            var rc = this.getActiveSearchCombo().recordClass;
-            var relatedPhpModel = rc.getPhpClassName();
             
-            var app = rc.getMeta('appName'), model = rc.getMeta('modelName'), f = app + model;
-            var type = '';
-            
-            if (this.constrainsConfig[f] && this.constrainsConfig[f].length) {
-                // per default the first defined type is used
-                var type = this.constrainsConfig[f][0].type;
-            }
-            
+            var rc = this.getActiveSearchCombo().recordClass,
+                relatedPhpModel = rc.getPhpClassName(),
+                appName = rc.getMeta('appName'), 
+                model = rc.getMeta('modelName'), 
+                f = appName + model,
+                type = '';
+
             var relationRecord = new Tine.Tinebase.Model.Relation(Ext.apply(this.getRelationDefaults(), Ext.apply({
                 related_record: record.data,
                 related_id: record.id,
@@ -709,42 +714,189 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 type: type,
                 own_degree: 'sibling'
             }, relconf)), record.id);
-
-            if (this.constrainsConfig[app + model]) {
-                Ext.each(this.constrainsConfig[app + model], function(conf) {
-                    // check new value
-                    if (conf.hasOwnProperty('max') && conf.max > 0 && (conf.type == relationRecord.get('type'))) {
-                        var resNew = this.store.queryBy(function(existingRecord, id) {
-                            if ((relationRecord.get('type') == existingRecord.get('type')) && (existingRecord.get('related_model') == relationRecord.get('related_model'))) {
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }, this);
-                        
-                        if (resNew.getCount() >= conf.max) {
-                            if (! this.view) {
-                                this.view = {};
-                            }
-                            if (! this.view.invalidRowRecords) {
-                                this.view.invalidRowRecords = [];
-                            }
-                            this.view.invalidRowRecords.push(relationRecord.get('related_id'));
-                        }
-                    } 
-                }, this);
+            
+            var mySideValid = true;
+            
+            if (this.constrainsConfig[f]) {
+                if (this.constrainsConfig[f].length) {
+                    // per default the first defined type is used
+                    var type = this.constrainsConfig[f][0].type;
+                }
+                // validate constrains config from own side
+                mySideValid = this.validateConstrainsConfig(this.constrainsConfig[f], relationRecord);
             }
             
-            // add if not already in
-            if (this.store.findExact('related_id', record.id) === -1) {
-                Tine.log.debug('Adding new relation:');
-                Tine.log.debug(relationRecord);
-                this.store.add([relationRecord]);
+            if (mySideValid) {
+                this.validateRelatedConstrainsConfig(record, relationRecord);
+            } else {
+                this.onAddNewRelationToStore(relationRecord, record);
             }
         }
+        
         this.getActiveSearchCombo().collapse();
+       
         this.getActiveSearchCombo().reset();
     },
+    
+    /**
+     * validates the constrains of the related record , fetches the relations
+     * 
+     * @param {Tine.Tinebase.data.Record} record
+     * @param {Tine.Tinebase.Model.Relation} relationRecord
+     */
+    validateRelatedConstrainsConfig: function(record, relationRecord) {
+        var rc = relationRecord.get('related_model').split(/_Model_/);
+        var rc = Tine[rc[0]].Model[rc[1]];
+
+        var appName = rc.getMeta('appName'); 
+        var model = rc.getMeta('modelName'); 
+        var relatedApp = Tine.Tinebase.appMgr.get(appName); 
+        var relatedConstrainsConfig = relatedApp.getRegistry().get('relatableModels');
+        var ownRecordClassName = this.editDialog.recordClass.getMeta('modelName');
+        var relatedRecordProxy = Tine[appName][(model.toLowerCase() + 'Backend')];
+        
+        if (! Ext.isFunction(record.get)) {
+            record = relatedRecordProxy.recordReader({responseText: Ext.encode(record)});
+        }
+        
+        for (var index = 0; index < relatedConstrainsConfig.length; index++) {
+            var rcc = relatedConstrainsConfig[index];
+            
+            if ((rcc.relatedApp == this.app.name) && (rcc.relatedModel == ownRecordClassName)) {
+                var myRelatedConstrainsConfig = rcc;
+                break;
+            }
+        }
+        
+        // validate constrains config from other side if a config exists
+        if (myRelatedConstrainsConfig) {
+            // if relations hasn't been fetched already, fetch them now
+            if (! Ext.isArray(record.data.relations) || record.data.relations.length === 0) {
+                relatedRecordProxy.loadRecord(record, { 
+                    success: function(record) {
+                        // if record has relations, validate each relation
+                        if (Ext.isArray(record.get('relations')) && record.get('relations').length > 0) {
+                            this.onValidateRelatedConstrainsConfig(myRelatedConstrainsConfig.config, relationRecord, appName, model, record);
+                        } else {
+                            // if there aren't any relations, no validation is needed
+                            this.onAddNewRelationToStore(relationRecord, record);
+                        }
+                    },
+                    // don't break on failure, use given record instead
+                    failure: this.onAddNewRelationToStore.createDelegate(this, [relationRecord, record]),
+                    scope: this
+                });
+            
+            } else {
+                this.onValidateRelatedConstrainsConfig(myRelatedConstrainsConfig.config, relationRecord, appName, model, record);
+            }
+        } else {
+            this.onAddNewRelationToStore(relationRecord, record);
+        }
+    },
+    
+    /**
+     * validates the constrains of the related record after fetching relations
+     * 
+     * @param {Object} constrainsConfig
+     * @param {Tine.Tinebase.Model.Relation} relationRecord
+     * @param {String} relatedAppName
+     * @param {String} relatedModelName
+     * @param {Tine.Tinebase.data.Record} record
+     */
+    onValidateRelatedConstrainsConfig: function(constrainsConfig, relationRecord, relatedAppName, relatedModelName, record) {
+        
+        var invalid = false;
+        
+        Ext.each(constrainsConfig, function(conf) {
+            
+            if (conf.hasOwnProperty('max') && conf.max > 0 && (conf.type == relationRecord.get('type'))) {
+                var rr = record.get('relations'),
+                    count = 0;
+                
+                for (var index = 0; index < rr.length; index++) {
+                    if (rr[index].type == conf.type) {
+                        count++;
+                    }
+                }
+                
+                if (count >= conf.max) {
+                    if (! this.view) {
+                        this.view = {};
+                    }
+                    if (! this.view.invalidRelatedRecords) {
+                        this.view.invalidRelatedRecords = [];
+                    }
+                    this.view.invalidRelatedRecords.push(relationRecord.get('related_id'));
+
+                    invalid = true;
+                }
+            } 
+        }, this);
+        
+        if (! invalid && Ext.isArray(this.view.invalidRelatedRecords)) {
+            index = this.view.invalidRelatedRecords.indexOf(record.getId());
+            if (index > -1) {
+                this.view.invalidRelatedRecords.splice(index, 1);
+            }
+        }
+        
+        this.onAddNewRelationToStore(relationRecord, record);
+    },
+    
+    /**
+     * Is called after all validation is done
+     * 
+     * @param {Tine.Tinebase.Model.Relation} relationRecord
+     * @param {Tine.Tinebase.data.Record} record
+     */
+    onAddNewRelationToStore: function(relationRecord, record) {
+        relationRecord.data.related_record.relations = null;
+        delete relationRecord.data.related_record.relations;
+        
+        // add if not already in
+        if (this.store.findExact('related_id', record.id) === -1) {
+            Tine.log.debug('Adding new relation:');
+            Tine.log.debug(relationRecord);
+            this.store.add([relationRecord]);
+        }
+        
+        this.view.refresh();
+    },
+    
+    /**
+     * 
+     * @param {Array} constrainsConfig
+     */
+    validateConstrainsConfig: function(constrainsConfig, relationRecord) {
+        var valid = true;
+        Ext.each(constrainsConfig, function(conf) {
+            // check new value
+            if (conf.hasOwnProperty('max') && conf.max > 0 && (conf.type == relationRecord.get('type'))) {
+                var resNew = this.store.queryBy(function(existingRecord, id) {
+                    if ((relationRecord.get('type') == existingRecord.get('type')) && (existingRecord.get('related_model') == relationRecord.get('related_model'))) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }, this);
+                
+                if (resNew.getCount() >= conf.max) {
+                    valid = false;
+                    if (! this.view) {
+                        this.view = {};
+                    }
+                    if (! this.view.invalidRowRecords) {
+                        this.view.invalidRowRecords = [];
+                    }
+                    this.view.invalidRowRecords.push(relationRecord.get('related_id'));
+                }
+            } 
+        }, this);
+        
+        return valid;
+    },
+    
     
     /**
      * checks if record to add is already linked or is the same record
@@ -794,11 +946,24 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     onValidateRowEdit: function(o) {
         if(o.field === 'type') {
+            
+            var index = -1;
+            
+            this.store.remove(o.record.getId());
+            
+            if (Ext.isArray(this.view.invalidRowRecords) && (index = this.view.invalidRowRecords.indexOf(o.record.id) > -1)) {
+                this.view.invalidRowRecords.splice(index, 1);
+            }
+            
             var model = o.record.get('related_model').split('_');
             var app = model[0];
-            if(!this.view.invalidRowRecords) this.view.invalidRowRecords = [];
+            
+            if (! this.view.invalidRowRecords) {
+                this.view.invalidRowRecords = [];
+            }
             model = model[2];
             
+            // check constrains from own_record side
             if(this.constrainsConfig[app + model]) {
                 // remove itself at first
                 this.view.invalidRowRecords.remove(o.record.get('id'));
@@ -832,7 +997,16 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                     }
                 }, this);
             }
+            
+            var index = -1;
+            if (Ext.isArray(this.view.invalidRelatedRecords) &&( index = this.view.invalidRelatedRecords.indexOf(o.record.id) > -1)) {
+                this.view.invalidRelatedRecords.splice(index, 1);
+            }
+            
+            // check constrains from other side
+            this.validateRelatedConstrainsConfig(o.record.get('related_record'), o.record, true);
         }
+        
         return true;
     },
 

@@ -2761,5 +2761,10 @@ msgstr "Es ist nicht erlaubt diesen Ordner zu löschen. Bitte definieren sie zuv
 msgid "Exception ({0})"
 msgstr "Ausnahmefehler ({0})"
 
+
 msgid "Month"
 msgstr "Monat"
+
+msgid "The maximum number of {0}s with the type {1} is reached at the {2} you added. Please change the type of this relation or edit the {2}"
+msgstr "Die maximale Anzahl an {0}n mit dem Typ {1} ist bereits auf der Seite des {2}s erreicht. Bitte ändern Sie den Typ oder bearbeiten Sie den {2}"
+
