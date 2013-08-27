@@ -376,32 +376,43 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $recurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
         if ($_from->isEarlier($_event->dtstart)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' from is ealier dtstart -> given event is next occurrence');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' from is ealier dtstart -> given event is next occurrence');
             return $_event;
         }
         
         $until->add($interval, $freqMap[$rrule->freq]);
         $attempts = 0;
         
+        if ($_event->rrule_until instanceof DateTime && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Event rrule_until: ' . $_event->rrule_until->toString());
+        
         while (TRUE) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' trying to find next occurrence from ' . $from->toString());
             
             if ($_event->rrule_until instanceof DateTime && $from->isLater($_event->rrule_until)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' passed rrule_until -> no further occurrences');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' passed rrule_until -> no further occurrences');
                 return NULL;
             }
             
-            $until   = ($_event->rrule_until instanceof DateTime && $until->isLater($_event->rrule_until)) ? $_event->rrule_until : $until;
-            
+            $until = ($_event->rrule_until instanceof DateTime && $until->isLater($_event->rrule_until))
+                ? clone $_event->rrule_until 
+                : $until;
+
             $recurSet->merge(self::computeRecurrenceSet($_event, $_exceptions, $from, $until));
             $attempts++;
             
             if (count($recurSet) >= $_which) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found next occurrence after $attempts attempt(s)");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " found next occurrence after $attempts attempt(s)");
                 break;
             }
             
             if ($attempts > count($_exceptions) + 5) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not find the next occurrence after $attempts attempts, giving up");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " could not find the next occurrence after $attempts attempts, giving up");
                 return NULL;
             }
             

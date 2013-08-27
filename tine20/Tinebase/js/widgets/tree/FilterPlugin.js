@@ -112,9 +112,12 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
             
             // save west panel scrolling position so we can restore it after selecting nodes
             if (this.treePanel.app.getMainScreen().getWestPanel().body) {
-                this.leftPanelScrollTop = this.treePanel.app.getMainScreen().getWestPanel().body.getScroll().top;
+                var scroller = Ext.get('treecards').dom.parentElement;
+                if (scroller) {
+                    this.leftPanelScrollTop = scroller.scrollTop;
+                }
             }
-            
+
             this.treePanel.getSelectionModel().suspendEvents();
             this.selectValue(filter.value);
         }, this);
@@ -133,6 +136,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
             }
             
             var treePath = this.treePanel.getTreePath(value.path);
+            
             this.selectPath.call(this.treePanel, treePath, null, function() {
                 // mark this expansion as done and check if all are done
                 value.isExpanded = true;
@@ -148,16 +152,19 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                             if (this.lastFocusEl) {
                                 var scroller = Ext.fly(this.lastFocusEl).up('div[class$=-scroller]'),
                                     scrollTop = scroller ? scroller.dom.scrollTop : null;
+                                    
                                 // TODO: is this needed (the element is already focused, atm. IE breaks (https://forge.tine20.org/mantisbt/view.php?id=6916))?
                                 if(!Ext.isIE) {
                                     Ext.fly(this.lastFocusEl).focus();
                                 }
                                 
-                                if (scrollTop) scroller.dom.scrollTop = scrollTop;
+                                if (scrollTop) {
+                                    scroller.dom.scrollTop = scrollTop;
+                                }
                             }
                             
                             if (this.leftPanelScrollTop) {
-                                this.treePanel.app.getMainScreen().getWestPanel().body.dom.scrollTop = this.leftPanelScrollTop;
+                                Ext.get('treecards').dom.parentElement.scrollTop = this.leftPanelScrollTop;
                             }
                         } catch (e) {}
                     }).defer(10, this);
@@ -179,6 +186,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
         attr = attr || 'id';
         var keys = path.split(this.pathSeparator),
             v = keys.pop();
+            
         if(keys.length > 1){
             var f = function(success, node){
                 if(success && node) {

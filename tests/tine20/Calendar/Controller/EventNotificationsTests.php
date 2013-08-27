@@ -857,6 +857,108 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $this->_recurAlarmTestHelper(FALSE, 120);
     }
+
+    /**
+     * testRecuringAlarmWithRecurExceptionMoved
+     * 
+     * @see 0008386: alarm is sent for recur series that is already over
+     */
+    public function testRecuringAlarmWithRecurExceptionMoved()
+    {
+        $event = $this->_getEvent();
+        
+        // lets flush mailer so next flushing ist faster!
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        self::flushMailer();
+        
+        // make sure next occurence contains now
+        $event->dtstart = Tinebase_DateTime::now()->subWeek(2)->addDay(1);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(60);
+        $event->rrule = 'FREQ=WEEKLY;INTERVAL=1;WKST=MO;BYDAY=' . array_search($event->dtstart->format('w'), Calendar_Model_Rrule::$WEEKDAY_DIGIT_MAP);
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 1440
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        
+        // adopt alarm time (previous alarms have been sent already)
+        $alarm = $persistentEvent->alarms->getFirstRecord();
+        $alarm->alarm_time->addWeek(2);
+        Tinebase_Alarm::getInstance()->update($alarm);
+        
+        // move next occurrence
+        $from = $event->dtstart;
+        $until = $event->dtend->addWeek(3);
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+        $recurEvent = $recurSet[1]; // tomorrow
+        
+        $recurEvent->dtstart->addDay(5);
+        $recurEvent->dtend = clone $recurEvent->dtstart;
+        $recurEvent->dtend->addMinute(60);
+        $persistentEvent = $this->_eventController->createRecurException($recurEvent);
+        
+        $baseEvent = $this->_eventController->getRecurBaseEvent($persistentEvent);
+        $alarm = $baseEvent->alarms->getFirstRecord();
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $alarm->sent_status);
+        
+        // assert no alarm
+        sleep(1);
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $messages = self::getMessages();
+        $this->assertEquals(0, count($messages), 'no alarm message should be sent: ' . print_r($messages, TRUE));
+    }
+
+    /**
+     * testRecuringAlarmWithThisAndFutureSplit
+     * 
+     * @see 0008386: alarm is sent for recur series that is already over
+     */
+    public function testRecuringAlarmWithThisAndFutureSplit()
+    {
+        $event = $this->_getEvent();
+        
+        // lets flush mailer so next flushing ist faster!
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        self::flushMailer();
+        
+        // make sure next occurence contains now
+        $event->dtstart = Tinebase_DateTime::now()->subMonth(1)->addDay(1);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(60);
+        $event->rrule = 'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=' . $event->dtstart->format('d');
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 2880
+            ), TRUE)
+        ));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        
+        // make sure, next alarm is for next month's event
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        self::flushMailer();
+        
+        // split THISANDFUTURE, alarm of old series should be set to SUCCESS because it no longer should be sent
+        $from = $event->dtstart;
+        $until = $event->dtend->addMonth(2);
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+        $recurEvent = $recurSet[1]; // next month
+        $recurEvent->summary = 'split series';
+        $newPersistentEvent = $this->_eventController->createRecurException($recurEvent, FALSE, TRUE);
+        
+        // check alarms
+        $oldSeriesAlarm = Tinebase_Alarm::getInstance()
+            ->getAlarmsOfRecord('Calendar_Model_Event', $persistentEvent->getId())
+            ->getFirstRecord();
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_SUCCESS, $oldSeriesAlarm->sent_status,
+            'no pending alarm should exist for old series: ' . print_r($oldSeriesAlarm->toArray(), TRUE));
+    }
     
     /**
      * get test alarm emails
@@ -890,6 +992,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         return $result;
     }
     
+    /**
+     * get messages
+     * 
+     * @return array
+     */
     public static function getMessages()
     {
         // make sure messages are sent if queue is activated
@@ -900,6 +1007,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         return self::getMailer()->getMessages();
     }
     
+    /**
+     * get mailer
+     * 
+     * @return Zend_Mail_Transport_Abstract
+     */
     public static function getMailer()
     {
         if (! self::$_mailer) {
