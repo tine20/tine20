@@ -171,28 +171,33 @@ class Syncroton_Wbxml_Decoder extends Syncroton_Wbxml_Abstract
                     // get rid of bit 7+8
                     $tagHexCode         = $byte & 0x3F;
 
-                    $tag        = $this->_codePage->getTag($tagHexCode);
-                    $nameSpace  = $this->_codePage->getNameSpace();
+                    try {
+                        $tag = $this->_codePage->getTag($tagHexCode);
+                    } catch (Syncroton_Wbxml_Exception $swe) {
+                        // tag can not be converted to ASCII name
+                        $tag = sprintf('unknown tag 0x%x', $tagHexCode);
+                    }
+                    $nameSpace    = $this->_codePage->getNameSpace();
                     $codePageName = $this->_codePage->getCodePageName();
                     
                     #echo "Tag: $nameSpace:$tag\n";
                     
-                    if($node === NULL) {
+                    if ($node === NULL) {
                         // create the domdocument
-                        $node = $this->_createDomDocument($nameSpace, $tag);
+                        $node    = $this->_createDomDocument($nameSpace, $tag);
                         $newNode = $node->documentElement;
                     } else {
-                        if(!$this->_dom->isDefaultNamespace($nameSpace)) {
+                        if (!$this->_dom->isDefaultNamespace($nameSpace)) {
                             $this->_dom->documentElement->setAttribute('xmlns:' . $codePageName, $nameSpace);
                         }
                         $newNode = $node->appendChild($this->_dom->createElementNS('uri:' . $codePageName, $tag));
                     }
                     
-                    if($tagHasAttributes) {
+                    if ($tagHasAttributes) {
                         $attributes = $this->_getAttributes();
                     }
                     
-                    if($tagHasContent == true) {
+                    if ($tagHasContent == true) {
                         $node = $newNode;
                         $openTags++;
                     }
