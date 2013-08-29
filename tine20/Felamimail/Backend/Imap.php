@@ -715,15 +715,15 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         /** basic fields end **/
         $index = 7;
         
-        if($type == 'message' && $subType == 'rfc822') {
+        if ($type == 'message' && $subType == 'rfc822') {
             $structure['messageEnvelop'] = $_structure[7];
             $structure['messageStructure'] = $this->_parsePartStructure($_structure[8], $_partId);
             $structure['messageLines'] = $_structure[9];
             
             // index of the first element containing extension data 
             $index = 10;
-        } elseif($type == 'text') {
-            if($_structure[7] != 'NIL') {
+        } elseif ($type == 'text') {
+            if (isset($_structure[7]) && $_structure[7] != 'NIL') {
                 $structure['lines'] = $_structure[7];
             }
             // index of the first element containing extension data 
