@@ -118,7 +118,22 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      */
     protected $_contentControllerName;
     
-    protected $_devicesWithMultipleFolders = array('iphone', 'ipad', 'thundertine', 'windowsphone', 'playbook', 'bb10');
+    /**
+     * devices that support multiple folders
+     * 
+     * @var array
+     */
+    protected $_devicesWithMultipleFolders = array(
+        'iphone',
+        'ipad',
+        'thundertine',
+        'windowsphone',
+        'wp8',
+        'windowsoutlook15',
+        'playbook',
+        'blackberry',
+        'bb10'
+    );
     
     /**
      * the constructor
@@ -229,7 +244,9 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         }
         
         try {
-            $entry = $this->_contentController->create($entry);
+            // create record (without duplicate check)
+            // @see 0008486: Contacts deleted on Android device after new created contact via ActiveSync
+            $entry = $this->_contentController->create($entry, FALSE);
         } catch (Tinebase_Exception_AccessDenied $tead) {
             throw new Syncroton_Exception_AccessDenied();
         }
