@@ -48,12 +48,12 @@ class OpenDocument_DocumentTests extends PHPUnit_Framework_TestCase
         $row  = $table->appendRow();
         
         $row  = $table->appendRow();
-        $cell = $row->appendCell('<{MATRIX}>');
+        $cell = $row->appendCell('###MATRIX###');
         
         $row  = $table->appendRow();
         
         $row  = $table->appendRow();
-        $cell = $row->appendCell('<{MARKER}>');
+        $cell = $row->appendCell('###MARKER###');
         
         $filename = Tinebase_Config::getInstance()->get('tmpdir') . DIRECTORY_SEPARATOR . Tinebase_Record_Abstract::generateUID(4) . '-ods-unittest.ods';
         
