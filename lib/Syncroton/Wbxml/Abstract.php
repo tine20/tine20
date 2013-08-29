@@ -151,12 +151,27 @@ abstract class Syncroton_Wbxml_Abstract
     
     protected function _getOpaque($_length)
     {
-        $string = fread($this->_stream, $_length);
-        
-        if($string === false) {
-            throw new Syncroton_Wbxml_Exception("failed reading opaque data");
+        $string = '';
+
+        // it might happen that not complete data is read from stream.
+        // loop until all data is read or EOF
+        while ($_length) {
+            $chunk = fread($this->_stream, $_length);
+
+            if ($chunk === false) {
+                throw new Syncroton_Wbxml_Exception("failed reading opaque data");
+            }
+
+            if ($len = strlen($chunk)) {
+                $string .= $chunk;
+                $_length -= $len;
+            }
+            
+            if (feof($this->_stream)) {
+                break;
+            }
         }
-        
+
         return $string;
     }
     
