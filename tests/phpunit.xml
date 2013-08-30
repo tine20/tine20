@@ -8,4 +8,11 @@
             <directory suffix=".php">../lib/Zend</directory>
         </blacklist>
     </filter>
+    
+    <testsuites>
+        <testsuite name="All Tests">
+            <file>Syncroton/AllTests.php</file>
+        </testsuite>
+    </testsuites>
+    
 </phpunit>
