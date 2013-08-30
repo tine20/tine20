@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "87e4f04e379e92b239d5d686ea808a40",
+    "hash": "4aaacf828fb13d24276d6540874e0791",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -191,13 +191,13 @@
                 "ext-simplexml": "*",
                 "ext-spl": "*",
                 "php": ">=5.3.1",
-                "sabre/vobject": "~2.1.0"
+                "sabre/vobject": ">=2.1,<2.2"
             },
             "provide": {
                 "evert/sabredav": "1.7.*"
             },
             "require-dev": {
-                "evert/phpdoc-md": "~0.0.7",
+                "evert/phpdoc-md": ">=0.0.7,<0.1",
                 "phing/phing": "2.4.14",
                 "phpunit/phpunit": "3.7.*"
             },
@@ -248,12 +248,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fruux/sabre-vobject.git",
-                "reference": "2.1.2"
+                "reference": "676c9c02d16db8f388cf34eb71f907b980d63783"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/2.1.2",
-                "reference": "2.1.2",
+                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/676c9c02d16db8f388cf34eb71f907b980d63783",
+                "reference": "676c9c02d16db8f388cf34eb71f907b980d63783",
                 "shasum": ""
             },
             "require": {
@@ -292,11 +292,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "dev-master",
+            "version": "1.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "a6afdc1721582c44e91b5642aa8358cee7c7db39"
+                "reference": "75c7423e4bf0ae306278d807e93a9886bb2c309a"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -307,12 +307,13 @@
                     "Syncroton": "lib/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL-3"
             ],
             "description": "Library to sync mobile phones",
             "homepage": "http://www.syncroton.org",
-            "time": "2013-08-30 10:00:42"
+            "time": "2013-08-30 17:09:52"
         }
     ],
     "packages-dev": [

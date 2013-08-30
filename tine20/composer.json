@@ -7,16 +7,13 @@
     "license" : ["AGPL-3.0", "BSD-3-Clause", "LGPL-2.1+", "MIT"],
     "repositories": [{
         "type": "git",
-        "url": "http://git.syncroton.org/Syncroton"
-    }, {
-        "type": "git",
         "url": "http://git.tine20.org/git/opendocument"
     }, {
         "type": "git",
         "url": "http://git.tine20.org/git/timezoneconvert"
     }],
     "require": {
-        "syncroton/syncroton": "dev-master",
+        "syncroton/syncroton": "1.0.*@dev",
         "ezyang/htmlpurifier": "v4.5.0",
         "codeplex/phpexcel": "1.7.8",
         "sabre/dav" : "1.8.*",
