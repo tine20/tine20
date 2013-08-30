@@ -948,7 +948,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $until = $event->dtend->addMonth(2);
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
-        $recurEvent = $recurSet[1]; // next month
+        $recurEvent = (count($recurSet) > 1) ? $recurSet[1] : $recurSet[0]; // next month
         $recurEvent->summary = 'split series';
         $newPersistentEvent = $this->_eventController->createRecurException($recurEvent, FALSE, TRUE);
         
