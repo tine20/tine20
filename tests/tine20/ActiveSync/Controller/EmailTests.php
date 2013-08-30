@@ -290,6 +290,32 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($completeMessage->headers['mime-version']));
         $this->assertEquals(1, count($completeMessage->headers['content-type']));
     }
+
+    /**
+     * testSendEmailAndroid
+     * 
+     * @see 0008844: Mails sent without content (NIL)
+     */
+    public function testSendEmailAndroid()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        
+        $email = file_get_contents(dirname(__FILE__) . '/../../Felamimail/files/Android.eml');
+        $email = str_replace('p.schuele@metaways.de', $this->_emailTestClass->getEmailAddress(), $email);
+        
+        $controller->sendEmail($email, true);
+        
+        // check if mail is in INBOX of test account
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $testHeaderValue = 'Android.eml';
+        $message = $this->_emailTestClass->searchAndCacheMessage($testHeaderValue, $inbox);
+        $this->_createdMessages->addRecord($message);
+        $this->assertEquals("Test", $message->subject);
+        
+        // check content
+        $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        $this->assertContains('Test', $completeMessage->body);
+    }
     
     /**
      * Test wether Base64Decoded Messages can be send or not

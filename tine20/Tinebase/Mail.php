@@ -66,7 +66,7 @@ class Tinebase_Mail extends Zend_Mail
                         $bodyEncoding = $_zmm->getHeader('content-transfer-encoding');
                 }
             } else {
-                $bodyEncoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
+                $bodyEncoding = Zend_Mime::ENCODING_7BIT;
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Using encoding: ' . $bodyEncoding);

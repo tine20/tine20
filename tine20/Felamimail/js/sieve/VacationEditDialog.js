@@ -221,7 +221,7 @@ Ext.namespace('Tine.Felamimail.sieve');
                     scope: this,
                     select: this.onSelectTemplateField
                 },
-                columnWidth: 0.5,
+                columnWidth: 0.5
             },
             items = [[Ext.apply({
             fieldLabel: this.app.i18n._('Start Date'),
