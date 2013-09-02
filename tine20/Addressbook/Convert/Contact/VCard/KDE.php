@@ -167,7 +167,7 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
             $card->add($bday);
         }
         
-        if(! empty($_record->jpegphoto)) {
+        if (!empty($_record->jpegphoto)) {
             try {
                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_record->getId());
                 $jpegData = $image->getBlob('image/jpeg');
@@ -179,6 +179,8 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Image for contact {$_record->getId()} not found or invalid");
             }
         }
+        
+        $this->_fromTine20ModelAddGeoData($_record, $card);
         
         // categories
         if (isset($_record->tags) && count($_record->tags) > 0) {
@@ -196,13 +198,16 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseEmail()
      */
-    protected function _toTine20ModelParseEmail(&$_data, VObject\Property$_property)
+    protected function _toTine20ModelParseEmail(&$_data, VObject\Property $_property)
     {
         $type = null;
-        foreach($_property['TYPE'] as $typeProperty) {
-            if(strtolower($typeProperty) == 'pref') {
-                $type = 'work';
-                break;
+        
+        if ($_property['TYPE']) {
+            foreach ($_property['TYPE'] as $typeProperty) {
+                if (strtolower($typeProperty) == 'pref') {
+                    $type = 'work';
+                    break;
+                }
             }
         }
         

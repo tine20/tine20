@@ -302,4 +302,24 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     protected function _toTine20ModelParseBday(&$_data, VObject\Property $_property)
     {
     }
+    
+    /**
+     * add GEO data to VCard
+     * 
+     * @param  Tinebase_Record_Abstract  $record
+     * @param  Sabre\VObject\Component   $card
+     */
+    protected function _fromTine20ModelAddGeoData(Tinebase_Record_Abstract $record, Sabre\VObject\Component $card)
+    {
+        if ($record->adr_one_lat && $record->adr_one_lon) {
+            $geo = new Sabre\VObject\Property\Compound('GEO');
+            $geo->setParts(array($record->adr_one_lat, $record->adr_one_lon));
+            $card->add($geo);
+            
+        } elseif ($record->adr_two_lat && $record->adr_two_lon) {
+            $geo = new Sabre\VObject\Property\Compound('GEO');
+            $geo->setParts(array($record->adr_two_lat, $record->adr_two_lon));
+            $card->add($geo);
+        }
+    }
 }

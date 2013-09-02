@@ -168,7 +168,7 @@ class Addressbook_Convert_Contact_VCard_MacOSX extends Addressbook_Convert_Conta
         
         $card->add(new VObject\Property('NOTE', $_record->note));
         
-        if(! empty($_record->jpegphoto)) {
+        if (!empty($_record->jpegphoto)) {
             try {
                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_record->getId());
                 $jpegData = $image->getBlob('image/jpeg');
@@ -180,6 +180,8 @@ class Addressbook_Convert_Contact_VCard_MacOSX extends Addressbook_Convert_Conta
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Image for contact {$_record->getId()} not found or invalid");
             }
         }
+        
+        $this->_fromTine20ModelAddGeoData($_record, $card);
         
         // categories
         if (isset($_record->tags) && count($_record->tags) > 0) {
