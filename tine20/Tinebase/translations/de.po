@@ -1473,6 +1473,11 @@ msgid ""
 " view-options or the {1} you search in."
 msgstr "Keine {0} gefunden. Bitte überprüfen Sie ihre Filterkriterien, Ansichtsoptionen oder die {1}, in denen Sie suchen."
 
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or change the module you search in."
+msgstr "Keine {0} gefunden. Bitte überprüfen Sie ihre Filterkriterien, Ansichtsoptionen oder wechseln Sie das Modul, in dem Sie suchen."
+
 #: js/widgets/grid/GridPanel.js:288 js/widgets/grid/GridPanel.js:474
 #: js/widgets/grid/GridPanel.js:475 js/widgets/grid/GridPanel.js:476
 msgid "Edit {0}"
