@@ -62,16 +62,24 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
    protected function _inspectBeforeUpdate($_record, $_oldRecord)
    {
        // if empty, no changes have been made
-       // lookforward: parts - parameter
+       // @todo: lookforward: parts - parameter
        if (empty($_record->freedays)) {
            return;
        }
+       
        $freeDays = new Tinebase_Record_RecordSet('HumanResources_Model_FreeDay');
        $fc = HumanResources_Controller_FreeDay::getInstance();
        $freetimeId = $_record->getId();
+       
        foreach($_record->freedays as $freedayArray) {
            $freedayArray['freetime_id'] = $freetimeId;
+
+           if (is_array($freedayArray['account_id'])) {
+               $freedayArray['account_id'] = $freedayArray['account_id']['id'];
+           }
+           
            $freeday = new HumanResources_Model_FreeDay($freedayArray);
+           
            if ($freeday->id) {
                $freeDays->addRecord($fc->update($freeday));
            } else {
@@ -106,6 +114,9 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
        
        if ($_record->freedays && ! empty($_record->freedays)) {
            foreach($_record->freedays as $fd) {
+               if (! ($fd instanceof HumanResources_Model_FreeDay)) {
+                   $fd = new HumanResources_Model_FreeDay($fd);
+               }
                $this->_freedaysToCreate->addRecord($fd);
            }
            $this->_freedaysToCreate->sort('date', 'ASC');

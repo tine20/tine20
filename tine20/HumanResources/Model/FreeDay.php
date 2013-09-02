@@ -49,7 +49,7 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
         'fields'            => array(
             'freetime_id'       => array(
                 'label'      => NULL,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'type'       => 'record',
                 'config' => array(
                     'appName'     => 'HumanResources',

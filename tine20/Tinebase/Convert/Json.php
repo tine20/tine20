@@ -42,39 +42,37 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
         
         // for resolving we'll use recordset
-        $records = new Tinebase_Record_RecordSet(get_class($_record), array($_record));
+        $recordClassName = get_class($_record);
+        $records = new Tinebase_Record_RecordSet($recordClassName, array($_record));
+        $modelConfiguration = $recordClassName::getConfiguration();
         
-        Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($records);
-        
-        // use modern record resolving, if the model was configured using Tinebase_ModelConfiguration
-        // at first, resolve all single record fields
-        $this->_resolveSingleRecordFields($records);
-        // next step, resolve all multiple records fields
-        $this->_resolveMultipleRecordFields($records);
-        
-        // resolve the traditional way, if model hasn't been configured with Tinebase_ModelConfiguration
-        self::resolveMultipleIdFields($records);
+        $this->_resolveBeforeToArray($records, $modelConfiguration);
         
         $_record = $records->getFirstRecord();
         $_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_record->bypassFilters = true;
         
-        return $_record->toArray();
+        $result = $_record->toArray();
+        
+        $result = $this->_resolveAfterToArray($result, $modelConfiguration);
+        
+        return $result;
     }
 
     /**
      * resolves single record fields (Tinebase_ModelConfiguration._recordsFields)
      * 
      * @param Tinebase_Record_RecordSet $_records the records
+     * @param Tinebase_ModelConfiguration
      */
-    protected function _resolveSingleRecordFields(Tinebase_Record_RecordSet $_records)
+    protected function _resolveSingleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfig = NULL)
     {
-        $ownRecordClass = $_records->getRecordClassName();
-        
-        if (! $cfg = $ownRecordClass::getConfiguration()) {
+        if (! $modelConfig) {
             return;
         }
-        $resolveFields = $cfg->recordFields;
+        
+        $resolveFields = $modelConfig->recordFields;
+        
         if ($resolveFields && is_array($resolveFields)) {
             // don't search twice if the same recordClass gets resolved on multiple fields
             foreach ($resolveFields as $fieldKey => $fieldConfig) {
@@ -230,21 +228,19 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * resolve multiple record fields (Tinebase_ModelConfiguration._recordsFields)
      * 
      * @param Tinebase_Record_RecordSet $_records
+     * @param Tinebase_ModelConfiguration $modelConfiguration
      */
-    protected function _resolveMultipleRecordFields(Tinebase_Record_RecordSet $_records)
+    protected function _resolveMultipleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL)
     {
-        // show if there is something to resolve
-        $ownRecordClass = $_records->getRecordClassName();
-        
-        if (! $_records->count()) {
+        if (! $modelConfiguration || (! $_records->count())) {
             return;
         }
         
-        if (! (($config = $ownRecordClass::getConfiguration()) && ($resolveFields = $config->recordsFields))) {
+        if (! ($resolveFields = $modelConfiguration->recordsFields)) {
             return;
         }
         
-        $ownIds = $_records->{$config->idProperty};
+        $ownIds = $_records->{$modelConfiguration->idProperty};
         
         // iterate fields to resolve
         foreach ($resolveFields as $fieldKey => $c) {
@@ -270,23 +266,106 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
             
             $foreignRecords = $controller->search($filter, $paging);
+            $foreignRecordClass = $foreignRecords->getRecordClassName();
+            $foreignRecordModelConfiguration = $foreignRecordClass::getConfiguration();
+            
             $foreignRecords->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
             $foreignRecords->convertDates = true;
-            Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($foreignRecords);
+            
             $fr = $foreignRecords->getFirstRecord();
+
             if ($fr && $fr->has('notes')) {
                 Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
             }
+            
             if ($foreignRecords->count() > 0) {
                 foreach ($_records as $record) {
-                    $filtered = $foreignRecords->filter($config['refIdField'], $record->getId());
-                    $record->{$fieldKey} = $filtered->toArray();
+                    $filtered = $foreignRecords->filter($config['refIdField'], $record->getId())->toArray();
+                    $filtered = $this->_resolveAfterToArray($filtered, $foreignRecordModelConfiguration);
+                    $record->{$fieldKey} = $filtered;
                 }
+                
             } else {
                 $_records->{$fieldKey} = NULL;
             }
         }
         
+    }
+    
+    /**
+     * resolves virtual fields, if a function has been defined in the field definition
+     * 
+     * @param array $resultSet
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     */
+    protected function _resolveVirtualFields($resultSet, $modelConfiguration = NULL)
+    {
+        if (! $modelConfiguration || ! ($virtualFields = $modelConfiguration->virtualFields)) {
+            return $resultSet;
+        }
+        
+        foreach($virtualFields as $field) {
+            if (array_key_exists('function', $field)) {
+                if (is_array($field['function'])) {
+                    if (count($field['function']) > 1) { // static method call
+                        $class  = $field['function'][0];
+                        $method = $field['function'][1];
+                        $resultSet = $class::$method($resultSet);
+
+                    } else { // use key as classname and value as method name
+                        $ks = array_keys($field['function']);
+                        $class  = array_pop($ks);
+                        $vs = array_values($field['function']);
+                        $method = array_pop($vs);
+                        $class = $class::getInstance();
+                        
+                        $resultSet = $class->$method($resultSet);
+                        
+                    }
+                // if no array has been given, this should be a function name
+                } else {
+                    $resolveFunction = $field['function'];
+                    $resultSet = $resolveFunction($resultSet);
+                }
+            }
+        }
+        
+        return $resultSet;
+    }
+    
+    /**
+     * resolves child records before converting the record set to an array
+     * 
+     * @param Tinebase_Record_RecordSet $records
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     */
+    protected function _resolveBeforeToArray($records, $modelConfiguration)
+    {
+        Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($records);
+        
+        self::resolveMultipleIdFields($records);
+        
+        // use modern record resolving, if the model was configured using Tinebase_ModelConfiguration
+        // at first, resolve all single record fields
+        if ($modelConfiguration) {
+            $this->_resolveSingleRecordFields($records, $modelConfiguration);
+        
+            // resolve all multiple records fields
+            $this->_resolveMultipleRecordFields($records, $modelConfiguration);
+        }
+    }
+    
+    /**
+     * resolves child records after converting the record set to an array
+     * 
+     * @param array $result
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @return array
+     */
+    protected function _resolveAfterToArray($result, $modelConfiguration)
+    {
+        $result = $this->_resolveVirtualFields($result, $modelConfiguration);
+        return $result;
     }
     
     /**
@@ -304,16 +383,19 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             return array();
         }
         
-        Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records);
+        // find out if there is a modelConfiguration
+        $ownRecordClass = $_records->getRecordClassName();
+        $config = $ownRecordClass::getConfiguration();
         
-        self::resolveMultipleIdFields($_records);
-        $this->_resolveSingleRecordFields($_records);
-        $this->_resolveMultipleRecordFields($_records);
+        $this->_resolveBeforeToArray($_records, $config);
         
         $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_records->convertDates = true;
 
         $result = $_records->toArray();
+        
+        // resolve all virtual fields after converting to array, so we can add these properties "virtually"
+        $result = $this->_resolveAfterToArray($result, $config);
 
         return $result;
     }

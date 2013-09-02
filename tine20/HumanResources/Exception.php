@@ -16,6 +16,6 @@
  * @package     HumanResources
  * @subpackage  Exception
  */
-class HumanResources_Exception extends Exception
+class HumanResources_Exception extends Tinebase_Exception
 {
 }

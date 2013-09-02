@@ -43,6 +43,9 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $startDate2 = clone $now;
         $startDate2->subMonth(1);
 
+        $edate1 = clone $startDate2;
+        $edate1->addYear(1);
+        
         // contract1 in the past, but created a second ago
         $contract1 = $this->_getContract();
         $contract1->employee_id = $employee->getId();
@@ -50,41 +53,53 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $contract1->creation_time = $now;
         $contract1 = $contractBackend->create($contract1);
 
-        // contract2 created more than 2 hrs ago, start date is in the past. update must fail
         $contract2 = $this->_getContract();
         $contract2->employee_id = $employee->getId();
-        $contract2->creation_time = $threeHrAgo;
         $contract2->start_date    = $startDate2;
+        $contract2->end_date = $edate1;
         $contract2 = $contractBackend->create($contract2);
-        
-        // contract3 created more than 3 hrs ago, but start date is in the future
-        $contract3 = $this->_getContract();
-        $contract3->employee_id = $employee->getId();
-        $contract3->creation_time = $threeHrAgo;
-        $contract3->start_date    = $inAMonth;
-        $contract3 =  $contractBackend->create($contract3);
 
-        // change calendar an update
+        // account
+
+        $accountInstance = HumanResources_Controller_Account::getInstance();
+        $accountInstance->createMissingAccounts();
+
+        $accountFilter = new HumanResources_Model_AccountFilter(array(
+            array('field' => 'year', 'operator' => 'equals', 'value' => $startDate2->format('Y'))
+        ));
+
+        $accountFilter->addFilter(new Tinebase_Model_Filter_Text(
+            array('field' => 'employee_id', 'operator' => 'equals', 'value' => $employee->getId())
+        ));
+        $myAccount = $accountInstance->search($accountFilter)->getFirstRecord();
+
+        $firstDayDate = clone $startDate2;
+        $firstDayDate->addDay(3);
+
+        $vacation = new HumanResources_Model_FreeTime(array(
+            'status'        => 'ACCEPTED',
+            'employee_id'   => $employee->getId(),
+            'account_id'    => $myAccount->getId(),
+            'type'          => 'VACATION',
+            'freedays'      => array(
+                array('date' => $firstDayDate, 'duration' => 1)
+            )
+        ));
+
+        $vacation = HumanResources_Controller_FreeTime::getInstance()->create($vacation);
+        
         $newCalendar = $this->_getFeastCalendar(true);
 
-        // no error should occur, the creation time is not older than 2 hours
-        $contract1->feast_calendar_id = $newCalendar->getId();
-        $contract1 = $contractController->update($contract1);
+        // LAST ASSERTION, do not add assertions after an expected Exception, they won't be executed
 
-        // no error should occur, the start_date is in the future
-        $contract3->feast_calendar_id = $newCalendar->getId();
-        $contract3 = $contractController->update($contract3);
-
-        // LAST ASSERTION, do not add assertions after a expected Exception, they won't be executed
-
-        $this->setExpectedException('HumanResources_Exception_ContractTooOld');
+        $this->setExpectedException('HumanResources_Exception_ContractNotEditable');
 
         $contract2->feast_calendar_id = $newCalendar->getId();
         $contract2 = $contractController->update($contract2);
-    
+
         // no more assertions here!
     }
-    
+
     /**
      * some contract tests (more in jsontests)
      */
@@ -93,7 +108,7 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $contractController = HumanResources_Controller_Contract::getInstance();
         $contract = $this->_getContract();
         $contract->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
-        
+
         // create feast days
         $feastDays2013 = array(
             // two days after another in one date
@@ -105,10 +120,10 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
             // additional date which has been accidentially inserted by the user (test filters in getFeastDays)
             '2009-12-31'
         );
-        
+
         $feastCalendar = $this->_getFeastCalendar();
         $contract->feast_calendar_id = $feastCalendar->getId();
-        
+
         foreach($feastDays2013 as $day) {
             if (is_array($day)) {
                 $date = array();
@@ -118,39 +133,39 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
             } else {
                 $date = new Tinebase_DateTime($day . ' 06:00:00');
             }
-            
+
             $this->_createFeastDay($date);
         }
-        
+
         // test "calculateVacationDays"
         $start  = new Tinebase_DateTime('2013-01-01');
         $stop   = new Tinebase_DateTime('2013-12-31');
-        
+
         $contract->start_date = $start;
         $contract->end_date   = $stop;
-        
+
         $this->assertEquals(30, $contractController->calculateVacationDays($contract, $start, $stop));
 
         $newStartDate = new Tinebase_DateTime('2013-07-01');
         $contract->start_date = $newStartDate;
-        
+
         $this->assertEquals(15, $contractController->calculateVacationDays($contract, $start, $stop));
-        
+
         // test "getDatesToWorkOn"
         $contract->start_date = $start;
-        
+
         // 2013 has 365 days, 52 Saturdays and 52 Sundays, all of the 10 feast days are at working days (a good year for an employee!)
         // so we expect 365-52-52-10 = 251 days
         $workingDates = $contractController->getDatesToWorkOn($contract, $start, $stop);
         $this->assertEquals(251, count($workingDates['results']));
-        
+
         // test "getFeastDays"
         $feastDays = $contractController->getFeastDays($contract, $start, $stop);
 
         // we expect 10 here
         $this->assertEquals(10, count($feastDays), '10 feast days should have been found!');
     }
-    
+
     /**
      * tests if a special property exists in the record set
      */
@@ -161,13 +176,13 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $recordSet->addRecord($employee);
         $this->assertEquals(1, count($recordSet->supervisor_id));
     }
-    
+
     /**
      * tests if the filter for the employee model gets created properly
      */
     public function testFilters()
     {
-        
+
         // prepare dates
         $today = new Tinebase_DateTime();
         $oneMonthAgo = clone $today;
@@ -176,62 +191,62 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $oneMonthAhead->addMonth(1);
         $twoMonthsAgo = clone $oneMonthAgo;
         $twoMonthsAgo->subMonth(1);
-        
+
         $employeeController = HumanResources_Controller_Employee::getInstance();
-        
+
         $employee1 = $this->_getEmployee('pwulf');
         $employee1->employment_begin = $oneMonthAgo;
         $employee1->employment_end = $oneMonthAhead;
         $employee1 = $employeeController->create($employee1);
-        
+
         $employee2 = $this->_getEmployee('rwright');
         $employee2->employment_begin = $oneMonthAgo;
         $employee2 = $employeeController->create($employee2);
-        
+
         $filter = new HumanResources_Model_EmployeeFilter(array(
             array('field' => 'n_given', 'operator' => 'equals', 'value' => 'Paul')
         ));
         $result = $employeeController->search($filter);
-        
+
         $this->assertEquals(1, $result->count());
         $this->assertEquals('Paul', $result->getFirstRecord()->n_given);
-        
+
         // test employed filter
-        
+
         // employee3 is not yet employed
         $employee3 = $this->_getEmployee('jmcblack');
         $employee3->employment_begin = $oneMonthAhead;
         $employee3 = $employeeController->create($employee3);
-        
+
         // employee4 has been employed
         $employee4 = $this->_getEmployee('jsmith');
         $employee4->employment_begin = $twoMonthsAgo;
         $employee4->employment_end = $oneMonthAgo;
         $employee4 = $employeeController->create($employee4);
-        
+
         $filter = new HumanResources_Model_EmployeeFilter(array(
             array('field' => 'is_employed', 'operator' => 'equals', 'value' => TRUE)
         ));
         $result = $employeeController->search($filter);
         $msg = 'rwright and pwulf should have been found';
         $this->assertEquals(2, $result->count(), $msg);
-        
+
         $names = $result->n_fn;
-        
+
         // just rwright and pwulf should have been found
         $this->assertContains('Roberta Wright', $names, $msg);
         $this->assertContains('Paul Wulf', $names, $msg);
-        
+
         $filter = new HumanResources_Model_EmployeeFilter(array(
             array('field' => 'is_employed', 'operator' => 'equals', 'value' => FALSE)
         ));
         $result = $employeeController->search($filter);
-        
+
         $msg = 'jsmith and jmcblack should have been found';
         $this->assertEquals(2, $result->count(), $msg);
-        
+
         $names = $result->n_fn;
-        
+
         // just jsmith and jmcblack should have been found
         $this->assertContains('John Smith', $names, $msg);
         $this->assertContains('James McBlack', $names, $msg);
