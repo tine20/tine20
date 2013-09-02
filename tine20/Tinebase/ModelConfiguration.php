@@ -509,7 +509,7 @@ class Tinebase_ModelConfiguration {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent',
-        'hasCustomFields', 'modlogActive', 'hasAttachments'
+        'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty'
     );
 
     /**
@@ -831,7 +831,7 @@ class Tinebase_ModelConfiguration {
         if (count($queryFilters)) {
             $this->_filterModel['query'] = array('label' => 'Quick search', 'field' => 'query', 'filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => $queryFilters), 'useGlobalTranslation' => true);
         }
-        $this->_filterModel[$this->_idProperty] = array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => $this->_appName . '_Model_' . $this->_modelName));
+        $this->_filterModel[$this->_idProperty] = array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('idProperty' => $this->_idProperty, 'modelName' => $this->_appName . '_Model_' . $this->_modelName));
         $this->_fieldKeys = array_keys($this->_fields);
     }
     
