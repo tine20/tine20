@@ -2760,3 +2760,6 @@ msgstr "Es ist nicht erlaubt diesen Ordner zu löschen. Bitte definieren sie zuv
 
 msgid "Exception ({0})"
 msgstr "Ausnahmefehler ({0})"
+
+msgid "Month"
+msgstr "Monat"

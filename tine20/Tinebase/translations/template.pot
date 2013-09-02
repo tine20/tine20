@@ -2779,3 +2779,6 @@ msgstr ""
 
 msgid "Exception ({0})"
 msgstr ""
+
+msgid "Month"
+msgstr ""
