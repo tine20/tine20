@@ -21,7 +21,9 @@ Tine.Sales.Model.ProductArray = Tine.Tinebase.Model.modlogFields.concat([
     {name: 'tags'},
     {name: 'notes'},
     // relations with other objects
-    { name: 'relations'}
+    { name: 'relations'},
+    
+    {name: 'attachments', omitDuplicateResolving: true}
 ]);
 
 /**
@@ -95,7 +97,9 @@ Tine.Sales.Model.ContractArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'tags'},
     {name: 'notes'},
     // linked contacts
-    { name: 'relations' }
+    { name: 'relations' },
+    
+    {name: 'attachments', omitDuplicateResolving: true}
 ]);
 
 /**

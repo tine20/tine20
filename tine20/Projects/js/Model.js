@@ -24,7 +24,9 @@ Tine.Projects.Model.Project = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     { name: 'relations' },
     // tine 2.0 notes + tags
     { name: 'notes'},
-    { name: 'tags' }
+    { name: 'tags' },
+    
+    {name: 'attachments', omitDuplicateResolving: true}
 ]), {
     appName: 'Projects',
     modelName: 'Project',

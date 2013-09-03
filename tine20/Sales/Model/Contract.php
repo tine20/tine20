@@ -1,7 +1,7 @@
 <?php
 /**
  * class to hold contract data
- *
+'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true), *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
@@ -86,6 +86,8 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        
+        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**

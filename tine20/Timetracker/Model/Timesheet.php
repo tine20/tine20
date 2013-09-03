@@ -68,6 +68,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        
+        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**

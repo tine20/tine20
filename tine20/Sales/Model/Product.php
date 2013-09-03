@@ -59,6 +59,8 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),    
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        
+        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**

@@ -26,7 +26,9 @@ Tine.Courses.Model.CourseArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'members' },
     // tine 2.0 notes + tags
     { name: 'notes' },
-    { name: 'tags' }
+    { name: 'tags' },
+    
+    {name: 'attachments', omitDuplicateResolving: true},
 ]);
 
 /**

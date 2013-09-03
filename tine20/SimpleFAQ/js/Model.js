@@ -24,7 +24,9 @@ Tine.SimpleFAQ.Model.Faq = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.
     {name: 'answer'},
     {name: 'notes'},
     {name: 'tags'},
-    {name: 'relations'}
+    {name: 'relations'},
+    
+    {name: 'attachments', omitDuplicateResolving: true}
 ]), {
     appName: 'SimpleFAQ',
     modelName: 'Faq',

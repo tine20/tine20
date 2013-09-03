@@ -68,6 +68,8 @@ class SimpleFAQ_Model_Faq extends Tinebase_Record_Abstract
          'tags'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true,),
          'relations'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
          'notes'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+         
+         'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
      );
 
      /**

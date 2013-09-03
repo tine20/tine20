@@ -111,6 +111,8 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'grants'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+       
+        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**
