@@ -419,11 +419,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
         }
         
-        // avoid sending headers during unit tests
-        if (php_sapi_name() != 'cli') {
-            // @todo this belong to DAV_Server, but it currently not supported
-            header('ETag: ' . $this->getETag());
-        }
+        return $this->getETag();
     }
     
     /**

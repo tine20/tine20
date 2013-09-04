@@ -1,4 +1,8 @@
 <?php
+
+use Sabre\DAV;
+use Sabre\CalDAV;
+
 /**
  * Tine 2.0
  *
@@ -55,9 +59,9 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
      *
      * The contents of the new file must be a valid VCARD
      *
-     * @param string $name
-     * @param resource $vcardData
-     * @return Sabre\DAV\File
+     * @param  string    $name
+     * @param  resource  $vcardData
+     * @return string    the etag of the record
      */
     public function createFile($name, $vobjectData = null) 
     {
@@ -330,7 +334,41 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
      */
     public function updateProperties($mutations) 
     {
-        return false;
+        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_ADMIN)) {
+            throw new DAV\Exception\Forbidden('permission to update container denied');
+        }
+        
+        $result = array(
+            200 => array(),
+            403 => array()
+        );
+        
+        foreach ($mutations as $key => $value) {
+            switch ($key) {
+                case '{DAV:}displayname':
+                    $this->_container->name = $value;
+                    $result['200'][$key] = null;
+                    break;
+                    
+                case '{' . CalDAV\Plugin::NS_CALDAV . '}calendar-description':
+                case '{' . CalDAV\Plugin::NS_CALDAV . '}calendar-timezone':
+                    // fake success
+                    $result['200'][$key] = null;
+                    break;
+                    
+                case '{http://apple.com/ns/ical/}calendar-color':
+                    $this->_container->color = substr($value, 0, 7);
+                    $result['200'][$key] = null;
+                    break;
+                
+                default:
+                    $result['403'][$key] = null;
+            }
+        }
+        
+        Tinebase_Container::getInstance()->update($this->_container);
+        
+        return $result;
     }
     
     /**

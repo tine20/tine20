@@ -69,6 +69,7 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
      * transaction id if test is wrapped in an transaction
      */
     protected $_transactionId = NULL;
+    
     /**
      * set up tests
      *

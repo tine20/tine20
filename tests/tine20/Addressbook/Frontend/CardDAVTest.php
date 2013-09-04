@@ -47,14 +47,14 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
         )));
-        
-        $this->objects['containerToDelete'][] = $this->objects['initialContainer'];
     }
 
     /**
@@ -65,15 +65,7 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->objects['containerToDelete'] as $containerId) {
-            $containerId = $containerId instanceof Tinebase_Model_Container ? $containerId->getId() : $containerId;
-            
-            try {
-                Tinebase_Container::getInstance()->deleteContainer($containerId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // do nothing
-            }
-        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -98,8 +90,11 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
         $child = $collection->getChild($this->objects['initialContainer']->getId());
         
         $this->assertTrue($child instanceof Addressbook_Frontend_WebDAV_Container);
-    }    
+    }
     
+    /**
+     * test to a create file. this should not be possible at this level
+     */
     public function testCreateFile()
     {
         $collection = new Addressbook_Frontend_CardDAV();
@@ -109,12 +104,19 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
         $collection->createFile('foobar');
     }
     
+    /**
+     * test to create a new directory
+     */
     public function testCreateDirectory()
     {
+        $randomName = Tinebase_Record_Abstract::generateUID();
+        
         $collection = new Addressbook_Frontend_CardDAV();
         
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $collection->createDirectory($randomName);
         
-        $collection->createDirectory('foobar');
+        $container = Tinebase_Container::getInstance()->getContainerByName('Addressbook', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+        
+        $this->assertTrue($container instanceof Tinebase_Model_Container);
     }
 }

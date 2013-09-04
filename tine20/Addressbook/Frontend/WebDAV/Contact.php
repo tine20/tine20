@@ -250,12 +250,8 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         
         $this->_contact = Addressbook_Controller_Contact::getInstance()->update($contact, false);
         $this->_vcard   = null;
-
-        // avoid sending headers during unit tests
-        if (php_sapi_name() != 'cli') {
-            // @todo this belongs to DAV_Server, but is currently not supported
-            header('ETag: ' . $this->getETag());
-        }
+        
+        return $this->getETag();
     }
     
     /**

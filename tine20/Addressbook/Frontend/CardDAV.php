@@ -53,6 +53,35 @@ class Addressbook_Frontend_CardDAV extends DAV\Collection implements DAV\IProper
     }
     
     /**
+     * create addressbook collection from CardDAV client.
+     * 
+     * (non-PHPdoc)
+     * @see Sabre_DAV_Collection::createDirectory()
+     */
+    public function createDirectory($name)
+    {
+      $newContainer = new Tinebase_Model_Container(array(
+            'name'              => $name,
+            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'backend'           => 'Sql',
+            'application_id'    => $this->_application->getId(),
+            'model'             => $this->_application->name . '_Model_' . $this->_model
+        ));
+
+        #if($newContainer->type !== Tinebase_Model_Container::TYPE_PERSONAL and $newContainer->type !== Tinebase_Model_Container::TYPE_SHARED) {
+        #    throw new Tinebase_Exception_InvalidArgument('Can add personal or shared containers only');
+        #}
+
+        $container = Tinebase_Container::getInstance()->addContainer($newContainer);
+
+        $result = $container->toArray();
+        $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
+        $result['path'] = $container->getPath();
+        
+        return $result;
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see Sabre\DAV\Collection::getChild()
      */
@@ -67,7 +96,16 @@ class Addressbook_Frontend_CardDAV extends DAV\Collection implements DAV\IProper
             # list container
             case 1:
                 try {
-                    $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerById($_name);
+                    // getchild to new collection ou existing one.
+                    if ($_name instanceof Tinebase_Model_Container) {
+                        $container = $_name;
+                    } else if (is_numeric($_name)) {
+                        $container = Tinebase_Container::getInstance()->getContainerById($_name);
+                    } else {
+                        $container = Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $_name, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+                    }
+
+                    //$container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerById($_name);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     throw new DAV\Exception\NotFound('Directory not found');
                 } catch (Tinebase_Exception_InvalidArgument $teia) {
@@ -119,10 +157,9 @@ class Addressbook_Frontend_CardDAV extends DAV\Collection implements DAV\IProper
                         // skip child => no read permissions
                     }
                 }
-                
                 break;
         }
-                
+        
         return $children;
         
     }
