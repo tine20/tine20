@@ -33,6 +33,9 @@ class Tasks_AllTests
         $suite->addTestSuite('Tasks_ControllerTest');
         $suite->addTestSuite('Tasks_Model_TaskFilterTest');
         $suite->addTestSuite('Tasks_JsonTest');
+        $suite->addTestSuite('Tasks_Frontend_WebDAV_AllTests');
+        $suite->addTestSuite('Tasks_Convert_Task_VCalendar_AllTests');
+        
         return $suite;
     }
 }

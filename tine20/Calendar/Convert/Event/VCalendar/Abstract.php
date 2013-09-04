@@ -54,8 +54,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Events: ' . print_r($_records->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Events: ' . print_r($_records->toArray(), true));
+        
         
         $vcalendar = new VObject\Component('VCALENDAR');
         

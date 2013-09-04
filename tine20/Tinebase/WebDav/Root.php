@@ -22,24 +22,31 @@ use Sabre\CalDAV;
  *
  * @package     Tinebase
  * @subpackage  WebDAV
+ * 
+ * @todo this should look for webdav frontend in installed apps
  */
 class Tinebase_WebDav_Root extends DAV\SimpleCollection
 {
     public function __construct()
     {
-        $caldavChildren  = array();
-        $carddavChildren = array();
-        $webdavChildren  = array();
+        $caldavCalendarChildren = array();
+        $caldavTasksChildren    = array();
+        $carddavChildren        = array();
+        $webdavChildren         = array();
         
         if(Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
-            $caldavChildren[] = new Calendar_Frontend_CalDAV();
+            $caldavCalendarChildren[] = new Calendar_Frontend_CalDAV();
+        }
+       
+        if(Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN)) {
+            $caldavTasksChildren[]    = new Tasks_Frontend_CalDAV();
         }
 
         if(Tinebase_Core::getUser()->hasRight('Addressbook', Tinebase_Acl_Rights::RUN)) {
             $carddavChildren[] = new Addressbook_Frontend_CardDAV();
         }
         
-        foreach (array('Addressbook', 'Calendar', 'Felamimail', 'Filemanager') as $application) {
+        foreach (array('Addressbook', 'Calendar', 'Felamimail', 'Filemanager', 'Tasks') as $application) {
             $applicationClass = $application . '_Frontend_WebDAV';
             if (Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN) && class_exists($applicationClass)) {
                 $webdavChildren[] = new $applicationClass($application);
@@ -48,7 +55,8 @@ class Tinebase_WebDav_Root extends DAV\SimpleCollection
         
         parent::__construct('root', array(
             new DAV\SimpleCollection(CardDAV\Plugin::ADDRESSBOOK_ROOT, $carddavChildren),
-            new DAV\SimpleCollection(CalDAV\Plugin::CALENDAR_ROOT,     $caldavChildren),
+            new DAV\SimpleCollection(CalDAV\Plugin::CALENDAR_ROOT,     $caldavCalendarChildren),
+            new DAV\SimpleCollection('tasks',                          $caldavTasksChildren),
             new DAV\SimpleCollection('webdav',                         $webdavChildren),
             new DAV\SimpleCollection('principals', array(
                 new DAVACL\PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/users'),

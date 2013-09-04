@@ -27,6 +27,21 @@ class Calendar_Frontend_CalDAV extends Addressbook_Frontend_CardDAV
     protected $_model = 'Event';
     
     /**
+     * Returns an array with all the child nodes
+     *
+     * @return Sabre_DAV_INode[]
+     */
+    public function getChildren()
+    {
+        $calendars = parent::getChildren();
+        
+        $TFCalDAV = new Tasks_Frontend_CalDAV();
+        $todoLists = $TFCalDAV->getChildren();
+        
+        return array_merge($calendars, $todoLists);
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see Sabre\DAV\Collection::getChild()
      * 
@@ -55,7 +70,16 @@ class Calendar_Frontend_CalDAV extends Addressbook_Frontend_CardDAV
                     
                 } else {
                     try {
-                        $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerById($_name);
+                        //modified to getchild for new collection or existing collection
+                        if ($_name instanceof Tinebase_Model_Container) {
+                            $container = $_name;
+                        } else if (is_numeric($_name)) {
+                            $container = Tinebase_Container::getInstance()->getContainerById($_name);
+                        } else {
+                            $container = Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $_name, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+                        }
+                        
+                        //$container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerById($_name);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         throw new Sabre\DAV\Exception\NotFound('Directory not found');
                     } catch (Tinebase_Exception_InvalidArgument $teia) {
@@ -66,7 +90,8 @@ class Calendar_Frontend_CalDAV extends Addressbook_Frontend_CardDAV
                     if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
                         throw new Sabre\DAV\Exception\NotFound('Directory not found');
                     }
-                    $objectClass = $this->_application->name . '_Frontend_WebDAV_Container';
+                    
+                    $objectClass = array_value(0, explode('_', get_class($this))) . '_Frontend_WebDAV_Container';
                     
                     return new $objectClass($container, true);
                 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tasks</name>
-    <version>7.1</version>
+    <version>7.2</version>
     <order>30</order>
     <depends>
         <application>Admin</application>
@@ -9,7 +9,7 @@
     <tables>
         <table>
             <name>tasks</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -129,6 +129,12 @@
                     <length>255</length>
                     <notnull>false</notnull>
                 </field>
+                <field>
+                    <name>uid</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -147,11 +153,20 @@
                     <field>
                         <name>organizer</name>
                     </field>
-                </index>            
+                </index>
                 <index>
                     <name>class</name>
                     <field>
                         <name>class</name>
+                    </field>
+                </index>
+                <index>
+                    <name>uid--id</name>
+                    <field>
+                        <name>uid</name>
+                    </field>
+                    <field>
+                        <name>id</name>
                     </field>
                 </index>
             </declaration>

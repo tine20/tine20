@@ -68,7 +68,8 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'deleted_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'seq'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // task only fields
-        'id'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Alnum'),
+        //'id'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Alnum'),
+        'id'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'percent'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'default' => 0),
         'completed'            => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'due'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
@@ -84,8 +85,9 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'originator_tz'        => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'priority'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'default' => 1),
         'status'               => array(Zend_Filter_Input::ALLOW_EMPTY => false        ),
-        'summary'              => array('presence' => 'required'     ),
+        'summary'              => array(Zend_Filter_Input::PRESENCE => 'required'      ),
         'url'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'uid'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // ical common fields with multiple appearance
         'attach'               => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
         'attendee'             => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
@@ -229,5 +231,22 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $text);
             
         return $text;
+    }
+    
+    /**
+     * sets and returns the addressbook entry of the organizer
+     * 
+     * @return Addressbook_Model_Contact
+     */
+    public function resolveOrganizer()
+    {
+        if (! empty($this->organizer) && ! $this->organizer instanceof Addressbook_Model_Contact) {
+            $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($this->organizer, TRUE);
+            if (count($contacts)) {
+                $this->organizer = $contacts->getFirstRecord();
+            }
+        }
+        
+        return $this->organizer;
     }
 }

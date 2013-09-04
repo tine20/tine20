@@ -35,7 +35,8 @@ class Tasks_Model_TaskFilterTest extends PHPUnit_Framework_TestCase
         $backend = new Tasks_Backend_Sql();
         
         $testTask1 = new Tasks_Model_Task(array(
-            // tine record fields
+            // Tine 2.0 record fields
+            'uid'                  => Tinebase_Record_Abstract::generateUID(),
             'container_id'         => $container_id,
             'created_by'           => 6,
             'creation_time'        => '2009-03-31 17:35:00',

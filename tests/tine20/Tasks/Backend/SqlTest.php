@@ -53,7 +53,8 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $this->_backend = new Tasks_Backend_Sql();
         
         $this->_testTask1 = new Tasks_Model_Task(array(
-            // tine record fields
+            // Tine 2.0 record fields
+            'uid'                  => Tinebase_Record_Abstract::generateUID(),
             'container_id'         => $this->container_id,
             'created_by'           => 6,
             'creation_time'        => '2009-03-31 17:35:00',
@@ -108,6 +109,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $summary = 'minimal task by phpunit';
         
         $task = new Tasks_Model_Task(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => $summary,
             'container_id'  => $this->container_id,
         ));

@@ -71,7 +71,7 @@ class Tinebase_WebDav_RootTest extends PHPUnit_Framework_TestCase
     {
         $children = $this->_rootNode->getChildren();
         
-        $this->assertEquals(4, count($children));
+        $this->assertEquals(5, count($children));
     }
 }
 

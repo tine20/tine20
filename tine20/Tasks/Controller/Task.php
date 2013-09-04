@@ -98,6 +98,29 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
     }
     
     /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        $_record->uid           = $_record->uid           ? $_record->uid           : Tinebase_Record_Abstract::generateUID();
+    }
+    
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        $_record->uid           = $_oldRecord->uid        ? $_oldRecord->uid        : Tinebase_Record_Abstract::generateUID();
+    }
+    
+    /**
      * update one record
      *
      * @param   Tinebase_Record_Interface $_record
