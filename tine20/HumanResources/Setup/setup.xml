@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>7.12</version>
+    <version>7.13</version>
     <order>51</order>
     <depends>
         <application>Calendar</application>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>humanresources_employee</name>
-            <version>12</version>
+            <version>13</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -132,6 +132,18 @@
                     <name>bank_account_number</name>
                     <type>text</type>
                     <length>64</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>bic</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>iban</name>
+                    <type>text</type>
+                    <length>128</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
