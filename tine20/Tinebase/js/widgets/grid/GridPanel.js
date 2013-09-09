@@ -303,7 +303,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.i18nRecordsName = this.i18nRecordsName ? this.i18nRecordsName : this.recordClass.getRecordsName();
         this.i18nContainerName = this.i18nContainerName ? this.i18nContainerName : this.recordClass.getContainerName();
         this.i18nContainersName = this.i18nContainersName ? this.i18nContainersName : this.recordClass.getContainersName();
-        this.i18nEmptyText = this.i18nEmptyText || String.format(Tine.Tinebase.translation._("There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName);
+        
+        this.i18nEmptyText = this.i18nEmptyText ||
+            this.i18nContainersName
+            ? String.format(Tine.Tinebase.translation._("There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, (this.i18nContainersName ? this.i18nContainersName : this.i18nRecordsName))
+            : String.format(Tine.Tinebase.translation._("There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."), this.i18nRecordsName);
 
         this.i18nEditActionText = this.i18nEditActionText ? this.i18nEditActionText : [String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordName), String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 2), this.i18nRecordsName)];
 
