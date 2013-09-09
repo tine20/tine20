@@ -78,14 +78,8 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 action.disable();
                 return;
             }
-            var now = new Date(),
-                modified = record.get('creation_time');
             
-            if (modified) {
-                var mod = modified.add(Date.HOUR, 2);
-                var setDisabled = (record.get('start_date') < now && mod < now);
-                action.setDisabled(setDisabled);
-            }
+            action.setDisabled(! (record.get('is_editable') == true)); // may be undefined
         }
         
         var tbar = this.getBottomToolbar();

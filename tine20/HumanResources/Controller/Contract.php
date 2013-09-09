@@ -71,36 +71,46 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        if (! $_record->start_date || ! $_record->start_date instanceof Tinebase_DateTime) {
-            return;
-        }
-        // do not update if the start_date is in the past and the creation time is older than 2 hours
-        // disable fields in edit dialog if the record was created 2 hours before and the start_date is in the past
-        $now = new Tinebase_DateTime();
-        
-        $created = clone $_record->creation_time;
-        $crP2h = $created->addHour(2);
-
-        // match = 1 if record was created 2 hrs ago
-        $match = $now->compare($crP2h);
-        
-        // match = 1 if start date is in the past
-        $match += $now->compare($_record->start_date);
-        $this->_containerToId($_record);
-        
-        // both matches
-        if ($match === 2) {
-            foreach (array('start_date', 'employee_id', 'feast_calendar_id', 'workingtime_json') as $key) {
-                if ($_record->{$key} != $_oldRecord->{$key}) {
-                    
-                    throw new HumanResources_Exception_ContractTooOld();
-                }
+        $diff = $_record->diff($_oldRecord, array('created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'notes', 'end_date'))->diff;
+        if (! empty($diff)) {
+            if ($this->getFreeTimes($_record)->count() > 0) {
+                throw new HumanResources_Exception_ContractNotEditable();
             }
+        }
+        
+        if (is_array($_record->feast_calendar_id)) {
+            $_record->feast_calendar_id = $_record->feast_calendar_id['id'];
         }
         
         $this->_checkDates($_record);
     }
 
+    
+    /**
+     * returns freetimes
+     * @param HumanResources_Model_Contract $contract
+     */
+    public function getFreeTimes($contract)
+    {
+        $freeTimeFilter = new HumanResources_Model_FreeTimeFilter(array(
+            array('field' => 'firstday_date', 'operator' => 'after', 'value' => $contract->start_date),
+        ));
+        
+        if ($contract->end_date) {
+            $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Date(
+                array('field' => 'firstday_date', 'operator' => 'before', 'value' => $contract->end_date)
+            ));
+        }
+        
+        $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Text(
+            array('field' => 'employee_id', 'operator' => 'equals', 'value' => $contract->employee_id)
+        ));
+        
+        $freeTimeController = HumanResources_Controller_FreeTime::getInstance();
+        $results = $freeTimeController->search($freeTimeFilter);
+        
+        return $results;
+    }
     
     
     /**
@@ -267,6 +277,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             $filter = new Calendar_Model_EventFilter(array(
                 array('field' => 'container_id', 'operator' => 'equals', 'value' => $contract->feast_calendar_id),
             ), 'AND');
+            
             $periodFilter = new Calendar_Model_PeriodFilter(array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $fd, 'until' => $ld)));
             $filter->addFilter($periodFilter);
             
@@ -481,5 +492,46 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $recs = $this->search($filter, $pagination);
         
         return $recs;
+    }
+    
+    /**
+     * resolves virtual field "is_editable"
+     * 
+     * @param array $resultSet
+     */
+    public function getEditableState($resultSet)
+    {
+        for ($i = 0; $i < count($resultSet); $i++) {
+            
+            $sDate = new Tinebase_DateTime($resultSet[$i]['start_date']);
+            $sDate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            
+            $eDate = NULL;
+            
+            if ($resultSet[$i]['end_date']) {
+                $eDate = new Tinebase_DateTime($resultSet[$i]['end_date']);
+                $eDate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            }
+            
+            $freeTimeFilter = new HumanResources_Model_FreeTimeFilter(array(
+                array('field' => 'firstday_date', 'operator' => 'after', 'value' => $sDate),
+                
+            ));
+            
+            if ($eDate) {
+                $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Date(
+                    array('field' => 'firstday_date', 'operator' => 'before', 'value' => $eDate)
+                ));
+            }
+            
+            $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Text(
+                array('field' => 'employee_id', 'operator' => 'equals', 'value' => $resultSet[$i]['employee_id'])
+            ));
+            
+            $freeTimeController = HumanResources_Controller_FreeTime::getInstance();
+            $resultSet[$i]['is_editable'] = ($freeTimeController->search($freeTimeFilter)->count() > 0) ? FALSE : TRUE;
+        }
+        
+        return $resultSet;
     }
 }

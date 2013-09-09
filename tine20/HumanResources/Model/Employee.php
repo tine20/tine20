@@ -162,6 +162,18 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'group' => 'banking',
                 'shy'   => TRUE
             ),
+            'iban' => array(
+                'label' => 'IBAN',
+                'duplicateCheckGroup' => 'iban',
+                'group' => 'banking',
+                'shy'   => TRUE
+            ),
+            'bic' => array(
+                'label' => 'BIC',
+                'duplicateCheckGroup' => 'bic',
+                'group' => 'banking',
+                'shy'   => TRUE
+            ),
             'bank_name' => array(
                 'label' => 'Bank Name', //_('Bank Name')
                 'group' => 'banking',

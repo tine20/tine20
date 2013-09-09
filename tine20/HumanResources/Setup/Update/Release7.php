@@ -500,4 +500,36 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('HumanResources', '7.13');
     }
+
+    /**
+     * update 7.13 -> 7.14
+     *
+     * - add iban and bic to employee model
+     */
+    public function update_13()
+    {
+        $field = '<field>
+                    <name>bic</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>false</notnull>
+                </field>
+                ';
+    
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('humanresources_employee', $declaration);
+        
+        $field = '<field>
+                    <name>iban</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>false</notnull>
+                </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('humanresources_employee', $declaration);
+        $this->setTableVersion('humanresources_employee', '13');
+        
+        $this->setApplicationVersion('HumanResources', '7.14');
+    }
 }

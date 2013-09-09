@@ -16,8 +16,14 @@
  * @package     HumanResources
  * @subpackage  Exception
  */
-class HumanResources_Exception_ContractTooOld extends HumanResources_Exception
+class HumanResources_Exception_ContractNotEditable extends HumanResources_Exception
 {
+    /**
+     * the title of the Exception (may be shown in a dialog)
+     *
+     * @var string
+     */
+    protected $_title = 'Contract not editable'; // _('Contract not editable')
     /**
      * construct
      *
@@ -25,7 +31,8 @@ class HumanResources_Exception_ContractTooOld extends HumanResources_Exception
      * @param integer $_code
      * @return void
      */
-    public function __construct($_message = "You are not allowed to change the record if it's older than 2 hours and the start_date is in the past!", $_code = 912) {
+    public function __construct($_message = "You are not allowed to change the record if a vacation has been booked already!", $_code = 912) {
+        // _("You are not allowed to change the record if a vacation has been booked already!")
         parent::__construct($_message, $_code);
     }
 }

@@ -920,10 +920,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * returns a Tinebase_Record_Diff record with differences to the given record
      * 
-     * @param  Tinebase_Record_Interface $_record record for comparison
+     * @param Tinebase_Record_Interface $_record record for comparison
+     * @param $_omitFields omit fields
      * @return Tinebase_Record_Diff|NULL
      */
-    public function diff($_record)
+    public function diff($_record, $omitFields = array())
     {
         if (! $_record instanceof Tinebase_Record_Abstract) {
             return $_record;
@@ -935,6 +936,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         ));
         $diff = array();
         foreach (array_keys($this->_validators) as $fieldName) {
+            // omit modlog fields, if set
+            if (in_array($fieldName, $omitFields)) {
+                continue;
+            }
+            
             $ownField = $this->__get($fieldName);
             $recordField = $_record->$fieldName;
             

@@ -90,6 +90,14 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'label'   => 'Workingtime', // _('Workingtime')
                 'default' => '{"days": [8,8,8,8,8,0,0]}',
                 'showInDetailsPanel' => TRUE
+            ),
+            'is_editable' => array(
+                'label' => NULL,
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'boolean',
+                    'function' => array('HumanResources_Controller_Contract' => 'getEditableState'),
+                )
             )
         )
     );

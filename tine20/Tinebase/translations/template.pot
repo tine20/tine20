@@ -2761,3 +2761,11 @@ msgstr ""
 
 msgid "Exception ({0})"
 msgstr ""
+
+
+msgid "Month"
+msgstr ""
+
+msgid "The maximum number of {0}s with the type {1} is reached at the {2} you added. Please change the type of this relation or edit the {2}"
+msgstr ""
+

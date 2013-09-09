@@ -109,23 +109,23 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             array('type' => 'RESPONSIBLE', 'degree' => 'sibling', 'text' => 'Responsible', 'max' => '1:0'), // _('Responsible')
             array('type' => 'CUSTOMER', 'degree' => 'sibling', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')
             array('type' => 'PARTNER', 'degree' => 'sibling', 'text' => 'Partner', 'max' => '0:0'),  // _('Partner')
-            )
+            ), 'defaultType' => ''
         ),
         array('relatedApp' => 'Tasks', 'relatedModel' => 'Task', 'config' => array(
             array('type' => 'TASK', 'degree' => 'sibling', 'text' => 'Task', 'max' => '0:0'),
-            )
+            ), 'defaultType' => ''
         ),
         array('relatedApp' => 'Sales', 'relatedModel' => 'Product', 'config' => array(
             array('type' => 'PRODUCT', 'degree' => 'sibling', 'text' => 'Product', 'max' => '0:0'),
-            )
+            ), 'defaultType' => ''
         ),
         array('relatedApp' => 'Sales', 'relatedModel' => 'CostCenter', 'config' => array(
-            array('type' => 'LEAD_COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '0:0'), // _('Lead Cost Center')
-            )
+            array('type' => 'LEAD_COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '1:0'), // _('Lead Cost Center')
+            ), 'defaultType' => ''
         ),
         array('relatedApp' => 'Timetracker', 'relatedModel' => 'Timeaccount', 'config' => array(
             array('type' => 'TIME_ACCOUNT', 'degree' => 'sibling', 'text' => 'Time Account', 'max' => '0:1'), // _('Time Account')
-            )
+            ), 'defaultType' => ''
         ),
     );
 }

@@ -392,6 +392,12 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             }], [{
                                 name: 'bank_code_number',
                                 fieldLabel: this.app.i18n._('Code Number')
+                            }, {
+                                name: 'iban',
+                                fieldLabel: 'IBAN'
+                            }, {
+                                name: 'bic',
+                                fieldLabel: 'BIC'
                             }
                         ]]
                     }]

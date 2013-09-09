@@ -87,17 +87,11 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.window.setTitle(String.format(_('Edit {0}'), this.i18nRecordName));
         }
         
-        // disable fields if the record was created 2 hours before and the start_date is in the past,
+        // disable fields if there are already some vacations booked
         // but allow setting end_date
-        var now = new Date(),
-            modified = this.record.get('creation_time');
         
-        if (modified) {
-            var mod = modified.add(Date.HOUR, 2);
-            
-            var setDisabled = (this.record.get('start_date') < now && mod < now);
-            
-            if (setDisabled) {
+        if (this.record.get('creation_time')) {
+            if (! this.record.get('is_editable')) {
                 this.getForm().items.each(function(formField) {
                     if (formField.name != 'end_date') {
                         formField.disable();

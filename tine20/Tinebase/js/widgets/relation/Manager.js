@@ -32,6 +32,10 @@ Tine.widgets.relation.Manager = function() {
 
             // create if not cached
             if(items[key] === undefined) {
+                if (Ext.isString(recordClass)) {
+                    app = Tine.Tinebase.common.resolveApp(app);
+                    recordClass = Tine[app]['Model'][recordClass];
+                }
                 this.create(recordClass, key);
             }
             

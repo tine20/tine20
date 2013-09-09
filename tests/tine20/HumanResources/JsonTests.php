@@ -74,7 +74,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $result = HumanResources_Controller_Account::getInstance()->search($filter);
         $this->assertEquals(2, $result->count());
        
-        
         $date->addMonth(2);
         $costCenter2 = $this->_getCostCenter($date);
         

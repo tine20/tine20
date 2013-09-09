@@ -157,6 +157,16 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         
+        foreach(array('vacation', 'sickness') as $prop) {
+            if (! empty($recordData[$prop])) {
+                for ($i = 0; $i < count($recordData[$prop]); $i++) {
+                    if (is_array($recordData[$prop][$i]['account_id'])) {
+                        // flat costcenter id
+                        $recordData[$prop][$i]['account_id'] = $recordData[$prop][$i]['account_id']['id'];
+                    }
+                }
+            }
+        }
         // auto set dates of the first contract to dates of the employee, if none are given
         if (! empty($recordData['contracts'])) {
             if (! empty($recordData['employment_begin']) && empty($recordData['contracts'][0]['start_date'])) {

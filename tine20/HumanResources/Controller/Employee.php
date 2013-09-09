@@ -47,6 +47,8 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         'bank_account_number',
         'bank_name',
         'bank_code_number',
+        'iban',
+        'bic',
         'employment_begin',
         'employment_end',
         'contracts'

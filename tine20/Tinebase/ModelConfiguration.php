@@ -264,7 +264,17 @@ class Tinebase_ModelConfiguration {
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel
      * tag tinebase.tag
      * user                      User                string                                 Tinebase_Model_Filter_User
-     *
+     * virtual:
+     * 
+     * Field Type "virtual" has a config property which holds the field configuration.
+     * An additional property is "function". If this property is set, the given function
+     * will be called to resolve the field in Tinebase_Convert_Json.
+     * If an array with two values is given, the first value will be handled as a class,
+     * the second one would be handled as a statically callable method.
+     * if the array is an associative one with one key and one value, 
+     * the key will be used for the classname of a singleton (callable by getInstance),
+     * the value will be used as method name.
+     * 
      * * record/foreign (legacy) 1:1 - Relation      text     Tine.<APP>.Model.<MODEL>      Tinebase_Record_Abstract  Tinebase_Model_Filter_ForeignId   Tine.widgets.grid.ForeignRecordFilter
      * * records                 1:n - Relation      -        Array of Record.data Objects  Tinebase_Record_RecordSet -                                 -
      * * relation                m:m - Relation      -        Tinebase.Model.Relation       Tinebase_Model_Relation   Tinebase_Model_Filter_Relation
@@ -509,7 +519,7 @@ class Tinebase_ModelConfiguration {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent',
-        'hasCustomFields', 'modlogActive', 'hasAttachments'
+        'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty'
     );
 
     /**
@@ -831,7 +841,7 @@ class Tinebase_ModelConfiguration {
         if (count($queryFilters)) {
             $this->_filterModel['query'] = array('label' => 'Quick Search', 'field' => 'query', 'filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => $queryFilters), 'useGlobalTranslation' => true);
         }
-        $this->_filterModel[$this->_idProperty] = array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => $this->_appName . '_Model_' . $this->_modelName));
+        $this->_filterModel[$this->_idProperty] = array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('idProperty' => $this->_idProperty, 'modelName' => $this->_appName . '_Model_' . $this->_modelName));
         $this->_fieldKeys = array_keys($this->_fields);
     }
     

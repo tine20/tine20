@@ -748,7 +748,7 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Update ' . $this->_modelName);
 
         $db = (method_exists($this->_backend, 'getAdapter')) ? $this->_backend->getAdapter() : Tinebase_Core::getDb();
-        
+
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
@@ -1774,7 +1774,7 @@ abstract class Tinebase_Controller_Record_Abstract
                     // update record if ID exists and has a length of 40
                     if ($record->id && strlen($record->id) == 40) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'Updating contract ' . $record->id);
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'Updating record ' . $record->getId());
                         }
                         $updatedRecord = $controller->update($record);
                         $existing->addRecord($updatedRecord);
@@ -1788,7 +1788,7 @@ abstract class Tinebase_Controller_Record_Abstract
     
             $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : array(), 'AND');
             $filter->addFilter(new Tinebase_Model_Filter_Text($_fieldConfig['refIdField'], 'equals', $_record->getId()));
-            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $existing->id));
+            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $existing->getId()));
     
             $deleteContracts = $controller->search($filter);
     
