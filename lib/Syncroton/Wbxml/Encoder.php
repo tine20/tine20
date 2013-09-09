@@ -163,8 +163,8 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
         xml_set_character_data_handler($parser, '_handleCharacters');
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         
-        while (($data = fread($tempStream, 819200))) {
-            if (!xml_parse($parser, $data, feof($tempStream))) {
+        while (!feof($tempStream)) {
+            if (!xml_parse($parser, fread($tempStream, 1048576), feof($tempStream))) {
                 // uncomment to write xml document to file
                 #rewind($tempStream);
                 #$xmlStream = fopen(tempnam(sys_get_temp_dir(), "xmlerrors"), 'r+');

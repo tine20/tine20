@@ -122,7 +122,7 @@ class Syncroton_ServerTests extends Syncroton_Command_ATestCase
         
         ob_end_clean();
         
-        $this->assertEquals('AwFqAAAHVkwDMQABUgMxAAFOVwM2AAFPSANjYWxlbmRhckZvbGRlcklkAAFJAzAA', substr(base64_encode($result), 0, 64));
+        $this->assertEquals('AwFqAAAHVkwDMQABUgMxAAFOVwM2AAFPSANjYWxlbmRhckZvbGRlcklkAAFHA0Rl', substr(base64_encode($result), 0, 64));
     }
     
     /**
