@@ -1145,53 +1145,53 @@ msgid ""
 "Germany)"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:81 js/Models.js:332
+#: js/ConnectionGridPanel.js:64 js/Models.js:332
 msgid "TOS"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:89 js/Models.js:107 js/Models.js:325
+#: js/ConnectionGridPanel.js:72 js/Models.js:107 js/Models.js:325
 msgid "Status"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:97
+#: js/ConnectionGridPanel.js:80
 msgid "Remote Number"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:103
+#: js/ConnectionGridPanel.js:86
 msgid "Local Number"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:109 js/LineFilterModel.js:32
+#: js/ConnectionGridPanel.js:92 js/LineFilterModel.js:32
 msgid "Line"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:116
+#: js/ConnectionGridPanel.js:99
 msgid "Call started"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:123
+#: js/ConnectionGridPanel.js:106
 msgid "Contact"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:195
+#: js/ConnectionGridPanel.js:178
 msgid "Save number"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:196
+#: js/ConnectionGridPanel.js:179
 msgid "Adds this number to the Addressbook"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:203 js/LineGridPanel.js:180
+#: js/ConnectionGridPanel.js:186 js/LineGridPanel.js:163
 #: js/AccountGridPanel.js:124
 msgid "Dial number"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:204 js/LineGridPanel.js:181
+#: js/ConnectionGridPanel.js:187 js/LineGridPanel.js:164
 #: js/AccountGridPanel.js:125
 msgid "Initiates a new outgoing call"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:213 js/LineGridPanel.js:220
+#: js/ConnectionGridPanel.js:196 js/LineGridPanel.js:203
 msgid "Add Account"
 msgstr ""
 
@@ -1236,7 +1236,7 @@ msgstr ""
 msgid "please choose your phone number..."
 msgstr ""
 
-#: js/SmsEditDialog.js:276
+#: js/SmsEditDialog.js:276 js/SmsEditDialog.js:293
 msgid "The message"
 msgstr ""
 
@@ -1244,11 +1244,19 @@ msgstr ""
 msgid "enter the text..."
 msgstr ""
 
-#: js/SmsEditDialog.js:302
+#: js/SmsEditDialog.js:293
+msgid "Character"
+msgstr ""
+
+#: js/SmsEditDialog.js:293
+msgid "Message"
+msgstr ""
+
+#: js/SmsEditDialog.js:316
 msgid "Send message to \"{0}\""
 msgstr ""
 
-#: js/SmsEditDialog.js:302
+#: js/SmsEditDialog.js:316
 msgid "Send message"
 msgstr ""
 
@@ -1305,53 +1313,52 @@ msgstr ""
 msgid "Add number {0} to the addressbook"
 msgstr ""
 
-#: js/LineGridPanel.js:82 js/AssignLinesGrid.js:100 js/AccountGridPanel.js:89
+#: js/LineGridPanel.js:65 js/AssignLinesGrid.js:100 js/AccountGridPanel.js:89
 #: js/AccountEditDialog.js:278
 msgid "Type"
 msgstr ""
 
-#: js/LineGridPanel.js:90 js/AccountFilterModel.js:38
+#: js/LineGridPanel.js:73 js/AccountFilterModel.js:38
 msgid "Account"
 msgstr ""
 
-#: js/LineGridPanel.js:98
+#: js/LineGridPanel.js:81
 msgid "User"
 msgstr ""
 
-#: js/LineGridPanel.js:105 js/AssignLinesGrid.js:101
-#: js/AccountGridPanel.js:115
+#: js/LineGridPanel.js:88 js/AssignLinesGrid.js:101 js/AccountGridPanel.js:115
 msgid "Uri Alias"
 msgstr ""
 
-#: js/LineGridPanel.js:111
+#: js/LineGridPanel.js:94
 msgid "SIP Uri"
 msgstr ""
 
-#: js/LineGridPanel.js:117 js/AssignLinesGrid.js:104
+#: js/LineGridPanel.js:100 js/AssignLinesGrid.js:104
 msgid "Incoming"
 msgstr ""
 
-#: js/LineGridPanel.js:125 js/AssignLinesGrid.js:103
+#: js/LineGridPanel.js:108 js/AssignLinesGrid.js:103
 msgid "Outgoing"
 msgstr ""
 
-#: js/LineGridPanel.js:131
+#: js/LineGridPanel.js:114
 msgid "Created"
 msgstr ""
 
-#: js/LineGridPanel.js:187 js/LineGridPanel.js:188
+#: js/LineGridPanel.js:170 js/LineGridPanel.js:171
 msgid "Synchronize Line"
 msgstr ""
 
-#: js/LineGridPanel.js:189 js/AccountEditDialog.js:68
+#: js/LineGridPanel.js:172 js/AccountEditDialog.js:68
 msgid "Synchronize Lines"
 msgstr ""
 
-#: js/LineGridPanel.js:191
+#: js/LineGridPanel.js:174
 msgid "Synchronizes the selected line(s)"
 msgstr ""
 
-#: js/LineGridPanel.js:246
+#: js/LineGridPanel.js:229
 msgid "Synchronizing..."
 msgstr ""
 

@@ -34,42 +34,42 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr ""
 
-#: Model/Task.php:188
+#: Model/Task.php:206
 msgid "Due"
 msgstr ""
 
-#: Model/Task.php:189 js/TaskEditDialog.js:197
+#: Model/Task.php:207 js/TaskEditDialog.js:200
 msgid "Organizer"
 msgstr ""
 
-#: Model/Task.php:190
+#: Model/Task.php:208
 msgid "Description"
 msgstr ""
 
-#: Model/Task.php:191 js/TaskGridPanel.js:136 js/TaskEditDialog.js:189
+#: Model/Task.php:209 js/TaskGridPanel.js:119 js/TaskEditDialog.js:192
 msgid "Priority"
 msgstr ""
 
-#: Model/Task.php:192 js/TaskGridPanel.js:165 js/TaskEditDialog.js:219
-#: js/Models.js:108 js/Models.js:166
+#: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
+#: js/Models.js:109 js/Models.js:167
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/Task.php:193 js/TaskGridPanel.js:152
+#: Model/Task.php:211 js/TaskGridPanel.js:135
 msgid "Percent"
 msgstr ""
 
-#: Model/Task.php:200 js/TaskGridPanel.js:111
+#: Model/Task.php:218 js/TaskGridPanel.js:90
 msgid "Lead"
 msgstr ""
 
-#: Model/Task.php:206
+#: Model/Task.php:224
 msgid "Telephone"
 msgstr ""
 
-#: Model/Task.php:207
+#: Model/Task.php:225
 msgid "Email"
 msgstr ""
 
@@ -98,7 +98,7 @@ msgid "No response"
 msgstr ""
 
 #: Setup/Update/Release5.php:75 Setup/Initialize.php:35
-#: js/TaskGridPanel.js:188 js/TaskEditDialog.js:226
+#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230
 msgid "Completed"
 msgstr ""
 
@@ -178,7 +178,7 @@ msgstr ""
 msgid "The default task list to create new tasks in."
 msgstr ""
 
-#: js/Tasks.js:24
+#: js/Tasks.js:39
 msgid "New Task"
 msgstr ""
 
@@ -188,27 +188,27 @@ msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/TaskGridPanel.js:110
+#: js/TaskGridPanel.js:87
 msgid "Tags"
 msgstr ""
 
-#: js/TaskGridPanel.js:114 js/TaskEditDialog.js:178 js/Models.js:105
+#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:106
 msgid "Summary"
 msgstr ""
 
-#: js/TaskGridPanel.js:118
+#: js/TaskGridPanel.js:101
 msgid "Add a task..."
 msgstr ""
 
-#: js/TaskGridPanel.js:122 js/Models.js:106
+#: js/TaskGridPanel.js:105 js/Models.js:107
 msgid "Due Date"
 msgstr ""
 
-#: js/TaskGridPanel.js:181 js/Models.js:120
+#: js/TaskGridPanel.js:164 js/Models.js:121
 msgid "Creation Time"
 msgstr ""
 
-#: js/TaskGridPanel.js:195 js/Models.js:116
+#: js/TaskGridPanel.js:178 js/Models.js:117
 msgid "Responsible"
 msgstr ""
 
@@ -216,62 +216,62 @@ msgstr ""
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr ""
 
-#: js/TaskEditDialog.js:185
+#: js/TaskEditDialog.js:188
 msgid "Due date"
 msgstr ""
 
-#: js/TaskEditDialog.js:198
+#: js/TaskEditDialog.js:201
 msgid "Add Responsible ..."
 msgstr ""
 
-#: js/TaskEditDialog.js:205
+#: js/TaskEditDialog.js:208
 msgid "Notes"
 msgstr ""
 
-#: js/TaskEditDialog.js:206
+#: js/TaskEditDialog.js:209
 msgid "Enter description..."
 msgstr ""
 
-#: js/TaskEditDialog.js:212
+#: js/TaskEditDialog.js:215
 msgid "Percentage"
 msgstr ""
 
-#: js/Models.js:64
+#: js/Models.js:65
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:64
+#: js/Models.js:65
 msgid "Tasks"
 msgstr ""
 
-#: js/Models.js:68
+#: js/Models.js:69
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:68
+#: js/Models.js:69
 msgid "to do lists"
 msgstr ""
 
-#: js/Models.js:103
+#: js/Models.js:104
 msgid "Quick Search"
 msgstr ""
 
-#: js/Models.js:118
+#: js/Models.js:119
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/Models.js:119
+#: js/Models.js:120
 msgid "Last Modified By"
 msgstr ""
 
-#: js/Models.js:121
+#: js/Models.js:122
 msgid "Created By"
 msgstr ""
 
-#: Controller/Task.php:164
+#: Controller/Task.php:187
 msgid "Notification for Task "
 msgstr ""
