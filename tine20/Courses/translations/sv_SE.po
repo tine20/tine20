@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-01-27 09:33+0000\n"
-"Last-Translator: niklasye <niklas@idontgetlaid.com>\n"
+"PO-Revision-Date: 2013-06-21 10:05+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,62 +34,85 @@ msgstr "Lägg till befintlig användare"
 msgid "Add existing user as member to a course"
 msgstr "Lägg till befintlig användare som medlem i en kurs"
 
-#: Config.php:75 js/CourseEditDialog.js:227 js/Models.js:72
+#: Config.php:82 js/CourseEditDialog.js:227 js/Models.js:72
 msgid "Internet Access"
 msgstr "Internet Tillgängligt"
 
-#: Config.php:77
+#: Config.php:84
 msgid "Internet access options."
 msgstr "Inställningar för internettillgänglighet."
 
-#: Config.php:84 Config.php:86
+#: Config.php:91 Config.php:93
 msgid "Internet Access Group (ON)"
 msgstr "Internetåtkomsts-grupp (ON)"
 
-#: Config.php:92 Config.php:94
+#: Config.php:99 Config.php:101
 msgid "Internet Access Group (FILTERED)"
 msgstr "Internetåkomsts-grupp (FILTERED)"
 
-#: Config.php:100 Config.php:102
+#: Config.php:107 Config.php:109
 msgid "Students Group"
 msgstr "Studentgrupp"
 
-#: Config.php:108 Config.php:110
+#: Config.php:115 Config.php:117
 msgid "Students Import Definition"
 msgstr "Studentimports-definition"
 
-#: Config.php:116
+#: Config.php:123
 msgid "Students login name prefix"
 msgstr "Prefix för studenters inloggningsnamn"
 
-#: Config.php:123 Config.php:125
+#: Config.php:130
+msgid "Student username schema"
+msgstr ""
+
+#: Config.php:132
+msgid ""
+"Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
+"chars of firstname"
+msgstr ""
+
+#: Config.php:139 Config.php:141
 msgid "Samba user settings"
 msgstr "Samba användarinställningar"
 
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurser"
+#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurs"
+msgstr[1] "Kurser"
 
-#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
-#: Preference.php:60
-msgid "All courses"
-msgstr "Alla Kurser"
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Lärare"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "På"
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Lärar Konto"
 
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Av"
+#: Controller/Course.php:317
+msgid "My course"
+msgstr "Min kurs"
 
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Filtrerad"
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Förnamn"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "Standard favoriten som laddas på lektionsstart"
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Efternamn"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Lägg till ny medlem till kurs"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Fel"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Vänligen åtgärda de fel som noterats."
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -98,12 +121,6 @@ msgstr "Importera kurs medlemmar"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Lägg till ny medlem"
-
-#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Kurs"
-msgstr[1] "Kurser"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -137,26 +154,6 @@ msgstr "Okänd"
 msgid "Reset Password"
 msgstr "Återställ lösenord"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Förnamn"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Efternamn"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Lägg till ny medlem till kurs"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Fel"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Vänligen åtgärda de fel som noterats."
-
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
 msgstr "Namn"
@@ -189,14 +186,27 @@ msgid_plural "Course Types"
 msgstr[0] "Kurs Typ"
 msgstr[1] "Kurs Typer"
 
-#: Controller/Course.php:247 Controller/Course.php:291
-msgid "Teacher"
-msgstr "Lärare"
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr "Alla Kurser"
 
-#: Controller/Course.php:248
-msgid "Teacher Account"
-msgstr "Lärar Konto"
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "Standard favoriten som laddas på lektionsstart"
 
-#: Controller/Course.php:308
-msgid "My course"
-msgstr "Min kurs"
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr "På"
+
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr "Av"
+
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr "Filtrerad"
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurser"

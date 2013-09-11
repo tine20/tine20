@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-04-19 06:24+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-06-21 10:05+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,21 +17,21 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Exception/PasswordPolicyViolation.php:22
-msgid "Password Policy Violation"
-msgstr "Xung đột chính sách mật khẩu."
+#: Acl/Rights/Abstract.php:72
+msgid "admin"
+msgstr "quản trị"
 
-#: Exception/SystemGeneric.php:27
-msgid "Generic System Exception"
-msgstr "Generic System Exception"
+#: Acl/Rights/Abstract.php:73
+msgid "admin right description"
+msgstr "mô tả quyền quản trị"
 
-#: Exception/Record/SystemContainer.php:22
-msgid "System Container"
-msgstr "Bộ chứa hệ thống"
+#: Acl/Rights/Abstract.php:76
+msgid "run"
+msgstr "chạy"
 
-#: Exception/Record/SystemContainer.php:28
-msgid "This is a system container which could not be deleted!"
-msgstr "Đây là bộ chứa hệ thống nên sẽ không thể xóa được"
+#: Acl/Rights/Abstract.php:77
+msgid "run right description"
+msgstr "chạy mô tả quyền"
 
 #: Acl/Rights.php:147
 msgid "Report bugs"
@@ -64,65 +64,6 @@ msgstr "Quản lý trạng thái của chính người dùng"
 #: Acl/Rights.php:160
 msgid "The right to manage the own client state."
 msgstr "Quyền để quản lý trạng thái của chính người dùng"
-
-#: Acl/Rights/Abstract.php:72
-msgid "admin"
-msgstr "quản trị"
-
-#: Acl/Rights/Abstract.php:73
-msgid "admin right description"
-msgstr "mô tả quyền quản trị"
-
-#: Acl/Rights/Abstract.php:76
-msgid "run"
-msgstr "chạy"
-
-#: Acl/Rights/Abstract.php:77
-msgid "run right description"
-msgstr "chạy mô tả quyền"
-
-#: Preference/Abstract.php:502
-msgid "default"
-msgstr "mặc định"
-
-#: Frontend/Http.php:396 js/ExceptionHandler.js:149
-msgid "Authorisation Required"
-msgstr "Yêu cầu chứng thực"
-
-#: Frontend/Http.php:397
-msgid "Your session is not valid. You need to login again."
-msgstr "Phiên làm việc của bạn không hợp lệ. Bạn cần đăng nhập lại."
-
-#: Frontend/Http.php:422 js/ExceptionDialog.js:62
-msgid "Abnormal End"
-msgstr "Abnormal End"
-
-#: Frontend/Http.php:423 js/ExceptionDialog.js:134
-msgid "An error occurred, the program ended abnormal."
-msgstr "An error occurred, the program ended abnormal."
-
-#: Notes.php:369
-msgid "by"
-msgstr "bởi"
-
-#: Notes.php:378
-msgid "Changed fields:"
-msgstr "Thay đổi trường:"
-
-#: User/Abstract.php:281 User/Abstract.php:282 User/Abstract.php:283
-#: User/Abstract.php:284 User/Abstract.php:285 js/ux/ConnectionStatus.js:58
-#: Group/Abstract.php:191
-msgid "unknown"
-msgstr "không rõ"
-
-#: Import/Csv/Abstract.php:197
-#, python-format
-msgid "The following fields weren't imported: %s"
-msgstr "Trường sau không được phép nhập vào: %s"
-
-#: Import/Csv/Abstract.php:198
-msgid "N/A"
-msgstr "N/A"
 
 #: Config.php:267
 msgid "System IMAP"
@@ -272,182 +213,125 @@ msgstr "Thư mục với quyền ghi trên máy chủ cho file của người d�
 msgid "User may change password"
 msgstr "Người dùng có thể đổi mật khẩu"
 
-#: Config.php:462 Config.php:464
+#: Config.php:463 Config.php:465
 msgid "Enable password policy"
 msgstr "Mở chính sách mật khẩu"
 
-#: Config.php:472
+#: Config.php:473
 msgid "Only ASCII"
 msgstr "Chỉ ASCII"
 
-#: Config.php:474
+#: Config.php:475
 msgid "Only ASCII characters are allowed in passwords."
 msgstr "Chỉ ký tự ASCII được phép sử dụng trong mật khẩu"
 
-#: Config.php:482
+#: Config.php:483
 msgid "Minimum length"
 msgstr "Độ dài tối thi"
 
-#: Config.php:484
+#: Config.php:485
 msgid "Minimum password length"
 msgstr "Độ dài tối thiểu mật khẩu"
 
-#: Config.php:492
+#: Config.php:493
 msgid "Minimum word chars"
 msgstr "Độ dài chữ tối thiểu"
 
-#: Config.php:494
+#: Config.php:495
 msgid "Minimum word chars in password"
 msgstr "Độ dài chữ tối thiểu trong mật khẩu"
 
-#: Config.php:502
+#: Config.php:503
 msgid "Minimum uppercase chars"
 msgstr "Ký tự in hoa tối tiểu"
 
-#: Config.php:504
+#: Config.php:505
 msgid "Minimum uppercase chars in password"
 msgstr "Độ dài ký tự in hoa tối thiểu"
 
-#: Config.php:512
+#: Config.php:513
 msgid "Minimum special chars"
 msgstr "Ký tự đặc biệt tối thi"
 
-#: Config.php:514
+#: Config.php:515
 msgid "Minimum special chars in password"
 msgstr "Ký tự đặc biệt tối tiểu trong mật khẩu"
 
-#: Config.php:522
+#: Config.php:523
 msgid "Minimum numbers"
 msgstr "Số tối thiểu"
 
-#: Config.php:524
+#: Config.php:525
 msgid "Minimum numbers in password"
 msgstr "Chữ số tối tiểu trong mật khẩu"
 
-#: Config.php:532
+#: Config.php:533
 msgid "Forbid part of username"
 msgstr "Cấm 1 phần của tên đăng nhập"
 
-#: Config.php:534
+#: Config.php:535
 msgid "Forbid part of username in password"
 msgstr "Cấm 1 phần tên đăng nhập trong mật khẩu"
 
-#: Config.php:542
+#: Config.php:543
 msgid "Automatic bugreports"
 msgstr "Tự động báo cáo lỗi"
 
-#: Config.php:544
+#: Config.php:545
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr "Luôn gửi báo cáo lỗi, thậm chí quá thời gian và các lỗi khác."
 
-#: Config.php:552
+#: Config.php:553
 msgid "Last sessions cleanup run"
 msgstr "Chạy dọn dẹp phiên làm việc lần cuối"
 
-#: Config.php:554
+#: Config.php:555
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr "Lưu định dạng thời gian của việc chạy dọn dẹp phiên làm việc cuối cùng."
 
-#: Config.php:562
+#: Config.php:563
 msgid "Maximum login failures"
 msgstr "Số lần đăng nhập sai tối đa"
 
-#: Config.php:564
+#: Config.php:565
 msgid "Maximum allowed login failures before blocking account"
 msgstr "Số lần đăng nhập lỗi tối đa trước khi phong tỏa tài khoản"
 
-#: Config.php:572
+#: Config.php:573
 msgid "Disable Anyone Account"
 msgstr "Cấm bất kỳ tài khoản nào"
 
-#: Config.php:574
+#: Config.php:575
 msgid "Disallow anyone account in grant configurations"
 msgstr "Cấm mọi tài khoản trong việc cấu hình phân quyền"
 
-#: Setup/setup.xml:3203
-msgid "note"
-msgstr "ghi chép"
+#: Container.php:684
+#, python-format
+msgid "%s's personal container"
+msgstr "Bộ chứa cá nhân của %s"
 
-#: Setup/setup.xml:3208
-msgid "default note type"
-msgstr "loại ghi chép mặc đ"
+#: Container.php:1525
+msgid ""
+"You are not allowed to delete this Container. Please define another "
+"container as the default addressbook for internal contacts!"
+msgstr "Bạn không được phép xóa bộ chứa này. Xin hãy định nghĩa một bộ chứa khác là sổ địa chỉ mặc định cho các liên hệ nội bộ!"
 
-#: Setup/setup.xml:3234
-msgid "telephone"
-msgstr "điện thoại"
+#: Exception/PasswordPolicyViolation.php:22
+msgid "Password Policy Violation"
+msgstr "Xung đột chính sách mật khẩu."
 
-#: Setup/setup.xml:3239
-msgid "telephone call"
-msgstr "cuộc gọi điện thoại"
+#: Exception/Record/SystemContainer.php:22
+msgid "System Container"
+msgstr "Bộ chứa hệ thống"
 
-#: Setup/setup.xml:3265
-msgid "email"
-msgstr "email"
+#: Exception/Record/SystemContainer.php:28
+msgid "This is a system container which could not be deleted!"
+msgstr "Đây là bộ chứa hệ thống nên sẽ không thể xóa được"
 
-#: Setup/setup.xml:3270
-msgid "email contact"
-msgstr "liên hệ email"
-
-#: Setup/setup.xml:3296
-msgid "created"
-msgstr "đã tạo"
-
-#: Setup/setup.xml:3301
-msgid "record created"
-msgstr "biểu ghi đã được tạo"
-
-#: Setup/setup.xml:3327
-msgid "changed"
-msgstr "đã đổi"
-
-#: Setup/setup.xml:3332
-msgid "record changed"
-msgstr "biểu ghi đã thay đổi"
-
-#: Preference.php:87 js/widgets/TimezoneChooser.js:37
-msgid "Timezone"
-msgstr "Múi giờ"
-
-#: Preference.php:88
-msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr "The timezone in which dates are shown in Tine 2.0."
-
-#: Preference.php:91 js/widgets/LangChooser.js:35
-msgid "Language"
-msgstr "Ngôn ngữ"
-
-#: Preference.php:92
-msgid "The language of the Tine 2.0 GUI."
-msgstr "The language of the Tine 2.0 GUI."
-
-#: Preference.php:95
-msgid "Default Application"
-msgstr "Ứng dụng mặc định"
-
-#: Preference.php:96
-msgid "The default application to show after login."
-msgstr "Ứng dụng mặc định được mở sau khi bạn đăng nhập"
-
-#: Preference.php:99
-msgid "Window Type"
-msgstr "Loại cửa sổ"
-
-#: Preference.php:100
-msgid "You can choose between modal windows or normal browser popup windows."
-msgstr "Bạn có thể chọn giữa cửa sổ mở trong (popup) hoặc cửa sổ popup thông thường của trình duyệt."
-
-#: Preference.php:103
-msgid "Confirm Logout"
-msgstr "Xác nhận thoát"
-
-#: Preference.php:104
-msgid "Show confirmation dialog on logout."
-msgstr "Hiển thị màn hình dialog khi thoát"
-
-#: Export/Spreadsheet/Ods.php:278
-msgid "Data"
-msgstr "Dữ liệu"
+#: Exception/SystemGeneric.php:27
+msgid "Generic System Exception"
+msgstr "Generic System Exception"
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
 msgid "Tags"
@@ -461,52 +345,54 @@ msgstr "Tạo bởi"
 msgid "Activities"
 msgstr "Hoạt động"
 
-#: js/AdminPanel.js:75
-msgid "Profile Information"
-msgstr "Thông tin hồ sơ"
+#: Export/Spreadsheet/Ods.php:278
+msgid "Data"
+msgstr "Dữ liệu"
 
-#: js/AdminPanel.js:79 js/widgets/EditRecord.js:168
-#: js/widgets/dialog/EditDialog.js:309
-msgid "Apply"
-msgstr "Áp dụng"
+#: Frontend/Http.php:396 js/ExceptionHandler.js:149
+msgid "Authorisation Required"
+msgstr "Yêu cầu chứng thực"
 
-#: js/AdminPanel.js:94 js/widgets/TimezoneChooser.js:77
-#: js/widgets/LangChooser.js:68
-msgid "Please Wait"
-msgstr "Xin hãy đợi"
+#: Frontend/Http.php:397
+msgid "Your session is not valid. You need to login again."
+msgstr "Phiên làm việc của bạn không hợp lệ. Bạn cần đăng nhập lại."
 
-#: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
-msgid "Read"
-msgstr "Đọc"
+#: Frontend/Http.php:422 js/ExceptionDialog.js:62
+msgid "Abnormal End"
+msgstr "Abnormal End"
 
-#: js/AdminPanel.js:157
-msgid "The field is readable part of the profile"
-msgstr "Trường là phần có thể đọc của hồ sơ"
+#: Frontend/Http.php:423 js/ExceptionDialog.js:134
+msgid "An error occurred, the program ended abnormal."
+msgstr "An error occurred, the program ended abnormal."
 
-#: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:47
-msgid "Edit"
-msgstr "Sửa"
+#: Group/Abstract.php:191 js/ux/ConnectionStatus.js:58 User/Abstract.php:281
+#: User/Abstract.php:282 User/Abstract.php:283 User/Abstract.php:284
+#: User/Abstract.php:285
+msgid "unknown"
+msgstr "không rõ"
 
-#: js/AdminPanel.js:162
-msgid "The field is editable part of the profile"
-msgstr "Trường là phần có thể sửa của hồ sơ"
+#: Import/Csv/Abstract.php:197
+#, python-format
+msgid "The following fields weren't imported: %s"
+msgstr "Trường sau không được phép nhập vào: %s"
 
-#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:139
-msgid "Field Name"
-msgstr "Tên trường"
+#: Import/Csv/Abstract.php:198
+msgid "N/A"
+msgstr "N/A"
 
 #: js/AboutDialog.js:41 js/MainMenu.js:112
 msgid "About {0}"
 msgstr "Về {0}"
 
 #: js/AboutDialog.js:60 js/CreditsScreen.js:53 js/LicenseScreen.js:51
-#: js/PasswordChangeDialog.js:66 js/widgets/EditRecord.js:157
-#: js/widgets/tags/TagsMassAttachAction.js:84
-#: js/widgets/dialog/MultiOptionsDialog.js:102
+#: js/PasswordChangeDialog.js:66 js/ux/form/LayerCombo.js:186
+#: js/widgets/ActivitiesPanel.js:311
+#: js/widgets/container/ContainerSelect.js:490
 #: js/widgets/dialog/AddToRecordPanel.js:111
-#: js/widgets/dialog/PreferencesDialog.js:109
-#: js/widgets/dialog/EditDialog.js:298 js/widgets/ActivitiesPanel.js:311
-#: js/widgets/container/ContainerSelect.js:490 js/ux/form/LayerCombo.js:186
+#: js/widgets/dialog/EditDialog.js:298
+#: js/widgets/dialog/MultiOptionsDialog.js:102
+#: js/widgets/dialog/PreferencesDialog.js:109 js/widgets/EditRecord.js:157
+#: js/widgets/tags/TagsMassAttachAction.js:84
 msgid "Ok"
 msgstr "OK"
 
@@ -526,11 +412,43 @@ msgstr "với sự trợ giúp của chúng tôi"
 msgid "Contributors"
 msgstr "Contributors"
 
-#: js/tineInit.js:603
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator "
-"and/or restart/reload your browser."
-msgstr "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
+#: js/AdminPanel.js:75
+msgid "Profile Information"
+msgstr "Thông tin hồ sơ"
+
+#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:309
+#: js/widgets/EditRecord.js:168
+msgid "Apply"
+msgstr "Áp dụng"
+
+#: js/AdminPanel.js:94 js/widgets/LangChooser.js:68
+#: js/widgets/TimezoneChooser.js:77
+msgid "Please Wait"
+msgstr "Xin hãy đợi"
+
+#: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
+msgid "Read"
+msgstr "Đọc"
+
+#: js/AdminPanel.js:157
+msgid "The field is readable part of the profile"
+msgstr "Trường là phần có thể đọc của hồ sơ"
+
+#: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:47
+msgid "Edit"
+msgstr "Sửa"
+
+#: js/AdminPanel.js:162
+msgid "The field is editable part of the profile"
+msgstr "Trường là phần có thể sửa của hồ sơ"
+
+#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:200
+msgid "Field Name"
+msgstr "Tên trường"
+
+#: js/ApplicationStarter.js:222 js/widgets/ActivitiesPanel.js:592
+msgid "Quick search"
+msgstr "Tìm nhanh"
 
 #: js/AppManager.js:208
 msgid "Missing Applications"
@@ -542,17 +460,13 @@ msgid ""
 "administrator."
 msgstr "Không có ựng dụng nào được mở cho bạn. Xin hãy liên hệ với quản trị hệ thống."
 
-#: js/CreditsScreen.js:36
-msgid "Credits"
-msgstr "Credits"
-
 #: js/common.js:235
 msgid "Usage:&#160;"
 msgstr "Sử dụng:&#160;"
 
-#: js/common.js:255 js/common.js:260 js/widgets/tags/TagToggleBox.js:112
-#: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagsPanel.js:128
-#: js/widgets/tags/TagCombo.js:134 js/widgets/tags/TagCombo.js:139
+#: js/common.js:255 js/common.js:260 js/widgets/tags/TagCombo.js:134
+#: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:128
+#: js/widgets/tags/TagToggleBox.js:112 js/widgets/tags/TagToggleBox.js:117
 msgid "personal"
 msgstr "cá nhân"
 
@@ -580,272 +494,25 @@ msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] "one: {0} giây\nother: {0} giây"
 
-#: js/LoginPanel.js:80 js/LoginPanel.js:118
-msgid "Login"
-msgstr "Đăng nhập"
+#: js/Container.js:123
+msgid "All {0}"
+msgstr "Tất cả{0}"
 
-#: js/LoginPanel.js:90 js/widgets/dialog/CredentialsDialog.js:61
-msgid "Username"
-msgstr "Tên truy cập"
+#: js/Container.js:124
+msgid "Shared {0}"
+msgstr "Chia sẻ {0}"
 
-#: js/LoginPanel.js:107 js/widgets/dialog/CredentialsDialog.js:65
-msgid "Password"
-msgstr "Mật khẩu"
+#: js/Container.js:125
+msgid "Other Users {0}"
+msgstr "Người dùng khác {0}"
 
-#: js/LoginPanel.js:137
-msgid "Tine 2.0 is made for you"
-msgstr "Tine 2.0 được phát triển cho bạn"
+#: js/Container.js:130
+msgid "My {0}"
+msgstr "Của tôi {0}"
 
-#: js/LoginPanel.js:139
-msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
-" and get help."
-msgstr "Tine 2.0 muốn tạo môi trường làm việc nhóm dễ dàng và thú vị hơn cho nhu cầu của bạn. Vậy, bạn được hoan nghênh trong việc tham gia thảo luận, đề xuất ý tưởng và yêu cầu giúp đỡ."
-
-#: js/LoginPanel.js:145
-msgid "Tine 2.0 Homepage"
-msgstr "Trang chủ Tine 2.0"
-
-#: js/LoginPanel.js:146
-msgid "Tine 2.0 Forum"
-msgstr "Diễn đàn Tine 2.0"
-
-#: js/LoginPanel.js:150
-msgid "Translations"
-msgstr "Chuyển ngữ"
-
-#: js/LoginPanel.js:152
-msgid ""
-"If you miss a language, or your language is not supported completely, you "
-"can help our translation teams at transifex."
-msgstr "Nếu bạn mất 1 ngôn ngữ, hoặc ngôn ngữ của bạn chưa được hỗ trợ hoàn toàn, bạn có thể giúp nhóm dịch thuật tại transifex."
-
-#: js/LoginPanel.js:155
-msgid "Tine 2.0 Translation Portal"
-msgstr "Cổng chuyển ngữ Tine 2.0"
-
-#: js/LoginPanel.js:200
-msgid "about {0} minutes"
-msgstr "khoảng {0} phút"
-
-#: js/LoginPanel.js:205 js/LoginPanel.js:430
-msgid "Tine 2.0 needs your help"
-msgstr "Tine 2.0 cần sự giúp đỡ của bạn"
-
-#: js/LoginPanel.js:207 js/LoginPanel.js:432
-msgid ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
-msgstr "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
-
-#: js/LoginPanel.js:213
-msgid "participate!"
-msgstr "tham dự!"
-
-#: js/LoginPanel.js:235
-msgid "Languages"
-msgstr "Ngôn ngữ"
-
-#: js/LoginPanel.js:236
-msgid "Duration"
-msgstr "Thời lượng"
-
-#: js/LoginPanel.js:277
-msgid "Browser incompatible"
-msgstr "Trình duyệt không tương thích"
-
-#: js/LoginPanel.js:279
-msgid "Your browser is not supported by Tine 2.0."
-msgstr "Trình duyệt của bạn không được hỗ trợ bởi Tine 2.0"
-
-#: js/LoginPanel.js:284
-msgid "Browser incompatible?"
-msgstr "Trình duyệt không tương thích?"
-
-#: js/LoginPanel.js:286
-msgid ""
-"You are using an unrecognized browser. This could result in unexpected "
-"behaviour."
-msgstr "Bạn đang sử dụng trình duyệt không được nhận dạng. Điều này có thể gây ra các hoạt động không như mong muốn."
-
-#: js/LoginPanel.js:292
-msgid "You might try one of these browsers:"
-msgstr "Bạn nên thử một trong các trình duyệt:"
-
-#: js/LoginPanel.js:350
-msgid "Logging you in..."
-msgstr "Bạn đang đăng nhập ..."
-
-#: js/LoginPanel.js:350 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
-#: js/widgets/persistentfilter/PickerPanel.js:317
-#: js/widgets/persistentfilter/PickerPanel.js:355
-#: js/widgets/persistentfilter/PickerPanel.js:407
-#: js/widgets/container/GrantsDialog.js:95
-msgid "Please wait"
-msgstr "Xin hãy đợi"
-
-#: js/LoginPanel.js:363
-msgid "Login successful. Loading {0}..."
-msgstr "Đăng nhập thành công. Đang tải {0}..."
-
-#: js/LoginPanel.js:363 js/MainMenu.js:227
-msgid "Please wait!"
-msgstr "Xin hãy đợi"
-
-#: js/LoginPanel.js:371 js/ExceptionHandler.js:214
-msgid "Connection lost, please check your network!"
-msgstr "Mất kết nối, xin hãy kiểm tra mạng của bạn!"
-
-#: js/LoginPanel.js:375
-msgid "Login failure"
-msgstr "Đăng nhập thất bại"
-
-#: js/LoginPanel.js:376
-msgid "Your username and/or your password are wrong!!!"
-msgstr "Tên truy cập của bạn và/hoặc mật khẩu của bạn bị sai!"
-
-#: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/PreferencesDialog.js:245
-#: js/widgets/dialog/PreferencesDialog.js:274
-#: js/widgets/dialog/EditDialog.js:671 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
-msgid "Errors"
-msgstr "Lỗi"
-
-#: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:691 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
-msgid "Please fix the errors noted."
-msgstr "Xin hãy sửa lại các lỗi đã được ghi chú."
-
-#: js/LoginPanel.js:403
-msgid "Please enter your login data"
-msgstr "Xin nhập thông tin đăng nhập của bạn"
-
-#: js/LicenseScreen.js:35
-msgid "License"
-msgstr "License"
-
-#: js/PasswordChangeDialog.js:32
-msgid "Change Password For \"{0}\""
-msgstr "Đổi mật khẩu cho \"{0}\""
-
-#: js/PasswordChangeDialog.js:48
-msgid "Old Password"
-msgstr "Mật khẩu cũ"
-
-#: js/PasswordChangeDialog.js:52
-msgid "New Password"
-msgstr "Mật khẩu mới"
-
-#: js/PasswordChangeDialog.js:56
-msgid "Repeat new Password"
-msgstr "Nhắc lại mật khẩu mới"
-
-#: js/PasswordChangeDialog.js:60 js/widgets/EditRecord.js:178
-#: js/widgets/tags/TagToggleBox.js:59
-#: js/widgets/tags/TagsMassAttachAction.js:105
-#: js/widgets/dialog/DuplicateMergeDialog.js:79
-#: js/widgets/dialog/MultiOptionsDialog.js:109
-#: js/widgets/dialog/AddToRecordPanel.js:103
-#: js/widgets/dialog/PreferencesDialog.js:117
-#: js/widgets/dialog/EditDialog.js:318 js/widgets/dialog/WizardPanel.js:187
-#: js/widgets/ActivitiesPanel.js:303
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
-#: js/widgets/container/ContainerSelect.js:481 js/ExceptionDialog.js:100
-#: js/ux/form/LayerCombo.js:193
-msgid "Cancel"
-msgstr "Hủy bỏ"
-
-#: js/PasswordChangeDialog.js:75
-msgid "Please Wait!"
-msgstr "Xin hãy đợi"
-
-#: js/PasswordChangeDialog.js:76
-msgid "changing password..."
-msgstr "Đang đổi mật khẩu..."
-
-#: js/PasswordChangeDialog.js:87
-msgid "Success"
-msgstr "Thành công"
-
-#: js/PasswordChangeDialog.js:88
-msgid "Your password has been changed."
-msgstr "Mật khẩu của bạn đã được thay đổi."
-
-#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:707
-#: js/widgets/relation/GenericPickerGridPanel.js:720
-#: js/widgets/dialog/ImportDialog.js:654
-#: js/widgets/dialog/MultipleEditResultSummary.js:196
-#: js/widgets/form/RecordPickerComboBox.js:267
-msgid "Failure"
-msgstr "Thất bại"
-
-#: js/PasswordChangeDialog.js:111
-msgid "The new passwords mismatch, please correct them."
-msgstr "Các mật khẩu mới không trùng nhau, xin hãy sửa lại."
-
-#: js/MainMenu.js:62
-msgid "User: {0}"
-msgstr "Người dùng: {0}"
-
-#: js/MainMenu.js:118
-msgid "Debug Console (Ctrl + F11)"
-msgstr "Cửa sổ gỡ lỗi (Ctrl + F11)"
-
-#: js/MainMenu.js:124 js/widgets/dialog/PreferencesPanel.js:36
-msgid "Preferences"
-msgstr "Thông số"
-
-#: js/MainMenu.js:131
-msgid "Edit Profile"
-msgstr "Sửa hồ sơ"
-
-#: js/MainMenu.js:138
-msgid "Change password"
-msgstr "Đổi mật khẩu"
-
-#: js/MainMenu.js:145
-msgid "Logout"
-msgstr "Thoát"
-
-#: js/MainMenu.js:146
-msgid "Logout from {0}"
-msgstr "Thoát từ {0}"
-
-#: js/MainMenu.js:153
-msgid "Allow desktop notifications"
-msgstr "Cho phép thông báo từ desktop"
-
-#: js/MainMenu.js:154
-msgid "Request permissions for webkit desktop notifications."
-msgstr "Yêu cầu quyền cho thông báo webkit desktop"
-
-#: js/MainMenu.js:164
-msgid "Install web app"
-msgstr "Cài đặt ứng dụng web"
-
-#: js/MainMenu.js:165
-msgid "Install Tine 2.0 as web app in your browser."
-msgstr "Cài đặt Tine 2.0 như là ứng dụng web trên trình duyệt của bạn"
-
-#: js/MainMenu.js:213 js/widgets/grid/GridPanel.js:1667
-#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:698
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
-#: js/widgets/persistentfilter/PickerPanel.js:315
-msgid "Confirm"
-msgstr "Xác nhận"
-
-#: js/MainMenu.js:213
-msgid "Are you sure you want to logout?"
-msgstr "Bạn có chắc chắn muốn thoát?"
-
-#: js/MainMenu.js:227
-msgid "Logging you out..."
-msgstr "Thoát khỏi hệ thống"
+#: js/CreditsScreen.js:36
+msgid "Credits"
+msgstr "Credits"
 
 #: js/data/Record.js:195
 msgid "Task"
@@ -856,6 +523,70 @@ msgstr[0] "one: Công việc\nother: Công việc"
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "one: việc cần làm\nother: việc cần làm"
+
+#: js/ExceptionDialog.js:100 js/PasswordChangeDialog.js:60
+#: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
+#: js/widgets/container/ContainerSelect.js:481
+#: js/widgets/dialog/AddToRecordPanel.js:103
+#: js/widgets/dialog/DuplicateMergeDialog.js:79
+#: js/widgets/dialog/EditDialog.js:318
+#: js/widgets/dialog/MultiOptionsDialog.js:109
+#: js/widgets/dialog/PreferencesDialog.js:117
+#: js/widgets/dialog/WizardPanel.js:187 js/widgets/EditRecord.js:178
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
+#: js/widgets/tags/TagsMassAttachAction.js:105
+#: js/widgets/tags/TagToggleBox.js:59
+msgid "Cancel"
+msgstr "Hủy bỏ"
+
+#: js/ExceptionDialog.js:107
+msgid "Send Report"
+msgstr "Gửi báo cáo"
+
+#: js/ExceptionDialog.js:135
+msgid "The last action you made was potentially not performed correctly."
+msgstr "Hoạt động cuối của bạn đã làm có thể không được thực hiện một cách chính xác."
+
+#: js/ExceptionDialog.js:136
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occurred."
+msgstr "Xin hãy giúp nâng cao chất lượng phần mềm này và thông báo với nhà cung cấp. Bao gồm mô tả ngắn gọn bạn làm gì ở đâu khi có lỗi xảy ra"
+
+#: js/ExceptionDialog.js:142
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
+#: js/widgets/relation/GenericPickerGridPanel.js:427
+#: js/widgets/tags/TagsPanel.js:483
+msgid "Description"
+msgstr "Mô tả"
+
+#: js/ExceptionDialog.js:150
+msgid "Send Contact Information"
+msgstr "Gửi thông tin liên hệ"
+
+#: js/ExceptionDialog.js:167
+msgid "Details:"
+msgstr "Chi tiết:"
+
+#: js/ExceptionDialog.js:191
+msgid "Sending report..."
+msgstr "Đang gửi báo cáo..."
+
+#: js/ExceptionDialog.js:191
+msgid "Please wait a moment"
+msgstr "Xin đợi trong giây l"
+
+#: js/ExceptionDialog.js:240
+msgid "Transmission Completed"
+msgstr "Việc chuyển phát đã hoàn thành"
+
+#: js/ExceptionDialog.js:241
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "Báo cáo của bạn đã được gửi. Cảm ơn bạn đã đóng góp."
+
+#: js/ExceptionDialog.js:241
+msgid "Please restart your browser now!"
+msgstr "Xin khởi động lại trình duyệt của bạn ngay!"
 
 #: js/ExceptionHandler.js:150
 msgid "Your session timed out. You need to login again."
@@ -913,6 +644,10 @@ msgstr "Dữ liệu không hợp lệ"
 msgid "Your input data is not valid. Please provide valid data."
 msgstr "Dữ liệu nhập vào của bạn không hợp lệ. Xin hãy cung cấp dữ liệu chính xác."
 
+#: js/ExceptionHandler.js:214 js/LoginPanel.js:380
+msgid "Connection lost, please check your network!"
+msgstr "Mất kết nối, xin hãy kiểm tra mạng của bạn!"
+
 #: js/ExceptionHandler.js:220
 msgid "Timeout"
 msgstr "Quá thời gian"
@@ -953,743 +688,930 @@ msgid ""
 "administrator."
 msgstr "Tài khoản người dùng của bạn không có vai trò thành viên. Xin liên hệ với quản trị hệ thống."
 
-#: js/Container.js:123
-msgid "All {0}"
-msgstr "Tất cả{0}"
+#: js/ExceptionHandler.js:262
+msgid "Method Not Found / Insufficent Permissions"
+msgstr ""
 
-#: js/Container.js:124
-msgid "Shared {0}"
-msgstr "Chia sẻ {0}"
+#: js/ExceptionHandler.js:263
+msgid ""
+"You tried to access a function that is not available. Please reload your "
+"browser, try again or contact your administrator."
+msgstr ""
 
-#: js/Container.js:125
-msgid "Other Users {0}"
-msgstr "Người dùng khác {0}"
+#: js/LicenseScreen.js:35
+msgid "License"
+msgstr "License"
 
-#: js/Container.js:130
-msgid "My {0}"
-msgstr "Của tôi {0}"
+#: js/LoginPanel.js:80 js/LoginPanel.js:118
+msgid "Login"
+msgstr "Đăng nhập"
 
-#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:360
-#: js/widgets/dialog/EditDialog.js:388
-msgid "Saved in"
-msgstr "Đã lưu trong"
+#: js/LoginPanel.js:90 js/widgets/dialog/CredentialsDialog.js:61
+msgid "Username"
+msgstr "Tên truy cập"
 
-#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:327
-msgid "delete"
-msgstr "xóa"
+#: js/LoginPanel.js:107 js/widgets/dialog/CredentialsDialog.js:65
+msgid "Password"
+msgstr "Mật khẩu"
 
-#: js/widgets/tags/TagToggleBox.js:52
-msgid "Detach Tags"
-msgstr "Gỡ từ khóa"
+#: js/LoginPanel.js:143
+msgid "Tine 2.0 is made for you"
+msgstr "Tine 2.0 được phát triển cho bạn"
 
-#: js/widgets/tags/TagToggleBox.js:52
-msgid "Attach Tags"
-msgstr "Gắn từ khóa"
+#: js/LoginPanel.js:145
+msgid ""
+"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
+"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
+" and get help."
+msgstr "Tine 2.0 muốn tạo môi trường làm việc nhóm dễ dàng và thú vị hơn cho nhu cầu của bạn. Vậy, bạn được hoan nghênh trong việc tham gia thảo luận, đề xuất ý tưởng và yêu cầu giúp đỡ."
 
-#: js/widgets/tags/TagToggleBox.js:140
-msgid "No Tags to detach found in the selected records"
-msgstr "Không có từ khóa nào để gỡ trong các biểu ghi được ch"
+#: js/LoginPanel.js:151
+msgid "Tine 2.0 Homepage"
+msgstr "Trang chủ Tine 2.0"
 
-#: js/widgets/tags/TagToggleBox.js:141
-msgid "Please Wait..."
-msgstr "Xin hãy đợi ..."
+#: js/LoginPanel.js:152
+msgid "Tine 2.0 Forum"
+msgstr "Diễn đàn Tine 2.0"
 
-#: js/widgets/tags/TagToggleBox.js:152
-msgid "Detaching Tags"
-msgstr "Gỡ từ khóa"
+#: js/LoginPanel.js:156
+msgid "Translations"
+msgstr "Chuyển ngữ"
 
-#: js/widgets/tags/TagsPanel.js:105
-msgid "Add a new personal tag"
-msgstr "Thêm 1 từ khóa cá nhân"
+#: js/LoginPanel.js:158
+msgid "Translation state of {0}: {1}%."
+msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:108
-msgid "Add New Personal Tag"
-msgstr "Thêm mới từ khóa cá nhân"
+#: js/LoginPanel.js:160
+msgid ""
+"If the state of your language is not satisfying, or if you miss a language, "
+"please consider becoming a Tine 2.0 translator."
+msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:109
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "Ghi chú: Bạn tạo 1 từ khóa cá nhân. Chỉ bạn mới có thể nhìn thấy nó."
+#: js/LoginPanel.js:163
+msgid "Tine 2.0 Translation Howto"
+msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:109
-msgid "Enter tag name:"
-msgstr "Nhập tên từ khóa:"
+#: js/LoginPanel.js:164
+msgid "Detailed Language Statistics"
+msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:150
-msgid "No Tags to display"
-msgstr "Không có từ khóa nào"
+#: js/LoginPanel.js:209
+msgid "about {0} minutes"
+msgstr "khoảng {0} phút"
 
-#: js/widgets/tags/TagsPanel.js:173
-msgid "Detach tag"
-msgid_plural "Detach tags"
-msgstr[0] "one: Gỡ từ khóa\nother: Gỡ từ khóa"
+#: js/LoginPanel.js:214 js/LoginPanel.js:439
+msgid "Tine 2.0 needs your help"
+msgstr "Tine 2.0 cần sự giúp đỡ của bạn"
 
-#: js/widgets/tags/TagsPanel.js:183
-msgid "Edit tag"
-msgstr "Sửa từ khóa"
+#: js/LoginPanel.js:216 js/LoginPanel.js:441
+msgid ""
+"We regularly need your feedback to make the next Tine 2.0 releases fit your "
+"needs even better. Help us and yourself by participating:"
+msgstr "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 
-#: js/widgets/tags/TagsPanel.js:188 js/widgets/tags/TagsPanel.js:193
-msgid "Rename Tag"
-msgstr "Đổi tên từ khóa"
+#: js/LoginPanel.js:222
+msgid "participate!"
+msgstr "tham dự!"
 
-#: js/widgets/tags/TagsPanel.js:193
-msgid "Please enter a new name:"
-msgstr "Xin nhập 1 tên mới:"
+#: js/LoginPanel.js:244
+msgid "Languages"
+msgstr "Ngôn ngữ"
 
-#: js/widgets/tags/TagsPanel.js:202
-msgid "Edit Description"
-msgstr "Sửa mô tả"
+#: js/LoginPanel.js:245
+msgid "Duration"
+msgstr "Thời lượng"
 
-#: js/widgets/tags/TagsPanel.js:207
-msgid "Description for tag"
-msgstr "Mô tả cho từ khóa"
+#: js/LoginPanel.js:286
+msgid "Browser incompatible"
+msgstr "Trình duyệt không tương thích"
 
-#: js/widgets/tags/TagsPanel.js:207
-msgid "Please enter new description:"
-msgstr "Xin nhập mô tả mới:"
+#: js/LoginPanel.js:288
+msgid "Your browser is not supported by Tine 2.0."
+msgstr "Trình duyệt của bạn không được hỗ trợ bởi Tine 2.0"
 
-#: js/widgets/tags/TagsPanel.js:216
-msgid "Change Color"
-msgstr "Đổi màu"
+#: js/LoginPanel.js:293
+msgid "Browser incompatible?"
+msgstr "Trình duyệt không tương thích?"
 
-#: js/widgets/tags/TagsPanel.js:245
-msgid "Delete Tag"
-msgid_plural "Delete Tags"
-msgstr[0] "one: Xóa từ khóa\nother: Xóa từ khóa"
+#: js/LoginPanel.js:295
+msgid ""
+"You are using an unrecognized browser. This could result in unexpected "
+"behaviour."
+msgstr "Bạn đang sử dụng trình duyệt không được nhận dạng. Điều này có thể gây ra các hoạt động không như mong muốn."
 
-#: js/widgets/tags/TagsPanel.js:258
-msgid "Realy Delete Selected Tag?"
-msgid_plural "Realy Delete Selected Tags?"
-msgstr[0] "one: Thực sự xóa từ khóa được chọn?\nother: Thực sự xóa các từ khóa được chọn?"
+#: js/LoginPanel.js:301
+msgid "You might try one of these browsers:"
+msgstr "Bạn nên thử một trong các trình duyệt:"
 
-#: js/widgets/tags/TagsPanel.js:259
-msgid "the selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "one:Từ khóa sau sẽ bị xóa và biến mất khỏi mọi mục\nother:Các từ khóa sau sẽ bị xóa và biến mất khỏi mọi mục"
+#: js/LoginPanel.js:359
+msgid "Logging you in..."
+msgstr "Bạn đang đăng nhập ..."
 
-#: js/widgets/tags/TagsPanel.js:263
-msgid "Please wait a moment..."
-msgstr "Xin đợi trong giaay lát"
+#: js/LoginPanel.js:359 js/widgets/container/GrantsDialog.js:95
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+#: js/widgets/persistentfilter/PickerPanel.js:317
+#: js/widgets/persistentfilter/PickerPanel.js:355
+#: js/widgets/persistentfilter/PickerPanel.js:407
+#: js/widgets/tree/ContextMenu.js:191
+msgid "Please wait"
+msgstr "Xin hãy đợi"
 
-#: js/widgets/tags/TagsPanel.js:263
-msgid "Deleting Tag"
-msgid_plural "Deleting Tags"
-msgstr[0] "one: Đang xóa từ khóa\nother: Đang xóa từ khóa"
+#: js/LoginPanel.js:372
+msgid "Login successful. Loading {0}..."
+msgstr "Đăng nhập thành công. Đang tải {0}..."
 
-#: js/widgets/tags/TagsPanel.js:279 js/widgets/tags/TagsPanel.js:371
-#: js/widgets/tags/TagsPanel.js:404 js/widgets/dialog/EditDialog.js:710
-msgid "Failed"
-msgstr "Thất bại"
+#: js/LoginPanel.js:372 js/MainMenu.js:227
+msgid "Please wait!"
+msgstr "Xin hãy đợi"
 
-#: js/widgets/tags/TagsPanel.js:279
-msgid "Could not delete Tag(s)."
-msgstr "Không thể xóa từ khóa."
+#: js/LoginPanel.js:384
+msgid "Login failure"
+msgstr "Đăng nhập thất bại"
 
-#: js/widgets/tags/TagsPanel.js:323 js/widgets/tags/TagsPanel.js:385
-msgid "Notice"
-msgstr "Cảnh báo"
+#: js/LoginPanel.js:385
+msgid "Your username and/or your password are wrong!!!"
+msgstr "Tên truy cập của bạn và/hoặc mật khẩu của bạn bị sai!"
 
-#: js/widgets/tags/TagsPanel.js:324 js/widgets/tags/TagsPanel.js:386
-msgid "The minimum tag length is three."
-msgstr "Độ dài tối thiểu cho từ khóa là 3"
+#: js/LoginPanel.js:397 js/widgets/dialog/CredentialsDialog.js:126
+#: js/widgets/dialog/EditDialog.js:671 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+#: js/widgets/dialog/PreferencesDialog.js:245
+#: js/widgets/dialog/PreferencesDialog.js:274
+msgid "Errors"
+msgstr "Lỗi"
 
-#: js/widgets/tags/TagsPanel.js:371
-msgid "Could not create tag."
-msgstr "Không thể tạo từ khóa"
+#: js/LoginPanel.js:397 js/widgets/dialog/CredentialsDialog.js:126
+#: js/widgets/dialog/EditDialog.js:691 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+msgid "Please fix the errors noted."
+msgstr "Xin hãy sửa lại các lỗi đã được ghi chú."
 
-#: js/widgets/tags/TagsPanel.js:404
-msgid "Could not update tag."
-msgstr "Không thể cập nhật từ khóa"
+#: js/LoginPanel.js:412
+msgid "Please enter your login data"
+msgstr "Xin nhập thông tin đăng nhập của bạn"
 
-#: js/widgets/tags/TagsPanel.js:483
-#: js/widgets/relation/GenericPickerGridPanel.js:427
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
-#: js/ExceptionDialog.js:142
-msgid "Description"
-msgstr "Mô tả"
+#: js/MainMenu.js:62
+msgid "User: {0}"
+msgstr "Người dùng: {0}"
 
-#: js/widgets/tags/TagsPanel.js:487
-#: js/widgets/container/PropertiesDialog.js:113
-msgid "Color"
-msgstr "Màu"
+#: js/MainMenu.js:118
+msgid "Debug Console (Ctrl + F11)"
+msgstr "Cửa sổ gỡ lỗi (Ctrl + F11)"
 
-#: js/widgets/tags/TagsMassAttachAction.js:18
-msgid "Add Tag"
-msgstr "Thêm từ khóa"
+#: js/MainMenu.js:124 js/widgets/dialog/PreferencesPanel.js:36
+msgid "Preferences"
+msgstr "Thông số"
 
-#: js/widgets/tags/TagsMassAttachAction.js:76
-msgid "Attach the following tag to all selected items:"
-msgstr "Gắn từ khóa sau với mọi mục được chọn:"
+#: js/MainMenu.js:131
+msgid "Edit Profile"
+msgstr "Sửa hồ sơ"
 
-#: js/widgets/tags/TagsMassAttachAction.js:98
-msgid "Select Tag"
-msgstr "Chọn th"
+#: js/MainMenu.js:138
+msgid "Change password"
+msgstr "Đổi mật khẩu"
 
-#: js/widgets/tags/TagsMassAttachAction.js:128
-msgid "Attaching Tag"
-msgstr "Đang gắn từ khóa"
+#: js/MainMenu.js:145
+msgid "Logout"
+msgstr "Thoát"
 
-#: js/widgets/tags/TagFilter.js:30 js/Models.js:141
+#: js/MainMenu.js:146
+msgid "Logout from {0}"
+msgstr "Thoát từ {0}"
+
+#: js/MainMenu.js:153
+msgid "Allow desktop notifications"
+msgstr "Cho phép thông báo từ desktop"
+
+#: js/MainMenu.js:154
+msgid "Request permissions for webkit desktop notifications."
+msgstr "Yêu cầu quyền cho thông báo webkit desktop"
+
+#: js/MainMenu.js:164
+msgid "Install web app"
+msgstr "Cài đặt ứng dụng web"
+
+#: js/MainMenu.js:165
+msgid "Install Tine 2.0 as web app in your browser."
+msgstr "Cài đặt Tine 2.0 như là ứng dụng web trên trình duyệt của bạn"
+
+#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:698
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+#: js/widgets/grid/GridPanel.js:1671
+#: js/widgets/persistentfilter/PickerPanel.js:315
+#: js/widgets/tree/ContextMenu.js:346
+msgid "Confirm"
+msgstr "Xác nhận"
+
+#: js/MainMenu.js:213
+msgid "Are you sure you want to logout?"
+msgstr "Bạn có chắc chắn muốn thoát?"
+
+#: js/MainMenu.js:227
+msgid "Logging you out..."
+msgstr "Thoát khỏi hệ thống"
+
+#: js/MainScreen.js:202
+msgid "Your password expired. Please enter a new user password:"
+msgstr "Mật khẩu của bạn đã hết hạn. Xin nhập mật khẩu người dùng mới:"
+
+#: js/Models.js:141 js/widgets/tags/TagFilter.js:30
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "one: Thẻ\nother: Thẻ"
 
-#: js/widgets/tags/TagsMassDetachAction.js:18
-msgid "Detach tag(s)"
-msgstr "Gỡ bỏ từ khóa"
-
-#: js/widgets/tags/TagsMassDetachAction.js:84
-msgid "Select Tag(s) to detach"
-msgstr "Chọn từ khóa để gỡ bỏ"
-
-#: js/widgets/tags/TagCombo.js:46
-msgid "tag name"
-msgstr "tên từ khóa"
-
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
-msgid "New version of Tine 2.0 available"
-msgstr "Phiên bản mới của Tine 2.0 đã phát hành"
-
-#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Phiên bản \"{0}\" của Tine 2.0 đã phát hành"
-
-#: js/widgets/VersionCheck.js:46
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "Đây là bản vá lỗi nghiêm trọng và phải được cập nhật ngay tức thì!"
-
-#: js/widgets/VersionCheck.js:55
-msgid "Please consider updating!"
-msgstr "Hãy cân nhắc việc cập nhật!"
-
-#: js/widgets/grid/PickerGridPanel.js:162
-msgid "Remove record"
-msgstr "Xóa biểu ghi"
-
-#: js/widgets/grid/PickerGridPanel.js:255 js/widgets/grid/PickerFilter.js:310
-#: js/widgets/grid/FilterModelMultiSelect.js:214
-#: js/widgets/container/FilterModel.js:249
-msgid "Selected  {0}"
-msgstr "{0] đã chọn "
-
-#: js/widgets/grid/PickerGridPanel.js:296
-msgid "Search for records ..."
-msgstr "Tìm biểu ghi..."
-
-#: js/widgets/grid/FilterModel.js:168
-msgid "contains"
-msgstr "chứa"
-
-#: js/widgets/grid/FilterModel.js:169
-msgid "reg. exp."
-msgstr "reg. exp."
-
-#: js/widgets/grid/FilterModel.js:170 js/widgets/container/FilterModel.js:142
-#: js/widgets/container/FilterModel.js:146
-msgid "is equal to"
-msgstr "bằng"
-
-#: js/widgets/grid/FilterModel.js:171
-msgid "is greater than"
-msgstr "lớn hơn"
-
-#: js/widgets/grid/FilterModel.js:172
-msgid "is less than"
-msgstr "ít hơn"
-
-#: js/widgets/grid/FilterModel.js:173
-msgid "is not"
-msgstr "không"
-
-#: js/widgets/grid/FilterModel.js:174
-msgid "one of"
-msgstr "một trong"
-
-#: js/widgets/grid/FilterModel.js:175
-msgid "none of"
-msgstr "không trong"
-
-#: js/widgets/grid/FilterModel.js:176
-msgid "is before"
-msgstr "trước"
-
-#: js/widgets/grid/FilterModel.js:177
-msgid "is after"
-msgstr "sau"
-
-#: js/widgets/grid/FilterModel.js:178
-msgid "is within"
-msgstr "trong"
-
-#: js/widgets/grid/FilterModel.js:179
-msgid "is in week no."
-msgstr "tại tuần số"
-
-#: js/widgets/grid/FilterModel.js:180
-msgid "starts with"
-msgstr "bắt đầu với"
-
-#: js/widgets/grid/FilterModel.js:181
-msgid "ends with"
-msgstr "kết thúc với"
-
-#: js/widgets/grid/FilterModel.js:182
-msgid "defined by"
-msgstr "định nghĩa bởi"
-
-#: js/widgets/grid/FilterModel.js:228
-#: js/widgets/grid/ForeignRecordFilter.js:395
-#: js/widgets/relation/FilterModel.js:87
-msgid "select a operator"
-msgstr "chọn toán tử"
-
-#: js/widgets/grid/FilterModel.js:352
-msgid "Search Account ..."
-msgstr "Tìm tài khoản ..."
-
-#: js/widgets/grid/FilterModel.js:462
-msgid "today"
-msgstr "hôm nay"
-
-#: js/widgets/grid/FilterModel.js:463
-msgid "yesterday"
-msgstr "hôm qua"
-
-#: js/widgets/grid/FilterModel.js:464
-msgid "this week"
-msgstr "tuần này"
-
-#: js/widgets/grid/FilterModel.js:465
-msgid "last week"
-msgstr "tuần trước"
-
-#: js/widgets/grid/FilterModel.js:466
-msgid "the week before last"
-msgstr "tuần trước nữa"
-
-#: js/widgets/grid/FilterModel.js:467
-msgid "this month"
-msgstr "tháng này"
-
-#: js/widgets/grid/FilterModel.js:468
-msgid "last month"
-msgstr "thánh trước"
-
-#: js/widgets/grid/FilterModel.js:469
-msgid "this quarter"
-msgstr "quý này"
-
-#: js/widgets/grid/FilterModel.js:470
-msgid "last quarter"
-msgstr "quý trước"
-
-#: js/widgets/grid/FilterModel.js:471
-msgid "this year"
-msgstr "năm nay"
-
-#: js/widgets/grid/FilterModel.js:472
-msgid "last year"
-msgstr "năm ngoái"
-
-#: js/widgets/grid/FilterModel.js:476
-msgid "tomorrow"
-msgstr "ngay mai"
-
-#: js/widgets/grid/FilterModel.js:477
-msgid "next week"
-msgstr "tuần sau"
-
-#: js/widgets/grid/FilterModel.js:478
-msgid "next month"
-msgstr "tháng sau"
-
-#: js/widgets/grid/FilterModel.js:479
-msgid "next quarter"
-msgstr "quý sau"
-
-#: js/widgets/grid/FilterModel.js:480
-msgid "next year"
-msgstr "năm sau"
-
-#: js/widgets/grid/FilterPanel.js:79
-msgid "Attention: There are more filters active!"
-msgstr "Chú ý: Có thêm bộ lọc được áp dụng!"
-
-#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:485
-msgid "Criteria {0}"
-msgstr "Biểu thức {0}"
-
-#: js/widgets/grid/FilterPanel.js:266
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
-msgid "show details"
-msgstr "xem chi tiết"
-
-#: js/widgets/grid/FilterPanel.js:267
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
-msgid "Always show advanced filters"
-msgstr "Luôn hiện bộ lọc nâng cao"
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] "one: Màn hình của bạn giới hạn {0} điều kiện:\nother: Màn hình của bạn giới hạn {0} điều kiện:"
-
-#: js/widgets/grid/FileUploadGrid.js:115 js/ux/form/ImageField.js:211
-msgid "Upload Failed"
-msgstr "Upload không thành công"
-
-#: js/widgets/grid/FileUploadGrid.js:116
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr "Không thể upload file. Dung lượng file quá lớn. Xin hãy thông báo với quản trị hệ thống. Dung lượng upload tối đa là:"
-
-#: js/widgets/grid/FileUploadGrid.js:180
-msgid "Remove file"
-msgstr "Xóa file"
-
-#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:116
-msgid "Pause upload"
-msgstr "Tạm dừng upload"
-
-#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:100
-msgid "Resume upload"
-msgstr "Tiếp tục upload"
-
-#: js/widgets/grid/FileUploadGrid.js:244
-msgid "Add file"
-msgstr "Thêm file"
-
-#: js/widgets/grid/FileUploadGrid.js:286
-msgid "name"
-msgstr "Tên"
-
-#: js/widgets/grid/FileUploadGrid.js:293
-msgid "size"
-msgstr "dung lượng"
-
-#: js/widgets/grid/FileUploadGrid.js:300
-msgid "type"
-msgstr "kiểu"
-
-#: js/widgets/grid/QuickaddGridPanel.js:91
-msgid "Remove"
-msgstr "Xóa"
-
-#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:571
-msgid "Show"
-msgstr "Hiển thị"
-
-#: js/widgets/grid/FilterToolbar.js:164
-msgid "add new filter"
-msgstr "thêm bộ lọc mới"
-
-#: js/widgets/grid/FilterToolbar.js:170
-msgid "reset all filters"
-msgstr "khởi tạo lại mọi bộ lọc"
-
-#: js/widgets/grid/FilterToolbar.js:176
-msgid "start search"
-msgstr "bắt đầu tìm"
-
-#: js/widgets/grid/FilterToolbar.js:184
-msgid "save as favorite"
-msgstr "lưu như lối tắt"
-
-#: js/widgets/grid/FilterToolbar.js:191
-msgid "Load a favorite"
-msgstr "Nạp 1 lối tắt"
-
-#: js/widgets/grid/FilterToolbar.js:358
-msgid "select a field"
-msgstr "chọn 1 trường"
-
-#: js/widgets/grid/FilterToolbar.js:396
-msgid "Delete this filter"
-msgstr "Xóa bộ lọc này"
-
-#: js/widgets/grid/FilterToolbar.js:428
-msgid "and"
-msgstr "và"
-
-#: js/widgets/grid/RendererManager.js:54
-msgid "has notes"
-msgstr "có ghi chép"
-
-#: js/widgets/grid/RendererManager.js:57
-msgid "has relations"
-msgstr "có liên hệ"
-
-#: js/widgets/grid/LinkGridPanel.js:103
-#: js/widgets/account/PickerGridPanel.js:267
-#: js/widgets/container/PropertiesDialog.js:107 js/Models.js:428
-msgid "Name"
-msgstr "Tên"
-
-#: js/widgets/grid/LinkGridPanel.js:105
-#: js/widgets/relation/GenericPickerGridPanel.js:430
-#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
-msgid "Type"
-msgstr "Loại"
-
-#: js/widgets/grid/FilterStructureTreePanel.js:35
-#: js/widgets/grid/FilterStructureTreePanel.js:52
-msgid "Show records that match to one of the following filters"
-msgstr "Hiển thị biểu ghi phù hợp với 1 trong các bộ lọc sau"
-
-#: js/widgets/grid/FilterStructureTreePanel.js:37
-#: js/widgets/grid/FilterStructureTreePanel.js:51
-msgid "or alternatively"
-msgstr "hoặc khác"
-
-#: js/widgets/grid/FilterStructureTreePanel.js:55
-msgid "Add alternative filter"
-msgstr "Thêm bộ lọc khác"
-
-#: js/widgets/grid/FilterStructureTreePanel.js:61
-msgid "Remove Filter"
-msgstr "Xóa bộ lọc"
-
-#: js/widgets/grid/GridPanel.js:286
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria,"
-" view-options or the {1} you search in."
-msgstr "Có thể tìm thấy bất kỳ {0}. Xin thay đổi điều kiện lọc, tùy chọn xem hoặc {1} bạn tìm kiếm."
-
-#: js/widgets/grid/GridPanel.js:288 js/widgets/grid/GridPanel.js:474
-#: js/widgets/grid/GridPanel.js:475 js/widgets/grid/GridPanel.js:476
-msgid "Edit {0}"
-msgid_plural "Edit {0}"
-msgstr[0] "one:Sửa {0}\nother:Sửa {0}"
-
-#: js/widgets/grid/GridPanel.js:489 js/widgets/dialog/EditDialog.js:484
-msgid "Copy {0}"
-msgstr "Sao chép {0}"
-
-#: js/widgets/grid/GridPanel.js:500 js/widgets/tree/ContextMenu.js:35
-msgid "Add {0}"
-msgstr "Thêm {0}"
-
-#: js/widgets/grid/GridPanel.js:508
-msgid "Print Page"
-msgstr "Trang in"
-
-#: js/widgets/grid/GridPanel.js:538
-#: js/widgets/dialog/DuplicateMergeDialog.js:220
-msgid "Merge {0}"
-msgstr "Gộp {0}"
-
-#: js/widgets/grid/GridPanel.js:573 js/widgets/grid/GridPanel.js:574
-#: js/widgets/grid/GridPanel.js:576 js/widgets/tree/ContextMenu.js:52
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "one: Xóa {0}\nother: Xóa {0}"
-
-#: js/widgets/grid/GridPanel.js:967
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Hiển thị biểu ghi {0} - {1} của {2}"
-
-#: js/widgets/grid/GridPanel.js:968
-msgid "No {0} to display"
-msgstr "Không {0} để hiển thị"
-
-#: js/widgets/grid/GridPanel.js:1206
-msgid "New..."
-msgstr "Mới..."
-
-#: js/widgets/grid/GridPanel.js:1225
-msgid "Add to..."
-msgstr "Thêm vào..."
-
-#: js/widgets/grid/GridPanel.js:1269
-#: js/widgets/relation/GenericPickerGridPanel.js:431
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/widgets/grid/GridPanel.js:1270 js/widgets/ActivitiesPanel.js:464
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/widgets/grid/GridPanel.js:1271
-msgid "Last Modified Time"
-msgstr "Thời gian sửa cuối"
-
-#: js/widgets/grid/GridPanel.js:1272
-msgid "Last Modified By"
-msgstr "Sửa cuối bởi"
-
-#: js/widgets/grid/GridPanel.js:1641
-msgid "Not Allowed"
-msgstr "Không được phép"
-
-#: js/widgets/grid/GridPanel.js:1642
-msgid "You are not allowed to delete all pages at once"
-msgstr "Bạn không được phép xóa mọi trang cùng 1 lúc"
-
-#: js/widgets/grid/GridPanel.js:1665
-msgid "Do you really want to delete the selected record ({0})?"
-msgid_plural "Do you really want to delete the selected records ({0})?"
-msgstr[0] "one: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?\nother: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?"
-
-#: js/widgets/grid/GridPanel.js:1700 js/widgets/dialog/EditDialog.js:700
-msgid "Deleting {0}"
-msgstr "Đang xóa {0}"
-
-#: js/widgets/grid/GridPanel.js:1700
-msgid " ... This may take a long time!"
-msgstr "... có thể mất nhiều thời gian!"
-
-#: js/widgets/grid/ForeignRecordFilter.js:61
-msgid "Edit definition"
-msgstr "Sửa định nghĩa"
-
-#: js/widgets/grid/ForeignRecordFilter.js:71
-msgid "Start definition"
-msgstr "Bắt đầu định nghĩa"
-
-#: js/widgets/grid/ForeignRecordFilter.js:111
-msgid "Related to"
-msgstr "Liên quan tới"
-
-#: js/widgets/relation/FilterModel.js:32
-#: js/widgets/relation/GenericPickerGridPanel.js:133 js/Models.js:400
+#: js/Models.js:272
+msgid "Alarm"
+msgid_plural "Alarms"
+msgstr[0] "one: Báo thức\nother: Báo thức"
+
+#: js/Models.js:310
+msgid "Import"
+msgid_plural "Imports"
+msgstr[0] "one: Nhập dữ liệu\nother: Nhập dữ liệu"
+
+#: js/Models.js:336 js/widgets/container/GrantsGrid.js:51
+#: js/widgets/dialog/ExportDialog.js:48
+msgid "Export"
+msgid_plural "Export"
+msgstr[0] "one: Xuất dữ liệu\nother: Xuất dữ liệu"
+
+#: js/Models.js:373
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] "one:Chi tiết\nother:Chi tiết"
+
+#: js/Models.js:400 js/widgets/relation/FilterModel.js:32
+#: js/widgets/relation/GenericPickerGridPanel.js:133
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "one:Quan hệ\nother:Quan hệ"
 
-#: js/widgets/relation/FilterModel.js:71
-msgid "Defined by ..."
-msgstr "Định nghĩa bởi ..."
+#: js/Models.js:421
+msgid "Department"
+msgid_plural "Departments"
+msgstr[0] "one:Bộ phận\none:Bộ phận"
 
-#: js/widgets/relation/FilterModel.js:114
-msgid "Define ..."
-msgstr "Định nghĩa ..."
+#: js/Models.js:428 js/widgets/account/PickerGridPanel.js:267
+#: js/widgets/container/PropertiesDialog.js:107
+#: js/widgets/grid/LinkGridPanel.js:103
+msgid "Name"
+msgstr "Tên"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:126
-msgid "Edit record"
-msgstr "Sửa biểu ghi"
+#: js/Models.js:447
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] "one: Cấu hình\nother: Cấu hình"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:162
-msgid "Sibling"
-msgstr "Sibling"
+#: js/Models.js:447
+msgid "Configs"
+msgstr "Cấu hình"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:163
-msgid "Parent"
-msgstr "Cha"
+#: js/PasswordChangeDialog.js:32
+msgid "Change Password For \"{0}\""
+msgstr "Đổi mật khẩu cho \"{0}\""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:164
-msgid "Child"
-msgstr "Con"
+#: js/PasswordChangeDialog.js:48
+msgid "Old Password"
+msgstr "Mật khẩu cũ"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:209
-msgid "Relations failure"
-msgstr "Lỗi liên quan"
+#: js/PasswordChangeDialog.js:52
+msgid "New Password"
+msgstr "Mật khẩu mới"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:209
-msgid "There are invalid relations. Please check before saving."
-msgstr "Có lỗi liên quan. Xin hãy kiểm tra trước khi lưu lại."
+#: js/PasswordChangeDialog.js:56
+msgid "Repeat new Password"
+msgstr "Nhắc lại mật khẩu mới"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:252
+#: js/PasswordChangeDialog.js:75
+msgid "Please Wait!"
+msgstr "Xin hãy đợi"
+
+#: js/PasswordChangeDialog.js:76
+msgid "changing password..."
+msgstr "Đang đổi mật khẩu..."
+
+#: js/PasswordChangeDialog.js:87
+msgid "Success"
+msgstr "Thành công"
+
+#: js/PasswordChangeDialog.js:88
+msgid "Your password has been changed."
+msgstr "Mật khẩu của bạn đã được thay đổi."
+
+#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
+#: js/widgets/dialog/ImportDialog.js:654
+#: js/widgets/dialog/MultipleEditResultSummary.js:196
+#: js/widgets/form/RecordPickerComboBox.js:267
+#: js/widgets/relation/GenericPickerGridPanel.js:707
+#: js/widgets/relation/GenericPickerGridPanel.js:720
+msgid "Failure"
+msgstr "Thất bại"
+
+#: js/PasswordChangeDialog.js:111
+msgid "The new passwords mismatch, please correct them."
+msgstr "Các mật khẩu mới không trùng nhau, xin hãy sửa lại."
+
+#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
+msgid "Outdent Text"
+msgstr "Nội dung thò ra"
+
+#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
+msgid "Indent Text"
+msgstr "Nội dung thụt vào"
+
+#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
+msgid "Remove Formatting"
+msgstr "Xóa định dạng"
+
+#: js/tineInit.js:603
 msgid ""
-"The maximum number of {0} with the type {1} is reached. Please change the "
-"type of this relation"
-msgstr "Số tối đa của {0} với loại {1} đã đạt ngưỡng. Xin hãy đổi loại liên quan này."
+"Fatal Error: Client self-update failed, please contact your administrator "
+"and/or restart/reload your browser."
+msgstr "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:426
-msgid "Record"
-msgstr "Biểu ghi"
+#: js/UserRegistration.js:37
+msgid "Registration Wizard"
+msgstr "Đồ thuật đăng ký"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:428
-msgid "Remark"
-msgstr "Nhận xét"
+#: js/UserRegistration.js:90
+msgid "Given name"
+msgstr "Tên gọi"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:429
-msgid "Dependency"
-msgstr "Phần phụ thuộc"
+#: js/UserRegistration.js:101
+msgid "Family name"
+msgstr "Tên họ"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:708
+#: js/UserRegistration.js:112
+msgid "Login name"
+msgstr "Tên đăng nhập"
+
+#: js/UserRegistration.js:125
+msgid "Emailaddress"
+msgstr "Địa chỉ Email"
+
+#: js/UserRegistration.js:171
+msgid "Congratulations!"
+msgstr "Chúc mừng!"
+
+#: js/UserRegistration.js:171
 msgid ""
-"The record you tried to link is already linked. Please edit the existing "
-"link."
-msgstr "Biểu ghi bạn có liên kết đã được liên kết. Xin sửa liên kết đã tồn tại."
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr "Bạn đã nhập mọi thông tin cần thiết. Nếu bạn nhấn nút Kết thúc, chúng tôi sẽ gửi cho bạn email đăng ký."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:721
-#: js/widgets/form/RecordPickerComboBox.js:268
-msgid "You tried to link a record with itself. This is not allowed!"
-msgstr "Bạn cố liên kết 1 biểu ghi với chính nó. Việc này không được phép!"
+#: js/ux/ConnectionStatus.js:56
+msgid "online"
+msgstr "trực tuyến"
 
-#: js/widgets/relation/PickerCombo.js:93
+#: js/ux/ConnectionStatus.js:57
+msgid "offline"
+msgstr "đoạn tuyến"
+
+#: js/ux/form/ComboBoxRecentsPlugin.js:43
+#: js/widgets/container/ContainerSelect.js:129
+msgid "choose other {0}..."
+msgstr "chọn {0} khác ..."
+
+#: js/ux/form/ImageField.js:76
+msgid "Loading"
+msgstr "Đang tải"
+
+#: js/ux/form/ImageField.js:78
+msgid "Click to edit"
+msgstr "Click để sửa"
+
+#: js/ux/form/ImageField.js:146
+msgid "Image Failed"
+msgstr "Ảnh bị hỏng"
+
+#: js/ux/form/ImageField.js:146
+msgid "Could not load image. Please notify your Administrator"
+msgstr "Không thể nạp ảnh. Xin thông báo với người quản trị hệ thống"
+
+#: js/ux/form/ImageField.js:168
+msgid "Not An Image"
+msgstr "Không phải là ảnh"
+
+#: js/ux/form/ImageField.js:168
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr "Xin chọn 1 file ảnh (gif/png/jpeg)"
+
+#: js/ux/form/ImageField.js:211 js/widgets/grid/FileUploadGrid.js:115
+msgid "Upload Failed"
+msgstr "Upload không thành công"
+
+#: js/ux/form/ImageField.js:211
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "Không thể upload ảnh. Xin hãy thông báo với người quản trị hệ thống"
+
+#: js/ux/form/ImageField.js:224
+msgid "Change Image"
+msgstr "Đổi ảnh"
+
+#: js/ux/form/ImageField.js:232 js/ux/form/ImageField.js:250
+msgid "Crop Image"
+msgstr "Xén ảnh"
+
+#: js/ux/form/ImageField.js:256
+msgid "Delete Image"
+msgstr "Xóa ảnh"
+
+#: js/ux/form/ImageField.js:265
+msgid "Show Original Image"
+msgstr "Hiển thị ảnh gốc"
+
+#: js/ux/form/RecordsComboBox.js:26
+msgid "Software Version"
+msgstr "Phiên bản phần mềm"
+
+#: js/ux/grid/PagingToolbar.js:50
+msgid "{0} selected"
+msgstr "{0} được chọn"
+
+#: js/ux/grid/PagingToolbar.js:51
+msgid "Unselect all"
+msgstr "Bỏ chọn hết"
+
+#: js/ux/grid/PagingToolbar.js:52
+msgid "Select all pages ({0} records)"
+msgstr "Chọn mọi trang ({0} biểu ghi)"
+
+#: js/ux/grid/PagingToolbar.js:53
+msgid "Toggle selection"
+msgstr "Đổi chọn"
+
+#: js/ux/Percentage.js:190
+msgid "(paused)"
+msgstr "(đã dừng)"
+
+#: js/ux/PopupWindowManager.js:164
 msgid ""
-"The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
-"once!"
-msgstr "{1} \"{2}\" đã được dùng trong trường \"{0}\" và chỉ được liên kết một lần!"
+"The window you want to work with is backgrounded. Your browser doesn't "
+"support to foreground the window for you, so you need to use your operating "
+"systems window switching features. Please send complaints to your browser "
+"vendor!"
+msgstr "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
 
-#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:265
-msgid "Rename {0}"
-msgstr "Đổi tên {0}"
+#: js/ux/SearchField.js:44
+msgid "enter searchfilter"
+msgstr "nhập bộ lọc tìm kiếm"
 
-#: js/widgets/tree/ContextMenu.js:61
-msgid "Manage {0} Permissions"
-msgstr "Quản lý quyền {0}"
+#: js/widgets/account/PickerGridPanel.js:158
+msgid "Search User"
+msgstr "Tìm người dùng"
 
-#: js/widgets/tree/ContextMenu.js:69
-msgid "{0} Properties"
-msgstr "Thuộc tính {0}"
+#: js/widgets/account/PickerGridPanel.js:164
+msgid "Search Group"
+msgstr "Tìm nhóm"
 
-#: js/widgets/tree/ContextMenu.js:78
-msgid "Set {0} color"
-msgstr "Đặt màu {0}"
+#: js/widgets/account/PickerGridPanel.js:170
+msgid "Add Anyone"
+msgstr "Thêm bất kỳ ai"
 
-#: js/widgets/tree/ContextMenu.js:92
-msgid "Reload {0}"
-msgstr "Nạp lại {0}"
+#: js/widgets/account/PickerGridPanel.js:213
+msgid "Anyone"
+msgstr "Bất kỳ ai"
 
-#: js/widgets/tree/ContextMenu.js:109
-msgid "Edit Properties"
-msgstr "Sửa thuộc tính"
+#: js/widgets/account/PickerGridPanel.js:229
+msgid "Search for users ..."
+msgstr "Tìm người dùng ..."
 
-#: js/widgets/tree/ContextMenu.js:124
-msgid "Download"
-msgstr "Download"
+#: js/widgets/account/PickerGridPanel.js:251
+msgid "Search for groups ..."
+msgstr "Tìm nhóm người dùng ..."
 
-#: js/widgets/tree/ContextMenu.js:185
-msgid "New {0}"
-msgstr "Thêm {0}"
+#: js/widgets/ActivitiesPanel.js:147
+msgid "Add a Note..."
+msgstr "Thêm 1 ghi chép ..."
 
-#: js/widgets/tree/ContextMenu.js:185
-msgid "Please enter the name of the new {0}:"
-msgstr "Xin nhập tên của {0} mới"
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:174
+#: js/widgets/container/GrantsGrid.js:45
+msgid "Add"
+msgstr "Thêm"
 
-#: js/widgets/tree/ContextMenu.js:188
-msgid "No {0} added"
-msgstr "Không {0} nào được thêm"
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
+msgid "Note"
+msgstr "Ghi chép"
 
-#: js/widgets/tree/ContextMenu.js:188 js/widgets/tree/ContextMenu.js:272
-msgid "You have to supply a {0} name!"
-msgstr "Bạn phải cung cấp 1 tên {0}!"
+#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
+msgid "Add new note"
+msgstr "Tạo ghi chép"
 
-#: js/widgets/tree/ContextMenu.js:191
-msgid "Creating {0}..."
-msgstr "Đang tạo {0} ...."
+#: js/widgets/ActivitiesPanel.js:206
+msgid "Notes"
+msgstr "Ghi chép"
 
-#: js/widgets/tree/ContextMenu.js:266
-msgid "Please enter the new name of the {0}:"
-msgstr "Nhập nhập tên {0} mới:"
+#: js/widgets/ActivitiesPanel.js:282
+msgid "Enter new note:"
+msgstr "Nhập ghi chép mới:"
 
-#: js/widgets/tree/ContextMenu.js:272
-msgid "Not renamed {0}"
-msgstr "Chưa đổi tên {0}"
+#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
+msgid "Add Note"
+msgstr "Thêm ghi chép"
 
-#: js/widgets/tree/ContextMenu.js:346
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "Bạn có muốn thật sự xóa {0} \"{1}\"?"
+#: js/widgets/ActivitiesPanel.js:371
+msgid "Add a {0} Note"
+msgstr "Thêm 1 ghi chép {0}"
 
-#: js/widgets/tree/ContextMenu.js:457
-msgid "Manage Permissions for {0} \"{1}\""
-msgstr "Quản lý quyền cho {0} \"{1}\""
+#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
+#: js/widgets/grid/LinkGridPanel.js:105
+#: js/widgets/relation/GenericPickerGridPanel.js:430
+msgid "Type"
+msgstr "Loại"
 
-#: js/widgets/tree/ContextMenu.js:481
-msgid "Properties for {0} \"{1}\""
-msgstr "Thuộc tính cho {0} \"{1}\""
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1274
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/widgets/ActivitiesPanel.js:465
+msgid "Timestamp"
+msgstr "Định dạng thời gian"
+
+#: js/widgets/ActivitiesPanel.js:479
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr "Hiển thị lịch sử, biểu ghi {0}-{1) của {2}"
+
+#: js/widgets/ActivitiesPanel.js:480
+msgid "No history to display"
+msgstr "Không có lịch sử nào"
+
+#: js/widgets/ActivitiesPanel.js:580
+msgid "History"
+msgstr "Lịch sử"
+
+#: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
+msgid "Time"
+msgstr "Thời gian"
+
+#: js/widgets/ActivitiesPanel.js:596
+msgid "User"
+msgstr "Người dùng"
+
+#: js/widgets/container/ContainerSelect.js:132
+msgid "Select a {0}"
+msgstr "Chọn 1 {0}"
+
+#: js/widgets/container/ContainerSelect.js:152
+msgid "Recently used {0}:"
+msgstr "{0} được dùng gần đây:"
+
+#: js/widgets/container/ContainerSelect.js:478
+msgid "please select a {0}"
+msgstr "hãy chọn 1 {0}"
+
+#: js/widgets/container/FilterModel.js:142
+msgid "is personal of"
+msgstr "là cá nhân của"
+
+#: js/widgets/container/FilterModel.js:142
+#: js/widgets/container/FilterModel.js:146 js/widgets/grid/FilterModel.js:170
+msgid "is equal to"
+msgstr "bằng"
+
+#: js/widgets/container/FilterModel.js:249
+#: js/widgets/grid/FilterModelMultiSelect.js:214
+#: js/widgets/grid/PickerFilter.js:310 js/widgets/grid/PickerGridPanel.js:255
+msgid "Selected  {0}"
+msgstr "{0] đã chọn "
+
+#: js/widgets/container/GrantsDialog.js:52
+msgid "Folder"
+msgstr "Thư mục"
+
+#: js/widgets/container/GrantsDialog.js:95
+msgid "Updating Grants"
+msgstr "Cập nhật quyền"
+
+#: js/widgets/container/GrantsDialog.js:125
+msgid "Error"
+msgstr "Lỗi"
+
+#: js/widgets/container/GrantsDialog.js:126
+msgid "You are not allowed to remove all admins for this container!"
+msgstr "Bạn không được phép xóa mọi quyền quản trị của mục này!"
+
+#: js/widgets/container/GrantsGrid.js:44
+msgid "The grant to read records of this container"
+msgstr "Quyền đọc biểu ghi của bộ chứa này"
+
+#: js/widgets/container/GrantsGrid.js:46
+msgid "The grant to add records to this container"
+msgstr "Quyền thêm biểu ghi cho bộ chứa này"
+
+#: js/widgets/container/GrantsGrid.js:48
+msgid "The grant to edit records in this container"
+msgstr "Quyền sửa biểu ghi trong bộ chứa này"
+
+#: js/widgets/container/GrantsGrid.js:49
+msgid "Delete"
+msgstr "Xóa"
+
+#: js/widgets/container/GrantsGrid.js:50
+msgid "The grant to delete records in this container"
+msgstr "Quyền xóa biểu ghi trong bộ chứa này"
+
+#: js/widgets/container/GrantsGrid.js:52
+msgid "The grant to export records from this container"
+msgstr "Quyền xuất biểu ghi từ bộ chứa này"
+
+#: js/widgets/container/GrantsGrid.js:53
+msgid "Sync"
+msgstr "Đồng bộ"
+
+#: js/widgets/container/GrantsGrid.js:54
+msgid "The grant to synchronise records with this container"
+msgstr "Quyền để đồng bộ biểu ghi với bộ chứa này"
+
+#: js/widgets/container/GrantsGrid.js:55
+msgid "Admin"
+msgstr "Quản trị"
+
+#: js/widgets/container/GrantsGrid.js:56
+msgid "The grant to administrate this container"
+msgstr "Quyền quản trị bộ chứa này"
+
+#: js/widgets/container/GrantsGrid.js:58
+msgid "Free Busy"
+msgstr "Bận rỗi"
+
+#: js/widgets/container/GrantsGrid.js:59
+msgid "The grant to access free busy information of events in this calendar"
+msgstr "Quyền truy cập thông tin bận rỗi của sự kiện trong lịch"
+
+#: js/widgets/container/GrantsGrid.js:60
+msgid "Private"
+msgstr "Riêng tư"
+
+#: js/widgets/container/GrantsGrid.js:61
+msgid "The grant to access records marked as private in this container"
+msgstr "Quyền truy cập biểu ghi được đánh dấu riêng tư trong bộ chứa."
+
+#: js/widgets/container/PropertiesDialog.js:90
+msgid "Properties"
+msgstr "Thuộc tính"
+
+#: js/widgets/container/PropertiesDialog.js:113
+#: js/widgets/tags/TagsPanel.js:487
+msgid "Color"
+msgstr "Màu"
+
+#: js/widgets/container/PropertiesDialog.js:119
+msgid "My Grants"
+msgstr "Quyền của tôi"
+
+#: js/widgets/container/TreePanel.js:142
+msgid "container"
+msgid_plural "containers"
+msgstr[0] "one: bộ chứa\nother: bộ chứa"
+
+#: js/widgets/container/TreePanel.js:546
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr "Bạn không được phép chọn {0} '{1}':"
+
+#: js/widgets/container/TreePanel.js:547
+msgid "{0} grant is required for desired action"
+msgstr "{0} quyền được yêu cầu cho hành động bạn muốn"
+
+#: js/widgets/container/TreePanel.js:548
+msgid "Insufficient Grants"
+msgstr "Thiếu quyền"
+
+#: js/widgets/CountryCombo.js:34
+msgid "Select a country..."
+msgstr "Chọn 1 quốc gia ..."
+
+#: js/widgets/customfields/EditDialogPlugin.js:155
+msgid "General"
+msgstr "Chung"
+
+#: js/widgets/customfields/EditDialogPlugin.js:167
+msgid "Custom Fields"
+msgstr "Trường tùy biến"
+
+#: js/widgets/dialog/AdminPanel.js:59
+msgid "Change settings for application {0}"
+msgstr "Thay đổi thiết lập cho ứng dụng {0}"
+
+#: js/widgets/dialog/AdminPanel.js:107
+msgid "Defaults"
+msgstr "Mặc định"
+
+#: js/widgets/dialog/AlarmPanel.js:34
+msgid "Alarms"
+msgstr "Nhắc nhở"
+
+#: js/widgets/dialog/AlarmPanel.js:37
+msgid "0 minutes before"
+msgstr "0 phút trước"
+
+#: js/widgets/dialog/AlarmPanel.js:38
+msgid "5 minutes before"
+msgstr "5 phút trước"
+
+#: js/widgets/dialog/AlarmPanel.js:39
+msgid "15 minutes before"
+msgstr "15 phút trước"
+
+#: js/widgets/dialog/AlarmPanel.js:40
+msgid "30 minutes before"
+msgstr "30 phút trước"
+
+#: js/widgets/dialog/AlarmPanel.js:41
+msgid "1 hour before"
+msgstr "1 giờ phút trước"
+
+#: js/widgets/dialog/AlarmPanel.js:42
+msgid "2 hours before"
+msgstr "2 giờ phút trước"
+
+#: js/widgets/dialog/AlarmPanel.js:43
+msgid "12 hours before"
+msgstr "12 giờ phút trước"
+
+#: js/widgets/dialog/AlarmPanel.js:44
+msgid "1 day before"
+msgstr "1 ngày phút trước"
+
+#: js/widgets/dialog/AlarmPanel.js:45
+msgid "2 days before"
+msgstr "2 ngày phút trước"
+
+#: js/widgets/dialog/AlarmPanel.js:46
+msgid "Custom Datetime"
+msgstr "Ngày giờ tùy chọn"
+
+#: js/widgets/dialog/AlarmPanel.js:58
+msgid "Alarm Time"
+msgstr "Thời gian báo thức"
+
+#: js/widgets/dialog/AlarmPanel.js:170
+msgid "{0} minutes before"
+msgstr "Trước {0} phút"
+
+#: js/widgets/dialog/CredentialsDialog.js:84
+msgid "Please enter your credentials"
+msgstr "Xin nhập thông tin của bạn"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:87
+#: js/widgets/dialog/MultipleEditResultSummary.js:86
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:69
+msgid "OK"
+msgstr "OK"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:134
+msgid "Merging Records..."
+msgstr "Gộp biểu ghi"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:173
+msgid "Merge Failed"
+msgstr "Gộp không thành công"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:173
+msgid "The merge succeeded, but the duplicate {0} could not be deleted."
+msgstr "Gộm thành công nhưng trùng lặp {0} không được xóa."
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:212
+msgid "Merge {0}, prefer First"
+msgstr "Gộp {0}, prefer First"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:213
+msgid "Merge {0}, prefer Second"
+msgstr "Gộp {0}, prefer Second"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:220
+#: js/widgets/grid/GridPanel.js:538
+msgid "Merge {0}"
+msgstr "Gộp {0}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:223
+msgid "First {0}"
+msgstr "Đầu tiên {0}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:224
+msgid "Second {0}"
+msgstr "Thứ hai {0}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:225
+msgid "Final {0}"
+msgstr "Cuối cùng {0}"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:41
+msgid "The record you try to add might already exist."
+msgstr "Biểu ghi bạn cố thêm có thể đã tồn tại"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:193
+msgid "Field Group"
+msgstr "Nhóm trường"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:207
+msgid "My Value"
+msgstr "Giá trị của tôi"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:215
+msgid "Existing Value"
+msgstr "Giá trị đã tồn tại"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:223
+msgid "Final Value"
+msgstr "Giá trị cuối cùng"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:240
+msgid "Action:"
+msgstr "Chức năng:"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:256
+msgid "Merge, keeping existing details"
+msgstr "Gộp, giữ chi tiết đã có"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:257
+msgid "Merge, keeping my details"
+msgstr "Gộp, giữ chi tiết của tôi"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:258
+msgid "Keep existing record and discard mine"
+msgstr "Giữ kiểu ghi đã tồn tại và bỏ qua tôi"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:259
+msgid "Keep both records"
+msgstr "Giữ cả hai biểu ghi"
+
+#: js/widgets/dialog/EditDialog.js:327 js/widgets/EditRecord.js:188
+msgid "delete"
+msgstr "xóa"
+
+#: js/widgets/dialog/EditDialog.js:360 js/widgets/dialog/EditDialog.js:388
+#: js/widgets/EditRecord.js:131
+msgid "Saved in"
+msgstr "Đã lưu trong"
+
+#: js/widgets/dialog/EditDialog.js:484 js/widgets/grid/GridPanel.js:489
+msgid "Copy {0}"
+msgstr "Sao chép {0}"
+
+#: js/widgets/dialog/EditDialog.js:487
+msgid "Add New {0}"
+msgstr "Thêm mới {0}"
+
+#: js/widgets/dialog/EditDialog.js:489
+msgid "Edit {0} \"{1}\""
+msgstr "Sửa {0} \"(1}\""
+
+#: js/widgets/dialog/EditDialog.js:553
+msgid "Transferring {0}..."
+msgstr "Đang truyền {0} ..."
+
+#: js/widgets/dialog/EditDialog.js:698
+msgid "Do you really want to delete this {0}?"
+msgstr "Bạn có thật sự muốn xóa {0} này?"
+
+#: js/widgets/dialog/EditDialog.js:700 js/widgets/grid/GridPanel.js:1704
+msgid "Deleting {0}"
+msgstr "Đang xóa {0}"
+
+#: js/widgets/dialog/EditDialog.js:710 js/widgets/tags/TagsPanel.js:279
+#: js/widgets/tags/TagsPanel.js:371 js/widgets/tags/TagsPanel.js:404
+msgid "Failed"
+msgstr "Thất bại"
+
+#: js/widgets/dialog/EditDialog.js:710
+msgid "Could not delete {0}."
+msgstr "Không thể xóa {0}"
+
+#: js/widgets/dialog/EditDialog.js:762
+msgid "Resolve Duplicate {0} Suspicion"
+msgstr "Giải quyết trùng lặp {0}"
+
+#: js/widgets/dialog/ExportDialog.js:84
+msgid "Export {0} {1}"
+msgstr "Đang xuất dữ liệu {0} {1}"
+
+#: js/widgets/dialog/ExportDialog.js:111
+msgid "Export definition"
+msgstr "Xuất dữ liệu định nghĩa"
+
+#: js/widgets/dialog/ExportDialog.js:120
+msgid "Select Export Definition ..."
+msgstr "Chọn các định nghĩa để xuất dữ liệu...."
+
+#: js/widgets/dialog/FileListDialog.js:28
+#: js/widgets/dialog/MultiOptionsDialog.js:28
+#: js/widgets/dialog/MultiOptionsDialog.js:81
+msgid "What would you like to do?"
+msgstr "Bạn muốn làm gì?"
+
+#: js/widgets/dialog/FileListDialog.js:32
+#: js/widgets/dialog/MultiOptionsDialog.js:32
+#: js/widgets/dialog/MultiOptionsDialog.js:141
+msgid "You need to select an option!"
+msgstr "Bạn cần chọn 1 tùy chọn!"
+
+#: js/widgets/dialog/FileListDialog.js:91
+msgid "No"
+msgstr "Không"
+
+#: js/widgets/dialog/FileListDialog.js:99
+msgid "Yes"
+msgstr "Có"
 
 #: js/widgets/dialog/ImportDialog.js:223
 msgid "Choose File and Format"
@@ -1847,135 +1769,62 @@ msgstr "All records will be tagged with: \"{0}\" so you can find them easily."
 msgid "{0} records have failures and will be discarded."
 msgstr "{0} biểu ghi có lỗi hoặc sẽ bị hủy bỏ"
 
-#: js/widgets/dialog/AdminPanel.js:59
-msgid "Change settings for application {0}"
-msgstr "Thay đổi thiết lập cho ứng dụng {0}"
-
-#: js/widgets/dialog/AdminPanel.js:107
-msgid "Defaults"
-msgstr "Mặc định"
-
 #: js/widgets/dialog/LinkPanel.js:46
 msgid "Links"
 msgstr "Liên kết"
 
-#: js/widgets/dialog/AlarmPanel.js:34
-msgid "Alarms"
-msgstr "Nhắc nhở"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:318
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:432
+msgid "Delete value from all selected records"
+msgstr "Xóa giá trị từ tất cả biểu ghi được chọn."
 
-#: js/widgets/dialog/AlarmPanel.js:37
-msgid "0 minutes before"
-msgstr "0 phút trước"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:415
+msgid "Undo change for all selected records"
+msgstr "Hủy bỏ thay đổi với mọi biểu ghi được chọn."
 
-#: js/widgets/dialog/AlarmPanel.js:38
-msgid "5 minutes before"
-msgstr "5 phút trước"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:490
+msgid "Edit {0} {1}"
+msgstr "Sửa {0} {1}"
 
-#: js/widgets/dialog/AlarmPanel.js:39
-msgid "15 minutes before"
-msgstr "15 phút trước"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:542
+msgid "Different Values"
+msgstr "Giá trị khác"
 
-#: js/widgets/dialog/AlarmPanel.js:40
-msgid "30 minutes before"
-msgstr "30 phút trước"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:543
+msgid ""
+"This field has different values. Editing this field will overwrite the old "
+"values."
+msgstr "Trường này đã có giá trị khác. Sửa trường này sẽ ghi đè giá trị cũ."
 
-#: js/widgets/dialog/AlarmPanel.js:41
-msgid "1 hour before"
-msgstr "1 giờ phút trước"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+msgid "Do you really want to change these {0} records?"
+msgstr "Bạn có muốn thay đổi các biểu ghi {0} này?"
 
-#: js/widgets/dialog/AlarmPanel.js:42
-msgid "2 hours before"
-msgstr "2 giờ phút trước"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+msgid "Applying changes"
+msgstr "Thực hiện thay đổi"
 
-#: js/widgets/dialog/AlarmPanel.js:43
-msgid "12 hours before"
-msgstr "12 giờ phút trước"
+#: js/widgets/dialog/MultipleEditResultSummary.js:146
+msgid "You edited {0} {1}."
+msgstr "Bạn đã sửa {0} {1}"
 
-#: js/widgets/dialog/AlarmPanel.js:44
-msgid "1 day before"
-msgstr "1 ngày phút trước"
+#: js/widgets/dialog/MultipleEditResultSummary.js:149
+msgid "{0} {1} have been updated properly."
+msgstr "{0} {1} đã được cập nhật chính xác"
 
-#: js/widgets/dialog/AlarmPanel.js:45
-msgid "2 days before"
-msgstr "2 ngày phút trước"
+#: js/widgets/dialog/MultipleEditResultSummary.js:149
+msgid "{0} {1} has been updated properly."
+msgstr "{0} {1} đã được cập nhật chính xác"
 
-#: js/widgets/dialog/AlarmPanel.js:46
-msgid "Custom Datetime"
-msgstr "Ngày giờ tùy chọn"
+#: js/widgets/dialog/MultipleEditResultSummary.js:152
+msgid ""
+"{0} {1} have invalid data after updating. These {1} have not been changed."
+msgstr "{0} {1} bị sai dữ liệu sau khi cập nhật. {1} này đã không được thay đổi."
 
-#: js/widgets/dialog/AlarmPanel.js:58
-msgid "Alarm Time"
-msgstr "Thời gian báo thức"
-
-#: js/widgets/dialog/AlarmPanel.js:170
-msgid "{0} minutes before"
-msgstr "Trước {0} phút"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:87
-#: js/widgets/dialog/MultipleEditResultSummary.js:86
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:69
-msgid "OK"
-msgstr "OK"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:134
-msgid "Merging Records..."
-msgstr "Gộp biểu ghi"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:173
-msgid "Merge Failed"
-msgstr "Gộp không thành công"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:173
-msgid "The merge succeeded, but the duplicate {0} could not be deleted."
-msgstr "Gộm thành công nhưng trùng lặp {0} không được xóa."
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:212
-msgid "Merge {0}, prefer First"
-msgstr "Gộp {0}, prefer First"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:213
-msgid "Merge {0}, prefer Second"
-msgstr "Gộp {0}, prefer Second"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:223
-msgid "First {0}"
-msgstr "Đầu tiên {0}"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:224
-msgid "Second {0}"
-msgstr "Thứ hai {0}"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:225
-msgid "Final {0}"
-msgstr "Cuối cùng {0}"
-
-#: js/widgets/dialog/PreferencesPanel.js:185
-msgid "There are no preferences for this application."
-msgstr "Không có thông số nào cho ứng dụng này."
-
-#: js/widgets/dialog/MultiOptionsDialog.js:28
-#: js/widgets/dialog/MultiOptionsDialog.js:81
-#: js/widgets/dialog/FileListDialog.js:28
-msgid "What would you like to do?"
-msgstr "Bạn muốn làm gì?"
-
-#: js/widgets/dialog/MultiOptionsDialog.js:32
-#: js/widgets/dialog/MultiOptionsDialog.js:141
-#: js/widgets/dialog/FileListDialog.js:32
-msgid "You need to select an option!"
-msgstr "Bạn cần chọn 1 tùy chọn!"
-
-#: js/widgets/dialog/FileListDialog.js:91
-msgid "No"
-msgstr "Không"
-
-#: js/widgets/dialog/FileListDialog.js:99
-msgid "Yes"
-msgstr "Có"
-
-#: js/widgets/dialog/CredentialsDialog.js:84
-msgid "Please enter your credentials"
-msgstr "Xin nhập thông tin của bạn"
+#: js/widgets/dialog/MultipleEditResultSummary.js:152
+msgid ""
+"{0} {1} has invalid data after updating. This {1} has not been changed."
+msgstr "{0} {1} sai dữ liệu sau khi cập nhật. {1} này đã không được thay đổi."
 
 #: js/widgets/dialog/PreferencesDialog.js:125
 msgid "Admin Mode"
@@ -2002,100 +1851,9 @@ msgstr "Bạn cần sửa các trường đánh dấu đỏ trước khi lưu l�
 msgid "Saving of preferences failed."
 msgstr "Lưu thông số không thành công."
 
-#: js/widgets/dialog/EditDialog.js:487
-msgid "Add New {0}"
-msgstr "Thêm mới {0}"
-
-#: js/widgets/dialog/EditDialog.js:489
-msgid "Edit {0} \"{1}\""
-msgstr "Sửa {0} \"(1}\""
-
-#: js/widgets/dialog/EditDialog.js:553
-msgid "Transferring {0}..."
-msgstr "Đang truyền {0} ..."
-
-#: js/widgets/dialog/EditDialog.js:698
-msgid "Do you really want to delete this {0}?"
-msgstr "Bạn có thật sự muốn xóa {0} này?"
-
-#: js/widgets/dialog/EditDialog.js:710
-msgid "Could not delete {0}."
-msgstr "Không thể xóa {0}"
-
-#: js/widgets/dialog/EditDialog.js:762
-msgid "Resolve Duplicate {0} Suspicion"
-msgstr "Giải quyết trùng lặp {0}"
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:146
-msgid "You edited {0} {1}."
-msgstr "Bạn đã sửa {0} {1}"
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:149
-msgid "{0} {1} have been updated properly."
-msgstr "{0} {1} đã được cập nhật chính xác"
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:149
-msgid "{0} {1} has been updated properly."
-msgstr "{0} {1} đã được cập nhật chính xác"
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:152
-msgid ""
-"{0} {1} have invalid data after updating. These {1} have not been changed."
-msgstr "{0} {1} bị sai dữ liệu sau khi cập nhật. {1} này đã không được thay đổi."
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:152
-msgid ""
-"{0} {1} has invalid data after updating. This {1} has not been changed."
-msgstr "{0} {1} sai dữ liệu sau khi cập nhật. {1} này đã không được thay đổi."
-
-#: js/widgets/dialog/ExportDialog.js:48 js/widgets/container/GrantsGrid.js:51
-#: js/Models.js:336
-msgid "Export"
-msgid_plural "Export"
-msgstr[0] "one: Xuất dữ liệu\nother: Xuất dữ liệu"
-
-#: js/widgets/dialog/ExportDialog.js:84
-msgid "Export {0} {1}"
-msgstr "Đang xuất dữ liệu {0} {1}"
-
-#: js/widgets/dialog/ExportDialog.js:111
-msgid "Export definition"
-msgstr "Xuất dữ liệu định nghĩa"
-
-#: js/widgets/dialog/ExportDialog.js:120
-msgid "Select Export Definition ..."
-msgstr "Chọn các định nghĩa để xuất dữ liệu...."
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:315
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:430
-msgid "Delete value from all selected records"
-msgstr "Xóa giá trị từ tất cả biểu ghi được chọn."
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:413
-msgid "Undo change for all selected records"
-msgstr "Hủy bỏ thay đổi với mọi biểu ghi được chọn."
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:487
-msgid "Edit {0} {1}"
-msgstr "Sửa {0} {1}"
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:540
-msgid "Different Values"
-msgstr "Giá trị khác"
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:541
-msgid ""
-"This field has different values. Editing this field will overwrite the old "
-"values."
-msgstr "Trường này đã có giá trị khác. Sửa trường này sẽ ghi đè giá trị cũ."
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
-msgid "Do you really want to change these {0} records?"
-msgstr "Bạn có muốn thay đổi các biểu ghi {0} này?"
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
-msgid "Applying changes"
-msgstr "Thực hiện thay đổi"
+#: js/widgets/dialog/PreferencesPanel.js:185
+msgid "There are no preferences for this application."
+msgstr "Không có thông số nào cho ứng dụng này."
 
 #: js/widgets/dialog/PreferencesTreePanel.js:67
 msgid "General Preferences"
@@ -2117,118 +1875,431 @@ msgstr "Tiếp tục"
 msgid "Finish"
 msgstr "Kết thúc"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:41
-msgid "The record you try to add might already exist."
-msgstr "Biểu ghi bạn cố thêm có thể đã tồn tại"
+#: js/widgets/form/ConfigPanel.js:113
+msgid "Configuration Problem"
+msgstr "Vấn đề cấu hình"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:132
-msgid "Field Group"
-msgstr "Nhóm trường"
+#: js/widgets/form/ConfigPanel.js:134
+msgid "Invalid configuration"
+msgstr "Cấu hình lỗi"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:146
-msgid "My Value"
-msgstr "Giá trị của tôi"
+#: js/widgets/form/ConfigPanel.js:158
+msgid "Transferring Configuration..."
+msgstr "Đang truyền cấu hình"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:154
-msgid "Existing Value"
-msgstr "Giá trị đã tồn tại"
+#: js/widgets/form/ConfigPanel.js:254
+msgid "Save config"
+msgstr "Lưu cấu hình"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:162
-msgid "Final Value"
-msgstr "Giá trị cuối cùng"
+#: js/widgets/form/ConfigPanel.js:264
+msgid "Reload config"
+msgstr "Nạp lại cấu hình"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:179
-msgid "Action:"
-msgstr "Chức năng:"
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Wrong File Type"
+msgstr "Sai kiểu file"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:195
-msgid "Merge, keeping existing details"
-msgstr "Gộp, giữ chi tiết đã có"
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Please select a file with one of the following extensions:"
+msgstr "Hãy chọn 1 file với 1 trong các phần mở rộng sau:"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:196
-msgid "Merge, keeping my details"
-msgstr "Gộp, giữ chi tiết của tôi"
+#: js/widgets/form/RecordPickerComboBox.js:99
+#: js/widgets/form/RecordPickerManager.js:48
+msgid "Searching..."
+msgstr "Đang tìm ..."
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:197
-msgid "Keep existing record and discard mine"
-msgstr "Giữ kiểu ghi đã tồn tại và bỏ qua tôi"
+#: js/widgets/form/RecordPickerComboBox.js:268
+#: js/widgets/relation/GenericPickerGridPanel.js:721
+msgid "You tried to link a record with itself. This is not allowed!"
+msgstr "Bạn cố liên kết 1 biểu ghi với chính nó. Việc này không được phép!"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:198
-msgid "Keep both records"
-msgstr "Giữ cả hai biểu ghi"
+#: js/widgets/grid/FileUploadGrid.js:116
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "Không thể upload file. Dung lượng file quá lớn. Xin hãy thông báo với quản trị hệ thống. Dung lượng upload tối đa là:"
 
-#: js/widgets/TimezoneChooser.js:77
-msgid "setting new timezone..."
-msgstr "thiết lập múi giờ mới ..."
+#: js/widgets/grid/FileUploadGrid.js:180
+msgid "Remove file"
+msgstr "Xóa file"
 
-#: js/widgets/customfields/EditDialogPlugin.js:155
-msgid "General"
-msgstr "Chung"
+#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:116
+msgid "Pause upload"
+msgstr "Tạm dừng upload"
 
-#: js/widgets/customfields/EditDialogPlugin.js:167
-msgid "Custom Fields"
-msgstr "Trường tùy biến"
+#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:100
+msgid "Resume upload"
+msgstr "Tiếp tục upload"
 
-#: js/widgets/ActivitiesPanel.js:147
-msgid "Add a Note..."
-msgstr "Thêm 1 ghi chép ..."
+#: js/widgets/grid/FileUploadGrid.js:244
+msgid "Add file"
+msgstr "Thêm file"
 
-#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:174
-#: js/widgets/container/GrantsGrid.js:45
-msgid "Add"
-msgstr "Thêm"
+#: js/widgets/grid/FileUploadGrid.js:286
+msgid "name"
+msgstr "Tên"
 
-#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
-msgid "Note"
-msgstr "Ghi chép"
+#: js/widgets/grid/FileUploadGrid.js:293
+msgid "size"
+msgstr "dung lượng"
 
-#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
-msgid "Add new note"
-msgstr "Tạo ghi chép"
+#: js/widgets/grid/FileUploadGrid.js:300
+msgid "type"
+msgstr "kiểu"
 
-#: js/widgets/ActivitiesPanel.js:206
-msgid "Notes"
-msgstr "Ghi chép"
+#: js/widgets/grid/FilterModel.js:168
+msgid "contains"
+msgstr "chứa"
 
-#: js/widgets/ActivitiesPanel.js:282
-msgid "Enter new note:"
-msgstr "Nhập ghi chép mới:"
+#: js/widgets/grid/FilterModel.js:169
+msgid "reg. exp."
+msgstr "reg. exp."
 
-#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
-msgid "Add Note"
-msgstr "Thêm ghi chép"
+#: js/widgets/grid/FilterModel.js:171
+msgid "is greater than"
+msgstr "lớn hơn"
 
-#: js/widgets/ActivitiesPanel.js:371
-msgid "Add a {0} Note"
-msgstr "Thêm 1 ghi chép {0}"
+#: js/widgets/grid/FilterModel.js:172
+msgid "is less than"
+msgstr "ít hơn"
 
-#: js/widgets/ActivitiesPanel.js:465
-msgid "Timestamp"
-msgstr "Định dạng thời gian"
+#: js/widgets/grid/FilterModel.js:173
+msgid "is not"
+msgstr "không"
 
-#: js/widgets/ActivitiesPanel.js:479
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr "Hiển thị lịch sử, biểu ghi {0}-{1) của {2}"
+#: js/widgets/grid/FilterModel.js:174
+msgid "one of"
+msgstr "một trong"
 
-#: js/widgets/ActivitiesPanel.js:480
-msgid "No history to display"
-msgstr "Không có lịch sử nào"
+#: js/widgets/grid/FilterModel.js:175
+msgid "none of"
+msgstr "không trong"
 
-#: js/widgets/ActivitiesPanel.js:580
-msgid "History"
-msgstr "Lịch sử"
+#: js/widgets/grid/FilterModel.js:176
+msgid "is before"
+msgstr "trước"
 
-#: js/widgets/ActivitiesPanel.js:592 js/ApplicationStarter.js:222
-msgid "Quick search"
-msgstr "Tìm nhanh"
+#: js/widgets/grid/FilterModel.js:177
+msgid "is after"
+msgstr "sau"
 
-#: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
-msgid "Time"
-msgstr "Thời gian"
+#: js/widgets/grid/FilterModel.js:178
+msgid "is within"
+msgstr "trong"
 
-#: js/widgets/ActivitiesPanel.js:596
-msgid "User"
-msgstr "Người dùng"
+#: js/widgets/grid/FilterModel.js:179
+msgid "is in week no."
+msgstr "tại tuần số"
+
+#: js/widgets/grid/FilterModel.js:180
+msgid "starts with"
+msgstr "bắt đầu với"
+
+#: js/widgets/grid/FilterModel.js:181
+msgid "ends with"
+msgstr "kết thúc với"
+
+#: js/widgets/grid/FilterModel.js:182
+msgid "defined by"
+msgstr "định nghĩa bởi"
+
+#: js/widgets/grid/FilterModel.js:228
+#: js/widgets/grid/ForeignRecordFilter.js:395
+#: js/widgets/relation/FilterModel.js:87
+msgid "select a operator"
+msgstr "chọn toán tử"
+
+#: js/widgets/grid/FilterModel.js:352
+msgid "Search Account ..."
+msgstr "Tìm tài khoản ..."
+
+#: js/widgets/grid/FilterModel.js:462
+msgid "today"
+msgstr "hôm nay"
+
+#: js/widgets/grid/FilterModel.js:463
+msgid "yesterday"
+msgstr "hôm qua"
+
+#: js/widgets/grid/FilterModel.js:464
+msgid "this week"
+msgstr "tuần này"
+
+#: js/widgets/grid/FilterModel.js:465
+msgid "last week"
+msgstr "tuần trước"
+
+#: js/widgets/grid/FilterModel.js:466
+msgid "the week before last"
+msgstr "tuần trước nữa"
+
+#: js/widgets/grid/FilterModel.js:467
+msgid "this month"
+msgstr "tháng này"
+
+#: js/widgets/grid/FilterModel.js:468
+msgid "last month"
+msgstr "thánh trước"
+
+#: js/widgets/grid/FilterModel.js:469
+msgid "this quarter"
+msgstr "quý này"
+
+#: js/widgets/grid/FilterModel.js:470
+msgid "last quarter"
+msgstr "quý trước"
+
+#: js/widgets/grid/FilterModel.js:471
+msgid "this year"
+msgstr "năm nay"
+
+#: js/widgets/grid/FilterModel.js:472
+msgid "last year"
+msgstr "năm ngoái"
+
+#: js/widgets/grid/FilterModel.js:476
+msgid "tomorrow"
+msgstr "ngay mai"
+
+#: js/widgets/grid/FilterModel.js:477
+msgid "next week"
+msgstr "tuần sau"
+
+#: js/widgets/grid/FilterModel.js:478
+msgid "next month"
+msgstr "tháng sau"
+
+#: js/widgets/grid/FilterModel.js:479
+msgid "next quarter"
+msgstr "quý sau"
+
+#: js/widgets/grid/FilterModel.js:480
+msgid "next year"
+msgstr "năm sau"
+
+#: js/widgets/grid/FilterPanel.js:78
+msgid "Attention: There are more filters active!"
+msgstr "Chú ý: Có thêm bộ lọc được áp dụng!"
+
+#: js/widgets/grid/FilterPanel.js:261
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
+msgid "show details"
+msgstr "xem chi tiết"
+
+#: js/widgets/grid/FilterPanel.js:262
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
+msgid "Always show advanced filters"
+msgstr "Luôn hiện bộ lọc nâng cao"
+
+#: js/widgets/grid/FilterPanel.js:501
+msgid "Criteria {0}"
+msgstr "Biểu thức {0}"
+
+#: js/widgets/grid/FilterStructureTreePanel.js:35
+#: js/widgets/grid/FilterStructureTreePanel.js:52
+msgid "Show records that match to one of the following filters"
+msgstr "Hiển thị biểu ghi phù hợp với 1 trong các bộ lọc sau"
+
+#: js/widgets/grid/FilterStructureTreePanel.js:37
+#: js/widgets/grid/FilterStructureTreePanel.js:51
+msgid "or alternatively"
+msgstr "hoặc khác"
+
+#: js/widgets/grid/FilterStructureTreePanel.js:55
+msgid "Add alternative filter"
+msgstr "Thêm bộ lọc khác"
+
+#: js/widgets/grid/FilterStructureTreePanel.js:61
+msgid "Remove Filter"
+msgstr "Xóa bộ lọc"
+
+#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:571
+msgid "Show"
+msgstr "Hiển thị"
+
+#: js/widgets/grid/FilterToolbar.js:164
+msgid "add new filter"
+msgstr "thêm bộ lọc mới"
+
+#: js/widgets/grid/FilterToolbar.js:170
+msgid "reset all filters"
+msgstr "khởi tạo lại mọi bộ lọc"
+
+#: js/widgets/grid/FilterToolbar.js:176
+msgid "start search"
+msgstr "bắt đầu tìm"
+
+#: js/widgets/grid/FilterToolbar.js:184
+msgid "save as favorite"
+msgstr "lưu như lối tắt"
+
+#: js/widgets/grid/FilterToolbar.js:191
+msgid "Load a favorite"
+msgstr "Nạp 1 lối tắt"
+
+#: js/widgets/grid/FilterToolbar.js:358
+msgid "select a field"
+msgstr "chọn 1 trường"
+
+#: js/widgets/grid/FilterToolbar.js:396
+msgid "Delete this filter"
+msgstr "Xóa bộ lọc này"
+
+#: js/widgets/grid/FilterToolbar.js:428
+msgid "and"
+msgstr "và"
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] "one: Màn hình của bạn giới hạn {0} điều kiện:\nother: Màn hình của bạn giới hạn {0} điều kiện:"
+
+#: js/widgets/grid/ForeignRecordFilter.js:61
+msgid "Edit definition"
+msgstr "Sửa định nghĩa"
+
+#: js/widgets/grid/ForeignRecordFilter.js:71
+msgid "Start definition"
+msgstr "Bắt đầu định nghĩa"
+
+#: js/widgets/grid/ForeignRecordFilter.js:111
+msgid "Related to"
+msgstr "Liên quan tới"
+
+#: js/widgets/grid/GridPanel.js:286
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
+msgstr "Có thể tìm thấy bất kỳ {0}. Xin thay đổi điều kiện lọc, tùy chọn xem hoặc {1} bạn tìm kiếm."
+
+#: js/widgets/grid/GridPanel.js:288 js/widgets/grid/GridPanel.js:474
+#: js/widgets/grid/GridPanel.js:475 js/widgets/grid/GridPanel.js:476
+msgid "Edit {0}"
+msgid_plural "Edit {0}"
+msgstr[0] "one:Sửa {0}\nother:Sửa {0}"
+
+#: js/widgets/grid/GridPanel.js:500 js/widgets/tree/ContextMenu.js:35
+msgid "Add {0}"
+msgstr "Thêm {0}"
+
+#: js/widgets/grid/GridPanel.js:508
+msgid "Print Page"
+msgstr "Trang in"
+
+#: js/widgets/grid/GridPanel.js:573 js/widgets/grid/GridPanel.js:574
+#: js/widgets/grid/GridPanel.js:576 js/widgets/tree/ContextMenu.js:52
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "one: Xóa {0}\nother: Xóa {0}"
+
+#: js/widgets/grid/GridPanel.js:971
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Hiển thị biểu ghi {0} - {1} của {2}"
+
+#: js/widgets/grid/GridPanel.js:972
+msgid "No {0} to display"
+msgstr "Không {0} để hiển thị"
+
+#: js/widgets/grid/GridPanel.js:1210
+msgid "New..."
+msgstr "Mới..."
+
+#: js/widgets/grid/GridPanel.js:1229
+msgid "Add to..."
+msgstr "Thêm vào..."
+
+#: js/widgets/grid/GridPanel.js:1273
+#: js/widgets/relation/GenericPickerGridPanel.js:431
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/widgets/grid/GridPanel.js:1275
+msgid "Last Modified Time"
+msgstr "Thời gian sửa cuối"
+
+#: js/widgets/grid/GridPanel.js:1276
+msgid "Last Modified By"
+msgstr "Sửa cuối bởi"
+
+#: js/widgets/grid/GridPanel.js:1645
+msgid "Not Allowed"
+msgstr "Không được phép"
+
+#: js/widgets/grid/GridPanel.js:1646
+msgid "You are not allowed to delete all pages at once"
+msgstr "Bạn không được phép xóa mọi trang cùng 1 lúc"
+
+#: js/widgets/grid/GridPanel.js:1669
+msgid "Do you really want to delete the selected record ({0})?"
+msgid_plural "Do you really want to delete the selected records ({0})?"
+msgstr[0] "one: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?\nother: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?"
+
+#: js/widgets/grid/GridPanel.js:1704
+msgid " ... This may take a long time!"
+msgstr "... có thể mất nhiều thời gian!"
+
+#: js/widgets/grid/PickerGridPanel.js:162
+msgid "Remove record"
+msgstr "Xóa biểu ghi"
+
+#: js/widgets/grid/PickerGridPanel.js:296
+msgid "Search for records ..."
+msgstr "Tìm biểu ghi..."
+
+#: js/widgets/grid/QuickaddGridPanel.js:91
+msgid "Remove"
+msgstr "Xóa"
+
+#: js/widgets/grid/RendererManager.js:54
+msgid "has notes"
+msgstr "có ghi chép"
+
+#: js/widgets/grid/RendererManager.js:57
+msgid "has relations"
+msgstr "có liên hệ"
+
+#: js/widgets/LangChooser.js:35 Preference.php:91
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+#: js/widgets/LangChooser.js:68
+msgid "setting new language..."
+msgstr "thiết lập ngôn ngữ mới ..."
+
+#: js/widgets/mainscreen/WestPanel.js:299
+msgid "containers"
+msgstr "bộ chứa"
+
+#: js/widgets/mainscreen/WestPanel.js:326
+msgid "Favorites"
+msgstr "Lối tắt"
+
+#: js/widgets/MainScreen.js:264
+msgid "Save current view as favorite"
+msgstr "Lưu khung xem hiện tại thành lối tắt"
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
+msgid "Favorite not Saved"
+msgstr "Lối tắt không được lưu"
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
+msgid ""
+"You have to supply a shorter name! Names of favorite can only be up to 40 "
+"characters long."
+msgstr "Bạn phải nhập tên ngắn hơn! Tên trong lối tắt không được dài hơn 40 ký tự."
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
+msgid "You have to supply a name for the favorite!"
+msgstr "Bạn phải cung cấp 1 tên cho lôi tắt!"
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:189
+msgid "Title"
+msgstr "Tiêu đề"
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
+msgid "Shared Favorite (visible by all users)"
+msgstr "Lối tắt chia sẻ (mọi người có thể nhìn thấy)"
 
 #: js/widgets/persistentfilter/PickerPanel.js:114
 msgid "My favorites"
@@ -2287,428 +2358,388 @@ msgstr "Lưu lối tắt \"{0}\""
 msgid "(shared)"
 msgstr "(chia sẻ)"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
-msgid "Favorite not Saved"
-msgstr "Lối tắt không được lưu"
+#: js/widgets/relation/FilterModel.js:71
+msgid "Defined by ..."
+msgstr "Định nghĩa bởi ..."
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
+#: js/widgets/relation/FilterModel.js:114
+msgid "Define ..."
+msgstr "Định nghĩa ..."
+
+#: js/widgets/relation/GenericPickerGridPanel.js:126
+msgid "Edit record"
+msgstr "Sửa biểu ghi"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:162
+msgid "Sibling"
+msgstr "Sibling"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:163
+msgid "Parent"
+msgstr "Cha"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:164
+msgid "Child"
+msgstr "Con"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:209
+msgid "Relations failure"
+msgstr "Lỗi liên quan"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:209
+msgid "There are invalid relations. Please check before saving."
+msgstr "Có lỗi liên quan. Xin hãy kiểm tra trước khi lưu lại."
+
+#: js/widgets/relation/GenericPickerGridPanel.js:252
 msgid ""
-"You have to supply a shorter name! Names of favorite can only be up to 40 "
-"characters long."
-msgstr "Bạn phải nhập tên ngắn hơn! Tên trong lối tắt không được dài hơn 40 ký tự."
+"The maximum number of {0} with the type {1} is reached. Please change the "
+"type of this relation"
+msgstr "Số tối đa của {0} với loại {1} đã đạt ngưỡng. Xin hãy đổi loại liên quan này."
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
-msgid "You have to supply a name for the favorite!"
-msgstr "Bạn phải cung cấp 1 tên cho lôi tắt!"
+#: js/widgets/relation/GenericPickerGridPanel.js:426
+msgid "Record"
+msgstr "Biểu ghi"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:189
-msgid "Title"
-msgstr "Tiêu đề"
+#: js/widgets/relation/GenericPickerGridPanel.js:428
+msgid "Remark"
+msgstr "Nhận xét"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
-msgid "Shared Favorite (visible by all users)"
-msgstr "Lối tắt chia sẻ (mọi người có thể nhìn thấy)"
+#: js/widgets/relation/GenericPickerGridPanel.js:429
+msgid "Dependency"
+msgstr "Phần phụ thuộc"
 
-#: js/widgets/CountryCombo.js:34
-msgid "Select a country..."
-msgstr "Chọn 1 quốc gia ..."
-
-#: js/widgets/account/PickerGridPanel.js:158
-msgid "Search User"
-msgstr "Tìm người dùng"
-
-#: js/widgets/account/PickerGridPanel.js:164
-msgid "Search Group"
-msgstr "Tìm nhóm"
-
-#: js/widgets/account/PickerGridPanel.js:170
-msgid "Add Anyone"
-msgstr "Thêm bất kỳ ai"
-
-#: js/widgets/account/PickerGridPanel.js:213
-msgid "Anyone"
-msgstr "Bất kỳ ai"
-
-#: js/widgets/account/PickerGridPanel.js:229
-msgid "Search for users ..."
-msgstr "Tìm người dùng ..."
-
-#: js/widgets/account/PickerGridPanel.js:251
-msgid "Search for groups ..."
-msgstr "Tìm nhóm người dùng ..."
-
-#: js/widgets/LangChooser.js:68
-msgid "setting new language..."
-msgstr "thiết lập ngôn ngữ mới ..."
-
-#: js/widgets/MainScreen.js:264
-msgid "Save current view as favorite"
-msgstr "Lưu khung xem hiện tại thành lối tắt"
-
-#: js/widgets/mainscreen/WestPanel.js:299
-msgid "containers"
-msgstr "bộ chứa"
-
-#: js/widgets/mainscreen/WestPanel.js:326
-msgid "Favorites"
-msgstr "Lối tắt"
-
-#: js/widgets/container/GrantsDialog.js:52
-msgid "Folder"
-msgstr "Thư mục"
-
-#: js/widgets/container/GrantsDialog.js:95
-msgid "Updating Grants"
-msgstr "Cập nhật quyền"
-
-#: js/widgets/container/GrantsDialog.js:125
-msgid "Error"
-msgstr "Lỗi"
-
-#: js/widgets/container/GrantsDialog.js:126
-msgid "You are not allowed to remove all admins for this container!"
-msgstr "Bạn không được phép xóa mọi quyền quản trị của mục này!"
-
-#: js/widgets/container/FilterModel.js:142
-msgid "is personal of"
-msgstr "là cá nhân của"
-
-#: js/widgets/container/ContainerSelect.js:129
-#: js/ux/form/ComboBoxRecentsPlugin.js:43
-msgid "choose other {0}..."
-msgstr "chọn {0} khác ..."
-
-#: js/widgets/container/ContainerSelect.js:132
-msgid "Select a {0}"
-msgstr "Chọn 1 {0}"
-
-#: js/widgets/container/ContainerSelect.js:152
-msgid "Recently used {0}:"
-msgstr "{0} được dùng gần đây:"
-
-#: js/widgets/container/ContainerSelect.js:478
-msgid "please select a {0}"
-msgstr "hãy chọn 1 {0}"
-
-#: js/widgets/container/PropertiesDialog.js:90
-msgid "Properties"
-msgstr "Thuộc tính"
-
-#: js/widgets/container/PropertiesDialog.js:119
-msgid "My Grants"
-msgstr "Quyền của tôi"
-
-#: js/widgets/container/TreePanel.js:142
-msgid "container"
-msgid_plural "containers"
-msgstr[0] "one: bộ chứa\nother: bộ chứa"
-
-#: js/widgets/container/TreePanel.js:546
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr "Bạn không được phép chọn {0} '{1}':"
-
-#: js/widgets/container/TreePanel.js:547
-msgid "{0} grant is required for desired action"
-msgstr "{0} quyền được yêu cầu cho hành động bạn muốn"
-
-#: js/widgets/container/TreePanel.js:548
-msgid "Insufficient Grants"
-msgstr "Thiếu quyền"
-
-#: js/widgets/container/GrantsGrid.js:44
-msgid "The grant to read records of this container"
-msgstr "Quyền đọc biểu ghi của bộ chứa này"
-
-#: js/widgets/container/GrantsGrid.js:46
-msgid "The grant to add records to this container"
-msgstr "Quyền thêm biểu ghi cho bộ chứa này"
-
-#: js/widgets/container/GrantsGrid.js:48
-msgid "The grant to edit records in this container"
-msgstr "Quyền sửa biểu ghi trong bộ chứa này"
-
-#: js/widgets/container/GrantsGrid.js:49
-msgid "Delete"
-msgstr "Xóa"
-
-#: js/widgets/container/GrantsGrid.js:50
-msgid "The grant to delete records in this container"
-msgstr "Quyền xóa biểu ghi trong bộ chứa này"
-
-#: js/widgets/container/GrantsGrid.js:52
-msgid "The grant to export records from this container"
-msgstr "Quyền xuất biểu ghi từ bộ chứa này"
-
-#: js/widgets/container/GrantsGrid.js:53
-msgid "Sync"
-msgstr "Đồng bộ"
-
-#: js/widgets/container/GrantsGrid.js:54
-msgid "The grant to synchronise records with this container"
-msgstr "Quyền để đồng bộ biểu ghi với bộ chứa này"
-
-#: js/widgets/container/GrantsGrid.js:55
-msgid "Admin"
-msgstr "Quản trị"
-
-#: js/widgets/container/GrantsGrid.js:56
-msgid "The grant to administrate this container"
-msgstr "Quyền quản trị bộ chứa này"
-
-#: js/widgets/container/GrantsGrid.js:58
-msgid "Free Busy"
-msgstr "Bận rỗi"
-
-#: js/widgets/container/GrantsGrid.js:59
-msgid "The grant to access free busy information of events in this calendar"
-msgstr "Quyền truy cập thông tin bận rỗi của sự kiện trong lịch"
-
-#: js/widgets/container/GrantsGrid.js:60
-msgid "Private"
-msgstr "Riêng tư"
-
-#: js/widgets/container/GrantsGrid.js:61
-msgid "The grant to access records marked as private in this container"
-msgstr "Quyền truy cập biểu ghi được đánh dấu riêng tư trong bộ chứa."
-
-#: js/widgets/form/ConfigPanel.js:113
-msgid "Configuration Problem"
-msgstr "Vấn đề cấu hình"
-
-#: js/widgets/form/ConfigPanel.js:134
-msgid "Invalid configuration"
-msgstr "Cấu hình lỗi"
-
-#: js/widgets/form/ConfigPanel.js:158
-msgid "Transferring Configuration..."
-msgstr "Đang truyền cấu hình"
-
-#: js/widgets/form/ConfigPanel.js:254
-msgid "Save config"
-msgstr "Lưu cấu hình"
-
-#: js/widgets/form/ConfigPanel.js:264
-msgid "Reload config"
-msgstr "Nạp lại cấu hình"
-
-#: js/widgets/form/FileUploadButton.js:65
-msgid "Wrong File Type"
-msgstr "Sai kiểu file"
-
-#: js/widgets/form/FileUploadButton.js:65
-msgid "Please select a file with one of the following extensions:"
-msgstr "Hãy chọn 1 file với 1 trong các phần mở rộng sau:"
-
-#: js/widgets/form/RecordPickerManager.js:48
-#: js/widgets/form/RecordPickerComboBox.js:99
-msgid "Searching..."
-msgstr "Đang tìm ..."
-
-#: js/ExceptionDialog.js:107
-msgid "Send Report"
-msgstr "Gửi báo cáo"
-
-#: js/ExceptionDialog.js:135
-msgid "The last action you made was potentially not performed correctly."
-msgstr "Hoạt động cuối của bạn đã làm có thể không được thực hiện một cách chính xác."
-
-#: js/ExceptionDialog.js:136
+#: js/widgets/relation/GenericPickerGridPanel.js:708
 msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
-msgstr "Xin hãy giúp nâng cao chất lượng phần mềm này và thông báo với nhà cung cấp. Bao gồm mô tả ngắn gọn bạn làm gì ở đâu khi có lỗi xảy ra"
+"The record you tried to link is already linked. Please edit the existing "
+"link."
+msgstr "Biểu ghi bạn có liên kết đã được liên kết. Xin sửa liên kết đã tồn tại."
 
-#: js/ExceptionDialog.js:150
-msgid "Send Contact Information"
-msgstr "Gửi thông tin liên hệ"
-
-#: js/ExceptionDialog.js:167
-msgid "Details:"
-msgstr "Chi tiết:"
-
-#: js/ExceptionDialog.js:191
-msgid "Sending report..."
-msgstr "Đang gửi báo cáo..."
-
-#: js/ExceptionDialog.js:191
-msgid "Please wait a moment"
-msgstr "Xin đợi trong giây l"
-
-#: js/ExceptionDialog.js:240
-msgid "Transmission Completed"
-msgstr "Việc chuyển phát đã hoàn thành"
-
-#: js/ExceptionDialog.js:241
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "Báo cáo của bạn đã được gửi. Cảm ơn bạn đã đóng góp."
-
-#: js/ExceptionDialog.js:241
-msgid "Please restart your browser now!"
-msgstr "Xin khởi động lại trình duyệt của bạn ngay!"
-
-#: js/MainScreen.js:202
-msgid "Your password expired. Please enter a new user password:"
-msgstr "Mật khẩu của bạn đã hết hạn. Xin nhập mật khẩu người dùng mới:"
-
-#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
-msgid "Outdent Text"
-msgstr "Nội dung thò ra"
-
-#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
-msgid "Indent Text"
-msgstr "Nội dung thụt vào"
-
-#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
-msgid "Remove Formatting"
-msgstr "Xóa định dạng"
-
-#: js/UserRegistration.js:37
-msgid "Registration Wizard"
-msgstr "Đồ thuật đăng ký"
-
-#: js/UserRegistration.js:90
-msgid "Given name"
-msgstr "Tên gọi"
-
-#: js/UserRegistration.js:101
-msgid "Family name"
-msgstr "Tên họ"
-
-#: js/UserRegistration.js:112
-msgid "Login name"
-msgstr "Tên đăng nhập"
-
-#: js/UserRegistration.js:125
-msgid "Emailaddress"
-msgstr "Địa chỉ Email"
-
-#: js/UserRegistration.js:171
-msgid "Congratulations!"
-msgstr "Chúc mừng!"
-
-#: js/UserRegistration.js:171
+#: js/widgets/relation/PickerCombo.js:93
 msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr "Bạn đã nhập mọi thông tin cần thiết. Nếu bạn nhấn nút Kết thúc, chúng tôi sẽ gửi cho bạn email đăng ký."
+"The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
+"once!"
+msgstr "{1} \"{2}\" đã được dùng trong trường \"{0}\" và chỉ được liên kết một lần!"
 
-#: js/ux/PopupWindowManager.js:164
-msgid ""
-"The window you want to work with is backgrounded. Your browser doesn't "
-"support to foreground the window for you, so you need to use your operating "
-"systems window switching features. Please send complaints to your browser "
-"vendor!"
-msgstr "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
+#: js/widgets/tags/TagCombo.js:46
+msgid "tag name"
+msgstr "tên từ khóa"
 
-#: js/ux/Percentage.js:190
-msgid "(paused)"
-msgstr "(đã dừng)"
+#: js/widgets/tags/TagsMassAttachAction.js:18
+msgid "Add Tag"
+msgstr "Thêm từ khóa"
 
-#: js/ux/SearchField.js:44
-msgid "enter searchfilter"
-msgstr "nhập bộ lọc tìm kiếm"
+#: js/widgets/tags/TagsMassAttachAction.js:76
+msgid "Attach the following tag to all selected items:"
+msgstr "Gắn từ khóa sau với mọi mục được chọn:"
 
-#: js/ux/grid/PagingToolbar.js:50
-msgid "{0} selected"
-msgstr "{0} được chọn"
+#: js/widgets/tags/TagsMassAttachAction.js:98
+msgid "Select Tag"
+msgstr "Chọn th"
 
-#: js/ux/grid/PagingToolbar.js:51
-msgid "Unselect all"
-msgstr "Bỏ chọn hết"
+#: js/widgets/tags/TagsMassAttachAction.js:128
+msgid "Attaching Tag"
+msgstr "Đang gắn từ khóa"
 
-#: js/ux/grid/PagingToolbar.js:52
-msgid "Select all pages ({0} records)"
-msgstr "Chọn mọi trang ({0} biểu ghi)"
+#: js/widgets/tags/TagsMassDetachAction.js:18
+msgid "Detach tag(s)"
+msgstr "Gỡ bỏ từ khóa"
 
-#: js/ux/grid/PagingToolbar.js:53
-msgid "Toggle selection"
-msgstr "Đổi chọn"
+#: js/widgets/tags/TagsMassDetachAction.js:84
+msgid "Select Tag(s) to detach"
+msgstr "Chọn từ khóa để gỡ bỏ"
 
-#: js/ux/ConnectionStatus.js:56
-msgid "online"
-msgstr "trực tuyến"
+#: js/widgets/tags/TagsPanel.js:105
+msgid "Add a new personal tag"
+msgstr "Thêm 1 từ khóa cá nhân"
 
-#: js/ux/ConnectionStatus.js:57
-msgid "offline"
-msgstr "đoạn tuyến"
+#: js/widgets/tags/TagsPanel.js:108
+msgid "Add New Personal Tag"
+msgstr "Thêm mới từ khóa cá nhân"
 
-#: js/ux/form/RecordsComboBox.js:26
-msgid "Software Version"
-msgstr "Phiên bản phần mềm"
+#: js/widgets/tags/TagsPanel.js:109
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr "Ghi chú: Bạn tạo 1 từ khóa cá nhân. Chỉ bạn mới có thể nhìn thấy nó."
 
-#: js/ux/form/ImageField.js:76
-msgid "Loading"
-msgstr "Đang tải"
+#: js/widgets/tags/TagsPanel.js:109
+msgid "Enter tag name:"
+msgstr "Nhập tên từ khóa:"
 
-#: js/ux/form/ImageField.js:78
-msgid "Click to edit"
-msgstr "Click để sửa"
+#: js/widgets/tags/TagsPanel.js:150
+msgid "No Tags to display"
+msgstr "Không có từ khóa nào"
 
-#: js/ux/form/ImageField.js:146
-msgid "Image Failed"
-msgstr "Ảnh bị hỏng"
+#: js/widgets/tags/TagsPanel.js:173
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] "one: Gỡ từ khóa\nother: Gỡ từ khóa"
 
-#: js/ux/form/ImageField.js:146
-msgid "Could not load image. Please notify your Administrator"
-msgstr "Không thể nạp ảnh. Xin thông báo với người quản trị hệ thống"
+#: js/widgets/tags/TagsPanel.js:183
+msgid "Edit tag"
+msgstr "Sửa từ khóa"
 
-#: js/ux/form/ImageField.js:168
-msgid "Not An Image"
-msgstr "Không phải là ảnh"
+#: js/widgets/tags/TagsPanel.js:188 js/widgets/tags/TagsPanel.js:193
+msgid "Rename Tag"
+msgstr "Đổi tên từ khóa"
 
-#: js/ux/form/ImageField.js:168
-msgid "Please select an image file (gif/png/jpeg)"
-msgstr "Xin chọn 1 file ảnh (gif/png/jpeg)"
+#: js/widgets/tags/TagsPanel.js:193
+msgid "Please enter a new name:"
+msgstr "Xin nhập 1 tên mới:"
 
-#: js/ux/form/ImageField.js:211
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "Không thể upload ảnh. Xin hãy thông báo với người quản trị hệ thống"
+#: js/widgets/tags/TagsPanel.js:202
+msgid "Edit Description"
+msgstr "Sửa mô tả"
 
-#: js/ux/form/ImageField.js:224
-msgid "Change Image"
-msgstr "Đổi ảnh"
+#: js/widgets/tags/TagsPanel.js:207
+msgid "Description for tag"
+msgstr "Mô tả cho từ khóa"
 
-#: js/ux/form/ImageField.js:232 js/ux/form/ImageField.js:250
-msgid "Crop Image"
-msgstr "Xén ảnh"
+#: js/widgets/tags/TagsPanel.js:207
+msgid "Please enter new description:"
+msgstr "Xin nhập mô tả mới:"
 
-#: js/ux/form/ImageField.js:256
-msgid "Delete Image"
-msgstr "Xóa ảnh"
+#: js/widgets/tags/TagsPanel.js:216
+msgid "Change Color"
+msgstr "Đổi màu"
 
-#: js/ux/form/ImageField.js:265
-msgid "Show Original Image"
-msgstr "Hiển thị ảnh gốc"
+#: js/widgets/tags/TagsPanel.js:245
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] "one: Xóa từ khóa\nother: Xóa từ khóa"
 
-#: js/Models.js:272
-msgid "Alarm"
-msgid_plural "Alarms"
-msgstr[0] "one: Báo thức\nother: Báo thức"
+#: js/widgets/tags/TagsPanel.js:258
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] "one: Thực sự xóa từ khóa được chọn?\nother: Thực sự xóa các từ khóa được chọn?"
 
-#: js/Models.js:310
-msgid "Import"
-msgid_plural "Imports"
-msgstr[0] "one: Nhập dữ liệu\nother: Nhập dữ liệu"
+#: js/widgets/tags/TagsPanel.js:259
+msgid "the selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] "one:Từ khóa sau sẽ bị xóa và biến mất khỏi mọi mục\nother:Các từ khóa sau sẽ bị xóa và biến mất khỏi mọi mục"
 
-#: js/Models.js:373
-msgid "Credentials"
-msgid_plural "Credentials"
-msgstr[0] "one:Chi tiết\nother:Chi tiết"
+#: js/widgets/tags/TagsPanel.js:263
+msgid "Please wait a moment..."
+msgstr "Xin đợi trong giaay lát"
 
-#: js/Models.js:421
-msgid "Department"
-msgid_plural "Departments"
-msgstr[0] "one:Bộ phận\none:Bộ phận"
+#: js/widgets/tags/TagsPanel.js:263
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] "one: Đang xóa từ khóa\nother: Đang xóa từ khóa"
 
-#: js/Models.js:447
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] "one: Cấu hình\nother: Cấu hình"
+#: js/widgets/tags/TagsPanel.js:279
+msgid "Could not delete Tag(s)."
+msgstr "Không thể xóa từ khóa."
 
-#: js/Models.js:447
-msgid "Configs"
-msgstr "Cấu hình"
+#: js/widgets/tags/TagsPanel.js:323 js/widgets/tags/TagsPanel.js:385
+msgid "Notice"
+msgstr "Cảnh báo"
+
+#: js/widgets/tags/TagsPanel.js:324 js/widgets/tags/TagsPanel.js:386
+msgid "The minimum tag length is three."
+msgstr "Độ dài tối thiểu cho từ khóa là 3"
+
+#: js/widgets/tags/TagsPanel.js:371
+msgid "Could not create tag."
+msgstr "Không thể tạo từ khóa"
+
+#: js/widgets/tags/TagsPanel.js:404
+msgid "Could not update tag."
+msgstr "Không thể cập nhật từ khóa"
+
+#: js/widgets/tags/TagToggleBox.js:52
+msgid "Detach Tags"
+msgstr "Gỡ từ khóa"
+
+#: js/widgets/tags/TagToggleBox.js:52
+msgid "Attach Tags"
+msgstr "Gắn từ khóa"
+
+#: js/widgets/tags/TagToggleBox.js:140
+msgid "No Tags to detach found in the selected records"
+msgstr "Không có từ khóa nào để gỡ trong các biểu ghi được ch"
+
+#: js/widgets/tags/TagToggleBox.js:141
+msgid "Please Wait..."
+msgstr "Xin hãy đợi ..."
+
+#: js/widgets/tags/TagToggleBox.js:152
+msgid "Detaching Tags"
+msgstr "Gỡ từ khóa"
+
+#: js/widgets/TimezoneChooser.js:37 Preference.php:87
+msgid "Timezone"
+msgstr "Múi giờ"
+
+#: js/widgets/TimezoneChooser.js:77
+msgid "setting new timezone..."
+msgstr "thiết lập múi giờ mới ..."
+
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:265
+msgid "Rename {0}"
+msgstr "Đổi tên {0}"
+
+#: js/widgets/tree/ContextMenu.js:61
+msgid "Manage {0} Permissions"
+msgstr "Quản lý quyền {0}"
+
+#: js/widgets/tree/ContextMenu.js:69
+msgid "{0} Properties"
+msgstr "Thuộc tính {0}"
+
+#: js/widgets/tree/ContextMenu.js:78
+msgid "Set {0} color"
+msgstr "Đặt màu {0}"
+
+#: js/widgets/tree/ContextMenu.js:92
+msgid "Reload {0}"
+msgstr "Nạp lại {0}"
+
+#: js/widgets/tree/ContextMenu.js:109
+msgid "Edit Properties"
+msgstr "Sửa thuộc tính"
+
+#: js/widgets/tree/ContextMenu.js:124
+msgid "Download"
+msgstr "Download"
+
+#: js/widgets/tree/ContextMenu.js:185
+msgid "New {0}"
+msgstr "Thêm {0}"
+
+#: js/widgets/tree/ContextMenu.js:185
+msgid "Please enter the name of the new {0}:"
+msgstr "Xin nhập tên của {0} mới"
+
+#: js/widgets/tree/ContextMenu.js:188
+msgid "No {0} added"
+msgstr "Không {0} nào được thêm"
+
+#: js/widgets/tree/ContextMenu.js:188 js/widgets/tree/ContextMenu.js:272
+msgid "You have to supply a {0} name!"
+msgstr "Bạn phải cung cấp 1 tên {0}!"
+
+#: js/widgets/tree/ContextMenu.js:191
+msgid "Creating {0}..."
+msgstr "Đang tạo {0} ...."
+
+#: js/widgets/tree/ContextMenu.js:266
+msgid "Please enter the new name of the {0}:"
+msgstr "Nhập nhập tên {0} mới:"
+
+#: js/widgets/tree/ContextMenu.js:272
+msgid "Not renamed {0}"
+msgstr "Chưa đổi tên {0}"
+
+#: js/widgets/tree/ContextMenu.js:346
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr "Bạn có muốn thật sự xóa {0} \"{1}\"?"
+
+#: js/widgets/tree/ContextMenu.js:457
+msgid "Manage Permissions for {0} \"{1}\""
+msgstr "Quản lý quyền cho {0} \"{1}\""
+
+#: js/widgets/tree/ContextMenu.js:481
+msgid "Properties for {0} \"{1}\""
+msgstr "Thuộc tính cho {0} \"{1}\""
+
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+msgid "New version of Tine 2.0 available"
+msgstr "Phiên bản mới của Tine 2.0 đã phát hành"
+
+#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "Phiên bản \"{0}\" của Tine 2.0 đã phát hành"
+
+#: js/widgets/VersionCheck.js:46
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "Đây là bản vá lỗi nghiêm trọng và phải được cập nhật ngay tức thì!"
+
+#: js/widgets/VersionCheck.js:55
+msgid "Please consider updating!"
+msgstr "Hãy cân nhắc việc cập nhật!"
+
+#: Notes.php:369
+msgid "by"
+msgstr "bởi"
+
+#: Notes.php:378
+msgid "Changed fields:"
+msgstr "Thay đổi trường:"
+
+#: Preference/Abstract.php:502
+msgid "default"
+msgstr "mặc định"
+
+#: Preference.php:88
+msgid "The timezone in which dates are shown in Tine 2.0."
+msgstr "The timezone in which dates are shown in Tine 2.0."
+
+#: Preference.php:92
+msgid "The language of the Tine 2.0 GUI."
+msgstr "The language of the Tine 2.0 GUI."
+
+#: Preference.php:95
+msgid "Default Application"
+msgstr "Ứng dụng mặc định"
+
+#: Preference.php:96
+msgid "The default application to show after login."
+msgstr "Ứng dụng mặc định được mở sau khi bạn đăng nhập"
+
+#: Preference.php:99
+msgid "Window Type"
+msgstr "Loại cửa sổ"
+
+#: Preference.php:100
+msgid "You can choose between modal windows or normal browser popup windows."
+msgstr "Bạn có thể chọn giữa cửa sổ mở trong (popup) hoặc cửa sổ popup thông thường của trình duyệt."
+
+#: Preference.php:103
+msgid "Confirm Logout"
+msgstr "Xác nhận thoát"
+
+#: Preference.php:104
+msgid "Show confirmation dialog on logout."
+msgstr "Hiển thị màn hình dialog khi thoát"
+
+#: Setup/setup.xml:3203
+msgid "note"
+msgstr "ghi chép"
+
+#: Setup/setup.xml:3208
+msgid "default note type"
+msgstr "loại ghi chép mặc đ"
+
+#: Setup/setup.xml:3234
+msgid "telephone"
+msgstr "điện thoại"
+
+#: Setup/setup.xml:3239
+msgid "telephone call"
+msgstr "cuộc gọi điện thoại"
+
+#: Setup/setup.xml:3265
+msgid "email"
+msgstr "email"
+
+#: Setup/setup.xml:3270
+msgid "email contact"
+msgstr "liên hệ email"
+
+#: Setup/setup.xml:3296
+msgid "created"
+msgstr "đã tạo"
+
+#: Setup/setup.xml:3301
+msgid "record created"
+msgstr "biểu ghi đã được tạo"
+
+#: Setup/setup.xml:3327
+msgid "changed"
+msgstr "đã đổi"
+
+#: Setup/setup.xml:3332
+msgid "record changed"
+msgstr "biểu ghi đã thay đổi"
 
 #: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."
@@ -2717,14 +2748,3 @@ msgstr "Tine 2.0 cần được cập nhật hoặc chưa được cài đặt"
 #: views/update.php:25
 msgid "Please wait or contact your administrator"
 msgstr "Xin hãy đợi hoặc liên hệ với quản trị hệ thống của bạn"
-
-#: Container.php:684
-#, python-format
-msgid "%s's personal container"
-msgstr "Bộ chứa cá nhân của %s"
-
-#: Container.php:1525
-msgid ""
-"You are not allowed to delete this Container. Please define another "
-"container as the default addressbook for internal contacts!"
-msgstr "Bạn không được phép xóa bộ chứa này. Xin hãy định nghĩa một bộ chứa khác là sổ địa chỉ mặc định cho các liên hệ nội bộ!"

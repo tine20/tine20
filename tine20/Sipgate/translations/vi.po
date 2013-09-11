@@ -17,26 +17,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Exception/NoConnection.php:29
-msgid "Could not connect to sipgate."
-msgstr "Không thể kết nối với sipgate"
-
-#: Exception/Authorization.php:29
-msgid "Could not authenticate to sipgate."
-msgstr "Không thể xác thực với sipgate."
-
-#: Exception/ResolveCredentials.php:29
-msgid "Could not resolve account settings."
-msgstr "Không thể đọc được thiết lập của bạn."
-
-#: Exception/Backend.php:29
-msgid "General Backend Exception."
-msgstr "Ngoại trừ nền tảng chung"
-
-#: Exception/MissingConfig.php:29
-msgid "The configuration is missing."
-msgstr "Cấu hình bị lỗi."
-
 #: Acl/Rights.php:94
 msgid "manage accounts"
 msgstr "quản lý tài khoản"
@@ -69,14 +49,6 @@ msgstr "quản lý tài khoản riêng"
 msgid "add, edit and delete private accounts"
 msgstr "thêm, sửa, và xóa tài khoản cá nhân"
 
-#: Controller.php:95
-msgid "You do not have admin rights on Sales"
-msgstr "Bạn không có quyền quản trị trong ứng dụng Kinh doanh"
-
-#: Controller.php:117
-msgid "You do not have admin rights on Sipgate"
-msgstr "Bạn không có quyền quản trị trong Sipgate"
-
 #: Config.php:48
 msgid "Connection Status"
 msgstr "Trạng thái kết nối"
@@ -93,7 +65,7 @@ msgstr "Thỏa thuận kết nối"
 msgid "Possible connection type of services"
 msgstr "Loại dịch vụ kết nối có thể"
 
-#: Config.php:68 js/AccountGridPanel.js:98 js/AccountEditDialog.js:261
+#: Config.php:68 js/AccountEditDialog.js:261 js/AccountGridPanel.js:98
 msgid "Account Type"
 msgstr "Loại tài khoản"
 
@@ -111,41 +83,530 @@ msgstr "Loại tài khoản sipgate"
 msgid "The type of your account as defined in the contract"
 msgstr "Loại tài khoản của bạn được định nghĩa trong hợp đồng"
 
-#: Setup/Update/Release1.php:50 Setup/Initialize.php:34
-msgid "accepted"
-msgstr "đã chấp nhận"
+#: Controller/Connection.php:242
+msgid "anonymous"
+msgstr "nặc danh"
 
-#: Setup/Update/Release1.php:51 Setup/Initialize.php:35
-msgid "outgoing"
-msgstr "đi"
+#: Controller.php:95
+msgid "You do not have admin rights on Sales"
+msgstr "Bạn không có quyền quản trị trong ứng dụng Kinh doanh"
 
-#: Setup/Update/Release1.php:52 Setup/Initialize.php:36
-msgid "missed"
-msgstr "nhỡ"
+#: Controller.php:117
+msgid "You do not have admin rights on Sipgate"
+msgstr "Bạn không có quyền quản trị trong Sipgate"
 
-#: Setup/Update/Release1.php:66 Setup/Initialize.php:50
-msgid "Telephone Call"
-msgstr "Cuộc gọi điện thoại"
+#: Exception/Authorization.php:29
+msgid "Could not authenticate to sipgate."
+msgstr "Không thể xác thực với sipgate."
 
-#: Setup/Update/Release1.php:67 Setup/Initialize.php:51
-msgid "Facsimile"
-msgstr "Sao chép"
+#: Exception/Backend.php:29
+msgid "General Backend Exception."
+msgstr "Ngoại trừ nền tảng chung"
 
-#: Setup/Update/Release1.php:91 Setup/Initialize.php:65
-msgid "basic/plus"
-msgstr "cơ bản/mở rộng"
+#: Exception/MissingConfig.php:29
+msgid "The configuration is missing."
+msgstr "Cấu hình bị lỗi."
 
-#: Setup/Update/Release1.php:92 Setup/Initialize.php:66
-msgid "team"
-msgstr "đội"
+#: Exception/NoConnection.php:29
+msgid "Could not connect to sipgate."
+msgstr "Không thể kết nối với sipgate"
 
-#: Setup/Update/Release1.php:106 Setup/Initialize.php:80
-msgid "private"
-msgstr "riêng tu"
+#: Exception/ResolveCredentials.php:29
+msgid "Could not resolve account settings."
+msgstr "Không thể đọc được thiết lập của bạn."
 
-#: Setup/Update/Release1.php:107 Setup/Initialize.php:81
-msgid "shared"
-msgstr "chia sẻ"
+#: js/AccountEditDialog.js:43
+msgid "Validating account..."
+msgstr "Xác nhận tài khoản ..."
+
+#: js/AccountEditDialog.js:44
+msgid "Synchronizing lines..."
+msgstr "Đồng bộ đường dây ..."
+
+#: js/AccountEditDialog.js:60
+msgid "Save Account"
+msgstr "Lưu tài khoản"
+
+#: js/AccountEditDialog.js:62
+msgid "Saves the account (without closing window)"
+msgstr "Lưu tài khoản (không đóng cửa sổ)"
+
+#: js/AccountEditDialog.js:68 js/LineGridPanel.js:189
+msgid "Synchronize Lines"
+msgstr "Đồng bộ đường dây"
+
+#: js/AccountEditDialog.js:70
+msgid ""
+"Synchronizes the selected account (creates or updates the associated lines)"
+msgstr "Đồng bộ tài khoản (tạo hoặc cập nhật đường dây được liên kết)"
+
+#: js/AccountEditDialog.js:76
+msgid "Validate Account"
+msgstr "Xác nhận tài khoản"
+
+#: js/AccountEditDialog.js:78
+msgid ""
+"Validates the selected account (creates or updates the associated lines)"
+msgstr "Xác nhận tài khoản được chọn (tạo hoặc cập nhật đường dây liên kết)"
+
+#: js/AccountEditDialog.js:95
+msgid "The account is not saved already!"
+msgstr "Tài khoản vẫn chưa được lưu lại."
+
+#: js/AccountEditDialog.js:96
+msgid "Please save yout account before syncing!"
+msgstr "Hãy lưu tài khoản của bạn trước khi đồng bộ!"
+
+#: js/AccountEditDialog.js:109
+msgid "The lines have been synced sucessfully!"
+msgstr "Đường dây đã được đồng bộ thành công!"
+
+#: js/AccountEditDialog.js:110
+msgid ""
+"The account has now {0} lines. Go on assigning user accounts to the new "
+"lines in the next tab."
+msgstr "Tài khoản có {0} đường dây. Tiếp tục gắn tài khoản người dùng tới đường dây trong tab mới."
+
+#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:340
+msgid "Errors"
+msgstr "Lỗi"
+
+#: js/AccountEditDialog.js:257
+msgid "Description"
+msgstr "Mô tả"
+
+#: js/AccountEditDialog.js:278 js/AccountGridPanel.js:89
+#: js/AssignLinesGrid.js:100 js/LineGridPanel.js:82
+msgid "Type"
+msgstr "Loại"
+
+#: js/AccountEditDialog.js:285 js/AccountGridPanel.js:107
+msgid "Mobile Number"
+msgstr "Số điện thoại"
+
+#: js/AccountEditDialog.js:288
+msgid "Sipgate Username"
+msgstr "Tên người dùng Sipgate"
+
+#: js/AccountEditDialog.js:290
+msgid "Hidden due to security reasons."
+msgstr "Hạn được ẩn vì lý do bảo mật"
+
+#: js/AccountEditDialog.js:292
+msgid "Password"
+msgstr "Mật khẩu"
+
+#: js/AccountEditDialog.js:296
+msgid "Passwort Repeat"
+msgstr "Nhắc lại mật khẩu"
+
+#: js/AccountEditDialog.js:302
+msgid "Is Validated"
+msgstr "Là hợp lệ"
+
+#: js/AccountEditDialog.js:340
+msgid "Please validate the account settings before saving!"
+msgstr "Xin hãy xác nhận các thiết lập tài khoản trước khi lưu lại!"
+
+#: js/AccountFilterModel.js:38 js/LineGridPanel.js:90
+msgid "Account"
+msgstr "Tài khoản"
+
+#: js/AccountGridPanel.js:54
+msgid "Telephone"
+msgstr "Điện thoại"
+
+#: js/AccountGridPanel.js:55 js/SearchAddressDialog.js:134
+#: js/SearchAddressDialog.js:156
+msgid "Fax"
+msgstr "Fax"
+
+#: js/AccountGridPanel.js:115 js/AssignLinesGrid.js:101
+#: js/LineGridPanel.js:105
+msgid "Uri Alias"
+msgstr "Ánh xạ Uri"
+
+#: js/AccountGridPanel.js:124 js/ConnectionGridPanel.js:203
+#: js/LineGridPanel.js:180
+msgid "Dial number"
+msgstr "Quay số"
+
+#: js/AccountGridPanel.js:125 js/ConnectionGridPanel.js:204
+#: js/LineGridPanel.js:181
+msgid "Initiates a new outgoing call"
+msgstr "Bắt đầu 1 cuộc gọi đi"
+
+#: js/AddressbookGridPanelHook.js:38
+msgid "Call contact"
+msgstr "Gọi liên hệ"
+
+#: js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
+msgstr "Viết SMS"
+
+#: js/AddressbookGridPanelHook.js:260
+msgid "Work"
+msgstr "Công việc"
+
+#: js/AddressbookGridPanelHook.js:270
+msgid "Home"
+msgstr "Nhà riêng"
+
+#: js/AddressbookGridPanelHook.js:280 js/AddressbookGridPanelHook.js:325
+msgid "Cell"
+msgstr "Cầm tay"
+
+#: js/AddressbookGridPanelHook.js:290 js/AddressbookGridPanelHook.js:335
+msgid "Cell private"
+msgstr "Cầm tay riêng"
+
+#: js/AssignLinesGrid.js:57
+msgid "Assign Lines"
+msgstr "Chuyển đường dây"
+
+#: js/AssignLinesGrid.js:99
+msgid "Id"
+msgstr "ID"
+
+#: js/AssignLinesGrid.js:102
+msgid "Sip Uri"
+msgstr "Sip Uri"
+
+#: js/AssignLinesGrid.js:103 js/LineGridPanel.js:125
+msgid "Outgoing"
+msgstr "Đi"
+
+#: js/AssignLinesGrid.js:104 js/LineGridPanel.js:117
+msgid "Incoming"
+msgstr "Đến"
+
+#: js/AssignLinesGrid.js:107
+msgid "Assigned User"
+msgstr "Người dùng được chuyển"
+
+#: js/CallStateWindow.js:106 js/DialNumberDialog.js:89
+#: js/SearchAddressDialog.js:63 js/SmsEditDialog.js:74
+msgid "Cancel"
+msgstr "Hủy"
+
+#: js/CallStateWindow.js:138
+msgid "The call can't be observed anymore. Lost SessionID."
+msgstr "Cuộc gọi không thể được theo dõi tiếp. Mất mã session"
+
+#: js/CallStateWindow.js:142
+msgid "The call can't be observed anymore due to an unknown error."
+msgstr "Cuộc gọi không thể được theo dõi vì 1 lỗi xảy ra."
+
+#: js/CallStateWindow.js:151
+msgid "Please pick up your phone to get connected to {0}."
+msgstr "Xin hãy chọn số điện thoại của bạn để kết nối tới {0}"
+
+#: js/CallStateWindow.js:155
+msgid "Connecting to {0}."
+msgstr "Kết nối tới {0}."
+
+#: js/CallStateWindow.js:162
+msgid "Connected to {0}."
+msgstr "Đã kết nối tới {0}."
+
+#: js/CallStateWindow.js:167
+msgid "call 1 busy"
+msgstr "gọi 1 số bận"
+
+#: js/CallStateWindow.js:174
+msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
+msgstr "Kết nối tới {0} không thành công. {0} bận hoặc từ chối cuộc gọi."
+
+#: js/CallStateWindow.js:180
+msgid "hungup before other called"
+msgstr "đã gác máy trước khi cuộc gọi khác được thực hiện"
+
+#: js/CallStateWindow.js:183
+msgid "hungup"
+msgstr "gác máy"
+
+#: js/CallStateWindow.js:221
+msgid "Initializing call to {0}"
+msgstr "Phân tích cuộc gọi tới {0}"
+
+#: js/CallStateWindow.js:244
+msgid "Connecting to: "
+msgstr "Kết nối tới:"
+
+#: js/ConnectionGridPanel.js:81 js/Models.js:332
+msgid "TOS"
+msgstr "TOS"
+
+#: js/ConnectionGridPanel.js:89 js/Models.js:107 js/Models.js:325
+msgid "Status"
+msgstr "Trạng thái"
+
+#: js/ConnectionGridPanel.js:97
+msgid "Remote Number"
+msgstr "Số từ xa"
+
+#: js/ConnectionGridPanel.js:103
+msgid "Local Number"
+msgstr "Số địa phương"
+
+#: js/ConnectionGridPanel.js:109 js/LineFilterModel.js:32
+msgid "Line"
+msgstr "Đường dây"
+
+#: js/ConnectionGridPanel.js:116
+msgid "Call started"
+msgstr "Cuộc gọi bắt đầu"
+
+#: js/ConnectionGridPanel.js:123
+msgid "Contact"
+msgstr "Liên hệ"
+
+#: js/ConnectionGridPanel.js:195
+msgid "Save number"
+msgstr "Lưu số"
+
+#: js/ConnectionGridPanel.js:196
+msgid "Adds this number to the Addressbook"
+msgstr "Thêm số này vào sổ địa chỉ"
+
+#: js/ConnectionGridPanel.js:213 js/LineGridPanel.js:220
+msgid "Add Account"
+msgstr "Thêm tài khoản"
+
+#: js/DialNumberDialog.js:97
+msgid "Ok"
+msgstr "OK"
+
+#: js/DialNumberDialog.js:161
+msgid "Select Line"
+msgstr "Chọn đường dây"
+
+#: js/DialNumberDialog.js:166
+msgid "Number to call"
+msgstr "Số để gọi"
+
+#: js/DialNumberDialog.js:171
+msgid "Please use a valid telephone number!"
+msgstr "Chọn 1 số điện thoại hợp lệ!"
+
+#: js/DialNumberDialog.js:211
+msgid "Dial Number {0}"
+msgstr "Quay số {0}"
+
+#: js/ExceptionHandler.js:18
+msgid ""
+"A general backend error occurred. If this is a permanent error, please "
+"contact your administrator."
+msgstr "Lỗi chung chung tại hệ thống. Nếu đây là một lỗi nghiêm trọng, xin liên hệ với quản trị của bạn."
+
+#: js/ExceptionHandler.js:26
+msgid ""
+"The application could not connect to the sipgate server. If this is a "
+"permanent error, please contact your administrator."
+msgstr "Ứng dụng không thể kết nối với máy chủ sipgate. Nếu đây là 1 lỗi nghiêm trọng, xin hãy liên hệ với quản trị hệ thống."
+
+#: js/ExceptionHandler.js:34
+msgid ""
+"The authentication data provided are not valid. Please configure or contact "
+"your administrator."
+msgstr "Dữ liệu xác thực được cung cấp không hợp lệ. Xin cấu hình hoặc liên hệ với quản trị hệ thống của bạn."
+
+#: js/ExceptionHandler.js:42
+msgid ""
+"The saved credentials and config data could not be resolved properly. Please"
+" reconfigure or contact your administrator."
+msgstr "Không thể phân tích một cách chính xác dữ liệu cấu hình và chi tiết người dùng đã lưu."
+
+#: js/ExceptionHandler.js:50
+msgid ""
+"There are missing parameters to connect to sipgate. Please reconfigure or "
+"contact your administrator."
+msgstr "Có lỗi tham số khi kết nối với sipgate. Xin hãy cấu hình lại hoặc liên hệ với quản trị hệ thống của bạn."
+
+#: js/ExceptionHandler.js:60
+msgid ""
+"The account you've configured is already in use. Please contact your "
+"administrator or activate the account again if it's yours."
+msgstr "Tài khoản bạn đã cấu hình đang được sử dụng. Xin hãy liên lạc với quản trị của bạn hoặc kích hoạt tài khoản ở lại nếu nó là của bạn,"
+
+#: js/LineGridPanel.js:98
+msgid "User"
+msgstr "Người dùng"
+
+#: js/LineGridPanel.js:111
+msgid "SIP Uri"
+msgstr "SIP Uri"
+
+#: js/LineGridPanel.js:131
+msgid "Created"
+msgstr "Đã tạo"
+
+#: js/LineGridPanel.js:187 js/LineGridPanel.js:188
+msgid "Synchronize Line"
+msgstr "Đồng bộ đường dây"
+
+#: js/LineGridPanel.js:191
+msgid "Synchronizes the selected line(s)"
+msgstr "Đồng bộ đường dây được chọn"
+
+#: js/LineGridPanel.js:246
+msgid "Synchronizing..."
+msgstr "Đang đồng bộ"
+
+#: js/Models.js:97 js/Models.js:144 js/Models.js:321
+msgid "Quick search"
+msgstr "Tìm nhanh"
+
+#: js/Models.js:98
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/Models.js:100
+msgid "Account-Type"
+msgstr "Loại tài khoản"
+
+#: js/Models.js:146
+msgid "Assigned to"
+msgstr "Thay đổi tới"
+
+#: js/Models.js:303
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "one: danh sách biểu ghi\nother: danh sách biểu ghi"
+
+#: js/SearchAddressDialog.js:55
+msgid "Add Number"
+msgstr "Thêm số"
+
+#: js/SearchAddressDialog.js:71 js/SmsEditDialog.js:81
+msgid "Close"
+msgstr "Đóng"
+
+#: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
+msgid "Phone"
+msgstr "Điện thoại"
+
+#: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
+msgid "Mobile"
+msgstr "Cầm tay"
+
+#: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
+msgid "Car phone"
+msgstr "Điện thoại trên xe"
+
+#: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
+msgid "Pager"
+msgstr "Tật trang"
+
+#: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
+msgid "Phone (private)"
+msgstr "Điện thoại (riêng tư)"
+
+#: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
+msgid "Fax (private)"
+msgstr "Fax (riêng tư)"
+
+#: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
+msgid "Mobile (private)"
+msgstr "Di động (riêng tư)"
+
+#: js/SearchAddressDialog.js:144
+msgid "-- create new --"
+msgstr "-- tạo mới --"
+
+#: js/SearchAddressDialog.js:145
+msgid "Select existing contact or create a new one"
+msgstr "Chọn liên hệ đã có hoặc tạo mới"
+
+#: js/SearchAddressDialog.js:180
+msgid "Choose Device"
+msgstr "Chọn thiết bị"
+
+#: js/SearchAddressDialog.js:211
+msgid "Add number {0} to the addressbook"
+msgstr "Thêm số {0} vào sổ địa chỉ"
+
+#: js/SmsEditDialog.js:67
+msgid "Send"
+msgstr "Gửi"
+
+#: js/SmsEditDialog.js:112
+msgid "Loading contact..."
+msgstr "Đang nạp liên hệ"
+
+#: js/SmsEditDialog.js:113
+msgid "Sending message..."
+msgstr "Đang gửi tin nhắn"
+
+#: js/SmsEditDialog.js:250
+msgid "Recipient"
+msgstr "Người nhận"
+
+#: js/SmsEditDialog.js:259
+msgid "Recipient's phone number"
+msgstr "Số điện thoại người nhận"
+
+#: js/SmsEditDialog.js:263
+msgid "please choose the recipient's phone number..."
+msgstr "xin chọn số người nhận..."
+
+#: js/SmsEditDialog.js:267
+msgid "Your phone number"
+msgstr "Số của bạn"
+
+#: js/SmsEditDialog.js:270
+msgid "please choose your phone number..."
+msgstr "xin chọn số của bạn..."
+
+#: js/SmsEditDialog.js:276
+msgid "The message"
+msgstr "tin nhắn"
+
+#: js/SmsEditDialog.js:279
+msgid "enter the text..."
+msgstr "nhận nội dung"
+
+#: js/SmsEditDialog.js:302
+msgid "Send message to \"{0}\""
+msgstr "Gửi tin nhắn tới {0}"
+
+#: js/SmsEditDialog.js:302
+msgid "Send message"
+msgstr "Gửi tin nhắn"
+
+#: Preference.php:78
+msgid "Your phone"
+msgstr "Số điện thoại của bạn"
+
+#: Preference.php:79
+msgid "This is your phone"
+msgstr "Đây là số của bạn"
+
+#: Preference.php:82
+msgid "Your fax"
+msgstr "Số fax của bạn"
+
+#: Preference.php:83
+msgid "This is your fax"
+msgstr "Đây là số fax của bạn"
+
+#: Preference.php:87
+msgid "Your mobile number"
+msgstr "Số di động của bạn"
+
+#: Preference.php:88
+msgid "Used when sending SMS"
+msgstr "Được dùng khi gửi SMS"
+
+#: Preference.php:92
+msgid "International calling code"
+msgstr "Mã gọi quốc tế"
+
+#: Preference.php:93
+msgid ""
+"Your international calling code (e.g. +1 in the United States, +49 in "
+"Germany)"
+msgstr "Mã gọi quốc tế của bạn (V.d: +84 là của Việt Nam, +1 là của Mỹ)"
 
 #: Setup/calling-codes.xml:6
 msgid "+93 (Afghanistan)"
@@ -1115,499 +1576,38 @@ msgstr "+260 (Zambia (Republic of))"
 msgid "+263 (Zimbabwe (Republic of))"
 msgstr "+263 (Zimbabwe (Republic of))"
 
-#: Preference.php:78
-msgid "Your phone"
-msgstr "Số điện thoại của bạn"
-
-#: Preference.php:79
-msgid "This is your phone"
-msgstr "Đây là số của bạn"
-
-#: Preference.php:82
-msgid "Your fax"
-msgstr "Số fax của bạn"
-
-#: Preference.php:83
-msgid "This is your fax"
-msgstr "Đây là số fax của bạn"
-
-#: Preference.php:87
-msgid "Your mobile number"
-msgstr "Số di động của bạn"
-
-#: Preference.php:88
-msgid "Used when sending SMS"
-msgstr "Được dùng khi gửi SMS"
-
-#: Preference.php:92
-msgid "International calling code"
-msgstr "Mã gọi quốc tế"
-
-#: Preference.php:93
-msgid ""
-"Your international calling code (e.g. +1 in the United States, +49 in "
-"Germany)"
-msgstr "Mã gọi quốc tế của bạn (V.d: +84 là của Việt Nam, +1 là của Mỹ)"
-
-#: js/ConnectionGridPanel.js:81 js/Models.js:332
-msgid "TOS"
-msgstr "TOS"
-
-#: js/ConnectionGridPanel.js:89 js/Models.js:107 js/Models.js:325
-msgid "Status"
-msgstr "Trạng thái"
-
-#: js/ConnectionGridPanel.js:97
-msgid "Remote Number"
-msgstr "Số từ xa"
-
-#: js/ConnectionGridPanel.js:103
-msgid "Local Number"
-msgstr "Số địa phương"
-
-#: js/ConnectionGridPanel.js:109 js/LineFilterModel.js:32
-msgid "Line"
-msgstr "Đường dây"
-
-#: js/ConnectionGridPanel.js:116
-msgid "Call started"
-msgstr "Cuộc gọi bắt đầu"
-
-#: js/ConnectionGridPanel.js:123
-msgid "Contact"
-msgstr "Liên hệ"
-
-#: js/ConnectionGridPanel.js:195
-msgid "Save number"
-msgstr "Lưu số"
-
-#: js/ConnectionGridPanel.js:196
-msgid "Adds this number to the Addressbook"
-msgstr "Thêm số này vào sổ địa chỉ"
-
-#: js/ConnectionGridPanel.js:203 js/LineGridPanel.js:180
-#: js/AccountGridPanel.js:124
-msgid "Dial number"
-msgstr "Quay số"
-
-#: js/ConnectionGridPanel.js:204 js/LineGridPanel.js:181
-#: js/AccountGridPanel.js:125
-msgid "Initiates a new outgoing call"
-msgstr "Bắt đầu 1 cuộc gọi đi"
-
-#: js/ConnectionGridPanel.js:213 js/LineGridPanel.js:220
-msgid "Add Account"
-msgstr "Thêm tài khoản"
-
-#: js/SmsEditDialog.js:67
-msgid "Send"
-msgstr "Gửi"
-
-#: js/SmsEditDialog.js:74 js/SearchAddressDialog.js:63
-#: js/DialNumberDialog.js:89 js/CallStateWindow.js:106
-msgid "Cancel"
-msgstr "Hủy"
-
-#: js/SmsEditDialog.js:81 js/SearchAddressDialog.js:71
-msgid "Close"
-msgstr "Đóng"
-
-#: js/SmsEditDialog.js:112
-msgid "Loading contact..."
-msgstr "Đang nạp liên hệ"
-
-#: js/SmsEditDialog.js:113
-msgid "Sending message..."
-msgstr "Đang gửi tin nhắn"
-
-#: js/SmsEditDialog.js:250
-msgid "Recipient"
-msgstr "Người nhận"
-
-#: js/SmsEditDialog.js:259
-msgid "Recipient's phone number"
-msgstr "Số điện thoại người nhận"
-
-#: js/SmsEditDialog.js:263
-msgid "please choose the recipient's phone number..."
-msgstr "xin chọn số người nhận..."
-
-#: js/SmsEditDialog.js:267
-msgid "Your phone number"
-msgstr "Số của bạn"
-
-#: js/SmsEditDialog.js:270
-msgid "please choose your phone number..."
-msgstr "xin chọn số của bạn..."
-
-#: js/SmsEditDialog.js:276
-msgid "The message"
-msgstr "tin nhắn"
-
-#: js/SmsEditDialog.js:279
-msgid "enter the text..."
-msgstr "nhận nội dung"
-
-#: js/SmsEditDialog.js:302
-msgid "Send message to \"{0}\""
-msgstr "Gửi tin nhắn tới {0}"
-
-#: js/SmsEditDialog.js:302
-msgid "Send message"
-msgstr "Gửi tin nhắn"
-
-#: js/SearchAddressDialog.js:55
-msgid "Add Number"
-msgstr "Thêm số"
-
-#: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
-msgid "Phone"
-msgstr "Điện thoại"
-
-#: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
-msgid "Mobile"
-msgstr "Cầm tay"
-
-#: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
-#: js/AccountGridPanel.js:55
-msgid "Fax"
-msgstr "Fax"
-
-#: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
-msgid "Car phone"
-msgstr "Điện thoại trên xe"
-
-#: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
-msgid "Pager"
-msgstr "Tật trang"
-
-#: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
-msgid "Phone (private)"
-msgstr "Điện thoại (riêng tư)"
-
-#: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
-msgid "Fax (private)"
-msgstr "Fax (riêng tư)"
-
-#: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
-msgid "Mobile (private)"
-msgstr "Di động (riêng tư)"
-
-#: js/SearchAddressDialog.js:144
-msgid "-- create new --"
-msgstr "-- tạo mới --"
-
-#: js/SearchAddressDialog.js:145
-msgid "Select existing contact or create a new one"
-msgstr "Chọn liên hệ đã có hoặc tạo mới"
-
-#: js/SearchAddressDialog.js:180
-msgid "Choose Device"
-msgstr "Chọn thiết bị"
-
-#: js/SearchAddressDialog.js:211
-msgid "Add number {0} to the addressbook"
-msgstr "Thêm số {0} vào sổ địa chỉ"
-
-#: js/LineGridPanel.js:82 js/AssignLinesGrid.js:100 js/AccountGridPanel.js:89
-#: js/AccountEditDialog.js:278
-msgid "Type"
-msgstr "Loại"
-
-#: js/LineGridPanel.js:90 js/AccountFilterModel.js:38
-msgid "Account"
-msgstr "Tài khoản"
-
-#: js/LineGridPanel.js:98
-msgid "User"
-msgstr "Người dùng"
-
-#: js/LineGridPanel.js:105 js/AssignLinesGrid.js:101
-#: js/AccountGridPanel.js:115
-msgid "Uri Alias"
-msgstr "Ánh xạ Uri"
-
-#: js/LineGridPanel.js:111
-msgid "SIP Uri"
-msgstr "SIP Uri"
-
-#: js/LineGridPanel.js:117 js/AssignLinesGrid.js:104
-msgid "Incoming"
-msgstr "Đến"
-
-#: js/LineGridPanel.js:125 js/AssignLinesGrid.js:103
-msgid "Outgoing"
-msgstr "Đi"
-
-#: js/LineGridPanel.js:131
-msgid "Created"
-msgstr "Đã tạo"
-
-#: js/LineGridPanel.js:187 js/LineGridPanel.js:188
-msgid "Synchronize Line"
-msgstr "Đồng bộ đường dây"
-
-#: js/LineGridPanel.js:189 js/AccountEditDialog.js:68
-msgid "Synchronize Lines"
-msgstr "Đồng bộ đường dây"
-
-#: js/LineGridPanel.js:191
-msgid "Synchronizes the selected line(s)"
-msgstr "Đồng bộ đường dây được chọn"
-
-#: js/LineGridPanel.js:246
-msgid "Synchronizing..."
-msgstr "Đang đồng bộ"
-
-#: js/AssignLinesGrid.js:57
-msgid "Assign Lines"
-msgstr "Chuyển đường dây"
-
-#: js/AssignLinesGrid.js:99
-msgid "Id"
-msgstr "ID"
-
-#: js/AssignLinesGrid.js:102
-msgid "Sip Uri"
-msgstr "Sip Uri"
-
-#: js/AssignLinesGrid.js:107
-msgid "Assigned User"
-msgstr "Người dùng được chuyển"
-
-#: js/AccountGridPanel.js:54
-msgid "Telephone"
-msgstr "Điện thoại"
-
-#: js/AccountGridPanel.js:107 js/AccountEditDialog.js:285
-msgid "Mobile Number"
-msgstr "Số điện thoại"
-
-#: js/DialNumberDialog.js:97
-msgid "Ok"
-msgstr "OK"
-
-#: js/DialNumberDialog.js:161
-msgid "Select Line"
-msgstr "Chọn đường dây"
-
-#: js/DialNumberDialog.js:166
-msgid "Number to call"
-msgstr "Số để gọi"
-
-#: js/DialNumberDialog.js:171
-msgid "Please use a valid telephone number!"
-msgstr "Chọn 1 số điện thoại hợp lệ!"
-
-#: js/DialNumberDialog.js:211
-msgid "Dial Number {0}"
-msgstr "Quay số {0}"
-
-#: js/ExceptionHandler.js:18
-msgid ""
-"A general backend error occurred. If this is a permanent error, please "
-"contact your administrator."
-msgstr "Lỗi chung chung tại hệ thống. Nếu đây là một lỗi nghiêm trọng, xin liên hệ với quản trị của bạn."
-
-#: js/ExceptionHandler.js:26
-msgid ""
-"The application could not connect to the sipgate server. If this is a "
-"permanent error, please contact your administrator."
-msgstr "Ứng dụng không thể kết nối với máy chủ sipgate. Nếu đây là 1 lỗi nghiêm trọng, xin hãy liên hệ với quản trị hệ thống."
-
-#: js/ExceptionHandler.js:34
-msgid ""
-"The authentication data provided are not valid. Please configure or contact "
-"your administrator."
-msgstr "Dữ liệu xác thực được cung cấp không hợp lệ. Xin cấu hình hoặc liên hệ với quản trị hệ thống của bạn."
-
-#: js/ExceptionHandler.js:42
-msgid ""
-"The saved credentials and config data could not be resolved properly. Please"
-" reconfigure or contact your administrator."
-msgstr "Không thể phân tích một cách chính xác dữ liệu cấu hình và chi tiết người dùng đã lưu."
-
-#: js/ExceptionHandler.js:50
-msgid ""
-"There are missing parameters to connect to sipgate. Please reconfigure or "
-"contact your administrator."
-msgstr "Có lỗi tham số khi kết nối với sipgate. Xin hãy cấu hình lại hoặc liên hệ với quản trị hệ thống của bạn."
-
-#: js/ExceptionHandler.js:60
-msgid ""
-"The account you've configured is already in use. Please contact your "
-"administrator or activate the account again if it's yours."
-msgstr "Tài khoản bạn đã cấu hình đang được sử dụng. Xin hãy liên lạc với quản trị của bạn hoặc kích hoạt tài khoản ở lại nếu nó là của bạn,"
-
-#: js/CallStateWindow.js:138
-msgid "The call can't be observed anymore. Lost SessionID."
-msgstr "Cuộc gọi không thể được theo dõi tiếp. Mất mã session"
-
-#: js/CallStateWindow.js:142
-msgid "The call can't be observed anymore due to an unknown error."
-msgstr "Cuộc gọi không thể được theo dõi vì 1 lỗi xảy ra."
-
-#: js/CallStateWindow.js:151
-msgid "Please pick up your phone to get connected to {0}."
-msgstr "Xin hãy chọn số điện thoại của bạn để kết nối tới {0}"
-
-#: js/CallStateWindow.js:155
-msgid "Connecting to {0}."
-msgstr "Kết nối tới {0}."
-
-#: js/CallStateWindow.js:162
-msgid "Connected to {0}."
-msgstr "Đã kết nối tới {0}."
-
-#: js/CallStateWindow.js:167
-msgid "call 1 busy"
-msgstr "gọi 1 số bận"
-
-#: js/CallStateWindow.js:174
-msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
-msgstr "Kết nối tới {0} không thành công. {0} bận hoặc từ chối cuộc gọi."
-
-#: js/CallStateWindow.js:180
-msgid "hungup before other called"
-msgstr "đã gác máy trước khi cuộc gọi khác được thực hiện"
-
-#: js/CallStateWindow.js:183
-msgid "hungup"
-msgstr "gác máy"
-
-#: js/CallStateWindow.js:221
-msgid "Initializing call to {0}"
-msgstr "Phân tích cuộc gọi tới {0}"
-
-#: js/CallStateWindow.js:244
-msgid "Connecting to: "
-msgstr "Kết nối tới:"
-
-#: js/AccountEditDialog.js:43
-msgid "Validating account..."
-msgstr "Xác nhận tài khoản ..."
-
-#: js/AccountEditDialog.js:44
-msgid "Synchronizing lines..."
-msgstr "Đồng bộ đường dây ..."
-
-#: js/AccountEditDialog.js:60
-msgid "Save Account"
-msgstr "Lưu tài khoản"
-
-#: js/AccountEditDialog.js:62
-msgid "Saves the account (without closing window)"
-msgstr "Lưu tài khoản (không đóng cửa sổ)"
-
-#: js/AccountEditDialog.js:70
-msgid ""
-"Synchronizes the selected account (creates or updates the associated lines)"
-msgstr "Đồng bộ tài khoản (tạo hoặc cập nhật đường dây được liên kết)"
-
-#: js/AccountEditDialog.js:76
-msgid "Validate Account"
-msgstr "Xác nhận tài khoản"
-
-#: js/AccountEditDialog.js:78
-msgid ""
-"Validates the selected account (creates or updates the associated lines)"
-msgstr "Xác nhận tài khoản được chọn (tạo hoặc cập nhật đường dây liên kết)"
-
-#: js/AccountEditDialog.js:95
-msgid "The account is not saved already!"
-msgstr "Tài khoản vẫn chưa được lưu lại."
-
-#: js/AccountEditDialog.js:96
-msgid "Please save yout account before syncing!"
-msgstr "Hãy lưu tài khoản của bạn trước khi đồng bộ!"
-
-#: js/AccountEditDialog.js:109
-msgid "The lines have been synced sucessfully!"
-msgstr "Đường dây đã được đồng bộ thành công!"
-
-#: js/AccountEditDialog.js:110
-msgid ""
-"The account has now {0} lines. Go on assigning user accounts to the new "
-"lines in the next tab."
-msgstr "Tài khoản có {0} đường dây. Tiếp tục gắn tài khoản người dùng tới đường dây trong tab mới."
-
-#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:340
-msgid "Errors"
-msgstr "Lỗi"
-
-#: js/AccountEditDialog.js:257
-msgid "Description"
-msgstr "Mô tả"
-
-#: js/AccountEditDialog.js:288
-msgid "Sipgate Username"
-msgstr "Tên người dùng Sipgate"
-
-#: js/AccountEditDialog.js:290
-msgid "Hidden due to security reasons."
-msgstr "Hạn được ẩn vì lý do bảo mật"
-
-#: js/AccountEditDialog.js:292
-msgid "Password"
-msgstr "Mật khẩu"
-
-#: js/AccountEditDialog.js:296
-msgid "Passwort Repeat"
-msgstr "Nhắc lại mật khẩu"
-
-#: js/AccountEditDialog.js:302
-msgid "Is Validated"
-msgstr "Là hợp lệ"
-
-#: js/AccountEditDialog.js:340
-msgid "Please validate the account settings before saving!"
-msgstr "Xin hãy xác nhận các thiết lập tài khoản trước khi lưu lại!"
-
-#: js/Models.js:97 js/Models.js:144 js/Models.js:321
-msgid "Quick search"
-msgstr "Tìm nhanh"
-
-#: js/Models.js:98
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/Models.js:100
-msgid "Account-Type"
-msgstr "Loại tài khoản"
-
-#: js/Models.js:146
-msgid "Assigned to"
-msgstr "Thay đổi tới"
-
-#: js/Models.js:303
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "one: danh sách biểu ghi\nother: danh sách biểu ghi"
-
-#: js/AddressbookGridPanelHook.js:38
-msgid "Call contact"
-msgstr "Gọi liên hệ"
-
-#: js/AddressbookGridPanelHook.js:61
-msgid "Compose SMS"
-msgstr "Viết SMS"
-
-#: js/AddressbookGridPanelHook.js:260
-msgid "Work"
-msgstr "Công việc"
-
-#: js/AddressbookGridPanelHook.js:270
-msgid "Home"
-msgstr "Nhà riêng"
-
-#: js/AddressbookGridPanelHook.js:280 js/AddressbookGridPanelHook.js:325
-msgid "Cell"
-msgstr "Cầm tay"
-
-#: js/AddressbookGridPanelHook.js:290 js/AddressbookGridPanelHook.js:335
-msgid "Cell private"
-msgstr "Cầm tay riêng"
-
-#: Controller/Connection.php:242
-msgid "anonymous"
-msgstr "nặc danh"
+#: Setup/Initialize.php:34 Setup/Update/Release1.php:50
+msgid "accepted"
+msgstr "đã chấp nhận"
+
+#: Setup/Initialize.php:35 Setup/Update/Release1.php:51
+msgid "outgoing"
+msgstr "đi"
+
+#: Setup/Initialize.php:36 Setup/Update/Release1.php:52
+msgid "missed"
+msgstr "nhỡ"
+
+#: Setup/Initialize.php:50 Setup/Update/Release1.php:66
+msgid "Telephone Call"
+msgstr "Cuộc gọi điện thoại"
+
+#: Setup/Initialize.php:51 Setup/Update/Release1.php:67
+msgid "Facsimile"
+msgstr "Sao chép"
+
+#: Setup/Initialize.php:65 Setup/Update/Release1.php:91
+msgid "basic/plus"
+msgstr "cơ bản/mở rộng"
+
+#: Setup/Initialize.php:66 Setup/Update/Release1.php:92
+msgid "team"
+msgstr "đội"
+
+#: Setup/Initialize.php:80 Setup/Update/Release1.php:106
+msgid "private"
+msgstr "riêng tu"
+
+#: Setup/Initialize.php:81 Setup/Update/Release1.php:107
+msgid "shared"
+msgstr "chia sẻ"

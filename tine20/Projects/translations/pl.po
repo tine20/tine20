@@ -25,11 +25,6 @@ msgstr "zarządzanie wspólnymi ulubionymi projektu"
 msgid "Create new shared project favorites"
 msgstr "Utwórz nowe, wspólne ulubione projektu"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's projekty osobiste"
-
 #: Config.php:38
 msgid "Project Status Available"
 msgstr "Status projektu: Dostępny"
@@ -51,9 +46,120 @@ msgid ""
 "syncronisation."
 msgstr "Rola uczestnika projektu: Możliwa. Zauważ proszę, że dodatkowe role uczestnika projektu mogą wpływać w innych projektach na eksport albo synchronizację."
 
-#: Setup/setup.xml:4 js/Projects.js:24
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's projekty osobiste"
+
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Proszę wybrać projekt, do którego należy dodać kontakty"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Proszę wybrać rolę uczestnika"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Wybierz projekt"
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr "Rola"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Wybierz rolę"
+
+#: js/AddToProjectPanel.js:102
+msgid "Adding {0} Participants to project"
+msgstr "Dodawanie {0} uczestników do projektu"
+
+#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "projekty"
+msgstr[2] "projekty"
+
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Lista projektów"
+msgstr[1] "listy projektów"
+msgstr[2] "listy projektów"
+
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Listy projektów"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/Model.js:73 js/ProjectEditDialog.js:130 js/ProjectGridPanel.js:95
+msgid "Title"
+msgstr "Tytuł"
+
+#: js/Model.js:74 js/ProjectEditDialog.js:135 js/ProjectGridPanel.js:88
+msgid "Number"
+msgstr "Ilość"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:171
+msgid "Description"
+msgstr "Opis"
+
+#: js/Model.js:77 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:101
+msgid "Status"
+msgstr "Status"
+
+#: js/Model.js:86
+msgid "Last Modified Time"
+msgstr "Czas ostatniej zmiany"
+
+#: js/Model.js:87
+msgid "Last Modified By"
+msgstr "Ostatnio zmienione przez"
+
+#: js/Model.js:88
+msgid "Creation Time"
+msgstr "Czas utworzenia"
+
+#: js/Model.js:89
+msgid "Created By"
+msgstr "Utworzone przez"
+
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
+msgid "Attendee"
+msgstr "Uczestnik"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Rola uczestnika"
+
+#: js/ProjectEditDialog.js:185
+msgid "Enter description"
+msgstr "Wprowadź opis"
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
+msgstr "Znaczniki"
+
+#: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "Projekty"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Wszystkie moje projekty"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Domyślne ulubione"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Domyślny ulubiony, ładowany podczas uruchamiania projektów"
 
 #: Setup/Initialize.php:34
 msgid "On hold"
@@ -98,109 +204,3 @@ msgstr "Moje, oczekujące projekty"
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
 msgstr "Moje, wstrzymane projekty"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Wszystkie moje projekty"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Domyślne ulubione"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Domyślny ulubiony, ładowany podczas uruchamiania projektów"
-
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Proszę wybrać projekt, do którego należy dodać kontakty"
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Proszę wybrać rolę uczestnika"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Wybierz projekt"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
-msgid "Role"
-msgstr "Rola"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Wybierz rolę"
-
-#: js/AddToProjectPanel.js:102
-msgid "Adding {0} Participants to project"
-msgstr "Dodawanie {0} uczestników do projektu"
-
-#: js/ProjectGridPanel.js:85
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:135
-msgid "Number"
-msgstr "Ilość"
-
-#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:130
-msgid "Title"
-msgstr "Tytuł"
-
-#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:141
-msgid "Status"
-msgstr "Status"
-
-#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "projekty"
-msgstr[2] "projekty"
-
-#: js/Model.js:37
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] "Lista projektów"
-msgstr[1] "listy projektów"
-msgstr[2] "listy projektów"
-
-#: js/Model.js:40
-msgid "Project lists"
-msgstr "Listy projektów"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:171
-msgid "Description"
-msgstr "Opis"
-
-#: js/Model.js:86
-msgid "Last Modified Time"
-msgstr "Czas ostatniej zmiany"
-
-#: js/Model.js:87
-msgid "Last Modified By"
-msgstr "Ostatnio zmienione przez"
-
-#: js/Model.js:88
-msgid "Creation Time"
-msgstr "Czas utworzenia"
-
-#: js/Model.js:89
-msgid "Created By"
-msgstr "Utworzone przez"
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
-msgid "Attendee"
-msgstr "Uczestnik"
-
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Rola uczestnika"
-
-#: js/ProjectEditDialog.js:185
-msgid "Enter description"
-msgstr "Wprowadź opis"

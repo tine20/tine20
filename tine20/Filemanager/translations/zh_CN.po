@@ -26,69 +26,56 @@ msgstr "管理共享文件夹"
 msgid "Create new shared folders"
 msgstr "创建共享文件夹"
 
+#: Controller/Node.php:318
+msgid "My folders"
+msgstr "我的文件夹"
+
+#: Controller/Node.php:325
+msgid "Shared folders"
+msgstr "共享文件夹"
+
+#: Controller/Node.php:332
+msgid "Other users folders"
+msgstr "其他用户文件夹"
+
 #: Controller.php:100
 #, python-format
 msgid "%s's personal files"
 msgstr "%s的个人文件"
 
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "路径"
+#: js/Filemanager.js:26
+msgid "Filemanager"
+msgstr "文件管理"
 
-#: js/NodeEditDialog.js:44 js/Filemanager.js:34 js/NodeGridPanel.js:344
+#: js/Filemanager.js:34 js/NodeEditDialog.js:44 js/NodeGridPanel.js:344
 msgid "Save locally"
 msgstr "本地保存"
 
-#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
-msgid "Node"
-msgstr "节点"
+#: js/Filemanager.js:81
+msgid "Service Unavailable"
+msgstr "服务不可用"
 
-#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
-msgid "Name"
-msgstr "文件名"
-
-#: js/NodeEditDialog.js:121 js/Model.js:530
-msgid "Type"
-msgstr "类型"
-
-#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
-msgid "Created By"
-msgstr "所有人"
-
-#: js/NodeEditDialog.js:132 js/Model.js:532 js/NodeGridPanel.js:179
-msgid "Creation Time"
-msgstr "创建时间"
-
-#: js/NodeEditDialog.js:141
-msgid "Modified By"
-msgstr "修改"
-
-#: js/NodeEditDialog.js:144
-msgid "Last Modified"
-msgstr "最后修改"
-
-#: js/NodeEditDialog.js:167
-msgid "Description"
-msgstr "描述"
-
-#: js/NodeEditDialog.js:181
-msgid "Enter description"
-msgstr "输入描述"
-
-#: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:651
-#: js/NodeGridPanel.js:803
-msgid "Upload Failed"
-msgstr "上传失败"
-
-#: js/NodeTreePanel.js:661 js/NodeGridPanel.js:652
+#: js/Filemanager.js:82
 msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr "文件太大不能上传，请修改管理设置中上传文件大小："
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
+" Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr "文件管理器配置不正确。 请参看 {0}Tine 2.0 Admin FAQ{1} 配置建议，或咨询您的系统管理员。"
 
-#: js/NodeTreePanel.js:771 js/NodeGridPanel.js:804
-msgid "Putting files in this folder is not allowed!"
-msgstr "文件不允许放入这个文件夹！"
+#: js/Filemanager.js:104
+msgid "Files already exists"
+msgstr "文件已经存在"
+
+#: js/Filemanager.js:104
+msgid "Do you want to replace the following file(s)?"
+msgstr "你真的要替换以下文件(s)"
+
+#: js/Filemanager.js:137
+msgid "Failure on create folder"
+msgstr "创建文件夹失败"
+
+#: js/Filemanager.js:138
+msgid "Item with this name already exists!"
+msgstr "此名称的项目已经存在！"
 
 #: js/GridContextMenu.js:34
 msgid "Please enter the new name of the {0}:"
@@ -132,39 +119,45 @@ msgstr "请等待"
 msgid "Quick search"
 msgstr "快速查找"
 
+#: js/Model.js:530 js/NodeEditDialog.js:121
+msgid "Type"
+msgstr "类型"
+
 #: js/Model.js:531 js/NodeGridPanel.js:147
 msgid "Contenttype"
 msgstr "类型"
 
-#: js/Filemanager.js:26
-msgid "Filemanager"
-msgstr "文件管理"
+#: js/Model.js:532 js/NodeEditDialog.js:132 js/NodeGridPanel.js:179
+msgid "Creation Time"
+msgstr "创建时间"
 
-#: js/Filemanager.js:81
-msgid "Service Unavailable"
-msgstr "服务不可用"
+#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
+msgid "Node"
+msgstr "节点"
 
-#: js/Filemanager.js:82
-msgid ""
-"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
-" Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "文件管理器配置不正确。 请参看 {0}Tine 2.0 Admin FAQ{1} 配置建议，或咨询您的系统管理员。"
+#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
+msgid "Name"
+msgstr "文件名"
 
-#: js/Filemanager.js:104
-msgid "Files already exists"
-msgstr "文件已经存在"
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
+msgid "Created By"
+msgstr "所有人"
 
-#: js/Filemanager.js:104
-msgid "Do you want to replace the following file(s)?"
-msgstr "你真的要替换以下文件(s)"
+#: js/NodeEditDialog.js:141
+msgid "Modified By"
+msgstr "修改"
 
-#: js/Filemanager.js:137
-msgid "Failure on create folder"
-msgstr "创建文件夹失败"
+#: js/NodeEditDialog.js:144
+msgid "Last Modified"
+msgstr "最后修改"
 
-#: js/Filemanager.js:138
-msgid "Item with this name already exists!"
-msgstr "此名称的项目已经存在！"
+#: js/NodeEditDialog.js:167
+msgid "Description"
+msgstr "描述"
+
+#: js/NodeEditDialog.js:181
+msgid "Enter description"
+msgstr "输入描述"
 
 #: js/NodeGridPanel.js:125
 msgid "Tags"
@@ -222,14 +215,21 @@ msgstr "请输入新的文件夹名字："
 msgid "No {0} added"
 msgstr "没有添加 {0}"
 
-#: Controller/Node.php:318
-msgid "My folders"
-msgstr "我的文件夹"
+#: js/NodeGridPanel.js:651 js/NodeGridPanel.js:803 js/NodeTreePanel.js:660
+#: js/NodeTreePanel.js:770
+msgid "Upload Failed"
+msgstr "上传失败"
 
-#: Controller/Node.php:325
-msgid "Shared folders"
-msgstr "共享文件夹"
+#: js/NodeGridPanel.js:652 js/NodeTreePanel.js:661
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "文件太大不能上传，请修改管理设置中上传文件大小："
 
-#: Controller/Node.php:332
-msgid "Other users folders"
-msgstr "其他用户文件夹"
+#: js/NodeGridPanel.js:804 js/NodeTreePanel.js:771
+msgid "Putting files in this folder is not allowed!"
+msgstr "文件不允许放入这个文件夹！"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "路径"

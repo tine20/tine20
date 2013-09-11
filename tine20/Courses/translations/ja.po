@@ -1,70 +1,20 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Courses\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-10 12:00+0000\n"
+"PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"Language-Team: Japanese (http://www.transifex.com/projects/p/tine20/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: NOT SPECIFIED / ANY\n"
-"X-Poedit-Language: Japanese\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Config.php:61 js/Models.js:72 js/CourseEditDialog.js:227
-msgid "Internet Access"
-msgstr ""
-
-#: Config.php:63
-msgid "Internet access options."
-msgstr ""
-
-#: Config.php:70 Config.php:72
-msgid "Internet Access Group (ON)"
-msgstr ""
-
-#: Config.php:78 Config.php:80
-msgid "Internet Access Group (FILTERED)"
-msgstr ""
-
-#: Config.php:86 Config.php:88
-msgid "Students Group"
-msgstr ""
-
-#: Config.php:94 Config.php:96
-msgid "Students Import Definition"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr ""
-
-#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
-#: Preference.php:60
-msgid "All courses"
-msgstr ""
-
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr ""
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr ""
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr ""
 
 #: Acl/Rights.php:99
 msgid "Add new user"
@@ -80,6 +30,65 @@ msgstr ""
 
 #: Acl/Rights.php:104
 msgid "Add existing user as member to a course"
+msgstr ""
+
+#: Config.php:82 js/CourseEditDialog.js:227 js/Models.js:72
+msgid "Internet Access"
+msgstr ""
+
+#: Config.php:84
+msgid "Internet access options."
+msgstr ""
+
+#: Config.php:91 Config.php:93
+msgid "Internet Access Group (ON)"
+msgstr ""
+
+#: Config.php:99 Config.php:101
+msgid "Internet Access Group (FILTERED)"
+msgstr ""
+
+#: Config.php:107 Config.php:109
+msgid "Students Group"
+msgstr ""
+
+#: Config.php:115 Config.php:117
+msgid "Students Import Definition"
+msgstr ""
+
+#: Config.php:123
+msgid "Students login name prefix"
+msgstr ""
+
+#: Config.php:130
+msgid "Student username schema"
+msgstr ""
+
+#: Config.php:132
+msgid ""
+"Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
+"chars of firstname"
+msgstr ""
+
+#: Config.php:139 Config.php:141
+msgid "Samba user settings"
+msgstr ""
+
+#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] ""
+
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr ""
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr ""
+
+#: Controller/Course.php:317
+msgid "My course"
 msgstr ""
 
 #: js/AddMemberDialog.js:63
@@ -101,44 +110,6 @@ msgstr ""
 #: js/AddMemberDialog.js:118
 msgid "Please fix the errors noted."
 msgstr ""
-
-#: js/CourseGridPanel.js:48 js/Models.js:70
-msgid "Name"
-msgstr ""
-
-#: js/CourseGridPanel.js:54
-msgid "Type"
-msgstr ""
-
-#: js/CourseGridPanel.js:99
-msgid "Failed"
-msgstr ""
-
-#: js/CourseGridPanel.js:100
-msgid "Some error occured while trying to update the courses."
-msgstr ""
-
-#: js/Models.js:41 js/CourseEditDialog.js:187 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:69
-msgid "Quick search"
-msgstr ""
-
-#: js/Models.js:107
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] ""
-msgstr[1] ""
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -180,10 +151,57 @@ msgstr ""
 msgid "Reset Password"
 msgstr ""
 
-#: Controller/Course.php:246 Controller/Course.php:287
-msgid "Teacher"
+#: js/CourseGridPanel.js:48 js/Models.js:70
+msgid "Name"
 msgstr ""
 
-#: Controller/Course.php:247
-msgid "Teacher Account"
+#: js/CourseGridPanel.js:54
+msgid "Type"
+msgstr ""
+
+#: js/CourseGridPanel.js:99
+msgid "Failed"
+msgstr ""
+
+#: js/CourseGridPanel.js:100
+msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+
+#: js/Models.js:69
+msgid "Quick search"
+msgstr ""
+
+#: js/Models.js:107
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] ""
+
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
+
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr ""
+
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr ""
+
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Courses"
 msgstr ""

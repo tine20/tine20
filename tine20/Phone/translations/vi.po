@@ -17,14 +17,39 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
-msgid "Edit phone settings"
-msgstr "Sửa thiết lập điện thoại"
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Liên lạc điện thoại"
 
-#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "Cơ quan"
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "Nhà riêng"
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "Di động"
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "Di động riêng"
+
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "one:Điện thoại\nother:Điện thoại"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "one:Danh sách điện thoại\nother:Danh sách điện thoại"
+
+#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
+msgid "Edit phone settings"
+msgstr "Sửa thiết lập điện thoại"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -129,28 +154,3 @@ msgstr "Đang reo"
 #: js/Phone.js:720
 msgid "Call ID"
 msgstr "Mã cuộc gọi"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "one:Danh sách điện thoại\nother:Danh sách điện thoại"
-
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr "Liên lạc điện thoại"
-
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr "Cơ quan"
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr "Nhà riêng"
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr "Di động"
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr "Di động riêng"

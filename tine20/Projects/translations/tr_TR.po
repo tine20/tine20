@@ -25,11 +25,6 @@ msgstr ""
 msgid "Create new shared project favorites"
 msgstr ""
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's Projeleri"
-
 #: Config.php:38
 msgid "Project Status Available"
 msgstr ""
@@ -51,9 +46,116 @@ msgid ""
 "syncronisation."
 msgstr ""
 
-#: Setup/setup.xml:4 js/Projects.js:24
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's Projeleri"
+
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr ""
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Katılımcının Rolünü Berlirtiniz"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Proje Seçiniz"
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr "Rol"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Rol Seçiniz"
+
+#: js/AddToProjectPanel.js:102
+msgid "Adding {0} Participants to project"
+msgstr "{0} Kişi Projeye Eklenmiştir"
+
+#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "one: Proje\n\nother: Projeler"
+
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "one: Proje Listesi\n\nother: Proje Listeleri"
+
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Proje Listeleri"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Hızlı Arama"
+
+#: js/Model.js:73 js/ProjectEditDialog.js:130 js/ProjectGridPanel.js:95
+msgid "Title"
+msgstr "Başlık"
+
+#: js/Model.js:74 js/ProjectEditDialog.js:135 js/ProjectGridPanel.js:88
+msgid "Number"
+msgstr "Sayı"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:171
+msgid "Description"
+msgstr "Açıklama"
+
+#: js/Model.js:77 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:101
+msgid "Status"
+msgstr "Durum"
+
+#: js/Model.js:86
+msgid "Last Modified Time"
+msgstr "Son Düzenleme Vakti"
+
+#: js/Model.js:87
+msgid "Last Modified By"
+msgstr "Son Düzenlemeyi Yapan"
+
+#: js/Model.js:88
+msgid "Creation Time"
+msgstr "Oluşturma Vakti"
+
+#: js/Model.js:89
+msgid "Created By"
+msgstr "Oluşturan"
+
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
+msgid "Attendee"
+msgstr "Katılımcı"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Katılımcının Rolü"
+
+#: js/ProjectEditDialog.js:185
+msgid "Enter description"
+msgstr "Açıklama Giriniz"
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
+msgstr ""
+
+#: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "Projeler"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Projelerim"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr ""
 
 #: Setup/Initialize.php:34
 msgid "On hold"
@@ -98,105 +200,3 @@ msgstr "İşlemde Olan Projelerim"
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
 msgstr "İşlemde Olan Projelerim"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Projelerim"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr ""
-
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr ""
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Katılımcının Rolünü Berlirtiniz"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Proje Seçiniz"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
-msgid "Role"
-msgstr "Rol"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Rol Seçiniz"
-
-#: js/AddToProjectPanel.js:102
-msgid "Adding {0} Participants to project"
-msgstr "{0} Kişi Projeye Eklenmiştir"
-
-#: js/ProjectGridPanel.js:85
-msgid "Tags"
-msgstr ""
-
-#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:135
-msgid "Number"
-msgstr "Sayı"
-
-#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:130
-msgid "Title"
-msgstr "Başlık"
-
-#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:141
-msgid "Status"
-msgstr "Durum"
-
-#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "one: Proje\n\nother: Projeler"
-
-#: js/Model.js:37
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] "one: Proje Listesi\n\nother: Proje Listeleri"
-
-#: js/Model.js:40
-msgid "Project lists"
-msgstr "Proje Listeleri"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Hızlı Arama"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:171
-msgid "Description"
-msgstr "Açıklama"
-
-#: js/Model.js:86
-msgid "Last Modified Time"
-msgstr "Son Düzenleme Vakti"
-
-#: js/Model.js:87
-msgid "Last Modified By"
-msgstr "Son Düzenlemeyi Yapan"
-
-#: js/Model.js:88
-msgid "Creation Time"
-msgstr "Oluşturma Vakti"
-
-#: js/Model.js:89
-msgid "Created By"
-msgstr "Oluşturan"
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
-msgid "Attendee"
-msgstr "Katılımcı"
-
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Katılımcının Rolü"
-
-#: js/ProjectEditDialog.js:185
-msgid "Enter description"
-msgstr "Açıklama Giriniz"

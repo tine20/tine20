@@ -46,72 +46,139 @@ msgstr ""
 msgid "Create or update shared timesheet favorites"
 msgstr ""
 
-#: Model/Timeaccount.php:43 js/TimeaccountEditDialog.js:117
-msgid "Cost Center"
-msgstr "Kostnadsställe"
+#: js/DurationSlider.js:94
+msgid "{0}"
+msgstr "{0}"
 
-#: Setup/setup.xml:4
-msgid "Timetracker"
-msgstr "Tidhanterare"
+#: js/DurationSpinner.js:69 js/DurationSpinner.js:79
+msgid "Not a valid time"
+msgstr "Tiden är inte giltig"
 
-#: Setup/setup.xml:81 js/TimeaccountEditDialog.js:90
-#: js/TimeAccountBilledFilterModel.js:47
+#: js/Models.js:48 js/TimesheetEditDialog.js:127
+msgid "Timesheet"
+msgid_plural "Timesheets"
+msgstr[0] "Tidrapport"
+msgstr[1] "Tidrapporter"
+
+#: js/Models.js:52
+msgid "timesheets list"
+msgid_plural "timesheets lists"
+msgstr[0] "lista över tidrapporter"
+msgstr[1] "listor över tidrapporter"
+
+#: js/Models.js:87 js/Models.js:166
+msgid "Quick search"
+msgstr "Snabbsök"
+
+#: js/Models.js:88 js/TimesheetEditDialog.js:189 js/TimesheetGridPanel.js:110
+msgid "Account"
+msgstr "Konto"
+
+#: js/Models.js:89 js/TimesheetEditDialog.js:164 js/TimesheetGridPanel.js:96
+msgid "Date"
+msgstr "Datum"
+
+#: js/Models.js:90 js/Models.js:169 js/TimeaccountEditDialog.js:171
+#: js/TimeaccountEditDialog.js:190 js/TimesheetEditDialog.js:175
+#: js/TimesheetGridPanel.js:104 js/TimesheetGridPanel.js:252
+msgid "Description"
+msgstr "Beskrivning"
+
+#: js/Models.js:91 js/TimesheetEditDialog.js:194 js/TimesheetGridPanel.js:105
+#: js/TimesheetGridPanel.js:393
+msgid "Billable"
+msgstr "Fakturerbar"
+
+#: js/Models.js:92 js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:107
+#: js/TimesheetGridPanel.js:398
+msgid "Cleared"
+msgstr "Rensad"
+
+#: js/Models.js:93 js/Models.js:172
+msgid "Last Modified Time"
+msgstr "Senast ändrad"
+
+#: js/Models.js:94 js/Models.js:173
+msgid "Last Modified By"
+msgstr "Senast ändrad av"
+
+#: js/Models.js:95 js/Models.js:174
+msgid "Creation Time"
+msgstr "Skapad"
+
+#: js/Models.js:96 js/Models.js:175
+msgid "Created By"
+msgstr "Skapad av"
+
+#: js/Models.js:141 js/TimeaccountEditDialog.js:145
+#: js/TimesheetEditDialog.js:144
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "Tidkonto"
+msgstr[1] "Tidkonton"
+
+#: js/Models.js:145
+msgid "timeaccount list"
+msgid_plural "timeaccount lists"
+msgstr[0] "Lista över tidkonto"
+msgstr[1] "Listor över tidkonto"
+
+#: js/Models.js:149 js/TimeaccountEditDialog.js:80
+#: js/TimeaccountGridPanel.js:134 js/TimeAccountStatusFilterModel.js:46
+msgid "closed"
+msgstr "stängd"
+
+#: js/Models.js:167 js/TimeaccountEditDialog.js:161
+#: js/TimeaccountGridPanel.js:96
+msgid "Number"
+msgstr "Nummer"
+
+#: js/Models.js:168 js/TimeaccountEditDialog.js:166
+#: js/TimeaccountGridPanel.js:101
+msgid "Title"
+msgstr "Titel"
+
+#: js/Models.js:170 js/TimeaccountEditDialog.js:82
+#: js/TimeaccountGridPanel.js:106
+msgid "Billed"
+msgstr "Fakturerad"
+
+#: js/Models.js:171 js/TimeaccountEditDialog.js:74
+#: js/TimeaccountGridPanel.js:129
+msgid "Status"
+msgstr "Status"
+
+#: js/Models.js:176 js/TimeaccountEditDialog.js:101
+#: js/TimeaccountGridPanel.js:124
+msgid "Booking deadline"
+msgstr "Deadline för bokning"
+
+#: js/TimeAccountBilledFilterModel.js:24
+msgid "Time Account - Billed"
+msgstr "Tidspool - Debiterad"
+
+#: js/TimeAccountBilledFilterModel.js:47 js/TimeaccountEditDialog.js:90
+#: Setup/setup.xml:81
 msgid "not yet billed"
 msgstr "Icke fakturerad"
 
-#: Setup/setup.xml:82 js/TimeaccountEditDialog.js:91
-#: js/TimeAccountBilledFilterModel.js:48
+#: js/TimeAccountBilledFilterModel.js:48 js/TimeaccountEditDialog.js:91
+#: Setup/setup.xml:82
 msgid "to bill"
 msgstr "att fakturera"
 
-#: Setup/setup.xml:83 js/TimeaccountEditDialog.js:92
-#: js/TimeAccountBilledFilterModel.js:49
+#: js/TimeAccountBilledFilterModel.js:49 js/TimeaccountEditDialog.js:92
+#: Setup/setup.xml:83
 msgid "billed"
 msgstr "fakturerad"
 
-#: Setup/Update/Release5.php:81 Setup/Initialize.php:112
-msgid "Timeaccounts to bill"
-msgstr "Tidkonto att fakturera"
+#: js/TimeAccountContractFilterModel.js:30
+msgid "Contract"
+msgstr "Kontrakt"
 
-#: Setup/Update/Release5.php:95 Setup/Initialize.php:126
-msgid "Timeaccounts not yet billed"
-msgstr "Ännu ej fakturerade tidkonto"
-
-#: Setup/Update/Release5.php:109 Setup/Initialize.php:141
-msgid "Timeaccounts already billed"
-msgstr "Redan fakturerade tidkonto"
-
-#: Setup/Initialize.php:33
-msgid "My Timesheets today"
-msgstr "Mina tidrapporter i dag"
-
-#: Setup/Initialize.php:47
-msgid "My Timesheets this week"
-msgstr "Mina tidrapporter denna vecka"
-
-#: Setup/Initialize.php:61
-msgid "My Timesheets last week"
-msgstr "Mina tidrapporter förra veckan"
-
-#: Setup/Initialize.php:75
-msgid "My Timesheets this month"
-msgstr "Mina tidrapporter denna månad"
-
-#: Setup/Initialize.php:89
-msgid "My Timesheets last month"
-msgstr "Mina tidrapporter förra månaden"
-
-#: Preference.php:64
-msgid "Timesheets ODS export configuration"
-msgstr "Konfiguration för exportering av tidrapporter i ODS-format"
-
-#: Preference.php:65
-msgid "Use this configuration for the timesheet ODS export."
-msgstr "Använd denna konfiguration för exportering av tidrapporter i ODS-format."
-
-#: Preference.php:116
-msgid "default"
-msgstr "standard"
+#: js/TimeAccountContractFilterModel.js:32
+msgid "without contract"
+msgstr "utan kontrakt"
 
 #: js/TimeaccountEditDialog.js:62
 msgid "Unit"
@@ -125,25 +192,10 @@ msgstr "Pris per enhet"
 msgid "Budget"
 msgstr "Budget"
 
-#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:129
-#: js/Models.js:171
-msgid "Status"
-msgstr "Status"
-
-#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:134 js/Models.js:149
-msgid "closed"
-msgstr "stängd"
-
-#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:133
+#: js/TimeaccountEditDialog.js:80 js/TimeaccountGridPanel.js:133
+#: js/TimeAccountStatusFilterModel.js:46
 msgid "open"
 msgstr "öppen"
-
-#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:106
-#: js/Models.js:170
-msgid "Billed"
-msgstr "Fakturerad"
 
 #: js/TimeaccountEditDialog.js:96
 msgid "not cleared yet..."
@@ -153,11 +205,6 @@ msgstr "inte rensad"
 msgid "Cleared In"
 msgstr "Rensad"
 
-#: js/TimeaccountEditDialog.js:101 js/TimeaccountGridPanel.js:124
-#: js/Models.js:176
-msgid "Booking deadline"
-msgstr "Deadline för bokning"
-
 #: js/TimeaccountEditDialog.js:109
 msgid "none"
 msgstr "ingen"
@@ -166,32 +213,13 @@ msgstr "ingen"
 msgid "last week"
 msgstr "förra veckan"
 
+#: js/TimeaccountEditDialog.js:117 Model/Timeaccount.php:43
+msgid "Cost Center"
+msgstr "Kostnadsställe"
+
 #: js/TimeaccountEditDialog.js:130
 msgid "Timesheets are billable"
 msgstr "Tidrapporter är debiterbara"
-
-#: js/TimeaccountEditDialog.js:145 js/TimesheetEditDialog.js:144
-#: js/Models.js:141
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "Tidkonto"
-msgstr[1] "Tidkonton"
-
-#: js/TimeaccountEditDialog.js:161 js/TimeaccountGridPanel.js:96
-#: js/Models.js:167
-msgid "Number"
-msgstr "Nummer"
-
-#: js/TimeaccountEditDialog.js:166 js/TimeaccountGridPanel.js:101
-#: js/Models.js:168
-msgid "Title"
-msgstr "Titel"
-
-#: js/TimeaccountEditDialog.js:171 js/TimeaccountEditDialog.js:190
-#: js/TimesheetEditDialog.js:175 js/TimesheetGridPanel.js:104
-#: js/TimesheetGridPanel.js:252 js/Models.js:90 js/Models.js:169
-msgid "Description"
-msgstr "Beskrivning"
 
 #: js/TimeaccountEditDialog.js:204
 msgid "Enter description"
@@ -253,11 +281,30 @@ msgstr "Inkludera alla andra möjligheter"
 msgid "Permissions"
 msgstr "Rättigheter"
 
-#: js/TimesheetEditDialog.js:127 js/Models.js:48
-msgid "Timesheet"
-msgid_plural "Timesheets"
-msgstr[0] "Tidrapport"
-msgstr[1] "Tidrapporter"
+#: js/TimeaccountGridPanel.js:93 js/TimesheetGridPanel.js:94
+msgid "Tags"
+msgstr "Taggar"
+
+#: js/TimeaccountGridPanel.js:118 js/TimesheetGridPanel.js:109
+#: js/TimesheetGridPanel.js:403
+msgid "Cleared in"
+msgstr "Rensade i"
+
+#: js/TimeaccountGridPanel.js:165 js/TimesheetGridPanel.js:328
+msgid "Export as ODS"
+msgstr "Exportera som ODS"
+
+#: js/TimeaccountGridPanel.js:172 js/TimesheetGridPanel.js:335
+msgid "Export as CSV"
+msgstr "Exportera som CVS"
+
+#: js/TimeaccountPickerCombo.js:46
+msgid "Show closed"
+msgstr "Visa stängda"
+
+#: js/TimeAccountStatusFilterModel.js:24
+msgid "Time Account - Status"
+msgstr "Tidkonto - Status"
 
 #: js/TimesheetEditDialog.js:145
 msgid "Select Time Account..."
@@ -266,10 +313,6 @@ msgstr "Välj tidkonto..."
 #: js/TimesheetEditDialog.js:159 js/TimesheetGridPanel.js:112
 msgid "Duration"
 msgstr "Varaktighet"
-
-#: js/TimesheetEditDialog.js:164 js/TimesheetGridPanel.js:96 js/Models.js:89
-msgid "Date"
-msgstr "Datum"
 
 #: js/TimesheetEditDialog.js:169
 msgid "Start"
@@ -283,20 +326,6 @@ msgstr "Inte inställd"
 msgid "Enter description..."
 msgstr "Ange beskrivning"
 
-#: js/TimesheetEditDialog.js:189 js/TimesheetGridPanel.js:110 js/Models.js:88
-msgid "Account"
-msgstr "Konto"
-
-#: js/TimesheetEditDialog.js:194 js/TimesheetGridPanel.js:105
-#: js/TimesheetGridPanel.js:393 js/Models.js:91
-msgid "Billable"
-msgstr "Fakturerbar"
-
-#: js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:107
-#: js/TimesheetGridPanel.js:398 js/Models.js:92
-msgid "Cleared"
-msgstr "Rensad"
-
 #: js/TimesheetEditDialog.js:258
 msgid "Failed"
 msgstr "Misslyckades"
@@ -309,26 +338,6 @@ msgstr "Kunde inte spara {0}."
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Deadline för detta tidkonto har överskridits."
 
-#: js/DurationSpinner.js:69 js/DurationSpinner.js:79
-msgid "Not a valid time"
-msgstr "Tiden är inte giltig"
-
-#: js/TimeaccountPickerCombo.js:46
-msgid "Show closed"
-msgstr "Visa stängda"
-
-#: js/Timetracker.js:25
-msgid "New Timesheet"
-msgstr "Ny tidrapport"
-
-#: js/TimeAccountStatusFilterModel.js:24
-msgid "Time Account - Status"
-msgstr "Tidkonto - Status"
-
-#: js/TimesheetGridPanel.js:94 js/TimeaccountGridPanel.js:93
-msgid "Tags"
-msgstr "Taggar"
-
 #: js/TimesheetGridPanel.js:98
 msgid "Start time"
 msgstr "Starttid"
@@ -340,11 +349,6 @@ msgstr "Tidspool(Nummer - Titel)"
 #: js/TimesheetGridPanel.js:102
 msgid "Time Account closed"
 msgstr "Stängt tidkonto"
-
-#: js/TimesheetGridPanel.js:109 js/TimesheetGridPanel.js:403
-#: js/TimeaccountGridPanel.js:118
-msgid "Cleared in"
-msgstr "Rensade i"
 
 #: js/TimesheetGridPanel.js:165
 msgid "timeframe"
@@ -378,14 +382,6 @@ msgstr "Detalj"
 msgid "Export Timesheets"
 msgstr "Exportera tidrapporter"
 
-#: js/TimesheetGridPanel.js:328 js/TimeaccountGridPanel.js:165
-msgid "Export as ODS"
-msgstr "Exportera som ODS"
-
-#: js/TimesheetGridPanel.js:335 js/TimeaccountGridPanel.js:172
-msgid "Export as CSV"
-msgstr "Exportera som CVS"
-
 #: js/TimesheetGridPanel.js:342
 msgid "Export as ..."
 msgstr "Exportera som..."
@@ -398,50 +394,54 @@ msgstr "Massuppdatering"
 msgid "Update field:"
 msgstr "Uppdatera fält:"
 
-#: js/TimeAccountBilledFilterModel.js:24
-msgid "Time Account - Billed"
-msgstr "Tidspool - Debiterad"
+#: js/Timetracker.js:25
+msgid "New Timesheet"
+msgstr "Ny tidrapport"
 
-#: js/DurationSlider.js:94
-msgid "{0}"
-msgstr "{0}"
+#: Preference.php:64
+msgid "Timesheets ODS export configuration"
+msgstr "Konfiguration för exportering av tidrapporter i ODS-format"
 
-#: js/TimeAccountContractFilterModel.js:30
-msgid "Contract"
-msgstr "Kontrakt"
+#: Preference.php:65
+msgid "Use this configuration for the timesheet ODS export."
+msgstr "Använd denna konfiguration för exportering av tidrapporter i ODS-format."
 
-#: js/TimeAccountContractFilterModel.js:32
-msgid "without contract"
-msgstr "utan kontrakt"
+#: Preference.php:116
+msgid "default"
+msgstr "standard"
 
-#: js/Models.js:52
-msgid "timesheets list"
-msgid_plural "timesheets lists"
-msgstr[0] "lista över tidrapporter"
-msgstr[1] "listor över tidrapporter"
+#: Setup/Initialize.php:33
+msgid "My Timesheets today"
+msgstr "Mina tidrapporter i dag"
 
-#: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
-msgstr "Snabbsök"
+#: Setup/Initialize.php:47
+msgid "My Timesheets this week"
+msgstr "Mina tidrapporter denna vecka"
 
-#: js/Models.js:93 js/Models.js:172
-msgid "Last Modified Time"
-msgstr "Senast ändrad"
+#: Setup/Initialize.php:61
+msgid "My Timesheets last week"
+msgstr "Mina tidrapporter förra veckan"
 
-#: js/Models.js:94 js/Models.js:173
-msgid "Last Modified By"
-msgstr "Senast ändrad av"
+#: Setup/Initialize.php:75
+msgid "My Timesheets this month"
+msgstr "Mina tidrapporter denna månad"
 
-#: js/Models.js:95 js/Models.js:174
-msgid "Creation Time"
-msgstr "Skapad"
+#: Setup/Initialize.php:89
+msgid "My Timesheets last month"
+msgstr "Mina tidrapporter förra månaden"
 
-#: js/Models.js:96 js/Models.js:175
-msgid "Created By"
-msgstr "Skapad av"
+#: Setup/Initialize.php:112 Setup/Update/Release5.php:81
+msgid "Timeaccounts to bill"
+msgstr "Tidkonto att fakturera"
 
-#: js/Models.js:145
-msgid "timeaccount list"
-msgid_plural "timeaccount lists"
-msgstr[0] "Lista över tidkonto"
-msgstr[1] "Listor över tidkonto"
+#: Setup/Initialize.php:126 Setup/Update/Release5.php:95
+msgid "Timeaccounts not yet billed"
+msgstr "Ännu ej fakturerade tidkonto"
+
+#: Setup/Initialize.php:141 Setup/Update/Release5.php:109
+msgid "Timeaccounts already billed"
+msgstr "Redan fakturerade tidkonto"
+
+#: Setup/setup.xml:4
+msgid "Timetracker"
+msgstr "Tidhanterare"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:51+0000\n"
+"PO-Revision-Date: 2013-06-21 10:05+0000\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -24,22 +24,6 @@ msgstr "quản lý sản phẩm"
 #: Acl/Rights.php:104
 msgid "add, edit and delete products"
 msgstr "thêm, xóa, sửa sản phẩm"
-
-#: Controller.php:83 Controller.php:103
-msgid "You do not have admin rights on Sales"
-msgstr "Bạn không có quyền quản trị trên hệ thống Kinh doanh"
-
-#: Model/Contract.php:91
-msgid "Responsible"
-msgstr "Chịu trách nhiệm"
-
-#: Model/Contract.php:92
-msgid "Customer"
-msgstr "Khách hàng"
-
-#: Model/Contract.php:93
-msgid "Partner"
-msgstr "Đối tác"
 
 #: Config.php:51
 msgid "Contract Number Creation"
@@ -65,7 +49,7 @@ msgstr "Phê chuẩn số hợp đồng"
 msgid "The Number can be validated as text or number."
 msgstr "Số có thể được phê chuẩn khi là chữ hoặc số"
 
-#: Config.php:69 js/Models.js:199 js/ContractEditDialog.js:136
+#: Config.php:69 js/ContractEditDialog.js:136 js/Models.js:203
 msgid "Number"
 msgstr "Số"
 
@@ -91,21 +75,13 @@ msgstr "Hợp đồng có trạng thái sẵn sàng xóa"
 msgid "Possible Contract cleared states."
 msgstr "Trạng thái đã xóa của hợp đồng có thể"
 
-#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
-msgid "My Products"
-msgstr "Sản phẩm của tôi"
+#: Controller/Contract.php:83
+msgid "The number you have tried to set is already in use!"
+msgstr "Số bạn đang đặt đã tồn tại!"
 
-#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
-msgid "Products created by myself"
-msgstr "Sản phẩm tạo bởi tôi"
-
-#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
-msgid "My Contracts"
-msgstr "Hợp đồng của tôi"
-
-#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
-msgid "Contracts created by myself"
-msgstr "Hợp đồng tạo bởi tôi"
+#: Controller.php:83 Controller.php:103
+msgid "You do not have admin rights on Sales"
+msgstr "Bạn không có quyền quản trị trên hệ thống Kinh doanh"
 
 #: js/AdminPanel.js:61
 msgid "Cancel"
@@ -119,25 +95,125 @@ msgstr "OK"
 msgid "Loading..."
 msgstr "Đang tải"
 
-#: js/ContractGridPanel.js:82
-msgid "Contract number"
-msgstr "Số hợp đồng"
+#: js/ContractEditDialog.js:96
+msgid "Please use a decimal number here!"
+msgstr "Xin sử dụng 1 số thập phân tại đây!"
 
-#: js/ContractGridPanel.js:88 js/Models.js:236 js/ContractEditDialog.js:143
+#: js/ContractEditDialog.js:143 js/ContractGridPanel.js:93 js/Models.js:240
 msgid "Title"
 msgstr "Tiêu đề"
 
-#: js/ContractGridPanel.js:94 js/Models.js:146 js/ContractEditDialog.js:176
+#: js/ContractEditDialog.js:149
+msgid "Contract Contact"
+msgstr ""
+
+#: js/ContractEditDialog.js:161
+msgid "Account Manager"
+msgstr ""
+
+#: js/ContractEditDialog.js:170
+msgid "Company"
+msgstr "Công ty"
+
+#: js/ContractEditDialog.js:176 js/ContractGridPanel.js:99 js/Models.js:147
 msgid "Status"
 msgstr "Trạng thái"
 
-#: js/ContractGridPanel.js:101 js/Models.js:153 js/ContractEditDialog.js:183
+#: js/ContractEditDialog.js:183 js/ContractGridPanel.js:106 js/Models.js:154
 msgid "Cleared"
 msgstr "Đã xóa"
 
-#: js/ContractGridPanel.js:108 js/Models.js:159 js/ContractEditDialog.js:187
+#: js/ContractEditDialog.js:187 js/ContractGridPanel.js:113 js/Models.js:160
 msgid "Cleared in"
 msgstr "Xóa vào"
+
+#: js/ContractEditDialog.js:193 js/ProductEditDialog.js:114
+#: js/ProductGridPanel.js:124
+msgid "Description"
+msgstr "Mo tả"
+
+#: js/ContractEditDialog.js:194 js/ProductEditDialog.js:115
+msgid "Enter description..."
+msgstr "Nhập vào mô tả"
+
+#: js/ContractGridPanel.js:79 js/ProductGridPanel.js:120
+msgid "Tags"
+msgstr "Thẻ"
+
+#: js/ContractGridPanel.js:87
+msgid "Contract number"
+msgstr "Số hợp đồng"
+
+#: js/Models.js:39
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "one:Sản phẩm\nother:Sản phẩm"
+
+#: js/Models.js:42 js/Models.js:229
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "one: danh sách biểu ghi\nother: danh sách biểu ghi"
+
+#: js/Models.js:76 js/Models.js:143 js/Models.js:202 js/Models.js:239
+msgid "Quick search"
+msgstr "Tìm nhanh"
+
+#: js/Models.js:77
+msgid "Product name"
+msgstr "Tên sản phẩm"
+
+#: js/Models.js:79 js/Models.js:145
+msgid "Creator"
+msgstr "Người tạo"
+
+#: js/Models.js:113
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "one:Hợp đồng\nother:Hợp đồng"
+
+#: js/Models.js:117
+msgid "All Contracts"
+msgid_plural "contracts lists"
+msgstr[0] "one:Mọi hợp đồng\nother:Danh sách hợp đồng"
+
+#: js/Models.js:144
+msgid "Contract name"
+msgstr "Tên hợp đồng"
+
+#: js/Models.js:162
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/Models.js:163
+msgid "Last Modified By"
+msgstr ""
+
+#: js/Models.js:164
+msgid "Creation Time"
+msgstr ""
+
+#: js/Models.js:165
+msgid "Created By"
+msgstr ""
+
+#: js/Models.js:189
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] "one:Giá trung tâm\nother:Giá trung tâm"
+
+#: js/Models.js:192
+msgid "All CostCenters"
+msgid_plural "All CostCenters"
+msgstr[0] "one: Mọi giá trung tâm\nother: Mọi giá trung tâm"
+
+#: js/Models.js:204
+msgid "Remark"
+msgstr "Đánh dấu lại"
+
+#: js/Models.js:226
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] "one: Bộ phận\nother: Bộ phận"
 
 #: js/ProductEditDialog.js:93 js/ProductGridPanel.js:121
 msgid "Name"
@@ -155,90 +231,30 @@ msgstr "Nhà sản xuất"
 msgid "Category"
 msgstr "Danh mục"
 
-#: js/ProductEditDialog.js:114 js/ProductGridPanel.js:124
-#: js/ContractEditDialog.js:193
-msgid "Description"
-msgstr "Mo tả"
+#: Model/Contract.php:107
+msgid "Responsible"
+msgstr "Chịu trách nhiệm"
 
-#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:194
-msgid "Enter description..."
-msgstr "Nhập vào mô tả"
+#: Model/Contract.php:108
+msgid "Customer"
+msgstr "Khách hàng"
 
-#: js/ProductGridPanel.js:120
-msgid "Tags"
-msgstr "Thẻ"
+#: Model/Contract.php:109
+msgid "Partner"
+msgstr "Đối tác"
 
-#: js/Models.js:39
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "one:Sản phẩm\nother:Sản phẩm"
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:63
+msgid "My Products"
+msgstr "Sản phẩm của tôi"
 
-#: js/Models.js:42 js/Models.js:225
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "one: danh sách biểu ghi\nother: danh sách biểu ghi"
+#: Setup/Initialize.php:35 Setup/Update/Release5.php:64
+msgid "Products created by myself"
+msgstr "Sản phẩm tạo bởi tôi"
 
-#: js/Models.js:76 js/Models.js:142 js/Models.js:198 js/Models.js:235
-msgid "Quick search"
-msgstr "Tìm nhanh"
+#: Setup/Initialize.php:55 Setup/Update/Release5.php:84
+msgid "My Contracts"
+msgstr "Hợp đồng của tôi"
 
-#: js/Models.js:77
-msgid "Product name"
-msgstr "Tên sản phẩm"
-
-#: js/Models.js:79 js/Models.js:144
-msgid "Creator"
-msgstr "Người tạo"
-
-#: js/Models.js:112
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "one:Hợp đồng\nother:Hợp đồng"
-
-#: js/Models.js:116
-msgid "All Contracts"
-msgid_plural "contracts lists"
-msgstr[0] "one:Mọi hợp đồng\nother:Danh sách hợp đồng"
-
-#: js/Models.js:143
-msgid "Contract name"
-msgstr "Tên hợp đồng"
-
-#: js/Models.js:185
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] "one:Giá trung tâm\nother:Giá trung tâm"
-
-#: js/Models.js:188
-msgid "All CostCenters"
-msgid_plural "All CostCenters"
-msgstr[0] "one: Mọi giá trung tâm\nother: Mọi giá trung tâm"
-
-#: js/Models.js:200
-msgid "Remark"
-msgstr "Đánh dấu lại"
-
-#: js/Models.js:222
-msgid "Division"
-msgid_plural "Divisions"
-msgstr[0] "one: Bộ phận\nother: Bộ phận"
-
-#: js/ContractEditDialog.js:96
-msgid "Please use a decimal number here!"
-msgstr "Xin sử dụng 1 số thập phân tại đây!"
-
-#: js/ContractEditDialog.js:149
-msgid "Contract Contact"
-msgstr ""
-
-#: js/ContractEditDialog.js:161
-msgid "Account Manager"
-msgstr ""
-
-#: js/ContractEditDialog.js:170
-msgid "Company"
-msgstr "Công ty"
-
-#: Controller/Contract.php:83
-msgid "The number you have tried to set is already in use!"
-msgstr "Số bạn đang đặt đã tồn tại!"
+#: Setup/Initialize.php:56 Setup/Update/Release5.php:85
+msgid "Contracts created by myself"
+msgstr "Hợp đồng tạo bởi tôi"

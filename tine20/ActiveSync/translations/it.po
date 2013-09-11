@@ -26,48 +26,6 @@ msgstr "Politica predefinita per i nuovi device"
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Inserisci l'ID della politica da applicare ai nuovi device"
 
-#: Setup/setup.xml:542 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Politica predefinita"
-
-#: Setup/setup.xml:547 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Politica predefinita installata durante il setup"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Rubrica predefinita"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Rubrica predefinita per la creazione dei nuovi contatti"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Calendario predefinito"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Il calendario predefinito per la creazione di nuovi eventi"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Elenco Attività predefinito"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Lista predefinita di attività in cui crearne una nuova."
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Device"
-msgstr[1] "Device"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Device"
-
 #: js/Application.js:27
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -99,3 +57,45 @@ msgstr "resettato"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Imposta Filtro Sync"
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Device"
+msgstr[1] "Device"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Device"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Rubrica predefinita"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Rubrica predefinita per la creazione dei nuovi contatti"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Calendario predefinito"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Il calendario predefinito per la creazione di nuovi eventi"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Elenco Attività predefinito"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Lista predefinita di attività in cui crearne una nuova."
+
+#: Setup/setup.xml:542 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Politica predefinita"
+
+#: Setup/setup.xml:547 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Politica predefinita installata durante il setup"

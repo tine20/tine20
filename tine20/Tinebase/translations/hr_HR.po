@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-04-19 06:24+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-06-21 10:05+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,21 +21,21 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Exception/PasswordPolicyViolation.php:22
-msgid "Password Policy Violation"
-msgstr "Kršenje politike korištenja lozinke"
+#: Acl/Rights/Abstract.php:72
+msgid "admin"
+msgstr "admin"
 
-#: Exception/SystemGeneric.php:27
-msgid "Generic System Exception"
-msgstr "Opća sistemska iznimka"
+#: Acl/Rights/Abstract.php:73
+msgid "admin right description"
+msgstr "opis admin prava"
 
-#: Exception/Record/SystemContainer.php:22
-msgid "System Container"
-msgstr "Sistemski Spremnik"
+#: Acl/Rights/Abstract.php:76
+msgid "run"
+msgstr "pokreni"
 
-#: Exception/Record/SystemContainer.php:28
-msgid "This is a system container which could not be deleted!"
-msgstr "Ovo je sistemski spremnik kojega nije moguće obrisati!"
+#: Acl/Rights/Abstract.php:77
+msgid "run right description"
+msgstr "opis prava za pokretanje"
 
 #: Acl/Rights.php:147
 msgid "Report bugs"
@@ -68,65 +68,6 @@ msgstr "Upravljaj svojim satusom"
 #: Acl/Rights.php:160
 msgid "The right to manage the own client state."
 msgstr "Prava za upravljanjem svjim vlastitim statusom"
-
-#: Acl/Rights/Abstract.php:72
-msgid "admin"
-msgstr "admin"
-
-#: Acl/Rights/Abstract.php:73
-msgid "admin right description"
-msgstr "opis admin prava"
-
-#: Acl/Rights/Abstract.php:76
-msgid "run"
-msgstr "pokreni"
-
-#: Acl/Rights/Abstract.php:77
-msgid "run right description"
-msgstr "opis prava za pokretanje"
-
-#: Preference/Abstract.php:502
-msgid "default"
-msgstr "zadana vrijednost"
-
-#: Frontend/Http.php:396 js/ExceptionHandler.js:149
-msgid "Authorisation Required"
-msgstr "Potrebna je autorizacija"
-
-#: Frontend/Http.php:397
-msgid "Your session is not valid. You need to login again."
-msgstr "Vaša sesija nije važeća. Morate se ponovno prijaviti."
-
-#: Frontend/Http.php:422 js/ExceptionDialog.js:62
-msgid "Abnormal End"
-msgstr "Neispravan završetak"
-
-#: Frontend/Http.php:423 js/ExceptionDialog.js:134
-msgid "An error occurred, the program ended abnormal."
-msgstr "Došlo je do pogreške, aplikacija je neispravno prekinuta."
-
-#: Notes.php:369
-msgid "by"
-msgstr "od"
-
-#: Notes.php:378
-msgid "Changed fields:"
-msgstr "Izmijenjena polja:"
-
-#: User/Abstract.php:281 User/Abstract.php:282 User/Abstract.php:283
-#: User/Abstract.php:284 User/Abstract.php:285 js/ux/ConnectionStatus.js:58
-#: Group/Abstract.php:191
-msgid "unknown"
-msgstr "nepoznato"
-
-#: Import/Csv/Abstract.php:197
-#, python-format
-msgid "The following fields weren't imported: %s"
-msgstr "Sljedeća polja nisu importovana:%s"
-
-#: Import/Csv/Abstract.php:198
-msgid "N/A"
-msgstr "ništa"
 
 #: Config.php:267
 msgid "System IMAP"
@@ -276,182 +217,125 @@ msgstr "Direktorij web servera s pravima pisanja za korisničke datoteke."
 msgid "User may change password"
 msgstr "Korisnik može promijeniti lozinku"
 
-#: Config.php:462 Config.php:464
+#: Config.php:463 Config.php:465
 msgid "Enable password policy"
 msgstr "Omogućite politiku lozinki"
 
-#: Config.php:472
+#: Config.php:473
 msgid "Only ASCII"
 msgstr "Samo ASCII"
 
-#: Config.php:474
+#: Config.php:475
 msgid "Only ASCII characters are allowed in passwords."
 msgstr "Samo su ASCII karakteri dozvoljeni u lozinkama."
 
-#: Config.php:482
+#: Config.php:483
 msgid "Minimum length"
 msgstr "Minimalna duljina"
 
-#: Config.php:484
+#: Config.php:485
 msgid "Minimum password length"
 msgstr "Minimalna duljina lozinke"
 
-#: Config.php:492
+#: Config.php:493
 msgid "Minimum word chars"
 msgstr "Minimalan broj znakova u riječi"
 
-#: Config.php:494
+#: Config.php:495
 msgid "Minimum word chars in password"
 msgstr "Minimalan broj znakova u lozinci"
 
-#: Config.php:502
+#: Config.php:503
 msgid "Minimum uppercase chars"
 msgstr "Minimalan broj velikih slova"
 
-#: Config.php:504
+#: Config.php:505
 msgid "Minimum uppercase chars in password"
 msgstr "Minimalan broj velikih slova u lozinci"
 
-#: Config.php:512
+#: Config.php:513
 msgid "Minimum special chars"
 msgstr "Minimalan broj posebnih znakova"
 
-#: Config.php:514
+#: Config.php:515
 msgid "Minimum special chars in password"
 msgstr "Minimalan broj posebnih znakova u lozinci"
 
-#: Config.php:522
+#: Config.php:523
 msgid "Minimum numbers"
 msgstr "Minimalan broj znamenki"
 
-#: Config.php:524
+#: Config.php:525
 msgid "Minimum numbers in password"
 msgstr "Minimalan broj znamenki u lozinci"
 
-#: Config.php:532
+#: Config.php:533
 msgid "Forbid part of username"
 msgstr "Zabranjen dio u korisničkom imenu"
 
-#: Config.php:534
+#: Config.php:535
 msgid "Forbid part of username in password"
 msgstr "Zabranjen dio imena u lozinci"
 
-#: Config.php:542
+#: Config.php:543
 msgid "Automatic bugreports"
 msgstr "Automatska prijava grešaka"
 
-#: Config.php:544
+#: Config.php:545
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr "Uvijek pošalji izvještaj greške, čak i kad istekne tajm-out i druge iznimke / nedostatak."
 
-#: Config.php:552
+#: Config.php:553
 msgid "Last sessions cleanup run"
 msgstr "Posljednja sesija pokretanje počistilo sesija "
 
-#: Config.php:554
+#: Config.php:555
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr "Sprema vrijeme zadnjeg uspješnog pokretanja"
 
-#: Config.php:562
+#: Config.php:563
 msgid "Maximum login failures"
 msgstr "Ukupan broj grešaka u prijavi"
 
-#: Config.php:564
+#: Config.php:565
 msgid "Maximum allowed login failures before blocking account"
 msgstr "Ukupan broj dozvoljenih grešaka u prijavi prije blokiranja računa"
 
-#: Config.php:572
+#: Config.php:573
 msgid "Disable Anyone Account"
 msgstr "Onemogući svačiji račun"
 
-#: Config.php:574
+#: Config.php:575
 msgid "Disallow anyone account in grant configurations"
 msgstr "Onemogući svačiji račun u konfiguraciji dozvola"
 
-#: Setup/setup.xml:3203
-msgid "note"
-msgstr "bilješka"
+#: Container.php:684
+#, python-format
+msgid "%s's personal container"
+msgstr "%s osobni kontejner"
 
-#: Setup/setup.xml:3208
-msgid "default note type"
-msgstr "standardni tip bilješke"
+#: Container.php:1525
+msgid ""
+"You are not allowed to delete this Container. Please define another "
+"container as the default addressbook for internal contacts!"
+msgstr "Nemate prava obrisati ovaj Spremnik. Molimo odredite drugi spremnik kao zadani spremnik za spremanje internih kontakata u adresar!"
 
-#: Setup/setup.xml:3234
-msgid "telephone"
-msgstr "telefon"
+#: Exception/PasswordPolicyViolation.php:22
+msgid "Password Policy Violation"
+msgstr "Kršenje politike korištenja lozinke"
 
-#: Setup/setup.xml:3239
-msgid "telephone call"
-msgstr "telefonski poziv"
+#: Exception/Record/SystemContainer.php:22
+msgid "System Container"
+msgstr "Sistemski Spremnik"
 
-#: Setup/setup.xml:3265
-msgid "email"
-msgstr "e-mail"
+#: Exception/Record/SystemContainer.php:28
+msgid "This is a system container which could not be deleted!"
+msgstr "Ovo je sistemski spremnik kojega nije moguće obrisati!"
 
-#: Setup/setup.xml:3270
-msgid "email contact"
-msgstr "e-mail kontakt"
-
-#: Setup/setup.xml:3296
-msgid "created"
-msgstr "kreirano"
-
-#: Setup/setup.xml:3301
-msgid "record created"
-msgstr "kreirani zapis"
-
-#: Setup/setup.xml:3327
-msgid "changed"
-msgstr "izmijenjen"
-
-#: Setup/setup.xml:3332
-msgid "record changed"
-msgstr "izmijenjeni zapis"
-
-#: Preference.php:87 js/widgets/TimezoneChooser.js:37
-msgid "Timezone"
-msgstr "Vremenska zona"
-
-#: Preference.php:88
-msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr "Vremenska zona postavljena za CPM 2.0."
-
-#: Preference.php:91 js/widgets/LangChooser.js:35
-msgid "Language"
-msgstr "Jezik"
-
-#: Preference.php:92
-msgid "The language of the Tine 2.0 GUI."
-msgstr "Jezik postavljen za CPM 2.0."
-
-#: Preference.php:95
-msgid "Default Application"
-msgstr "Početna aplikacija"
-
-#: Preference.php:96
-msgid "The default application to show after login."
-msgstr "Početna aplikacija za prikaz nakon prijave."
-
-#: Preference.php:99
-msgid "Window Type"
-msgstr "Tip prozora"
-
-#: Preference.php:100
-msgid "You can choose between modal windows or normal browser popup windows."
-msgstr "Možete birati između modalnih prozora ili normalnih popup prozora."
-
-#: Preference.php:103
-msgid "Confirm Logout"
-msgstr "Potvrda odjave"
-
-#: Preference.php:104
-msgid "Show confirmation dialog on logout."
-msgstr "Prikaži dijalog potvrde prilikom odjave."
-
-#: Export/Spreadsheet/Ods.php:278
-msgid "Data"
-msgstr "Podaci"
+#: Exception/SystemGeneric.php:27
+msgid "Generic System Exception"
+msgstr "Opća sistemska iznimka"
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
 msgid "Tags"
@@ -465,52 +349,54 @@ msgstr "Kreirao"
 msgid "Activities"
 msgstr "Aktivnosti"
 
-#: js/AdminPanel.js:75
-msgid "Profile Information"
-msgstr "Podaci o profilu"
+#: Export/Spreadsheet/Ods.php:278
+msgid "Data"
+msgstr "Podaci"
 
-#: js/AdminPanel.js:79 js/widgets/EditRecord.js:168
-#: js/widgets/dialog/EditDialog.js:309
-msgid "Apply"
-msgstr "Primijeni"
+#: Frontend/Http.php:396 js/ExceptionHandler.js:149
+msgid "Authorisation Required"
+msgstr "Potrebna je autorizacija"
 
-#: js/AdminPanel.js:94 js/widgets/TimezoneChooser.js:77
-#: js/widgets/LangChooser.js:68
-msgid "Please Wait"
-msgstr "Molimo pričekajte"
+#: Frontend/Http.php:397
+msgid "Your session is not valid. You need to login again."
+msgstr "Vaša sesija nije važeća. Morate se ponovno prijaviti."
 
-#: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
-msgid "Read"
-msgstr "Čitaj"
+#: Frontend/Http.php:422 js/ExceptionDialog.js:62
+msgid "Abnormal End"
+msgstr "Neispravan završetak"
 
-#: js/AdminPanel.js:157
-msgid "The field is readable part of the profile"
-msgstr "Polje se može čitati  u profilu"
+#: Frontend/Http.php:423 js/ExceptionDialog.js:134
+msgid "An error occurred, the program ended abnormal."
+msgstr "Došlo je do pogreške, aplikacija je neispravno prekinuta."
 
-#: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:47
-msgid "Edit"
-msgstr "Uredi"
+#: Group/Abstract.php:191 js/ux/ConnectionStatus.js:58 User/Abstract.php:281
+#: User/Abstract.php:282 User/Abstract.php:283 User/Abstract.php:284
+#: User/Abstract.php:285
+msgid "unknown"
+msgstr "nepoznato"
 
-#: js/AdminPanel.js:162
-msgid "The field is editable part of the profile"
-msgstr "Polje se može ažurirati u profilu"
+#: Import/Csv/Abstract.php:197
+#, python-format
+msgid "The following fields weren't imported: %s"
+msgstr "Sljedeća polja nisu importovana:%s"
 
-#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:139
-msgid "Field Name"
-msgstr "Naziv polja"
+#: Import/Csv/Abstract.php:198
+msgid "N/A"
+msgstr "ništa"
 
 #: js/AboutDialog.js:41 js/MainMenu.js:112
 msgid "About {0}"
 msgstr "Približno {0}"
 
 #: js/AboutDialog.js:60 js/CreditsScreen.js:53 js/LicenseScreen.js:51
-#: js/PasswordChangeDialog.js:66 js/widgets/EditRecord.js:157
-#: js/widgets/tags/TagsMassAttachAction.js:84
-#: js/widgets/dialog/MultiOptionsDialog.js:102
+#: js/PasswordChangeDialog.js:66 js/ux/form/LayerCombo.js:186
+#: js/widgets/ActivitiesPanel.js:311
+#: js/widgets/container/ContainerSelect.js:490
 #: js/widgets/dialog/AddToRecordPanel.js:111
-#: js/widgets/dialog/PreferencesDialog.js:109
-#: js/widgets/dialog/EditDialog.js:298 js/widgets/ActivitiesPanel.js:311
-#: js/widgets/container/ContainerSelect.js:490 js/ux/form/LayerCombo.js:186
+#: js/widgets/dialog/EditDialog.js:298
+#: js/widgets/dialog/MultiOptionsDialog.js:102
+#: js/widgets/dialog/PreferencesDialog.js:109 js/widgets/EditRecord.js:157
+#: js/widgets/tags/TagsMassAttachAction.js:84
 msgid "Ok"
 msgstr "U redu"
 
@@ -530,11 +416,43 @@ msgstr "uz pomoć naših"
 msgid "Contributors"
 msgstr "Suradnici"
 
-#: js/tineInit.js:603
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator "
-"and/or restart/reload your browser."
-msgstr "Neuspjelo ažuriranje klijenta. Molimo Vas da kontaktirate administratora i/ ili ponovno pokrenete preglednik."
+#: js/AdminPanel.js:75
+msgid "Profile Information"
+msgstr "Podaci o profilu"
+
+#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:309
+#: js/widgets/EditRecord.js:168
+msgid "Apply"
+msgstr "Primijeni"
+
+#: js/AdminPanel.js:94 js/widgets/LangChooser.js:68
+#: js/widgets/TimezoneChooser.js:77
+msgid "Please Wait"
+msgstr "Molimo pričekajte"
+
+#: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
+msgid "Read"
+msgstr "Čitaj"
+
+#: js/AdminPanel.js:157
+msgid "The field is readable part of the profile"
+msgstr "Polje se može čitati  u profilu"
+
+#: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:47
+msgid "Edit"
+msgstr "Uredi"
+
+#: js/AdminPanel.js:162
+msgid "The field is editable part of the profile"
+msgstr "Polje se može ažurirati u profilu"
+
+#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:200
+msgid "Field Name"
+msgstr "Naziv polja"
+
+#: js/ApplicationStarter.js:222 js/widgets/ActivitiesPanel.js:592
+msgid "Quick search"
+msgstr "Brzo pretraživanje"
 
 #: js/AppManager.js:208
 msgid "Missing Applications"
@@ -546,17 +464,13 @@ msgid ""
 "administrator."
 msgstr "Nije omogućeno korištenje aplikacija. Molimo Vas da kontaktirate administratora."
 
-#: js/CreditsScreen.js:36
-msgid "Credits"
-msgstr "Zasluge"
-
 #: js/common.js:235
 msgid "Usage:&#160;"
 msgstr "Iskorišteno:&#160;"
 
-#: js/common.js:255 js/common.js:260 js/widgets/tags/TagToggleBox.js:112
-#: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagsPanel.js:128
-#: js/widgets/tags/TagCombo.js:134 js/widgets/tags/TagCombo.js:139
+#: js/common.js:255 js/common.js:260 js/widgets/tags/TagCombo.js:134
+#: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:128
+#: js/widgets/tags/TagToggleBox.js:112 js/widgets/tags/TagToggleBox.js:117
 msgid "personal"
 msgstr "osobno"
 
@@ -592,272 +506,25 @@ msgstr[0] "{0} sekunda"
 msgstr[1] "{0} sekunde"
 msgstr[2] "{0} sekundi"
 
-#: js/LoginPanel.js:80 js/LoginPanel.js:118
-msgid "Login"
-msgstr "Prijava"
+#: js/Container.js:123
+msgid "All {0}"
+msgstr "Svi {0}"
 
-#: js/LoginPanel.js:90 js/widgets/dialog/CredentialsDialog.js:61
-msgid "Username"
-msgstr "Korisničko ime"
+#: js/Container.js:124
+msgid "Shared {0}"
+msgstr "Zajednički {0}"
 
-#: js/LoginPanel.js:107 js/widgets/dialog/CredentialsDialog.js:65
-msgid "Password"
-msgstr "Zaporka"
+#: js/Container.js:125
+msgid "Other Users {0}"
+msgstr "Ostali korisnici {0}"
 
-#: js/LoginPanel.js:137
-msgid "Tine 2.0 is made for you"
-msgstr "CPM 2.0 je napravljen za Vas"
+#: js/Container.js:130
+msgid "My {0}"
+msgstr "Moji {0}"
 
-#: js/LoginPanel.js:139
-msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
-" and get help."
-msgstr "CPM 2.0 je prilagođen Vašim poslovnim potrebama. Slobodno možete dati svoje prijedloge u cilju poboljšanja."
-
-#: js/LoginPanel.js:145
-msgid "Tine 2.0 Homepage"
-msgstr "CPM 2.0 Početna stranica"
-
-#: js/LoginPanel.js:146
-msgid "Tine 2.0 Forum"
-msgstr "CPM 2.0 Forum"
-
-#: js/LoginPanel.js:150
-msgid "Translations"
-msgstr "Prijevod"
-
-#: js/LoginPanel.js:152
-msgid ""
-"If you miss a language, or your language is not supported completely, you "
-"can help our translation teams at transifex."
-msgstr "Ako Vam fali jezik ili nije podržan u potpunosti, možete pomoć našem timu na transifex-u"
-
-#: js/LoginPanel.js:155
-msgid "Tine 2.0 Translation Portal"
-msgstr "Portal Tine 2.0 prijevoda "
-
-#: js/LoginPanel.js:200
-msgid "about {0} minutes"
-msgstr "Otprilike {0} minuta"
-
-#: js/LoginPanel.js:205 js/LoginPanel.js:430
-msgid "Tine 2.0 needs your help"
-msgstr "CPM 2.0 treba Vašu pomoć"
-
-#: js/LoginPanel.js:207 js/LoginPanel.js:432
-msgid ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
-msgstr "Kako bi unaprijedili CPM 2.0 potrebne su nam Vaše redovite povratne informacije. Pomozite sudjelujući:"
-
-#: js/LoginPanel.js:213
-msgid "participate!"
-msgstr "Sudjelujte!"
-
-#: js/LoginPanel.js:235
-msgid "Languages"
-msgstr "Jezici"
-
-#: js/LoginPanel.js:236
-msgid "Duration"
-msgstr "Trajanje"
-
-#: js/LoginPanel.js:277
-msgid "Browser incompatible"
-msgstr "Preglednik nije podržan"
-
-#: js/LoginPanel.js:279
-msgid "Your browser is not supported by Tine 2.0."
-msgstr "Vaš preglednik nije podržan u CPM 2.0"
-
-#: js/LoginPanel.js:284
-msgid "Browser incompatible?"
-msgstr "Preglednik nije podržan?"
-
-#: js/LoginPanel.js:286
-msgid ""
-"You are using an unrecognized browser. This could result in unexpected "
-"behaviour."
-msgstr "Koristite preglednik koji nije prepoznat. To može dovetni do neočekivanog ponašanja."
-
-#: js/LoginPanel.js:292
-msgid "You might try one of these browsers:"
-msgstr "Možete probati jedan od ovih preglednika:"
-
-#: js/LoginPanel.js:350
-msgid "Logging you in..."
-msgstr "Prijava u tijeku..."
-
-#: js/LoginPanel.js:350 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
-#: js/widgets/persistentfilter/PickerPanel.js:317
-#: js/widgets/persistentfilter/PickerPanel.js:355
-#: js/widgets/persistentfilter/PickerPanel.js:407
-#: js/widgets/container/GrantsDialog.js:95
-msgid "Please wait"
-msgstr "Molimo pričekajte"
-
-#: js/LoginPanel.js:363
-msgid "Login successful. Loading {0}..."
-msgstr "Prijava uspješna. Učitavanje {0}..."
-
-#: js/LoginPanel.js:363 js/MainMenu.js:227
-msgid "Please wait!"
-msgstr "Molimo pričekajte!"
-
-#: js/LoginPanel.js:371 js/ExceptionHandler.js:214
-msgid "Connection lost, please check your network!"
-msgstr "Veza je izgubljena, molimo Vas da provjerite mrežu!"
-
-#: js/LoginPanel.js:375
-msgid "Login failure"
-msgstr "Prijava neuspješna"
-
-#: js/LoginPanel.js:376
-msgid "Your username and/or your password are wrong!!!"
-msgstr "Vaše korisničko ime i/ili zaporka nisu ispravni!"
-
-#: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/PreferencesDialog.js:245
-#: js/widgets/dialog/PreferencesDialog.js:274
-#: js/widgets/dialog/EditDialog.js:671 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
-msgid "Errors"
-msgstr "Greške"
-
-#: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:691 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
-msgid "Please fix the errors noted."
-msgstr "Molimo Vas da ispravite navedene pogreške."
-
-#: js/LoginPanel.js:403
-msgid "Please enter your login data"
-msgstr "Molimo Vas da unesete svoje podatke za prijavu"
-
-#: js/LicenseScreen.js:35
-msgid "License"
-msgstr "Licenca"
-
-#: js/PasswordChangeDialog.js:32
-msgid "Change Password For \"{0}\""
-msgstr "Izmijeni zaporku za \"{0}\""
-
-#: js/PasswordChangeDialog.js:48
-msgid "Old Password"
-msgstr "Stara zaporka"
-
-#: js/PasswordChangeDialog.js:52
-msgid "New Password"
-msgstr "Nova zaporka"
-
-#: js/PasswordChangeDialog.js:56
-msgid "Repeat new Password"
-msgstr "Potvrdite novu zaporku"
-
-#: js/PasswordChangeDialog.js:60 js/widgets/EditRecord.js:178
-#: js/widgets/tags/TagToggleBox.js:59
-#: js/widgets/tags/TagsMassAttachAction.js:105
-#: js/widgets/dialog/DuplicateMergeDialog.js:79
-#: js/widgets/dialog/MultiOptionsDialog.js:109
-#: js/widgets/dialog/AddToRecordPanel.js:103
-#: js/widgets/dialog/PreferencesDialog.js:117
-#: js/widgets/dialog/EditDialog.js:318 js/widgets/dialog/WizardPanel.js:187
-#: js/widgets/ActivitiesPanel.js:303
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
-#: js/widgets/container/ContainerSelect.js:481 js/ExceptionDialog.js:100
-#: js/ux/form/LayerCombo.js:193
-msgid "Cancel"
-msgstr "Odustani"
-
-#: js/PasswordChangeDialog.js:75
-msgid "Please Wait!"
-msgstr "Molimo pričekajte!"
-
-#: js/PasswordChangeDialog.js:76
-msgid "changing password..."
-msgstr "izmjena zaporke..."
-
-#: js/PasswordChangeDialog.js:87
-msgid "Success"
-msgstr "Uspješno"
-
-#: js/PasswordChangeDialog.js:88
-msgid "Your password has been changed."
-msgstr "Vaša zaporka je izmijenjena."
-
-#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:707
-#: js/widgets/relation/GenericPickerGridPanel.js:720
-#: js/widgets/dialog/ImportDialog.js:654
-#: js/widgets/dialog/MultipleEditResultSummary.js:196
-#: js/widgets/form/RecordPickerComboBox.js:267
-msgid "Failure"
-msgstr "Neuspješno"
-
-#: js/PasswordChangeDialog.js:111
-msgid "The new passwords mismatch, please correct them."
-msgstr "Nove zaporke nisu jednake, molimo Vas da ih ispravite."
-
-#: js/MainMenu.js:62
-msgid "User: {0}"
-msgstr "Korisnik: {0}"
-
-#: js/MainMenu.js:118
-msgid "Debug Console (Ctrl + F11)"
-msgstr "Debug konzola (Ctrl + F11)"
-
-#: js/MainMenu.js:124 js/widgets/dialog/PreferencesPanel.js:36
-msgid "Preferences"
-msgstr "Postavke"
-
-#: js/MainMenu.js:131
-msgid "Edit Profile"
-msgstr "Uredi profil"
-
-#: js/MainMenu.js:138
-msgid "Change password"
-msgstr "Izmijeni zaporku"
-
-#: js/MainMenu.js:145
-msgid "Logout"
-msgstr "Odjava"
-
-#: js/MainMenu.js:146
-msgid "Logout from {0}"
-msgstr "Odjava iz {0}"
-
-#: js/MainMenu.js:153
-msgid "Allow desktop notifications"
-msgstr "Dozvoli desktop obavijesti"
-
-#: js/MainMenu.js:154
-msgid "Request permissions for webkit desktop notifications."
-msgstr "Zatraži dopuštenje za desktop obavijesti"
-
-#: js/MainMenu.js:164
-msgid "Install web app"
-msgstr "Instaliraj web aplikaciju"
-
-#: js/MainMenu.js:165
-msgid "Install Tine 2.0 as web app in your browser."
-msgstr "Instaliraj CPM 2.0 kao web aplikaciju"
-
-#: js/MainMenu.js:213 js/widgets/grid/GridPanel.js:1667
-#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:698
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
-#: js/widgets/persistentfilter/PickerPanel.js:315
-msgid "Confirm"
-msgstr "Potvrdi"
-
-#: js/MainMenu.js:213
-msgid "Are you sure you want to logout?"
-msgstr "Jeste li sigurni da se želite odjaviti?"
-
-#: js/MainMenu.js:227
-msgid "Logging you out..."
-msgstr "Odjava u tijeku..."
+#: js/CreditsScreen.js:36
+msgid "Credits"
+msgstr "Zasluge"
 
 #: js/data/Record.js:195
 msgid "Task"
@@ -872,6 +539,70 @@ msgid_plural "to do lists"
 msgstr[0] "popis zadataka"
 msgstr[1] "popisa zadataka"
 msgstr[2] "popisa zadataka"
+
+#: js/ExceptionDialog.js:100 js/PasswordChangeDialog.js:60
+#: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
+#: js/widgets/container/ContainerSelect.js:481
+#: js/widgets/dialog/AddToRecordPanel.js:103
+#: js/widgets/dialog/DuplicateMergeDialog.js:79
+#: js/widgets/dialog/EditDialog.js:318
+#: js/widgets/dialog/MultiOptionsDialog.js:109
+#: js/widgets/dialog/PreferencesDialog.js:117
+#: js/widgets/dialog/WizardPanel.js:187 js/widgets/EditRecord.js:178
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
+#: js/widgets/tags/TagsMassAttachAction.js:105
+#: js/widgets/tags/TagToggleBox.js:59
+msgid "Cancel"
+msgstr "Odustani"
+
+#: js/ExceptionDialog.js:107
+msgid "Send Report"
+msgstr "Pošalji izvještaj"
+
+#: js/ExceptionDialog.js:135
+msgid "The last action you made was potentially not performed correctly."
+msgstr "Vaša posljednja radnja nije pravilno izvršena."
+
+#: js/ExceptionDialog.js:136
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occurred."
+msgstr "U cilju poboljšanja aplikacije molimo Vas da nam pošaljete kratak opis radnje koja je dovela do pogreške."
+
+#: js/ExceptionDialog.js:142
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
+#: js/widgets/relation/GenericPickerGridPanel.js:427
+#: js/widgets/tags/TagsPanel.js:483
+msgid "Description"
+msgstr "Opis"
+
+#: js/ExceptionDialog.js:150
+msgid "Send Contact Information"
+msgstr "Pošalji kontakt informacije"
+
+#: js/ExceptionDialog.js:167
+msgid "Details:"
+msgstr "Detalji:"
+
+#: js/ExceptionDialog.js:191
+msgid "Sending report..."
+msgstr "Slanje izvještaja..."
+
+#: js/ExceptionDialog.js:191
+msgid "Please wait a moment"
+msgstr "Molimo pričekajte trenutak"
+
+#: js/ExceptionDialog.js:240
+msgid "Transmission Completed"
+msgstr "Prijenos izvršen"
+
+#: js/ExceptionDialog.js:241
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "Vaš izvještaj je poslan."
+
+#: js/ExceptionDialog.js:241
+msgid "Please restart your browser now!"
+msgstr "Molimo Vas da ponovno pokrenite preglednik!"
 
 #: js/ExceptionHandler.js:150
 msgid "Your session timed out. You need to login again."
@@ -929,6 +660,10 @@ msgstr "Pogrešan Podatak"
 msgid "Your input data is not valid. Please provide valid data."
 msgstr "Podatak koji unosite nije dobar. Molimo unesite ispravan podatak."
 
+#: js/ExceptionHandler.js:214 js/LoginPanel.js:380
+msgid "Connection lost, please check your network!"
+msgstr "Veza je izgubljena, molimo Vas da provjerite mrežu!"
+
 #: js/ExceptionHandler.js:220
 msgid "Timeout"
 msgstr "Vremensko ograničenje"
@@ -969,765 +704,948 @@ msgid ""
 "administrator."
 msgstr "Vaš korisnički račun nema potrebnu ulogu. Molimo Vas da kontaktirate svog administratora."
 
-#: js/Container.js:123
-msgid "All {0}"
-msgstr "Svi {0}"
+#: js/ExceptionHandler.js:262
+msgid "Method Not Found / Insufficent Permissions"
+msgstr ""
 
-#: js/Container.js:124
-msgid "Shared {0}"
-msgstr "Zajednički {0}"
+#: js/ExceptionHandler.js:263
+msgid ""
+"You tried to access a function that is not available. Please reload your "
+"browser, try again or contact your administrator."
+msgstr ""
 
-#: js/Container.js:125
-msgid "Other Users {0}"
-msgstr "Ostali korisnici {0}"
+#: js/LicenseScreen.js:35
+msgid "License"
+msgstr "Licenca"
 
-#: js/Container.js:130
-msgid "My {0}"
-msgstr "Moji {0}"
+#: js/LoginPanel.js:80 js/LoginPanel.js:118
+msgid "Login"
+msgstr "Prijava"
 
-#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:360
-#: js/widgets/dialog/EditDialog.js:388
-msgid "Saved in"
-msgstr "Spremljeno u"
+#: js/LoginPanel.js:90 js/widgets/dialog/CredentialsDialog.js:61
+msgid "Username"
+msgstr "Korisničko ime"
 
-#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:327
-msgid "delete"
-msgstr "izbriši"
+#: js/LoginPanel.js:107 js/widgets/dialog/CredentialsDialog.js:65
+msgid "Password"
+msgstr "Zaporka"
 
-#: js/widgets/tags/TagToggleBox.js:52
-msgid "Detach Tags"
-msgstr "Ukloni Oznake"
+#: js/LoginPanel.js:143
+msgid "Tine 2.0 is made for you"
+msgstr "CPM 2.0 je napravljen za Vas"
 
-#: js/widgets/tags/TagToggleBox.js:52
-msgid "Attach Tags"
-msgstr "Dodaj Oznaku"
+#: js/LoginPanel.js:145
+msgid ""
+"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
+"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
+" and get help."
+msgstr "CPM 2.0 je prilagođen Vašim poslovnim potrebama. Slobodno možete dati svoje prijedloge u cilju poboljšanja."
 
-#: js/widgets/tags/TagToggleBox.js:140
-msgid "No Tags to detach found in the selected records"
-msgstr "Nema Oznaka za ukloniti u odabranih zapisima."
+#: js/LoginPanel.js:151
+msgid "Tine 2.0 Homepage"
+msgstr "CPM 2.0 Početna stranica"
 
-#: js/widgets/tags/TagToggleBox.js:141
-msgid "Please Wait..."
-msgstr "Molimo pročekajte..."
+#: js/LoginPanel.js:152
+msgid "Tine 2.0 Forum"
+msgstr "CPM 2.0 Forum"
 
-#: js/widgets/tags/TagToggleBox.js:152
-msgid "Detaching Tags"
-msgstr "Uklanjanje Oznaka"
+#: js/LoginPanel.js:156
+msgid "Translations"
+msgstr "Prijevod"
 
-#: js/widgets/tags/TagsPanel.js:105
-msgid "Add a new personal tag"
-msgstr "Dodaj novu osobnu oznaku"
+#: js/LoginPanel.js:158
+msgid "Translation state of {0}: {1}%."
+msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:108
-msgid "Add New Personal Tag"
-msgstr "Dodaj novu osobnu oznaku"
+#: js/LoginPanel.js:160
+msgid ""
+"If the state of your language is not satisfying, or if you miss a language, "
+"please consider becoming a Tine 2.0 translator."
+msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:109
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "Možete stvoriti osobne oznake koje će biti vidljive samo Vama."
+#: js/LoginPanel.js:163
+msgid "Tine 2.0 Translation Howto"
+msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:109
-msgid "Enter tag name:"
-msgstr "Unesite naziv oznake:"
+#: js/LoginPanel.js:164
+msgid "Detailed Language Statistics"
+msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:150
-msgid "No Tags to display"
-msgstr "Nema oznaka za prikaz"
+#: js/LoginPanel.js:209
+msgid "about {0} minutes"
+msgstr "Otprilike {0} minuta"
 
-#: js/widgets/tags/TagsPanel.js:173
-msgid "Detach tag"
-msgid_plural "Detach tags"
-msgstr[0] "Odvoji oznaku"
-msgstr[1] "Odvoji oznake"
-msgstr[2] "Odvoji oznake"
+#: js/LoginPanel.js:214 js/LoginPanel.js:439
+msgid "Tine 2.0 needs your help"
+msgstr "CPM 2.0 treba Vašu pomoć"
 
-#: js/widgets/tags/TagsPanel.js:183
-msgid "Edit tag"
-msgstr "Uredi oznaku"
+#: js/LoginPanel.js:216 js/LoginPanel.js:441
+msgid ""
+"We regularly need your feedback to make the next Tine 2.0 releases fit your "
+"needs even better. Help us and yourself by participating:"
+msgstr "Kako bi unaprijedili CPM 2.0 potrebne su nam Vaše redovite povratne informacije. Pomozite sudjelujući:"
 
-#: js/widgets/tags/TagsPanel.js:188 js/widgets/tags/TagsPanel.js:193
-msgid "Rename Tag"
-msgstr "Preimenuj oznaku"
+#: js/LoginPanel.js:222
+msgid "participate!"
+msgstr "Sudjelujte!"
 
-#: js/widgets/tags/TagsPanel.js:193
-msgid "Please enter a new name:"
-msgstr "Molimo Vas da unesete novi naziv:"
+#: js/LoginPanel.js:244
+msgid "Languages"
+msgstr "Jezici"
 
-#: js/widgets/tags/TagsPanel.js:202
-msgid "Edit Description"
-msgstr "Uredite opis"
+#: js/LoginPanel.js:245
+msgid "Duration"
+msgstr "Trajanje"
 
-#: js/widgets/tags/TagsPanel.js:207
-msgid "Description for tag"
-msgstr "Opis oznake"
+#: js/LoginPanel.js:286
+msgid "Browser incompatible"
+msgstr "Preglednik nije podržan"
 
-#: js/widgets/tags/TagsPanel.js:207
-msgid "Please enter new description:"
-msgstr "Molimo Vas da unesete novi opis:"
+#: js/LoginPanel.js:288
+msgid "Your browser is not supported by Tine 2.0."
+msgstr "Vaš preglednik nije podržan u CPM 2.0"
 
-#: js/widgets/tags/TagsPanel.js:216
-msgid "Change Color"
-msgstr "Promijenite boju"
+#: js/LoginPanel.js:293
+msgid "Browser incompatible?"
+msgstr "Preglednik nije podržan?"
 
-#: js/widgets/tags/TagsPanel.js:245
-msgid "Delete Tag"
-msgid_plural "Delete Tags"
-msgstr[0] "Izbrišite oznaku"
-msgstr[1] "Izbrišite oznake"
-msgstr[2] "Izbrišite oznake"
+#: js/LoginPanel.js:295
+msgid ""
+"You are using an unrecognized browser. This could result in unexpected "
+"behaviour."
+msgstr "Koristite preglednik koji nije prepoznat. To može dovetni do neočekivanog ponašanja."
 
-#: js/widgets/tags/TagsPanel.js:258
-msgid "Realy Delete Selected Tag?"
-msgid_plural "Realy Delete Selected Tags?"
-msgstr[0] "Želite li izbrisati odabranu oznaku?"
-msgstr[1] "Želite li izbrisati odabrane oznake?"
-msgstr[2] "Želite li izbrisati odabrane oznake?"
+#: js/LoginPanel.js:301
+msgid "You might try one of these browsers:"
+msgstr "Možete probati jedan od ovih preglednika:"
 
-#: js/widgets/tags/TagsPanel.js:259
-msgid "the selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "Odabrana oznaka će biti izbrisana"
-msgstr[1] "Odabrane oznake će biti izbrisane"
-msgstr[2] "Odabrane oznake će biti izbrisane"
+#: js/LoginPanel.js:359
+msgid "Logging you in..."
+msgstr "Prijava u tijeku..."
 
-#: js/widgets/tags/TagsPanel.js:263
-msgid "Please wait a moment..."
-msgstr "Molimo pričekajte trenutak..."
+#: js/LoginPanel.js:359 js/widgets/container/GrantsDialog.js:95
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+#: js/widgets/persistentfilter/PickerPanel.js:317
+#: js/widgets/persistentfilter/PickerPanel.js:355
+#: js/widgets/persistentfilter/PickerPanel.js:407
+#: js/widgets/tree/ContextMenu.js:191
+msgid "Please wait"
+msgstr "Molimo pričekajte"
 
-#: js/widgets/tags/TagsPanel.js:263
-msgid "Deleting Tag"
-msgid_plural "Deleting Tags"
-msgstr[0] "Brisanje oznake"
-msgstr[1] "Brisanje oznaka"
-msgstr[2] "Brisanje oznaka"
+#: js/LoginPanel.js:372
+msgid "Login successful. Loading {0}..."
+msgstr "Prijava uspješna. Učitavanje {0}..."
 
-#: js/widgets/tags/TagsPanel.js:279 js/widgets/tags/TagsPanel.js:371
-#: js/widgets/tags/TagsPanel.js:404 js/widgets/dialog/EditDialog.js:710
-msgid "Failed"
-msgstr "Neuspjelo"
+#: js/LoginPanel.js:372 js/MainMenu.js:227
+msgid "Please wait!"
+msgstr "Molimo pričekajte!"
 
-#: js/widgets/tags/TagsPanel.js:279
-msgid "Could not delete Tag(s)."
-msgstr "Nije moguće izbrisati Oznaku(e)."
+#: js/LoginPanel.js:384
+msgid "Login failure"
+msgstr "Prijava neuspješna"
 
-#: js/widgets/tags/TagsPanel.js:323 js/widgets/tags/TagsPanel.js:385
-msgid "Notice"
-msgstr "Obavijest"
+#: js/LoginPanel.js:385
+msgid "Your username and/or your password are wrong!!!"
+msgstr "Vaše korisničko ime i/ili zaporka nisu ispravni!"
 
-#: js/widgets/tags/TagsPanel.js:324 js/widgets/tags/TagsPanel.js:386
-msgid "The minimum tag length is three."
-msgstr "Naziv oznake treba sadržavati minimalno tri znaka."
+#: js/LoginPanel.js:397 js/widgets/dialog/CredentialsDialog.js:126
+#: js/widgets/dialog/EditDialog.js:671 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+#: js/widgets/dialog/PreferencesDialog.js:245
+#: js/widgets/dialog/PreferencesDialog.js:274
+msgid "Errors"
+msgstr "Greške"
 
-#: js/widgets/tags/TagsPanel.js:371
-msgid "Could not create tag."
-msgstr "Nije moguće kreirati oznaku."
+#: js/LoginPanel.js:397 js/widgets/dialog/CredentialsDialog.js:126
+#: js/widgets/dialog/EditDialog.js:691 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+msgid "Please fix the errors noted."
+msgstr "Molimo Vas da ispravite navedene pogreške."
 
-#: js/widgets/tags/TagsPanel.js:404
-msgid "Could not update tag."
-msgstr "Nije moguće ažurirati oznaku."
+#: js/LoginPanel.js:412
+msgid "Please enter your login data"
+msgstr "Molimo Vas da unesete svoje podatke za prijavu"
 
-#: js/widgets/tags/TagsPanel.js:483
-#: js/widgets/relation/GenericPickerGridPanel.js:427
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
-#: js/ExceptionDialog.js:142
-msgid "Description"
-msgstr "Opis"
+#: js/MainMenu.js:62
+msgid "User: {0}"
+msgstr "Korisnik: {0}"
 
-#: js/widgets/tags/TagsPanel.js:487
-#: js/widgets/container/PropertiesDialog.js:113
-msgid "Color"
-msgstr "Boja"
+#: js/MainMenu.js:118
+msgid "Debug Console (Ctrl + F11)"
+msgstr "Debug konzola (Ctrl + F11)"
 
-#: js/widgets/tags/TagsMassAttachAction.js:18
-msgid "Add Tag"
-msgstr "Dodaj oznaku"
+#: js/MainMenu.js:124 js/widgets/dialog/PreferencesPanel.js:36
+msgid "Preferences"
+msgstr "Postavke"
 
-#: js/widgets/tags/TagsMassAttachAction.js:76
-msgid "Attach the following tag to all selected items:"
-msgstr "Dodijeli oznaku odabranim stavkama:"
+#: js/MainMenu.js:131
+msgid "Edit Profile"
+msgstr "Uredi profil"
 
-#: js/widgets/tags/TagsMassAttachAction.js:98
-msgid "Select Tag"
-msgstr "Odaberi oznaku"
+#: js/MainMenu.js:138
+msgid "Change password"
+msgstr "Izmijeni zaporku"
 
-#: js/widgets/tags/TagsMassAttachAction.js:128
-msgid "Attaching Tag"
-msgstr "Dodavanje Oznake"
+#: js/MainMenu.js:145
+msgid "Logout"
+msgstr "Odjava"
 
-#: js/widgets/tags/TagFilter.js:30 js/Models.js:141
+#: js/MainMenu.js:146
+msgid "Logout from {0}"
+msgstr "Odjava iz {0}"
+
+#: js/MainMenu.js:153
+msgid "Allow desktop notifications"
+msgstr "Dozvoli desktop obavijesti"
+
+#: js/MainMenu.js:154
+msgid "Request permissions for webkit desktop notifications."
+msgstr "Zatraži dopuštenje za desktop obavijesti"
+
+#: js/MainMenu.js:164
+msgid "Install web app"
+msgstr "Instaliraj web aplikaciju"
+
+#: js/MainMenu.js:165
+msgid "Install Tine 2.0 as web app in your browser."
+msgstr "Instaliraj CPM 2.0 kao web aplikaciju"
+
+#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:698
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+#: js/widgets/grid/GridPanel.js:1671
+#: js/widgets/persistentfilter/PickerPanel.js:315
+#: js/widgets/tree/ContextMenu.js:346
+msgid "Confirm"
+msgstr "Potvrdi"
+
+#: js/MainMenu.js:213
+msgid "Are you sure you want to logout?"
+msgstr "Jeste li sigurni da se želite odjaviti?"
+
+#: js/MainMenu.js:227
+msgid "Logging you out..."
+msgstr "Odjava u tijeku..."
+
+#: js/MainScreen.js:202
+msgid "Your password expired. Please enter a new user password:"
+msgstr "Vaša zaporka je istekla. Molimo unesite novu zaporku:"
+
+#: js/Models.js:141 js/widgets/tags/TagFilter.js:30
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Oznaka"
 msgstr[1] "Oznake"
 msgstr[2] "Oznaka"
 
-#: js/widgets/tags/TagsMassDetachAction.js:18
-msgid "Detach tag(s)"
-msgstr "Uklanjanje Oznake"
-
-#: js/widgets/tags/TagsMassDetachAction.js:84
-msgid "Select Tag(s) to detach"
-msgstr "Odaberite Oznaku(e) za uklanjanje"
-
-#: js/widgets/tags/TagCombo.js:46
-msgid "tag name"
-msgstr "naziv oznake"
-
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
-msgid "New version of Tine 2.0 available"
-msgstr "Nova verzija CPM 2.0 je dostupna"
-
-#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Verzija \"{0}\" CPM-a 2.0 je dostupna."
-
-#: js/widgets/VersionCheck.js:46
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "Radi se o nužnom ažuriranju aplikacije koje mora biti izvršeno što prije."
-
-#: js/widgets/VersionCheck.js:55
-msgid "Please consider updating!"
-msgstr "Molimo Vas da ažurirate aplikaciju."
-
-#: js/widgets/grid/PickerGridPanel.js:162
-msgid "Remove record"
-msgstr "Ukloni zapis"
-
-#: js/widgets/grid/PickerGridPanel.js:255 js/widgets/grid/PickerFilter.js:310
-#: js/widgets/grid/FilterModelMultiSelect.js:214
-#: js/widgets/container/FilterModel.js:249
-msgid "Selected  {0}"
-msgstr "Označeno  {0}"
-
-#: js/widgets/grid/PickerGridPanel.js:296
-msgid "Search for records ..."
-msgstr "Traži zapise..."
-
-#: js/widgets/grid/FilterModel.js:168
-msgid "contains"
-msgstr "sadrži"
-
-#: js/widgets/grid/FilterModel.js:169
-msgid "reg. exp."
-msgstr "regularni izraz"
-
-#: js/widgets/grid/FilterModel.js:170 js/widgets/container/FilterModel.js:142
-#: js/widgets/container/FilterModel.js:146
-msgid "is equal to"
-msgstr "jednako"
-
-#: js/widgets/grid/FilterModel.js:171
-msgid "is greater than"
-msgstr "veće od"
-
-#: js/widgets/grid/FilterModel.js:172
-msgid "is less than"
-msgstr "manje od"
-
-#: js/widgets/grid/FilterModel.js:173
-msgid "is not"
-msgstr "nije"
-
-#: js/widgets/grid/FilterModel.js:174
-msgid "one of"
-msgstr "jedno od"
-
-#: js/widgets/grid/FilterModel.js:175
-msgid "none of"
-msgstr "nijedno od"
-
-#: js/widgets/grid/FilterModel.js:176
-msgid "is before"
-msgstr "je prije"
-
-#: js/widgets/grid/FilterModel.js:177
-msgid "is after"
-msgstr "je poslije"
-
-#: js/widgets/grid/FilterModel.js:178
-msgid "is within"
-msgstr "je unutar"
-
-#: js/widgets/grid/FilterModel.js:179
-msgid "is in week no."
-msgstr "je u br. tjedna"
-
-#: js/widgets/grid/FilterModel.js:180
-msgid "starts with"
-msgstr "počinje s"
-
-#: js/widgets/grid/FilterModel.js:181
-msgid "ends with"
-msgstr "završava s"
-
-#: js/widgets/grid/FilterModel.js:182
-msgid "defined by"
-msgstr "definiran"
-
-#: js/widgets/grid/FilterModel.js:228
-#: js/widgets/grid/ForeignRecordFilter.js:395
-#: js/widgets/relation/FilterModel.js:87
-msgid "select a operator"
-msgstr "odabir operatora"
-
-#: js/widgets/grid/FilterModel.js:352
-msgid "Search Account ..."
-msgstr "Pretraga korisničkih računa..."
-
-#: js/widgets/grid/FilterModel.js:462
-msgid "today"
-msgstr "danas"
-
-#: js/widgets/grid/FilterModel.js:463
-msgid "yesterday"
-msgstr "jučer"
-
-#: js/widgets/grid/FilterModel.js:464
-msgid "this week"
-msgstr "ovaj tjedan"
-
-#: js/widgets/grid/FilterModel.js:465
-msgid "last week"
-msgstr "prošli tjedan"
-
-#: js/widgets/grid/FilterModel.js:466
-msgid "the week before last"
-msgstr "pretprošli tjedan"
-
-#: js/widgets/grid/FilterModel.js:467
-msgid "this month"
-msgstr "ovaj mjesec"
-
-#: js/widgets/grid/FilterModel.js:468
-msgid "last month"
-msgstr "prošli mjesec"
-
-#: js/widgets/grid/FilterModel.js:469
-msgid "this quarter"
-msgstr "ovaj kvartal"
-
-#: js/widgets/grid/FilterModel.js:470
-msgid "last quarter"
-msgstr "prošli kvartal"
-
-#: js/widgets/grid/FilterModel.js:471
-msgid "this year"
-msgstr "ove godine"
-
-#: js/widgets/grid/FilterModel.js:472
-msgid "last year"
-msgstr "prošle godine"
-
-#: js/widgets/grid/FilterModel.js:476
-msgid "tomorrow"
-msgstr "sutra"
-
-#: js/widgets/grid/FilterModel.js:477
-msgid "next week"
-msgstr "sljedeći tjedan"
-
-#: js/widgets/grid/FilterModel.js:478
-msgid "next month"
-msgstr "sljedeći mjesec"
-
-#: js/widgets/grid/FilterModel.js:479
-msgid "next quarter"
-msgstr "sljedeći kvartal"
-
-#: js/widgets/grid/FilterModel.js:480
-msgid "next year"
-msgstr "sljedeća godina"
-
-#: js/widgets/grid/FilterPanel.js:79
-msgid "Attention: There are more filters active!"
-msgstr "Pažnja: Postoji više aktivnih filtera!"
-
-#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:485
-msgid "Criteria {0}"
-msgstr "Kriteriji {0}"
-
-#: js/widgets/grid/FilterPanel.js:266
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
-msgid "show details"
-msgstr "napredno pretraživanje"
-
-#: js/widgets/grid/FilterPanel.js:267
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
-msgid "Always show advanced filters"
-msgstr "Uvijek prikaži napredne filtre"
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] "Vaš pregled je određen sa {0} kriterijem:"
-msgstr[1] "Vaš pregled je određen sa {0} kriterija:"
-msgstr[2] "Vaš pregled je određen sa {0} kriterija:"
-
-#: js/widgets/grid/FileUploadGrid.js:115 js/ux/form/ImageField.js:211
-msgid "Upload Failed"
-msgstr "Učitavanje nije uspjelo"
-
-#: js/widgets/grid/FileUploadGrid.js:116
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr "Nije moguće učitati datoteku. Molimo Vas da obavijestite administratora. Maksimalna veličina datoteke za učitavanje je:"
-
-#: js/widgets/grid/FileUploadGrid.js:180
-msgid "Remove file"
-msgstr "Ukloni datoteku"
-
-#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:116
-msgid "Pause upload"
-msgstr "Pauziraj učitavanje"
-
-#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:100
-msgid "Resume upload"
-msgstr "Nastavi upload"
-
-#: js/widgets/grid/FileUploadGrid.js:244
-msgid "Add file"
-msgstr "Dodaj datoteku"
-
-#: js/widgets/grid/FileUploadGrid.js:286
-msgid "name"
-msgstr "Naziv"
-
-#: js/widgets/grid/FileUploadGrid.js:293
-msgid "size"
-msgstr "Veličina"
-
-#: js/widgets/grid/FileUploadGrid.js:300
-msgid "type"
-msgstr "Tip"
-
-#: js/widgets/grid/QuickaddGridPanel.js:91
-msgid "Remove"
-msgstr "Ukloni"
-
-#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:571
-msgid "Show"
-msgstr "Prikaži"
-
-#: js/widgets/grid/FilterToolbar.js:164
-msgid "add new filter"
-msgstr "dodaj novi filter"
-
-#: js/widgets/grid/FilterToolbar.js:170
-msgid "reset all filters"
-msgstr "reset svih filtera"
-
-#: js/widgets/grid/FilterToolbar.js:176
-msgid "start search"
-msgstr "pretraži"
-
-#: js/widgets/grid/FilterToolbar.js:184
-msgid "save as favorite"
-msgstr "spremi kao favorit"
-
-#: js/widgets/grid/FilterToolbar.js:191
-msgid "Load a favorite"
-msgstr "Učitaj favorite"
-
-#: js/widgets/grid/FilterToolbar.js:358
-msgid "select a field"
-msgstr "označi polje"
-
-#: js/widgets/grid/FilterToolbar.js:396
-msgid "Delete this filter"
-msgstr "Obriši ovaj filter"
-
-#: js/widgets/grid/FilterToolbar.js:428
-msgid "and"
-msgstr "i"
-
-#: js/widgets/grid/RendererManager.js:54
-msgid "has notes"
-msgstr "ima bilješku"
-
-#: js/widgets/grid/RendererManager.js:57
-msgid "has relations"
-msgstr "ima relaciju"
-
-#: js/widgets/grid/LinkGridPanel.js:103
-#: js/widgets/account/PickerGridPanel.js:267
-#: js/widgets/container/PropertiesDialog.js:107 js/Models.js:428
-msgid "Name"
-msgstr "Naziv"
-
-#: js/widgets/grid/LinkGridPanel.js:105
-#: js/widgets/relation/GenericPickerGridPanel.js:430
-#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
-msgid "Type"
-msgstr "Tip"
-
-#: js/widgets/grid/FilterStructureTreePanel.js:35
-#: js/widgets/grid/FilterStructureTreePanel.js:52
-msgid "Show records that match to one of the following filters"
-msgstr "Pokazuju zapise koji odgovaraju jednoj od sljedećih filtera"
-
-#: js/widgets/grid/FilterStructureTreePanel.js:37
-#: js/widgets/grid/FilterStructureTreePanel.js:51
-msgid "or alternatively"
-msgstr "ili alternativni"
-
-#: js/widgets/grid/FilterStructureTreePanel.js:55
-msgid "Add alternative filter"
-msgstr "Dodaj alternativni filter"
-
-#: js/widgets/grid/FilterStructureTreePanel.js:61
-msgid "Remove Filter"
-msgstr "Ukloni filter"
-
-#: js/widgets/grid/GridPanel.js:286
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria,"
-" view-options or the {1} you search in."
-msgstr "{0} ne može biti pronađeno. Pokušajte promijeniti svoje filter-kriterije, opcije pregleda ili što traži u {1}. "
-
-#: js/widgets/grid/GridPanel.js:288 js/widgets/grid/GridPanel.js:474
-#: js/widgets/grid/GridPanel.js:475 js/widgets/grid/GridPanel.js:476
-msgid "Edit {0}"
-msgid_plural "Edit {0}"
-msgstr[0] "Uredi {0}"
-msgstr[1] "Uredi {0}"
-msgstr[2] "Uredi {0}"
-
-#: js/widgets/grid/GridPanel.js:489 js/widgets/dialog/EditDialog.js:484
-msgid "Copy {0}"
-msgstr "Kopiraj {0}"
-
-#: js/widgets/grid/GridPanel.js:500 js/widgets/tree/ContextMenu.js:35
-msgid "Add {0}"
-msgstr "Dodaj {0}"
-
-#: js/widgets/grid/GridPanel.js:508
-msgid "Print Page"
-msgstr "Ispiši stranicu"
-
-#: js/widgets/grid/GridPanel.js:538
-#: js/widgets/dialog/DuplicateMergeDialog.js:220
-msgid "Merge {0}"
-msgstr "Spoji {0}"
-
-#: js/widgets/grid/GridPanel.js:573 js/widgets/grid/GridPanel.js:574
-#: js/widgets/grid/GridPanel.js:576 js/widgets/tree/ContextMenu.js:52
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "Izbriši {0}"
-msgstr[1] "Izbriši {0}"
-msgstr[2] "Izbriši {0}"
-
-#: js/widgets/grid/GridPanel.js:967
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Prikazivanje zapisa {0} - {1} od {2}"
-
-#: js/widgets/grid/GridPanel.js:968
-msgid "No {0} to display"
-msgstr "Nema {0} za prikaz"
-
-#: js/widgets/grid/GridPanel.js:1206
-msgid "New..."
-msgstr "Novi..."
-
-#: js/widgets/grid/GridPanel.js:1225
-msgid "Add to..."
-msgstr "Dodati..."
-
-#: js/widgets/grid/GridPanel.js:1269
-#: js/widgets/relation/GenericPickerGridPanel.js:431
-msgid "Creation Time"
-msgstr "Datum kreiranja"
-
-#: js/widgets/grid/GridPanel.js:1270 js/widgets/ActivitiesPanel.js:464
-msgid "Created By"
-msgstr "Kreirao"
-
-#: js/widgets/grid/GridPanel.js:1271
-msgid "Last Modified Time"
-msgstr "Datum zadnje izmjene"
-
-#: js/widgets/grid/GridPanel.js:1272
-msgid "Last Modified By"
-msgstr "Zadnji ažurirao"
-
-#: js/widgets/grid/GridPanel.js:1641
-msgid "Not Allowed"
-msgstr "Nije dopušteno"
-
-#: js/widgets/grid/GridPanel.js:1642
-msgid "You are not allowed to delete all pages at once"
-msgstr "Nije Vam dozvoljeno brisanje svih stranica od jednom"
-
-#: js/widgets/grid/GridPanel.js:1665
-msgid "Do you really want to delete the selected record ({0})?"
-msgid_plural "Do you really want to delete the selected records ({0})?"
-msgstr[0] "Da li stvarno želite izbrisati odabrani zapis  ({0})?"
-msgstr[1] "Da li stvarno želite izbrisati odabrane zapise  ({0})?"
-msgstr[2] "Da li stvarno želite izbrisati odabrane zapise ({0})?"
-
-#: js/widgets/grid/GridPanel.js:1700 js/widgets/dialog/EditDialog.js:700
-msgid "Deleting {0}"
-msgstr "Brisanje {0}"
-
-#: js/widgets/grid/GridPanel.js:1700
-msgid " ... This may take a long time!"
-msgstr "Molimo pričekajte trenutak!"
-
-#: js/widgets/grid/ForeignRecordFilter.js:61
-msgid "Edit definition"
-msgstr "Uredi definiciju"
-
-#: js/widgets/grid/ForeignRecordFilter.js:71
-msgid "Start definition"
-msgstr "Početna definicija"
-
-#: js/widgets/grid/ForeignRecordFilter.js:111
-msgid "Related to"
-msgstr "Povezan s"
-
-#: js/widgets/relation/FilterModel.js:32
-#: js/widgets/relation/GenericPickerGridPanel.js:133 js/Models.js:400
+#: js/Models.js:272
+msgid "Alarm"
+msgid_plural "Alarms"
+msgstr[0] "Podsjetnik"
+msgstr[1] "Podsjetnici"
+msgstr[2] "Podsjetnika"
+
+#: js/Models.js:310
+msgid "Import"
+msgid_plural "Imports"
+msgstr[0] "Unos"
+msgstr[1] "Unosa"
+msgstr[2] "Unosa"
+
+#: js/Models.js:336 js/widgets/container/GrantsGrid.js:51
+#: js/widgets/dialog/ExportDialog.js:48
+msgid "Export"
+msgid_plural "Export"
+msgstr[0] "Izvoz"
+msgstr[1] "Izvoza"
+msgstr[2] "Izvoza"
+
+#: js/Models.js:373
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] "Pravo"
+msgstr[1] "Prava"
+msgstr[2] "Prava"
+
+#: js/Models.js:400 js/widgets/relation/FilterModel.js:32
+#: js/widgets/relation/GenericPickerGridPanel.js:133
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Veza"
 msgstr[1] "Veze"
 msgstr[2] "Veza"
 
-#: js/widgets/relation/FilterModel.js:71
-msgid "Defined by ..."
-msgstr "Definiran sa ..."
+#: js/Models.js:421
+msgid "Department"
+msgid_plural "Departments"
+msgstr[0] "Odjel"
+msgstr[1] "Odjela"
+msgstr[2] "Odjela"
 
-#: js/widgets/relation/FilterModel.js:114
-msgid "Define ..."
-msgstr "Definiraj ..."
+#: js/Models.js:428 js/widgets/account/PickerGridPanel.js:267
+#: js/widgets/container/PropertiesDialog.js:107
+#: js/widgets/grid/LinkGridPanel.js:103
+msgid "Name"
+msgstr "Naziv"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:126
-msgid "Edit record"
-msgstr "Uredi zapis"
+#: js/Models.js:447
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] "Postavka"
+msgstr[1] "Postavke"
+msgstr[2] "Postavki"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:162
-msgid "Sibling"
-msgstr "polu brat"
+#: js/Models.js:447
+msgid "Configs"
+msgstr "Postavke"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:163
-msgid "Parent"
-msgstr "Roditelj"
+#: js/PasswordChangeDialog.js:32
+msgid "Change Password For \"{0}\""
+msgstr "Izmijeni zaporku za \"{0}\""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:164
-msgid "Child"
-msgstr "Dijete"
+#: js/PasswordChangeDialog.js:48
+msgid "Old Password"
+msgstr "Stara zaporka"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:209
-msgid "Relations failure"
-msgstr "Neuspješna relacija"
+#: js/PasswordChangeDialog.js:52
+msgid "New Password"
+msgstr "Nova zaporka"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:209
-msgid "There are invalid relations. Please check before saving."
-msgstr "Postoje neke krive relacije. Molimo napravite provjeru prije spremanja izmjena."
+#: js/PasswordChangeDialog.js:56
+msgid "Repeat new Password"
+msgstr "Potvrdite novu zaporku"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:252
+#: js/PasswordChangeDialog.js:75
+msgid "Please Wait!"
+msgstr "Molimo pričekajte!"
+
+#: js/PasswordChangeDialog.js:76
+msgid "changing password..."
+msgstr "izmjena zaporke..."
+
+#: js/PasswordChangeDialog.js:87
+msgid "Success"
+msgstr "Uspješno"
+
+#: js/PasswordChangeDialog.js:88
+msgid "Your password has been changed."
+msgstr "Vaša zaporka je izmijenjena."
+
+#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
+#: js/widgets/dialog/ImportDialog.js:654
+#: js/widgets/dialog/MultipleEditResultSummary.js:196
+#: js/widgets/form/RecordPickerComboBox.js:267
+#: js/widgets/relation/GenericPickerGridPanel.js:707
+#: js/widgets/relation/GenericPickerGridPanel.js:720
+msgid "Failure"
+msgstr "Neuspješno"
+
+#: js/PasswordChangeDialog.js:111
+msgid "The new passwords mismatch, please correct them."
+msgstr "Nove zaporke nisu jednake, molimo Vas da ih ispravite."
+
+#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
+msgid "Outdent Text"
+msgstr "Izvuci tekst"
+
+#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
+msgid "Indent Text"
+msgstr "Uvuci tekst"
+
+#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
+msgid "Remove Formatting"
+msgstr "Ukloni formatiranje"
+
+#: js/tineInit.js:603
 msgid ""
-"The maximum number of {0} with the type {1} is reached. Please change the "
-"type of this relation"
-msgstr "Pretražen je maksimalan broj {0} sa tipom {1}. Molimo promijenite tip ove relacije."
+"Fatal Error: Client self-update failed, please contact your administrator "
+"and/or restart/reload your browser."
+msgstr "Neuspjelo ažuriranje klijenta. Molimo Vas da kontaktirate administratora i/ ili ponovno pokrenete preglednik."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:426
-msgid "Record"
-msgstr "Zapis"
+#: js/UserRegistration.js:37
+msgid "Registration Wizard"
+msgstr "Čarobnjak za prijavu"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:428
-msgid "Remark"
-msgstr "Opaska"
+#: js/UserRegistration.js:90
+msgid "Given name"
+msgstr "Ime"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:429
-msgid "Dependency"
-msgstr "Zavisnost"
+#: js/UserRegistration.js:101
+msgid "Family name"
+msgstr "Prezime"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:708
+#: js/UserRegistration.js:112
+msgid "Login name"
+msgstr "Korisničko ime"
+
+#: js/UserRegistration.js:125
+msgid "Emailaddress"
+msgstr "E-mail adresa"
+
+#: js/UserRegistration.js:171
+msgid "Congratulations!"
+msgstr "Čestitke!"
+
+#: js/UserRegistration.js:171
 msgid ""
-"The record you tried to link is already linked. Please edit the existing "
-"link."
-msgstr "Zapis koji pokušavate povezati je već povezan. Molimo uredite postojeću poveznicu."
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr "Unijeli ste sve potrebne informacije. Klikom na Završi poslat ćemo Vam registracijski e-mail."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:721
-#: js/widgets/form/RecordPickerComboBox.js:268
-msgid "You tried to link a record with itself. This is not allowed!"
-msgstr "Pokušavate povezati zapisa sa samim sobom. Ovo nije dozvoljeno!"
+#: js/ux/ConnectionStatus.js:56
+msgid "online"
+msgstr "povezan"
 
-#: js/widgets/relation/PickerCombo.js:93
+#: js/ux/ConnectionStatus.js:57
+msgid "offline"
+msgstr "odspojen"
+
+#: js/ux/form/ComboBoxRecentsPlugin.js:43
+#: js/widgets/container/ContainerSelect.js:129
+msgid "choose other {0}..."
+msgstr "odaberi ostalih {0}..."
+
+#: js/ux/form/ImageField.js:76
+msgid "Loading"
+msgstr "Učitavanje"
+
+#: js/ux/form/ImageField.js:78
+msgid "Click to edit"
+msgstr "Klikni za uređivanje"
+
+#: js/ux/form/ImageField.js:146
+msgid "Image Failed"
+msgstr "Neuspješan prikaz slike"
+
+#: js/ux/form/ImageField.js:146
+msgid "Could not load image. Please notify your Administrator"
+msgstr "Nije moguće učitati sliku. Molimo Vas da obavijestite administratora."
+
+#: js/ux/form/ImageField.js:168
+msgid "Not An Image"
+msgstr "Nije slika"
+
+#: js/ux/form/ImageField.js:168
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr "Označite datoteku slike (gif/png/jpeg)"
+
+#: js/ux/form/ImageField.js:211 js/widgets/grid/FileUploadGrid.js:115
+msgid "Upload Failed"
+msgstr "Učitavanje nije uspjelo"
+
+#: js/ux/form/ImageField.js:211
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "Nije moguće prenijeti sliku. Molimo Vas da obavijestite administratora."
+
+#: js/ux/form/ImageField.js:224
+msgid "Change Image"
+msgstr "Izmijeni sliku"
+
+#: js/ux/form/ImageField.js:232 js/ux/form/ImageField.js:250
+msgid "Crop Image"
+msgstr "Kadriranje slike"
+
+#: js/ux/form/ImageField.js:256
+msgid "Delete Image"
+msgstr "Brisanje slike"
+
+#: js/ux/form/ImageField.js:265
+msgid "Show Original Image"
+msgstr "Prikaži originalnu sliku"
+
+#: js/ux/form/RecordsComboBox.js:26
+msgid "Software Version"
+msgstr "Verzija aplikacije"
+
+#: js/ux/grid/PagingToolbar.js:50
+msgid "{0} selected"
+msgstr "{0} označeno"
+
+#: js/ux/grid/PagingToolbar.js:51
+msgid "Unselect all"
+msgstr "Odznači sve"
+
+#: js/ux/grid/PagingToolbar.js:52
+msgid "Select all pages ({0} records)"
+msgstr "Označi sve stranice ({0} zapisa)"
+
+#: js/ux/grid/PagingToolbar.js:53
+msgid "Toggle selection"
+msgstr "Zamijeni odabrano"
+
+#: js/ux/Percentage.js:190
+msgid "(paused)"
+msgstr "(pauziran)"
+
+#: js/ux/PopupWindowManager.js:164
 msgid ""
-"The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
-"once!"
-msgstr "{1} \"{2}\" se već koristi u Polju \"{0}\" a može biti povezan samo jednom!"
+"The window you want to work with is backgrounded. Your browser doesn't "
+"support to foreground the window for you, so you need to use your operating "
+"systems window switching features. Please send complaints to your browser "
+"vendor!"
+msgstr "Prozor s kojim želite raditi je u pozadini. Vaš preglednik ne podržava da postavi prozor u prvom planu za vas, tako da ćete morati koristiti svoj operacijski sustav i prebaciti se na željeni prozor. Molim prijavite pritužbe proizvođaču preglednika. "
 
-#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:265
-msgid "Rename {0}"
-msgstr "Promjena naziva {0}"
+#: js/ux/SearchField.js:44
+msgid "enter searchfilter"
+msgstr "unesite pojam za pretragu"
 
-#: js/widgets/tree/ContextMenu.js:61
-msgid "Manage {0} Permissions"
-msgstr "Upravljaj {0} Dozvolama"
+#: js/widgets/account/PickerGridPanel.js:158
+msgid "Search User"
+msgstr "Traži korisnika"
 
-#: js/widgets/tree/ContextMenu.js:69
-msgid "{0} Properties"
-msgstr "{0} Postavke"
+#: js/widgets/account/PickerGridPanel.js:164
+msgid "Search Group"
+msgstr "Traži grupu"
 
-#: js/widgets/tree/ContextMenu.js:78
-msgid "Set {0} color"
-msgstr "Postavi {0} boju"
+#: js/widgets/account/PickerGridPanel.js:170
+msgid "Add Anyone"
+msgstr "Dodaj bilo koga"
 
-#: js/widgets/tree/ContextMenu.js:92
-msgid "Reload {0}"
-msgstr "Ponovno učitavanje {0}"
+#: js/widgets/account/PickerGridPanel.js:213
+msgid "Anyone"
+msgstr "Bilo tko"
 
-#: js/widgets/tree/ContextMenu.js:109
-msgid "Edit Properties"
-msgstr "Uredi Postavke"
+#: js/widgets/account/PickerGridPanel.js:229
+msgid "Search for users ..."
+msgstr "Traženje korisnika..."
 
-#: js/widgets/tree/ContextMenu.js:124
-msgid "Download"
-msgstr "Preuzimanje"
+#: js/widgets/account/PickerGridPanel.js:251
+msgid "Search for groups ..."
+msgstr "Traženje grupa..."
 
-#: js/widgets/tree/ContextMenu.js:185
-msgid "New {0}"
-msgstr "Novo {0}"
+#: js/widgets/ActivitiesPanel.js:147
+msgid "Add a Note..."
+msgstr "Dodaj bilješku..."
 
-#: js/widgets/tree/ContextMenu.js:185
-msgid "Please enter the name of the new {0}:"
-msgstr "Molimo Vas da unesete naziv novog {0}:"
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:174
+#: js/widgets/container/GrantsGrid.js:45
+msgid "Add"
+msgstr "Dodaj"
 
-#: js/widgets/tree/ContextMenu.js:188
-msgid "No {0} added"
-msgstr "Nema dodanih {0}"
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
+msgid "Note"
+msgstr "Bilješka"
 
-#: js/widgets/tree/ContextMenu.js:188 js/widgets/tree/ContextMenu.js:272
-msgid "You have to supply a {0} name!"
-msgstr "Potrebno dodijeliti {0} naziv!"
+#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
+msgid "Add new note"
+msgstr "Dodaj novu bilješku"
 
-#: js/widgets/tree/ContextMenu.js:191
-msgid "Creating {0}..."
-msgstr "Kreiranje {0}..."
+#: js/widgets/ActivitiesPanel.js:206
+msgid "Notes"
+msgstr "Bilješke"
 
-#: js/widgets/tree/ContextMenu.js:266
-msgid "Please enter the new name of the {0}:"
-msgstr "Molimo Vas da unesete novo ime za {0}:"
+#: js/widgets/ActivitiesPanel.js:282
+msgid "Enter new note:"
+msgstr "Unesite novu bilješku:"
 
-#: js/widgets/tree/ContextMenu.js:272
-msgid "Not renamed {0}"
-msgstr "Nije preimenovano {0}"
+#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
+msgid "Add Note"
+msgstr "Dodaj bilješku"
 
-#: js/widgets/tree/ContextMenu.js:346
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "Želite li izbrisati {0} \"{1}\"?"
+#: js/widgets/ActivitiesPanel.js:371
+msgid "Add a {0} Note"
+msgstr "Dodaj {0} bilješku"
 
-#: js/widgets/tree/ContextMenu.js:457
-msgid "Manage Permissions for {0} \"{1}\""
-msgstr "Upravljanje Pravima za {0} \"{1}\""
+#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
+#: js/widgets/grid/LinkGridPanel.js:105
+#: js/widgets/relation/GenericPickerGridPanel.js:430
+msgid "Type"
+msgstr "Tip"
 
-#: js/widgets/tree/ContextMenu.js:481
-msgid "Properties for {0} \"{1}\""
-msgstr "Postavke za {0} \"{1}\""
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1274
+msgid "Created By"
+msgstr "Kreirao"
+
+#: js/widgets/ActivitiesPanel.js:465
+msgid "Timestamp"
+msgstr "Vremenska oznaka"
+
+#: js/widgets/ActivitiesPanel.js:479
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr "Prikaz povijesti {0} - {1} of {2}"
+
+#: js/widgets/ActivitiesPanel.js:480
+msgid "No history to display"
+msgstr "Nema povijesti za prikaz"
+
+#: js/widgets/ActivitiesPanel.js:580
+msgid "History"
+msgstr "Povijest"
+
+#: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
+msgid "Time"
+msgstr "Vrijeme"
+
+#: js/widgets/ActivitiesPanel.js:596
+msgid "User"
+msgstr "Korisnik"
+
+#: js/widgets/container/ContainerSelect.js:132
+msgid "Select a {0}"
+msgstr "Odaberi {0}"
+
+#: js/widgets/container/ContainerSelect.js:152
+msgid "Recently used {0}:"
+msgstr "Nedavno korišteni {0}:"
+
+#: js/widgets/container/ContainerSelect.js:478
+msgid "please select a {0}"
+msgstr "molimo odaberite {0}"
+
+#: js/widgets/container/FilterModel.js:142
+msgid "is personal of"
+msgstr "je osobno od"
+
+#: js/widgets/container/FilterModel.js:142
+#: js/widgets/container/FilterModel.js:146 js/widgets/grid/FilterModel.js:170
+msgid "is equal to"
+msgstr "jednako"
+
+#: js/widgets/container/FilterModel.js:249
+#: js/widgets/grid/FilterModelMultiSelect.js:214
+#: js/widgets/grid/PickerFilter.js:310 js/widgets/grid/PickerGridPanel.js:255
+msgid "Selected  {0}"
+msgstr "Označeno  {0}"
+
+#: js/widgets/container/GrantsDialog.js:52
+msgid "Folder"
+msgstr "Mapa"
+
+#: js/widgets/container/GrantsDialog.js:95
+msgid "Updating Grants"
+msgstr "Ažuriranje prava"
+
+#: js/widgets/container/GrantsDialog.js:125
+msgid "Error"
+msgstr "Greška"
+
+#: js/widgets/container/GrantsDialog.js:126
+msgid "You are not allowed to remove all admins for this container!"
+msgstr "Nije Vam dozvoljeno uklanjanje svih admina ovog spremnika!"
+
+#: js/widgets/container/GrantsGrid.js:44
+msgid "The grant to read records of this container"
+msgstr "Pravo za čitanje zapisa ovog spremnika"
+
+#: js/widgets/container/GrantsGrid.js:46
+msgid "The grant to add records to this container"
+msgstr "Pravo za dodavanje zapisa ovom spremniku"
+
+#: js/widgets/container/GrantsGrid.js:48
+msgid "The grant to edit records in this container"
+msgstr "Pravo za uređivanje zapisa ovog spremnika"
+
+#: js/widgets/container/GrantsGrid.js:49
+msgid "Delete"
+msgstr "Briši"
+
+#: js/widgets/container/GrantsGrid.js:50
+msgid "The grant to delete records in this container"
+msgstr "Pravo za brisanje zapisa ovog spremnika"
+
+#: js/widgets/container/GrantsGrid.js:52
+msgid "The grant to export records from this container"
+msgstr "Pravo za izvoz zapisa iz ovog spremnika"
+
+#: js/widgets/container/GrantsGrid.js:53
+msgid "Sync"
+msgstr "Usklađivanje"
+
+#: js/widgets/container/GrantsGrid.js:54
+msgid "The grant to synchronise records with this container"
+msgstr "Pravo za usklađivanje zapisa s ovim spremnikom"
+
+#: js/widgets/container/GrantsGrid.js:55
+msgid "Admin"
+msgstr "Admin"
+
+#: js/widgets/container/GrantsGrid.js:56
+msgid "The grant to administrate this container"
+msgstr "Pravo za administriranje ovog spremnika"
+
+#: js/widgets/container/GrantsGrid.js:58
+msgid "Free Busy"
+msgstr "Bez posla"
+
+#: js/widgets/container/GrantsGrid.js:59
+msgid "The grant to access free busy information of events in this calendar"
+msgstr "Prava za slobodan pristup informacijama o događanjima u tom kalendaru"
+
+#: js/widgets/container/GrantsGrid.js:60
+msgid "Private"
+msgstr "Osobno"
+
+#: js/widgets/container/GrantsGrid.js:61
+msgid "The grant to access records marked as private in this container"
+msgstr "Pravo za pristup privatnim zapisima ovog spremnika"
+
+#: js/widgets/container/PropertiesDialog.js:90
+msgid "Properties"
+msgstr "Postavke"
+
+#: js/widgets/container/PropertiesDialog.js:113
+#: js/widgets/tags/TagsPanel.js:487
+msgid "Color"
+msgstr "Boja"
+
+#: js/widgets/container/PropertiesDialog.js:119
+msgid "My Grants"
+msgstr "Moja prava"
+
+#: js/widgets/container/TreePanel.js:142
+msgid "container"
+msgid_plural "containers"
+msgstr[0] "spremnik"
+msgstr[1] "spremnika"
+msgstr[2] "spremnika"
+
+#: js/widgets/container/TreePanel.js:546
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr "Nije Vam dozvoljen odabir {0} '{1}':"
+
+#: js/widgets/container/TreePanel.js:547
+msgid "{0} grant is required for desired action"
+msgstr "{0} potrebno je pravo za izvršenje željene akcije"
+
+#: js/widgets/container/TreePanel.js:548
+msgid "Insufficient Grants"
+msgstr "Nedovoljna prava"
+
+#: js/widgets/CountryCombo.js:34
+msgid "Select a country..."
+msgstr "Odaberite zemlju..."
+
+#: js/widgets/customfields/EditDialogPlugin.js:155
+msgid "General"
+msgstr "Ostalo"
+
+#: js/widgets/customfields/EditDialogPlugin.js:167
+msgid "Custom Fields"
+msgstr "Ostali podaci"
+
+#: js/widgets/dialog/AdminPanel.js:59
+msgid "Change settings for application {0}"
+msgstr "Izmjena postavki za aplikaciju {0}"
+
+#: js/widgets/dialog/AdminPanel.js:107
+msgid "Defaults"
+msgstr "Početne postavke"
+
+#: js/widgets/dialog/AlarmPanel.js:34
+msgid "Alarms"
+msgstr "Alarmi"
+
+#: js/widgets/dialog/AlarmPanel.js:37
+msgid "0 minutes before"
+msgstr "0 minuta prije"
+
+#: js/widgets/dialog/AlarmPanel.js:38
+msgid "5 minutes before"
+msgstr "5 minuta prije"
+
+#: js/widgets/dialog/AlarmPanel.js:39
+msgid "15 minutes before"
+msgstr "15 minuta prije"
+
+#: js/widgets/dialog/AlarmPanel.js:40
+msgid "30 minutes before"
+msgstr "30 minuta prije"
+
+#: js/widgets/dialog/AlarmPanel.js:41
+msgid "1 hour before"
+msgstr "1 sat prije"
+
+#: js/widgets/dialog/AlarmPanel.js:42
+msgid "2 hours before"
+msgstr "2 sata prije"
+
+#: js/widgets/dialog/AlarmPanel.js:43
+msgid "12 hours before"
+msgstr "12 sati prije"
+
+#: js/widgets/dialog/AlarmPanel.js:44
+msgid "1 day before"
+msgstr "1 dan prije"
+
+#: js/widgets/dialog/AlarmPanel.js:45
+msgid "2 days before"
+msgstr "2 dana prije"
+
+#: js/widgets/dialog/AlarmPanel.js:46
+msgid "Custom Datetime"
+msgstr "Poseban datum/vrijeme"
+
+#: js/widgets/dialog/AlarmPanel.js:58
+msgid "Alarm Time"
+msgstr "Vrijeme Podsjetnika"
+
+#: js/widgets/dialog/AlarmPanel.js:170
+msgid "{0} minutes before"
+msgstr "{0} minuta prije"
+
+#: js/widgets/dialog/CredentialsDialog.js:84
+msgid "Please enter your credentials"
+msgstr "Molimo unesite svoje akreditive"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:87
+#: js/widgets/dialog/MultipleEditResultSummary.js:86
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:69
+msgid "OK"
+msgstr "U redu"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:134
+msgid "Merging Records..."
+msgstr "Spajanje Zapisa..."
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:173
+msgid "Merge Failed"
+msgstr "Spoji Polja"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:173
+msgid "The merge succeeded, but the duplicate {0} could not be deleted."
+msgstr "Spajanje je uspješno obavljeno, no dupli {0} ne mogu biti izbrisani."
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:212
+msgid "Merge {0}, prefer First"
+msgstr "Spoji {0}, preferiraj Prvi"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:213
+msgid "Merge {0}, prefer Second"
+msgstr "Spoji {0}, preferiraj Drugi"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:220
+#: js/widgets/grid/GridPanel.js:538
+msgid "Merge {0}"
+msgstr "Spoji {0}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:223
+msgid "First {0}"
+msgstr "Prvi {0}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:224
+msgid "Second {0}"
+msgstr "Drugi {0}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:225
+msgid "Final {0}"
+msgstr "Završni {0}"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:41
+msgid "The record you try to add might already exist."
+msgstr "Zapis koji pokušavate dodati možda već postoji."
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:193
+msgid "Field Group"
+msgstr "Polje grupe"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:207
+msgid "My Value"
+msgstr "Moja Vrijednost"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:215
+msgid "Existing Value"
+msgstr "Postojeća Vrijednost"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:223
+msgid "Final Value"
+msgstr "Zadnja Vrijednost"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:240
+msgid "Action:"
+msgstr "Akcija:"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:256
+msgid "Merge, keeping existing details"
+msgstr "Spoji zadržavajući postojeće detalje"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:257
+msgid "Merge, keeping my details"
+msgstr "Spoji zadržavajući moje detalje"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:258
+msgid "Keep existing record and discard mine"
+msgstr "Zadrži postojeći zapis i odbaci moj"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:259
+msgid "Keep both records"
+msgstr "Zadrži oba zapisa"
+
+#: js/widgets/dialog/EditDialog.js:327 js/widgets/EditRecord.js:188
+msgid "delete"
+msgstr "izbriši"
+
+#: js/widgets/dialog/EditDialog.js:360 js/widgets/dialog/EditDialog.js:388
+#: js/widgets/EditRecord.js:131
+msgid "Saved in"
+msgstr "Spremljeno u"
+
+#: js/widgets/dialog/EditDialog.js:484 js/widgets/grid/GridPanel.js:489
+msgid "Copy {0}"
+msgstr "Kopiraj {0}"
+
+#: js/widgets/dialog/EditDialog.js:487
+msgid "Add New {0}"
+msgstr "Dodaj novi {0}"
+
+#: js/widgets/dialog/EditDialog.js:489
+msgid "Edit {0} \"{1}\""
+msgstr "Uredi {0} \"{1}\""
+
+#: js/widgets/dialog/EditDialog.js:553
+msgid "Transferring {0}..."
+msgstr "Prijenos {0}..."
+
+#: js/widgets/dialog/EditDialog.js:698
+msgid "Do you really want to delete this {0}?"
+msgstr "Želite li izbrisati {0}?"
+
+#: js/widgets/dialog/EditDialog.js:700 js/widgets/grid/GridPanel.js:1704
+msgid "Deleting {0}"
+msgstr "Brisanje {0}"
+
+#: js/widgets/dialog/EditDialog.js:710 js/widgets/tags/TagsPanel.js:279
+#: js/widgets/tags/TagsPanel.js:371 js/widgets/tags/TagsPanel.js:404
+msgid "Failed"
+msgstr "Neuspjelo"
+
+#: js/widgets/dialog/EditDialog.js:710
+msgid "Could not delete {0}."
+msgstr "Nije moguće izbrisati {0}."
+
+#: js/widgets/dialog/EditDialog.js:762
+msgid "Resolve Duplicate {0} Suspicion"
+msgstr "Rješavanje dvostruko {0} sumnjivih"
+
+#: js/widgets/dialog/ExportDialog.js:84
+msgid "Export {0} {1}"
+msgstr "Izvoz {0} {1}"
+
+#: js/widgets/dialog/ExportDialog.js:111
+msgid "Export definition"
+msgstr "Definicija izvoza"
+
+#: js/widgets/dialog/ExportDialog.js:120
+msgid "Select Export Definition ..."
+msgstr "Odaberite definiciju izvoza..."
+
+#: js/widgets/dialog/FileListDialog.js:28
+#: js/widgets/dialog/MultiOptionsDialog.js:28
+#: js/widgets/dialog/MultiOptionsDialog.js:81
+msgid "What would you like to do?"
+msgstr "Što želite napraviti?"
+
+#: js/widgets/dialog/FileListDialog.js:32
+#: js/widgets/dialog/MultiOptionsDialog.js:32
+#: js/widgets/dialog/MultiOptionsDialog.js:141
+msgid "You need to select an option!"
+msgstr "Morate odabrati opciju."
+
+#: js/widgets/dialog/FileListDialog.js:91
+msgid "No"
+msgstr "Ne"
+
+#: js/widgets/dialog/FileListDialog.js:99
+msgid "Yes"
+msgstr "Da"
 
 #: js/widgets/dialog/ImportDialog.js:223
 msgid "Choose File and Format"
@@ -1885,135 +1803,62 @@ msgstr "Svi zapisi će biti označeni kao: \"{0}\", tako da ih možete lakše pr
 msgid "{0} records have failures and will be discarded."
 msgstr "{0} zapisa je s greškom i biti će odbačeni."
 
-#: js/widgets/dialog/AdminPanel.js:59
-msgid "Change settings for application {0}"
-msgstr "Izmjena postavki za aplikaciju {0}"
-
-#: js/widgets/dialog/AdminPanel.js:107
-msgid "Defaults"
-msgstr "Početne postavke"
-
 #: js/widgets/dialog/LinkPanel.js:46
 msgid "Links"
 msgstr "Linkovi"
 
-#: js/widgets/dialog/AlarmPanel.js:34
-msgid "Alarms"
-msgstr "Alarmi"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:318
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:432
+msgid "Delete value from all selected records"
+msgstr "Izbrišite vrijednos sa svih odabranih zapisa"
 
-#: js/widgets/dialog/AlarmPanel.js:37
-msgid "0 minutes before"
-msgstr "0 minuta prije"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:415
+msgid "Undo change for all selected records"
+msgstr "Poništi izmjene za sve odabrane zapise."
 
-#: js/widgets/dialog/AlarmPanel.js:38
-msgid "5 minutes before"
-msgstr "5 minuta prije"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:490
+msgid "Edit {0} {1}"
+msgstr "Uredi {0} {1}"
 
-#: js/widgets/dialog/AlarmPanel.js:39
-msgid "15 minutes before"
-msgstr "15 minuta prije"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:542
+msgid "Different Values"
+msgstr "Različite Vrijednosti"
 
-#: js/widgets/dialog/AlarmPanel.js:40
-msgid "30 minutes before"
-msgstr "30 minuta prije"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:543
+msgid ""
+"This field has different values. Editing this field will overwrite the old "
+"values."
+msgstr "Ovo polje ima različite vrijednosti. Uređivanjem ovog polja ćete prebrisati stare vrijednosti."
 
-#: js/widgets/dialog/AlarmPanel.js:41
-msgid "1 hour before"
-msgstr "1 sat prije"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+msgid "Do you really want to change these {0} records?"
+msgstr "Zaista želite promijeniti ove {0} zapise?"
 
-#: js/widgets/dialog/AlarmPanel.js:42
-msgid "2 hours before"
-msgstr "2 sata prije"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+msgid "Applying changes"
+msgstr "Primjenjujem promjene"
 
-#: js/widgets/dialog/AlarmPanel.js:43
-msgid "12 hours before"
-msgstr "12 sati prije"
+#: js/widgets/dialog/MultipleEditResultSummary.js:146
+msgid "You edited {0} {1}."
+msgstr "Uredili ste {0} {1}"
 
-#: js/widgets/dialog/AlarmPanel.js:44
-msgid "1 day before"
-msgstr "1 dan prije"
+#: js/widgets/dialog/MultipleEditResultSummary.js:149
+msgid "{0} {1} have been updated properly."
+msgstr "{0} {1} je ispravno ažuriran."
 
-#: js/widgets/dialog/AlarmPanel.js:45
-msgid "2 days before"
-msgstr "2 dana prije"
+#: js/widgets/dialog/MultipleEditResultSummary.js:149
+msgid "{0} {1} has been updated properly."
+msgstr "{0} {1} je ispravno ažuriran."
 
-#: js/widgets/dialog/AlarmPanel.js:46
-msgid "Custom Datetime"
-msgstr "Poseban datum/vrijeme"
+#: js/widgets/dialog/MultipleEditResultSummary.js:152
+msgid ""
+"{0} {1} have invalid data after updating. These {1} have not been changed."
+msgstr "{0} {1} ima pogrešne podatke nakon ažuriranja. {1} nisu izmijenjeni."
 
-#: js/widgets/dialog/AlarmPanel.js:58
-msgid "Alarm Time"
-msgstr "Vrijeme Podsjetnika"
-
-#: js/widgets/dialog/AlarmPanel.js:170
-msgid "{0} minutes before"
-msgstr "{0} minuta prije"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:87
-#: js/widgets/dialog/MultipleEditResultSummary.js:86
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:69
-msgid "OK"
-msgstr "U redu"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:134
-msgid "Merging Records..."
-msgstr "Spajanje Zapisa..."
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:173
-msgid "Merge Failed"
-msgstr "Spoji Polja"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:173
-msgid "The merge succeeded, but the duplicate {0} could not be deleted."
-msgstr "Spajanje je uspješno obavljeno, no dupli {0} ne mogu biti izbrisani."
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:212
-msgid "Merge {0}, prefer First"
-msgstr "Spoji {0}, preferiraj Prvi"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:213
-msgid "Merge {0}, prefer Second"
-msgstr "Spoji {0}, preferiraj Drugi"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:223
-msgid "First {0}"
-msgstr "Prvi {0}"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:224
-msgid "Second {0}"
-msgstr "Drugi {0}"
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:225
-msgid "Final {0}"
-msgstr "Završni {0}"
-
-#: js/widgets/dialog/PreferencesPanel.js:185
-msgid "There are no preferences for this application."
-msgstr "Nema postavki za ovu aplikaciju."
-
-#: js/widgets/dialog/MultiOptionsDialog.js:28
-#: js/widgets/dialog/MultiOptionsDialog.js:81
-#: js/widgets/dialog/FileListDialog.js:28
-msgid "What would you like to do?"
-msgstr "Što želite napraviti?"
-
-#: js/widgets/dialog/MultiOptionsDialog.js:32
-#: js/widgets/dialog/MultiOptionsDialog.js:141
-#: js/widgets/dialog/FileListDialog.js:32
-msgid "You need to select an option!"
-msgstr "Morate odabrati opciju."
-
-#: js/widgets/dialog/FileListDialog.js:91
-msgid "No"
-msgstr "Ne"
-
-#: js/widgets/dialog/FileListDialog.js:99
-msgid "Yes"
-msgstr "Da"
-
-#: js/widgets/dialog/CredentialsDialog.js:84
-msgid "Please enter your credentials"
-msgstr "Molimo unesite svoje akreditive"
+#: js/widgets/dialog/MultipleEditResultSummary.js:152
+msgid ""
+"{0} {1} has invalid data after updating. This {1} has not been changed."
+msgstr "{0} {1} ima pogrešne podatke nakon ažuriranja. {1} nisu izmijenjeni."
 
 #: js/widgets/dialog/PreferencesDialog.js:125
 msgid "Admin Mode"
@@ -2040,102 +1885,9 @@ msgstr "Morate ispraviti polja označena crveno kako bi konfiguracija mogla biti
 msgid "Saving of preferences failed."
 msgstr "Spremanje postavki nije uspjelo."
 
-#: js/widgets/dialog/EditDialog.js:487
-msgid "Add New {0}"
-msgstr "Dodaj novi {0}"
-
-#: js/widgets/dialog/EditDialog.js:489
-msgid "Edit {0} \"{1}\""
-msgstr "Uredi {0} \"{1}\""
-
-#: js/widgets/dialog/EditDialog.js:553
-msgid "Transferring {0}..."
-msgstr "Prijenos {0}..."
-
-#: js/widgets/dialog/EditDialog.js:698
-msgid "Do you really want to delete this {0}?"
-msgstr "Želite li izbrisati {0}?"
-
-#: js/widgets/dialog/EditDialog.js:710
-msgid "Could not delete {0}."
-msgstr "Nije moguće izbrisati {0}."
-
-#: js/widgets/dialog/EditDialog.js:762
-msgid "Resolve Duplicate {0} Suspicion"
-msgstr "Rješavanje dvostruko {0} sumnjivih"
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:146
-msgid "You edited {0} {1}."
-msgstr "Uredili ste {0} {1}"
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:149
-msgid "{0} {1} have been updated properly."
-msgstr "{0} {1} je ispravno ažuriran."
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:149
-msgid "{0} {1} has been updated properly."
-msgstr "{0} {1} je ispravno ažuriran."
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:152
-msgid ""
-"{0} {1} have invalid data after updating. These {1} have not been changed."
-msgstr "{0} {1} ima pogrešne podatke nakon ažuriranja. {1} nisu izmijenjeni."
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:152
-msgid ""
-"{0} {1} has invalid data after updating. This {1} has not been changed."
-msgstr "{0} {1} ima pogrešne podatke nakon ažuriranja. {1} nisu izmijenjeni."
-
-#: js/widgets/dialog/ExportDialog.js:48 js/widgets/container/GrantsGrid.js:51
-#: js/Models.js:336
-msgid "Export"
-msgid_plural "Export"
-msgstr[0] "Izvoz"
-msgstr[1] "Izvoza"
-msgstr[2] "Izvoza"
-
-#: js/widgets/dialog/ExportDialog.js:84
-msgid "Export {0} {1}"
-msgstr "Izvoz {0} {1}"
-
-#: js/widgets/dialog/ExportDialog.js:111
-msgid "Export definition"
-msgstr "Definicija izvoza"
-
-#: js/widgets/dialog/ExportDialog.js:120
-msgid "Select Export Definition ..."
-msgstr "Odaberite definiciju izvoza..."
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:315
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:430
-msgid "Delete value from all selected records"
-msgstr "Izbrišite vrijednos sa svih odabranih zapisa"
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:413
-msgid "Undo change for all selected records"
-msgstr "Poništi izmjene za sve odabrane zapise."
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:487
-msgid "Edit {0} {1}"
-msgstr "Uredi {0} {1}"
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:540
-msgid "Different Values"
-msgstr "Različite Vrijednosti"
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:541
-msgid ""
-"This field has different values. Editing this field will overwrite the old "
-"values."
-msgstr "Ovo polje ima različite vrijednosti. Uređivanjem ovog polja ćete prebrisati stare vrijednosti."
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
-msgid "Do you really want to change these {0} records?"
-msgstr "Zaista želite promijeniti ove {0} zapise?"
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
-msgid "Applying changes"
-msgstr "Primjenjujem promjene"
+#: js/widgets/dialog/PreferencesPanel.js:185
+msgid "There are no preferences for this application."
+msgstr "Nema postavki za ovu aplikaciju."
 
 #: js/widgets/dialog/PreferencesTreePanel.js:67
 msgid "General Preferences"
@@ -2157,118 +1909,439 @@ msgstr "Sljedeći"
 msgid "Finish"
 msgstr "Završiti"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:41
-msgid "The record you try to add might already exist."
-msgstr "Zapis koji pokušavate dodati možda već postoji."
+#: js/widgets/form/ConfigPanel.js:113
+msgid "Configuration Problem"
+msgstr "Konfiguracijski problem"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:132
-msgid "Field Group"
-msgstr "Polje grupe"
+#: js/widgets/form/ConfigPanel.js:134
+msgid "Invalid configuration"
+msgstr "Neispravna konfiguracija"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:146
-msgid "My Value"
-msgstr "Moja Vrijednost"
+#: js/widgets/form/ConfigPanel.js:158
+msgid "Transferring Configuration..."
+msgstr "Prijenos konfiguracije..."
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:154
-msgid "Existing Value"
-msgstr "Postojeća Vrijednost"
+#: js/widgets/form/ConfigPanel.js:254
+msgid "Save config"
+msgstr "Spremanje konfiguracije"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:162
-msgid "Final Value"
-msgstr "Zadnja Vrijednost"
+#: js/widgets/form/ConfigPanel.js:264
+msgid "Reload config"
+msgstr "Ponovno učitavanje konfiguracije"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:179
-msgid "Action:"
-msgstr "Akcija:"
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Wrong File Type"
+msgstr "Pogrešna vrsta datoteke"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:195
-msgid "Merge, keeping existing details"
-msgstr "Spoji zadržavajući postojeće detalje"
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Please select a file with one of the following extensions:"
+msgstr "Odaberite datoteku s jednim od sljedećih nastavaka:"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:196
-msgid "Merge, keeping my details"
-msgstr "Spoji zadržavajući moje detalje"
+#: js/widgets/form/RecordPickerComboBox.js:99
+#: js/widgets/form/RecordPickerManager.js:48
+msgid "Searching..."
+msgstr "Tražim..."
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:197
-msgid "Keep existing record and discard mine"
-msgstr "Zadrži postojeći zapis i odbaci moj"
+#: js/widgets/form/RecordPickerComboBox.js:268
+#: js/widgets/relation/GenericPickerGridPanel.js:721
+msgid "You tried to link a record with itself. This is not allowed!"
+msgstr "Pokušavate povezati zapisa sa samim sobom. Ovo nije dozvoljeno!"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:198
-msgid "Keep both records"
-msgstr "Zadrži oba zapisa"
+#: js/widgets/grid/FileUploadGrid.js:116
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "Nije moguće učitati datoteku. Molimo Vas da obavijestite administratora. Maksimalna veličina datoteke za učitavanje je:"
 
-#: js/widgets/TimezoneChooser.js:77
-msgid "setting new timezone..."
-msgstr "podešavanje nove vremenske zone..."
+#: js/widgets/grid/FileUploadGrid.js:180
+msgid "Remove file"
+msgstr "Ukloni datoteku"
 
-#: js/widgets/customfields/EditDialogPlugin.js:155
-msgid "General"
-msgstr "Ostalo"
+#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:116
+msgid "Pause upload"
+msgstr "Pauziraj učitavanje"
 
-#: js/widgets/customfields/EditDialogPlugin.js:167
-msgid "Custom Fields"
-msgstr "Ostali podaci"
+#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:100
+msgid "Resume upload"
+msgstr "Nastavi upload"
 
-#: js/widgets/ActivitiesPanel.js:147
-msgid "Add a Note..."
-msgstr "Dodaj bilješku..."
+#: js/widgets/grid/FileUploadGrid.js:244
+msgid "Add file"
+msgstr "Dodaj datoteku"
 
-#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:174
-#: js/widgets/container/GrantsGrid.js:45
-msgid "Add"
-msgstr "Dodaj"
+#: js/widgets/grid/FileUploadGrid.js:286
+msgid "name"
+msgstr "Naziv"
 
-#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
-msgid "Note"
-msgstr "Bilješka"
+#: js/widgets/grid/FileUploadGrid.js:293
+msgid "size"
+msgstr "Veličina"
 
-#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
-msgid "Add new note"
-msgstr "Dodaj novu bilješku"
+#: js/widgets/grid/FileUploadGrid.js:300
+msgid "type"
+msgstr "Tip"
 
-#: js/widgets/ActivitiesPanel.js:206
-msgid "Notes"
-msgstr "Bilješke"
+#: js/widgets/grid/FilterModel.js:168
+msgid "contains"
+msgstr "sadrži"
 
-#: js/widgets/ActivitiesPanel.js:282
-msgid "Enter new note:"
-msgstr "Unesite novu bilješku:"
+#: js/widgets/grid/FilterModel.js:169
+msgid "reg. exp."
+msgstr "regularni izraz"
 
-#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
-msgid "Add Note"
-msgstr "Dodaj bilješku"
+#: js/widgets/grid/FilterModel.js:171
+msgid "is greater than"
+msgstr "veće od"
 
-#: js/widgets/ActivitiesPanel.js:371
-msgid "Add a {0} Note"
-msgstr "Dodaj {0} bilješku"
+#: js/widgets/grid/FilterModel.js:172
+msgid "is less than"
+msgstr "manje od"
 
-#: js/widgets/ActivitiesPanel.js:465
-msgid "Timestamp"
-msgstr "Vremenska oznaka"
+#: js/widgets/grid/FilterModel.js:173
+msgid "is not"
+msgstr "nije"
 
-#: js/widgets/ActivitiesPanel.js:479
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr "Prikaz povijesti {0} - {1} of {2}"
+#: js/widgets/grid/FilterModel.js:174
+msgid "one of"
+msgstr "jedno od"
 
-#: js/widgets/ActivitiesPanel.js:480
-msgid "No history to display"
-msgstr "Nema povijesti za prikaz"
+#: js/widgets/grid/FilterModel.js:175
+msgid "none of"
+msgstr "nijedno od"
 
-#: js/widgets/ActivitiesPanel.js:580
-msgid "History"
-msgstr "Povijest"
+#: js/widgets/grid/FilterModel.js:176
+msgid "is before"
+msgstr "je prije"
 
-#: js/widgets/ActivitiesPanel.js:592 js/ApplicationStarter.js:222
-msgid "Quick search"
-msgstr "Brzo pretraživanje"
+#: js/widgets/grid/FilterModel.js:177
+msgid "is after"
+msgstr "je poslije"
 
-#: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
-msgid "Time"
-msgstr "Vrijeme"
+#: js/widgets/grid/FilterModel.js:178
+msgid "is within"
+msgstr "je unutar"
 
-#: js/widgets/ActivitiesPanel.js:596
-msgid "User"
-msgstr "Korisnik"
+#: js/widgets/grid/FilterModel.js:179
+msgid "is in week no."
+msgstr "je u br. tjedna"
+
+#: js/widgets/grid/FilterModel.js:180
+msgid "starts with"
+msgstr "počinje s"
+
+#: js/widgets/grid/FilterModel.js:181
+msgid "ends with"
+msgstr "završava s"
+
+#: js/widgets/grid/FilterModel.js:182
+msgid "defined by"
+msgstr "definiran"
+
+#: js/widgets/grid/FilterModel.js:228
+#: js/widgets/grid/ForeignRecordFilter.js:395
+#: js/widgets/relation/FilterModel.js:87
+msgid "select a operator"
+msgstr "odabir operatora"
+
+#: js/widgets/grid/FilterModel.js:352
+msgid "Search Account ..."
+msgstr "Pretraga korisničkih računa..."
+
+#: js/widgets/grid/FilterModel.js:462
+msgid "today"
+msgstr "danas"
+
+#: js/widgets/grid/FilterModel.js:463
+msgid "yesterday"
+msgstr "jučer"
+
+#: js/widgets/grid/FilterModel.js:464
+msgid "this week"
+msgstr "ovaj tjedan"
+
+#: js/widgets/grid/FilterModel.js:465
+msgid "last week"
+msgstr "prošli tjedan"
+
+#: js/widgets/grid/FilterModel.js:466
+msgid "the week before last"
+msgstr "pretprošli tjedan"
+
+#: js/widgets/grid/FilterModel.js:467
+msgid "this month"
+msgstr "ovaj mjesec"
+
+#: js/widgets/grid/FilterModel.js:468
+msgid "last month"
+msgstr "prošli mjesec"
+
+#: js/widgets/grid/FilterModel.js:469
+msgid "this quarter"
+msgstr "ovaj kvartal"
+
+#: js/widgets/grid/FilterModel.js:470
+msgid "last quarter"
+msgstr "prošli kvartal"
+
+#: js/widgets/grid/FilterModel.js:471
+msgid "this year"
+msgstr "ove godine"
+
+#: js/widgets/grid/FilterModel.js:472
+msgid "last year"
+msgstr "prošle godine"
+
+#: js/widgets/grid/FilterModel.js:476
+msgid "tomorrow"
+msgstr "sutra"
+
+#: js/widgets/grid/FilterModel.js:477
+msgid "next week"
+msgstr "sljedeći tjedan"
+
+#: js/widgets/grid/FilterModel.js:478
+msgid "next month"
+msgstr "sljedeći mjesec"
+
+#: js/widgets/grid/FilterModel.js:479
+msgid "next quarter"
+msgstr "sljedeći kvartal"
+
+#: js/widgets/grid/FilterModel.js:480
+msgid "next year"
+msgstr "sljedeća godina"
+
+#: js/widgets/grid/FilterPanel.js:78
+msgid "Attention: There are more filters active!"
+msgstr "Pažnja: Postoji više aktivnih filtera!"
+
+#: js/widgets/grid/FilterPanel.js:261
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
+msgid "show details"
+msgstr "napredno pretraživanje"
+
+#: js/widgets/grid/FilterPanel.js:262
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
+msgid "Always show advanced filters"
+msgstr "Uvijek prikaži napredne filtre"
+
+#: js/widgets/grid/FilterPanel.js:501
+msgid "Criteria {0}"
+msgstr "Kriteriji {0}"
+
+#: js/widgets/grid/FilterStructureTreePanel.js:35
+#: js/widgets/grid/FilterStructureTreePanel.js:52
+msgid "Show records that match to one of the following filters"
+msgstr "Pokazuju zapise koji odgovaraju jednoj od sljedećih filtera"
+
+#: js/widgets/grid/FilterStructureTreePanel.js:37
+#: js/widgets/grid/FilterStructureTreePanel.js:51
+msgid "or alternatively"
+msgstr "ili alternativni"
+
+#: js/widgets/grid/FilterStructureTreePanel.js:55
+msgid "Add alternative filter"
+msgstr "Dodaj alternativni filter"
+
+#: js/widgets/grid/FilterStructureTreePanel.js:61
+msgid "Remove Filter"
+msgstr "Ukloni filter"
+
+#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:571
+msgid "Show"
+msgstr "Prikaži"
+
+#: js/widgets/grid/FilterToolbar.js:164
+msgid "add new filter"
+msgstr "dodaj novi filter"
+
+#: js/widgets/grid/FilterToolbar.js:170
+msgid "reset all filters"
+msgstr "reset svih filtera"
+
+#: js/widgets/grid/FilterToolbar.js:176
+msgid "start search"
+msgstr "pretraži"
+
+#: js/widgets/grid/FilterToolbar.js:184
+msgid "save as favorite"
+msgstr "spremi kao favorit"
+
+#: js/widgets/grid/FilterToolbar.js:191
+msgid "Load a favorite"
+msgstr "Učitaj favorite"
+
+#: js/widgets/grid/FilterToolbar.js:358
+msgid "select a field"
+msgstr "označi polje"
+
+#: js/widgets/grid/FilterToolbar.js:396
+msgid "Delete this filter"
+msgstr "Obriši ovaj filter"
+
+#: js/widgets/grid/FilterToolbar.js:428
+msgid "and"
+msgstr "i"
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] "Vaš pregled je određen sa {0} kriterijem:"
+msgstr[1] "Vaš pregled je određen sa {0} kriterija:"
+msgstr[2] "Vaš pregled je određen sa {0} kriterija:"
+
+#: js/widgets/grid/ForeignRecordFilter.js:61
+msgid "Edit definition"
+msgstr "Uredi definiciju"
+
+#: js/widgets/grid/ForeignRecordFilter.js:71
+msgid "Start definition"
+msgstr "Početna definicija"
+
+#: js/widgets/grid/ForeignRecordFilter.js:111
+msgid "Related to"
+msgstr "Povezan s"
+
+#: js/widgets/grid/GridPanel.js:286
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
+msgstr "{0} ne može biti pronađeno. Pokušajte promijeniti svoje filter-kriterije, opcije pregleda ili što traži u {1}. "
+
+#: js/widgets/grid/GridPanel.js:288 js/widgets/grid/GridPanel.js:474
+#: js/widgets/grid/GridPanel.js:475 js/widgets/grid/GridPanel.js:476
+msgid "Edit {0}"
+msgid_plural "Edit {0}"
+msgstr[0] "Uredi {0}"
+msgstr[1] "Uredi {0}"
+msgstr[2] "Uredi {0}"
+
+#: js/widgets/grid/GridPanel.js:500 js/widgets/tree/ContextMenu.js:35
+msgid "Add {0}"
+msgstr "Dodaj {0}"
+
+#: js/widgets/grid/GridPanel.js:508
+msgid "Print Page"
+msgstr "Ispiši stranicu"
+
+#: js/widgets/grid/GridPanel.js:573 js/widgets/grid/GridPanel.js:574
+#: js/widgets/grid/GridPanel.js:576 js/widgets/tree/ContextMenu.js:52
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "Izbriši {0}"
+msgstr[1] "Izbriši {0}"
+msgstr[2] "Izbriši {0}"
+
+#: js/widgets/grid/GridPanel.js:971
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Prikazivanje zapisa {0} - {1} od {2}"
+
+#: js/widgets/grid/GridPanel.js:972
+msgid "No {0} to display"
+msgstr "Nema {0} za prikaz"
+
+#: js/widgets/grid/GridPanel.js:1210
+msgid "New..."
+msgstr "Novi..."
+
+#: js/widgets/grid/GridPanel.js:1229
+msgid "Add to..."
+msgstr "Dodati..."
+
+#: js/widgets/grid/GridPanel.js:1273
+#: js/widgets/relation/GenericPickerGridPanel.js:431
+msgid "Creation Time"
+msgstr "Datum kreiranja"
+
+#: js/widgets/grid/GridPanel.js:1275
+msgid "Last Modified Time"
+msgstr "Datum zadnje izmjene"
+
+#: js/widgets/grid/GridPanel.js:1276
+msgid "Last Modified By"
+msgstr "Zadnji ažurirao"
+
+#: js/widgets/grid/GridPanel.js:1645
+msgid "Not Allowed"
+msgstr "Nije dopušteno"
+
+#: js/widgets/grid/GridPanel.js:1646
+msgid "You are not allowed to delete all pages at once"
+msgstr "Nije Vam dozvoljeno brisanje svih stranica od jednom"
+
+#: js/widgets/grid/GridPanel.js:1669
+msgid "Do you really want to delete the selected record ({0})?"
+msgid_plural "Do you really want to delete the selected records ({0})?"
+msgstr[0] "Da li stvarno želite izbrisati odabrani zapis  ({0})?"
+msgstr[1] "Da li stvarno želite izbrisati odabrane zapise  ({0})?"
+msgstr[2] "Da li stvarno želite izbrisati odabrane zapise ({0})?"
+
+#: js/widgets/grid/GridPanel.js:1704
+msgid " ... This may take a long time!"
+msgstr "Molimo pričekajte trenutak!"
+
+#: js/widgets/grid/PickerGridPanel.js:162
+msgid "Remove record"
+msgstr "Ukloni zapis"
+
+#: js/widgets/grid/PickerGridPanel.js:296
+msgid "Search for records ..."
+msgstr "Traži zapise..."
+
+#: js/widgets/grid/QuickaddGridPanel.js:91
+msgid "Remove"
+msgstr "Ukloni"
+
+#: js/widgets/grid/RendererManager.js:54
+msgid "has notes"
+msgstr "ima bilješku"
+
+#: js/widgets/grid/RendererManager.js:57
+msgid "has relations"
+msgstr "ima relaciju"
+
+#: js/widgets/LangChooser.js:35 Preference.php:91
+msgid "Language"
+msgstr "Jezik"
+
+#: js/widgets/LangChooser.js:68
+msgid "setting new language..."
+msgstr "postavka novog jezika..."
+
+#: js/widgets/mainscreen/WestPanel.js:299
+msgid "containers"
+msgstr "spremnici"
+
+#: js/widgets/mainscreen/WestPanel.js:326
+msgid "Favorites"
+msgstr "Favoriti"
+
+#: js/widgets/MainScreen.js:264
+msgid "Save current view as favorite"
+msgstr "Pohrani"
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
+msgid "Favorite not Saved"
+msgstr "Favorit nije spremljen"
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
+msgid ""
+"You have to supply a shorter name! Names of favorite can only be up to 40 "
+"characters long."
+msgstr "Molimo Vas da dodijelite kraći naziv favorita (može sadržavati najviše 40 znakova)."
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
+msgid "You have to supply a name for the favorite!"
+msgstr "Molimo Vas da odaberete naziv za favorita!"
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:189
+msgid "Title"
+msgstr "Naslov"
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
+msgid "Shared Favorite (visible by all users)"
+msgstr "Spremi Favorite (vidljivi svim korisnicima)"
 
 #: js/widgets/persistentfilter/PickerPanel.js:114
 msgid "My favorites"
@@ -2327,440 +2400,398 @@ msgstr "Spremanje Favorita \"{0}\""
 msgid "(shared)"
 msgstr "(dijeljeno)"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
-msgid "Favorite not Saved"
-msgstr "Favorit nije spremljen"
+#: js/widgets/relation/FilterModel.js:71
+msgid "Defined by ..."
+msgstr "Definiran sa ..."
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
+#: js/widgets/relation/FilterModel.js:114
+msgid "Define ..."
+msgstr "Definiraj ..."
+
+#: js/widgets/relation/GenericPickerGridPanel.js:126
+msgid "Edit record"
+msgstr "Uredi zapis"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:162
+msgid "Sibling"
+msgstr "polu brat"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:163
+msgid "Parent"
+msgstr "Roditelj"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:164
+msgid "Child"
+msgstr "Dijete"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:209
+msgid "Relations failure"
+msgstr "Neuspješna relacija"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:209
+msgid "There are invalid relations. Please check before saving."
+msgstr "Postoje neke krive relacije. Molimo napravite provjeru prije spremanja izmjena."
+
+#: js/widgets/relation/GenericPickerGridPanel.js:252
 msgid ""
-"You have to supply a shorter name! Names of favorite can only be up to 40 "
-"characters long."
-msgstr "Molimo Vas da dodijelite kraći naziv favorita (može sadržavati najviše 40 znakova)."
+"The maximum number of {0} with the type {1} is reached. Please change the "
+"type of this relation"
+msgstr "Pretražen je maksimalan broj {0} sa tipom {1}. Molimo promijenite tip ove relacije."
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
-msgid "You have to supply a name for the favorite!"
-msgstr "Molimo Vas da odaberete naziv za favorita!"
+#: js/widgets/relation/GenericPickerGridPanel.js:426
+msgid "Record"
+msgstr "Zapis"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:189
-msgid "Title"
-msgstr "Naslov"
+#: js/widgets/relation/GenericPickerGridPanel.js:428
+msgid "Remark"
+msgstr "Opaska"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
-msgid "Shared Favorite (visible by all users)"
-msgstr "Spremi Favorite (vidljivi svim korisnicima)"
+#: js/widgets/relation/GenericPickerGridPanel.js:429
+msgid "Dependency"
+msgstr "Zavisnost"
 
-#: js/widgets/CountryCombo.js:34
-msgid "Select a country..."
-msgstr "Odaberite zemlju..."
-
-#: js/widgets/account/PickerGridPanel.js:158
-msgid "Search User"
-msgstr "Traži korisnika"
-
-#: js/widgets/account/PickerGridPanel.js:164
-msgid "Search Group"
-msgstr "Traži grupu"
-
-#: js/widgets/account/PickerGridPanel.js:170
-msgid "Add Anyone"
-msgstr "Dodaj bilo koga"
-
-#: js/widgets/account/PickerGridPanel.js:213
-msgid "Anyone"
-msgstr "Bilo tko"
-
-#: js/widgets/account/PickerGridPanel.js:229
-msgid "Search for users ..."
-msgstr "Traženje korisnika..."
-
-#: js/widgets/account/PickerGridPanel.js:251
-msgid "Search for groups ..."
-msgstr "Traženje grupa..."
-
-#: js/widgets/LangChooser.js:68
-msgid "setting new language..."
-msgstr "postavka novog jezika..."
-
-#: js/widgets/MainScreen.js:264
-msgid "Save current view as favorite"
-msgstr "Pohrani"
-
-#: js/widgets/mainscreen/WestPanel.js:299
-msgid "containers"
-msgstr "spremnici"
-
-#: js/widgets/mainscreen/WestPanel.js:326
-msgid "Favorites"
-msgstr "Favoriti"
-
-#: js/widgets/container/GrantsDialog.js:52
-msgid "Folder"
-msgstr "Mapa"
-
-#: js/widgets/container/GrantsDialog.js:95
-msgid "Updating Grants"
-msgstr "Ažuriranje prava"
-
-#: js/widgets/container/GrantsDialog.js:125
-msgid "Error"
-msgstr "Greška"
-
-#: js/widgets/container/GrantsDialog.js:126
-msgid "You are not allowed to remove all admins for this container!"
-msgstr "Nije Vam dozvoljeno uklanjanje svih admina ovog spremnika!"
-
-#: js/widgets/container/FilterModel.js:142
-msgid "is personal of"
-msgstr "je osobno od"
-
-#: js/widgets/container/ContainerSelect.js:129
-#: js/ux/form/ComboBoxRecentsPlugin.js:43
-msgid "choose other {0}..."
-msgstr "odaberi ostalih {0}..."
-
-#: js/widgets/container/ContainerSelect.js:132
-msgid "Select a {0}"
-msgstr "Odaberi {0}"
-
-#: js/widgets/container/ContainerSelect.js:152
-msgid "Recently used {0}:"
-msgstr "Nedavno korišteni {0}:"
-
-#: js/widgets/container/ContainerSelect.js:478
-msgid "please select a {0}"
-msgstr "molimo odaberite {0}"
-
-#: js/widgets/container/PropertiesDialog.js:90
-msgid "Properties"
-msgstr "Postavke"
-
-#: js/widgets/container/PropertiesDialog.js:119
-msgid "My Grants"
-msgstr "Moja prava"
-
-#: js/widgets/container/TreePanel.js:142
-msgid "container"
-msgid_plural "containers"
-msgstr[0] "spremnik"
-msgstr[1] "spremnika"
-msgstr[2] "spremnika"
-
-#: js/widgets/container/TreePanel.js:546
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr "Nije Vam dozvoljen odabir {0} '{1}':"
-
-#: js/widgets/container/TreePanel.js:547
-msgid "{0} grant is required for desired action"
-msgstr "{0} potrebno je pravo za izvršenje željene akcije"
-
-#: js/widgets/container/TreePanel.js:548
-msgid "Insufficient Grants"
-msgstr "Nedovoljna prava"
-
-#: js/widgets/container/GrantsGrid.js:44
-msgid "The grant to read records of this container"
-msgstr "Pravo za čitanje zapisa ovog spremnika"
-
-#: js/widgets/container/GrantsGrid.js:46
-msgid "The grant to add records to this container"
-msgstr "Pravo za dodavanje zapisa ovom spremniku"
-
-#: js/widgets/container/GrantsGrid.js:48
-msgid "The grant to edit records in this container"
-msgstr "Pravo za uređivanje zapisa ovog spremnika"
-
-#: js/widgets/container/GrantsGrid.js:49
-msgid "Delete"
-msgstr "Briši"
-
-#: js/widgets/container/GrantsGrid.js:50
-msgid "The grant to delete records in this container"
-msgstr "Pravo za brisanje zapisa ovog spremnika"
-
-#: js/widgets/container/GrantsGrid.js:52
-msgid "The grant to export records from this container"
-msgstr "Pravo za izvoz zapisa iz ovog spremnika"
-
-#: js/widgets/container/GrantsGrid.js:53
-msgid "Sync"
-msgstr "Usklađivanje"
-
-#: js/widgets/container/GrantsGrid.js:54
-msgid "The grant to synchronise records with this container"
-msgstr "Pravo za usklađivanje zapisa s ovim spremnikom"
-
-#: js/widgets/container/GrantsGrid.js:55
-msgid "Admin"
-msgstr "Admin"
-
-#: js/widgets/container/GrantsGrid.js:56
-msgid "The grant to administrate this container"
-msgstr "Pravo za administriranje ovog spremnika"
-
-#: js/widgets/container/GrantsGrid.js:58
-msgid "Free Busy"
-msgstr "Bez posla"
-
-#: js/widgets/container/GrantsGrid.js:59
-msgid "The grant to access free busy information of events in this calendar"
-msgstr "Prava za slobodan pristup informacijama o događanjima u tom kalendaru"
-
-#: js/widgets/container/GrantsGrid.js:60
-msgid "Private"
-msgstr "Osobno"
-
-#: js/widgets/container/GrantsGrid.js:61
-msgid "The grant to access records marked as private in this container"
-msgstr "Pravo za pristup privatnim zapisima ovog spremnika"
-
-#: js/widgets/form/ConfigPanel.js:113
-msgid "Configuration Problem"
-msgstr "Konfiguracijski problem"
-
-#: js/widgets/form/ConfigPanel.js:134
-msgid "Invalid configuration"
-msgstr "Neispravna konfiguracija"
-
-#: js/widgets/form/ConfigPanel.js:158
-msgid "Transferring Configuration..."
-msgstr "Prijenos konfiguracije..."
-
-#: js/widgets/form/ConfigPanel.js:254
-msgid "Save config"
-msgstr "Spremanje konfiguracije"
-
-#: js/widgets/form/ConfigPanel.js:264
-msgid "Reload config"
-msgstr "Ponovno učitavanje konfiguracije"
-
-#: js/widgets/form/FileUploadButton.js:65
-msgid "Wrong File Type"
-msgstr "Pogrešna vrsta datoteke"
-
-#: js/widgets/form/FileUploadButton.js:65
-msgid "Please select a file with one of the following extensions:"
-msgstr "Odaberite datoteku s jednim od sljedećih nastavaka:"
-
-#: js/widgets/form/RecordPickerManager.js:48
-#: js/widgets/form/RecordPickerComboBox.js:99
-msgid "Searching..."
-msgstr "Tražim..."
-
-#: js/ExceptionDialog.js:107
-msgid "Send Report"
-msgstr "Pošalji izvještaj"
-
-#: js/ExceptionDialog.js:135
-msgid "The last action you made was potentially not performed correctly."
-msgstr "Vaša posljednja radnja nije pravilno izvršena."
-
-#: js/ExceptionDialog.js:136
+#: js/widgets/relation/GenericPickerGridPanel.js:708
 msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
-msgstr "U cilju poboljšanja aplikacije molimo Vas da nam pošaljete kratak opis radnje koja je dovela do pogreške."
+"The record you tried to link is already linked. Please edit the existing "
+"link."
+msgstr "Zapis koji pokušavate povezati je već povezan. Molimo uredite postojeću poveznicu."
 
-#: js/ExceptionDialog.js:150
-msgid "Send Contact Information"
-msgstr "Pošalji kontakt informacije"
-
-#: js/ExceptionDialog.js:167
-msgid "Details:"
-msgstr "Detalji:"
-
-#: js/ExceptionDialog.js:191
-msgid "Sending report..."
-msgstr "Slanje izvještaja..."
-
-#: js/ExceptionDialog.js:191
-msgid "Please wait a moment"
-msgstr "Molimo pričekajte trenutak"
-
-#: js/ExceptionDialog.js:240
-msgid "Transmission Completed"
-msgstr "Prijenos izvršen"
-
-#: js/ExceptionDialog.js:241
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "Vaš izvještaj je poslan."
-
-#: js/ExceptionDialog.js:241
-msgid "Please restart your browser now!"
-msgstr "Molimo Vas da ponovno pokrenite preglednik!"
-
-#: js/MainScreen.js:202
-msgid "Your password expired. Please enter a new user password:"
-msgstr "Vaša zaporka je istekla. Molimo unesite novu zaporku:"
-
-#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
-msgid "Outdent Text"
-msgstr "Izvuci tekst"
-
-#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
-msgid "Indent Text"
-msgstr "Uvuci tekst"
-
-#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
-msgid "Remove Formatting"
-msgstr "Ukloni formatiranje"
-
-#: js/UserRegistration.js:37
-msgid "Registration Wizard"
-msgstr "Čarobnjak za prijavu"
-
-#: js/UserRegistration.js:90
-msgid "Given name"
-msgstr "Ime"
-
-#: js/UserRegistration.js:101
-msgid "Family name"
-msgstr "Prezime"
-
-#: js/UserRegistration.js:112
-msgid "Login name"
-msgstr "Korisničko ime"
-
-#: js/UserRegistration.js:125
-msgid "Emailaddress"
-msgstr "E-mail adresa"
-
-#: js/UserRegistration.js:171
-msgid "Congratulations!"
-msgstr "Čestitke!"
-
-#: js/UserRegistration.js:171
+#: js/widgets/relation/PickerCombo.js:93
 msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr "Unijeli ste sve potrebne informacije. Klikom na Završi poslat ćemo Vam registracijski e-mail."
+"The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
+"once!"
+msgstr "{1} \"{2}\" se već koristi u Polju \"{0}\" a može biti povezan samo jednom!"
 
-#: js/ux/PopupWindowManager.js:164
-msgid ""
-"The window you want to work with is backgrounded. Your browser doesn't "
-"support to foreground the window for you, so you need to use your operating "
-"systems window switching features. Please send complaints to your browser "
-"vendor!"
-msgstr "Prozor s kojim želite raditi je u pozadini. Vaš preglednik ne podržava da postavi prozor u prvom planu za vas, tako da ćete morati koristiti svoj operacijski sustav i prebaciti se na željeni prozor. Molim prijavite pritužbe proizvođaču preglednika. "
+#: js/widgets/tags/TagCombo.js:46
+msgid "tag name"
+msgstr "naziv oznake"
 
-#: js/ux/Percentage.js:190
-msgid "(paused)"
-msgstr "(pauziran)"
+#: js/widgets/tags/TagsMassAttachAction.js:18
+msgid "Add Tag"
+msgstr "Dodaj oznaku"
 
-#: js/ux/SearchField.js:44
-msgid "enter searchfilter"
-msgstr "unesite pojam za pretragu"
+#: js/widgets/tags/TagsMassAttachAction.js:76
+msgid "Attach the following tag to all selected items:"
+msgstr "Dodijeli oznaku odabranim stavkama:"
 
-#: js/ux/grid/PagingToolbar.js:50
-msgid "{0} selected"
-msgstr "{0} označeno"
+#: js/widgets/tags/TagsMassAttachAction.js:98
+msgid "Select Tag"
+msgstr "Odaberi oznaku"
 
-#: js/ux/grid/PagingToolbar.js:51
-msgid "Unselect all"
-msgstr "Odznači sve"
+#: js/widgets/tags/TagsMassAttachAction.js:128
+msgid "Attaching Tag"
+msgstr "Dodavanje Oznake"
 
-#: js/ux/grid/PagingToolbar.js:52
-msgid "Select all pages ({0} records)"
-msgstr "Označi sve stranice ({0} zapisa)"
+#: js/widgets/tags/TagsMassDetachAction.js:18
+msgid "Detach tag(s)"
+msgstr "Uklanjanje Oznake"
 
-#: js/ux/grid/PagingToolbar.js:53
-msgid "Toggle selection"
-msgstr "Zamijeni odabrano"
+#: js/widgets/tags/TagsMassDetachAction.js:84
+msgid "Select Tag(s) to detach"
+msgstr "Odaberite Oznaku(e) za uklanjanje"
 
-#: js/ux/ConnectionStatus.js:56
-msgid "online"
-msgstr "povezan"
+#: js/widgets/tags/TagsPanel.js:105
+msgid "Add a new personal tag"
+msgstr "Dodaj novu osobnu oznaku"
 
-#: js/ux/ConnectionStatus.js:57
-msgid "offline"
-msgstr "odspojen"
+#: js/widgets/tags/TagsPanel.js:108
+msgid "Add New Personal Tag"
+msgstr "Dodaj novu osobnu oznaku"
 
-#: js/ux/form/RecordsComboBox.js:26
-msgid "Software Version"
-msgstr "Verzija aplikacije"
+#: js/widgets/tags/TagsPanel.js:109
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr "Možete stvoriti osobne oznake koje će biti vidljive samo Vama."
 
-#: js/ux/form/ImageField.js:76
-msgid "Loading"
-msgstr "Učitavanje"
+#: js/widgets/tags/TagsPanel.js:109
+msgid "Enter tag name:"
+msgstr "Unesite naziv oznake:"
 
-#: js/ux/form/ImageField.js:78
-msgid "Click to edit"
-msgstr "Klikni za uređivanje"
+#: js/widgets/tags/TagsPanel.js:150
+msgid "No Tags to display"
+msgstr "Nema oznaka za prikaz"
 
-#: js/ux/form/ImageField.js:146
-msgid "Image Failed"
-msgstr "Neuspješan prikaz slike"
+#: js/widgets/tags/TagsPanel.js:173
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] "Odvoji oznaku"
+msgstr[1] "Odvoji oznake"
+msgstr[2] "Odvoji oznake"
 
-#: js/ux/form/ImageField.js:146
-msgid "Could not load image. Please notify your Administrator"
-msgstr "Nije moguće učitati sliku. Molimo Vas da obavijestite administratora."
+#: js/widgets/tags/TagsPanel.js:183
+msgid "Edit tag"
+msgstr "Uredi oznaku"
 
-#: js/ux/form/ImageField.js:168
-msgid "Not An Image"
-msgstr "Nije slika"
+#: js/widgets/tags/TagsPanel.js:188 js/widgets/tags/TagsPanel.js:193
+msgid "Rename Tag"
+msgstr "Preimenuj oznaku"
 
-#: js/ux/form/ImageField.js:168
-msgid "Please select an image file (gif/png/jpeg)"
-msgstr "Označite datoteku slike (gif/png/jpeg)"
+#: js/widgets/tags/TagsPanel.js:193
+msgid "Please enter a new name:"
+msgstr "Molimo Vas da unesete novi naziv:"
 
-#: js/ux/form/ImageField.js:211
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "Nije moguće prenijeti sliku. Molimo Vas da obavijestite administratora."
+#: js/widgets/tags/TagsPanel.js:202
+msgid "Edit Description"
+msgstr "Uredite opis"
 
-#: js/ux/form/ImageField.js:224
-msgid "Change Image"
-msgstr "Izmijeni sliku"
+#: js/widgets/tags/TagsPanel.js:207
+msgid "Description for tag"
+msgstr "Opis oznake"
 
-#: js/ux/form/ImageField.js:232 js/ux/form/ImageField.js:250
-msgid "Crop Image"
-msgstr "Kadriranje slike"
+#: js/widgets/tags/TagsPanel.js:207
+msgid "Please enter new description:"
+msgstr "Molimo Vas da unesete novi opis:"
 
-#: js/ux/form/ImageField.js:256
-msgid "Delete Image"
-msgstr "Brisanje slike"
+#: js/widgets/tags/TagsPanel.js:216
+msgid "Change Color"
+msgstr "Promijenite boju"
 
-#: js/ux/form/ImageField.js:265
-msgid "Show Original Image"
-msgstr "Prikaži originalnu sliku"
+#: js/widgets/tags/TagsPanel.js:245
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] "Izbrišite oznaku"
+msgstr[1] "Izbrišite oznake"
+msgstr[2] "Izbrišite oznake"
 
-#: js/Models.js:272
-msgid "Alarm"
-msgid_plural "Alarms"
-msgstr[0] "Podsjetnik"
-msgstr[1] "Podsjetnici"
-msgstr[2] "Podsjetnika"
+#: js/widgets/tags/TagsPanel.js:258
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] "Želite li izbrisati odabranu oznaku?"
+msgstr[1] "Želite li izbrisati odabrane oznake?"
+msgstr[2] "Želite li izbrisati odabrane oznake?"
 
-#: js/Models.js:310
-msgid "Import"
-msgid_plural "Imports"
-msgstr[0] "Unos"
-msgstr[1] "Unosa"
-msgstr[2] "Unosa"
+#: js/widgets/tags/TagsPanel.js:259
+msgid "the selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] "Odabrana oznaka će biti izbrisana"
+msgstr[1] "Odabrane oznake će biti izbrisane"
+msgstr[2] "Odabrane oznake će biti izbrisane"
 
-#: js/Models.js:373
-msgid "Credentials"
-msgid_plural "Credentials"
-msgstr[0] "Pravo"
-msgstr[1] "Prava"
-msgstr[2] "Prava"
+#: js/widgets/tags/TagsPanel.js:263
+msgid "Please wait a moment..."
+msgstr "Molimo pričekajte trenutak..."
 
-#: js/Models.js:421
-msgid "Department"
-msgid_plural "Departments"
-msgstr[0] "Odjel"
-msgstr[1] "Odjela"
-msgstr[2] "Odjela"
+#: js/widgets/tags/TagsPanel.js:263
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] "Brisanje oznake"
+msgstr[1] "Brisanje oznaka"
+msgstr[2] "Brisanje oznaka"
 
-#: js/Models.js:447
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] "Postavka"
-msgstr[1] "Postavke"
-msgstr[2] "Postavki"
+#: js/widgets/tags/TagsPanel.js:279
+msgid "Could not delete Tag(s)."
+msgstr "Nije moguće izbrisati Oznaku(e)."
 
-#: js/Models.js:447
-msgid "Configs"
-msgstr "Postavke"
+#: js/widgets/tags/TagsPanel.js:323 js/widgets/tags/TagsPanel.js:385
+msgid "Notice"
+msgstr "Obavijest"
+
+#: js/widgets/tags/TagsPanel.js:324 js/widgets/tags/TagsPanel.js:386
+msgid "The minimum tag length is three."
+msgstr "Naziv oznake treba sadržavati minimalno tri znaka."
+
+#: js/widgets/tags/TagsPanel.js:371
+msgid "Could not create tag."
+msgstr "Nije moguće kreirati oznaku."
+
+#: js/widgets/tags/TagsPanel.js:404
+msgid "Could not update tag."
+msgstr "Nije moguće ažurirati oznaku."
+
+#: js/widgets/tags/TagToggleBox.js:52
+msgid "Detach Tags"
+msgstr "Ukloni Oznake"
+
+#: js/widgets/tags/TagToggleBox.js:52
+msgid "Attach Tags"
+msgstr "Dodaj Oznaku"
+
+#: js/widgets/tags/TagToggleBox.js:140
+msgid "No Tags to detach found in the selected records"
+msgstr "Nema Oznaka za ukloniti u odabranih zapisima."
+
+#: js/widgets/tags/TagToggleBox.js:141
+msgid "Please Wait..."
+msgstr "Molimo pročekajte..."
+
+#: js/widgets/tags/TagToggleBox.js:152
+msgid "Detaching Tags"
+msgstr "Uklanjanje Oznaka"
+
+#: js/widgets/TimezoneChooser.js:37 Preference.php:87
+msgid "Timezone"
+msgstr "Vremenska zona"
+
+#: js/widgets/TimezoneChooser.js:77
+msgid "setting new timezone..."
+msgstr "podešavanje nove vremenske zone..."
+
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:265
+msgid "Rename {0}"
+msgstr "Promjena naziva {0}"
+
+#: js/widgets/tree/ContextMenu.js:61
+msgid "Manage {0} Permissions"
+msgstr "Upravljaj {0} Dozvolama"
+
+#: js/widgets/tree/ContextMenu.js:69
+msgid "{0} Properties"
+msgstr "{0} Postavke"
+
+#: js/widgets/tree/ContextMenu.js:78
+msgid "Set {0} color"
+msgstr "Postavi {0} boju"
+
+#: js/widgets/tree/ContextMenu.js:92
+msgid "Reload {0}"
+msgstr "Ponovno učitavanje {0}"
+
+#: js/widgets/tree/ContextMenu.js:109
+msgid "Edit Properties"
+msgstr "Uredi Postavke"
+
+#: js/widgets/tree/ContextMenu.js:124
+msgid "Download"
+msgstr "Preuzimanje"
+
+#: js/widgets/tree/ContextMenu.js:185
+msgid "New {0}"
+msgstr "Novo {0}"
+
+#: js/widgets/tree/ContextMenu.js:185
+msgid "Please enter the name of the new {0}:"
+msgstr "Molimo Vas da unesete naziv novog {0}:"
+
+#: js/widgets/tree/ContextMenu.js:188
+msgid "No {0} added"
+msgstr "Nema dodanih {0}"
+
+#: js/widgets/tree/ContextMenu.js:188 js/widgets/tree/ContextMenu.js:272
+msgid "You have to supply a {0} name!"
+msgstr "Potrebno dodijeliti {0} naziv!"
+
+#: js/widgets/tree/ContextMenu.js:191
+msgid "Creating {0}..."
+msgstr "Kreiranje {0}..."
+
+#: js/widgets/tree/ContextMenu.js:266
+msgid "Please enter the new name of the {0}:"
+msgstr "Molimo Vas da unesete novo ime za {0}:"
+
+#: js/widgets/tree/ContextMenu.js:272
+msgid "Not renamed {0}"
+msgstr "Nije preimenovano {0}"
+
+#: js/widgets/tree/ContextMenu.js:346
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr "Želite li izbrisati {0} \"{1}\"?"
+
+#: js/widgets/tree/ContextMenu.js:457
+msgid "Manage Permissions for {0} \"{1}\""
+msgstr "Upravljanje Pravima za {0} \"{1}\""
+
+#: js/widgets/tree/ContextMenu.js:481
+msgid "Properties for {0} \"{1}\""
+msgstr "Postavke za {0} \"{1}\""
+
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+msgid "New version of Tine 2.0 available"
+msgstr "Nova verzija CPM 2.0 je dostupna"
+
+#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "Verzija \"{0}\" CPM-a 2.0 je dostupna."
+
+#: js/widgets/VersionCheck.js:46
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "Radi se o nužnom ažuriranju aplikacije koje mora biti izvršeno što prije."
+
+#: js/widgets/VersionCheck.js:55
+msgid "Please consider updating!"
+msgstr "Molimo Vas da ažurirate aplikaciju."
+
+#: Notes.php:369
+msgid "by"
+msgstr "od"
+
+#: Notes.php:378
+msgid "Changed fields:"
+msgstr "Izmijenjena polja:"
+
+#: Preference/Abstract.php:502
+msgid "default"
+msgstr "zadana vrijednost"
+
+#: Preference.php:88
+msgid "The timezone in which dates are shown in Tine 2.0."
+msgstr "Vremenska zona postavljena za CPM 2.0."
+
+#: Preference.php:92
+msgid "The language of the Tine 2.0 GUI."
+msgstr "Jezik postavljen za CPM 2.0."
+
+#: Preference.php:95
+msgid "Default Application"
+msgstr "Početna aplikacija"
+
+#: Preference.php:96
+msgid "The default application to show after login."
+msgstr "Početna aplikacija za prikaz nakon prijave."
+
+#: Preference.php:99
+msgid "Window Type"
+msgstr "Tip prozora"
+
+#: Preference.php:100
+msgid "You can choose between modal windows or normal browser popup windows."
+msgstr "Možete birati između modalnih prozora ili normalnih popup prozora."
+
+#: Preference.php:103
+msgid "Confirm Logout"
+msgstr "Potvrda odjave"
+
+#: Preference.php:104
+msgid "Show confirmation dialog on logout."
+msgstr "Prikaži dijalog potvrde prilikom odjave."
+
+#: Setup/setup.xml:3203
+msgid "note"
+msgstr "bilješka"
+
+#: Setup/setup.xml:3208
+msgid "default note type"
+msgstr "standardni tip bilješke"
+
+#: Setup/setup.xml:3234
+msgid "telephone"
+msgstr "telefon"
+
+#: Setup/setup.xml:3239
+msgid "telephone call"
+msgstr "telefonski poziv"
+
+#: Setup/setup.xml:3265
+msgid "email"
+msgstr "e-mail"
+
+#: Setup/setup.xml:3270
+msgid "email contact"
+msgstr "e-mail kontakt"
+
+#: Setup/setup.xml:3296
+msgid "created"
+msgstr "kreirano"
+
+#: Setup/setup.xml:3301
+msgid "record created"
+msgstr "kreirani zapis"
+
+#: Setup/setup.xml:3327
+msgid "changed"
+msgstr "izmijenjen"
+
+#: Setup/setup.xml:3332
+msgid "record changed"
+msgstr "izmijenjeni zapis"
 
 #: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."
@@ -2769,14 +2800,3 @@ msgstr "CPM 2.0 potrebno je nadograditi ili nije još instaliran."
 #: views/update.php:25
 msgid "Please wait or contact your administrator"
 msgstr "Molimo pričekajte ili kontaktirajte administratora"
-
-#: Container.php:684
-#, python-format
-msgid "%s's personal container"
-msgstr "%s osobni kontejner"
-
-#: Container.php:1525
-msgid ""
-"You are not allowed to delete this Container. Please define another "
-"container as the default addressbook for internal contacts!"
-msgstr "Nemate prava obrisati ovaj Spremnik. Molimo odredite drugi spremnik kao zadani spremnik za spremanje internih kontakata u adresar!"

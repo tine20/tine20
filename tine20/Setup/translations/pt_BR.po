@@ -18,6 +18,66 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Nome"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Permitido"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Ordenar"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Versão Instalada"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Versão Disponível"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Situação"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Depende de"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Instalar aplicação"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Desinstalar aplicação"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Atualizar aplicação"
+
+#: js/ApplicationGridPanel.js:105
+msgid "Go to {0} login"
+msgstr "Ir para {0} entrar"
+
+#: js/ApplicationGridPanel.js:175
+msgid "uninstall"
+msgstr "desinstalar"
+
+#: js/ApplicationGridPanel.js:175
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Você quer realmente desinstalar a aplicação(ões)?"
+
+#: js/ApplicationGridPanel.js:235
+msgid "This may take a while"
+msgstr "Isso pode demorar um pouco"
+
+#: js/ApplicationGridPanel.js:267
+msgid "Dependency Violation"
+msgstr "Violação de Dependência1"
+
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
 msgstr "Apague todos os usuários e grupos que existam"
@@ -30,9 +90,9 @@ msgid ""
 msgstr "Alterando de SQL para LDAP todos as Contas de Usuários, Grupos e Funções serão apagadas. Você quer realmente trocar a copnta de armazenamento para LDAP ?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
-#: js/EmailPanel.js:146 js/ConfigManagerPanel.js:147
-#: js/ConfigManagerPanel.js:159 js/ConfigManagerPanel.js:171
-#: js/ConfigManagerPanel.js:183
+#: js/ConfigManagerPanel.js:147 js/ConfigManagerPanel.js:159
+#: js/ConfigManagerPanel.js:171 js/ConfigManagerPanel.js:183
+#: js/EmailPanel.js:146
 msgid "Backend"
 msgstr "Retaguarda"
 
@@ -98,10 +158,10 @@ msgid "Host"
 msgstr "Hospedeiro"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
-#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 #: js/ConfigManagerPanel.js:234 js/ConfigManagerPanel.js:321
 #: js/ConfigManagerPanel.js:341 js/ConfigManagerPanel.js:382
-#: js/ConfigManagerPanel.js:441
+#: js/ConfigManagerPanel.js:441 js/EmailPanel.js:195 js/EmailPanel.js:290
+#: js/EmailPanel.js:394
 msgid "Port"
 msgstr "Porta"
 
@@ -110,8 +170,8 @@ msgid "Login name"
 msgstr "Nome de entrada"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
-#: js/EmailPanel.js:190 js/ConfigManagerPanel.js:214
-#: js/ConfigManagerPanel.js:245
+#: js/ConfigManagerPanel.js:214 js/ConfigManagerPanel.js:245
+#: js/EmailPanel.js:190
 msgid "Password"
 msgstr "Senha"
 
@@ -127,10 +187,10 @@ msgstr "Base DN"
 msgid "Search filter"
 msgstr "Filtro de pesquisa"
 
-#: js/AuthenticationPanel.js:363 js/EmailPanel.js:182 js/EmailPanel.js:286
-#: js/EmailPanel.js:390 js/ConfigManagerPanel.js:229
+#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:229
 #: js/ConfigManagerPanel.js:317 js/ConfigManagerPanel.js:337
 #: js/ConfigManagerPanel.js:378 js/ConfigManagerPanel.js:437
+#: js/EmailPanel.js:182 js/EmailPanel.js:286 js/EmailPanel.js:390
 msgid "Hostname"
 msgstr "Servidor"
 
@@ -304,115 +364,101 @@ msgstr "Senhas são diferentes"
 msgid "Should not be empty"
 msgstr "Não deveria estar vazio"
 
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "Eu li o contrato de licenciamento e aceito"
+#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
+msgid "File"
+msgstr "Arquivo"
 
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Contrato de Licenciamento"
+#: js/ConfigManagerPanel.js:198
+msgid "Setup Authentication"
+msgstr "Autenticação da Configuração"
 
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "Eu li o acordo de privacidade e aceito"
+#: js/ConfigManagerPanel.js:205 js/EmailPanel.js:186
+msgid "Username"
+msgstr "Nome do usuário"
 
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Acordo de Privacidade"
+#: js/ConfigManagerPanel.js:219 js/ConfigManagerPanel.js:237
+msgid "Database"
+msgstr "Banco de dados"
 
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Aceitar Termos e Condições"
+#: js/ConfigManagerPanel.js:241
+msgid "User"
+msgstr "Usuário"
 
-#: js/Setup.js:53
-msgid "Terms and Conditions"
-msgstr "Termos e Condições"
+#: js/ConfigManagerPanel.js:249
+msgid "Prefix"
+msgstr "Prefixo"
 
-#: js/Setup.js:58
-msgid "Setup Checks"
-msgstr "Verificações de Configuração"
+#: js/ConfigManagerPanel.js:253
+msgid "Logging"
+msgstr "Entrando"
 
-#: js/Setup.js:64
-msgid "Config Manager"
-msgstr "Gerenciador de Configuração"
+#: js/ConfigManagerPanel.js:263
+msgid "Filename"
+msgstr "Nome do arquivo"
 
-#: js/Setup.js:70
-msgid "Authentication/Accounts"
-msgstr "Autenticação/Contas"
+#: js/ConfigManagerPanel.js:266
+msgid "Priority"
+msgstr "Prioridade"
 
-#: js/Setup.js:76
-msgid "Email"
-msgstr "Email"
+#: js/ConfigManagerPanel.js:270
+msgid "Caching"
+msgstr "Colocando na memória"
 
-#: js/Setup.js:82
-msgid "Application Manager"
-msgstr "Gerenciador de Aplicação"
+#: js/ConfigManagerPanel.js:281 js/ConfigManagerPanel.js:398
+msgid "Lifetime (seconds)"
+msgstr "Ciclo de vida (segundos)"
 
-#: js/Setup.js:185
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Aplicação"
-msgstr[1] "Aplicações"
+#: js/ConfigManagerPanel.js:304 js/ConfigManagerPanel.js:423
+msgid "Path"
+msgstr "Caminho"
 
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "Nome"
+#: js/ConfigManagerPanel.js:349
+msgid "Queue"
+msgstr "Fila"
 
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr "Permitido"
+#: js/ConfigManagerPanel.js:390
+msgid "Session"
+msgstr "Sessão"
 
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "Ordenar"
+#: js/ConfigManagerPanel.js:449
+msgid "Temporary files"
+msgstr "Arquivos temporários"
 
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "Versão Instalada"
+#: js/ConfigManagerPanel.js:457
+msgid "Temporary Files Path"
+msgstr "Caminho dos Arquivos Temporários"
 
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "Versão Disponível"
+#: js/ConfigManagerPanel.js:462
+msgid "Filestore directory"
+msgstr "Diretório de armazenamento de arquivos"
 
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "Situação"
+#: js/ConfigManagerPanel.js:470
+msgid "Filestore Path"
+msgstr "Caminho do armazenamento de arquivos"
 
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "Depende de"
+#: js/ConfigManagerPanel.js:475
+msgid "Addressbook Map panel"
+msgstr "Catálogo de endereços do Painel Map"
 
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr "Instalar aplicação"
+#: js/ConfigManagerPanel.js:483
+msgid "Map panel"
+msgstr "Painel Map"
 
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "Desinstalar aplicação"
+#: js/ConfigManagerPanel.js:485
+msgid "disabled"
+msgstr "inválido"
 
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Atualizar aplicação"
+#: js/ConfigManagerPanel.js:485
+msgid "enabled"
+msgstr "permitido"
 
-#: js/ApplicationGridPanel.js:105
-msgid "Go to {0} login"
-msgstr "Ir para {0} entrar"
+#: js/ConfigManagerPanel.js:497
+msgid "Config file is not writable"
+msgstr "Arquivo de configuração somente para leitura"
 
-#: js/ApplicationGridPanel.js:175
-msgid "uninstall"
-msgstr "desinstalar"
-
-#: js/ApplicationGridPanel.js:175
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Você quer realmente desinstalar a aplicação(ões)?"
-
-#: js/ApplicationGridPanel.js:235
-msgid "This may take a while"
-msgstr "Isso pode demorar um pouco"
-
-#: js/ApplicationGridPanel.js:267
-msgid "Dependency Violation"
-msgstr "Violação de Dependência1"
+#: js/ConfigManagerPanel.js:516
+msgid "Download config file"
+msgstr "Baixando arquivo de configuração"
 
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
@@ -425,10 +471,6 @@ msgstr "SMTP Básico"
 #: js/EmailPanel.js:174
 msgid "Imap"
 msgstr "IMAP"
-
-#: js/EmailPanel.js:186 js/ConfigManagerPanel.js:205
-msgid "Username"
-msgstr "Nome do usuário"
 
 #: js/EmailPanel.js:206
 msgid "Use system account"
@@ -584,94 +626,52 @@ msgstr "Executar testes de configurações"
 msgid "Ignore setup tests"
 msgstr "Ignorar testes de configurações"
 
-#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
-msgid "File"
-msgstr "Arquivo"
+#: js/Setup.js:53
+msgid "Terms and Conditions"
+msgstr "Termos e Condições"
 
-#: js/ConfigManagerPanel.js:198
-msgid "Setup Authentication"
-msgstr "Autenticação da Configuração"
+#: js/Setup.js:58
+msgid "Setup Checks"
+msgstr "Verificações de Configuração"
 
-#: js/ConfigManagerPanel.js:219 js/ConfigManagerPanel.js:237
-msgid "Database"
-msgstr "Banco de dados"
+#: js/Setup.js:64
+msgid "Config Manager"
+msgstr "Gerenciador de Configuração"
 
-#: js/ConfigManagerPanel.js:241
-msgid "User"
-msgstr "Usuário"
+#: js/Setup.js:70
+msgid "Authentication/Accounts"
+msgstr "Autenticação/Contas"
 
-#: js/ConfigManagerPanel.js:249
-msgid "Prefix"
-msgstr "Prefixo"
+#: js/Setup.js:76
+msgid "Email"
+msgstr "Email"
 
-#: js/ConfigManagerPanel.js:253
-msgid "Logging"
-msgstr "Entrando"
+#: js/Setup.js:82
+msgid "Application Manager"
+msgstr "Gerenciador de Aplicação"
 
-#: js/ConfigManagerPanel.js:263
-msgid "Filename"
-msgstr "Nome do arquivo"
+#: js/Setup.js:185
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Aplicação"
+msgstr[1] "Aplicações"
 
-#: js/ConfigManagerPanel.js:266
-msgid "Priority"
-msgstr "Prioridade"
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "Eu li o contrato de licenciamento e aceito"
 
-#: js/ConfigManagerPanel.js:270
-msgid "Caching"
-msgstr "Colocando na memória"
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Contrato de Licenciamento"
 
-#: js/ConfigManagerPanel.js:281 js/ConfigManagerPanel.js:398
-msgid "Lifetime (seconds)"
-msgstr "Ciclo de vida (segundos)"
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "Eu li o acordo de privacidade e aceito"
 
-#: js/ConfigManagerPanel.js:304 js/ConfigManagerPanel.js:423
-msgid "Path"
-msgstr "Caminho"
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Acordo de Privacidade"
 
-#: js/ConfigManagerPanel.js:349
-msgid "Queue"
-msgstr "Fila"
-
-#: js/ConfigManagerPanel.js:390
-msgid "Session"
-msgstr "Sessão"
-
-#: js/ConfigManagerPanel.js:449
-msgid "Temporary files"
-msgstr "Arquivos temporários"
-
-#: js/ConfigManagerPanel.js:457
-msgid "Temporary Files Path"
-msgstr "Caminho dos Arquivos Temporários"
-
-#: js/ConfigManagerPanel.js:462
-msgid "Filestore directory"
-msgstr "Diretório de armazenamento de arquivos"
-
-#: js/ConfigManagerPanel.js:470
-msgid "Filestore Path"
-msgstr "Caminho do armazenamento de arquivos"
-
-#: js/ConfigManagerPanel.js:475
-msgid "Addressbook Map panel"
-msgstr "Catálogo de endereços do Painel Map"
-
-#: js/ConfigManagerPanel.js:483
-msgid "Map panel"
-msgstr "Painel Map"
-
-#: js/ConfigManagerPanel.js:485
-msgid "disabled"
-msgstr "inválido"
-
-#: js/ConfigManagerPanel.js:485
-msgid "enabled"
-msgstr "permitido"
-
-#: js/ConfigManagerPanel.js:497
-msgid "Config file is not writable"
-msgstr "Arquivo de configuração somente para leitura"
-
-#: js/ConfigManagerPanel.js:516
-msgid "Download config file"
-msgstr "Baixando arquivo de configuração"
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Aceitar Termos e Condições"
