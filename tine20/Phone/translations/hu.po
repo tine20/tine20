@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 13:55+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,6 +15,158 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Model/Call.php:43
+msgid "Call"
+msgstr ""
+
+#: Model/Call.php:44
+msgid "Calls"
+msgstr ""
+
+#: Model/Call.php:60 js/DialerPanel.js:76
+msgid "Line"
+msgstr "Vonal"
+
+#: Model/Call.php:70 Model/MyPhone.php:32 js/DialerPanel.js:53
+msgid "Phone"
+msgstr "Telefonok"
+
+#: Model/Call.php:80
+msgid "Caller Id"
+msgstr "Hívó azonosító"
+
+#: Model/Call.php:86
+msgid "Start"
+msgstr "Kezdés"
+
+#: Model/Call.php:91
+msgid "Connected"
+msgstr "Kapcsolódva"
+
+#: Model/Call.php:95
+msgid "Disconnected"
+msgstr "Kapcsolat bontva"
+
+#: Model/Call.php:100
+msgid "Duration"
+msgstr "Időtartam"
+
+#: Model/Call.php:106
+msgid "Ringing"
+msgstr "Csörgés"
+
+#: Model/Call.php:112
+msgid "Direction"
+msgstr "Irány"
+
+#: Model/Call.php:115
+msgid "Source"
+msgstr "Forrás"
+
+#: Model/Call.php:120
+msgid "Destination"
+msgstr "Cél"
+
+#: Model/MyPhone.php:33 js/CallGridPanel.js:167
+msgid "Phones"
+msgstr "Telefonok"
+
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr ""
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr ""
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr ""
+
+#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
+msgid "Calls this week"
+msgstr ""
+
+#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
+msgid "Calls last week"
+msgstr ""
+
+#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
+msgid "Calls this month"
+msgstr ""
+
+#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
+msgid "Calls last month"
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr ""
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr ""
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr ""
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr ""
+
+#: js/DialerPanel.js:85
+msgid "Number"
+msgstr "Szám"
+
+#: js/DialerPanel.js:94
+msgid "Cancel"
+msgstr "Mégse"
+
+#: js/DialerPanel.js:104
+msgid "Dial"
+msgstr "Tárcsázás"
+
+#: js/DialerPanel.js:124
+msgid "Error"
+msgstr "Hiba"
+
+#: js/DialerPanel.js:125
+msgid "Not possible to dial."
+msgstr "Nem lehetséges tárcsázni."
+
+#: js/CallGridPanel.js:54
+msgid "Edit phone settings"
+msgstr "Telefon beállítások szerkesztése"
+
+#: js/CallGridPanel.js:68
+msgid "Dial number"
+msgstr "Szám tárcsázása"
+
+#: js/CallGridPanel.js:69
+msgid "Initiate a new outgoing call"
+msgstr "Új kimenő hívás letesítése"
+
+#: js/CallGridPanel.js:216
+msgid "No phone selected"
+msgstr ""
+
+#: js/CallGridPanel.js:217
+msgid "Please select the desired phone in the tree!"
+msgstr ""
+
+#: js/Phone.js:100
+msgid "Incoming call"
+msgstr "Bejövő hívás"
+
+#: js/Phone.js:104
+msgid "Outgoing call"
+msgstr "Kimenő hívás"
+
+#: js/Phone.js:112
+msgid "unknown number"
+msgstr "ismeretlen szám"
 
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
@@ -35,123 +187,3 @@ msgstr "Mobil"
 #: js/AddressbookGridPanelHook.js:198
 msgid "Cell private"
 msgstr "Mobil privát"
-
-#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] "Telefon"
-msgstr[1] "Telefonok"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "telefon lista"
-msgstr[1] "telefon listák"
-
-#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
-msgid "Edit phone settings"
-msgstr "Telefon beállítások szerkesztése"
-
-#: js/Phone.js:70
-msgid "Phones"
-msgstr "Telefonok"
-
-#: js/Phone.js:288
-msgid "Line"
-msgstr "Vonal"
-
-#: js/Phone.js:297
-msgid "Number"
-msgstr "Szám"
-
-#: js/Phone.js:306
-msgid "Cancel"
-msgstr "Mégse"
-
-#: js/Phone.js:316
-msgid "Dial"
-msgstr "Tárcsázás"
-
-#: js/Phone.js:336
-msgid "Error"
-msgstr "Hiba"
-
-#: js/Phone.js:337
-msgid "Not possible to dial."
-msgstr "Nem lehetséges tárcsázni."
-
-#: js/Phone.js:483
-msgid "Dial number"
-msgstr "Szám tárcsázása"
-
-#: js/Phone.js:484
-msgid "Initiate a new outgoing call"
-msgstr "Új kimenő hívás letesítése"
-
-#: js/Phone.js:550
-msgid "Incoming call"
-msgstr "Bejövő hívás"
-
-#: js/Phone.js:554
-msgid "Outgoing call"
-msgstr "Kimenő hívás"
-
-#: js/Phone.js:562
-msgid "unknown number"
-msgstr "ismeretlen szám"
-
-#: js/Phone.js:599
-msgid "Search:"
-msgstr "Keresés:"
-
-#: js/Phone.js:684
-msgid "Source or Destination"
-msgstr "Forrás vagy Cél"
-
-#: js/Phone.js:700
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Hívások megjelenítése {0} - {1} / {2}"
-
-#: js/Phone.js:701 js/Phone.js:744
-msgid "No calls to display"
-msgstr "Nincs megjeleníthető hívás"
-
-#: js/Phone.js:711
-msgid "Direction"
-msgstr "Irány"
-
-#: js/Phone.js:712
-msgid "Source"
-msgstr "Forrás"
-
-#: js/Phone.js:713
-msgid "Caller Id"
-msgstr "Hívó azonosító"
-
-#: js/Phone.js:714
-msgid "Destination"
-msgstr "Cél"
-
-#: js/Phone.js:715
-msgid "Start"
-msgstr "Kezdés"
-
-#: js/Phone.js:716
-msgid "Connected"
-msgstr "Kapcsolódva"
-
-#: js/Phone.js:717
-msgid "Disconnected"
-msgstr "Kapcsolat bontva"
-
-#: js/Phone.js:718
-msgid "Duration"
-msgstr "Időtartam"
-
-#: js/Phone.js:719
-msgid "Ringing"
-msgstr "Csörgés"
-
-#: js/Phone.js:720
-msgid "Call ID"
-msgstr "Hívás azonosító"

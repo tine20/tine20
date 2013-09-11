@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-11 18:40+0000\n"
-"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
+"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,13 +17,80 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:31
+#: Config.php:52
 msgid "Default policy for new devices"
 msgstr "Domyślna polityka dla nowych urządzeń"
 
-#: Config.php:33
+#: Config.php:54
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Wpisz id polityki, aby przypisać ją do nowo dodanych urządzeń."
+
+#: Config.php:62
+msgid "Disable Access Log"
+msgstr ""
+
+#: Config.php:64
+msgid "Disable ActiveSync Access Log creation."
+msgstr ""
+
+#: Config.php:73
+msgid "Filter timeslot for emails"
+msgstr ""
+
+#: Config.php:75
+msgid "For how long in the past the emails should be synchronized."
+msgstr ""
+
+#: Config.php:96
+msgid "Filter timeslot for events"
+msgstr ""
+
+#: Config.php:98
+msgid "For how long in the past the events should be synchronized."
+msgstr ""
+
+#: Setup/setup.xml:546 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Domyślna polityka"
+
+#: Setup/setup.xml:551 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Domyślna polityka określona podczas definiowania ustawień"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Domyślna książka adresowa"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Domyślna książka adresowa z nowymi kontaktami"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Domyślny kalendarz"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Domyślny kalendarz z nowymi terminami"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Domyślna lista zadań"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Domyślna lista dla nowo tworzonych zadań"
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Urządzenie"
+msgstr[1] "urządzenia"
+msgstr[2] "urządzenia"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Urządzenia"
 
 #: js/Application.js:27
 msgid "Active Sync"
@@ -56,46 +123,3 @@ msgstr "zresetowane"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Ustaw filtr synchronizacji"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Urządzenie"
-msgstr[1] "urządzenia"
-msgstr[2] "urządzenia"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Urządzenia"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Domyślna książka adresowa"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Domyślna książka adresowa z nowymi kontaktami"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Domyślny kalendarz"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Domyślny kalendarz z nowymi terminami"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Domyślna lista zadań"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Domyślna lista dla nowo tworzonych zadań"
-
-#: Setup/setup.xml:542 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Domyślna polityka"
-
-#: Setup/setup.xml:547 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Domyślna polityka określona podczas definiowania ustawień"

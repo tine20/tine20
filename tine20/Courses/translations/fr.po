@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-06-21 10:05+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Add existing user as member to a course"
 msgstr ""
 
-#: Config.php:82 js/CourseEditDialog.js:227 js/Models.js:72
+#: Config.php:82 js/CourseEditDialog.js:230 js/Models.js:74
 msgid "Internet Access"
 msgstr ""
 
@@ -74,22 +74,75 @@ msgstr ""
 msgid "Samba user settings"
 msgstr ""
 
-#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr ""
+
+#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
+#: Preference.php:60
+msgid "All courses"
+msgstr ""
+
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr ""
+
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr ""
+
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
+
+#: js/CourseEditDialog.js:33
+msgid "Import course members"
+msgstr ""
+
+#: js/CourseEditDialog.js:42
+msgid "Add new member"
+msgstr ""
+
+#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
+#: js/CourseEditDialog.js:206
+msgid "Course Name"
 msgstr ""
 
-#: Controller/Course.php:257
-msgid "Teacher Account"
+#: js/CourseEditDialog.js:213
+msgid "Course / School Type"
 msgstr ""
 
-#: Controller/Course.php:317
-msgid "My course"
+#: js/CourseEditDialog.js:224
+msgid "Description"
+msgstr ""
+
+#: js/CourseEditDialog.js:240
+msgid "Fileserver Access"
+msgstr ""
+
+#: js/CourseEditDialog.js:272
+msgid "Members"
+msgstr ""
+
+#: js/CourseEditDialog.js:299
+msgid "Login"
+msgstr ""
+
+#: js/CourseEditDialog.js:303
+msgid "unknown"
+msgstr ""
+
+#: js/CourseEditDialog.js:308
+msgid "Reset Password"
 msgstr ""
 
 #: js/AddMemberDialog.js:63
@@ -112,99 +165,46 @@ msgstr ""
 msgid "Please fix the errors noted."
 msgstr ""
 
-#: js/CourseEditDialog.js:33
-msgid "Import course members"
-msgstr ""
-
-#: js/CourseEditDialog.js:42
-msgid "Add new member"
-msgstr ""
-
-#: js/CourseEditDialog.js:203
-msgid "Course Name"
-msgstr ""
-
-#: js/CourseEditDialog.js:210
-msgid "Course / School Type"
-msgstr ""
-
-#: js/CourseEditDialog.js:221
-msgid "Description"
-msgstr ""
-
-#: js/CourseEditDialog.js:237
-msgid "Fileserver Access"
-msgstr ""
-
-#: js/CourseEditDialog.js:269
-msgid "Members"
-msgstr ""
-
-#: js/CourseEditDialog.js:296
-msgid "Login"
-msgstr ""
-
-#: js/CourseEditDialog.js:300
-msgid "unknown"
-msgstr ""
-
-#: js/CourseEditDialog.js:305
-msgid "Reset Password"
-msgstr ""
-
-#: js/CourseGridPanel.js:48 js/Models.js:70
+#: js/CourseGridPanel.js:44 js/Models.js:72
 msgid "Name"
 msgstr ""
 
-#: js/CourseGridPanel.js:54
+#: js/CourseGridPanel.js:50
 msgid "Type"
 msgstr ""
 
-#: js/CourseGridPanel.js:99
+#: js/CourseGridPanel.js:95
 msgid "Failed"
 msgstr ""
 
-#: js/CourseGridPanel.js:100
+#: js/CourseGridPanel.js:96
 msgid "Some error occured while trying to update the courses."
 msgstr ""
 
-#: js/Models.js:45
+#: js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:69
-msgid "Quick search"
+#: js/Models.js:71
+msgid "Quick Search"
 msgstr ""
 
-#: js/Models.js:107
+#: js/Models.js:109
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
 msgstr ""
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
+#: Controller/Course.php:257
+msgid "Teacher Account"
 msgstr ""
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr ""
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr ""
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Courses"
+#: Controller/Course.php:317
+msgid "My course"
 msgstr ""

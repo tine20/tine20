@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 08:56+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Slovak (http://www.transifex.com/projects/p/tine20/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,12 +16,79 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:31
+#: Config.php:52
 msgid "Default policy for new devices"
 msgstr ""
 
-#: Config.php:33
+#: Config.php:54
 msgid "Enter the id of the policy to apply to newly created devices."
+msgstr ""
+
+#: Config.php:62
+msgid "Disable Access Log"
+msgstr ""
+
+#: Config.php:64
+msgid "Disable ActiveSync Access Log creation."
+msgstr ""
+
+#: Config.php:73
+msgid "Filter timeslot for emails"
+msgstr ""
+
+#: Config.php:75
+msgid "For how long in the past the emails should be synchronized."
+msgstr ""
+
+#: Config.php:96
+msgid "Filter timeslot for events"
+msgstr ""
+
+#: Config.php:98
+msgid "For how long in the past the events should be synchronized."
+msgstr ""
+
+#: Setup/setup.xml:546 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr ""
+
+#: Setup/setup.xml:551 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr ""
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr ""
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr ""
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr ""
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr ""
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr ""
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr ""
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:42
+msgid "Devices"
 msgstr ""
 
 #: js/Application.js:27
@@ -54,47 +121,4 @@ msgstr ""
 
 #: js/Application.js:102
 msgid "Set Sync Filter"
-msgstr ""
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr ""
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr ""
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr ""
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr ""
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr ""
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr ""
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr ""
-
-#: Setup/setup.xml:542 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr ""
-
-#: Setup/setup.xml:547 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
 msgstr ""

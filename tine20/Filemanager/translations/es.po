@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-07-02 16:40+0000\n"
-"Last-Translator: munta <munta@muntane.es>\n"
+"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/tine20/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,64 +17,85 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:97
+#: Acl/Rights.php:105
 msgid "manage shared folders"
 msgstr "gestionar carpetas compartidas"
 
-#: Acl/Rights.php:98
+#: Acl/Rights.php:106
 msgid "Create new shared folders"
 msgstr "Crear nueva carpeta compartida"
 
-#: Controller/Node.php:318
-msgid "My folders"
-msgstr "Mis carpetas"
+#: Acl/Rights.php:109
+msgid "manage module"
+msgstr ""
 
-#: Controller/Node.php:325
-msgid "Shared folders"
-msgstr "Carpetas compartidas"
+#: Acl/Rights.php:110
+msgid "show module main screen"
+msgstr ""
 
-#: Controller/Node.php:332
-msgid "Other users folders"
-msgstr "Otras carpetas de usuarios"
-
-#: Controller.php:100
+#: Controller.php:102
 #, python-format
 msgid "%s's personal files"
 msgstr "%s's ficheros personales"
 
-#: js/Filemanager.js:26
-msgid "Filemanager"
-msgstr "Gestor de archivos"
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "Ruta"
 
-#: js/Filemanager.js:34 js/NodeEditDialog.js:44 js/NodeGridPanel.js:344
+#: js/NodeEditDialog.js:44 js/Filemanager.js:44 js/NodeGridPanel.js:346
 msgid "Save locally"
 msgstr "Guardar localmente"
 
-#: js/Filemanager.js:81
-msgid "Service Unavailable"
-msgstr "Servicio no disponible"
+#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
+msgid "Node"
+msgstr "Nodo"
 
-#: js/Filemanager.js:82
+#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:135
+msgid "Name"
+msgstr "Nombre"
+
+#: js/NodeEditDialog.js:121 js/Model.js:530
+msgid "Type"
+msgstr "Tipo"
+
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:189
+msgid "Created By"
+msgstr "Creado por"
+
+#: js/NodeEditDialog.js:132 js/Model.js:532 js/NodeGridPanel.js:181
+msgid "Creation Time"
+msgstr "Fecha de Creación"
+
+#: js/NodeEditDialog.js:141
+msgid "Modified By"
+msgstr "Modificado por"
+
+#: js/NodeEditDialog.js:144
+msgid "Last Modified"
+msgstr "Última modificación"
+
+#: js/NodeEditDialog.js:167
+msgid "Description"
+msgstr "Descripción"
+
+#: js/NodeEditDialog.js:181
+msgid "Enter description"
+msgstr "Introducir descripción"
+
+#: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:653
+#: js/NodeGridPanel.js:805
+msgid "Upload Failed"
+msgstr "Carga Fallida"
+
+#: js/NodeTreePanel.js:661 js/NodeGridPanel.js:654
 msgid ""
-"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
-" Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "El gestor de archivos no está configurado correctamente. Por favor, consulte el {0} Tine 2.0 Administrador FAQ {1} para obtener consejo de configuración o póngase en contacto con su administrador."
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr "No se pudo cargar el archivo. El tamaño podría ser demasiado grande. Por favor notifique a su administrador. Tamaño máximo de subida:"
 
-#: js/Filemanager.js:104
-msgid "Files already exists"
-msgstr "Los archivos ya existen"
-
-#: js/Filemanager.js:104
-msgid "Do you want to replace the following file(s)?"
-msgstr "¿Realmente desea reemplazarlo(s)?"
-
-#: js/Filemanager.js:137
-msgid "Failure on create folder"
-msgstr "Fallo al crear carpeta"
-
-#: js/Filemanager.js:138
-msgid "Item with this name already exists!"
-msgstr "Existe un item con el mismo nombre!"
+#: js/NodeTreePanel.js:771 js/NodeGridPanel.js:806
+msgid "Putting files in this folder is not allowed!"
+msgstr "No está permitido poner archivos en esta carpeta!"
 
 #: js/GridContextMenu.js:34
 msgid "Please enter the new name of the {0}:"
@@ -84,11 +105,11 @@ msgstr "Por favor introduce un nuevo nombre para {0}:"
 msgid "Not renamed {0}"
 msgstr "{0} no renombrado"
 
-#: js/GridContextMenu.js:40 js/NodeGridPanel.js:503
+#: js/GridContextMenu.js:40 js/NodeGridPanel.js:505
 msgid "You have to supply a {0} name!"
 msgstr "¡Ud. debe ingresar {0} nombre!"
 
-#: js/GridContextMenu.js:144 js/NodeGridPanel.js:544
+#: js/GridContextMenu.js:144 js/NodeGridPanel.js:546
 msgid "Do you really want to delete the following files?"
 msgstr "¿Realmente desea borrar los archivos seleccionados?"
 
@@ -98,7 +119,7 @@ msgid_plural "Files"
 msgstr[0] "Fichero"
 msgstr[1] "Ficheros"
 
-#: js/Model.js:43 js/NodeGridPanel.js:155
+#: js/Model.js:43 js/NodeGridPanel.js:157
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Carpeta"
@@ -117,120 +138,107 @@ msgid "Please wait"
 msgstr "Por favor espere"
 
 #: js/Model.js:529
-msgid "Quick search"
-msgstr "Búsqueda Rápida"
+msgid "Quick Search"
+msgstr ""
 
-#: js/Model.js:530 js/NodeEditDialog.js:121
-msgid "Type"
-msgstr "Tipo"
-
-#: js/Model.js:531 js/NodeGridPanel.js:147
+#: js/Model.js:531 js/NodeGridPanel.js:149
 msgid "Contenttype"
 msgstr "Tipo de contenido"
 
-#: js/Model.js:532 js/NodeEditDialog.js:132 js/NodeGridPanel.js:179
-msgid "Creation Time"
-msgstr "Fecha de Creación"
+#: js/Filemanager.js:36
+msgid "Filemanager"
+msgstr "Gestor de archivos"
 
-#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
-msgid "Node"
-msgstr "Nodo"
+#: js/Filemanager.js:91
+msgid "Service Unavailable"
+msgstr "Servicio no disponible"
 
-#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:133
-msgid "Name"
-msgstr "Nombre"
+#: js/Filemanager.js:92
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
+" Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr "El gestor de archivos no está configurado correctamente. Por favor, consulte el {0} Tine 2.0 Administrador FAQ {1} para obtener consejo de configuración o póngase en contacto con su administrador."
 
-#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:187
-msgid "Created By"
-msgstr "Creado por"
+#: js/Filemanager.js:114
+msgid "Files already exists"
+msgstr "Los archivos ya existen"
 
-#: js/NodeEditDialog.js:141
-msgid "Modified By"
-msgstr "Modificado por"
+#: js/Filemanager.js:114
+msgid "Do you want to replace the following file(s)?"
+msgstr "¿Realmente desea reemplazarlo(s)?"
 
-#: js/NodeEditDialog.js:144
-msgid "Last Modified"
-msgstr "Última modificación"
+#: js/Filemanager.js:147
+msgid "Failure on create folder"
+msgstr "Fallo al crear carpeta"
 
-#: js/NodeEditDialog.js:167
-msgid "Description"
-msgstr "Descripción"
+#: js/Filemanager.js:148
+msgid "Item with this name already exists!"
+msgstr "Existe un item con el mismo nombre!"
 
-#: js/NodeEditDialog.js:181
-msgid "Enter description"
-msgstr "Introducir descripción"
-
-#: js/NodeGridPanel.js:125
+#: js/NodeGridPanel.js:127
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: js/NodeGridPanel.js:140
+#: js/NodeGridPanel.js:142
 msgid "Size"
 msgstr "Tamaño"
 
-#: js/NodeGridPanel.js:164
+#: js/NodeGridPanel.js:166
 msgid "Revision"
 msgstr "Revisión"
 
-#: js/NodeGridPanel.js:194
+#: js/NodeGridPanel.js:196
 msgid "Last Modified Time"
 msgstr "Fecha última modificación"
 
-#: js/NodeGridPanel.js:201
+#: js/NodeGridPanel.js:203
 msgid "Last Modified By"
 msgstr "Última modificación por"
 
-#: js/NodeGridPanel.js:249
+#: js/NodeGridPanel.js:251
 msgid "The max. Upload Filesize is {0} MB"
 msgstr "El tamaño máximo de subida para un fichero es {0} MB"
 
-#: js/NodeGridPanel.js:287
+#: js/NodeGridPanel.js:289
 msgid "Upload"
 msgstr "Subir"
 
-#: js/NodeGridPanel.js:311
+#: js/NodeGridPanel.js:313
 msgid "Edit Properties"
 msgstr "Editar Propiedades"
 
-#: js/NodeGridPanel.js:322
+#: js/NodeGridPanel.js:324
 msgid "Create Folder"
 msgstr "Crear Carpeta"
 
-#: js/NodeGridPanel.js:333
+#: js/NodeGridPanel.js:335
 msgid "Folder Up"
 msgstr "Subir Carpeta"
 
-#: js/NodeGridPanel.js:354 js/NodeGridPanel.js:355 js/NodeGridPanel.js:357
+#: js/NodeGridPanel.js:356 js/NodeGridPanel.js:357 js/NodeGridPanel.js:359
 msgid "Delete"
 msgstr "Borrar"
 
-#: js/NodeGridPanel.js:499
+#: js/NodeGridPanel.js:501
 msgid "New Folder"
 msgstr "Nueva Carpeta"
 
-#: js/NodeGridPanel.js:499
+#: js/NodeGridPanel.js:501
 msgid "Please enter the name of the new folder:"
 msgstr "Por favor introduzca el nombre de la nueva carpeta:"
 
-#: js/NodeGridPanel.js:503
+#: js/NodeGridPanel.js:505
 msgid "No {0} added"
 msgstr "No {0} agregado"
 
-#: js/NodeGridPanel.js:651 js/NodeGridPanel.js:803 js/NodeTreePanel.js:660
-#: js/NodeTreePanel.js:770
-msgid "Upload Failed"
-msgstr "Carga Fallida"
+#: Controller/Node.php:318
+msgid "My folders"
+msgstr "Mis carpetas"
 
-#: js/NodeGridPanel.js:652 js/NodeTreePanel.js:661
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr "No se pudo cargar el archivo. El tamaño podría ser demasiado grande. Por favor notifique a su administrador. Tamaño máximo de subida:"
+#: Controller/Node.php:325
+msgid "Shared folders"
+msgstr "Carpetas compartidas"
 
-#: js/NodeGridPanel.js:804 js/NodeTreePanel.js:771
-msgid "Putting files in this folder is not allowed!"
-msgstr "No está permitido poner archivos en esta carpeta!"
-
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "Ruta"
+#: Controller/Node.php:332
+msgid "Other users folders"
+msgstr "Otras carpetas de usuarios"

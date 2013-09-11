@@ -1,92 +1,122 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - ActiveSync\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-10 12:00+0000\n"
+"PO-Revision-Date: 2012-04-02 13:30+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"Language-Team: Japanese (http://www.transifex.com/projects/p/tine20/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: \n"
-"X-Poedit-Language: Japanese\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Application.js:30
-msgid "Active Sync"
+#: Config.php:52
+msgid "Default policy for new devices"
 msgstr ""
 
-#: js/Application.js:46
-msgid "Select a Device"
+#: Config.php:54
+msgid "Enter the id of the policy to apply to newly created devices."
 msgstr ""
 
-#: js/Application.js:60
-msgid "No ActiveSync Device registered"
+#: Config.php:62
+msgid "Disable Access Log"
 msgstr ""
 
-#: js/Application.js:68
-msgid "Set as {0} Filter"
+#: Config.php:64
+msgid "Disable ActiveSync Access Log creation."
 msgstr ""
 
-#: js/Application.js:93
-msgid "Resetted Sync Filter"
+#: Config.php:73
+msgid "Filter timeslot for emails"
 msgstr ""
 
-#: js/Application.js:94 js/Application.js:106
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
+#: Config.php:75
+msgid "For how long in the past the emails should be synchronized."
 msgstr ""
 
-#: js/Application.js:97
-msgid "resetted"
+#: Config.php:96
+msgid "Filter timeslot for events"
 msgstr ""
 
-#: js/Application.js:105
-msgid "Set Sync Filter"
+#: Config.php:98
+msgid "For how long in the past the events should be synchronized."
 msgstr ""
 
-#: js/Model.js:45
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:45
-msgid "Devices"
-msgstr ""
-
-#: Preference.php:79
-msgid "Default Addressbook"
-msgstr ""
-
-#: Preference.php:80
-msgid "The default addressbook to create new contacts in."
-msgstr ""
-
-#: Preference.php:83
-msgid "Default Calendar"
-msgstr ""
-
-#: Preference.php:84
-msgid "The default calendar to create new events in."
-msgstr ""
-
-#: Preference.php:87
-msgid "Default Task List"
-msgstr ""
-
-#: Preference.php:88
-msgid "The default task list to create new tasks in."
-msgstr ""
-
-#: Setup/setup.xml:527
+#: Setup/setup.xml:546 Setup/Update/Release6.php:290
 msgid "Default Policy"
 msgstr ""
 
-#: Setup/setup.xml:532
+#: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
+msgstr ""
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr ""
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr ""
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr ""
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr ""
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr ""
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr ""
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] ""
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr ""
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr ""
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr ""
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr ""
+
+#: js/Application.js:65
+msgid "Set as {0} Filter"
+msgstr ""
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr ""
+
+#: js/Application.js:91 js/Application.js:103
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr ""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr ""
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
 msgstr ""

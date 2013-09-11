@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-07 08:19+0000\n"
-"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
+"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,97 +42,17 @@ msgstr "Nội bộ"
 msgid "Public"
 msgstr "Công khai"
 
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:199
-#: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "Trạng thái câu hỏi"
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Tất cả câu hỏi trong danh sách hỏi đáp của tôi"
 
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:204
-#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "Loại câu hỏi"
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Sửa lần cuối bởi tôi"
 
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Mặc định"
-
-#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:151
-#: js/FaqGridPanel.js:120
-msgid "Question"
-msgstr "Câu hỏi"
-
-#: js/FaqEditDialog.js:109
-msgid "Enter a question..."
-msgstr "Nhập 1 câu hỏi..."
-
-#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:157
-#: js/FaqGridPanel.js:127
-msgid "Answer"
-msgstr "Trả lời"
-
-#: js/FaqEditDialog.js:116
-msgid "Enter a answer..."
-msgstr "Nhập 1 câu trả lời"
-
-#: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
-msgid "Type"
-msgstr "Gõ"
-
-#: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
-msgid "Status"
-msgstr "Trạng thái"
-
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr "Thông tin câu hỏi"
-
-#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:101
-msgid "Tags"
-msgstr "Thẻ"
-
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Chưa có câu trả lời"
-
-#: js/FaqGridPanel.js:94
-msgid "FAQ id"
-msgstr "Mã câu hỏi"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Thêm mới trạng thái câu hỏi"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Thêm mới kiểu câu hỏi"
-
-#: js/Model.js:33 js/SimpleFAQ.js:19
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "one:Hỏi đáp\nother:Hỏi đáp"
-
-#: js/Model.js:37
-msgid "FAQ List"
-msgid_plural "FAQ Lists"
-msgstr[0] "one:Danh sách hỏi đáp\nother:Danh sách hỏi đáp"
-
-#: js/Model.js:37
-msgid "FAQ Lists"
-msgstr "Danh sách hỏi đáp"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Tìm kiếm nhanh"
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Tất cả hỏi đáp tôi đã sửa"
 
 #: Preference.php:28
 msgid "All my FAQs"
@@ -154,14 +74,105 @@ msgstr "Danh sách hỏi đáp mặc định"
 msgid "The default FAQ list to create new FAQ in."
 msgstr "Danh sách hỏi đáp mặc định để tạo câu hỏi trong đó"
 
-#: Setup/Initialize.php:33
-msgid "All FAQs of my FAQ Lists"
-msgstr "Tất cả câu hỏi trong danh sách hỏi đáp của tôi"
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
+#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "Trạng thái câu hỏi"
 
-#: Setup/Initialize.php:40
-msgid "Last modified by me"
-msgstr "Sửa lần cuối bởi tôi"
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
+#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "Loại câu hỏi"
 
-#: Setup/Initialize.php:41
-msgid "All FAQs that I have last modified"
-msgstr "Tất cả hỏi đáp tôi đã sửa"
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Mặc định"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Thêm mới kiểu câu hỏi"
+
+#: js/SimpleFAQ.js:19 js/Model.js:35
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "one:Hỏi đáp\nother:Hỏi đáp"
+
+#: js/SimpleFAQ.js:26
+msgid "Find Question"
+msgstr ""
+
+#: js/SimpleFAQ.js:35
+msgid "Search question"
+msgstr ""
+
+#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:118
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Trả lời"
+
+#: js/FaqGridPanel.js:72
+msgid "FAQ id"
+msgstr "Mã câu hỏi"
+
+#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Thẻ"
+
+#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:139
+msgid "Status"
+msgstr "Trạng thái"
+
+#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:127
+msgid "Type"
+msgstr "Gõ"
+
+#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:111 js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Câu hỏi"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Thêm mới trạng thái câu hỏi"
+
+#: js/Model.js:39
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] "one:Danh sách hỏi đáp\nother:Danh sách hỏi đáp"
+
+#: js/Model.js:39
+msgid "FAQ Lists"
+msgstr "Danh sách hỏi đáp"
+
+#: js/Model.js:74
+msgid "Quick Search"
+msgstr ""
+
+#: js/FaqEditDialog.js:112
+msgid "Enter a question..."
+msgstr "Nhập 1 câu hỏi..."
+
+#: js/FaqEditDialog.js:119
+msgid "Enter a answer..."
+msgstr "Nhập 1 câu trả lời"
+
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr ""
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "Thông tin câu hỏi"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Chưa có câu trả lời"

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-06-21 12:12+0000\n"
-"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
+"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -46,373 +46,41 @@ msgstr "Управление общими избранными расписан�
 msgid "Create or update shared timesheet favorites"
 msgstr "Создать или обновить общие временные расписания"
 
-#: js/DurationSlider.js:94
-msgid "{0}"
-msgstr "{0}"
-
-#: js/DurationSpinner.js:69 js/DurationSpinner.js:79
-msgid "Not a valid time"
-msgstr "Не действительное время"
-
-#: js/Models.js:48 js/TimesheetEditDialog.js:127
-msgid "Timesheet"
-msgid_plural "Timesheets"
-msgstr[0] "Табель"
-msgstr[1] "Табеля"
-msgstr[2] "Табелей"
-
-#: js/Models.js:52
-msgid "timesheets list"
-msgid_plural "timesheets lists"
-msgstr[0] "список табелей"
-msgstr[1] "списка табелей"
-msgstr[2] "списков табелей"
-
-#: js/Models.js:87 js/Models.js:166
-msgid "Quick search"
-msgstr "Быстрый поиск"
-
-#: js/Models.js:88 js/TimesheetEditDialog.js:189 js/TimesheetGridPanel.js:110
-msgid "Account"
-msgstr "Счет"
-
-#: js/Models.js:89 js/TimesheetEditDialog.js:164 js/TimesheetGridPanel.js:96
-msgid "Date"
-msgstr "Дата"
-
-#: js/Models.js:90 js/Models.js:169 js/TimeaccountEditDialog.js:171
-#: js/TimeaccountEditDialog.js:190 js/TimesheetEditDialog.js:175
-#: js/TimesheetGridPanel.js:104 js/TimesheetGridPanel.js:252
-msgid "Description"
-msgstr "Описание"
-
-#: js/Models.js:91 js/TimesheetEditDialog.js:194 js/TimesheetGridPanel.js:105
-#: js/TimesheetGridPanel.js:393
-msgid "Billable"
-msgstr "Оплачиваемо"
-
-#: js/Models.js:92 js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:107
-#: js/TimesheetGridPanel.js:398
-msgid "Cleared"
-msgstr "Просчитано"
-
-#: js/Models.js:93 js/Models.js:172
-msgid "Last Modified Time"
-msgstr "Время последнего изменения"
-
-#: js/Models.js:94 js/Models.js:173
-msgid "Last Modified By"
-msgstr "Последнее изменение:"
-
-#: js/Models.js:95 js/Models.js:174
-msgid "Creation Time"
-msgstr "Время создания"
-
-#: js/Models.js:96 js/Models.js:175
-msgid "Created By"
-msgstr "Создан"
-
-#: js/Models.js:141 js/TimeaccountEditDialog.js:145
-#: js/TimesheetEditDialog.js:144
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "Временный счет"
-msgstr[1] "Временных счета"
-msgstr[2] "Временных счетов"
-
-#: js/Models.js:145
-msgid "timeaccount list"
-msgid_plural "timeaccount lists"
-msgstr[0] "список временного счета"
-msgstr[1] "списка временного счета"
-msgstr[2] "списков временного счета"
-
-#: js/Models.js:149 js/TimeaccountEditDialog.js:80
-#: js/TimeaccountGridPanel.js:134 js/TimeAccountStatusFilterModel.js:46
-msgid "closed"
-msgstr "Закрыто"
-
-#: js/Models.js:167 js/TimeaccountEditDialog.js:161
-#: js/TimeaccountGridPanel.js:96
-msgid "Number"
-msgstr "Номер"
-
-#: js/Models.js:168 js/TimeaccountEditDialog.js:166
-#: js/TimeaccountGridPanel.js:101
-msgid "Title"
-msgstr "Заголовок"
-
-#: js/Models.js:170 js/TimeaccountEditDialog.js:82
-#: js/TimeaccountGridPanel.js:106
-msgid "Billed"
-msgstr "Оплачено"
-
-#: js/Models.js:171 js/TimeaccountEditDialog.js:74
-#: js/TimeaccountGridPanel.js:129
-msgid "Status"
-msgstr "Статус"
-
-#: js/Models.js:176 js/TimeaccountEditDialog.js:101
-#: js/TimeaccountGridPanel.js:124
-msgid "Booking deadline"
-msgstr ""
-
-#: js/TimeAccountBilledFilterModel.js:24
-msgid "Time Account - Billed"
-msgstr ""
-
-#: js/TimeAccountBilledFilterModel.js:47 js/TimeaccountEditDialog.js:90
-#: Setup/setup.xml:81
-msgid "not yet billed"
-msgstr "еще не оплачено"
-
-#: js/TimeAccountBilledFilterModel.js:48 js/TimeaccountEditDialog.js:91
-#: Setup/setup.xml:82
-msgid "to bill"
-msgstr "оплатить"
-
-#: js/TimeAccountBilledFilterModel.js:49 js/TimeaccountEditDialog.js:92
-#: Setup/setup.xml:83
-msgid "billed"
-msgstr "оплачено"
-
-#: js/TimeAccountContractFilterModel.js:30
-msgid "Contract"
-msgstr "Договор"
-
-#: js/TimeAccountContractFilterModel.js:32
-msgid "without contract"
-msgstr "без договора"
-
-#: js/TimeaccountEditDialog.js:62
-msgid "Unit"
-msgstr "Часть"
-
-#: js/TimeaccountEditDialog.js:66
-msgid "Unit Price"
-msgstr "Цена на части"
-
-#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:112
-msgid "Budget"
-msgstr "Бюджет"
-
-#: js/TimeaccountEditDialog.js:80 js/TimeaccountGridPanel.js:133
-#: js/TimeAccountStatusFilterModel.js:46
-msgid "open"
-msgstr "Открыто"
-
-#: js/TimeaccountEditDialog.js:96
-msgid "not cleared yet..."
-msgstr "Еще не рассчитывать..."
-
-#: js/TimeaccountEditDialog.js:97 js/TimesheetEditDialog.js:210
-msgid "Cleared In"
-msgstr "Рассчитан в"
-
-#: js/TimeaccountEditDialog.js:109
-msgid "none"
-msgstr "Нет"
-
-#: js/TimeaccountEditDialog.js:110
-msgid "last week"
-msgstr "На прошлой неделе"
-
-#: js/TimeaccountEditDialog.js:117 Model/Timeaccount.php:43
+#: Model/Timeaccount.php:43 Model/Timeaccount.php:47
+#: js/TimeaccountEditDialog.js:125
 msgid "Cost Center"
 msgstr "Затраты"
 
-#: js/TimeaccountEditDialog.js:130
-msgid "Timesheets are billable"
-msgstr "Табели оплачиваемы"
-
-#: js/TimeaccountEditDialog.js:204
-msgid "Enter description"
-msgstr "Ввести описание"
-
-#: js/TimeaccountEditDialog.js:220
-msgid "Access"
-msgstr "Доступ"
-
-#: js/TimeaccountEditDialog.js:243
-msgid "Book Own"
-msgstr "Забронировать собственное"
-
-#: js/TimeaccountEditDialog.js:245
-msgid "The grant to add Timesheets to this Timeaccount"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:249
-msgid "View All"
-msgstr "Показать все"
-
-#: js/TimeaccountEditDialog.js:250
-msgid "The grant to view Timesheets of other users"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:255
-msgid "Book All"
-msgstr "Закажите все"
-
-#: js/TimeaccountEditDialog.js:256
-msgid "The grant to add Timesheets for other users"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:261
-msgid "Manage Clearing"
-msgstr "Сделать рассчитываемым"
-
-#: js/TimeaccountEditDialog.js:262
-msgid "The grant to manage clearing of Timesheets"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:267 js/TimeaccountGridPanel.js:156
-msgid "Export"
-msgstr "Экспорт"
-
-#: js/TimeaccountEditDialog.js:268
-msgid "The grant to export Timesheets of Timeaccount"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:273
-msgid "Manage All"
-msgstr "Позволяется все"
-
-#: js/TimeaccountEditDialog.js:274
-msgid "Includes all other grants"
-msgstr "добавить все другие привелегии"
-
-#: js/TimeaccountEditDialog.js:282
-msgid "Permissions"
-msgstr "Права доступа"
-
-#: js/TimeaccountGridPanel.js:93 js/TimesheetGridPanel.js:94
-msgid "Tags"
-msgstr "Тэги"
-
-#: js/TimeaccountGridPanel.js:118 js/TimesheetGridPanel.js:109
-#: js/TimesheetGridPanel.js:403
-msgid "Cleared in"
-msgstr "Рассчитан в"
-
-#: js/TimeaccountGridPanel.js:165 js/TimesheetGridPanel.js:328
-msgid "Export as ODS"
-msgstr "Экспорт как ODS"
-
-#: js/TimeaccountGridPanel.js:172 js/TimesheetGridPanel.js:335
-msgid "Export as CSV"
-msgstr "Экспорт как CSV"
-
-#: js/TimeaccountPickerCombo.js:46
-msgid "Show closed"
-msgstr "Показать закрытые"
-
-#: js/TimeAccountStatusFilterModel.js:24
-msgid "Time Account - Status"
-msgstr "Статус временного счета"
-
-#: js/TimesheetEditDialog.js:145
-msgid "Select Time Account..."
-msgstr "Выберите  временный счет"
-
-#: js/TimesheetEditDialog.js:159 js/TimesheetGridPanel.js:112
-msgid "Duration"
-msgstr "Продолжительность"
-
-#: js/TimesheetEditDialog.js:169
-msgid "Start"
-msgstr "Старт"
-
-#: js/TimesheetEditDialog.js:170
-msgid "not set"
-msgstr "не ставить"
-
-#: js/TimesheetEditDialog.js:176
-msgid "Enter description..."
-msgstr "Введите описание..."
-
-#: js/TimesheetEditDialog.js:258
-msgid "Failed"
-msgstr "Не удалось"
-
-#: js/TimesheetEditDialog.js:259
-msgid "Could not save {0}."
-msgstr "Не сохранено {0}."
-
-#: js/TimesheetEditDialog.js:260
-msgid "Booking deadline for this Timeaccount has been exceeded."
-msgstr ""
-
-#: js/TimesheetGridPanel.js:98
-msgid "Start time"
-msgstr "Время старта"
-
-#: js/TimesheetGridPanel.js:100
-msgid "Time Account (Number - Title)"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:102
-msgid "Time Account closed"
-msgstr "Счет времени закрыт"
-
-#: js/TimesheetGridPanel.js:165
-msgid "timeframe"
+#: Setup/setup.xml:4
+msgid "Timetracker"
 msgstr "Хронометраж"
 
-#: js/TimesheetGridPanel.js:189
-msgid "summary"
-msgstr "резюме"
+#: Setup/setup.xml:81 js/TimeaccountEditDialog.js:90
+#: js/TimeAccountBilledFilterModel.js:47
+msgid "not yet billed"
+msgstr "еще не оплачено"
 
-#: js/TimesheetGridPanel.js:192
-msgid "Total Timesheets"
-msgstr "Все табели"
+#: Setup/setup.xml:82 js/TimeaccountEditDialog.js:91
+#: js/TimeAccountBilledFilterModel.js:48
+msgid "to bill"
+msgstr "оплатить"
 
-#: js/TimesheetGridPanel.js:193
-msgid "Billable Timesheets"
-msgstr "Оплачиваемые табели"
+#: Setup/setup.xml:83 js/TimeaccountEditDialog.js:92
+#: js/TimeAccountBilledFilterModel.js:49
+msgid "billed"
+msgstr "оплачено"
 
-#: js/TimesheetGridPanel.js:194
-msgid "Total Time"
-msgstr "Все время"
+#: Setup/Update/Release5.php:81 Setup/Initialize.php:112
+msgid "Timeaccounts to bill"
+msgstr "Расписание на оплату"
 
-#: js/TimesheetGridPanel.js:195
-msgid "Time of Billable Timesheets"
-msgstr "Время оплачиваемых табелей"
+#: Setup/Update/Release5.php:95 Setup/Initialize.php:126
+msgid "Timeaccounts not yet billed"
+msgstr "Расписание не оплачено"
 
-#: js/TimesheetGridPanel.js:266
-msgid "Detail"
-msgstr "Подробности"
-
-#: js/TimesheetGridPanel.js:319
-msgid "Export Timesheets"
-msgstr "Экспорт расписания"
-
-#: js/TimesheetGridPanel.js:342
-msgid "Export as ..."
-msgstr "Экспорт в ..."
-
-#: js/TimesheetGridPanel.js:385
-msgid "Mass Update"
-msgstr "Массовое обновление"
-
-#: js/TimesheetGridPanel.js:391
-msgid "Update field:"
-msgstr "Обновить поле:"
-
-#: js/Timetracker.js:25
-msgid "New Timesheet"
-msgstr "Новое расписание"
-
-#: Preference.php:64
-msgid "Timesheets ODS export configuration"
-msgstr ""
-
-#: Preference.php:65
-msgid "Use this configuration for the timesheet ODS export."
-msgstr ""
-
-#: Preference.php:116
-msgid "default"
-msgstr "по умолчанию"
+#: Setup/Update/Release5.php:109 Setup/Initialize.php:141
+msgid "Timeaccounts already billed"
+msgstr "Расписание оплачено"
 
 #: Setup/Initialize.php:33
 msgid "My Timesheets today"
@@ -434,18 +102,360 @@ msgstr "Моё расписание на этот месяц"
 msgid "My Timesheets last month"
 msgstr "Моё расписание на прошлый месяц"
 
-#: Setup/Initialize.php:112 Setup/Update/Release5.php:81
-msgid "Timeaccounts to bill"
-msgstr "Расписание на оплату"
+#: Preference.php:64
+msgid "Timesheets ODS export configuration"
+msgstr ""
 
-#: Setup/Initialize.php:126 Setup/Update/Release5.php:95
-msgid "Timeaccounts not yet billed"
-msgstr "Расписание не оплачено"
+#: Preference.php:65
+msgid "Use this configuration for the timesheet ODS export."
+msgstr ""
 
-#: Setup/Initialize.php:141 Setup/Update/Release5.php:109
-msgid "Timeaccounts already billed"
-msgstr "Расписание оплачено"
+#: Preference.php:116
+msgid "default"
+msgstr "по умолчанию"
 
-#: Setup/setup.xml:4
-msgid "Timetracker"
+#: js/TimeaccountEditDialog.js:62
+msgid "Unit"
+msgstr "Часть"
+
+#: js/TimeaccountEditDialog.js:66
+msgid "Unit Price"
+msgstr "Цена на части"
+
+#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:89
+msgid "Budget"
+msgstr "Бюджет"
+
+#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:111
+#: js/Models.js:178
+msgid "Status"
+msgstr "Статус"
+
+#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
+#: js/TimeaccountGridPanel.js:116 js/Models.js:156
+msgid "closed"
+msgstr "Закрыто"
+
+#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
+#: js/TimeaccountGridPanel.js:115
+msgid "open"
+msgstr "Открыто"
+
+#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:83
+#: js/Models.js:177
+msgid "Billed"
+msgstr "Оплачено"
+
+#: js/TimeaccountEditDialog.js:100
+msgid "not cleared yet..."
+msgstr "Еще не рассчитывать..."
+
+#: js/TimeaccountEditDialog.js:101 js/TimesheetEditDialog.js:213
+msgid "Cleared In"
+msgstr "Рассчитан в"
+
+#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:101
+#: js/Models.js:184
+msgid "Booking deadline"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:113
+msgid "none"
+msgstr "Нет"
+
+#: js/TimeaccountEditDialog.js:114
+msgid "last week"
+msgstr "На прошлой неделе"
+
+#: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:106
+#: js/Models.js:179
+msgid "Cleared at"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:140
+msgid "Responsible person"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:151
+msgid "Timesheets are billable"
+msgstr "Табели оплачиваемы"
+
+#: js/TimeaccountEditDialog.js:169 js/TimesheetEditDialog.js:147
+#: js/Models.js:147
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "Временный счет"
+msgstr[1] "Временных счета"
+msgstr[2] "Временных счетов"
+
+#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:73
+#: js/Models.js:174
+msgid "Number"
+msgstr "Номер"
+
+#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:78
+#: js/Models.js:175
+msgid "Title"
+msgstr "Заголовок"
+
+#: js/TimeaccountEditDialog.js:195 js/TimeaccountEditDialog.js:214
+#: js/TimesheetEditDialog.js:178 js/TimesheetGridPanel.js:86
+#: js/TimesheetGridPanel.js:234 js/Models.js:93 js/Models.js:176
+msgid "Description"
+msgstr "Описание"
+
+#: js/TimeaccountEditDialog.js:228
+msgid "Enter description"
+msgstr "Ввести описание"
+
+#: js/TimeaccountEditDialog.js:244
+msgid "Access"
+msgstr "Доступ"
+
+#: js/TimeaccountEditDialog.js:267
+msgid "Book Own"
+msgstr "Забронировать собственное"
+
+#: js/TimeaccountEditDialog.js:269
+msgid "The grant to add Timesheets to this Timeaccount"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:273
+msgid "View All"
+msgstr "Показать все"
+
+#: js/TimeaccountEditDialog.js:274
+msgid "The grant to view Timesheets of other users"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:279
+msgid "Book All"
+msgstr "Закажите все"
+
+#: js/TimeaccountEditDialog.js:280
+msgid "The grant to add Timesheets for other users"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:285
+msgid "Manage Clearing"
+msgstr "Сделать рассчитываемым"
+
+#: js/TimeaccountEditDialog.js:286
+msgid "The grant to manage clearing of Timesheets"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:138
+msgid "Export"
+msgstr "Экспорт"
+
+#: js/TimeaccountEditDialog.js:292
+msgid "The grant to export Timesheets of Timeaccount"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:297
+msgid "Manage All"
+msgstr "Позволяется все"
+
+#: js/TimeaccountEditDialog.js:298
+msgid "Includes all other grants"
+msgstr "добавить все другие привелегии"
+
+#: js/TimeaccountEditDialog.js:306
+msgid "Permissions"
+msgstr "Права доступа"
+
+#: js/TimesheetEditDialog.js:130 js/Models.js:50
+msgid "Timesheet"
+msgid_plural "Timesheets"
+msgstr[0] "Табель"
+msgstr[1] "Табеля"
+msgstr[2] "Табелей"
+
+#: js/TimesheetEditDialog.js:148
+msgid "Select Time Account..."
+msgstr "Выберите  временный счет"
+
+#: js/TimesheetEditDialog.js:162 js/TimesheetGridPanel.js:94
+msgid "Duration"
+msgstr "Продолжительность"
+
+#: js/TimesheetEditDialog.js:167 js/TimesheetGridPanel.js:78 js/Models.js:92
+msgid "Date"
+msgstr "Дата"
+
+#: js/TimesheetEditDialog.js:172
+msgid "Start"
+msgstr "Старт"
+
+#: js/TimesheetEditDialog.js:173
+msgid "not set"
+msgstr "не ставить"
+
+#: js/TimesheetEditDialog.js:179
+msgid "Enter description..."
+msgstr "Введите описание..."
+
+#: js/TimesheetEditDialog.js:192 js/TimesheetGridPanel.js:92 js/Models.js:91
+msgid "Account"
+msgstr "Счет"
+
+#: js/TimesheetEditDialog.js:197 js/TimesheetGridPanel.js:87
+#: js/TimesheetGridPanel.js:375 js/Models.js:94
+msgid "Billable"
+msgstr "Оплачиваемо"
+
+#: js/TimesheetEditDialog.js:203 js/TimesheetGridPanel.js:89
+#: js/TimesheetGridPanel.js:380 js/Models.js:95
+msgid "Cleared"
+msgstr "Просчитано"
+
+#: js/TimesheetEditDialog.js:261
+msgid "Failed"
+msgstr "Не удалось"
+
+#: js/TimesheetEditDialog.js:262
+msgid "Could not save {0}."
+msgstr "Не сохранено {0}."
+
+#: js/TimesheetEditDialog.js:263
+msgid "Booking deadline for this Timeaccount has been exceeded."
+msgstr ""
+
+#: js/DurationSpinner.js:69 js/DurationSpinner.js:79
+msgid "Not a valid time"
+msgstr "Не действительное время"
+
+#: js/TimeaccountPickerCombo.js:46
+msgid "Show closed"
+msgstr "Показать закрытые"
+
+#: js/Timetracker.js:25
+msgid "New Timesheet"
+msgstr "Новое расписание"
+
+#: js/TimeAccountStatusFilterModel.js:24
+msgid "Time Account - Status"
+msgstr "Статус временного счета"
+
+#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:70
+msgid "Tags"
+msgstr "Тэги"
+
+#: js/TimesheetGridPanel.js:80
+msgid "Start time"
+msgstr "Время старта"
+
+#: js/TimesheetGridPanel.js:82
+msgid "Time Account (Number - Title)"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:84
+msgid "Time Account closed"
+msgstr "Счет времени закрыт"
+
+#: js/TimesheetGridPanel.js:91 js/TimesheetGridPanel.js:385
+#: js/TimeaccountGridPanel.js:95
+msgid "Cleared in"
+msgstr "Рассчитан в"
+
+#: js/TimesheetGridPanel.js:147
+msgid "timeframe"
 msgstr "Хронометраж"
+
+#: js/TimesheetGridPanel.js:171
+msgid "summary"
+msgstr "резюме"
+
+#: js/TimesheetGridPanel.js:174
+msgid "Total Timesheets"
+msgstr "Все табели"
+
+#: js/TimesheetGridPanel.js:175
+msgid "Billable Timesheets"
+msgstr "Оплачиваемые табели"
+
+#: js/TimesheetGridPanel.js:176
+msgid "Total Time"
+msgstr "Все время"
+
+#: js/TimesheetGridPanel.js:177
+msgid "Time of Billable Timesheets"
+msgstr "Время оплачиваемых табелей"
+
+#: js/TimesheetGridPanel.js:248
+msgid "Detail"
+msgstr "Подробности"
+
+#: js/TimesheetGridPanel.js:301
+msgid "Export Timesheets"
+msgstr "Экспорт расписания"
+
+#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:147
+msgid "Export as ODS"
+msgstr "Экспорт как ODS"
+
+#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:154
+msgid "Export as CSV"
+msgstr "Экспорт как CSV"
+
+#: js/TimesheetGridPanel.js:324
+msgid "Export as ..."
+msgstr "Экспорт в ..."
+
+#: js/TimesheetGridPanel.js:367
+msgid "Mass Update"
+msgstr "Массовое обновление"
+
+#: js/TimesheetGridPanel.js:373
+msgid "Update field:"
+msgstr "Обновить поле:"
+
+#: js/TimeAccountBilledFilterModel.js:24
+msgid "Time Account - Billed"
+msgstr ""
+
+#: js/DurationSlider.js:94
+msgid "{0}"
+msgstr "{0}"
+
+#: js/TimeAccountContractFilterModel.js:30
+msgid "Contract"
+msgstr "Договор"
+
+#: js/TimeAccountContractFilterModel.js:32
+msgid "without contract"
+msgstr "без договора"
+
+#: js/Models.js:54
+msgid "timesheets list"
+msgid_plural "timesheets lists"
+msgstr[0] "список табелей"
+msgstr[1] "списка табелей"
+msgstr[2] "списков табелей"
+
+#: js/Models.js:90 js/Models.js:173
+msgid "Quick Search"
+msgstr ""
+
+#: js/Models.js:96 js/Models.js:180
+msgid "Last Modified Time"
+msgstr "Время последнего изменения"
+
+#: js/Models.js:97 js/Models.js:181
+msgid "Last Modified By"
+msgstr "Последнее изменение:"
+
+#: js/Models.js:98 js/Models.js:182
+msgid "Creation Time"
+msgstr "Время создания"
+
+#: js/Models.js:99 js/Models.js:183
+msgid "Created By"
+msgstr "Создан"
+
+#: js/Models.js:152
+msgid "timeaccount list"
+msgid_plural "timeaccount lists"
+msgstr[0] "список временного счета"
+msgstr[1] "списка временного счета"
+msgstr[2] "списков временного счета"

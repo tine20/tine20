@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-09-19 20:48+0000\n"
-"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
+"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,13 +18,80 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:31
+#: Config.php:52
 msgid "Default policy for new devices"
 msgstr "Политика по умолчанию для новых устройств"
 
-#: Config.php:33
+#: Config.php:54
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Введите ID политики для применения к вновь созданным устройствам."
+
+#: Config.php:62
+msgid "Disable Access Log"
+msgstr ""
+
+#: Config.php:64
+msgid "Disable ActiveSync Access Log creation."
+msgstr ""
+
+#: Config.php:73
+msgid "Filter timeslot for emails"
+msgstr ""
+
+#: Config.php:75
+msgid "For how long in the past the emails should be synchronized."
+msgstr ""
+
+#: Config.php:96
+msgid "Filter timeslot for events"
+msgstr ""
+
+#: Config.php:98
+msgid "For how long in the past the events should be synchronized."
+msgstr ""
+
+#: Setup/setup.xml:546 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Политика по умолчанию"
+
+#: Setup/setup.xml:551 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Политика по умолчанию заданная при установке"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Адресная книга по умолчанию"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Адресная книга для создания контактов по умолчанию"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Календарь по умолчанию"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Календарь для создания новых событий по умолчанию"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Список задач по умолчанию"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Список задач для создания новых задач по умолчанию"
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Устройство"
+msgstr[1] "Устройства"
+msgstr[2] "Устройства"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Устройства"
 
 #: js/Application.js:27
 msgid "Active Sync"
@@ -57,46 +124,3 @@ msgstr "сброшен"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Установить фильтр синхронизации"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Устройство"
-msgstr[1] "Устройства"
-msgstr[2] "Устройства"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Устройства"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Адресная книга по умолчанию"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Адресная книга для создания контактов по умолчанию"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Календарь по умолчанию"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Календарь для создания новых событий по умолчанию"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Список задач по умолчанию"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Список задач для создания новых задач по умолчанию"
-
-#: Setup/setup.xml:542 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Политика по умолчанию"
-
-#: Setup/setup.xml:547 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Политика по умолчанию заданная при установке"

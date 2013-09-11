@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-06-21 10:05+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Catalan (http://www.transifex.com/projects/p/tine20/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,6 +23,30 @@ msgstr "gestiona productes"
 #: Acl/Rights.php:104
 msgid "add, edit and delete products"
 msgstr "afegeix, edita i elimina productes"
+
+#: Controller.php:83 Controller.php:103
+msgid "You do not have admin rights on Sales"
+msgstr ""
+
+#: Model/Contract.php:109
+msgid "Responsible"
+msgstr ""
+
+#: Model/Contract.php:110
+msgid "Customer"
+msgstr ""
+
+#: Model/Contract.php:111
+msgid "Partner"
+msgstr ""
+
+#: Model/Contract.php:123 js/ContractEditDialog.js:174
+msgid "Lead Cost Center"
+msgstr ""
+
+#: Model/Contract.php:127
+msgid "Time Account"
+msgstr ""
 
 #: Config.php:51
 msgid "Contract Number Creation"
@@ -48,7 +72,7 @@ msgstr ""
 msgid "The Number can be validated as text or number."
 msgstr ""
 
-#: Config.php:69 js/ContractEditDialog.js:136 js/Models.js:203
+#: Config.php:69 js/Models.js:208 js/ContractEditDialog.js:138
 msgid "Number"
 msgstr ""
 
@@ -74,12 +98,20 @@ msgstr ""
 msgid "Possible Contract cleared states."
 msgstr ""
 
-#: Controller/Contract.php:83
-msgid "The number you have tried to set is already in use!"
+#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
+msgid "My Products"
 msgstr ""
 
-#: Controller.php:83 Controller.php:103
-msgid "You do not have admin rights on Sales"
+#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
+msgid "Products created by myself"
+msgstr ""
+
+#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
+msgid "My Contracts"
+msgstr ""
+
+#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
+msgid "Contracts created by myself"
 msgstr ""
 
 #: js/AdminPanel.js:61
@@ -94,173 +126,157 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
-#: js/ContractEditDialog.js:96
-msgid "Please use a decimal number here!"
-msgstr ""
-
-#: js/ContractEditDialog.js:143 js/ContractGridPanel.js:93 js/Models.js:240
-msgid "Title"
-msgstr "Títol"
-
-#: js/ContractEditDialog.js:149
-msgid "Contract Contact"
-msgstr ""
-
-#: js/ContractEditDialog.js:161
-msgid "Account Manager"
-msgstr ""
-
-#: js/ContractEditDialog.js:170
-msgid "Company"
-msgstr ""
-
-#: js/ContractEditDialog.js:176 js/ContractGridPanel.js:99 js/Models.js:147
-msgid "Status"
-msgstr "Estat"
-
-#: js/ContractEditDialog.js:183 js/ContractGridPanel.js:106 js/Models.js:154
-msgid "Cleared"
-msgstr ""
-
-#: js/ContractEditDialog.js:187 js/ContractGridPanel.js:113 js/Models.js:160
-msgid "Cleared in"
-msgstr ""
-
-#: js/ContractEditDialog.js:193 js/ProductEditDialog.js:114
-#: js/ProductGridPanel.js:124
-msgid "Description"
-msgstr "Descripció"
-
-#: js/ContractEditDialog.js:194 js/ProductEditDialog.js:115
-msgid "Enter description..."
-msgstr "Introduïu una descripció..."
-
-#: js/ContractGridPanel.js:79 js/ProductGridPanel.js:120
+#: js/ContractGridPanel.js:62 js/ProductGridPanel.js:97
 msgid "Tags"
 msgstr "Etiquetes"
 
-#: js/ContractGridPanel.js:87
+#: js/ContractGridPanel.js:70
 msgid "Contract number"
 msgstr "Número de contracte"
 
-#: js/Models.js:39
+#: js/ContractGridPanel.js:76 js/Models.js:245 js/ContractEditDialog.js:145
+msgid "Title"
+msgstr "Títol"
+
+#: js/ContractGridPanel.js:82 js/Models.js:151 js/ContractEditDialog.js:189
+msgid "Status"
+msgstr "Estat"
+
+#: js/ContractGridPanel.js:89 js/Models.js:158 js/ContractEditDialog.js:196
+msgid "Cleared"
+msgstr ""
+
+#: js/ContractGridPanel.js:96 js/Models.js:164 js/ContractEditDialog.js:200
+msgid "Cleared in"
+msgstr ""
+
+#: js/ProductEditDialog.js:93 js/ProductGridPanel.js:98
+msgid "Name"
+msgstr "Nom"
+
+#: js/ProductEditDialog.js:99 js/ProductGridPanel.js:102
+msgid "Price"
+msgstr "Preu"
+
+#: js/ProductEditDialog.js:106 js/ProductGridPanel.js:99
+msgid "Manufacturer"
+msgstr "Fabricant"
+
+#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:100
+msgid "Category"
+msgstr "Categoria"
+
+#: js/ProductEditDialog.js:114 js/ProductGridPanel.js:101
+#: js/ContractEditDialog.js:206
+msgid "Description"
+msgstr "Descripció"
+
+#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:207
+msgid "Enter description..."
+msgstr "Introduïu una descripció..."
+
+#: js/ContractCostCenterFilterModel.js:30
+msgid "Cost Center"
+msgstr ""
+
+#: js/ContractCostCenterFilterModel.js:32
+msgid "without CostCenter"
+msgstr ""
+
+#: js/Models.js:41
 msgid "Product"
 msgid_plural "Products"
 msgstr[0] "Producte"
 msgstr[1] "Productes"
 
-#: js/Models.js:42 js/Models.js:229
+#: js/Models.js:44 js/Models.js:234
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "llista de registres"
 msgstr[1] "llistes de registres"
 
-#: js/Models.js:76 js/Models.js:143 js/Models.js:202 js/Models.js:239
-msgid "Quick search"
-msgstr "Cerca ràpida"
+#: js/Models.js:78 js/Models.js:147 js/Models.js:207 js/Models.js:244
+msgid "Quick Search"
+msgstr ""
 
-#: js/Models.js:77
+#: js/Models.js:79
 msgid "Product name"
 msgstr "Nom del producte"
 
-#: js/Models.js:79 js/Models.js:145
+#: js/Models.js:81 js/Models.js:149
 msgid "Creator"
 msgstr ""
 
-#: js/Models.js:113
+#: js/Models.js:117
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Contracte"
 msgstr[1] "Contractes"
 
-#: js/Models.js:117
+#: js/Models.js:121
 msgid "All Contracts"
 msgid_plural "contracts lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:144
+#: js/Models.js:148
 msgid "Contract name"
 msgstr ""
 
-#: js/Models.js:162
+#: js/Models.js:167
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/Models.js:163
+#: js/Models.js:168
 msgid "Last Modified By"
 msgstr ""
 
-#: js/Models.js:164
+#: js/Models.js:169
 msgid "Creation Time"
 msgstr ""
 
-#: js/Models.js:165
+#: js/Models.js:170
 msgid "Created By"
 msgstr ""
 
-#: js/Models.js:189
+#: js/Models.js:194
 msgid "CostCenter"
 msgid_plural "CostCenters"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:192
+#: js/Models.js:197
 msgid "All CostCenters"
 msgid_plural "All CostCenters"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:204
+#: js/Models.js:209
 msgid "Remark"
 msgstr ""
 
-#: js/Models.js:226
+#: js/Models.js:231
 msgid "Division"
 msgid_plural "Divisions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/ProductEditDialog.js:93 js/ProductGridPanel.js:121
-msgid "Name"
-msgstr "Nom"
-
-#: js/ProductEditDialog.js:99 js/ProductGridPanel.js:125
-msgid "Price"
-msgstr "Preu"
-
-#: js/ProductEditDialog.js:106 js/ProductGridPanel.js:122
-msgid "Manufacturer"
-msgstr "Fabricant"
-
-#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:123
-msgid "Category"
-msgstr "Categoria"
-
-#: Model/Contract.php:107
-msgid "Responsible"
+#: js/ContractEditDialog.js:96
+msgid "Please use a decimal number here!"
 msgstr ""
 
-#: Model/Contract.php:108
-msgid "Customer"
+#: js/ContractEditDialog.js:151
+msgid "Contract Contact"
 msgstr ""
 
-#: Model/Contract.php:109
-msgid "Partner"
+#: js/ContractEditDialog.js:163
+msgid "Account Manager"
 msgstr ""
 
-#: Setup/Initialize.php:34 Setup/Update/Release5.php:63
-msgid "My Products"
+#: js/ContractEditDialog.js:183
+msgid "Company"
 msgstr ""
 
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:64
-msgid "Products created by myself"
-msgstr ""
-
-#: Setup/Initialize.php:55 Setup/Update/Release5.php:84
-msgid "My Contracts"
-msgstr ""
-
-#: Setup/Initialize.php:56 Setup/Update/Release5.php:85
-msgid "Contracts created by myself"
+#: Controller/Contract.php:83
+msgid "The number you have tried to set is already in use!"
 msgstr ""
