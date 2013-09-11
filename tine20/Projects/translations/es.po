@@ -92,7 +92,7 @@ msgid "Project lists"
 msgstr "Listas de Proyectos"
 
 #: js/Model.js:72
-msgid "Quick Search"
+msgid "Quick search"
 msgstr "Búsqueda Rápida"
 
 #: js/Model.js:73 js/ProjectEditDialog.js:130 js/ProjectGridPanel.js:95

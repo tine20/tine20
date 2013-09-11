@@ -28,10 +28,6 @@ msgid ""
 "records"
 msgstr "Edytuj urodziny, dane o koncie bankowym i inne, prywatne informacje pracownika"
 
-#: Controller.php:74
-msgid "You do not have admin rights on HumanResources"
-msgstr "Nie masz dostępu do działu HR"
-
 #: Config.php:48
 msgid "Freetime Type"
 msgstr "Typ wolnego"
@@ -66,101 +62,9 @@ msgid ""
 "other free days in datepicker"
 msgstr "Tutaj możesz zdefiniować domyślny kalendarz świąt używany do ustawiania dni świątecznych i innych wolnych dni w miejscach wyboru daty"
 
-#: Setup/Update/Release6.php:299 Setup/Initialize.php:89
-msgid "Excused"
-msgstr "Usprawiedliwiona"
-
-#: Setup/Update/Release6.php:300 Setup/Initialize.php:90
-msgid "Unexcused"
-msgstr "Nieusprawiedliwiona"
-
-#: Setup/Update/Release6.php:330 Setup/Initialize.php:33 js/Models.js:111
-msgid "Currently employed"
-msgstr "Obecnie zatrudniony"
-
-#: Setup/Update/Release6.php:331 Setup/Initialize.php:34
-msgid "Employees which are currently employed"
-msgstr "Zatrudnieni pracownicy"
-
-#: Setup/Initialize.php:54
-msgid "Sickness"
-msgstr "Chorobowe"
-
-#: Setup/Initialize.php:55
-msgid "Vacation"
-msgstr "Urlop"
-
-#: Setup/Initialize.php:56
-msgid "Remaining Vacation"
-msgstr "Pozostały urlop"
-
-#: Setup/Initialize.php:57
-msgid "Extra Vacation"
-msgstr "Dodatkowy urlop"
-
-#: Setup/Initialize.php:71
-msgid "Requested"
-msgstr "Na żądanie"
-
-#: Setup/Initialize.php:72
-msgid "In process"
-msgstr "W opracowaniu"
-
-#: Setup/Initialize.php:73
-msgid "Accepted"
-msgstr "Zaakceptowany"
-
-#: Setup/Initialize.php:74
-msgid "Declined"
-msgstr "Odrzucony"
-
-#: js/EmployeeGridPanel.js:95 js/FreeDayGridPanel.js:113
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/EmployeeGridPanel.js:98 js/EmployeeEditDialog.js:228
-msgid "Number"
-msgstr "Numer"
-
-#: js/EmployeeGridPanel.js:105 js/EmployeeEditDialog.js:288
-msgid "Full Name"
-msgstr "Pełne nazwisko"
-
-#: js/EmployeeGridPanel.js:111 js/EmployeeEditDialog.js:293 js/Models.js:116
-msgid "Salutation"
-msgstr "Forma grzecznościowa"
-
-#: js/EmployeeGridPanel.js:118 js/EmployeeEditDialog.js:301 js/Models.js:113
-msgid "Title"
-msgstr "Tytuł naukowy"
-
-#: js/EmployeeGridPanel.js:125 js/EmployeeEditDialog.js:305 js/Models.js:112
-msgid "First Name"
-msgstr "Imię"
-
-#: js/EmployeeGridPanel.js:132 js/EmployeeEditDialog.js:314 js/Models.js:115
-msgid "Last Name"
-msgstr "Nazwisko"
-
-#: js/EmployeeGridPanel.js:139 js/EmployeeEditDialog.js:383 js/Models.js:108
-msgid "Employment begin"
-msgstr "Początek zatrudnienia"
-
-#: js/EmployeeGridPanel.js:146 js/EmployeeEditDialog.js:388 js/Models.js:109
-msgid "Employment end"
-msgstr "Koniec zatrudnienia"
-
-#: js/EmployeeGridPanel.js:153 js/EmployeeEditDialog.js:171
-msgid "Supervisor"
-msgstr "Przełożony"
-
-#: js/EmployeeGridPanel.js:162 js/EmployeeEditDialog.js:186 js/Models.js:117
-msgid "Health Insurance"
-msgstr "Ubezpieczenie zdrowotne"
-
-#: js/EmployeeGridPanel.js:168 js/EmployeeEditDialog.js:179
-msgid "Division"
-msgstr "Oddział"
+#: Controller.php:74
+msgid "You do not have admin rights on HumanResources"
+msgstr "Nie masz dostępu do działu HR"
 
 #: js/AdminPanel.js:68
 msgid "Cancel"
@@ -178,6 +82,60 @@ msgstr "Kalendarz"
 msgid "Calendars"
 msgstr "Kalendarze"
 
+#: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:143 js/Models.js:261
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Umowa"
+msgstr[1] "Umowy"
+msgstr[2] "Umowy"
+
+#: js/ContractGridPanel.js:128
+msgid "Working Time Model"
+msgstr "Model czasu pracy"
+
+#: js/ContractGridPanel.js:131
+msgid "Vacation Days"
+msgstr "Dni urlopu"
+
+#: js/ContractGridPanel.js:133
+msgid "Start Date"
+msgstr "Data rozpoczęcia"
+
+#: js/ContractGridPanel.js:136
+msgid "End Date"
+msgstr "Data zakończenia"
+
+#: js/ContractGridPanel.js:139
+msgid "Feast Calendar"
+msgstr "Kalendarz świąt"
+
+#: js/ContractGridPanel.js:177
+msgid "Edit Working Time"
+msgstr "Edytuj czas pracy"
+
+#: js/CostCenterGridPanel.js:58 js/Models.js:230
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] "Centrum kosztów"
+msgstr[1] "Centra kosztów"
+msgstr[2] "Centra kosztów"
+
+#: js/CostCenterGridPanel.js:104
+msgid "Cost Center"
+msgstr "Centrum kosztów"
+
+#: js/CostCenterGridPanel.js:107
+msgid "Startdate"
+msgstr "Data rozpoczęcia"
+
+#: js/DatePicker.js:42
+msgid "WK"
+msgstr "TK"
+
+#: js/DatePicker.js:63
+msgid "Loading calendar data..."
+msgstr "Ładowanie danych kalendarza..."
+
 #: js/EmployeeEditDialog.js:118
 msgid "Dependent Windows"
 msgstr "Okna zależne"
@@ -188,6 +146,18 @@ msgid ""
 "cancel them before closing this one!"
 msgstr "Nadal są wyświetlane okna zależne od tego okna. Proszę je zapisać albo anulować przed zamknięciem tego okna!"
 
+#: js/EmployeeEditDialog.js:171 js/EmployeeGridPanel.js:153
+msgid "Supervisor"
+msgstr "Przełożony"
+
+#: js/EmployeeEditDialog.js:179 js/EmployeeGridPanel.js:168
+msgid "Division"
+msgstr "Oddział"
+
+#: js/EmployeeEditDialog.js:186 js/EmployeeGridPanel.js:162 js/Models.js:117
+msgid "Health Insurance"
+msgstr "Ubezpieczenie zdrowotne"
+
 #: js/EmployeeEditDialog.js:201 js/Models.js:333
 msgid "Free Time"
 msgid_plural "Free Times"
@@ -196,13 +166,17 @@ msgstr[1] "Urlopy"
 msgstr[2] "Urlopy"
 
 #: js/EmployeeEditDialog.js:209 js/EmployeeEditDialog.js:222
-#: js/FreeTimeEditDialog.js:130 js/FreeDayGridPanel.js:114
+#: js/FreeDayGridPanel.js:114 js/FreeTimeEditDialog.js:130
 #: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:166 js/Models.js:69
 msgid "Employee"
 msgid_plural "Employees"
 msgstr[0] "Pracownik"
 msgstr[1] "Pracownicy"
 msgstr[2] "Pracownicy"
+
+#: js/EmployeeEditDialog.js:228 js/EmployeeGridPanel.js:98
+msgid "Number"
+msgstr "Numer"
 
 #: js/EmployeeEditDialog.js:240 js/Models.js:110
 msgid "Account"
@@ -211,6 +185,26 @@ msgstr "Konto"
 #: js/EmployeeEditDialog.js:259
 msgid "Apply contact data on form"
 msgstr "Dodaj dane kontaktowe do formularza"
+
+#: js/EmployeeEditDialog.js:288 js/EmployeeGridPanel.js:105
+msgid "Full Name"
+msgstr "Pełne nazwisko"
+
+#: js/EmployeeEditDialog.js:293 js/EmployeeGridPanel.js:111 js/Models.js:116
+msgid "Salutation"
+msgstr "Forma grzecznościowa"
+
+#: js/EmployeeEditDialog.js:301 js/EmployeeGridPanel.js:118 js/Models.js:113
+msgid "Title"
+msgstr "Tytuł naukowy"
+
+#: js/EmployeeEditDialog.js:305 js/EmployeeGridPanel.js:125 js/Models.js:112
+msgid "First Name"
+msgstr "Imię"
+
+#: js/EmployeeEditDialog.js:314 js/EmployeeGridPanel.js:132 js/Models.js:115
+msgid "Last Name"
+msgstr "Nazwisko"
 
 #: js/EmployeeEditDialog.js:328
 msgid "Personal Information"
@@ -260,6 +254,14 @@ msgstr "Urodziny"
 msgid "Internal Information"
 msgstr "Informacje wewnętrzne"
 
+#: js/EmployeeEditDialog.js:383 js/EmployeeGridPanel.js:139 js/Models.js:108
+msgid "Employment begin"
+msgstr "Początek zatrudnienia"
+
+#: js/EmployeeEditDialog.js:388 js/EmployeeGridPanel.js:146 js/Models.js:109
+msgid "Employment end"
+msgstr "Koniec zatrudnienia"
+
 #: js/EmployeeEditDialog.js:391 js/Models.js:114
 msgid "Profession"
 msgstr "Zawód"
@@ -293,49 +295,34 @@ msgstr "Opis"
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
-#: js/HumanResources.js:25
-msgid "Human Resources"
-msgstr "HR"
+#: js/EmployeeGridPanel.js:95 js/FreeDayGridPanel.js:113
+msgid "Tags"
+msgstr "Znaczniki"
 
-#: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:143 js/Models.js:261
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Umowa"
-msgstr[1] "Umowy"
-msgstr[2] "Umowy"
+#: js/ExceptionHandler.js:47
+msgid "No contract could be found."
+msgstr "Nie znaleziono umowy"
 
-#: js/ContractGridPanel.js:128
-msgid "Working Time Model"
-msgstr "Model czasu pracy"
+#: js/ExceptionHandler.js:48
+msgid "Please create a contract for this employee!"
+msgstr "Proszę utworzyć umowę dla niniejszego pracownika!"
 
-#: js/ContractGridPanel.js:131
-msgid "Vacation Days"
-msgstr "Dni urlopu"
+#: js/FreeDayGridPanel.js:115 js/FreeTimeEditDialog.js:199
+#: js/FreeTimeGridPanel.js:167 js/Models.js:367
+msgid "Type"
+msgstr "Typ"
 
-#: js/ContractGridPanel.js:133
-msgid "Start Date"
+#: js/FreeDayGridPanel.js:116 js/FreeTimeGridPanel.js:169
+msgid "Date Start"
 msgstr "Data rozpoczęcia"
 
-#: js/ContractGridPanel.js:136
-msgid "End Date"
-msgstr "Data zakończenia"
-
-#: js/ContractGridPanel.js:139
-msgid "Feast Calendar"
-msgstr "Kalendarz świąt"
-
-#: js/ContractGridPanel.js:177
-msgid "Edit Working Time"
-msgstr "Edytuj czas pracy"
+#: js/FreeDayGridPanel.js:117
+msgid "Remark"
+msgstr "Komentarz"
 
 #: js/FreeTimeEditDialog.js:170 js/FreeTimeEditDialog.js:182
 msgid "FreeTime"
 msgstr "Wolne"
-
-#: js/FreeTimeEditDialog.js:199 js/FreeDayGridPanel.js:115
-#: js/FreeTimeGridPanel.js:167 js/Models.js:367
-msgid "Type"
-msgstr "Typ"
 
 #: js/FreeTimeEditDialog.js:214 js/FreeTimeGridPanel.js:168 js/Models.js:375
 msgid "Status"
@@ -353,41 +340,91 @@ msgstr "Długość ostatniego dnia"
 msgid "Select Days"
 msgstr "Wybierz dni"
 
-#: js/FreeDayGridPanel.js:116 js/FreeTimeGridPanel.js:169
-msgid "Date Start"
-msgstr "Data rozpoczęcia"
+#: js/HumanResources.js:25
+msgid "Human Resources"
+msgstr "HR"
 
-#: js/FreeDayGridPanel.js:117
-msgid "Remark"
-msgstr "Komentarz"
+#: js/Models.js:72
+msgid "Employees"
+msgid_plural "Employees"
+msgstr[0] "Pracownik"
+msgstr[1] "pracownicy"
+msgstr[2] "pracownicy"
 
-#: js/ExceptionHandler.js:47
-msgid "No contract could be found."
-msgstr "Nie znaleziono umowy"
+#: js/Models.js:106 js/Models.js:199 js/Models.js:297 js/Models.js:365
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
 
-#: js/ExceptionHandler.js:48
-msgid "Please create a contract for this employee!"
-msgstr "Proszę utworzyć umowę dla niniejszego pracownika!"
+#: js/Models.js:107
+msgid "Employee name"
+msgstr "Nazwa pracownika"
 
-#: js/DatePicker.js:42
-msgid "WK"
-msgstr "TK"
+#: js/Models.js:111 Setup/Initialize.php:33 Setup/Update/Release6.php:330
+msgid "Currently employed"
+msgstr "Obecnie zatrudniony"
 
-#: js/DatePicker.js:63
-msgid "Loading calendar data..."
-msgstr "Ładowanie danych kalendarza..."
+#: js/Models.js:120 js/Models.js:382
+msgid "Last Modified Time"
+msgstr "Czas ostatniej zmiany"
 
-#: js/WorkingTimeEditDialog.js:74
-msgid "Edit working time for {0} ({1} - {2})"
-msgstr "Edytuj czas pracy dla {0} ({1} - {2})"
+#: js/Models.js:121 js/Models.js:383
+msgid "Last Modified By"
+msgstr "Zmienione przez"
 
-#: js/WorkingTimeEditDialog.js:108 js/WorkingTimeEditDialog.js:120
-#: js/Models.js:162
+#: js/Models.js:122 js/Models.js:384
+msgid "Creation Time"
+msgstr "Czas utworzenia"
+
+#: js/Models.js:123 js/Models.js:385
+msgid "Created By"
+msgstr "Utworzone przez"
+
+#: js/Models.js:162 js/WorkingTimeEditDialog.js:108
+#: js/WorkingTimeEditDialog.js:120
 msgid "Working Time"
 msgid_plural "Working Times"
 msgstr[0] "Czas pracy"
 msgstr[1] "czasy pracy"
 msgstr[2] "czasy pracy"
+
+#: js/Models.js:165
+msgid "Working Times"
+msgid_plural "Working Times"
+msgstr[0] "Czasy pracy"
+msgstr[1] "czasy pracy"
+msgstr[2] "czasy pracy"
+
+#: js/Models.js:234
+msgid "CostCenters"
+msgid_plural "CostCenters"
+msgstr[0] "Centrum kosztów"
+msgstr[1] "Centra kosztów"
+msgstr[2] "Centra kosztów"
+
+#: js/Models.js:264
+msgid "Contracts"
+msgid_plural "Contracts"
+msgstr[0] "Umowa"
+msgstr[1] "umowy"
+msgstr[2] "umowy"
+
+#: js/Models.js:417
+msgid "Free Day"
+msgid_plural "Free Days"
+msgstr[0] "Wolny dzień"
+msgstr[1] "wolne dni"
+msgstr[2] "wolne dni"
+
+#: js/Models.js:420
+msgid "Free Days"
+msgid_plural "Free Days"
+msgstr[0] "Wolne dni"
+msgstr[1] "wolne dni"
+msgstr[2] "wolne dni"
+
+#: js/WorkingTimeEditDialog.js:74
+msgid "Edit working time for {0} ({1} - {2})"
+msgstr "Edytuj czas pracy dla {0} ({1} - {2})"
 
 #: js/WorkingTimeEditDialog.js:135
 msgid "Choose the template"
@@ -453,83 +490,46 @@ msgstr "Powtórzony tytuł"
 msgid "The title you have chosen is already in use. Please try another one!"
 msgstr "Wybrany tytuł jest już używany. Proszę skorzystaj z innego!"
 
-#: js/Models.js:72
-msgid "Employees"
-msgid_plural "Employees"
-msgstr[0] "Pracownik"
-msgstr[1] "pracownicy"
-msgstr[2] "pracownicy"
+#: Setup/Initialize.php:34 Setup/Update/Release6.php:331
+msgid "Employees which are currently employed"
+msgstr "Zatrudnieni pracownicy"
 
-#: js/Models.js:106 js/Models.js:199 js/Models.js:297 js/Models.js:365
-msgid "Quick Search"
-msgstr "Szybkie wyszukiwanie"
+#: Setup/Initialize.php:54
+msgid "Sickness"
+msgstr "Chorobowe"
 
-#: js/Models.js:107
-msgid "Employee name"
-msgstr "Nazwa pracownika"
+#: Setup/Initialize.php:55
+msgid "Vacation"
+msgstr "Urlop"
 
-#: js/Models.js:120 js/Models.js:382
-msgid "Last Modified Time"
-msgstr "Czas ostatniej zmiany"
+#: Setup/Initialize.php:56
+msgid "Remaining Vacation"
+msgstr "Pozostały urlop"
 
-#: js/Models.js:121 js/Models.js:383
-msgid "Last Modified By"
-msgstr "Zmienione przez"
+#: Setup/Initialize.php:57
+msgid "Extra Vacation"
+msgstr "Dodatkowy urlop"
 
-#: js/Models.js:122 js/Models.js:384
-msgid "Creation Time"
-msgstr "Czas utworzenia"
+#: Setup/Initialize.php:71
+msgid "Requested"
+msgstr "Na żądanie"
 
-#: js/Models.js:123 js/Models.js:385
-msgid "Created By"
-msgstr "Utworzone przez"
+#: Setup/Initialize.php:72
+msgid "In process"
+msgstr "W opracowaniu"
 
-#: js/Models.js:165
-msgid "Working Times"
-msgid_plural "Working Times"
-msgstr[0] "Czasy pracy"
-msgstr[1] "czasy pracy"
-msgstr[2] "czasy pracy"
+#: Setup/Initialize.php:73
+msgid "Accepted"
+msgstr "Zaakceptowany"
 
-#: js/Models.js:230 js/CostCenterGridPanel.js:58
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] "Centrum kosztów"
-msgstr[1] "Centra kosztów"
-msgstr[2] "Centra kosztów"
+#: Setup/Initialize.php:74
+msgid "Declined"
+msgstr "Odrzucony"
 
-#: js/Models.js:234
-msgid "CostCenters"
-msgid_plural "CostCenters"
-msgstr[0] "Centrum kosztów"
-msgstr[1] "Centra kosztów"
-msgstr[2] "Centra kosztów"
+#: Setup/Initialize.php:89 Setup/Update/Release6.php:299
+msgid "Excused"
+msgstr "Usprawiedliwiona"
 
-#: js/Models.js:264
-msgid "Contracts"
-msgid_plural "Contracts"
-msgstr[0] "Umowa"
-msgstr[1] "umowy"
-msgstr[2] "umowy"
-
-#: js/Models.js:417
-msgid "Free Day"
-msgid_plural "Free Days"
-msgstr[0] "Wolny dzień"
-msgstr[1] "wolne dni"
-msgstr[2] "wolne dni"
-
-#: js/Models.js:420
-msgid "Free Days"
-msgid_plural "Free Days"
-msgstr[0] "Wolne dni"
-msgstr[1] "wolne dni"
-msgstr[2] "wolne dni"
-
-#: js/CostCenterGridPanel.js:104
-msgid "Cost Center"
-msgstr "Centrum kosztów"
-
-#: js/CostCenterGridPanel.js:107
-msgid "Startdate"
-msgstr "Data rozpoczęcia"
+#: Setup/Initialize.php:90 Setup/Update/Release6.php:300
+msgid "Unexcused"
+msgstr "Nieusprawiedliwiona"

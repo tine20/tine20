@@ -314,7 +314,6 @@ Tine.Admin.Applications.Main = function() {
                 // don't allow to disable Admin, Tinebase or Addressbook as we can't deal with this yet
                 for (var i=0; i<selected.length; i++) {
                     if (typeof selected[i].get == 'function' && selected[i].get('name').toString().match(/Tinebase|Admin|Addressbook/)) {
-                        _action_enable.setDisabled(true);
                         _action_disable.setDisabled(true);
                         break;
                     }
@@ -342,7 +341,6 @@ Tine.Admin.Applications.Main = function() {
                  * @return {String}
                  */
                 getRowClass: function(record, index) {
-                    //console.log(record);
                     var className = '';
                     switch(record.get('status')) {
                         case 'disabled':

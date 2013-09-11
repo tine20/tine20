@@ -27,10 +27,6 @@ msgid ""
 "records"
 msgstr "Sửa dữ liệu tài khoản, sinh nhật và thông tin cá nhân khác cho biểu ghi người lao động"
 
-#: Controller.php:74
-msgid "You do not have admin rights on HumanResources"
-msgstr "Bạn không có quyền quản trị với hệ thống HumanResources"
-
 #: Config.php:48
 msgid "Freetime Type"
 msgstr "Loại thời gian rỗi"
@@ -65,101 +61,9 @@ msgid ""
 "other free days in datepicker"
 msgstr ""
 
-#: Setup/Update/Release6.php:299 Setup/Initialize.php:89
-msgid "Excused"
-msgstr ""
-
-#: Setup/Update/Release6.php:300 Setup/Initialize.php:90
-msgid "Unexcused"
-msgstr ""
-
-#: Setup/Update/Release6.php:330 Setup/Initialize.php:33 js/Models.js:111
-msgid "Currently employed"
-msgstr ""
-
-#: Setup/Update/Release6.php:331 Setup/Initialize.php:34
-msgid "Employees which are currently employed"
-msgstr ""
-
-#: Setup/Initialize.php:54
-msgid "Sickness"
-msgstr "Ốm"
-
-#: Setup/Initialize.php:55
-msgid "Vacation"
-msgstr "Nghỉ lễ"
-
-#: Setup/Initialize.php:56
-msgid "Remaining Vacation"
-msgstr ""
-
-#: Setup/Initialize.php:57
-msgid "Extra Vacation"
-msgstr ""
-
-#: Setup/Initialize.php:71
-msgid "Requested"
-msgstr "Đã yêu cầu"
-
-#: Setup/Initialize.php:72
-msgid "In process"
-msgstr "Trong tiến trình"
-
-#: Setup/Initialize.php:73
-msgid "Accepted"
-msgstr "Chấp nhận"
-
-#: Setup/Initialize.php:74
-msgid "Declined"
-msgstr "Từ chối"
-
-#: js/EmployeeGridPanel.js:95 js/FreeDayGridPanel.js:113
-msgid "Tags"
-msgstr "Từ khóa"
-
-#: js/EmployeeGridPanel.js:98 js/EmployeeEditDialog.js:228
-msgid "Number"
-msgstr "Số"
-
-#: js/EmployeeGridPanel.js:105 js/EmployeeEditDialog.js:288
-msgid "Full Name"
-msgstr "Tên đầy đủ"
-
-#: js/EmployeeGridPanel.js:111 js/EmployeeEditDialog.js:293 js/Models.js:116
-msgid "Salutation"
-msgstr "Lời chào"
-
-#: js/EmployeeGridPanel.js:118 js/EmployeeEditDialog.js:301 js/Models.js:113
-msgid "Title"
-msgstr "Tiêu đề"
-
-#: js/EmployeeGridPanel.js:125 js/EmployeeEditDialog.js:305 js/Models.js:112
-msgid "First Name"
-msgstr "Họ"
-
-#: js/EmployeeGridPanel.js:132 js/EmployeeEditDialog.js:314 js/Models.js:115
-msgid "Last Name"
-msgstr "Tên"
-
-#: js/EmployeeGridPanel.js:139 js/EmployeeEditDialog.js:383 js/Models.js:108
-msgid "Employment begin"
-msgstr "Bắt đầu làm việc"
-
-#: js/EmployeeGridPanel.js:146 js/EmployeeEditDialog.js:388 js/Models.js:109
-msgid "Employment end"
-msgstr "Kết thúc hợp đồng"
-
-#: js/EmployeeGridPanel.js:153 js/EmployeeEditDialog.js:171
-msgid "Supervisor"
-msgstr "Giám đốc"
-
-#: js/EmployeeGridPanel.js:162 js/EmployeeEditDialog.js:186 js/Models.js:117
-msgid "Health Insurance"
-msgstr "Bảo hiểm y tế"
-
-#: js/EmployeeGridPanel.js:168 js/EmployeeEditDialog.js:179
-msgid "Division"
-msgstr "Bộ phận"
+#: Controller.php:74
+msgid "You do not have admin rights on HumanResources"
+msgstr "Bạn không có quyền quản trị với hệ thống HumanResources"
 
 #: js/AdminPanel.js:68
 msgid "Cancel"
@@ -177,6 +81,56 @@ msgstr "Lịch"
 msgid "Calendars"
 msgstr "Lịch"
 
+#: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:143 js/Models.js:261
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "one: Hợp đồng\nother: Hợp đồng"
+
+#: js/ContractGridPanel.js:128
+msgid "Working Time Model"
+msgstr "Mẫu thời gian làm việc"
+
+#: js/ContractGridPanel.js:131
+msgid "Vacation Days"
+msgstr "Ngày nghỉ"
+
+#: js/ContractGridPanel.js:133
+msgid "Start Date"
+msgstr "Ngày bắt đầu"
+
+#: js/ContractGridPanel.js:136
+msgid "End Date"
+msgstr "Ngày kết thúc"
+
+#: js/ContractGridPanel.js:139
+msgid "Feast Calendar"
+msgstr "Lịch nghỉ lễ"
+
+#: js/ContractGridPanel.js:177
+msgid "Edit Working Time"
+msgstr ""
+
+#: js/CostCenterGridPanel.js:58 js/Models.js:230
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] ""
+
+#: js/CostCenterGridPanel.js:104
+msgid "Cost Center"
+msgstr ""
+
+#: js/CostCenterGridPanel.js:107
+msgid "Startdate"
+msgstr ""
+
+#: js/DatePicker.js:42
+msgid "WK"
+msgstr "WK"
+
+#: js/DatePicker.js:63
+msgid "Loading calendar data..."
+msgstr "Đang nạp dữ liệu lịch"
+
 #: js/EmployeeEditDialog.js:118
 msgid "Dependent Windows"
 msgstr ""
@@ -187,17 +141,33 @@ msgid ""
 "cancel them before closing this one!"
 msgstr ""
 
+#: js/EmployeeEditDialog.js:171 js/EmployeeGridPanel.js:153
+msgid "Supervisor"
+msgstr "Giám đốc"
+
+#: js/EmployeeEditDialog.js:179 js/EmployeeGridPanel.js:168
+msgid "Division"
+msgstr "Bộ phận"
+
+#: js/EmployeeEditDialog.js:186 js/EmployeeGridPanel.js:162 js/Models.js:117
+msgid "Health Insurance"
+msgstr "Bảo hiểm y tế"
+
 #: js/EmployeeEditDialog.js:201 js/Models.js:333
 msgid "Free Time"
 msgid_plural "Free Times"
 msgstr[0] "one: Thời gian rỗi\nother: Thời gian rỗi"
 
 #: js/EmployeeEditDialog.js:209 js/EmployeeEditDialog.js:222
-#: js/FreeTimeEditDialog.js:130 js/FreeDayGridPanel.js:114
+#: js/FreeDayGridPanel.js:114 js/FreeTimeEditDialog.js:130
 #: js/FreeTimeEmployeeFilter.js:31 js/FreeTimeGridPanel.js:166 js/Models.js:69
 msgid "Employee"
 msgid_plural "Employees"
 msgstr[0] "one: Người lao động\nother: Người lao động"
+
+#: js/EmployeeEditDialog.js:228 js/EmployeeGridPanel.js:98
+msgid "Number"
+msgstr "Số"
 
 #: js/EmployeeEditDialog.js:240 js/Models.js:110
 msgid "Account"
@@ -206,6 +176,26 @@ msgstr "Tài khoản"
 #: js/EmployeeEditDialog.js:259
 msgid "Apply contact data on form"
 msgstr "Áp dụng dữ liệu liên hệ trên biểu mẫu"
+
+#: js/EmployeeEditDialog.js:288 js/EmployeeGridPanel.js:105
+msgid "Full Name"
+msgstr "Tên đầy đủ"
+
+#: js/EmployeeEditDialog.js:293 js/EmployeeGridPanel.js:111 js/Models.js:116
+msgid "Salutation"
+msgstr "Lời chào"
+
+#: js/EmployeeEditDialog.js:301 js/EmployeeGridPanel.js:118 js/Models.js:113
+msgid "Title"
+msgstr "Tiêu đề"
+
+#: js/EmployeeEditDialog.js:305 js/EmployeeGridPanel.js:125 js/Models.js:112
+msgid "First Name"
+msgstr "Họ"
+
+#: js/EmployeeEditDialog.js:314 js/EmployeeGridPanel.js:132 js/Models.js:115
+msgid "Last Name"
+msgstr "Tên"
 
 #: js/EmployeeEditDialog.js:328
 msgid "Personal Information"
@@ -255,6 +245,14 @@ msgstr "Ngày sinh"
 msgid "Internal Information"
 msgstr "Thông tin nội bội"
 
+#: js/EmployeeEditDialog.js:383 js/EmployeeGridPanel.js:139 js/Models.js:108
+msgid "Employment begin"
+msgstr "Bắt đầu làm việc"
+
+#: js/EmployeeEditDialog.js:388 js/EmployeeGridPanel.js:146 js/Models.js:109
+msgid "Employment end"
+msgstr "Kết thúc hợp đồng"
+
 #: js/EmployeeEditDialog.js:391 js/Models.js:114
 msgid "Profession"
 msgstr "Chuyên gia"
@@ -288,47 +286,34 @@ msgstr "Mô tả"
 msgid "Enter description"
 msgstr "Nhập mô tả"
 
-#: js/HumanResources.js:25
-msgid "Human Resources"
-msgstr "Tài nguyên nhân sự"
+#: js/EmployeeGridPanel.js:95 js/FreeDayGridPanel.js:113
+msgid "Tags"
+msgstr "Từ khóa"
 
-#: js/ContractGridPanel.js:58 js/FreeTimeEditDialog.js:143 js/Models.js:261
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "one: Hợp đồng\nother: Hợp đồng"
+#: js/ExceptionHandler.js:47
+msgid "No contract could be found."
+msgstr "Không tìm thấy hợp đồng nào"
 
-#: js/ContractGridPanel.js:128
-msgid "Working Time Model"
-msgstr "Mẫu thời gian làm việc"
+#: js/ExceptionHandler.js:48
+msgid "Please create a contract for this employee!"
+msgstr "Xin hãy tạo 1 hợp đồng cho nhân viên này"
 
-#: js/ContractGridPanel.js:131
-msgid "Vacation Days"
-msgstr "Ngày nghỉ"
+#: js/FreeDayGridPanel.js:115 js/FreeTimeEditDialog.js:199
+#: js/FreeTimeGridPanel.js:167 js/Models.js:367
+msgid "Type"
+msgstr "Loại"
 
-#: js/ContractGridPanel.js:133
-msgid "Start Date"
+#: js/FreeDayGridPanel.js:116 js/FreeTimeGridPanel.js:169
+msgid "Date Start"
 msgstr "Ngày bắt đầu"
 
-#: js/ContractGridPanel.js:136
-msgid "End Date"
-msgstr "Ngày kết thúc"
-
-#: js/ContractGridPanel.js:139
-msgid "Feast Calendar"
-msgstr "Lịch nghỉ lễ"
-
-#: js/ContractGridPanel.js:177
-msgid "Edit Working Time"
-msgstr ""
+#: js/FreeDayGridPanel.js:117
+msgid "Remark"
+msgstr "Bình luận"
 
 #: js/FreeTimeEditDialog.js:170 js/FreeTimeEditDialog.js:182
 msgid "FreeTime"
 msgstr "Thời gian rỗi"
-
-#: js/FreeTimeEditDialog.js:199 js/FreeDayGridPanel.js:115
-#: js/FreeTimeGridPanel.js:167 js/Models.js:367
-msgid "Type"
-msgstr "Loại"
 
 #: js/FreeTimeEditDialog.js:214 js/FreeTimeGridPanel.js:168 js/Models.js:375
 msgid "Status"
@@ -346,39 +331,77 @@ msgstr "Độ dài ngày cuối cùng"
 msgid "Select Days"
 msgstr "Chọn ngày"
 
-#: js/FreeDayGridPanel.js:116 js/FreeTimeGridPanel.js:169
-msgid "Date Start"
-msgstr "Ngày bắt đầu"
+#: js/HumanResources.js:25
+msgid "Human Resources"
+msgstr "Tài nguyên nhân sự"
 
-#: js/FreeDayGridPanel.js:117
-msgid "Remark"
-msgstr "Bình luận"
+#: js/Models.js:72
+msgid "Employees"
+msgid_plural "Employees"
+msgstr[0] "one: Nhân viên\nother: Nhân viên"
 
-#: js/ExceptionHandler.js:47
-msgid "No contract could be found."
-msgstr "Không tìm thấy hợp đồng nào"
+#: js/Models.js:106 js/Models.js:199 js/Models.js:297 js/Models.js:365
+msgid "Quick search"
+msgstr "Tìm nhanh"
 
-#: js/ExceptionHandler.js:48
-msgid "Please create a contract for this employee!"
-msgstr "Xin hãy tạo 1 hợp đồng cho nhân viên này"
+#: js/Models.js:107
+msgid "Employee name"
+msgstr "Tên nhân viên"
 
-#: js/DatePicker.js:42
-msgid "WK"
-msgstr "WK"
+#: js/Models.js:111 Setup/Initialize.php:33 Setup/Update/Release6.php:330
+msgid "Currently employed"
+msgstr ""
 
-#: js/DatePicker.js:63
-msgid "Loading calendar data..."
-msgstr "Đang nạp dữ liệu lịch"
+#: js/Models.js:120 js/Models.js:382
+msgid "Last Modified Time"
+msgstr "Thời gian sửa cuối"
+
+#: js/Models.js:121 js/Models.js:383
+msgid "Last Modified By"
+msgstr "Sửa lần cuối bởi"
+
+#: js/Models.js:122 js/Models.js:384
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/Models.js:123 js/Models.js:385
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/Models.js:162 js/WorkingTimeEditDialog.js:108
+#: js/WorkingTimeEditDialog.js:120
+msgid "Working Time"
+msgid_plural "Working Times"
+msgstr[0] "one: Thời gian làm việc\nother: Thời gian làm việc"
+
+#: js/Models.js:165
+msgid "Working Times"
+msgid_plural "Working Times"
+msgstr[0] "one: Thời gian làm việc\nother: Thời gian làm việc"
+
+#: js/Models.js:234
+msgid "CostCenters"
+msgid_plural "CostCenters"
+msgstr[0] ""
+
+#: js/Models.js:264
+msgid "Contracts"
+msgid_plural "Contracts"
+msgstr[0] "one: Hợp đồng\nother: Hợp đồng"
+
+#: js/Models.js:417
+msgid "Free Day"
+msgid_plural "Free Days"
+msgstr[0] "one: Ngày rỗi\nother: Ngày rỗi"
+
+#: js/Models.js:420
+msgid "Free Days"
+msgid_plural "Free Days"
+msgstr[0] "one: Ngày rỗi\nother: Ngày rỗi"
 
 #: js/WorkingTimeEditDialog.js:74
 msgid "Edit working time for {0} ({1} - {2})"
 msgstr ""
-
-#: js/WorkingTimeEditDialog.js:108 js/WorkingTimeEditDialog.js:120
-#: js/Models.js:162
-msgid "Working Time"
-msgid_plural "Working Times"
-msgstr[0] "one: Thời gian làm việc\nother: Thời gian làm việc"
 
 #: js/WorkingTimeEditDialog.js:135
 msgid "Choose the template"
@@ -444,69 +467,46 @@ msgstr ""
 msgid "The title you have chosen is already in use. Please try another one!"
 msgstr ""
 
-#: js/Models.js:72
-msgid "Employees"
-msgid_plural "Employees"
-msgstr[0] "one: Nhân viên\nother: Nhân viên"
-
-#: js/Models.js:106 js/Models.js:199 js/Models.js:297 js/Models.js:365
-msgid "Quick Search"
-msgstr "Tìm nhanh"
-
-#: js/Models.js:107
-msgid "Employee name"
-msgstr "Tên nhân viên"
-
-#: js/Models.js:120 js/Models.js:382
-msgid "Last Modified Time"
-msgstr "Thời gian sửa cuối"
-
-#: js/Models.js:121 js/Models.js:383
-msgid "Last Modified By"
-msgstr "Sửa lần cuối bởi"
-
-#: js/Models.js:122 js/Models.js:384
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/Models.js:123 js/Models.js:385
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/Models.js:165
-msgid "Working Times"
-msgid_plural "Working Times"
-msgstr[0] "one: Thời gian làm việc\nother: Thời gian làm việc"
-
-#: js/Models.js:230 js/CostCenterGridPanel.js:58
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] ""
-
-#: js/Models.js:234
-msgid "CostCenters"
-msgid_plural "CostCenters"
-msgstr[0] ""
-
-#: js/Models.js:264
-msgid "Contracts"
-msgid_plural "Contracts"
-msgstr[0] "one: Hợp đồng\nother: Hợp đồng"
-
-#: js/Models.js:417
-msgid "Free Day"
-msgid_plural "Free Days"
-msgstr[0] "one: Ngày rỗi\nother: Ngày rỗi"
-
-#: js/Models.js:420
-msgid "Free Days"
-msgid_plural "Free Days"
-msgstr[0] "one: Ngày rỗi\nother: Ngày rỗi"
-
-#: js/CostCenterGridPanel.js:104
-msgid "Cost Center"
+#: Setup/Initialize.php:34 Setup/Update/Release6.php:331
+msgid "Employees which are currently employed"
 msgstr ""
 
-#: js/CostCenterGridPanel.js:107
-msgid "Startdate"
+#: Setup/Initialize.php:54
+msgid "Sickness"
+msgstr "Ốm"
+
+#: Setup/Initialize.php:55
+msgid "Vacation"
+msgstr "Nghỉ lễ"
+
+#: Setup/Initialize.php:56
+msgid "Remaining Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:57
+msgid "Extra Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:71
+msgid "Requested"
+msgstr "Đã yêu cầu"
+
+#: Setup/Initialize.php:72
+msgid "In process"
+msgstr "Trong tiến trình"
+
+#: Setup/Initialize.php:73
+msgid "Accepted"
+msgstr "Chấp nhận"
+
+#: Setup/Initialize.php:74
+msgid "Declined"
+msgstr "Từ chối"
+
+#: Setup/Initialize.php:89 Setup/Update/Release6.php:299
+msgid "Excused"
+msgstr ""
+
+#: Setup/Initialize.php:90 Setup/Update/Release6.php:300
+msgid "Unexcused"
 msgstr ""

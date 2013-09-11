@@ -25,49 +25,6 @@ msgstr "Zadani policy za nove uređaje"
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Unesite novi policy id za nove kreirane uređaje."
 
-#: Setup/setup.xml:542 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Zadani policy"
-
-#: Setup/setup.xml:547 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Zadani policy instaliran tijekom postavljanja"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Zadani adresar"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Zadani adresar za kreiranje novih kontakata."
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Zadani kalendar"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Zadani kalendar za kreiranje novih događaja."
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Zadana lista zadataka."
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Zadana lista zadataka za kreiranje novih zadataka."
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Uređaj"
-msgstr[1] "Uređaja"
-msgstr[2] "Uređaja"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Uređaji"
-
 #: js/Application.js:27
 msgid "Active Sync"
 msgstr "Active Sync"
@@ -99,3 +56,46 @@ msgstr "resetirano"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Postavi Sync filter"
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Uređaj"
+msgstr[1] "Uređaja"
+msgstr[2] "Uređaja"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Uređaji"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Zadani adresar"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Zadani adresar za kreiranje novih kontakata."
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Zadani kalendar"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Zadani kalendar za kreiranje novih događaja."
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Zadana lista zadataka."
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Zadana lista zadataka za kreiranje novih zadataka."
+
+#: Setup/setup.xml:542 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Zadani policy"
+
+#: Setup/setup.xml:547 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Zadani policy instaliran tijekom postavljanja"

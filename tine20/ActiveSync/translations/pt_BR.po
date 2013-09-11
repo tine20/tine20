@@ -24,48 +24,6 @@ msgstr "Política padrão para novos dispositivos"
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Informe o id da política para aplicar aos mais recentes dispositivos criados"
 
-#: Setup/setup.xml:542 Setup/Update/Release6.php:290
-msgid "Default Policy"
-msgstr "Política Padrão"
-
-#: Setup/setup.xml:547 Setup/Update/Release6.php:295
-msgid "Default Policy installed during setup"
-msgstr "Política Padrão instalada durante a configuração"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Catálogo de Endereços Padrão"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "O Catálogo de endereços padrão para criar novos contatos em."
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Calendário Padrão"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "O calendário padrão para criaro novos eventos em."
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Lista de Tarefas Padrão"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "A lista de tarefa padrão para criar novas tarefas em."
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Dispositivo"
-msgstr[1] "Dispositivos"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Dispositivos"
-
 #: js/Application.js:27
 msgid "Active Sync"
 msgstr "Syncronização Ativa"
@@ -97,3 +55,45 @@ msgstr "Restabelecido"
 #: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Atribuir Filtro Sincronizado"
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Dispositivo"
+msgstr[1] "Dispositivos"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Dispositivos"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Catálogo de Endereços Padrão"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "O Catálogo de endereços padrão para criar novos contatos em."
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Calendário Padrão"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "O calendário padrão para criaro novos eventos em."
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Lista de Tarefas Padrão"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "A lista de tarefa padrão para criar novas tarefas em."
+
+#: Setup/setup.xml:542 Setup/Update/Release6.php:290
+msgid "Default Policy"
+msgstr "Política Padrão"
+
+#: Setup/setup.xml:547 Setup/Update/Release6.php:295
+msgid "Default Policy installed during setup"
+msgstr "Política Padrão instalada durante a configuração"

@@ -483,7 +483,7 @@ msgid "lead lists"
 msgstr ""
 
 #: js/Model.js:103
-msgid "Quick Search"
+msgid "Quick search"
 msgstr "Быстрый поиск"
 
 #: js/Model.js:110

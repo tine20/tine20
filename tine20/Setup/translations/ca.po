@@ -16,6 +16,66 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Nom"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Habilitat"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Ordre"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Versió instal·lada"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Versió disponible"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Estat"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Depèn de"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Instal·la aplicació"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Desinstal·la aplicació"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Actualitza aplicació"
+
+#: js/ApplicationGridPanel.js:105
+msgid "Go to {0} login"
+msgstr "Vés a l'inici de sessió de {0}"
+
+#: js/ApplicationGridPanel.js:175
+msgid "uninstall"
+msgstr "desinstal·la"
+
+#: js/ApplicationGridPanel.js:175
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Esteu segur que voleu deinstal·lar l'aplicació o aplicacions?"
+
+#: js/ApplicationGridPanel.js:235
+msgid "This may take a while"
+msgstr "Això pot tardar una estona"
+
+#: js/ApplicationGridPanel.js:267
+msgid "Dependency Violation"
+msgstr "S'ha produït una violació de dependències"
+
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
 msgstr "Elimina tots els usuaris i grups existents"
@@ -28,9 +88,9 @@ msgid ""
 msgstr "El canvi d'SQL a LDAP eliminarà tots els comptes d'usuari, els grups i els rols existents. Esteu segur que voleu canviar l'administració d'emmagatzematge de comptes a LDAP?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
-#: js/EmailPanel.js:146 js/ConfigManagerPanel.js:147
-#: js/ConfigManagerPanel.js:159 js/ConfigManagerPanel.js:171
-#: js/ConfigManagerPanel.js:183
+#: js/ConfigManagerPanel.js:147 js/ConfigManagerPanel.js:159
+#: js/ConfigManagerPanel.js:171 js/ConfigManagerPanel.js:183
+#: js/EmailPanel.js:146
 msgid "Backend"
 msgstr "Administració"
 
@@ -96,10 +156,10 @@ msgid "Host"
 msgstr "Amfitrió"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
-#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 #: js/ConfigManagerPanel.js:234 js/ConfigManagerPanel.js:321
 #: js/ConfigManagerPanel.js:341 js/ConfigManagerPanel.js:382
-#: js/ConfigManagerPanel.js:441
+#: js/ConfigManagerPanel.js:441 js/EmailPanel.js:195 js/EmailPanel.js:290
+#: js/EmailPanel.js:394
 msgid "Port"
 msgstr "Port"
 
@@ -108,8 +168,8 @@ msgid "Login name"
 msgstr "Nom d'inici de sessió"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
-#: js/EmailPanel.js:190 js/ConfigManagerPanel.js:214
-#: js/ConfigManagerPanel.js:245
+#: js/ConfigManagerPanel.js:214 js/ConfigManagerPanel.js:245
+#: js/EmailPanel.js:190
 msgid "Password"
 msgstr "Contrasenya"
 
@@ -125,10 +185,10 @@ msgstr "DN base"
 msgid "Search filter"
 msgstr "Filtre de cerca"
 
-#: js/AuthenticationPanel.js:363 js/EmailPanel.js:182 js/EmailPanel.js:286
-#: js/EmailPanel.js:390 js/ConfigManagerPanel.js:229
+#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:229
 #: js/ConfigManagerPanel.js:317 js/ConfigManagerPanel.js:337
 #: js/ConfigManagerPanel.js:378 js/ConfigManagerPanel.js:437
+#: js/EmailPanel.js:182 js/EmailPanel.js:286 js/EmailPanel.js:390
 msgid "Hostname"
 msgstr "Nom de l'amfitrió"
 
@@ -302,115 +362,101 @@ msgstr "Les contrasenyes no coincideixen"
 msgid "Should not be empty"
 msgstr "No pot ser buit"
 
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "He llegit i acceptat l'acord de llicència"
+#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
+msgid "File"
+msgstr ""
 
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Acord de llicència"
+#: js/ConfigManagerPanel.js:198
+msgid "Setup Authentication"
+msgstr "Estableix l'autenticació"
 
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "He llegit i acceptat l'acord de privadesa"
+#: js/ConfigManagerPanel.js:205 js/EmailPanel.js:186
+msgid "Username"
+msgstr "Nom d'usuari"
 
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Acord de privadesa"
+#: js/ConfigManagerPanel.js:219 js/ConfigManagerPanel.js:237
+msgid "Database"
+msgstr "Base de dades"
 
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Accepta els termes i condicions"
+#: js/ConfigManagerPanel.js:241
+msgid "User"
+msgstr "Usuari"
 
-#: js/Setup.js:53
-msgid "Terms and Conditions"
-msgstr "Termes i condicions"
+#: js/ConfigManagerPanel.js:249
+msgid "Prefix"
+msgstr "Prefix"
 
-#: js/Setup.js:58
-msgid "Setup Checks"
-msgstr "Proves de configuració"
+#: js/ConfigManagerPanel.js:253
+msgid "Logging"
+msgstr "Registre d'esdeveniments"
 
-#: js/Setup.js:64
-msgid "Config Manager"
-msgstr "Gestor de configuracions"
+#: js/ConfigManagerPanel.js:263
+msgid "Filename"
+msgstr "Nom de fitxer"
 
-#: js/Setup.js:70
-msgid "Authentication/Accounts"
-msgstr "Autenticació/Comptes"
+#: js/ConfigManagerPanel.js:266
+msgid "Priority"
+msgstr "Prioritat"
 
-#: js/Setup.js:76
-msgid "Email"
-msgstr "Correu electrònic"
+#: js/ConfigManagerPanel.js:270
+msgid "Caching"
+msgstr "Emmagatzematge cau"
 
-#: js/Setup.js:82
-msgid "Application Manager"
-msgstr "Gestor d'aplicacions"
+#: js/ConfigManagerPanel.js:281 js/ConfigManagerPanel.js:398
+msgid "Lifetime (seconds)"
+msgstr "temps de vida (segons)"
 
-#: js/Setup.js:185
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Aplicació"
-msgstr[1] "Aplicacions"
+#: js/ConfigManagerPanel.js:304 js/ConfigManagerPanel.js:423
+msgid "Path"
+msgstr "Camí"
 
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "Nom"
+#: js/ConfigManagerPanel.js:349
+msgid "Queue"
+msgstr ""
 
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr "Habilitat"
+#: js/ConfigManagerPanel.js:390
+msgid "Session"
+msgstr ""
 
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "Ordre"
+#: js/ConfigManagerPanel.js:449
+msgid "Temporary files"
+msgstr "Fitxers temporals"
 
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "Versió instal·lada"
+#: js/ConfigManagerPanel.js:457
+msgid "Temporary Files Path"
+msgstr "Camí als fitxers temporals"
 
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "Versió disponible"
+#: js/ConfigManagerPanel.js:462
+msgid "Filestore directory"
+msgstr ""
 
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "Estat"
+#: js/ConfigManagerPanel.js:470
+msgid "Filestore Path"
+msgstr ""
 
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "Depèn de"
+#: js/ConfigManagerPanel.js:475
+msgid "Addressbook Map panel"
+msgstr "Tauler Mapa de llibreta d'adreces"
 
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr "Instal·la aplicació"
+#: js/ConfigManagerPanel.js:483
+msgid "Map panel"
+msgstr "Tauler Mapa"
 
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "Desinstal·la aplicació"
+#: js/ConfigManagerPanel.js:485
+msgid "disabled"
+msgstr "inhabilitat"
 
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Actualitza aplicació"
+#: js/ConfigManagerPanel.js:485
+msgid "enabled"
+msgstr "habilitat"
 
-#: js/ApplicationGridPanel.js:105
-msgid "Go to {0} login"
-msgstr "Vés a l'inici de sessió de {0}"
+#: js/ConfigManagerPanel.js:497
+msgid "Config file is not writable"
+msgstr "El fitxer de configuració no es pot escriure"
 
-#: js/ApplicationGridPanel.js:175
-msgid "uninstall"
-msgstr "desinstal·la"
-
-#: js/ApplicationGridPanel.js:175
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Esteu segur que voleu deinstal·lar l'aplicació o aplicacions?"
-
-#: js/ApplicationGridPanel.js:235
-msgid "This may take a while"
-msgstr "Això pot tardar una estona"
-
-#: js/ApplicationGridPanel.js:267
-msgid "Dependency Violation"
-msgstr "S'ha produït una violació de dependències"
+#: js/ConfigManagerPanel.js:516
+msgid "Download config file"
+msgstr "Descarrega el fitxer de configuració"
 
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
@@ -423,10 +469,6 @@ msgstr "SMTP estàndard"
 #: js/EmailPanel.js:174
 msgid "Imap"
 msgstr "Imap"
-
-#: js/EmailPanel.js:186 js/ConfigManagerPanel.js:205
-msgid "Username"
-msgstr "Nom d'usuari"
 
 #: js/EmailPanel.js:206
 msgid "Use system account"
@@ -582,94 +624,52 @@ msgstr "Executa proves de configuració"
 msgid "Ignore setup tests"
 msgstr "Ignora les proves de configuració"
 
-#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
-msgid "File"
-msgstr ""
+#: js/Setup.js:53
+msgid "Terms and Conditions"
+msgstr "Termes i condicions"
 
-#: js/ConfigManagerPanel.js:198
-msgid "Setup Authentication"
-msgstr "Estableix l'autenticació"
+#: js/Setup.js:58
+msgid "Setup Checks"
+msgstr "Proves de configuració"
 
-#: js/ConfigManagerPanel.js:219 js/ConfigManagerPanel.js:237
-msgid "Database"
-msgstr "Base de dades"
+#: js/Setup.js:64
+msgid "Config Manager"
+msgstr "Gestor de configuracions"
 
-#: js/ConfigManagerPanel.js:241
-msgid "User"
-msgstr "Usuari"
+#: js/Setup.js:70
+msgid "Authentication/Accounts"
+msgstr "Autenticació/Comptes"
 
-#: js/ConfigManagerPanel.js:249
-msgid "Prefix"
-msgstr "Prefix"
+#: js/Setup.js:76
+msgid "Email"
+msgstr "Correu electrònic"
 
-#: js/ConfigManagerPanel.js:253
-msgid "Logging"
-msgstr "Registre d'esdeveniments"
+#: js/Setup.js:82
+msgid "Application Manager"
+msgstr "Gestor d'aplicacions"
 
-#: js/ConfigManagerPanel.js:263
-msgid "Filename"
-msgstr "Nom de fitxer"
+#: js/Setup.js:185
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Aplicació"
+msgstr[1] "Aplicacions"
 
-#: js/ConfigManagerPanel.js:266
-msgid "Priority"
-msgstr "Prioritat"
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "He llegit i acceptat l'acord de llicència"
 
-#: js/ConfigManagerPanel.js:270
-msgid "Caching"
-msgstr "Emmagatzematge cau"
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Acord de llicència"
 
-#: js/ConfigManagerPanel.js:281 js/ConfigManagerPanel.js:398
-msgid "Lifetime (seconds)"
-msgstr "temps de vida (segons)"
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "He llegit i acceptat l'acord de privadesa"
 
-#: js/ConfigManagerPanel.js:304 js/ConfigManagerPanel.js:423
-msgid "Path"
-msgstr "Camí"
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Acord de privadesa"
 
-#: js/ConfigManagerPanel.js:349
-msgid "Queue"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:390
-msgid "Session"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:449
-msgid "Temporary files"
-msgstr "Fitxers temporals"
-
-#: js/ConfigManagerPanel.js:457
-msgid "Temporary Files Path"
-msgstr "Camí als fitxers temporals"
-
-#: js/ConfigManagerPanel.js:462
-msgid "Filestore directory"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:470
-msgid "Filestore Path"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:475
-msgid "Addressbook Map panel"
-msgstr "Tauler Mapa de llibreta d'adreces"
-
-#: js/ConfigManagerPanel.js:483
-msgid "Map panel"
-msgstr "Tauler Mapa"
-
-#: js/ConfigManagerPanel.js:485
-msgid "disabled"
-msgstr "inhabilitat"
-
-#: js/ConfigManagerPanel.js:485
-msgid "enabled"
-msgstr "habilitat"
-
-#: js/ConfigManagerPanel.js:497
-msgid "Config file is not writable"
-msgstr "El fitxer de configuració no es pot escriure"
-
-#: js/ConfigManagerPanel.js:516
-msgid "Download config file"
-msgstr "Descarrega el fitxer de configuració"
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Accepta els termes i condicions"

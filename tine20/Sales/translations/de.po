@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-21 19:56+0000\n"
-"Last-Translator: Björn Balazs <transifex@lazs.de>\n"
+"PO-Revision-Date: 2013-06-21 10:05+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,22 +26,6 @@ msgstr "Produkte verwalten"
 #: Acl/Rights.php:104
 msgid "add, edit and delete products"
 msgstr "Hinzufügen, Editieren und Löschen von Produkten"
-
-#: Controller.php:83 Controller.php:103
-msgid "You do not have admin rights on Sales"
-msgstr "Sie haben kein Adminrecht in der Sales-Applikation"
-
-#: Model/Contract.php:91
-msgid "Responsible"
-msgstr "Verantwortlicher"
-
-#: Model/Contract.php:92
-msgid "Customer"
-msgstr "Kunde"
-
-#: Model/Contract.php:93
-msgid "Partner"
-msgstr "Partner"
 
 #: Config.php:51
 msgid "Contract Number Creation"
@@ -67,7 +51,7 @@ msgstr "Vertragsnummer-Validierung"
 msgid "The Number can be validated as text or number."
 msgstr "Die Vertragsnummer kann als Text oder Nummer validiert werden."
 
-#: Config.php:69 js/Models.js:199 js/ContractEditDialog.js:136
+#: Config.php:69 js/ContractEditDialog.js:136 js/Models.js:203
 msgid "Number"
 msgstr "Nummer"
 
@@ -93,21 +77,13 @@ msgstr "Verfügbare Abgerechnetstatus für Verträge"
 msgid "Possible Contract cleared states."
 msgstr "Mögliche Werte für Abgerechnetstatus"
 
-#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
-msgid "My Products"
-msgstr "Meine Produkte"
+#: Controller/Contract.php:83
+msgid "The number you have tried to set is already in use!"
+msgstr "Diese Nummer ist bereits vergeben!"
 
-#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
-msgid "Products created by myself"
-msgstr "Von mir erstellte Produkte"
-
-#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
-msgid "My Contracts"
-msgstr "Meine Aufträge"
-
-#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
-msgid "Contracts created by myself"
-msgstr "Von mir erstellte Aufträge"
+#: Controller.php:83 Controller.php:103
+msgid "You do not have admin rights on Sales"
+msgstr "Sie haben kein Adminrecht in der Sales-Applikation"
 
 #: js/AdminPanel.js:61
 msgid "Cancel"
@@ -121,25 +97,132 @@ msgstr "OK"
 msgid "Loading..."
 msgstr "Lade ..."
 
-#: js/ContractGridPanel.js:82
-msgid "Contract number"
-msgstr "Vertragsnummer"
+#: js/ContractEditDialog.js:96
+msgid "Please use a decimal number here!"
+msgstr "Bitte benutzen Sie eine Dezimalzahl!"
 
-#: js/ContractGridPanel.js:88 js/Models.js:236 js/ContractEditDialog.js:143
+#: js/ContractEditDialog.js:143 js/ContractGridPanel.js:93 js/Models.js:240
 msgid "Title"
 msgstr "Titel"
 
-#: js/ContractGridPanel.js:94 js/Models.js:146 js/ContractEditDialog.js:176
+#: js/ContractEditDialog.js:149
+msgid "Contract Contact"
+msgstr "Kontakt für Vertrag"
+
+#: js/ContractEditDialog.js:161
+msgid "Account Manager"
+msgstr "Konto Manager"
+
+#: js/ContractEditDialog.js:170
+msgid "Company"
+msgstr "Firma"
+
+#: js/ContractEditDialog.js:176 js/ContractGridPanel.js:99 js/Models.js:147
 msgid "Status"
 msgstr "Status"
 
-#: js/ContractGridPanel.js:101 js/Models.js:153 js/ContractEditDialog.js:183
+#: js/ContractEditDialog.js:183 js/ContractGridPanel.js:106 js/Models.js:154
 msgid "Cleared"
 msgstr "Abgerechnet"
 
-#: js/ContractGridPanel.js:108 js/Models.js:159 js/ContractEditDialog.js:187
+#: js/ContractEditDialog.js:187 js/ContractGridPanel.js:113 js/Models.js:160
 msgid "Cleared in"
 msgstr "Abgerechnet in"
+
+#: js/ContractEditDialog.js:193 js/ProductEditDialog.js:114
+#: js/ProductGridPanel.js:124
+msgid "Description"
+msgstr "Beschreibung"
+
+#: js/ContractEditDialog.js:194 js/ProductEditDialog.js:115
+msgid "Enter description..."
+msgstr "Bitte geben Sie eine Beschreibung ein..."
+
+#: js/ContractGridPanel.js:79 js/ProductGridPanel.js:120
+msgid "Tags"
+msgstr "Tags"
+
+#: js/ContractGridPanel.js:87
+msgid "Contract number"
+msgstr "Vertragsnummer"
+
+#: js/Models.js:39
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Produkt"
+msgstr[1] "Produkte"
+
+#: js/Models.js:42 js/Models.js:229
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "Vertragsliste"
+msgstr[1] "Vertragslisten"
+
+#: js/Models.js:76 js/Models.js:143 js/Models.js:202 js/Models.js:239
+msgid "Quick search"
+msgstr "Schnellsuche"
+
+#: js/Models.js:77
+msgid "Product name"
+msgstr "Produktname"
+
+#: js/Models.js:79 js/Models.js:145
+msgid "Creator"
+msgstr "Ersteller"
+
+#: js/Models.js:113
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Vertrag"
+msgstr[1] "Verträge"
+
+#: js/Models.js:117
+msgid "All Contracts"
+msgid_plural "contracts lists"
+msgstr[0] "Alle Verträge"
+msgstr[1] "Vertragslisten"
+
+#: js/Models.js:144
+msgid "Contract name"
+msgstr "Auftragsname"
+
+#: js/Models.js:162
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/Models.js:163
+msgid "Last Modified By"
+msgstr ""
+
+#: js/Models.js:164
+msgid "Creation Time"
+msgstr ""
+
+#: js/Models.js:165
+msgid "Created By"
+msgstr ""
+
+#: js/Models.js:189
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] "Kostenstelle"
+msgstr[1] "Kostenstellen"
+
+#: js/Models.js:192
+msgid "All CostCenters"
+msgid_plural "All CostCenters"
+msgstr[0] "Alle Konstenstellen"
+msgstr[1] "Alle Konstenstellen"
+
+#: js/Models.js:204
+msgid "Remark"
+msgstr "Anmerkung"
+
+#: js/Models.js:226
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] "Abteilung"
+msgstr[1] "Abteilung"
 
 #: js/ProductEditDialog.js:93 js/ProductGridPanel.js:121
 msgid "Name"
@@ -157,103 +240,30 @@ msgstr "Hersteller"
 msgid "Category"
 msgstr "Kategorie"
 
-#: js/ProductEditDialog.js:114 js/ProductGridPanel.js:124
-#: js/ContractEditDialog.js:193
-msgid "Description"
-msgstr "Beschreibung"
+#: Model/Contract.php:107
+msgid "Responsible"
+msgstr "Verantwortlicher"
 
-#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:194
-msgid "Enter description..."
-msgstr "Bitte geben Sie eine Beschreibung ein..."
+#: Model/Contract.php:108
+msgid "Customer"
+msgstr "Kunde"
 
-#: js/ProductGridPanel.js:120
-msgid "Tags"
-msgstr "Tags"
+#: Model/Contract.php:109
+msgid "Partner"
+msgstr "Partner"
 
-#: js/Models.js:39
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Produkt"
-msgstr[1] "Produkte"
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:63
+msgid "My Products"
+msgstr "Meine Produkte"
 
-#: js/Models.js:42 js/Models.js:225
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Vertragsliste"
-msgstr[1] "Vertragslisten"
+#: Setup/Initialize.php:35 Setup/Update/Release5.php:64
+msgid "Products created by myself"
+msgstr "Von mir erstellte Produkte"
 
-#: js/Models.js:76 js/Models.js:142 js/Models.js:198 js/Models.js:235
-msgid "Quick Search"
-msgstr "Schnellsuche"
+#: Setup/Initialize.php:55 Setup/Update/Release5.php:84
+msgid "My Contracts"
+msgstr "Meine Aufträge"
 
-#: js/Models.js:77
-msgid "Product name"
-msgstr "Produktname"
-
-#: js/Models.js:79 js/Models.js:144
-msgid "Creator"
-msgstr "Ersteller"
-
-#: js/Models.js:112
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Vertrag"
-msgstr[1] "Verträge"
-
-#: js/Models.js:116
-msgid "All Contracts"
-msgid_plural "contracts lists"
-msgstr[0] "Alle Verträge"
-msgstr[1] "Vertragslisten"
-
-#: js/Models.js:143
-msgid "Contract name"
-msgstr "Auftragsname"
-
-#: js/Models.js:185
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] "Kostenstelle"
-msgstr[1] "Kostenstellen"
-
-#: js/Models.js:188
-msgid "All CostCenters"
-msgid_plural "All CostCenters"
-msgstr[0] "Alle Konstenstellen"
-msgstr[1] "Alle Konstenstellen"
-
-#: js/Models.js:200
-msgid "Remark"
-msgstr "Anmerkung"
-
-#: js/Models.js:222
-msgid "Division"
-msgid_plural "Divisions"
-msgstr[0] "Abteilung"
-msgstr[1] "Abteilung"
-
-#: js/ContractEditDialog.js:96
-msgid "Please use a decimal number here!"
-msgstr "Bitte benutzen Sie eine Dezimalzahl!"
-
-#: js/ContractEditDialog.js:149
-msgid "Contract Contact"
-msgstr "Kontakt für Vertrag"
-
-#: js/ContractEditDialog.js:161
-msgid "Account Manager"
-msgstr "Konto Manager"
-
-#: js/ContractEditDialog.js:170
-msgid "Company"
-msgstr "Firma"
-
-#: Controller/Contract.php:83
-msgid "The number you have tried to set is already in use!"
-msgstr "Diese Nummer ist bereits vergeben!"
-
-msgid "Lead Cost Center"
-msgstr "Lead-Kostenstelle"
-
-msgid "Time Account"
-msgstr "Zeitkonto"
+#: Setup/Initialize.php:56 Setup/Update/Release5.php:85
+msgid "Contracts created by myself"
+msgstr "Von mir erstellte Aufträge"

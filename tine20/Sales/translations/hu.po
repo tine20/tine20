@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-20 11:51+0000\n"
+"PO-Revision-Date: 2013-06-21 10:05+0000\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -24,22 +24,6 @@ msgstr "termékek kezelése"
 #: Acl/Rights.php:104
 msgid "add, edit and delete products"
 msgstr "termékek hozzáadása, szerkesztése és törlése"
-
-#: Controller.php:83 Controller.php:103
-msgid "You do not have admin rights on Sales"
-msgstr "Nincs rendszergazda jogosultságod a Salesban"
-
-#: Model/Contract.php:91
-msgid "Responsible"
-msgstr "Felelős"
-
-#: Model/Contract.php:92
-msgid "Customer"
-msgstr "Ügyfél"
-
-#: Model/Contract.php:93
-msgid "Partner"
-msgstr "Partner"
 
 #: Config.php:51
 msgid "Contract Number Creation"
@@ -65,7 +49,7 @@ msgstr "Szerződés szám érvényesítés"
 msgid "The Number can be validated as text or number."
 msgstr "A szám érvényesíthető szövegként vagy számként."
 
-#: Config.php:69 js/Models.js:199 js/ContractEditDialog.js:136
+#: Config.php:69 js/ContractEditDialog.js:136 js/Models.js:203
 msgid "Number"
 msgstr "Szám"
 
@@ -91,21 +75,13 @@ msgstr "Szerződés lezárt állapot elérhető"
 msgid "Possible Contract cleared states."
 msgstr "Lehetséges Szerződés lezárt állapotok."
 
-#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
-msgid "My Products"
-msgstr "Termékeim"
+#: Controller/Contract.php:83
+msgid "The number you have tried to set is already in use!"
+msgstr "A beállítani próbált szám használatban van!"
 
-#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
-msgid "Products created by myself"
-msgstr "Általam készített termékek"
-
-#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
-msgid "My Contracts"
-msgstr "Szerződéseim"
-
-#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
-msgid "Contracts created by myself"
-msgstr "Általam készített szerződések"
+#: Controller.php:83 Controller.php:103
+msgid "You do not have admin rights on Sales"
+msgstr "Nincs rendszergazda jogosultságod a Salesban"
 
 #: js/AdminPanel.js:61
 msgid "Cancel"
@@ -119,25 +95,132 @@ msgstr "OK"
 msgid "Loading..."
 msgstr "Betöltés..."
 
-#: js/ContractGridPanel.js:82
-msgid "Contract number"
-msgstr "Szerződés száma"
+#: js/ContractEditDialog.js:96
+msgid "Please use a decimal number here!"
+msgstr "Kérlek itt egész számot használj!"
 
-#: js/ContractGridPanel.js:88 js/Models.js:236 js/ContractEditDialog.js:143
+#: js/ContractEditDialog.js:143 js/ContractGridPanel.js:93 js/Models.js:240
 msgid "Title"
 msgstr "Cím"
 
-#: js/ContractGridPanel.js:94 js/Models.js:146 js/ContractEditDialog.js:176
+#: js/ContractEditDialog.js:149
+msgid "Contract Contact"
+msgstr ""
+
+#: js/ContractEditDialog.js:161
+msgid "Account Manager"
+msgstr ""
+
+#: js/ContractEditDialog.js:170
+msgid "Company"
+msgstr "Cég"
+
+#: js/ContractEditDialog.js:176 js/ContractGridPanel.js:99 js/Models.js:147
 msgid "Status"
 msgstr "Állapot"
 
-#: js/ContractGridPanel.js:101 js/Models.js:153 js/ContractEditDialog.js:183
+#: js/ContractEditDialog.js:183 js/ContractGridPanel.js:106 js/Models.js:154
 msgid "Cleared"
 msgstr "Lezárva"
 
-#: js/ContractGridPanel.js:108 js/Models.js:159 js/ContractEditDialog.js:187
+#: js/ContractEditDialog.js:187 js/ContractGridPanel.js:113 js/Models.js:160
 msgid "Cleared in"
 msgstr "Lezárva ekkor:"
+
+#: js/ContractEditDialog.js:193 js/ProductEditDialog.js:114
+#: js/ProductGridPanel.js:124
+msgid "Description"
+msgstr "Leírás"
+
+#: js/ContractEditDialog.js:194 js/ProductEditDialog.js:115
+msgid "Enter description..."
+msgstr "Leírás bevitele..."
+
+#: js/ContractGridPanel.js:79 js/ProductGridPanel.js:120
+msgid "Tags"
+msgstr "Címke"
+
+#: js/ContractGridPanel.js:87
+msgid "Contract number"
+msgstr "Szerződés száma"
+
+#: js/Models.js:39
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Termék"
+msgstr[1] "Termékek"
+
+#: js/Models.js:42 js/Models.js:229
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "adat lista"
+msgstr[1] "adat listák"
+
+#: js/Models.js:76 js/Models.js:143 js/Models.js:202 js/Models.js:239
+msgid "Quick search"
+msgstr "Gyors keresés"
+
+#: js/Models.js:77
+msgid "Product name"
+msgstr "Termék neve"
+
+#: js/Models.js:79 js/Models.js:145
+msgid "Creator"
+msgstr "Készítő"
+
+#: js/Models.js:113
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Szerződés"
+msgstr[1] "Szerződések"
+
+#: js/Models.js:117
+msgid "All Contracts"
+msgid_plural "contracts lists"
+msgstr[0] "Minden szerződés"
+msgstr[1] "szerződés listák"
+
+#: js/Models.js:144
+msgid "Contract name"
+msgstr "Szerződés neve"
+
+#: js/Models.js:162
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/Models.js:163
+msgid "Last Modified By"
+msgstr ""
+
+#: js/Models.js:164
+msgid "Creation Time"
+msgstr ""
+
+#: js/Models.js:165
+msgid "Created By"
+msgstr ""
+
+#: js/Models.js:189
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] "Költséghely"
+msgstr[1] "Költséghelyek"
+
+#: js/Models.js:192
+msgid "All CostCenters"
+msgid_plural "All CostCenters"
+msgstr[0] "Minden költséghely"
+msgstr[1] "Minden költséghelyek"
+
+#: js/Models.js:204
+msgid "Remark"
+msgstr "Megjegyzés"
+
+#: js/Models.js:226
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] "Részleg"
+msgstr[1] "Részlegek"
 
 #: js/ProductEditDialog.js:93 js/ProductGridPanel.js:121
 msgid "Name"
@@ -155,97 +238,30 @@ msgstr "Gyártó"
 msgid "Category"
 msgstr "Kategória"
 
-#: js/ProductEditDialog.js:114 js/ProductGridPanel.js:124
-#: js/ContractEditDialog.js:193
-msgid "Description"
-msgstr "Leírás"
+#: Model/Contract.php:107
+msgid "Responsible"
+msgstr "Felelős"
 
-#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:194
-msgid "Enter description..."
-msgstr "Leírás bevitele..."
+#: Model/Contract.php:108
+msgid "Customer"
+msgstr "Ügyfél"
 
-#: js/ProductGridPanel.js:120
-msgid "Tags"
-msgstr "Címke"
+#: Model/Contract.php:109
+msgid "Partner"
+msgstr "Partner"
 
-#: js/Models.js:39
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Termék"
-msgstr[1] "Termékek"
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:63
+msgid "My Products"
+msgstr "Termékeim"
 
-#: js/Models.js:42 js/Models.js:225
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "adat lista"
-msgstr[1] "adat listák"
+#: Setup/Initialize.php:35 Setup/Update/Release5.php:64
+msgid "Products created by myself"
+msgstr "Általam készített termékek"
 
-#: js/Models.js:76 js/Models.js:142 js/Models.js:198 js/Models.js:235
-msgid "Quick Search"
-msgstr "Gyors keresés"
+#: Setup/Initialize.php:55 Setup/Update/Release5.php:84
+msgid "My Contracts"
+msgstr "Szerződéseim"
 
-#: js/Models.js:77
-msgid "Product name"
-msgstr "Termék neve"
-
-#: js/Models.js:79 js/Models.js:144
-msgid "Creator"
-msgstr "Készítő"
-
-#: js/Models.js:112
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Szerződés"
-msgstr[1] "Szerződések"
-
-#: js/Models.js:116
-msgid "All Contracts"
-msgid_plural "contracts lists"
-msgstr[0] "Minden szerződés"
-msgstr[1] "szerződés listák"
-
-#: js/Models.js:143
-msgid "Contract name"
-msgstr "Szerződés neve"
-
-#: js/Models.js:185
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] "Költséghely"
-msgstr[1] "Költséghelyek"
-
-#: js/Models.js:188
-msgid "All CostCenters"
-msgid_plural "All CostCenters"
-msgstr[0] "Minden költséghely"
-msgstr[1] "Minden költséghelyek"
-
-#: js/Models.js:200
-msgid "Remark"
-msgstr "Megjegyzés"
-
-#: js/Models.js:222
-msgid "Division"
-msgid_plural "Divisions"
-msgstr[0] "Részleg"
-msgstr[1] "Részlegek"
-
-#: js/ContractEditDialog.js:96
-msgid "Please use a decimal number here!"
-msgstr "Kérlek itt egész számot használj!"
-
-#: js/ContractEditDialog.js:149
-msgid "Contract Contact"
-msgstr ""
-
-#: js/ContractEditDialog.js:161
-msgid "Account Manager"
-msgstr ""
-
-#: js/ContractEditDialog.js:170
-msgid "Company"
-msgstr "Cég"
-
-#: Controller/Contract.php:83
-msgid "The number you have tried to set is already in use!"
-msgstr "A beállítani próbált szám használatban van!"
+#: Setup/Initialize.php:56 Setup/Update/Release5.php:85
+msgid "Contracts created by myself"
+msgstr "Általam készített szerződések"

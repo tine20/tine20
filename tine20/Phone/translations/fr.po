@@ -17,15 +17,41 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
-msgid "Edit phone settings"
-msgstr "Éditer les paramètres du téléphone"
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Appeler le contact"
 
-#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "Travail"
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "Domicile"
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "Mobile"
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "Mobile personnel"
+
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Téléphone"
 msgstr[1] "Téléphones"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "Liste de téléphones"
+msgstr[1] "Listes de téléphones"
+
+#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
+msgid "Edit phone settings"
+msgstr "Éditer les paramètres du téléphone"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -130,29 +156,3 @@ msgstr "Appel"
 #: js/Phone.js:720
 msgid "Call ID"
 msgstr "ID d'appel"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "Liste de téléphones"
-msgstr[1] "Listes de téléphones"
-
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr "Appeler le contact"
-
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr "Travail"
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr "Domicile"
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr "Mobile"
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr "Mobile personnel"

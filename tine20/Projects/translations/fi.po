@@ -26,11 +26,6 @@ msgstr "Hallinnoi projektin jaettuja suosikkeja"
 msgid "Create new shared project favorites"
 msgstr "Luo projektille uusi jaettu suosikki"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's hemkilökohtaisesta projektista"
-
 #: Config.php:38
 msgid "Project Status Available"
 msgstr "Projektin tila saatavilla"
@@ -52,9 +47,118 @@ msgid ""
 "syncronisation."
 msgstr "Mahdolliset osallistujien roolit. Huomaathan, että lisätyt roolit eivät välttämättä välity oikein muihin projektinhallintajärjestelmiin."
 
-#: Setup/setup.xml:4 js/Projects.js:24
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's hemkilökohtaisesta projektista"
+
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Valitse projekti lisätäksesi yhteyshenkilöt"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Valitse osallistujan rooli"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Valitse projekti"
+
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+msgid "Role"
+msgstr "Rooli"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Valitse rooli"
+
+#: js/AddToProjectPanel.js:102
+msgid "Adding {0} Participants to project"
+msgstr "Lisätty {0} osallistujaa projektiin"
+
+#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekti"
+msgstr[1] "Projektit"
+
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Projekti lista"
+msgstr[1] "Projektit lista"
+
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Projekti lista"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Pika haku"
+
+#: js/Model.js:73 js/ProjectEditDialog.js:130 js/ProjectGridPanel.js:95
+msgid "Title"
+msgstr "Otsikko"
+
+#: js/Model.js:74 js/ProjectEditDialog.js:135 js/ProjectGridPanel.js:88
+msgid "Number"
+msgstr "Numero"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:171
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/Model.js:77 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:101
+msgid "Status"
+msgstr "Tila"
+
+#: js/Model.js:86
+msgid "Last Modified Time"
+msgstr "Muokattu viimeksi"
+
+#: js/Model.js:87
+msgid "Last Modified By"
+msgstr "Viimeksi muokannut"
+
+#: js/Model.js:88
+msgid "Creation Time"
+msgstr "Luontiaika"
+
+#: js/Model.js:89
+msgid "Created By"
+msgstr "Luonut"
+
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
+msgid "Attendee"
+msgstr "Osallistuja"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Osallistujan rooli"
+
+#: js/ProjectEditDialog.js:185
+msgid "Enter description"
+msgstr "Lisää kuvaus"
+
+#: js/ProjectGridPanel.js:85
+msgid "Tags"
+msgstr "Tagit"
+
+#: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "Projektit"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Kaikki projektini"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Oletus suosikki"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Oletus suosikki joka ladataan projekti ohjelmaa käynnistettäessä"
 
 #: Setup/Initialize.php:34
 msgid "On hold"
@@ -99,107 +203,3 @@ msgstr "Odottavat projektit"
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
 msgstr "Odottamassa olevat projektini"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Kaikki projektini"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Oletus suosikki"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Oletus suosikki joka ladataan projekti ohjelmaa käynnistettäessä"
-
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Valitse projekti lisätäksesi yhteyshenkilöt"
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Valitse osallistujan rooli"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Valitse projekti"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
-msgid "Role"
-msgstr "Rooli"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Valitse rooli"
-
-#: js/AddToProjectPanel.js:102
-msgid "Adding {0} Participants to project"
-msgstr "Lisätty {0} osallistujaa projektiin"
-
-#: js/ProjectGridPanel.js:85
-msgid "Tags"
-msgstr "Tagit"
-
-#: js/ProjectGridPanel.js:88 js/Model.js:74 js/ProjectEditDialog.js:135
-msgid "Number"
-msgstr "Numero"
-
-#: js/ProjectGridPanel.js:95 js/Model.js:73 js/ProjectEditDialog.js:130
-msgid "Title"
-msgstr "Otsikko"
-
-#: js/ProjectGridPanel.js:101 js/Model.js:77 js/ProjectEditDialog.js:141
-msgid "Status"
-msgstr "Tila"
-
-#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekti"
-msgstr[1] "Projektit"
-
-#: js/Model.js:37
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] "Projekti lista"
-msgstr[1] "Projektit lista"
-
-#: js/Model.js:40
-msgid "Project lists"
-msgstr "Projekti lista"
-
-#: js/Model.js:72
-msgid "Quick Search"
-msgstr "Pika haku"
-
-#: js/Model.js:75 js/ProjectEditDialog.js:171
-msgid "Description"
-msgstr "Kuvaus"
-
-#: js/Model.js:86
-msgid "Last Modified Time"
-msgstr "Muokattu viimeksi"
-
-#: js/Model.js:87
-msgid "Last Modified By"
-msgstr "Viimeksi muokannut"
-
-#: js/Model.js:88
-msgid "Creation Time"
-msgstr "Luontiaika"
-
-#: js/Model.js:89
-msgid "Created By"
-msgstr "Luonut"
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
-msgid "Attendee"
-msgstr "Osallistuja"
-
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Osallistujan rooli"
-
-#: js/ProjectEditDialog.js:185
-msgid "Enter description"
-msgstr "Lisää kuvaus"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-06-22 06:53+0000\n"
+"PO-Revision-Date: 2013-08-30 11:44+0000\n"
 "Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr "Импорт списка (###CURRENTDATE###)"
 msgid ""
 "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
-msgstr ""
+msgstr "Предметы импортированы ###CURRENTDATE### в ###CURRENTTIME### пользователем ###USERFULLNAME###"
 
 #: js/InventoryItemEditDialog.js:52
 msgid "The active number must be less than or equal total number."
@@ -119,7 +119,7 @@ msgstr "Дата счёта"
 
 #: js/InventoryItemEditDialog.js:297 Model/InventoryItem.php:148
 msgid "Depreciate"
-msgstr ""
+msgstr "Не используется"
 
 #: js/InventoryItemGridPanel.js:36
 msgid "Export Inventory"

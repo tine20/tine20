@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-02-07 08:32+0000\n"
-"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
+"PO-Revision-Date: 2013-06-21 10:05+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,62 +33,84 @@ msgstr "Thêm người dùng đã tồn tại"
 msgid "Add existing user as member to a course"
 msgstr "Thêm người dùng đã tồn tại là thành viên của khóa học"
 
-#: Config.php:75 js/CourseEditDialog.js:227 js/Models.js:72
+#: Config.php:82 js/CourseEditDialog.js:227 js/Models.js:72
 msgid "Internet Access"
 msgstr "Truy cập internet"
 
-#: Config.php:77
+#: Config.php:84
 msgid "Internet access options."
 msgstr "Tùy chọn truy cập internet"
 
-#: Config.php:84 Config.php:86
+#: Config.php:91 Config.php:93
 msgid "Internet Access Group (ON)"
 msgstr "Nhóm truy cập internet (MỞ)"
 
-#: Config.php:92 Config.php:94
+#: Config.php:99 Config.php:101
 msgid "Internet Access Group (FILTERED)"
 msgstr "Nhóm truy cập internet (BỊ LỌC)"
 
-#: Config.php:100 Config.php:102
+#: Config.php:107 Config.php:109
 msgid "Students Group"
 msgstr "Nhóm sinh viên"
 
-#: Config.php:108 Config.php:110
+#: Config.php:115 Config.php:117
 msgid "Students Import Definition"
 msgstr "Nhập định nghĩa sinh viên"
 
-#: Config.php:116
+#: Config.php:123
 msgid "Students login name prefix"
 msgstr "Tiền tố tên đăng nhập của sinh viên"
 
-#: Config.php:123 Config.php:125
+#: Config.php:130
+msgid "Student username schema"
+msgstr ""
+
+#: Config.php:132
+msgid ""
+"Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
+"chars of firstname"
+msgstr ""
+
+#: Config.php:139 Config.php:141
 msgid "Samba user settings"
 msgstr "Thiết lập người dùng Samba"
 
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Khóa học"
+#: Controller/Course.php:121 js/CourseEditDialog.js:187 js/Models.js:41
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "one:Khóa học\nother:Khóa học"
 
-#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
-#: Preference.php:60
-msgid "All courses"
-msgstr "Tất cả khóa học"
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Giáo viên"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "Mở"
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Tài khoản giáo viên"
 
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Tắt"
+#: Controller/Course.php:317
+msgid "My course"
+msgstr "Khóa học của tôi"
 
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Đã lọc"
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Họ và đệm"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "Lối tắt mặc định được nạp khi lớp học bắt đầu"
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Tên"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Thêm mới thành viên cho khóa học"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Lỗi"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Xin hãy sửa lỗi đã được ghi chú"
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
@@ -97,11 +119,6 @@ msgstr "Nhập học viên"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Thêm thành viên mới"
-
-#: js/CourseEditDialog.js:187 js/Models.js:41 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "one:Khóa học\nother:Khóa học"
 
 #: js/CourseEditDialog.js:203
 msgid "Course Name"
@@ -135,26 +152,6 @@ msgstr "không rõ"
 msgid "Reset Password"
 msgstr "Khởi tạo mật khẩu"
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Họ và đệm"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Tên"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Thêm mới thành viên cho khóa học"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Lỗi"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Xin hãy sửa lỗi đã được ghi chú"
-
 #: js/CourseGridPanel.js:48 js/Models.js:70
 msgid "Name"
 msgstr "Tên"
@@ -177,7 +174,7 @@ msgid_plural "record lists"
 msgstr[0] "one:danh sách biểu ghi\nother:danh sách biểu ghi"
 
 #: js/Models.js:69
-msgid "Quick Search"
+msgid "Quick search"
 msgstr "Tìm nhanh"
 
 #: js/Models.js:107
@@ -185,14 +182,27 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "one:Loại khóa học\nothers:Loại khóa học"
 
-#: Controller/Course.php:247 Controller/Course.php:291
-msgid "Teacher"
-msgstr "Giáo viên"
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr "Tất cả khóa học"
 
-#: Controller/Course.php:248
-msgid "Teacher Account"
-msgstr "Tài khoản giáo viên"
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "Lối tắt mặc định được nạp khi lớp học bắt đầu"
 
-#: Controller/Course.php:308
-msgid "My course"
-msgstr "Khóa học của tôi"
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr "Mở"
+
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr "Tắt"
+
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr "Đã lọc"
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Khóa học"

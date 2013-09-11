@@ -16,20 +16,41 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
-msgid "Edit phone settings"
-msgstr "Telefoneinstellungen bearbeiten"
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Kontakt anrufen"
 
-#: js/Phone.js:59 js/Phone.js:265 js/Models.js:69
+#: js/AddressbookGridPanelHook.js:171
+msgid "Work"
+msgstr "Geschäftlich"
+
+#: js/AddressbookGridPanelHook.js:180
+msgid "Home"
+msgstr "Privat"
+
+#: js/AddressbookGridPanelHook.js:189
+msgid "Cell"
+msgstr "Handy"
+
+#: js/AddressbookGridPanelHook.js:198
+msgid "Cell private"
+msgstr "Handy privat"
+
+#: js/Models.js:69 js/Phone.js:59 js/Phone.js:265
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
 msgstr[1] "Telefone"
 
-msgid "Call"
-msgid_plural "Calls"
-msgstr[0] "Gespräch"
-msgstr[1] "Gespräche"
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "Telefonliste"
+msgstr[1] "Telefonlisten"
+
+#: js/Phone.js:29 js/Phone.js:496 js/Phone.js:497
+msgid "Edit phone settings"
+msgstr "Telefoneinstellungen bearbeiten"
 
 #: js/Phone.js:70
 msgid "Phones"
@@ -134,59 +155,3 @@ msgstr "Klingeln"
 #: js/Phone.js:720
 msgid "Call ID"
 msgstr "Anruf-ID"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "Telefonliste"
-msgstr[1] "Telefonlisten"
-
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr "Kontakt anrufen"
-
-#: js/AddressbookGridPanelHook.js:171
-msgid "Work"
-msgstr "Geschäftlich"
-
-#: js/AddressbookGridPanelHook.js:180
-msgid "Home"
-msgstr "Privat"
-
-#: js/AddressbookGridPanelHook.js:189
-msgid "Cell"
-msgstr "Handy"
-
-#: js/AddressbookGridPanelHook.js:198
-msgid "Cell private"
-msgstr "Handy privat"
-
-msgid "Calls this week"
-msgstr "Gespräche diese Woche"
-
-msgid "Calls last week"
-msgstr "Gespräche letzte Woche"
-
-msgid "Calls this month"
-msgstr "Gespräche dieser Monat"
-
-msgid "Calls last month"
-msgstr "Gespräche letzter Monat"
-
-msgid "Incoming and outgoing calls of this week"
-msgstr "Ein- und ausgehende Gespräche von dieser Woche"
-
-msgid "Incoming and outgoing calls of last week"
-msgstr "Ein- und ausgehende Gespräche von letzter Woche"
-
-msgid "Incoming and outgoing calls of this month"
-msgstr "Ein- und ausgehende Gespräche von diesem Monat"
-
-msgid "Incoming and outgoing calls of last month"
-msgstr "Ein- und ausgehende Gespräche vom letzten Monat"
-
-msgid "No phone selected"
-msgstr "Es ist kein Telefon ausgewählt"
-
-msgid "Please select the desired phone in the tree!"
-msgstr "Bitte wählen Sie das gewünschte Telefon im Baum aus!"

@@ -33,45 +33,6 @@ msgstr "quản lý lối tắt dùng chung"
 msgid "Create or update shared addressbook favorites"
 msgstr "Tạo, cập nhật lối tắt dùng chung"
 
-#: Controller.php:103
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "sổ địa chỉ cá nhân của %s"
-
-#: Import/definitions/adb_outlook_import_csv.xml:13
-msgid "Contact CSV import from Outlook address book"
-msgstr "Nhập dữ liệu CSV từ Outlook address book"
-
-#: Import/definitions/adb_google_import_csv.xml:12
-msgid "Contact import from Google address book"
-msgstr "Nhập dữ liệu từ sổ địa chỉ google"
-
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Contact CSV import"
-msgstr "Nhập dữ liệu CVS"
-
-#: Import/definitions/adb_tine_import_csv.xml:18
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Nhập danh sách (###CURRENTDATE###)"
-
-#: Import/definitions/adb_tine_import_csv.xml:20
-msgid ""
-"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
-msgstr "Liên lạc đã được nhập vào ###CURRENTDATE### lúc ###CURRENTTIME### bởi ###USERFULLNAME###"
-
-#: Import/definitions/adb_mac_import_csv.xml:17
-msgid "Contact CSV import from mac address book"
-msgstr "Nhập dữ liệu liên hệ CSV từ sổ địa chỉ Mac"
-
-#: Import/definitions/adb_import_vcard.xml:14
-msgid "Contact VCARD import"
-msgstr "Nhập dữ liệu liên hệ VCARD"
-
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
-msgid "CSV Outlook 2007 German"
-msgstr "CSV Outlook 2007 German"
-
 #: Config.php:45
 msgid "Contact duplicate check fields"
 msgstr "Contact duplicate check fields"
@@ -100,72 +61,14 @@ msgstr "Quy tắc phân loại cho địa chỉ"
 msgid "Path to a XML file with address parsing rules."
 msgstr "Đường dẫn tới file XML với quy tắc phân loại địa chỉ"
 
-#: Setup/setup.xml:654
-msgid "Internal Contacts"
-msgstr "Liên hệ nội bộ"
+#: Controller/Contact.php:330
+msgid "Uploaded new contact image."
+msgstr "Cập nhật ảnh liên hệ mới"
 
-#: Setup/Update/Release5.php:194 Setup/Initialize.php:63
-msgid "Mr"
-msgstr "Ông"
-
-#: Setup/Update/Release5.php:195 Setup/Initialize.php:64
-msgid "Ms"
-msgstr "Cô"
-
-#: Setup/Update/Release5.php:196 Setup/Initialize.php:65 js/ContactGrid.js:112
-#: js/ContactGridDetailsPanel.js:131 js/ContactEditDialog.js:125
-#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449 js/Model.js:27
-#: js/Model.js:141
-msgid "Company"
-msgstr "Công ty"
-
-#: Setup/Update/Release3.php:37 Setup/Initialize.php:135
-msgid "All contacts I have read grants for"
-msgstr "Mọi liên hệ tôi đã đọc quyền cho"
-
-#: Setup/Initialize.php:140
-msgid "My company"
-msgstr "Công ty tôi"
-
-#: Setup/Initialize.php:141
-msgid "All coworkers in my company"
-msgstr "Tất cả đồng nghiệp trong công ty tôi"
-
-#: Setup/Initialize.php:154
-msgid "My contacts"
-msgstr "Liên hệ của tôi"
-
-#: Setup/Initialize.php:155
-msgid "All contacts in my Addressbooks"
-msgstr "Mọi liên hệ trong sổ địa chỉ của tôi"
-
-#: Setup/Initialize.php:167
-msgid "Last modified by me"
-msgstr "Sửa lần cuối bởi tôi"
-
-#: Setup/Initialize.php:168
-msgid "All contacts that I have last modified"
-msgstr "Mọi liên hệ tôi đã sửa gần đây"
-
-#: Preference.php:28
-msgid "All contacts"
-msgstr "Mọi liên hệ"
-
-#: Preference.php:65
-msgid "Default Addressbook"
-msgstr "Sổ địa chỉ mặc đ"
-
-#: Preference.php:66
-msgid "The default addressbook for new contacts"
-msgstr "Sổ địa chỉ mặc định cho liên hệ mới"
-
-#: Preference.php:69
-msgid "Default Favorite"
-msgstr "Lối tắt mặc định"
-
-#: Preference.php:70
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr "Lối tắt mặc định sẽ được nạp khi sổ địa chỉ khởi động"
+#: Controller.php:103
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "sổ địa chỉ cá nhân của %s"
 
 #: Export/Pdf.php:37
 msgid "Business Contact Data"
@@ -211,7 +114,7 @@ msgstr "URL"
 msgid "Role"
 msgstr "Vai trò"
 
-#: Export/Pdf.php:76 js/ContactGrid.js:116 js/ContactEditDialog.js:143
+#: Export/Pdf.php:76 js/ContactEditDialog.js:143 js/ContactGrid.js:116
 #: js/Model.js:33
 msgid "Room"
 msgstr "Phòng"
@@ -258,15 +161,239 @@ msgstr "Địa chỉ website"
 msgid "Other Data"
 msgstr "Dữ liệu khác"
 
-#: Export/Pdf.php:114 js/ContactGrid.js:142 js/ContactEditDialog.js:170
+#: Export/Pdf.php:114 js/ContactEditDialog.js:170 js/ContactGrid.js:142
 #: js/Model.js:26 js/Model.js:149
 msgid "Birthday"
 msgstr "Ngày sinh"
 
-#: Export/Pdf.php:117 js/ContactGrid.js:114 js/ContactEditDialog.js:164
+#: Export/Pdf.php:117 js/ContactEditDialog.js:164 js/ContactGrid.js:114
 #: js/Model.js:30 js/Model.js:144
 msgid "Job Title"
 msgstr "Chức danh"
+
+#: Import/definitions/adb_google_import_csv.xml:12
+msgid "Contact import from Google address book"
+msgstr "Nhập dữ liệu từ sổ địa chỉ google"
+
+#: Import/definitions/adb_import_vcard.xml:14
+msgid "Contact VCARD import"
+msgstr "Nhập dữ liệu liên hệ VCARD"
+
+#: Import/definitions/adb_mac_import_csv.xml:17
+msgid "Contact CSV import from mac address book"
+msgstr "Nhập dữ liệu liên hệ CSV từ sổ địa chỉ Mac"
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
+msgid "CSV Outlook 2007 German"
+msgstr "CSV Outlook 2007 German"
+
+#: Import/definitions/adb_outlook_import_csv.xml:13
+msgid "Contact CSV import from Outlook address book"
+msgstr "Nhập dữ liệu CSV từ Outlook address book"
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Contact CSV import"
+msgstr "Nhập dữ liệu CVS"
+
+#: Import/definitions/adb_tine_import_csv.xml:18
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Nhập danh sách (###CURRENTDATE###)"
+
+#: Import/definitions/adb_tine_import_csv.xml:20
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr "Liên lạc đã được nhập vào ###CURRENTDATE### lúc ###CURRENTTIME### bởi ###USERFULLNAME###"
+
+#: js/Addressbook.js:22
+msgid "New Contact"
+msgstr "Thêm liên lạc"
+
+#: js/Addressbook.js:32 js/Model.js:98 js/Model.js:205
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "one: Sổ địa chỉ\nother: Sổ địa chỉ"
+
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
+msgstr "URL CardDAV"
+
+#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
+msgid "Map"
+msgstr "Bản đồ"
+
+#: js/ContactEditDialog.js:76
+msgid "Personal Information"
+msgstr "Thông tin cá nhân"
+
+#: js/ContactEditDialog.js:88 js/ContactGrid.js:107 js/Model.js:29
+msgid "Salutation"
+msgstr "Lời chào"
+
+#: js/ContactEditDialog.js:104 js/Model.js:22
+msgid "Title"
+msgstr "Tiêu đề"
+
+#: js/ContactEditDialog.js:109 js/ContactGrid.js:109 js/Model.js:20
+#: js/Model.js:139
+msgid "First Name"
+msgstr "Họ"
+
+#: js/ContactEditDialog.js:114 js/Model.js:21
+msgid "Middle Name"
+msgstr "Đệm"
+
+#: js/ContactEditDialog.js:119 js/ContactEditDialog.js:431
+#: js/ContactEditDialog.js:449 js/ContactGrid.js:108 js/Model.js:19
+#: js/Model.js:140
+msgid "Last Name"
+msgstr "Tên"
+
+#: js/ContactEditDialog.js:125 js/ContactEditDialog.js:431
+#: js/ContactEditDialog.js:449 js/ContactGrid.js:112
+#: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:141
+#: Setup/Initialize.php:65 Setup/Update/Release5.php:196
+msgid "Company"
+msgstr "Công ty"
+
+#: js/ContactEditDialog.js:130 js/ContactGrid.js:113 js/Model.js:28
+#: js/Model.js:142
+msgid "Unit"
+msgstr "Đơn vị"
+
+#: js/ContactEditDialog.js:135 js/Model.js:23
+msgid "Suffix"
+msgstr "Hậu tố"
+
+#: js/ContactEditDialog.js:139 js/ContactGrid.js:115 js/Model.js:31
+#: js/Model.js:148
+msgid "Job Role"
+msgstr "Vai trò công việc"
+
+#: js/ContactEditDialog.js:159 js/ContactGrid.js:111 js/Model.js:24
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+#: js/ContactEditDialog.js:178
+msgid "Contact Information"
+msgstr "Thông tin liên hệ"
+
+#: js/ContactEditDialog.js:183 js/ContactGrid.js:128
+#: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
+#: js/Model.js:51 js/Model.js:143
+msgid "Phone"
+msgstr "Điện thoại"
+
+#: js/ContactEditDialog.js:188 js/ContactGrid.js:129
+#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
+#: js/Model.js:52
+msgid "Mobile"
+msgstr "Di động"
+
+#: js/ContactEditDialog.js:193 js/ContactGrid.js:130
+#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
+#: js/Model.js:53
+msgid "Fax"
+msgstr "Fax"
+
+#: js/ContactEditDialog.js:198 js/ContactGrid.js:133 js/Model.js:57
+msgid "Phone (private)"
+msgstr "Điện thoại (cá nhân)"
+
+#: js/ContactEditDialog.js:203 js/ContactGrid.js:135 js/Model.js:59
+msgid "Mobile (private)"
+msgstr "Di động (cá nhân)"
+
+#: js/ContactEditDialog.js:208 js/ContactGrid.js:134 js/Model.js:58
+msgid "Fax (private)"
+msgstr "Fax (cá nhân)"
+
+#: js/ContactEditDialog.js:213 js/ContactGridDetailsPanel.js:142
+#: js/ContactGridDetailsPanel.js:166 js/Model.js:62 js/Model.js:146
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: js/ContactEditDialog.js:219 js/Model.js:63
+msgid "E-Mail (private)"
+msgstr "E-Mail (cá nhân)"
+
+#: js/ContactEditDialog.js:226 js/ContactGrid.js:137
+#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
+#: js/Model.js:64
+msgid "Web"
+msgstr "Web"
+
+#: js/ContactEditDialog.js:267 js/Model.js:34 js/Model.js:150 js/Model.js:151
+#: js/Model.js:152 js/Model.js:153 js/Model.js:154
+msgid "Company Address"
+msgstr "Địa chỉ công ty"
+
+#: js/ContactEditDialog.js:270 js/ContactEditDialog.js:299
+#: js/ContactGrid.js:117 js/Model.js:150 js/Model.js:155
+msgid "Street"
+msgstr "Phố"
+
+#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303
+msgid "Street 2"
+msgstr "Phố 2"
+
+#: js/ContactEditDialog.js:278 js/ContactEditDialog.js:307
+#: js/ContactGrid.js:119 js/Model.js:151 js/Model.js:156
+msgid "Region"
+msgstr "Miền"
+
+#: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311 js/Model.js:152
+#: js/Model.js:157
+msgid "Postal Code"
+msgstr "Mã vùng"
+
+#: js/ContactEditDialog.js:286 js/ContactEditDialog.js:315
+#: js/ContactGrid.js:118 js/Model.js:153 js/Model.js:158
+msgid "City"
+msgstr "Thành phố"
+
+#: js/ContactEditDialog.js:291 js/ContactEditDialog.js:320
+#: js/ContactGrid.js:121 js/Model.js:154 js/Model.js:159
+msgid "Country"
+msgstr "Quốc gia"
+
+#: js/ContactEditDialog.js:341 js/Model.js:68 js/Model.js:145
+msgid "Description"
+msgstr "Mô tả"
+
+#: js/ContactEditDialog.js:355
+msgid "Enter description"
+msgstr "Nhập mô tả"
+
+#: js/ContactEditDialog.js:399
+msgid "Export as pdf"
+msgstr "Xuất dạng pdf"
+
+#: js/ContactEditDialog.js:407 js/ContactEditDialog.js:492
+msgid "Parse address"
+msgstr "Địa chỉ"
+
+#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449
+msgid "Either {0} or {1} must be given"
+msgstr "Hoặc {0} hoặc {1} phải được đưa ra"
+
+#: js/ContactEditDialog.js:484
+msgid "Paste address"
+msgstr "Dán địa chỉ"
+
+#: js/ContactEditDialog.js:484
+msgid "Please paste an address that should be parsed:"
+msgstr "Xin hãy dán một địa chỉ sẽ được phân tích"
+
+#: js/ContactEditDialog.js:520
+msgid "End token mode"
+msgstr "Kết thúc chế độ token"
+
+#: js/ContactFilterModel.js:35 js/ContactGrid.js:292 js/Model.js:94
+#: js/Model.js:133
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "one: Liên hệ\nother: Liên hệ"
 
 #: js/ContactGrid.js:105 js/Model.js:160
 msgid "Type"
@@ -276,62 +403,13 @@ msgstr "Kiểu"
 msgid "Tags"
 msgstr "Thẻ"
 
-#: js/ContactGrid.js:107 js/ContactEditDialog.js:88 js/Model.js:29
-msgid "Salutation"
-msgstr "Lời chào"
-
-#: js/ContactGrid.js:108 js/ContactEditDialog.js:119
-#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449 js/Model.js:19
-#: js/Model.js:140
-msgid "Last Name"
-msgstr "Tên"
-
-#: js/ContactGrid.js:109 js/ContactEditDialog.js:109 js/Model.js:20
-#: js/Model.js:139
-msgid "First Name"
-msgstr "Họ"
-
 #: js/ContactGrid.js:110
 msgid "Full Name"
 msgstr "Tên đầy đủ"
 
-#: js/ContactGrid.js:111 js/ContactEditDialog.js:159 js/Model.js:24
-msgid "Display Name"
-msgstr "Tên hiển thị"
-
-#: js/ContactGrid.js:113 js/ContactEditDialog.js:130 js/Model.js:28
-#: js/Model.js:142
-msgid "Unit"
-msgstr "Đơn vị"
-
-#: js/ContactGrid.js:115 js/ContactEditDialog.js:139 js/Model.js:31
-#: js/Model.js:148
-msgid "Job Role"
-msgstr "Vai trò công việc"
-
-#: js/ContactGrid.js:117 js/ContactEditDialog.js:270
-#: js/ContactEditDialog.js:299 js/Model.js:150 js/Model.js:155
-msgid "Street"
-msgstr "Phố"
-
-#: js/ContactGrid.js:118 js/ContactEditDialog.js:286
-#: js/ContactEditDialog.js:315 js/Model.js:153 js/Model.js:158
-msgid "City"
-msgstr "Thành phố"
-
-#: js/ContactGrid.js:119 js/ContactEditDialog.js:278
-#: js/ContactEditDialog.js:307 js/Model.js:151 js/Model.js:156
-msgid "Region"
-msgstr "Miền"
-
 #: js/ContactGrid.js:120
 msgid "Postalcode"
 msgstr "Mã vùng"
-
-#: js/ContactGrid.js:121 js/ContactEditDialog.js:291
-#: js/ContactEditDialog.js:320 js/Model.js:154 js/Model.js:159
-msgid "Country"
-msgstr "Quốc gia"
 
 #: js/ContactGrid.js:122
 msgid "Street (private)"
@@ -353,24 +431,6 @@ msgstr "Mã vùng (riêng tư)"
 msgid "Country (private)"
 msgstr "Quốc gia (riêng tư)"
 
-#: js/ContactGrid.js:128 js/ContactGridDetailsPanel.js:139
-#: js/ContactGridDetailsPanel.js:163 js/ContactEditDialog.js:183
-#: js/Model.js:51 js/Model.js:143
-msgid "Phone"
-msgstr "Điện thoại"
-
-#: js/ContactGrid.js:129 js/ContactGridDetailsPanel.js:140
-#: js/ContactGridDetailsPanel.js:164 js/ContactEditDialog.js:188
-#: js/Model.js:52
-msgid "Mobile"
-msgstr "Di động"
-
-#: js/ContactGrid.js:130 js/ContactGridDetailsPanel.js:141
-#: js/ContactGridDetailsPanel.js:165 js/ContactEditDialog.js:193
-#: js/Model.js:53
-msgid "Fax"
-msgstr "Fax"
-
 #: js/ContactGrid.js:131
 msgid "Car phone"
 msgstr "Điện thoại trên xe"
@@ -379,27 +439,9 @@ msgstr "Điện thoại trên xe"
 msgid "Pager"
 msgstr "Phân trang"
 
-#: js/ContactGrid.js:133 js/ContactEditDialog.js:198 js/Model.js:57
-msgid "Phone (private)"
-msgstr "Điện thoại (cá nhân)"
-
-#: js/ContactGrid.js:134 js/ContactEditDialog.js:208 js/Model.js:58
-msgid "Fax (private)"
-msgstr "Fax (cá nhân)"
-
-#: js/ContactGrid.js:135 js/ContactEditDialog.js:203 js/Model.js:59
-msgid "Mobile (private)"
-msgstr "Di động (cá nhân)"
-
 #: js/ContactGrid.js:136
 msgid "Email (private)"
 msgstr "Email (riêng tư)"
-
-#: js/ContactGrid.js:137 js/ContactGridDetailsPanel.js:144
-#: js/ContactGridDetailsPanel.js:168 js/ContactEditDialog.js:226
-#: js/Model.js:64
-msgid "Web"
-msgstr "Web"
 
 #: js/ContactGrid.js:138
 msgid "URL (private)"
@@ -450,12 +492,6 @@ msgstr "Nhập liên lạc"
 msgid "Contact of a user account"
 msgstr ""
 
-#: js/ContactGrid.js:292 js/ContactFilterModel.js:35 js/Model.js:94
-#: js/Model.js:133
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "one: Liên hệ\nother: Liên hệ"
-
 #: js/ContactGridDetailsPanel.js:62 js/Model.js:94
 msgid "Contacts"
 msgstr "Liên lạc"
@@ -463,11 +499,6 @@ msgstr "Liên lạc"
 #: js/ContactGridDetailsPanel.js:65
 msgid "Select contact"
 msgstr "Chọn liên lạc"
-
-#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
-#: js/ContactEditDialog.js:213 js/Model.js:62 js/Model.js:146
-msgid "E-Mail"
-msgstr "E-Mail"
 
 #: js/ContactGridDetailsPanel.js:155
 msgid "Private"
@@ -485,79 +516,9 @@ msgstr "Liên kết bảo mật"
 msgid "Please review this link in edit dialog."
 msgstr "Xin hãy xem xét liên kết này trong cửa sổ chỉnh sửa"
 
-#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
-msgid "Map"
-msgstr "Bản đồ"
-
-#: js/ContactEditDialog.js:76
-msgid "Personal Information"
-msgstr "Thông tin cá nhân"
-
-#: js/ContactEditDialog.js:104 js/Model.js:22
-msgid "Title"
-msgstr "Tiêu đề"
-
-#: js/ContactEditDialog.js:114 js/Model.js:21
-msgid "Middle Name"
-msgstr "Đệm"
-
-#: js/ContactEditDialog.js:135 js/Model.js:23
-msgid "Suffix"
-msgstr "Hậu tố"
-
-#: js/ContactEditDialog.js:178
-msgid "Contact Information"
-msgstr "Thông tin liên hệ"
-
-#: js/ContactEditDialog.js:219 js/Model.js:63
-msgid "E-Mail (private)"
-msgstr "E-Mail (cá nhân)"
-
-#: js/ContactEditDialog.js:267 js/Model.js:34 js/Model.js:150 js/Model.js:151
-#: js/Model.js:152 js/Model.js:153 js/Model.js:154
-msgid "Company Address"
-msgstr "Địa chỉ công ty"
-
-#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303
-msgid "Street 2"
-msgstr "Phố 2"
-
-#: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311 js/Model.js:152
-#: js/Model.js:157
-msgid "Postal Code"
-msgstr "Mã vùng"
-
-#: js/ContactEditDialog.js:341 js/Model.js:68 js/Model.js:145
-msgid "Description"
-msgstr "Mô tả"
-
-#: js/ContactEditDialog.js:355
-msgid "Enter description"
-msgstr "Nhập mô tả"
-
-#: js/ContactEditDialog.js:399
-msgid "Export as pdf"
-msgstr "Xuất dạng pdf"
-
-#: js/ContactEditDialog.js:407 js/ContactEditDialog.js:492
-msgid "Parse address"
-msgstr "Địa chỉ"
-
-#: js/ContactEditDialog.js:431 js/ContactEditDialog.js:449
-msgid "Either {0} or {1} must be given"
-msgstr "Hoặc {0} hoặc {1} phải được đưa ra"
-
-#: js/ContactEditDialog.js:484
-msgid "Paste address"
-msgstr "Dán địa chỉ"
-
-#: js/ContactEditDialog.js:484
-msgid "Please paste an address that should be parsed:"
-msgstr "Xin hãy dán một địa chỉ sẽ được phân tích"
-
-#: js/ContactEditDialog.js:520
-msgid "End token mode"
-msgstr "Kết thúc chế độ token"
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr "Thành viên của danh sách"
 
 #: js/MapPanel.js:58
 msgid "Company address"
@@ -566,14 +527,6 @@ msgstr "Địa chỉ cơ quan"
 #: js/MapPanel.js:65
 msgid "Private address"
 msgstr "Địa chỉ nhà riêng"
-
-#: js/ListMemberFilterModel.js:37
-msgid "Member of List"
-msgstr "Thành viên của danh sách"
-
-#: js/CardDAVContainerPropertiesHookField.js:35
-msgid "CardDAV URL"
-msgstr "URL CardDAV"
 
 #: js/Model.js:19
 msgid "Name"
@@ -639,11 +592,6 @@ msgstr "Truyền thông cá nhân"
 msgid "Web (private)"
 msgstr "Web (riêng tư)"
 
-#: js/Model.js:98 js/Model.js:205 js/Addressbook.js:32
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "one: Sổ địa chỉ\nother: Sổ địa chỉ"
-
 #: js/Model.js:98 js/Model.js:205
 msgid "Addressbooks"
 msgstr "Sổ địa chỉ"
@@ -653,7 +601,7 @@ msgid "User Account"
 msgstr "Tài khoản người dùng"
 
 #: js/Model.js:136
-msgid "Quick Search"
+msgid "Quick search"
 msgstr "Tìm nhanh"
 
 #: js/Model.js:161
@@ -681,10 +629,62 @@ msgstr[0] "one: Danh sách\nother: Danh sách"
 msgid "Lists"
 msgstr "Danh sách"
 
-#: js/Addressbook.js:22
-msgid "New Contact"
-msgstr "Thêm liên lạc"
+#: Preference.php:28
+msgid "All contacts"
+msgstr "Mọi liên hệ"
 
-#: Controller/Contact.php:329
-msgid "Uploaded new contact image."
-msgstr "Cập nhật ảnh liên hệ mới"
+#: Preference.php:65
+msgid "Default Addressbook"
+msgstr "Sổ địa chỉ mặc đ"
+
+#: Preference.php:66
+msgid "The default addressbook for new contacts"
+msgstr "Sổ địa chỉ mặc định cho liên hệ mới"
+
+#: Preference.php:69
+msgid "Default Favorite"
+msgstr "Lối tắt mặc định"
+
+#: Preference.php:70
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "Lối tắt mặc định sẽ được nạp khi sổ địa chỉ khởi động"
+
+#: Setup/Initialize.php:63 Setup/Update/Release5.php:194
+msgid "Mr"
+msgstr "Ông"
+
+#: Setup/Initialize.php:64 Setup/Update/Release5.php:195
+msgid "Ms"
+msgstr "Cô"
+
+#: Setup/Initialize.php:135 Setup/Update/Release3.php:37
+msgid "All contacts I have read grants for"
+msgstr "Mọi liên hệ tôi đã đọc quyền cho"
+
+#: Setup/Initialize.php:140
+msgid "My company"
+msgstr "Công ty tôi"
+
+#: Setup/Initialize.php:141
+msgid "All coworkers in my company"
+msgstr "Tất cả đồng nghiệp trong công ty tôi"
+
+#: Setup/Initialize.php:154
+msgid "My contacts"
+msgstr "Liên hệ của tôi"
+
+#: Setup/Initialize.php:155
+msgid "All contacts in my Addressbooks"
+msgstr "Mọi liên hệ trong sổ địa chỉ của tôi"
+
+#: Setup/Initialize.php:167
+msgid "Last modified by me"
+msgstr "Sửa lần cuối bởi tôi"
+
+#: Setup/Initialize.php:168
+msgid "All contacts that I have last modified"
+msgstr "Mọi liên hệ tôi đã sửa gần đây"
+
+#: Setup/setup.xml:654
+msgid "Internal Contacts"
+msgstr "Liên hệ nội bộ"

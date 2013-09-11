@@ -18,6 +18,66 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Namn"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Aktiverad"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Order"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Installerad Version"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Tillgänglig Version"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Status"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Beror på"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Installera applikation"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Avinstallera applikation"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Uppdatera applikation"
+
+#: js/ApplicationGridPanel.js:105
+msgid "Go to {0} login"
+msgstr "Gå till {0} Logga in"
+
+#: js/ApplicationGridPanel.js:175
+msgid "uninstall"
+msgstr "Avinstallera"
+
+#: js/ApplicationGridPanel.js:175
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Vill du verkligen avinstallera programmet (n)?"
+
+#: js/ApplicationGridPanel.js:235
+msgid "This may take a while"
+msgstr "Detta kan ta ett tag"
+
+#: js/ApplicationGridPanel.js:267
+msgid "Dependency Violation"
+msgstr "Överträdelse"
+
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
 msgstr "radera alla existerande användare och grupper"
@@ -30,9 +90,9 @@ msgid ""
 msgstr "Växla från SQL till LDAP kommer att ta bort alla befintliga användarkonton, grupper och roller. Vill du verkligen byta konto lagring backend till LDAP?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
-#: js/EmailPanel.js:146 js/ConfigManagerPanel.js:147
-#: js/ConfigManagerPanel.js:159 js/ConfigManagerPanel.js:171
-#: js/ConfigManagerPanel.js:183
+#: js/ConfigManagerPanel.js:147 js/ConfigManagerPanel.js:159
+#: js/ConfigManagerPanel.js:171 js/ConfigManagerPanel.js:183
+#: js/EmailPanel.js:146
 msgid "Backend"
 msgstr "Backend"
 
@@ -98,10 +158,10 @@ msgid "Host"
 msgstr "Host"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:366
-#: js/EmailPanel.js:195 js/EmailPanel.js:290 js/EmailPanel.js:394
 #: js/ConfigManagerPanel.js:234 js/ConfigManagerPanel.js:321
 #: js/ConfigManagerPanel.js:341 js/ConfigManagerPanel.js:382
-#: js/ConfigManagerPanel.js:441
+#: js/ConfigManagerPanel.js:441 js/EmailPanel.js:195 js/EmailPanel.js:290
+#: js/EmailPanel.js:394
 msgid "Port"
 msgstr "port"
 
@@ -110,8 +170,8 @@ msgid "Login name"
 msgstr "Inloggnins namn"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
-#: js/EmailPanel.js:190 js/ConfigManagerPanel.js:214
-#: js/ConfigManagerPanel.js:245
+#: js/ConfigManagerPanel.js:214 js/ConfigManagerPanel.js:245
+#: js/EmailPanel.js:190
 msgid "Password"
 msgstr "Lösenord"
 
@@ -127,10 +187,10 @@ msgstr "Bas DN"
 msgid "Search filter"
 msgstr "Sök filter"
 
-#: js/AuthenticationPanel.js:363 js/EmailPanel.js:182 js/EmailPanel.js:286
-#: js/EmailPanel.js:390 js/ConfigManagerPanel.js:229
+#: js/AuthenticationPanel.js:363 js/ConfigManagerPanel.js:229
 #: js/ConfigManagerPanel.js:317 js/ConfigManagerPanel.js:337
 #: js/ConfigManagerPanel.js:378 js/ConfigManagerPanel.js:437
+#: js/EmailPanel.js:182 js/EmailPanel.js:286 js/EmailPanel.js:390
 msgid "Hostname"
 msgstr "Host namn"
 
@@ -304,115 +364,101 @@ msgstr "Lösenord matchar inte"
 msgid "Should not be empty"
 msgstr "Ska inte vara tom"
 
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "Jag har läst licens avtalet och accepterat det"
+#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
+msgid "File"
+msgstr "Fil"
 
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Licens Avtal"
+#: js/ConfigManagerPanel.js:198
+msgid "Setup Authentication"
+msgstr "Inställnings Autentisering"
 
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "jag har läst sekretess avtalet och accepterat det."
+#: js/ConfigManagerPanel.js:205 js/EmailPanel.js:186
+msgid "Username"
+msgstr "Användarnamn"
 
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Sekretess Avtal"
+#: js/ConfigManagerPanel.js:219 js/ConfigManagerPanel.js:237
+msgid "Database"
+msgstr "Databas"
 
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Acceptera Villkor"
+#: js/ConfigManagerPanel.js:241
+msgid "User"
+msgstr "Användare"
 
-#: js/Setup.js:53
-msgid "Terms and Conditions"
-msgstr "Villkor"
+#: js/ConfigManagerPanel.js:249
+msgid "Prefix"
+msgstr "Prefix"
 
-#: js/Setup.js:58
-msgid "Setup Checks"
-msgstr "Inställnings Kontroller"
+#: js/ConfigManagerPanel.js:253
+msgid "Logging"
+msgstr "Loggar"
 
-#: js/Setup.js:64
-msgid "Config Manager"
-msgstr "Config hanterare"
+#: js/ConfigManagerPanel.js:263
+msgid "Filename"
+msgstr "Filnamn"
 
-#: js/Setup.js:70
-msgid "Authentication/Accounts"
-msgstr "Verifiering / konton"
+#: js/ConfigManagerPanel.js:266
+msgid "Priority"
+msgstr "Prioritet"
 
-#: js/Setup.js:76
-msgid "Email"
-msgstr "E-post"
+#: js/ConfigManagerPanel.js:270
+msgid "Caching"
+msgstr "Fångar"
 
-#: js/Setup.js:82
-msgid "Application Manager"
-msgstr "Applikation Hanterare"
+#: js/ConfigManagerPanel.js:281 js/ConfigManagerPanel.js:398
+msgid "Lifetime (seconds)"
+msgstr "Livstid (sekunder)"
 
-#: js/Setup.js:185
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Applikation"
-msgstr[1] "Applikationer"
+#: js/ConfigManagerPanel.js:304 js/ConfigManagerPanel.js:423
+msgid "Path"
+msgstr "Väg"
 
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "Namn"
+#: js/ConfigManagerPanel.js:349
+msgid "Queue"
+msgstr ""
 
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
+#: js/ConfigManagerPanel.js:390
+msgid "Session"
+msgstr "Se"
+
+#: js/ConfigManagerPanel.js:449
+msgid "Temporary files"
+msgstr "Temporära filer"
+
+#: js/ConfigManagerPanel.js:457
+msgid "Temporary Files Path"
+msgstr "Temporära Fil Vägar"
+
+#: js/ConfigManagerPanel.js:462
+msgid "Filestore directory"
+msgstr "Session"
+
+#: js/ConfigManagerPanel.js:470
+msgid "Filestore Path"
+msgstr "Fillagrings väg"
+
+#: js/ConfigManagerPanel.js:475
+msgid "Addressbook Map panel"
+msgstr "Adressboks karta"
+
+#: js/ConfigManagerPanel.js:483
+msgid "Map panel"
+msgstr "Karta"
+
+#: js/ConfigManagerPanel.js:485
+msgid "disabled"
+msgstr "Inaktiverad"
+
+#: js/ConfigManagerPanel.js:485
+msgid "enabled"
 msgstr "Aktiverad"
 
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "Order"
+#: js/ConfigManagerPanel.js:497
+msgid "Config file is not writable"
+msgstr "Config fil är inte skrivbar"
 
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "Installerad Version"
-
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "Tillgänglig Version"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "Status"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "Beror på"
-
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr "Installera applikation"
-
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "Avinstallera applikation"
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Uppdatera applikation"
-
-#: js/ApplicationGridPanel.js:105
-msgid "Go to {0} login"
-msgstr "Gå till {0} Logga in"
-
-#: js/ApplicationGridPanel.js:175
-msgid "uninstall"
-msgstr "Avinstallera"
-
-#: js/ApplicationGridPanel.js:175
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Vill du verkligen avinstallera programmet (n)?"
-
-#: js/ApplicationGridPanel.js:235
-msgid "This may take a while"
-msgstr "Detta kan ta ett tag"
-
-#: js/ApplicationGridPanel.js:267
-msgid "Dependency Violation"
-msgstr "Överträdelse"
+#: js/ConfigManagerPanel.js:516
+msgid "Download config file"
+msgstr "Ladda ner config fil"
 
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
@@ -425,10 +471,6 @@ msgstr "Standard SMTP"
 #: js/EmailPanel.js:174
 msgid "Imap"
 msgstr "Imap"
-
-#: js/EmailPanel.js:186 js/ConfigManagerPanel.js:205
-msgid "Username"
-msgstr "Användarnamn"
 
 #: js/EmailPanel.js:206
 msgid "Use system account"
@@ -584,94 +626,52 @@ msgstr "Kör installations tester"
 msgid "Ignore setup tests"
 msgstr "Ignorera installations tester"
 
-#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
-msgid "File"
-msgstr "Fil"
+#: js/Setup.js:53
+msgid "Terms and Conditions"
+msgstr "Villkor"
 
-#: js/ConfigManagerPanel.js:198
-msgid "Setup Authentication"
-msgstr "Inställnings Autentisering"
+#: js/Setup.js:58
+msgid "Setup Checks"
+msgstr "Inställnings Kontroller"
 
-#: js/ConfigManagerPanel.js:219 js/ConfigManagerPanel.js:237
-msgid "Database"
-msgstr "Databas"
+#: js/Setup.js:64
+msgid "Config Manager"
+msgstr "Config hanterare"
 
-#: js/ConfigManagerPanel.js:241
-msgid "User"
-msgstr "Användare"
+#: js/Setup.js:70
+msgid "Authentication/Accounts"
+msgstr "Verifiering / konton"
 
-#: js/ConfigManagerPanel.js:249
-msgid "Prefix"
-msgstr "Prefix"
+#: js/Setup.js:76
+msgid "Email"
+msgstr "E-post"
 
-#: js/ConfigManagerPanel.js:253
-msgid "Logging"
-msgstr "Loggar"
+#: js/Setup.js:82
+msgid "Application Manager"
+msgstr "Applikation Hanterare"
 
-#: js/ConfigManagerPanel.js:263
-msgid "Filename"
-msgstr "Filnamn"
+#: js/Setup.js:185
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Applikation"
+msgstr[1] "Applikationer"
 
-#: js/ConfigManagerPanel.js:266
-msgid "Priority"
-msgstr "Prioritet"
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "Jag har läst licens avtalet och accepterat det"
 
-#: js/ConfigManagerPanel.js:270
-msgid "Caching"
-msgstr "Fångar"
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Licens Avtal"
 
-#: js/ConfigManagerPanel.js:281 js/ConfigManagerPanel.js:398
-msgid "Lifetime (seconds)"
-msgstr "Livstid (sekunder)"
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "jag har läst sekretess avtalet och accepterat det."
 
-#: js/ConfigManagerPanel.js:304 js/ConfigManagerPanel.js:423
-msgid "Path"
-msgstr "Väg"
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Sekretess Avtal"
 
-#: js/ConfigManagerPanel.js:349
-msgid "Queue"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:390
-msgid "Session"
-msgstr "Se"
-
-#: js/ConfigManagerPanel.js:449
-msgid "Temporary files"
-msgstr "Temporära filer"
-
-#: js/ConfigManagerPanel.js:457
-msgid "Temporary Files Path"
-msgstr "Temporära Fil Vägar"
-
-#: js/ConfigManagerPanel.js:462
-msgid "Filestore directory"
-msgstr "Session"
-
-#: js/ConfigManagerPanel.js:470
-msgid "Filestore Path"
-msgstr "Fillagrings väg"
-
-#: js/ConfigManagerPanel.js:475
-msgid "Addressbook Map panel"
-msgstr "Adressboks karta"
-
-#: js/ConfigManagerPanel.js:483
-msgid "Map panel"
-msgstr "Karta"
-
-#: js/ConfigManagerPanel.js:485
-msgid "disabled"
-msgstr "Inaktiverad"
-
-#: js/ConfigManagerPanel.js:485
-msgid "enabled"
-msgstr "Aktiverad"
-
-#: js/ConfigManagerPanel.js:497
-msgid "Config file is not writable"
-msgstr "Config fil är inte skrivbar"
-
-#: js/ConfigManagerPanel.js:516
-msgid "Download config file"
-msgstr "Ladda ner config fil"
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Acceptera Villkor"

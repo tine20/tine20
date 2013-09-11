@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-04-19 06:23+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-06-21 10:05+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: Norwegian Bokmål (http://www.transifex.com/projects/p/tine20/language/nb/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,21 +16,21 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Exception/PasswordPolicyViolation.php:22
-msgid "Password Policy Violation"
-msgstr ""
+#: Acl/Rights/Abstract.php:72
+msgid "admin"
+msgstr "admin"
 
-#: Exception/SystemGeneric.php:27
-msgid "Generic System Exception"
-msgstr ""
+#: Acl/Rights/Abstract.php:73
+msgid "admin right description"
+msgstr "admin rettighets beskrivelse"
 
-#: Exception/Record/SystemContainer.php:22
-msgid "System Container"
-msgstr ""
+#: Acl/Rights/Abstract.php:76
+msgid "run"
+msgstr "kjør"
 
-#: Exception/Record/SystemContainer.php:28
-msgid "This is a system container which could not be deleted!"
-msgstr ""
+#: Acl/Rights/Abstract.php:77
+msgid "run right description"
+msgstr "kjøre rettighets beskrivelse"
 
 #: Acl/Rights.php:147
 msgid "Report bugs"
@@ -62,65 +62,6 @@ msgstr ""
 
 #: Acl/Rights.php:160
 msgid "The right to manage the own client state."
-msgstr ""
-
-#: Acl/Rights/Abstract.php:72
-msgid "admin"
-msgstr "admin"
-
-#: Acl/Rights/Abstract.php:73
-msgid "admin right description"
-msgstr "admin rettighets beskrivelse"
-
-#: Acl/Rights/Abstract.php:76
-msgid "run"
-msgstr "kjør"
-
-#: Acl/Rights/Abstract.php:77
-msgid "run right description"
-msgstr "kjøre rettighets beskrivelse"
-
-#: Preference/Abstract.php:502
-msgid "default"
-msgstr ""
-
-#: Frontend/Http.php:396 js/ExceptionHandler.js:149
-msgid "Authorisation Required"
-msgstr "Autorisering Kreves"
-
-#: Frontend/Http.php:397
-msgid "Your session is not valid. You need to login again."
-msgstr "Din sessjon er ikke gyldig. Du må logge inn igjen."
-
-#: Frontend/Http.php:422 js/ExceptionDialog.js:62
-msgid "Abnormal End"
-msgstr "Unormal Avsluttning"
-
-#: Frontend/Http.php:423 js/ExceptionDialog.js:134
-msgid "An error occurred, the program ended abnormal."
-msgstr "En feil oppstod, programmet avsluttet unormalt."
-
-#: Notes.php:369
-msgid "by"
-msgstr "av"
-
-#: Notes.php:378
-msgid "Changed fields:"
-msgstr "Endrede felter:"
-
-#: User/Abstract.php:281 User/Abstract.php:282 User/Abstract.php:283
-#: User/Abstract.php:284 User/Abstract.php:285 js/ux/ConnectionStatus.js:58
-#: Group/Abstract.php:191
-msgid "unknown"
-msgstr "ukjent"
-
-#: Import/Csv/Abstract.php:197
-#, python-format
-msgid "The following fields weren't imported: %s"
-msgstr ""
-
-#: Import/Csv/Abstract.php:198
-msgid "N/A"
 msgstr ""
 
 #: Config.php:267
@@ -271,181 +212,124 @@ msgstr ""
 msgid "User may change password"
 msgstr ""
 
-#: Config.php:462 Config.php:464
+#: Config.php:463 Config.php:465
 msgid "Enable password policy"
 msgstr ""
 
-#: Config.php:472
+#: Config.php:473
 msgid "Only ASCII"
 msgstr ""
 
-#: Config.php:474
+#: Config.php:475
 msgid "Only ASCII characters are allowed in passwords."
 msgstr ""
 
-#: Config.php:482
+#: Config.php:483
 msgid "Minimum length"
 msgstr ""
 
-#: Config.php:484
+#: Config.php:485
 msgid "Minimum password length"
 msgstr ""
 
-#: Config.php:492
+#: Config.php:493
 msgid "Minimum word chars"
 msgstr ""
 
-#: Config.php:494
+#: Config.php:495
 msgid "Minimum word chars in password"
 msgstr ""
 
-#: Config.php:502
+#: Config.php:503
 msgid "Minimum uppercase chars"
 msgstr ""
 
-#: Config.php:504
+#: Config.php:505
 msgid "Minimum uppercase chars in password"
 msgstr ""
 
-#: Config.php:512
+#: Config.php:513
 msgid "Minimum special chars"
 msgstr ""
 
-#: Config.php:514
+#: Config.php:515
 msgid "Minimum special chars in password"
 msgstr ""
 
-#: Config.php:522
+#: Config.php:523
 msgid "Minimum numbers"
 msgstr ""
 
-#: Config.php:524
+#: Config.php:525
 msgid "Minimum numbers in password"
 msgstr ""
 
-#: Config.php:532
+#: Config.php:533
 msgid "Forbid part of username"
 msgstr ""
 
-#: Config.php:534
+#: Config.php:535
 msgid "Forbid part of username in password"
 msgstr ""
 
-#: Config.php:542
+#: Config.php:543
 msgid "Automatic bugreports"
 msgstr ""
 
-#: Config.php:544
+#: Config.php:545
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr ""
 
-#: Config.php:552
+#: Config.php:553
 msgid "Last sessions cleanup run"
 msgstr ""
 
-#: Config.php:554
+#: Config.php:555
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr ""
 
-#: Config.php:562
+#: Config.php:563
 msgid "Maximum login failures"
 msgstr ""
 
-#: Config.php:564
+#: Config.php:565
 msgid "Maximum allowed login failures before blocking account"
 msgstr ""
 
-#: Config.php:572
+#: Config.php:573
 msgid "Disable Anyone Account"
 msgstr ""
 
-#: Config.php:574
+#: Config.php:575
 msgid "Disallow anyone account in grant configurations"
 msgstr ""
 
-#: Setup/setup.xml:3203
-msgid "note"
-msgstr "notat"
-
-#: Setup/setup.xml:3208
-msgid "default note type"
-msgstr "standard notat type"
-
-#: Setup/setup.xml:3234
-msgid "telephone"
-msgstr "telefon"
-
-#: Setup/setup.xml:3239
-msgid "telephone call"
-msgstr "telefon samtale"
-
-#: Setup/setup.xml:3265
-msgid "email"
-msgstr "e-post"
-
-#: Setup/setup.xml:3270
-msgid "email contact"
-msgstr "e-post kontakt"
-
-#: Setup/setup.xml:3296
-msgid "created"
-msgstr "opprettet"
-
-#: Setup/setup.xml:3301
-msgid "record created"
-msgstr "post opprettet"
-
-#: Setup/setup.xml:3327
-msgid "changed"
-msgstr "endret"
-
-#: Setup/setup.xml:3332
-msgid "record changed"
-msgstr "post endret"
-
-#: Preference.php:87 js/widgets/TimezoneChooser.js:37
-msgid "Timezone"
-msgstr "Tidssone"
-
-#: Preference.php:88
-msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr "Tidssonen hvor datoer vises i Tine 2.0."
-
-#: Preference.php:91 js/widgets/LangChooser.js:35
-msgid "Language"
-msgstr "Språk"
-
-#: Preference.php:92
-msgid "The language of the Tine 2.0 GUI."
-msgstr "Språket til Tine 2.0 Grensesnittet."
-
-#: Preference.php:95
-msgid "Default Application"
-msgstr "Standard Program"
-
-#: Preference.php:96
-msgid "The default application to show after login."
-msgstr "Standard program som skal vises etter logg inn."
-
-#: Preference.php:99
-msgid "Window Type"
-msgstr "Vindus Type"
-
-#: Preference.php:100
-msgid "You can choose between modal windows or normal browser popup windows."
+#: Container.php:684
+#, python-format
+msgid "%s's personal container"
 msgstr ""
 
-#: Preference.php:103
-msgid "Confirm Logout"
+#: Container.php:1525
+msgid ""
+"You are not allowed to delete this Container. Please define another "
+"container as the default addressbook for internal contacts!"
 msgstr ""
 
-#: Preference.php:104
-msgid "Show confirmation dialog on logout."
+#: Exception/PasswordPolicyViolation.php:22
+msgid "Password Policy Violation"
 msgstr ""
 
-#: Export/Spreadsheet/Ods.php:278
-msgid "Data"
+#: Exception/Record/SystemContainer.php:22
+msgid "System Container"
+msgstr ""
+
+#: Exception/Record/SystemContainer.php:28
+msgid "This is a system container which could not be deleted!"
+msgstr ""
+
+#: Exception/SystemGeneric.php:27
+msgid "Generic System Exception"
 msgstr ""
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
@@ -460,38 +344,39 @@ msgstr "Opprettet ava"
 msgid "Activities"
 msgstr "Aktiviteter"
 
-#: js/AdminPanel.js:75
-msgid "Profile Information"
+#: Export/Spreadsheet/Ods.php:278
+msgid "Data"
 msgstr ""
 
-#: js/AdminPanel.js:79 js/widgets/EditRecord.js:168
-#: js/widgets/dialog/EditDialog.js:309
-msgid "Apply"
-msgstr "Bruk"
+#: Frontend/Http.php:396 js/ExceptionHandler.js:149
+msgid "Authorisation Required"
+msgstr "Autorisering Kreves"
 
-#: js/AdminPanel.js:94 js/widgets/TimezoneChooser.js:77
-#: js/widgets/LangChooser.js:68
-msgid "Please Wait"
-msgstr "Vennligts Vent"
+#: Frontend/Http.php:397
+msgid "Your session is not valid. You need to login again."
+msgstr "Din sessjon er ikke gyldig. Du må logge inn igjen."
 
-#: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
-msgid "Read"
-msgstr "Lest"
+#: Frontend/Http.php:422 js/ExceptionDialog.js:62
+msgid "Abnormal End"
+msgstr "Unormal Avsluttning"
 
-#: js/AdminPanel.js:157
-msgid "The field is readable part of the profile"
+#: Frontend/Http.php:423 js/ExceptionDialog.js:134
+msgid "An error occurred, the program ended abnormal."
+msgstr "En feil oppstod, programmet avsluttet unormalt."
+
+#: Group/Abstract.php:191 js/ux/ConnectionStatus.js:58 User/Abstract.php:281
+#: User/Abstract.php:282 User/Abstract.php:283 User/Abstract.php:284
+#: User/Abstract.php:285
+msgid "unknown"
+msgstr "ukjent"
+
+#: Import/Csv/Abstract.php:197
+#, python-format
+msgid "The following fields weren't imported: %s"
 msgstr ""
 
-#: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:47
-msgid "Edit"
-msgstr "Rediger"
-
-#: js/AdminPanel.js:162
-msgid "The field is editable part of the profile"
-msgstr ""
-
-#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:139
-msgid "Field Name"
+#: Import/Csv/Abstract.php:198
+msgid "N/A"
 msgstr ""
 
 #: js/AboutDialog.js:41 js/MainMenu.js:112
@@ -499,13 +384,14 @@ msgid "About {0}"
 msgstr "Om {0}"
 
 #: js/AboutDialog.js:60 js/CreditsScreen.js:53 js/LicenseScreen.js:51
-#: js/PasswordChangeDialog.js:66 js/widgets/EditRecord.js:157
-#: js/widgets/tags/TagsMassAttachAction.js:84
-#: js/widgets/dialog/MultiOptionsDialog.js:102
+#: js/PasswordChangeDialog.js:66 js/ux/form/LayerCombo.js:186
+#: js/widgets/ActivitiesPanel.js:311
+#: js/widgets/container/ContainerSelect.js:490
 #: js/widgets/dialog/AddToRecordPanel.js:111
-#: js/widgets/dialog/PreferencesDialog.js:109
-#: js/widgets/dialog/EditDialog.js:298 js/widgets/ActivitiesPanel.js:311
-#: js/widgets/container/ContainerSelect.js:490 js/ux/form/LayerCombo.js:186
+#: js/widgets/dialog/EditDialog.js:298
+#: js/widgets/dialog/MultiOptionsDialog.js:102
+#: js/widgets/dialog/PreferencesDialog.js:109 js/widgets/EditRecord.js:157
+#: js/widgets/tags/TagsMassAttachAction.js:84
 msgid "Ok"
 msgstr "OK"
 
@@ -525,11 +411,43 @@ msgstr ""
 msgid "Contributors"
 msgstr ""
 
-#: js/tineInit.js:603
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator "
-"and/or restart/reload your browser."
-msgstr "Fatal Feil: Klient selv-oppdatering feilet, vennligst kontakt din administrator og/eller resart/oppdater din vevleser."
+#: js/AdminPanel.js:75
+msgid "Profile Information"
+msgstr ""
+
+#: js/AdminPanel.js:79 js/widgets/dialog/EditDialog.js:309
+#: js/widgets/EditRecord.js:168
+msgid "Apply"
+msgstr "Bruk"
+
+#: js/AdminPanel.js:94 js/widgets/LangChooser.js:68
+#: js/widgets/TimezoneChooser.js:77
+msgid "Please Wait"
+msgstr "Vennligts Vent"
+
+#: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
+msgid "Read"
+msgstr "Lest"
+
+#: js/AdminPanel.js:157
+msgid "The field is readable part of the profile"
+msgstr ""
+
+#: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:47
+msgid "Edit"
+msgstr "Rediger"
+
+#: js/AdminPanel.js:162
+msgid "The field is editable part of the profile"
+msgstr ""
+
+#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:200
+msgid "Field Name"
+msgstr ""
+
+#: js/ApplicationStarter.js:222 js/widgets/ActivitiesPanel.js:592
+msgid "Quick search"
+msgstr "Hurtig søk"
 
 #: js/AppManager.js:208
 msgid "Missing Applications"
@@ -541,17 +459,13 @@ msgid ""
 "administrator."
 msgstr "Det er ingen applikasjoner aktivert for deg. Vennligst kontakt din administrator."
 
-#: js/CreditsScreen.js:36
-msgid "Credits"
-msgstr ""
-
 #: js/common.js:235
 msgid "Usage:&#160;"
 msgstr ""
 
-#: js/common.js:255 js/common.js:260 js/widgets/tags/TagToggleBox.js:112
-#: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagsPanel.js:128
-#: js/widgets/tags/TagCombo.js:134 js/widgets/tags/TagCombo.js:139
+#: js/common.js:255 js/common.js:260 js/widgets/tags/TagCombo.js:134
+#: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:128
+#: js/widgets/tags/TagToggleBox.js:112 js/widgets/tags/TagToggleBox.js:117
 msgid "personal"
 msgstr "personlig"
 
@@ -583,272 +497,25 @@ msgid_plural "{0} seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/LoginPanel.js:80 js/LoginPanel.js:118
-msgid "Login"
-msgstr "Logg inn"
+#: js/Container.js:123
+msgid "All {0}"
+msgstr "Alle  {0}"
 
-#: js/LoginPanel.js:90 js/widgets/dialog/CredentialsDialog.js:61
-msgid "Username"
-msgstr "Brukernavn"
+#: js/Container.js:124
+msgid "Shared {0}"
+msgstr "Delt {0}"
 
-#: js/LoginPanel.js:107 js/widgets/dialog/CredentialsDialog.js:65
-msgid "Password"
-msgstr "Passord"
+#: js/Container.js:125
+msgid "Other Users {0}"
+msgstr "Andre Brukere {0}"
 
-#: js/LoginPanel.js:137
-msgid "Tine 2.0 is made for you"
-msgstr "Tine2.0 er laget for deg"
+#: js/Container.js:130
+msgid "My {0}"
+msgstr "Min {0}"
 
-#: js/LoginPanel.js:139
-msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
-" and get help."
-msgstr "Tine 2.0 ønske å gjøre forretnings sammarbeid enklere og morsommere - for dine behov! Så du er hjertelig velkommen til å diskutere med oss, gi nye ideer og få hjelp."
-
-#: js/LoginPanel.js:145
-msgid "Tine 2.0 Homepage"
-msgstr "Tine 2.0 Hjemmeside"
-
-#: js/LoginPanel.js:146
-msgid "Tine 2.0 Forum"
-msgstr "Tine 2.0 Forum"
-
-#: js/LoginPanel.js:150
-msgid "Translations"
+#: js/CreditsScreen.js:36
+msgid "Credits"
 msgstr ""
-
-#: js/LoginPanel.js:152
-msgid ""
-"If you miss a language, or your language is not supported completely, you "
-"can help our translation teams at transifex."
-msgstr ""
-
-#: js/LoginPanel.js:155
-msgid "Tine 2.0 Translation Portal"
-msgstr ""
-
-#: js/LoginPanel.js:200
-msgid "about {0} minutes"
-msgstr "om {0} minutter"
-
-#: js/LoginPanel.js:205 js/LoginPanel.js:430
-msgid "Tine 2.0 needs your help"
-msgstr "Tine 2.0 trenger din hjelp"
-
-#: js/LoginPanel.js:207 js/LoginPanel.js:432
-msgid ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
-msgstr "Vi trenger regelmessige tilbakemeldinger for å gjøre neste Tine 2.0 utgivelser passe dine behov enda bedre. Hjelp oss og degselv ved å delta:"
-
-#: js/LoginPanel.js:213
-msgid "participate!"
-msgstr "delta!"
-
-#: js/LoginPanel.js:235
-msgid "Languages"
-msgstr "Språk"
-
-#: js/LoginPanel.js:236
-msgid "Duration"
-msgstr "Varighet"
-
-#: js/LoginPanel.js:277
-msgid "Browser incompatible"
-msgstr ""
-
-#: js/LoginPanel.js:279
-msgid "Your browser is not supported by Tine 2.0."
-msgstr ""
-
-#: js/LoginPanel.js:284
-msgid "Browser incompatible?"
-msgstr ""
-
-#: js/LoginPanel.js:286
-msgid ""
-"You are using an unrecognized browser. This could result in unexpected "
-"behaviour."
-msgstr ""
-
-#: js/LoginPanel.js:292
-msgid "You might try one of these browsers:"
-msgstr ""
-
-#: js/LoginPanel.js:350
-msgid "Logging you in..."
-msgstr "Logger deg inn..."
-
-#: js/LoginPanel.js:350 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
-#: js/widgets/persistentfilter/PickerPanel.js:317
-#: js/widgets/persistentfilter/PickerPanel.js:355
-#: js/widgets/persistentfilter/PickerPanel.js:407
-#: js/widgets/container/GrantsDialog.js:95
-msgid "Please wait"
-msgstr "Vennligst vent"
-
-#: js/LoginPanel.js:363
-msgid "Login successful. Loading {0}..."
-msgstr "Logg inn fullført. Laster {0}..."
-
-#: js/LoginPanel.js:363 js/MainMenu.js:227
-msgid "Please wait!"
-msgstr "Vennligst vent!"
-
-#: js/LoginPanel.js:371 js/ExceptionHandler.js:214
-msgid "Connection lost, please check your network!"
-msgstr "Forbindelse mistet, vennligst kontroller ditt nettverk!"
-
-#: js/LoginPanel.js:375
-msgid "Login failure"
-msgstr "Logg inn feilet"
-
-#: js/LoginPanel.js:376
-msgid "Your username and/or your password are wrong!!!"
-msgstr "Ditt brukernavn og/eller passord er feil!!!"
-
-#: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/PreferencesDialog.js:245
-#: js/widgets/dialog/PreferencesDialog.js:274
-#: js/widgets/dialog/EditDialog.js:671 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
-msgid "Errors"
-msgstr "Feil"
-
-#: js/LoginPanel.js:388 js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:691 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:603
-msgid "Please fix the errors noted."
-msgstr "Vennligst fiks disse feilene."
-
-#: js/LoginPanel.js:403
-msgid "Please enter your login data"
-msgstr "Vennligst tast inn dine logg inn data"
-
-#: js/LicenseScreen.js:35
-msgid "License"
-msgstr ""
-
-#: js/PasswordChangeDialog.js:32
-msgid "Change Password For \"{0}\""
-msgstr "Endre Passord For \"{0}\""
-
-#: js/PasswordChangeDialog.js:48
-msgid "Old Password"
-msgstr "Gammelt Passord"
-
-#: js/PasswordChangeDialog.js:52
-msgid "New Password"
-msgstr "Nytt Passord"
-
-#: js/PasswordChangeDialog.js:56
-msgid "Repeat new Password"
-msgstr "Gjenta nytt Passord"
-
-#: js/PasswordChangeDialog.js:60 js/widgets/EditRecord.js:178
-#: js/widgets/tags/TagToggleBox.js:59
-#: js/widgets/tags/TagsMassAttachAction.js:105
-#: js/widgets/dialog/DuplicateMergeDialog.js:79
-#: js/widgets/dialog/MultiOptionsDialog.js:109
-#: js/widgets/dialog/AddToRecordPanel.js:103
-#: js/widgets/dialog/PreferencesDialog.js:117
-#: js/widgets/dialog/EditDialog.js:318 js/widgets/dialog/WizardPanel.js:187
-#: js/widgets/ActivitiesPanel.js:303
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
-#: js/widgets/container/ContainerSelect.js:481 js/ExceptionDialog.js:100
-#: js/ux/form/LayerCombo.js:193
-msgid "Cancel"
-msgstr "Avbryt"
-
-#: js/PasswordChangeDialog.js:75
-msgid "Please Wait!"
-msgstr "Vennligst Vent!"
-
-#: js/PasswordChangeDialog.js:76
-msgid "changing password..."
-msgstr "endrer passord...."
-
-#: js/PasswordChangeDialog.js:87
-msgid "Success"
-msgstr "Vellykket"
-
-#: js/PasswordChangeDialog.js:88
-msgid "Your password has been changed."
-msgstr "Ditt passord ble endret."
-
-#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:707
-#: js/widgets/relation/GenericPickerGridPanel.js:720
-#: js/widgets/dialog/ImportDialog.js:654
-#: js/widgets/dialog/MultipleEditResultSummary.js:196
-#: js/widgets/form/RecordPickerComboBox.js:267
-msgid "Failure"
-msgstr "Feil"
-
-#: js/PasswordChangeDialog.js:111
-msgid "The new passwords mismatch, please correct them."
-msgstr "Passordene stemmer ikke, vennligst rett dem."
-
-#: js/MainMenu.js:62
-msgid "User: {0}"
-msgstr "Bruker {0}"
-
-#: js/MainMenu.js:118
-msgid "Debug Console (Ctrl + F11)"
-msgstr "Feilsøkings Konsoll (Ctrl + F11)"
-
-#: js/MainMenu.js:124 js/widgets/dialog/PreferencesPanel.js:36
-msgid "Preferences"
-msgstr "Alternativer"
-
-#: js/MainMenu.js:131
-msgid "Edit Profile"
-msgstr ""
-
-#: js/MainMenu.js:138
-msgid "Change password"
-msgstr "Endre passord"
-
-#: js/MainMenu.js:145
-msgid "Logout"
-msgstr "Logg ut"
-
-#: js/MainMenu.js:146
-msgid "Logout from {0}"
-msgstr "Logg ut fra {0}"
-
-#: js/MainMenu.js:153
-msgid "Allow desktop notifications"
-msgstr ""
-
-#: js/MainMenu.js:154
-msgid "Request permissions for webkit desktop notifications."
-msgstr ""
-
-#: js/MainMenu.js:164
-msgid "Install web app"
-msgstr ""
-
-#: js/MainMenu.js:165
-msgid "Install Tine 2.0 as web app in your browser."
-msgstr ""
-
-#: js/MainMenu.js:213 js/widgets/grid/GridPanel.js:1667
-#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:698
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
-#: js/widgets/persistentfilter/PickerPanel.js:315
-msgid "Confirm"
-msgstr "Bekreft"
-
-#: js/MainMenu.js:213
-msgid "Are you sure you want to logout?"
-msgstr "Er du sikker på at du vil logge ut?"
-
-#: js/MainMenu.js:227
-msgid "Logging you out..."
-msgstr "Logger deg ut..."
 
 #: js/data/Record.js:195
 msgid "Task"
@@ -861,6 +528,70 @@ msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "oppgave liste"
 msgstr[1] "oppgave lister"
+
+#: js/ExceptionDialog.js:100 js/PasswordChangeDialog.js:60
+#: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
+#: js/widgets/container/ContainerSelect.js:481
+#: js/widgets/dialog/AddToRecordPanel.js:103
+#: js/widgets/dialog/DuplicateMergeDialog.js:79
+#: js/widgets/dialog/EditDialog.js:318
+#: js/widgets/dialog/MultiOptionsDialog.js:109
+#: js/widgets/dialog/PreferencesDialog.js:117
+#: js/widgets/dialog/WizardPanel.js:187 js/widgets/EditRecord.js:178
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
+#: js/widgets/tags/TagsMassAttachAction.js:105
+#: js/widgets/tags/TagToggleBox.js:59
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: js/ExceptionDialog.js:107
+msgid "Send Report"
+msgstr "Sende Rapport"
+
+#: js/ExceptionDialog.js:135
+msgid "The last action you made was potentially not performed correctly."
+msgstr "Den siste handlingen du utførte ble muligens ikke utført riktig."
+
+#: js/ExceptionDialog.js:136
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occurred."
+msgstr "Vennligst hjelp til å forbedre dette programmet og varsle leverandøren. Innkluder en kort beskrivelse av hva du gjorde når feilen oppstod."
+
+#: js/ExceptionDialog.js:142
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
+#: js/widgets/relation/GenericPickerGridPanel.js:427
+#: js/widgets/tags/TagsPanel.js:483
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: js/ExceptionDialog.js:150
+msgid "Send Contact Information"
+msgstr "Send Kontakt Informasjon"
+
+#: js/ExceptionDialog.js:167
+msgid "Details:"
+msgstr "Detaljer:"
+
+#: js/ExceptionDialog.js:191
+msgid "Sending report..."
+msgstr "Sender rapport..."
+
+#: js/ExceptionDialog.js:191
+msgid "Please wait a moment"
+msgstr "Vennligst vent litt"
+
+#: js/ExceptionDialog.js:240
+msgid "Transmission Completed"
+msgstr "Overføring Fullført"
+
+#: js/ExceptionDialog.js:241
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "Din rapport er sendt. Takk for ditt bidrag"
+
+#: js/ExceptionDialog.js:241
+msgid "Please restart your browser now!"
+msgstr "Vennligst ta en omstart av din vevleser nå!"
 
 #: js/ExceptionHandler.js:150
 msgid "Your session timed out. You need to login again."
@@ -918,6 +649,10 @@ msgstr ""
 msgid "Your input data is not valid. Please provide valid data."
 msgstr ""
 
+#: js/ExceptionHandler.js:214 js/LoginPanel.js:380
+msgid "Connection lost, please check your network!"
+msgstr "Forbindelse mistet, vennligst kontroller ditt nettverk!"
+
 #: js/ExceptionHandler.js:220
 msgid "Timeout"
 msgstr ""
@@ -958,753 +693,938 @@ msgid ""
 "administrator."
 msgstr ""
 
-#: js/Container.js:123
-msgid "All {0}"
-msgstr "Alle  {0}"
-
-#: js/Container.js:124
-msgid "Shared {0}"
-msgstr "Delt {0}"
-
-#: js/Container.js:125
-msgid "Other Users {0}"
-msgstr "Andre Brukere {0}"
-
-#: js/Container.js:130
-msgid "My {0}"
-msgstr "Min {0}"
-
-#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:360
-#: js/widgets/dialog/EditDialog.js:388
-msgid "Saved in"
-msgstr "Lagret i"
-
-#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:327
-msgid "delete"
-msgstr "slett"
-
-#: js/widgets/tags/TagToggleBox.js:52
-msgid "Detach Tags"
+#: js/ExceptionHandler.js:262
+msgid "Method Not Found / Insufficent Permissions"
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:52
-msgid "Attach Tags"
+#: js/ExceptionHandler.js:263
+msgid ""
+"You tried to access a function that is not available. Please reload your "
+"browser, try again or contact your administrator."
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:140
-msgid "No Tags to detach found in the selected records"
+#: js/LicenseScreen.js:35
+msgid "License"
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:141
-msgid "Please Wait..."
+#: js/LoginPanel.js:80 js/LoginPanel.js:118
+msgid "Login"
+msgstr "Logg inn"
+
+#: js/LoginPanel.js:90 js/widgets/dialog/CredentialsDialog.js:61
+msgid "Username"
+msgstr "Brukernavn"
+
+#: js/LoginPanel.js:107 js/widgets/dialog/CredentialsDialog.js:65
+msgid "Password"
+msgstr "Passord"
+
+#: js/LoginPanel.js:143
+msgid "Tine 2.0 is made for you"
+msgstr "Tine2.0 er laget for deg"
+
+#: js/LoginPanel.js:145
+msgid ""
+"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
+"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
+" and get help."
+msgstr "Tine 2.0 ønske å gjøre forretnings sammarbeid enklere og morsommere - for dine behov! Så du er hjertelig velkommen til å diskutere med oss, gi nye ideer og få hjelp."
+
+#: js/LoginPanel.js:151
+msgid "Tine 2.0 Homepage"
+msgstr "Tine 2.0 Hjemmeside"
+
+#: js/LoginPanel.js:152
+msgid "Tine 2.0 Forum"
+msgstr "Tine 2.0 Forum"
+
+#: js/LoginPanel.js:156
+msgid "Translations"
 msgstr ""
 
-#: js/widgets/tags/TagToggleBox.js:152
-msgid "Detaching Tags"
+#: js/LoginPanel.js:158
+msgid "Translation state of {0}: {1}%."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:105
-msgid "Add a new personal tag"
-msgstr "Legg til et nytt personlig merke"
-
-#: js/widgets/tags/TagsPanel.js:108
-msgid "Add New Personal Tag"
-msgstr "Legg Til Nytt Personlig Merke"
-
-#: js/widgets/tags/TagsPanel.js:109
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "NB: Du kan opprette et personlig merke. Bare du kan se det!"
-
-#: js/widgets/tags/TagsPanel.js:109
-msgid "Enter tag name:"
-msgstr "Tast inn merke navn:"
-
-#: js/widgets/tags/TagsPanel.js:150
-msgid "No Tags to display"
-msgstr "Ingen Merker å vise"
-
-#: js/widgets/tags/TagsPanel.js:173
-msgid "Detach tag"
-msgid_plural "Detach tags"
-msgstr[0] "Fjern merke"
-msgstr[1] "Fjern merker"
-
-#: js/widgets/tags/TagsPanel.js:183
-msgid "Edit tag"
-msgstr "Rediger merke"
-
-#: js/widgets/tags/TagsPanel.js:188 js/widgets/tags/TagsPanel.js:193
-msgid "Rename Tag"
-msgstr "Endre navn på Merke"
-
-#: js/widgets/tags/TagsPanel.js:193
-msgid "Please enter a new name:"
-msgstr "Vennligst tast inn et nytt navn:"
-
-#: js/widgets/tags/TagsPanel.js:202
-msgid "Edit Description"
-msgstr "Rediger Beskrivelse"
-
-#: js/widgets/tags/TagsPanel.js:207
-msgid "Description for tag"
-msgstr "Beskrivelse for merke"
-
-#: js/widgets/tags/TagsPanel.js:207
-msgid "Please enter new description:"
-msgstr "Vennligst tast inn ny beskrivelse:"
-
-#: js/widgets/tags/TagsPanel.js:216
-msgid "Change Color"
-msgstr "Endre Farge"
-
-#: js/widgets/tags/TagsPanel.js:245
-msgid "Delete Tag"
-msgid_plural "Delete Tags"
-msgstr[0] "Slett Merke"
-msgstr[1] "Slett Merker"
-
-#: js/widgets/tags/TagsPanel.js:258
-msgid "Realy Delete Selected Tag?"
-msgid_plural "Realy Delete Selected Tags?"
-msgstr[0] "Virkelig Slette Merke?"
-msgstr[1] "Virkelig Slette Merker?"
-
-#: js/widgets/tags/TagsPanel.js:259
-msgid "the selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "valgt merke vil bli slettet og forsvinne fra alle poster"
-msgstr[1] "Valgt merke vil bli fjernet og forsvinne fra alle poster"
-
-#: js/widgets/tags/TagsPanel.js:263
-msgid "Please wait a moment..."
-msgstr "Vennligst vent et øyeblikk..."
-
-#: js/widgets/tags/TagsPanel.js:263
-msgid "Deleting Tag"
-msgid_plural "Deleting Tags"
-msgstr[0] "Sletter Merke"
-msgstr[1] "Sletter Merker"
-
-#: js/widgets/tags/TagsPanel.js:279 js/widgets/tags/TagsPanel.js:371
-#: js/widgets/tags/TagsPanel.js:404 js/widgets/dialog/EditDialog.js:710
-msgid "Failed"
-msgstr "Feilet"
-
-#: js/widgets/tags/TagsPanel.js:279
-msgid "Could not delete Tag(s)."
-msgstr "Klarte ikke å slette Merke(r)."
-
-#: js/widgets/tags/TagsPanel.js:323 js/widgets/tags/TagsPanel.js:385
-msgid "Notice"
-msgstr "Varsel"
-
-#: js/widgets/tags/TagsPanel.js:324 js/widgets/tags/TagsPanel.js:386
-msgid "The minimum tag length is three."
-msgstr "Minimum merke lengde er tre."
-
-#: js/widgets/tags/TagsPanel.js:371
-msgid "Could not create tag."
-msgstr "Klarte ikke å opprette merke."
-
-#: js/widgets/tags/TagsPanel.js:404
-msgid "Could not update tag."
-msgstr "Clarte ikke å oppdatere merke."
-
-#: js/widgets/tags/TagsPanel.js:483
-#: js/widgets/relation/GenericPickerGridPanel.js:427
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
-#: js/ExceptionDialog.js:142
-msgid "Description"
-msgstr "Beskrivelse"
-
-#: js/widgets/tags/TagsPanel.js:487
-#: js/widgets/container/PropertiesDialog.js:113
-msgid "Color"
-msgstr "Farge"
-
-#: js/widgets/tags/TagsMassAttachAction.js:18
-msgid "Add Tag"
-msgstr "Legg til Merke"
-
-#: js/widgets/tags/TagsMassAttachAction.js:76
-msgid "Attach the following tag to all selected items:"
-msgstr "Sett inn følgende merke på alle valgte ting:"
-
-#: js/widgets/tags/TagsMassAttachAction.js:98
-msgid "Select Tag"
-msgstr "Velg Merke"
-
-#: js/widgets/tags/TagsMassAttachAction.js:128
-msgid "Attaching Tag"
+#: js/LoginPanel.js:160
+msgid ""
+"If the state of your language is not satisfying, or if you miss a language, "
+"please consider becoming a Tine 2.0 translator."
 msgstr ""
 
-#: js/widgets/tags/TagFilter.js:30 js/Models.js:141
+#: js/LoginPanel.js:163
+msgid "Tine 2.0 Translation Howto"
+msgstr ""
+
+#: js/LoginPanel.js:164
+msgid "Detailed Language Statistics"
+msgstr ""
+
+#: js/LoginPanel.js:209
+msgid "about {0} minutes"
+msgstr "om {0} minutter"
+
+#: js/LoginPanel.js:214 js/LoginPanel.js:439
+msgid "Tine 2.0 needs your help"
+msgstr "Tine 2.0 trenger din hjelp"
+
+#: js/LoginPanel.js:216 js/LoginPanel.js:441
+msgid ""
+"We regularly need your feedback to make the next Tine 2.0 releases fit your "
+"needs even better. Help us and yourself by participating:"
+msgstr "Vi trenger regelmessige tilbakemeldinger for å gjøre neste Tine 2.0 utgivelser passe dine behov enda bedre. Hjelp oss og degselv ved å delta:"
+
+#: js/LoginPanel.js:222
+msgid "participate!"
+msgstr "delta!"
+
+#: js/LoginPanel.js:244
+msgid "Languages"
+msgstr "Språk"
+
+#: js/LoginPanel.js:245
+msgid "Duration"
+msgstr "Varighet"
+
+#: js/LoginPanel.js:286
+msgid "Browser incompatible"
+msgstr ""
+
+#: js/LoginPanel.js:288
+msgid "Your browser is not supported by Tine 2.0."
+msgstr ""
+
+#: js/LoginPanel.js:293
+msgid "Browser incompatible?"
+msgstr ""
+
+#: js/LoginPanel.js:295
+msgid ""
+"You are using an unrecognized browser. This could result in unexpected "
+"behaviour."
+msgstr ""
+
+#: js/LoginPanel.js:301
+msgid "You might try one of these browsers:"
+msgstr ""
+
+#: js/LoginPanel.js:359
+msgid "Logging you in..."
+msgstr "Logger deg inn..."
+
+#: js/LoginPanel.js:359 js/widgets/container/GrantsDialog.js:95
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+#: js/widgets/persistentfilter/PickerPanel.js:317
+#: js/widgets/persistentfilter/PickerPanel.js:355
+#: js/widgets/persistentfilter/PickerPanel.js:407
+#: js/widgets/tree/ContextMenu.js:191
+msgid "Please wait"
+msgstr "Vennligst vent"
+
+#: js/LoginPanel.js:372
+msgid "Login successful. Loading {0}..."
+msgstr "Logg inn fullført. Laster {0}..."
+
+#: js/LoginPanel.js:372 js/MainMenu.js:227
+msgid "Please wait!"
+msgstr "Vennligst vent!"
+
+#: js/LoginPanel.js:384
+msgid "Login failure"
+msgstr "Logg inn feilet"
+
+#: js/LoginPanel.js:385
+msgid "Your username and/or your password are wrong!!!"
+msgstr "Ditt brukernavn og/eller passord er feil!!!"
+
+#: js/LoginPanel.js:397 js/widgets/dialog/CredentialsDialog.js:126
+#: js/widgets/dialog/EditDialog.js:671 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+#: js/widgets/dialog/PreferencesDialog.js:245
+#: js/widgets/dialog/PreferencesDialog.js:274
+msgid "Errors"
+msgstr "Feil"
+
+#: js/LoginPanel.js:397 js/widgets/dialog/CredentialsDialog.js:126
+#: js/widgets/dialog/EditDialog.js:691 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+msgid "Please fix the errors noted."
+msgstr "Vennligst fiks disse feilene."
+
+#: js/LoginPanel.js:412
+msgid "Please enter your login data"
+msgstr "Vennligst tast inn dine logg inn data"
+
+#: js/MainMenu.js:62
+msgid "User: {0}"
+msgstr "Bruker {0}"
+
+#: js/MainMenu.js:118
+msgid "Debug Console (Ctrl + F11)"
+msgstr "Feilsøkings Konsoll (Ctrl + F11)"
+
+#: js/MainMenu.js:124 js/widgets/dialog/PreferencesPanel.js:36
+msgid "Preferences"
+msgstr "Alternativer"
+
+#: js/MainMenu.js:131
+msgid "Edit Profile"
+msgstr ""
+
+#: js/MainMenu.js:138
+msgid "Change password"
+msgstr "Endre passord"
+
+#: js/MainMenu.js:145
+msgid "Logout"
+msgstr "Logg ut"
+
+#: js/MainMenu.js:146
+msgid "Logout from {0}"
+msgstr "Logg ut fra {0}"
+
+#: js/MainMenu.js:153
+msgid "Allow desktop notifications"
+msgstr ""
+
+#: js/MainMenu.js:154
+msgid "Request permissions for webkit desktop notifications."
+msgstr ""
+
+#: js/MainMenu.js:164
+msgid "Install web app"
+msgstr ""
+
+#: js/MainMenu.js:165
+msgid "Install Tine 2.0 as web app in your browser."
+msgstr ""
+
+#: js/MainMenu.js:213 js/widgets/dialog/EditDialog.js:698
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+#: js/widgets/grid/GridPanel.js:1671
+#: js/widgets/persistentfilter/PickerPanel.js:315
+#: js/widgets/tree/ContextMenu.js:346
+msgid "Confirm"
+msgstr "Bekreft"
+
+#: js/MainMenu.js:213
+msgid "Are you sure you want to logout?"
+msgstr "Er du sikker på at du vil logge ut?"
+
+#: js/MainMenu.js:227
+msgid "Logging you out..."
+msgstr "Logger deg ut..."
+
+#: js/MainScreen.js:202
+msgid "Your password expired. Please enter a new user password:"
+msgstr ""
+
+#: js/Models.js:141 js/widgets/tags/TagFilter.js:30
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/tags/TagsMassDetachAction.js:18
-msgid "Detach tag(s)"
-msgstr ""
-
-#: js/widgets/tags/TagsMassDetachAction.js:84
-msgid "Select Tag(s) to detach"
-msgstr ""
-
-#: js/widgets/tags/TagCombo.js:46
-msgid "tag name"
-msgstr "merke navn"
-
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
-msgid "New version of Tine 2.0 available"
-msgstr "Ny versjon av Tine 2.0 tilgjengelig"
-
-#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Versjon {0} \" av Tine 2.0 er tilgjengelig."
-
-#: js/widgets/VersionCheck.js:46
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "Er en kritisk oppdatering og må installeres så fort som mulig!"
-
-#: js/widgets/VersionCheck.js:55
-msgid "Please consider updating!"
-msgstr "Vennligst vurder oppgradering!"
-
-#: js/widgets/grid/PickerGridPanel.js:162
-msgid "Remove record"
-msgstr ""
-
-#: js/widgets/grid/PickerGridPanel.js:255 js/widgets/grid/PickerFilter.js:310
-#: js/widgets/grid/FilterModelMultiSelect.js:214
-#: js/widgets/container/FilterModel.js:249
-msgid "Selected  {0}"
-msgstr ""
-
-#: js/widgets/grid/PickerGridPanel.js:296
-msgid "Search for records ..."
-msgstr ""
-
-#: js/widgets/grid/FilterModel.js:168
-msgid "contains"
-msgstr "inneholder"
-
-#: js/widgets/grid/FilterModel.js:169
-msgid "reg. exp."
-msgstr ""
-
-#: js/widgets/grid/FilterModel.js:170 js/widgets/container/FilterModel.js:142
-#: js/widgets/container/FilterModel.js:146
-msgid "is equal to"
-msgstr "er lik som"
-
-#: js/widgets/grid/FilterModel.js:171
-msgid "is greater than"
-msgstr "er større enn"
-
-#: js/widgets/grid/FilterModel.js:172
-msgid "is less than"
-msgstr "er mindre enn"
-
-#: js/widgets/grid/FilterModel.js:173
-msgid "is not"
-msgstr "er ikke"
-
-#: js/widgets/grid/FilterModel.js:174
-msgid "one of"
-msgstr "en av"
-
-#: js/widgets/grid/FilterModel.js:175
-msgid "none of"
-msgstr ""
-
-#: js/widgets/grid/FilterModel.js:176
-msgid "is before"
-msgstr "er før"
-
-#: js/widgets/grid/FilterModel.js:177
-msgid "is after"
-msgstr "er etter"
-
-#: js/widgets/grid/FilterModel.js:178
-msgid "is within"
-msgstr "er mellom"
-
-#: js/widgets/grid/FilterModel.js:179
-msgid "is in week no."
-msgstr "er i uke nr."
-
-#: js/widgets/grid/FilterModel.js:180
-msgid "starts with"
-msgstr "starter med"
-
-#: js/widgets/grid/FilterModel.js:181
-msgid "ends with"
-msgstr "slutter med"
-
-#: js/widgets/grid/FilterModel.js:182
-msgid "defined by"
-msgstr ""
-
-#: js/widgets/grid/FilterModel.js:228
-#: js/widgets/grid/ForeignRecordFilter.js:395
-#: js/widgets/relation/FilterModel.js:87
-msgid "select a operator"
-msgstr "velg en operatør"
-
-#: js/widgets/grid/FilterModel.js:352
-msgid "Search Account ..."
-msgstr "Søke Konto ..."
-
-#: js/widgets/grid/FilterModel.js:462
-msgid "today"
-msgstr "i dag"
-
-#: js/widgets/grid/FilterModel.js:463
-msgid "yesterday"
-msgstr "i går"
-
-#: js/widgets/grid/FilterModel.js:464
-msgid "this week"
-msgstr "denne uken"
-
-#: js/widgets/grid/FilterModel.js:465
-msgid "last week"
-msgstr "forrige uke"
-
-#: js/widgets/grid/FilterModel.js:466
-msgid "the week before last"
-msgstr "uken før forrige"
-
-#: js/widgets/grid/FilterModel.js:467
-msgid "this month"
-msgstr "denn måneden"
-
-#: js/widgets/grid/FilterModel.js:468
-msgid "last month"
-msgstr "forrige måned"
-
-#: js/widgets/grid/FilterModel.js:469
-msgid "this quarter"
-msgstr "dette kvartalet"
-
-#: js/widgets/grid/FilterModel.js:470
-msgid "last quarter"
-msgstr "forrige kvartal"
-
-#: js/widgets/grid/FilterModel.js:471
-msgid "this year"
-msgstr "dette året"
-
-#: js/widgets/grid/FilterModel.js:472
-msgid "last year"
-msgstr "ifjor"
-
-#: js/widgets/grid/FilterModel.js:476
-msgid "tomorrow"
-msgstr "i morgen"
-
-#: js/widgets/grid/FilterModel.js:477
-msgid "next week"
-msgstr "neste uke"
-
-#: js/widgets/grid/FilterModel.js:478
-msgid "next month"
-msgstr "neste måned"
-
-#: js/widgets/grid/FilterModel.js:479
-msgid "next quarter"
-msgstr "neste kvartal"
-
-#: js/widgets/grid/FilterModel.js:480
-msgid "next year"
-msgstr "neste år"
-
-#: js/widgets/grid/FilterPanel.js:79
-msgid "Attention: There are more filters active!"
-msgstr ""
-
-#: js/widgets/grid/FilterPanel.js:175 js/widgets/grid/FilterPanel.js:485
-msgid "Criteria {0}"
-msgstr ""
-
-#: js/widgets/grid/FilterPanel.js:266
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
-msgid "show details"
-msgstr ""
-
-#: js/widgets/grid/FilterPanel.js:267
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
-msgid "Always show advanced filters"
-msgstr "Vis alltid avanserte filter"
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
+#: js/Models.js:272
+msgid "Alarm"
+msgid_plural "Alarms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/FileUploadGrid.js:115 js/ux/form/ImageField.js:211
-msgid "Upload Failed"
-msgstr "Opplasting Feilet"
-
-#: js/widgets/grid/FileUploadGrid.js:116
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:180
-msgid "Remove file"
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:116
-msgid "Pause upload"
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:100
-msgid "Resume upload"
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:244
-msgid "Add file"
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:286
-msgid "name"
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:293
-msgid "size"
-msgstr ""
-
-#: js/widgets/grid/FileUploadGrid.js:300
-msgid "type"
-msgstr ""
-
-#: js/widgets/grid/QuickaddGridPanel.js:91
-msgid "Remove"
-msgstr "Fjern"
-
-#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:571
-msgid "Show"
-msgstr "Vis"
-
-#: js/widgets/grid/FilterToolbar.js:164
-msgid "add new filter"
-msgstr "legg til nytt filter"
-
-#: js/widgets/grid/FilterToolbar.js:170
-msgid "reset all filters"
-msgstr "nullstill alle filtere"
-
-#: js/widgets/grid/FilterToolbar.js:176
-msgid "start search"
-msgstr "start søk"
-
-#: js/widgets/grid/FilterToolbar.js:184
-msgid "save as favorite"
-msgstr ""
-
-#: js/widgets/grid/FilterToolbar.js:191
-msgid "Load a favorite"
-msgstr ""
-
-#: js/widgets/grid/FilterToolbar.js:358
-msgid "select a field"
-msgstr "velg et felt"
-
-#: js/widgets/grid/FilterToolbar.js:396
-msgid "Delete this filter"
-msgstr "Slett dette filteret"
-
-#: js/widgets/grid/FilterToolbar.js:428
-msgid "and"
-msgstr "og"
-
-#: js/widgets/grid/RendererManager.js:54
-msgid "has notes"
-msgstr ""
-
-#: js/widgets/grid/RendererManager.js:57
-msgid "has relations"
-msgstr ""
-
-#: js/widgets/grid/LinkGridPanel.js:103
-#: js/widgets/account/PickerGridPanel.js:267
-#: js/widgets/container/PropertiesDialog.js:107 js/Models.js:428
-msgid "Name"
-msgstr "Navn"
-
-#: js/widgets/grid/LinkGridPanel.js:105
-#: js/widgets/relation/GenericPickerGridPanel.js:430
-#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
-msgid "Type"
-msgstr "Type"
-
-#: js/widgets/grid/FilterStructureTreePanel.js:35
-#: js/widgets/grid/FilterStructureTreePanel.js:52
-msgid "Show records that match to one of the following filters"
-msgstr ""
-
-#: js/widgets/grid/FilterStructureTreePanel.js:37
-#: js/widgets/grid/FilterStructureTreePanel.js:51
-msgid "or alternatively"
-msgstr ""
-
-#: js/widgets/grid/FilterStructureTreePanel.js:55
-msgid "Add alternative filter"
-msgstr ""
-
-#: js/widgets/grid/FilterStructureTreePanel.js:61
-msgid "Remove Filter"
-msgstr ""
-
-#: js/widgets/grid/GridPanel.js:286
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria,"
-" view-options or the {1} you search in."
-msgstr ""
-
-#: js/widgets/grid/GridPanel.js:288 js/widgets/grid/GridPanel.js:474
-#: js/widgets/grid/GridPanel.js:475 js/widgets/grid/GridPanel.js:476
-msgid "Edit {0}"
-msgid_plural "Edit {0}"
+#: js/Models.js:310
+msgid "Import"
+msgid_plural "Imports"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:489 js/widgets/dialog/EditDialog.js:484
-msgid "Copy {0}"
-msgstr ""
-
-#: js/widgets/grid/GridPanel.js:500 js/widgets/tree/ContextMenu.js:35
-msgid "Add {0}"
-msgstr "Legg til {0}"
-
-#: js/widgets/grid/GridPanel.js:508
-msgid "Print Page"
-msgstr ""
-
-#: js/widgets/grid/GridPanel.js:538
-#: js/widgets/dialog/DuplicateMergeDialog.js:220
-msgid "Merge {0}"
-msgstr ""
-
-#: js/widgets/grid/GridPanel.js:573 js/widgets/grid/GridPanel.js:574
-#: js/widgets/grid/GridPanel.js:576 js/widgets/tree/ContextMenu.js:52
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "Slett  {0}"
-msgstr[1] "Slett {0}"
-
-#: js/widgets/grid/GridPanel.js:967
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Viser poster {0} - {1} of {2}"
-
-#: js/widgets/grid/GridPanel.js:968
-msgid "No {0} to display"
-msgstr "Ingen  {0} å vise"
-
-#: js/widgets/grid/GridPanel.js:1206
-msgid "New..."
-msgstr ""
-
-#: js/widgets/grid/GridPanel.js:1225
-msgid "Add to..."
-msgstr ""
-
-#: js/widgets/grid/GridPanel.js:1269
-#: js/widgets/relation/GenericPickerGridPanel.js:431
-msgid "Creation Time"
-msgstr ""
-
-#: js/widgets/grid/GridPanel.js:1270 js/widgets/ActivitiesPanel.js:464
-msgid "Created By"
-msgstr "Opprettet Av"
-
-#: js/widgets/grid/GridPanel.js:1271
-msgid "Last Modified Time"
-msgstr ""
-
-#: js/widgets/grid/GridPanel.js:1272
-msgid "Last Modified By"
-msgstr ""
-
-#: js/widgets/grid/GridPanel.js:1641
-msgid "Not Allowed"
-msgstr "Ikke Tillatt"
-
-#: js/widgets/grid/GridPanel.js:1642
-msgid "You are not allowed to delete all pages at once"
-msgstr "Du har ikke tilatelse til å slette alle sider på en gang"
-
-#: js/widgets/grid/GridPanel.js:1665
-msgid "Do you really want to delete the selected record ({0})?"
-msgid_plural "Do you really want to delete the selected records ({0})?"
+#: js/Models.js:336 js/widgets/container/GrantsGrid.js:51
+#: js/widgets/dialog/ExportDialog.js:48
+msgid "Export"
+msgid_plural "Export"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1700 js/widgets/dialog/EditDialog.js:700
-msgid "Deleting {0}"
-msgstr "Sletter {0}"
+#: js/Models.js:373
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] "Attest"
+msgstr[1] "Attester"
 
-#: js/widgets/grid/GridPanel.js:1700
-msgid " ... This may take a long time!"
-msgstr " ... Dette kan ta lang tid!"
-
-#: js/widgets/grid/ForeignRecordFilter.js:61
-msgid "Edit definition"
-msgstr ""
-
-#: js/widgets/grid/ForeignRecordFilter.js:71
-msgid "Start definition"
-msgstr ""
-
-#: js/widgets/grid/ForeignRecordFilter.js:111
-msgid "Related to"
-msgstr ""
-
-#: js/widgets/relation/FilterModel.js:32
-#: js/widgets/relation/GenericPickerGridPanel.js:133 js/Models.js:400
+#: js/Models.js:400 js/widgets/relation/FilterModel.js:32
+#: js/widgets/relation/GenericPickerGridPanel.js:133
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Relation"
 msgstr[1] "Relationer"
 
-#: js/widgets/relation/FilterModel.js:71
-msgid "Defined by ..."
+#: js/Models.js:421
+msgid "Department"
+msgid_plural "Departments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:428 js/widgets/account/PickerGridPanel.js:267
+#: js/widgets/container/PropertiesDialog.js:107
+#: js/widgets/grid/LinkGridPanel.js:103
+msgid "Name"
+msgstr "Navn"
+
+#: js/Models.js:447
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:447
+msgid "Configs"
 msgstr ""
 
-#: js/widgets/relation/FilterModel.js:114
-msgid "Define ..."
+#: js/PasswordChangeDialog.js:32
+msgid "Change Password For \"{0}\""
+msgstr "Endre Passord For \"{0}\""
+
+#: js/PasswordChangeDialog.js:48
+msgid "Old Password"
+msgstr "Gammelt Passord"
+
+#: js/PasswordChangeDialog.js:52
+msgid "New Password"
+msgstr "Nytt Passord"
+
+#: js/PasswordChangeDialog.js:56
+msgid "Repeat new Password"
+msgstr "Gjenta nytt Passord"
+
+#: js/PasswordChangeDialog.js:75
+msgid "Please Wait!"
+msgstr "Vennligst Vent!"
+
+#: js/PasswordChangeDialog.js:76
+msgid "changing password..."
+msgstr "endrer passord...."
+
+#: js/PasswordChangeDialog.js:87
+msgid "Success"
+msgstr "Vellykket"
+
+#: js/PasswordChangeDialog.js:88
+msgid "Your password has been changed."
+msgstr "Ditt passord ble endret."
+
+#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
+#: js/widgets/dialog/ImportDialog.js:654
+#: js/widgets/dialog/MultipleEditResultSummary.js:196
+#: js/widgets/form/RecordPickerComboBox.js:267
+#: js/widgets/relation/GenericPickerGridPanel.js:707
+#: js/widgets/relation/GenericPickerGridPanel.js:720
+msgid "Failure"
+msgstr "Feil"
+
+#: js/PasswordChangeDialog.js:111
+msgid "The new passwords mismatch, please correct them."
+msgstr "Passordene stemmer ikke, vennligst rett dem."
+
+#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
+msgid "Outdent Text"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:126
-msgid "Edit record"
+#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
+msgid "Indent Text"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:162
-msgid "Sibling"
+#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
+msgid "Remove Formatting"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:163
-msgid "Parent"
-msgstr ""
-
-#: js/widgets/relation/GenericPickerGridPanel.js:164
-msgid "Child"
-msgstr ""
-
-#: js/widgets/relation/GenericPickerGridPanel.js:209
-msgid "Relations failure"
-msgstr ""
-
-#: js/widgets/relation/GenericPickerGridPanel.js:209
-msgid "There are invalid relations. Please check before saving."
-msgstr ""
-
-#: js/widgets/relation/GenericPickerGridPanel.js:252
+#: js/tineInit.js:603
 msgid ""
-"The maximum number of {0} with the type {1} is reached. Please change the "
-"type of this relation"
-msgstr ""
+"Fatal Error: Client self-update failed, please contact your administrator "
+"and/or restart/reload your browser."
+msgstr "Fatal Feil: Klient selv-oppdatering feilet, vennligst kontakt din administrator og/eller resart/oppdater din vevleser."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:426
-msgid "Record"
-msgstr ""
+#: js/UserRegistration.js:37
+msgid "Registration Wizard"
+msgstr "Regristrerings Veiviser"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:428
-msgid "Remark"
-msgstr ""
+#: js/UserRegistration.js:90
+msgid "Given name"
+msgstr "For navn"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:429
-msgid "Dependency"
-msgstr ""
+#: js/UserRegistration.js:101
+msgid "Family name"
+msgstr "Etter navn"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:708
+#: js/UserRegistration.js:112
+msgid "Login name"
+msgstr "Logg inn navn"
+
+#: js/UserRegistration.js:125
+msgid "Emailaddress"
+msgstr "Epostadresse"
+
+#: js/UserRegistration.js:171
+msgid "Congratulations!"
+msgstr "Gratulerer!"
+
+#: js/UserRegistration.js:171
 msgid ""
-"The record you tried to link is already linked. Please edit the existing "
-"link."
+"You have entered all needed information. If you press the Finish button we "
+"will send you the registration email."
+msgstr "Du har tastet inn all nødvendig informasjon. Hvis du trykker Fullfør knappen vil vi sende deg registrerings e-posten."
+
+#: js/ux/ConnectionStatus.js:56
+msgid "online"
+msgstr "tilkoblet"
+
+#: js/ux/ConnectionStatus.js:57
+msgid "offline"
+msgstr "frakoblet"
+
+#: js/ux/form/ComboBoxRecentsPlugin.js:43
+#: js/widgets/container/ContainerSelect.js:129
+msgid "choose other {0}..."
+msgstr "Velg annet {0}..."
+
+#: js/ux/form/ImageField.js:76
+msgid "Loading"
+msgstr "Laster"
+
+#: js/ux/form/ImageField.js:78
+msgid "Click to edit"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:721
-#: js/widgets/form/RecordPickerComboBox.js:268
-msgid "You tried to link a record with itself. This is not allowed!"
+#: js/ux/form/ImageField.js:146
+msgid "Image Failed"
+msgstr "Bilde Feilet"
+
+#: js/ux/form/ImageField.js:146
+msgid "Could not load image. Please notify your Administrator"
+msgstr "Klarte ikke laste bilde. Vennligst varsle din Administrator"
+
+#: js/ux/form/ImageField.js:168
+msgid "Not An Image"
+msgstr "Ikke Et Bilde"
+
+#: js/ux/form/ImageField.js:168
+msgid "Please select an image file (gif/png/jpeg)"
 msgstr ""
 
-#: js/widgets/relation/PickerCombo.js:93
+#: js/ux/form/ImageField.js:211 js/widgets/grid/FileUploadGrid.js:115
+msgid "Upload Failed"
+msgstr "Opplasting Feilet"
+
+#: js/ux/form/ImageField.js:211
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "Klarte ikke å laste opp bilde. Vennligst varsle din Administrator"
+
+#: js/ux/form/ImageField.js:224
+msgid "Change Image"
+msgstr "Endre Bilde"
+
+#: js/ux/form/ImageField.js:232 js/ux/form/ImageField.js:250
+msgid "Crop Image"
+msgstr "Tilpass Bilde"
+
+#: js/ux/form/ImageField.js:256
+msgid "Delete Image"
+msgstr "Slett Bilde"
+
+#: js/ux/form/ImageField.js:265
+msgid "Show Original Image"
+msgstr "Vis Orginalt Bilde"
+
+#: js/ux/form/RecordsComboBox.js:26
+msgid "Software Version"
+msgstr "Programmvare Versjon"
+
+#: js/ux/grid/PagingToolbar.js:50
+msgid "{0} selected"
+msgstr "{0} valgte"
+
+#: js/ux/grid/PagingToolbar.js:51
+msgid "Unselect all"
+msgstr "Velg ingen"
+
+#: js/ux/grid/PagingToolbar.js:52
+msgid "Select all pages ({0} records)"
+msgstr "Velg alle sider ({0} poster)"
+
+#: js/ux/grid/PagingToolbar.js:53
+msgid "Toggle selection"
+msgstr "Veklse valg"
+
+#: js/ux/Percentage.js:190
+msgid "(paused)"
+msgstr ""
+
+#: js/ux/PopupWindowManager.js:164
 msgid ""
-"The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
-"once!"
+"The window you want to work with is backgrounded. Your browser doesn't "
+"support to foreground the window for you, so you need to use your operating "
+"systems window switching features. Please send complaints to your browser "
+"vendor!"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:265
-msgid "Rename {0}"
-msgstr "Endre navn {0}"
+#: js/ux/SearchField.js:44
+msgid "enter searchfilter"
+msgstr "tast inn søkefilter"
 
-#: js/widgets/tree/ContextMenu.js:61
-msgid "Manage {0} Permissions"
+#: js/widgets/account/PickerGridPanel.js:158
+msgid "Search User"
+msgstr "Søk etter Bruker"
+
+#: js/widgets/account/PickerGridPanel.js:164
+msgid "Search Group"
+msgstr "Søk etter Gruppe"
+
+#: js/widgets/account/PickerGridPanel.js:170
+msgid "Add Anyone"
+msgstr "Legg til hvem som helst"
+
+#: js/widgets/account/PickerGridPanel.js:213
+msgid "Anyone"
+msgstr "Hvem som helst"
+
+#: js/widgets/account/PickerGridPanel.js:229
+msgid "Search for users ..."
+msgstr "Søk etter brukere...."
+
+#: js/widgets/account/PickerGridPanel.js:251
+msgid "Search for groups ..."
+msgstr "Søk etter grupper..."
+
+#: js/widgets/ActivitiesPanel.js:147
+msgid "Add a Note..."
+msgstr "Legg til et Notat..."
+
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:174
+#: js/widgets/container/GrantsGrid.js:45
+msgid "Add"
+msgstr "Legg til"
+
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
+msgid "Note"
+msgstr "Notat"
+
+#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
+msgid "Add new note"
+msgstr "Legg til nytt notat"
+
+#: js/widgets/ActivitiesPanel.js:206
+msgid "Notes"
+msgstr "Notater"
+
+#: js/widgets/ActivitiesPanel.js:282
+msgid "Enter new note:"
+msgstr "Tast inn nytt notat:"
+
+#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
+msgid "Add Note"
+msgstr "Legg til Notat"
+
+#: js/widgets/ActivitiesPanel.js:371
+msgid "Add a {0} Note"
+msgstr "Leg til et {0} Notat"
+
+#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:598
+#: js/widgets/grid/LinkGridPanel.js:105
+#: js/widgets/relation/GenericPickerGridPanel.js:430
+msgid "Type"
+msgstr "Type"
+
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:1274
+msgid "Created By"
+msgstr "Opprettet Av"
+
+#: js/widgets/ActivitiesPanel.js:465
+msgid "Timestamp"
+msgstr "Tidstempel"
+
+#: js/widgets/ActivitiesPanel.js:479
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr "Viser historikk  {0} - {1} of {2}"
+
+#: js/widgets/ActivitiesPanel.js:480
+msgid "No history to display"
+msgstr "Ingen historikk å vise"
+
+#: js/widgets/ActivitiesPanel.js:580
+msgid "History"
+msgstr "Historikk"
+
+#: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
+msgid "Time"
+msgstr "Tid"
+
+#: js/widgets/ActivitiesPanel.js:596
+msgid "User"
+msgstr "Bruker"
+
+#: js/widgets/container/ContainerSelect.js:132
+msgid "Select a {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:69
-msgid "{0} Properties"
+#: js/widgets/container/ContainerSelect.js:152
+msgid "Recently used {0}:"
+msgstr "Nylig bruk {0}:"
+
+#: js/widgets/container/ContainerSelect.js:478
+msgid "please select a {0}"
+msgstr "vennligst velg en {0}"
+
+#: js/widgets/container/FilterModel.js:142
+msgid "is personal of"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:78
-msgid "Set {0} color"
+#: js/widgets/container/FilterModel.js:142
+#: js/widgets/container/FilterModel.js:146 js/widgets/grid/FilterModel.js:170
+msgid "is equal to"
+msgstr "er lik som"
+
+#: js/widgets/container/FilterModel.js:249
+#: js/widgets/grid/FilterModelMultiSelect.js:214
+#: js/widgets/grid/PickerFilter.js:310 js/widgets/grid/PickerGridPanel.js:255
+msgid "Selected  {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:92
-msgid "Reload {0}"
-msgstr "Laste på nytt {0}"
+#: js/widgets/container/GrantsDialog.js:52
+msgid "Folder"
+msgstr "Mappe"
 
-#: js/widgets/tree/ContextMenu.js:109
-msgid "Edit Properties"
+#: js/widgets/container/GrantsDialog.js:95
+msgid "Updating Grants"
+msgstr "Oppdaterer Tillatelser"
+
+#: js/widgets/container/GrantsDialog.js:125
+msgid "Error"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:124
-msgid "Download"
+#: js/widgets/container/GrantsDialog.js:126
+msgid "You are not allowed to remove all admins for this container!"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:185
-msgid "New {0}"
-msgstr "Ny {0}"
+#: js/widgets/container/GrantsGrid.js:44
+msgid "The grant to read records of this container"
+msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:185
-msgid "Please enter the name of the new {0}:"
-msgstr "Vennligst tast inn navnet på den nye {0}:"
+#: js/widgets/container/GrantsGrid.js:46
+msgid "The grant to add records to this container"
+msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:188
-msgid "No {0} added"
-msgstr "Ingen {0} lagt til"
+#: js/widgets/container/GrantsGrid.js:48
+msgid "The grant to edit records in this container"
+msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:188 js/widgets/tree/ContextMenu.js:272
-msgid "You have to supply a {0} name!"
-msgstr "Du må oppgi et {0} navn!"
+#: js/widgets/container/GrantsGrid.js:49
+msgid "Delete"
+msgstr "Slett"
 
-#: js/widgets/tree/ContextMenu.js:191
-msgid "Creating {0}..."
-msgstr "Oppretter {0}..."
+#: js/widgets/container/GrantsGrid.js:50
+msgid "The grant to delete records in this container"
+msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:266
-msgid "Please enter the new name of the {0}:"
-msgstr "Vennligst tast inn det nye navnet på {0}:"
+#: js/widgets/container/GrantsGrid.js:52
+msgid "The grant to export records from this container"
+msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:272
-msgid "Not renamed {0}"
-msgstr "Ikke endret navn  {0}"
+#: js/widgets/container/GrantsGrid.js:53
+msgid "Sync"
+msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:346
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "Vil du virkelig slette {0} \"{1}\"?"
+#: js/widgets/container/GrantsGrid.js:54
+msgid "The grant to synchronise records with this container"
+msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:457
-msgid "Manage Permissions for {0} \"{1}\""
-msgstr "Behandle Rettigheter for {0} \"{1}\""
+#: js/widgets/container/GrantsGrid.js:55
+msgid "Admin"
+msgstr "Admin"
 
-#: js/widgets/tree/ContextMenu.js:481
-msgid "Properties for {0} \"{1}\""
+#: js/widgets/container/GrantsGrid.js:56
+msgid "The grant to administrate this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:58
+msgid "Free Busy"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:59
+msgid "The grant to access free busy information of events in this calendar"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:60
+msgid "Private"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:61
+msgid "The grant to access records marked as private in this container"
+msgstr ""
+
+#: js/widgets/container/PropertiesDialog.js:90
+msgid "Properties"
+msgstr ""
+
+#: js/widgets/container/PropertiesDialog.js:113
+#: js/widgets/tags/TagsPanel.js:487
+msgid "Color"
+msgstr "Farge"
+
+#: js/widgets/container/PropertiesDialog.js:119
+msgid "My Grants"
+msgstr ""
+
+#: js/widgets/container/TreePanel.js:142
+msgid "container"
+msgid_plural "containers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/container/TreePanel.js:546
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr ""
+
+#: js/widgets/container/TreePanel.js:547
+msgid "{0} grant is required for desired action"
+msgstr ""
+
+#: js/widgets/container/TreePanel.js:548
+msgid "Insufficient Grants"
+msgstr ""
+
+#: js/widgets/CountryCombo.js:34
+msgid "Select a country..."
+msgstr ""
+
+#: js/widgets/customfields/EditDialogPlugin.js:155
+msgid "General"
+msgstr "Generell"
+
+#: js/widgets/customfields/EditDialogPlugin.js:167
+msgid "Custom Fields"
+msgstr "Egendefinert Felt"
+
+#: js/widgets/dialog/AdminPanel.js:59
+msgid "Change settings for application {0}"
+msgstr ""
+
+#: js/widgets/dialog/AdminPanel.js:107
+msgid "Defaults"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:34
+msgid "Alarms"
+msgstr "Alarmer"
+
+#: js/widgets/dialog/AlarmPanel.js:37
+msgid "0 minutes before"
+msgstr "0 minutter før"
+
+#: js/widgets/dialog/AlarmPanel.js:38
+msgid "5 minutes before"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:39
+msgid "15 minutes before"
+msgstr "15 minutter før"
+
+#: js/widgets/dialog/AlarmPanel.js:40
+msgid "30 minutes before"
+msgstr "30 minutter før"
+
+#: js/widgets/dialog/AlarmPanel.js:41
+msgid "1 hour before"
+msgstr "1 time før"
+
+#: js/widgets/dialog/AlarmPanel.js:42
+msgid "2 hours before"
+msgstr "2 timer før"
+
+#: js/widgets/dialog/AlarmPanel.js:43
+msgid "12 hours before"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:44
+msgid "1 day before"
+msgstr "1 dag før"
+
+#: js/widgets/dialog/AlarmPanel.js:45
+msgid "2 days before"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:46
+msgid "Custom Datetime"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:58
+msgid "Alarm Time"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:170
+msgid "{0} minutes before"
+msgstr ""
+
+#: js/widgets/dialog/CredentialsDialog.js:84
+msgid "Please enter your credentials"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:87
+#: js/widgets/dialog/MultipleEditResultSummary.js:86
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:69
+msgid "OK"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:134
+msgid "Merging Records..."
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:173
+msgid "Merge Failed"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:173
+msgid "The merge succeeded, but the duplicate {0} could not be deleted."
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:212
+msgid "Merge {0}, prefer First"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:213
+msgid "Merge {0}, prefer Second"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:220
+#: js/widgets/grid/GridPanel.js:538
+msgid "Merge {0}"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:223
+msgid "First {0}"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:224
+msgid "Second {0}"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:225
+msgid "Final {0}"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:41
+msgid "The record you try to add might already exist."
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:193
+msgid "Field Group"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:207
+msgid "My Value"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:215
+msgid "Existing Value"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:223
+msgid "Final Value"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:240
+msgid "Action:"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:256
+msgid "Merge, keeping existing details"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:257
+msgid "Merge, keeping my details"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:258
+msgid "Keep existing record and discard mine"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:259
+msgid "Keep both records"
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:327 js/widgets/EditRecord.js:188
+msgid "delete"
+msgstr "slett"
+
+#: js/widgets/dialog/EditDialog.js:360 js/widgets/dialog/EditDialog.js:388
+#: js/widgets/EditRecord.js:131
+msgid "Saved in"
+msgstr "Lagret i"
+
+#: js/widgets/dialog/EditDialog.js:484 js/widgets/grid/GridPanel.js:489
+msgid "Copy {0}"
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:487
+msgid "Add New {0}"
+msgstr "Legg Til Ny {0}"
+
+#: js/widgets/dialog/EditDialog.js:489
+msgid "Edit {0} \"{1}\""
+msgstr "Rediger {0} \"{1}\""
+
+#: js/widgets/dialog/EditDialog.js:553
+msgid "Transferring {0}..."
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:698
+msgid "Do you really want to delete this {0}?"
+msgstr "Vil du virkelig slette dette {0}?"
+
+#: js/widgets/dialog/EditDialog.js:700 js/widgets/grid/GridPanel.js:1704
+msgid "Deleting {0}"
+msgstr "Sletter {0}"
+
+#: js/widgets/dialog/EditDialog.js:710 js/widgets/tags/TagsPanel.js:279
+#: js/widgets/tags/TagsPanel.js:371 js/widgets/tags/TagsPanel.js:404
+msgid "Failed"
+msgstr "Feilet"
+
+#: js/widgets/dialog/EditDialog.js:710
+msgid "Could not delete {0}."
+msgstr "Klarte ikke å slette {0}"
+
+#: js/widgets/dialog/EditDialog.js:762
+msgid "Resolve Duplicate {0} Suspicion"
+msgstr ""
+
+#: js/widgets/dialog/ExportDialog.js:84
+msgid "Export {0} {1}"
+msgstr ""
+
+#: js/widgets/dialog/ExportDialog.js:111
+msgid "Export definition"
+msgstr ""
+
+#: js/widgets/dialog/ExportDialog.js:120
+msgid "Select Export Definition ..."
+msgstr ""
+
+#: js/widgets/dialog/FileListDialog.js:28
+#: js/widgets/dialog/MultiOptionsDialog.js:28
+#: js/widgets/dialog/MultiOptionsDialog.js:81
+msgid "What would you like to do?"
+msgstr ""
+
+#: js/widgets/dialog/FileListDialog.js:32
+#: js/widgets/dialog/MultiOptionsDialog.js:32
+#: js/widgets/dialog/MultiOptionsDialog.js:141
+msgid "You need to select an option!"
+msgstr ""
+
+#: js/widgets/dialog/FileListDialog.js:91
+msgid "No"
+msgstr ""
+
+#: js/widgets/dialog/FileListDialog.js:99
+msgid "Yes"
 msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:223
@@ -1863,134 +1783,61 @@ msgstr ""
 msgid "{0} records have failures and will be discarded."
 msgstr ""
 
-#: js/widgets/dialog/AdminPanel.js:59
-msgid "Change settings for application {0}"
-msgstr ""
-
-#: js/widgets/dialog/AdminPanel.js:107
-msgid "Defaults"
-msgstr ""
-
 #: js/widgets/dialog/LinkPanel.js:46
 msgid "Links"
 msgstr "Linker"
 
-#: js/widgets/dialog/AlarmPanel.js:34
-msgid "Alarms"
-msgstr "Alarmer"
-
-#: js/widgets/dialog/AlarmPanel.js:37
-msgid "0 minutes before"
-msgstr "0 minutter før"
-
-#: js/widgets/dialog/AlarmPanel.js:38
-msgid "5 minutes before"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:318
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:432
+msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/AlarmPanel.js:39
-msgid "15 minutes before"
-msgstr "15 minutter før"
-
-#: js/widgets/dialog/AlarmPanel.js:40
-msgid "30 minutes before"
-msgstr "30 minutter før"
-
-#: js/widgets/dialog/AlarmPanel.js:41
-msgid "1 hour before"
-msgstr "1 time før"
-
-#: js/widgets/dialog/AlarmPanel.js:42
-msgid "2 hours before"
-msgstr "2 timer før"
-
-#: js/widgets/dialog/AlarmPanel.js:43
-msgid "12 hours before"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:415
+msgid "Undo change for all selected records"
 msgstr ""
 
-#: js/widgets/dialog/AlarmPanel.js:44
-msgid "1 day before"
-msgstr "1 dag før"
-
-#: js/widgets/dialog/AlarmPanel.js:45
-msgid "2 days before"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:490
+msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/AlarmPanel.js:46
-msgid "Custom Datetime"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:542
+msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/AlarmPanel.js:58
-msgid "Alarm Time"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:543
+msgid ""
+"This field has different values. Editing this field will overwrite the old "
+"values."
 msgstr ""
 
-#: js/widgets/dialog/AlarmPanel.js:170
-msgid "{0} minutes before"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:87
-#: js/widgets/dialog/MultipleEditResultSummary.js:86
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:69
-msgid "OK"
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+msgid "Applying changes"
 msgstr ""
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:134
-msgid "Merging Records..."
+#: js/widgets/dialog/MultipleEditResultSummary.js:146
+msgid "You edited {0} {1}."
 msgstr ""
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:173
-msgid "Merge Failed"
+#: js/widgets/dialog/MultipleEditResultSummary.js:149
+msgid "{0} {1} have been updated properly."
 msgstr ""
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:173
-msgid "The merge succeeded, but the duplicate {0} could not be deleted."
+#: js/widgets/dialog/MultipleEditResultSummary.js:149
+msgid "{0} {1} has been updated properly."
 msgstr ""
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:212
-msgid "Merge {0}, prefer First"
+#: js/widgets/dialog/MultipleEditResultSummary.js:152
+msgid ""
+"{0} {1} have invalid data after updating. These {1} have not been changed."
 msgstr ""
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:213
-msgid "Merge {0}, prefer Second"
-msgstr ""
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:223
-msgid "First {0}"
-msgstr ""
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:224
-msgid "Second {0}"
-msgstr ""
-
-#: js/widgets/dialog/DuplicateMergeDialog.js:225
-msgid "Final {0}"
-msgstr ""
-
-#: js/widgets/dialog/PreferencesPanel.js:185
-msgid "There are no preferences for this application."
-msgstr "Det er ingen instillinger for dette programmet."
-
-#: js/widgets/dialog/MultiOptionsDialog.js:28
-#: js/widgets/dialog/MultiOptionsDialog.js:81
-#: js/widgets/dialog/FileListDialog.js:28
-msgid "What would you like to do?"
-msgstr ""
-
-#: js/widgets/dialog/MultiOptionsDialog.js:32
-#: js/widgets/dialog/MultiOptionsDialog.js:141
-#: js/widgets/dialog/FileListDialog.js:32
-msgid "You need to select an option!"
-msgstr ""
-
-#: js/widgets/dialog/FileListDialog.js:91
-msgid "No"
-msgstr ""
-
-#: js/widgets/dialog/FileListDialog.js:99
-msgid "Yes"
-msgstr ""
-
-#: js/widgets/dialog/CredentialsDialog.js:84
-msgid "Please enter your credentials"
+#: js/widgets/dialog/MultipleEditResultSummary.js:152
+msgid ""
+"{0} {1} has invalid data after updating. This {1} has not been changed."
 msgstr ""
 
 #: js/widgets/dialog/PreferencesDialog.js:125
@@ -2018,101 +1865,9 @@ msgstr "Du må rette rødt markerte felter før konfigurasjonen kan lagres"
 msgid "Saving of preferences failed."
 msgstr "Lagring av instillinger feilet."
 
-#: js/widgets/dialog/EditDialog.js:487
-msgid "Add New {0}"
-msgstr "Legg Til Ny {0}"
-
-#: js/widgets/dialog/EditDialog.js:489
-msgid "Edit {0} \"{1}\""
-msgstr "Rediger {0} \"{1}\""
-
-#: js/widgets/dialog/EditDialog.js:553
-msgid "Transferring {0}..."
-msgstr ""
-
-#: js/widgets/dialog/EditDialog.js:698
-msgid "Do you really want to delete this {0}?"
-msgstr "Vil du virkelig slette dette {0}?"
-
-#: js/widgets/dialog/EditDialog.js:710
-msgid "Could not delete {0}."
-msgstr "Klarte ikke å slette {0}"
-
-#: js/widgets/dialog/EditDialog.js:762
-msgid "Resolve Duplicate {0} Suspicion"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:146
-msgid "You edited {0} {1}."
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:149
-msgid "{0} {1} have been updated properly."
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:149
-msgid "{0} {1} has been updated properly."
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:152
-msgid ""
-"{0} {1} have invalid data after updating. These {1} have not been changed."
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditResultSummary.js:152
-msgid ""
-"{0} {1} has invalid data after updating. This {1} has not been changed."
-msgstr ""
-
-#: js/widgets/dialog/ExportDialog.js:48 js/widgets/container/GrantsGrid.js:51
-#: js/Models.js:336
-msgid "Export"
-msgid_plural "Export"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/widgets/dialog/ExportDialog.js:84
-msgid "Export {0} {1}"
-msgstr ""
-
-#: js/widgets/dialog/ExportDialog.js:111
-msgid "Export definition"
-msgstr ""
-
-#: js/widgets/dialog/ExportDialog.js:120
-msgid "Select Export Definition ..."
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:315
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:430
-msgid "Delete value from all selected records"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:413
-msgid "Undo change for all selected records"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:487
-msgid "Edit {0} {1}"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:540
-msgid "Different Values"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:541
-msgid ""
-"This field has different values. Editing this field will overwrite the old "
-"values."
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:638
-msgid "Do you really want to change these {0} records?"
-msgstr ""
-
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:641
-msgid "Applying changes"
-msgstr ""
+#: js/widgets/dialog/PreferencesPanel.js:185
+msgid "There are no preferences for this application."
+msgstr "Det er ingen instillinger for dette programmet."
 
 #: js/widgets/dialog/PreferencesTreePanel.js:67
 msgid "General Preferences"
@@ -2134,118 +1889,435 @@ msgstr ""
 msgid "Finish"
 msgstr ""
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:41
-msgid "The record you try to add might already exist."
+#: js/widgets/form/ConfigPanel.js:113
+msgid "Configuration Problem"
 msgstr ""
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:132
-msgid "Field Group"
+#: js/widgets/form/ConfigPanel.js:134
+msgid "Invalid configuration"
+msgstr "Ugyldig konfigurasjon"
+
+#: js/widgets/form/ConfigPanel.js:158
+msgid "Transferring Configuration..."
 msgstr ""
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:146
-msgid "My Value"
+#: js/widgets/form/ConfigPanel.js:254
+msgid "Save config"
+msgstr "Lagre konfigurasjon"
+
+#: js/widgets/form/ConfigPanel.js:264
+msgid "Reload config"
 msgstr ""
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:154
-msgid "Existing Value"
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Wrong File Type"
 msgstr ""
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:162
-msgid "Final Value"
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Please select a file with one of the following extensions:"
 msgstr ""
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:179
-msgid "Action:"
+#: js/widgets/form/RecordPickerComboBox.js:99
+#: js/widgets/form/RecordPickerManager.js:48
+msgid "Searching..."
+msgstr "Søker..."
+
+#: js/widgets/form/RecordPickerComboBox.js:268
+#: js/widgets/relation/GenericPickerGridPanel.js:721
+msgid "You tried to link a record with itself. This is not allowed!"
 msgstr ""
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:195
-msgid "Merge, keeping existing details"
+#: js/widgets/grid/FileUploadGrid.js:116
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
 msgstr ""
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:196
-msgid "Merge, keeping my details"
+#: js/widgets/grid/FileUploadGrid.js:180
+msgid "Remove file"
 msgstr ""
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:197
-msgid "Keep existing record and discard mine"
+#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:116
+msgid "Pause upload"
 msgstr ""
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:198
-msgid "Keep both records"
+#: js/widgets/grid/FileUploadGrid.js:197 js/widgets/tree/ContextMenu.js:100
+msgid "Resume upload"
 msgstr ""
 
-#: js/widgets/TimezoneChooser.js:77
-msgid "setting new timezone..."
-msgstr "setter ny tidssone..."
+#: js/widgets/grid/FileUploadGrid.js:244
+msgid "Add file"
+msgstr ""
 
-#: js/widgets/customfields/EditDialogPlugin.js:155
-msgid "General"
-msgstr "Generell"
+#: js/widgets/grid/FileUploadGrid.js:286
+msgid "name"
+msgstr ""
 
-#: js/widgets/customfields/EditDialogPlugin.js:167
-msgid "Custom Fields"
-msgstr "Egendefinert Felt"
+#: js/widgets/grid/FileUploadGrid.js:293
+msgid "size"
+msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:147
-msgid "Add a Note..."
-msgstr "Legg til et Notat..."
+#: js/widgets/grid/FileUploadGrid.js:300
+msgid "type"
+msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:174
-#: js/widgets/container/GrantsGrid.js:45
-msgid "Add"
-msgstr "Legg til"
+#: js/widgets/grid/FilterModel.js:168
+msgid "contains"
+msgstr "inneholder"
 
-#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
-msgid "Note"
-msgstr "Notat"
+#: js/widgets/grid/FilterModel.js:169
+msgid "reg. exp."
+msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
-msgid "Add new note"
-msgstr "Legg til nytt notat"
+#: js/widgets/grid/FilterModel.js:171
+msgid "is greater than"
+msgstr "er større enn"
 
-#: js/widgets/ActivitiesPanel.js:206
-msgid "Notes"
-msgstr "Notater"
+#: js/widgets/grid/FilterModel.js:172
+msgid "is less than"
+msgstr "er mindre enn"
 
-#: js/widgets/ActivitiesPanel.js:282
-msgid "Enter new note:"
-msgstr "Tast inn nytt notat:"
+#: js/widgets/grid/FilterModel.js:173
+msgid "is not"
+msgstr "er ikke"
 
-#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
-msgid "Add Note"
-msgstr "Legg til Notat"
+#: js/widgets/grid/FilterModel.js:174
+msgid "one of"
+msgstr "en av"
 
-#: js/widgets/ActivitiesPanel.js:371
-msgid "Add a {0} Note"
-msgstr "Leg til et {0} Notat"
+#: js/widgets/grid/FilterModel.js:175
+msgid "none of"
+msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:465
-msgid "Timestamp"
-msgstr "Tidstempel"
+#: js/widgets/grid/FilterModel.js:176
+msgid "is before"
+msgstr "er før"
 
-#: js/widgets/ActivitiesPanel.js:479
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr "Viser historikk  {0} - {1} of {2}"
+#: js/widgets/grid/FilterModel.js:177
+msgid "is after"
+msgstr "er etter"
 
-#: js/widgets/ActivitiesPanel.js:480
-msgid "No history to display"
-msgstr "Ingen historikk å vise"
+#: js/widgets/grid/FilterModel.js:178
+msgid "is within"
+msgstr "er mellom"
 
-#: js/widgets/ActivitiesPanel.js:580
-msgid "History"
-msgstr "Historikk"
+#: js/widgets/grid/FilterModel.js:179
+msgid "is in week no."
+msgstr "er i uke nr."
 
-#: js/widgets/ActivitiesPanel.js:592 js/ApplicationStarter.js:222
-msgid "Quick Search"
-msgstr "Hurtig søk"
+#: js/widgets/grid/FilterModel.js:180
+msgid "starts with"
+msgstr "starter med"
 
-#: js/widgets/ActivitiesPanel.js:593 js/widgets/ActivitiesPanel.js:594
-msgid "Time"
-msgstr "Tid"
+#: js/widgets/grid/FilterModel.js:181
+msgid "ends with"
+msgstr "slutter med"
 
-#: js/widgets/ActivitiesPanel.js:596
-msgid "User"
-msgstr "Bruker"
+#: js/widgets/grid/FilterModel.js:182
+msgid "defined by"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:228
+#: js/widgets/grid/ForeignRecordFilter.js:395
+#: js/widgets/relation/FilterModel.js:87
+msgid "select a operator"
+msgstr "velg en operatør"
+
+#: js/widgets/grid/FilterModel.js:352
+msgid "Search Account ..."
+msgstr "Søke Konto ..."
+
+#: js/widgets/grid/FilterModel.js:462
+msgid "today"
+msgstr "i dag"
+
+#: js/widgets/grid/FilterModel.js:463
+msgid "yesterday"
+msgstr "i går"
+
+#: js/widgets/grid/FilterModel.js:464
+msgid "this week"
+msgstr "denne uken"
+
+#: js/widgets/grid/FilterModel.js:465
+msgid "last week"
+msgstr "forrige uke"
+
+#: js/widgets/grid/FilterModel.js:466
+msgid "the week before last"
+msgstr "uken før forrige"
+
+#: js/widgets/grid/FilterModel.js:467
+msgid "this month"
+msgstr "denn måneden"
+
+#: js/widgets/grid/FilterModel.js:468
+msgid "last month"
+msgstr "forrige måned"
+
+#: js/widgets/grid/FilterModel.js:469
+msgid "this quarter"
+msgstr "dette kvartalet"
+
+#: js/widgets/grid/FilterModel.js:470
+msgid "last quarter"
+msgstr "forrige kvartal"
+
+#: js/widgets/grid/FilterModel.js:471
+msgid "this year"
+msgstr "dette året"
+
+#: js/widgets/grid/FilterModel.js:472
+msgid "last year"
+msgstr "ifjor"
+
+#: js/widgets/grid/FilterModel.js:476
+msgid "tomorrow"
+msgstr "i morgen"
+
+#: js/widgets/grid/FilterModel.js:477
+msgid "next week"
+msgstr "neste uke"
+
+#: js/widgets/grid/FilterModel.js:478
+msgid "next month"
+msgstr "neste måned"
+
+#: js/widgets/grid/FilterModel.js:479
+msgid "next quarter"
+msgstr "neste kvartal"
+
+#: js/widgets/grid/FilterModel.js:480
+msgid "next year"
+msgstr "neste år"
+
+#: js/widgets/grid/FilterPanel.js:78
+msgid "Attention: There are more filters active!"
+msgstr ""
+
+#: js/widgets/grid/FilterPanel.js:261
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
+msgid "show details"
+msgstr ""
+
+#: js/widgets/grid/FilterPanel.js:262
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
+msgid "Always show advanced filters"
+msgstr "Vis alltid avanserte filter"
+
+#: js/widgets/grid/FilterPanel.js:501
+msgid "Criteria {0}"
+msgstr ""
+
+#: js/widgets/grid/FilterStructureTreePanel.js:35
+#: js/widgets/grid/FilterStructureTreePanel.js:52
+msgid "Show records that match to one of the following filters"
+msgstr ""
+
+#: js/widgets/grid/FilterStructureTreePanel.js:37
+#: js/widgets/grid/FilterStructureTreePanel.js:51
+msgid "or alternatively"
+msgstr ""
+
+#: js/widgets/grid/FilterStructureTreePanel.js:55
+msgid "Add alternative filter"
+msgstr ""
+
+#: js/widgets/grid/FilterStructureTreePanel.js:61
+msgid "Remove Filter"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:571
+msgid "Show"
+msgstr "Vis"
+
+#: js/widgets/grid/FilterToolbar.js:164
+msgid "add new filter"
+msgstr "legg til nytt filter"
+
+#: js/widgets/grid/FilterToolbar.js:170
+msgid "reset all filters"
+msgstr "nullstill alle filtere"
+
+#: js/widgets/grid/FilterToolbar.js:176
+msgid "start search"
+msgstr "start søk"
+
+#: js/widgets/grid/FilterToolbar.js:184
+msgid "save as favorite"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:191
+msgid "Load a favorite"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:358
+msgid "select a field"
+msgstr "velg et felt"
+
+#: js/widgets/grid/FilterToolbar.js:396
+msgid "Delete this filter"
+msgstr "Slett dette filteret"
+
+#: js/widgets/grid/FilterToolbar.js:428
+msgid "and"
+msgstr "og"
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/grid/ForeignRecordFilter.js:61
+msgid "Edit definition"
+msgstr ""
+
+#: js/widgets/grid/ForeignRecordFilter.js:71
+msgid "Start definition"
+msgstr ""
+
+#: js/widgets/grid/ForeignRecordFilter.js:111
+msgid "Related to"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:286
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:288 js/widgets/grid/GridPanel.js:474
+#: js/widgets/grid/GridPanel.js:475 js/widgets/grid/GridPanel.js:476
+msgid "Edit {0}"
+msgid_plural "Edit {0}"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/grid/GridPanel.js:500 js/widgets/tree/ContextMenu.js:35
+msgid "Add {0}"
+msgstr "Legg til {0}"
+
+#: js/widgets/grid/GridPanel.js:508
+msgid "Print Page"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:573 js/widgets/grid/GridPanel.js:574
+#: js/widgets/grid/GridPanel.js:576 js/widgets/tree/ContextMenu.js:52
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "Slett  {0}"
+msgstr[1] "Slett {0}"
+
+#: js/widgets/grid/GridPanel.js:971
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Viser poster {0} - {1} of {2}"
+
+#: js/widgets/grid/GridPanel.js:972
+msgid "No {0} to display"
+msgstr "Ingen  {0} å vise"
+
+#: js/widgets/grid/GridPanel.js:1210
+msgid "New..."
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1229
+msgid "Add to..."
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1273
+#: js/widgets/relation/GenericPickerGridPanel.js:431
+msgid "Creation Time"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1275
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1276
+msgid "Last Modified By"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:1645
+msgid "Not Allowed"
+msgstr "Ikke Tillatt"
+
+#: js/widgets/grid/GridPanel.js:1646
+msgid "You are not allowed to delete all pages at once"
+msgstr "Du har ikke tilatelse til å slette alle sider på en gang"
+
+#: js/widgets/grid/GridPanel.js:1669
+msgid "Do you really want to delete the selected record ({0})?"
+msgid_plural "Do you really want to delete the selected records ({0})?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/grid/GridPanel.js:1704
+msgid " ... This may take a long time!"
+msgstr " ... Dette kan ta lang tid!"
+
+#: js/widgets/grid/PickerGridPanel.js:162
+msgid "Remove record"
+msgstr ""
+
+#: js/widgets/grid/PickerGridPanel.js:296
+msgid "Search for records ..."
+msgstr ""
+
+#: js/widgets/grid/QuickaddGridPanel.js:91
+msgid "Remove"
+msgstr "Fjern"
+
+#: js/widgets/grid/RendererManager.js:54
+msgid "has notes"
+msgstr ""
+
+#: js/widgets/grid/RendererManager.js:57
+msgid "has relations"
+msgstr ""
+
+#: js/widgets/LangChooser.js:35 Preference.php:91
+msgid "Language"
+msgstr "Språk"
+
+#: js/widgets/LangChooser.js:68
+msgid "setting new language..."
+msgstr "setter nytt språk..."
+
+#: js/widgets/mainscreen/WestPanel.js:299
+msgid "containers"
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:326
+msgid "Favorites"
+msgstr ""
+
+#: js/widgets/MainScreen.js:264
+msgid "Save current view as favorite"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
+msgid "Favorite not Saved"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
+msgid ""
+"You have to supply a shorter name! Names of favorite can only be up to 40 "
+"characters long."
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
+msgid "You have to supply a name for the favorite!"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:189
+msgid "Title"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
+msgid "Shared Favorite (visible by all users)"
+msgstr ""
 
 #: js/widgets/persistentfilter/PickerPanel.js:114
 msgid "My favorites"
@@ -2304,434 +2376,393 @@ msgstr ""
 msgid "(shared)"
 msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
-msgid "Favorite not Saved"
+#: js/widgets/relation/FilterModel.js:71
+msgid "Defined by ..."
 msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:132
+#: js/widgets/relation/FilterModel.js:114
+msgid "Define ..."
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:126
+msgid "Edit record"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:162
+msgid "Sibling"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:163
+msgid "Parent"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:164
+msgid "Child"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:209
+msgid "Relations failure"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:209
+msgid "There are invalid relations. Please check before saving."
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:252
 msgid ""
-"You have to supply a shorter name! Names of favorite can only be up to 40 "
-"characters long."
+"The maximum number of {0} with the type {1} is reached. Please change the "
+"type of this relation"
 msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:136
-msgid "You have to supply a name for the favorite!"
+#: js/widgets/relation/GenericPickerGridPanel.js:426
+msgid "Record"
 msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:189
-msgid "Title"
+#: js/widgets/relation/GenericPickerGridPanel.js:428
+msgid "Remark"
 msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
-msgid "Shared Favorite (visible by all users)"
+#: js/widgets/relation/GenericPickerGridPanel.js:429
+msgid "Dependency"
 msgstr ""
 
-#: js/widgets/CountryCombo.js:34
-msgid "Select a country..."
-msgstr ""
-
-#: js/widgets/account/PickerGridPanel.js:158
-msgid "Search User"
-msgstr "Søk etter Bruker"
-
-#: js/widgets/account/PickerGridPanel.js:164
-msgid "Search Group"
-msgstr "Søk etter Gruppe"
-
-#: js/widgets/account/PickerGridPanel.js:170
-msgid "Add Anyone"
-msgstr "Legg til hvem som helst"
-
-#: js/widgets/account/PickerGridPanel.js:213
-msgid "Anyone"
-msgstr "Hvem som helst"
-
-#: js/widgets/account/PickerGridPanel.js:229
-msgid "Search for users ..."
-msgstr "Søk etter brukere...."
-
-#: js/widgets/account/PickerGridPanel.js:251
-msgid "Search for groups ..."
-msgstr "Søk etter grupper..."
-
-#: js/widgets/LangChooser.js:68
-msgid "setting new language..."
-msgstr "setter nytt språk..."
-
-#: js/widgets/MainScreen.js:264
-msgid "Save current view as favorite"
-msgstr ""
-
-#: js/widgets/mainscreen/WestPanel.js:299
-msgid "containers"
-msgstr ""
-
-#: js/widgets/mainscreen/WestPanel.js:326
-msgid "Favorites"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:52
-msgid "Folder"
-msgstr "Mappe"
-
-#: js/widgets/container/GrantsDialog.js:95
-msgid "Updating Grants"
-msgstr "Oppdaterer Tillatelser"
-
-#: js/widgets/container/GrantsDialog.js:125
-msgid "Error"
-msgstr ""
-
-#: js/widgets/container/GrantsDialog.js:126
-msgid "You are not allowed to remove all admins for this container!"
-msgstr ""
-
-#: js/widgets/container/FilterModel.js:142
-msgid "is personal of"
-msgstr ""
-
-#: js/widgets/container/ContainerSelect.js:129
-#: js/ux/form/ComboBoxRecentsPlugin.js:43
-msgid "choose other {0}..."
-msgstr "Velg annet {0}..."
-
-#: js/widgets/container/ContainerSelect.js:132
-msgid "Select a {0}"
-msgstr ""
-
-#: js/widgets/container/ContainerSelect.js:152
-msgid "Recently used {0}:"
-msgstr "Nylig bruk {0}:"
-
-#: js/widgets/container/ContainerSelect.js:478
-msgid "please select a {0}"
-msgstr "vennligst velg en {0}"
-
-#: js/widgets/container/PropertiesDialog.js:90
-msgid "Properties"
-msgstr ""
-
-#: js/widgets/container/PropertiesDialog.js:119
-msgid "My Grants"
-msgstr ""
-
-#: js/widgets/container/TreePanel.js:142
-msgid "container"
-msgid_plural "containers"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/widgets/container/TreePanel.js:546
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr ""
-
-#: js/widgets/container/TreePanel.js:547
-msgid "{0} grant is required for desired action"
-msgstr ""
-
-#: js/widgets/container/TreePanel.js:548
-msgid "Insufficient Grants"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:44
-msgid "The grant to read records of this container"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:46
-msgid "The grant to add records to this container"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:48
-msgid "The grant to edit records in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:49
-msgid "Delete"
-msgstr "Slett"
-
-#: js/widgets/container/GrantsGrid.js:50
-msgid "The grant to delete records in this container"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:52
-msgid "The grant to export records from this container"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:53
-msgid "Sync"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:54
-msgid "The grant to synchronise records with this container"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:55
-msgid "Admin"
-msgstr "Admin"
-
-#: js/widgets/container/GrantsGrid.js:56
-msgid "The grant to administrate this container"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:58
-msgid "Free Busy"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:59
-msgid "The grant to access free busy information of events in this calendar"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:60
-msgid "Private"
-msgstr ""
-
-#: js/widgets/container/GrantsGrid.js:61
-msgid "The grant to access records marked as private in this container"
-msgstr ""
-
-#: js/widgets/form/ConfigPanel.js:113
-msgid "Configuration Problem"
-msgstr ""
-
-#: js/widgets/form/ConfigPanel.js:134
-msgid "Invalid configuration"
-msgstr "Ugyldig konfigurasjon"
-
-#: js/widgets/form/ConfigPanel.js:158
-msgid "Transferring Configuration..."
-msgstr ""
-
-#: js/widgets/form/ConfigPanel.js:254
-msgid "Save config"
-msgstr "Lagre konfigurasjon"
-
-#: js/widgets/form/ConfigPanel.js:264
-msgid "Reload config"
-msgstr ""
-
-#: js/widgets/form/FileUploadButton.js:65
-msgid "Wrong File Type"
-msgstr ""
-
-#: js/widgets/form/FileUploadButton.js:65
-msgid "Please select a file with one of the following extensions:"
-msgstr ""
-
-#: js/widgets/form/RecordPickerManager.js:48
-#: js/widgets/form/RecordPickerComboBox.js:99
-msgid "Searching..."
-msgstr "Søker..."
-
-#: js/ExceptionDialog.js:107
-msgid "Send Report"
-msgstr "Sende Rapport"
-
-#: js/ExceptionDialog.js:135
-msgid "The last action you made was potentially not performed correctly."
-msgstr "Den siste handlingen du utførte ble muligens ikke utført riktig."
-
-#: js/ExceptionDialog.js:136
+#: js/widgets/relation/GenericPickerGridPanel.js:708
 msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
-msgstr "Vennligst hjelp til å forbedre dette programmet og varsle leverandøren. Innkluder en kort beskrivelse av hva du gjorde når feilen oppstod."
-
-#: js/ExceptionDialog.js:150
-msgid "Send Contact Information"
-msgstr "Send Kontakt Informasjon"
-
-#: js/ExceptionDialog.js:167
-msgid "Details:"
-msgstr "Detaljer:"
-
-#: js/ExceptionDialog.js:191
-msgid "Sending report..."
-msgstr "Sender rapport..."
-
-#: js/ExceptionDialog.js:191
-msgid "Please wait a moment"
-msgstr "Vennligst vent litt"
-
-#: js/ExceptionDialog.js:240
-msgid "Transmission Completed"
-msgstr "Overføring Fullført"
-
-#: js/ExceptionDialog.js:241
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "Din rapport er sendt. Takk for ditt bidrag"
-
-#: js/ExceptionDialog.js:241
-msgid "Please restart your browser now!"
-msgstr "Vennligst ta en omstart av din vevleser nå!"
-
-#: js/MainScreen.js:202
-msgid "Your password expired. Please enter a new user password:"
+"The record you tried to link is already linked. Please edit the existing "
+"link."
 msgstr ""
 
-#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
-msgid "Outdent Text"
-msgstr ""
-
-#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
-msgid "Indent Text"
-msgstr ""
-
-#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
-msgid "Remove Formatting"
-msgstr ""
-
-#: js/UserRegistration.js:37
-msgid "Registration Wizard"
-msgstr "Regristrerings Veiviser"
-
-#: js/UserRegistration.js:90
-msgid "Given name"
-msgstr "For navn"
-
-#: js/UserRegistration.js:101
-msgid "Family name"
-msgstr "Etter navn"
-
-#: js/UserRegistration.js:112
-msgid "Login name"
-msgstr "Logg inn navn"
-
-#: js/UserRegistration.js:125
-msgid "Emailaddress"
-msgstr "Epostadresse"
-
-#: js/UserRegistration.js:171
-msgid "Congratulations!"
-msgstr "Gratulerer!"
-
-#: js/UserRegistration.js:171
+#: js/widgets/relation/PickerCombo.js:93
 msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr "Du har tastet inn all nødvendig informasjon. Hvis du trykker Fullfør knappen vil vi sende deg registrerings e-posten."
-
-#: js/ux/PopupWindowManager.js:164
-msgid ""
-"The window you want to work with is backgrounded. Your browser doesn't "
-"support to foreground the window for you, so you need to use your operating "
-"systems window switching features. Please send complaints to your browser "
-"vendor!"
+"The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
+"once!"
 msgstr ""
 
-#: js/ux/Percentage.js:190
-msgid "(paused)"
+#: js/widgets/tags/TagCombo.js:46
+msgid "tag name"
+msgstr "merke navn"
+
+#: js/widgets/tags/TagsMassAttachAction.js:18
+msgid "Add Tag"
+msgstr "Legg til Merke"
+
+#: js/widgets/tags/TagsMassAttachAction.js:76
+msgid "Attach the following tag to all selected items:"
+msgstr "Sett inn følgende merke på alle valgte ting:"
+
+#: js/widgets/tags/TagsMassAttachAction.js:98
+msgid "Select Tag"
+msgstr "Velg Merke"
+
+#: js/widgets/tags/TagsMassAttachAction.js:128
+msgid "Attaching Tag"
 msgstr ""
 
-#: js/ux/SearchField.js:44
-msgid "enter searchfilter"
-msgstr "tast inn søkefilter"
-
-#: js/ux/grid/PagingToolbar.js:50
-msgid "{0} selected"
-msgstr "{0} valgte"
-
-#: js/ux/grid/PagingToolbar.js:51
-msgid "Unselect all"
-msgstr "Velg ingen"
-
-#: js/ux/grid/PagingToolbar.js:52
-msgid "Select all pages ({0} records)"
-msgstr "Velg alle sider ({0} poster)"
-
-#: js/ux/grid/PagingToolbar.js:53
-msgid "Toggle selection"
-msgstr "Veklse valg"
-
-#: js/ux/ConnectionStatus.js:56
-msgid "online"
-msgstr "tilkoblet"
-
-#: js/ux/ConnectionStatus.js:57
-msgid "offline"
-msgstr "frakoblet"
-
-#: js/ux/form/RecordsComboBox.js:26
-msgid "Software Version"
-msgstr "Programmvare Versjon"
-
-#: js/ux/form/ImageField.js:76
-msgid "Loading"
-msgstr "Laster"
-
-#: js/ux/form/ImageField.js:78
-msgid "Click to edit"
+#: js/widgets/tags/TagsMassDetachAction.js:18
+msgid "Detach tag(s)"
 msgstr ""
 
-#: js/ux/form/ImageField.js:146
-msgid "Image Failed"
-msgstr "Bilde Feilet"
-
-#: js/ux/form/ImageField.js:146
-msgid "Could not load image. Please notify your Administrator"
-msgstr "Klarte ikke laste bilde. Vennligst varsle din Administrator"
-
-#: js/ux/form/ImageField.js:168
-msgid "Not An Image"
-msgstr "Ikke Et Bilde"
-
-#: js/ux/form/ImageField.js:168
-msgid "Please select an image file (gif/png/jpeg)"
+#: js/widgets/tags/TagsMassDetachAction.js:84
+msgid "Select Tag(s) to detach"
 msgstr ""
 
-#: js/ux/form/ImageField.js:211
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "Klarte ikke å laste opp bilde. Vennligst varsle din Administrator"
+#: js/widgets/tags/TagsPanel.js:105
+msgid "Add a new personal tag"
+msgstr "Legg til et nytt personlig merke"
 
-#: js/ux/form/ImageField.js:224
-msgid "Change Image"
-msgstr "Endre Bilde"
+#: js/widgets/tags/TagsPanel.js:108
+msgid "Add New Personal Tag"
+msgstr "Legg Til Nytt Personlig Merke"
 
-#: js/ux/form/ImageField.js:232 js/ux/form/ImageField.js:250
-msgid "Crop Image"
-msgstr "Tilpass Bilde"
+#: js/widgets/tags/TagsPanel.js:109
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr "NB: Du kan opprette et personlig merke. Bare du kan se det!"
 
-#: js/ux/form/ImageField.js:256
-msgid "Delete Image"
-msgstr "Slett Bilde"
+#: js/widgets/tags/TagsPanel.js:109
+msgid "Enter tag name:"
+msgstr "Tast inn merke navn:"
 
-#: js/ux/form/ImageField.js:265
-msgid "Show Original Image"
-msgstr "Vis Orginalt Bilde"
+#: js/widgets/tags/TagsPanel.js:150
+msgid "No Tags to display"
+msgstr "Ingen Merker å vise"
 
-#: js/Models.js:272
-msgid "Alarm"
-msgid_plural "Alarms"
-msgstr[0] ""
-msgstr[1] ""
+#: js/widgets/tags/TagsPanel.js:173
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] "Fjern merke"
+msgstr[1] "Fjern merker"
 
-#: js/Models.js:310
-msgid "Import"
-msgid_plural "Imports"
-msgstr[0] ""
-msgstr[1] ""
+#: js/widgets/tags/TagsPanel.js:183
+msgid "Edit tag"
+msgstr "Rediger merke"
 
-#: js/Models.js:373
-msgid "Credentials"
-msgid_plural "Credentials"
-msgstr[0] "Attest"
-msgstr[1] "Attester"
+#: js/widgets/tags/TagsPanel.js:188 js/widgets/tags/TagsPanel.js:193
+msgid "Rename Tag"
+msgstr "Endre navn på Merke"
 
-#: js/Models.js:421
-msgid "Department"
-msgid_plural "Departments"
-msgstr[0] ""
-msgstr[1] ""
+#: js/widgets/tags/TagsPanel.js:193
+msgid "Please enter a new name:"
+msgstr "Vennligst tast inn et nytt navn:"
 
-#: js/Models.js:447
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-msgstr[1] ""
+#: js/widgets/tags/TagsPanel.js:202
+msgid "Edit Description"
+msgstr "Rediger Beskrivelse"
 
-#: js/Models.js:447
-msgid "Configs"
+#: js/widgets/tags/TagsPanel.js:207
+msgid "Description for tag"
+msgstr "Beskrivelse for merke"
+
+#: js/widgets/tags/TagsPanel.js:207
+msgid "Please enter new description:"
+msgstr "Vennligst tast inn ny beskrivelse:"
+
+#: js/widgets/tags/TagsPanel.js:216
+msgid "Change Color"
+msgstr "Endre Farge"
+
+#: js/widgets/tags/TagsPanel.js:245
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] "Slett Merke"
+msgstr[1] "Slett Merker"
+
+#: js/widgets/tags/TagsPanel.js:258
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] "Virkelig Slette Merke?"
+msgstr[1] "Virkelig Slette Merker?"
+
+#: js/widgets/tags/TagsPanel.js:259
+msgid "the selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] "valgt merke vil bli slettet og forsvinne fra alle poster"
+msgstr[1] "Valgt merke vil bli fjernet og forsvinne fra alle poster"
+
+#: js/widgets/tags/TagsPanel.js:263
+msgid "Please wait a moment..."
+msgstr "Vennligst vent et øyeblikk..."
+
+#: js/widgets/tags/TagsPanel.js:263
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] "Sletter Merke"
+msgstr[1] "Sletter Merker"
+
+#: js/widgets/tags/TagsPanel.js:279
+msgid "Could not delete Tag(s)."
+msgstr "Klarte ikke å slette Merke(r)."
+
+#: js/widgets/tags/TagsPanel.js:323 js/widgets/tags/TagsPanel.js:385
+msgid "Notice"
+msgstr "Varsel"
+
+#: js/widgets/tags/TagsPanel.js:324 js/widgets/tags/TagsPanel.js:386
+msgid "The minimum tag length is three."
+msgstr "Minimum merke lengde er tre."
+
+#: js/widgets/tags/TagsPanel.js:371
+msgid "Could not create tag."
+msgstr "Klarte ikke å opprette merke."
+
+#: js/widgets/tags/TagsPanel.js:404
+msgid "Could not update tag."
+msgstr "Clarte ikke å oppdatere merke."
+
+#: js/widgets/tags/TagToggleBox.js:52
+msgid "Detach Tags"
 msgstr ""
+
+#: js/widgets/tags/TagToggleBox.js:52
+msgid "Attach Tags"
+msgstr ""
+
+#: js/widgets/tags/TagToggleBox.js:140
+msgid "No Tags to detach found in the selected records"
+msgstr ""
+
+#: js/widgets/tags/TagToggleBox.js:141
+msgid "Please Wait..."
+msgstr ""
+
+#: js/widgets/tags/TagToggleBox.js:152
+msgid "Detaching Tags"
+msgstr ""
+
+#: js/widgets/TimezoneChooser.js:37 Preference.php:87
+msgid "Timezone"
+msgstr "Tidssone"
+
+#: js/widgets/TimezoneChooser.js:77
+msgid "setting new timezone..."
+msgstr "setter ny tidssone..."
+
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:265
+msgid "Rename {0}"
+msgstr "Endre navn {0}"
+
+#: js/widgets/tree/ContextMenu.js:61
+msgid "Manage {0} Permissions"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:69
+msgid "{0} Properties"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:78
+msgid "Set {0} color"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:92
+msgid "Reload {0}"
+msgstr "Laste på nytt {0}"
+
+#: js/widgets/tree/ContextMenu.js:109
+msgid "Edit Properties"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:124
+msgid "Download"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:185
+msgid "New {0}"
+msgstr "Ny {0}"
+
+#: js/widgets/tree/ContextMenu.js:185
+msgid "Please enter the name of the new {0}:"
+msgstr "Vennligst tast inn navnet på den nye {0}:"
+
+#: js/widgets/tree/ContextMenu.js:188
+msgid "No {0} added"
+msgstr "Ingen {0} lagt til"
+
+#: js/widgets/tree/ContextMenu.js:188 js/widgets/tree/ContextMenu.js:272
+msgid "You have to supply a {0} name!"
+msgstr "Du må oppgi et {0} navn!"
+
+#: js/widgets/tree/ContextMenu.js:191
+msgid "Creating {0}..."
+msgstr "Oppretter {0}..."
+
+#: js/widgets/tree/ContextMenu.js:266
+msgid "Please enter the new name of the {0}:"
+msgstr "Vennligst tast inn det nye navnet på {0}:"
+
+#: js/widgets/tree/ContextMenu.js:272
+msgid "Not renamed {0}"
+msgstr "Ikke endret navn  {0}"
+
+#: js/widgets/tree/ContextMenu.js:346
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr "Vil du virkelig slette {0} \"{1}\"?"
+
+#: js/widgets/tree/ContextMenu.js:457
+msgid "Manage Permissions for {0} \"{1}\""
+msgstr "Behandle Rettigheter for {0} \"{1}\""
+
+#: js/widgets/tree/ContextMenu.js:481
+msgid "Properties for {0} \"{1}\""
+msgstr ""
+
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+msgid "New version of Tine 2.0 available"
+msgstr "Ny versjon av Tine 2.0 tilgjengelig"
+
+#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "Versjon {0} \" av Tine 2.0 er tilgjengelig."
+
+#: js/widgets/VersionCheck.js:46
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "Er en kritisk oppdatering og må installeres så fort som mulig!"
+
+#: js/widgets/VersionCheck.js:55
+msgid "Please consider updating!"
+msgstr "Vennligst vurder oppgradering!"
+
+#: Notes.php:369
+msgid "by"
+msgstr "av"
+
+#: Notes.php:378
+msgid "Changed fields:"
+msgstr "Endrede felter:"
+
+#: Preference/Abstract.php:502
+msgid "default"
+msgstr ""
+
+#: Preference.php:88
+msgid "The timezone in which dates are shown in Tine 2.0."
+msgstr "Tidssonen hvor datoer vises i Tine 2.0."
+
+#: Preference.php:92
+msgid "The language of the Tine 2.0 GUI."
+msgstr "Språket til Tine 2.0 Grensesnittet."
+
+#: Preference.php:95
+msgid "Default Application"
+msgstr "Standard Program"
+
+#: Preference.php:96
+msgid "The default application to show after login."
+msgstr "Standard program som skal vises etter logg inn."
+
+#: Preference.php:99
+msgid "Window Type"
+msgstr "Vindus Type"
+
+#: Preference.php:100
+msgid "You can choose between modal windows or normal browser popup windows."
+msgstr ""
+
+#: Preference.php:103
+msgid "Confirm Logout"
+msgstr ""
+
+#: Preference.php:104
+msgid "Show confirmation dialog on logout."
+msgstr ""
+
+#: Setup/setup.xml:3203
+msgid "note"
+msgstr "notat"
+
+#: Setup/setup.xml:3208
+msgid "default note type"
+msgstr "standard notat type"
+
+#: Setup/setup.xml:3234
+msgid "telephone"
+msgstr "telefon"
+
+#: Setup/setup.xml:3239
+msgid "telephone call"
+msgstr "telefon samtale"
+
+#: Setup/setup.xml:3265
+msgid "email"
+msgstr "e-post"
+
+#: Setup/setup.xml:3270
+msgid "email contact"
+msgstr "e-post kontakt"
+
+#: Setup/setup.xml:3296
+msgid "created"
+msgstr "opprettet"
+
+#: Setup/setup.xml:3301
+msgid "record created"
+msgstr "post opprettet"
+
+#: Setup/setup.xml:3327
+msgid "changed"
+msgstr "endret"
+
+#: Setup/setup.xml:3332
+msgid "record changed"
+msgstr "post endret"
 
 #: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."
@@ -2739,15 +2770,4 @@ msgstr ""
 
 #: views/update.php:25
 msgid "Please wait or contact your administrator"
-msgstr ""
-
-#: Container.php:684
-#, python-format
-msgid "%s's personal container"
-msgstr ""
-
-#: Container.php:1525
-msgid ""
-"You are not allowed to delete this Container. Please define another "
-"container as the default addressbook for internal contacts!"
 msgstr ""

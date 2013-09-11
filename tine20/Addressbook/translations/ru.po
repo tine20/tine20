@@ -610,7 +610,7 @@ msgid "User Account"
 msgstr "Учётная запись преподавателя"
 
 #: js/Model.js:136
-msgid "Quick Search"
+msgid "Quick search"
 msgstr "Быстрый поиск"
 
 #: js/Model.js:161

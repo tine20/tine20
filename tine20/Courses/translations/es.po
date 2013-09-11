@@ -175,7 +175,7 @@ msgstr[0] "listado de registro"
 msgstr[1] "listado de registros"
 
 #: js/Models.js:69
-msgid "Quick Search"
+msgid "Quick search"
 msgstr "Búsqueda Rápida"
 
 #: js/Models.js:107

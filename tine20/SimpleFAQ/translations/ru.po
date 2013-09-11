@@ -141,7 +141,7 @@ msgid "FAQ Lists"
 msgstr "Списки ЧаВО"
 
 #: js/Model.js:72
-msgid "Quick Search"
+msgid "Quick search"
 msgstr "Быстрый поиск"
 
 #: Preference.php:28
