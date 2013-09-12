@@ -32,6 +32,8 @@ DirectoryIndex index.php
     RewriteRule ^calendars                   index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
     RewriteRule ^webdav                      index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
     RewriteRule ^principals                  index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+    RewriteRule ^remote.php                  index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+    
     
 </IfModule>
 

@@ -33,6 +33,7 @@ class Tinebase_WebDav_Root extends DAV\SimpleCollection
         $caldavTasksChildren    = array();
         $carddavChildren        = array();
         $webdavChildren         = array();
+        $ownCloudChildren       = array();
         
         if(Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
             $caldavCalendarChildren[] = new Calendar_Frontend_CalDAV();
@@ -44,6 +45,10 @@ class Tinebase_WebDav_Root extends DAV\SimpleCollection
 
         if(Tinebase_Core::getUser()->hasRight('Addressbook', Tinebase_Acl_Rights::RUN)) {
             $carddavChildren[] = new Addressbook_Frontend_CardDAV();
+        }
+        
+        if(Tinebase_Core::getUser()->hasRight('Filemanager', Tinebase_Acl_Rights::RUN)) {
+            $ownCloudChildren[] = new Filemanager_Frontend_WebDAV('webdav');
         }
         
         foreach (array('Addressbook', 'Calendar', 'Felamimail', 'Filemanager', 'Tasks') as $application) {
@@ -61,7 +66,9 @@ class Tinebase_WebDav_Root extends DAV\SimpleCollection
             new DAV\SimpleCollection('principals', array(
                 new DAVACL\PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/users'),
                 new DAVACL\PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/groups')
-            ))
+            )),
+            // main entry point for ownCloud 
+            new DAV\SimpleCollection('remote.php',                     $ownCloudChildren)
         ));
     }
 }
