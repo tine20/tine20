@@ -15,37 +15,6 @@
  * @package     Tinebase
  * @subpackage  Backend
  */
-class Tinebase_Backend_Sql_Command
+class Tinebase_Backend_Sql_Command extends Tinebase_Backend_Sql_Factory_Abstract
 {
-    protected static $_instances = array();
-    
-    /**
-     * @param Zend_Db_Adapter_Abstract $adapter
-     * @return Tinebase_Backend_Sql_Command_Interface
-     */
-    public static function factory(Zend_Db_Adapter_Abstract $adapter)
-    {
-        $className = __CLASS__ . '_' . self::_getClassName($adapter);
-        
-        // @todo find better array key (add loginname and host)
-        if (!isset(self::$_instances[$className])) {
-            self::$_instances[$className] = new $className($adapter);
-        }
-        
-        return self::$_instances[$className];
-    }
-    
-    /**
-     *
-     * @param Zend_Db_Adapter_Abstract $adapter
-     * @return string
-     */
-    private static function _getClassName($adapter)
-    {
-        $completeClassName = explode('_',get_class($adapter));
-        $className = $completeClassName[count($completeClassName)-1];
-        $className = str_replace('Oci','Oracle',$className);
-        
-        return $className;
-    }
 }
