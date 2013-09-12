@@ -548,7 +548,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             $returned = $this->_json->saveMessage($messageToSend);
             $this->fail('Tinebase_Exception_SystemGeneric expected');
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            $this->assertContains('550 5.1.1 <' . $invalidEmail . '>: Recipient address rejected', $tesg->getMessage());
+            $this->assertContains('550 5.1.1 <' . $invalidEmail . '>: Recipient address rejected', $tesg->getMessage(),
+                'exception message did not match: ' . $tesg->getMessage());
         }
     }
     
