@@ -116,6 +116,8 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         }
         
         Tinebase_FileSystem::getInstance()->fclose($handle);
+        
+        return '"' . Tinebase_FileSystem::getInstance()->getETag($path) . '"';
     }
 
     /**

@@ -113,6 +113,8 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         }
     
         Tinebase_FileSystem::getInstance()->fclose($handle);
+        
+        return '"' . Tinebase_FileSystem::getInstance()->getETag($path) . '"';
     }
     
     /**

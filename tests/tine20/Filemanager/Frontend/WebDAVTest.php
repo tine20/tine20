@@ -223,7 +223,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
     {
         $parent = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory();
         
-        $file = $parent->createFile('tine_logo.png', fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r'));
+        $etag = $parent->createFile('tine_logo.png', fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r'));
         
         $node = $this->_webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
         
@@ -233,6 +233,7 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(7246, $node->getSize());
         $this->assertEquals('image/png', $node->getContentType());
         $this->assertEquals('"7424e2c16388bf388af1c4fe44c1dd67d31f468b"', $node->getETag());
+        $this->assertTrue(preg_match('/"\w+"/', $etag) === 1);
         
         return $node;
     }
@@ -241,9 +242,10 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
     {
         $node = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_file();
         
-        $node->put(fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r'));
+        $etag = $node->put(fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r'));
         
         $this->assertEquals('Filemanager_Frontend_WebDAV_File', get_class($node), 'wrong type');
+        $this->assertTrue(preg_match('/"\w+"/', $etag) === 1);
     }
     
     public function testDeleteFile()

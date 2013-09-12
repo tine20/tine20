@@ -81,5 +81,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
         }
         
         Tinebase_FileSystem::getInstance()->fclose($handle);
+        
+        return $this->getETag();
     }
 }
