@@ -212,6 +212,36 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     }
     
     /**
+     * (non-PHPdoc)
+     * @see Tinebase_Record_Abstract::diff()
+     */
+    public function diff($record, $omitFields = array())
+    {
+        $checkRrule = false;
+        if (! in_array('rrule', $omitFields)) {
+            $omitFields[] = 'rrule';
+            $checkRrule = true;
+        }
+        
+        $diff = parent::diff($record, $omitFields);
+        
+        if ($checkRrule) {
+            $ownRrule    = ! $this->rrule instanceof Calendar_Model_Rrule ? Calendar_Model_Rrule::getRruleFromString((string) $this->rrule) : $this->rrule;
+            $recordRrule = ! $record->rrule instanceof Calendar_Model_Rrule ? Calendar_Model_Rrule::getRruleFromString($record->rrule) : $record->rrule;
+            
+            $rruleDiff = $ownRrule->diff($recordRrule);
+            
+            if (! empty($rruleDiff->diff)) {
+                $diffArray = $diff->diff;
+                $diffArray['rrule'] = $rruleDiff;
+                
+                $diff->diff = $diffArray;
+            }
+        }
+        
+        return $diff;
+    }
+    /**
      * add current user to attendee if he's organizer
      * 
      * @param bool $ifOrganizer      only add current user if he's organizer
@@ -503,17 +533,16 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         }
         
         if (isset($_data['attendee']) && is_array($_data['attendee'])) {
-            $_data['attendee'] = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_data['attendee'], $this->bypassFilters);
+            $_data['attendee'] = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_data['attendee'], $this->bypassFilters, $this->convertDates);
         }
         
         if (isset($_data['rrule']) && ! empty($_data['rrule']) && ! $_data['rrule'] instanceof Calendar_Model_Rrule) {
-            // normalize rrule
-            $_data['rrule'] = new Calendar_Model_Rrule($_data['rrule'], $this->bypassFilters);
-            $_data['rrule'] = (string) $_data['rrule'];
+            // rrule can be array or string
+            $_data['rrule'] = new Calendar_Model_Rrule($_data['rrule'], $this->bypassFilters, $this->convertDates);
         }
         
         if (isset($_data['alarms']) && is_array($_data['alarms'])) {
-            $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms'], TRUE);
+            $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms'], TRUE, $this->convertDates);
         }
         
         parent::setFromArray($_data);

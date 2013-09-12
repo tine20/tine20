@@ -370,6 +370,38 @@ class Calendar_JsonTests extends Calendar_TestCase
     }
     
     /**
+     * testCreateRecurEventWithRruleUntil
+     * 
+     * @see 0008906: rrule_until is saved in usertime
+     */
+    public function testCreateRecurEventWithRruleUntil()
+    {
+        $eventData = $this->testCreateRecurEvent();
+        $localMidnight = Tinebase_DateTime::now()->setTime(23,59,59)->toString();
+        $eventData['rrule']['until'] = $localMidnight;
+        //$eventData['rrule']['freq']  = 'WEEKLY';
+        
+        $updatedEventData = $this->_uit->saveEvent($eventData);
+        $this->assertGreaterThanOrEqual($localMidnight, $updatedEventData['rrule']['until']);
+        
+        // check db record
+        $calbackend = new Calendar_Backend_Sql();
+        $db = $calbackend->getAdapter();
+        $select = $db->select();
+        $select->from(array($calbackend->getTableName() => $calbackend->getTablePrefix() . $calbackend->getTableName()), array('rrule_until', 'rrule'))->limit(1);
+        $select->where($db->quoteIdentifier($calbackend->getTableName() . '.id') . ' = ?', $updatedEventData['id']);
+        
+        $stmt = $db->query($select);
+        $queryResult = $stmt->fetch();
+        
+//         echo Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+//         echo date_default_timezone_get();
+        
+        $midnightInUTC = new Tinebase_DateTime($queryResult['rrule_until']);
+        $this->assertEquals(Tinebase_DateTime::now()->setTime(23,59,59)->toString(), $midnightInUTC->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), TRUE)->toString());
+    }
+    
+    /**
     * testSearchRecuringIncludes
     */
     public function testSearchRecuringIncludes()
