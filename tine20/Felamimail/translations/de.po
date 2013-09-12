@@ -84,11 +84,11 @@ msgstr "Markiert"
 #: Controller/Message/Send.php:85
 #, python-format
 msgid "Error: %s"
-msgstr ""
+msgstr "Fehler: %s"
 
 #: Controller/Message/Send.php:87
 msgid "Could not send message"
-msgstr ""
+msgstr "Konnte Nachricht nicht senden"
 
 #: Controller/Message/Send.php:271 js/GridDetailsPanel.js:245
 #: js/GridPanel.js:485 js/MessageEditDialog.js:949 js/Model.js:155
