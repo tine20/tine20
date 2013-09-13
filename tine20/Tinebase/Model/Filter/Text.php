@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -57,8 +57,16 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      */
     public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = array())
     {
+        $this->_setOpSqlMap();
+        parent::__construct($_fieldOrData, $_operator, $_value, $_options);
+    }
+    
+    /**
+     * set operator sql map (need to do this here because of Tinebase_Backend_Sql_Commands)
+     */
+    protected function _setOpSqlMap()
+    {
         $db = Tinebase_Core::getDb();
-
         $this->_opSqlMap = array(
             'equals'            => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '?'  ),
             'contains'          => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '%?%'),
@@ -72,8 +80,6 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
             'group'             => array('sqlop' => " NOT LIKE  ''",    'wildcards' => '?'  ),
             'equalsspecial'     => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '?'     ),
         );
-
-        parent::__construct($_fieldOrData, $_operator, $_value, $_options);
     }
 
     /**
@@ -81,12 +87,16 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      *
      * @param  Zend_Db_Select                $_select
      * @param  Tinebase_Backend_Sql_Abstract $_backend
-     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function appendFilterSql($_select, $_backend)
     {
         // quote field identifier, set action and replace wildcards
         $field = $this->_getQuotedFieldName($_backend);
+        
+        if (! array_key_exists($this->_operator, $this->_opSqlMap)) {
+            throw new Tinebase_Exception_InvalidArgument('Operator "' . $this->_operator . '" not defined in sql map of ' . get_class($this));
+        }
         $action = $this->_opSqlMap[$this->_operator];
         $value = $this->_replaceWildcards($this->_value);
 
