@@ -70,9 +70,9 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
      */
     public function __construct($_path)
     {
-        $this->_path = $_path;
-        $this->_pathParts = $this->_parsePath($_path);
-        $this->_applicationName = $this->_pathParts[0];
+        $this->_path            = $_path;
+        $this->_pathParts       = $this->_parsePath($_path);
+        $this->_applicationName = array_value(0, explode('_', get_class($this)));
     }
     
     /**
@@ -114,7 +114,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
             'type'           => $containerType,
             'backend'        => 'sql',
             'application_id' => $this->_getApplication()->getId(),
-            'model'          => 'Tinebase_Model_Node'
+            'model'          => Tinebase_Core::getApplicationInstance($this->_applicationName)->getDefaultModel()
         )));
         
         return $container;

@@ -172,6 +172,12 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($node instanceof Filemanager_Frontend_WebDAV_Container, 'wrong node class');
         $this->assertEquals('unittestdirectory', $node->getName());
         
+        $children = $this->_webdavTree->getChildren('/webdav/Filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName);
+        foreach ($children as $node) {
+            $names[] = $node->getName();
+        }
+        $this->assertContains('unittestdirectory', $names);
+        
         $this->_webdavTree->delete('/webdav/Filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName .'/unittestdirectory');
         
         $this->setExpectedException('Sabre\DAV\Exception\NotFound');

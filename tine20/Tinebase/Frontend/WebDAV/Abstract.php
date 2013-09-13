@@ -19,13 +19,6 @@
 abstract class Tinebase_Frontend_WebDAV_Abstract extends Tinebase_WebDav_Collection_Abstract
 {
     /**
-    * application name
-    *
-    * @var string
-    */
-    protected $_applicationName = 'Tinebase';
-    
-    /**
      * Creates a new subdirectory
      *
      * @param  string  $name  name of the new subdirectory

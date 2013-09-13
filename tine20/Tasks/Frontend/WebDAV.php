@@ -18,5 +18,4 @@
  */
 class Tasks_Frontend_WebDAV extends Tinebase_WebDav_Collection_Abstract
 {
-    protected $_applicationName = 'Tasks';
 }
