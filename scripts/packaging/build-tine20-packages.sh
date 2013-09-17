@@ -11,7 +11,7 @@ BASEDIR="./tine20build"
 TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
-CODENAME="Kristina"
+CODENAME="Collin"
 GITURL="http://git.tine20.org/git/tine20"
 
 RELEASE=""
@@ -234,7 +234,7 @@ function createArchives()
                     (mv $TEMPDIR/tine20/langstatistics.json $TEMPDIR/tine20/Tinebase/translations/langstatistics.json)
                     
                     echo -n "building "
-                    local FILES="Addressbook Admin Setup Tinebase Zend images library vendor docs fonts config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES CREDITS setup.php tine20.php bootstrap.php worker.php"
+                    local FILES="Addressbook Admin Setup Tinebase Zend images library vendor docs fonts config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES CREDITS setup.php tine20.php bootstrap.php worker.php status.php"
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILES)
                     (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILES)
                     
