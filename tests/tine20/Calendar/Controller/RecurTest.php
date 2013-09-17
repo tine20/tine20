@@ -633,7 +633,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $this->assertEquals($events[1]->dtstart, new Tinebase_DateTime('2012-02-14 09:00:00'), 'start of second baseEvent is wrong');
         $this->assertTrue(empty($events[1]->recurid), 'second baseEvent is not a baseEvent');
-        $this->assertEquals($events[1]->rrule, $event->rrule, 'rrule of second baseEvent must be set');
+        $this->assertEquals((string) $event->rrule, (string) $events[1]->rrule, 'rrule of second baseEvent must be set');
         $this->assertFalse($events[1]->rrule_until instanceof Tinebase_DateTime, 'rrule_until of second baseEvent must not be set');
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, Calendar_Model_Attender::getAttendee($events[1]->attendee, $event->attendee[1])->status, 'second baseEvent status is not touched');
     }

@@ -135,14 +135,16 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     public function setFromString($_rrule)
     {
-        $parts = explode(';', $_rrule);
-        foreach ($parts as $part) {
-            list($key, $value) = explode('=', $part);
-            $part = strtolower($key);
-            if (! in_array($part, $this->_rruleParts)) {
-                throw new Tinebase_Exception_UnexpectedValue("$part is not a known rrule part");
+        if ($_rrule) {
+            $parts = explode(';', $_rrule);
+            foreach ($parts as $part) {
+                list($key, $value) = explode('=', $part);
+                $part = strtolower($key);
+                if (! in_array($part, $this->_rruleParts)) {
+                    throw new Tinebase_Exception_UnexpectedValue("$part is not a known rrule part");
+                }
+                $this->$part = $value;
             }
-            $this->$part = $value;
         }
     }
     

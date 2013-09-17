@@ -439,7 +439,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function setTimezone($_timezone, $_recursive = TRUE)
     {
-         
         foreach ($this->_datetimeFields as $field) {
             if (!isset($this->_properties[$field])) continue;
             
@@ -469,7 +468,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 }
             }
         }
-        
     }
     
     /**
@@ -921,7 +919,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * returns a Tinebase_Record_Diff record with differences to the given record
      * 
      * @param Tinebase_Record_Interface $_record record for comparison
-     * @param $_omitFields omit fields
+     * @param array $omitFields omit fields (for example modlog fields)
      * @return Tinebase_Record_Diff|NULL
      */
     public function diff($_record, $omitFields = array())
@@ -936,7 +934,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         ));
         $diff = array();
         foreach (array_keys($this->_validators) as $fieldName) {
-            // omit modlog fields, if set
             if (in_array($fieldName, $omitFields)) {
                 continue;
             }

@@ -105,14 +105,13 @@ class Calendar_Model_EventTests extends PHPUnit_Framework_TestCase
         
         $update = clone $event;
         
-        // parts order change
         $update->rrule = 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TH;WKST=MO';
         $diff = $event->diff($update);
-        $this->assertFalse(array_key_exists('rrule',$diff->diff));
+        $this->assertFalse(array_key_exists('rrule', $diff->diff), 'parts order change:' . print_r($diff->toArray(), TRUE));
         
         // real change
         $update->rrule = 'FREQ=WEEKLY;INTERVAL=;BYDAY=TH;WKST=SU';
         $diff = $event->diff($update);
-        $this->assertTrue(array_key_exists('rrule',$diff->diff));
+        $this->assertTrue(array_key_exists('rrule',$diff->diff), 'real change should have diff! diff:' . print_r($diff->toArray(), TRUE));
     }
 }

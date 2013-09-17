@@ -668,10 +668,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                         } else if(isset($data->$syncrotonProperty->until)) {
                             $rrule->count = null;
                             $rrule->until = new Tinebase_DateTime($data->$syncrotonProperty->until);
-                            // until ends at 23:59:59 in Tine 2.0 but at 00:00:00 in Windows CE (local user time)
-                            if ($rrule->until->format('s') == '00') {
-                                $rrule->until->addHour(23)->addMinute(59)->addSecond(59);
-                            }
                         } else {
                             $rrule->count = null;
                             $rrule->until = null;

@@ -55,7 +55,7 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
         $this->assertEquals(1, preg_match("/BEGIN:DAYLIGHT\r\nTZOFFSETFROM:\+0100\r\nTZOFFSETTO:\+0200\r\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\r\nEND:DAYLIGHT\r\n/", $ics), 'DAYLIGHT not correct');
 
         // assert rrule
-        $this->assertEquals(1, preg_match("/RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20151230T130000Z\r\n/", $ics), 'RRULE broken');
+        $this->assertEquals(1, preg_match("/RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20151230T140000Z\r\n/", $ics), 'RRULE broken');
     }
     
     public function testExportAllDayEvent()

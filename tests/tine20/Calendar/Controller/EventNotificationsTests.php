@@ -821,12 +821,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $baseEvent = $this->_eventController->getRecurBaseEvent($persistentEvent);
         if ($allFollowing) {
-            $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=' . $baseEvent->dtstart->addDay(2)->subHour(1)->toString(), $baseEvent->rrule);
+            $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=' . $baseEvent->dtstart->addDay(2)->subHour(1)->toString(), (string) $baseEvent->rrule);
             $this->assertEquals(1, count($baseEvent->alarms));
             $this->assertEquals('Nothing to send, series is over', $baseEvent->alarms->getFirstRecord()->sent_message,
                 'alarm adoption failed: ' . print_r($baseEvent->alarms->getFirstRecord()->toArray(), TRUE));
         } else {
-            $this->assertEquals('FREQ=DAILY;INTERVAL=1', $baseEvent->rrule);
+            $this->assertEquals('FREQ=DAILY;INTERVAL=1', (string) $baseEvent->rrule);
             $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $baseEvent->alarms->getFirstRecord()->sent_status);
             $this->assertEquals('', $baseEvent->alarms->getFirstRecord()->sent_message);
         }
