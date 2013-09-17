@@ -60,6 +60,9 @@ class Tasks_Setup_Update_Release7 extends Setup_Update_Abstract
         // add uid to all tasks
         foreach ($allTasks as $task) {
             $task->uid = $task->id;
+            if (empty($task->status)) {
+                $task->status = 'UNKNOWN';
+            }
             
             $tasksBackend->update($task);
         }
