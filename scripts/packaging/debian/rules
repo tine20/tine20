@@ -43,6 +43,7 @@ override_dh_installdeb:
 	
 	# generate list of available subpackages
 	(echo -n "tine20:Modules="; for x in $(MODULES); do echo -n "tine20-$$x (= \$${binary:Version}),"; done; echo "") >> debian/tine20-webstack.substvars
+	(echo -n "tine20:Modules="; for x in $(MODULES); do echo -n "tine20-$$x (= \$${binary:Version}),"; done; echo "") >> debian/tine20-worker.substvars
 
 # overwrite dh_fixperms to execute an additional shell script
 override_dh_fixperms:

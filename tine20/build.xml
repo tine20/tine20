@@ -41,11 +41,13 @@
                 <exclude name=".tx/*" />
                 <exclude name="build/*" />
                 <exclude name="docs/*" />
+                <exclude name="fonts/*" />
                 <exclude name="images/*" />
                 <exclude name="library/*" />
                 <exclude name="styles/*" />
                 <exclude name="themes/*" />
                 <exclude name="vendor/*" />
+                <exclude name="Tool/*" />
                 <exclude name="Zend/*" />
             </fileset>
         </foreach>

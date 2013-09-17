@@ -215,14 +215,14 @@ function createArchives()
                     (cd $TEMPDIR/tine20/library/ExtJS/src;     rm -rf $(ls | grep -v debug.js))
                     (cd $TEMPDIR/tine20/library/ExtJS;         rm -rf $(ls | grep -v adapter | grep -v ext-all-debug.js | grep -v ext-all.js | grep -v resources | grep -v src))
                     
-                    # cleanup HTMLPurifier
-                    (cd $TEMPDIR/tine20/library/HTMLPurifier;  rm -rf HTMLPurifier.*.php)
+                    ## cleanup HTMLPurifier
+                    #(cd $TEMPDIR/tine20/library/HTMLPurifier;  rm -rf HTMLPurifier.*.php)
 
                     # cleanup OpenLayers
                     (cd $TEMPDIR/tine20/library/OpenLayers;    rm -rf $(ls | grep -v img | grep -v license.txt | grep -v OpenLayers.js | grep -v theme))
 
-                    # cleanup PHPExcel
-                    (cd $TEMPDIR/tine20/library/PHPExcel/PHPExcel/Shared;  rm -rf PDF)
+                    ## cleanup PHPExcel
+                    #(cd $TEMPDIR/tine20/library/PHPExcel/PHPExcel/Shared;  rm -rf PDF)
                     
                     # cleanup qCal
                     (cd $TEMPDIR/tine20/library/qCal;  rm -rf docs tests)
@@ -234,7 +234,7 @@ function createArchives()
                     (mv $TEMPDIR/tine20/langstatistics.json $TEMPDIR/tine20/Tinebase/translations/langstatistics.json)
                     
                     echo -n "building "
-                    local FILES="Addressbook Admin Setup Tinebase Zend images library styles docs config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES CREDITS setup.php tine20.php bootstrap.php worker.php"
+                    local FILES="Addressbook Admin Setup Tinebase Zend images library vendor docs fonts config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES CREDITS setup.php tine20.php bootstrap.php worker.php"
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILES)
                     (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILES)
                     

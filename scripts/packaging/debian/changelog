@@ -1,3 +1,9 @@
+tine20 (2013.10.0~beta1-0) natty; urgency=low
+
+  * New upstream release "Collin" Beta 1
+
+ -- Philipp Schüle <p.schuele@metaways.de>  Thu, 17 Sep 2013 13:41:22 +0200
+
 tine20 (2013.03.7-0) natty; urgency=low
 
   * New upstream release "Kristina" Service Release 6

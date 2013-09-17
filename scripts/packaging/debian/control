@@ -43,7 +43,7 @@ Depends: ${misc:Depends},
  php5-mcrypt, 
  php5-gd,
  makepasswd
-Recommends: mysql-client | postgresql-client (>= 9.1), php-apc
+Recommends: mysql-client | postgresql-client (>= 9.1), php-apc | php5-apc
 Description: Tine 2.0 webserver integration package
  This package integrates Tine 2.0 with the webserver, by installing all needed
  dependencies to make Tine 2.0 available via HTTP(S).
@@ -156,9 +156,9 @@ Depends: ${tine20:Modules},
  php5-mysql | php5-mysqli | php5-pgsql,
  php5-mcrypt, 
  php5-gd,
- php-apc,
  php5-cli,
  php5-redis (>= 2.2.2)
+Recommends: php-apc | php5-apc
 Description: webbased groupware and crm - asynchronous worker
  This package contains the asynchronous worker of Tine 2.0. Install this package
  if you have a high number of users.

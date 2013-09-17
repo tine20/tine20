@@ -8,9 +8,9 @@ LICENSE                  /usr/share/tine20
 PRIVACY                  /usr/share/tine20
 bootstrap.php            /usr/share/tine20
 images                   /usr/share/tine20
+fonts                    /usr/share/tine20
 index.php                /usr/share/tine20
 langHelper.php           /usr/share/tine20
 setup.php                /usr/share/tine20
-styles                   /usr/share/tine20
 tine20.php               /usr/share/tine20
 debian/etc/php5.ini      /etc/tine20
