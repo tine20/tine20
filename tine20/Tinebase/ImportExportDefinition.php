@@ -193,4 +193,31 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         
         return $result;
     }
+
+    /**
+     * repair definitions tables
+     * 
+     * - fixes application_ids
+     * 
+     * @todo should be moved to generic (?) backend
+     */
+    public function repairTable()
+    {
+        $definitions = $this->_backend->getAll();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Got ' . count($definitions) . ' definitions. Checking definitions table ...');
+        
+        foreach ($definitions as $definition) {
+            $appName = substr($definition->model, 0, strpos($definition->model, '_Model'));
+            echo $appName;
+            $application = Tinebase_Application::getInstance()->getApplicationByName($appName);
+            if ($application->getId() !== $definition->application_id) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Fixing application_id for definition ' . $definition->name);
+                $definition->application_id = $application->getId();
+                $this->update($definition);
+            }
+        }
+    }
 }

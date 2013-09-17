@@ -655,11 +655,50 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return FALSE;
         }
         
-        $writer = new Zend_Log_Writer_Stream('php://output');
-        $writer->addFilter(new Zend_Log_Filter_Priority(6));
-        Tinebase_Core::getLogger()->addWriter($writer);
+        $this->_addOutputLogWriter();
         
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
+    }
+    
+    /**
+     * add log writer for php://output
+     */
+    protected function _addOutputLogWriter()
+    {
+        $writer = new Zend_Log_Writer_Stream('php://output');
+        $writer->addFilter(new Zend_Log_Filter_Priority(6));
+        Tinebase_Core::getLogger()->addWriter($writer);
+    }
+    
+    /**
+     * repair a table
+     * 
+     * @param Zend_Console_Getopt $opts
+     * 
+     * @todo add more tables
+     */
+    public function repairTable($opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+        
+        $this->_addOutputLogWriter();
+        
+        $data = $this->_parseArgs($opts, array('table'));
+        
+        switch ($data['table']) {
+            case 'importexport_definition':
+                Tinebase_ImportExportDefinition::getInstance()->repairTable();
+                $result = 0;
+                break;
+            default:
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' No repair script found for ' . $data['table']);
+                $result = 1;
+        }
+        
+        exit($result);
     }
 }
