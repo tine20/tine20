@@ -75,9 +75,11 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                 case 'ADR':
                     $type = null;
                     foreach($property['TYPE'] as $typeProperty) {
-                        // delete ,PREF added by eM Client
-                        $typeProperty = str_replace(",pref","",strtolower($typeProperty->value));
-                        if (($typeProperty == 'home') || ($typeProperty == 'work')) {
+                        $typeProperty = strtolower($typeProperty);
+                        $typeProperty = str_replace(",pref", "", $typeProperty);
+                        $typeProperty = preg_replace('/,.+$/', '', $typeProperty);
+                        
+                        if (in_array($typeProperty, array('home','work'))) {
                             $type = $typeProperty;
                             break;
                         }
@@ -112,7 +114,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     break;
                     
                 case 'EMAIL':
-                    $this->_toTine20ModelParseEmail($data, $property);
+                    $this->_toTine20ModelParseEmail($data, $property, $vcard);
                     break;
                     
                 case 'FN':
@@ -217,14 +219,18 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         if (isset($property['TYPE'])) {
             // get all types
             foreach($property['TYPE'] as $typeProperty) {
-                $types[] = strtoupper($typeProperty->value);
+                foreach(explode(',', $typeProperty->value) as $typeProperty) {
+                    if (! in_array(strtoupper($typeProperty), array('VOICE'))) {
+                        $types[] = strtoupper($typeProperty);
+                    }
+                }
             }
             
             // CELL
             if (in_array('CELL', $types)) {
                 if (count($types) == 1 || in_array('WORK', $types)) {
                     $telField = 'tel_cell';
-                } elseif(in_array('HOME', $types)) {
+                } else if(in_array('HOME', $types)) {
                     $telField = 'tel_cell_private';
                 }
     
@@ -234,9 +240,9 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     
                 // FAX
             } elseif (in_array('FAX', $types)) {
-                if (count($property['TYPE']) == 1 || in_array('WORK', $types)) {
+                if (count($types) == 1 || in_array('WORK', $types)) {
                     $telField = 'tel_fax';
-                } elseif(in_array('HOME', $types)) {
+                } else if(in_array('HOME', $types)) {
                     $telField = 'tel_fax_home';
                 }
     
@@ -260,10 +266,11 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * parse email
      * 
-     * @param array $_data
-     * @param Sabre\VObject\Property $_property
+     * @param array                   $_data        reference to tine20 data array
+     * @param Sabre\VObject\Property  $_property    mail property
+     * @param Sabre\VObject\Component $vcard        complete vcard
      */
-    protected function _toTine20ModelParseEmail(&$_data, VObject\Property $_property)
+    protected function _toTine20ModelParseEmail(&$_data, VObject\Property $_property, $vcard)
     {
         $type = null;
         foreach ($_property['TYPE'] as $typeProperty) {
