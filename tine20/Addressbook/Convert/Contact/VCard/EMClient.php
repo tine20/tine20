@@ -200,11 +200,14 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
     }
     
     /**
-     * (non-PHPdoc)
-     * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseEmail()
+     * parse email
+     *
+     * @param array                   $_data        reference to tine20 data array
+     * @param Sabre\VObject\Property  $_property    mail property
+     * @param Sabre\VObject\Component $vcard        complete vcard
      */
-    protected function _toTine20ModelParseEmail(&$_data, VObject\Property $_property)
-    {
+    protected function _toTine20ModelParseEmail(&$_data, Sabre\VObject\Property $_property, $vcard)
+        {
         $type = null;
         if (isset($_property['TYPE'])) {
             foreach($_property['TYPE'] as $typeProperty) {

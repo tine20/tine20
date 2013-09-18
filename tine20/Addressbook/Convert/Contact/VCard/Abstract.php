@@ -265,12 +265,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     
     /**
      * parse email
-     * 
+     *
      * @param array                   $_data        reference to tine20 data array
      * @param Sabre\VObject\Property  $_property    mail property
      * @param Sabre\VObject\Component $vcard        complete vcard
      */
-    protected function _toTine20ModelParseEmail(&$_data, VObject\Property $_property, $vcard)
+    protected function _toTine20ModelParseEmail(&$_data, Sabre\VObject\Property $_property, $vcard)
     {
         $type = null;
         foreach ($_property['TYPE'] as $typeProperty) {

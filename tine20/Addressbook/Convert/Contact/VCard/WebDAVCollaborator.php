@@ -124,7 +124,7 @@ class Addressbook_Convert_Contact_VCard_WebDAVCollaborator extends Addressbook_C
      * @param Sabre\VObject\Property  $_property    mail property
      * @param Sabre\VObject\Component $vcard        complete vcard
      */
-    protected function _toTine20ModelParseEmail(&$_data, VObject\Property $_property, $vcard)
+    protected function _toTine20ModelParseEmail(&$_data, Sabre\VObject\Property $_property, $vcard)
     {
         if ($vcard->{'X-OUTLOOK-EMAIL-2'} && $vcard->{'X-OUTLOOK-EMAIL-2'}->value == $_property->value) {
             $_data['email_home'] = $_property->value;
