@@ -234,7 +234,10 @@ function createArchives()
                     (mv $TEMPDIR/tine20/langstatistics.json $TEMPDIR/tine20/Tinebase/translations/langstatistics.json)
                     
                     echo -n "building "
-                    local FILES="Addressbook Admin Setup Tinebase Zend images library vendor docs fonts config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES CREDITS setup.php tine20.php bootstrap.php worker.php status.php"
+                    local FILES="Addressbook Admin Setup Tinebase Zend images library vendor docs fonts themes" 
+                    local FILES="$FILES config.inc.php.dist index.php langHelper.php setup.php tine20.php bootstrap.php worker.php status.php"
+                    local FILES="$FILES CREDITS LICENSE PRIVACY README RELEASENOTES"
+                    
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILES)
                     (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILES)
                     
