@@ -411,7 +411,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                             flex: 1,
                             xtype: 'ux.displayfield',
                             cls: 'x-ux-display-header',
-                            //style: 'padding-top: 2px',
                             name: 'lead_name'
                         }, {
                             flex: 1,
@@ -465,10 +464,8 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                             layout: 'ux.display',
                             labelAlign: 'top',
                             autoScroll: true,
-                            //cls: 'contactIconPartner',
                             layoutConfig: {
                                 background: 'solid'
-                                //declaration: this.app.i18n._('Partner')
                             },
                             items: [{
                                 xtype: 'ux.displayfield',
@@ -482,10 +479,8 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                             layout: 'ux.display',
                             labelAlign: 'top',
                             autoScroll: true,
-                            //cls: 'contactIconCustomer',
                             layoutConfig: {
                                 background: 'solid'
-                                //declaration: this.app.i18n._('Customer')
                             },
                             items: [{
                                 xtype: 'ux.displayfield',
@@ -540,22 +535,4 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     showMulti: function(sm, body) {
         this.setPiechartStores.defer(1000, this, [false]);
     }
-    
-    /*
-    TODO move this to generic grid panel?
-    onClick: function(e) {
-        var target = e.getTarget('a[class=tinebase-email-link]');
-        if (target) {
-            var email = target.id.split(':')[1];
-            var defaults = Tine.Felamimail.Model.Message.getDefaultData();
-            defaults.to = [email];
-            defaults.body = Tine.Felamimail.getSignature();
-            
-            var record = new Tine.Felamimail.Model.Message(defaults, 0);
-            var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
-                record: record
-            });
-        }
-    }
-    */
 });

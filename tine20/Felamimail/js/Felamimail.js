@@ -106,16 +106,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
             
             this.showActiveVacation();
-            var adbHook = new Tine.Felamimail.GridPanelHook({
-                app: this,
-                foreignAppName: 'Addressbook'
-            });
-            var crmHook = new Tine.Felamimail.GridPanelHook({
-                app: this,
-                foreignAppName: 'Crm',
-                contactInRelation: true,
-                relationType: 'CUSTOMER'
-            });
+            this.initGridPanelHooks();
         }
     },
     
@@ -131,7 +122,34 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             );
         }, this);
     },
-
+    
+    /**
+     * initialize grid panel hooks
+     */
+    initGridPanelHooks: function() {
+        var adbHook = new Tine.Felamimail.GridPanelHook({
+            app: this,
+            foreignAppName: 'Addressbook'
+        });
+        var crmHook = new Tine.Felamimail.GridPanelHook({
+            app: this,
+            foreignAppName: 'Crm',
+            contactInRelation: true,
+            relationType: 'CUSTOMER'
+        });
+        var calHook = new Tine.Felamimail.GridPanelHook({
+            app: this,
+            foreignAppName: 'Calendar',
+            addMailFromRecord: function(mailAddresses, record) {
+                Ext.each(record.get('attendee'), function(attender) {
+                    if (attender.user_type == 'user') {
+                        this.addMailFromContact(mailAddresses, attender.user_id);
+                    }
+                }, this);
+            }
+        });
+    },
+    
     /**
      * check mails
      * 

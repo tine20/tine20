@@ -92,6 +92,8 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     
     contactInRelation: false,
     relationType: null,
+    addMailFromRecord: null,
+    mailAddresses: null,
     
     /**
      * get addressbook contact grid panel
@@ -122,6 +124,9 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
                        this.addMailFromContact(mailAddresses, relation.related_record);
                     }
                 }, this);
+            } else if (Ext.isFunction(this.addMailFromRecord)){
+                // addMailFromRecord can be defined in config
+                this.addMailFromRecord(mailAddresses, record);
             } else {
                 this.addMailFromContact(mailAddresses, record);
             }
@@ -131,6 +136,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         Tine.log.debug('Tine.Felamimail.GridPanelHook::getMailAddresses - Got ' + mailAddresses.length + ' email addresses.');
         if (mailAddresses.length > 0) {
             Tine.log.debug(mailAddresses);
+            this.mailAddresses = mailAddresses;
         }
         
         return mailAddresses;
@@ -163,11 +169,16 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      * @param {Button} btn 
      */
     onComposeEmail: function(btn) {
-        var sm = this.getGridPanel().grid.getSelectionModel(),
-            mailAddresses = sm.isFilterSelect ? null : this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections());
+        if (this.getGridPanel().grid) {
+            var sm = this.getGridPanel().grid.getSelectionModel(),
+                mailAddresses = sm.isFilterSelect ? null : this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections());
+        } else {
+            var sm = null,
+                mailAddresses = this.mailAddresses;
+        }
 
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
-            selectionFilter: sm.isFilterSelect ? Ext.encode(sm.getSelectionFilter()) : null,
+            selectionFilter: sm && sm.isFilterSelect ? Ext.encode(sm.getSelectionFilter()) : null,
             mailAddresses: mailAddresses ? Ext.encode(mailAddresses) : null
         });
     },
@@ -193,7 +204,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      * @param {Object} records
      */
     updateAction: function(action, grants, records) {
-        var sm = this.getGridPanel().grid.getSelectionModel();
-        action.setDisabled(this.getMailAddresses(sm.getSelections()).length == 0);
+        this.mailAddresses = [];
+        action.setDisabled(this.getMailAddresses(records).length == 0);
     }
 });
