@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ==================================================  -->
+<!-- Build Definition for OpenDocument                   -->
+<!--                                                     -->
+<!-- http://git.syncroton.org/?p=Syncroton;a=summary     -->
+<!-- http://www.phing.info                               -->
+<!-- ==================================================  -->
+<project name="syncroton" description="Syncroton build file" default="test">
+
+    <!-- ============================================  -->
+    <!-- Target: test                                  -->
+    <!-- ============================================  -->
+    <target name="test" depends="compose-dev">
+        <echo msg="Starting Tests" />
+        <exec command="../vendor/bin/phpunit --config phpunit.xml --log-junit junit_log_syncroton.xml" dir="tests" passthru="true" />
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: compose                               -->
+    <!-- ============================================  -->
+    <target name="compose">
+        <echo msg="Fetching dependencies" />
+        <exec command="composer install" passthru="true" />
+    </target>
+    
+    <!-- ============================================  -->
+    <!-- Target: compose-dev                           -->
+    <!-- ============================================  -->
+    <target name="compose-dev">
+        <echo msg="Fetching dependencies for development" />
+        <exec command="composer --dev install" passthru="true" />
+    </target>
+    
+</project>

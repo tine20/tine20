@@ -118,7 +118,7 @@ function getTestDatabase()
     );
     
     foreach ($folders as $folder) {
-        $db->insert('syncroton_data_folder', $folder);
+        $db->insert('Syncroton_data_folder', $folder);
     }
     
     $entries = array(
@@ -332,7 +332,7 @@ function getTestDatabase()
     );
     
     foreach ($entries as $entry) {
-        $db->insert('syncroton_data', $entry);
+        $db->insert('Syncroton_data', $entry);
     }
     
     return $db;

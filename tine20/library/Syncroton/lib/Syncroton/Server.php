@@ -172,9 +172,7 @@ class Syncroton_Server
         
         if ($response instanceof DOMDocument) {
             if ($this->_logger instanceof Zend_Log) {
-                $response->formatOutput = true;
-                $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " xml response:\n" . $response->saveXML());
-                $response->formatOutput = false;
+                $this->_logDomDocument(Zend_Log::DEBUG, $response, __METHOD__, __LINE__);
             }
             
             if (isset($command) && $command instanceof Syncroton_Command_ICommand) {
@@ -190,7 +188,7 @@ class Syncroton_Server
             } catch (Syncroton_Wbxml_Exception $swe) {
                 if ($this->_logger instanceof Zend_Log) {
                     $this->_logger->err(__METHOD__ . '::' . __LINE__ . " Could not encode output: " . $swe);
-                    $this->_logger->err(__METHOD__ . '::' . __LINE__ . " xml response:\n" . $response->saveXML());
+                    $this->_logDomDocument(Zend_Log::ERR, $response, __METHOD__, __LINE__);
                 }
                 
                 header("HTTP/1.1 500 Internal server error");
@@ -227,7 +225,7 @@ class Syncroton_Server
                 
                 echo $header;
             }
-                        
+            
             // output body
             rewind($outputStream);
             fpassthru($outputStream);
@@ -240,7 +238,37 @@ class Syncroton_Server
                 }
             }
         }
-    }    
+    }
+    
+    /**
+     * write (possible big) DOMDocument in smaller chunks to log file
+     * 
+     * @param unknown     $priority
+     * @param DOMDocument $dom
+     * @param string      $method
+     * @param string      $method
+     */
+    protected function _logDomDocument($priority, DOMDocument $dom, $method, $method)
+    {
+        $loops = 0;
+        
+        $tempStream = fopen('php://temp/maxmemory:5242880', 'r+');
+                
+        $dom->formatOutput = true;
+        fwrite($tempStream, $dom->saveXML());
+        $dom->formatOutput = false;
+        
+        rewind($tempStream);
+        
+        // log data in 1MByte chunks
+        while (!feof($tempStream)) {
+            $this->_logger->log($method . '::' . $method . " xml response($loops):\n" . fread($tempStream, 1048576), $priority);
+            
+            $loops++;
+        }
+        
+        fclose($tempStream);
+    }
     
     /**
      * return request params

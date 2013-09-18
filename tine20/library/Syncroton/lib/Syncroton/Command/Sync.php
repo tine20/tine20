@@ -777,6 +777,8 @@ class Syncroton_Command_Sync extends Syncroton_Command_Wbxml
                     } catch (Exception $e) {
                         if ($this->_logger instanceof Zend_Log)
                             $this->_logger->warn(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
+                        if ($this->_logger instanceof Zend_Log)
+                            $this->_logger->debug(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getTraceAsString());
                     }
                     
                     // mark as sent to the client, even the conversion to xml might have failed 

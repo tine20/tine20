@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `syncroton_policy` (
+CREATE TABLE IF NOT EXISTS `Syncroton_policy` (
     `id` varchar(40) NOT NULL,
     `name` varchar(255) NOT NULL,
     `description` varchar(255) DEFAULT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `syncroton_policy` (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `syncroton_device` (
+CREATE TABLE IF NOT EXISTS `Syncroton_device` (
     `id` varchar(40) NOT NULL,
     `deviceid` varchar(64) NOT NULL,
     `devicetype` varchar(64) NOT NULL,
@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `syncroton_device` (
     `remotewipe` int(11) DEFAULT '0',
     `pingfolder` longblob,
     `lastsynccollection` longblob DEFAULT NULL,
+    `lastping` datetime DEFAULT NULL,
     'contactsfilter_id' varchar(40) DEFAULT NULL,
     'calendarfilter_id' varchar(40) DEFAULT NULL,
     'tasksfilter_id' varchar(40) DEFAULT NULL,
@@ -34,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `syncroton_device` (
     UNIQUE KEY `owner_id--deviceid` (`owner_id`, `deviceid`)
 );
 
-CREATE TABLE IF NOT EXISTS `syncroton_folder` (
+CREATE TABLE IF NOT EXISTS `Syncroton_folder` (
     `id` varchar(40) NOT NULL,
     `device_id` varchar(40) NOT NULL,
     `class` varchar(64) NOT NULL,
@@ -48,10 +49,10 @@ CREATE TABLE IF NOT EXISTS `syncroton_folder` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `device_id--class--folderid` (`device_id`(40),`class`(40),`folderid`(40)),
     KEY `folderstates::device_id--devices::id` (`device_id`),
-    CONSTRAINT `folderstates::device_id--devices::id` FOREIGN KEY (`device_id`) REFERENCES `syncroton_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE 
+    CONSTRAINT `folderstates::device_id--devices::id` FOREIGN KEY (`device_id`) REFERENCES `Syncroton_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE 
 );
 
-CREATE TABLE IF NOT EXISTS `syncroton_synckey` (
+CREATE TABLE IF NOT EXISTS `Syncroton_synckey` (
     `id` varchar(40) NOT NULL,
     `device_id` varchar(40) NOT NULL DEFAULT '',
     `type` varchar(64) NOT NULL DEFAULT '',
@@ -60,10 +61,10 @@ CREATE TABLE IF NOT EXISTS `syncroton_synckey` (
     `pendingdata` longblob,
     PRIMARY KEY (`id`),
     UNIQUE KEY `device_id--type--counter` (`device_id`,`type`,`counter`),
-    CONSTRAINT `syncroton_synckey::device_id--syncroton_device::id` FOREIGN KEY (`device_id`) REFERENCES `syncroton_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `Syncroton_synckey::device_id--Syncroton_device::id` FOREIGN KEY (`device_id`) REFERENCES `Syncroton_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS `syncroton_content` (
+CREATE TABLE IF NOT EXISTS `Syncroton_content` (
     `id` varchar(40) NOT NULL,
     `device_id` varchar(40) DEFAULT NULL,
     `folder_id` varchar(40) DEFAULT NULL,
@@ -73,11 +74,11 @@ CREATE TABLE IF NOT EXISTS `syncroton_content` (
     `is_deleted` tinyint(1) DEFAULT '0',
     PRIMARY KEY (`id`),
     UNIQUE KEY `device_id--folder_id--contentid` (`device_id`(40),`folder_id`(40),`contentid`(40)),
-    KEY `syncroton_contents::device_id` (`device_id`),
-    CONSTRAINT `syncroton_contents::device_id--syncroton_device::id` FOREIGN KEY (`device_id`) REFERENCES `syncroton_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    KEY `Syncroton_contents::device_id` (`device_id`),
+    CONSTRAINT `Syncroton_contents::device_id--Syncroton_device::id` FOREIGN KEY (`device_id`) REFERENCES `Syncroton_device` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS `syncroton_data` (
+CREATE TABLE IF NOT EXISTS `Syncroton_data` (
     `id` varchar(40) NOT NULL,
     `class` varchar(40) NOT NULL,
     `folder_id` varchar(40) NOT NULL,
@@ -85,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `syncroton_data` (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `syncroton_data_folder` (
+CREATE TABLE IF NOT EXISTS `Syncroton_data_folder` (
     `id` varchar(40) NOT NULL,
     `owner_id` varchar(40) NOT NULL,
     `type` int(11) NOT NULL,

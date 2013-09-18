@@ -37,6 +37,7 @@
  * @property    string   tasksfilter_id
  * @property    string   emailfilter_id
  * @property    string   lastsynccollection
+ * @property    DateTime lastping
  */
 interface Syncroton_Model_IDevice extends Syncroton_Model_IEntry
 {
@@ -46,6 +47,5 @@ interface Syncroton_Model_IDevice extends Syncroton_Model_IEntry
      * @return int/string
      */
     public function getMajorVersion();
-    
 }
 

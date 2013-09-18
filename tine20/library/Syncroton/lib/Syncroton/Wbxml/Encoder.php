@@ -151,6 +151,10 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
     {
         $_dom->formatOutput = false;
         
+        $tempStream = fopen('php://temp/maxmemory:5242880', 'r+');
+        fwrite($tempStream, $_dom->saveXML());
+        rewind($tempStream);
+        
         $this->_initialize($_dom);
         
         $parser = xml_parser_create_ns($this->_charSet, ';');
@@ -159,14 +163,22 @@ class Syncroton_Wbxml_Encoder extends Syncroton_Wbxml_Abstract
         xml_set_character_data_handler($parser, '_handleCharacters');
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         
-        if (!xml_parse($parser, $_dom->saveXML())) {
-            #file_put_contents(tempnam(sys_get_temp_dir(), "xmlerrors"), $_dom->saveXML());
-            throw new Syncroton_Wbxml_Exception(sprintf('XML error: %s at line %d',
-                xml_error_string(xml_get_error_code($parser)),
-                xml_get_current_line_number($parser)
-            ));
+        while (!feof($tempStream)) {
+            if (!xml_parse($parser, fread($tempStream, 1048576), feof($tempStream))) {
+                // uncomment to write xml document to file
+                #rewind($tempStream);
+                #$xmlStream = fopen(tempnam(sys_get_temp_dir(), "xmlerrors"), 'r+');
+                #stream_copy_to_stream($tempStream, $xmlStream);
+                #fclose($xmlStream);
+                
+                throw new Syncroton_Wbxml_Exception(sprintf('XML error: %s at line %d',
+                    xml_error_string(xml_get_error_code($parser)),
+                    xml_get_current_line_number($parser)
+                ));
+            }
         }
 
+        fclose($tempStream);
         xml_parser_free($parser);
     }
 
