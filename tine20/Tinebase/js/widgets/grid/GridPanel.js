@@ -380,7 +380,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (this.modelConfig) {
                 filterModels = this.getCustomfieldFilters();
             } else if (Ext.isFunction(this.recordClass.getFilterModel)) {
-                filterModels = this.recordClass.getFilterModel();
+                filterModels = this.recordClass.getFilterModel().concat(this.getCustomfieldFilters());
             }
             this.filterToolbar = new Tine.widgets.grid.FilterPanel(Ext.apply({}, {
                 app: this.app,
@@ -1414,6 +1414,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * returns filter toolbar
      * @private
+     * @deprecated
+     * 
+     * TODO this seems to be legacy code that is only used in some apps (Calendar, Felamimail, ...)
+     *   -> should be removed
+     *   -> we use initFilterPanel() now
      */
     getFilterToolbar: function(config) {
         config = config || {};
