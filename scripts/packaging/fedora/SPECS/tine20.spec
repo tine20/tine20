@@ -301,6 +301,9 @@ fi
 %files webstack
 
 %changelog
+* Thu Sep 19 2013 Philipp Schüle <p.schuele@metaways.de> - 2013.03.8-1
+- New upstream release Kristina Service Release 7
+
 * Thu Aug 15 2013 Philipp Schüle <p.schuele@metaways.de> - 2013.03.7-1
 - New upstream release Kristina Service Release 6
 
