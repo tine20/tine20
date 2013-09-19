@@ -462,7 +462,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 }
                 
                 // allow to set pw suffix in config
-                if (array_key_exists('pwsuffix', $imapConfig)) {
+                if (array_key_exists('pwsuffix', $imapConfig) && ! preg_match('/' . preg_quote($imapConfig['pwsuffix']) . '$/', $credentials->password)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                         ' Appending configured pwsuffix to system account password.');
                     $credentials->password .= $imapConfig['pwsuffix'];
