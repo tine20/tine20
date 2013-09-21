@@ -163,7 +163,9 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
                 hidden: true,
                 dataIndex: 'description',
                 renderer: function(description, metaData, record) {
-                    metaData.attr = 'ext:qtip="' + Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(Ext.util.Format.htmlEncode(description))) + '"';
+                    if (metaData) {
+                        metaData.attr = 'ext:qtip="' + Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(Ext.util.Format.htmlEncode(description))) + '"';
+                    }
                     return Ext.util.Format.htmlEncode(description);
                 }
             }/*, {
