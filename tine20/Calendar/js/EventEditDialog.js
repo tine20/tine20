@@ -375,13 +375,23 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.validateDtEnd();
     },
     
+    /**
+     * on dt start change
+     * 
+     * @param {} dtStartField
+     * @param {} newValue
+     * @param {} oldValue
+     */
     onDtStartChange: function(dtStartField, newValue, oldValue) {
         if (Ext.isDate(newValue) && Ext.isDate(oldValue)) {
-            var diff = newValue.getTime() - oldValue.getTime();
-            var dtEndField = this.getForm().findField('dtend');
-            var dtEnd = dtEndField.getValue();
+            var dtEndField = this.getForm().findField('dtend'),
+                dtEnd = dtEndField.getValue();
+                
             if (Ext.isDate(dtEnd)) {
-                dtEndField.setValue(dtEnd.add(Date.MILLI, diff));
+                var duration = dtEnd.getTime() - oldValue.getTime(),
+                    newDtEnd = newValue.add(Date.MILLI, duration);
+                
+                dtEndField.setValue(newDtEnd);
             }
         }
     },
