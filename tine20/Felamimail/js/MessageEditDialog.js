@@ -656,12 +656,20 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
             folderName = account.get(folderField);
         
+        Tine.log.debug('onSaveInFolder() - Save message in folder ' + folderName);
+        Tine.log.debug(this.record);
+            
         if (! folderName || folderName == '') {
             Ext.MessageBox.alert(
-                this.app.i18n._('Failed'), 
+                _('Failed'),
                 String.format(this.app.i18n._('{0} account setting empty.'), folderField)
             );
-        } else if (this.isValid()) {
+        } else if (this.attachmentGrid.isUploading()) {
+            Ext.MessageBox.alert(
+                _('Failed'),
+                this.app.i18n._('Files are still uploading.')
+            );
+        } else {
             this.loadMask.show();
             this.recordProxy.saveInFolder(this.record, folderName, {
                 scope: this,
@@ -670,11 +678,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.purgeListeners();
                     this.window.close();
                 },
-                failure: this.onRequestFailed,
+                failure: Tine.Felamimail.handleRequestException.createInterceptor(function() {
+                        this.loadMask.hide();
+                    }, this
+                ),
                 timeout: 150000 // 3 minutes
             });
-        } else {
-            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
         }
     },
     
@@ -989,7 +998,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (result) {
             result = this.validateRecipients();
         }
-        
         
         return (result && Tine.Felamimail.MessageEditDialog.superclass.isValid.call(this));
     },

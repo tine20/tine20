@@ -671,7 +671,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
            this.loadMask.show();
         }
         
-        if (event.isRecurInstance() || event.isRecurException() || (event.isRecurBase() && ! event.get('rrule').newrule)) {
+        if (event.id && (event.isRecurInstance() || event.isRecurException() || (event.isRecurBase() && ! event.get('rrule').newrule))) {
             Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 title: this.app.i18n._('Update Event'),
                 height: 170,
