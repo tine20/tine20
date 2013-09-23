@@ -154,7 +154,9 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
             }
             
             this.selectedRecord = rec;
-            this.setValue(val);
+            
+            // @see 0007622: losing non-contact recipient
+            this.setRawValue(rec ? rec.get(this.displayField) : val);
         }
     }
 });
