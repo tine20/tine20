@@ -21,8 +21,7 @@
         "metaways/timezoneconvert": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*",
-        "phing/phing": "2.5.*"
+        "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
         "files": ["Tinebase/Helper.php"],

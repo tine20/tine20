@@ -18,6 +18,8 @@ RELEASE=""
 GITBRANCH=""
 PACKAGEDIR=""
 
+PATH=$PATH:$MISCPACKAGESDIR:$TEMPDIR/tine20/vendor/bin
+
 #
 # checkout url to local directory
 #
@@ -285,6 +287,15 @@ function createSpecialArchives()
     (cd $TEMPDIR/voip; zip -qr ../../packages/tine20/$RELEASE/tine20-voip_$RELEASE.zip     .)
 }
 
+function setupComposer()
+{
+    wget -O $MISCPACKAGESDIR/composer.phar https://getcomposer.org/composer.phar
+    chmod ugo+x $MISCPACKAGESDIR/composer.phar
+    ln -sf composer $MISCPACKAGESDIR/composer.phar
+    
+    composer install -d $TEMPDIR/tine20 --no-dev
+}
+
 function setupPackageDir()
 {
     PACKAGEDIR="$BASEDIR/packages/tine20/$RELEASE"
@@ -384,6 +395,7 @@ getOptions "$@"
 
 createDirectories
 checkout "$GITURL" "$GITBRANCH"
+setupComposer
 setupPackageDir
 activateReleaseMode
 buildLangStats

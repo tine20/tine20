@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "61b79e3d8faa2a50f06dd953cfe1db60",
+    "hash": "f0d9456e791e80c320634762a5db04e3",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -320,58 +320,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "phing/phing",
-            "version": "2.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phingofficial/phing.git",
-                "reference": "62b6e0e03c093b8b18084a0994be1146b753a267"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/62b6e0e03c093b8b18084a0994be1146b753a267",
-                "reference": "62b6e0e03c093b8b18084a0994be1146b753a267",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.0"
-            },
-            "bin": [
-                "bin/phing"
-            ],
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "classes/phing/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "classes"
-            ],
-            "license": [
-                "LGPL3"
-            ],
-            "authors": [
-                {
-                    "name": "Michiel Rook",
-                    "email": "mrook@php.net"
-                },
-                {
-                    "name": "Phing Community",
-                    "homepage": "http://www.phing.info/trac/wiki/Development/Contributors"
-                }
-            ],
-            "description": "PHing Is Not GNU make; it's a PHP project build system or build tool based on Apache Ant.",
-            "homepage": "http://www.phing.info/",
-            "keywords": [
-                "build",
-                "task",
-                "tool"
-            ],
-            "time": "2013-02-16 14:23:57"
-        },
         {
             "name": "phpunit/php-code-coverage",
             "version": "1.2.13",
