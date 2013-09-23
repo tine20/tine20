@@ -211,8 +211,8 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     public function calendarQuery(array $filters)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' filters ' . print_r($filters, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filters ' . print_r($filters, true));
         
         //var_dump($filters['comp-filters'][0]);
         

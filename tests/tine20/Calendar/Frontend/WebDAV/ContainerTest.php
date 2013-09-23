@@ -211,13 +211,11 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         // reschedule to match period filter
         $event->dtstart = Tinebase_DateTime::now();
-        $event->dtend = Tinebase_DateTime::now()->addMinute(30);
+        $event->dtend   = Tinebase_DateTime::now()->addMinute(30);
         Calendar_Controller_MSEventFacade::getInstance()->update($event);
         
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
         
-        // Doing a calendar-query first, to make sure we get the most
-        // performance.
         $urls = $container->calendarQuery(array(
             'name' => 'VCALENDAR',
             'comp-filters' => array(
@@ -228,7 +226,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
                     'is-not-defined' => false,
                     'time-range' => array(
                         'start' => Tinebase_DateTime::now()->subHour(1),
-                        'end' => Tinebase_DateTime::now()->addHour(1),
+                        'end'   => Tinebase_DateTime::now()->addHour(1),
                     ),
                 ),
             ),
