@@ -1,0 +1,12 @@
+howto install sikuli-ide ubuntu 12.10:
+======================================
+
+$ wget https://launchpad.net/sikuli/sikulix/1.0.1/+download/sikuli-setup.jar
+$ java -jar sikuli-setup.jar (PACK 1)
+$ sudo add-apt-repository ppa:kubuntu-ppa/backports
+$ sudo apt-get update
+$ sudo apt-get install libtesseract3 libopencv-core2.4 libopencv-highgui2.4
+
+$ ./runIDE
+oder
+$ ./runIDE -d 3 -r ~/workspace/tine20/tests/sikuli/login.sikuli
