@@ -125,7 +125,8 @@ function getOptions()
 
 function activateReleaseMode()
 {
-    local DATETIME=`date "+%F %X%:z"`
+    # utc datetime, like this: 2013-09-24 14:27:06
+    local DATETIME=`date -u "+%F %T"`
     
     # set buildtype to DEBUG for beta releases
     if [[ $RELEASE == *beta* ]]; then  
