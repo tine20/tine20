@@ -266,7 +266,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     getSurveyData: function (cb) {
         var ds = new Ext.data.Store({
             proxy: new Ext.data.ScriptTagProxy({
-                url: 'https://versioncheck.officespot20.com/surveyCheck/surveyCheck.php'
+                url: 'https://versioncheck.tine20.net/surveyCheck/surveyCheck.php'
             }),
             reader: new Ext.data.JsonReader({
                 root: 'survey'
@@ -300,7 +300,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                         if (Ext.isDate(enddate) && enddate.getTime() > new Date().getTime() && 
                             Tine.clientVersion.packageString.indexOf(version) === 0) {
                             survey.data.lang_duration = String.format(_('about {0} minutes'), survey.data.duration);
-                            survey.data.link = 'https://versioncheck.officespot20.com/surveyCheck/surveyCheck.php?participate';
+                            survey.data.link = 'https://versioncheck.tine20.net/surveyCheck/surveyCheck.php?participate';
                             
                             this.surveyPanel.add([{
                                 cls: 'tb-login-big-label',
