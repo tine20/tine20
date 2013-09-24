@@ -44,11 +44,13 @@ if [ "$1" = "configure" ]; then
         
         password=$(makepasswd --minchars=15 --maxchars=20)
         echo "$password" > "$mysqlPasswordFile"
-    
-        mysqlCmd="mysql --defaults-file=/etc/mysql/debian.cnf"
         
-        echo "CREATE DATABASE IF NOT EXISTS tine20;" | $mysqlCmd
-        echo "GRANT ALL ON tine20.* TO 'tine20'@'localhost' IDENTIFIED BY '$password';" | $mysqlCmd
+        if [ -x /usr/bin/mysql ]; then
+            mysqlCmd="/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf"
+            
+            echo "CREATE DATABASE IF NOT EXISTS tine20;" | $mysqlCmd
+            echo "GRANT ALL ON tine20.* TO 'tine20'@'localhost' IDENTIFIED BY '$password';" | $mysqlCmd
+        fi
     fi
     
     # create config.inc.php if needed
