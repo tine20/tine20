@@ -15,6 +15,5 @@
         <extension name="iconv" />
         <extension name="zip" />
         <extension name="xml" />
-        <extension name="fileinfo" />
     </extensions>
 </essential>
