@@ -5,7 +5,7 @@
  * @package     Timetracker
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Timetracker_Setup_Update_Release7 extends Setup_Update_Abstract
@@ -56,5 +56,15 @@ class Timetracker_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setTableVersion('timetracker_timeaccount', 9);
         $this->setApplicationVersion('Timetracker', '7.2');
+    }
+
+    /**
+     * update to 8.0
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Timetracker', '8.0');
     }
 }

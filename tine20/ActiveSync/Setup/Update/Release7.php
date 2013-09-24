@@ -71,4 +71,14 @@ class ActiveSync_Setup_Update_Release7 extends Setup_Update_Abstract
         $this->setTableVersion('acsync_device', '6');
         $this->setApplicationVersion('ActiveSync', '7.3');
     }
+    
+    /**
+     * update to 8.0
+     *
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->setApplicationVersion('ActiveSync', '8.0');
+    }
 }

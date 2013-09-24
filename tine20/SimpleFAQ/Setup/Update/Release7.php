@@ -35,4 +35,14 @@ class SimpleFAQ_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('SimpleFAQ', '7.1');
     }
+
+    /**
+     * update to 8.0
+     *
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('SimpleFAQ', '8.0');
+    }
 }

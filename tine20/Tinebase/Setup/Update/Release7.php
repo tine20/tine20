@@ -482,4 +482,14 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '7.8');
     }
+
+    /**
+     * update to 8.0
+     *
+     * @return void
+     */
+    public function update_8()
+    {
+        $this->setApplicationVersion('Tinebase', '8.0');
+    }
 }

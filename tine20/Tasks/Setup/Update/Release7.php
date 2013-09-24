@@ -95,4 +95,14 @@ class Tasks_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tasks', '7.2');
     }
+
+    /**
+     * update to 8.0
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Tasks', '8.0');
+    }
 }

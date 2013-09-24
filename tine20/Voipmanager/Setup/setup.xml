@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>7.0</version>
+    <version>8.0</version>
     <order>50</order>
     <depends>
         <application>Admin</application>

@@ -532,4 +532,14 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('HumanResources', '7.14');
     }
+
+    /**
+     * update to 8.0
+     *
+     * @return void
+     */
+    public function update_14()
+    {
+        $this->setApplicationVersion('HumanResources', '8.0');
+    }
 }

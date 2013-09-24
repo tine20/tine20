@@ -5,7 +5,7 @@
  * @package     Crm
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Crm_Setup_Update_Release7 extends Setup_Update_Abstract
@@ -29,5 +29,15 @@ class Crm_Setup_Update_Release7 extends Setup_Update_Abstract
         Tinebase_Setup_Update_Release7::updateModlogSeq('Crm_Model_Lead', 'metacrm_lead');
         
         $this->setApplicationVersion('Crm', '7.1');
+    }
+
+    /**
+     * update to 8.0
+     *
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Crm', '8.0');
     }
 }
