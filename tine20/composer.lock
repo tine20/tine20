@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "bab208dc427673aa76ed0ff17e5b476d",
+    "hash": "61b79e3d8faa2a50f06dd953cfe1db60",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -322,16 +322,16 @@
     "packages-dev": [
         {
             "name": "phing/phing",
-            "version": "2.6.1",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "3f7d71bf561bafea39087250f777b349438cc32e"
+                "reference": "62b6e0e03c093b8b18084a0994be1146b753a267"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/3f7d71bf561bafea39087250f777b349438cc32e",
-                "reference": "3f7d71bf561bafea39087250f777b349438cc32e",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/62b6e0e03c093b8b18084a0994be1146b753a267",
+                "reference": "62b6e0e03c093b8b18084a0994be1146b753a267",
                 "shasum": ""
             },
             "require": {
@@ -370,7 +370,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2013-08-26 21:13:03"
+            "time": "2013-02-16 14:23:57"
         },
         {
             "name": "phpunit/php-code-coverage",

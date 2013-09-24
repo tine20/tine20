@@ -22,7 +22,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
-        "phing/phing": "2.6.*"
+        "phing/phing": "2.5.*"
     },
     "autoload": {
         "files": ["Tinebase/Helper.php"],
