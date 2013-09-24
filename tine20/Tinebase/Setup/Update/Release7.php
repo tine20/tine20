@@ -447,15 +447,39 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
     public function update_6()
     {
         $declaration = new Setup_Backend_Schema_Field_Xml('
-                <field>
-                    <name>data</name>
-                    <type>clob</type>
-                </field>
-            ');
+            <field>
+                <name>data</name>
+                <type>clob</type>
+            </field>
+        ');
         
         $this->_backend->alterCol('state', $declaration);
         $this->setTableVersion('state', 3);
         
         $this->setApplicationVersion('Tinebase', '7.7');
+    }
+    
+    /**
+     * update to 7.8
+     *
+     * add uuid column to support folder creation via webdav
+     */
+    public function update_7()
+    {
+        $this->validateTableVersion('container', 7);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>uuid</name>
+                <type>text</type>
+                <length>64</length>
+                <default>NULL</default>
+            </field>
+        ');
+        
+        $this->_backend->addCol('container', $declaration);
+        $this->setTableVersion('container', 8);
+        
+        $this->setApplicationVersion('Tinebase', '7.8');
     }
 }
