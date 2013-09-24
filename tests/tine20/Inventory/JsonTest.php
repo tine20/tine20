@@ -107,6 +107,28 @@ class Inventory_JsonTest extends Inventory_TestCase
     }
     
     /**
+     * test testSearchInventoryItems for tags of an InventoryItem
+     */
+    public function testSearchInventoryItemsTags()
+    {
+        $inventoryRecordWithTag = $this->testCreateInventoryItem();
+        $inventoryRecordWithoutTag = $this->testCreateInventoryItem();
+        
+        $inventoryRecordWithTag['tags'] = array(array(
+            'name'    => 'supi',
+            'type'    => Tinebase_Model_Tag::TYPE_PERSONAL,
+        ));
+        $inventoryRecordWithTag = $this->_json->saveInventoryItem($inventoryRecordWithTag);
+        $inventoryRecordTagID = $inventoryRecordWithTag['tags'][0]['id'];
+        
+        $searchTagFilter = array(array('field' => 'tag', 'operator' => 'equals', 'value' => $inventoryRecordTagID));
+        
+        $returned = $this->_json->searchInventoryItems($searchTagFilter, $this->_getPaging());
+        
+        $this->assertEquals(1, $returned['totalcount']);
+    }
+    
+    /**
      * test deletetion of an InventoryItem
      */
     public function testDeleteInventoryItems()

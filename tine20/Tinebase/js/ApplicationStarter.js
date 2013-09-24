@@ -256,6 +256,11 @@ Tine.Tinebase.ApplicationStarter = {
      */
     getFilter: function(fieldKey, filterconfig, modelConfig) {
         // take field label if no filterlabel is defined
+        // TODO Refactor: tag and tags see ticket 0008944
+        // TODO Remove this ugly hack!
+        if (fieldKey == 'tag') {
+            fieldKey = 'tags';
+        }
         var fieldconfig = modelConfig.fields[fieldKey];
         var appName = modelConfig.appName;
         var modelName = modelConfig.modelName;

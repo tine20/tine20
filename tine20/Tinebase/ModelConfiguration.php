@@ -648,13 +648,22 @@ class Tinebase_ModelConfiguration {
             $this->_singularContainerMode = true;
         }
 
+        // quick hack ('key')
         if ($this->_hasTags) {
             $this->_fields['tags'] = array(
                 'label' => 'Tags',
                 'sortable' => false,
                 'type' => 'tag', 
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL), 
-                'useGlobalTranslation' => TRUE
+                'useGlobalTranslation' => TRUE,
+                'filterDefinition' => array(
+                    'key'     => 'tag',
+                    'filter'  => $this->_filterModelMapping['tag'],
+                    'options' => array(
+                           'idProperty' => $this->_idProperty,
+                           'applicationName' => $this->_appName
+                    )
+                )
             );
         }
 
@@ -731,10 +740,15 @@ class Tinebase_ModelConfiguration {
 //                 }
             }
 
+            // TODO: Split this up in multiple functions
+            // TODO: Refactor: key 'tag' should be 'tags' in filter definition / quick hack
+            // also see ticket 8944 (https://forge.tine20.org/mantisbt/view.php?id=8944)
+            
             // set filter model
             if (array_key_exists('filterDefinition', $fieldDef)) {
                 // use filter from definition
-                $this->_filterModel[$fieldKey] = $fieldDef['filterDefinition'];
+                $key = isset($fieldDef['filterDefinition']['key']) ? $fieldDef['filterDefinition']['key'] : $fieldKey;
+                $this->_filterModel[$key] = $fieldDef['filterDefinition'];
             } else if (array_key_exists($fieldDef['type'], $this->_filterModelMapping)) {
                 // if no filterDefinition is given, try to use the default one
                 $this->_filterModel[$fieldKey] = array('filter' => $this->_filterModelMapping[$fieldDef['type']]);

@@ -367,6 +367,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     {
         $fieldModel = (isset($_filterData['field']) && isset($this->_filterModel[$_filterData['field']])) ? $this->_filterModel[$_filterData['field']] : '';
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . '[' . $this->_className . '] Debug: ' . print_r($this->_filterModel, true));
+        
         if (empty($fieldModel)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . '[' . $this->_className . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
