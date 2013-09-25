@@ -1800,4 +1800,24 @@ class Setup_Controller
         // deactivate cache again
         Tinebase_Core::setupCache(FALSE);
     }
+
+    /**
+     * returns TRUE if filesystem is available
+     * 
+     * @return boolean
+     */
+    public function isFilesystemAvailable()
+    {
+        $session = Tinebase_Core::getSession();
+        if (! isset($session->filesystemAvailable)) {
+            $result = (! empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
+            if (is_object($session)) {
+                $session->filesystemAvailable = $result;
+            }
+        } else {
+            $result = $session->filesystemAvailable;
+        }
+        
+        return $result;
+    }
 }

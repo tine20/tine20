@@ -629,7 +629,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'maxFileUploadSize' => convertToBytes(ini_get('upload_max_filesize')),
             'maxPostSize'       => convertToBytes(ini_get('post_max_size')),
             'thousandSeparator' => $numberString[1],
-            'decimalSeparator'  => $numberString[5]
+            'decimalSeparator'  => $numberString[5],
+            'filesystemAvailable' => Setup_Controller::getInstance()->isFilesystemAvailable()
         );
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {

@@ -936,7 +936,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * creates attachments panel
      */
     initAttachmentsPanel: function() {
-        if (! this.attachmentsPanel && ! this.hideAttachmentsPanel && this.recordClass && this.recordClass.hasField('attachments')) {
+        if (! this.attachmentsPanel && ! this.hideAttachmentsPanel && this.recordClass && this.recordClass.hasField('attachments') && Tine.Tinebase.registry.get('filesystemAvailable')) {
             this.attachmentsPanel = new Tine.widgets.dialog.AttachmentsGridPanel({ anchor: '100% 100%', editDialog: this }); 
             this.items.items.push(this.attachmentsPanel);
         }

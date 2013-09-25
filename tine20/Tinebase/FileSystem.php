@@ -65,7 +65,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $this->_fileObjectBackend  = new Tinebase_Tree_FileObject();
         $this->_treeNodeBackend    = new Tinebase_Tree_Node();
         
-        if (empty(Tinebase_Core::getConfig()->filesdir) || !is_writeable(Tinebase_Core::getConfig()->filesdir)) {
+        if (! Setup_Controller::getInstance()->isFilesystemAvailable()) {
             throw new Tinebase_Exception_Backend('No base path (filesdir) configured or path not writeable');
         }
         

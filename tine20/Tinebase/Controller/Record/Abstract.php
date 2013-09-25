@@ -425,7 +425,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($this->resolveCustomfields()) {
             Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record);
         }
-        if ($record->has('attachments')) {
+        if ($record->has('attachments') && Setup_Controller::getInstance()->isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
         }
     }
@@ -902,7 +902,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($record->has('alarms') && isset($record->alarms)) {
             $this->_saveAlarms($record);
         }
-        if ($record->has('attachments') && isset($record->attachments)) {
+        if ($record->has('attachments') && isset($record->attachments) && Setup_Controller::getInstance()->isFilesystemAvailable()) {
             $updatedRecord->attachments = $record->attachments;
             Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($updatedRecord);
         }
