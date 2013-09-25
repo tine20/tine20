@@ -37,20 +37,37 @@
         <foreach param="name" absparam="path" target="build-module">
             <fileset dir=".">
                 <type type="dir" />
-                <include name="*/*" />
-                <exclude name=".tx/*" />
-                <exclude name="build/*" />
-                <exclude name="docs/*" />
-                <exclude name="fonts/*" />
-                <exclude name="images/*" />
-                <exclude name="library/*" />
-                <exclude name="styles/*" />
-                <exclude name="themes/*" />
-                <exclude name="vendor/*" />
-                <exclude name="Tool/*" />
-                <exclude name="Zend/*" />
+                <include name="*" />
+                <exclude name="/" />
+                <exclude name="*.*" />
+                <exclude name=".tx" />
+                <exclude name="build" />
+                <exclude name="docs" />
+                <exclude name="fonts" />
+                <exclude name="images" />
+                <exclude name="library" />
+                <exclude name="styles" />
+                <exclude name="themes" />
+                <exclude name="vendor" />
+                <exclude name="Tool" />
+                <exclude name="Zend" />
             </fileset>
         </foreach>
+    </target>
+    
+    <!-- ============================================  -->
+    <!-- Target: unit-test                                 -->
+    <!-- ============================================  -->
+    <target name="unit-test">
+        <copy file="${configPath}" tofile="../tests/tine20/config.inc.php" overwrite="true"/>
+        <phpunit configuration="../tests/tine20/phpunit.xml">
+            <formatter type="plain" usefile="false"/>
+            <batchtest>
+                <fileset dir="../tests/tine20">
+                  <include name="AllTests.php"/>
+                </fileset>
+            </batchtest>
+        </phpunit>
     </target>
     
     <!-- ============================================  -->

@@ -459,7 +459,7 @@ class jsb2tk
     {
         // NOTE: it's a shame, that jsb2bin does not do the path rewrite!
         //       as it interprets the jsb2 file it would be the ultimate instance to do so!
-        `java -jar {$this->_jsb2bin} --projectFile {$_modul->jsb2file} --homeDir {$this->getHomeDir()}`;
+        `java -jar "{$this->_jsb2bin}" --projectFile "{$_modul->jsb2file}" --homeDir "{$this->getHomeDir()}"`;
     }
     
     public function adoptPath()

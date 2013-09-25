@@ -163,7 +163,7 @@ function buildLangStats()
 function buildClient()
 {
     echo -n "building javascript clients ... "
-    phing -f $TEMPDIR/tine20/build.xml build
+    $TEMPDIR/tine20/vendor/bin/phing -f $TEMPDIR/tine20/build.xml build
     echo "done"
 }
 
