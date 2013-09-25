@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-17 13:31+0000\n"
+"PO-Revision-Date: 2013-09-17 13:43+0000\n"
 "Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -85,7 +85,7 @@ msgstr "управление настраиваемыми полями"
 
 #: Acl/Rights.php:237
 msgid "add and edit customfields"
-msgstr ""
+msgstr "добавить или изменить настраиваемые поля"
 
 #: Acl/Rights.php:240
 msgid "view access log"
@@ -137,19 +137,19 @@ msgstr "просмотреть личные и общие контейнеры"
 
 #: Acl/Rights.php:264
 msgid "view customfields"
-msgstr ""
+msgstr "просмотр настраиваемых полей"
 
 #: Acl/Rights.php:265
 msgid "view customfields list"
-msgstr ""
+msgstr "лист настраиваемых полей"
 
 #: Acl/Rights.php:268
 msgid "view serverinfo"
-msgstr ""
+msgstr "просмотр информации о сервере"
 
 #: Acl/Rights.php:269
 msgid "view serverinfo list"
-msgstr ""
+msgstr "лист информации о сервере"
 
 #: Config.php:33 Config.php:35
 msgid "Default IMAP user settings"
@@ -752,7 +752,7 @@ msgstr "Пароль должен быть изменен"
 
 #: js/user/EditDialog.js:446
 msgid "Kick Off Time"
-msgstr ""
+msgstr "Время начала"
 
 #: js/user/EditDialog.js:466
 msgid "IMAP Quota (MB)"
@@ -1056,7 +1056,7 @@ msgstr "Время"
 
 #: js/customfield/EditDialog.js:577
 msgid "Boolean"
-msgstr ""
+msgstr "Булево"
 
 #: js/customfield/EditDialog.js:578
 msgid "Search Combo"
@@ -1088,7 +1088,7 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:653
 msgid "Customfield already exists. Please choose another name."
-msgstr ""
+msgstr "Это настраиваемое поле уже существует. Пожалуйста, используйте другое имя."
 
 #: js/customfield/GridPanel.js:128
 msgid "Restart application to apply new customfields?"

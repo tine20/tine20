@@ -3,13 +3,14 @@
 # ihorvat <ivana.horvat@globalnet.hr>, 2012
 # onebeat <onebeat.hr@gmail.com>, 2013
 # onebeat <onebeat.hr@gmail.com>, 2012
+# fvisic <visicfilip@gmail.com>, 2013
 # fvisic <visicfilip@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-09-17 22:15+0000\n"
+"Last-Translator: fvisic <visicfilip@gmail.com>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -663,7 +664,7 @@ msgstr "Korisnički račun"
 
 #: js/Model.js:137
 msgid "Quick Search"
-msgstr ""
+msgstr "Brza pretraga"
 
 #: js/Model.js:162
 msgid "Last Modified Time"

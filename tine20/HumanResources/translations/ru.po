@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-09-17 13:53+0000\n"
+"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +30,7 @@ msgstr ""
 
 #: Acl/Rights.php:93
 msgid "edit private employee data"
-msgstr ""
+msgstr "редактировать личные данные сотрудника"
 
 #: Acl/Rights.php:94
 msgid ""
@@ -110,7 +110,7 @@ msgstr "Статус"
 
 #: Model/FreeTime.php:88
 msgid "First Day"
-msgstr ""
+msgstr "Первый день"
 
 #: Model/FreeTime.php:93 Model/FreeDay.php:35
 msgid "Free Days"
@@ -127,7 +127,7 @@ msgstr ""
 
 #: Model/ExtraFreeTime.php:70 js/ExtraFreeTimeEditDialog.js:124
 msgid "Days"
-msgstr ""
+msgstr "Дни"
 
 #: Model/ExtraFreeTime.php:74 js/ExtraFreeTimeEditDialog.js:132
 msgid "Expiration date"
@@ -155,7 +155,7 @@ msgstr "Банковская информация"
 
 #: Model/Employee.php:51
 msgid "Private Information"
-msgstr ""
+msgstr "Частная информация"
 
 #: Model/Employee.php:63
 msgid "Is employed"
@@ -171,11 +171,11 @@ msgstr "Страна"
 
 #: Model/Employee.php:89
 msgid "Germany"
-msgstr ""
+msgstr "Германия"
 
 #: Model/Employee.php:93 js/EmployeeEditDialog.js:317
 msgid "Locality"
-msgstr ""
+msgstr "Местонахождение"
 
 #: Model/Employee.php:98 js/EmployeeEditDialog.js:320
 msgid "Postalcode"
@@ -231,7 +231,7 @@ msgstr "Дата рождения"
 
 #: Model/Employee.php:155 js/EmployeeEditDialog.js:385
 msgid "Account Holder"
-msgstr ""
+msgstr "Владелец учётной записи"
 
 #: Model/Employee.php:160 js/EmployeeEditDialog.js:388
 msgid "Account Number"
@@ -247,19 +247,19 @@ msgstr "Код"
 
 #: Model/Employee.php:189 js/EmployeeEditDialog.js:359
 msgid "Employment begin"
-msgstr ""
+msgstr "Начало работы"
 
 #: Model/Employee.php:194 js/EmployeeEditDialog.js:365
 msgid "Employment end"
-msgstr ""
+msgstr "Окончание работы"
 
 #: Model/Employee.php:199 js/EmployeeEditDialog.js:131
 msgid "Supervisor"
-msgstr ""
+msgstr "Инспектор"
 
 #: Model/Employee.php:210 js/EmployeeEditDialog.js:139
 msgid "Division"
-msgstr ""
+msgstr "Отделение"
 
 #: Model/Employee.php:220 js/EmployeeEditDialog.js:146
 msgid "Health Insurance"
@@ -346,7 +346,7 @@ msgstr ""
 
 #: Setup/Update/Release7.php:143 Setup/Initialize.php:39
 msgid "All employees"
-msgstr ""
+msgstr "Все сотрудники"
 
 #: Setup/Update/Release7.php:144 Setup/Initialize.php:40
 msgid "All available employees"
@@ -382,7 +382,7 @@ msgstr ""
 
 #: Setup/Initialize.php:52
 msgid "All accounts"
-msgstr ""
+msgstr "Все учётные записи"
 
 #: Setup/Initialize.php:53
 msgid "All available accounts"
@@ -414,11 +414,11 @@ msgstr[2] ""
 
 #: js/EmployeeGridPanel.js:49
 msgid "Export as ODS"
-msgstr ""
+msgstr "Экспорт в ODS"
 
 #: js/EmployeeGridPanel.js:56
 msgid "Export as XLS"
-msgstr ""
+msgstr "Экспортировать в XLS"
 
 #: js/AdminPanel.js:64
 msgid "Cancel"
@@ -430,7 +430,7 @@ msgstr "OK"
 
 #: js/AdminPanel.js:126
 msgid "Please use the following format: MM-DD"
-msgstr ""
+msgstr "Пожалуйста, используйте следующий формат: ММ-ДД"
 
 #: js/AdminPanel.js:219 js/ContractEditDialog.js:222
 msgid "Calendar"
@@ -442,7 +442,7 @@ msgstr "Календари"
 
 #: js/EmployeeEditDialog.js:107
 msgid "Account is disabled or deleted!"
-msgstr ""
+msgstr "Учётная запись удалена или отключена!"
 
 #: js/EmployeeEditDialog.js:235
 msgid "Apply contact data on form"
@@ -462,7 +462,7 @@ msgstr "Улица2"
 
 #: js/EmployeeEditDialog.js:350
 msgid "Internal Information"
-msgstr ""
+msgstr "внутренняя информация"
 
 #: js/EmployeeEditDialog.js:435 js/FreeTimeEditDialog.js:254
 #: js/ExtraFreeTimeEditDialog.js:168
@@ -509,11 +509,11 @@ msgstr "Контакт не найден."
 
 #: js/ExceptionHandler.js:42
 msgid "Please create a contract for this employee!"
-msgstr ""
+msgstr "Пожалуйста, создайте контракт для этого сотрудника!"
 
 #: js/ExceptionHandler.js:48
 msgid "Not allowed!"
-msgstr ""
+msgstr "Не разрешено!"
 
 #: js/FreeTimeGridPanel.js:48
 msgid "Book as vacation"
@@ -554,7 +554,7 @@ msgstr ""
 
 #: js/AccountEditDialog.js:91
 msgid "Summary"
-msgstr ""
+msgstr "Сводка"
 
 #: js/AccountEditDialog.js:110
 msgid "Possible vaction days"
@@ -608,7 +608,7 @@ msgstr[2] "Рабочее время"
 
 #: js/Models.js:59
 msgid "Quick Search"
-msgstr ""
+msgstr "Быстрый поиск"
 
 #: js/CostCenterGridPanel.js:58
 msgid "CostCenter"
