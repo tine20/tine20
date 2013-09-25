@@ -19,7 +19,7 @@ use Sabre\DAVACL;
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
+class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebase_Server_Interface
 {
     /**
      * the request
@@ -53,30 +53,20 @@ class Tinebase_Server_WebDAV implements Tinebase_Server_Interface
         $loginName = $this->_request->getServer('PHP_AUTH_USER');
         $password  = $this->_request->getServer('PHP_AUTH_PW');
         
-        if(empty($loginName)) {
-            // "Basic didhfiefdhfu4fjfjdsa34drsdfterrde..."
-            if (isset($_SERVER["REMOTE_USER"])) {
-                $basicAuthData = base64_decode(substr($_SERVER["REMOTE_USER"], 6));
-            } elseif (isset($_SERVER["REDIRECT_REMOTE_USER"])) {
-                $basicAuthData = base64_decode(substr($_SERVER["REDIRECT_REMOTE_USER"], 6));
-            } elseif (isset($_SERVER["Authorization"])) {
-                $basicAuthData = base64_decode(substr($_SERVER["Authorization"], 6));
-            } elseif (isset($_SERVER["HTTP_AUTHORIZATION"])) {
-                $basicAuthData = base64_decode(substr($_SERVER["HTTP_AUTHORIZATION"], 6));
-            }
-        
-            if (isset($basicAuthData) && !empty($basicAuthData)) {
+        if (empty($loginName)) {
+            $basicAuthData = $this->_getBasicAuthData();
+            if ($basicAuthData) {
                 list($loginName, $password) = explode(":", $basicAuthData);
             }
         }
         
-        if(empty($loginName)) {
+        if (empty($loginName)) {
             header('WWW-Authenticate: Basic realm="WebDav for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;
         }
         
-        if(Tinebase_Controller::getInstance()->login($loginName, $password, $_SERVER['REMOTE_ADDR'], 'TineWebDav') !== true) {
+        if (Tinebase_Controller::getInstance()->login($loginName, $password, $_SERVER['REMOTE_ADDR'], 'TineWebDav') !== true) {
             header('WWW-Authenticate: Basic realm="CardDav for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;

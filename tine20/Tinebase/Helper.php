@@ -223,3 +223,18 @@ function getClone($obj)
 {
     return clone $obj;
 }
+
+/**
+ * returns all elements of an array whose key matches the $pattern
+ * 
+ * @param string $pattern
+ * @param array $array
+ * @return array
+ */
+function searchArrayByRegexpKey($pattern, $array)
+{
+    $keys = array_keys($array);
+    $result = preg_grep($pattern, $keys);
+    
+    return array_intersect_key($array, array_flip($result));
+}

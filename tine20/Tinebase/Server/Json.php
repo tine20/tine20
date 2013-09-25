@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Server_Json implements Tinebase_Server_Interface
+class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_Server_Interface
 {
     /**
      * handled request methods

@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_HelperTests::main();
-}
 
 /**
  * Test class for Tinebase_Helper
@@ -77,5 +73,27 @@ class Tinebase_HelperTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1024, convertToBytes('1K'));
         $this->assertEquals(1024*1024, convertToBytes('1M'));
         
+    }
+
+    /**
+     * testSearchArrayByRegexpKey
+     * 
+     * @see 0008782: Endless loop login windows when calling Active Sync Page
+     */
+    public function testSearchArrayByRegexpKey()
+    {
+        $server = array(
+            'REMOTE_USER' => '1',
+            'REDIRECT_REMOTE_USER' => '2',
+            'REDIRECT_REDIRECT_REMOTE_USER' => '3',
+            'OTHER' => '4',
+        );
+        
+        $remoteUserValues = searchArrayByRegexpKey('/REMOTE_USER$/', $server);
+        
+        $this->assertTrue(! empty($remoteUserValues));
+        $this->assertEquals(3, count($remoteUserValues));
+        $firstServerValue = array_shift($remoteUserValues);
+        $this->assertEquals('1', $firstServerValue);
     }
 }

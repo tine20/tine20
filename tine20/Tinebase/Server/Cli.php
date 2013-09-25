@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Server_Cli implements Tinebase_Server_Interface
+class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_Server_Interface
 {
     protected static $_anonymousMethods = array(
         'Tinebase.triggerAsyncEvents',

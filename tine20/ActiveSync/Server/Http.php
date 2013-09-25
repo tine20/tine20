@@ -15,7 +15,7 @@
  * @package     ActiveSync
  * @subpackage  Server
  */
-class ActiveSync_Server_Http implements Tinebase_Server_Interface
+class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebase_Server_Interface
 {
     /**
      * the request
@@ -70,30 +70,20 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         $loginName = $this->_request->getServer('PHP_AUTH_USER');
         $password  = $this->_request->getServer('PHP_AUTH_PW');
         
-        if(empty($loginName)) {
-            // "Basic didhfiefdhfu4fjfjdsa34drsdfterrde..."
-            if (isset($_SERVER["REMOTE_USER"])) {
-                $basicAuthData = base64_decode(substr($_SERVER["REMOTE_USER"], 6));
-            } elseif (isset($_SERVER["REDIRECT_REMOTE_USER"])) {
-                $basicAuthData = base64_decode(substr($_SERVER["REDIRECT_REMOTE_USER"], 6));
-            } elseif (isset($_SERVER["Authorization"])) {
-                $basicAuthData = base64_decode(substr($_SERVER["Authorization"], 6));
-            } elseif (isset($_SERVER["HTTP_AUTHORIZATION"])) {
-                $basicAuthData = base64_decode(substr($_SERVER["HTTP_AUTHORIZATION"], 6));
-            }
-
-            if (isset($basicAuthData) && !empty($basicAuthData)) {
+        if (empty($loginName)) {
+            $basicAuthData = $this->_getBasicAuthData();
+            if ($basicAuthData) {
                 list($loginName, $password) = explode(":", $basicAuthData);
             }
         }
         
-        if(empty($loginName)) {
+        if (empty($loginName)) {
             header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;
         }
         
-        if($this->_authenticate($loginName, $password, $this->_request->getClientIp()) !== true) {
+        if ($this->_authenticate($loginName, $password, $this->_request->getClientIp()) !== true) {
             header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;
