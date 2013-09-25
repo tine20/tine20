@@ -170,6 +170,31 @@
     </target>
     
     <!-- ============================================  -->
+    <!-- Target: tx-pull                               -->
+    <!-- ============================================  -->
+    <target name="tx-pull">
+        <echo msg="pull translations from transifex" />
+        <exec command="tx pull -a -f --skip" passthru="true" />
+        <echo msg="commit updated strings now:" />
+        <echo msg="git add */translations" />
+        <echo msg="git commit -m '#7086: update translation files'" />
+        <echo msg="git push gerrit HEAD:refs/heads/master" />
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: tx-push                               -->
+    <!-- ============================================  -->
+    <target name="tx-push">
+        <echo msg="updating templates" />
+        <exec command="./langHelper.php --pot" passthru="true" />
+        <echo msg="push translations to transifex" />
+        <exec command="tx push -s" passthru="true" />
+        <echo msg="commit updated strings now:" />
+        <echo msg="git commit -a -m 'update lang templates'" />
+        <echo msg="git push gerrit HEAD:refs/heads/master" />
+    </target>
+    
+    <!-- ============================================  -->
     <!-- Task: init                                    -->
     <!-- ============================================  -->
     <adhoc-task name="init"><![CDATA[
