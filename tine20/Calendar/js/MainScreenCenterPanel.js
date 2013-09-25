@@ -436,6 +436,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var event = view.getTargetEvent(e);
         var datetime = view.getTargetDateTime(e);
         
+        if (event && event.id.match(/new-ext-gen/) ) {
+            // new event, no ctx menu possible atm
+            // @see 0008948: deactivate context menu on new events
+            return;
+        }
+        
         var addAction, responseAction, copyAction;
         if (datetime || event) {
             var dtStart = datetime || event.get('dtstart').clone();
