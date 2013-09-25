@@ -452,8 +452,8 @@ class Setup_Frontend_Cli
             $this->_checkAdminRole($user);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
-                die('It is not possible to create a new user with LDAP user backend here.');
+            if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::SQL) {
+                die('It is not possible to create a new user with other user backend than SQL here.');
             }
             
             // create new admin user that expires tomorrow

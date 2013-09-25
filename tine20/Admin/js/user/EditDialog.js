@@ -44,7 +44,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     initComponent: function () {
         var accountBackend = Tine.Tinebase.registry.get('accountBackend');
-        this.ldapBackend = (accountBackend === 'Ldap');
+        this.ldapBackend = (accountBackend === 'Ldap' || accountBackend === 'ActiveDirectory');
 
         Tine.Admin.UserEditDialog.superclass.initComponent.call(this);
     },

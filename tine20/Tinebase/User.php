@@ -22,9 +22,10 @@ class Tinebase_User
      * 
      * @var string
      */
-    const SQL = 'Sql';
-    const LDAP = 'Ldap';
-    const TYPO3 = 'Typo3';
+    const ACTIVEDIRECTORY = 'ActiveDirectory';
+    const LDAP   = 'Ldap';
+    const SQL    = 'Sql';
+    const TYPO3  = 'Typo3';
     
     /**
      * user status constants
@@ -99,7 +100,7 @@ class Tinebase_User
             self::DEFAULT_ADMIN_GROUP_NAME_KEY => Tinebase_Group::DEFAULT_ADMIN_GROUP,
         ),
         self::LDAP => array(
-            'host' => '',
+            'host' => 'localhost',
             'username' => '',
             'password' => '',
             'bindRequiresDn' => true,
@@ -110,7 +111,7 @@ class Tinebase_User
             'groupsDn' => '',
             'groupFilter' => 'objectclass=posixgroup',
             'groupSearchScope' => Zend_Ldap::SEARCH_SCOPE_SUB,
-            'pwEncType' => 'CRYPT',
+            'pwEncType' => 'SSHA',
             'minUserId' => '10000',
             'maxUserId' => '29999',
             'minGroupId' => '11000',
@@ -119,6 +120,28 @@ class Tinebase_User
             'userUUIDAttribute' => 'entryUUID',
             self::DEFAULT_USER_GROUP_NAME_KEY  => Tinebase_Group::DEFAULT_USER_GROUP,
             self::DEFAULT_ADMIN_GROUP_NAME_KEY => Tinebase_Group::DEFAULT_ADMIN_GROUP,
+            'readonly' => false,
+        ),
+        self::ACTIVEDIRECTORY => array(
+            'host' => 'localhost',
+            'username' => '',
+            'password' => '',
+            'bindRequiresDn' => true,
+            'useRfc2307' => false,
+            'userDn' => '',
+            'userFilter' => 'objectclass=user',
+            'userSearchScope' => Zend_Ldap::SEARCH_SCOPE_SUB,
+            'groupsDn' => '',
+            'groupFilter' => 'objectclass=group',
+            'groupSearchScope' => Zend_Ldap::SEARCH_SCOPE_SUB,
+            'minUserId' => '10000',
+            'maxUserId' => '29999',
+            'minGroupId' => '11000',
+            'maxGroupId' => '11099',
+            'groupUUIDAttribute' => 'objectGUID',
+            'userUUIDAttribute' => 'objectGUID',
+            self::DEFAULT_USER_GROUP_NAME_KEY  => 'Domain Users',
+            self::DEFAULT_ADMIN_GROUP_NAME_KEY => 'Domain Admins',
             'readonly' => false,
          )
     );
@@ -178,6 +201,11 @@ class Tinebase_User
         }
         
         switch ($backendType) {
+            case self::ACTIVEDIRECTORY:
+                $result  = new Tinebase_User_ActiveDirectory($options);
+                
+                break;
+                
             case self::LDAP:
                 // manage samba sam?
                 if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {

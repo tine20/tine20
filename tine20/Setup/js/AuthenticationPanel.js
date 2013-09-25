@@ -123,7 +123,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
     onChangeAccountsStorage: function () {
         var AccountsStorage = this.accountsStorageCombo.getValue();
 
-        if (AccountsStorage === 'Ldap' && AccountsStorage !== this.originalAccountsStorage) {
+        if ((AccountsStorage === 'Ldap' || AccountsStorage === 'ActiveDirectory') && AccountsStorage !== this.originalAccountsStorage) {
             Ext.Msg.confirm(this.app.i18n._('Delete all existing users and groups'), this.app.i18n._('Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?'), function (confirmbtn, value) {
                 if (confirmbtn === 'yes') {
                     this.doOnChangeAccountsStorage(AccountsStorage);
@@ -215,7 +215,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
         this.accountsStorageCombo = new Ext.form.ComboBox(Ext.applyIf({
             name: 'accounts_backend',
             fieldLabel: this.app.i18n._('Backend'),
-            store: [['Sql', 'Sql'], ['Ldap', 'Ldap']],
+            store: [['Sql', 'Sql'], ['Ldap', 'Ldap'], ['ActiveDirectory', 'ActiveDirectory']],
             value: 'Sql',
             width: 300,
             listeners: {
@@ -452,103 +452,11 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                             fieldLabel: this.app.i18n._('Default admin group name')
                             //allowEmpty: false
                         }]
-                    }, {
-                        id: this.accountsStorageIdPrefix + 'Ldap',
-                        layout: 'form',
-                        autoHeight: 'auto',
-                        defaults: {
-                            width: 300,
-                            xtype: 'textfield',
-                            tabIndex: this.getTabIndex
-                        },
-                        items: [{
-                            name: 'accounts_Ldap_host',
-                            fieldLabel: this.app.i18n._('Host')
-                        }, {
-                            name: 'accounts_Ldap_username',
-                            fieldLabel: this.app.i18n._('Login name')
-                        }, {
-                            name: 'accounts_Ldap_password',
-                            fieldLabel: this.app.i18n._('Password'),
-                            inputType: 'password'
-                        }, 
-                        Ext.applyIf({
-                            name: 'accounts_Ldap_bindRequiresDn',
-                            fieldLabel: this.app.i18n._('Bind requires DN'),
-                            store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
-                            value: '1'
-                        }, commonComboConfig), 
-                        {
-                            name: 'accounts_Ldap_userDn',
-                            fieldLabel: this.app.i18n._('User DN')
-                        }, {
-                            name: 'accounts_Ldap_userFilter',
-                            fieldLabel: this.app.i18n._('User Filter')
-                        }, 
-                        Ext.applyIf({
-                            name: 'accounts_Ldap_userSearchScope',
-                            fieldLabel: this.app.i18n._('User Search Scope'),
-                            store: [['1', 'SEARCH_SCOPE_SUB'], ['2', 'SEARCH_SCOPE_ONE']],
-                            value: '1'
-                        }, commonComboConfig), 
-                        {
-                            name: 'accounts_Ldap_groupsDn',
-                            fieldLabel: this.app.i18n._('Groups DN')
-                        }, {
-                            name: 'accounts_Ldap_groupFilter',
-                            fieldLabel: this.app.i18n._('Group Filter')
-                        }, 
-                        Ext.applyIf({
-                            name: 'accounts_Ldap_groupSearchScope',
-                            fieldLabel: this.app.i18n._('Group Search Scope'),
-                            store: [['1', 'SEARCH_SCOPE_SUB'], ['2', 'SEARCH_SCOPE_ONE']],
-                            value: '1'
-                        }, commonComboConfig), 
-                        Ext.applyIf({
-                            name: 'accounts_Ldap_pwEncType',
-                            fieldLabel: this.app.i18n._('Password encoding'),
-                            store: [['CRYPT', 'CRYPT'], ['SHA', 'SHA'], ['MD5', 'MD5']],
-                            value: 'CRYPT'
-                        }, commonComboConfig), 
-                        Ext.applyIf({
-                            name: 'accounts_Ldap_useRfc2307bis',
-                            fieldLabel: this.app.i18n._('Use Rfc 2307 bis'),
-                            store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
-                            value: '0'
-                        }, commonComboConfig), 
-                        {
-                            name: 'accounts_Ldap_minUserId',
-                            fieldLabel: this.app.i18n._('Min User Id')
-                        }, {
-                            name: 'accounts_Ldap_maxUserId',
-                            fieldLabel: this.app.i18n._('Max User Id')
-                        }, {
-                            name: 'accounts_Ldap_minGroupId',
-                            fieldLabel: this.app.i18n._('Min Group Id')
-                        }, {
-                            name: 'accounts_Ldap_maxGroupId',
-                            fieldLabel: this.app.i18n._('Max Group Id')
-                        }, {
-                            name: 'accounts_Ldap_groupUUIDAttribute',
-                            fieldLabel: this.app.i18n._('Group UUID Attribute name')
-                        }, {
-                            name: 'accounts_Ldap_userUUIDAttribute',
-                            fieldLabel: this.app.i18n._('User UUID Attribute name')
-                        }, {
-                            name: 'accounts_Ldap_defaultUserGroupName',
-                            fieldLabel: this.app.i18n._('Default user group name')
-                        }, {
-                            name: 'accounts_Ldap_defaultAdminGroupName',
-                            fieldLabel: this.app.i18n._('Default admin group name')
-                        },
-                        Ext.applyIf({
-                            name: 'accounts_Ldap_readonly',
-                            fieldLabel: this.app.i18n._('Readonly access'),
-                            store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
-                            value: '0'
-                        }, commonComboConfig)]
                     }]
-            } ]
+                },
+                this.getDirectoryOptions('Ldap', commonComboConfig),
+                this.getDirectoryOptions('ActiveDirectory', commonComboConfig)
+            ]
           }, {
             xtype: 'fieldset',
             collapsible: false,
@@ -657,6 +565,112 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 value: '0'
             }, commonComboConfig)]
         }];
+    },
+    
+    /**
+     * getDirectoryOptions
+     * 
+     * @param {String} type LDAP or ActiveDirectory
+     * @param {Object} commonComboConfig
+     */
+    getDirectoryOptions: function(type, commonComboConfig)
+    {
+        return {
+            id: this.accountsStorageIdPrefix + type,
+            layout: 'form',
+            autoHeight: 'auto',
+            defaults: {
+                width: 300,
+                xtype: 'textfield',
+                tabIndex: this.getTabIndex
+            },
+            items: [{
+                name: 'accounts_' + type + '_host',
+                fieldLabel: this.app.i18n._('Host')
+            }, {
+                name: 'accounts_' + type + '_username',
+                fieldLabel: this.app.i18n._('Login name')
+            }, {
+                name: 'accounts_' + type + '_password',
+                fieldLabel: this.app.i18n._('Password'),
+                inputType: 'password'
+            }, 
+            Ext.applyIf({
+                name: 'accounts_' + type + '_bindRequiresDn',
+                fieldLabel: this.app.i18n._('Bind requires DN'),
+                store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
+                value: '1'
+            }, commonComboConfig), 
+            {
+                name: 'accounts_' + type + '_userDn',
+                fieldLabel: this.app.i18n._('User DN')
+            }, {
+                name: 'accounts_' + type + '_userFilter',
+                fieldLabel: this.app.i18n._('User Filter')
+            }, 
+            Ext.applyIf({
+                name: 'accounts_' + type + '_userSearchScope',
+                fieldLabel: this.app.i18n._('User Search Scope'),
+                store: [['1', 'SEARCH_SCOPE_SUB'], ['2', 'SEARCH_SCOPE_ONE']],
+                value: '1'
+            }, commonComboConfig), 
+            {
+                name: 'accounts_' + type + '_groupsDn',
+                fieldLabel: this.app.i18n._('Groups DN')
+            }, {
+                name: 'accounts_' + type + '_groupFilter',
+                fieldLabel: this.app.i18n._('Group Filter')
+            }, 
+            Ext.applyIf({
+                name: 'accounts_' + type + '_groupSearchScope',
+                fieldLabel: this.app.i18n._('Group Search Scope'),
+                store: [['1', 'SEARCH_SCOPE_SUB'], ['2', 'SEARCH_SCOPE_ONE']],
+                value: '1'
+            }, commonComboConfig), 
+            Ext.applyIf({
+                name: 'accounts_' + type + '_pwEncType',
+                fieldLabel: this.app.i18n._('Password encoding'),
+                store: [['SSHA', 'SSHA'], ['SHA', 'SHA'], ['MD5', 'MD5 (unsecure)'], ['CRYPT', 'CRYPT (very unsecure)']],
+                value: 'SSHA'
+            }, commonComboConfig), 
+            Ext.applyIf({
+                name: 'accounts_' + type + '_useRfc2307bis',
+                fieldLabel: (type === 'Ldap') ? this.app.i18n._('Use Rfc 2307 bis') : this.app.i18n._('Maintain RFC 2307 attributes'),
+                store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
+                value: '0'
+            }, commonComboConfig), 
+            {
+                name: 'accounts_' + type + '_minUserId',
+                fieldLabel: this.app.i18n._('Min User Id')
+            }, {
+                name: 'accounts_' + type + '_maxUserId',
+                fieldLabel: this.app.i18n._('Max User Id')
+            }, {
+                name: 'accounts_' + type + '_minGroupId',
+                fieldLabel: this.app.i18n._('Min Group Id')
+            }, {
+                name: 'accounts_' + type + '_maxGroupId',
+                fieldLabel: this.app.i18n._('Max Group Id')
+            }, {
+                name: 'accounts_' + type + '_groupUUIDAttribute',
+                fieldLabel: this.app.i18n._('Group UUID Attribute name')
+            }, {
+                name: 'accounts_' + type + '_userUUIDAttribute',
+                fieldLabel: this.app.i18n._('User UUID Attribute name')
+            }, {
+                name: 'accounts_' + type + '_defaultUserGroupName',
+                fieldLabel: this.app.i18n._('Default user group name')
+            }, {
+                name: 'accounts_' + type + '_defaultAdminGroupName',
+                fieldLabel: this.app.i18n._('Default admin group name')
+            },
+            Ext.applyIf({
+                name: 'accounts_' + type + '_readonly',
+                fieldLabel: this.app.i18n._('Readonly access'),
+                store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
+                value: '0'
+            }, commonComboConfig)]
+        };
     },
     
     /**

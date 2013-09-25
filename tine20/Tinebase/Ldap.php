@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Ldap
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -184,5 +184,93 @@ class Tinebase_Ldap extends Zend_Ldap
             }
         }
         return $this;
-    }    
+    }
+    
+    /**
+     * return first namingContext from LDAP root DSE
+     * 
+     * @return string
+     */
+    public function getFirstNamingContext()
+    {
+        return array_value(0, $this->getRootDse()->getNamingContexts());
+    }
+    
+    /**
+     * convert binary objectGUID to to plain ASCII string
+     * example guid: c8ab4322-3a4b-4af9-a100-9ed746049c91
+     * 
+     * @param  string  $binaryGuid
+     * @return string
+     */
+    public static function decodeGuid($binaryGuid)
+    {
+        $hexGuid = unpack("H*hex", $binaryGuid); 
+        $hex = $hexGuid["hex"];
+        
+        $hex1 = substr($hex, -26, 2) . substr($hex, -28, 2) . substr($hex, -30, 2) . substr($hex, -32, 2);
+        $hex2 = substr($hex, -22, 2) . substr($hex, -24, 2);
+        $hex3 = substr($hex, -18, 2) . substr($hex, -20, 2);
+        $hex4 = substr($hex, -16, 4);
+        $hex5 = substr($hex, -12, 12);
+        
+        $guid = $hex1 . "-" . $hex2 . "-" . $hex3 . "-" . $hex4 . "-" . $hex5;
+        
+        return $guid;
+    }
+    
+    /**
+     * convert plain ASCII objectGUID to binary string
+     * example guid: c8ab4322-3a4b-4af9-a100-9ed746049c91
+     * 
+     * @param  string $guid
+     * @return string
+     */
+    public static function encodeGuid($guid)
+    {
+        $hex  = substr($guid, -30, 2) . substr($guid, -32, 2) . substr($guid, -34, 2) . substr($guid, -36, 2);
+        $hex .= substr($guid, -25, 2) . substr($guid, -27, 2);
+        $hex .= substr($guid, -20, 2) . substr($guid, -22, 2);
+        $hex .= substr($guid, -17, 4);
+        $hex .= substr($guid, -12, 12);
+        
+        $binaryGuid = pack('H*', $hex);
+        
+        return $binaryGuid;
+    }
+    
+    /**
+     * decode ActiveDirectory SID
+     * 
+     * @param  string  $binarySid  the binary encoded SID
+     * @return string
+     */
+    public static function decodeSid($binarySid) 
+    {
+        if (strpos($binarySid, '-') !== false) {
+            return $binarySid;
+        }
+        
+        $sid = false; 
+        
+        $unpacked = unpack("crev/cdashes/nc/Nd/V*e", $binarySid); 
+        
+        if ($unpacked) { 
+            $n232 = pow(2,32); 
+            unset($unpacked["dashes"]); // unused 
+            $unpacked["c"] = $n232 * $unpacked["c"] + $unpacked["d"]; 
+            unset($unpacked["d"]); 
+            
+            $sid = "S";
+            
+            foreach ($unpacked as $v) { 
+                if ($v < 0) {
+                    $v = $n232 + $v; 
+                }
+                $sid .= '-' . $v; 
+            } 
+        }
+         
+        return $sid; 
+    }
 }

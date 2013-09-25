@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -118,6 +118,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if (array_key_exists('readonly', $_options)) {
             $this->_isReadOnlyBackend = (bool)$_options['readonly'];
         }
+        if (array_key_exists('ldap', $_options)) {
+            $this->_ldap = $_options['ldap'];
+        }
         
         $this->_options = $_options;
 
@@ -127,14 +130,21 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $this->_userBaseFilter     = $this->_options['userFilter'];
         $this->_userSearchScope    = $this->_options['userSearchScope'];
         $this->_groupBaseFilter    = $this->_options['groupFilter'];
-                
-        $this->_ldap = new Tinebase_Ldap($_options);
-        $this->_ldap->bind();
         
-        $this->_sql = new Tinebase_Group_Sql();
+        if (! $this->_ldap instanceof Tinebase_Ldap) {
+            $this->_ldap = new Tinebase_Ldap($this->_options);
+            try {
+                $this->_ldap->bind();
+            } catch (Zend_Ldap_Exception $zle) {
+                // @todo move this to Tinebase_Ldap?
+                throw new Tinebase_Exception_Backend_Ldap('Could not bind to LDAP: ' . $zle->getMessage());
+            }
+        }
         
-        foreach ($_options['plugins'] as $className) {
-            $this->_plugins[$className] = new $className($this->_ldap, $this->_options);
+        if (isset($_options['plugins']) && is_array($_options['plugins'])) {
+            foreach ($_options['plugins'] as $className) {
+                $this->_plugins[$className] = new $className($this->_ldap, $this->_options);
+            }
         }
     }
         
@@ -170,7 +180,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $group = $groups->getFirst();
         
         $result = new Tinebase_Model_Group(array(
-            'id'            => $group[$this->_groupUUIDAttribute][0],
+            'id'            => $this->_decodeGroupId($group[$this->_groupUUIDAttribute][0]),
             'name'          => $group['cn'][0],
             'description'   => isset($group['description'][0]) ? $group['description'][0] : '' 
         ), TRUE);
@@ -206,7 +216,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         foreach ($groups as $group) {
             $groupObject = new Tinebase_Model_Group(array(
-                'id'            => $group[$this->_groupUUIDAttribute][0],
+                'id'            => $this->_decodeGroupId($group[$this->_groupUUIDAttribute][0]),
                 'name'          => $group['cn'][0],
                 'description'   => isset($group['description'][0]) ? $group['description'][0] : null
             ), TRUE);
@@ -487,7 +497,6 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zle->getTraceAsString());
         }
     }
-        
     
     /**
      * create a new group in sync backend
@@ -507,7 +516,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             'top',
             'posixGroup'
         );
-                
+        
         $gidNumber = $this->_generateGidNumber();
         $ldapData = array(
             'objectclass' => $objectClass,
@@ -533,7 +542,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         $groupId = $this->_ldap->getEntry($dn, array($this->_groupUUIDAttribute));
         
-        $groupId = $groupId[$this->_groupUUIDAttribute][0];
+        $groupId = $this->_decodeGroupId($groupId[$this->_groupUUIDAttribute][0]);
         
         $group = $this->getGroupByIdFromSyncBackend($groupId);
                 
@@ -566,8 +575,11 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             $plugin->inspectUpdateGroup($_group, $ldapData);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
         $this->_ldap->update($dn, $ldapData);
         
         $group = $this->getGroupByIdFromSyncBackend($_group);
@@ -729,6 +741,17 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         }
 
         return $result;
+    }
+    
+    /**
+     * convert binary id to plain text id
+     * 
+     * @param  string  $groupId
+     * @return string
+     */
+    protected function _decodeGroupId($groupId)
+    {
+        return $groupId;
     }
     
     /**

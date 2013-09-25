@@ -17,11 +17,16 @@
  */
 class Tinebase_Group
 {
-    const SQL = 'Sql';
+    /**
+     * backend constants
+     * 
+     * @var string
+     */
+    const ACTIVEDIRECTORY = 'ActiveDirectory';
+    const LDAP            = 'Ldap';
+    const SQL             = 'Sql';
+    const TYPO3           = 'Typo3';
     
-    const LDAP = 'Ldap';
-    
-    const TYPO3 = 'Typo3';
     
     /**
      * default admin group name
@@ -64,7 +69,6 @@ class Tinebase_Group
      */
     public static function getInstance() 
     {
-        $backendType = Tinebase_User::getConfiguredBackend();
         if (self::$_instance === NULL) {
             $backendType = Tinebase_User::getConfiguredBackend();
             
@@ -86,6 +90,13 @@ class Tinebase_Group
     public static function factory($_backendType) 
     {
         switch($_backendType) {
+            case self::ACTIVEDIRECTORY:
+                $options = Tinebase_User::getBackendConfiguration();
+                
+                $result = new Tinebase_Group_ActiveDirectory($options);
+                
+                break;
+                
             case self::LDAP:
                 $options = Tinebase_User::getBackendConfiguration();
                 

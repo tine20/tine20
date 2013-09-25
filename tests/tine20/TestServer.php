@@ -5,7 +5,7 @@
  * @package     tests
  * @subpackage  test root
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  */
@@ -50,6 +50,8 @@ class TestServer
      */
     public function initFramework()
     {
+        $this->setWhiteAndBlacklists();
+        
         // get config
         $configData = @include('phpunitconfig.inc.php');
         if ($configData === false) {
@@ -76,6 +78,30 @@ class TestServer
         
         // this is needed for session handling in unittests (deactivate Zend_Session::writeClose and others)
         Zend_Session::$_unitTestEnabled = TRUE;
+    }
+    
+    /**
+     * Set white / black lists
+     */
+    public function setWhiteAndBlacklists()
+    {
+        if ($this->isPhpunitVersionGreaterOrEquals("3.6.0")) {
+            $filter = new PHP_CodeCoverage_Filter();
+            $filter->addDirectoryToBlacklist(PATH_TO_TEST_DIR);
+            $filter->addDirectoryToBlacklist(PATH_TO_TINE_LIBRARY);
+            $filter->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Setup');
+            $filter->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Zend');
+        } else if ($this->isPhpunitVersionGreaterOrEquals("3.5.0")) {
+            PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TEST_DIR);
+            PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TINE_LIBRARY);
+            PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Setup');
+            PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Zend');
+        } else {
+            PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TEST_DIR);
+            PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TINE_LIBRARY);
+            PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Setup');
+            PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Zend');
+        }
     }
 
     /**
@@ -204,5 +230,16 @@ class TestServer
         file_put_contents($tempPath, $contents);
         
         return $tempPath;
+    }
+
+    /**
+     * isPhpunitVersionGreaterOrEquals
+     * 
+     * @param String $version for example '3.6.0'
+     */
+    public function isPhpunitVersionGreaterOrEquals($version)
+    {
+        $phpUnitVersion = explode(' ',PHPUnit_Runner_Version::getVersionString());
+        return (version_compare($phpUnitVersion[1], $version) >= 0);
     }
 }

@@ -72,7 +72,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         'shadowAccount',
         'inetOrgPerson',
     );
-
+    
     /**
      * the base dn to work on (defaults to to userDn, but can also be machineDn)
      *
@@ -101,17 +101,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     protected $_userSearchScope = Zend_Ldap::SEARCH_SCOPE_SUB;
 
-    /**
-     * the query filter for the ldap search (for example uid=%s)
-     *
-     * @var string
-     */
-    protected $_queryFilter = '|(uid=%s)(cn=%s)(sn=%s)(givenName=%s)';
-    
     protected $_ldapPlugins = array();
     
     protected $_isReadOnlyBackend     = false;
-
+    
     /**
      * the constructor
      *
@@ -147,9 +140,15 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         if (array_key_exists('readonly', $_options)) {
             $this->_isReadOnlyBackend = (bool)$_options['readonly'];
         }
+        if (array_key_exists('ldap', $_options)) {
+            $this->_ldap = $_options['ldap'];
+        }
         
         $this->_options = $_options;
-
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Registering " . print_r($this->_options, true));
+        
         $this->_userUUIDAttribute  = strtolower($this->_options['userUUIDAttribute']);
         $this->_groupUUIDAttribute = strtolower($this->_options['groupUUIDAttribute']);
         $this->_baseDn             = $this->_options['baseDn'];
@@ -159,12 +158,14 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         $this->_rowNameMapping['accountId'] = $this->_userUUIDAttribute;
         
-        try {
+        if (! $this->_ldap instanceof Tinebase_Ldap) {
             $this->_ldap = new Tinebase_Ldap($this->_options);
-            $this->_ldap->bind();
-        } catch (Zend_Ldap_Exception $zle) {
-            // @todo move this to Tinebase_Ldap?
-            throw new Tinebase_Exception_Backend_Ldap('Could not bind to LDAP: ' . $zle->getMessage());
+            try {
+                $this->_ldap->bind();
+            } catch (Zend_Ldap_Exception $zle) {
+                // @todo move this to Tinebase_Ldap?
+                throw new Tinebase_Exception_Backend_Ldap('Could not bind to LDAP: ' . $zle->getMessage());
+            }
         }
         
         foreach ($this->_plugins as $plugin) {
@@ -181,7 +182,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function registerLdapPlugin(Tinebase_User_Plugin_LdapInterface $plugin)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Registering " . get_class($plugin) . ' LDAP plugin.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Registering " . get_class($plugin) . ' LDAP plugin.');
         
         $plugin->setLdap($this->_ldap);
         $this->_ldapPlugins[] = $plugin;
@@ -217,7 +219,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             array_values($this->_rowNameMapping),
             $_sort !== null ? $this->_rowNameMapping[$_sort] : null
         );
-
+        
         $result = new Tinebase_Record_RecordSet($_accountClass);
 
         // nothing to be done anymore
@@ -227,7 +229,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         foreach ($accounts as $account) {
             $accountObject = $this->_ldap2User($account, $_accountClass);
-
+            
             if ($accountObject) {
                 $result->addRecord($accountObject);
             }
@@ -399,13 +401,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         if ($_status == 'disabled') {
             $ldapData = array(
-            'shadowMax'      => 1,
-            'shadowInactive' => 1
+                'shadowMax'      => 1,
+                'shadowInactive' => 1
             );
         } else {
             $ldapData = array(
-            'shadowMax'      => 999999,
-            'shadowInactive' => array()
+                'shadowMax'      => 999999,
+                'shadowInactive' => array()
             );
         }
 
@@ -534,7 +536,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         $dn = $this->_generateDn($_user);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  ldapData: ' . print_r($ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  ldapData: ' . print_r($ldapData, true));
 
         $this->_ldap->add($dn, $ldapData);
 
@@ -614,9 +617,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
         $attributes[] = 'objectclass';
         $attributes[] = 'uidnumber';
+        $attributes[] = 'useraccountcontrol';
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' filter ' . $filter);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' requested attributes ' . print_r($attributes, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filter ' . $filter);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' requested attributes ' . print_r($attributes, true));
         
         $accounts = $this->_ldap->search(
             $filter,
@@ -629,7 +635,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             throw new Tinebase_Exception_NotFound('User with ' . $_property . ' =  ' . $value . ' not found.');
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' current ldap values ' . print_r($accounts->getFirst(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' current ldap values ' . print_r($accounts->getFirst(), true));
         
         return $accounts->getFirst();
     }
@@ -810,6 +817,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                         }
                         break;
 
+                    case 'accountId':
+                        $accountArray[$keyMapping] = $this->_decodeAccountId($value[0]);
+                        
+                        break;
+                        
                     default:
                         $accountArray[$keyMapping] = $value[0];
                         break;
@@ -817,6 +829,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             }
         }
 
+        if (empty($accountArray['accountLastName']) && !empty($accountArray['accountFullName'])) {
+            $accountArray['accountLastName'] = $accountArray['accountFullName'];
+        }
         if ($errors) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not instantiate account object for ldap user ' . print_r($_userData, 1));
             $accountObject = null;
@@ -825,6 +840,17 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
 
         return $accountObject;
+    }
+    
+    /**
+     * helper function to be overwriten in subclasses
+     * 
+     * @param  string  $accountId
+     * @return string
+     */
+    protected function _decodeAccountId($accountId)
+    {
+        return $accountId;
     }
 
     /**
@@ -981,5 +1007,5 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         )->getFirst();
 
         return $groupId['uidnumber'][0];
-    }    
+    }
 }
