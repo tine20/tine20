@@ -246,6 +246,16 @@ class Tinebase_Core
     }
     
     /**
+     * returns TRUE if request is HTTPS
+     * 
+     * @return boolean
+     */
+    public static function isHttpsRequest()
+    {
+        return (! empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF');
+    }
+    
+    /**
      * enable profiling
      * - supports xhprof
      */
@@ -813,7 +823,7 @@ class Tinebase_Core
             ));
         }
         
-        if (!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
+        if (self::isHttpsRequest()) {
             Zend_Session::setOptions(array(
                 'cookie_secure'     => true
             ));

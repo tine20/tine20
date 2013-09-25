@@ -225,7 +225,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' User agent validation disabled.');
         }
         
-        if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONIPVALIDATION, FALSE)) {
+        // we only need to activate ip session validation for non-encrypted connections
+        $ipSessionValidationDefault = Tinebase_Core::isHttpsRequest() ? FALSE : TRUE;
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONIPVALIDATION, $ipSessionValidationDefault)) {
             Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
