@@ -194,7 +194,7 @@ class Tinebase_Core
             $server = new Voipmanager_Server_Asterisk();
             
         /**************************** ActiveSync API ****************************
-         * RewriteRule ^/Microsoft-Server-ActiveSync /index.php?frontend=activesync [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+         * RewriteRule ^Microsoft-Server-ActiveSync index.php?frontend=activesync [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
          */
         } elseif((isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') ||
                  (isset($_GET['frontend']) && $_GET['frontend'] == 'activesync')) {
