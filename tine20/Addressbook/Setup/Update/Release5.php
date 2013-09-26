@@ -169,7 +169,7 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
         foreach ($salutationDatas as $salutationData) {
             $salutationMap[$salutationData['id']] = $salutationData['name'];
             $this->_db->update(SQL_TABLE_PREFIX . 'addressbook', array(
-                'salutation_id' => strtoupper($salutationData['name']),
+                'salutation_id' => substr(strtoupper($salutationData['name']), 0, 40),
             ), "`salutation_id` = '{$salutationData['id']}'");
         }
         
