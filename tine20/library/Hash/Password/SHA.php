@@ -57,7 +57,7 @@ class Hash_Password_SHA
         }
         
         return $hash;
-    }        
+    }
 
     /**
      * validate SHA hash

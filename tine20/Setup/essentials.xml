@@ -15,5 +15,6 @@
         <extension name="iconv" />
         <extension name="zip" />
         <extension name="xml" />
+        <extension name="hash" />
     </extensions>
 </essential>
