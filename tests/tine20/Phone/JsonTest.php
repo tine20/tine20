@@ -4,7 +4,7 @@
  * 
  * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -219,7 +219,6 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to get all calls
-     *
      */
     public function testGetCalls()
     {
@@ -229,7 +228,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         
         // search query -> '050'
         $result = $this->_json->searchCalls($this->_objects['filter2'], $this->_objects['paging']);
-        $this->assertEquals(1, $result['totalcount'], 'query filter not working');
+        $this->assertGreaterThanOrEqual(1, $result['totalcount'], 'query filter not working');
         
         $call2 = $result['results'][0];
         
