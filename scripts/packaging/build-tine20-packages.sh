@@ -294,7 +294,7 @@ function setupComposer()
     chmod ugo+x $MISCPACKAGESDIR/composer.phar
     ln -sf composer $MISCPACKAGESDIR/composer.phar
     
-    composer install -d $TEMPDIR/tine20 --no-dev
+    composer install -d $TEMPDIR/tine20
 }
 
 function setupPackageDir()
