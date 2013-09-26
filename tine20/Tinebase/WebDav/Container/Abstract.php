@@ -69,13 +69,6 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
         
         $object = $objectClass::create($this->_container, $name, $vobjectData);
         
-        #// avoid sending headers during unit tests
-        #if (php_sapi_name() != 'cli') {
-        #    // @todo this belongs to DAV_Server, but is currently not supported
-        #    header('ETag: ' . $object->getETag());
-        #    #header('Location: /' . $object->getName());
-        #}
-        
         return $object->getETag();
     }
     
@@ -255,7 +248,8 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' webdav acl ' . print_r($acl, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' webdav acl ' . print_r($acl, true));
         
         return $acl;
     }
@@ -280,8 +274,15 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
      */
     public function getOwner()
     {
-        return null;
-        return $this->addressBookInfo['principaluri'];
+        if (! Tinebase_Container::getInstance()->hasGrant(
+            Tinebase_Core::getUser(), 
+            $this->_container, 
+            Tinebase_Model_Grants::GRANT_ADMIN)
+        ) {
+            return null;
+        }
+        
+        return 'principals/users/' . Tinebase_Core::getUser()->contact_id;
     }
     
     /**

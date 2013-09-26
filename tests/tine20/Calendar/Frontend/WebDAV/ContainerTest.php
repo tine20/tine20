@@ -88,6 +88,18 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     /**
      * assert that name of folder is container name
      */
+    public function testGetOwner()
+    {
+        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        $result = $container->getOwner();
+        
+        $this->assertEquals('principals/users/' . Tinebase_Core::getUser()->contact_id, $result);
+    }
+    
+    /**
+     * assert that name of folder is container name
+     */
     public function testGetACL()
     {
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
