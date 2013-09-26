@@ -33,12 +33,13 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
+        $correlationName = Tinebase_Record_Abstract::generateUID(30);
         $db = $_backend->getAdapter();
         $_select->joinLeft(
-            /* table  */ array('members' => $db->table_prefix . 'addressbook_list_members'), 
-            /* on     */ $db->quoteIdentifier('members.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id'),
+            /* table  */ array($correlationName => $db->table_prefix . 'addressbook_list_members'), 
+            /* on     */ $db->quoteIdentifier($correlationName . '.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id'),
             /* select */ array()
         );
-        $_select->where($db->quoteIdentifier('members.list_id') . ' IN (?)', (array) $this->_value);
+        $_select->where($db->quoteIdentifier($correlationName . '.list_id') . ' IN (?)', (array) $this->_value);
     }
 }
