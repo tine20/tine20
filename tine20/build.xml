@@ -59,7 +59,8 @@
     <!-- Target: phpdoc                                -->
     <!-- ============================================  -->
     <target name="phpdoc">
-        <echo msg="Building Tine 2.0 PHP API Documentation" />
+        <echo msg="Building Tine 2.0 PHP API Documentation..." />
+        
         <includepath classpath="${project.basedir}/vendor/phpdocumentor" />
         
         <mkdir dir="${builddir}/apidocs" />
@@ -75,18 +76,65 @@
     </target>
     
     <!-- ============================================  -->
-    <!-- Target: unit-test                                 -->
+    <!-- Target: phpunit                               -->
     <!-- ============================================  -->
-    <target name="unit-test">
-        <copy file="${configPath}" tofile="../tests/tine20/config.inc.php" overwrite="true"/>
-        <phpunit configuration="../tests/tine20/phpunit.xml">
+    <target name="phpunit">
+        <echo msg="Starting Tests..." />
+        
+        <if>
+            <isset property="configPath" />
+            <then>
+                <includepath classpath = "${configPath}" />
+            </then>
+        </if>
+        
+        <delete dir="${builddir}/reports"/>
+        <mkdir dir="${builddir}/reports" />
+        
+        <phpunit configuration="../tests/tine20/phpunit.xml" haltonfailure="true" haltonerror="true" printsummary="true">
             <formatter type="plain" usefile="false"/>
+            <formatter type="xml" todir="${builddir}/reports"/>
             <batchtest>
                 <fileset dir="../tests/tine20">
-                  <include name="AllTests.php"/>
+                  <include name="**/*Test.php"/>
+                  <exclude name="Tinebase/AccountTest.php"/>
                 </fileset>
             </batchtest>
         </phpunit>
+        
+        <phpunitreport infile="${builddir}/reports/testsuites.xml" format="frames" todir="${builddir}/reports/tests"/>
+    </target>
+    
+    <!-- ============================================  -->
+    <!-- Target: report                                -->
+    <!-- ============================================  -->
+    <target name="report">
+        <echo msg="Starting Tests..." />
+        
+        <delete dir="${builddir}/reports"/>
+        <mkdir dir="${builddir}/reports/tests"/>
+        <mkdir dir="${builddir}/reports/coverage"/>
+        <coverage-setup database="${builddir}/reports/coverage.db">
+            <fileset dir=".">
+                <include name="**/*.php" />
+                <exclude name="Zend/**.php" />
+                <exclude name="library/**.php" />
+                <exclude name="vendor/**.php" />
+            </fileset>
+        </coverage-setup>
+        <phpunit configuration="../tests/tine20/phpunit.xml" haltonfailure="true" haltonerror="true" printsummary="true" codecoverage="true">
+            <formatter type="xml" todir="${builddir}/reports"/>
+            <batchtest>
+                <fileset dir="../tests/tine20">
+                  <include name="**/*Test.php"/>
+                  <exclude name="Tinebase/AccountTest.php"/>
+                </fileset>
+            </batchtest>
+        </phpunit>
+        <phpunitreport infile="${builddir}/reports/testsuites.xml" format="frames" todir="${builddir}/reports/tests"/>
+        <coverage-report outfile="${builddir}/reports/coverage.xml">
+            <report todir="${builddir}/reports/coverage" title="Tine 2.0"/>
+        </coverage-report>  
     </target>
     
     <!-- ============================================  -->
