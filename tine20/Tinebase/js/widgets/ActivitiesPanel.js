@@ -66,7 +66,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         addNote: function (button, event) {
             //var note_type_id = Ext.getCmp('note_type_combo').getValue();
             var note_type_id = button.typeId,
-                noteTextarea = Ext.getCmp('note_textarea'),
+                noteTextarea = Ext.getCmp(this.idPrefix + 'note_textarea'),
                 note = noteTextarea.getValue(),
                 notesStore,
                 newNote;
@@ -135,7 +135,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         this.activities = new Ext.DataView({
             anchor: '-20',
             tpl: ActivitiesTpl,       
-            id: 'grid_activities_limited',
+            id: this.idPrefix + 'grid_activities_limited',
             store: this.recordNotesStore,
             overClass: 'x-view-over',
             itemSelector: 'activities-item-small'
@@ -148,7 +148,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
      */
     initNoteForm: function () {
         var noteTextarea =  new Ext.form.TextArea({
-            id: 'note_textarea',
+            id: this.idPrefix + 'note_textarea',
             emptyText: this.translation.gettext('Add a Note...'),
             grow: false,
             preventScrollbars: false,
@@ -166,6 +166,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                 var action = new Ext.Action({
                     text: this.translation.gettext('Add') + ' ' + this.translation.gettext(record.data.name) + ' ' + this.translation.gettext('Note'),
                     tooltip: this.translation.gettext(record.data.description),
+                    scope: this,
                     handler: this.handlers.addNote,
                     iconCls: 'notes_' + record.data.name + 'Icon',
                     typeId: record.data.id,
@@ -182,6 +183,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             menu: {
                 items: subMenu
             },
+            scope: this,
             handler: this.handlers.addNote,
             typeId: defaultTypeRecord.data.id
         });
@@ -209,6 +211,8 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         
         // translate / update title
         this.title = this.translation.gettext('Notes');
+        
+        this.idPrefix = Ext.id();
         
         // init recordNotesStore
         this.notes = [];
