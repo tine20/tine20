@@ -34,8 +34,8 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
     }
     
     var modelName = config.keyFieldConfig.definition && config.keyFieldConfig.definition.options ? config.keyFieldConfig.definition.options['recordModel'] : "Tinebase_Config_KeyFieldRecord",
-        modelParts = modelName.split('_'),
-        recordClass = Tine[modelParts[0]] && Tine[modelParts[0]]['Model'] && Tine[modelParts[0]]['Model'][modelParts[2]] ? Tine[modelParts[0]]['Model'][modelParts[2]] : null;
+        modelParts = modelName.split('_Model_'),
+        recordClass = Tine[modelParts[0]] && Tine[modelParts[0]]['Model'] && Tine[modelParts[0]]['Model'][modelParts[1]] ? Tine[modelParts[0]]['Model'][modelParts[1]] : null;
     
     config.fields = recordClass ? recordClass : ['id', 'value', 'icon', 'system', 'i18nValue'];
     

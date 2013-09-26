@@ -272,8 +272,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     onEditInNewWindow: function() {
         var selected = this.getSelectionModel().getSelected(),
-            app = selected.get('related_model').split('_')[0],
-            model = selected.get('related_model').split('_')[2],
+            app = selected.get('related_model').split('_Model_')[0],
+            model = selected.get('related_model').split('_Model_')[1],
             ms = Tine.Tinebase.appMgr.get(app).getMainScreen(),
             recordData = selected.get('related_record'),
             record = new Tine[app].Model[model](recordData);
@@ -460,9 +460,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {} o
      */
     onBeforeRowEdit: function(o) {
-        var model = o.record.get('related_model').split('_');
+        var model = o.record.get('related_model').split('_Model_');
         var app = model[0];
-        model = model[2];
+        model = model[1];
         var colModel = o.grid.getColumnModel();
 
         switch (o.field) {
@@ -564,8 +564,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         if (! relm) {
             return '';
         }
-        var split = relm.split('_'); 
-        var recordClass = Tine[split[0]][split[1]][split[2]];
+        var split = relm.split('_Model_'); 
+        var recordClass = Tine[split[0]].Model[split[1]];
         var record = new recordClass(recData);
         var result = '';
         if (recData) {
@@ -630,8 +630,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         if(!value) {
             return '';
         }
-        var split = value.split('_');
-        var model = Tine[split[0]][split[1]][split[2]];
+        var split = value.split('_Model_');
+        var model = Tine[split[0]].Model[split[1]];
         return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName') + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
     },
 
@@ -979,13 +979,13 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 this.view.invalidRowRecords.splice(index, 1);
             }
             
-            var model = o.record.get('related_model').split('_');
+            var model = o.record.get('related_model').split('_Model_');
             var app = model[0];
             
             if (! this.view.invalidRowRecords) {
                 this.view.invalidRowRecords = [];
             }
-            model = model[2];
+            model = model[1];
             
             // check constrains from own_record side
             if(this.constrainsConfig[app + model]) {
