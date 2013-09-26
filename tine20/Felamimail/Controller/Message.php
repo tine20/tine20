@@ -601,7 +601,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
                 $bodyCharCountBefore = strlen($body);
-                $body = $this->_purifyBodyContent($body);
+                $body = $this->_purifyBodyContent($body, $_message->getId());
                 $bodyCharCountAfter = strlen($body);
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -637,9 +637,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * use html purifier to remove 'bad' tags/attributes from html body
      *
      * @param string $_content
+     * @param string $messageId
      * @return string
      */
-    protected function _purifyBodyContent($_content)
+    protected function _purifyBodyContent($_content, $messageId)
     {
         if (!defined('HTMLPURIFIER_PREFIX')) {
             define('HTMLPURIFIER_PREFIX', realpath(dirname(__FILE__) . '/../../library/HTMLPurifier'));
@@ -654,7 +655,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Current mem usage before purify: ' . memory_get_usage()/1024/1024);
         
-        $config = HTMLPurifier_Config::createDefault();
+        // add custom schema for passing message id to URIScheme
+        $configSchema = HTMLPurifier_ConfigSchema::makeFromSerial();
+        $configSchema->add('Felamimail.messageId', NULL, 'string', TRUE);
+        $config = HTMLPurifier_Config::create(NULL, $configSchema);
         $config->set('HTML.DefinitionID', 'purify message body contents');
         $config->set('HTML.DefinitionRev', 1);
         
@@ -669,14 +673,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             'http' => true,
             'https' => true,
             'mailto' => true,
-            'data' => true
+            'data' => true,
+            'cid' => true
         ));
+        $config->set('Felamimail.messageId', $messageId);
         
         $this->_transformBodyTags($config);
         
         // add uri filter
         $uri = $config->getDefinition('URI');
         $uri->addFilter(new Felamimail_HTMLPurifier_URIFilter_TransformURI(), $config);
+        
+        // add cid uri scheme
+        require_once(dirname(dirname(__FILE__)) . '/HTMLPurifier/URIScheme/cid.php');
         
         $purifier = new HTMLPurifier($config);
         $content = $purifier->purify($_content);
@@ -847,7 +856,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     'filename'     => $filename,
                     'partId'       => $part['partId'],
                     'size'         => $part['size'],
-                    'description'  => $part['description']
+                    'description'  => $part['description'],
+                    'cid'          => (! empty($part['id'])) ? $part['id'] : NULL,
                 );
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -947,5 +957,33 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return $this->_punycodeConverter;
+    }
+
+    /**
+     * get resource part id
+     * 
+     * @param string $cid
+     * @param string $messageId
+     * @return array
+     * @throws Tinebase_Exception_NotFound
+     * 
+     * @todo add param string $folderId?
+     */
+    public function getResourcePartStructure($cid, $messageId)
+    {
+        $message = $this->get($messageId);
+        $this->_checkMessageAccount($message);
+        
+        $attachments = $this->getAttachments($messageId);
+        
+        foreach ($attachments as $attachment) {
+            if ($attachment['cid'] === '<' . $cid . '>') {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Found attachment ' . $attachment['partId'] . ' with cid ' . $cid);
+                return $attachment;
+            }
+        }
+        
+        throw new Tinebase_Exception_NotFound('Resource not found');
     }
 }

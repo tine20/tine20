@@ -37,8 +37,6 @@ class Felamimail_HTMLPurifier_URIFilter_TransformURI extends HTMLPurifier_URIFil
         
         if ($uri->host) {
             $result = $this->_checkExternalUrl($uri, $token);
-        } else if ($uri->scheme == 'data') {
-            $result = $this->_checkData($uri, $token);
         }
         return $result;
     }
@@ -55,14 +53,10 @@ class Felamimail_HTMLPurifier_URIFilter_TransformURI extends HTMLPurifier_URIFil
      */
     protected function _checkExternalUrl($uri, $token)
     {
-        if ($token->name === 'a') {
-            $result = TRUE;
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                . ' Remove  URI: ' . $uri->toString());
-            
-            $result = FALSE;
-        }
+        $result = in_array($uri->scheme, array('http', 'https', 'mailto'));
+        
+        // only allow external urls in anchors for the moment
+        $result = $result && $token->name === 'a';
         
 //         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
 //             . ' Moving uri to another namespace and replace current uri with blank.gif: ' . $uri->toString());
@@ -71,42 +65,9 @@ class Felamimail_HTMLPurifier_URIFilter_TransformURI extends HTMLPurifier_URIFil
 //         $uri = new HTMLPurifier_URI('http', null, $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], null,
 //             '/index.php', 'Felamimail.getResource&uri=' . base64_encode($uri->toString()) . '&type=' . $token->name, null);
         
-        return $result;
-    }
-    
-    /**
-     * check if data is valid, check and allow
-     * 
-     * @param HTMLPurifier_URI $uri
-     * @param HTMLPurifier_Token $token
-     * @return boolean
-     */
-    protected function _checkData($uri, $token)
-    {
-        $result = FALSE;
-        if ($token->name === 'img' && isset($token->attr['src'])) {
-            $imgSrc = $token->attr['src'];
-            $imgSrc = str_replace(array("\r", "\n"), '', $imgSrc);
-            if (preg_match('/([a-z\/]*);base64,(.*)/', $imgSrc, $matches)) {
-                $mimetype = $matches[1];
-                $base64 = $matches[2];
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                    . ' Found base64 image: ' . $base64);
-                $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_imgdata');
-                file_put_contents($tmpPath, @base64_decode($base64));
-                // @todo check given mimetype or all images types?
-                if (! Tinebase_ImageHelper::isImageFile($tmpPath)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                        . ' URI data is no image file: ' . $uri->toString());
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                        . ' Verified ' . $mimetype . ' image.');
-                    $result = TRUE;
-                }
-            }
-        } else {
+        if (! $result) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                . ' Only allow images data uris, discarding: ' . $token->name);
+                . ' Remove  URI: ' . $uri->toString());
         }
         
         return $result;

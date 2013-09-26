@@ -32,7 +32,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             . ' Downloading Attachment ' . $partId . ' of message with id ' . $messageId
         );
         
-        $this->_downloadMessagePart($messageId, $partId);
+        $this->_outputMessagePart($messageId, $partId);
     }
 
     /**
@@ -44,7 +44,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Downloading Message ' . $messageId);
         
-        $this->_downloadMessagePart($messageId);
+        $this->_outputMessagePart($messageId);
     }
     
     /**
@@ -52,8 +52,10 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * 
      * @param string $_messageId
      * @param string $_partId
+     * @param string $disposition
+     * @param boolean $validateImage
      */
-    protected function _downloadMessagePart($_messageId, $_partId = NULL)
+    protected function _outputMessagePart($_messageId, $_partId = NULL, $disposition = 'attachment', $validateImage = FALSE)
     {
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
         
@@ -68,7 +70,6 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
                     . ' filename: '    . $filename
                     . ' content type ' . $contentType
-                    //. ' ' . stream_get_contents($part->getDecodedStream())
                 );
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '. print_r($part, TRUE));
@@ -81,11 +82,29 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 // overwrite Pragma header from session
                 header("Pragma: cache");
                 
-                header('Content-Disposition: attachment; filename="' . $filename . '"');
+                header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
                 header("Content-Type: " . $contentType);
                 
                 $stream = ($_partId === NULL) ? $part->getRawStream() : $part->getDecodedStream();
-                fpassthru($stream);
+                
+                if ($validateImage) {
+                    $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_imgdata');
+                    $tmpFile = fopen($tmpPath, 'w');
+                    stream_copy_to_stream($stream, $tmpFile);
+                    fclose($tmpFile);
+                    // @todo check given mimetype or all images types?
+                    if (! Tinebase_ImageHelper::isImageFile($tmpPath)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                            . ' Resource is no image file: ' . $filename);
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                            . ' Verified ' . $contentType . ' image.');
+                        readfile($tmpPath);
+                    }
+                    
+                } else {
+                    fpassthru($stream);
+                }
                 fclose($stream);
             }
         } catch (Exception $e) {
@@ -120,5 +139,24 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
         
         return $messageId . $extension;
+    }
+
+    /**
+     * get resource, delivers the image (audio, video) data
+     * 
+     * @param string $cid
+     * @param string $messageId
+     * 
+     * @todo add param string $folderId
+     * @todo support audio/video 
+     */
+    public function getResource($cid, $messageId)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Requesting resource <' . $cid . '> for message ' . $messageId);
+        
+        $resPart = Felamimail_Controller_Message::getInstance()->getResourcePartStructure($cid, $messageId);
+        
+        $this->_outputMessagePart($messageId, $resPart['partId'], 'inline', TRUE);
     }
 }

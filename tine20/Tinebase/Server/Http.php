@@ -44,7 +44,8 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 Zend_Session::expireSessionCookie();
             }
             
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Is HTTP request. method: ' . $this->getRequestMethod());
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Is HTTP request. method: ' . $this->getRequestMethod());
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' REQUEST: ' . print_r($_REQUEST, TRUE));
             
             // register addidional HTTP apis only available for authorised users
             if (Zend_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {

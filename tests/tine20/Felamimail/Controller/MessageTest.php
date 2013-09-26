@@ -1327,17 +1327,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * @see 0007726: show inline images of multipart/related message parts
      * 
      * @todo allow external resources
-     * @todo remove $_SERVER stuff?
      */
     public function testHtmlPurify()
     {
-//         $_SERVER['SERVER_NAME'] = 'localhost';
-//         $_SERVER['REQUEST_URI'] = '/tine20';
         $cachedMessage = $this->messageTestHelper('text_html_urls.eml');
         $message = $this->_controller->getCompleteMessage($cachedMessage);
-        
-//         unset($_SERVER['SERVER_NAME']);
-//         unset($_SERVER['REQUEST_URI']);
         
 //         $this->assertContains('<div></div>
 //     <img src="http://localhost/tine20/index.php?Felamimail.getResource&amp;uri=aHR0cDovL3d3dy50aW5lMjAub3JnL2ZpbGVhZG1pbi90ZW1wbGF0ZXMvaW1hZ2VzL3RpbmUyMC5wbmc=&amp;type=img" alt="tine20.png" /><img src="http://localhost/tine20.png" alt="tine20.png" />
@@ -1352,14 +1346,34 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     /**
      * testNewsletterMultipartRelated
      * 
+     * this tests if cid scheme src urls are replaced with Felamimail.getResource...
+     * 
      * @see 0007726: show inline images of multipart/related message parts
      * 
-     * @todo implement
+     * @return Felamimail_Model_Message
      */
     public function testNewsletterMultipartRelatedWithImages()
     {
-        $this->markTestIncomplete('implement');
         $cachedMessage = $this->messageTestHelper('mw_newsletter_multipart_related.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertContains('<img src="http://localhost/index.php?&amp;method=Felamimail.getResource&amp;cid=1354533197.50bc894dacd37@www.metaways.de&amp;messageId=' . $message->getId() . '"', $message->body);
+        
+        return $message;
+    }
+    
+    /**
+     * testGetResource
+     * 
+     * @see 0007726: show inline images of multipart/related message parts
+     */
+    public function testGetResource()
+    {
+        $message = $this->testNewsletterMultipartRelatedWithImages();
+        
+        $resourcePart = $this->_controller->getResourcePartStructure('1354533197.50bc894dacd37@www.metaways.de', $message->getId());
+        
+        $this->assertEquals('2.3', $resourcePart['partId']);
     }
     
     /**
