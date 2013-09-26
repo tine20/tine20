@@ -41,4 +41,18 @@ class Addressbook_Setup_Update_Release7 extends Setup_Update_Abstract
     {
         $this->setApplicationVersion('Addressbook', '8.0');
     }
+
+    /**
+     * update to 8.0
+     * 
+     * - it looks like we had a 7.2 version in the adb for a short time. this should fix it.
+     * 
+     * @see 0008952: Update von 7.2 auf 8.0 nicht möglich
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Addressbook', '8.0');
+    }
 }
