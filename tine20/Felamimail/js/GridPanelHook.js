@@ -94,6 +94,8 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     relationType: null,
     addMailFromRecord: null,
     mailAddresses: null,
+    subject: null,
+    subjectField: null,
     
     /**
      * get addressbook contact grid panel
@@ -177,12 +179,15 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
                 mailAddresses = this.mailAddresses;
         }
 
+        var record = new Tine.Felamimail.Model.Message({
+            subject: (this.subject) ? this.subject : '',
+            to: mailAddresses
+        }, 0);
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
             selectionFilter: sm && sm.isFilterSelect ? Ext.encode(sm.getSelectionFilter()) : null,
-            mailAddresses: mailAddresses ? Ext.encode(mailAddresses) : null
+            record: record
         });
     },
-
     
     /**
      * add to action updater the first time we render
@@ -206,5 +211,8 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     updateAction: function(action, grants, records) {
         this.mailAddresses = [];
         action.setDisabled(this.getMailAddresses(records).length == 0);
+        if (this.subjectField && records.length > 0) {
+            this.subject = records[0].get(this.subjectField);
+        }
     }
 });

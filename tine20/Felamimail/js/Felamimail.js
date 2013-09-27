@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -135,11 +135,13 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             app: this,
             foreignAppName: 'Crm',
             contactInRelation: true,
-            relationType: 'CUSTOMER'
+            relationType: 'CUSTOMER',
+            subjectField: 'lead_name'
         });
         var calHook = new Tine.Felamimail.GridPanelHook({
             app: this,
             foreignAppName: 'Calendar',
+            subjectField: 'summary',
             addMailFromRecord: function(mailAddresses, record) {
                 Ext.each(record.get('attendee'), function(attender) {
                     if (attender.user_type == 'user') {
