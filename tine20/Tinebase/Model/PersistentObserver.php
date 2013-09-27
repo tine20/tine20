@@ -12,10 +12,10 @@
 /**
  * class Tinebase_Model_PersistentObserver
  * 
+ * NOTE: this is not used atm but might come in handy at some point
+ * 
  * @package     Tinebase
  * @subpackage  Record
- * 
- * NOTE: this is not used atm but might come in handy at some point
  */
 class Tinebase_Model_PersistentObserver extends Tinebase_Record_Abstract 
 {

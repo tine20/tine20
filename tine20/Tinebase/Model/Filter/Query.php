@@ -12,9 +12,6 @@
 /**
  * Tinebase_Model_Filter_Query
  * 
- * @package     Tinebase
- * @subpackage  Filter
- * 
  * filters for all of the given filterstrings if it is contained in at least 
  * one of the defined fields
  * 
@@ -22,6 +19,9 @@
  * 
  * The fields to query in _must_ be defined in the options key 'fields'
  * The value string is space-exploded into multiple filterstrings
+ * 
+ * @package     Tinebase
+ * @subpackage  Filter
  */
 class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
 {

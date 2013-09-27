@@ -12,10 +12,10 @@
 /**
  * Tinebase_Model_Filter_Id
  * 
+ * filters one or more ids
+ * 
  * @package     Tinebase
  * @subpackage  Filter
- * 
- * filters one or more ids
  */
 class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
 {

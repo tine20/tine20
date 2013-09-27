@@ -14,9 +14,6 @@
 /**
  * Tinebase_Model_Filter_FilterGroup
  * 
- * @package     Tinebase
- * @subpackage  Filter
- * 
  * A filter group represents a number of individual filters and a condition between
  * all of them. Each filter group requires a filter model where the allowed filters
  * and options for them are specified on the one hand, and concrete filter data for
@@ -99,6 +96,9 @@
  *      array('field' => 'created_by',  'operator' => 'equals', 'value' => 2),
  *      array('field' => 'modified_by', 'operator' => 'equals', 'value' => 2),
  * </code>
+ * 
+ * @package     Tinebase
+ * @subpackage  Filter
  */
 class Tinebase_Model_Filter_FilterGroup implements Iterator
 {

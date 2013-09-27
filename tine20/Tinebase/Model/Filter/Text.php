@@ -12,10 +12,10 @@
 /**
  * Tinebase_Model_Filter_Text
  * 
+ * filters one filterstring in one property
+ * 
  * @package     Tinebase
  * @subpackage  Filter
- * 
- * filters one filterstring in one property
  */
 class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
 {

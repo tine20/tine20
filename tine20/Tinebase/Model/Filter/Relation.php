@@ -12,9 +12,6 @@
 /**
  * Tinebase_Model_Filter_Relation
  * 
- * @package     Tinebase
- * @subpackage  Filter
- * 
  * filters own ids match result of related filter
  * 
  * <code>
@@ -23,6 +20,9 @@
  *          'filtergroup'    => 'Addressbook_Model_ContactFilter'
  *      )
  * </code>     
+ * 
+ * @package     Tinebase
+ * @subpackage  Filter
  */
 class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
 {

@@ -12,12 +12,12 @@
 /**
  * Tinebase_Model_Filter_User
  * 
- * @package     Tinebase
- * @subpackage  Filter
- * 
  * filters for user id
  * 
  * adds a inGroup operator
+ * 
+ * @package     Tinebase
+ * @subpackage  Filter
  */
 class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
 {

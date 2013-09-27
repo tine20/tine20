@@ -12,14 +12,13 @@
 /**
  * Tinebase_Model_Filter_Abstract
  * 
- * @package     Tinebase
- * @subpackage  Filter
- * 
  * acl filter interface
  * 
  * A ACL filter constrict the results of a filter group based on the required
  * grants needed by the current user.
  * 
+ * @package     Tinebase
+ * @subpackage  Filter
  */
 interface Tinebase_Model_Filter_AclFilter
 {

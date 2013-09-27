@@ -6,16 +6,10 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- *
- * @todo        add tests for notes
- * @todo        add more documentation
  */
 
 /**
  * abstract csv import class
- * 
- * @package     Tinebase
- * @subpackage  Import
  * 
  * some documentation for the xml import definition:
  * 
@@ -31,6 +25,11 @@
  * <replace>\n</replace>:               replace \r\n with \n
  * <fixed>fixed</fixed>:                the field has a fixed value ('fixed' in this example)
  * 
+ *
+ * @todo        add tests for notes
+ * @todo        add more documentation
+ * @package     Tinebase
+ * @subpackage  Import
  */
 abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
 {

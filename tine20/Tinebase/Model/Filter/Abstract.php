@@ -12,12 +12,11 @@
 /**
  * Tinebase_Model_Filter_Abstract
  * 
- * @package     Tinebase
- * @subpackage  Filter
- * 
  * Abstract filter
  * 
  * @todo validate value!
+ * @package     Tinebase
+ * @subpackage  Filter
  */
 abstract class Tinebase_Model_Filter_Abstract
 {

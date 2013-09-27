@@ -12,10 +12,10 @@
 /**
  * Tinebase_Model_Filter_ContainerOwner
  * 
+ * filters by container owner
+ * 
  * @package     Tinebase
  * @subpackage  Filter
- * 
- * filters by container owner
  */
 class Tinebase_Model_Filter_ContainerOwner extends Tinebase_Model_Filter_Abstract
 {

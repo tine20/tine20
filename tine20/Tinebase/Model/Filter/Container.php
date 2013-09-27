@@ -12,9 +12,6 @@
 /**
  * Tinebase_Model_Filter_Container
  * 
- * @package     Tinebase
- * @subpackage  Filter
- * 
  * filters by containers
  * 
  * NOTE: this filter accepts multiple formats for incoming container values
@@ -24,6 +21,9 @@
  *  
  * NOTE: This filter already does all ACL checks. This means a controller only 
  *       has to make sure a containerfilter is set and if not add one
+ * 
+ * @package     Tinebase
+ * @subpackage  Filter
  */
 class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract implements Tinebase_Model_Filter_AclFilter 
 {

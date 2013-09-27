@@ -14,10 +14,10 @@
 /**
  * Tinebase_Model_Filter_Date
  * 
+ * filters date in one property
+ * 
  * @package     Tinebase
  * @subpackage  Filter
- * 
- * filters date in one property
  */
 class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
 {

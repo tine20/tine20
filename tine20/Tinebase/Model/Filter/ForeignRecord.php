@@ -12,10 +12,10 @@
 /**
  * Tinebase_Model_Filter_ForeignRecord
  * 
+ * filters own ids match result of foreign filter
+ * 
  * @package     Tinebase
  * @subpackage  Filter
- * 
- * filters own ids match result of foreign filter
  */
 abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter_Abstract
 {

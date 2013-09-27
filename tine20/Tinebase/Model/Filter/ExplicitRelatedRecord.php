@@ -21,7 +21,9 @@
  *     'own_controller' => 'Timetracker_Controller_Timeaccount',
  *     'related_model' => 'Sales_Model_Contract',
  * ))
- *  
+ * 
+ * @package     Tinebase
+ * @subpackage  Filter
  */
 class Tinebase_Model_Filter_ExplicitRelatedRecord extends Tinebase_Model_Filter_Relation
 {

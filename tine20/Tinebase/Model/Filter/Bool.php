@@ -12,10 +12,10 @@
 /**
  * Tinebase_Model_Filter_Bool
  * 
+ * filters one boolean in one property
+ * 
  * @package     Tinebase
  * @subpackage  Filter
- * 
- * filters one boolean in one property
  */
 class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
 {

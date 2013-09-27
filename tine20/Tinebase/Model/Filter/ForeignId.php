@@ -12,9 +12,6 @@
 /**
  * foreign id filter
  * 
- * @package     Tinebase
- * @subpackage  Filter
- * 
  * Expects:
  * - a filtergroup in options->filtergroup
  * - a controller  in options->controller
@@ -22,6 +19,8 @@
  * Hands over all options to filtergroup
  * Hands over AclFilter functions to filtergroup
  *
+ * @package     Tinebase
+ * @subpackage  Filter
  */
 class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecord
 {

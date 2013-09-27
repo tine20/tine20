@@ -12,10 +12,10 @@
 /**
  * Tinebase_Model_Filter_Int
  * 
+ * filters one int in one property
+ * 
  * @package     Tinebase
  * @subpackage  Filter
- * 
- * filters one int in one property
  */
 class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
 {

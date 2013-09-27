@@ -12,9 +12,6 @@
 /**
  * Tinebase_Model_Filter_CustomField
  * 
- * @package     Tinebase
- * @subpackage  Filter
- * 
  * filters by given customfield name/value
  * 
  * a custom field filter is constructed like this:
@@ -24,6 +21,9 @@
  *     'operator' => 'contains', 
  *     'value' => array('cfId' => '1234', 'value' => 'searchstring')
  *  ),
+ * 
+ * @package     Tinebase
+ * @subpackage  Filter
  */
 class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
 {

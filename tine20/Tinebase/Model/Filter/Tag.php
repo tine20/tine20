@@ -12,10 +12,10 @@
 /**
  * Tinebase_Model_Filter_Tag
  * 
+ * filters by given tag
+ * 
  * @package     Tinebase
  * @subpackage  Filter
- * 
- * filters by given tag
  */
 class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
 {
