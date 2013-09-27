@@ -4,7 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -40,7 +40,15 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         autoExpandColumn: 'title'
     },
     copyEditAction: true,
-    defaultFilters: [{field: 'is_open', operator: 'equals', value: true}],
+    defaultFilters: [{
+        field: 'query',
+        operator: 'contains',
+        value: ''
+    }, {
+        field: 'is_open',
+        operator: 'equals',
+        value: true
+    }],
     
     initComponent: function() {
         this.recordProxy = Tine.Timetracker.timeaccountBackend;
