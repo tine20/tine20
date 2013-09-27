@@ -5,13 +5,13 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * userprofile class
  * 
- * @package     ActiveSync
+ * @package     Tinebase
  */
 class Tinebase_UserProfile
 {
