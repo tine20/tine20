@@ -1,4 +1,13 @@
 <?php
+/**
+ * Tine 2.0
+ * 
+ * @package     Tinebase
+ * @subpackage  User
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cornelius Weiß <c.weiss@metaways.de>
+ */
 
 /**
  * Simple Read-Only Typo3 User Backend
@@ -20,6 +29,9 @@
  *       
  * This class does nothing more than importing Typo3 backendusers
  * into the Tine 2.0 user tables.
+ * 
+ * @package     Tinebase
+ * @subpackage  User
  */
 class Tinebase_User_Typo3 extends Tinebase_User_Sql
 {

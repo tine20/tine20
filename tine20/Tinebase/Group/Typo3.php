@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Tine 2.0
+ * 
+ * @package     Tinebase
+ * @subpackage  Group
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cornelius Weiß <c.weiss@metaways.de>
+ */
 
 /**
  * Simple Read-Only Typo3 Group Backend
@@ -12,6 +20,9 @@
  * 
  * This class does nothing more than importing Typo3 groups / groupmembers
  * into the Tine 2.0 group / groupmembers tables.
+ * 
+ * @package     Tinebase
+ * @subpackage  Group
  */
 class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
 {

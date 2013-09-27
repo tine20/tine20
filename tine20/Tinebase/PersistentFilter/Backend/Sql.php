@@ -13,7 +13,7 @@
 /**
  * backend for persistent filters
  *
- * @package     Timetracker
+ * @package     Tinebase
  * @subpackage  Backend
  */
 class Tinebase_PersistentFilter_Backend_Sql extends Tinebase_Backend_Sql_Abstract
