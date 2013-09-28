@@ -56,6 +56,25 @@
     </target>
     
     <!-- ============================================  -->
+    <!-- Target: phpdoc                                -->
+    <!-- ============================================  -->
+    <target name="phpdoc">
+        <echo msg="Building Tine 2.0 PHP API Documentation" />
+        <includepath classpath="${project.basedir}/vendor/phpdocumentor" />
+        
+        <mkdir dir="${builddir}/apidocs" />
+        
+        <phpdoc2 title="Tine 2.0 PHP API Documentation" destdir="${builddir}/apidocs" template="responsive-twig">
+            <fileset dir=".">
+                <include name="**/*.php" />
+                <exclude name="Zend/**.php" />
+                <exclude name="library/**.php" />
+                <exclude name="vendor/**.php" />
+            </fileset>
+        </phpdoc2>
+    </target>
+    
+    <!-- ============================================  -->
     <!-- Target: unit-test                                 -->
     <!-- ============================================  -->
     <target name="unit-test">
