@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tine 2.0
  *
@@ -10,9 +9,12 @@
  * @author      Mario Cesar Kolling <mario.kolling@serpro.gov.br>
  * @copyright   Copyright (c) 2009-2013 Serpro (http://www.serpro.gov.br)
  * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
  */
 
+/**
+ * @package     Tinebase
+ * @subpackage  Auth
+ */
 class Tinebase_Auth_ModSsl_UsernameCallback_Abstract implements Tinebase_Auth_ModSsl_UsernameCallback_Interface
 {
     /**

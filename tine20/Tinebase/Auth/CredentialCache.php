@@ -3,6 +3,7 @@
  * Tine 2.0
  *
  * @package     Tinebase
+ * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,6 +11,9 @@
 
 /**
  * class for caching credentials
+ *  
+ * @package     Tinebase
+ * @subpackage  Auth
  */
 class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implements Tinebase_Controller_Interface
 {

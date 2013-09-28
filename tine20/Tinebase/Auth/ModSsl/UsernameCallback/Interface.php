@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tine 2.0
  *
@@ -13,6 +12,10 @@
  * 
  */
 
+/**
+ * @package     Tinebase
+ * @subpackage  Auth
+ */
 interface Tinebase_Auth_ModSsl_UsernameCallback_Interface
 {
     public function getUsername();
