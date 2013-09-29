@@ -7,7 +7,7 @@
 # $ ./build-tine20-packages.sh -s "http://git.tine20.org/git/tine20" -b 2011-01 -r "2011-01-3" -c "Kristina"
 
 ## GLOBAL VARIABLES ##
-BASEDIR="./tine20build"
+BASEDIR=`readlink -f ./tine20build`
 TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
@@ -48,7 +48,7 @@ function checkout()
         fi
     elif [ -n "$RELEASE" ]; then   
         echo "checkout release tag"
-        git checkout refs/tags/$RELEASE
+        git checkout refs/tags/${RELEASE/\~/-}
         RETVAL=$?
 
         if [ $RETVAL -ne 0 ]; then
@@ -288,7 +288,7 @@ function setupComposer()
 {
     wget -O $MISCPACKAGESDIR/composer.phar https://getcomposer.org/composer.phar
     chmod ugo+x $MISCPACKAGESDIR/composer.phar
-    ln -sf composer $MISCPACKAGESDIR/composer.phar
+    (cd $MISCPACKAGESDIR; ln -sf composer.phar composer)
 
     composer install -d $TEMPDIR/tine20
 }
