@@ -296,12 +296,14 @@
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "23ebb9ce5e3558b0a3681e11316822dc1afb128a"
+                "reference": "3226e509f766cc554b357cfa77d3b777cc62da51"
             },
             "require": {
                 "php": ">=5.3.0"
             },
             "require-dev": {
+                "phing/phing": "2.6.1-p0",
+                "phpdocumentor/phpdocumentor": "dev-release-2.0.2",
                 "phpunit/phpunit": "3.7.*"
             },
             "type": "library",
@@ -316,7 +318,7 @@
             ],
             "description": "Library to sync mobile phones",
             "homepage": "http://www.syncroton.org",
-            "time": "2013-09-09 08:59:16"
+            "time": "2013-09-29 19:00:36"
         }
     ],
     "packages-dev": [
