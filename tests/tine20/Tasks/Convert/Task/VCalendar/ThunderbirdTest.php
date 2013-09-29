@@ -43,6 +43,7 @@ class Tasks_Convert_Task_VCalendar_ThunderbirdTest extends PHPUnit_Framework_Tes
      */
     protected function setUp()
     {
+        $this->markTestIncomplete('tests not yet implemented');
     }
 
     /**

@@ -25,9 +25,9 @@ class Tasks_Convert_Task_VCalendar_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar All Import VCalendar Tests');
         $suite->addTestSuite('Tasks_Convert_Task_VCalendar_FactoryTest');
         $suite->addTestSuite('Tasks_Convert_Task_VCalendar_GenericTest');
-        #$suite->addTestSuite('Tasks_Convert_Task_VCalendar_MacOSXTest');
-        #$suite->addTestSuite('Tasks_Convert_Task_VCalendar_ThunderbirdTest');
-        #$suite->addTestSuite('Tasks_Convert_Task_VCalendar_EMClientTest');
+        $suite->addTestSuite('Tasks_Convert_Task_VCalendar_MacOSXTest');
+        $suite->addTestSuite('Tasks_Convert_Task_VCalendar_ThunderbirdTest');
+        $suite->addTestSuite('Tasks_Convert_Task_VCalendar_EMClientTest');
         
         return $suite;
     }

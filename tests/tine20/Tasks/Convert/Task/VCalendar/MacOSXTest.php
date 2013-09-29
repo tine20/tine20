@@ -47,6 +47,7 @@ class Tasks_Convert_Task_VCalendar_MacOSXTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->markTestIncomplete('tests not yet implemented');
     }
 
     /**

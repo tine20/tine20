@@ -43,6 +43,7 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends PHPUnit_Framework_TestCa
      */
     protected function setUp()
     {
+        $this->markTestIncomplete('tests not yet implemented');
     }
 
     /**
