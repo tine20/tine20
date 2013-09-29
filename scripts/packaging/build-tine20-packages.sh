@@ -18,7 +18,7 @@ RELEASE=""
 GITBRANCH=""
 PACKAGEDIR=""
 
-PATH=$PATH:$MISCPACKAGESDIR:$TEMPDIR/tine20/vendor/bin
+PATH=$MISCPACKAGESDIR:$TEMPDIR/tine20/vendor/bin:$PATH
 
 #
 # checkout url to local directory
@@ -85,8 +85,6 @@ function createDirectories()
     test -d $MISCPACKAGESDIR || mkdir -p $MISCPACKAGESDIR
     test -d $TEMPDIR || mkdir -p $TEMPDIR
     
-    #rm -rf $TEMPDIR/*
-    #test -d $TEMPDIR/Setup || mkdir $TEMPDIR/Setup
     echo "done"
 }
 
@@ -218,15 +216,9 @@ function createArchives()
                     (cd $TEMPDIR/tine20/library/ExtJS/src;     rm -rf $(ls | grep -v debug.js))
                     (cd $TEMPDIR/tine20/library/ExtJS;         rm -rf $(ls | grep -v adapter | grep -v ext-all-debug.js | grep -v ext-all.js | grep -v resources | grep -v src))
                     
-                    ## cleanup HTMLPurifier
-                    #(cd $TEMPDIR/tine20/library/HTMLPurifier;  rm -rf HTMLPurifier.*.php)
-
                     # cleanup OpenLayers
                     (cd $TEMPDIR/tine20/library/OpenLayers;    rm -rf $(ls | grep -v img | grep -v license.txt | grep -v OpenLayers.js | grep -v theme))
 
-                    ## cleanup PHPExcel
-                    #(cd $TEMPDIR/tine20/library/PHPExcel/PHPExcel/Shared;  rm -rf PDF)
-                    
                     # cleanup qCal
                     (cd $TEMPDIR/tine20/library/qCal;  rm -rf docs tests)
 
@@ -235,6 +227,10 @@ function createArchives()
                     
                     # save langStats
                     (mv $TEMPDIR/tine20/langstatistics.json $TEMPDIR/tine20/Tinebase/translations/langstatistics.json)
+                    
+                    # remove composer dev requires
+                    composer install --no-dev -d $TEMPDIR/tine20
+                    find $TEMPDIR/tine20/vendor -name .git -type d -print0 | xargs -0 rm -rf
                     
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase Zend images library vendor docs fonts themes" 
@@ -293,7 +289,7 @@ function setupComposer()
     wget -O $MISCPACKAGESDIR/composer.phar https://getcomposer.org/composer.phar
     chmod ugo+x $MISCPACKAGESDIR/composer.phar
     ln -sf composer $MISCPACKAGESDIR/composer.phar
-    
+
     composer install -d $TEMPDIR/tine20
 }
 
