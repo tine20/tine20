@@ -84,18 +84,6 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
     
     protected $_setGeoData = TRUE;
     
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Controller Contacts Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-    
     protected function setUp()
     {
         parent::setUp();
@@ -137,6 +125,34 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
         $this->assertEquals('c.weiss@example.de',     $syncrotonContact->email2Address);
         $this->assertEquals('20001224T230000Z',       $syncrotonContact->birthday->format('Ymd\THis\Z'));
         $this->assertEquals(NULL,                     $syncrotonContact->webPage, 'facebook url should be removed');
+        
+        return array($serverId, $syncrotonContact);
+    }
+
+    /**
+     * test birthday handling for BB10
+     * 
+     * @param string $syncrotonFolder
+     * @return array
+     */
+    public function testCreateEntryBB10($syncrotonFolder = null)
+    {
+        if ($syncrotonFolder === null) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_BLACKBERRY), new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $xml = new SimpleXMLElement($this->_testXMLInput);
+        $syncrotonContact = new Syncroton_Model_Contact($xml->Collections->Collection->Commands->Add[0]->ApplicationData);
+        
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonContact);
+        
+        $tine20Contact = Addressbook_Controller_Contact::getInstance()->get($serverId);
+        $this->assertEquals('2000-12-25T11:00:00+00:00', $tine20Contact->bday->getIso());
+        
+        $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        $this->assertEquals('2000-12-25T23:00:00+00:00', $syncrotonContact->birthday->getIso());
         
         return array($serverId, $syncrotonContact);
     }

@@ -461,7 +461,20 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
                     'remotewipe' => 0
                 ));
                 break;
-    
+                
+            case Syncroton_Model_Device::TYPE_BLACKBERRY:
+                $device = new Syncroton_Model_Device(array(
+                    'deviceid'   => 'BB2B2449CA',
+                    'devicetype' => Syncroton_Model_Device::TYPE_BLACKBERRY,
+                    'policykey'  => null,
+                    'policyId'   => null,
+                    'ownerId'    => Tinebase_Core::getUser()->getId(),
+                    'useragent'  => 'RIM-Q10-SQN100-3/10.2.0.1443',
+                    'acsversion' => '14.1',
+                    'remotewipe' => 0
+                )); 
+                break;
+                
             case Syncroton_Model_Device::TYPE_WEBOS:
                 $device = new Syncroton_Model_Device(array(
                     'deviceid'   => 'webos-abcd',

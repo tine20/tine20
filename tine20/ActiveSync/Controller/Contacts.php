@@ -163,7 +163,17 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
                     $syncrotonContact->$syncrotonProperty = Tinebase_Translation::getCountryNameByRegionCode($entry->$tine20Property);
                     
                     break;
-                
+                    
+                case 'bday':
+                    $syncrotonContact->$syncrotonProperty = $entry->$tine20Property;
+                    
+                   if ($this->_device->devicetype == Syncroton_Model_Device::TYPE_BLACKBERRY && version_compare($this->_device->getMajorVersion(), '10', '>=')) {
+                        // BB 10+ expects birthday to be at noon
+                        $syncrotonContact->$syncrotonProperty->addHour(12);
+                    }
+                    
+                    break;
+                    
                 case 'note':
                     $syncrotonContact->$syncrotonProperty = new Syncroton_Model_EmailBody(array(
                         'type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT,
@@ -244,22 +254,20 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
                     break;
                     
                 case 'bday':
-                    #$isoDate = (string)$data->$fieldName;
                     $contact->$value = new Tinebase_DateTime($data->$fieldName);
                     
-                    if (
-                        // ($this->_device->devicetype == Syncroton_Model_Device::TYPE_WEBOS) || // only valid versions < 2.1
-                        ($this->_device->devicetype == Syncroton_Model_Device::TYPE_IPHONE && $this->_device->getMajorVersion() < 800)/* ||
-                        preg_match("/^\d{4}-\d{2}-\d{2}$/", $isoDate)*/
-                    ) {
+                    if ($this->_device->devicetype == Syncroton_Model_Device::TYPE_IPHONE && $this->_device->getMajorVersion() < 800) {
                         // iOS < 4 & webow < 2.1 send birthdays to the entered date, but the time the birthday got entered on the device
                         // acutally iOS < 4 somtimes sends the bday at noon but the timezone is not clear
                         // -> we don't trust the time part and set the birthdays timezone to the timezone the user has set in tine
                         $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
                         $contact->$value = new Tinebase_DateTime($contact->bday->setTime(0,0,0)->format(Tinebase_Record_Abstract::ISO8601LONG), $userTimezone);
                         $contact->$value->setTimezone('UTC');
+                    } elseif ($this->_device->devicetype == Syncroton_Model_Device::TYPE_BLACKBERRY && version_compare($this->_device->getMajorVersion(), '10', '>=')) {
+                        // BB 10+ expects birthday to be at noon
+                        $contact->$value->subHour(12);
                     }
-                        
+                    
                     break;
                     
                 case 'adr_one_countryname':
