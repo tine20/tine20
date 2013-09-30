@@ -33,12 +33,13 @@
         "psr-0": {
             "": ["", "library", "../tests/tine20"],
             "TimeZoneConvert": "library/TimeZoneConvert/lib/",
+            "Zend": ["", "library"],
             "qCal": "library/qCal/lib"
         },
         "classmap": [
             "library/idnaconvert"
         ]
     },
-    "include-path-desc": "ZF still needs include path as it does not consequently use autoloading internally",
+    "include-path-desc": "ZF1 still needs include path as it does not consequently use autoloading internally",
     "include-path": ["", "library"]
 }

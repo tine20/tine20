@@ -296,10 +296,11 @@
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "3226e509f766cc554b357cfa77d3b777cc62da51"
+                "reference": "c21f851459f1943a59c22ceda626846d056ce465"
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.3.0",
+                "zendframework/zendframework1": ">=1.9.1"
             },
             "require-dev": {
                 "phing/phing": "2.6.1-p0",
@@ -309,7 +310,10 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Syncroton": "lib/"
+                    "Syncroton": [
+                        "lib/",
+                        "tests/"
+                    ]
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -318,7 +322,58 @@
             ],
             "description": "Library to sync mobile phones",
             "homepage": "http://www.syncroton.org",
-            "time": "2013-09-29 19:00:36"
+            "time": "2013-09-30 06:56:52"
+        },
+        {
+            "name": "zendframework/zendframework1",
+            "version": "1.12.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zf1.git",
+                "reference": "3e31137181d121d03cb1117fd95b07027cfa4bea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zf1/zipball/3e31137181d121d03cb1117fd95b07027cfa4bea",
+                "reference": "3e31137181d121d03cb1117fd95b07027cfa4bea",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.11"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-trunk": "1.12.x-dev",
+                    "dev-release-1.0": "1.0.x-dev",
+                    "dev-release-1.5": "1.5.x-dev",
+                    "dev-release-1.6": "1.6.x-dev",
+                    "dev-release-1.7": "1.7.x-dev",
+                    "dev-release-1.8": "1.8.x-dev",
+                    "dev-release-1.9": "1.9.x-dev",
+                    "dev-release-1.10": "1.10.x-dev",
+                    "dev-release-1.11": "1.11.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "library/"
+            ],
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "framework"
+            ],
+            "time": "2013-03-13 16:53:12"
         }
     ],
     "packages-dev": [
