@@ -17,6 +17,10 @@
 
 <table>
   <tr>
+    <td><?php echo $this->lang_customer ?></td>
+    <td><?php echo $this->customer ?></td>
+  </tr>
+<tr>
     <td><?php echo $this->lang_state ?></td>
     <td><?php echo $this->leadState['leadstate'] ?></td>
   </tr>
@@ -64,7 +68,3 @@
     <?php echo sprintf($this->lang_updatedFieldMsg, $update->modified_attribute, $update->old_value, $update->new_value) ?><br />
   <?php endforeach; ?>
 <?php endif;?>
-  
-        
-
-

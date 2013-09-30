@@ -526,7 +526,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             $createdRecord = $this->_backend->create($_record);
             $this->_inspectAfterCreate($createdRecord, $_record);
-            $this->_setRelatedData($createdRecord, $_record);
+            $this->_setRelatedData($createdRecord, $_record, TRUE);
             $this->_setNotes($createdRecord, $_record);
 
             if ($this->sendNotifications()) {

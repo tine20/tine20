@@ -4,8 +4,8 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -14,15 +14,35 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Crm_AbstractTest::main');
-}
-
 /**
  * abstract crm test class
  */
 class Crm_AbstractTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Sets up the fixture.
+     * This method is called before a test is executed.
+     *
+     * @access protected
+     */
+    protected function setUp()
+    {
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
+    }
+
+    /**
+     * Tears down the fixture
+     * This method is called after a test is executed.
+     *
+     * @access protected
+     */
+    protected function tearDown()
+    {
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(TRUE);
+        Tinebase_TransactionManager::getInstance()->rollBack();
+    }
+    
     /**
      * get contact
      * 

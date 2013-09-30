@@ -312,44 +312,6 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * try to set / get linked contacts
-     *
-     * @deprecated when we have the update test in jsonTest, remove that
-     */
-    public function testLinkedContacts()
-    {
-        /*
-        // create test contact
-        try {
-            $contact = Addressbook_Controller_Contact::getInstance()->get($this->_objects['user']->getId());
-        } catch ( Exception $e ) {
-            $contact = Addressbook_Controller_Contact::getInstance()->create($this->_objects['user']);
-        }
-        
-        // link contact
-        $lead = Crm_Controller_Lead::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['leadId']);
-        $lead->relations = array(array(
-            'own_model'              => 'Crm_Model_Lead',
-            'own_backend'            => 'Sql',
-            'own_id'                 => $GLOBALS['Addressbook_ControllerTest']['leadId'],
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'related_model'          => 'Addressbook_Model_Contact',
-            'related_backend'        => Addressbook_Backend_Factory::SQL,
-            'related_id'             => $contact->getId(),
-            'type'                   => 'RESPONSIBLE'
-        ));
-         
-        $lead = Crm_Controller_Lead::getInstance()->update($lead);
-                
-        // check linked contacts
-        $updatedLead = Crm_Controller_Lead::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['leadId']);
-        
-        $this->assertGreaterThan(0, count($updatedLead->relations));
-        $this->assertEquals($contact->getId(), $updatedLead->relations[0]->related_id);
-        */
-    }
-    
-    /**
      * try to delete a lead
      *
      */

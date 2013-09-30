@@ -37,20 +37,8 @@ class Crm_JsonTest extends Crm_AbstractTest
      * @var Tinebase_FileSystem
      */
     protected $_fsController;
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
-    /**
+   /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -58,12 +46,10 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-
+        parent::setUp();
+        
         $this->_instance = new Crm_Frontend_Json();
         $this->_fsController = Tinebase_FileSystem::getInstance();
-        
-        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
     }
 
     /**
@@ -84,10 +70,9 @@ class Crm_JsonTest extends Crm_AbstractTest
             }
         }
         
-        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(TRUE);
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
     }
-    
+     
     /**
      * test get crm registry
      * 

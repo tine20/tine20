@@ -31,6 +31,7 @@ class Crm_AllTests
         $suite->addTest(Crm_Export_AllTests::suite());
         $suite->addTestSuite('Crm_ControllerTest');
         $suite->addTestSuite('Crm_JsonTest');
+        $suite->addTestSuite('Crm_NotificationsTests');
         return $suite;
     }
 }

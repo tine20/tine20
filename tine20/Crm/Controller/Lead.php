@@ -154,7 +154,16 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $view->leadType = $settings->getOptionById($_lead->leadtype_id, 'leadtypes');
         $view->leadSource = $settings->getOptionById($_lead->leadsource_id, 'leadsources');
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container_id);
-        //$view->updates = $_updates;
+        
+        if (isset($_lead->relations)) {
+            $customer = $_lead->relations->filter('type', 'CUSTOMER')->getFirstRecord();
+            if ($customer) {
+                $view->customer = $customer->related_record->n_fn;
+                if (isset($customer->related_record->org_name)) {
+                    $view->customer .= ' (' . $customer->related_record->org_name . ')';
+                }
+            }
+        }
         
         if($_lead->start instanceof DateTime) {
             $view->start = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_lead->start, NULL, NULL, 'date');
@@ -174,6 +183,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             $view->ScheduledEnd = '-';
         }
         
+        $view->lang_customer = $translate->_('Customer');
         $view->lang_state = $translate->_('State');
         $view->lang_type = $translate->_('Role');
         $view->lang_source = $translate->_('Source');
@@ -190,7 +200,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $plain = $view->render('newLeadPlain.php');
         $html = $view->render('newLeadHtml.php');
         
-        if($_action == 'changed') {
+        if ($_action == 'changed') {
             $subject = sprintf($translate->_('Lead %s has been changed'), $_lead->lead_name);
         } else {
             $subject = sprintf($translate->_('Lead %s has been created'), $_lead->lead_name);
@@ -205,7 +215,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' error creating pdf: ' . $e->__toString());
             $attachment = NULL;
         }
-                
+        
         $recipients = $this->_getNotificationRecipients($_lead);
         // send notificaton to updater in any case!
         if (! in_array($_updater->accountId, $recipients)) {
