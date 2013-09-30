@@ -107,10 +107,6 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $returnedGet = $this->_backend->getTask($returned['id'], '0', '');
         $this->assertEquals($task['summary'], $returnedGet['summary']);
         
-        $returnedGet = $this->_backend->getTask('');
-        $this->assertEquals(Tinebase_Core::getUser()->accountFirstName, $returnedGet['organizer']['accountFirstName']);
-        $this->assertEquals('personal', $returnedGet['container_id']['type']);
-        
         $this->_backend->deleteTasks(array($returned['id']));
     }
     

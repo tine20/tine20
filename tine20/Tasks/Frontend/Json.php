@@ -59,27 +59,11 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * Return a single Task
      *
      * @param string $id
-     * @param int    $containerId
-     * @param string $relatedApp
      * @return Tasks_Model_Task task
      */
-    public function getTask($id, $containerId = -1, $relatedApp = '')
+    public function getTask($id)
     {
-        if(strlen($id) == 40) {
-            $task = Tasks_Controller_Task::getInstance()->get($id);
-        } else {
-            $task = new Tasks_Model_Task(array(
-                'container_id' => $containerId
-            ), true);
-        
-            if ($containerId <= 0) {
-                $task->container_id = Tasks_Controller::getInstance()->getDefaultContainer($relatedApp)->getId();
-            }
-            
-            $task->organizer = Tinebase_Core::getUser()->getId();
-        }
-        
-        return $this->_recordToJson($task);
+        return $this->_get($id, Tasks_Controller_Task::getInstance());
     }
 
     /**
