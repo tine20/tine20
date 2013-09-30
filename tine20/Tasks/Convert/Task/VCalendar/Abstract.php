@@ -662,13 +662,13 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                     if (preg_match('/mailto:(?P<email>.*)/i', $property->value, $matches)) {
                         // it's not possible to change the organizer by spec
                         if (empty($task->organizer)) {
-                            $name = isset($property['CN']) ? $property['CN']->value : $matches['email'];
-                            $contact = Calendar_Model_Attender::resolveEmailToContact(array(
-                                'email'     => $matches['email'],
-                                'lastName'  => $name,
-                            ));
-                        
-                            $task->organizer = $contact->getId();
+//                             $name = isset($property['CN']) ? $property['CN']->value : $matches['email'];
+//                             $contact = Calendar_Model_Attender::resolveEmailToContact(array(
+//                                 'email'     => $matches['email'],
+//                                 'lastName'  => $name,
+//                             ));
+                            $user = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $matches['email']);
+                            $task->organizer = $user ? $user->getId() : Tinebase_Core::getUser()->getId();
                         }
                     }
                     

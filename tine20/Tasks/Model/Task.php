@@ -240,13 +240,13 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      */
     public function resolveOrganizer()
     {
-        if (! empty($this->organizer) && ! $this->organizer instanceof Addressbook_Model_Contact) {
-            $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($this->organizer, TRUE);
-            if (count($contacts)) {
-                $this->organizer = $contacts->getFirstRecord();
+        Tinebase_User::getInstance()->resolveUsers($this, 'organizer', true);
+        
+        if (! empty($this->organizer) && $this->organizer instanceof Tinebase_Model_User) {
+            $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($this->organizer->contact_id, TRUE);
+            if ($contacts) {
+                return $contacts->getFirstRecord();
             }
         }
-        
-        return $this->organizer;
     }
 }

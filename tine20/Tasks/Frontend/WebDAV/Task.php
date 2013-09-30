@@ -150,7 +150,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
     {
         // can happen only during create not on update
         if (empty($task->organizer)) {
-            $task->organizer = Tinebase_Core::getUser()->contact_id;
+            $task->organizer = Tinebase_Core::getUser()->getId();
         }
 
     }
@@ -413,7 +413,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         self::enforceEventParameters($task);
         
         // don't allow update of alarms for non organizer if oganizer is Tine 2.0 user
-        if ($task->organizer !== Tinebase_Core::getUser()->contact_id) {
+        if ($task->organizer !== Tinebase_Core::getUser()->getId()) {
             $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($task->organizer,TRUE);
             
             // reset alarms if organizer is Tine 2.0 user

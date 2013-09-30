@@ -80,7 +80,8 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
         
         $record = $task->getRecord();
 
-        $this->assertEquals('New Task', $record->summary);
+        $this->assertEquals('New Task', $record->summary, 'summary');
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $record->organizer, 'organizer');
         
         return $task;
     }

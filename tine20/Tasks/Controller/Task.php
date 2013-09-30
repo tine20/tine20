@@ -98,6 +98,17 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
     }
     
     /**
+     * inspect before create/update
+     *
+     * @param   Tinebase_Record_Interface $_record      the record to inspect
+     */
+    protected function _inspectTask($_record)
+    {
+        $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
+        $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->getId();
+    }
+    
+    /**
      * inspect creation of one record (before create)
      *
      * @param   Tinebase_Record_Interface $_record
@@ -105,7 +116,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
+        $this->_inspectTask($_record);
     }
     
     /**
@@ -117,7 +128,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        $_record->uid = $_oldRecord->uid ? $_oldRecord->uid        : Tinebase_Record_Abstract::generateUID();
+        $this->_inspectTask($_record);
     }
     
     /**

@@ -134,7 +134,7 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
         // to prevent ugly (and not helpful) error messages on the client
         if (isset($_SERVER['REQUEST_METHOD']) && $httpRequest->getMethod() == 'PUT' && $httpRequest->getHeader('If-None-Match') === '*') {
             if (
-                $object->organizer != Tinebase_Core::getUser()->contact_id && 
+                $object->organizer != Tinebase_Core::getUser()->getId() && 
                 Calendar_Model_Attender::getOwnAttender($object->attendee) !== null
             ) {
                 throw new DAV\Exception\NotFound('Object not found');
