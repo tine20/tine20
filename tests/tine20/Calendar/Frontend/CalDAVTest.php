@@ -51,9 +51,18 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
         
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
+            'model'             => 'Calendar_Model_Event',
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+        )));
+        
+        $this->objects['tasksContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'model'             => 'Tasks_Model_Task',
+            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
         )));
     }
 
@@ -78,6 +87,12 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
         $children = $collection->getChildren();
         
         $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV_Container);
+        
+        $this->assertTrue(array_reduce($children, function($result, $container){
+            return $result || $container instanceof Tasks_Frontend_WebDAV_Container;
+        }, FALSE), 'tasks container is missing');
+        
+        return $children;
     }
         
     /**
@@ -90,6 +105,22 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
         $child = $collection->getChild($this->objects['initialContainer']->getId());
         
         $this->assertTrue($child instanceof Calendar_Frontend_WebDAV_Container);
+    }
+    
+    /**
+     * test getChild
+     */
+    public function testGetTasksChild()
+    {
+        $collection = new Calendar_Frontend_CalDAV();
+        $children = $this->testGetChildren();
+        
+        $taskContainer = array_reduce($children, function($result, $container){
+            return $container instanceof Tasks_Frontend_WebDAV_Container ? $container : NULL;
+        }, NULL);
+        $child = $collection->getChild($taskContainer->getName());
+    
+        $this->assertTrue($child instanceof Tasks_Frontend_WebDAV_Container);
     }
     
     /**

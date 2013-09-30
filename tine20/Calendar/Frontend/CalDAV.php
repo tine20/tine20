@@ -91,7 +91,7 @@ class Calendar_Frontend_CalDAV extends Addressbook_Frontend_CardDAV
                         throw new Sabre\DAV\Exception\NotFound('Directory not found');
                     }
                     
-                    $objectClass = array_value(0, explode('_', get_class($this))) . '_Frontend_WebDAV_Container';
+                    $objectClass = array_value(0, explode('_', $container->model ?: 'Calendar')) . '_Frontend_WebDAV_Container';
                     
                     return new $objectClass($container, true);
                 }
