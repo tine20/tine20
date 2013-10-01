@@ -1,15 +1,17 @@
 # 
 # Translators:
-# Alexander Stintzing <a.stintzing@metaways.de>, 2012
+# Alexander Stintzing <a.stintzing@metaways.de>, 2012-2013
 # Björn Balazs <transifex@lazs.de>, 2012-2013
 # lkneschke <l.kneschke@metaways.de>, 2013
+# lkneschke <l.kneschke@metaways.de>, 2013
+# mspahn <ms@ansta.lt>, 2013
 # mspahn <ms@ansta.lt>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-12 14:05+0000\n"
-"Last-Translator: lkneschke <l.kneschke@metaways.de>\n"
+"PO-Revision-Date: 2013-10-01 13:34+0000\n"
+"Last-Translator: Alexander Stintzing <a.stintzing@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,17 +30,17 @@ msgstr "Vertrag nicht bearbeitbar"
 msgid ""
 "You are not allowed to change the record if a vacation has been booked "
 "already!"
-msgstr ""
+msgstr "Der Vertrag kann nicht mehr geändert werden, wenn bereits Urlaub gebucht worden ist."
 
 #: Acl/Rights.php:93
 msgid "edit private employee data"
-msgstr "Private Daten des Angestellten bearbeiten"
+msgstr "Private Daten des Mitarbeiters bearbeiten"
 
 #: Acl/Rights.php:94
 msgid ""
 "Edit birthday, account data and other private information of employee "
 "records"
-msgstr "Bearbeiten von persönlichen Daten und Vertragsdaten des Angestellten."
+msgstr "Bearbeiten von persönlichen Daten und Vertragsdaten des Mitarbeiters."
 
 #: Controller.php:74
 msgid "You do not have admin rights on HumanResources"
@@ -88,7 +90,7 @@ msgstr "Freizeitansprüche"
 
 #: Model/FreeTime.php:35 js/AccountEditDialog.js:104
 msgid "Free Times"
-msgstr "Freizeitansprüche"
+msgstr "Freie Tage"
 
 #: Model/FreeTime.php:60 Model/Employee.php:77 js/EmployeeEditDialog.js:216
 msgid "Account"
@@ -120,11 +122,11 @@ msgstr "freie Tage"
 #: Model/ExtraFreeTime.php:33 js/AccountEditDialog.js:74
 #: js/ExtraFreeTimeEditDialog.js:99 js/ExtraFreeTimeEditDialog.js:111
 msgid "Extra free time"
-msgstr ""
+msgstr "Sonderurlaub"
 
 #: Model/ExtraFreeTime.php:34 Model/Account.php:71
 msgid "Extra free times"
-msgstr ""
+msgstr "Sonderurlaub"
 
 #: Model/ExtraFreeTime.php:70 js/ExtraFreeTimeEditDialog.js:124
 msgid "Days"
@@ -136,11 +138,11 @@ msgstr "Ablaufdatum"
 
 #: Model/Account.php:34
 msgid "Personal account"
-msgstr ""
+msgstr "Personalkonto"
 
 #: Model/Account.php:35
 msgid "Personal accounts"
-msgstr ""
+msgstr "Personalkonten"
 
 #: Model/Account.php:63 js/FreeTimeEditDialog.js:159
 msgid "Year"
@@ -156,7 +158,7 @@ msgstr "Bankverbindung"
 
 #: Model/Employee.php:51
 msgid "Private Information"
-msgstr ""
+msgstr "Private Informationen"
 
 #: Model/Employee.php:63
 msgid "Is employed"
@@ -192,7 +194,7 @@ msgstr "Straße"
 
 #: Model/Employee.php:113
 msgid "Street 2"
-msgstr ""
+msgstr "Straße 2"
 
 #: Model/Employee.php:118 js/EmployeeEditDialog.js:332
 msgid "E-Mail"
@@ -224,7 +226,7 @@ msgstr "Vorname"
 
 #: Model/Employee.php:145
 msgid "Employee name"
-msgstr "Name des Angestellten"
+msgstr "Name des Mitarbeiters"
 
 #: Model/Employee.php:150 js/EmployeeEditDialog.js:342
 msgid "Birthday"
@@ -329,21 +331,21 @@ msgstr "Hier können Sie den Standard Feiertagskalender festlegen, der benutzt w
 
 #: Config.php:100
 msgid "Extra freetime type"
-msgstr ""
+msgstr "Sonderurlaub Typ"
 
 #: Config.php:102
 msgid "Possible extra free time definitions"
-msgstr ""
+msgstr "Mögliche Sonderurlaube"
 
 #: Config.php:110 js/AdminPanel.js:230
 msgid "Vacation expires"
-msgstr ""
+msgstr "Urlaub verfällt"
 
 #: Config.php:112
 msgid ""
 "Here you can define the day, when the vacation days taken from last year "
 "expires, the format is MM-DD."
-msgstr ""
+msgstr "Hier können Sie den Tag angeben, ab dem die Urlaubstage vom letzten Jahr verfallen sind. Bitte im Format JJ-DD angeben."
 
 #: Setup/Update/Release7.php:143 Setup/Initialize.php:39
 msgid "All employees"
@@ -351,7 +353,7 @@ msgstr "Alle Angestellten"
 
 #: Setup/Update/Release7.php:144 Setup/Initialize.php:40
 msgid "All available employees"
-msgstr ""
+msgstr "Alle verfügbaren Mitarbeiter"
 
 #: Setup/Update/Release7.php:373 Setup/Initialize.php:88
 msgid "Payed"
@@ -379,7 +381,7 @@ msgstr "Momentan angestellte Mitarbeiter"
 
 #: Setup/Initialize.php:33
 msgid "Currently employed employees"
-msgstr "Momentan angestellte Mitarbeiter"
+msgstr "Zur Zeit angestellt"
 
 #: Setup/Initialize.php:52
 msgid "All accounts"
@@ -409,8 +411,8 @@ msgstr "abgewiesen"
 #: js/EmployeeGridPanel.js:37
 msgid "Export {0}"
 msgid_plural "Export {0}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} exportieren"
+msgstr[1] "{0} exportieren"
 
 #: js/EmployeeGridPanel.js:49
 msgid "Export as ODS"
@@ -442,7 +444,7 @@ msgstr "Kalender"
 
 #: js/EmployeeEditDialog.js:107
 msgid "Account is disabled or deleted!"
-msgstr "Benutzerkonto ist deaktiviert oder gelöscht!"
+msgstr "Benutzer nicht mehr vorhanden!"
 
 #: js/EmployeeEditDialog.js:235
 msgid "Apply contact data on form"
@@ -471,19 +473,19 @@ msgstr "Geben Sie eine Beschreibung an"
 
 #: js/FreeTimeEditDialog.js:75
 msgid "Edit {0} \"{1}\""
-msgstr ""
+msgstr "{0} \"{1}\" bearbeiten"
 
 #: js/FreeTimeEditDialog.js:83
 msgid "Add {0} for {1}"
-msgstr ""
+msgstr "Füge {0} für {1} hinzu"
 
 #: js/FreeTimeEditDialog.js:85
 msgid "Edit {0} for {1}"
-msgstr ""
+msgstr "{0} für {1} bearbeiten"
 
 #: js/FreeTimeEditDialog.js:170
 msgid "Remaining"
-msgstr ""
+msgstr "Übrig"
 
 #: js/FreeTimeEditDialog.js:221
 msgid "Select Days"
@@ -491,17 +493,17 @@ msgstr "Wählen Sie die Tage"
 
 #: js/AccountGridPanel.js:32
 msgid "Book remaining vacation"
-msgstr ""
+msgstr "Urlaub vom letzten Jahr als Sonderurlaub buchen"
 
 #: js/AccountGridPanel.js:79
 msgid "Booking has been successfull!"
-msgstr ""
+msgstr "Buchung erfolgreich!"
 
 #: js/AccountGridPanel.js:80
 msgid ""
 "The remaining vacation days of the selected accounts have been booked "
 "successfully!"
-msgstr ""
+msgstr "Die übrigen Urlaubstage wurden erfolgreich umgebucht!"
 
 #: js/ExceptionHandler.js:41
 msgid "No contract could be found."
@@ -521,13 +523,13 @@ msgstr "Als Urlaub buchen"
 
 #: js/FreeTimeGridPanel.js:60 js/FreeTimeGridPanel.js:61
 msgid "Sickness Days"
-msgstr ""
+msgstr "Krankheitstage"
 
 #: js/FreeTimeGridPanel.js:68
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria "
 "or view-options."
-msgstr ""
+msgstr "Es konnte keine {0} gefunden werden. Bitte ändern Sie die Filterkriterien oder Ansichtseinstellungen."
 
 #: js/DatePicker.js:49
 msgid "WK"
@@ -539,18 +541,18 @@ msgstr "Lade Kalender.."
 
 #: js/DatePicker.js:224
 msgid "No more vacation days"
-msgstr ""
+msgstr "Keine weiteren Urlaubstage vorhanden"
 
 #: js/DatePicker.js:225
 msgid ""
 "The Employee has no more possible vacation days left for this year. Add some"
 " extra free days to the account, if the employee should have more vacation "
 "this year."
-msgstr ""
+msgstr "Der Mitarbeiter hat keine Urlaubstage mehr in diesem Jahr . Bitte fügen Sie Sonderurlaub hinzu, um dem Mitarbeiter mehr möglichen Urlaub zuzuordnen."
 
 #: js/AccountEditDialog.js:52
 msgid "Edit {0} for {1} - {2}"
-msgstr ""
+msgstr "{0} von {1} des Jahres {2} bearbeiten"
 
 #: js/AccountEditDialog.js:91
 msgid "Summary"
@@ -558,15 +560,15 @@ msgstr "Zusammenfassung"
 
 #: js/AccountEditDialog.js:110
 msgid "Possible vaction days"
-msgstr "Verfügbare Urlaubstage"
+msgstr "Mögliche Urlaubstage"
 
 #: js/AccountEditDialog.js:111
 msgid "Remaining vaction days"
-msgstr "Verbleibende Urlaubstage"
+msgstr "Übrige Urlaubstage"
 
 #: js/AccountEditDialog.js:112
 msgid "Taken vaction days"
-msgstr "Genommene Urlaubstage"
+msgstr "Verbrauchte Urlaubstage"
 
 #: js/AccountEditDialog.js:113
 msgid "Expired vaction days"
@@ -574,7 +576,7 @@ msgstr "Verfallene Urlaubstage"
 
 #: js/AccountEditDialog.js:114
 msgid "Rebooked vaction days"
-msgstr ""
+msgstr "Umgebuchte Urlaubstage"
 
 #: js/AccountEditDialog.js:127
 msgid "Excused sickness days"
@@ -592,11 +594,11 @@ msgstr[1] "Arbeitszeitmodelle"
 
 #: js/AccountEditDialog.js:141
 msgid "Days to work"
-msgstr ""
+msgstr "Anzahl Arbeitstage"
 
 #: js/AccountEditDialog.js:142
 msgid "Hours to work"
-msgstr ""
+msgstr "Anzahl der zu leistenden Stunden"
 
 #: js/Models.js:26
 msgid "Working Times"
@@ -620,7 +622,7 @@ msgstr "Anfangsdatum"
 
 #: js/ContractEditDialog.js:87
 msgid "Edit {0}"
-msgstr ""
+msgstr "{0} bearbeiten"
 
 #: js/ContractEditDialog.js:246
 msgid "Choose the template"
