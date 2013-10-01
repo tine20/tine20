@@ -1811,7 +1811,7 @@ class Setup_Controller
         $session = Tinebase_Core::getSession();
         if (! isset($session->filesystemAvailable)) {
             $result = (! empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
-            if (is_object($session)) {
+            if (is_object($session) && Zend_Session::isWritable()) {
                 $session->filesystemAvailable = $result;
             }
         } else {
