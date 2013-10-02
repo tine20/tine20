@@ -107,7 +107,8 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
      * @param  bool   $_isPassword  is prompt a password?
      * @return string
      */
-    public static function promptInput($_promptText, $_isPassword = FALSE) {
+    public static function promptInput($_promptText, $_isPassword = FALSE)
+    {
         fwrite(STDOUT, PHP_EOL . "$_promptText> ");
         
         if ($_isPassword) {
