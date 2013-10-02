@@ -179,7 +179,7 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
             // some apps (Felamimail atm) can add application specific title postfixes
             // TODO generalize this
             appPostfix = (document.title.match(/^\([0-9]+\) /)) ? document.title.match(/^\([0-9]+\) /)[0] : '';
-        document.title = appPostfix + Tine.title + postfix  + ' - ' + app.getTitle();
+        document.title = Ext.util.Format.stripTags(appPostfix + Tine.title + postfix  + ' - ' + app.getTitle());
     },
     
     /**

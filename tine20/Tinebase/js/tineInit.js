@@ -52,8 +52,7 @@ Tine.clientVersion.releaseTime      = 'none';
  * 
  * @type String
  */
-// TODO 'org' needs to be 'moved to the top'
-Tine.title = 'Tine 2.0org';
+Tine.title = 'Tine 2.0<sup>org</sup>';
 Tine.weburl = 'http://www.tine20.com/info/community.html';
 Tine.helpUrl = 'http://www.tine20.org/wiki/index.php/Main_Page';
 
@@ -221,7 +220,7 @@ Tine.Tinebase.tineInit = {
         var c = Ext.ux.PopupWindowMgr.get(window) || {};
         
         // set window title
-        window.document.title = c.title ? c.title : window.document.title;
+        window.document.title = Ext.util.Format.stripTags(c.title ? c.title : window.document.title);
         
         // finally render the window contents in a new card  
         var card = Tine.WindowFactory.getCenterPanel(c);

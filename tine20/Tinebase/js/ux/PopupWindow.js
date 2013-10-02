@@ -161,7 +161,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      */
     setTitle: function(title, iconCls) {
         if (this.popup && this.popup.document) {
-            this.popup.document.title = title;
+            this.popup.document.title = Ext.util.Format.stripTags(title);
         }
     },
     
