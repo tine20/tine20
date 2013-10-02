@@ -224,7 +224,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 appName: 'Calendar',
                                 requiredGrant: 'readGrant',
                                 hideTrigger2: true,
-                                allowBlank: true,
+                                allowBlank: false,
                                 blurOnSelect: true,
                                 fieldLabel: this.app.i18n._('Feast Calendar'),
                                 name: 'feast_calendar_id'

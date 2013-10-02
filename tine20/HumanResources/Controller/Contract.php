@@ -71,7 +71,13 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        // sanitize container_id
+        if (is_array($_record->feast_calendar_id)) {
+            $_record->feast_calendar_id = $_record->feast_calendar_id['id'];
+        }
+        
         $diff = $_record->diff($_oldRecord, array('created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'notes', 'end_date'))->diff;
+        
         if (! empty($diff)) {
             if ($this->getFreeTimes($_record)->count() > 0) {
                 throw new HumanResources_Exception_ContractNotEditable();
@@ -413,8 +419,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         } elseif (is_object($employeeId) && get_class($employeeId) == 'HumanResources_Model_Employee') {
             $employeeId = $employeeId->getId();
         }
-        
-        
+
         $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
         if ($employeeId) {
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId)));

@@ -100,34 +100,30 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      */
     loadFeastDays: function(freetime, employeeId) {
         
-        if (! employeeId) {
-            return;
-        }
-        
         if (freetime) {
-            var employeeId   = freetime.get('employee_id').id;
-            var firstDay     = freetime.get('firstday_date')
-            var firstDayDate = firstDay ? firstDay : new Date();
+            var year = null;
             var freeTimeId   = freetime.get('id') ? freetime.get('id') : null;
-            
-            this.loadMask = new Ext.LoadMask(this.getEl(), {
-                msg: this.app.i18n._('Loading calendar data...')
-            });
-            
-            this.loadMask.show();
-            
-            var req = Ext.Ajax.request({
-                url : 'index.php',
-                params : { method : 'HumanResources.getFeastAndFreeDays', _employeeId : employeeId, _firstDayDate: firstDayDate, _freeTimeId: freeTimeId},
-                success : function(_result, _request) {
-                    this.onFeastDaysLoad(Ext.decode(_result.responseText), freetime);
-                },
-                failure : function(exception) {
-                    Tine.HumanResources.handleRequestException(exception, this.onFeastDaysLoadFailureCallback, this);
-                },
-                scope: this
-            });
+        } else {
+            var year = this.editDialog.accountBox.selectedRecord ? this.editDialog.accountBox.selectedRecord.data.year : null;
+            var freeTimeId = null;
         }
+        this.loadMask = new Ext.LoadMask(this.getEl(), {
+            msg: this.app.i18n._('Loading calendar data...')
+        });
+        
+        this.loadMask.show();
+        
+        var req = Ext.Ajax.request({
+            url : 'index.php',
+            params : { method : 'HumanResources.getFeastAndFreeDays', _employeeId : employeeId, _year: year, _freeTimeId: freeTimeId},
+            success : function(_result, _request) {
+                this.onFeastDaysLoad(Ext.decode(_result.responseText), freetime);
+            },
+            failure : function(exception) {
+                Tine.HumanResources.handleRequestException(exception, this.onFeastDaysLoadFailureCallback, this);
+            },
+            scope: this
+        });
     },
     
     /**
@@ -162,7 +158,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         var lastDay = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
         this.setMaxDate(lastDay);
         
-        var iterate = result.results.ownFreeDays ? result.results.ownFreeDays : freetime.get('freedays');
+        var iterate = result.results.ownFreeDays ? result.results.ownFreeDays : (freetime ? freetime.get('freedays') : null);
         
         if (Ext.isArray(iterate)) {
             Ext.each(iterate, function(fd) {
@@ -178,8 +174,19 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         this.loadMask.hide();
         this.enable();
         
+        var focusDate = this.editDialog.record.get('firstday_date');
+        if (! focusDate) {
+            var year = this.editDialog.accountBox.selectedRecord ? parseInt(this.editDialog.accountBox.selectedRecord.data.year) : 0;
+            if (year > 0) {
+                var focusDate = new Date(this.activeDate.getTime());
+                focusDate.setFullYear(year);
+            } else {
+                focusDate = new Date();
+            }
+        }
+        
         // focus
-        this.update(this.editDialog.record.get('firstday_date') ? this.editDialog.record.get('firstday_date') : new Date());
+        this.update(focusDate);
     },
     
     /**
@@ -239,6 +246,16 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             this.store.addSorted(new this.recordClass({date: date, duration: 1}));
             remaining--;
         }
+        
+        if (this.store.getCount() > 0) {
+            if (! this.editDialog.accountBox.getValue()) {
+                this.editDialog.accountBox.load();
+            }
+            this.editDialog.accountBox.disable();
+        } else {
+            this.editDialog.accountBox.enable();
+        }
+        
         if (this.freetimeType == 'VACATION') {
             this.editDialog.getForm().findField('remaining_vacation_days').setValue(remaining);
         }

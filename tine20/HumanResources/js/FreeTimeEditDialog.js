@@ -80,9 +80,10 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         var typeString = this.freetimeType == 'SICKNESS' ? 'Sickness Days' : 'Vacation Days';
         
         if (this.record.id) {
-            this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'), typeString, this.record.get('employee_id').n_fn));
-        } else {
+            this.accountBox.disable();
             this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), typeString, this.record.get('employee_id').n_fn));
+        } else {
+            this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'), typeString, this.record.get('employee_id').n_fn));
         }
     },
 
@@ -164,6 +165,12 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 {field: 'year', operator: 'greater', 'value': year }
             ]
         });
+        // update calendar if year changes  
+        this.accountBox.on('select', function(combo, record, index){
+            this.datePicker.loadFeastDays(null, this.fixedFields.get('employee_id').id);
+        }, this);
+        
+        
         var firstRow = [this.statusBox, this.accountBox];
         var freeTimeTypeName = 'Sickness Days';
         if (this.freetimeType == 'VACATION') {

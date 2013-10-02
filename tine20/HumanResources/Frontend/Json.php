@@ -321,10 +321,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * returns feast days and freedays of an employee for the freetime edit dialog
      * 
      * @param string $_employeeId
-     * @param DateTime $_firstDayDate
+     * @param integer $_year
      * @param string $_freeTimeId
      */
-    public function getFeastAndFreeDays($_employeeId, $_firstDayDate = NULL, $_freeTimeId = NULL)
+    public function getFeastAndFreeDays($_employeeId, $_year = NULL, $_freeTimeId = NULL)
     {
         $cController = HumanResources_Controller_Contract::getInstance();
         $eController = HumanResources_Controller_Employee::getInstance();
@@ -333,10 +333,19 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // set period to search for
         $minDate = new Tinebase_DateTime();
-        $minDate->setDate($minDate->format('Y'), 1, 1)->setTime(0,0,0);
+        if ($_year) {
+            $minDate->setDate($_year, 1, 1);
+        } elseif ($_freeTimeId) {
+            $myFreeTime = HumanResources_Controller_FreeTime::getInstance()->get($_freeTimeId);
+            $minDate->setDate($myFreeTime->firstday_date->format('Y'), 1, 1);
+        } else {
+            $minDate->setDate($minDate->format('Y'), 1, 1);
+        }
+        
+        $minDate->setTime(0,0,0);
         $maxDate = clone $minDate;
         $maxDate->addYear(1)->subSecond(1);
-        
+
         // find contracts
         $contracts = $cController->getValidContracts($minDate, $maxDate, $_employeeId);
         $contracts->sort('start_date', 'ASC');
