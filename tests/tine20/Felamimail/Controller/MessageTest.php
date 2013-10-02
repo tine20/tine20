@@ -1357,7 +1357,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('mw_newsletter_multipart_related.eml');
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         
-        $this->assertContains('<img src="http://localhost/index.php?&amp;method=Felamimail.getResource&amp;cid=1354533197.50bc894dacd37@www.metaways.de&amp;messageId=' . $message->getId() . '"', $message->body);
+        $this->assertContains('<img src="index.php?method=Felamimail.getResource&amp;cid=1354533197.50bc894dacd37@www.metaways.de&amp;messageId=' . $message->getId() . '"', $message->body);
         
         return $message;
     }

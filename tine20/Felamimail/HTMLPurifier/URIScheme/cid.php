@@ -50,19 +50,12 @@ class HTMLPurifier_URIScheme_cid extends HTMLPurifier_URIScheme
      */
     public function doValidate(&$uri, $config, $context)
     {
-        // @todo maybe we should change this mechanism
-        if (isset($_SERVER['SERVER_NAME'])) {
-            $host = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-        } else {
-            $host = 'localhost';
-        }
-        
         $messageId = $config->get('Felamimail.messageId');
-    
-        $uri->scheme = 'http';
-        $uri->host = $host;
-        $uri->query = '&method=Felamimail.getResource&cid=' . $uri->path . '&messageId=' . $messageId;
-        $uri->path = '/index.php';
+        
+        $uri->scheme = NULL;
+        $uri->host = NULL;
+        $uri->query = 'method=Felamimail.getResource&cid=' . $uri->path . '&messageId=' . $messageId;
+        $uri->path = 'index.php';
         
         return true;
     }
