@@ -214,16 +214,16 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 defaults: {xtype: 'label'},
                 items: [{
                     cls: 'tb-login-big-label',
-                    html: _('Tine 2.0 is made for you')
+                    html: String.format(_('{0} is made for you'), Tine.title)
                 }, {
-                    html: '<p>' + _('Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help.') + '</p>'
+                    html: '<p>' + String.format(_('{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help.'), Tine.title) + '</p>'
                 }, {
                     cls: 'tb-login-big-label-spacer',
                     html: '&nbsp;'
                 }, {
                     html: '<ul>' + 
-                        '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + _('Tine 2.0 Homepage') + '</a></li>' +
-                        '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + _('Tine 2.0 Forum') + '</a></li>' +
+                        '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + String.format(_('{0} Homepage'), Tine.title) + '</a></li>' +
+                        '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + String.format(_('Tine 2.0 Forum'), Tine.title) + '</a></li>' +
                     '</ul><br/>'
                 }, {
                     cls: 'tb-login-big-label',
@@ -231,10 +231,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 }, {
                     html: Ext.isDefined(percentageCompleted) ? ('<p>' + String.format(_('Translation state of {0}: {1}%.'), language, percentageCompleted) + '</p>') : ''
                 }, {
-                    html: '<p>' + _('If the state of your language is not satisfying, or if you miss a language, please consider becoming a Tine 2.0 translator.') + '</p>'
+                    html: '<p>' + String.format(_('If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator.'), Tine.title) + '</p>'
                 }, {
                     html: '<br/><ul>' +
-                        '<li><a target="_blank" href="http://www.tine20.org/wiki/index.php/Contributors/Howtos/Translations" border="0">' + _('Tine 2.0 Translation Howto') + '</a></li>' +
+                        '<li><a target="_blank" href="http://www.tine20.org/wiki/index.php/Contributors/Howtos/Translations" border="0">' + String.format(_('{0} Translation Howto'), Tine.title) + '</a></li>' +
                         '<li><a target="_blank" href="http://www.tine20.org/langStats/"' + (Ext.isArray(version) ? '?v=' + version[0] : '') +' border="0">' + _('Detailed Language Statistics') + '</a></li>'
                     + '</ul>'
                 }]
@@ -255,7 +255,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 defaults: {xtype: 'label'},
                 items: [{
                     html: "<div class='tine-viewport-poweredby' style='position: absolute; bottom: 10px; right: 10px; font:normal 12px arial, helvetica,tahoma,sans-serif;'>" + 
-                        _("Powered by:") + " <a target='_blank' href='http://www.tine20.com/' title='" + _("online open source groupware and crm") + "'>Tine 2.0</a>"
+                        _("Powered by:") + " <a target='_blank' href='http://www.tine20.com/' title='" + _("online open source groupware and crm") + "'>" + Tine.title + "</a>"
                 }]
             });
         }
