@@ -58,12 +58,17 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 id: 'Tinebase_System_Menu', 
                 items: this.getMainActions()
         }},
-        '->', {
+        '->',
+        this.actionLearnMore,
+        // TODO add a bigger spacer here?
+        { xtype: 'spacer' },
+        {
             text: String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
             menu: this.getUserActions(),
-            menuAlign: 'tr-br'
+            menuAlign: 'tr-br',
+            iconCls: 'renderer_accountUserIcon'
         },
-        this.onlineStatus,
+        this.onlineStatus, 
         this.action_logout];
     },
     
@@ -154,6 +159,16 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             tooltip:  String.format(_('Logout from {0}'), Tine.title),
             iconCls: 'action_logOut',
             handler: this.onLogout,
+            scope: this
+        });
+        
+        this.actionLearnMore = new Ext.Action({
+            text: String.format(_('Learn more about {0}'), Tine.title),
+            tooltip: Tine.weburl,
+            iconCls: 'tine-favicon',
+            handler: function() {
+                window.open(Tine.weburl, '_blank');
+            },
             scope: this
         });
         

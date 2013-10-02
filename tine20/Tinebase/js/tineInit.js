@@ -52,8 +52,9 @@ Tine.clientVersion.releaseTime      = 'none';
  * 
  * @type String
  */
-Tine.title = 'Tine 2.0';
-Tine.weburl = 'http://www.tine20.com/';
+// TODO 'org' needs to be 'moved to the top'
+Tine.title = 'Tine 2.0org';
+Tine.weburl = 'http://www.tine20.com/info/community.html';
 Tine.helpUrl = 'http://www.tine20.org/wiki/index.php/Main_Page';
 
 /**
