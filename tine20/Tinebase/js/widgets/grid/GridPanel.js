@@ -375,7 +375,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Object} config
      */
     initFilterPanel: function(config) {
-        if (! this.filterToolbar) {
+        if (! this.filterToolbar && ! this.editDialog) {
             var filterModels = [];
             if (this.modelConfig) {
                 filterModels = this.getCustomfieldFilters();

@@ -34,6 +34,8 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     editDialog: null,
     
+    usePagingToolbar: false,
+    
     /**
      * initializes the component
      */
