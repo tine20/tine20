@@ -232,7 +232,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         
         $call2 = $result['results'][0];
         
-        $this->assertEquals($this->_objects['call2']->destination, $call2['destination']);
+        $this->assertEquals($this->_objects['call2']->destination, $call2['destination'], 'destination mismatch: ' . print_r($this->_objects['call2']->toArray(), true));
         $this->assertEquals($this->_objects['call2']->getId(), $call2['id']);
         
         // search for phone_id
