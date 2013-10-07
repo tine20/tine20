@@ -175,7 +175,7 @@ class TestServer
         $cmd = implode(' ', $_SERVER['argv']);
         
         $cmd = preg_replace(array(
-            '/\/phpunit/',
+            '@' . preg_quote($_SERVER['SCRIPT_NAME']) . '@',
             '/--stderr /',
             '/--colors /',
             '/--verbose /',
@@ -188,7 +188,7 @@ class TestServer
             '/-c [\S]+\D/',
             '/--log-junit [\S]+\D/'
         ), array(
-            '/php',
+            'php',
             '',
             '',
             '',
