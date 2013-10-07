@@ -1061,6 +1061,24 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $message = $this->_searchForMessageBySubject(Tinebase_Core::filterInputForDatabase($subject));
     }
     
+    /**
+     * testMessageWithInvalidICS
+     * 
+     * @see 0008786: broken ics causes js error when showing details
+     */
+    public function testMessageWithInvalidICS()
+    {
+        $inbox = $this->_getFolder('INBOX');
+        $mailAsString = file_get_contents(dirname(__FILE__) . '/files/invalidimip.eml');
+        Felamimail_Controller_Message::getInstance()->appendMessage($inbox, $mailAsString);
+        
+        $this->_foldersToClear = array('INBOX');
+        $message = $this->_searchForMessageBySubject('test invalid imip');
+        
+        $fullMessage = $this->_json->getMessage($message['id']);
+        $this->assertTrue(empty($fullMessage->preparedParts));
+    }
+    
     /*********************** sieve tests ****************************/
     
     /**
