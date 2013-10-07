@@ -770,7 +770,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('text_plain2.eml', 'text_plain2.eml');
         
         $this->assertGreaterThan(0, count($cachedMessage->to));
-        $this->assertContains('c.weiss@metaways.de', $cachedMessage->to[0], 'wrong "to" header:' . print_r($cachedMessage->to, TRUE));
+        $this->assertContains('c.weiss@metaways.de', $cachedMessage->to[0], 'wrong "to" header:' . print_r($cachedMessage->to, true));
         $this->assertContains('online', $cachedMessage->subject);
     }
     
@@ -781,7 +781,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->messageTestHelper('invaliddate.eml', 'text/invaliddate');
         
-        $this->assertEquals('2010-03-01 21:39:42', $cachedMessage->sent->toString());
+        $this->assertEquals('1970-01-01 00:00:00', $cachedMessage->sent->toString(), print_r($cachedMessage->toArray(), true));
     }
     
     /**
