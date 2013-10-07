@@ -158,7 +158,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $e = $this->_getEmployee('rwright');
         $e = $this->_json->saveEmployee($e->toArray());
         
-        $this->assertType('array', $e['account_id']);
+        $this->assertTrue(is_array($e['account_id']));
         
         $ui = Tinebase_User::getInstance();
         $a = $ui->getFullUserById($e['account_id']['accountId']);
@@ -168,7 +168,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $e = $this->_json->getEmployee($e['id']);
         
-        $this->assertNotType('array', $e['account_id']);
+        $this->assertFalse(is_array($e['account_id']));
         $this->assertEquals($a->accountId, $e['account_id']);
     }
     
