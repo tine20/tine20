@@ -188,7 +188,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         );
 
         $this->_objects['filter2'] = array(
-            array('field' => 'query', 'operator' => 'contains', 'value' => '050')
+            array('field' => 'query', 'operator' => 'contains', 'value' => '05036')
         );
 
         $this->_objects['filter3'] = array(
