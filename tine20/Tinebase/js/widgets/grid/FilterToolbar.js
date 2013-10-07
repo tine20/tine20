@@ -428,16 +428,18 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.filterStore.each(function(filter){
             var tr = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
             
-            // prefix
-            tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = _('and');
-            //filter.deleteRowButton.setVisible(filter.id != lastId);
-                
+            if (tr) {
+                tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = _('and');
+            }
+            
             if (filter.id == lastId) {
-                // move add filter button
-                tr.child('td[class=tw-ftb-frow-pbutton]').insertFirst(this.actions.addFilterRow.getEl());
-                this.actions.addFilterRow.show();
-                // move start search button
-                tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.searchButtonWrap);
+                if (tr) {
+                    // move add filter button
+                    tr.child('td[class=tw-ftb-frow-pbutton]').insertFirst(this.actions.addFilterRow.getEl());
+                    this.actions.addFilterRow.show();
+                    // move start search button
+                    tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.searchButtonWrap);
+                }
                 if (this.showSearchButton) {
                     this.actions.startSearch.show();
                 }
@@ -450,7 +452,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             }
             
             if (filter.id == firstId) {
-                tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = this.rowPrefix;
+                if (tr) {
+                    tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = this.rowPrefix;
+                }
                 
                 // hack for the save/delete all btns which are now in the first row
                 //if (Ext.isSafari) {
@@ -460,8 +464,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 //    this.actions.removeAllFilters.getEl().applyStyles('display: inline');
                 //}
                 
-                tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.saveFilter.getEl());
-                tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.removeAllFilters.getEl());
+                if (tr) {
+                    tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.saveFilter.getEl());
+                    tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.removeAllFilters.getEl());
+                }
                 
                 //tr.child('td[class=tw-ftb-frow-pmbutton]').insertFirst(this.actions.removeAllFilters.getEl());
                 //this.actions.removeAllFilters.setVisible(numFilters > 1);
