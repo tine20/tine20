@@ -186,7 +186,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
      */
     getFormItems: function () {
         var setupRequired = Tine.Setup.registry.get('setupRequired');
-                
+        
         // common config for all combos in this setup
         var commonComboConfig = {
             xtype: 'combo',
@@ -322,12 +322,18 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                             name: 'authentication_Ldap_password',
                             fieldLabel: this.app.i18n._('Password'),
                             inputType: 'password'
-                        }, 
+                        },
                         Ext.applyIf({
                             name: 'authentication_Ldap_bindRequiresDn',
                             fieldLabel: this.app.i18n._('Bind requires DN'),
                             store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
                             value: '1'
+                        }, commonComboConfig),
+                        Ext.applyIf({
+                            name: 'authentication_Ldap_useStartTls',
+                            fieldLabel: this.app.i18n._('Start TLS'),
+                            store: [[['0', this.app.i18n._('No'), '1', this.app.i18n._('Yes')]]],
+                            value: '0'
                         }, commonComboConfig), 
                         {
                             name: 'authentication_Ldap_baseDn',
@@ -376,45 +382,6 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                             name: 'authentication_Imap_domain',
                             fieldLabel: this.app.i18n._('Append domain to login name')
                         }
-    //                    {
-    //                        inputType: 'text',
-    //                        xtype: 'combo',
-    //                        width: 300,
-    //                        listWidth: 300,
-    //                        mode: 'local',
-    //                        forceSelection: true,
-    //                        allowEmpty: false,
-    //                        triggerAction: 'all',
-    //                        selectOnFocus:true,
-    //                        store: [['1', 'Yes'], ['0','No']],
-    //                        name: 'authentication_Sql_tryUsernameSplit',
-    //                        fieldLabel: this.app.i18n._('Try to split username'),
-    //                        value: '1'
-    //                    }, {
-    //                        inputType: 'text',
-    //                        xtype: 'combo',
-    //                        width: 300,
-    //                        listWidth: 300,
-    //                        mode: 'local',
-    //                        forceSelection: true,
-    //                        allowEmpty: false,
-    //                        triggerAction: 'all',
-    //                        selectOnFocus:true,
-    //                        store: [['2', 'ACCTNAME_FORM_USERNAME'], ['3','ACCTNAME_FORM_BACKSLASH'], ['4','ACCTNAME_FORM_PRINCIPAL']],
-    //                        name: 'authentication_Sql_accountCanonicalForm',
-    //                        fieldLabel: this.app.i18n._('Account canonical form'),
-    //                        value: '2'
-    //                    }, {
-    //                        name: 'authentication_Sql_accountDomainName',
-    //                        fieldLabel: this.app.i18n._('Account domain name '),
-    //                        inputType: 'text',
-    //                        tabIndex: 7
-    //                    }, {
-    //                        name: 'authentication_Sql_accountDomainNameShort',
-    //                        fieldLabel: this.app.i18n._('Account domain short name'),
-    //                        inputType: 'text',
-    //                        tabIndex: 8
-    //                    } 
                         ]
                     }]
                 }
@@ -446,16 +413,15 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         items: [{
                             name: 'accounts_Sql_defaultUserGroupName',
                             fieldLabel: this.app.i18n._('Default user group name')
-                            //allowEmpty: false
                         }, {
                             name: 'accounts_Sql_defaultAdminGroupName',
                             fieldLabel: this.app.i18n._('Default admin group name')
-                            //allowEmpty: false
                         }]
-                    }]
-                },
-                this.getDirectoryOptions('Ldap', commonComboConfig),
-                this.getDirectoryOptions('ActiveDirectory', commonComboConfig)
+                    },
+                        this.getDirectoryOptions('Ldap', commonComboConfig),
+                        this.getDirectoryOptions('ActiveDirectory', commonComboConfig)
+                    ]
+                }
             ]
           }, {
             xtype: 'fieldset',
@@ -600,6 +566,29 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 fieldLabel: this.app.i18n._('Bind requires DN'),
                 store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
                 value: '1'
+            }, commonComboConfig),
+            Ext.applyIf({
+                name: 'accounts_' + type + 'useStartTls',
+                fieldLabel: this.app.i18n._('Start TLS'),
+                store: [[['0', this.app.i18n._('No'), '1', this.app.i18n._('Yes')]]],
+                value: '0'
+            }, commonComboConfig),
+            Ext.applyIf({
+                name: 'accounts_' + type + '_pwEncType',
+                fieldLabel: this.app.i18n._('Password encryption type'),
+                store: [
+                    ['des', this.app.i18n._('des')],
+                    ['blowfish_crypt', this.app.i18n._('blowfish_crypt')],
+                    ['md5_crypt', this.app.i18n._('md5_crypt')],
+                    ['ext_crypt', this.app.i18n._('ext_crypt')],
+                    ['md5', this.app.i18n._('md5')],
+                    ['smd5', this.app.i18n._('smd5')],
+                    ['sha', this.app.i18n._('sha')],
+                    ['ssha', this.app.i18n._('ssha')],
+                    ['ntpassword', this.app.i18n._('ntpassword')],
+                    ['plain', this.app.i18n._('plain')]
+                ],
+                value: 'ssha'
             }, commonComboConfig), 
             {
                 name: 'accounts_' + type + '_userDn',

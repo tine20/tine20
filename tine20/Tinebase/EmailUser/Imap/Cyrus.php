@@ -56,7 +56,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         $this->_config['domain'] = !empty($imapConfig['domain']) ? $imapConfig['domain'] : null;
         $this->_config['host']   = $imapConfig['host'];
         $this->_config['port']   = !empty($imapConfig['port']) ? $imapConfig['port'] : 143;
-        $this->_config['ssl']    = $imapConfig['ssl'] != 'none' ? $imapConfig['ssl'] : false;
+        $this->_config['ssl']    = $imapConfig['ssl'] != 'none' ? strtoupper($imapConfig['ssl']) : false;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' cyrus imap config: ' . print_r($this->_config, true));
