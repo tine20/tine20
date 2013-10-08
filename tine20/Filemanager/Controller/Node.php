@@ -1156,6 +1156,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * 
      * @param string $_flatpath
      * @return boolean
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _deleteNode($_flatpath)
     {
@@ -1173,6 +1174,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $success = $this->_deleteNodeInBackend($pathRecord);
         
         if ($success && ! $parentPathRecord->container) {
+            
+            if (! is_object($pathRecord->container)) {
+                throw new Tinebase_Exception_NotFound('Container not found');
+            }
+            
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Delete container ' . $pathRecord->container->name);
             Tinebase_Container::getInstance()->delete($pathRecord->container->getId());
