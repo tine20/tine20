@@ -659,3 +659,12 @@ msgstr "Sa."
 #: js/ContractEditDialog.js:285
 msgid "Sun."
 msgstr "So."
+
+msgid "You have to select at least one day to save this sickness entry."
+msgstr "Sie müssen mindestens einen Tag auswählen, um diesen Kranksheitseintrag speichern zu können."
+
+msgid "You have to select at least one day to save this vacation entry."
+msgstr "Sie müssen mindestens einen Tag auswählen, um diesen Urlaub speichern zu können."
+
+msgid "No day selected"
+msgstr "Kein Tag gewählt"

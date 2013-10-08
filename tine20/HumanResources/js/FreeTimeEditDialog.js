@@ -52,6 +52,10 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         Tine.HumanResources.FreeTimeEditDialog.superclass.initComponent.call(this);
     },
     
+    isValid: function() {
+        return Tine.HumanResources.FreeTimeEditDialog.superclass.isValid.call(this);
+    },
+    
     /**
      * executed after record got updated from proxy
      * 
@@ -69,6 +73,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         }
         this.record.set('employee_id', this.fixedFields.get('employee_id'));
         
+        this.accountBox.onRecordLoad(this.record);
         this.datePicker.onRecordLoad(this.record, this.fixedFields.get('employee_id').id);
         
         if (this.record.get('employee_id')) {
@@ -86,16 +91,37 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'), typeString, this.record.get('employee_id').n_fn));
         }
     },
-
+    
+    onApplyChanges: function(closeWindow) {
+        // if no day is selected, show message and break saving
+        if (! this.datePicker.store.getFirstDay()) {
+            var msg = this.freetimeType == 'SICKNESS' ? this.app.i18n._('You have to select at least one day to save this sickness entry.') : this.app.i18n._('You have to select at least one day to save this vacation entry.')
+            Ext.MessageBox.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.WARNING,
+                title: this.app.i18n._('No day selected'), 
+                msg: msg
+            });
+            
+            return false;
+        } else {
+            Tine.HumanResources.FreeTimeEditDialog.superclass.onApplyChanges.call(this, closeWindow);
+        }
+    },
+    
     /**
      * executed when record gets updated from form
      * @private
      */
     onRecordUpdate: function() {
+        var firstDay = this.datePicker.store.getFirstDay();
+        
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordUpdate.call(this);
         this.record.set('freedays', this.datePicker.getData());
         this.record.set('type', this.fixedFields.get('type').toLowerCase());
-        this.record.set('firstday_date', new Date(this.datePicker.store.getFirstDay().get('date')));
+        if (firstDay) {
+            this.record.set('firstday_date', new Date(firstDay.get('date')));
+        }
     },
     
     /**
@@ -151,19 +177,45 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     value: 'REQUESTED',
                     columnWidth: 2/3
                 }, statusBoxDefaults);
+        
         var year = new Date();
-        year = parseInt(year.format('Y'));
-        year = year - 2;
+        thisYear = parseInt(year.format('Y'));
+        year = thisYear - 2;
         
         this.accountBox = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Account', {
             name: 'account_id',
-            fieldLabel: this.app.i18n._('Year'),
             additionalFilters: [
                 {field: 'employee_id', operator: 'AND', value: [
                     { field: ':id', operator: 'equals', value: this.fixedFields.get('employee_id')}
                 ]},
                 {field: 'year', operator: 'greater', 'value': year }
-            ]
+            ],
+
+            fieldLabel: this.app.i18n._('Year'),
+            onRecordLoad: function(record) {
+                if (record.get('account_id')) {
+                     this.setValue(record.get('account_id'));
+                } else {
+                    var addFilters = [{field: 'employee_id', operator: 'AND', value: [
+                        { field: ':id', operator: 'equals', value: record.get('employee_id')}
+                    ]}, {field: 'year', operator:'equals', value: thisYear}];
+                    
+                    var request = Ext.Ajax.request({
+                        url : 'index.php',
+                        params : { method : 'HumanResources.searchAccounts', filter: addFilters},
+                        success : function(_result, _request) {
+                            this.onAccountsLoad(Ext.decode(_result.responseText));
+                        },
+                        failure : function(exception) {
+                            Tine.HumanResources.handleRequestException(exception);
+                        },
+                        scope: this
+                    });
+                }
+            },
+            onAccountsLoad: function(result) {
+                this.setValue(thisYear);
+            }
         });
         // update calendar if year changes  
         this.accountBox.on('select', function(combo, record, index){

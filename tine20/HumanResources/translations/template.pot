@@ -649,3 +649,12 @@ msgstr ""
 #: js/ContractEditDialog.js:285
 msgid "Sun."
 msgstr ""
+
+msgid "You have to select at least one day to save this sickness entry."
+msgstr ""
+
+msgid "You have to select at least one day to save this vacation entry."
+msgstr ""
+
+msgid "No day selected"
+msgstr ""

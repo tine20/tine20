@@ -405,6 +405,16 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals(27, $account2013['remaining_vacation_days'], 'There should be 27 remaining vacation days after all!');
         $this->assertEquals(0, $account2013['expired_vacation_days'], 'There should be no expired vacation days after all!');
         $this->assertEquals(3, $account2013['taken_vacation_days'], 'He took 3 vacation days');
+        
+        
+        // test account filter for: employee_id and year
+        $accountsFilter = array(array('field' => "employee_id", 'operator' => "AND", 'value' => array(
+            array('field' => ':id', 'operator' => 'equals', 'value' => $employee->getId())
+        )), array('field' => 'year', 'operator' => 'equals', 'value' => $account2013['year']));
+        
+        $result = $json->searchAccounts($accountsFilter, array());
+        $this->assertEquals(1, $result['totalcount']);
+        
     }
     
     /**
