@@ -230,11 +230,5 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
                 this.app.getMainScreen().show();
             }
         }).defer(100, this);
-    },
-    
-    // added to select node of active content type
-    afterRender: function () {
-        Tine.widgets.ContentTypeTreePanel.superclass.afterRender.call(this);
-        this.getSelectionModel().select(this.getRootNode().findChild('id', 'treenode-' + this.contentType));
     }
 });
