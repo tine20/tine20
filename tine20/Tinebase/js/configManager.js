@@ -13,8 +13,7 @@ Ext.ns('Tine.Tinebase');
 Tine.Tinebase.configManager = function(){
     return {
         get: function(name, appName) {
-            var app = (Tine.Tinebase.hasOwnProperty('appMgr') && appName) ? Tine.Tinebase.appMgr.get(appName) : null,
-                registry = app ? app.getRegistry() : Tine.Tinebase.registry,
+            var registry = appName && Tine[appName] ? Tine[appName].registry : Tine.Tinebase.registry,
                 config = registry ? registry.get('config') : false,
                 struct = config ? config[name] : false,
                 // TODO get default from definition?
