@@ -151,4 +151,56 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
         $this->assertEquals(1, $susan->contracts->count(), 'no contracts found');
     }
+    
+    /**
+     * tests set_contracts_end_date
+     */
+    public function testSetContractsEndDate()
+    {
+        $this->_doImport(FALSE);
+        
+        $cc = HumanResources_Controller_Contract::getInstance();
+        $ec = HumanResources_Controller_Employee::getInstance();
+        
+        $user = Tinebase_Core::getUser();
+
+        $begin = Tinebase_DateTime::now()->subYear(1);
+        $end   = clone $begin;
+        $end->addMonth(11);
+        
+        $employee = new HumanResources_Model_Employee(array(
+            'account_id' => $user->getId(),
+            'n_family' => 'TEST',
+            'n_given' => 'UNIT',
+            'employment_begin' => $begin, 
+            'employment_end' => NULL));
+        
+        $employee = $ec->create($employee);
+        
+        $contract = new HumanResources_Model_Contract(array(
+            'employee_id' => $employee->getId(),
+            'start_date'  => $begin,
+            'end_date'    => NULL,
+            'workingtime_json' => '{days: [4,4,4,4,4,0,0]}',
+            'vacation_days' => 34
+        ));
+        
+        $contract = $cc->create($contract);
+        
+        $this->assertEquals(NULL, $contract->end_date);
+        $this->assertEquals(NULL, $employee->employment_end);
+        
+        $newEnd = Tinebase_DateTime::now()->subDay(1);
+        
+        $employee->employment_end = $newEnd;
+        
+        $employee->contracts = array($contract->toArray());
+        
+        $ec->update($employee);
+        $this->_cli->set_contracts_end_date();
+        $allContracts = $cc->getAll();
+        
+        $updatedContract = $cc->get($contract->getId());
+        $this->assertEquals($newEnd, $updatedContract->end_date);
+    }
 }

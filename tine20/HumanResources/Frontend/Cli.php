@@ -50,6 +50,9 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'year'     => 'just create accounts for this year'
             )
         ),
+        'set_contracts_end_date' => array(
+            'description'   => 'sets the contracts end_date to the date of employment_begin of the corresponding employee, if employee has an employment end date',
+        )
     );
 
     /**
@@ -353,5 +356,26 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         
         return $employee;
+    }
+    
+    /**
+     * sets the contracts end_date to the date of employment_begin of the corresponding 
+     * employee, if employee has an employment end date
+     */
+    public function set_contracts_end_date()
+    {
+        $eController = HumanResources_Controller_Employee::getInstance();
+        $cController = HumanResources_Controller_Contract::getInstance();
+        
+        $filter = new HumanResources_Model_EmployeeFilter(array(array('field' => 'is_employed', 'operator' => 'equals', 'value' => FALSE)));
+        $oldEmployees = $eController->search($filter);
+        
+        foreach($oldEmployees as $employee) {
+            $contract = $cController->getContractsByEmployeeId($employee->getId())->sort('start_date', 'DESC')->getFirstRecord();
+            if ($contract) {
+                $contract->end_date = $employee->employment_end;
+                $cController->update($contract);
+            }
+        }
     }
 }
