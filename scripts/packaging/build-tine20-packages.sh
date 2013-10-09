@@ -230,7 +230,20 @@ function createArchives()
                     
                     # remove composer dev requires
                     composer install --no-dev -d $TEMPDIR/tine20
-                    find $TEMPDIR/tine20/vendor -name .git -type d -print0 | xargs -0 rm -rf
+                    
+                    rm -rf $TEMPDIR/tine20/vendor/zendframework/zendframework1
+                    rm -rf $TEMPDIR/tine20/vendor/phpdocumentor
+                    rm -rf $TEMPDIR/tine20/vendor/ezyang/htmlpurifier/{art,benchmarks,extras,maintenance,smoketests}
+                    
+                    find $TEMPDIR/tine20/vendor -name .gitignore -type f -print0 | xargs -0 rm -rf
+                    find $TEMPDIR/tine20/vendor -name .git       -type d -print0 | xargs -0 rm -rf
+                    find $TEMPDIR/tine20/vendor -name docs       -type d -print0 | xargs -0 rm -rf
+                    find $TEMPDIR/tine20/vendor -name examples   -type d -print0 | xargs -0 rm -rf
+                    find $TEMPDIR/tine20/vendor -name tests      -type d -print0 | xargs -0 rm -rf
+                    
+                    composer dumpautoload -d $TEMPDIR/tine20
+                    
+                    rm -rf $TEMPDIR/tine20/composer.*
                     
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase Zend images library vendor docs fonts themes" 
