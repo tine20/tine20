@@ -131,6 +131,16 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         this.dateField.markInvalid(msg);
         this.timeField.markInvalid(msg);
     },
+
+    addClass: function (cls) {
+        this.dateField.addClass(cls);
+        this.timeField.addClass(cls);
+    },
+
+    removeClass: function (cls) {
+        this.dateField.removeClass(cls);
+        this.timeField.removeClass(cls);
+    },
     
     onRender: function (ct, position) {
         //Ext.ux.form.DateTimeField.superclass.onRender.call(this, ct, position);
