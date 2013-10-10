@@ -1533,7 +1533,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:575
+#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:581
 msgid "Show"
 msgstr ""
 

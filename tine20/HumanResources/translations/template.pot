@@ -36,7 +36,7 @@ msgstr ""
 msgid "You do not have admin rights on HumanResources"
 msgstr ""
 
-#: Model/Contract.php:33 js/ContractGridPanel.js:41
+#: Model/Contract.php:33 js/ContractGridPanel.js:43
 #: js/ContractEditDialog.js:200 js/ContractEditDialog.js:213
 msgid "Contract"
 msgid_plural "Contracts"
@@ -92,12 +92,12 @@ msgid "Type"
 msgstr ""
 
 #: Model/FreeTime.php:77 Model/ExtraFreeTime.php:64 Model/Employee.php:83
-#: js/EmployeeEditDialog.js:421 js/FreeTimeEditDialog.js:240
+#: js/EmployeeEditDialog.js:421 js/FreeTimeEditDialog.js:247
 #: js/ExtraFreeTimeEditDialog.js:154
 msgid "Description"
 msgstr ""
 
-#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:136
+#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:137
 msgid "Status"
 msgstr ""
 
@@ -134,7 +134,7 @@ msgstr ""
 msgid "Personal accounts"
 msgstr ""
 
-#: Model/Account.php:63 js/FreeTimeEditDialog.js:159
+#: Model/Account.php:63 js/FreeTimeEditDialog.js:160
 msgid "Year"
 msgstr ""
 
@@ -456,7 +456,7 @@ msgstr ""
 msgid "Internal Information"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:435 js/FreeTimeEditDialog.js:254
+#: js/EmployeeEditDialog.js:435 js/FreeTimeEditDialog.js:261
 #: js/ExtraFreeTimeEditDialog.js:168
 msgid "Enter description"
 msgstr ""
@@ -465,19 +465,19 @@ msgstr ""
 msgid "Edit {0} \"{1}\""
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:83
-msgid "Add {0} for {1}"
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:85
+#: js/FreeTimeEditDialog.js:84
 msgid "Edit {0} for {1}"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:170
+#: js/FreeTimeEditDialog.js:86
+msgid "Add {0} for {1}"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:177
 msgid "Remaining"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:221
+#: js/FreeTimeEditDialog.js:228
 msgid "Select Days"
 msgstr ""
 
@@ -525,15 +525,15 @@ msgstr ""
 msgid "WK"
 msgstr ""
 
-#: js/DatePicker.js:114
+#: js/DatePicker.js:111
 msgid "Loading calendar data..."
 msgstr ""
 
-#: js/DatePicker.js:224
+#: js/DatePicker.js:231
 msgid "No more vacation days"
 msgstr ""
 
-#: js/DatePicker.js:225
+#: js/DatePicker.js:232
 msgid ""
 "The Employee has no more possible vacation days left for this year. Add some "
 "extra free days to the account, if the employee should have more vacation "
