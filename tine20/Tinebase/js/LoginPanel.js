@@ -491,7 +491,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                                             document.getElementById('imgCaptcha').src = 'data:image/png;base64,' + responseData.c1;
                                             document.getElementById('contImgCaptcha').style.visibility = 'visible';  
                                         }
-                                    }                                    
+                                    }
                                 }.createDelegate(this)
                             });
                         }
@@ -514,7 +514,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         
         this.originalTitle = window.document.title;
         var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
-        window.document.title = Tine.title + postfix + ' - ' + _('Please enter your login data');
+        window.document.title = Ext.util.Format.stripTags(Tine.title + postfix + ' - ' + _('Please enter your login data'));
     },
     
     onResize: function () {
