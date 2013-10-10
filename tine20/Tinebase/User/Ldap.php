@@ -146,8 +146,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         
         $this->_options = $_options;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Registering " . print_r($this->_options, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Registering " . print_r($this->_options, true));
         
         $this->_userUUIDAttribute  = strtolower($this->_options['userUUIDAttribute']);
         $this->_groupUUIDAttribute = strtolower($this->_options['groupUUIDAttribute']);
@@ -621,8 +621,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filter ' . $filter);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' requested attributes ' . print_r($attributes, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' requested attributes ' . print_r($attributes, true));
         
         $accounts = $this->_ldap->search(
             $filter,
