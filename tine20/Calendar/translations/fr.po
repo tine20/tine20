@@ -56,73 +56,73 @@ msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "Ce contact a été ajouté automatiquement comme participant"
 
-#: Model/Event.php:302
+#: Model/Event.php:332
 msgid "Start"
 msgstr "Début"
 
-#: Model/Event.php:303 js/RrulePanel.js:321
+#: Model/Event.php:333 js/RrulePanel.js:321
 msgid "End"
 msgstr "Fin"
 
-#: Model/Event.php:304 js/GridView.js:127 js/EventDetailsPanel.js:262
+#: Model/Event.php:334 js/GridView.js:127 js/EventDetailsPanel.js:262
 msgid "Blocking"
 msgstr "Bloquant"
 
-#: Model/Event.php:305
+#: Model/Event.php:335
 msgid "Classification"
 msgstr "Catégorie"
 
-#: Model/Event.php:306 js/GridView.js:161 js/ResourceEditDialog.js:84
+#: Model/Event.php:336 js/GridView.js:161 js/ResourceEditDialog.js:84
 #: js/Model.js:207 js/EventEditDialog.js:256
 msgid "Description"
 msgstr "Description"
 
-#: Model/Event.php:307 js/GridView.js:148 js/EventDetailsPanel.js:272
+#: Model/Event.php:337 js/GridView.js:148 js/EventDetailsPanel.js:272
 #: js/Model.js:206 js/EventEditDialog.js:124 js/ResourcesGridPanel.js:54
 msgid "Location"
 msgstr "Lieu"
 
-#: Model/Event.php:308 js/GridView.js:154 js/PerspectiveCombo.js:127
+#: Model/Event.php:338 js/GridView.js:154 js/PerspectiveCombo.js:127
 #: js/EventDetailsPanel.js:276 js/Model.js:226 js/EventEditDialog.js:300
 msgid "Organizer"
 msgstr "Organisateur"
 
-#: Model/Event.php:309
+#: Model/Event.php:339
 msgid "Priority"
 msgstr "Priorité"
 
-#: Model/Event.php:310 js/GridView.js:171 js/AddToEventPanel.js:88
+#: Model/Event.php:340 js/GridView.js:173 js/AddToEventPanel.js:88
 #: js/AttendeeGridPanel.js:214 js/ContactEventsGridPanel.js:126
 #: js/EventEditDialog.js:178
 msgid "Status"
 msgstr "Statut"
 
-#: Model/Event.php:311 js/GridView.js:143 js/Model.js:205
+#: Model/Event.php:341 js/GridView.js:143 js/Model.js:205
 #: js/ContactEventsGridPanel.js:113 js/EventEditDialog.js:79
 msgid "Summary"
 msgstr "Résumé"
 
-#: Model/Event.php:312
+#: Model/Event.php:342
 msgid "Url"
 msgstr "Site Internet"
 
-#: Model/Event.php:313
+#: Model/Event.php:343
 msgid "Recurrance rule"
 msgstr "Récurrences"
 
-#: Model/Event.php:314
+#: Model/Event.php:344
 msgid "Is all day event"
 msgstr "Toute la journée"
 
-#: Model/Event.php:315
+#: Model/Event.php:345
 msgid "Organizer timezone"
 msgstr "Fuseau horaire de l'organisateur"
 
-#: Model/Event.php:340
+#: Model/Event.php:370
 msgid "No"
 msgstr "Non"
 
-#: Model/Event.php:340
+#: Model/Event.php:370
 msgid "Yes"
 msgstr "Oui"
 
@@ -554,119 +554,119 @@ msgstr "Jour"
 msgid "Month"
 msgstr "Mois"
 
-#: js/MainScreenCenterPanel.js:497
+#: js/MainScreenCenterPanel.js:508
 msgid "Set my response"
 msgstr "Définir ma présence"
 
-#: js/MainScreenCenterPanel.js:526
+#: js/MainScreenCenterPanel.js:537
 msgid "Copy {0}"
 msgstr "Copier {0}"
 
-#: js/MainScreenCenterPanel.js:542
+#: js/MainScreenCenterPanel.js:553
 msgid "Updating event in the past"
 msgstr "Mettre  à jour un évènement ayant déjà eu lieu"
 
-#: js/MainScreenCenterPanel.js:543
+#: js/MainScreenCenterPanel.js:554
 msgid "Update this event"
 msgstr "Mettre à jour cet évènement"
 
-#: js/MainScreenCenterPanel.js:544
+#: js/MainScreenCenterPanel.js:555
 msgid "Do not update this event"
 msgstr "Ne pas mettre à jour cet évènement"
 
-#: js/MainScreenCenterPanel.js:548
+#: js/MainScreenCenterPanel.js:559
 msgid "Creating event in the past"
 msgstr "Créer un évènement dans le passé"
 
-#: js/MainScreenCenterPanel.js:549
+#: js/MainScreenCenterPanel.js:560
 msgid "Create this event"
 msgstr "Créer cet évènement"
 
-#: js/MainScreenCenterPanel.js:550
+#: js/MainScreenCenterPanel.js:561
 msgid "Do not create this event"
 msgstr "Ne pas créer cet évènement"
 
-#: js/MainScreenCenterPanel.js:671
+#: js/MainScreenCenterPanel.js:682
 msgid "Update Event"
 msgstr "Mettre à jour un évènement"
 
-#: js/MainScreenCenterPanel.js:675
+#: js/MainScreenCenterPanel.js:686
 msgid "Update this event only"
 msgstr "Mettre à jour cet évènement seulement"
 
-#: js/MainScreenCenterPanel.js:676
+#: js/MainScreenCenterPanel.js:687
 msgid "Update this and all future events"
 msgstr "Mettre à jour cet évènement et tous les prochains"
 
-#: js/MainScreenCenterPanel.js:677
+#: js/MainScreenCenterPanel.js:688
 msgid "Update whole series"
 msgstr "Mettre à jour toute la série"
 
-#: js/MainScreenCenterPanel.js:678
+#: js/MainScreenCenterPanel.js:689
 msgid "Update nothing"
 msgstr "Ne rien mettre à jour"
 
-#: js/MainScreenCenterPanel.js:814
+#: js/MainScreenCenterPanel.js:825
 msgid "Please Change Selection"
 msgstr "Veuillez Changer la sélection"
 
-#: js/MainScreenCenterPanel.js:815
+#: js/MainScreenCenterPanel.js:826
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 msgstr "La sélection contient des évènements récurrents. Les évènements récurrents doivent être supprimés séparément!"
 
-#: js/MainScreenCenterPanel.js:828
+#: js/MainScreenCenterPanel.js:839
 msgid "Delete Event"
 msgstr "Supprimer"
 
-#: js/MainScreenCenterPanel.js:832
+#: js/MainScreenCenterPanel.js:843
 msgid "Delete this event only"
 msgstr "Supprimer cet évènement seulement"
 
-#: js/MainScreenCenterPanel.js:833
+#: js/MainScreenCenterPanel.js:844
 msgid "Delete this and all future events"
 msgstr "Supprimer cet évènement et tous les suivants"
 
-#: js/MainScreenCenterPanel.js:834
+#: js/MainScreenCenterPanel.js:845
 msgid "Delete whole series"
 msgstr "Supprimer toute la série"
 
-#: js/MainScreenCenterPanel.js:835
+#: js/MainScreenCenterPanel.js:846
 msgid "Delete nothing"
 msgstr "Ne rien supprimer"
 
-#: js/MainScreenCenterPanel.js:886
+#: js/MainScreenCenterPanel.js:897
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer l'évènement sélectionné?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les {0} évènements sélectionnés?"
 
-#: js/MainScreenCenterPanel.js:1030
+#: js/MainScreenCenterPanel.js:1041
 msgid "Could not Print"
 msgstr "L'impression a échoué"
 
-#: js/MainScreenCenterPanel.js:1030
+#: js/MainScreenCenterPanel.js:1041
 msgid "Sorry, your current view does not support printing."
 msgstr "Désolé, cette vue n'est pas imprimable."
 
-#: js/MainScreenCenterPanel.js:1183
+#: js/MainScreenCenterPanel.js:1194
 msgid "Scheduling Conflict"
 msgstr "Conflit de planification"
 
-#: js/MainScreenCenterPanel.js:1185
+#: js/MainScreenCenterPanel.js:1196
 msgid "The following attendee are busy at the requested time:"
 msgstr "Le participant suivant est déjà occupé à l'heure demandée :"
 
-#: js/MainScreenCenterPanel.js:1189
+#: js/MainScreenCenterPanel.js:1200
 msgid "Ignore Conflict"
 msgstr "Ignorer le conflit"
 
-#: js/MainScreenCenterPanel.js:1190
+#: js/MainScreenCenterPanel.js:1201
 msgid "Edit Event"
 msgstr "Modifier l'évènement"
 
-#: js/MainScreenCenterPanel.js:1191
+#: js/MainScreenCenterPanel.js:1202
 msgid "Cancel this action"
 msgstr "Annuler"
 
@@ -852,19 +852,19 @@ msgstr "Sauvegardé"
 msgid "Enter description"
 msgstr "Saisir une description"
 
-#: js/EventEditDialog.js:458
+#: js/EventEditDialog.js:468
 msgid "End date is not valid"
 msgstr "Date de fin invalide"
 
-#: js/EventEditDialog.js:461
+#: js/EventEditDialog.js:471
 msgid "End date must be after start date"
 msgstr "La date de fin doit être postérieure à la date de début"
 
-#: js/EventEditDialog.js:474
+#: js/EventEditDialog.js:484
 msgid "Start date is not valid"
 msgstr "Date de début non valide"
 
-#: js/EventEditDialog.js:494
+#: js/EventEditDialog.js:504
 msgid "Errors"
 msgstr "Erreurs"
 

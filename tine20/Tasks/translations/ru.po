@@ -283,6 +283,6 @@ msgstr "Последнее изменение"
 msgid "Created By"
 msgstr "Создана"
 
-#: Controller/Task.php:187
+#: Controller/Task.php:198
 msgid "Notification for Task "
 msgstr "Напоминание для задачи "

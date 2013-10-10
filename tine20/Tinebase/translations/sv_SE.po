@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"PO-Revision-Date: 2013-10-02 11:06+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
@@ -149,12 +149,12 @@ msgstr "Ändra fällt: "
 msgid "unknown"
 msgstr "okänd"
 
-#: Import/Csv/Abstract.php:201
+#: Import/Csv/Abstract.php:200
 #, python-format
 msgid "The following fields weren't imported: %s"
 msgstr ""
 
-#: Import/Csv/Abstract.php:202
+#: Import/Csv/Abstract.php:201
 msgid "N/A"
 msgstr ""
 
@@ -403,43 +403,43 @@ msgstr ""
 msgid "Disallow anyone account in grant configurations"
 msgstr ""
 
-#: Setup/setup.xml:3203
+#: Setup/setup.xml:3209
 msgid "note"
 msgstr "Notering"
 
-#: Setup/setup.xml:3208
+#: Setup/setup.xml:3214
 msgid "default note type"
 msgstr "Standard Noterings typ"
 
-#: Setup/setup.xml:3234
+#: Setup/setup.xml:3240
 msgid "telephone"
 msgstr "Telefon"
 
-#: Setup/setup.xml:3239
+#: Setup/setup.xml:3245
 msgid "telephone call"
 msgstr "Telefon samtal"
 
-#: Setup/setup.xml:3265
+#: Setup/setup.xml:3271
 msgid "email"
 msgstr "e-post"
 
-#: Setup/setup.xml:3270
+#: Setup/setup.xml:3276
 msgid "email contact"
 msgstr "e-post kontakt"
 
-#: Setup/setup.xml:3296
+#: Setup/setup.xml:3302
 msgid "created"
 msgstr "skapad"
 
-#: Setup/setup.xml:3301
+#: Setup/setup.xml:3307
 msgid "record created"
 msgstr "register skapad"
 
-#: Setup/setup.xml:3327
+#: Setup/setup.xml:3333
 msgid "changed"
 msgstr "ändrad"
 
-#: Setup/setup.xml:3332
+#: Setup/setup.xml:3338
 msgid "record changed"
 msgstr "register ändrat"
 
@@ -573,7 +573,7 @@ msgstr "Detta fält är en redigerbar del av profilen"
 msgid "Field Name"
 msgstr "Fältnamn"
 
-#: js/AboutDialog.js:41 js/MainMenu.js:113
+#: js/AboutDialog.js:41 js/MainMenu.js:118
 msgid "About {0}"
 msgstr "Om {0}"
 
@@ -584,7 +584,7 @@ msgstr "Om {0}"
 #: js/widgets/dialog/ExceptionHandlerDialog.js:194
 #: js/widgets/dialog/AddToRecordPanel.js:111
 #: js/widgets/dialog/PreferencesDialog.js:109
-#: js/widgets/dialog/EditDialog.js:373 js/widgets/ActivitiesPanel.js:315
+#: js/widgets/dialog/EditDialog.js:373 js/widgets/ActivitiesPanel.js:319
 #: js/widgets/container/ContainerSelect.js:490 js/ux/form/LayerCombo.js:186
 msgid "Ok"
 msgstr "Ok"
@@ -684,19 +684,19 @@ msgid "Version"
 msgstr ""
 
 #: js/LoginPanel.js:217
-msgid "Tine 2.0 is made for you"
-msgstr "Tine 2.0 är gjort för dig"
+msgid "{0} is made for you"
+msgstr ""
 
 #: js/LoginPanel.js:219
 msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
-" and get help."
-msgstr "Tine 2,0 vill göra affärs samarbetet lättare och roligare för dina behov! Så du är varmt välkommen att diskutera med oss, ta in idéer och få hjälp"
+"{0} wants to make business collaboration easier and more enjoyable - for "
+"your needs! So you are warmly welcome to discuss with us, bring in ideas and"
+" get help."
+msgstr ""
 
 #: js/LoginPanel.js:225
-msgid "Tine 2.0 Homepage"
-msgstr "Tine 2.0 Startsida"
+msgid "{0} Homepage"
+msgstr ""
 
 #: js/LoginPanel.js:226
 msgid "Tine 2.0 Forum"
@@ -713,11 +713,11 @@ msgstr ""
 #: js/LoginPanel.js:234
 msgid ""
 "If the state of your language is not satisfying, or if you miss a language, "
-"please consider becoming a Tine 2.0 translator."
+"please consider becoming a {0} translator."
 msgstr ""
 
 #: js/LoginPanel.js:237
-msgid "Tine 2.0 Translation Howto"
+msgid "{0} Translation Howto"
 msgstr ""
 
 #: js/LoginPanel.js:238
@@ -797,7 +797,7 @@ msgstr "var god vänta"
 msgid "Login successful. Loading {0}..."
 msgstr "Inloggning godkännt. Laddar {0} ..."
 
-#: js/LoginPanel.js:468 js/MainMenu.js:242
+#: js/LoginPanel.js:468 js/MainMenu.js:257
 msgid "Please wait!"
 msgstr "Var god vänta!"
 
@@ -864,7 +864,7 @@ msgstr "Upprepa nytt Lösenord"
 #: js/widgets/dialog/AddToRecordPanel.js:103
 #: js/widgets/dialog/PreferencesDialog.js:117
 #: js/widgets/dialog/EditDialog.js:393 js/widgets/dialog/WizardPanel.js:187
-#: js/widgets/ActivitiesPanel.js:307
+#: js/widgets/ActivitiesPanel.js:311
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
 #: js/widgets/container/ContainerSelect.js:481 js/ExceptionDialog.js:109
 #: js/ExceptionDialog.js:119 js/ux/form/LayerCombo.js:193
@@ -900,66 +900,70 @@ msgstr "misslyckande"
 msgid "The new passwords mismatch, please correct them."
 msgstr "Det nya lösenordet matchade inte, vänligen rätta till det."
 
-#: js/MainMenu.js:62
+#: js/MainMenu.js:66
 msgid "User: {0}"
 msgstr "Användare: {0}"
 
-#: js/MainMenu.js:119
+#: js/MainMenu.js:124
 msgid "Help"
 msgstr ""
 
-#: js/MainMenu.js:126
+#: js/MainMenu.js:131
 msgid "Debug Console (Ctrl + F11)"
 msgstr "Debug-konsol (Ctrl + F11)"
 
-#: js/MainMenu.js:132 js/widgets/dialog/PreferencesPanel.js:36
+#: js/MainMenu.js:137 js/widgets/dialog/PreferencesPanel.js:36
 msgid "Preferences"
 msgstr "Inställningar"
 
-#: js/MainMenu.js:139
+#: js/MainMenu.js:144
 msgid "Edit Profile"
 msgstr "Editera Profil"
 
-#: js/MainMenu.js:146
+#: js/MainMenu.js:151
 msgid "Change password"
 msgstr "Byt lösenord"
 
-#: js/MainMenu.js:153
+#: js/MainMenu.js:158
 msgid "Logout"
 msgstr "Logga ut"
 
-#: js/MainMenu.js:154
+#: js/MainMenu.js:159
 msgid "Logout from {0}"
 msgstr "Logga ut från {0}"
 
-#: js/MainMenu.js:161
+#: js/MainMenu.js:166
+msgid "Learn more about {0}"
+msgstr ""
+
+#: js/MainMenu.js:176
 msgid "Allow desktop notifications"
 msgstr "Tillåt skrivbords notifieringar"
 
-#: js/MainMenu.js:162
+#: js/MainMenu.js:177
 msgid "Request permissions for webkit desktop notifications."
 msgstr "Begär tillstånd för webkit skrivbord anmälningar."
 
-#: js/MainMenu.js:172
+#: js/MainMenu.js:187
 msgid "Install web app"
 msgstr "Installera webbapplikation"
 
-#: js/MainMenu.js:173
+#: js/MainMenu.js:188
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr "Installera Tine 2,0 som webb app i din webbläsare"
 
-#: js/MainMenu.js:228 js/widgets/grid/GridPanel.js:1750
+#: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:640
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr "Godkänn"
 
-#: js/MainMenu.js:228
+#: js/MainMenu.js:243
 msgid "Are you sure you want to logout?"
 msgstr "Vill du verkligen logga ut?"
 
-#: js/MainMenu.js:242
+#: js/MainMenu.js:257
 msgid "Logging you out..."
 msgstr "Loggar ut dig..."
 
@@ -1279,19 +1283,19 @@ msgstr "Välj Tagg(ar) att avmontera"
 msgid "tag name"
 msgstr "tagg namn"
 
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+#: js/widgets/VersionCheck.js:50 js/widgets/VersionCheck.js:59
 msgid "New version of Tine 2.0 available"
 msgstr "Ny version av Tine 2.0 är tillgänglig"
 
-#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
+#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Version \"{0}\" av Tine 2.0 är tillgänglig"
 
-#: js/widgets/VersionCheck.js:46
+#: js/widgets/VersionCheck.js:52
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "Det är en kritisk uppdatering och måste installeras så fort som möjligt!"
 
-#: js/widgets/VersionCheck.js:55
+#: js/widgets/VersionCheck.js:61
 msgid "Please consider updating!"
 msgstr "Överväg uppdatering!"
 
@@ -1590,7 +1594,7 @@ msgstr "Namn"
 
 #: js/widgets/grid/LinkGridPanel.js:105
 #: js/widgets/relation/GenericPickerGridPanel.js:451
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/ActivitiesPanel.js:601
+#: js/widgets/ActivitiesPanel.js:468 js/widgets/ActivitiesPanel.js:605
 msgid "Type"
 msgstr "Typ"
 
@@ -1679,7 +1683,7 @@ msgstr "Skapad Tid"
 
 #: js/widgets/grid/GridPanel.js:1366
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
-#: js/widgets/ActivitiesPanel.js:467
+#: js/widgets/ActivitiesPanel.js:471
 msgid "Created By"
 msgstr "Skapad Av"
 
@@ -1691,25 +1695,25 @@ msgstr "Senast Ändrad Tid"
 msgid "Last Modified By"
 msgstr "Senast Ändrad Av"
 
-#: js/widgets/grid/GridPanel.js:1724
+#: js/widgets/grid/GridPanel.js:1729
 msgid "Not Allowed"
 msgstr "Inte Tillåtet"
 
-#: js/widgets/grid/GridPanel.js:1725
+#: js/widgets/grid/GridPanel.js:1730
 msgid "You are not allowed to delete all pages at once"
 msgstr "Du får inte ta bort alla sidor på en gång"
 
-#: js/widgets/grid/GridPanel.js:1748
+#: js/widgets/grid/GridPanel.js:1753
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Vill du verkligen ta bort det valda registret ({0})?"
 msgstr[1] "Vill du verkligen ta bort dom valda registren ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1793 js/widgets/dialog/EditDialog.js:829
+#: js/widgets/grid/GridPanel.js:1798 js/widgets/dialog/EditDialog.js:829
 msgid "Deleting {0}"
 msgstr "Raderar {0}"
 
-#: js/widgets/grid/GridPanel.js:1793
+#: js/widgets/grid/GridPanel.js:1798
 msgid " ... This may take a long time!"
 msgstr "... Detta kan ta lång tid!"
 
@@ -2383,60 +2387,60 @@ msgstr "Egna Fält"
 msgid "Add a Note..."
 msgstr "Lägg till en notifiering..."
 
-#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:179
+#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:180
 #: js/widgets/container/GrantsGrid.js:45
 msgid "Add"
 msgstr "Lägg till"
 
-#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:466
+#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:470
 msgid "Note"
 msgstr "Notifiera"
 
-#: js/widgets/ActivitiesPanel.js:180 js/widgets/ActivitiesPanel.js:388
+#: js/widgets/ActivitiesPanel.js:181 js/widgets/ActivitiesPanel.js:392
 msgid "Add new note"
 msgstr "Lägg till ny notifiering"
 
-#: js/widgets/ActivitiesPanel.js:211
+#: js/widgets/ActivitiesPanel.js:213
 msgid "Notes"
 msgstr "Notifieringar"
 
-#: js/widgets/ActivitiesPanel.js:286
+#: js/widgets/ActivitiesPanel.js:290
 msgid "Enter new note:"
 msgstr "Lägg till ny notifiering:"
 
-#: js/widgets/ActivitiesPanel.js:331 js/widgets/ActivitiesPanel.js:387
+#: js/widgets/ActivitiesPanel.js:335 js/widgets/ActivitiesPanel.js:391
 msgid "Add Note"
 msgstr "Lägg till Notifiering"
 
-#: js/widgets/ActivitiesPanel.js:374
+#: js/widgets/ActivitiesPanel.js:378
 msgid "Add a {0} Note"
 msgstr "Lägg till ett {0} Notifiering"
 
-#: js/widgets/ActivitiesPanel.js:468
+#: js/widgets/ActivitiesPanel.js:472
 msgid "Timestamp"
 msgstr "Tidsstämpel"
 
-#: js/widgets/ActivitiesPanel.js:482
+#: js/widgets/ActivitiesPanel.js:486
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Visar historikposter {0} - {1} av {2}"
 
-#: js/widgets/ActivitiesPanel.js:483
+#: js/widgets/ActivitiesPanel.js:487
 msgid "No history to display"
 msgstr "Ingen historik att visa"
 
-#: js/widgets/ActivitiesPanel.js:583
+#: js/widgets/ActivitiesPanel.js:587
 msgid "History"
 msgstr "Historik"
 
-#: js/widgets/ActivitiesPanel.js:595
+#: js/widgets/ActivitiesPanel.js:599
 msgid "Quick Search"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:596 js/widgets/ActivitiesPanel.js:597
+#: js/widgets/ActivitiesPanel.js:600 js/widgets/ActivitiesPanel.js:601
 msgid "Time"
 msgstr "Tid"
 
-#: js/widgets/ActivitiesPanel.js:599
+#: js/widgets/ActivitiesPanel.js:603
 msgid "User"
 msgstr "Användare"
 

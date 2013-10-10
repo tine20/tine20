@@ -122,26 +122,26 @@ msgstr "Enhet"
 msgid "Unit Price"
 msgstr "Pris per enhet"
 
-#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:89
+#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:97
 msgid "Budget"
 msgstr "Budget"
 
-#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:111
+#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:119
 #: js/Models.js:178
 msgid "Status"
 msgstr "Status"
 
 #: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:116 js/Models.js:156
+#: js/TimeaccountGridPanel.js:124 js/Models.js:156
 msgid "closed"
 msgstr "stängd"
 
 #: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:115
+#: js/TimeaccountGridPanel.js:123
 msgid "open"
 msgstr "öppen"
 
-#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:83
+#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:91
 #: js/Models.js:177
 msgid "Billed"
 msgstr "Fakturerad"
@@ -154,7 +154,7 @@ msgstr "inte rensad"
 msgid "Cleared In"
 msgstr "Rensad"
 
-#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:101
+#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:109
 #: js/Models.js:184
 msgid "Booking deadline"
 msgstr "Deadline för bokning"
@@ -167,7 +167,7 @@ msgstr "ingen"
 msgid "last week"
 msgstr "förra veckan"
 
-#: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:106
+#: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:114
 #: js/Models.js:179
 msgid "Cleared at"
 msgstr ""
@@ -187,12 +187,12 @@ msgid_plural "Time Accounts"
 msgstr[0] "Tidkonto"
 msgstr[1] "Tidkonton"
 
-#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:73
+#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:81
 #: js/Models.js:174
 msgid "Number"
 msgstr "Nummer"
 
-#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:78
+#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:86
 #: js/Models.js:175
 msgid "Title"
 msgstr "Titel"
@@ -243,7 +243,7 @@ msgstr "Hantera rensning"
 msgid "The grant to manage clearing of Timesheets"
 msgstr "Möjlighet att hantera rensning av tidrapporter"
 
-#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:138
+#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:146
 msgid "Export"
 msgstr "Export"
 
@@ -335,7 +335,7 @@ msgstr "Ny tidrapport"
 msgid "Time Account - Status"
 msgstr "Tidkonto - Status"
 
-#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:70
+#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:78
 msgid "Tags"
 msgstr "Taggar"
 
@@ -352,7 +352,7 @@ msgid "Time Account closed"
 msgstr "Stängt tidkonto"
 
 #: js/TimesheetGridPanel.js:91 js/TimesheetGridPanel.js:385
-#: js/TimeaccountGridPanel.js:95
+#: js/TimeaccountGridPanel.js:103
 msgid "Cleared in"
 msgstr "Rensade i"
 
@@ -388,11 +388,11 @@ msgstr "Detalj"
 msgid "Export Timesheets"
 msgstr "Exportera tidrapporter"
 
-#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:147
+#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:155
 msgid "Export as ODS"
 msgstr "Exportera som ODS"
 
-#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:154
+#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:162
 msgid "Export as CSV"
 msgstr "Exportera som CVS"
 

@@ -47,14 +47,13 @@ msgid "%s's personal leads"
 msgstr "%s 的个人线索"
 
 #: Controller.php:162 Model/Lead.php:120 js/LeadGridDetailsPanel.js:45
-#: js/LeadGridDetailsPanel.js:488 js/Contact.js:161 js/Contact.js:356
-#: js/Contact.js:396 js/LeadGridPanel.js:122
+#: js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
+#: js/LeadGridPanel.js:122 Controller/Lead.php:186
 msgid "Customer"
 msgstr "客户"
 
-#: Controller.php:163 js/LeadGridDetailsPanel.js:45
-#: js/LeadGridDetailsPanel.js:471 js/Contact.js:181 js/Contact.js:357
-#: js/Contact.js:400 js/LeadGridPanel.js:121
+#: Controller.php:163 js/LeadGridDetailsPanel.js:45 js/Contact.js:181
+#: js/Contact.js:357 js/Contact.js:400 js/LeadGridPanel.js:121
 msgid "Partner"
 msgstr "伙伴"
 
@@ -180,32 +179,32 @@ msgstr "线索数据"
 msgid "Leadstate"
 msgstr "线索状态"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:455
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:454
 #: js/LeadEditDialog.js:360
 msgid "Leadtype"
 msgstr "线索类型"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:460
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:459
 #: js/LeadEditDialog.js:367
 msgid "Leadsource"
 msgstr "线索源"
 
 #: Export/Pdf.php:87 js/Model.js:109 js/LeadGridPanel.js:125
-#: Controller/Lead.php:183
+#: Controller/Lead.php:193
 msgid "Turnover"
 msgstr "周转"
 
 #: Export/Pdf.php:90 js/Model.js:108 js/LeadEditDialog.js:220
-#: js/LeadGridPanel.js:124 Controller/Lead.php:184
+#: js/LeadGridPanel.js:124 Controller/Lead.php:194
 msgid "Probability"
 msgstr "可能性"
 
-#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:445 js/LeadEditDialog.js:399
-#: Controller/Lead.php:180
+#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:444 js/LeadEditDialog.js:399
+#: Controller/Lead.php:190
 msgid "Start"
 msgstr "开始"
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:227 Controller/Lead.php:182
+#: Export/Pdf.php:96 js/LeadEditDialog.js:227 Controller/Lead.php:192
 msgid "End"
 msgstr "结束"
 
@@ -296,7 +295,7 @@ msgstr[0] ""
 msgid "Select Lead"
 msgstr ""
 
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:178
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:188
 msgid "Role"
 msgstr "职务"
 
@@ -324,7 +323,7 @@ msgstr "添加任务..."
 msgid "Percent"
 msgstr "百分比"
 
-#: js/Task.js:218 js/LeadGridDetailsPanel.js:440
+#: js/Task.js:218 js/LeadGridDetailsPanel.js:439
 msgid "Status"
 msgstr "状态"
 
@@ -397,7 +396,7 @@ msgstr ""
 msgid "Web"
 msgstr ""
 
-#: js/LeadGridDetailsPanel.js:450 js/LeadEditDialog.js:405
+#: js/LeadGridDetailsPanel.js:449 js/LeadEditDialog.js:405
 msgid "Estimated end"
 msgstr "估计结束"
 
@@ -557,41 +556,41 @@ msgstr ""
 msgid "New Lead"
 msgstr ""
 
-#: Controller/Lead.php:177
+#: Controller/Lead.php:187
 msgid "State"
 msgstr "情形"
 
-#: Controller/Lead.php:179
+#: Controller/Lead.php:189
 msgid "Source"
 msgstr "源"
 
-#: Controller/Lead.php:181
+#: Controller/Lead.php:191
 msgid "Scheduled end"
 msgstr "预订结束"
 
-#: Controller/Lead.php:185
+#: Controller/Lead.php:195
 msgid "Folder"
 msgstr "文件夹"
 
-#: Controller/Lead.php:186
+#: Controller/Lead.php:196
 msgid "Updated by"
 msgstr "更新者"
 
-#: Controller/Lead.php:187
+#: Controller/Lead.php:197
 msgid "Updated Fields:"
 msgstr "更新的字段："
 
-#: Controller/Lead.php:188
+#: Controller/Lead.php:198
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s 是从 %s 修改到 %s."
 
-#: Controller/Lead.php:194
+#: Controller/Lead.php:204
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "线索 %s 已经被更新"
 
-#: Controller/Lead.php:196
+#: Controller/Lead.php:206
 #, python-format
 msgid "Lead %s has been created"
 msgstr "潜在客户 %s 已被创建"

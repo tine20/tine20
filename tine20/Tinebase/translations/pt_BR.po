@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"PO-Revision-Date: 2013-10-02 11:06+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -150,12 +150,12 @@ msgstr "Campos modificados:"
 msgid "unknown"
 msgstr "desconhecido"
 
-#: Import/Csv/Abstract.php:201
+#: Import/Csv/Abstract.php:200
 #, python-format
 msgid "The following fields weren't imported: %s"
 msgstr "Os seguintes campos foram importados:  %s"
 
-#: Import/Csv/Abstract.php:202
+#: Import/Csv/Abstract.php:201
 msgid "N/A"
 msgstr "N/A"
 
@@ -404,43 +404,43 @@ msgstr "Desabilitar Qualquer Conta"
 msgid "Disallow anyone account in grant configurations"
 msgstr "Ninguém pode desabilitar as permissões da conta"
 
-#: Setup/setup.xml:3203
+#: Setup/setup.xml:3209
 msgid "note"
 msgstr "nota"
 
-#: Setup/setup.xml:3208
+#: Setup/setup.xml:3214
 msgid "default note type"
 msgstr "tipo de nota padrão"
 
-#: Setup/setup.xml:3234
+#: Setup/setup.xml:3240
 msgid "telephone"
 msgstr "telefone"
 
-#: Setup/setup.xml:3239
+#: Setup/setup.xml:3245
 msgid "telephone call"
 msgstr "chamada telefônica"
 
-#: Setup/setup.xml:3265
+#: Setup/setup.xml:3271
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3270
+#: Setup/setup.xml:3276
 msgid "email contact"
 msgstr "email do contato"
 
-#: Setup/setup.xml:3296
+#: Setup/setup.xml:3302
 msgid "created"
 msgstr "criado"
 
-#: Setup/setup.xml:3301
+#: Setup/setup.xml:3307
 msgid "record created"
 msgstr "registro criado"
 
-#: Setup/setup.xml:3327
+#: Setup/setup.xml:3333
 msgid "changed"
 msgstr "modificado"
 
-#: Setup/setup.xml:3332
+#: Setup/setup.xml:3338
 msgid "record changed"
 msgstr "registros modificado"
 
@@ -574,7 +574,7 @@ msgstr "O campo é parte legível do perfil"
 msgid "Field Name"
 msgstr "Nome do campo"
 
-#: js/AboutDialog.js:41 js/MainMenu.js:113
+#: js/AboutDialog.js:41 js/MainMenu.js:118
 msgid "About {0}"
 msgstr "Sobre {0}"
 
@@ -585,7 +585,7 @@ msgstr "Sobre {0}"
 #: js/widgets/dialog/ExceptionHandlerDialog.js:194
 #: js/widgets/dialog/AddToRecordPanel.js:111
 #: js/widgets/dialog/PreferencesDialog.js:109
-#: js/widgets/dialog/EditDialog.js:373 js/widgets/ActivitiesPanel.js:315
+#: js/widgets/dialog/EditDialog.js:373 js/widgets/ActivitiesPanel.js:319
 #: js/widgets/container/ContainerSelect.js:490 js/ux/form/LayerCombo.js:186
 msgid "Ok"
 msgstr "OK"
@@ -685,19 +685,19 @@ msgid "Version"
 msgstr ""
 
 #: js/LoginPanel.js:217
-msgid "Tine 2.0 is made for you"
-msgstr "Tine 2.0 é feito para você"
+msgid "{0} is made for you"
+msgstr ""
 
 #: js/LoginPanel.js:219
 msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
-" and get help."
-msgstr "Tine 2.0 quer tornar a colaboração nos negócios mais fácil e mais amigável - para as suas necessidades! Então você é bem vindo para discutir conosco, trazer idéias e obter ajuda."
+"{0} wants to make business collaboration easier and more enjoyable - for "
+"your needs! So you are warmly welcome to discuss with us, bring in ideas and"
+" get help."
+msgstr ""
 
 #: js/LoginPanel.js:225
-msgid "Tine 2.0 Homepage"
-msgstr "Página do Tine 2.0"
+msgid "{0} Homepage"
+msgstr ""
 
 #: js/LoginPanel.js:226
 msgid "Tine 2.0 Forum"
@@ -714,11 +714,11 @@ msgstr ""
 #: js/LoginPanel.js:234
 msgid ""
 "If the state of your language is not satisfying, or if you miss a language, "
-"please consider becoming a Tine 2.0 translator."
+"please consider becoming a {0} translator."
 msgstr ""
 
 #: js/LoginPanel.js:237
-msgid "Tine 2.0 Translation Howto"
+msgid "{0} Translation Howto"
 msgstr ""
 
 #: js/LoginPanel.js:238
@@ -798,7 +798,7 @@ msgstr "Por favor aguarde"
 msgid "Login successful. Loading {0}..."
 msgstr "Login bem sucedido.  Carregando {0}..."
 
-#: js/LoginPanel.js:468 js/MainMenu.js:242
+#: js/LoginPanel.js:468 js/MainMenu.js:257
 msgid "Please wait!"
 msgstr "Favor aguardar!"
 
@@ -865,7 +865,7 @@ msgstr "Repeta a nova Senha"
 #: js/widgets/dialog/AddToRecordPanel.js:103
 #: js/widgets/dialog/PreferencesDialog.js:117
 #: js/widgets/dialog/EditDialog.js:393 js/widgets/dialog/WizardPanel.js:187
-#: js/widgets/ActivitiesPanel.js:307
+#: js/widgets/ActivitiesPanel.js:311
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
 #: js/widgets/container/ContainerSelect.js:481 js/ExceptionDialog.js:109
 #: js/ExceptionDialog.js:119 js/ux/form/LayerCombo.js:193
@@ -901,66 +901,70 @@ msgstr "Falha"
 msgid "The new passwords mismatch, please correct them."
 msgstr "As novas senhas são diferentes, favor corrigí-las."
 
-#: js/MainMenu.js:62
+#: js/MainMenu.js:66
 msgid "User: {0}"
 msgstr "Usuário: {0}"
 
-#: js/MainMenu.js:119
+#: js/MainMenu.js:124
 msgid "Help"
 msgstr ""
 
-#: js/MainMenu.js:126
+#: js/MainMenu.js:131
 msgid "Debug Console (Ctrl + F11)"
 msgstr "Console de Depuração (Ctrl + F11)"
 
-#: js/MainMenu.js:132 js/widgets/dialog/PreferencesPanel.js:36
+#: js/MainMenu.js:137 js/widgets/dialog/PreferencesPanel.js:36
 msgid "Preferences"
 msgstr "Preferências"
 
-#: js/MainMenu.js:139
+#: js/MainMenu.js:144
 msgid "Edit Profile"
 msgstr "Editar Perfil"
 
-#: js/MainMenu.js:146
+#: js/MainMenu.js:151
 msgid "Change password"
 msgstr "Alterar senha"
 
-#: js/MainMenu.js:153
+#: js/MainMenu.js:158
 msgid "Logout"
 msgstr "Sair"
 
-#: js/MainMenu.js:154
+#: js/MainMenu.js:159
 msgid "Logout from {0}"
 msgstr "Sair de {0}"
 
-#: js/MainMenu.js:161
+#: js/MainMenu.js:166
+msgid "Learn more about {0}"
+msgstr ""
+
+#: js/MainMenu.js:176
 msgid "Allow desktop notifications"
 msgstr "Permitir notificações na Área de Trabalho"
 
-#: js/MainMenu.js:162
+#: js/MainMenu.js:177
 msgid "Request permissions for webkit desktop notifications."
 msgstr "Solicitação de permissão para notificações do webkit na área de trabalho."
 
-#: js/MainMenu.js:172
+#: js/MainMenu.js:187
 msgid "Install web app"
 msgstr "Instalar applicação web"
 
-#: js/MainMenu.js:173
+#: js/MainMenu.js:188
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr "Instalar Tine 2.0 como uma aplicação web no seu navegador."
 
-#: js/MainMenu.js:228 js/widgets/grid/GridPanel.js:1750
+#: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:640
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr "Confirmar"
 
-#: js/MainMenu.js:228
+#: js/MainMenu.js:243
 msgid "Are you sure you want to logout?"
 msgstr "Vocẽ está certo que quer sair ?"
 
-#: js/MainMenu.js:242
+#: js/MainMenu.js:257
 msgid "Logging you out..."
 msgstr "Saindo ..."
 
@@ -1280,19 +1284,19 @@ msgstr "Selecione identificação(ões) a desvincular"
 msgid "tag name"
 msgstr "nome da identificação"
 
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+#: js/widgets/VersionCheck.js:50 js/widgets/VersionCheck.js:59
 msgid "New version of Tine 2.0 available"
 msgstr "Nova versão do Tine 2.0 está disponível"
 
-#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
+#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Versão \"{0}\" do Tine 2.0 está disponível."
 
-#: js/widgets/VersionCheck.js:46
+#: js/widgets/VersionCheck.js:52
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "É uma ataulização crítica e deve ser instalada tão logo seja possível!"
 
-#: js/widgets/VersionCheck.js:55
+#: js/widgets/VersionCheck.js:61
 msgid "Please consider updating!"
 msgstr "Favor considerar a atualização!"
 
@@ -1591,7 +1595,7 @@ msgstr "Nome"
 
 #: js/widgets/grid/LinkGridPanel.js:105
 #: js/widgets/relation/GenericPickerGridPanel.js:451
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/ActivitiesPanel.js:601
+#: js/widgets/ActivitiesPanel.js:468 js/widgets/ActivitiesPanel.js:605
 msgid "Type"
 msgstr "Tipo"
 
@@ -1680,7 +1684,7 @@ msgstr "Hora da criação"
 
 #: js/widgets/grid/GridPanel.js:1366
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
-#: js/widgets/ActivitiesPanel.js:467
+#: js/widgets/ActivitiesPanel.js:471
 msgid "Created By"
 msgstr "Criado Por"
 
@@ -1692,25 +1696,25 @@ msgstr "Última Hora modificada"
 msgid "Last Modified By"
 msgstr "Última Modificação Por"
 
-#: js/widgets/grid/GridPanel.js:1724
+#: js/widgets/grid/GridPanel.js:1729
 msgid "Not Allowed"
 msgstr "Não permitido"
 
-#: js/widgets/grid/GridPanel.js:1725
+#: js/widgets/grid/GridPanel.js:1730
 msgid "You are not allowed to delete all pages at once"
 msgstr "Você não tem permissão para apagar todas as páginas de uma vez"
 
-#: js/widgets/grid/GridPanel.js:1748
+#: js/widgets/grid/GridPanel.js:1753
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Você quer realmente apagar o registro selecionado ({0})?"
 msgstr[1] "Você quer realmente apagar os registros selecionados ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1793 js/widgets/dialog/EditDialog.js:829
+#: js/widgets/grid/GridPanel.js:1798 js/widgets/dialog/EditDialog.js:829
 msgid "Deleting {0}"
 msgstr "Excluindo {0}"
 
-#: js/widgets/grid/GridPanel.js:1793
+#: js/widgets/grid/GridPanel.js:1798
 msgid " ... This may take a long time!"
 msgstr "... Isto pode levar muito tempo!"
 
@@ -2384,60 +2388,60 @@ msgstr "Campos Customizados"
 msgid "Add a Note..."
 msgstr "Adicionar Nota..."
 
-#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:179
+#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:180
 #: js/widgets/container/GrantsGrid.js:45
 msgid "Add"
 msgstr "Adicionar"
 
-#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:466
+#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:470
 msgid "Note"
 msgstr "Nota"
 
-#: js/widgets/ActivitiesPanel.js:180 js/widgets/ActivitiesPanel.js:388
+#: js/widgets/ActivitiesPanel.js:181 js/widgets/ActivitiesPanel.js:392
 msgid "Add new note"
 msgstr "Adicionar nova nota"
 
-#: js/widgets/ActivitiesPanel.js:211
+#: js/widgets/ActivitiesPanel.js:213
 msgid "Notes"
 msgstr "Notas"
 
-#: js/widgets/ActivitiesPanel.js:286
+#: js/widgets/ActivitiesPanel.js:290
 msgid "Enter new note:"
 msgstr "Incluir nova nota"
 
-#: js/widgets/ActivitiesPanel.js:331 js/widgets/ActivitiesPanel.js:387
+#: js/widgets/ActivitiesPanel.js:335 js/widgets/ActivitiesPanel.js:391
 msgid "Add Note"
 msgstr "Adicionar Nota"
 
-#: js/widgets/ActivitiesPanel.js:374
+#: js/widgets/ActivitiesPanel.js:378
 msgid "Add a {0} Note"
 msgstr "Adicionar {)} Notas"
 
-#: js/widgets/ActivitiesPanel.js:468
+#: js/widgets/ActivitiesPanel.js:472
 msgid "Timestamp"
 msgstr "Visão atual"
 
-#: js/widgets/ActivitiesPanel.js:482
+#: js/widgets/ActivitiesPanel.js:486
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Exibindo histórico de registros {0} - {1} de {2}"
 
-#: js/widgets/ActivitiesPanel.js:483
+#: js/widgets/ActivitiesPanel.js:487
 msgid "No history to display"
 msgstr "Nenhum histórico a exibir"
 
-#: js/widgets/ActivitiesPanel.js:583
+#: js/widgets/ActivitiesPanel.js:587
 msgid "History"
 msgstr "Histórico"
 
-#: js/widgets/ActivitiesPanel.js:595
+#: js/widgets/ActivitiesPanel.js:599
 msgid "Quick Search"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:596 js/widgets/ActivitiesPanel.js:597
+#: js/widgets/ActivitiesPanel.js:600 js/widgets/ActivitiesPanel.js:601
 msgid "Time"
 msgstr "Hora"
 
-#: js/widgets/ActivitiesPanel.js:599
+#: js/widgets/ActivitiesPanel.js:603
 msgid "User"
 msgstr "Usuário"
 

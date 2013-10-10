@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 16:15+0000\n"
+"PO-Revision-Date: 2013-10-02 11:06+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -247,73 +247,73 @@ msgstr "Neue E-Mail"
 msgid "Email"
 msgstr "E-Mail"
 
-#: js/Felamimail.js:129
+#: js/Felamimail.js:120
 msgid "Active Vacation Message"
 msgstr "Aktive Abwesenheitsbenachrichtigung"
 
-#: js/Felamimail.js:130
+#: js/Felamimail.js:121
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "E-Mailkonto {0} hat eine aktive Abwesenheitsbenachrichtigung"
 
-#: js/Felamimail.js:527
+#: js/Felamimail.js:547
 msgid "New mails"
 msgstr "Neue E-Mails"
 
-#: js/Felamimail.js:528
+#: js/Felamimail.js:548
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Sie haben {0} neue Nachricht(en) im Ordner {1} ({2})"
 
-#: js/Felamimail.js:648
+#: js/Felamimail.js:668
 msgid "IMAP Credentials for {0}"
 msgstr "Empfangsserver-Zugangsdaten (IMAP) für {0}"
 
-#: js/Felamimail.js:651
+#: js/Felamimail.js:671
 msgid "Credentials"
 msgstr "Zugangsdaten"
 
-#: js/Felamimail.js:804 js/Felamimail.js:837
+#: js/Felamimail.js:824 js/Felamimail.js:857
 msgid "IMAP Error"
 msgstr "IMAP-Fehler (Empfangsserver)"
 
-#: js/Felamimail.js:805
+#: js/Felamimail.js:825
 msgid "No connection to IMAP server."
 msgstr "Keine Verbindung zum Empfangsserver-Server (IMAP)."
 
-#: js/Felamimail.js:821
+#: js/Felamimail.js:841
 msgid "IMAP Credentials Error"
 msgstr "Zugangsdaten für Empfangsserver (IMAP) falsch"
 
-#: js/Felamimail.js:822
+#: js/Felamimail.js:842
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren Administrator."
 
-#: js/Felamimail.js:838
+#: js/Felamimail.js:858
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  Bitte aktualisieren Sie die Ordnerliste."
 
-#: js/Felamimail.js:867
+#: js/Felamimail.js:887
 msgid "SMTP Error"
 msgstr "SMTP-Fehler (Sendeserver)"
 
-#: js/Felamimail.js:868
+#: js/Felamimail.js:888
 msgid "No connection to SMTP server."
 msgstr "Keine Verbindung zum Sendeserver (SMTP)."
 
-#: js/Felamimail.js:876
+#: js/Felamimail.js:896
 msgid "Sieve Error"
 msgstr "Sieve-Fehler"
 
-#: js/Felamimail.js:877
+#: js/Felamimail.js:897
 msgid "No connection to Sieve server."
 msgstr "Keine Verbindung zum Sieve-Server."
 
-#: js/Felamimail.js:885
+#: js/Felamimail.js:905
 msgid "Save Sieve Script Error"
 msgstr "Fehler beim Speichern des Sieve-Skriptes"
 
-#: js/Felamimail.js:886
+#: js/Felamimail.js:906
 msgid "Could not save script on Sieve server."
 msgstr "Konnte das Sieve-Skript nicht auf dem Server speichern."
 
@@ -433,65 +433,57 @@ msgstr "Fwd:"
 msgid "{0} Message"
 msgstr "{0} Nachricht"
 
-#: js/MessageEditDialog.js:661
+#: js/MessageEditDialog.js:664 js/MessageEditDialog.js:669
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/MessageEditDialog.js:662
+#: js/MessageEditDialog.js:665
 msgid "{0} account setting empty."
 msgstr "{0} E-Mailaccount-Einstellung leer."
 
-#: js/MessageEditDialog.js:677
-msgid "Errors"
-msgstr "Fehler"
+#: js/MessageEditDialog.js:670 js/MessageEditDialog.js:995
+msgid "Files are still uploading."
+msgstr "Es werden gerade Dateien hochgeladen."
 
-#: js/MessageEditDialog.js:677
-msgid "Please fix the errors noted."
-msgstr "Bitte beheben Sie den genannten Fehler."
-
-#: js/MessageEditDialog.js:726 js/MessageEditDialog.js:959
+#: js/MessageEditDialog.js:735 js/MessageEditDialog.js:968
 msgid "Compose email:"
 msgstr "E-Mail verfassen:"
 
-#: js/MessageEditDialog.js:789 js/GridDetailsPanel.js:347 js/GridPanel.js:468
+#: js/MessageEditDialog.js:798 js/GridDetailsPanel.js:347 js/GridPanel.js:468
 msgid "Attachments"
 msgstr "Anhänge"
 
-#: js/MessageEditDialog.js:855 js/GridDetailsPanel.js:246
+#: js/MessageEditDialog.js:864 js/GridDetailsPanel.js:246
 msgid "From"
 msgstr "Von"
 
-#: js/MessageEditDialog.js:924 Controller/Message/Send.php:269
+#: js/MessageEditDialog.js:933 Controller/Message/Send.php:269
 msgid "Body"
 msgstr "Nachricht"
 
-#: js/MessageEditDialog.js:949 js/GridDetailsPanel.js:245
+#: js/MessageEditDialog.js:958 js/GridDetailsPanel.js:245
 #: js/sieve/RuleConditionsPanel.js:72 js/Model.js:155 js/GridPanel.js:482
 #: Controller/Message/Send.php:269
 msgid "Subject"
 msgstr "Betreff"
 
-#: js/MessageEditDialog.js:986
-msgid "Files are still uploading."
-msgstr "Es werden gerade Dateien hochgeladen."
-
-#: js/MessageEditDialog.js:1015
+#: js/MessageEditDialog.js:1023
 msgid "Empty subject"
 msgstr "Leerer Betreff"
 
-#: js/MessageEditDialog.js:1016
+#: js/MessageEditDialog.js:1024
 msgid "Do you really want to send a message with an empty subject?"
 msgstr "Wollen Sie die Nachricht wirklich mit einem leeren Betreff senden?"
 
-#: js/MessageEditDialog.js:1037
+#: js/MessageEditDialog.js:1045
 msgid "Add Note"
 msgstr "Notiz hinzufügen"
 
-#: js/MessageEditDialog.js:1038
+#: js/MessageEditDialog.js:1046
 msgid "Edit Email Note Text:"
 msgstr "E-Mailnotiz bearbeiten:"
 
-#: js/MessageEditDialog.js:1061
+#: js/MessageEditDialog.js:1069
 msgid "No recipients set."
 msgstr "Empfänger fehlen."
 

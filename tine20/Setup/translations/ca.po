@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"PO-Revision-Date: 2013-10-02 11:06+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Catalan (http://www.transifex.com/projects/p/tine20/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -59,21 +59,21 @@ msgid "Try to split username"
 msgstr ""
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
-#: js/AuthenticationPanel.js:478 js/AuthenticationPanel.js:516
-#: js/AuthenticationPanel.js:547 js/AuthenticationPanel.js:572
-#: js/AuthenticationPanel.js:596 js/AuthenticationPanel.js:602
-#: js/AuthenticationPanel.js:608 js/AuthenticationPanel.js:629
-#: js/AuthenticationPanel.js:650 js/AuthenticationPanel.js:656
+#: js/AuthenticationPanel.js:480 js/AuthenticationPanel.js:504
+#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
+#: js/AuthenticationPanel.js:537 js/AuthenticationPanel.js:558
+#: js/AuthenticationPanel.js:564 js/AuthenticationPanel.js:601
+#: js/AuthenticationPanel.js:639 js/AuthenticationPanel.js:670
 #: js/EmailPanel.js:207 js/EmailPanel.js:267
 msgid "Yes"
 msgstr "Sí"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
-#: js/AuthenticationPanel.js:478 js/AuthenticationPanel.js:516
-#: js/AuthenticationPanel.js:547 js/AuthenticationPanel.js:572
-#: js/AuthenticationPanel.js:596 js/AuthenticationPanel.js:602
-#: js/AuthenticationPanel.js:608 js/AuthenticationPanel.js:629
-#: js/AuthenticationPanel.js:650 js/AuthenticationPanel.js:656
+#: js/AuthenticationPanel.js:480 js/AuthenticationPanel.js:504
+#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
+#: js/AuthenticationPanel.js:537 js/AuthenticationPanel.js:558
+#: js/AuthenticationPanel.js:564 js/AuthenticationPanel.js:601
+#: js/AuthenticationPanel.js:639 js/AuthenticationPanel.js:670
 #: js/EmailPanel.js:207 js/EmailPanel.js:267
 msgid "No"
 msgstr "No"
@@ -93,7 +93,7 @@ msgstr "Nom de domini del compte "
 msgid "Account domain short name"
 msgstr "Nom curt de domini del compte"
 
-#: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:466
+#: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:589
 msgid "Host"
 msgstr "Amfitrió"
 
@@ -105,17 +105,17 @@ msgstr "Amfitrió"
 msgid "Port"
 msgstr "Port"
 
-#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:469
+#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:592
 msgid "Login name"
 msgstr "Nom d'inici de sessió"
 
-#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:472
+#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:595
 #: js/EmailPanel.js:190 js/ConfigManagerPanel.js:214
 #: js/ConfigManagerPanel.js:245
 msgid "Password"
 msgstr "Contrasenya"
 
-#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:477
+#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:600
 msgid "Bind requires DN"
 msgstr "La vinculació requereix DN"
 
@@ -162,153 +162,157 @@ msgstr "Afegeix el domini al nom d'inici de sessió"
 msgid "Accounts storage"
 msgstr "Emmagatzematge de comptes"
 
-#: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:539
+#: js/AuthenticationPanel.js:448 js/AuthenticationPanel.js:662
 msgid "Default user group name"
 msgstr "Nom de grup d'usuari per defecte"
 
-#: js/AuthenticationPanel.js:452 js/AuthenticationPanel.js:542
+#: js/AuthenticationPanel.js:452 js/AuthenticationPanel.js:665
 msgid "Default admin group name"
 msgstr "Nom de grup d'administració per defecte"
 
-#: js/AuthenticationPanel.js:483
-msgid "User DN"
-msgstr "DN d'usuari"
-
-#: js/AuthenticationPanel.js:486
-msgid "User Filter"
-msgstr "Filtre d'usuari"
-
-#: js/AuthenticationPanel.js:490
-msgid "User Search Scope"
-msgstr "Abast de la cerca d'usuari"
-
-#: js/AuthenticationPanel.js:496
-msgid "Groups DN"
-msgstr "DN de grups"
-
-#: js/AuthenticationPanel.js:499
-msgid "Group Filter"
-msgstr "Filtre de grup"
-
-#: js/AuthenticationPanel.js:503
-msgid "Group Search Scope"
-msgstr "Abast de la cerca de grup"
-
-#: js/AuthenticationPanel.js:509
-msgid "Password encoding"
-msgstr "Codificació de la contrasenya"
-
-#: js/AuthenticationPanel.js:515
-msgid "Use Rfc 2307 bis"
-msgstr "Utilitza Rfc 2307 bis"
-
-#: js/AuthenticationPanel.js:521
-msgid "Min User Id"
-msgstr "Identificador d'usuari mínim"
-
-#: js/AuthenticationPanel.js:524
-msgid "Max User Id"
-msgstr "Identificador d'usuari màxim"
-
-#: js/AuthenticationPanel.js:527
-msgid "Min Group Id"
-msgstr "Identificador de grup mínim"
-
-#: js/AuthenticationPanel.js:530
-msgid "Max Group Id"
-msgstr "Identificador de grup màxim"
-
-#: js/AuthenticationPanel.js:533
-msgid "Group UUID Attribute name"
-msgstr "Nom d'atribut UUID de grup"
-
-#: js/AuthenticationPanel.js:536
-msgid "User UUID Attribute name"
-msgstr "Nom d'atribut UUID d'usuari"
-
-#: js/AuthenticationPanel.js:546
-msgid "Readonly access"
-msgstr ""
-
-#: js/AuthenticationPanel.js:556
+#: js/AuthenticationPanel.js:464
 msgid "Login panel"
 msgstr ""
 
-#: js/AuthenticationPanel.js:571
+#: js/AuthenticationPanel.js:479
 msgid "Reuse last username logged"
 msgstr ""
 
-#: js/AuthenticationPanel.js:580
+#: js/AuthenticationPanel.js:488
 msgid "Password Settings"
 msgstr ""
 
-#: js/AuthenticationPanel.js:595
+#: js/AuthenticationPanel.js:503
 msgid "User can change password"
 msgstr "L'usuari pot canviar la contrasenya"
 
-#: js/AuthenticationPanel.js:601
+#: js/AuthenticationPanel.js:509
 msgid "Enable password policy"
 msgstr ""
 
-#: js/AuthenticationPanel.js:607
+#: js/AuthenticationPanel.js:515
 msgid "Only ASCII"
 msgstr ""
 
-#: js/AuthenticationPanel.js:612
+#: js/AuthenticationPanel.js:520
 msgid "Minimum length"
 msgstr ""
 
-#: js/AuthenticationPanel.js:615
+#: js/AuthenticationPanel.js:523
 msgid "Minimum word chars"
 msgstr ""
 
-#: js/AuthenticationPanel.js:618
+#: js/AuthenticationPanel.js:526
 msgid "Minimum uppercase chars"
 msgstr ""
 
-#: js/AuthenticationPanel.js:621
+#: js/AuthenticationPanel.js:529
 msgid "Minimum special chars"
 msgstr ""
 
-#: js/AuthenticationPanel.js:624
+#: js/AuthenticationPanel.js:532
 msgid "Minimum numbers"
 msgstr ""
 
-#: js/AuthenticationPanel.js:628
+#: js/AuthenticationPanel.js:536
 msgid "Forbid part of username in password"
 msgstr ""
 
-#: js/AuthenticationPanel.js:637
+#: js/AuthenticationPanel.js:545
 msgid "Redirect Settings"
 msgstr "Configuració de redireccionament"
 
-#: js/AuthenticationPanel.js:645
+#: js/AuthenticationPanel.js:553
 msgid "Redirect Url (redirect to login screen if empty)"
 msgstr "Url on redirigir (es redirigeix a la pantalla d'inici de sessió si ho deixeu buit)"
 
-#: js/AuthenticationPanel.js:649
+#: js/AuthenticationPanel.js:557
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr "Sempre es redirigeix (si poseu No, només es redirigirà després d'un tancament de sessió)"
 
-#: js/AuthenticationPanel.js:655
+#: js/AuthenticationPanel.js:563
 msgid "Redirect to referring site, if exists"
 msgstr "Si existeix, es redirigeix al lloc referent"
 
+#: js/AuthenticationPanel.js:606
+msgid "User DN"
+msgstr "DN d'usuari"
+
+#: js/AuthenticationPanel.js:609
+msgid "User Filter"
+msgstr "Filtre d'usuari"
+
+#: js/AuthenticationPanel.js:613
+msgid "User Search Scope"
+msgstr "Abast de la cerca d'usuari"
+
+#: js/AuthenticationPanel.js:619
+msgid "Groups DN"
+msgstr "DN de grups"
+
+#: js/AuthenticationPanel.js:622
+msgid "Group Filter"
+msgstr "Filtre de grup"
+
+#: js/AuthenticationPanel.js:626
+msgid "Group Search Scope"
+msgstr "Abast de la cerca de grup"
+
+#: js/AuthenticationPanel.js:632
+msgid "Password encoding"
+msgstr "Codificació de la contrasenya"
+
+#: js/AuthenticationPanel.js:638
+msgid "Use Rfc 2307 bis"
+msgstr "Utilitza Rfc 2307 bis"
+
+#: js/AuthenticationPanel.js:638
+msgid "Maintain RFC 2307 attributes"
+msgstr ""
+
+#: js/AuthenticationPanel.js:644
+msgid "Min User Id"
+msgstr "Identificador d'usuari mínim"
+
+#: js/AuthenticationPanel.js:647
+msgid "Max User Id"
+msgstr "Identificador d'usuari màxim"
+
+#: js/AuthenticationPanel.js:650
+msgid "Min Group Id"
+msgstr "Identificador de grup mínim"
+
+#: js/AuthenticationPanel.js:653
+msgid "Max Group Id"
+msgstr "Identificador de grup màxim"
+
+#: js/AuthenticationPanel.js:656
+msgid "Group UUID Attribute name"
+msgstr "Nom d'atribut UUID de grup"
+
+#: js/AuthenticationPanel.js:659
+msgid "User UUID Attribute name"
+msgstr "Nom d'atribut UUID d'usuari"
+
 #: js/AuthenticationPanel.js:669
+msgid "Readonly access"
+msgstr ""
+
+#: js/AuthenticationPanel.js:683
 msgid "Save config and install"
 msgstr "Desa la configuració i instal·la"
 
-#: js/AuthenticationPanel.js:671 js/ConfigManagerPanel.js:499
+#: js/AuthenticationPanel.js:685 js/ConfigManagerPanel.js:499
 msgid "Save config"
 msgstr "Desa la configuració"
 
-#: js/AuthenticationPanel.js:696
+#: js/AuthenticationPanel.js:710
 msgid "Passwords don't match"
 msgstr "Les contrasenyes no coincideixen"
 
-#: js/AuthenticationPanel.js:706 js/AuthenticationPanel.js:713
-#: js/AuthenticationPanel.js:717 js/AuthenticationPanel.js:729
-#: js/AuthenticationPanel.js:740
+#: js/AuthenticationPanel.js:720 js/AuthenticationPanel.js:727
+#: js/AuthenticationPanel.js:731 js/AuthenticationPanel.js:743
+#: js/AuthenticationPanel.js:754
 msgid "Should not be empty"
 msgstr "No pot ser buit"
 

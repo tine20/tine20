@@ -1,11 +1,12 @@
 # 
 # Translators:
+# mrhypefm <p_zittema@hotmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-10-04 10:19+0000\n"
+"Last-Translator: mrhypefm <p_zittema@hotmail.com>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,193 +19,193 @@ msgstr ""
 
 #: Acl/Rights.php:99
 msgid "Add new user"
-msgstr ""
+msgstr "Voeg nieuwe gebruiker toe"
 
 #: Acl/Rights.php:100
 msgid "Add new user as member to a course"
-msgstr ""
+msgstr "Voeg gebruiker al lid van de cursus toe"
 
 #: Acl/Rights.php:103
 msgid "Add existing user"
-msgstr ""
+msgstr "Voeg bestaande gebruiker toe"
 
 #: Acl/Rights.php:104
 msgid "Add existing user as member to a course"
-msgstr ""
+msgstr "Voeg bestaande gebruiker toe als lid van de cursus"
 
 #: Config.php:82 js/CourseEditDialog.js:230 js/Models.js:74
 msgid "Internet Access"
-msgstr ""
+msgstr "Internet toegang"
 
 #: Config.php:84
 msgid "Internet access options."
-msgstr ""
+msgstr "Internet toegang opties"
 
 #: Config.php:91 Config.php:93
 msgid "Internet Access Group (ON)"
-msgstr ""
+msgstr "Internet toegang groep (aan)"
 
 #: Config.php:99 Config.php:101
 msgid "Internet Access Group (FILTERED)"
-msgstr ""
+msgstr "Internet toegang groep (gefilterd)"
 
 #: Config.php:107 Config.php:109
 msgid "Students Group"
-msgstr ""
+msgstr "Studenten groep"
 
 #: Config.php:115 Config.php:117
 msgid "Students Import Definition"
-msgstr ""
+msgstr "Student importeer waarde"
 
 #: Config.php:123
 msgid "Students login name prefix"
-msgstr ""
+msgstr "Variable studenten loginnaam"
 
 #: Config.php:130
 msgid "Student username schema"
-msgstr ""
+msgstr "Student gebruikersnaam schema"
 
 #: Config.php:132
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
-msgstr ""
+msgstr "Student gebruikersnaam schema (0 = alleen achternaam (10 karakters), 1 = achternaam + 2 karakters van voornaam"
 
 #: Config.php:139 Config.php:141
 msgid "Samba user settings"
-msgstr ""
+msgstr "Samba gebruikersopties"
 
 #: Setup/setup.xml:4
 msgid "Courses"
-msgstr ""
+msgstr "Cursussen"
 
 #: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
 #: Preference.php:60
 msgid "All courses"
-msgstr ""
+msgstr "Alle cursussen"
 
 #: Setup/Initialize.php:66
 msgid "On"
-msgstr ""
+msgstr "Aan"
 
 #: Setup/Initialize.php:67
 msgid "Off"
-msgstr ""
+msgstr "Uit"
 
 #: Setup/Initialize.php:68
 msgid "Filtered"
-msgstr ""
+msgstr "Gefilterd"
 
 #: Preference.php:61
 msgid "The default favorite which is loaded on Classes startup"
-msgstr ""
+msgstr "De standaard favoriet die bij het opstarten van Klassen wordt geladen"
 
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
-msgstr ""
+msgstr "Importeer cursus leden"
 
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
-msgstr ""
+msgstr "Voeg nieuwe gebruiker toe"
 
 #: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Cursus"
+msgstr[1] "Cursussen"
 
 #: js/CourseEditDialog.js:206
 msgid "Course Name"
-msgstr ""
+msgstr "Cursus naam"
 
 #: js/CourseEditDialog.js:213
 msgid "Course / School Type"
-msgstr ""
+msgstr "Cursus / School soort"
 
 #: js/CourseEditDialog.js:224
 msgid "Description"
-msgstr ""
+msgstr "Omschrijving"
 
 #: js/CourseEditDialog.js:240
 msgid "Fileserver Access"
-msgstr ""
+msgstr "Bestandsbeheerder toegang"
 
 #: js/CourseEditDialog.js:272
 msgid "Members"
-msgstr ""
+msgstr "Leden"
 
 #: js/CourseEditDialog.js:299
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: js/CourseEditDialog.js:303
 msgid "unknown"
-msgstr ""
+msgstr "Onbekend"
 
 #: js/CourseEditDialog.js:308
 msgid "Reset Password"
-msgstr ""
+msgstr "Reset wachtwoord"
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
-msgstr ""
+msgstr "Voornaam"
 
 #: js/AddMemberDialog.js:67
 msgid "Last Name"
-msgstr ""
+msgstr "Achternaam"
 
 #: js/AddMemberDialog.js:86
 msgid "Add new member to course"
-msgstr ""
+msgstr "Voeg nieuw lid toe aan cursus"
 
 #: js/AddMemberDialog.js:118
 msgid "Errors"
-msgstr ""
+msgstr "Fouten"
 
 #: js/AddMemberDialog.js:118
 msgid "Please fix the errors noted."
-msgstr ""
+msgstr "Verhelp de genoemde fouten."
 
 #: js/CourseGridPanel.js:44 js/Models.js:72
 msgid "Name"
-msgstr ""
+msgstr "Naam"
 
 #: js/CourseGridPanel.js:50
 msgid "Type"
-msgstr ""
+msgstr "soort"
 
 #: js/CourseGridPanel.js:95
 msgid "Failed"
-msgstr ""
+msgstr "Mislukt"
 
 #: js/CourseGridPanel.js:96
 msgid "Some error occured while trying to update the courses."
-msgstr ""
+msgstr "Foutmelding tijdens poging van het updaten van de cursussen"
 
 #: js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Taaklijst"
+msgstr[1] "Taaklijsten"
 
 #: js/Models.js:71
 msgid "Quick Search"
-msgstr ""
+msgstr "Snel zoeken"
 
 #: js/Models.js:109
 msgid "Course Type"
 msgid_plural "Course Types"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Cursus soort"
+msgstr[1] "Cursus soorten"
 
 #: Controller/Course.php:256 Controller/Course.php:300
 msgid "Teacher"
-msgstr ""
+msgstr "Docent"
 
 #: Controller/Course.php:257
 msgid "Teacher Account"
-msgstr ""
+msgstr "Docent account"
 
 #: Controller/Course.php:317
 msgid "My course"
-msgstr ""
+msgstr "Mijn cursus"

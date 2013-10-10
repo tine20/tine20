@@ -120,26 +120,26 @@ msgstr "Unidad"
 msgid "Unit Price"
 msgstr "Precio por Unidad"
 
-#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:89
+#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:97
 msgid "Budget"
 msgstr "Presupuesto"
 
-#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:111
+#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:119
 #: js/Models.js:178
 msgid "Status"
 msgstr "Estado"
 
 #: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:116 js/Models.js:156
+#: js/TimeaccountGridPanel.js:124 js/Models.js:156
 msgid "closed"
 msgstr "cerrado"
 
 #: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:115
+#: js/TimeaccountGridPanel.js:123
 msgid "open"
 msgstr "abierto"
 
-#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:83
+#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:91
 #: js/Models.js:177
 msgid "Billed"
 msgstr "Facturado"
@@ -152,7 +152,7 @@ msgstr "no autorizado aún..."
 msgid "Cleared In"
 msgstr "Autorizado El"
 
-#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:101
+#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:109
 #: js/Models.js:184
 msgid "Booking deadline"
 msgstr ""
@@ -165,7 +165,7 @@ msgstr ""
 msgid "last week"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:106
+#: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:114
 #: js/Models.js:179
 msgid "Cleared at"
 msgstr ""
@@ -185,12 +185,12 @@ msgid_plural "Time Accounts"
 msgstr[0] "Cuenta de Hora"
 msgstr[1] "Cuentas de Horas"
 
-#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:73
+#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:81
 #: js/Models.js:174
 msgid "Number"
 msgstr "Número"
 
-#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:78
+#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:86
 #: js/Models.js:175
 msgid "Title"
 msgstr "Título"
@@ -241,7 +241,7 @@ msgstr "Administrar Autorizaciones"
 msgid "The grant to manage clearing of Timesheets"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:138
+#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:146
 msgid "Export"
 msgstr "Exportar"
 
@@ -333,7 +333,7 @@ msgstr ""
 msgid "Time Account - Status"
 msgstr "Cuenta de Horas - Estado"
 
-#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:70
+#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:78
 msgid "Tags"
 msgstr "Etiquetas"
 
@@ -350,7 +350,7 @@ msgid "Time Account closed"
 msgstr "Cuenta de Horas cerrada"
 
 #: js/TimesheetGridPanel.js:91 js/TimesheetGridPanel.js:385
-#: js/TimeaccountGridPanel.js:95
+#: js/TimeaccountGridPanel.js:103
 msgid "Cleared in"
 msgstr "Autorizado el"
 
@@ -386,11 +386,11 @@ msgstr "Detalle"
 msgid "Export Timesheets"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:147
+#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:155
 msgid "Export as ODS"
 msgstr "Exportar como ODS"
 
-#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:154
+#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:162
 msgid "Export as CSV"
 msgstr "Exportar como CVS"
 

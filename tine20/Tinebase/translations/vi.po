@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"PO-Revision-Date: 2013-10-02 11:06+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -146,12 +146,12 @@ msgstr "Thay đổi trường:"
 msgid "unknown"
 msgstr "không rõ"
 
-#: Import/Csv/Abstract.php:201
+#: Import/Csv/Abstract.php:200
 #, python-format
 msgid "The following fields weren't imported: %s"
 msgstr "Trường sau không được phép nhập vào: %s"
 
-#: Import/Csv/Abstract.php:202
+#: Import/Csv/Abstract.php:201
 msgid "N/A"
 msgstr "N/A"
 
@@ -400,43 +400,43 @@ msgstr "Cấm bất kỳ tài khoản nào"
 msgid "Disallow anyone account in grant configurations"
 msgstr "Cấm mọi tài khoản trong việc cấu hình phân quyền"
 
-#: Setup/setup.xml:3203
+#: Setup/setup.xml:3209
 msgid "note"
 msgstr "ghi chép"
 
-#: Setup/setup.xml:3208
+#: Setup/setup.xml:3214
 msgid "default note type"
 msgstr "loại ghi chép mặc đ"
 
-#: Setup/setup.xml:3234
+#: Setup/setup.xml:3240
 msgid "telephone"
 msgstr "điện thoại"
 
-#: Setup/setup.xml:3239
+#: Setup/setup.xml:3245
 msgid "telephone call"
 msgstr "cuộc gọi điện thoại"
 
-#: Setup/setup.xml:3265
+#: Setup/setup.xml:3271
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3270
+#: Setup/setup.xml:3276
 msgid "email contact"
 msgstr "liên hệ email"
 
-#: Setup/setup.xml:3296
+#: Setup/setup.xml:3302
 msgid "created"
 msgstr "đã tạo"
 
-#: Setup/setup.xml:3301
+#: Setup/setup.xml:3307
 msgid "record created"
 msgstr "biểu ghi đã được tạo"
 
-#: Setup/setup.xml:3327
+#: Setup/setup.xml:3333
 msgid "changed"
 msgstr "đã đổi"
 
-#: Setup/setup.xml:3332
+#: Setup/setup.xml:3338
 msgid "record changed"
 msgstr "biểu ghi đã thay đổi"
 
@@ -570,7 +570,7 @@ msgstr "Trường là phần có thể sửa của hồ sơ"
 msgid "Field Name"
 msgstr "Tên trường"
 
-#: js/AboutDialog.js:41 js/MainMenu.js:113
+#: js/AboutDialog.js:41 js/MainMenu.js:118
 msgid "About {0}"
 msgstr "Về {0}"
 
@@ -581,7 +581,7 @@ msgstr "Về {0}"
 #: js/widgets/dialog/ExceptionHandlerDialog.js:194
 #: js/widgets/dialog/AddToRecordPanel.js:111
 #: js/widgets/dialog/PreferencesDialog.js:109
-#: js/widgets/dialog/EditDialog.js:373 js/widgets/ActivitiesPanel.js:315
+#: js/widgets/dialog/EditDialog.js:373 js/widgets/ActivitiesPanel.js:319
 #: js/widgets/container/ContainerSelect.js:490 js/ux/form/LayerCombo.js:186
 msgid "Ok"
 msgstr "OK"
@@ -677,19 +677,19 @@ msgid "Version"
 msgstr ""
 
 #: js/LoginPanel.js:217
-msgid "Tine 2.0 is made for you"
-msgstr "Tine 2.0 được phát triển cho bạn"
+msgid "{0} is made for you"
+msgstr ""
 
 #: js/LoginPanel.js:219
 msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
-" and get help."
-msgstr "Tine 2.0 muốn tạo môi trường làm việc nhóm dễ dàng và thú vị hơn cho nhu cầu của bạn. Vậy, bạn được hoan nghênh trong việc tham gia thảo luận, đề xuất ý tưởng và yêu cầu giúp đỡ."
+"{0} wants to make business collaboration easier and more enjoyable - for "
+"your needs! So you are warmly welcome to discuss with us, bring in ideas and"
+" get help."
+msgstr ""
 
 #: js/LoginPanel.js:225
-msgid "Tine 2.0 Homepage"
-msgstr "Trang chủ Tine 2.0"
+msgid "{0} Homepage"
+msgstr ""
 
 #: js/LoginPanel.js:226
 msgid "Tine 2.0 Forum"
@@ -706,11 +706,11 @@ msgstr ""
 #: js/LoginPanel.js:234
 msgid ""
 "If the state of your language is not satisfying, or if you miss a language, "
-"please consider becoming a Tine 2.0 translator."
+"please consider becoming a {0} translator."
 msgstr ""
 
 #: js/LoginPanel.js:237
-msgid "Tine 2.0 Translation Howto"
+msgid "{0} Translation Howto"
 msgstr ""
 
 #: js/LoginPanel.js:238
@@ -790,7 +790,7 @@ msgstr "Xin hãy đợi"
 msgid "Login successful. Loading {0}..."
 msgstr "Đăng nhập thành công. Đang tải {0}..."
 
-#: js/LoginPanel.js:468 js/MainMenu.js:242
+#: js/LoginPanel.js:468 js/MainMenu.js:257
 msgid "Please wait!"
 msgstr "Xin hãy đợi"
 
@@ -857,7 +857,7 @@ msgstr "Nhắc lại mật khẩu mới"
 #: js/widgets/dialog/AddToRecordPanel.js:103
 #: js/widgets/dialog/PreferencesDialog.js:117
 #: js/widgets/dialog/EditDialog.js:393 js/widgets/dialog/WizardPanel.js:187
-#: js/widgets/ActivitiesPanel.js:307
+#: js/widgets/ActivitiesPanel.js:311
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
 #: js/widgets/container/ContainerSelect.js:481 js/ExceptionDialog.js:109
 #: js/ExceptionDialog.js:119 js/ux/form/LayerCombo.js:193
@@ -893,66 +893,70 @@ msgstr "Thất bại"
 msgid "The new passwords mismatch, please correct them."
 msgstr "Các mật khẩu mới không trùng nhau, xin hãy sửa lại."
 
-#: js/MainMenu.js:62
+#: js/MainMenu.js:66
 msgid "User: {0}"
 msgstr "Người dùng: {0}"
 
-#: js/MainMenu.js:119
+#: js/MainMenu.js:124
 msgid "Help"
 msgstr ""
 
-#: js/MainMenu.js:126
+#: js/MainMenu.js:131
 msgid "Debug Console (Ctrl + F11)"
 msgstr "Cửa sổ gỡ lỗi (Ctrl + F11)"
 
-#: js/MainMenu.js:132 js/widgets/dialog/PreferencesPanel.js:36
+#: js/MainMenu.js:137 js/widgets/dialog/PreferencesPanel.js:36
 msgid "Preferences"
 msgstr "Thông số"
 
-#: js/MainMenu.js:139
+#: js/MainMenu.js:144
 msgid "Edit Profile"
 msgstr "Sửa hồ sơ"
 
-#: js/MainMenu.js:146
+#: js/MainMenu.js:151
 msgid "Change password"
 msgstr "Đổi mật khẩu"
 
-#: js/MainMenu.js:153
+#: js/MainMenu.js:158
 msgid "Logout"
 msgstr "Thoát"
 
-#: js/MainMenu.js:154
+#: js/MainMenu.js:159
 msgid "Logout from {0}"
 msgstr "Thoát từ {0}"
 
-#: js/MainMenu.js:161
+#: js/MainMenu.js:166
+msgid "Learn more about {0}"
+msgstr ""
+
+#: js/MainMenu.js:176
 msgid "Allow desktop notifications"
 msgstr "Cho phép thông báo từ desktop"
 
-#: js/MainMenu.js:162
+#: js/MainMenu.js:177
 msgid "Request permissions for webkit desktop notifications."
 msgstr "Yêu cầu quyền cho thông báo webkit desktop"
 
-#: js/MainMenu.js:172
+#: js/MainMenu.js:187
 msgid "Install web app"
 msgstr "Cài đặt ứng dụng web"
 
-#: js/MainMenu.js:173
+#: js/MainMenu.js:188
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr "Cài đặt Tine 2.0 như là ứng dụng web trên trình duyệt của bạn"
 
-#: js/MainMenu.js:228 js/widgets/grid/GridPanel.js:1750
+#: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:640
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr "Xác nhận"
 
-#: js/MainMenu.js:228
+#: js/MainMenu.js:243
 msgid "Are you sure you want to logout?"
 msgstr "Bạn có chắc chắn muốn thoát?"
 
-#: js/MainMenu.js:242
+#: js/MainMenu.js:257
 msgid "Logging you out..."
 msgstr "Thoát khỏi hệ thống"
 
@@ -1264,19 +1268,19 @@ msgstr "Chọn từ khóa để gỡ bỏ"
 msgid "tag name"
 msgstr "tên từ khóa"
 
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+#: js/widgets/VersionCheck.js:50 js/widgets/VersionCheck.js:59
 msgid "New version of Tine 2.0 available"
 msgstr "Phiên bản mới của Tine 2.0 đã phát hành"
 
-#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
+#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Phiên bản \"{0}\" của Tine 2.0 đã phát hành"
 
-#: js/widgets/VersionCheck.js:46
+#: js/widgets/VersionCheck.js:52
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "Đây là bản vá lỗi nghiêm trọng và phải được cập nhật ngay tức thì!"
 
-#: js/widgets/VersionCheck.js:55
+#: js/widgets/VersionCheck.js:61
 msgid "Please consider updating!"
 msgstr "Hãy cân nhắc việc cập nhật!"
 
@@ -1573,7 +1577,7 @@ msgstr "Tên"
 
 #: js/widgets/grid/LinkGridPanel.js:105
 #: js/widgets/relation/GenericPickerGridPanel.js:451
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/ActivitiesPanel.js:601
+#: js/widgets/ActivitiesPanel.js:468 js/widgets/ActivitiesPanel.js:605
 msgid "Type"
 msgstr "Loại"
 
@@ -1660,7 +1664,7 @@ msgstr "Thời gian tạo"
 
 #: js/widgets/grid/GridPanel.js:1366
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
-#: js/widgets/ActivitiesPanel.js:467
+#: js/widgets/ActivitiesPanel.js:471
 msgid "Created By"
 msgstr "Tạo bởi"
 
@@ -1672,24 +1676,24 @@ msgstr "Thời gian sửa cuối"
 msgid "Last Modified By"
 msgstr "Sửa cuối bởi"
 
-#: js/widgets/grid/GridPanel.js:1724
+#: js/widgets/grid/GridPanel.js:1729
 msgid "Not Allowed"
 msgstr "Không được phép"
 
-#: js/widgets/grid/GridPanel.js:1725
+#: js/widgets/grid/GridPanel.js:1730
 msgid "You are not allowed to delete all pages at once"
 msgstr "Bạn không được phép xóa mọi trang cùng 1 lúc"
 
-#: js/widgets/grid/GridPanel.js:1748
+#: js/widgets/grid/GridPanel.js:1753
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "one: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?\nother: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1793 js/widgets/dialog/EditDialog.js:829
+#: js/widgets/grid/GridPanel.js:1798 js/widgets/dialog/EditDialog.js:829
 msgid "Deleting {0}"
 msgstr "Đang xóa {0}"
 
-#: js/widgets/grid/GridPanel.js:1793
+#: js/widgets/grid/GridPanel.js:1798
 msgid " ... This may take a long time!"
 msgstr "... có thể mất nhiều thời gian!"
 
@@ -2361,60 +2365,60 @@ msgstr "Trường tùy biến"
 msgid "Add a Note..."
 msgstr "Thêm 1 ghi chép ..."
 
-#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:179
+#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:180
 #: js/widgets/container/GrantsGrid.js:45
 msgid "Add"
 msgstr "Thêm"
 
-#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:466
+#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:470
 msgid "Note"
 msgstr "Ghi chép"
 
-#: js/widgets/ActivitiesPanel.js:180 js/widgets/ActivitiesPanel.js:388
+#: js/widgets/ActivitiesPanel.js:181 js/widgets/ActivitiesPanel.js:392
 msgid "Add new note"
 msgstr "Tạo ghi chép"
 
-#: js/widgets/ActivitiesPanel.js:211
+#: js/widgets/ActivitiesPanel.js:213
 msgid "Notes"
 msgstr "Ghi chép"
 
-#: js/widgets/ActivitiesPanel.js:286
+#: js/widgets/ActivitiesPanel.js:290
 msgid "Enter new note:"
 msgstr "Nhập ghi chép mới:"
 
-#: js/widgets/ActivitiesPanel.js:331 js/widgets/ActivitiesPanel.js:387
+#: js/widgets/ActivitiesPanel.js:335 js/widgets/ActivitiesPanel.js:391
 msgid "Add Note"
 msgstr "Thêm ghi chép"
 
-#: js/widgets/ActivitiesPanel.js:374
+#: js/widgets/ActivitiesPanel.js:378
 msgid "Add a {0} Note"
 msgstr "Thêm 1 ghi chép {0}"
 
-#: js/widgets/ActivitiesPanel.js:468
+#: js/widgets/ActivitiesPanel.js:472
 msgid "Timestamp"
 msgstr "Định dạng thời gian"
 
-#: js/widgets/ActivitiesPanel.js:482
+#: js/widgets/ActivitiesPanel.js:486
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Hiển thị lịch sử, biểu ghi {0}-{1) của {2}"
 
-#: js/widgets/ActivitiesPanel.js:483
+#: js/widgets/ActivitiesPanel.js:487
 msgid "No history to display"
 msgstr "Không có lịch sử nào"
 
-#: js/widgets/ActivitiesPanel.js:583
+#: js/widgets/ActivitiesPanel.js:587
 msgid "History"
 msgstr "Lịch sử"
 
-#: js/widgets/ActivitiesPanel.js:595
+#: js/widgets/ActivitiesPanel.js:599
 msgid "Quick Search"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:596 js/widgets/ActivitiesPanel.js:597
+#: js/widgets/ActivitiesPanel.js:600 js/widgets/ActivitiesPanel.js:601
 msgid "Time"
 msgstr "Thời gian"
 
-#: js/widgets/ActivitiesPanel.js:599
+#: js/widgets/ActivitiesPanel.js:603
 msgid "User"
 msgstr "Người dùng"
 

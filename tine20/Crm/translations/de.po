@@ -49,14 +49,13 @@ msgid "%s's personal leads"
 msgstr "%ss persönliche Leads"
 
 #: Controller.php:162 Model/Lead.php:120 js/LeadGridDetailsPanel.js:45
-#: js/LeadGridDetailsPanel.js:488 js/Contact.js:161 js/Contact.js:356
-#: js/Contact.js:396 js/LeadGridPanel.js:122
+#: js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
+#: js/LeadGridPanel.js:122 Controller/Lead.php:186
 msgid "Customer"
 msgstr "Kunde"
 
-#: Controller.php:163 js/LeadGridDetailsPanel.js:45
-#: js/LeadGridDetailsPanel.js:471 js/Contact.js:181 js/Contact.js:357
-#: js/Contact.js:400 js/LeadGridPanel.js:121
+#: Controller.php:163 js/LeadGridDetailsPanel.js:45 js/Contact.js:181
+#: js/Contact.js:357 js/Contact.js:400 js/LeadGridPanel.js:121
 msgid "Partner"
 msgstr "Partner"
 
@@ -182,32 +181,32 @@ msgstr "Lead-Daten"
 msgid "Leadstate"
 msgstr "Status"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:455
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:454
 #: js/LeadEditDialog.js:360
 msgid "Leadtype"
 msgstr "Typ"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:460
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:459
 #: js/LeadEditDialog.js:367
 msgid "Leadsource"
 msgstr "Quelle"
 
 #: Export/Pdf.php:87 js/Model.js:109 js/LeadGridPanel.js:125
-#: Controller/Lead.php:183
+#: Controller/Lead.php:193
 msgid "Turnover"
 msgstr "Umsatz"
 
 #: Export/Pdf.php:90 js/Model.js:108 js/LeadEditDialog.js:220
-#: js/LeadGridPanel.js:124 Controller/Lead.php:184
+#: js/LeadGridPanel.js:124 Controller/Lead.php:194
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
 
-#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:445 js/LeadEditDialog.js:399
-#: Controller/Lead.php:180
+#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:444 js/LeadEditDialog.js:399
+#: Controller/Lead.php:190
 msgid "Start"
 msgstr "Start"
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:227 Controller/Lead.php:182
+#: Export/Pdf.php:96 js/LeadEditDialog.js:227 Controller/Lead.php:192
 msgid "End"
 msgstr "Ende"
 
@@ -300,7 +299,7 @@ msgstr[1] "Lead"
 msgid "Select Lead"
 msgstr "Lead auswählen"
 
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:178
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:188
 msgid "Role"
 msgstr "Rolle"
 
@@ -328,7 +327,7 @@ msgstr "Aufgabe hinzufügen..."
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/Task.js:218 js/LeadGridDetailsPanel.js:440
+#: js/Task.js:218 js/LeadGridDetailsPanel.js:439
 msgid "Status"
 msgstr "Status"
 
@@ -402,7 +401,7 @@ msgstr "Email"
 msgid "Web"
 msgstr "Webseite"
 
-#: js/LeadGridDetailsPanel.js:450 js/LeadEditDialog.js:405
+#: js/LeadGridDetailsPanel.js:449 js/LeadEditDialog.js:405
 msgid "Estimated end"
 msgstr "Geplantes Ende"
 
@@ -566,41 +565,41 @@ msgstr "Als XLS exportieren"
 msgid "New Lead"
 msgstr "Neuer Lead"
 
-#: Controller/Lead.php:177
+#: Controller/Lead.php:187
 msgid "State"
 msgstr "Status"
 
-#: Controller/Lead.php:179
+#: Controller/Lead.php:189
 msgid "Source"
 msgstr "Quelle"
 
-#: Controller/Lead.php:181
+#: Controller/Lead.php:191
 msgid "Scheduled end"
 msgstr "geplantes Ende"
 
-#: Controller/Lead.php:185
+#: Controller/Lead.php:195
 msgid "Folder"
 msgstr "Ordner"
 
-#: Controller/Lead.php:186
+#: Controller/Lead.php:196
 msgid "Updated by"
 msgstr "Aktualisiert von"
 
-#: Controller/Lead.php:187
+#: Controller/Lead.php:197
 msgid "Updated Fields:"
 msgstr "Geänderte Felder:"
 
-#: Controller/Lead.php:188
+#: Controller/Lead.php:198
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s wurde von %s auf %s geändert."
 
-#: Controller/Lead.php:194
+#: Controller/Lead.php:204
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "Lead %s wurde geändert"
 
-#: Controller/Lead.php:196
+#: Controller/Lead.php:206
 #, python-format
 msgid "Lead %s has been created"
 msgstr "Lead %s wurde angelegt"

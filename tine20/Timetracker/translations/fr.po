@@ -121,26 +121,26 @@ msgstr "Unité"
 msgid "Unit Price"
 msgstr "Prix de l'unité"
 
-#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:89
+#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:97
 msgid "Budget"
 msgstr "Budget"
 
-#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:111
+#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:119
 #: js/Models.js:178
 msgid "Status"
 msgstr "État"
 
 #: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:116 js/Models.js:156
+#: js/TimeaccountGridPanel.js:124 js/Models.js:156
 msgid "closed"
 msgstr "fermé"
 
 #: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:115
+#: js/TimeaccountGridPanel.js:123
 msgid "open"
 msgstr "Ouvert"
 
-#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:83
+#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:91
 #: js/Models.js:177
 msgid "Billed"
 msgstr "Facturé"
@@ -153,7 +153,7 @@ msgstr "Non acquitté..."
 msgid "Cleared In"
 msgstr "Acquitté"
 
-#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:101
+#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:109
 #: js/Models.js:184
 msgid "Booking deadline"
 msgstr "Date limite de réservation"
@@ -166,7 +166,7 @@ msgstr "aucun"
 msgid "last week"
 msgstr "semaine dernière"
 
-#: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:106
+#: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:114
 #: js/Models.js:179
 msgid "Cleared at"
 msgstr ""
@@ -186,12 +186,12 @@ msgid_plural "Time Accounts"
 msgstr[0] "Compte de temps"
 msgstr[1] "Comptes de temps"
 
-#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:73
+#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:81
 #: js/Models.js:174
 msgid "Number"
 msgstr "Numéro"
 
-#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:78
+#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:86
 #: js/Models.js:175
 msgid "Title"
 msgstr "Titre"
@@ -242,7 +242,7 @@ msgstr "Gérer les acquittements"
 msgid "The grant to manage clearing of Timesheets"
 msgstr "Le droit de gérer l'effacement des feuilles de temps"
 
-#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:138
+#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:146
 msgid "Export"
 msgstr "Exporter"
 
@@ -334,7 +334,7 @@ msgstr "Nouveau tableau de suivi"
 msgid "Time Account - Status"
 msgstr "Comptes épargne-temps - État"
 
-#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:70
+#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:78
 msgid "Tags"
 msgstr "Marqueurs"
 
@@ -351,7 +351,7 @@ msgid "Time Account closed"
 msgstr "Compte fermé"
 
 #: js/TimesheetGridPanel.js:91 js/TimesheetGridPanel.js:385
-#: js/TimeaccountGridPanel.js:95
+#: js/TimeaccountGridPanel.js:103
 msgid "Cleared in"
 msgstr "Acquitté"
 
@@ -387,11 +387,11 @@ msgstr "Detail"
 msgid "Export Timesheets"
 msgstr "Exporter le tableau de suivi"
 
-#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:147
+#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:155
 msgid "Export as ODS"
 msgstr "Exporter en ODS"
 
-#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:154
+#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:162
 msgid "Export as CSV"
 msgstr "Exporter en CSV"
 

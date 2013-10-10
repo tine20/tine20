@@ -48,14 +48,13 @@ msgid "%s's personal leads"
 msgstr "%s personlig leads"
 
 #: Controller.php:162 Model/Lead.php:120 js/LeadGridDetailsPanel.js:45
-#: js/LeadGridDetailsPanel.js:488 js/Contact.js:161 js/Contact.js:356
-#: js/Contact.js:396 js/LeadGridPanel.js:122
+#: js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
+#: js/LeadGridPanel.js:122 Controller/Lead.php:186
 msgid "Customer"
 msgstr "Kund"
 
-#: Controller.php:163 js/LeadGridDetailsPanel.js:45
-#: js/LeadGridDetailsPanel.js:471 js/Contact.js:181 js/Contact.js:357
-#: js/Contact.js:400 js/LeadGridPanel.js:121
+#: Controller.php:163 js/LeadGridDetailsPanel.js:45 js/Contact.js:181
+#: js/Contact.js:357 js/Contact.js:400 js/LeadGridPanel.js:121
 msgid "Partner"
 msgstr "Partner"
 
@@ -181,32 +180,32 @@ msgstr "Lead Data"
 msgid "Leadstate"
 msgstr "Leadstatus"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:455
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:454
 #: js/LeadEditDialog.js:360
 msgid "Leadtype"
 msgstr "Leadtyp"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:460
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:459
 #: js/LeadEditDialog.js:367
 msgid "Leadsource"
 msgstr "Leadkälla"
 
 #: Export/Pdf.php:87 js/Model.js:109 js/LeadGridPanel.js:125
-#: Controller/Lead.php:183
+#: Controller/Lead.php:193
 msgid "Turnover"
 msgstr "omsättning"
 
 #: Export/Pdf.php:90 js/Model.js:108 js/LeadEditDialog.js:220
-#: js/LeadGridPanel.js:124 Controller/Lead.php:184
+#: js/LeadGridPanel.js:124 Controller/Lead.php:194
 msgid "Probability"
 msgstr "sannolikt"
 
-#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:445 js/LeadEditDialog.js:399
-#: Controller/Lead.php:180
+#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:444 js/LeadEditDialog.js:399
+#: Controller/Lead.php:190
 msgid "Start"
 msgstr "Start"
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:227 Controller/Lead.php:182
+#: Export/Pdf.php:96 js/LeadEditDialog.js:227 Controller/Lead.php:192
 msgid "End"
 msgstr "Slut"
 
@@ -299,7 +298,7 @@ msgstr[1] "Leads"
 msgid "Select Lead"
 msgstr "Välj Lead"
 
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:178
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:188
 msgid "Role"
 msgstr "Roll"
 
@@ -327,7 +326,7 @@ msgstr "Lägg till en uppgift ..."
 msgid "Percent"
 msgstr "procent"
 
-#: js/Task.js:218 js/LeadGridDetailsPanel.js:440
+#: js/Task.js:218 js/LeadGridDetailsPanel.js:439
 msgid "Status"
 msgstr "Status"
 
@@ -401,7 +400,7 @@ msgstr "E-post"
 msgid "Web"
 msgstr "Webb"
 
-#: js/LeadGridDetailsPanel.js:450 js/LeadEditDialog.js:405
+#: js/LeadGridDetailsPanel.js:449 js/LeadEditDialog.js:405
 msgid "Estimated end"
 msgstr "beräknat slut"
 
@@ -565,41 +564,41 @@ msgstr "Exportera som XLS"
 msgid "New Lead"
 msgstr "Ny Lead"
 
-#: Controller/Lead.php:177
+#: Controller/Lead.php:187
 msgid "State"
 msgstr "tillstånd"
 
-#: Controller/Lead.php:179
+#: Controller/Lead.php:189
 msgid "Source"
 msgstr "Källa"
 
-#: Controller/Lead.php:181
+#: Controller/Lead.php:191
 msgid "Scheduled end"
 msgstr "Schemalagt slut"
 
-#: Controller/Lead.php:185
+#: Controller/Lead.php:195
 msgid "Folder"
 msgstr "Mapp"
 
-#: Controller/Lead.php:186
+#: Controller/Lead.php:196
 msgid "Updated by"
 msgstr "Uppdaterad av"
 
-#: Controller/Lead.php:187
+#: Controller/Lead.php:197
 msgid "Updated Fields:"
 msgstr "Uppdaterade Fält:"
 
-#: Controller/Lead.php:188
+#: Controller/Lead.php:198
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s ändrades från %s till %s."
 
-#: Controller/Lead.php:194
+#: Controller/Lead.php:204
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "Lead %s har ändrats"
 
-#: Controller/Lead.php:196
+#: Controller/Lead.php:206
 #, python-format
 msgid "Lead %s has been created"
 msgstr "Lead %s har skapats"

@@ -280,6 +280,6 @@ msgstr "Zadnji izmijenio"
 msgid "Created By"
 msgstr "Kreirao"
 
-#: Controller/Task.php:187
+#: Controller/Task.php:198
 msgid "Notification for Task "
 msgstr "Notifikacija za zadatak"

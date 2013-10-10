@@ -280,6 +280,6 @@ msgstr "Ostatnio zmienione przez"
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: Controller/Task.php:187
+#: Controller/Task.php:198
 msgid "Notification for Task "
 msgstr "Powiadomienie o zadaniu "

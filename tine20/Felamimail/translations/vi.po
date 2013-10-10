@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-06-21 10:05+0000\n"
-"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
+"PO-Revision-Date: 2013-10-02 11:06+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -240,73 +240,73 @@ msgstr "Email mới"
 msgid "Email"
 msgstr "Email"
 
-#: js/Felamimail.js:129
+#: js/Felamimail.js:120
 msgid "Active Vacation Message"
 msgstr "Bật chế độ tự động trả lời"
 
-#: js/Felamimail.js:130
+#: js/Felamimail.js:121
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Tài khoản email \"{0}\" có 1 email tự động trả lời đang hoạt động"
 
-#: js/Felamimail.js:527
+#: js/Felamimail.js:547
 msgid "New mails"
 msgstr "Email mới"
 
-#: js/Felamimail.js:528
+#: js/Felamimail.js:548
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Bạn có {0} email mới trong thư mục {1} ({2})."
 
-#: js/Felamimail.js:648
+#: js/Felamimail.js:668
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP Credentials for {0}"
 
-#: js/Felamimail.js:651
+#: js/Felamimail.js:671
 msgid "Credentials"
 msgstr "Credentials"
 
-#: js/Felamimail.js:804 js/Felamimail.js:837
+#: js/Felamimail.js:824 js/Felamimail.js:857
 msgid "IMAP Error"
 msgstr "IMAP Error"
 
-#: js/Felamimail.js:805
+#: js/Felamimail.js:825
 msgid "No connection to IMAP server."
 msgstr "Không kết nối tới máy chủ IMAP"
 
-#: js/Felamimail.js:821
+#: js/Felamimail.js:841
 msgid "IMAP Credentials Error"
 msgstr "IMAP Credentials Error"
 
-#: js/Felamimail.js:822
+#: js/Felamimail.js:842
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Thông tin email bị sai. Xin hãy liên lạc với quản trị hệ thống của bạn."
 
-#: js/Felamimail.js:838
+#: js/Felamimail.js:858
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "Một trong số thư mục của bạn đã bị xóa hoặc đổi tên bởi người dùng khác."
 
-#: js/Felamimail.js:867
+#: js/Felamimail.js:887
 msgid "SMTP Error"
 msgstr "SMTP Error"
 
-#: js/Felamimail.js:868
+#: js/Felamimail.js:888
 msgid "No connection to SMTP server."
 msgstr "Không có kết nối tới máy chủ SMTP"
 
-#: js/Felamimail.js:876
+#: js/Felamimail.js:896
 msgid "Sieve Error"
 msgstr "Sieve Error"
 
-#: js/Felamimail.js:877
+#: js/Felamimail.js:897
 msgid "No connection to Sieve server."
 msgstr "Không có kết nối tới máy chủ Sieve"
 
-#: js/Felamimail.js:885
+#: js/Felamimail.js:905
 msgid "Save Sieve Script Error"
 msgstr "Lưu lỗi Sieve Script"
 
-#: js/Felamimail.js:886
+#: js/Felamimail.js:906
 msgid "Could not save script on Sieve server."
 msgstr "Không thể lưu scrip trên máy chủ Sieve"
 
@@ -426,65 +426,57 @@ msgstr "Fwd:"
 msgid "{0} Message"
 msgstr "Nội dung {0}"
 
-#: js/MessageEditDialog.js:661
+#: js/MessageEditDialog.js:664 js/MessageEditDialog.js:669
 msgid "Failed"
 msgstr "Thất bại"
 
-#: js/MessageEditDialog.js:662
+#: js/MessageEditDialog.js:665
 msgid "{0} account setting empty."
 msgstr "{0} thiết lập tài khoản rỗng."
 
-#: js/MessageEditDialog.js:677
-msgid "Errors"
-msgstr "Lỗi"
+#: js/MessageEditDialog.js:670 js/MessageEditDialog.js:995
+msgid "Files are still uploading."
+msgstr "Files vẫn đang được upload."
 
-#: js/MessageEditDialog.js:677
-msgid "Please fix the errors noted."
-msgstr "Xin sửa lỗi được ghi chú."
-
-#: js/MessageEditDialog.js:726 js/MessageEditDialog.js:959
+#: js/MessageEditDialog.js:735 js/MessageEditDialog.js:968
 msgid "Compose email:"
 msgstr "Soạn email:"
 
-#: js/MessageEditDialog.js:789 js/GridDetailsPanel.js:347 js/GridPanel.js:468
+#: js/MessageEditDialog.js:798 js/GridDetailsPanel.js:347 js/GridPanel.js:468
 msgid "Attachments"
 msgstr "Đính kèm"
 
-#: js/MessageEditDialog.js:855 js/GridDetailsPanel.js:246
+#: js/MessageEditDialog.js:864 js/GridDetailsPanel.js:246
 msgid "From"
 msgstr "Từ"
 
-#: js/MessageEditDialog.js:924 Controller/Message/Send.php:269
+#: js/MessageEditDialog.js:933 Controller/Message/Send.php:269
 msgid "Body"
 msgstr "Nội dung"
 
-#: js/MessageEditDialog.js:949 js/GridDetailsPanel.js:245
+#: js/MessageEditDialog.js:958 js/GridDetailsPanel.js:245
 #: js/sieve/RuleConditionsPanel.js:72 js/Model.js:155 js/GridPanel.js:482
 #: Controller/Message/Send.php:269
 msgid "Subject"
 msgstr "Tiêu đề"
 
-#: js/MessageEditDialog.js:986
-msgid "Files are still uploading."
-msgstr "Files vẫn đang được upload."
-
-#: js/MessageEditDialog.js:1015
+#: js/MessageEditDialog.js:1023
 msgid "Empty subject"
 msgstr "Tiêu đề trống"
 
-#: js/MessageEditDialog.js:1016
+#: js/MessageEditDialog.js:1024
 msgid "Do you really want to send a message with an empty subject?"
 msgstr "Bạn có muốn gửi 1 email với tiêu đề trống?"
 
-#: js/MessageEditDialog.js:1037
+#: js/MessageEditDialog.js:1045
 msgid "Add Note"
 msgstr "Thêm ghi chú"
 
-#: js/MessageEditDialog.js:1038
+#: js/MessageEditDialog.js:1046
 msgid "Edit Email Note Text:"
 msgstr "Sửa văn bản ghi chú email:"
 
-#: js/MessageEditDialog.js:1061
+#: js/MessageEditDialog.js:1069
 msgid "No recipients set."
 msgstr "Không chỉ ra người nhận."
 

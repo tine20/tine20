@@ -121,26 +121,26 @@ msgstr "Đơn vị"
 msgid "Unit Price"
 msgstr "Giá đơn vị"
 
-#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:89
+#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:97
 msgid "Budget"
 msgstr "Quỹ"
 
-#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:111
+#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:119
 #: js/Models.js:178
 msgid "Status"
 msgstr "Trạng thái"
 
 #: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:116 js/Models.js:156
+#: js/TimeaccountGridPanel.js:124 js/Models.js:156
 msgid "closed"
 msgstr "đã đóng"
 
 #: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:115
+#: js/TimeaccountGridPanel.js:123
 msgid "open"
 msgstr "mở"
 
-#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:83
+#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:91
 #: js/Models.js:177
 msgid "Billed"
 msgstr "Đã trả"
@@ -153,7 +153,7 @@ msgstr "vẫn chưa được xóa ..."
 msgid "Cleared In"
 msgstr "Đã xóa trong"
 
-#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:101
+#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:109
 #: js/Models.js:184
 msgid "Booking deadline"
 msgstr "Hạn đăng ký"
@@ -166,7 +166,7 @@ msgstr "không"
 msgid "last week"
 msgstr "tuần trước"
 
-#: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:106
+#: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:114
 #: js/Models.js:179
 msgid "Cleared at"
 msgstr ""
@@ -185,12 +185,12 @@ msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "one: Tài khoản thời gian\nother: Tài khoản thời gian"
 
-#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:73
+#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:81
 #: js/Models.js:174
 msgid "Number"
 msgstr "Số"
 
-#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:78
+#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:86
 #: js/Models.js:175
 msgid "Title"
 msgstr "Tiêu đề"
@@ -241,7 +241,7 @@ msgstr "Quản lý xóa dữ liệu"
 msgid "The grant to manage clearing of Timesheets"
 msgstr "Quyền để quản lý việc xóa chấm công."
 
-#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:138
+#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:146
 msgid "Export"
 msgstr "Xuất dữ liệu"
 
@@ -332,7 +332,7 @@ msgstr "Tạo chấm công"
 msgid "Time Account - Status"
 msgstr "Tài khoản thời gian - Trạng thái"
 
-#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:70
+#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:78
 msgid "Tags"
 msgstr "Th"
 
@@ -349,7 +349,7 @@ msgid "Time Account closed"
 msgstr "Tài khoản thời gian đã đóng"
 
 #: js/TimesheetGridPanel.js:91 js/TimesheetGridPanel.js:385
-#: js/TimeaccountGridPanel.js:95
+#: js/TimeaccountGridPanel.js:103
 msgid "Cleared in"
 msgstr "Xóa trong"
 
@@ -385,11 +385,11 @@ msgstr "Chi tiết"
 msgid "Export Timesheets"
 msgstr "Xuất dữ liệu tính công"
 
-#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:147
+#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:155
 msgid "Export as ODS"
 msgstr "Xuất dữ liệu dạng ODS"
 
-#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:154
+#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:162
 msgid "Export as CSV"
 msgstr "Xuất dữ liệu dạng CSV"
 
