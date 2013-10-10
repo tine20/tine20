@@ -373,6 +373,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                     $organizer = Addressbook_Controller_Contact::getInstance()->getMultiple($_value, TRUE)->getFirstRecord();
                 }
                 return $organizer instanceof Addressbook_Model_Contact ? $organizer->n_fileas : '';
+            case 'rrule':
+                if ($_value) {
+                    $rrule = $_value instanceof Calendar_Model_Rrule ? $_value : new Calendar_Model_Rrule($_value);
+                    return $rrule->getTranslatedRule($_translation);
+                }
             default:
                 return $_value;
         }

@@ -17,6 +17,11 @@ foreach ($this->updates as $field => $update) {
         $i18nOldValue  = Calendar_Model_Event::getTranslatedValue($field, $update, $this->translate, $this->timezone);
         $i18nCurrValue = Calendar_Model_Event::getTranslatedValue($field, $this->event->$field, $this->translate, $this->timezone);
         
+        if($field == 'rrule' && $this->event->recurid) {
+            echo $this->translate->_("This is an event series exception.");
+            continue;
+        }
+        
         echo sprintf($this->translate->_('%1$s changed from "%2$s" to "%3$s"'), $i18nFieldName, $i18nOldValue, $i18nCurrValue) . "\n";
     }
 }
@@ -62,11 +67,13 @@ if (array_key_exists('attendee', $this->updates)) {
 <?php endif;?>
 <?php echo $this->translate->_('Event details') ?>:
 <?php 
-$orderedFields = array('dtstart', 'dtend', 'summary', 'location', 'description',);
+$orderedFields = array('dtstart', 'dtend', 'summary', 'location', 'description', 'rrule');
 
 foreach($orderedFields as $field) {
-    echo str_pad(Calendar_Model_Event::getTranslatedFieldName($field, $this->translate) . ':', 20) . 
-         Calendar_Model_Event::getTranslatedValue($field, $this->event->$field, $this->translate, $this->timezone) . "\n";
+    if ($this->event->$field) {
+        echo str_pad(Calendar_Model_Event::getTranslatedFieldName($field, $this->translate) . ':', 20) . 
+             Calendar_Model_Event::getTranslatedValue($field, $this->event->$field, $this->translate, $this->timezone) . "\n";
+    }
 }
 
 echo $this->translate->plural('Attender', 'Attendee', count($this->event->attendee)). ":\n";

@@ -331,8 +331,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 'attendee'      => $this->_getPersonaAttendee('jmcblack'),
         ));
         
+        self::flushMailer();
         $persistentEvent = $this->_eventController->create($event);
-        //$persistentSClever = Calendar_Model_Attender::getAttendee($persistentEvent->attendee, $event->attendee[1]);
+        $this->_assertMail('jmcblack', 'Recurrance rule:    Daily', 'body');
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
@@ -348,6 +349,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $recurSet[5]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $recurSet[5]->summary = 'exceptional summary';
         $this->_eventController->createRecurException($recurSet[5], FALSE, FALSE); //2012-03-20
+        $this->_assertMail('jmcblack', 'This is an event series exception', 'body');
         $this->_assertMail('jmcblack', 'update');
         
         // reschedule instance
@@ -1043,7 +1045,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * 
      * @see #6800: add message-id to notification mails
      */
-    protected function _assertMail($_personas, $_assertString = NULL)
+    protected function _assertMail($_personas, $_assertString = NULL, $_location = 'subject')
     {
         $messages = self::getMessages();
         
@@ -1061,9 +1063,32 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 $this->assertEquals(0, count($mailsForPersona), 'No mail should be send for '. $personaName);
             } else {
                 $this->assertEquals(1, count($mailsForPersona), 'One mail should be send for '. $personaName);
-                $subject = $mailsForPersona[0]->getSubject();
-                $this->assertTrue(FALSE !== strpos($subject, $_assertString), 'Mail subject for ' . $personaName . ' should contain "' . $_assertString . '" but '. $subject . ' is given');
                 $this->assertEquals('UTF-8', $mailsForPersona[0]->getCharset());
+                
+                switch ($_location) {
+                    case 'subject':
+                        $subject = $mailsForPersona[0]->getSubject();
+                        $this->assertTrue(FALSE !== strpos($subject, $_assertString), 'Mail subject for ' . $personaName . ' should contain "' . $_assertString . '" but '. $subject . ' is given');
+                        break;
+                        
+                    case 'body':
+                        $bodyPart = $mailsForPersona[0]->getBodyText(FALSE);
+                        
+                        // so odd!
+                        $s = fopen('php://temp','r+');
+                        fputs($s, $bodyPart->getContent());
+                        rewind($s);
+                        $bodyPartStream = new Zend_Mime_Part($s);
+                        $bodyPartStream->encoding = $bodyPart->encoding;
+                        $bodyText = $bodyPartStream->getDecodedContent();
+                        
+                        $this->assertContains($_assertString, $bodyText);
+                        break;
+                        
+                    default:
+                        throw new Exception('no such location '. $_location);
+                        break;
+                }
                 
                 $headers = $mailsForPersona[0]->getHeaders();
                 $this->assertTrue(isset($headers['Message-Id']), 'message-id header not found');

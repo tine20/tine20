@@ -1032,6 +1032,27 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('2012-12-20 10:30:00', (string) $recurSet->getFirstRecord()->alarms->getFirstRecord()->alarm_time);
     }
     
+    public function testGetTranslatedRule()
+    {
+        $locale = new Zend_Locale('en');
+        $translation = Tinebase_Translation::getTranslation('Calendar', $locale);
+        
+        $asserts = array(
+            'FREQ=DAILY;INTERVAL=1'                          => 'Daily',
+            'FREQ=DAILY;INTERVAL=3'                          => 'Every 3rd day',
+            'FREQ=WEEKLY;INTERVAL=3;WKST=SU;BYDAY=TU,WE,TH'  => 'Every 3rd week on Tuesday, Wednesday and Thursday',
+            'FREQ=MONTHLY;INTERVAL=2;BYDAY=-1FR'             => 'Every 2nd month on the last Friday',
+            'FREQ=MONTHLY;INTERVAL=1;BYDAY=2TH'              => 'Monthly every second Thursday',
+            'FREQ=MONTHLY;INTERVAL=3;BYMONTHDAY=24'          => 'Every 3rd month on the 24th',
+            'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=5'           => 'Monthly on the 5th',
+            'FREQ=YEARLY;INTERVAL=1;BYMONTH=7;BYMONTHDAY=10' => 'Yearly on the 10th of July',
+            );
+        
+        foreach($asserts as $rruleString => $expected) {
+            $translated = Calendar_Model_Rrule::getRruleFromString($rruleString);
+            $this->assertEquals($translated, $translated);
+        }
+    }
 }
     
 

@@ -54,6 +54,16 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         self::WDAY_SATURDAY   => 6
     );
     
+    static $WEEKDAY_MAP = array(
+        self::WDAY_SUNDAY     => 'sun',
+        self::WDAY_MONDAY     => 'mon',
+        self::WDAY_TUESDAY    => 'tue',
+        self::WDAY_WEDNESDAY  => 'wed',
+        self::WDAY_THURSDAY   => 'thu',
+        self::WDAY_FRIDAY     => 'fri',
+        self::WDAY_SATURDAY   => 'sat'
+    );
+
     const TS_HOUR = 3600;
     const TS_DAY  = 86400;
     
@@ -256,6 +266,142 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         return $isValid;
     }
+    
+    /**
+     * get human readable version of this rrule
+     * 
+     * @param  Zend_Translate   $translation
+     * @return string
+     */
+    public function getTranslatedRule($translation)
+    {
+        $rule = '';
+        $locale = new Zend_Locale($translation->getAdapter()->getLocale());
+        $numberFormatter = null;
+        $weekDays = Zend_Locale::getTranslationList('day', $locale);
+        
+        switch ($this->freq) {
+            case self::FREQ_DAILY:
+                $rule .= $this->interval > 1 ?
+                    sprintf($translation->_('Every %s day'), $this->_formatInterval($this->interval, $translation, $numberFormatter)) :
+                    $translation->_('Daily');
+                break;
+                
+            case self::FREQ_WEEKLY:
+                $rule .= $this->interval > 1 ?
+                    sprintf($translation->_('Every %s week on '), $this->_formatInterval($this->interval, $translation, $numberFormatter)) :
+                    $translation->_('Weekly on ');
+                
+                $recurWeekDays = explode(',', $this->byday);
+                $recurWeekDaysCount = count($recurWeekDays);
+                foreach ($recurWeekDays as $idx => $recurWeekDay) {
+                    $rule .= $weekDays[self::$WEEKDAY_MAP[$recurWeekDay]];
+                    if ($recurWeekDaysCount && $idx+1 != $recurWeekDaysCount) {
+                        $rule .= $idx == $recurWeekDaysCount-2 ? $translation->_(' and ') : ', ';
+                    }
+                }
+                break;
+                
+            case self::FREQ_MONTHLY:
+                if ($this->byday) {
+                    $byDayInterval = (int) substr($this->byday, 0, -2);
+                    $byDayWeekday  = substr($this->byday, -2);
+                    
+                    
+                    $rule .= $this->interval > 1 ?
+                        sprintf($translation->_('Every %1$s month on the %2$s %3$s'), $this->_formatInterval($this->interval, $translation, $numberFormatter), $this->_getIntervalTranslation($byDayInterval, $translation), $weekDays[self::$WEEKDAY_MAP[$byDayWeekday]]) :
+                        sprintf($translation->_('Monthly every %1$s %2$s'), $byDayIntervalMap[$byDayInterval], $weekDays[self::$WEEKDAY_MAP[$byDayWeekday]]);
+                    
+                } else {
+                    $bymonthday = $this->bymonthday;
+                    
+                    $rule .= $this->interval > 1 ?
+                        sprintf($translation->_('Every %1$s month on the %2$s'), $this->_formatInterval($this->interval, $translation, $numberFormatter), $this->_formatInterval($this->bymonthday, $translation, $numberFormatter)) :
+                        sprintf($translation->_('Monthly on the %1$s'), $this->_formatInterval($this->bymonthday, $translation, $numberFormatter));
+                }
+                break;
+            case self::FREQ_YEARLY:
+                $month = Zend_Locale::getTranslationList('month', $locale);
+                $rule .= sprintf($translation->_('Yearly on the %1$s of %2$s'), $this->_formatInterval($this->bymonthday, $translation, $numberFormatter), $month[$this->bymonth]);
+                break;
+        }
+        
+        return $rule;
+    }
+    
+    /**
+     * format interval (use NumberFormatter if intl extension is found)
+     * 
+     * @param integer $number
+     * @param Zend_Translate $translation
+     * @param NumberFormatter|null $numberFormatter
+     * @return string
+     */
+    protected function _formatInterval($number, $translation, $numberFormatter = null)
+    {
+        if ($numberFormatter === null && extension_loaded('intl')) {
+            $locale = new Zend_Locale($translation->getAdapter()->getLocale());
+            $numberFormatter = new NumberFormatter((string) $locale, NumberFormatter::ORDINAL);
+        }
+        
+        $result = ($numberFormatter) ? $numberFormatter->format($number) : $this->_getIntervalTranslation($interval, $translation);
+        
+        return $result;
+    }
+    
+    /**
+     * get translation string for interval (first, second, ...)
+     * 
+     * @param integer $interval
+     * @param Zend_Translate $translation
+     * @return string
+     */
+    protected function _getIntervalTranslation($interval, $translation)
+    {
+        switch ($interval) {
+            case -2: 
+                $result = $translation->_('second to last');
+                break;
+            case -1: 
+                $result = $translation->_('last');
+                break;
+            case 0: 
+                throw new Tinebase_Exception_UnexpectedValue('0 is not supported');
+                break;
+            case 1: 
+                $result = $translation->_('first');
+                break;
+            case 2: 
+                $result = $translation->_('second');
+                break;
+            case 3: 
+                $result = $translation->_('third');
+                break;
+            case 4: 
+                $result = $translation->_('fourth');
+                break;
+            case 5: 
+                $result = $translation->_('fifth');
+                break;
+            default:
+                switch ($interval % 10) {
+                    case 1:
+                        $result = $interval . $translation->_('st');
+                        break;
+                    case 2:
+                        $result = $interval . $translation->_('nd');
+                        break;
+                    case 3:
+                        $result = $interval . $translation->_('rd');
+                        break;
+                    default:
+                        $result = $interval . $translation->_('th');
+                }
+        }
+        
+        return $result;
+    }
+    
     /************************* Recurrence computation *****************************/
     
     /**
@@ -319,7 +465,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @param Tinebase_Record_RecordSet $_events
      * @param Calendar_Model_EventFilter $_filter
      */
-    public static function mergeAndRemoveNonMatchingRecurrences(Tinebase_Record_RecordSet $_events, Calendar_Model_EventFilter $_filter = NULL)
+    public static function mergeAndRemoveNonMatchingRecurrences(Tinebase_Record_RecordSet $_events, Calendar_Model_EventFilter $_filter = null)
     {
         if (!$_filter) {
             return;

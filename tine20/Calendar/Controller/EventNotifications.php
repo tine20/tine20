@@ -77,7 +77,7 @@ use Sabre\VObject;
         $orderedUpdateFieldOfInterest = array(
             'dtstart', 'dtend', 'summary', 'location', 'description',
             'transp', 'priority', 'status', 'class',
-            'url', 'rrule', 'is_all_day_event', 'originator_tz', /*'tags', 'notes',*/
+            'url', 'is_all_day_event', 'originator_tz', /*'tags', 'notes',*/
         );
         
         $updates = array();
@@ -87,7 +87,12 @@ use Sabre\VObject;
             }
         }
         
-        // cehck for organizer update
+        // check for rrule update
+        if ((string) $_event->rrule != (string) $_oldEvent->rrule) {
+            $updates['rrule'] = $_oldEvent->rrule;
+        }
+        
+        // check for organizer update
         if (Tinebase_Record_Abstract::convertId($_event['organizer'], 'Addressbook_Model_Contact') != 
             Tinebase_Record_Abstract::convertId($_oldEvent['organizer'], 'Addressbook_Model_Contact')) {
             
