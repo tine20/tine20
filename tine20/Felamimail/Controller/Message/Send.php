@@ -541,6 +541,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      *
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Message $_message
+     * @throws Felamimail_Exception_IMAP
      */
     protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message)
     {
@@ -548,6 +549,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             return;
         }
 
+        $maxAttachmentSize = $this->_getMaxAttachmentSize();
         $size = 0;
         $tempFileBackend = Tinebase_TempFile::getInstance();
         foreach ($_message->attachments as $attachment) {
@@ -560,6 +562,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 
                 $name = $attachment['name'] . '.eml';
                 $type = $attachment['type'];
+                if (! empty($attachment['size'])) {
+                    $size += $attachment['size'];
+                }
                 
             } else {
                 $tempFile = ($attachment instanceof Tinebase_Model_TempFile) 
@@ -584,14 +589,47 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 
                 $name = $tempFile->name;
                 $type = $tempFile->type;
+                
+                if (! empty($tempFile->size)) {
+                    $size += $tempFile->size;
+                }
             }
             
             $part->setTypeAndDispositionForAttachment($type, $name);
+            
+            if ($size > $maxAttachmentSize) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Current attachment size: ' . convertToMegabytes($size) . ' MB / allowed size: ' . convertToMegabytes($maxAttachmentSize) . ' MB');
+                throw new Felamimail_Exception_IMAP('Maximum attachment size exceeded. Please remove one or more attachments.');
+            }
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Adding attachment ' . $part->type);
             
             $_mail->addAttachment($part);
         }
+    }
+    
+    /**
+     * get max attachment size for outgoing mails
+     * 
+     * - currently it is set to memory_limit / 10
+     * - returns size in Bytes
+     * 
+     * @return integer
+     */
+    protected function _getMaxAttachmentSize()
+    {
+        $configuredMemoryLimit = ini_get('memory_limit');
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' memory_limit = ' . $configuredMemoryLimit);
+        
+        if ($configuredMemoryLimit === FALSE or $configuredMemoryLimit == -1) {
+            // set to a big default value
+            $configuredMemoryLimit = '512M';
+        }
+        
+        return convertToBytes($configuredMemoryLimit) / 10;
     }
 }
