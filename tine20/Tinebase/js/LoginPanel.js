@@ -223,7 +223,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 }, {
                     html: '<ul>' + 
                         '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + String.format(_('{0} Homepage'), Tine.title) + '</a></li>' +
-                        '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + String.format(_('Tine 2.0 Forum'), Tine.title) + '</a></li>' +
+                        '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + String.format(_('{0} Forum'), Tine.title) + '</a></li>' +
                     '</ul><br/>'
                 }, {
                     cls: 'tb-login-big-label',
@@ -255,7 +255,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 defaults: {xtype: 'label'},
                 items: [{
                     html: "<div class='tine-viewport-poweredby' style='position: absolute; bottom: 10px; right: 10px; font:normal 12px arial, helvetica,tahoma,sans-serif;'>" + 
-                        _("Powered by:") + " <a target='_blank' href='http://www.tine20.com/' title='" + _("online open source groupware and crm") + "'>" + Tine.title + "</a>"
+                        _("Powered by:") + " <a target='_blank' href='" + Tine.weburl + "' title='" + _("online open source groupware and crm") + "'>" + Tine.title + "</a>"
                 }]
             });
         }
