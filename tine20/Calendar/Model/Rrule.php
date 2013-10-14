@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -305,12 +305,12 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             case self::FREQ_MONTHLY:
                 if ($this->byday) {
                     $byDayInterval = (int) substr($this->byday, 0, -2);
+                    $byDayIntervalTranslation = $this->_getIntervalTranslation($byDayInterval, $translation);
                     $byDayWeekday  = substr($this->byday, -2);
                     
-                    
                     $rule .= $this->interval > 1 ?
-                        sprintf($translation->_('Every %1$s month on the %2$s %3$s'), $this->_formatInterval($this->interval, $translation, $numberFormatter), $this->_getIntervalTranslation($byDayInterval, $translation), $weekDays[self::$WEEKDAY_MAP[$byDayWeekday]]) :
-                        sprintf($translation->_('Monthly every %1$s %2$s'), $byDayIntervalMap[$byDayInterval], $weekDays[self::$WEEKDAY_MAP[$byDayWeekday]]);
+                        sprintf($translation->_('Every %1$s month on the %2$s %3$s'), $this->_formatInterval($this->interval, $translation, $numberFormatter), $byDayIntervalTranslation, $weekDays[self::$WEEKDAY_MAP[$byDayWeekday]]) :
+                        sprintf($translation->_('Monthly every %1$s %2$s'), $byDayIntervalTranslation, $weekDays[self::$WEEKDAY_MAP[$byDayWeekday]]);
                     
                 } else {
                     $bymonthday = $this->bymonthday;

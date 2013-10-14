@@ -289,7 +289,7 @@ use Sabre\VObject;
         
             Tinebase_Notification::getInstance()->send($sender, array($contact), $messageSubject, $messageBody, $calendarPart, $attachments);
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " exception: " . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " exception: " . $e);
             return;
         }
     }
