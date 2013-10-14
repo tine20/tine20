@@ -229,7 +229,8 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
             'n_fn'       => $c->n_fn,
             'n_given'    => $c->n_given,
             'n_family'   => $c->n_family,
-            'account_id' => $a->getId()
+            'account_id' => $a->getId(),
+            'position'   => 'Photographer'
         );
 
         return new HumanResources_Model_Employee($ea);

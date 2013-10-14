@@ -28,7 +28,6 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     appName: 'HumanResources',
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
     
     windowHeight: 300,
@@ -260,7 +259,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
                                     name: 'working_hours',
                                     columnWidth: 1/3
-                                },{name: 'vacation_days', fieldLabel: this.app.i18n._('Vacation Days'), columnWidth: 1/3, allowBlank: false}
+                                },{name: 'vacation_days', fieldLabel: this.app.i18n._('Vacation days of one calendar year'), columnWidth: 1/3, allowBlank: false}
                             ],
                             
                             [Ext.apply({

@@ -86,9 +86,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         if (this.record.id) {
             this.accountBox.disable();
-            this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), typeString, this.record.get('employee_id').n_fn));
+            this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), this.app.i18n._hidden(typeString), this.record.get('employee_id').n_fn));
         } else {
-            this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'), typeString, this.record.get('employee_id').n_fn));
+            this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'), this.app.i18n._hidden(typeString), this.record.get('employee_id').n_fn));
         }
     },
     
@@ -313,27 +313,10 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 emptyText: _('Enter description'),
                                 requiredGrant: 'editGrant'
                             }]
-                        }),
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'HumanResources',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
-                        new Tine.widgets.tags.TagPanel({
-                            app: 'HumanResources',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
                         })
                     ]
                 }]
-            }, 
-            new Tine.widgets.activities.ActivitiesTabPanel({
-                app: this.appName,
-                record_id: this.record.id,
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-                }) 
-            ]
+            }]
         };
     }
 });

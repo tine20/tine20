@@ -53,15 +53,13 @@ msgid_plural "Contracts"
 msgstr[0] "Vertrag"
 msgstr[1] "Verträge"
 
-#: Model/Contract.php:34 Model/Employee.php:228
-msgid "Contracts"
-msgstr "Verträge"
-
 #: Model/Contract.php:49 Model/FreeTime.php:49 Model/Employee.php:34
 #: Model/CostCenter.php:50 js/EmployeeEditDialog.js:185
 #: js/EmployeeEditDialog.js:198 js/FreeTimeEmployeeFilter.js:31
 msgid "Employee"
-msgstr "Mitarbeiter"
+msgid_plural "Employees"
+msgstr[0] "Mitarbeiter"
+msgstr[1] "Mitarbeiter"
 
 #: Model/Contract.php:60 Model/CostCenter.php:72 js/ContractEditDialog.js:218
 msgid "Start Date"
@@ -73,8 +71,8 @@ msgstr "Ende"
 
 #: Model/Contract.php:74 js/FreeTimeGridPanel.js:64 js/FreeTimeGridPanel.js:65
 #: js/ContractEditDialog.js:263
-msgid "Vacation Days"
-msgstr "Urlaubstage"
+msgid "Vacation days of one calendar year"
+msgstr "Urlaubstage in einem Kalenderjahr"
 
 #: Model/Contract.php:81 js/ContractEditDialog.js:229
 msgid "Feast Calendar"
@@ -122,11 +120,9 @@ msgstr "freie Tage"
 #: Model/ExtraFreeTime.php:33 js/AccountEditDialog.js:74
 #: js/ExtraFreeTimeEditDialog.js:99 js/ExtraFreeTimeEditDialog.js:111
 msgid "Extra free time"
-msgstr "Sonderurlaub"
-
-#: Model/ExtraFreeTime.php:34 Model/Account.php:71
-msgid "Extra free times"
-msgstr "Sonderurlaub"
+msgid_plural "Extra free times"
+msgstr[0] "Sonderurlaub"
+msgstr[1] "Sonderurlaub"
 
 #: Model/ExtraFreeTime.php:70 js/ExtraFreeTimeEditDialog.js:124
 msgid "Days"
@@ -138,19 +134,13 @@ msgstr "Ablaufdatum"
 
 #: Model/Account.php:34
 msgid "Personal account"
-msgstr "Personalkonto"
-
-#: Model/Account.php:35
-msgid "Personal accounts"
-msgstr "Personalkonten"
+msgid_plural "Personal accounts"
+msgstr[0] "Personalkonto"
+msgstr[1] "Personalkonten"
 
 #: Model/Account.php:63 js/FreeTimeEditDialog.js:159
 msgid "Year"
 msgstr "Jahr"
-
-#: Model/Employee.php:35
-msgid "Employees"
-msgstr "Angestellte"
 
 #: Model/Employee.php:50 js/EmployeeEditDialog.js:376
 msgid "Banking Information"
@@ -668,3 +658,21 @@ msgstr "Sie müssen mindestens einen Tag auswählen, um diesen Urlaub speichern 
 
 msgid "No day selected"
 msgstr "Kein Tag gewählt"
+
+msgid "Created By"
+msgstr "Erstellt von"
+
+msgid "Creation Time"
+msgstr "Erstelldatum"
+
+msgid "Last Modified By"
+msgstr "Zuletzt geändert von"
+
+msgid "Last Modified Time"
+msgstr "Letztes Modifikationsdatum"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Vacation Days"
+msgstr "Urlaubstage"

@@ -94,6 +94,9 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
                 case 'date':
                     column.setEditor(new Ext.ux.form.ClearableDateField({}));
                     break;
+                case 'int':
+                    column.setEditor(new Ext.form.NumberField({}));
+                    break;
                 default:
                     // TODO: allow more types, create FieldRegistry
                     return;

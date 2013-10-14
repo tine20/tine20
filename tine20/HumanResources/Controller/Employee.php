@@ -247,7 +247,9 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      * @todo use getMigration()
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
-    { 
+    {
+        $this->_duplicateCheck($_record);
+        
         $this->_doPrivateCleanup($_record, $_oldRecord);
         $this->_checkContractsOverlap($_record);
         $this->_recordArraysToId($_record);

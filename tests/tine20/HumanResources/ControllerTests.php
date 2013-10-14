@@ -217,13 +217,15 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $employee3 = $this->_getEmployee('jmcblack');
         $employee3->employment_begin = $oneMonthAhead;
         $employee3 = $employeeController->create($employee3);
-
+        
         // employee4 has been employed
         $employee4 = $this->_getEmployee('jsmith');
         $employee4->employment_begin = $twoMonthsAgo;
         $employee4->employment_end = $oneMonthAgo;
         $employee4 = $employeeController->create($employee4);
 
+        $this->assertEquals('Photographer', $employee4->position);
+        
         $filter = new HumanResources_Model_EmployeeFilter(array(
             array('field' => 'is_employed', 'operator' => 'equals', 'value' => TRUE)
         ));

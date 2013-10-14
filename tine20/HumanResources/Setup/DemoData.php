@@ -55,23 +55,28 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected $_dataMapping = array(
         'pwulf' => array(
             'health_insurance' => 'NHS', 'bank_name' => 'Barclays', 'supervisor_id' => NULL,
-            'bank_code_number' => '15464684', 'bank_account_number' => '029784164'
+            'bank_code_number' => '15464684', 'bank_account_number' => '029784164',
+            'position' => 'Project Leader'
         ),
         'jsmith' => array(
             'health_insurance' => 'NHS', 'bank_name' => 'Bank of England',
-            'bank_code_number' => '23563473535', 'bank_account_number' => '2038957221'
+            'bank_code_number' => '23563473535', 'bank_account_number' => '2038957221',
+            'position' => 'Photographer'
         ),
         'rwright' => array(
             'health_insurance' => 'NHS', 'bank_name' => 'RBS',
-            'bank_code_number' => '25367345624', 'bank_account_number' => '253872543'
+            'bank_code_number' => '25367345624', 'bank_account_number' => '253872543',
+            'position' => 'Controller'
         ),
         'sclever' => array(
             'health_insurance' => 'NHS', 'bank_name' => 'Lloyds',
-            'bank_code_number' => '25464543', 'bank_account_number' => '130897782'
+            'bank_code_number' => '25464543', 'bank_account_number' => '130897782',
+            'position' => 'Secretary'
         ),
         'jmcblack' => array(
             'health_insurance' => 'NHS', 'bank_name' => 'Barclays',
-            'bank_code_number' => '15464684', 'bank_account_number' => '345160934'
+            'bank_code_number' => '15464684', 'bank_account_number' => '345160934',
+            'position' => 'Sales Manager'
         ),
         'unittest' => array()
     );

@@ -67,7 +67,7 @@ msgstr "结束日期"
 
 #: Model/Contract.php:74 js/FreeTimeGridPanel.js:64 js/FreeTimeGridPanel.js:65
 #: js/ContractEditDialog.js:263
-msgid "Vacation Days"
+msgid "Vacation days of one calendar year"
 msgstr "假期"
 
 #: Model/Contract.php:81 js/ContractEditDialog.js:229

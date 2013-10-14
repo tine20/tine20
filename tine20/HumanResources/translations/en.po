@@ -139,8 +139,8 @@ msgid "Working Time Model"
 msgstr "Working Time Model"
 
 #: js/ContractGridPanel.js:130
-msgid "Vacation Days"
-msgstr "Vacation Days"
+msgid "Vacation days of one calendar year"
+msgstr "Vacation days of one calendar year"
 
 #: js/ContractGridPanel.js:132
 msgid "Start Date"

@@ -73,7 +73,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
             'vacation_days'     => array(
                 'label'   => 'Vacation Days',    // _('Vacation Days')
                 'type'    => 'integer',
-                'default' => 23,
+                'default' => 27,
                 'queryFilter' => TRUE,
                 'showInDetailsPanel' => TRUE
             ),

@@ -36,6 +36,8 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     freetimeType: null,
     
+    usePagingToolbar: false,
+    
     /**
      * inits this cmp
      * 
@@ -84,20 +86,22 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         this.store.remove(record);
         record.set('type', 'vacation');
         record.set('status', 'ACCEPTED');
-        this.editDialog.vacationGridPanel.store.add(record);
+        this.editDialog.vacationGridPanel.getStore().add(record);
         
-        // set sickness of record
+        // set sickness of parent record (employee)
         var sickness = [];
         this.getGrid().getStore().each(function(item) {
             sickness.push(item.data);
         });
         this.editDialog.record.set('sickness', sickness);
         
+        // set vacation of parent record (employee)
         var vacation = [];
         
         this.editDialog.vacationGridPanel.getStore().each(function(item) {
             vacation.push(item.data);
         });
+        
         this.editDialog.record.set('vacation', vacation);
     },
     

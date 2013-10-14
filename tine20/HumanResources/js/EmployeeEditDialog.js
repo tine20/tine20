@@ -31,7 +31,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     evalGrants: false,
     
     windowWidth: 800,
-    windowHeight: 620,
+    windowHeight: 630,
     
     /**
      * show private Information (autoset due to rights)
@@ -251,7 +251,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                                     this.form.findField(f).setValue(sr.get('adr_two_' + f));
                                                 }, this);
                                                 
-                                                Ext.each(['email', 'tel_home', 'tel_cell', 'bday'], function(f){
+                                                Ext.each(['email_home', 'tel_home', 'tel_cell', 'bday'], function(f){
                                                     this.form.findField(f).setValue(sr.get(f));
                                                 }, this);
                                             }
@@ -357,15 +357,22 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 xtype: 'datefield',
                                 name: 'employment_begin',
                                 fieldLabel: this.app.i18n._('Employment begin'),
-                                allowBlank: false
+                                allowBlank: false,
+                                columnWidth: .5
                             }, {
                                 xtype: 'extuxclearabledatefield',
                                 name: 'employment_end',
                                 allowBlank: true,
-                                fieldLabel: this.app.i18n._('Employment end')
+                                fieldLabel: this.app.i18n._('Employment end'),
+                                columnWidth: .5
                             }, {
                                 name: 'profession',
-                                fieldLabel: this.app.i18n._('Profession')
+                                fieldLabel: this.app.i18n._('Profession'),
+                                columnWidth: .5
+                            }, {
+                                name: 'position',
+                                fieldLabel: this.app.i18n._('Position'),
+                                columnWidth: .5
                             }
                         ]]
                     }]

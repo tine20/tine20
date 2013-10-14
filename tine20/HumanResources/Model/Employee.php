@@ -223,6 +223,9 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             'profession' => array(
                 'label' => 'Profession', //_('Profession')
             ),
+            'position' => array(
+                'label' => 'Position', //_('Position')
+            ),
             'contracts' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'label'      => 'Contracts', // _('Contracts')
