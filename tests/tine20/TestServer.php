@@ -171,8 +171,10 @@ class TestServer
         //$backtrace = debug_backtrace();
         //return $backtrace[1]['class'];
  
-        // assemble command
         $cmd = implode(' ', $_SERVER['argv']);
+        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Original commmand: ' . $cmd);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Script name: ' . $_SERVER['SCRIPT_NAME']);
         
         $cmd = preg_replace(array(
             '@' . preg_quote($_SERVER['SCRIPT_NAME']) . '@',
@@ -182,7 +184,7 @@ class TestServer
             '/--stop-on-failure /',
             '/[\S]+\.php$/',
             '/ \S+Tests{0,1}/',
-            '/--debug /',
+            '/--debug\s*/',
             '/--filter [\S]+\D/',
             '/--configuration [\S]+\D/',
             '/-c [\S]+\D/',
