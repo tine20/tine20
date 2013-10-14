@@ -211,4 +211,50 @@ class Setup_Update_Abstract
         Tinebase_Application::getInstance()->removeApplicationTable(Tinebase_Application::getInstance()->getApplicationByName($_application), $_tableName);
         $result = $this->_backend->dropTable($_tableName);
     }
+    
+    /**
+     * prompts for a username to set as active user on performing updates. this must be an admin user.
+     * the user account will be returned. this method can be called by cli only, so a exception will 
+     * be thrown if not running on cli
+     * 
+     * @throws Tinebase_Exception
+     * @return Tinebase_Model_FullUser
+     */
+    public function promptForUsername()
+    {
+        if (php_sapi_name() == 'cli') {
+            
+            $userFound = NULL;
+            
+            do {
+                try {
+                    if ($userFound === FALSE) {
+                        echo PHP_EOL;
+                        echo 'The user "' . $user . '" could not be found!' . PHP_EOL . PHP_EOL;
+                    }
+                    
+                    $user = Tinebase_Server_Cli::promptInput('Please enter an admin username to perform updates ');
+                    $userAccount = Tinebase_User::getInstance()->getFullUserByLoginName($user);
+                    
+                    if (! $userAccount->hasRight('Tinebase', Tinebase_Acl_Rights::ADMIN)) {
+                        $userFound = NULL;
+                        echo PHP_EOL;
+                        echo 'The user "' . $user . '" could be found, but this is not an admin user!' . PHP_EOL . PHP_EOL;
+                    } else {
+                        Tinebase_Core::set(Tinebase_Core::USER, $userAccount);
+                        $userFound = TRUE;
+                    }
+                    
+                } catch (Tinebase_Exception_NotFound $e) {
+                    $userFound = FALSE;
+                }
+                
+            } while (! $userFound);
+            
+        } else {
+            throw new Tinebase_Exception('This update could be run from cli only!');
+        }
+        
+        return $userAccount;
+    }
 }
