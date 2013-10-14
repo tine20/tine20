@@ -223,8 +223,15 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      */
     protected function _addAutomaticAlarms(Tinebase_Record_Abstract $_record)
     {
-        $automaticAlarms = Tasks_Config::getInstance()->get(Tinebase_Config::AUTOMATICALARM, new Tinebase_Config_Struct())->toArray();
-        if (count($automaticAlarms) == 0) {
+        $automaticAlarms = Tasks_Config::getInstance()->get(Tinebase_Config::AUTOMATICALARM, new Tinebase_Config_Struct());
+        if (! is_object($automaticAlarms)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                . ' Invalid ' . Tinebase_Config::AUTOMATICALARM . ' config option');
+            return;
+        }
+        $automaticAlarmsArray = $automaticAlarms->toArray();
+        
+        if (count($automaticAlarmsArray) == 0) {
             return;
         }
         
@@ -237,8 +244,8 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
             return;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add automatic alarms / minutes before: ' . implode(',', $automaticAlarms));
-        foreach ($automaticAlarms as $minutesBefore) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add automatic alarms / minutes before: ' . implode(',', $automaticAlarmsArray));
+        foreach ($automaticAlarmsArray as $minutesBefore) {
             $_record->alarms->addRecord(new Tinebase_Model_Alarm(array(
                 'minutes_before' => $minutesBefore,
             ), TRUE));
