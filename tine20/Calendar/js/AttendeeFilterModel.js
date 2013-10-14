@@ -98,7 +98,7 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
         
         this.attendeeFilterGrid = new Tine.Calendar.AttendeeFilterGrid({
             title: this.app.i18n._('Select Attendee'),
-            height: this.layerHeight || 'auto',
+            height: this.layerHeight - 40 || 'auto',
             showNamesOnly: true,
             showMemberOfType: true,
             onStoreChange: Ext.emptyFn

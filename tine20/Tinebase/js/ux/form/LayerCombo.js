@@ -260,7 +260,8 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
                 shadow: this.shadow,
                 cls: [cls, this.layerClass].join(' '),
                 constrain:false,
-                zindex: (zindex || 12000) + 5
+                // 12000 was too much, the attendee filter layer was hidden behind the filter toolbar
+                zindex: (zindex || 10000) + 5
             });
 
             var lw = this.layerWidth || Math.max(this.wrap.getWidth(), this.minLayerWidth);
