@@ -12,6 +12,7 @@ class HumanResources_Setup_Update_Release8 extends Setup_Update_Abstract
 {
     /**
      * update to 8.1
+     * 
      *  - add position field to employee
      */
     public function update_0()
@@ -28,5 +29,34 @@ class HumanResources_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setTableVersion('humanresources_employee', '14');
         $this->setApplicationVersion('HumanResources', '8.1');
+    }
+    
+    /**
+     * update to 8.2
+     * 
+     *  - add lastday_date and days_count field to freetime
+     */
+    public function update_1()
+    {
+        $field = '<field>
+                <name>lastday_date</name>
+                <type>date</type>
+            </field>
+        ';
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('humanresources_freetime', $declaration);
+        
+        $field = '<field>
+                <name>days_count</name>
+                <type>integer</type>
+                <notnull>false</notnull>
+                <default>0</default>
+            </field>
+        ';
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('humanresources_freetime', $declaration);
+    
+        $this->setTableVersion('humanresources_freetime', '7');
+        $this->setApplicationVersion('HumanResources', '8.2');
     }
 }

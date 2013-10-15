@@ -549,10 +549,7 @@ msgid "No more vacation days"
 msgstr ""
 
 #: js/DatePicker.js:232
-msgid ""
-"The Employee has no more possible vacation days left for this year. Add some "
-"extra free days to the account, if the employee should have more vacation "
-"this year."
+msgid "The Employee has no more possible vacation days left for this year. Create a new vacation and use another personal account the vacation should be taken from."
 msgstr ""
 
 #: js/AccountEditDialog.js:52
@@ -671,4 +668,22 @@ msgstr ""
 
 #: js/ContractEditDialog.js:294
 msgid "Sun."
+msgstr ""
+
+msgid "Last Day"
+msgstr ""
+
+msgid "Days Count"
+msgstr ""
+
+msgid "No personal account found"
+msgstr ""
+
+msgid "An existing personal account could not be found. Please create one!"
+msgstr ""
+
+msgid "Year can not be changed"
+msgstr ""
+
+msgid "You have already selected some dates from another year. Please create a new record to add dates from another year!"
 msgstr ""

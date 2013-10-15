@@ -23,34 +23,33 @@ Tine.HumanResources.handleRequestException = function(exception, callback, callb
         var response = Ext.util.JSON.decode(exception.responseText);
         exception = response.data;
     }
-    var defaults = {
-        buttons: Ext.Msg.OK,
-        icon: Ext.MessageBox.WARNING,
-        fn: callback,
-        scope: callbackScope
-    };
-        
-    Tine.log.warn('Request exception :');
-    Tine.log.warn(exception);
     
     var app = Tine.Tinebase.appMgr.get('HumanResources');
     
+    var defaults = {
+        buttons: Ext.Msg.OK,
+        icon: Ext.MessageBox.ERROR,
+        fn: callback,
+        scope: callbackScope,
+        title: app.i18n._(exception.title),
+        msg: app.i18n._(exception.message)
+    };
+    
+    Tine.log.warn('Request exception :');
+    Tine.log.warn(exception);
+
     switch(exception.code) {
-        case 911:
-            Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: app.i18n._('No contract could be found.'), 
-                    msg: app.i18n._('Please create a contract for this employee!'),
-                    icon: Ext.MessageBox.ERROR
-                }));
+        case 911: // HumanResources_Exception_NoContract
+        case 913: // HumanResources_Exception_RemainingNotBookable
+        case 914: // HumanResources_Exception_NoAccount
+            Ext.MessageBox.show(defaults);
             break;
-        case 913:
-            Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: app.i18n._('Not allowed!'), 
-                    msg: app.i18n._(exception.message),
-                    icon: Ext.MessageBox.ERROR
-                }));
-            break;
+        // return false will the generic exceptionhandler handle the caught exception
         default:
-            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+            return false;
     }
+    
+    return true;
 }
+
+Tine.Tinebase.ExceptionHandlerRegistry.register('HumanResources', Tine.HumanResources.handleRequestException);

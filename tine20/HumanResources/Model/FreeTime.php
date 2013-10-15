@@ -88,6 +88,15 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 'label' => 'First Day', // _('First Day')
                 'type'  => 'date'
             ),
+            'lastday_date'   => array(
+                'label' => 'Last Day', // _('Last Day')
+                'type'  => 'date'
+            ),
+            'days_count'   => array(
+                'label' => 'Days Count', // _('Days Count')
+                'type'  => 'int'
+            ),
+            
            'freedays' => array(
                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                'label' => 'Free Days', // _('Free Days')
