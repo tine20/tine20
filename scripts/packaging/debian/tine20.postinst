@@ -27,58 +27,57 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <http://www.gnu.org/licenses/>.
 
-#DEBHELPER#
+set -e
 
 . /usr/share/debconf/confmodule
 db_version 2.0
 
 if [ "$1" = "configure" ]; then
 
-    # create database if needed
-    mysqlPasswordFile="/etc/tine20/mysql.secret"
-    
-    if [ ! -e "$mysqlPasswordFile" ]; then
-        touch      "$mysqlPasswordFile"
-        chmod 0600 "$mysqlPasswordFile"
-        chown 0:0  "$mysqlPasswordFile"
-        
-        password=$(makepasswd --minchars=15 --maxchars=20)
-        echo "$password" > "$mysqlPasswordFile"
-        
-        if [ -x /usr/bin/mysql ]; then
-            mysqlCmd="/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf"
-            
-            echo "CREATE DATABASE IF NOT EXISTS tine20;" | $mysqlCmd
-            echo "GRANT ALL ON tine20.* TO 'tine20'@'localhost' IDENTIFIED BY '$password';" | $mysqlCmd
-        fi
-    fi
-    
     # create config.inc.php if needed
     tine20ConfigFile="/etc/tine20/config.inc.php"
     
     if [ ! -e "$tine20ConfigFile" ] ; then
-        cp /usr/share/doc/tine20-tinebase/examples/config.inc.php.dist "$tine20ConfigFile"
-        chmod 0660       "$tine20ConfigFile"
-        chown 0:www-data "$tine20ConfigFile"
+        cp /usr/share/doc/tine20-tinebase/examples/config.inc.php.dist $tine20ConfigFile
+        chmod 0660       $tine20ConfigFile
+        chown 0:www-data $tine20ConfigFile
 
         db_get tine20/setupuser
-        setupuser="$RET"
+        setupUser="$RET"
         db_reset tine20/setupuser || true
         
         db_get tine20/setuppasswd
-        setuppassword="$RET"
+        setupPassword="$RET"
         db_reset tine20/setuppasswd || true
         
-        mysqlpassword=$(cat "$mysqlPasswordFile")
-
-        sed -i -e "s/_DBC_DBSERVER_/localhost/g"       "$tine20ConfigFile"
-        sed -i -e "s/_DBC_DBNAME_/tine20/g"            "$tine20ConfigFile"
-        sed -i -e "s/_DBC_DBUSER_/tine20/g"            "$tine20ConfigFile"
-        sed -i -e "s/_DBC_DBPASS_/$mysqlpassword/g"    "$tine20ConfigFile"
-        sed -i -e "s/_SETUPUSERNAME_/$setupuser/g"     "$tine20ConfigFile"
-        sed -i -e "s/_SETUPPASSWORD_/$setuppassword/g" "$tine20ConfigFile"
+        sqlPassword=$(makepasswd --minchars=15 --maxchars=20)
+        if [ -z $setupPassword ]; then
+            setupPassword=$(makepasswd --minchars=15 --maxchars=20)
+        fi
+        
+        sed -i -e "s/_DBC_DBSERVER_/localhost/g"       $tine20ConfigFile
+        sed -i -e "s/_DBC_DBNAME_/tine20/g"            $tine20ConfigFile
+        sed -i -e "s/_DBC_DBUSER_/tine20/g"            $tine20ConfigFile
+        sed -i -e "s/_DBC_DBPASS_/$sqlPassword/g"      $tine20ConfigFile
+        sed -i -e "s/_SETUPUSERNAME_/$setupUser/g"     $tine20ConfigFile
+        sed -i -e "s/_SETUPPASSWORD_/$setupPassword/g" $tine20ConfigFile
+        
+        if [ -x /usr/bin/mysql -a -e /etc/mysql/debian.cnf ]; then
+            mysqlCmd="/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf"
+            
+            echo "CREATE DATABASE IF NOT EXISTS tine20;" | $mysqlCmd
+            echo "GRANT ALL ON tine20.* TO 'tine20'@'localhost' IDENTIFIED BY '${sqlPassword}';" | $mysqlCmd
+            
+        elif [ -x /usr/bin/psql ]; then
+            su - postgres -c "psql -q -c \"CREATE USER tine20 WITH PASSWORD '${sqlPassword}'\""             >/dev/null 2>&1
+            su - postgres -c "/usr/bin/createdb --owner=tine20 --template=template0 --encoding=UTF8 tine20" >/dev/null 2>&1
+            
+            sed -i -e "s/pdo_mysql/pdo_pgsql/g"        $tine20ConfigFile
+        fi
     fi
     
 fi
+
+#DEBHELPER#
 
 exit 0

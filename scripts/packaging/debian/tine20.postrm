@@ -31,11 +31,16 @@
 
 if [ "$1" = "purge" ]; then
     
-    if [ -x /usr/bin/mysql ]; then
+    if [ -x /usr/bin/mysql -a -e /etc/mysql/debian.cnf ]; then
         mysqlCmd="/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf"
         
         echo "DROP DATABASE IF EXISTS tine20;" | $mysqlCmd
         echo "REVOKE ALL ON tine20.* FROM 'tine20'@'localhost';" | $mysqlCmd
+        
+    elif [ -x /usr/bin/psql ]; then
+        su - postgres -c "/usr/bin/dropdb   tine20"
+        su - postgres -c "/usr/bin/dropuser tine20"
+        
     fi
 
     rm -f /etc/tine20/config.inc.php
