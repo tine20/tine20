@@ -30,8 +30,8 @@ class HumanResources_Model_ExtraFreeTime extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Extra free time', // _('Extra free time')
-        'recordsName'       => 'Extra free times', // _('Extra free times')
+        'recordName'        => 'Extra free time', // ngettext('Extra free time', 'Extra free times', n)
+        'recordsName'       => 'Extra free times',
         'hasRelations'      => FALSE,
         'hasCustomFields'   => FALSE,
         'hasNotes'          => TRUE,

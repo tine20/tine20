@@ -30,8 +30,8 @@ class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Cost Center', // _('Cost Center')
-        'recordsName'       => 'Cost Centers', // _('Cost Centers')
+        'recordName'        => 'Cost Center', // ngettext('Cost Center', 'Cost Centers', n)
+        'recordsName'       => 'Cost Centers',
         'hasRelations'      => FALSE,
         'hasCustomFields'   => FALSE,
         'hasNotes'          => FALSE,

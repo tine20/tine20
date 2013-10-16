@@ -31,8 +31,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Employee', // _('Employee')
-        'recordsName'       => 'Employees', // _('Employees')
+        'recordName'        => 'Employee',
+        'recordsName'       => 'Employees', // ngettext('Employee', 'Employees', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
         'hasNotes'          => TRUE,
