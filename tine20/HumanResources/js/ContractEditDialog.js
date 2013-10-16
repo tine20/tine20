@@ -216,8 +216,9 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         items: [[
                             {xtype: 'datefield', name: 'start_date', fieldLabel: this.app.i18n._('Start Date'), allowBlank: false },
                             {xtype: 'extuxclearabledatefield', name: 'end_date',   fieldLabel: this.app.i18n._('End Date')},
-                            
-                            Tine.widgets.form.RecordPickerManager.get('Tinebase', 'Container', {
+                            {
+                                xtype: 'tinewidgetscontainerselectcombo', 
+                                name: 'feast_calendar_id',
                                 containerName: this.app.i18n._('Calendar'),
                                 containersName: this.app.i18n._('Calendars'),
                                 appName: 'Calendar',
@@ -225,9 +226,8 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 hideTrigger2: true,
                                 allowBlank: false,
                                 blurOnSelect: true,
-                                fieldLabel: this.app.i18n._('Feast Calendar'),
-                                name: 'feast_calendar_id'
-                            })
+                                fieldLabel: this.app.i18n._('Feast Calendar')
+                            }
                         ]]
                     }]
                 }, {
