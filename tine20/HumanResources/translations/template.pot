@@ -43,15 +43,13 @@ msgid_plural "Contracts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/Contract.php:34 Model/Employee.php:231
-msgid "Contracts"
-msgstr ""
-
-#: Model/Contract.php:49 Model/FreeTime.php:49 Model/Employee.php:34
+#: Model/Contract.php:49 Model/FreeTime.php:49 Model/Employee.php:35
 #: Model/CostCenter.php:50 js/EmployeeEditDialog.js:185
 #: js/EmployeeEditDialog.js:198 js/FreeTimeEmployeeFilter.js:31
 msgid "Employee"
-msgstr ""
+msgid_plural "Employees"
+msgstr[0] ""
+msgstr[1] ""
 
 #: Model/Contract.php:60 Model/CostCenter.php:72 js/ContractEditDialog.js:217
 msgid "Start Date"
@@ -75,11 +73,9 @@ msgstr ""
 
 #: Model/FreeTime.php:34
 msgid "Free Time"
-msgstr ""
-
-#: Model/FreeTime.php:35 js/AccountEditDialog.js:104
-msgid "Free Times"
-msgstr ""
+msgid_plural "Free Times"
+msgstr[0] ""
+msgstr[1] ""
 
 #: Model/FreeTime.php:60 Model/Employee.php:77 js/EmployeeEditDialog.js:216
 msgid "Account"
@@ -104,18 +100,16 @@ msgstr ""
 msgid "First Day"
 msgstr ""
 
-#: Model/FreeTime.php:93 Model/FreeDay.php:35
+#: Model/FreeTime.php:93
 msgid "Free Days"
 msgstr ""
 
 #: Model/ExtraFreeTime.php:33 js/AccountEditDialog.js:74
 #: js/ExtraFreeTimeEditDialog.js:99 js/ExtraFreeTimeEditDialog.js:111
 msgid "Extra free time"
-msgstr ""
-
-#: Model/ExtraFreeTime.php:34 Model/Account.php:71
-msgid "Extra free times"
-msgstr ""
+msgid_plural "Extra free times"
+msgstr[0] ""
+msgstr[1] ""
 
 #: Model/ExtraFreeTime.php:70 js/ExtraFreeTimeEditDialog.js:124
 msgid "Days"
@@ -127,18 +121,16 @@ msgstr ""
 
 #: Model/Account.php:34
 msgid "Personal account"
-msgstr ""
-
-#: Model/Account.php:35
-msgid "Personal accounts"
-msgstr ""
+msgid_plural "Personal accounts"
+msgstr[0] ""
+msgstr[1] ""
 
 #: Model/Account.php:63 js/FreeTimeEditDialog.js:194
 msgid "Year"
 msgstr ""
 
-#: Model/Employee.php:35
-msgid "Employees"
+#: Model/Account.php:71
+msgid "Extra free times"
 msgstr ""
 
 #: Model/Employee.php:50 js/EmployeeEditDialog.js:383
@@ -265,7 +257,11 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
-#: Model/Employee.php:244 Model/CostCenter.php:34
+#: Model/Employee.php:231
+msgid "Contracts"
+msgstr ""
+
+#: Model/Employee.php:244
 msgid "Cost Centers"
 msgstr ""
 
@@ -281,12 +277,16 @@ msgstr ""
 
 #: Model/FreeDay.php:34
 msgid "Free Day"
-msgstr ""
+msgid_plural "Free Days"
+msgstr[0] ""
+msgstr[1] ""
 
 #: Model/CostCenter.php:33 Model/CostCenter.php:61
 #: js/CostCenterGridPanel.js:125
 msgid "Cost Center"
-msgstr ""
+msgid_plural "Cost Centers"
+msgstr[0] ""
+msgstr[1] ""
 
 #: Config.php:61
 msgid "Freetime Type"
@@ -561,6 +561,10 @@ msgstr ""
 
 #: js/AccountEditDialog.js:91
 msgid "Summary"
+msgstr ""
+
+#: js/AccountEditDialog.js:104
+msgid "Free Times"
 msgstr ""
 
 #: js/AccountEditDialog.js:110
