@@ -178,7 +178,15 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         
     },
     
+    /**
+     * onDefineRelatedRecord
+     * 
+     * @param {} filter
+     */
     onDefineRelatedRecord: function(filter) {
+        Tine.log.debug('Tine.widgets.grid.ForeignRecordFilter::onDefineRelatedRecord() - filter:');
+        Tine.log.debug(filter);
+        
         if (! filter.toolbar) {
             this.createRelatedRecordToolbar(filter);
         }
@@ -345,6 +353,9 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * create a related record toolbar
      */
     createRelatedRecordToolbar: function(filter) {
+        Tine.log.debug('Tine.widgets.grid.ForeignRecordFilter::createRelatedRecordToolbar() - filter:');
+        Tine.log.debug(filter);
+        
         var foreignRecordDefinition = filter.foreignRecordDefinition,
             foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
             filterModels = foreignRecordClass.getFilterModel(),

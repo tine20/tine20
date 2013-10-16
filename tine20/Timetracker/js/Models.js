@@ -148,7 +148,7 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.data.Record.create(Tine.Timet
     recordName: 'Time Account',
     recordsName: 'Time Accounts',
     containerProperty: 'container_id',
-    defaultFilter: 'is_open',
+    defaultFilter: 'query',
     // ngettext('timeaccount list', 'timeaccount lists', n);
     containerName: 'All Timeaccounts',
     containersName: 'timeaccount lists',
@@ -176,7 +176,7 @@ Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
         {label: app.i18n._('Description'),      field: 'description', operators: ['contains']},
         {label: app.i18n._('Billed'),           field: 'status',      filtertype: 'timetracker.timeaccountbilled'},
         {label: app.i18n._('Status'),           field: 'is_open',     filtertype: 'timetracker.timeaccountstatus'},
-        {label: app.i18n._('Cleared at'),                field: 'cleared_at',      valueType: 'date'},
+        {label: app.i18n._('Cleared at'),       field: 'cleared_at',  valueType: 'date'},
         {label: _('Last Modified Time'),        field: 'last_modified_time', valueType: 'date'},
         {label: _('Last Modified By'),          field: 'last_modified_by',   valueType: 'user'},
         {label: _('Creation Time'),             field: 'creation_time',      valueType: 'date'},

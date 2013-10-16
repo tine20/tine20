@@ -31,7 +31,7 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     initComponent: function() {
         this.label = _('Relation');
         
-        // @TODO whipe some models?
+        // @TODO wipe some models?
         var relatedModels = [];
         Tine.Tinebase.data.RecordMgr.eachKey(function(operator, record) {
             if (record.hasField('relations') && Ext.isFunction(record.getFilterModel)) {
@@ -54,13 +54,18 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     },
     
     onDefineRelatedRecord: function(filter) {
-        var operator = filter.formFields.operator.getValue();
-        console.log(operator);
-        console.log(Tine.Tinebase.data.RecordMgr.get(operator));
+        Tine.log.debug('Tine.widgets.relation.FilterModel::onDefineRelatedRecord() - filter:');
+        Tine.log.debug(filter);
         
         if (! filter.sheet) {
+            var operator = filter.formFields.operator.getValue(),
+                recordClass = Tine.Tinebase.data.RecordMgr.get(operator);
+                
+            Tine.log.debug('Tine.widgets.relation.FilterModel::onDefineRelatedRecord() - recordClass:');
+            Tine.log.debug(recordClass);
+            
             filter.sheet = new Tine.widgets.grid.FilterToolbar({
-                recordClass: Tine.Tinebase.data.RecordMgr.get(operator),
+                recordClass: recordClass,
                 defaultFilter: 'query'
             });
             
