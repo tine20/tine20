@@ -108,9 +108,7 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     {
         if ($this->_transactionId) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-        }
-        
-        else {
+        } else {
             $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
                 array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
             )), new Tinebase_Model_Pagination(array()));
@@ -208,11 +206,35 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
         ));
     }
     
+    /**
+     * test needs transaction
+     */
     protected function _testNeedsTransaction()
     {
         if ($this->_transactionId) {
             Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
             $this->_transactionId = NULL;
         }
+    }
+    
+    /**
+     * get all calendar grants
+     * 
+     * @param Tinebase_Model_User $user
+     * @return array
+     */
+    protected function _getAllCalendarGrants($user = null)
+    {
+        return array(
+            'account_id'    => $user ? $user->getId() : Tinebase_Core::getUser()->getId(),
+            'account_type'  => 'user',
+            Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_ADD      => true,
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+            Tinebase_Model_Grants::GRANT_DELETE   => true,
+            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+        );
     }
 }

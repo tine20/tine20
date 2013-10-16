@@ -464,9 +464,9 @@ class Tinebase_Timemachine_ModificationLog
         if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ 
             . " Non resolvable conflict for field '" . $diff->modified_attribute . "'!");
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' New user value: ' . $newUserValue
-            . ' New diff value: ' . $diff->new_value
-            . ' Old diff value: ' . $diff->old_value);
+            . ' New user value: ' . var_export($newUserValue, TRUE)
+            . ' New diff value: ' . var_export($diff->new_value, TRUE)
+            . ' Old diff value: ' . var_export($diff->old_value, TRUE));
         
         throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
     }

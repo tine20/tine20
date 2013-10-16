@@ -866,6 +866,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
             }
             
+            if (! isset($exceptionAttender)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && $_event->attendee instanceof Tinebase_Record_RecordSet) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Failed to update attendee: " . print_r($_event->attendee->toArray(), true));
+                }
+                throw new Tinebase_Exception_AccessDenied('Failed to update attendee, status authkey might be missing');
+            }
+            
             return $this->get($exceptionAttender->cal_event_id);
         }
         
@@ -1500,7 +1507,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 break;
         }
         
-        if (!$hasGrant) {
+        if (! $hasGrant) {
             if ($_throw) {
                 throw new Tinebase_Exception_AccessDenied($_errorMessage);
             } else {

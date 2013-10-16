@@ -303,19 +303,44 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConflicts);
         
-        foreach($migration['toCreate'] as $exception) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Found ' . count($migration['toCreate']) . ' exceptions to create and ' . count($migration['toUpdate']) . ' to update.');
+        
+        foreach ($migration['toCreate'] as $exception) {
             $_event->assertCurrentUserAsAttendee(TRUE, TRUE);
             $this->_prepareException($updatedBaseEvent, $exception);
             $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
         }
         
-        foreach($migration['toUpdate'] as $exception) {
+        foreach ($migration['toUpdate'] as $exception) {
             $_event->assertCurrentUserAsAttendee(TRUE, TRUE);
             $this->_prepareException($updatedBaseEvent, $exception);
+            $this->_addStatusAuthkeyForOwnAttender($exception);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' Updating exception: ' . print_r($exception->toArray(), TRUE));
             $this->_eventController->update($exception, $_checkBusyConflicts);
         }
         
         return $this->_toiTIP($updatedBaseEvent);
+    }
+    
+    /**
+     * add status_authkey for own attender
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    protected function _addStatusAuthkeyForOwnAttender($event)
+    {
+        if (! $event->attendee instanceof Tinebase_Record_RecordSet) {
+            return;
+        }
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($event->attendee);
+        if ($ownAttender) {
+            $currentEvent = $this->_eventController->get($event->id);
+            $currentAttender = Calendar_Model_Attender::getAttendee($currentEvent->attendee, $ownAttender);
+            $ownAttender->status_authkey = $currentAttender->status_authkey;
+        }
     }
     
     /**

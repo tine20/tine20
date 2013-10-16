@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -62,6 +62,17 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['REQUEST_URI'] = 'lars';
     }
 
+    /**
+     * tear down tests
+     *
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+    }
+    
     /**
      * test create event with internal organizer
      * 
@@ -667,5 +678,85 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         );
         
         return $vcalendar;
+    }
+
+    /**
+     * testAcceptInvitationForRecurringEventException
+     * 
+     * @see 0009022: can not accept invitation to recurring event exception
+     */
+    public function testAcceptInvitationForRecurringEventException()
+    {
+        Tinebase_Container::getInstance()->setGrants($this->objects['initialContainer'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+            $this->_getAllCalendarGrants(),
+            array(
+                'account_id'    => 0,
+                'account_type'  => 'anyone',
+                Tinebase_Model_Grants::GRANT_READ     => true,
+                Tinebase_Model_Grants::GRANT_ADD      => false,
+                Tinebase_Model_Grants::GRANT_EDIT     => false,
+                Tinebase_Model_Grants::GRANT_DELETE   => false,
+                Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+                Tinebase_Model_Grants::GRANT_ADMIN    => false,
+        ))), true);
+        
+        $persistentEvent = Calendar_Controller_Event::getInstance()->create(new Calendar_Model_Event(array(
+            'container_id' => $this->objects['initialContainer']->getId(),
+            'rrule'   => 'FREQ=WEEKLY;BYDAY=WE',
+            'dtstart' => new Tinebase_DateTime('20131016T120000'),
+            'dtend'   => new Tinebase_DateTime('20131016T130000'),
+            'summary' => 'Meeting',
+            'attendee' => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+                array(
+                    'user_id'   => Tinebase_Core::getUser()->contact_id,
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+                    'status_authkey' => 'e4546f26cb37f69baf59135e7bd379bf94bba429', // TODO is this needed??
+                )
+            )),
+            'uid' => '3ef8b44333aea7c01aa5a9308e2cb014807c60b3'
+        )));
+
+        // add pwulf as attender to create exception
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $exception = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, new Tinebase_DateTime('20131017T140000'));
+        $exception->attendee->addRecord(new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => $this->_personasContacts['pwulf']->getId(),
+        )));
+        $persistentException = Calendar_Controller_Event::getInstance()->createRecurException($exception);
+        $persistentEvent = Calendar_Controller_Event::getInstance()->get($persistentEvent->getId());
+        
+        // pwulf tries to accept invitation
+        Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()->getFullUserByLoginName('pwulf'));
+        
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac OS X/10.8.5 (12F45) CalendarAgent/57';
+        $vcalendarStream = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/accept_exdate_invite.ics');
+        
+        $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $persistentEvent);
+        $event->put($vcalendarStream);
+        
+        $exdateWebDAVEvent = $event->getRecord()->exdate[0];
+        $this->_assertCurrentUserAttender($exdateWebDAVEvent);
+        
+        $exdateCalEvent = Calendar_Controller_Event::getInstance()->get($persistentException->getId());
+        $this->_assertCurrentUserAttender($exdateCalEvent);
+    }
+    
+    /**
+     * assert current user as attender
+     * 
+     * @param Calendar_Model_Event $exdate
+     */
+    protected function _assertCurrentUserAttender($event)
+    {
+        $this->assertTrue($event->attendee instanceof Tinebase_Record_RecordSet, 'attendee is no recordset: ' . print_r($event->toArray(), true));
+        $this->assertEquals(2, $event->attendee->count(), 'exdate should have 2 attendee: ' . print_r($event->toArray(), true));
+        $currentUser = Calendar_Model_Attender::getAttendee($event->attendee, new Calendar_Model_Attender(array(
+            'user_id'   => Tinebase_Core::getUser()->contact_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+        )));
+        $this->assertNotNull($currentUser, 'currentUser not found in attendee');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $currentUser->status, print_r($currentUser->toArray(), true));
     }
 }
