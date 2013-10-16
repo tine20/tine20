@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"PO-Revision-Date: 2013-10-15 18:08+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Persian (Iran) (http://www.transifex.com/projects/p/tine20/language/fa_IR/)\n"
 "MIME-Version: 1.0\n"
@@ -40,13 +40,13 @@ msgstr ""
 msgid "You do not have admin rights on HumanResources"
 msgstr ""
 
-#: Model/Contract.php:33 js/ContractGridPanel.js:41
-#: js/ContractEditDialog.js:200 js/ContractEditDialog.js:213
+#: Model/Contract.php:33 js/ContractGridPanel.js:43
+#: js/ContractEditDialog.js:199 js/ContractEditDialog.js:212
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] ""
 
-#: Model/Contract.php:34 Model/Employee.php:228
+#: Model/Contract.php:34 Model/Employee.php:231
 msgid "Contracts"
 msgstr ""
 
@@ -56,20 +56,19 @@ msgstr ""
 msgid "Employee"
 msgstr ""
 
-#: Model/Contract.php:60 Model/CostCenter.php:72 js/ContractEditDialog.js:218
+#: Model/Contract.php:60 Model/CostCenter.php:72 js/ContractEditDialog.js:217
 msgid "Start Date"
 msgstr ""
 
-#: Model/Contract.php:69 js/ContractEditDialog.js:219
+#: Model/Contract.php:69 js/ContractEditDialog.js:218
 msgid "End Date"
 msgstr ""
 
-#: Model/Contract.php:74 js/FreeTimeGridPanel.js:64 js/FreeTimeGridPanel.js:65
-#: js/ContractEditDialog.js:263
-msgid "Vacation days of one calendar year"
+#: Model/Contract.php:74 js/FreeTimeGridPanel.js:66 js/FreeTimeGridPanel.js:67
+msgid "Vacation Days"
 msgstr ""
 
-#: Model/Contract.php:81 js/ContractEditDialog.js:229
+#: Model/Contract.php:81 js/ContractEditDialog.js:228
 msgid "Feast Calendar"
 msgstr ""
 
@@ -95,12 +94,12 @@ msgid "Type"
 msgstr ""
 
 #: Model/FreeTime.php:77 Model/ExtraFreeTime.php:64 Model/Employee.php:83
-#: js/EmployeeEditDialog.js:421 js/FreeTimeEditDialog.js:240
+#: js/EmployeeEditDialog.js:428 js/FreeTimeEditDialog.js:299
 #: js/ExtraFreeTimeEditDialog.js:154
 msgid "Description"
 msgstr ""
 
-#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:136
+#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:163
 msgid "Status"
 msgstr ""
 
@@ -137,7 +136,7 @@ msgstr ""
 msgid "Personal accounts"
 msgstr ""
 
-#: Model/Account.php:63 js/FreeTimeEditDialog.js:159
+#: Model/Account.php:63 js/FreeTimeEditDialog.js:194
 msgid "Year"
 msgstr ""
 
@@ -145,7 +144,7 @@ msgstr ""
 msgid "Employees"
 msgstr ""
 
-#: Model/Employee.php:50 js/EmployeeEditDialog.js:376
+#: Model/Employee.php:50 js/EmployeeEditDialog.js:383
 msgid "Banking Information"
 msgstr ""
 
@@ -225,19 +224,19 @@ msgstr ""
 msgid "Birthday"
 msgstr ""
 
-#: Model/Employee.php:155 js/EmployeeEditDialog.js:385
+#: Model/Employee.php:155 js/EmployeeEditDialog.js:392
 msgid "Account Holder"
 msgstr ""
 
-#: Model/Employee.php:160 js/EmployeeEditDialog.js:388
+#: Model/Employee.php:160 js/EmployeeEditDialog.js:395
 msgid "Account Number"
 msgstr ""
 
-#: Model/Employee.php:178 js/EmployeeEditDialog.js:391
+#: Model/Employee.php:178 js/EmployeeEditDialog.js:398
 msgid "Bank Name"
 msgstr ""
 
-#: Model/Employee.php:183 js/EmployeeEditDialog.js:394
+#: Model/Employee.php:183 js/EmployeeEditDialog.js:401
 msgid "Code Number"
 msgstr ""
 
@@ -245,7 +244,7 @@ msgstr ""
 msgid "Employment begin"
 msgstr ""
 
-#: Model/Employee.php:194 js/EmployeeEditDialog.js:365
+#: Model/Employee.php:194 js/EmployeeEditDialog.js:366
 msgid "Employment end"
 msgstr ""
 
@@ -261,21 +260,25 @@ msgstr ""
 msgid "Health Insurance"
 msgstr ""
 
-#: Model/Employee.php:224 js/EmployeeEditDialog.js:368
+#: Model/Employee.php:224 js/EmployeeEditDialog.js:370
 msgid "Profession"
 msgstr ""
 
-#: Model/Employee.php:241 Model/CostCenter.php:34
+#: Model/Employee.php:227 js/EmployeeEditDialog.js:374
+msgid "Position"
+msgstr ""
+
+#: Model/Employee.php:244 Model/CostCenter.php:34
 msgid "Cost Centers"
 msgstr ""
 
-#: Model/Employee.php:253 Setup/Initialize.php:74 js/FreeTimeGridPanel.js:63
-#: js/FreeTimeGridPanel.js:209
+#: Model/Employee.php:256 Setup/Initialize.php:74 js/FreeTimeGridPanel.js:65
+#: js/FreeTimeGridPanel.js:213
 msgid "Vacation"
 msgstr ""
 
-#: Model/Employee.php:266 Setup/Initialize.php:73 js/FreeTimeGridPanel.js:59
-#: js/FreeTimeGridPanel.js:207 js/AccountEditDialog.js:121
+#: Model/Employee.php:269 Setup/Initialize.php:73 js/FreeTimeGridPanel.js:61
+#: js/FreeTimeGridPanel.js:211 js/AccountEditDialog.js:121
 msgid "Sickness"
 msgstr ""
 
@@ -426,11 +429,11 @@ msgstr ""
 msgid "Please use the following format: MM-DD"
 msgstr ""
 
-#: js/AdminPanel.js:219 js/ContractEditDialog.js:222
+#: js/AdminPanel.js:219 js/ContractEditDialog.js:221
 msgid "Calendar"
 msgstr ""
 
-#: js/AdminPanel.js:220 js/ContractEditDialog.js:223
+#: js/AdminPanel.js:220 js/ContractEditDialog.js:222
 msgid "Calendars"
 msgstr ""
 
@@ -458,28 +461,40 @@ msgstr ""
 msgid "Internal Information"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:435 js/FreeTimeEditDialog.js:254
+#: js/EmployeeEditDialog.js:442 js/FreeTimeEditDialog.js:313
 #: js/ExtraFreeTimeEditDialog.js:168
 msgid "Enter description"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:75
+#: js/FreeTimeEditDialog.js:80
 msgid "Edit {0} \"{1}\""
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:83
-msgid "Add {0} for {1}"
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:85
+#: js/FreeTimeEditDialog.js:89
 msgid "Edit {0} for {1}"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:170
+#: js/FreeTimeEditDialog.js:91
+msgid "Add {0} for {1}"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:98
+msgid "You have to select at least one day to save this sickness entry."
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:98
+msgid "You have to select at least one day to save this vacation entry."
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:102
+msgid "No day selected"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:229
 msgid "Remaining"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:221
+#: js/FreeTimeEditDialog.js:280
 msgid "Select Days"
 msgstr ""
 
@@ -509,15 +524,15 @@ msgstr ""
 msgid "Not allowed!"
 msgstr ""
 
-#: js/FreeTimeGridPanel.js:48
+#: js/FreeTimeGridPanel.js:50
 msgid "Book as vacation"
 msgstr ""
 
-#: js/FreeTimeGridPanel.js:60 js/FreeTimeGridPanel.js:61
+#: js/FreeTimeGridPanel.js:62 js/FreeTimeGridPanel.js:63
 msgid "Sickness Days"
 msgstr ""
 
-#: js/FreeTimeGridPanel.js:68
+#: js/FreeTimeGridPanel.js:70
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria "
 "or view-options."
@@ -527,15 +542,15 @@ msgstr ""
 msgid "WK"
 msgstr ""
 
-#: js/DatePicker.js:114
+#: js/DatePicker.js:111
 msgid "Loading calendar data..."
 msgstr ""
 
-#: js/DatePicker.js:224
+#: js/DatePicker.js:231
 msgid "No more vacation days"
 msgstr ""
 
-#: js/DatePicker.js:225
+#: js/DatePicker.js:232
 msgid ""
 "The Employee has no more possible vacation days left for this year. Add some"
 " extra free days to the account, if the employee should have more vacation "
@@ -578,7 +593,7 @@ msgstr ""
 msgid "Unexcused sickness days"
 msgstr ""
 
-#: js/AccountEditDialog.js:135 js/Models.js:23 js/ContractEditDialog.js:238
+#: js/AccountEditDialog.js:135 js/Models.js:23 js/ContractEditDialog.js:237
 msgid "Working Time"
 msgid_plural "Working Times"
 msgstr[0] ""
@@ -609,42 +624,46 @@ msgstr[0] ""
 msgid "Startdate"
 msgstr ""
 
-#: js/ContractEditDialog.js:87
+#: js/ContractEditDialog.js:86
 msgid "Edit {0}"
 msgstr ""
 
-#: js/ContractEditDialog.js:246
+#: js/ContractEditDialog.js:245
 msgid "Choose the template"
 msgstr ""
 
-#: js/ContractEditDialog.js:255
+#: js/ContractEditDialog.js:254
 msgid "Working Hours per week"
 msgstr ""
 
-#: js/ContractEditDialog.js:267
+#: js/ContractEditDialog.js:262
+msgid "Vacation days of one calendar year"
+msgstr ""
+
+#: js/ContractEditDialog.js:266
 msgid "Mon."
 msgstr ""
 
-#: js/ContractEditDialog.js:270
+#: js/ContractEditDialog.js:269
 msgid "Tue."
 msgstr ""
 
-#: js/ContractEditDialog.js:273
+#: js/ContractEditDialog.js:272
 msgid "Wed."
 msgstr ""
 
-#: js/ContractEditDialog.js:276
+#: js/ContractEditDialog.js:275
 msgid "Thu."
 msgstr ""
 
-#: js/ContractEditDialog.js:279
+#: js/ContractEditDialog.js:278
 msgid "Fri."
 msgstr ""
 
-#: js/ContractEditDialog.js:282
+#: js/ContractEditDialog.js:281
 msgid "Sat."
 msgstr ""
 
-#: js/ContractEditDialog.js:285
+#: js/ContractEditDialog.js:284
 msgid "Sun."
 msgstr ""

@@ -1,11 +1,12 @@
 # 
 # Translators:
+# pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"PO-Revision-Date: 2013-10-16 10:23+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -63,13 +64,13 @@ msgstr "Studenten-Loginnamen Prefix"
 
 #: Config.php:130
 msgid "Student username schema"
-msgstr ""
+msgstr "Benutzernamensschema für Schüler"
 
 #: Config.php:132
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
-msgstr ""
+msgstr "Benutzernamensschema für Schüler (0 = nur Nachname (10 Zeichen), 1 = Nachname + 2 Zeichen des Vornamens)"
 
 #: Config.php:139 Config.php:141
 msgid "Samba user settings"
@@ -190,7 +191,7 @@ msgstr[1] "Listen"
 
 #: js/Models.js:71
 msgid "Quick Search"
-msgstr ""
+msgstr "Schnellsuche"
 
 #: js/Models.js:109
 msgid "Course Type"

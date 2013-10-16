@@ -4,14 +4,15 @@
 # Björn Balazs <transifex@lazs.de>, 2012-2013
 # sysdef <transifex.com@sysdef.de>, 2013
 # corneliusweiss <mail@corneliusweiss.de>, 2012
+# mspahn <ms@ansta.lt>, 2013
 # pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-02 11:06+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-10-15 18:15+0000\n"
+"Last-Translator: mspahn <ms@ansta.lt>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -572,7 +573,7 @@ msgstr "Bearbeiten"
 msgid "The field is editable part of the profile"
 msgstr "Das Feld kann im Profil bearbeitet werden"
 
-#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:200
+#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:203
 msgid "Field Name"
 msgstr "Feldname"
 
@@ -580,7 +581,11 @@ msgstr "Feldname"
 msgid "About {0}"
 msgstr "Über {0}"
 
-#: js/AboutDialog.js:60 js/CreditsScreen.js:53 js/LicenseScreen.js:51
+#: js/AboutDialog.js:56 js/MainMenu.js:166
+msgid "Learn more about {0}"
+msgstr "Lerne mehr über {0}"
+
+#: js/AboutDialog.js:61 js/CreditsScreen.js:53 js/LicenseScreen.js:51
 #: js/PasswordChangeDialog.js:66 js/widgets/EditRecord.js:157
 #: js/widgets/tags/TagsMassAttachAction.js:84
 #: js/widgets/dialog/MultiOptionsDialog.js:102
@@ -592,19 +597,19 @@ msgstr "Über {0}"
 msgid "Ok"
 msgstr "Ok"
 
-#: js/AboutDialog.js:70
+#: js/AboutDialog.js:71
 msgid "Released under different"
 msgstr "Veröffentlicht unter verschiedenen"
 
-#: js/AboutDialog.js:71
+#: js/AboutDialog.js:72
 msgid "Open Source Licenses"
 msgstr "Open Source Lizenzen"
 
-#: js/AboutDialog.js:78
+#: js/AboutDialog.js:79
 msgid "with the help of our"
 msgstr "mit der Hilfe von unseren"
 
-#: js/AboutDialog.js:79
+#: js/AboutDialog.js:80
 msgid "Contributors"
 msgstr " Mitwirkenden"
 
@@ -688,22 +693,22 @@ msgstr "Version"
 
 #: js/LoginPanel.js:217
 msgid "{0} is made for you"
-msgstr ""
+msgstr "{0} ist für Euch gemacht"
 
 #: js/LoginPanel.js:219
 msgid ""
 "{0} wants to make business collaboration easier and more enjoyable - for "
 "your needs! So you are warmly welcome to discuss with us, bring in ideas and"
 " get help."
-msgstr ""
+msgstr "{0} macht die Zusammenarbeit im Unternehmen einfacher und angenehmer. Helft uns, Tine 2.0 weiter zu verbessern. Wir freuen uns über Eure Ideen und spannende Diskussionen."
 
 #: js/LoginPanel.js:225
 msgid "{0} Homepage"
-msgstr ""
+msgstr "{0} Homepage"
 
 #: js/LoginPanel.js:226
-msgid "Tine 2.0 Forum"
-msgstr "Tine 2.0 Forum"
+msgid "{0} Forum"
+msgstr "{0} Forum"
 
 #: js/LoginPanel.js:230
 msgid "Translations"
@@ -717,11 +722,11 @@ msgstr "Übersetzungsstatus von {0}: {1}%."
 msgid ""
 "If the state of your language is not satisfying, or if you miss a language, "
 "please consider becoming a {0} translator."
-msgstr ""
+msgstr "Falls die Übersetzung in ihrer Sprache unzureichend ist oder eine Sprache fehlt, können Sie in Betracht ziehen ein {0} Übersetzer zu werden."
 
 #: js/LoginPanel.js:237
 msgid "{0} Translation Howto"
-msgstr ""
+msgstr "{0} Übersetzungsanleitung"
 
 #: js/LoginPanel.js:238
 msgid "Detailed Language Statistics"
@@ -934,10 +939,6 @@ msgstr "Abmelden"
 #: js/MainMenu.js:159
 msgid "Logout from {0}"
 msgstr "{0} Sitzung beenden"
-
-#: js/MainMenu.js:166
-msgid "Learn more about {0}"
-msgstr ""
 
 #: js/MainMenu.js:176
 msgid "Allow desktop notifications"
@@ -1544,7 +1545,7 @@ msgstr "Typ"
 msgid "Remove"
 msgstr "Entfernen"
 
-#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:575
+#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:581
 msgid "Show"
 msgstr "Zeige"
 
@@ -2338,39 +2339,39 @@ msgstr "Ende"
 msgid "The record you try to add might already exist."
 msgstr "Der Datensatz, den Sie versucht haben, hinzuzufügen, existiert möglicherweise bereits."
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:193
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:196
 msgid "Field Group"
 msgstr "Feldgruppe"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:207
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:210
 msgid "My Value"
 msgstr "Mein Wert"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:215
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:218
 msgid "Existing Value"
 msgstr "Existierender Wert"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:223
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:226
 msgid "Final Value"
 msgstr "Endgültiger Wert"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:240
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:243
 msgid "Action:"
 msgstr "Aktion:"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:256
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:259
 msgid "Merge, keeping existing details"
 msgstr "Zusammenführen, existierende Werte behalten"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:257
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:260
 msgid "Merge, keeping my details"
 msgstr "Zusammenführen, neue Werte behalten"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:258
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:261
 msgid "Keep existing record and discard mine"
 msgstr "Den existierenden Datensatz behalten und den neuen verwerfen"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:259
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:262
 msgid "Keep both records"
 msgstr "Beide Datensätze behalten"
 

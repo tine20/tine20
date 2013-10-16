@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-02 11:06+0000\n"
+"PO-Revision-Date: 2013-10-15 18:07+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -570,7 +570,7 @@ msgstr "Изменить"
 msgid "The field is editable part of the profile"
 msgstr ""
 
-#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:200
+#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:203
 msgid "Field Name"
 msgstr "Название поля"
 
@@ -578,7 +578,11 @@ msgstr "Название поля"
 msgid "About {0}"
 msgstr "О {0}"
 
-#: js/AboutDialog.js:60 js/CreditsScreen.js:53 js/LicenseScreen.js:51
+#: js/AboutDialog.js:56 js/MainMenu.js:166
+msgid "Learn more about {0}"
+msgstr ""
+
+#: js/AboutDialog.js:61 js/CreditsScreen.js:53 js/LicenseScreen.js:51
 #: js/PasswordChangeDialog.js:66 js/widgets/EditRecord.js:157
 #: js/widgets/tags/TagsMassAttachAction.js:84
 #: js/widgets/dialog/MultiOptionsDialog.js:102
@@ -590,19 +594,19 @@ msgstr "О {0}"
 msgid "Ok"
 msgstr "Ок"
 
-#: js/AboutDialog.js:70
+#: js/AboutDialog.js:71
 msgid "Released under different"
 msgstr ""
 
-#: js/AboutDialog.js:71
+#: js/AboutDialog.js:72
 msgid "Open Source Licenses"
 msgstr "лицензиями с открытым кодом"
 
-#: js/AboutDialog.js:78
+#: js/AboutDialog.js:79
 msgid "with the help of our"
 msgstr ""
 
-#: js/AboutDialog.js:79
+#: js/AboutDialog.js:80
 msgid "Contributors"
 msgstr "Участники"
 
@@ -704,8 +708,8 @@ msgid "{0} Homepage"
 msgstr ""
 
 #: js/LoginPanel.js:226
-msgid "Tine 2.0 Forum"
-msgstr "Форум Tine 2.0"
+msgid "{0} Forum"
+msgstr ""
 
 #: js/LoginPanel.js:230
 msgid "Translations"
@@ -936,10 +940,6 @@ msgstr "Выход"
 #: js/MainMenu.js:159
 msgid "Logout from {0}"
 msgstr "Выход из {0}"
-
-#: js/MainMenu.js:166
-msgid "Learn more about {0}"
-msgstr ""
 
 #: js/MainMenu.js:176
 msgid "Allow desktop notifications"
@@ -1556,7 +1556,7 @@ msgstr "тип"
 msgid "Remove"
 msgstr "Удалить"
 
-#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:575
+#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:581
 msgid "Show"
 msgstr "Показать"
 
@@ -2355,39 +2355,39 @@ msgstr "Завершить"
 msgid "The record you try to add might already exist."
 msgstr "Запись, которую вы пытаетесь добавить, уже существует."
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:193
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:196
 msgid "Field Group"
 msgstr "Группа полей"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:207
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:210
 msgid "My Value"
 msgstr "Моё значение"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:215
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:218
 msgid "Existing Value"
 msgstr "Существующее значение"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:223
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:226
 msgid "Final Value"
 msgstr "Финальное значение"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:240
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:243
 msgid "Action:"
 msgstr "Действие:"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:256
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:259
 msgid "Merge, keeping existing details"
 msgstr "Слияние, остаются существующие данные"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:257
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:260
 msgid "Merge, keeping my details"
 msgstr "Слияние, остаются мои данные"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:258
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:261
 msgid "Keep existing record and discard mine"
 msgstr "Оставить имеющиеся данные и отклонить мои"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:259
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:262
 msgid "Keep both records"
 msgstr "Оставить обе записи"
 

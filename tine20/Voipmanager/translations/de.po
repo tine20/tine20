@@ -1,10 +1,11 @@
 # 
 # Translators:
+# pschuele <p.schuele@metaways.de>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"PO-Revision-Date: 2013-10-16 10:17+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -420,7 +421,7 @@ msgstr "Software-ID"
 #: js/Models.js:191 js/Models.js:233 js/Models.js:311 js/Models.js:373
 #: js/Models.js:477 js/Models.js:516 js/Models.js:575 js/Models.js:613
 msgid "Quick Search"
-msgstr ""
+msgstr "Schnellsuche"
 
 #: js/Snom/LocationGridPanel.js:58
 msgid "FW Interval"

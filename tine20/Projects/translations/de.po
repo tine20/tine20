@@ -1,12 +1,13 @@
 # 
 # Translators:
 # Björn Balazs <transifex@lazs.de>, 2013
+# pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"PO-Revision-Date: 2013-10-16 10:21+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -138,7 +139,7 @@ msgstr "Füge {0} Teilnehmer zum Projekt hinzu"
 
 #: js/ProjectGridPanel.js:75
 msgid "Search FAQ"
-msgstr ""
+msgstr "FAQ durchsuchen"
 
 #: js/ProjectGridPanel.js:118
 msgid "Tags"
@@ -174,7 +175,7 @@ msgstr "Projektlisten"
 
 #: js/Model.js:74
 msgid "Quick Search"
-msgstr ""
+msgstr "Schnellsuche"
 
 #: js/Model.js:77 js/ProjectEditDialog.js:174
 msgid "Description"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 16:19+0000\n"
+"PO-Revision-Date: 2013-10-16 10:20+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -103,19 +103,19 @@ msgstr "Anrufe im letzten Monat"
 
 #: Setup/Initialize.php:34
 msgid "Incoming and outgoing calls of this week"
-msgstr ""
+msgstr "Eingehende und ausgehende Anrufe dieser Woche"
 
 #: Setup/Initialize.php:44
 msgid "Incoming and outgoing calls of last week"
-msgstr ""
+msgstr "Eingehende und ausgehende Anrufe letzter Woche"
 
 #: Setup/Initialize.php:54
 msgid "Incoming and outgoing calls of this month"
-msgstr ""
+msgstr "Eingehende und ausgehende Anrufe dieses Monats"
 
 #: Setup/Initialize.php:64
 msgid "Incoming and outgoing calls of last month"
-msgstr ""
+msgstr "Eingehende und ausgehende Anrufe letzten Monats"
 
 #: js/DialerPanel.js:85
 msgid "Number"

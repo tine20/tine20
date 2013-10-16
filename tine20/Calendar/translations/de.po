@@ -5,13 +5,14 @@
 # kaystrobach <info@kay-strobach.de>, 2012
 # sysdef <transifex.com@sysdef.de>, 2013
 # corneliusweiss <mail@corneliusweiss.de>, 2012
+# mspahn <ms@ansta.lt>, 2013
 # pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 16:14+0000\n"
+"PO-Revision-Date: 2013-10-16 10:25+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -130,6 +131,92 @@ msgstr "Nein"
 #: Model/Event.php:370
 msgid "Yes"
 msgstr "Ja"
+
+#: Model/Rrule.php:286
+#, python-format
+msgid "Every %s day"
+msgstr "Jeden %s. Tag"
+
+#: Model/Rrule.php:287 js/RrulePanel.js:79
+msgid "Daily"
+msgstr "Täglich"
+
+#: Model/Rrule.php:292
+#, python-format
+msgid "Every %s week on "
+msgstr "Jede %s. Woche am"
+
+#: Model/Rrule.php:293
+msgid "Weekly on "
+msgstr "Wöchentlich am"
+
+#: Model/Rrule.php:300
+msgid " and "
+msgstr "und"
+
+#: Model/Rrule.php:312
+msgid "Every %1$s month on the %2$s %3$s"
+msgstr "Jeden %1$s Monat am %2$s %3$s"
+
+#: Model/Rrule.php:313
+msgid "Monthly every %1$s %2$s"
+msgstr "Monatlich jeden %1$s %2$s"
+
+#: Model/Rrule.php:319
+msgid "Every %1$s month on the %2$s"
+msgstr "Jeden %1$s Monat am %2$s"
+
+#: Model/Rrule.php:320
+msgid "Monthly on the %1$s"
+msgstr "Monatlich am %1$s"
+
+#: Model/Rrule.php:325
+msgid "Yearly on the %1$s of %2$s"
+msgstr "Jährlich am %1$s of %2$s"
+
+#: Model/Rrule.php:363
+msgid "second to last"
+msgstr "vorletzten"
+
+#: Model/Rrule.php:366 js/RrulePanel.js:543 js/RrulePanel.js:724
+msgid "last"
+msgstr "letzten"
+
+#: Model/Rrule.php:372 js/RrulePanel.js:539 js/RrulePanel.js:720
+msgid "first"
+msgstr "ersten"
+
+#: Model/Rrule.php:375 js/RrulePanel.js:540 js/RrulePanel.js:721
+msgid "second"
+msgstr "zweiten"
+
+#: Model/Rrule.php:378 js/RrulePanel.js:541 js/RrulePanel.js:722
+msgid "third"
+msgstr "dritten"
+
+#: Model/Rrule.php:381 js/RrulePanel.js:542 js/RrulePanel.js:723
+msgid "fourth"
+msgstr "vierten"
+
+#: Model/Rrule.php:384
+msgid "fifth"
+msgstr "fünfte"
+
+#: Model/Rrule.php:389
+msgid "st"
+msgstr "."
+
+#: Model/Rrule.php:392
+msgid "nd"
+msgstr "."
+
+#: Model/Rrule.php:395
+msgid "rd"
+msgstr "."
+
+#: Model/Rrule.php:398
+msgid "th"
+msgstr "."
 
 #: Config.php:45
 msgid "Fixed Calendars"
@@ -390,10 +477,6 @@ msgstr "Keine Wiederholungsregel definiert"
 msgid "None"
 msgstr "Einmalig"
 
-#: js/RrulePanel.js:79
-msgid "Daily"
-msgstr "Täglich"
-
 #: js/RrulePanel.js:86
 msgid "Weekly"
 msgstr "Wöchentlich"
@@ -442,26 +525,6 @@ msgstr "Jeden {0}. Monat"
 #: js/RrulePanel.js:751
 msgid "at the"
 msgstr "am"
-
-#: js/RrulePanel.js:539 js/RrulePanel.js:720
-msgid "first"
-msgstr "ersten"
-
-#: js/RrulePanel.js:540 js/RrulePanel.js:721
-msgid "second"
-msgstr "zweiten"
-
-#: js/RrulePanel.js:541 js/RrulePanel.js:722
-msgid "third"
-msgstr "dritten"
-
-#: js/RrulePanel.js:542 js/RrulePanel.js:723
-msgid "fourth"
-msgstr "vierten"
-
-#: js/RrulePanel.js:543 js/RrulePanel.js:724
-msgid "last"
-msgstr "letzten"
 
 #: js/RrulePanel.js:694
 msgid "Every {0}. Year"
@@ -925,78 +988,82 @@ msgstr "Suche Termin"
 msgid "Updates"
 msgstr "Änderungen"
 
-#: views/eventNotification.php:20
+#: views/eventNotification.php:21
+msgid "This is an event series exception."
+msgstr "Dies ist eine Terminserienausnahme"
+
+#: views/eventNotification.php:25
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
 msgstr "%1$s wurde von  \"%2$s\" auf \"%3$s\" geändert"
 
-#: views/eventNotification.php:27
+#: views/eventNotification.php:32
 msgid "%1$s has been invited"
 msgstr "%1$s wurde eingeladen"
 
-#: views/eventNotification.php:32
+#: views/eventNotification.php:37
 msgid "%1$s has been removed"
 msgstr "%1$s wurde entfernt"
 
-#: views/eventNotification.php:39
+#: views/eventNotification.php:44
 msgid "%1$s accepted invitation"
 msgstr "%1$s hat zugesagt"
 
-#: views/eventNotification.php:43
+#: views/eventNotification.php:48
 msgid "%1$s declined invitation"
 msgstr "%1$s hat abgesagt"
 
-#: views/eventNotification.php:47
+#: views/eventNotification.php:52
 msgid "Tentative response from %1$s"
 msgstr "%1$s hat vorläufig zugesagt"
 
-#: views/eventNotification.php:51
+#: views/eventNotification.php:56
 msgid "No response from %1$s"
 msgstr "Keine Antwort von  %1$s"
 
-#: views/eventNotification.php:54
+#: views/eventNotification.php:59
 msgid "\"%2$s\" response from %1$s"
 msgstr "\"%2$s\" Antwort von %1$s"
 
-#: views/eventNotification.php:63
+#: views/eventNotification.php:68
 msgid "Event details"
 msgstr "Termin Details"
 
-#: Controller/EventNotifications.php:312
+#: Controller/EventNotifications.php:317
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Termin-Erinnerung für \"%1$s\" am %2$s"
 
-#: Controller/EventNotifications.php:315
+#: Controller/EventNotifications.php:320
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Einladung zum Termin  \"%1$s\" am %2$s"
 
-#: Controller/EventNotifications.php:319
+#: Controller/EventNotifications.php:324
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "Termin \"%1$s\" am %2$s wurde abgesagt"
 
-#: Controller/EventNotifications.php:327
+#: Controller/EventNotifications.php:332
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr "Der Termin \"%1$s\" wurde von %2$s auf %3$s verlegt"
 
-#: Controller/EventNotifications.php:334
+#: Controller/EventNotifications.php:339
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Der Termin \"%1$s\" am %2$s wurde verändert"
 
-#: Controller/EventNotifications.php:345
+#: Controller/EventNotifications.php:350
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "Zusage von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:349
+#: Controller/EventNotifications.php:354
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "Absage von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:353
+#: Controller/EventNotifications.php:358
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Vorläufige Zusage von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:357
+#: Controller/EventNotifications.php:362
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Keine Antwort von %1$s für den Termin \"%2$s\" am  %3$s"
 
-#: Controller/EventNotifications.php:361
+#: Controller/EventNotifications.php:366
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Geänderte Teilnehmer beim Termin  \"%1$s\" am %2$s"
