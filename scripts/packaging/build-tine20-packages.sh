@@ -248,7 +248,7 @@ function createArchives()
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase Zend images library vendor docs fonts themes" 
                     local FILES="$FILES config.inc.php.dist index.php langHelper.php setup.php tine20.php bootstrap.php worker.php status.php"
-                    local FILES="$FILES CREDITS LICENSE PRIVACY README RELEASENOTES"
+                    local FILES="$FILES CREDITS LICENSE PRIVACY README RELEASENOTES chrome_web_app.json"
                     
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILES)
                     (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILES)
