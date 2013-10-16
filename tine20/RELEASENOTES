@@ -3,33 +3,44 @@
 
                     TINE 2.0 RELEASENOTES
                     
-Release:     Kristina (2013.03)
-Last change: 2013-02-27
+Release:     Collin (2013.10)
+Last change: 2013-10-16
 
 For a comprehensive list of user-related releasenotes with screenshots see
-the Tine 2.0 Wiki at http://www.tine20.org/wiki/index.php/Releases/Kristina
+the Tine 2.0 Wiki at http://www.tine20.org/wiki/index.php/Releases/Collin
 
 Contents
 --
-1. New Queue management
-2. Calendar resources ACL
-3. Import Scripting interface
+1. PHP module requirements / proposals
+2. ActiveDirectory support
+3. Login CAPTCHA support
+4. OwnCloud client support
 
-1. New Queue management
+1. PHP module requirements / proposals
 -----------------
-- Configuration options for the Redis queue backend have been added to the setup.php
-  config tool.
 
-2. Calendar resources ACL
+- php module intl is recommended (for calendar notifications)
+- php module hash is now marked as required
+
+2. ActiveDirectory support
 -----------------
-- ACL has been added to calendar resources. You might have to check the resources
-  in the Admin/Applications/Calendar/Settings dialog. You need READ grant to "invite"
-  resources to events and EDIT grant to change the status. An update script adds the
-  READ grant to all users if no other grants have been defined for the resource.
-  
-3. Import Scripting interface
+
+Tine 2.0 now supports ActiveDirectory as accounts backend. It is possible
+to configure that in the setup.
+
+more information: https://forge.tine20.org/mantisbt/view.php?id=2756
+
+3. Login CAPTCHA support
 -----------------
-- With the new import scripting interface you can implement your imports in any 
-  given language.
-- This way you can use your existing infrastructure and knowledge to import any 
-  data from any given source into Tine 2.0.
+
+It is now possible to show a CAPTCHA on the login page when a user enters
+wrong credentials multiple times. This is configurable in the config.inc.php.
+
+more information: https://forge.tine20.org/mantisbt/view.php?id=8484
+
+4. OwnCloud client support
+-----------------
+
+OwnCloud clients are now able to connect to a Tine 2.0 server.
+
+more information: https://www.tine20.org/wiki/index.php/Admins/Synchronisation/Owncloud
