@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-15 18:13+0000\n"
+"PO-Revision-Date: 2013-10-16 14:42+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -54,15 +54,13 @@ msgid_plural "Contracts"
 msgstr[0] "Vertrag"
 msgstr[1] "Verträge"
 
-#: Model/Contract.php:34 Model/Employee.php:231
-msgid "Contracts"
-msgstr "Verträge"
-
-#: Model/Contract.php:49 Model/FreeTime.php:49 Model/Employee.php:34
+#: Model/Contract.php:49 Model/FreeTime.php:49 Model/Employee.php:35
 #: Model/CostCenter.php:50 js/EmployeeEditDialog.js:185
 #: js/EmployeeEditDialog.js:198 js/FreeTimeEmployeeFilter.js:31
 msgid "Employee"
-msgstr "Mitarbeiter"
+msgid_plural "Employees"
+msgstr[0] "Mitarbeiter"
+msgstr[1] "Mitarbeiter"
 
 #: Model/Contract.php:60 Model/CostCenter.php:72 js/ContractEditDialog.js:217
 msgid "Start Date"
@@ -86,11 +84,9 @@ msgstr "Arbeitszeit"
 
 #: Model/FreeTime.php:34
 msgid "Free Time"
-msgstr "Freizeitansprüche"
-
-#: Model/FreeTime.php:35 js/AccountEditDialog.js:104
-msgid "Free Times"
-msgstr "Freie Tage"
+msgid_plural "Free Times"
+msgstr[0] "Freizeitanspruch"
+msgstr[1] "Freizeitansprüche"
 
 #: Model/FreeTime.php:60 Model/Employee.php:77 js/EmployeeEditDialog.js:216
 msgid "Account"
@@ -115,18 +111,16 @@ msgstr "Status"
 msgid "First Day"
 msgstr "Erster Tag"
 
-#: Model/FreeTime.php:93 Model/FreeDay.php:35
+#: Model/FreeTime.php:93
 msgid "Free Days"
 msgstr "freie Tage"
 
 #: Model/ExtraFreeTime.php:33 js/AccountEditDialog.js:74
 #: js/ExtraFreeTimeEditDialog.js:99 js/ExtraFreeTimeEditDialog.js:111
 msgid "Extra free time"
-msgstr "Sonderurlaub"
-
-#: Model/ExtraFreeTime.php:34 Model/Account.php:71
-msgid "Extra free times"
-msgstr "Sonderurlaub"
+msgid_plural "Extra free times"
+msgstr[0] "Sonderurlaub"
+msgstr[1] "Sonderurlaube"
 
 #: Model/ExtraFreeTime.php:70 js/ExtraFreeTimeEditDialog.js:124
 msgid "Days"
@@ -138,19 +132,17 @@ msgstr "Ablaufdatum"
 
 #: Model/Account.php:34
 msgid "Personal account"
-msgstr "Personalkonto"
-
-#: Model/Account.php:35
-msgid "Personal accounts"
-msgstr "Personalkonten"
+msgid_plural "Personal accounts"
+msgstr[0] "Personalkonto"
+msgstr[1] "Personalkonten"
 
 #: Model/Account.php:63 js/FreeTimeEditDialog.js:194
 msgid "Year"
 msgstr "Jahr"
 
-#: Model/Employee.php:35
-msgid "Employees"
-msgstr "Angestellte"
+#: Model/Account.php:71
+msgid "Extra free times"
+msgstr "Sonderurlaub"
 
 #: Model/Employee.php:50 js/EmployeeEditDialog.js:383
 msgid "Banking Information"
@@ -276,7 +268,11 @@ msgstr "Beruf"
 msgid "Position"
 msgstr "Position"
 
-#: Model/Employee.php:244 Model/CostCenter.php:34
+#: Model/Employee.php:231
+msgid "Contracts"
+msgstr "Verträge"
+
+#: Model/Employee.php:244
 msgid "Cost Centers"
 msgstr "Kostenstellen"
 
@@ -292,12 +288,16 @@ msgstr "Krankheit"
 
 #: Model/FreeDay.php:34
 msgid "Free Day"
-msgstr "freie Tage"
+msgid_plural "Free Days"
+msgstr[0] "freier Tag"
+msgstr[1] "freie Tage"
 
 #: Model/CostCenter.php:33 Model/CostCenter.php:61
 #: js/CostCenterGridPanel.js:125
 msgid "Cost Center"
-msgstr "Kostenstelle"
+msgid_plural "Cost Centers"
+msgstr[0] ""
+msgstr[1] "Kostenstelle"
 
 #: Config.php:61
 msgid "Freetime Type"
@@ -573,6 +573,10 @@ msgstr "{0} von {1} des Jahres {2} bearbeiten"
 #: js/AccountEditDialog.js:91
 msgid "Summary"
 msgstr "Zusammenfassung"
+
+#: js/AccountEditDialog.js:104
+msgid "Free Times"
+msgstr "Freie Tage"
 
 #: js/AccountEditDialog.js:110
 msgid "Possible vaction days"
