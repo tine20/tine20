@@ -23,6 +23,7 @@ class Tasks_Convert_Task_VCalendar_Factory
     const CLIENT_KDE         = 'kde';
     const CLIENT_MACOSX      = 'macosx';
     const CLIENT_THUNDERBIRD = 'thunderbird';
+    const CLIENT_EMCLIENT     = 'emclient';
     
     /**
      * factory function to return a selected vcalendar backend class
@@ -58,6 +59,11 @@ class Tasks_Convert_Task_VCalendar_Factory
                 return new Tasks_Convert_Task_VCalendar_Thunderbird($_version);
                  
                 break;
+                
+            case Tasks_Convert_Task_VCalendar_Factory::CLIENT_EMCLIENT:
+                return new Tasks_Convert_Task_VCalendar_EMClient($_version);
+                 
+                break;
                      
         }
     }
@@ -87,6 +93,11 @@ class Tasks_Convert_Task_VCalendar_Factory
         // Thunderbird
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_Thunderbird::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_THUNDERBIRD;
+            $version = $matches['version'];
+        
+         // EMClient       
+        } elseif (preg_match(Tasks_Convert_Task_VCalendar_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_EMCLIENT;
             $version = $matches['version'];
         
         } else {
