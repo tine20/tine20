@@ -18,7 +18,7 @@ foreach ($this->updates as $field => $update) {
         $i18nCurrValue = Calendar_Model_Event::getTranslatedValue($field, $this->event->$field, $this->translate, $this->timezone);
         
         if($field == 'rrule' && $this->event->recurid) {
-            echo $this->translate->_("This is an event series exception.");
+            echo $this->translate->_("This is an event series exception.")  . "\n" ;
             continue;
         }
         
