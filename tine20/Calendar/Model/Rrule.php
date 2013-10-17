@@ -344,7 +344,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $numberFormatter = new NumberFormatter((string) $locale, NumberFormatter::ORDINAL);
         }
         
-        $result = ($numberFormatter) ? $numberFormatter->format($number) : $this->_getIntervalTranslation($interval, $translation);
+        $result = ($numberFormatter) ? $numberFormatter->format($number) : $this->_getIntervalTranslation($number, $translation);
         
         return $result;
     }
