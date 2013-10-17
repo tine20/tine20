@@ -1,3 +1,9 @@
+tine20 (2013.10.1~rc2-0) natty; urgency=low
+
+  * New upstream release "Collin" Release Candidate 2
+
+ -- Philipp Schüle <p.schuele@metaways.de>  Thu, 17 Oct 2013 11:15:23 +0200
+
 tine20 (2013.10.1~rc1-0) natty; urgency=low
 
   * New upstream release "Collin" Release Candidate 1
