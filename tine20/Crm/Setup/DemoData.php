@@ -88,7 +88,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
         $c = Sales_Controller_Contract::getInstance();
         $f = new Sales_Model_ContractFilter(array(
-            array('field' => 'lead_name', 'operator' => 'equals', 'value' => 'Relauch Reseller Platform')
+            array('field' => 'lead_name', 'operator' => 'equals', 'value' => 'Relaunch Reseller Platform')
         ));
         return ($c->search($f)->count() > 0) ? true : false;
     }
@@ -221,7 +221,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $wed2weeksago->subWeek(1);
         
         $this->_createLead(array(
-            'lead_name'     => 'Relauch Reseller Platform',
+            'lead_name'     => 'Relaunch Reseller Platform',
             'status'        => 'ACCEPTED',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
