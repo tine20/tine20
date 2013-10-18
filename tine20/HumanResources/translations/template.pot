@@ -687,3 +687,9 @@ msgstr ""
 
 msgid "You have already selected some dates from another year. Please create a new record to add dates from another year!"
 msgstr ""
+
+msgid "Could not book as vacation"
+msgstr ""
+
+msgid "The unexcused sickness days could not be booked as vacation. There are not enough days left!"
+msgstr ""
