@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -81,8 +81,16 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     public function setValue($_value)
     {
         if (is_array($_value) && (isset($_value['from']) && isset($_value['until']))) {
-            $from = $_value['from'] instanceof DateTime ? $_value['from']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['from'];
-            $until = $_value['until'] instanceof DateTime ? $_value['until']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['until'];
+            // convert DateTime to Tinebase_DateTime
+            if (is_object($_value['from']) && get_class($_value['from']) === 'DateTime') {
+                $_value['from'] = new Tinebase_DateTime($_value['from']);
+            }
+            if (is_object($_value['from']) && get_class($_value['until']) === 'DateTime') {
+                $_value['until'] = new Tinebase_DateTime($_value['until']);
+            }
+            
+            $from = $_value['from'] instanceof Tinebase_DateTime ? $_value['from']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['from'];
+            $until = $_value['until'] instanceof Tinebase_DateTime ? $_value['until']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['until'];
             
             $this->_from = $this->_convertStringToUTC($from);
             $this->_until = $this->_convertStringToUTC($until);

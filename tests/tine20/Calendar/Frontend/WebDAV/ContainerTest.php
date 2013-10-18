@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Frontend_WebDAV_ContainerTest::main');
-}
 
 /**
  * Test class for Calendar_Frontend_WebDAV_Container
@@ -215,11 +211,14 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV_Event);
     }
     
-    public function testCalendarQuery()
+    /**
+     * test calendarQuery with start and end time set
+     * 
+     * @param boolean $timeRangeEndSet
+     */
+    public function testCalendarQuery($timeRangeEndSet = TRUE)
     {
         $event = $this->testCreateFile()->getRecord();
-        
-        //var_dump($event->getId());
         
         // reschedule to match period filter
         $event->dtstart = Tinebase_DateTime::now();
@@ -228,26 +227,38 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
         
+        $timeRange = $timeRangeEndSet ? array(
+            'start' => Tinebase_DateTime::now()->subHour(1),
+            'end'   => Tinebase_DateTime::now()->addHour(1)
+        ) : array(
+            'start' => Tinebase_DateTime::now()->subHour(1),
+        );
+        
         $urls = $container->calendarQuery(array(
-            'name' => 'VCALENDAR',
+            'name'         => 'VCALENDAR',
             'comp-filters' => array(
                 array(
-                    'name' => 'VEVENT',
-                    'comp-filters' => array(),
-                    'prop-filters' => array(),
+                    'name'           => 'VEVENT',
+                    'comp-filters'   => array(),
+                    'prop-filters'   => array(),
                     'is-not-defined' => false,
-                    'time-range' => array(
-                        'start' => Tinebase_DateTime::now()->subHour(1),
-                        'end'   => Tinebase_DateTime::now()->addHour(1),
-                    ),
+                    'time-range'     => $timeRange,
                 ),
             ),
-            'prop-filters' => array(),
+            'prop-filters'   => array(),
             'is-not-defined' => false,
-            'time-range' => null,
+            'time-range'     => null
         ));
         
         $this->assertContains($event->getId(), $urls);
+    }
+    
+    /**
+     * test calendarQuery with start time set only
+     */
+    public function testCalendarQueryNoEnd()
+    {
+        $this->testCalendarQuery(FALSE);
     }
     
     /**

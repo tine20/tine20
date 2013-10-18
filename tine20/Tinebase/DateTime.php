@@ -79,8 +79,8 @@ class Tinebase_DateTime extends DateTime
     /**
      * Returns new DateTime object
      * 
-     * @param string|int    $_time
-     * @param DateTimeZone  $_timezone
+     * @param string|int|DateTime $_time
+     * @param DateTimeZone $_timezone
      */
     public function __construct($_time = "now", $_timezone = NULL)
     {

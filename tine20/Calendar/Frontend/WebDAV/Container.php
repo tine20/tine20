@@ -235,13 +235,20 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         );
         
         if (isset($filters['comp-filters']) && isset($filters['comp-filters'][0]['time-range'])) {
-            if (isset($filters['comp-filters'][0]['time-range']['start'])) {
+            $timeRange = $filters['comp-filters'][0]['time-range'];
+            if (isset($timeRange['start'])) {
+                if (! isset($timeRange['end'])) {
+                    // create default time-range end in 4 years from now 
+                    $timeRange['end'] = new DateTime('NOW');
+                    $timeRange['end']->add(new DateInterval('P4Y'));
+                }
+                
                 $filterArray[] = array(
-                    'field' => 'period', 
+                    'field'    => 'period', 
                     'operator' => 'within', 
-                    'value' => array(
-                        'from'  => $filters['comp-filters'][0]['time-range']['start'],
-                        'until' => $filters['comp-filters'][0]['time-range']['end']
+                    'value'    => array(
+                        'from'  => new Tinebase_DateTime($timeRange['start']),
+                        'until' => new Tinebase_DateTime($timeRange['end'])
                     )
                 );
             }
