@@ -26,7 +26,7 @@
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
         "phing/phing": "2.6.1-p0",
-        "phpdocumentor/phpdocumentor": "dev-release-2.0.2"
+        "phpdocumentor/phpdocumentor": "2.1.*"
     },
     "autoload": {
         "files": ["Tinebase/Helper.php"],
