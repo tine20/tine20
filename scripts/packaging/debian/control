@@ -43,6 +43,7 @@ Depends: ${misc:Depends},
  php5-mcrypt, 
  php5-gd,
  php5-intl,
+ php5-json,
  makepasswd
 Recommends: mysql-client | postgresql-client (>= 9.1), php-apc | php5-apc
 Description: Tine 2.0 webserver integration package
