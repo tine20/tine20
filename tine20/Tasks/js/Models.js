@@ -13,6 +13,7 @@ Ext.ns('Tine.Tasks.Model');
 // Task model
 Tine.Tasks.Model.TaskArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
+    { name: 'uid' },
     { name: 'percent', header: 'Percent' },
     { name: 'completed', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'due', type: 'date', dateFormat: Date.patterns.ISO8601Long },

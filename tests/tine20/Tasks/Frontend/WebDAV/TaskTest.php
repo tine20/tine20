@@ -202,13 +202,13 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
         
         $task = $this->testCreateTask();
     
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/apple-reminder-minimal.ics', 'r');
     
         $task->put($vcalendarStream);
     
         $record = $task->getRecord();
     
-        $this->assertEquals('New Task', $record->summary);
+        $this->assertEquals('high priority reminder', $record->summary);
     }
     
     /**
