@@ -783,12 +783,14 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             record = relatedRecordProxy.recordReader({responseText: Ext.encode(record)});
         }
         
-        for (var index = 0; index < relatedConstrainsConfig.length; index++) {
-            var rcc = relatedConstrainsConfig[index];
-            
-            if ((rcc.relatedApp == this.app.name) && (rcc.relatedModel == ownRecordClassName)) {
-                var myRelatedConstrainsConfig = rcc;
-                break;
+        if (relatedConstrainsConfig) {
+            for (var index = 0; index < relatedConstrainsConfig.length; index++) {
+                var rcc = relatedConstrainsConfig[index];
+                
+                if ((rcc.relatedApp == this.app.name) && (rcc.relatedModel == ownRecordClassName)) {
+                    var myRelatedConstrainsConfig = rcc;
+                    break;
+                }
             }
         }
         
