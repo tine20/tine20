@@ -33,6 +33,13 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
     protected $_testUser;
     
     /**
+     * user plugins, need to be reset after triggerAsyncEvents run
+     * 
+     * @var array
+     */
+    protected $_userPlugins = array();
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -54,6 +61,7 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
     {
         $this->_cli = new Tinebase_Frontend_Cli();
         $this->_testUser = Tinebase_Core::getUser();
+        $this->_userPlugins = Tinebase_User::getInstance()->getPlugins();
     }
 
     /**
@@ -64,6 +72,10 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        // need to be reset after triggerAsyncEvents run (singleton ...)
+        Tinebase_User::getInstance()->unregisterAllPlugins();
+        Tinebase_User::getInstance()->registerPlugins($this->_userPlugins);
+        
         $currentUser = Tinebase_Core::getUser();
         if ($currentUser->accountLoginName !== $this->_testUser->accountLoginName) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
@@ -202,7 +214,10 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         ob_start();
         $this->_cli->triggerAsyncEvents($opts);
         $out = ob_get_clean();
-
+        
+        $userPlugins = Tinebase_User::getInstance()->getPlugins();
+        $this->assertEquals(0, count($userPlugins));
+        
         $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
         $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
         $this->assertEquals('cronuser', $cronuser->accountLoginName);

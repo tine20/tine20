@@ -85,11 +85,28 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $this->_db = Tinebase_Core::getDb();
         $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
         
+        $this->registerSqlPlugins();
+    }
+    
+    /**
+     * registerSqlPlugins
+     */
+    public function registerSqlPlugins()
+    {
         foreach ($this->_plugins as $plugin) {
             if ($plugin instanceof Tinebase_User_Plugin_SqlInterface) {
                 $this->_sqlPlugins[] = $plugin;
             }
         }
+    }
+    
+    /**
+     * unregisterAllPlugins
+     */
+    public function unregisterAllPlugins()
+    {
+        parent::unregisterAllPlugins();
+        $this->_sqlPlugins = array();
     }
     
     /**
