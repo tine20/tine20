@@ -47,6 +47,14 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
         'appName'           => 'HumanResources',
         'modelName'         => 'Account',
         
+        'filterModel' => array(
+            'query' => array(
+                'label' => 'Quick search',    // _('Quick search')
+                'filter' => 'HumanResources_Model_AccountQuicksearchFilter',
+                'jsConfig' => array('valueType' => 'string')
+            )
+        ),
+        
         'fields'            => array(
             'employee_id' => array(
                 'label' => 'Employee',
@@ -63,7 +71,6 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                 'label' => 'Year', //_('Year')
                 'duplicateCheckGroup' => 'year-employee',
                 'group' => 'Account',
-                'queryFilter' => TRUE,
                 'type'    => 'integer'
             ),
             'extra_free_times' => array(

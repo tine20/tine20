@@ -421,6 +421,14 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $result = $json->searchAccounts($accountsFilter, array());
         $this->assertEquals(1, $result['totalcount']);
         
+        // test account quicksearch filter
+        $qsFilter = array(array('field' => "query", 'operator' => "contains", 'value' => 'Admin'));
+        $result = $json->searchAccounts($qsFilter, array());
+        $this->assertEquals(3, $result['totalcount']);
+        
+        $qsFilter = array(array('field' => "query", 'operator' => "contains", 'value' => 'Adsmin'));
+        $result = $json->searchAccounts($qsFilter, array());
+        $this->assertEquals(0, $result['totalcount']);
     }
     
     /**
