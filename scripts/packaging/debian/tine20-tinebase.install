@@ -12,5 +12,7 @@ fonts                    /usr/share/tine20
 index.php                /usr/share/tine20
 langHelper.php           /usr/share/tine20
 setup.php                /usr/share/tine20
+status.php               /usr/share/tine20
+themes                   /usr/share/tine20
 tine20.php               /usr/share/tine20
 debian/etc/php5.ini      /etc/tine20
