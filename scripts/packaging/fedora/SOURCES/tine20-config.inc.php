@@ -7,10 +7,10 @@
 // minimal configuration
 return array(
     'database' => array(
-        'host'          => 'ENTER DATABASE HOSTNAME',
-        'dbname'        => 'ENTER DATABASE NAME',
-        'username'      => 'ENTER DATABASE USERNAME',
-        'password'      => 'ENTER DATABASE PASSWORD',
+        'host'          => 'localhost',
+        'dbname'        => 'tine20',
+        'username'      => 'tine20',
+        'password'      => 'DATABASE PASSWORD',
         'adapter'       => 'pdo_mysql',
         'tableprefix'   => 'tine20_',
     ),

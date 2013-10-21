@@ -26,24 +26,32 @@
 # Zend/         - there is php-ZendFramework, strip it out
 
 %global vyear 2013
-%global vmonth 03
-%global vmin 7
+%global vmonth 10
+%global vmin 1
+# comment out release suffix when not an unstable release
+%global rsuffix rc2
 
 Name:           tine20
-Version:        %{vyear}.%{vmonth}.%{vmin}
-Release:        1%{?dist}
 Summary:        Open Source Groupware and CRM
+Version:        %{vyear}.%{vmonth}.%{vmin}
+
+%if %{?rsuffix}
+Release:        0.%{rsuffix}.1
+%global         source_suffix ~%{rsuffix}
+%else
+Release:        1
+%endif
 
 License:        AGPLv3, GPLv3, BSD, LGPLv2.1+, LGPLv2.1
 URL:            http://www.tine20.org/
-Source0:        http://www.tine20.org/downloads/%{version}/%{name}-allinone_%{version}.tar.bz2
+Source0:        http://www.tine20.org/downloads/%{version}%{?source_suffix}/%{name}-allinone_%{version}%{?source_suffix}.tar.bz2
 Source1:        %{name}-httpd.conf
 Source2:        %{name}-php.ini
 Source3:        %{name}-config.inc.php
 Source4:        %{name}-logrotate.conf
 Source5:        %{name}-README.fedora
 Source6:        %{name}-cron
-Source7:        http://www.tine20.org/downloads/%{version}/%{name}-humanresources_%{version}.tar.bz2
+Source7:        http://www.tine20.org/downloads/%{version}%{?source_suffix}/%{name}-humanresources_%{version}%{?source_suffix}.tar.bz2
 
 Requires:       %{name}-webstack = %{version}
 Requires:       mysql-server
@@ -76,7 +84,12 @@ Summary:        Tine 2.0 webserver integration package
 Requires:       httpd
 Requires:       php >= 5.3.0
 Requires:       php-gd php-mysqli php-mcrypt php-pecl-apc
-Requires:       php-ZendFramework php-ZendFramework-Ldap
+%if 0%{?fedora} >= 19
+Requires:       php-opcache
+%else
+Requires:       php-pecl-apc
+%endif
+#Requires:       php-ZendFramework php-ZendFramework-Ldap
 Requires:       %{name}-tinebase %{name}-activesync %{name}-calendar %{name}-crm %{name}-felamimail %{name}-filemanager %{name}-projects %{name}-sales %{name}-tasks %{name}-timetracker
 
 %description webstack
@@ -168,6 +181,14 @@ Requires:       %{name}-tinebase = %{version}
 This package contains the time tracker module for Tine 2.0.
 
 
+%package worker
+Summary:        Tine 2.0 asynchronous worker
+Requires:       %{name}-worker = %{version}
+
+%description worker
+This package contains the files neede to process asynchronous jobs for Tine 2.0.
+
+
 %prep
 %setup -q -c -n %{name}-%{version}
 %{__cp} -a %{SOURCE5} README.fedora
@@ -176,24 +197,19 @@ This package contains the time tracker module for Tine 2.0.
 %build
 # nothing to do here so far..
 
+
 %install
 %{__rm} -rf $RPM_BUILD_ROOT
-
-
-## remove the bundled ZendFramework, the Fedora-shipped one is referenced from
-## tine20-httpd.conf which will be installed as /etc/httpd/conf.d/tine20.conf
-#%{__rm} -rf library/Zend/
-
 
 # installation of code to /usr/share/tine20
 %{__install} -d $RPM_BUILD_ROOT%{_datadir}/%{name}/
 %{__cp} -ad * $RPM_BUILD_ROOT%{_datadir}/%{name}/
-%{__rm} -f $RPM_BUILD_ROOT%{_datadir}/%{name}/{[R]*,config.inc.php.dist}
 
 # session and other stuff
 %{__install} -d $RPM_BUILD_ROOT%{_sharedstatedir}/%{name}/{tmp,sessions,files,cache}
 
 # httpd configuration
+# tine20-httpd.conf which will be installed as /etc/httpd/conf.d/tine20.conf
 %{__install} -d $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
 %{__install} -pm 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/%{name}.conf
 
@@ -203,7 +219,7 @@ This package contains the time tracker module for Tine 2.0.
 
 # Tine 2.0 configuration
 %{__install} -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
-%{__install} -pm 640 %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/config.inc.php
+%{__install} -pm 660 %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/config.inc.php
 
 # logging
 %{__install} -d $RPM_BUILD_ROOT%{_localstatedir}/log/%{name}
@@ -214,8 +230,19 @@ This package contains the time tracker module for Tine 2.0.
 %{__install} -d $RPM_BUILD_ROOT%{_sysconfdir}/cron.d/
 %{__install} -pm 644 %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/cron.d/%{name}
 
+# cleanup
+%{__rm} -f $RPM_BUILD_ROOT%{_datadir}/%{name}/{[R]*,config.inc.php.dist}
+%{__rm} -f $RPM_BUILD_ROOT%{_datadir}/%{name}/docs/htaccess
+
+
 %post
 if [ "$1" -eq "1" ]; then
+    # database password
+    export NEWPASS=$( dd if=/dev/urandom bs=20 count=1 2>/dev/null \
+        | sha1sum | awk '{print $1}' )
+    sed -i "s/DATABASE PASSWORD/$NEWPASS/" %{_sysconfdir}/%{name}/config.inc.php
+    
+    # setup password
     export NEWPASS=$( dd if=/dev/urandom bs=20 count=1 2>/dev/null \
         | sha1sum | awk '{print $1}' )
     sed -i "s/SETUP PASSWORD/$NEWPASS/" %{_sysconfdir}/%{name}/config.inc.php
@@ -229,24 +256,24 @@ fi
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/Addressbook/
 %{_datadir}/%{name}/Admin/
-%{_datadir}/%{name}/images/
-%{_datadir}/%{name}/index.php
-%{_datadir}/%{name}/langHelper.php
 %{_datadir}/%{name}/Setup/
-%{_datadir}/%{name}/setup.php
-%{_datadir}/%{name}/styles/
-%{_datadir}/%{name}/%{name}.php
 %{_datadir}/%{name}/Tinebase/
 %{_datadir}/%{name}/Zend/
+%{_datadir}/%{name}/CREDITS
 %{_datadir}/%{name}/LICENSE
 %{_datadir}/%{name}/PRIVACY
 %{_datadir}/%{name}/bootstrap.php
-%{_datadir}/%{name}/CREDITS
-%{_datadir}/%{name}/docs/htaccess
+%{_datadir}/%{name}/images/
+%{_datadir}/%{name}/fonts/
+%{_datadir}/%{name}/index.php
+%{_datadir}/%{name}/langHelper.php
+%{_datadir}/%{name}/setup.php
+%{_datadir}/%{name}/status.php
+%{_datadir}/%{name}/%{name}.php
+%{_datadir}/%{name}/themes
 
 %dir %{_sysconfdir}/%{name}/
-%config(noreplace) %attr(0640,root,apache) %{_sysconfdir}/%{name}/config.inc.php
-%config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
+%config(noreplace) %attr(0660,root,apache) %{_sysconfdir}/%{name}/config.inc.php
 %config(noreplace) %{_sysconfdir}/php.d/tine20.ini
 %config            %{_sysconfdir}/cron.d/tine20
 
@@ -259,8 +286,11 @@ fi
 %dir %attr(0750,apache,apache) %{_localstatedir}/log/%{name}/
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 
+
 %files libraries
 %{_datadir}/%{name}/library/
+%{_datadir}/%{name}/vendor/
+
 
 %files activesync
 %{_datadir}/%{name}/ActiveSync/
@@ -299,8 +329,17 @@ fi
 
 
 %files webstack
+%config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
+
+
+%files worker
+%{_datadir}/%{name}/worker.php
+
 
 %changelog
+* Thu Oct 17 2013 Philipp Schüle <p.schuele@metaways.de> - 2013.10.1-0.rc2.1
+- New upstream release Collin Release Candidate 2
+
 * Thu Sep 19 2013 Philipp Schüle <p.schuele@metaways.de> - 2013.03.8-1
 - New upstream release Kristina Service Release 7
 
@@ -319,7 +358,7 @@ fi
 * Thu Feb 07 2013 Philipp Schüle <p.schuele@metaways.de> - 2013.03.1~alpha1-1
 - New upstream release Kristina Alpha 1
 
-* Wed Jan 04 2013 Lars Kneschke <l.kneschke@metaways.de> - 2012.10.3-1
+* Fri Jan 04 2013 Lars Kneschke <l.kneschke@metaways.de> - 2012.10.3-1
 - New upstream release Joey SR 3 (2012.10.3)
 
 * Wed Jan 02 2013 Lars Kneschke <l.kneschke@metaways.de> - 2012.10.2-1
