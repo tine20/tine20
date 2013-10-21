@@ -424,13 +424,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             throw new Tinebase_Exception_InvalidArgument('email address is needed to resolve contact');
         }
         
+        $email = self::_sanitizeEmail($_attenderData['email']);
+        
         $contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
             array('condition' => 'OR', 'filters' => array(
-                array('field' => 'email',      'operator'  => 'equals', 'value' => $_attenderData['email']),
-                array('field' => 'email_home', 'operator'  => 'equals', 'value' => $_attenderData['email'])
+                array('field' => 'email',      'operator'  => 'equals', 'value' => $email),
+                array('field' => 'email_home', 'operator'  => 'equals', 'value' => $email)
             )),
         )), new Tinebase_Model_Pagination(array(
-            'sort'    => 'type', // prefere user over contact
+            'sort'    => 'type', // prefer user over contact
             'dir'     => 'DESC',
             'limit'   => 1
         )));
@@ -442,10 +444,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         } else if ($_implicitAddMissingContacts === TRUE) {
             $translation = Tinebase_Translation::getTranslation('Calendar');
             $i18nNote = $translation->_('This contact has been automatically added by the system as an event attender');
+            if ($email !== $_attenderData['email']) {
+                $i18nNote .= "\n";
+                $i18nNote .= $translation->_('The email address has been shortened: ') . $_attenderData['email'] . ' -> ' . $email;
+            }
             $contactData = array(
                 'note'        => $i18nNote,
-                'email'       => $_attenderData['email'],
-                'n_family'    => (isset($_attenderData['lastName'])) ? $_attenderData['lastName'] : $_attenderData['email'],
+                'email'       => $email,
+                'n_family'    => (isset($_attenderData['lastName'])) ? $_attenderData['lastName'] : $email,
                 'n_given'     => (isset($_attenderData['firstName'])) ? $_attenderData['firstName'] : '',
             );
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
@@ -453,6 +459,37 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $result = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
         } else {
             $result = NULL;
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * sanitize email address
+     * 
+     * @param string $email
+     * @return string
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected static function _sanitizeEmail($email)
+    {
+        // TODO should be generalized OR increase size of email field(s)
+        $result = $email;
+        if (strlen($email) > 64) {
+            // try to find '/' for splitting
+            $lastSlash = strrpos($email, '/');
+            if ($lastSlash !== false) {
+                $result = substr($email, $lastSlash + 1);
+            }
+            
+            if (strlen($result) > 64) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                    . ' Email address could not be sanitized: ' . $email . '(length: ' . strlen($email) . ')');
+                throw new Tinebase_Exception_Record_Validation('email string too long');
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                    . ' Email address has been sanitized: ' . $email . ' -> ' . $result);
+            }
         }
         
         return $result;

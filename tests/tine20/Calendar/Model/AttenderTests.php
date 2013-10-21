@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -195,5 +195,22 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         $this->assertTrue(in_array($this->_testUserContact->getId(), $userIds), 'testaccount missing');
         $this->assertTrue(in_array($this->_personasContacts['sclever']->getId(), $userIds), 'sclever missing');
         $this->assertTrue(in_array($persistentContact->getId(), $userIds), 'unittestorg missing');
+    }
+    
+    /**
+     * testLongEmailAddress
+     * 
+     * @see 0009066: iCal .ics file import fails
+     */
+    public function testLongEmailAddress()
+    {
+        $attenderData = array(
+            'email' => '5:an_Opportunities/Conferenceroom/CMT_Marsta@corpmx01.external.atlascopco.com',
+            'n_family' => 'Opportunities/Conferenceroom/CMT',
+            'n_given' => '5:an'
+        );
+        
+        $contact = Calendar_Model_Attender::resolveEmailToContact($attenderData);
+        $this->assertEquals(strtolower('CMT_Marsta@corpmx01.external.atlascopco.com'), $contact->email);
     }
 }
