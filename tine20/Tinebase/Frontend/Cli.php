@@ -105,8 +105,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Triggering async events from CLI.');
         
+        $userController = Tinebase_User::getInstance();
+        
+        // deactivate user plugins (like postfix/dovecot email backends) for async job user
+        $userController->unregisterAllPlugins();
+        
         try {
-            $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
+            $cronuser = $userController->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         }

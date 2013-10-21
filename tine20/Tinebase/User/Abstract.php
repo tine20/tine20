@@ -21,7 +21,6 @@
  
 abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
 {
-
     /**
      * des encryption
      */
@@ -84,6 +83,11 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     protected $_plugins = array();
     
+    /**
+     * user block time
+     * 
+     * @var integer
+     */
     protected $_blockTime        = 15;
     
     /**
@@ -92,10 +96,45 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     public function __construct(array $_options = array())
     {
         if (array_key_exists('plugins', $_options)) {
-            foreach ($_options['plugins'] as $plugin) {
-                $this->registerPlugin($plugin);
-            }
+            $this->registerPlugins($_options['plugins']);
         }
+    }
+    
+    /**
+     * registerPlugins
+     * 
+     * @param array $plugins
+     */
+    public function registerPlugins($plugins)
+    {
+        foreach ($plugins as $plugin) {
+            $this->registerPlugin($plugin);
+        }
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_User_Interface::registerPlugin()
+     */
+    public function registerPlugin(Tinebase_User_Plugin_Interface $_plugin)
+    {
+        $className = get_class($_plugin);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Registering " . $className . ' plugin.');
+        
+        $this->_plugins[$className] = $_plugin;
+    }
+
+    /**
+     * unregisterAllPlugins
+     */
+    public function unregisterAllPlugins()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Unregistering all user plugins.');
+        
+        $this->_plugins = array();
     }
     
     /**
@@ -226,7 +265,6 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         
         return $randomString;
     }
-    
     
     /**
      * get list of users
@@ -376,19 +414,6 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         }
         
         return $result;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see Tinebase_User_Interface::registerPlugin()
-     */
-    public function registerPlugin(Tinebase_User_Plugin_Interface $_plugin)
-    {
-        $className = get_class($_plugin);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Registering " . $className . ' plugin.');
-        
-        $this->_plugins[$className] = $_plugin;
     }
     
     /**
