@@ -130,6 +130,8 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
      */
     selectValue: function(value) {
         var values = Ext.isArray(value) ? value : [value];
+            
+            
         Ext.each(values, function(value, idx) {
             if (Ext.isString(value) && ! value.path) {
                 value = values[idx] = {path: value};
@@ -147,6 +149,13 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                 
                 if (allValuesExpanded) {
                     this.treePanel.getSelectionModel().resumeEvents();
+                    
+                    if (this.leftPanelScrollTop) {
+                        try {
+                            Ext.get('treecards').dom.parentElement.scrollTop = this.leftPanelScrollTop;
+                        } catch (e) {}
+                    } 
+                    
                     (function() {
                         try {
                             if (this.lastFocusEl) {
@@ -161,10 +170,6 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                                 if (scrollTop) {
                                     scroller.dom.scrollTop = scrollTop;
                                 }
-                            }
-                            
-                            if (this.leftPanelScrollTop) {
-                                Ext.get('treecards').dom.parentElement.scrollTop = this.leftPanelScrollTop;
                             }
                         } catch (e) {}
                     }).defer(10, this);
