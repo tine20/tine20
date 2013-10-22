@@ -193,14 +193,23 @@
 }
 
 .preview-panel-felamimail-body ul {
-	list-style: circle outside; 
-	margin-left: 20px;
+    list-style: circle outside; 
+    margin-left: 20px;
 }
 .preview-panel-felamimail-body ol {
     list-style: decimal outside; 
     margin-left: 20px;
 }
 
+.preview-panel-felamimail-body strong { 
+    font-weight: bold; 
+    font-style: inherit;
+}
+
+.preview-panel-felamimail-body em { 
+    font-style: italic; 
+    font-weight: inherit;
+}
 
 /* note: htmlarea has textarea as its basis, so when we support text composing
          this need to be restructured e.g. by having a felamimail-message-body-text cls
@@ -457,15 +466,5 @@
 
 .felamimail-sieverule-disabled {
     color: #aaaaaa;
-}
-
-/*------------ ExtJS clears the following default browser's styles -----------*/
-strong { 
-    font-weight: bold; 
-    font-style: inherit;
-}
-em { 
-    font-style: italic; 
-    font-weight: inherit;
 }
 
