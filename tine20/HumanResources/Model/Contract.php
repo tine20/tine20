@@ -49,6 +49,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'label'      => 'Employee',    // _('Employee')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
                 'type'       => 'record',
+                'sortable'   => FALSE,
                 'config' => array(
                     'appName'     => 'HumanResources',
                     'modelName'   => 'Employee',
@@ -60,6 +61,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'label'      => 'Start Date',    // _('Start Date')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'type'       => 'date',
+                'sortable'   => FALSE,
                  'default'    => 'now',
                  'showInDetailsPanel' => TRUE
             ),
@@ -68,6 +70,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'label'   => 'End Date',    // _('End Date')
                 'type'    => 'date',
+                'sortable'   => FALSE,
                 'showInDetailsPanel' => TRUE
             ),
             'vacation_days'     => array(
@@ -75,6 +78,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'type'    => 'integer',
                 'default' => 27,
                 'queryFilter' => TRUE,
+                'sortable'   => FALSE,
                 'showInDetailsPanel' => TRUE
             ),
             'feast_calendar_id' => array(
@@ -84,17 +88,20 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                     'appName'   => 'Calendar',
                     'modelName' => 'Event',
                 ),
+                'sortable'   => FALSE,
                 'showInDetailsPanel' => TRUE
             ),
             'workingtime_json'  => array(
                 'label'   => 'Workingtime', // _('Workingtime')
                 'default' => '{"days": [8,8,8,8,8,0,0]}',
+                'sortable'   => FALSE,
                 'showInDetailsPanel' => TRUE
             ),
             'is_editable' => array(
                 'label' => NULL,
                 'type' => 'virtual',
                 'config' => array(
+                    'sortable'   => FALSE,
                     'type' => 'boolean',
                     'function' => array('HumanResources_Controller_Contract' => 'getEditableState'),
                 )

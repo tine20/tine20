@@ -200,6 +200,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_save($recordData, HumanResources_Controller_Account::getInstance(), 'Account');
     }
+    
     /**
      * Search for records matching given arguments
      *

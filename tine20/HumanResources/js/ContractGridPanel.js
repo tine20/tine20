@@ -33,7 +33,6 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @type {Tine.HumanResources.EmployeeEditDialog}
      */
     editDialog: null,
-    
     usePagingToolbar: false,
     
     /**
