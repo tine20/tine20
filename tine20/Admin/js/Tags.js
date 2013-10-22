@@ -93,6 +93,8 @@ Tine.Admin.Tags.Main = {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
         
+        this.pageSize = Tine.Tinebase.registry.get('preferences').containsKey('pageSize') ? parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) : 50;
+        
         this.actions.addTag = new Ext.Action({
             text: this.translation.gettext('Add Tag'),
             handler: this.handlers.addTag,
@@ -136,7 +138,7 @@ Tine.Admin.Tags.Main = {
             Ext.getCmp('AdminTagsGrid').getStore().load({
                 params: {
                     start: 0,
-                    limit: 50
+                    limit: this.pageSize
                 }
             });
         }, this);
@@ -205,7 +207,7 @@ Tine.Admin.Tags.Main = {
                 
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
-            pageSize: 50,
+            pageSize: this.pageSize,
             store: dataStore,
             displayInfo: true,
             displayMsg: this.translation.gettext('Displaying tags {0} - {1} of {2}'),
@@ -311,7 +313,7 @@ Tine.Admin.Tags.Main = {
      */
     loadData: function () {
         var dataStore = Ext.getCmp('AdminTagsGrid').getStore();
-        dataStore.load({ params: { start: 0, limit: 50 } });
+        dataStore.load({ params: { start: 0, limit: this.pageSize } });
     },
 
     show: function () {

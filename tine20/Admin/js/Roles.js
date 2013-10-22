@@ -98,6 +98,8 @@ Tine.Admin.Roles.Main = {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
         
+        this.pageSize = Tine.Tinebase.registry.get('preferences').containsKey('pageSize') ? parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) : 50;
+        
         this.actions.addRole = new Ext.Action({
             text: this.translation.gettext('Add Role'),
             disabled: true,
@@ -142,7 +144,7 @@ Tine.Admin.Roles.Main = {
             Ext.getCmp('AdminRolesGrid').getStore().load({
                 params: {
                     start: 0,
-                    limit: 50
+                    limit: this.pageSize
                 }
             });
         }, this);
@@ -220,7 +222,7 @@ Tine.Admin.Roles.Main = {
         
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
-            pageSize: 50,
+            pageSize: this.pageSize,
             store: dataStore,
             displayInfo: true,
             displayMsg: this.translation.gettext('Displaying roles {0} - {1} of {2}'),
@@ -319,7 +321,7 @@ Tine.Admin.Roles.Main = {
     loadData: function() 
     {
         var dataStore = Ext.getCmp('AdminRolesGrid').getStore();
-        dataStore.load({ params: { start:0, limit:50 } });
+        dataStore.load({ params: { start: 0, limit: this.pageSize } });
     },
 
     show: function() 
