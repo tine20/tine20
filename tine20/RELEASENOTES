@@ -4,7 +4,7 @@
                     TINE 2.0 RELEASENOTES
                     
 Release:     Collin (2013.10)
-Last change: 2013-10-16
+Last change: 2013-10-22
 
 For a comprehensive list of user-related releasenotes with screenshots see
 the Tine 2.0 Wiki at http://www.tine20.org/wiki/index.php/Releases/Collin
@@ -15,6 +15,7 @@ Contents
 2. ActiveDirectory support
 3. Login CAPTCHA support
 4. OwnCloud client support
+5. CalDAV Tasks
 
 1. PHP module requirements / proposals
 -----------------
@@ -44,3 +45,11 @@ more information: https://forge.tine20.org/mantisbt/view.php?id=8484
 OwnCloud clients are now able to connect to a Tine 2.0 server.
 
 more information: https://www.tine20.org/wiki/index.php/Admins/Synchronisation/Owncloud
+
+5. CalDAV Tasks
+-----------------
+
+It is now possible to synchronize tasks via CalDAV.
+
+more information: https://www.tine20.org/wiki/index.php/Admins/Thunderbird-Synchronisation
+ 
