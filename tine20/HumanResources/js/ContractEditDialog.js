@@ -119,11 +119,12 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     updateWorkingHours: function(formField, newValue, oldValue) {
-        var sum = this.getForm().findField('working_hours').getValue();
-        if (! newValue) {
-            formField.setValue('0');
+        var sum = 0;
+        for (var index = 0; index < 7; index++) {
+            sum += parseFloat(this.getForm().findField(('weekdays_' + index)).getValue());
         }
-        this.getForm().findField('working_hours').setValue(sum - oldValue + newValue);
+        
+        this.getForm().findField('working_hours').setValue(sum);
     },
     
     /**
@@ -170,7 +171,15 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     getFormItems: function() {
         var weekdayFieldDefaults = {
-            xtype: 'numberfield',
+            
+            xtype: 'uxspinner',
+            strategy: new Ext.ux.form.Spinner.NumberStrategy({
+                incrementValue : .5,
+                alternateIncrementValue: 1,
+                minValue: 0,
+                maxValue: 16,
+                allowDecimals : true
+            }),
             decimalPrecision: 2,
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
             anchor: '100%',
@@ -179,7 +188,8 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             columnWidth: 1/7,
             listeners: {
                 scope:  this,
-                change: this.updateWorkingHours.createDelegate(this)
+                blur: this.updateWorkingHours.createDelegate(this),
+                spin: this.updateWorkingHours.createDelegate(this)
             }
         };
         
