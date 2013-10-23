@@ -29,7 +29,7 @@
 %global vmonth 10
 %global vmin 1
 # comment out release suffix when not an unstable release
-%global rsuffix rc2
+# %global rsuffix rc2
 
 Name:           tine20
 Summary:        Open Source Groupware and CRM
@@ -337,6 +337,9 @@ fi
 
 
 %changelog
+* Thu Oct 24 2013 Philipp Schüle <p.schuele@metaways.de> - 2013.10.1-0
+- New upstream release Collin
+
 * Thu Oct 17 2013 Philipp Schüle <p.schuele@metaways.de> - 2013.10.1-0.rc2.1
 - New upstream release Collin Release Candidate 2
 
