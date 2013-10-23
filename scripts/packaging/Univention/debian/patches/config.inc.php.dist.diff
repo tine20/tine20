@@ -1,8 +1,8 @@
 --- a/config.inc.php.dist
 +++ b/config.inc.php.dist
-@@ -7,32 +7,29 @@
- // minimal configuration
- return array(
+@@ -9,32 +9,29 @@
+     // set 'count' equal zero to disable captcha, or set to number of invalid logins before request captcha.
+     'captcha' => array('count'=>0), 
      'database' => array(
 -        'host'          => 'ENTER DATABASE HOSTNAME',
 -        'dbname'	    => 'ENTER DATABASE NAME',

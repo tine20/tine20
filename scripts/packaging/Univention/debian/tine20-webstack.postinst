@@ -56,17 +56,30 @@ if [ "$1" = "configure" ]; then
                         fi 
                     fi
                 fi
-    
-                # create vhost configuration links
-                servers="apache2"
-                linkdestination_apache="../../tine20/apache.conf"
-                linkname="tine20"
-    
-                if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
-                    . /usr/share/wwwconfig-common/confd-link.sh
+                
+                # create Apache 2.x configuration links
+                if [ -d /etc/apache2/conf.d/ ]; then
+                    if [ ! -e /etc/apache2/conf.d/tine20 ]; then
+                        ln -s ../../tine20/apache.conf /etc/apache2/conf.d/tine20
+                    fi
+                    
+                elif [ -d /etc/apache2/conf-available ]; then
+                    if [ ! -e /etc/apache2/conf-available/tine20.conf ]; then
+                        ln -s ../../tine20/apache.conf /etc/apache2/conf-available/tine20.conf
+                    fi
+                    
+                    /usr/sbin/a2enconf tine20
                 fi
                 
+                #linkdestination_apache="../../tine20/apache.conf"
+                #linkname="tine20"
+                #
+                #if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
+                #    . /usr/share/wwwconfig-common/confd-link.sh
+                #fi
+                
                 # mark webserver for restart (used by restart.sh)
+                servers="apache2"
                 restart="$restart $webserver"
             
             fi

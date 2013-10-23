@@ -33,11 +33,10 @@
 
 # set ucr default values
 ucr set \
-    tine20/cfg/server/mysql_host?'localhost' \
-    tine20/cfg/server/mysql_port?'3306' \
-    tine20/cfg/server/mysql_user?'tine20' \
-    tine20/cfg/server/mysql_password?'@&@/etc/tine20/mysql.secret@&@' \
-    tine20/cfg/server/mysql_database?'tine20' \
+    tine20/cfg/sql/user?'tine20' \
+    tine20/cfg/sql/host?'localhost' \
+    tine20/cfg/sql/port?'5432' \
+    tine20/cfg/sql/database?'tine20' \
     tine20/cfg/directory/cache?"/var/lib/tine20/cache" \
     tine20/cfg/directory/files?"/var/lib/tine20/files" \
     tine20/cfg/directory/sessions?"/var/lib/tine20/sessions" \

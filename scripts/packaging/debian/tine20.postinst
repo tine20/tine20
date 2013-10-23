@@ -69,8 +69,9 @@ if [ "$1" = "configure" ]; then
             echo "GRANT ALL ON tine20.* TO 'tine20'@'localhost' IDENTIFIED BY '${sqlPassword}';" | $mysqlCmd
             
         elif [ -x /usr/bin/psql ]; then
-            su - postgres -c "psql -q -c \"CREATE USER tine20 WITH PASSWORD '${sqlPassword}'\""             >/dev/null 2>&1
-            su - postgres -c "/usr/bin/createdb --owner=tine20 --template=template0 --encoding=UTF8 tine20" >/dev/null 2>&1
+            su - postgres -c "/usr/bin/createuser --no-createdb --no-createrole --no-superuser tine20"
+            su - postgres -c "/usr/bin/psql -c \"ALTER USER tine20 WITH PASSWORD '${sqlPassword}';\" -d template1"
+            su - postgres -c "/usr/bin/createdb --owner=tine20 --template=template0 --encoding=UTF8 tine20"
             
             sed -i -e "s/pdo_mysql/pdo_pgsql/g"        $tine20ConfigFile
         fi

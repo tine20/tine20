@@ -31,35 +31,48 @@
 
 VERSION="1"
 
-. /usr/share/univention-join/joinscripthelper.lib
 . /usr/share/univention-lib/all.sh
+. /usr/share/univention-join/joinscripthelper.lib
 
 joinscript_init
 
-eval "$(ucr --shell dump)"
+eval "$(univention-config-registry shell)"
 
 ucs_addServiceToLocalhost "Tine20" "$@"
 
 if [ ! -e /etc/tine20/ldapuser.secret ]; then
     #create a user to use for ldap searches
-    ldappassword=$(makepasswd --minchars=15 --maxchars=20)
-    echo "$ldappassword" > /etc/tine20/ldapuser.secret
+    LDAPPASSWORD=$(makepasswd --minchars=15 --maxchars=20)
+    echo "$LDAPPASSWORD" > /etc/tine20/ldapuser.secret
     chmod 640 /etc/tine20/ldapuser.secret
     chown root:www-data /etc/tine20/ldapuser.secret
 else
-    ldappassword="$(cat /etc/tine20/ldapuser.secret)"
+    LDAPPASSWORD="$(cat /etc/tine20/ldapuser.secret)"
 fi
 
 udm container/cn create "$@" --ignore_exists \
     --position "$ldap_base" \
     --set name=tine20
-                
+
 udm users/user create "$@" --ignore_exists \
     --position "cn=tine20,$ldap_base" \
-    --set username="tine20" --set password="$ldappassword" \
+    --set username="tine20" --set password="$LDAPPASSWORD" \
     --set firstname="Tine 2.0 " --set lastname="LDAP account" \
     --set description="Account used by Tine 2.0 to authenticate against LDAP directory" \
     --option ldap_pwd
+
+# initial setup of Tine 2.0
+
+LDAPHOST="$ldap_server_name\\:$ldap_server_port"
+LDAPBASE=${ldap_base//,/\\\,}
+
+php /usr/share/tine20/setup.php --config=/etc/tine20/config.inc.php --install -- \
+        adminLoginName="administrator" \
+        adminPassword="***" \
+        acceptedTermsVersion=1000 \
+        authentication="backend:ldap,host:$LDAPHOST,username:uid=tine20\,cn=tine20\,$LDAPBASE,password:$LDAPPASSWORD,baseDn:cn=users\,$LDAPBASE,accountFilterFormat:(&(objectClass=posixAccount)(uid=%s))" \
+        accounts="backend:ldap,host:$LDAPHOST,username:uid=tine20\,cn=tine20\,$LDAPBASE,password:$LDAPPASSWORD,userDn:cn=users\,$LDAPBASE,groupsDn:cn=groups\,$LDAPBASE,defaultUserGroupName:Domain Users,defaultAdminGroupName:Domain Admins,readonly:1"
+
 
 joinscript_save_current_version
 

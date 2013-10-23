@@ -33,15 +33,9 @@
 import sys, re
 
 def handler(bc,changes):
-    db_dbname   = bc.get('tine20/cfg/server/mysql_database', 'tine20')
-    db_host     = bc.get('tine20/cfg/server/mysql_host'    , 'localhost')
-    db_username = bc.get('tine20/cfg/server/mysql_user'    , 'tine20')
-    
-    db_password_file = bc.get('tine20/cfg/server/mysql_password', '@&@/etc/tine20/mysql.secret@&@').replace('@&@','')
-    try:
-        db_password = open(db_password_file,'r').readline().strip()
-    except IOError, e:
-        db_password = None
+    db_dbname   = bc.get('tine20/cfg/sql/database', 'tine20')
+    db_host     = bc.get('tine20/cfg/sql/host'    , 'localhost')
+    db_username = bc.get('tine20/cfg/sql/user'    , 'tine20')
     
     try:
         f = open('/etc/tine20/config.inc.php', 'r')
@@ -67,9 +61,6 @@ def handler(bc,changes):
                     
                 if re.search('.*username.*=>', line):
                     line = '        \'username\'      => \'%s\',\n' % str(db_username)
-        
-                if re.search('.*password.*=>', line) and db_password:
-                    line = '        \'password\'      => \'%s\',\n' % str(db_password)
         
                 newlines.append(line)
                 line = f.readline()
