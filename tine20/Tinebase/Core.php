@@ -983,6 +983,9 @@ class Tinebase_Core
             case self::PDO_PGSQL:
                 unset($dbConfigArray['adapter']);
                 unset($dbConfigArray['tableprefix']);
+                if (empty($dbConfigArray['port'])) {
+                    $dbConfigArray['port'] = 5432;
+                }
                 $db = Zend_Db::factory('Pdo_Pgsql', $dbConfigArray);
                 try {
                     // set mysql timezone to utc and activate strict mode
