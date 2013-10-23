@@ -280,14 +280,16 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             $fd->subSecond(1);
             $ld->addSecond(1);
             
-            $filter = new Calendar_Model_EventFilter(array(
-                array('field' => 'container_id', 'operator' => 'equals', 'value' => $contract->feast_calendar_id),
-            ), 'AND');
+            $periodFilter = new Calendar_Model_PeriodFilter(
+                array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $fd, 'until' => $ld)));
             
-            $periodFilter = new Calendar_Model_PeriodFilter(array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $fd, 'until' => $ld)));
-            $filter->addFilter($periodFilter);
+            $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
+                array('field' => 'container_id', 'operator' => 'equals', 'value' =>
+                    $contract->feast_calendar_id),
+            )));
             
-            $events = Calendar_Controller_Event::getInstance()->search($filter);
+            Calendar_Model_Rrule::mergeRecurrenceSet($events, $fd, $ld);
+            
             $events->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
             
             foreach($events as $event) {

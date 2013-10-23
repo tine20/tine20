@@ -355,6 +355,12 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $this->_createFeastDay($date);
         }
         
+        // what about the holy evening? it's recurring
+        // @see 0009114: Freeetime edit dialog doesn't calculate recurring feast days
+        //      https://forge.tine20.org/mantisbt/view.php?id=9114
+        
+        $this->_createRecurringFeastDay(new Tinebase_DateTime('2011-12-24'));
+        
         $result = $json->searchAccounts($accountsFilter, array('sort' => 'year', 'dir' => 'DESC'));
         $this->assertEquals('3', $result['totalcount'], 'Three accounts should have been found!');
         
@@ -362,7 +368,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account2013 = $json->getAccount($accountId2013);
         
         $this->assertEquals(25, $account2013['possible_vacation_days']);
-        $this->assertEquals(226, $account2013['working_days']);
+        $this->assertEquals(225, $account2013['working_days']);
         
         // add 5 extra free days to the account with different expiration dates, 2 days aren't expired already
         $tomorrow = Tinebase_DateTime::now()->addDay(1);
@@ -378,7 +384,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account2013 = $json->getAccount($accountId2013);
         $this->assertEquals(27, $account2013['possible_vacation_days']);
         $this->assertEquals(27, $account2013['remaining_vacation_days']);
-        $this->assertEquals(224, $account2013['working_days']);
+        $this->assertEquals(223, $account2013['working_days']);
         $this->assertEquals(3, $account2013['expired_vacation_days'], 'There should be 3 expired vacation days at first!');
         // now add 3 vacation days before the expiration day of the second extra free time
         // #8202: Allow to book remaining free days from last years' account, respect expiration

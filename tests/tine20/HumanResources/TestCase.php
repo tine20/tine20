@@ -289,6 +289,22 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_DELETE  => true,
         ));
     
-        Calendar_Controller_Event::getInstance()->create($event)->toArray();
+        return Calendar_Controller_Event::getInstance()->create($event);
+    }
+    
+    /**
+     * creates a recurring event
+     * 
+     * @param Tinebase_DateTime $date
+     * @return Calendar_Model_Event
+     */
+    protected function _createRecurringFeastDay($date)
+    {
+        $event = $this->_createFeastDay($date);
+        $event->rrule = "FREQ=YEARLY;INTERVAL=1;BYMONTH=12;BYMONTHDAY=24";
+        $event->dtstart->subYear(1);
+        $event->dtend->subYear(1);
+        
+        return Calendar_Controller_Event::getInstance()->update($event);
     }
 }
