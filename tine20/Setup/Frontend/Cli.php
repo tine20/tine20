@@ -529,11 +529,16 @@ class Setup_Frontend_Cli
         $result = array(
             'active' => 1
         );
+
+        // keep spaces, \: and \,
+        $_value = preg_replace(array('/ /', '/\\\:/', '/\\\,/', '/\s*/'), array('§', '@', ';', ''), $_value);
         
-        $_value = preg_replace(array('/\s*/', '/\\\,/'), array('', ';'), $_value);
         $parts = explode(',', $_value);
+        
         foreach ($parts as $part) {
             $part = str_replace(';', ',', $part);
+            $part = str_replace('§', ' ', $part);
+            $part = str_replace('@', ':', $part);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $part);
             if (strpos($part, '_') !== FALSE) {
                 list($key, $sub) = preg_split('/_/', $part, 2);
