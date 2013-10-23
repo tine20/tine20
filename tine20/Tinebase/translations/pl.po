@@ -142,8 +142,8 @@ msgstr "przez"
 msgid "Changed fields:"
 msgstr "Zmienione pola:"
 
-#: User/Abstract.php:281 User/Abstract.php:282 User/Abstract.php:283
-#: User/Abstract.php:284 User/Abstract.php:285 User/Abstract.php:286
+#: User/Abstract.php:319 User/Abstract.php:320 User/Abstract.php:321
+#: User/Abstract.php:322 User/Abstract.php:323 User/Abstract.php:324
 #: js/ux/ConnectionStatus.js:58 Group/Abstract.php:191
 msgid "unknown"
 msgstr "nieznany"
@@ -792,7 +792,7 @@ msgid "Logging you in..."
 msgstr "Trwa logowanie …"
 
 #: js/LoginPanel.js:454 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:650
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -828,13 +828,13 @@ msgstr "Błąd logowania"
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:612
 msgid "Errors"
 msgstr "Błędy"
 
 #: js/LoginPanel.js:502 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:612
 msgid "Please fix the errors noted."
 msgstr "Proszę poprawić wskazane błędy."
 
@@ -957,7 +957,7 @@ msgstr "Zainstaluj Tine 2.0 w swojej przeglądarce jako aplikację WWW"
 
 #: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:647
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr "Proszę o odpowiedź"
@@ -1466,8 +1466,8 @@ msgid "defined by"
 msgstr "zdefiniowane przez"
 
 #: js/widgets/grid/FilterModel.js:285
-#: js/widgets/grid/ForeignRecordFilter.js:395
-#: js/widgets/relation/FilterModel.js:87
+#: js/widgets/grid/ForeignRecordFilter.js:406
+#: js/widgets/relation/FilterModel.js:92
 msgid "select a operator"
 msgstr "wybierz operator"
 
@@ -1753,11 +1753,11 @@ msgstr[0] "Relacja"
 msgstr[1] "Relacje"
 msgstr[2] "Relacje"
 
-#: js/widgets/relation/FilterModel.js:71
+#: js/widgets/relation/FilterModel.js:76
 msgid "Defined by ..."
 msgstr "Zdefiniowane przez ..."
 
-#: js/widgets/relation/FilterModel.js:114
+#: js/widgets/relation/FilterModel.js:119
 msgid "Define ..."
 msgstr "Zdefiniuj ..."
 
@@ -2311,21 +2311,21 @@ msgstr "Przywróć usuniętą wartość do zaznaczonych wierszy"
 msgid "Edit {0} {1}"
 msgstr "Edytuj {0} {1}"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:542
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:549
 msgid "Different Values"
 msgstr "Różne wartości"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:543
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:550
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr "To pole zawiera różne wartości. Edycja nadpisze stare wartości."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:647
 msgid "Do you really want to change these {0} records?"
 msgstr "Czy na pewno chcesz zmienić tych {0} wierszy?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:650
 msgid "Applying changes"
 msgstr "Zmieniam"
 

@@ -56,7 +56,7 @@ msgid "Priority"
 msgstr "Priorité"
 
 #: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
-#: js/Models.js:109 js/Models.js:167
+#: js/Models.js:110 js/Models.js:168
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Statut"
@@ -197,7 +197,7 @@ msgstr[1] "Êtes-vous sûr de vouloir supprimer les tâches sélectionnées?"
 msgid "Tags"
 msgstr "Marqueur"
 
-#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:106
+#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:107
 msgid "Summary"
 msgstr "Résumé"
 
@@ -205,15 +205,15 @@ msgstr "Résumé"
 msgid "Add a task..."
 msgstr "Ajouter"
 
-#: js/TaskGridPanel.js:105 js/Models.js:107
+#: js/TaskGridPanel.js:105 js/Models.js:108
 msgid "Due Date"
 msgstr "Date de fin"
 
-#: js/TaskGridPanel.js:164 js/Models.js:121
+#: js/TaskGridPanel.js:164 js/Models.js:122
 msgid "Creation Time"
 msgstr "Date de création"
 
-#: js/TaskGridPanel.js:178 js/Models.js:117
+#: js/TaskGridPanel.js:178 js/Models.js:118
 msgid "Responsible"
 msgstr "Responsable"
 
@@ -241,39 +241,39 @@ msgstr "Saisissez une description..."
 msgid "Percentage"
 msgstr "Pourcentage"
 
-#: js/Models.js:65
+#: js/Models.js:66
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Tâche"
 msgstr[1] "Tâches"
 
-#: js/Models.js:65
+#: js/Models.js:66
 msgid "Tasks"
 msgstr "Tâches"
 
-#: js/Models.js:69
+#: js/Models.js:70
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "liste de tâches"
 msgstr[1] "listes de tâches"
 
-#: js/Models.js:69
+#: js/Models.js:70
 msgid "to do lists"
 msgstr "listes de tâches"
 
-#: js/Models.js:104
+#: js/Models.js:105
 msgid "Quick Search"
 msgstr ""
 
-#: js/Models.js:119
+#: js/Models.js:120
 msgid "Last Modified Time"
 msgstr "Dernière modification"
 
-#: js/Models.js:120
+#: js/Models.js:121
 msgid "Last Modified By"
 msgstr "Modifié par"
 
-#: js/Models.js:122
+#: js/Models.js:123
 msgid "Created By"
 msgstr "Créé par"
 

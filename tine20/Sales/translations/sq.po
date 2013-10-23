@@ -1,0 +1,283 @@
+# 
+# Translators:
+# jevgu <jevgu@albnet.net>, 2013
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2013-10-23 10:51+0000\n"
+"Last-Translator: jevgu <jevgu@albnet.net>\n"
+"Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sq\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:103
+msgid "manage products"
+msgstr "menaxho produktet"
+
+#: Acl/Rights.php:104
+msgid "add, edit and delete products"
+msgstr "shto, modifiko dhe fshij produktet"
+
+#: Controller.php:83 Controller.php:103
+msgid "You do not have admin rights on Sales"
+msgstr "Ju nuk keni të drejta administratori në Shitje"
+
+#: Model/Contract.php:109
+msgid "Responsible"
+msgstr "Përgjegjës"
+
+#: Model/Contract.php:110
+msgid "Customer"
+msgstr "Klient"
+
+#: Model/Contract.php:111
+msgid "Partner"
+msgstr "Partner"
+
+#: Model/Contract.php:123 js/ContractEditDialog.js:174
+msgid "Lead Cost Center"
+msgstr "Drejtues qëndrës së kostove"
+
+#: Model/Contract.php:127
+msgid "Time Account"
+msgstr "Llogari Kohore"
+
+#: Config.php:51
+msgid "Contract Number Creation"
+msgstr "Krijimi Nr.të Kontratës"
+
+#: Config.php:53
+msgid "Should the contract number be set manually or be auto-created?"
+msgstr "Duhet që Nr. i kontrates të krijohet manualisht apo të vetëkrijohet?"
+
+#: Config.php:56
+msgid "automatically"
+msgstr "automatikisht"
+
+#: Config.php:57
+msgid "manually"
+msgstr "manualisht"
+
+#: Config.php:64
+msgid "Contract Number Validation"
+msgstr "Miratim i Nr. të Kontratës"
+
+#: Config.php:66
+msgid "The Number can be validated as text or number."
+msgstr "Numëri mund të miratohet si tekst ose numër."
+
+#: Config.php:69 js/Models.js:208 js/ContractEditDialog.js:138
+msgid "Number"
+msgstr "Numër"
+
+#: Config.php:70
+msgid "Text"
+msgstr "Tekst"
+
+#: Config.php:77
+msgid "Contract Status Available"
+msgstr "Status i Kontratës i Disponueshëm"
+
+#: Config.php:79
+msgid ""
+"Possible Contract status. Please note that additional contract status might "
+"impact other Sales systems on export or syncronisation."
+msgstr "Statusi i mundshëm i Kontratës. Kini kujdes që statuse të tjetë të kontrates mund të kenë ndikim në sistemetë tjerë Shitjesh gjatë eksportimit ose sinkronizimit"
+
+#: Config.php:87
+msgid "Contract Cleared State Available"
+msgstr "Status i Pastër i Kontratës i Diponueshëm"
+
+#: Config.php:89
+msgid "Possible Contract cleared states."
+msgstr "Status të pastër të kontrates të mudshëm"
+
+#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
+msgid "My Products"
+msgstr "Produktet e mi"
+
+#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
+msgid "Products created by myself"
+msgstr "Produkte të krijuar nga Unë"
+
+#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
+msgid "My Contracts"
+msgstr "Kotratat e mia"
+
+#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
+msgid "Contracts created by myself"
+msgstr "Kontrata të krijuara nga Unë"
+
+#: js/AdminPanel.js:61
+msgid "Cancel"
+msgstr "Anullo"
+
+#: js/AdminPanel.js:69
+msgid "OK"
+msgstr "Ok"
+
+#: js/AdminPanel.js:90
+msgid "Loading..."
+msgstr "Duke ngarkuar"
+
+#: js/ContractGridPanel.js:62 js/ProductGridPanel.js:97
+msgid "Tags"
+msgstr "Etiketa"
+
+#: js/ContractGridPanel.js:70
+msgid "Contract number"
+msgstr "Nr.i Kontratës"
+
+#: js/ContractGridPanel.js:76 js/Models.js:245 js/ContractEditDialog.js:145
+msgid "Title"
+msgstr "Titull"
+
+#: js/ContractGridPanel.js:82 js/Models.js:151 js/ContractEditDialog.js:189
+msgid "Status"
+msgstr "Status"
+
+#: js/ContractGridPanel.js:89 js/Models.js:158 js/ContractEditDialog.js:196
+msgid "Cleared"
+msgstr "E Pastër"
+
+#: js/ContractGridPanel.js:96 js/Models.js:164 js/ContractEditDialog.js:200
+msgid "Cleared in"
+msgstr "Pastruar në"
+
+#: js/ProductEditDialog.js:93 js/ProductGridPanel.js:98
+msgid "Name"
+msgstr "Emër"
+
+#: js/ProductEditDialog.js:99 js/ProductGridPanel.js:102
+msgid "Price"
+msgstr "Çmim"
+
+#: js/ProductEditDialog.js:106 js/ProductGridPanel.js:99
+msgid "Manufacturer"
+msgstr "Prodhues"
+
+#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:100
+msgid "Category"
+msgstr "Kategori"
+
+#: js/ProductEditDialog.js:114 js/ProductGridPanel.js:101
+#: js/ContractEditDialog.js:206
+msgid "Description"
+msgstr "Përshkrimi"
+
+#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:207
+msgid "Enter description..."
+msgstr "Vendosni përshkrimin..."
+
+#: js/ContractCostCenterFilterModel.js:30
+msgid "Cost Center"
+msgstr "Qëndër Kostosh"
+
+#: js/ContractCostCenterFilterModel.js:32
+msgid "without CostCenter"
+msgstr "Pa qëndër kostosh"
+
+#: js/Models.js:41
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Produkt"
+msgstr[1] "Produkte"
+
+#: js/Models.js:44 js/Models.js:234
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "listë të dhënash"
+msgstr[1] "lista të dhënash"
+
+#: js/Models.js:78 js/Models.js:147 js/Models.js:207 js/Models.js:244
+msgid "Quick Search"
+msgstr "Kërkim i Shpejtë"
+
+#: js/Models.js:79
+msgid "Product name"
+msgstr "Emri i Produktit"
+
+#: js/Models.js:81 js/Models.js:149
+msgid "Creator"
+msgstr "Krijuesi"
+
+#: js/Models.js:117
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Kontratë"
+msgstr[1] "Kontrata"
+
+#: js/Models.js:121
+msgid "All Contracts"
+msgid_plural "contracts lists"
+msgstr[0] "Të gjitha kontratat"
+msgstr[1] "Listat e kontratave"
+
+#: js/Models.js:148
+msgid "Contract name"
+msgstr "Emri Kontratës"
+
+#: js/Models.js:167
+msgid "Last Modified Time"
+msgstr "Koha e Modifikimt të fundit"
+
+#: js/Models.js:168
+msgid "Last Modified By"
+msgstr "Modifikimi i fundit nga"
+
+#: js/Models.js:169
+msgid "Creation Time"
+msgstr "Koha e Krijimit"
+
+#: js/Models.js:170
+msgid "Created By"
+msgstr "Krijuar Nga"
+
+#: js/Models.js:194
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] "Qëndra e kostos"
+msgstr[1] "Qëndrat e kostos"
+
+#: js/Models.js:197
+msgid "All CostCenters"
+msgid_plural "All CostCenters"
+msgstr[0] "Të gjitha qëndrat e kostove"
+msgstr[1] "Të gjitha qëndrat e kostove"
+
+#: js/Models.js:209
+msgid "Remark"
+msgstr "Vërejtje"
+
+#: js/Models.js:231
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] "Sektor"
+msgstr[1] "Sektorë"
+
+#: js/ContractEditDialog.js:96
+msgid "Please use a decimal number here!"
+msgstr "Ju lutem përdorni këtu një numër dhjetor!"
+
+#: js/ContractEditDialog.js:151
+msgid "Contract Contact"
+msgstr "Kontakti i Kontratës"
+
+#: js/ContractEditDialog.js:163
+msgid "Account Manager"
+msgstr "Menaxheri Llogarisë"
+
+#: js/ContractEditDialog.js:183
+msgid "Company"
+msgstr "Kompani"
+
+#: Controller/Contract.php:83
+msgid "The number you have tried to set is already in use!"
+msgstr "Nr. që ju doni të vendosni është në përdorim!"

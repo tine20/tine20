@@ -54,7 +54,7 @@ msgid "Priority"
 msgstr "優先權"
 
 #: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
-#: js/Models.js:109 js/Models.js:167
+#: js/Models.js:110 js/Models.js:168
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] ""
@@ -193,7 +193,7 @@ msgstr[0] "要刪除已選的任務嗎?"
 msgid "Tags"
 msgstr ""
 
-#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:106
+#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:107
 msgid "Summary"
 msgstr "總計"
 
@@ -201,15 +201,15 @@ msgstr "總計"
 msgid "Add a task..."
 msgstr "新增任務"
 
-#: js/TaskGridPanel.js:105 js/Models.js:107
+#: js/TaskGridPanel.js:105 js/Models.js:108
 msgid "Due Date"
 msgstr "到期日"
 
-#: js/TaskGridPanel.js:164 js/Models.js:121
+#: js/TaskGridPanel.js:164 js/Models.js:122
 msgid "Creation Time"
 msgstr "建立時間"
 
-#: js/TaskGridPanel.js:178 js/Models.js:117
+#: js/TaskGridPanel.js:178 js/Models.js:118
 msgid "Responsible"
 msgstr "負責"
 
@@ -237,37 +237,37 @@ msgstr "輸入說明"
 msgid "Percentage"
 msgstr "百分比"
 
-#: js/Models.js:65
+#: js/Models.js:66
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "任務"
 
-#: js/Models.js:65
+#: js/Models.js:66
 msgid "Tasks"
 msgstr "任務"
 
-#: js/Models.js:69
+#: js/Models.js:70
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "工作清單"
 
-#: js/Models.js:69
+#: js/Models.js:70
 msgid "to do lists"
 msgstr "工作清單"
 
-#: js/Models.js:104
+#: js/Models.js:105
 msgid "Quick Search"
 msgstr ""
 
-#: js/Models.js:119
+#: js/Models.js:120
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/Models.js:120
+#: js/Models.js:121
 msgid "Last Modified By"
 msgstr ""
 
-#: js/Models.js:122
+#: js/Models.js:123
 msgid "Created By"
 msgstr ""
 

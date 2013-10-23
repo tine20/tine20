@@ -55,7 +55,7 @@ msgid "Priority"
 msgstr "Độ quan trọng"
 
 #: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
-#: js/Models.js:109 js/Models.js:167
+#: js/Models.js:110 js/Models.js:168
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "one: Trạng thái\nother: Trạng thái"
@@ -194,7 +194,7 @@ msgstr[0] "one: Bạn có muốn xóa công việc đã chọn?\nother: Bạn c�
 msgid "Tags"
 msgstr "Thẻ"
 
-#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:106
+#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:107
 msgid "Summary"
 msgstr "Tóm tắt"
 
@@ -202,15 +202,15 @@ msgstr "Tóm tắt"
 msgid "Add a task..."
 msgstr "Thêm 1 việc"
 
-#: js/TaskGridPanel.js:105 js/Models.js:107
+#: js/TaskGridPanel.js:105 js/Models.js:108
 msgid "Due Date"
 msgstr "Ngày đến hạn"
 
-#: js/TaskGridPanel.js:164 js/Models.js:121
+#: js/TaskGridPanel.js:164 js/Models.js:122
 msgid "Creation Time"
 msgstr "Thời gian tạo"
 
-#: js/TaskGridPanel.js:178 js/Models.js:117
+#: js/TaskGridPanel.js:178 js/Models.js:118
 msgid "Responsible"
 msgstr "Có thể trả lời"
 
@@ -238,37 +238,37 @@ msgstr "Nhập mô tả..."
 msgid "Percentage"
 msgstr "Phần trăm"
 
-#: js/Models.js:65
+#: js/Models.js:66
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "one: Công việc\nothers: Công việc"
 
-#: js/Models.js:65
+#: js/Models.js:66
 msgid "Tasks"
 msgstr "Công việc"
 
-#: js/Models.js:69
+#: js/Models.js:70
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "one: danh sách cần làm\nother: danh sách cần làm"
 
-#: js/Models.js:69
+#: js/Models.js:70
 msgid "to do lists"
 msgstr "Danh sách cần làm"
 
-#: js/Models.js:104
+#: js/Models.js:105
 msgid "Quick Search"
 msgstr ""
 
-#: js/Models.js:119
+#: js/Models.js:120
 msgid "Last Modified Time"
 msgstr "Thời gian sửa"
 
-#: js/Models.js:120
+#: js/Models.js:121
 msgid "Last Modified By"
 msgstr "Sửa lần cuối bởi"
 
-#: js/Models.js:122
+#: js/Models.js:123
 msgid "Created By"
 msgstr "Tạo bởi"
 

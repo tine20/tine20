@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-15 18:07+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-10-17 18:59+0000\n"
+"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -144,8 +144,8 @@ msgstr "у"
 msgid "Changed fields:"
 msgstr "Измененные поля:"
 
-#: User/Abstract.php:281 User/Abstract.php:282 User/Abstract.php:283
-#: User/Abstract.php:284 User/Abstract.php:285 User/Abstract.php:286
+#: User/Abstract.php:319 User/Abstract.php:320 User/Abstract.php:321
+#: User/Abstract.php:322 User/Abstract.php:323 User/Abstract.php:324
 #: js/ux/ConnectionStatus.js:58 Group/Abstract.php:191
 msgid "unknown"
 msgstr "неизвестно"
@@ -794,7 +794,7 @@ msgid "Logging you in..."
 msgstr "Регистрирую Вас в..."
 
 #: js/LoginPanel.js:454 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:650
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -830,13 +830,13 @@ msgstr "Регистрация не удалась"
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:612
 msgid "Errors"
 msgstr "Ошибки"
 
 #: js/LoginPanel.js:502 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:612
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, исправьте отмеченные ошибки."
 
@@ -959,7 +959,7 @@ msgstr "Установить Tine 2.0 как веб приложение в ва
 
 #: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:647
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr "Подтверждение"
@@ -1468,8 +1468,8 @@ msgid "defined by"
 msgstr ""
 
 #: js/widgets/grid/FilterModel.js:285
-#: js/widgets/grid/ForeignRecordFilter.js:395
-#: js/widgets/relation/FilterModel.js:87
+#: js/widgets/grid/ForeignRecordFilter.js:406
+#: js/widgets/relation/FilterModel.js:92
 msgid "select a operator"
 msgstr "выберите оператор"
 
@@ -1521,7 +1521,7 @@ msgstr "Загрузка не удалась"
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
-msgstr ""
+msgstr "Файл не загружен. Размер файла великоват. Сообщите своему администратору об этом. Максимальный размер загружаемых файлов:"
 
 #: js/widgets/grid/FileUploadGrid.js:180
 msgid "Remove {0}"
@@ -1635,7 +1635,7 @@ msgstr "Удалить фильтр"
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."
-msgstr ""
+msgstr "Не нашлось чего-либо из {0}. Пожалуйста, измените критерии фильтра или {1}."
 
 #: js/widgets/grid/GridPanel.js:310
 msgid ""
@@ -1755,11 +1755,11 @@ msgstr[0] "Отношение"
 msgstr[1] "Отношения"
 msgstr[2] "Отношения"
 
-#: js/widgets/relation/FilterModel.js:71
+#: js/widgets/relation/FilterModel.js:76
 msgid "Defined by ..."
 msgstr ""
 
-#: js/widgets/relation/FilterModel.js:114
+#: js/widgets/relation/FilterModel.js:119
 msgid "Define ..."
 msgstr ""
 
@@ -2313,21 +2313,21 @@ msgstr "Отменить изменения для выделенных запи
 msgid "Edit {0} {1}"
 msgstr "Редактировать {0} {1}"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:542
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:549
 msgid "Different Values"
 msgstr "Различные значения"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:543
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:550
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:647
 msgid "Do you really want to change these {0} records?"
 msgstr "Вы действительно хотите изменить эти {0} записи?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:650
 msgid "Applying changes"
 msgstr "Применить изменения"
 
@@ -2503,7 +2503,7 @@ msgstr "Перезапись избранного \"{0}\""
 
 #: js/widgets/persistentfilter/PickerPanel.js:386
 msgid "Could not save Favorite"
-msgstr ""
+msgstr "Избранное не изменено"
 
 #: js/widgets/persistentfilter/PickerPanel.js:386
 msgid "Your current view does not support favorites"

@@ -1,0 +1,182 @@
+# 
+# Translators:
+# jevgu <jevgu@albnet.net>, 2013
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2013-10-23 12:00+0000\n"
+"Last-Translator: jevgu <jevgu@albnet.net>\n"
+"Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sq\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:114
+#, python-format
+msgid "%s's personal FAQs"
+msgstr "%s FAQ personale"
+
+#: Controller.php:164
+msgid "Draft"
+msgstr "Draft"
+
+#: Controller.php:165
+msgid "released"
+msgstr "Lëshuar"
+
+#: Controller.php:166
+msgid "obsolete"
+msgstr "e vjetër"
+
+#: Controller.php:169
+msgid "Internal"
+msgstr "e brëndshme"
+
+#: Controller.php:170
+msgid "Public"
+msgstr "Publike"
+
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Të gjitha FAQ e listave të mia FAQ"
+
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "E fundit e modifikuar nga unë"
+
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Të gjitha FAQ që kam modifikuar së fundmi"
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr "Të gjitha FAQ e mia"
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr "E preferuara e paracaktuar"
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "E preferuara e paracaktuar që ngakohet ne fillimin e FAQ-ve"
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr "Lista e paracaktuar e FAQ"
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Lista e paracaktuare FAQ ku të krijohen FAQ-t e reja"
+
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
+#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "Gjëndja e FAQ"
+msgstr[1] "Gjëndet e FAQ"
+
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
+#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "Lloji FAQ"
+msgstr[1] "Llojet e FAQ"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Të paracaktuara"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Shto një lloj të ri FAQ"
+
+#: js/SimpleFAQ.js:19 js/Model.js:35
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQ"
+
+#: js/SimpleFAQ.js:26
+msgid "Find Question"
+msgstr "Gjej Pyetje"
+
+#: js/SimpleFAQ.js:35
+msgid "Search question"
+msgstr "Kërko Pyetje"
+
+#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:118
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Përgjigje"
+
+#: js/FaqGridPanel.js:72
+msgid "FAQ id"
+msgstr "ID e FAQ"
+
+#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Etiketa"
+
+#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:139
+msgid "Status"
+msgstr "Gjëndja"
+
+#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:127
+msgid "Type"
+msgstr "Lloji"
+
+#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:111 js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Pyetje"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Shto një status të ri FAQ"
+
+#: js/Model.js:39
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] "Lista FAQ"
+msgstr[1] "Listat FAQ"
+
+#: js/Model.js:39
+msgid "FAQ Lists"
+msgstr "Listat e FAQ-ve"
+
+#: js/Model.js:74
+msgid "Quick Search"
+msgstr "Kërkim i Shpejtë"
+
+#: js/FaqEditDialog.js:112
+msgid "Enter a question..."
+msgstr "Bëni një pyetje"
+
+#: js/FaqEditDialog.js:119
+msgid "Enter a answer..."
+msgstr "Jepni një përgjigje"
+
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr "Kërko FAQ"
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "Informacione FAQ-sh"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Koha e krijimit"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Krijuar nga"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Akoma asnjë përgjigje"

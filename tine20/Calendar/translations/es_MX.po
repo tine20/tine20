@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-10 13:51+0000\n"
+"PO-Revision-Date: 2013-10-23 12:54+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Spanish (Mexico) (http://www.transifex.com/projects/p/tine20/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
@@ -49,9 +49,13 @@ msgstr ""
 msgid "unknown"
 msgstr ""
 
-#: Model/Attender.php:444
+#: Model/Attender.php:446
 msgid ""
 "This contact has been automatically added by the system as an event attender"
+msgstr ""
+
+#: Model/Attender.php:449
+msgid "The email address has been shortened: "
 msgstr ""
 
 #: Model/Event.php:332

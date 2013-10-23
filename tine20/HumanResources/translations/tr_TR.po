@@ -42,7 +42,7 @@ msgid "You do not have admin rights on HumanResources"
 msgstr ""
 
 #: Model/Contract.php:33 js/ContractGridPanel.js:43
-#: js/ContractEditDialog.js:199 js/ContractEditDialog.js:212
+#: js/ContractEditDialog.js:209 js/ContractEditDialog.js:222
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "one: Anlaşma\n\nother: Anlaşmalar"
@@ -54,11 +54,11 @@ msgid "Employee"
 msgid_plural "Employees"
 msgstr[0] "one: İş Arkadaşı\n\nother: İş Arkadaşları"
 
-#: Model/Contract.php:60 Model/CostCenter.php:72 js/ContractEditDialog.js:217
+#: Model/Contract.php:60 Model/CostCenter.php:72 js/ContractEditDialog.js:227
 msgid "Start Date"
 msgstr "Başlangıc"
 
-#: Model/Contract.php:69 js/ContractEditDialog.js:218
+#: Model/Contract.php:69 js/ContractEditDialog.js:228
 msgid "End Date"
 msgstr "Son Tarih"
 
@@ -66,7 +66,7 @@ msgstr "Son Tarih"
 msgid "Vacation Days"
 msgstr "Tatil Günleri"
 
-#: Model/Contract.php:81 js/ContractEditDialog.js:228
+#: Model/Contract.php:81 js/ContractEditDialog.js:239
 msgid "Feast Calendar"
 msgstr "Tatıl Takvimi"
 
@@ -424,11 +424,11 @@ msgstr "Tamam"
 msgid "Please use the following format: MM-DD"
 msgstr ""
 
-#: js/AdminPanel.js:219 js/ContractEditDialog.js:221
+#: js/AdminPanel.js:219 js/ContractEditDialog.js:232
 msgid "Calendar"
 msgstr "Takvim"
 
-#: js/AdminPanel.js:220 js/ContractEditDialog.js:222
+#: js/AdminPanel.js:220 js/ContractEditDialog.js:233
 msgid "Calendars"
 msgstr "Takvimler"
 
@@ -592,7 +592,7 @@ msgstr ""
 msgid "Unexcused sickness days"
 msgstr ""
 
-#: js/AccountEditDialog.js:135 js/Models.js:23 js/ContractEditDialog.js:237
+#: js/AccountEditDialog.js:135 js/Models.js:23 js/ContractEditDialog.js:247
 msgid "Working Time"
 msgid_plural "Working Times"
 msgstr[0] "one: Çalısma Vakti\n\nother: Çalısma Vakitleri"
@@ -627,42 +627,42 @@ msgstr ""
 msgid "Edit {0}"
 msgstr ""
 
-#: js/ContractEditDialog.js:245
+#: js/ContractEditDialog.js:255
 msgid "Choose the template"
 msgstr ""
 
-#: js/ContractEditDialog.js:254
+#: js/ContractEditDialog.js:264
 msgid "Working Hours per week"
 msgstr ""
 
-#: js/ContractEditDialog.js:262
+#: js/ContractEditDialog.js:272
 msgid "Vacation days of one calendar year"
 msgstr ""
 
-#: js/ContractEditDialog.js:266
+#: js/ContractEditDialog.js:276
 msgid "Mon."
 msgstr ""
 
-#: js/ContractEditDialog.js:269
+#: js/ContractEditDialog.js:279
 msgid "Tue."
 msgstr ""
 
-#: js/ContractEditDialog.js:272
+#: js/ContractEditDialog.js:282
 msgid "Wed."
 msgstr ""
 
-#: js/ContractEditDialog.js:275
+#: js/ContractEditDialog.js:285
 msgid "Thu."
 msgstr ""
 
-#: js/ContractEditDialog.js:278
+#: js/ContractEditDialog.js:288
 msgid "Fri."
 msgstr ""
 
-#: js/ContractEditDialog.js:281
+#: js/ContractEditDialog.js:291
 msgid "Sat."
 msgstr ""
 
-#: js/ContractEditDialog.js:284
+#: js/ContractEditDialog.js:294
 msgid "Sun."
 msgstr ""

@@ -143,8 +143,8 @@ msgstr "av"
 msgid "Changed fields:"
 msgstr "Ändra fällt: "
 
-#: User/Abstract.php:281 User/Abstract.php:282 User/Abstract.php:283
-#: User/Abstract.php:284 User/Abstract.php:285 User/Abstract.php:286
+#: User/Abstract.php:319 User/Abstract.php:320 User/Abstract.php:321
+#: User/Abstract.php:322 User/Abstract.php:323 User/Abstract.php:324
 #: js/ux/ConnectionStatus.js:58 Group/Abstract.php:191
 msgid "unknown"
 msgstr "okänd"
@@ -789,7 +789,7 @@ msgid "Logging you in..."
 msgstr "Loggar in dig..."
 
 #: js/LoginPanel.js:454 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:650
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -825,13 +825,13 @@ msgstr "Misslyckades med att logga in"
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:612
 msgid "Errors"
 msgstr "Fel"
 
 #: js/LoginPanel.js:502 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:605
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:612
 msgid "Please fix the errors noted."
 msgstr "Var god fixa noterade fel."
 
@@ -954,7 +954,7 @@ msgstr "Installera Tine 2,0 som webb app i din webbläsare"
 
 #: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:647
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr "Godkänn"
@@ -1455,8 +1455,8 @@ msgid "defined by"
 msgstr "definieras av"
 
 #: js/widgets/grid/FilterModel.js:285
-#: js/widgets/grid/ForeignRecordFilter.js:395
-#: js/widgets/relation/FilterModel.js:87
+#: js/widgets/grid/ForeignRecordFilter.js:406
+#: js/widgets/relation/FilterModel.js:92
 msgid "select a operator"
 msgstr "välj en operatör"
 
@@ -1736,11 +1736,11 @@ msgid_plural "Relations"
 msgstr[0] "Relation"
 msgstr[1] "Relationer"
 
-#: js/widgets/relation/FilterModel.js:71
+#: js/widgets/relation/FilterModel.js:76
 msgid "Defined by ..."
 msgstr "Definierad av ..."
 
-#: js/widgets/relation/FilterModel.js:114
+#: js/widgets/relation/FilterModel.js:119
 msgid "Define ..."
 msgstr "Definiera ..."
 
@@ -2293,21 +2293,21 @@ msgstr "Ångra ändring för alla valda register"
 msgid "Edit {0} {1}"
 msgstr "Ändra {0} {1}"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:542
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:549
 msgid "Different Values"
 msgstr "Olika värden"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:543
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:550
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr "Detta fält har olika värden.  Om du redigerar detta område kommer det att skriva över de gamla värdena."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:640
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:647
 msgid "Do you really want to change these {0} records?"
 msgstr "Vill du verkligen ändra dessa {0} register?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:643
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:650
 msgid "Applying changes"
 msgstr "Gör ändringar"
 

@@ -250,65 +250,65 @@ msgstr "Aktuellt semestermeddelande"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "E-postkonto \"{0}\" har ett aktivt semestermeddelande."
 
-#: js/Felamimail.js:547
+#: js/Felamimail.js:549
 msgid "New mails"
 msgstr "nya mail"
 
-#: js/Felamimail.js:548
+#: js/Felamimail.js:550
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Du har {0} ny mail(s) i mappen {1} ({2})."
 
-#: js/Felamimail.js:668
+#: js/Felamimail.js:670
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP Referenser för {0}"
 
-#: js/Felamimail.js:671
+#: js/Felamimail.js:673
 msgid "Credentials"
 msgstr "Inloggningsuppgifter"
 
-#: js/Felamimail.js:824 js/Felamimail.js:857
+#: js/Felamimail.js:826 js/Felamimail.js:859
 msgid "IMAP Error"
 msgstr "IMAP Fel"
 
-#: js/Felamimail.js:825
+#: js/Felamimail.js:827
 msgid "No connection to IMAP server."
 msgstr "Ingen anslutning till IMAP server."
 
-#: js/Felamimail.js:841
+#: js/Felamimail.js:843
 msgid "IMAP Credentials Error"
 msgstr "Fel på IMAP inloggningsuppgifter"
 
-#: js/Felamimail.js:842
+#: js/Felamimail.js:844
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Dina mail-inloggningsuppgifter är felaktiga. Vänligen kontakta din administratör"
 
-#: js/Felamimail.js:858
+#: js/Felamimail.js:860
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "En av dina mappar har tagits bort eller har bytts namn på av någon annan klient. Uppdatera mapplistan av detta konto."
 
-#: js/Felamimail.js:887
+#: js/Felamimail.js:889
 msgid "SMTP Error"
 msgstr "SMTP-fel"
 
-#: js/Felamimail.js:888
+#: js/Felamimail.js:890
 msgid "No connection to SMTP server."
 msgstr "Ingen anslutning till SMTP server"
 
-#: js/Felamimail.js:896
+#: js/Felamimail.js:898
 msgid "Sieve Error"
 msgstr "Filterfel"
 
-#: js/Felamimail.js:897
+#: js/Felamimail.js:899
 msgid "No connection to Sieve server."
 msgstr "Ingen anslutning till Filterserver"
 
-#: js/Felamimail.js:905
+#: js/Felamimail.js:907
 msgid "Save Sieve Script Error"
 msgstr "Fel vid sparning av filter-skript"
 
-#: js/Felamimail.js:906
+#: js/Felamimail.js:908
 msgid "Could not save script on Sieve server."
 msgstr "Kunde inte spara skriptet på Filterserver."
 

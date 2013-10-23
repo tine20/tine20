@@ -213,20 +213,20 @@ msgstr ""
 msgid "Computer Name"
 msgstr "Název počítače"
 
-#: js/SambaMachineGrid.js:57 js/SambaMachineGrid.js:89 js/Tags.js:226
-#: js/Roles.js:239 js/GroupEditDialog.js:129 js/Groups.js:236
+#: js/SambaMachineGrid.js:57 js/SambaMachineGrid.js:89 js/Tags.js:228
+#: js/Roles.js:241 js/GroupEditDialog.js:129 js/Groups.js:238
 #: js/TagEditDialog.js:226 js/RoleEditDialog.js:294 js/user/GridPanel.js:93
 msgid "Description"
 msgstr "Popis"
 
-#: js/SambaMachineGrid.js:76 js/Roles.js:237 js/Groups.js:234
+#: js/SambaMachineGrid.js:76 js/Roles.js:239 js/Groups.js:236
 #: js/container/GridPanel.js:65 js/user/GridPanel.js:171
 #: js/customfield/EditDialog.js:283 js/customfield/GridPanel.js:65
 msgid "ID"
 msgstr "ID"
 
-#: js/SambaMachineGrid.js:83 js/Tags.js:225 js/Roles.js:238
-#: js/Applications.js:282 js/Groups.js:235 js/AccessLog.js:128
+#: js/SambaMachineGrid.js:83 js/Tags.js:227 js/Roles.js:240
+#: js/Applications.js:282 js/Groups.js:237 js/AccessLog.js:128
 #: js/container/EditDialog.js:124 js/user/EditDialog.js:285
 #: js/user/EditDialog.js:321 js/customfield/EditDialog.js:596
 #: js/customfield/GridPanel.js:67
@@ -246,35 +246,35 @@ msgstr "Opravdu chcete smazat vybrané štítky?"
 msgid "Deleting tag(s)..."
 msgstr "Mažu štítek(ky)..."
 
-#: js/Tags.js:97
+#: js/Tags.js:99
 msgid "Add Tag"
 msgstr ""
 
-#: js/Tags.js:105
+#: js/Tags.js:107
 msgid "Edit Tag"
 msgstr ""
 
-#: js/Tags.js:113
+#: js/Tags.js:115
 msgid "Delete Tag"
 msgstr ""
 
-#: js/Tags.js:169 js/Roles.js:176 js/Applications.js:187 js/Groups.js:176
+#: js/Tags.js:171 js/Roles.js:178 js/Applications.js:187 js/Groups.js:178
 msgid "Search:"
 msgstr "Hledat:"
 
-#: js/Tags.js:211
+#: js/Tags.js:213
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "Zobrazuji štítky {0} - {1} of {2}"
 
-#: js/Tags.js:212 js/Tags.js:268
+#: js/Tags.js:214 js/Tags.js:270
 msgid "No tags to display"
 msgstr "Žádné štítky ke zobrazení"
 
-#: js/Tags.js:222 js/TagEditDialog.js:232 js/container/EditDialog.js:171
+#: js/Tags.js:224 js/TagEditDialog.js:232 js/container/EditDialog.js:171
 msgid "Color"
 msgstr "Barva"
 
-#: js/Tags.js:223
+#: js/Tags.js:225
 msgid "Usage:&#160;"
 msgstr ""
 
@@ -295,23 +295,23 @@ msgstr "Nepodařilo se"
 msgid "Some error occurred while trying to delete the role."
 msgstr "Během mazání role došlo k chybě."
 
-#: js/Roles.js:102
+#: js/Roles.js:104
 msgid "Add Role"
 msgstr ""
 
-#: js/Roles.js:110
+#: js/Roles.js:112
 msgid "Edit Role"
 msgstr ""
 
-#: js/Roles.js:118
+#: js/Roles.js:120
 msgid "Delete Role"
 msgstr ""
 
-#: js/Roles.js:226
+#: js/Roles.js:228
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "Zobrazuji role  {0} - {1} z {2}"
 
-#: js/Roles.js:227 js/Roles.js:281
+#: js/Roles.js:229 js/Roles.js:283
 msgid "No roles to display"
 msgstr "Žádné role ke zobrazení"
 
@@ -451,23 +451,23 @@ msgstr "Mažu skupinu(y)..."
 msgid "Some error occurred while trying to delete the group."
 msgstr "Během mazání skupiny došlo k chybě."
 
-#: js/Groups.js:104
+#: js/Groups.js:106
 msgid "Add Group"
 msgstr ""
 
-#: js/Groups.js:112
+#: js/Groups.js:114
 msgid "Edit Group"
 msgstr ""
 
-#: js/Groups.js:120
+#: js/Groups.js:122
 msgid "Delete Group"
 msgstr ""
 
-#: js/Groups.js:223
+#: js/Groups.js:225
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Zobrazuji skupiny {0} - {1} z {2}"
 
-#: js/Groups.js:224 js/Groups.js:278
+#: js/Groups.js:226 js/Groups.js:280
 msgid "No groups to display"
 msgstr "Žádné skupiny ke zobrazení"
 

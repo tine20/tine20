@@ -1,0 +1,694 @@
+# 
+# Translators:
+# jevgu <jevgu@albnet.net>, 2013
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2013-10-23 10:13+0000\n"
+"Last-Translator: jevgu <jevgu@albnet.net>\n"
+"Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sq\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:105
+msgid "manage shared addressbooks"
+msgstr "menaxhoni blloqet e adresave te ndarë"
+
+#: Acl/Rights.php:106
+msgid "Create new shared addressbook folders"
+msgstr "Krijoni një dosje të re të ndarë blloku adresash   "
+
+#: Acl/Rights.php:109
+msgid "manage shared addressbook favorites"
+msgstr "menaxhoni blloqe e ndarë të preferuar të adresave"
+
+#: Acl/Rights.php:110
+msgid "Create or update shared addressbook favorites"
+msgstr "Krijoni ose përditesoni blloqe të ndarë të preferuar të adresave"
+
+#: Controller.php:105
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "Blloku personal i adresave i %s"
+
+#: Import/definitions/adb_outlook_import_csv.xml:13
+msgid "Contact CSV import from Outlook address book"
+msgstr "Importo kontakte CSV nga Outlook"
+
+#: Import/definitions/adb_google_import_csv.xml:12
+msgid "Contact import from Google address book"
+msgstr "Importo kontakte nga Google addres book"
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Contact CSV import"
+msgstr "Importo kontakte CSV"
+
+#: Import/definitions/adb_tine_import_csv.xml:18
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Importo listën (###CURRENTDATE###)"
+
+#: Import/definitions/adb_tine_import_csv.xml:20
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr "Kontaket u importuan në  ###CURRENTDATE### më ###CURRENTTIME### nga ###USERFULLNAME### "
+
+#: Import/definitions/adb_mac_import_csv.xml:17
+msgid "Contact CSV import from mac address book"
+msgstr "Importo kontakte CSV nga Mac Address Book"
+
+#: Import/definitions/adb_import_vcard.xml:14
+msgid "Contact VCARD import"
+msgstr "Importo kontakte nga VCARD"
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
+msgid "CSV Outlook 2007 German"
+msgstr "CSV Outlook 2007 German"
+
+#: Config.php:45
+msgid "Contact duplicate check fields"
+msgstr "Fushat e kërkimit të kontakteve të duplikuar"
+
+#: Config.php:47
+msgid ""
+"These fields are checked when a new contact is created. If a record with the"
+" same data in the fields is found, a duplicate exception is thrown."
+msgstr "Këto fusha janë të zgjedhuara kur krijohet një kontakt i ri. Nëse gjendet një regjistrim me të njëjtat të dhënanjë përjashtim duplikimi do të shfaqet"
+
+#: Config.php:59
+msgid "Contact salutations available"
+msgstr "Përshëndetje kontatki e disponueshme"
+
+#: Config.php:61
+msgid ""
+"Possible contact salutations. Please note that additional values might "
+"impact other Addressbook systems on export or syncronisation."
+msgstr "Përshëndetje kotakti e mundshme. Ju lutem kujdes pasi vlerat e shtuara mund të ndikojnë sisteme të tjerë bllok-adresash gjatë eksportit ose sinkronizimit"
+
+#: Config.php:69
+msgid "Parsing rules for addresses"
+msgstr "Rregullat gramatikore për adresat"
+
+#: Config.php:71
+msgid "Path to a XML file with address parsing rules."
+msgstr "Rruga për një skedar XML me rregullat gramatikore të adresave"
+
+#: Setup/setup.xml:654
+msgid "Internal Contacts"
+msgstr "Kontakte të brëndshme"
+
+#: Setup/Update/Release5.php:194 Setup/Initialize.php:63
+msgid "Mr"
+msgstr "Z"
+
+#: Setup/Update/Release5.php:195 Setup/Initialize.php:64
+msgid "Ms"
+msgstr "Znj"
+
+#: Setup/Update/Release5.php:196 Setup/Initialize.php:65 js/ContactGrid.js:108
+#: js/ContactGridDetailsPanel.js:131 js/ContactEditDialog.js:128
+#: js/ContactEditDialog.js:434 js/ContactEditDialog.js:456 js/Model.js:27
+#: js/Model.js:142
+msgid "Company"
+msgstr "Kompani"
+
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:135
+msgid "All contacts I have read grants for"
+msgstr "Të gjithë kontatet qe i kam lexuar të drejtat për"
+
+#: Setup/Initialize.php:140
+msgid "My company"
+msgstr "Kompania Ime"
+
+#: Setup/Initialize.php:141
+msgid "All coworkers in my company"
+msgstr "Të gjithë bashkëpunëtorët ne Kompanine time"
+
+#: Setup/Initialize.php:154
+msgid "My contacts"
+msgstr "Kontaktet e mi"
+
+#: Setup/Initialize.php:155
+msgid "All contacts in my Addressbooks"
+msgstr "Të gjithë kontaktet ne Bllokun Tim të adresave"
+
+#: Setup/Initialize.php:167
+msgid "Last modified by me"
+msgstr "I funidit i modifikuar nga une"
+
+#: Setup/Initialize.php:168
+msgid "All contacts that I have last modified"
+msgstr "Të gjithe kontaktet që kam modifikuar së fundmi"
+
+#: Preference.php:28
+msgid "All contacts"
+msgstr "Të gjithë kontaktet"
+
+#: Preference.php:65
+msgid "Default Addressbook"
+msgstr "Blloku i Paracaktuar i Adresave"
+
+#: Preference.php:66
+msgid "The default addressbook for new contacts"
+msgstr "Blloku i Paracaktuar i Adresave për kontaktet e rinj"
+
+#: Preference.php:69
+msgid "Default Favorite"
+msgstr "Të Preferuara të Paracaktuar"
+
+#: Preference.php:70
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "I preferuari i paracaktuar i cili ngarkohet në fillim të bllokut të adresave"
+
+#: Export/Pdf.php:37
+msgid "Business Contact Data"
+msgstr "Te dhena kotaktesh biznesi"
+
+#: Export/Pdf.php:39
+msgid "Organisation / Unit"
+msgstr "Organizata / Njesia"
+
+#: Export/Pdf.php:44
+msgid "Business Address"
+msgstr "Adresë Biznesi"
+
+#: Export/Pdf.php:52 js/ContactGrid.js:123
+msgid "Email"
+msgstr "E-Postë"
+
+#: Export/Pdf.php:55
+msgid "Telephone Work"
+msgstr "Telefon Punë"
+
+#: Export/Pdf.php:58
+msgid "Telephone Cellphone"
+msgstr "Telefon Celular"
+
+#: Export/Pdf.php:61
+msgid "Telephone Car"
+msgstr "Telefon makine"
+
+#: Export/Pdf.php:64
+msgid "Telephone Fax"
+msgstr "Telefon Faks"
+
+#: Export/Pdf.php:67
+msgid "Telephone Page"
+msgstr "Faqe Telefoni"
+
+#: Export/Pdf.php:70
+msgid "URL"
+msgstr "URL"
+
+#: Export/Pdf.php:73
+msgid "Role"
+msgstr "Roli"
+
+#: Export/Pdf.php:76 js/ContactGrid.js:112 js/ContactEditDialog.js:146
+#: js/Model.js:33
+msgid "Room"
+msgstr "Dhomë"
+
+#: Export/Pdf.php:79
+msgid "Assistant"
+msgstr "Asistent"
+
+#: Export/Pdf.php:82
+msgid "Assistant Telephone"
+msgstr "Telefoni Asistentit"
+
+#: Export/Pdf.php:86
+msgid "Private Contact Data"
+msgstr "Të dhëna private të kontaktit"
+
+#: Export/Pdf.php:88 js/ContactEditDialog.js:299 js/Model.js:43
+#: js/Model.js:156 js/Model.js:157 js/Model.js:158 js/Model.js:159
+#: js/Model.js:160
+msgid "Private Address"
+msgstr "Adresë Private"
+
+#: Export/Pdf.php:96
+msgid "Email Home"
+msgstr "E-Postë Shtëpi"
+
+#: Export/Pdf.php:99
+msgid "Telephone Home"
+msgstr "Telefon Shtëpi"
+
+#: Export/Pdf.php:102
+msgid "Telephone Cellphone Private"
+msgstr "Telefon Celular Personal"
+
+#: Export/Pdf.php:105
+msgid "Telephone Fax Home"
+msgstr "Telefon Faks Shtëpi"
+
+#: Export/Pdf.php:108
+msgid "URL Home"
+msgstr "URL Shtëpi"
+
+#: Export/Pdf.php:112
+msgid "Other Data"
+msgstr "Të dhëna të tjera"
+
+#: Export/Pdf.php:114 js/ContactGrid.js:138 js/ContactEditDialog.js:173
+#: js/Model.js:26 js/Model.js:150
+msgid "Birthday"
+msgstr "Ditëlindja"
+
+#: Export/Pdf.php:117 js/ContactGrid.js:110 js/ContactEditDialog.js:167
+#: js/Model.js:30 js/Model.js:145
+msgid "Job Title"
+msgstr "Titulli i Punës"
+
+#: js/ContactGrid.js:101 js/Model.js:161
+msgid "Type"
+msgstr "Tipi"
+
+#: js/ContactGrid.js:102
+msgid "Tags"
+msgstr "Etiketa"
+
+#: js/ContactGrid.js:103 js/ContactEditDialog.js:91 js/Model.js:29
+msgid "Salutation"
+msgstr "Situatë"
+
+#: js/ContactGrid.js:104 js/ContactEditDialog.js:122
+#: js/ContactEditDialog.js:434 js/ContactEditDialog.js:456 js/Model.js:19
+#: js/Model.js:141
+msgid "Last Name"
+msgstr "Mbiemri"
+
+#: js/ContactGrid.js:105 js/ContactEditDialog.js:112 js/Model.js:20
+#: js/Model.js:140
+msgid "First Name"
+msgstr "Emri"
+
+#: js/ContactGrid.js:106
+msgid "Full Name"
+msgstr "Emri i Plote"
+
+#: js/ContactGrid.js:107 js/ContactEditDialog.js:162 js/Model.js:24
+msgid "Display Name"
+msgstr "Emri i Shfaqur"
+
+#: js/ContactGrid.js:109 js/ContactEditDialog.js:133 js/Model.js:28
+#: js/Model.js:143
+msgid "Unit"
+msgstr "Njësi"
+
+#: js/ContactGrid.js:111 js/ContactEditDialog.js:142 js/Model.js:31
+#: js/Model.js:149
+msgid "Job Role"
+msgstr "Roli i punës"
+
+#: js/ContactGrid.js:113 js/ContactEditDialog.js:273
+#: js/ContactEditDialog.js:302 js/Model.js:151 js/Model.js:156
+msgid "Street"
+msgstr "Rruga"
+
+#: js/ContactGrid.js:114 js/ContactEditDialog.js:289
+#: js/ContactEditDialog.js:318 js/Model.js:154 js/Model.js:159
+msgid "City"
+msgstr "Qyteti"
+
+#: js/ContactGrid.js:115 js/ContactEditDialog.js:281
+#: js/ContactEditDialog.js:310 js/Model.js:152 js/Model.js:157
+msgid "Region"
+msgstr "Rajoni"
+
+#: js/ContactGrid.js:116
+msgid "Postalcode"
+msgstr "Kodi Postal"
+
+#: js/ContactGrid.js:117 js/ContactEditDialog.js:294
+#: js/ContactEditDialog.js:323 js/Model.js:155 js/Model.js:160
+msgid "Country"
+msgstr "Vendi"
+
+#: js/ContactGrid.js:118
+msgid "Street (private)"
+msgstr "Rruga (private)"
+
+#: js/ContactGrid.js:119
+msgid "City (private)"
+msgstr "Qyteti(privat)"
+
+#: js/ContactGrid.js:120
+msgid "Region (private)"
+msgstr "Rajoni(privat)"
+
+#: js/ContactGrid.js:121
+msgid "Postalcode (private)"
+msgstr "Kodi Postal (privat)"
+
+#: js/ContactGrid.js:122
+msgid "Country (private)"
+msgstr "Vendi (privat)"
+
+#: js/ContactGrid.js:124 js/ContactGridDetailsPanel.js:139
+#: js/ContactGridDetailsPanel.js:163 js/ContactEditDialog.js:186
+#: js/Model.js:51 js/Model.js:144
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/ContactGrid.js:125 js/ContactGridDetailsPanel.js:140
+#: js/ContactGridDetailsPanel.js:164 js/ContactEditDialog.js:191
+#: js/Model.js:52
+msgid "Mobile"
+msgstr "Celular"
+
+#: js/ContactGrid.js:126 js/ContactGridDetailsPanel.js:141
+#: js/ContactGridDetailsPanel.js:165 js/ContactEditDialog.js:196
+#: js/Model.js:53
+msgid "Fax"
+msgstr "Faks"
+
+#: js/ContactGrid.js:127
+msgid "Car phone"
+msgstr "Telefoni makines"
+
+#: js/ContactGrid.js:128
+msgid "Pager"
+msgstr "biperi"
+
+#: js/ContactGrid.js:129 js/ContactEditDialog.js:201 js/Model.js:57
+msgid "Phone (private)"
+msgstr "Telefon (privat)"
+
+#: js/ContactGrid.js:130 js/ContactEditDialog.js:211 js/Model.js:58
+msgid "Fax (private)"
+msgstr "Fax (privat)"
+
+#: js/ContactGrid.js:131 js/ContactEditDialog.js:206 js/Model.js:59
+msgid "Mobile (private)"
+msgstr "Celular (privat)"
+
+#: js/ContactGrid.js:132
+msgid "Email (private)"
+msgstr "E-Postë (private)"
+
+#: js/ContactGrid.js:133 js/ContactGridDetailsPanel.js:144
+#: js/ContactGridDetailsPanel.js:168 js/ContactEditDialog.js:229
+#: js/Model.js:64
+msgid "Web"
+msgstr "Faqe Interneti"
+
+#: js/ContactGrid.js:134
+msgid "URL (private)"
+msgstr "URL (private)"
+
+#: js/ContactGrid.js:135
+msgid "Note"
+msgstr "Shënime"
+
+#: js/ContactGrid.js:136
+msgid "Timezone"
+msgstr "Brezi Orar"
+
+#: js/ContactGrid.js:137
+msgid "Geo"
+msgstr "Gjeo"
+
+#: js/ContactGrid.js:148 js/ContactGrid.js:149 js/ContactGrid.js:150
+msgid "Export {0}"
+msgid_plural "Export {0}"
+msgstr[0] "Eksporto {0}"
+msgstr[1] "Eksporto {0}"
+
+#: js/ContactGrid.js:159
+msgid "Export as PDF"
+msgstr "Eksporto si PDF"
+
+#: js/ContactGrid.js:166
+msgid "Export as CSV"
+msgstr "Eksporto si CSV"
+
+#: js/ContactGrid.js:173
+msgid "Export as ODS"
+msgstr "Eksporto si ODS"
+
+#: js/ContactGrid.js:180
+msgid "Export as XLS"
+msgstr "Eksporto si XLS"
+
+#: js/ContactGrid.js:187
+msgid "Export as ..."
+msgstr "Eksporto si..."
+
+#: js/ContactGrid.js:199
+msgid "Import contacts"
+msgstr "Importo kontakte"
+
+#: js/ContactGrid.js:288
+msgid "Contact of a user account"
+msgstr "Kontati i një llogarie përdoruesi"
+
+#: js/ContactGrid.js:288 js/ContactFilterModel.js:35 js/Model.js:95
+#: js/Model.js:134
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Kontakt"
+msgstr[1] "Kontakte"
+
+#: js/ContactGridDetailsPanel.js:62 js/Model.js:95
+msgid "Contacts"
+msgstr "Kontakte"
+
+#: js/ContactGridDetailsPanel.js:65
+msgid "Select contact"
+msgstr "Zgjidhni kontatk"
+
+#: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
+#: js/ContactEditDialog.js:216 js/Model.js:62 js/Model.js:147
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: js/ContactGridDetailsPanel.js:155
+msgid "Private"
+msgstr "Private"
+
+#: js/ContactGridDetailsPanel.js:178
+msgid "Info"
+msgstr "Info"
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Insecure link"
+msgstr "Lidhje e pasigurtë"
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Please review this link in edit dialog."
+msgstr "Ju lutem rishikoni kete lidhje me dialogun e modifikimit"
+
+#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
+msgid "Map"
+msgstr "Hartë"
+
+#: js/ContactEditDialog.js:79
+msgid "Personal Information"
+msgstr "Informacion Personal"
+
+#: js/ContactEditDialog.js:107 js/Model.js:22
+msgid "Title"
+msgstr "Titull"
+
+#: js/ContactEditDialog.js:117 js/Model.js:21
+msgid "Middle Name"
+msgstr "Emri i dyte"
+
+#: js/ContactEditDialog.js:138 js/Model.js:23
+msgid "Suffix"
+msgstr "Prapashtesa"
+
+#: js/ContactEditDialog.js:181
+msgid "Contact Information"
+msgstr "Informacioni kontaktit"
+
+#: js/ContactEditDialog.js:222 js/Model.js:63
+msgid "E-Mail (private)"
+msgstr "E-Postë (privat)"
+
+#: js/ContactEditDialog.js:270 js/Model.js:34 js/Model.js:151 js/Model.js:152
+#: js/Model.js:153 js/Model.js:154 js/Model.js:155
+msgid "Company Address"
+msgstr "Adresa e Kompanise"
+
+#: js/ContactEditDialog.js:277 js/ContactEditDialog.js:306
+msgid "Street 2"
+msgstr "Rruga 2"
+
+#: js/ContactEditDialog.js:285 js/ContactEditDialog.js:314 js/Model.js:153
+#: js/Model.js:158
+msgid "Postal Code"
+msgstr "Kodi Postal"
+
+#: js/ContactEditDialog.js:344 js/Model.js:68 js/Model.js:146
+msgid "Description"
+msgstr "Përshkrimi"
+
+#: js/ContactEditDialog.js:358
+msgid "Enter description"
+msgstr "Vendosni Përshkrimin"
+
+#: js/ContactEditDialog.js:402
+msgid "Export as pdf"
+msgstr "Eksporto si pdf"
+
+#: js/ContactEditDialog.js:410 js/ContactEditDialog.js:499
+msgid "Parse address"
+msgstr "Verifiko adresë"
+
+#: js/ContactEditDialog.js:434 js/ContactEditDialog.js:456
+msgid "Either {0} or {1} must be given"
+msgstr " ose {0} ose {1} duhet te jepen "
+
+#: js/ContactEditDialog.js:491
+msgid "Paste address"
+msgstr "Ngjit adresë"
+
+#: js/ContactEditDialog.js:491
+msgid "Please paste an address that should be parsed:"
+msgstr "Ju lutem ngjisni një adrese që duhet verifikuar "
+
+#: js/ContactEditDialog.js:527
+msgid "End token mode"
+msgstr "Përfundo mënyren token"
+
+#: js/MapPanel.js:58
+msgid "Company address"
+msgstr "Adresa e Kompanisë"
+
+#: js/MapPanel.js:65
+msgid "Private address"
+msgstr "Adresa Private"
+
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr "Pjesëtar i Listës"
+
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
+msgstr "CardDAV URL"
+
+#: js/Model.js:19
+msgid "Name"
+msgstr "Emri"
+
+#: js/Model.js:34
+msgid "Street (Company Address)"
+msgstr "Rruga (Adresa e Kompanise)"
+
+#: js/Model.js:35
+msgid "Street 2 (Company Address)"
+msgstr "Rruga 2 (Adresa e Kompanise)"
+
+#: js/Model.js:36
+msgid "City (Company Address)"
+msgstr "Qyteti (Adresa e Kompanise)"
+
+#: js/Model.js:37
+msgid "Region (Company Address)"
+msgstr "Rajoni (Adresa e Kompanise)"
+
+#: js/Model.js:38
+msgid "Postal Code (Company Address)"
+msgstr "Kodi Postal (Adresa e Kompanise)"
+
+#: js/Model.js:39
+msgid "Country (Company Address)"
+msgstr "Vendi (Adresa e Kompanise)"
+
+#: js/Model.js:43
+msgid "Street (Private Address)"
+msgstr "Rruga (Adresa e Private)"
+
+#: js/Model.js:44
+msgid "Street 2 (Private Address)"
+msgstr "Rruga 2 (adresa Private)"
+
+#: js/Model.js:45
+msgid "City (Private Address)"
+msgstr "Qyteti (Adresa Private)"
+
+#: js/Model.js:46
+msgid "Region (Private Address)"
+msgstr "Rajoni (Adresa Private)"
+
+#: js/Model.js:47
+msgid "Postal Code (Private Address)"
+msgstr "Kodi Postal (Adresa Private)"
+
+#: js/Model.js:48
+msgid "Country (Private Address)"
+msgstr "Vendi (Adresa Private)"
+
+#: js/Model.js:51
+msgid "Company Communication"
+msgstr "Komunikimi Kopmanise"
+
+#: js/Model.js:57
+msgid "Private Communication"
+msgstr "Komunikimi Privat"
+
+#: js/Model.js:65
+msgid "Web (private)"
+msgstr "Adresa Internetit (Private)"
+
+#: js/Model.js:99 js/Model.js:206 js/Addressbook.js:32
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Bllok Adresash"
+msgstr[1] "Blloqe Adresash"
+
+#: js/Model.js:99 js/Model.js:206
+msgid "Addressbooks"
+msgstr "Blloqe Adresash"
+
+#: js/Model.js:134
+msgid "User Account"
+msgstr "Llogaria Përdoruesit"
+
+#: js/Model.js:137
+msgid "Quick Search"
+msgstr "Kërkim i Shpejtë"
+
+#: js/Model.js:162
+msgid "Last Modified Time"
+msgstr "Koha e modifikimit të fundit"
+
+#: js/Model.js:163
+msgid "Last Modified By"
+msgstr "Modifikimi i fundit nga"
+
+#: js/Model.js:164
+msgid "Creation Time"
+msgstr "Koha e Krijimit"
+
+#: js/Model.js:165
+msgid "Created By"
+msgstr "Krijuar nga"
+
+#: js/Model.js:202
+msgid "List"
+msgid_plural "Lists"
+msgstr[0] "Listë"
+msgstr[1] "Lista"
+
+#: js/Model.js:202
+msgid "Lists"
+msgstr "Lista"
+
+#: js/Addressbook.js:22
+msgid "New Contact"
+msgstr "Kontakt i Ri"
+
+#: Controller/Contact.php:330
+msgid "Uploaded new contact image."
+msgstr "U ngarkua nje foto  e kontati të ri "
