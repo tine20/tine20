@@ -46,9 +46,13 @@ msgstr ""
 msgid "unknown"
 msgstr ""
 
-#: Model/Attender.php:444
+#: Model/Attender.php:446
 msgid ""
 "This contact has been automatically added by the system as an event attender"
+msgstr ""
+
+#: Model/Attender.php:449
+msgid "The email address has been shortened: "
 msgstr ""
 
 #: Model/Event.php:332
