@@ -292,13 +292,19 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             });
             
             if (! Tine.Tinebase.registry.get('denySurveys')) {
+                Tine.log.debug('getSurveyPanel() - fetching survey data ...');
                 this.getSurveyData(function (survey) {
+                    Tine.log.debug(survey);
                     if (typeof survey.get === 'function') {
                         var enddate = Date.parseDate(survey.get('enddate'), Date.patterns.ISO8601Long);
                         var version = survey.get('version');
                         
+                        Tine.log.debug('Survey version: ' + version + ' / Tine version: ' + Tine.clientVersion.packageString) ;
+                        Tine.log.debug('Survey enddate: ' + enddate);
+                        
                         if (Ext.isDate(enddate) && enddate.getTime() > new Date().getTime() && 
                             Tine.clientVersion.packageString.indexOf(version) === 0) {
+                            Tine.log.debug('Show survey panel');
                             survey.data.lang_duration = String.format(_('about {0} minutes'), survey.data.duration);
                             survey.data.link = 'https://versioncheck.tine20.net/surveyCheck/surveyCheck.php?participate';
                             
@@ -422,7 +428,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             cls: 'tb-login-infosection',
             border: false,
             width: 300,
-            height: 460,
+            height: 520, // bad idea to hardcode height here
             layout: 'vbox',
             layoutConfig: {
                 align: 'stretch'
