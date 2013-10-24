@@ -106,6 +106,10 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
     {
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
         $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->getId();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . " Inspected Task: " . print_r($_record->toArray(), true)
+        );
     }
     
     /**
