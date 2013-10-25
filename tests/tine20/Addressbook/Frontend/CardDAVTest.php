@@ -119,4 +119,27 @@ class Addressbook_Frontend_CardDAVTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue($container instanceof Tinebase_Model_Container);
     }
+    
+    public function testGetAllContactsMetaContainer()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac OS X/10.9 (13A603) AddressBook/1365';
+    
+        $collection = new Addressbook_Frontend_CardDAV();
+    
+        $children = $collection->getChildren();
+    
+        $this->assertCount(1, $children, 'there should be just one global container');
+        $this->assertTrue($children[0] instanceof Addressbook_Frontend_CardDAV_AllContacts, 'wrong instance');
+    }
+    
+    public function testGetAllContainers()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+    
+        $collection = new Addressbook_Frontend_CardDAV();
+    
+        $children = $collection->getChildren();
+    
+        $this->assertGreaterThanOrEqual(2, count($children), 'there should be more than one container');
+    }
 }
