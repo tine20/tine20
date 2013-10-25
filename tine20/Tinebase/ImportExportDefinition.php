@@ -138,21 +138,38 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      */
     public static function getOptionsAsZendConfigXml(Tinebase_Model_ImportExportDefinition $_definition, $_additionalOptions = array())
     {
-        $tmpfname = tempnam(Tinebase_Core::getTempDir(), "tine_tempfile_");
-        
-        if (! $tmpfname) {
-            throw new Tinebase_Exception_AccessDenied('Could not create temporary file.');
+        $cacheId = 'ZendConfigXml_' . md5($_definition);
+        $cache = Tinebase_Core::getCache();
+        if (! $cache->test($cacheId)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Generate new Zend_Config_Xml object' . $cacheId);
+            $tmpfname = tempnam(Tinebase_Core::getTempDir(), "tine_tempfile_");
+            
+            if (! $tmpfname) {
+                throw new Tinebase_Exception_AccessDenied('Could not create temporary file.');
+            }
+            
+            $handle = fopen($tmpfname, "w");
+            fwrite($handle, $_definition->plugin_options);
+            fclose($handle);
+            
+            // read file with Zend_Config_Xml
+            $config = new Zend_Config_Xml($tmpfname, null, true);
+            unlink($tmpfname);
+            
+            $cache->save($config, $cacheId);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Get Zend_Config_Xml from cache' . $cacheId);
+            $config = $cache->load($cacheId);
         }
         
-        $handle = fopen($tmpfname, "w");
-        fwrite($handle, $_definition->plugin_options);
-        fclose($handle);
+        if (! empty($_additionalOptions)) {
+            $config->merge(new Zend_Config($_additionalOptions));
+        }
         
-        // read file with Zend_Config_Xml
-        $config = new Zend_Config_Xml($tmpfname, null, TRUE);
-        $config->merge(new Zend_Config($_additionalOptions));
-        
-        unlink($tmpfname);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Config: ' . print_r($config->toArray(), true));
         
         return $config;
     }
