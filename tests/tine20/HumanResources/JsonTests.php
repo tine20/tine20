@@ -97,7 +97,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
         $this->assertEquals($date1->addDay(1)->toString(), $date2->toString());
 
-        $freeTimes = $this->_json->getFeastAndFreeDays($savedEmployee['id']);
+        $freeTimes = $this->_json->getFeastAndFreeDays($savedEmployee['id'], $date2->format('Y'));
         
         $this->assertEquals($savedEmployee['id'], $freeTimes['results']['contracts'][0]['employee_id']);
     }
@@ -308,6 +308,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employmentChange = new Tinebase_DateTime('2014-01-01');
         $employmentEnd    = new Tinebase_DateTime('2014-06-30');
     
+        $referenceDate = new Tinebase_DateTime('2013-10-10');
+        
         $contractController = HumanResources_Controller_Contract::getInstance();
         $employeeController = HumanResources_Controller_Employee::getInstance();
         $contractBackend = new HumanResources_Backend_Contract();
@@ -345,13 +347,15 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $accountController->createMissingAccounts(2014, $employee);
         
         // create feast days
-        $feastDays2013 = array(
-            '2013-01-01', '2013-03-29', '2013-04-01', '2013-05-01', '2013-05-09',
-            '2013-05-20', '2013-10-03', '2013-12-25', '2013-12-26', '2013-12-31'
+        $feastDays = array(
+            '01-01', '03-29', '04-01', '05-01', '05-09',
+            '05-20', '10-03', '12-25', '12-26', '12-31'
         );
         
-        foreach ($feastDays2013 as $day) {
-            $date = new Tinebase_DateTime($day . ' 12:00:00');
+        foreach ($feastDays as $day) {
+            $date = new Tinebase_DateTime('2013-' . $day . ' 12:00:00');
+            $this->_createFeastDay($date);
+            $date = new Tinebase_DateTime('2014-' . $day . ' 12:00:00');
             $this->_createFeastDay($date);
         }
         
@@ -367,12 +371,20 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $accountId2013 = $result['results'][1]['id'];
         $account2013 = $json->getAccount($accountId2013);
         
+        $accountId2014 = $result['results'][0]['id'];
+        $account2014 = $json->getAccount($accountId2014);
+        
         $this->assertEquals(25, $account2013['possible_vacation_days']);
         $this->assertEquals(225, $account2013['working_days']);
         
+        $this->assertEquals(15, $account2014['possible_vacation_days']);
+        $this->assertEquals(160, $account2014['working_days']);
+        
         // add 5 extra free days to the account with different expiration dates, 2 days aren't expired already
-        $tomorrow = Tinebase_DateTime::now()->addDay(1);
-        $yesterday = Tinebase_DateTime::now()->subDay(1);
+        $tomorrow = Tinebase_DateTime::now();
+        $tomorrow->addDay(1);
+        $yesterday = Tinebase_DateTime::now();
+        $yesterday->subDay(1);
         
         $eft1 = new HumanResources_Model_ExtraFreeTime(array('days' => 2, 'account_id' => $accountId2013, 'expires' => $tomorrow));
         $eft2 = new HumanResources_Model_ExtraFreeTime(array('days' => 3, 'account_id' => $accountId2013, 'expires' => $yesterday));
@@ -386,9 +398,14 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals(27, $account2013['remaining_vacation_days']);
         $this->assertEquals(223, $account2013['working_days']);
         $this->assertEquals(3, $account2013['expired_vacation_days'], 'There should be 3 expired vacation days at first!');
+        
+        // the extra freetimes added to the account2013 should not affect account 2014
+        $account2014 = $json->getAccount($accountId2014);
+        $this->assertEquals(15, $account2014['possible_vacation_days']);
+        $this->assertEquals(160, $account2014['working_days']);
+        
         // now add 3 vacation days before the expiration day of the second extra free time
         // #8202: Allow to book remaining free days from last years' account, respect expiration
-
         $freetime = array(
             'account_id' => $accountId2013,
             'employee_id' => $employee->getId(),
@@ -429,6 +446,52 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $qsFilter = array(array('field' => "query", 'operator' => "contains", 'value' => 'Adsmin'));
         $result = $json->searchAccounts($qsFilter, array());
         $this->assertEquals(0, $result['totalcount']);
+
+        $refdate = clone $referenceDate;
+        
+        // now we test if adding a vacation with dates of 2013 but the account of 2014 works as expected
+        $freetime = array(
+            'account_id' => $accountId2014,
+            'employee_id' => $employee->getId(),
+            'type' => 'vacation',
+            'status' => 'ACCEPTED',
+            'firstday_date' => $refdate,
+            'lastday_date'  => $refdate->addDay(3)->toString(),
+            'days_count' => 3
+        );
+        
+        $refdate = clone $referenceDate;
+        
+        $freetime['freedays'] = array(
+            array('duration' => '1', 'date' => $referenceDate->toString()),
+            array('duration' => '1', 'date' => $referenceDate->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $referenceDate->addDay(1)->toString()),
+        );
+        
+        $freetime = $this->_json->saveFreeTime($freetime);
+        
+        // the extra freetimes added to the account2014 should not affect account 2013
+        $account2013 = $json->getAccount($accountId2013);
+        $this->assertEquals(30, $account2013['possible_vacation_days']);
+        $this->assertEquals(27, $account2013['remaining_vacation_days']);
+        sleep(1);
+        // but possible vacation days of the 2014 account should be reduced by 3
+        $account2014 = $json->getAccount($accountId2014);
+        $this->assertEquals(15, $account2014['possible_vacation_days']);
+        $this->assertEquals(12, $account2014['remaining_vacation_days']);
+        $this->assertEquals(160, $account2014['working_days']);
+    }
+    
+    /**
+     * test HumanResources_Exception_NoAccount
+     */
+    public function testNoAccountException()
+    {
+        $employee = $this->_getEmployee('unittest');
+        
+        $this->setExpectedException('HumanResources_Exception_NoAccount');
+        
+        $this->_json->getFeastAndFreeDays($employee->getId(), '2000');
     }
     
     /**

@@ -1,12 +1,12 @@
 <?php
 /**
  * Tine 2.0
+ * 
  * @package     HumanResources
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
- *
  */
 
 /**
@@ -24,6 +24,13 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var HumanResources_Controller_Employee
      */
     protected $_controller = NULL;
+    
+    /**
+     * holds cached accounts by year but for one employee only!
+     * 
+     * @var array
+     */
+    protected $_cachedAccountsOnSaveEmployee = NULL;
     
     /**
      * All full configured models
@@ -160,8 +167,28 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach(array('vacation', 'sickness') as $prop) {
             if (! empty($recordData[$prop])) {
                 for ($i = 0; $i < count($recordData[$prop]); $i++) {
+                    // add account id by year if no account id is given (sickness)
+                    if (! $recordData[$prop][$i]['account_id']) {
+                        
+                        $date = new Tinebase_DateTime($recordData[$prop][$i]['firstday_date']);
+                        $year = $date->format('Y');
+                        
+                        if (! isset($this->_cachedAccountsOnSaveEmployee[$year])) {
+                            $filter = new HumanResources_Model_AccountFilter(array(array('field' => 'year', 'operator' => 'equals', 'value' => $year)));
+                            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $recordData['id'])));
+                            $account = HumanResources_Controller_Account::getInstance()->search($filter)->getFirstRecord();
+                            if (! $account) {
+                                throw new HumanResources_Exception_NoAccount();
+                            }
+                            $this->_cachedAccountsOnSaveEmployee[$year] = $account;
+                        } else {
+                            $account = $this->_cachedAccountsOnSaveEmployee[$year];
+                        }
+                        
+                        $recordData[$prop][$i]['account_id'] = $account->getId();
+                    }
+                    // flat account id
                     if (is_array($recordData[$prop][$i]['account_id'])) {
-                        // flat costcenter id
                         $recordData[$prop][$i]['account_id'] = $recordData[$prop][$i]['account_id']['id'];
                     }
                 }
@@ -329,18 +356,33 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $cController = HumanResources_Controller_Contract::getInstance();
         $eController = HumanResources_Controller_Employee::getInstance();
+        $aController = HumanResources_Controller_Account::getInstance();
+        
         // validate employeeId
         $employee = $eController->get($_employeeId);
+        $_freeTimeId = (strlen($_freeTimeId) == 40) ? $_freeTimeId : NULL;
         
         // set period to search for
         $minDate = new Tinebase_DateTime();
-        if ($_year) {
+        if ($_year && (! $_freeTimeId)) {
             $minDate->setDate($_year, 1, 1);
         } elseif ($_freeTimeId) {
             $myFreeTime = HumanResources_Controller_FreeTime::getInstance()->get($_freeTimeId);
             $minDate->setDate($myFreeTime->firstday_date->format('Y'), 1, 1);
         } else {
             $minDate->setDate($minDate->format('Y'), 1, 1);
+        }
+        
+        // find account
+        $filter = new HumanResources_Model_AccountFilter(array(
+            array('field' => 'year', 'operator' => 'equals', 'value' => intval($_year))
+        ));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
+        
+        $account = $aController->search($filter)->getFirstRecord();
+        
+        if (! $account) {
+            throw new HumanResources_Exception_NoAccount();
         }
         
         $minDate->setTime(0,0,0);
@@ -364,7 +406,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($contracts as $contract) {
             $json = $contract->getWorkingTimeJson();
             $startDay = ($contract->start_date == NULL) ? $minDate : ($contract->start_date < $minDate) ? $minDate : $contract->start_date;
-            $stopDay  = ($contract->end_date == NULL) ? $maxDate : ($contract->end_date > $maxDate)   ? $maxDate : $contract->end_date;
+            $stopDay  = ($contract->end_date == NULL)   ? $maxDate : ($contract->end_date > $maxDate)   ? $maxDate : $contract->end_date;
 
             if ($first) {
                 $firstDay = clone $startDay;
@@ -390,40 +432,45 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $excludeDates = array_merge($cController->getFeastDays($contract, $startDay, $stopDay), $excludeDates);
         }
         
-        // search free times for this interval
+        // search vacation days for this interval
         $filter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $maxDate)));
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $minDate)));
         
         $freetimes = HumanResources_Controller_FreeTime::getInstance()->search($filter);
-
+        
+        $accountFreeTimes = $freetimes->filter('account_id', $account->getId());
+        
         $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Int(array('field' => 'duration', 'operator' => 'equals', 'value' => 1)));
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'date', 'operator' => 'before', 'value' => $maxDate)));
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'date', 'operator' => 'after', 'value' => $minDate)));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $freetimes->id)));
         
-        $otherFreeDays = HumanResources_Controller_FreeDay::getInstance()->search($filter);
+        $filter1 = clone $filter;
+        $filter1->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $freetimes->id)));
+        $otherVacationDays = HumanResources_Controller_FreeDay::getInstance()->search($filter1);
         
-        $remainingVacation -= $otherFreeDays->count();
+        $filter2 = clone $filter;
+        $filter2->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $accountFreeTimes->id)));
+        
+        $accountVacationDays = HumanResources_Controller_FreeDay::getInstance()->search($filter2);
+        
+        $ownFreeDays = NULL;
         
         if ($_freeTimeId) {
-            $ownFreeDays   = $otherFreeDays->filter('freetime_id', $_freeTimeId);
-            $otherFreeDays->removeRecords($ownFreeDays);
+            $filter3 = clone $filter;
+            $filter3->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => array($_freeTimeId))));
+            $ownFreeDays = HumanResources_Controller_FreeDay::getInstance()->search($filter3);
+            $otherVacationDays->removeRecords($ownFreeDays);
             $ownFreeDays = $ownFreeDays->toArray();
-        } else {
-            $ownFreeDays = NULL;
         }
         
-        $excludeDates = array_merge($otherFreeDays->date, $excludeDates);
-        $otherFreeDays = $otherFreeDays ? $otherFreeDays->toArray() : NULL;
+        $remainingVacation -= $accountVacationDays->count();
+        
+        $excludeDates      = array_merge($otherVacationDays->date, $excludeDates);
+        $otherVacationDays = $otherVacationDays ? $otherVacationDays->toArray() : NULL;
         
         return array(
             'results' => array(
-                // @todo: CALCULATE BY ACCOUNT
                 'remainingVacation' => $remainingVacation,
-                'otherFreeDays' => $otherFreeDays, 
+                'otherVacationDays' => $otherVacationDays, 
                 'ownFreeDays'   => $ownFreeDays,
                 'excludeDates'  => $excludeDates,
                 'contracts'     => $contracts->toArray(),
@@ -437,6 +484,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * Sets the config for HR
+     * 
      * @param array $config
      */
     public function setConfig($config) {

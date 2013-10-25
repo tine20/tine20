@@ -559,12 +559,9 @@ msgstr "Lade Kalender.."
 msgid "No more vacation days"
 msgstr "Keine weiteren Urlaubstage vorhanden"
 
-#: js/DatePicker.js:232
-msgid ""
-"The Employee has no more possible vacation days left for this year. Add some"
-" extra free days to the account, if the employee should have more vacation "
-"this year."
-msgstr "Der Mitarbeiter hat keine Urlaubstage mehr in diesem Jahr . Bitte fügen Sie Sonderurlaub hinzu, um dem Mitarbeiter mehr möglichen Urlaub zuzuordnen."
+#: js/DatePicker.js:225
+msgid "The Employee has no more possible vacation days left for this year. Create a new vacation and use another personal account the vacation should be taken from."
+msgstr "Der Mitarbeiter hat keine Urlaubstage auf dem gewünschten Personalkonto. Erstellen Sie einen neuen Urlaub und wählen Sie ein anderes Personalkonto, von dem die Urlaubstage abgezogen werden sollen."
 
 #: js/AccountEditDialog.js:52
 msgid "Edit {0} for {1} - {2}"
@@ -683,3 +680,22 @@ msgstr "Sa."
 #: js/ContractEditDialog.js:294
 msgid "Sun."
 msgstr "So."
+
+msgid "Last Day"
+msgstr "Letzter Tag"
+
+msgid "Days Count"
+msgstr "Anzahl der Tage"
+
+
+msgid "No personal account found"
+msgstr "Kein Personalkonto gefunden"
+
+msgid "An existing personal account could not be found. Please create one!"
+msgstr "Es konnte kein Personalkonto gefunden werden. Bitte erstellen Sie eines!"
+
+msgid "Year can not be changed"
+msgstr "Das Jahr kann nicht geändert werden"
+
+msgid "You have already selected some dates from another year. Please create a new record to add dates from another year!"
+msgstr "Sie haben bereits ein odere mehrere Tage aus einem anderen Jahr gewählt. Bitte erstellen Sie einen neuen Datensatz, um die gewünschten Tage einzutragen."

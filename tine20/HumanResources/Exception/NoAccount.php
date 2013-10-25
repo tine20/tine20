@@ -11,27 +11,27 @@
  */
 
 /**
- * No  Contract Exception
+ * No Account Exception
  *
  * @package     HumanResources
  * @subpackage  Exception
  */
-class HumanResources_Exception_RemainingNotBookable extends HumanResources_Exception
+class HumanResources_Exception_NoAccount extends HumanResources_Exception
 {
     /**
      * the title of the Exception (may be shown in a dialog)
      *
      * @var string
      */
-    protected $_title = 'Not allowed!'; // _('Not allowed!')
+    protected $_title = 'No personal account found'; // _('No personal account found')
     
     /**
      * @see SPL Exception
      */
-    protected $message = "It's only allowed to book remaining vacation days from years in the past!"; // _("It's only allowed to book remaining vacation days from years in the past!")
+    protected $message = 'An existing personal account could not be found. Please create one!'; //_('An existing personal account could not be found. Please create one!')
     
     /**
      * @see SPL Exception
-     */
-    protected $code = 913;
+    */
+    protected $code = 914;
 }

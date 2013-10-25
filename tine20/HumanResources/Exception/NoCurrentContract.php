@@ -18,19 +18,30 @@
  */
 class HumanResources_Exception_NoCurrentContract extends HumanResources_Exception
 {
+    /**
+     * the nearest contract, if any
+     * 
+     * @var unknown
+     */
     protected $_nearest_record = NULL;
 
     /**
-     * construct
+     * the title of the Exception (may be shown in a dialog)
      *
-     * @param string $_message
-     * @param integer $_code
-     * @return void
+     * @var string
      */
-    public function __construct($_message = 'A current contract could not be found!', $_code = 910)
-    {
-        parent::__construct($_message, $_code);
-    }
+    protected $_title = 'No current contract!'; // _('No current contract!')
+    
+    /**
+     * @see SPL Exception
+     */
+    protected $message = "A current contract could not be found!"; // _("A current contract could not be found!")
+    
+    /**
+     * @see SPL Exception
+     */
+    protected $code = 910;
+    
     /**
      * add record to exception
      * @param Tinebase_Record_Interface $_record

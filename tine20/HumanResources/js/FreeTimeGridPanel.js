@@ -149,17 +149,25 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         };
         
         // collect free days not saved already
-        var localFreedays = [], localSicknessdays = [];
+        var localFreedays = {}, localSicknessdays = {};
         
         this.editDialog.vacationGridPanel.store.each(function(record) {
             if (record.id && record.id.length == 13) {
-                localFreedays = localFreedays.concat(record.data.freedays ? record.data.freedays : []);
+                var accountId = Ext.isObject(record.get('account_id')) ? record.get('account_id').id : record.get('account_id');
+                if (! localFreedays.hasOwnProperty(accountId)) {
+                    localFreedays[accountId] = [];
+                }
+                localFreedays[accountId] = localFreedays[accountId].concat(record.data.freedays ? record.data.freedays : []);
             }
         }, this);
         
         this.editDialog.sicknessGridPanel.store.each(function(record) {
             if (record.id && record.id.length == 13) {
-                localSicknessdays = localSicknessdays.concat(record.data.freedays ? record.data.freedays : []);
+                var accountId = Ext.isObject(record.get('account_id')) ? record.get('account_id').id : record.get('account_id');
+                if (! localSicknessdays.hasOwnProperty(accountId)) {
+                    localSicknessdays[accountId] = [];
+                }
+                localSicknessdays[accountId] = localSicknessdays[accountId].concat(record.data.freedays ? record.data.freedays : []);
             }
         });
         

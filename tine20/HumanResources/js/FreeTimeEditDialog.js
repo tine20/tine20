@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.HumanResources');
 
@@ -26,13 +26,61 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     mode: 'local',
     loadRecord: false,
+    
     /**
      * show private Information (autoset due to rights)
-     * @type 
+     * 
+     * @type {Boolean}
      */
     showPrivateInformation: null,
     
+    /**
+     * holds cached getFeastAndFreeDaysQueries
+     * 
+     * @type {Array}
+     */
+    calculatedFeastDays: null,
+    
+    /**
+     * either SICKNESS or VACATION
+     * 
+     * @type {String}
+     */
     freetimeType: null,
+    
+    /**
+     * the datepicker holds a calendar to select the dates of vacation or sickness
+     * 
+     * @type {Tine.HumanResources.DatePicker}
+     */
+    datePicker: null,
+    
+    /**
+     * the account picker holds the account the (vacation-)days are taken from
+     * @type {Tine.Tinebase.widgets.form.RecordPickerComboBox}
+     */
+    accountPicker: null,
+    
+    /**
+     * two years ago for the accountPicker search
+     * 
+     * @type {Number}
+     */
+    twoYearsAgo: null,
+    
+    /**
+     * year on init time
+     * 
+     * @type {Number}
+     */
+    startYear: null,
+    
+    /**
+     * holds the current account (by the startYear, if no account is given by the record)
+     * 
+     * @type {Tine.HumanResources.Model.Account}
+     */
+    currentAccount: null,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -41,19 +89,34 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     updateToolbars: Ext.emptyFn,
     
     /**
+     * holds vacation day records already inserted in the employee by account_id
+     * 
+     * @type {Object}
+     */
+    localFreedays: null,
+    
+    /**
+     * holds sickness day records already inserted in the employee by account_id
+     * 
+     * @type {Object}
+     */
+    localSicknessdays: null,
+    
+    /**
      * inits the component
      */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('HumanResources')
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
-        this.initDatePicker();
-        this.mode = 'local';
+        
+        this.calculatedFeastDays = [];
+        
+        // calculate current year and two years ago for the accountPicker search
+        var date = new Date();
+        this.startYear = parseInt(date.format('Y'));
+        this.twoYearsAgo = this.startYear - 2;
         
         Tine.HumanResources.FreeTimeEditDialog.superclass.initComponent.call(this);
-    },
-    
-    isValid: function() {
-        return Tine.HumanResources.FreeTimeEditDialog.superclass.isValid.call(this);
     },
     
     /**
@@ -73,8 +136,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         }
         this.record.set('employee_id', this.fixedFields.get('employee_id'));
         
-        this.accountBox.onRecordLoad(this.record);
-        this.datePicker.onRecordLoad(this.record, this.fixedFields.get('employee_id').id);
+        this.datePicker.loadFeastDays(false, true);
         
         if (this.record.get('employee_id')) {
             this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
@@ -82,16 +144,27 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordLoad.call(this);
         
+        if (this.accountPicker) {
+            this.accountPicker.onRecordLoad(this.record);
+        }
+        // set title after record load to determine if it's an update or new record
         var typeString = this.freetimeType == 'SICKNESS' ? 'Sickness Days' : 'Vacation Days';
-        
         if (this.record.id) {
-            this.accountBox.disable();
+            if (this.accountPicker) {
+                this.accountPicker.disable();
+            }
             this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), this.app.i18n._hidden(typeString), this.record.get('employee_id').n_fn));
         } else {
             this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'), this.app.i18n._hidden(typeString), this.record.get('employee_id').n_fn));
         }
     },
     
+    /**
+     * just break if at least one day is selected, otherwise close the window
+     * 
+     * @param {Boolean} closeWindow
+     * @return {Boolean}
+     */
     onApplyChanges: function(closeWindow) {
         // if no day is selected, show message and break saving
         if (! this.datePicker.store.getFirstDay()) {
@@ -114,14 +187,23 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     onRecordUpdate: function() {
-        var firstDay = this.datePicker.store.getFirstDay();
-        
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordUpdate.call(this);
-        this.record.set('freedays', this.datePicker.getData());
-        this.record.set('type', this.fixedFields.get('type').toLowerCase());
-        if (firstDay) {
-            this.record.set('firstday_date', new Date(firstDay.get('date')));
+        
+        var firstDay = this.datePicker.store.getFirstDay();
+        var lastDay  = this.datePicker.store.getLastDay();
+        
+        // add in json by year if sickness record
+        if (! this.accountPicker) {
+            this.record.set('account_id', null);
+        } else {
+            this.record.set('account_id', this.currentAccount.data);
         }
+        
+        this.record.set('freedays',      this.datePicker.getData());
+        this.record.set('type',          this.fixedFields.get('type').toLowerCase());
+        this.record.set('firstday_date', new Date(firstDay.get('date')));
+        this.record.set('lastday_date',  new Date(lastDay.get('date')));
+        this.record.set('days_count',    this.datePicker.store.getCount());
     },
     
     /**
@@ -129,13 +211,15 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     initDatePicker: function() {
         this.datePicker = new Tine.HumanResources.DatePicker({
+            accountPickerActive: (this.freetimeType == 'VACATION') ? true : false,
             recordClass: Tine.HumanResources.Model.FreeDay,
             app: this.app,
             editDialog: this,
             dateProperty: 'date',
             recordsProperty: 'freedays',
             foreignIdProperty: 'freeday_id',
-            freetimeType: this.freetimeType
+            freetimeType: this.freetimeType,
+            currentYear: this.startYear
         });
     },
     
@@ -150,6 +234,136 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     /**
+     * initializes the account picker
+     */
+    initAccountPicker: function() {
+        
+        var that = this;
+        
+        this.accountPicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Account', {
+            name: 'account_id',
+            fieldLabel: this.app.i18n._('Personal account'),
+            additionalFilters: [
+                {field: 'employee_id', operator: 'AND', value: [
+                    { field: ':id', operator: 'equals', value: this.fixedFields.get('employee_id').id}
+                ]},
+                // two years ago should be enough to show in the list
+                {field: 'year', operator: 'greater', 'value': this.twoYearsAgo }
+            ],
+            
+            /**
+             * fills the accountPicker on init with the account associated to 
+             * the record or current year if the record is new
+             * 
+             * @param {Tine.HumanResources.Model.Account} record
+             */
+            onRecordLoad: function(record) {
+                if (record.get('account_id')) {
+                    that.currentAccount = new Tine.HumanResources.Model.Account(record.get('account_id'));
+                    return;
+                }
+                
+                var addFilters = [{field: 'employee_id', operator: 'AND', value: [
+                    { field: ':id', operator: 'equals', value: record.get('employee_id').id}
+                ]}, {field: 'year', operator:'equals', value: this.startYear}];
+                
+                var request = Ext.Ajax.request({
+                    url : 'index.php',
+                    params : { method : 'HumanResources.searchAccounts', filter: addFilters},
+                    success : function(_result, _request) {
+                        var result = Ext.decode(_result.responseText);
+                        this.store.loadData(result);
+                        var rr = result.results;
+                        for (var index = 0; index < rr.length; index++) {
+                            if (rr[index].year == that.startYear) {
+                                this.setValue(rr[index]);
+                                that.currentAccount = new Tine.HumanResources.Model.Account(rr[index]);
+                            }
+                        }
+                    },
+                    failure : function(exception) {
+                        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                    },
+                    scope: this
+                });
+            }
+        });
+        
+        // update remaining days on account change
+        this.accountPicker.on('select', function(combo, record, index) {
+            var year = record.get('year');
+            that.currentAccount = record;
+            // if not cached, fetch from server
+            if (! that.calculatedFeastDays[year]) {
+                var request = Ext.Ajax.request({
+                    url : 'index.php',
+                    params : { 
+                        method : 'HumanResources.getFeastAndFreeDays',
+                        _employeeId: this.fixedFields.get('employee_id').id,
+                        _year: year
+                    },
+                    success : function(_result, _request) {
+                        var response = Ext.decode(_result.responseText);
+                        // cache result
+                        this.calculatedFeastDays[year] = response.results;
+                        this.onAccountLoad(response.results);
+                    },
+                    failure : function(exception) {
+                        Tine.Tinebase.ExceptionHandler.handleRequestException(exception, this.onFeastDaysLoadFailureCallback, this);
+                    },
+                    scope: that
+                });
+            } else {
+                that.onAccountLoad(this.calculatedFeastDays[year]);
+            }
+        }, this);
+    },
+    
+    /**
+     * initializes the status picker
+     */
+    initStatusPicker: function() {
+        
+        this.freetimeType = this.fixedFields.get('type');
+        
+        var statusPickerDefaults = {
+            fieldLabel: this.app.i18n._('Status'),
+            xtype: 'widget-keyfieldcombo',
+            app: 'HumanResources',
+            name: 'status'
+        };
+        
+        this.statusPicker = (this.freetimeType != 'VACATION') ? 
+            Ext.apply({
+                keyFieldName: 'sicknessStatus',
+                value: 'EXCUSED',
+                columnWidth: 1
+            }, statusPickerDefaults) :
+                Ext.apply({
+                keyFieldName: 'vacationStatus',
+                value: 'REQUESTED',
+                columnWidth: 2/3
+            }, 
+            statusPickerDefaults);
+    },
+    
+    /**
+     * 
+     * @param {} calculated
+     */
+    onAccountLoad: function(calculated) {
+        var accountId = this.currentAccount.getId();
+        var localFreeDaysToSubstract = (this.localFreedays[accountId] || []).length ;
+        this.form.findField('remaining_vacation_days').setValue(calculated.remainingVacation - localFreeDaysToSubstract);
+    },
+    
+    /**
+     * if loading feast and freedays failes
+     */
+    onFeastDaysLoadFailureCallback: function() {
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -158,76 +372,20 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
-        this.freetimeType = this.fixedFields.get('type');
-        var statusBoxDefaults = {
-            fieldLabel: this.app.i18n._('Status'),
-            xtype: 'widget-keyfieldcombo',
-            app: 'HumanResources',
-            name: 'status'
-        };
-        
-        this.statusBox = this.freetimeType == 'SICKNESS' ? 
-                Ext.apply({
-                    keyFieldName: 'sicknessStatus',
-                    value: 'EXCUSED',
-                    columnWidth: 1
-                }, statusBoxDefaults)
-            :   Ext.apply({
-                    keyFieldName: 'vacationStatus',
-                    value: 'REQUESTED',
-                    columnWidth: 2/3
-                }, statusBoxDefaults);
-        
-        var year = new Date();
-        thisYear = parseInt(year.format('Y'));
-        year = thisYear - 2;
-        
-        this.accountBox = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Account', {
-            name: 'account_id',
-            additionalFilters: [
-                {field: 'employee_id', operator: 'AND', value: [
-                    { field: ':id', operator: 'equals', value: this.fixedFields.get('employee_id')}
-                ]},
-                {field: 'year', operator: 'greater', 'value': year }
-            ],
-
-            fieldLabel: this.app.i18n._('Year'),
-            onRecordLoad: function(record) {
-                if (record.get('account_id')) {
-                     this.setValue(record.get('account_id'));
-                } else {
-                    var addFilters = [{field: 'employee_id', operator: 'AND', value: [
-                        { field: ':id', operator: 'equals', value: record.get('employee_id')}
-                    ]}, {field: 'year', operator:'equals', value: thisYear}];
-                    
-                    var request = Ext.Ajax.request({
-                        url : 'index.php',
-                        params : { method : 'HumanResources.searchAccounts', filter: addFilters},
-                        success : function(_result, _request) {
-                            this.onAccountsLoad(Ext.decode(_result.responseText));
-                        },
-                        failure : function(exception) {
-                            Tine.HumanResources.handleRequestException(exception);
-                        },
-                        scope: this
-                    });
-                }
-            },
-            onAccountsLoad: function(result) {
-                this.setValue(thisYear);
-            }
-        });
-        // update calendar if year changes  
-        this.accountBox.on('select', function(combo, record, index){
-            this.datePicker.loadFeastDays(null, this.fixedFields.get('employee_id').id);
-        }, this);
-        
-        
-        var firstRow = [this.statusBox, this.accountBox];
-        var freeTimeTypeName = 'Sickness Days';
+        this.initDatePicker();
         if (this.freetimeType == 'VACATION') {
+            this.initAccountPicker();
+        }
+        this.initStatusPicker();
+        
+        var firstRow = [this.statusPicker];
+        
+        if (this.freetimeType == 'VACATION') {
+            firstRow.push(this.accountPicker);
             firstRow.push({columnWidth: 1/3, name: 'remaining_vacation_days', readOnly: true, fieldLabel: this.app.i18n._('Remaining')});
-            freeTimeTypeName = 'Vacation Days';
+            var freeTimeTypeName = 'Vacation Days';
+        } else {
+            var freeTimeTypeName = 'Sickness Days';
         }
 
         return {
@@ -270,16 +428,16 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             items: [
                                 firstRow,
                                 [{
-                                        xtype: 'panel',
-                                        cls: 'HumanResources x-form-item',
-                                        width: 220,
-                                        style: {
-                                            'float': 'right',
-                                            margin: '0 5px 10px 0'
-                                        },
-                                        items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
-                                    }]
-                                ]
+                                    xtype: 'panel',
+                                    cls: 'HumanResources x-form-item',
+                                    width: 220,
+                                    style: {
+                                        'float': 'right',
+                                        margin: '0 5px 10px 0'
+                                    },
+                                    items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
+                                }]
+                            ]
                         }]
                     }]
                 }, {

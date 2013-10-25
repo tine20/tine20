@@ -135,30 +135,22 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         $freetimeController = HumanResources_Controller_FreeTime::getInstance();
         $employeeId = is_object($account->employee_id) ? $account->employee_id->getId() : $account->employee_id;
         
-        $filter = new HumanResources_Model_FreeTimeFilter(array(
-            array('field' => 'firstday_date', 'operator' => 'before', 'value' => $yearEnds),
-            array('field' => 'firstday_date', 'operator' => 'after',  'value' => $yearBegins)
-        ), 'AND');
-        
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId)));
+        $filter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
         
         $freeTimes = $freetimeController->search($filter);
     
         $filter = new HumanResources_Model_FreeTimeFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_DateTime(array('field' => 'firstday_date', 'operator' => 'isnull', 'value' => TRUE)));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
-
         $rebookedVacationTimes  = $freetimeController->search($filter);
+        
         $acceptedVacationTimes  = $freeTimes->filter('type', 'vacation')->filter('status', 'ACCEPTED');
         $unexcusedSicknessTimes = $freeTimes->filter('type', 'sickness')->filter('status', 'UNEXCUSED');
         $excusedSicknessTimes   = $freeTimes->filter('type', 'sickness')->filter('status', 'EXCUSED');
         
         $freedayController = HumanResources_Controller_FreeDay::getInstance();
-        
-        $filter = new HumanResources_Model_FreeDayFilter(array(
-            array('field' => 'date', 'operator' => 'before', 'value' => $yearEnds),
-            array('field' => 'date', 'operator' => 'after',  'value' => $yearBegins),
-        ), 'AND');
+        $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
 
         $acceptedVacationFilter = clone $filter;
         $acceptedVacationFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $acceptedVacationTimes->id)));
@@ -188,14 +180,14 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         }
         
         return array(
-            'possible_vacation_days'  => $possibleVacationDays,
+            'possible_vacation_days'  => intval($possibleVacationDays),
             'expired_vacation_days'   => isset($extraFreeTimes) ? $extraFreeTimes['expired'] : 0,
             'rebooked_vacation_days'  => $rebookedVacationDays->count(),
             'remaining_vacation_days' => $possibleVacationDays - $acceptedVacationDays->count() - $rebookedVacationDays->count(),
             'taken_vacation_days'     => $acceptedVacationDays->count(),
             'excused_sickness'        => $excusedSicknessDays->count(),
             'unexcused_sickness'      => $unexcusedSicknessDays->count(),
-            'working_days'            => count($datesToWorkOn['results']) - $possibleVacationDays,
+            'working_days'            => intval((count($datesToWorkOn['results']) - $possibleVacationDays)),
             'working_hours'           => $datesToWorkOn['hours']
         );
     }

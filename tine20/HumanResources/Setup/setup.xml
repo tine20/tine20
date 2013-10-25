@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>8.1</version>
+    <version>8.2</version>
     <order>51</order>
     <depends>
         <application>Calendar</application>
@@ -323,7 +323,7 @@
         </table>
         <table>
             <name>humanresources_freetime</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -334,6 +334,16 @@
                 <field>
                     <name>firstday_date</name>
                     <type>date</type>
+                </field>
+                <field>
+                    <name>lastday_date</name>
+                    <type>date</type>
+                </field>
+                <field>
+                    <name>days_count</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                    <default>0</default>
                 </field>
                 <field>
                     <name>employee_id</name>

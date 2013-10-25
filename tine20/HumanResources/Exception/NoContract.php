@@ -18,16 +18,20 @@
  */
 class HumanResources_Exception_NoContract extends HumanResources_Exception
 {
-    protected $_nearest_record = NULL;
-
-    /**
-     * construct
+/**
+     * the title of the Exception (may be shown in a dialog)
      *
-     * @param string $_message
-     * @param integer $_code
-     * @return void
+     * @var string
      */
-    public function __construct($_message = 'No contract could not be found.', $_code = 911) {
-        parent::__construct($_message, $_code);
-    }
+    protected $_title = 'No contract could be found.'; // _('No contract could be found.')
+    
+    /**
+     * @see SPL Exception
+     */
+    protected $message = 'Please create a contract for this employee!'; // _('Please create a contract for this employee!')
+    
+    /**
+     * @see SPL Exception
+     */
+    protected $code = 911;
 }
