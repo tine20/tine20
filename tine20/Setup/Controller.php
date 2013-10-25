@@ -1291,9 +1291,8 @@ class Setup_Controller
      */
     public function setConfigOption($key, $value, $applicationName = 'Tinebase')
     {
-        $value = is_string($value) ? $value : Zend_Json::encode($value);
-        
         $config = Tinebase_Config_Abstract::factory($applicationName);
+        
         if ($config) {
             $config->set($key, $value);
         }
