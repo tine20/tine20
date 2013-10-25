@@ -104,7 +104,13 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $notes = $this->_instance->searchNotes($filter, $paging);
         
         $this->assertGreaterThan(0, $notes['totalcount']);
-        $this->assertEquals($this->_objects['note']->note, $notes['results'][0]['note']);
+        $found = false;
+        foreach ($notes['results'] as $note) {
+            if ($this->_objects['note']->note === $note['note']) {
+                $found = true;
+            }
+        }
+        $this->assertTrue($found, 'note not found in notes: ' . print_r($notes['results'], true));
         
         // delete note
         Tinebase_Notes::getInstance()->deleteNotesOfRecord(
