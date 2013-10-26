@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c9cdc5bc01bf09d28fdb4682d12ac312",
+    "hash": "2acb29d90a16802355c8c8b6ddbe9ed2",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -292,11 +292,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.0.x-dev",
+            "version": "1.0",
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "09f8ec56c642ec563e556a1e7778da21ffc7c135"
+                "reference": "b8b4206b57d6b22f7368f46c22d96f131a881cb5"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -322,7 +322,7 @@
             ],
             "description": "Library to sync mobile phones",
             "homepage": "http://www.syncroton.org",
-            "time": "2013-10-18 06:30:29"
+            "time": "2013-10-23 14:05:40"
         },
         {
             "name": "zendframework/zendframework1",
@@ -3159,7 +3159,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "syncroton/syncroton": 20,
         "metaways/opendocument": 20,
         "metaways/timezoneconvert": 20
     },

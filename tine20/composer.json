@@ -16,7 +16,7 @@
         "url": "https://github.com/lkneschke/phing"
     }],
     "require": {
-        "syncroton/syncroton": "1.0.*@dev",
+        "syncroton/syncroton": "1.*",
         "ezyang/htmlpurifier": "v4.5.0",
         "codeplex/phpexcel": "1.7.8",
         "sabre/dav" : "1.8.*",
