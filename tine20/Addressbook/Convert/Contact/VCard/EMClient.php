@@ -176,7 +176,7 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
             try {
                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_record->getId());
                 $jpegData = $image->getBlob('image/jpeg');
-                $photo = new VObject\Property('PHOTO', $jpegData);
+                $photo = new VObject\Property('PHOTO', base64_encode($jpegData));
                 $photo->add('ENCODING', 'b');
                 $photo->add('TYPE', 'JPEG');
                 $card->add($photo);

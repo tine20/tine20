@@ -21,7 +21,8 @@ use Sabre\VObject;
 class Addressbook_Convert_Contact_VCard_MacOSX extends Addressbook_Convert_Contact_VCard_Abstract
 {
     // AddressBook/6.0 (1043) CardDAVPlugin/182 CFNetwork/520.0.13 Mac_OS_X/10.7.1 (11B26)
-    const HEADER_MATCH = '/^AddressBook.*Mac_OS_X\/(?P<version>.*) /';
+    // Mac OS X/10.9 (13A603) AddressBook/1365
+    const HEADER_MATCH = '/Mac[ _]OS[ _]X\/(?P<version>.*) /';
     
     protected $_emptyArray = array(
         'adr_one_countryname'   => null,
@@ -172,7 +173,7 @@ class Addressbook_Convert_Contact_VCard_MacOSX extends Addressbook_Convert_Conta
             try {
                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_record->getId());
                 $jpegData = $image->getBlob('image/jpeg');
-                $photo = new VObject\Property('PHOTO', $jpegData);
+                $photo = new VObject\Property('PHOTO', base64_encode($jpegData));
                 $photo->add('ENCODING', 'b');
                 $photo->add('TYPE', 'JPEG');
                 $card->add($photo);

@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -17,23 +17,23 @@ Ext.ns('Tine.Addressbook');
  * @class       Tine.Addressbook.ContactEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
  * Addressbook Edit Dialog <br>
- * 
+ *
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    
+
     /**
      * parse address button
-     * @type Ext.Button 
+     * @type Ext.Button
      */
     parseAddressButton: null,
-    
+
     windowNamePrefix: 'ContactEditWindow_',
     appName: 'Addressbook',
     recordClass: Tine.Addressbook.Model.Contact,
     showContainerSelector: true,
     multipleEdit: true,
-    
+
     getFormItems: function () {
         if (Tine.Tinebase.configManager.get('mapPanel') && Tine.widgets.MapPanel) {
             this.mapPanel = new Tine.Addressbook.MapPanel({
@@ -41,9 +41,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 title: this.app.i18n._('Map'),
                 disabled: (Ext.isEmpty(this.record.get('adr_one_lon')) || Ext.isEmpty(this.record.get('adr_one_lat'))) && (Ext.isEmpty(this.record.get('adr_two_lon')) || Ext.isEmpty(this.record.get('adr_two_lat')))
             });
-            
+
             Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this.mapPanel);
-            
+
         } else {
             this.mapPanel = new Ext.Panel({
                 layout: 'fit',
@@ -52,7 +52,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 html: ''
             });
         }
-        
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -135,15 +135,15 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                     maxLength: 64
                                 }]/* move to seperate tab, [{
                                     columnWidth: .4,
-                                    fieldLabel: this.app.i18n._('Suffix'), 
+                                    fieldLabel: this.app.i18n._('Suffix'),
                                     name:'n_suffix'
                                 }, {
                                     columnWidth: .4,
-                                    fieldLabel: this.app.i18n._('Job Role'), 
+                                    fieldLabel: this.app.i18n._('Job Role'),
                                     name:'role'
                                 }, {
                                     columnWidth: .2,
-                                    fieldLabel: this.app.i18n._('Room'), 
+                                    fieldLabel: this.app.i18n._('Room'),
                                     name:'room'
                                 }]*/
                             ]},
@@ -168,7 +168,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                      name: 'title',
                                      maxLength: 64
                                 }, {
-                                     width: 90,
+                                     width: 110,
                                      xtype: 'extuxclearabledatefield',
                                      fieldLabel: this.app.i18n._('Birthday'),
                                      name: 'bday'
@@ -193,7 +193,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 name: 'tel_cell',
                                 maxLength: 40
                             }, {
-                                fieldLabel: this.app.i18n._('Fax'), 
+                                fieldLabel: this.app.i18n._('Fax'),
                                 labelIcon: 'images/oxygen/16x16/devices/printer.png',
                                 name: 'tel_fax',
                                 maxLength: 40
@@ -213,13 +213,13 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 name: 'tel_fax_home',
                                 maxLength: 40
                             }], [{
-                                fieldLabel: this.app.i18n._('E-Mail'), 
+                                fieldLabel: this.app.i18n._('E-Mail'),
                                 labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
                                 name: 'email',
                                 vtype: 'email',
                                 maxLength: 64
                             }, {
-                                fieldLabel: this.app.i18n._('E-Mail (private)'), 
+                                fieldLabel: this.app.i18n._('E-Mail (private)'),
                                 labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
                                 name: 'email_home',
                                 vtype: 'email',
@@ -381,18 +381,18 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             ]
         };
     },
-    
+
     /**
      * init component
      */
     initComponent: function () {
         var relatedRecords = {};
-        
+
         this.initToolbar();
-        
+
         this.supr().initComponent.apply(this, arguments);
     },
-    
+
     /**
      * initToolbar
      */
@@ -414,38 +414,38 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             scope: this,
             enableToggle: true
         });
-        
+
         this.tbarItems = [exportContactButton, addNoteButton, this.parseAddressButton];
     },
-    
+
     /**
      * checks if form data is valid
-     * 
+     *
      * @return {Boolean}
      */
     isValid: function () {
         var form = this.getForm();
         var isValid = true;
-        
+
         // you need to fill in one of: n_given n_family org_name
         // @todo required fields should depend on salutation ('company' -> org_name, etc.)
         //       and not required fields should be disabled (n_given, n_family, etc.)
         if (form.findField('n_family').getValue() === '' && form.findField('org_name').getValue() === '') {
             var invalidString = String.format(this.app.i18n._('Either {0} or {1} must be given'), this.app.i18n._('Last Name'), this.app.i18n._('Company'));
-            
+
             form.findField('n_family').markInvalid(invalidString);
             form.findField('org_name').markInvalid(invalidString);
-            
+
             isValid = false;
         }
         else {
             form.findField('n_family').clearInvalid();
             form.findField('org_name').clearInvalid();
         }
-        
+
         return isValid && Tine.Addressbook.ContactEditDialog.superclass.isValid.apply(this, arguments);
     },
-    
+
     /**
      * overwrites the isValid method on multipleEdit
      */
@@ -456,13 +456,13 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             var invalidString = String.format(this.app.i18n._('Either {0} or {1} must be given'), this.app.i18n._('Last Name'), this.app.i18n._('Company'));
             this.getForm().findField('n_family').markInvalid(invalidString);
             this.getForm().findField('org_name').markInvalid(invalidString);
-            
+
             isValid = false;
         }
-        
+
         return isValid;
     },
-    
+
     /**
      * export pdf handler
      */
@@ -478,12 +478,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         });
         downloader.start();
     },
-    
+
     /**
      * parse address handler
-     * 
+     *
      * opens message box where user can paste address
-     * 
+     *
      * @param {Ext.Button} button
      */
     onParseAddress: function (button) {
@@ -500,35 +500,35 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             this.tokenModePlugin.endTokenMode();
         }
     },
-    
+
     /**
      * send address to server + fills record/form with parsed data + adds unrecognizedTokens to description box
-     * 
+     *
      * @param {String} address
      */
     parseAddress: function(address) {
         Tine.log.debug('parsing address ... ');
-        
+
         Tine.Addressbook.parseAddressData(address, function(result, response) {
             Tine.log.debug('parsed address:');
             Tine.log.debug(result);
-            
+
             // only set the fields that could be detected
             Ext.iterate(result.contact, function(key, value) {
                 if (value && ! this.record.get(key)) {
                     this.record.set(key, value);
                 }
             }, this);
-            
+
             var oldNote = (this.record.get('note')) ? this.record.get('note') : '';
             this.record.set('note', result.unrecognizedTokens.join(' ') + oldNote);
             this.onRecordLoad();
-            
+
             this.parseAddressButton.setText(this.app.i18n._('End token mode'));
             this.tokenModePlugin.startTokenMode();
         }, this);
     },
-    
+
     /**
      * onRecordLoad
      */
@@ -536,7 +536,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         // NOTE: it comes again and again till
         if (this.rendered) {
             var container = this.record.get('container_id');
-            
+
             // handle default container
             // TODO is this still needed? don't we already have generic default container handling?
             if (! this.record.id) {
@@ -547,11 +547,11 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 } else if (! Ext.isObject(container)) {
                     container = Tine.Addressbook.registry.get('defaultAddressbook');
                 }
-                
+
                 this.record.set('container_id', '');
                 this.record.set('container_id', container);
             }
-            
+
             if (this.mapPanel instanceof Tine.Addressbook.MapPanel) {
                 this.mapPanel.onRecordLoad(this.record);
             }
@@ -562,11 +562,11 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
 
 /**
  * Opens a new contact edit dialog window
- * 
+ *
  * @return {Ext.ux.Window}
  */
 Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
-    
+
     // if a container is selected in the tree, take this as default container
     var treeNode = Ext.getCmp('Addressbook_Tree') ? Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode() : null;
     if (treeNode && treeNode.attributes && treeNode.attributes.container.type) {
@@ -574,7 +574,7 @@ Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
     } else {
         config.forceContainer = null;
     }
-    
+
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,

@@ -255,6 +255,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @private
      */
     onRequestFailed: function(response, request) {
+        this.saving = false;
+        
         if (response.code && response.code == 902) {
             // deadline exception
             Ext.MessageBox.alert(

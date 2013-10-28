@@ -98,7 +98,7 @@ class Addressbook_Convert_Contact_VCard_WebDAVCollaborator extends Addressbook_C
             try {
                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_record->getId());
                 $jpegData = $image->getBlob('image/jpeg');
-                $photo = new Sabre_VObject_Property('PHOTO', $jpegData);
+                $photo = new Sabre_VObject_Property('PHOTO', base64_encode($jpegData));
                 $photo->add('ENCODING', 'b');
                 $photo->add('TYPE', 'JPEG');
                 $card->add($photo);
