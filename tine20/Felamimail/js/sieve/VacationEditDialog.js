@@ -337,6 +337,7 @@ Ext.namespace('Tine.Felamimail.sieve');
      * @param {Object} exception
      */
     onRequestFailed: function(exception) {
+        this.saving = false;
         Tine.Felamimail.handleRequestException(exception);
         this.loadMask.hide();
     },

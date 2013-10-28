@@ -209,6 +209,7 @@ Tine.Sipgate.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     onRequestFailed: function(exception) {
+        this.saving = false;
         this.resetValidated();
         this.validateMask.hide();
         this.syncMask.hide();
