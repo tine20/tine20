@@ -175,7 +175,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         
         // add extra free times of this year, if not expired (defined by account)
         if ($account->extra_free_times) {
-            $extraFreeTimes = $this->_calculateExtraFreeTimes($account, $acceptedVacationDays);
+            $extraFreeTimes = $this->calculateExtraFreeTimes($account, $acceptedVacationDays);
             $possibleVacationDays += $extraFreeTimes['remaining'];
         }
         
@@ -197,10 +197,10 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
      * combined with all accepted vacation days for an account
      * 
      * @param HumanResources_Model_Account $account
-     * @param unknown $acceptedVacationDays
-     * @return multitype:number
+     * @param Tinebase_Record_RecordSet $acceptedVacationDays
+     * @return array
      */
-    protected function _calculateExtraFreeTimes($account, $acceptedVacationDays)
+    public function calculateExtraFreeTimes($account, $acceptedVacationDays)
     {
         // clone to find out if vacation was booked before expiration date of eft
         $tempAVD = clone $acceptedVacationDays;

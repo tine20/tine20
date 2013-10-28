@@ -358,6 +358,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $cController = HumanResources_Controller_Contract::getInstance();
         $eController = HumanResources_Controller_Employee::getInstance();
         $aController = HumanResources_Controller_Account::getInstance();
+        $ftController = HumanResources_Controller_FreeTime::getInstance();
+        $fdController = HumanResources_Controller_FreeDay::getInstance();
         
         // validate employeeId
         $employee = $eController->get($_employeeId);
@@ -368,7 +370,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($_year && (! $_freeTimeId)) {
             $minDate->setDate($_year, 1, 1);
         } elseif ($_freeTimeId) {
-            $myFreeTime = HumanResources_Controller_FreeTime::getInstance()->get($_freeTimeId);
+            // if a freetime id is given, take the year of the freetime
+            $myFreeTime = $ftController->get($_freeTimeId);
             $minDate->setDate($myFreeTime->firstday_date->format('Y'), 1, 1);
         } else {
             $minDate->setDate($minDate->format('Y'), 1, 1);
@@ -417,6 +420,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $first = TRUE;
         
         $remainingVacation = 0;
+        $feastDays = array();
         
         // find out disabled days for the different contracts
         foreach ($contracts as $contract) {
@@ -430,9 +434,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             
             $remainingVacation += $cController->calculateVacationDays($contract, $minDate, $maxDate);
-            
+            // find out weekdays to disable
             if (is_object($json)) {
                 foreach($json->days as $index => $hours) {
+                    $hours = intval($hours);
                     if ($hours === 0) {
                         $day = clone $startDay;
                         $day->setWeekDay(($index+1));
@@ -445,56 +450,119 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
             // search feast days
-            $excludeDates = array_merge($cController->getFeastDays($contract, $startDay, $stopDay), $excludeDates);
+            $feastDays = array_merge($cController->getFeastDays($contract, $startDay, $stopDay), $feastDays);
         }
         
-        // search vacation days for this interval
-        $filter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
+        // set time to 0
+        foreach($feastDays as &$feastDay) {
+            $feastDay->setTime(0,0,0);
+        }
         
-        $freetimes = HumanResources_Controller_FreeTime::getInstance()->search($filter);
+        // search free times for the account and the interval
         
-        $accountFreeTimes = $freetimes->filter('account_id', $account->getId());
+        // prepare free time filter, add employee_id
+        $freeTimeFilter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
+        $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
         
-        $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_Int(array('field' => 'duration', 'operator' => 'equals', 'value' => 1)));
+        // don't search for freetimes belonging to the freetime handled itself
+        if ($_freeTimeId) {
+            $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'not', 'value' => $_freeTimeId)));
+        }
         
-        $filter1 = clone $filter;
-        $filter1->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $freetimes->id)));
-        $otherVacationDays = HumanResources_Controller_FreeDay::getInstance()->search($filter1);
+        // prepare vacation times filter
+        $vacationTimesFilter = clone $freeTimeFilter;
+        $vacationTimesFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'type', 'operator' => 'equals', 'value' => 'vacation')));
         
-        $filter2 = clone $filter;
-        $filter2->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $accountFreeTimes->id)));
+        // search all vacation times belonging to the account, regardless which interval we want
+        $accountFreeTimesFilter = clone $vacationTimesFilter;
+        $accountFreeTimesFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
+        $accountVacationTimeIds = $ftController->search($accountFreeTimesFilter)->id;
         
-        $accountVacationDays = HumanResources_Controller_FreeDay::getInstance()->search($filter2);
+        // search all vacation times for the interval
+        $fddMin = clone $minDate;
+        $fddMin->subDay(1);
+        $fddMax = clone $maxDate;
+        $fddMax->addDay(1);
+        
+        $vacationTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $fddMin)));
+        $vacationTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $fddMax)));
+        $vacationTimes = $ftController->search($vacationTimesFilter);
+        
+        $acceptedVacationTimes = $vacationTimes->filter('status', 'ACCEPTED');
+        
+        // search all sickness times for the interval
+        $sicknessTimesFilter = clone $freeTimeFilter;
+        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'type', 'operator' => 'equals', 'value' => 'sickness')));
+        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $fddMin)));
+        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $fddMax)));
+        $sicknessTimes = $ftController->search($sicknessTimesFilter);
+        
+        // search free days belonging the found free times
+        
+        // prepare free day filter
+        $freeDayFilter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
+        $freeDayFilter->addFilter(new Tinebase_Model_Filter_Int(array('field' => 'duration', 'operator' => 'equals', 'value' => 1)));
+        
+        // find vacation days belonging to the account (date doesn't matter, may be from another year, just count the days)
+        if (count($accountVacationTimeIds)) {
+            $accountFreeDayFilter = clone $freeDayFilter;
+            $accountFreeDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $accountVacationTimeIds)));
+            $remainingVacation = $remainingVacation - $fdController->search($accountFreeDayFilter)->count();
+        }
+        
+        // find all vacation days of the period
+        $vacationDayFilter = clone $freeDayFilter;
+        $vacationDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $vacationTimes->id)));
+        $vacationDays = $fdController->search($vacationDayFilter);
+        
+        // find out accepted vacation days. Vacation days will be substracted from remainingVacation only if they are accepted,
+        // but they will be shown in the freetime edit dialog
+        // TODO: discuss this
+        $acceptedVacationDayFilter = clone $freeDayFilter;
+        $acceptedVacationDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $acceptedVacationTimes->id)));
+        $acceptedVacationDays = $fdController->search($acceptedVacationDayFilter);
+        
+        // calculate extra vacation days
+        if ($account) {
+            $filter = new HumanResources_Model_ExtraFreeTimeFilter(array());
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
+            $account->extra_free_times = HumanResources_Controller_ExtraFreeTime::getInstance()->search($filter);
+            $extraFreeTimes = $aController->calculateExtraFreeTimes($account, $acceptedVacationDays);
+            $remainingVacation = $remainingVacation + $extraFreeTimes['remaining'];
+        } else {
+            $extraFreeTimes = NULL;
+        }
+        
+        // find all sickness days of the period
+        $sicknessDayFilter = clone $freeDayFilter;
+        $sicknessDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $sicknessTimes->id)));
+        $sicknessDays = $fdController->search($sicknessDayFilter);
         
         $ownFreeDays = NULL;
         
         if ($_freeTimeId) {
-            $filter3 = clone $filter;
-            $filter3->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => array($_freeTimeId))));
-            $ownFreeDays = HumanResources_Controller_FreeDay::getInstance()->search($filter3);
-            $otherVacationDays->removeRecords($ownFreeDays);
+            $ownFreeDaysFilter = clone $freeDayFilter;
+            $ownFreeDaysFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => array($_freeTimeId))));
+            $ownFreeDays = $fdController->search($ownFreeDaysFilter);
+            $remainingVacation = $remainingVacation - $ownFreeDays->count();
             $ownFreeDays = $ownFreeDays->toArray();
         }
         
-        $remainingVacation -= $accountVacationDays->count();
-        
-        $excludeDates      = array_merge($otherVacationDays->date, $excludeDates);
-        $otherVacationDays = $otherVacationDays ? $otherVacationDays->toArray() : NULL;
-        
+        // TODO: remove results property, just return results array itself
         return array(
             'results' => array(
                 'remainingVacation' => $remainingVacation,
-                'otherVacationDays' => $otherVacationDays, 
-                'ownFreeDays'   => $ownFreeDays,
-                'excludeDates'  => $excludeDates,
-                'contracts'     => $contracts->toArray(),
-                'employee'      => $employee->toArray(),
-                'firstDay'      => $firstDay,
-                'lastDay'       => $stopDay,
-             ), 
-            'totalcount' => count($excludeDates), 
+                'extraFreeTimes'    => $extraFreeTimes,
+                'vacationDays'      => $vacationDays->toArray(),
+                'sicknessDays'      => $sicknessDays->toArray(),
+                'excludeDates'      => $excludeDates,
+                'ownFreeDays'       => $ownFreeDays,
+                'feastDays'         => $feastDays,
+                'contracts'         => $contracts->toArray(),
+                'employee'          => $employee->toArray(),
+                'firstDay'          => $firstDay,
+                'lastDay'           => $stopDay,
+             )
         );
     }
     

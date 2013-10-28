@@ -137,7 +137,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             days = [];
         
         for (var index = 0; index < 7; index++) {
-            days[index] = values['weekdays_' + index];
+            days[index] = parseInt(values['weekdays_' + index]);
         }
         
         return Ext.encode({days: days});
@@ -177,7 +177,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 incrementValue : .5,
                 alternateIncrementValue: 1,
                 minValue: 0,
-                maxValue: 16,
+                maxValue: 24,
                 allowDecimals : true
             }),
             decimalPrecision: 2,

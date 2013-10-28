@@ -31,7 +31,6 @@
     background-image:url(../../images/oxygen/32x32/apps/ksudoku.png) !important;
 }
 
-
 .applyContactData {
         height:14px!important;
         width: 14px!important;
@@ -67,4 +66,20 @@
 
 .HumanResources .x-date-picker {
     border-color: #B5B8C8!important;
+}
+
+.hr-date-sickness a, .hr-date-vacation a, .hr-date-feast a {
+    color: white!important;
+}
+
+.hr-date-sickness {
+    background-color: #e1d8d3!important;
+}
+
+.hr-date-vacation {
+    background-color: #d4e1d3!important;
+}
+
+.hr-date-feast {
+    background-color: #e0d3e1!important;
 }
