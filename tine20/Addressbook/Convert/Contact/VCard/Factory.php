@@ -119,4 +119,16 @@ class Addressbook_Convert_Contact_VCard_Factory
         
         return array($backend, $version);
     }
+    
+    /**
+     * returns CalDAV user agent
+     * 
+     * @return array($agent, $version)
+     */
+    public static function getUserAgent()
+    {
+        $userAgent = array_key_exists('HTTP_USER_AGENT', $_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+        
+        return self::parseUserAgent($userAgent);
+    }
 }
