@@ -50,6 +50,9 @@ class Tinebase_Server_WebDAVTests extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
+    /**
+     * test general functionality of Tinebase_Server_WebDAV
+     */
     public function testServer()
     {
         $_SERVER['REQUEST_METHOD']            = 'PROPFIND';
@@ -79,5 +82,45 @@ class Tinebase_Server_WebDAVTests extends PHPUnit_Framework_TestCase
         ob_end_clean();
         
         $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30));
+    }
+    
+    /**
+     * test propfind for principal url
+     * 
+     * you have to provide a valid contactid
+     */
+    public function testPropfindPrincipal()
+    {
+        $contactId = '692b5f099593918a4bc87c411578891e47e79790';
+        
+        $_SERVER['REQUEST_METHOD']            = 'PROPFIND';
+        $_SERVER['HTTP_DEPTH']                = '0';
+        $_SERVER['HTTP_USER_AGENT']           = 'Mozilla/5.0 (X11; Linux i686; rv:24.0) Gecko/20100101 Thunderbird/24.1.0 Lightning/2.6.2';
+        $_SERVER['REQUEST_URI']               = '/principals/users/' . $contactId;
+        $_SERVER['PHP_AUTH_USER']             = $this->_config->username;
+        $_SERVER['PHP_AUTH_PW']               = $this->_config->password;
+        $_SERVER['REMOTE_ADDR']               = $this->_config->ip;
+        
+        $request = new Zend_Controller_Request_Http(
+            Zend_Uri::factory('http://tine20pgsql/principals/users/' . $contactId . '/')
+        );
+        
+        $body = fopen('php://temp', 'r+');
+        fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:caldav"><D:prop><C:calendar-home-set/><C:calendar-user-address-set/><C:schedule-inbox-URL/><C:schedule-outbox-URL/></D:prop></D:propfind>');
+        rewind($body);
+        
+        ob_start();
+        
+        $server = new Tinebase_Server_WebDAV();
+        
+        $server->handle($request, $body);
+        
+        $result = ob_get_contents();
+        
+        ob_end_clean();
+        
+        //var_dump($result);
+        
+        $this->assertNotContains('<d:status>HTTP/1.1 404 Not Found</d:status>', $result);
     }
 }

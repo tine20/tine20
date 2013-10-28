@@ -31,7 +31,7 @@ PERCENT-COMPLETE:10
 STATUS:IN-PROCESS
 PRIORITY:0
 LOCATION:Kiel
-DESCRIPTION:This is a descpription\nwith a linebreak and a \; \, and :
+DESCRIPTION:This is a descpription\nwith a linebreak and a \; \, and : a
 BEGIN:VALARM
 ACTION:DISPLAY
 TRIGGER;VALUE=DURATION:-PT1H15M

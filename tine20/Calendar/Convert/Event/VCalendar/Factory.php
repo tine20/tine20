@@ -6,12 +6,11 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * addressbook vcard convert factory class
+ * calendar VCALENDAR converter factory class
  *
  * @package     Calendar
  * @subpackage  Convert
@@ -23,7 +22,7 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_KDE         = 'kde';
     const CLIENT_MACOSX      = 'macosx';
     const CLIENT_THUNDERBIRD = 'thunderbird';
-    const CLIENT_EMCLIENT     = 'emclient';
+    const CLIENT_EMCLIENT    = 'emclient';
     
     /**
      * factory function to return a selected vcalendar backend class
@@ -105,7 +104,8 @@ class Calendar_Convert_Event_VCalendar_Factory
             $version = null;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $_userAgent ->  backend: $backend version: $version");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $_userAgent ->  backend: $backend version: $version");
         
         return array($backend, $version);
     }

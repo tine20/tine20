@@ -155,10 +155,10 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends PHPUnit_Framework_TestCa
         // var_dump($vcalendar);
         // required fields
         $this->assertContains('VERSION:2.0',                                    $vcalendar, $vcalendar);
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Tasks V',         $vcalendar, $vcalendar);
-        $this->assertContains('CREATED;VALUE=DATE-TIME:20111111T111100Z',       $vcalendar, $vcalendar);
-        $this->assertContains('LAST-MODIFIED;VALUE=DATE-TIME:20111111T121200Z', $vcalendar, $vcalendar);
-        $this->assertContains('DTSTAMP;VALUE=DATE-TIME:',                       $vcalendar, $vcalendar);
+        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Tasks V',         $vcalendar, $vcalendar);
+        $this->assertContains('CREATED:20111111T111100Z',       $vcalendar, $vcalendar);
+        $this->assertContains('LAST-MODIFIED:20111111T121200Z', $vcalendar, $vcalendar);
+        $this->assertContains('DTSTAMP:',                       $vcalendar, $vcalendar);
         $this->assertContains('TZID:Europe/Berlin',               $vcalendar, $vcalendar);
         $this->assertContains('UID:' . $task->uid,                $vcalendar, $vcalendar);
         $this->assertContains('LOCATION:' . $task->location,      $vcalendar, $vcalendar);

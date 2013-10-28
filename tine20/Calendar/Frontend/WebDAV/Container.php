@@ -182,18 +182,6 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         return $this->_controller;
     }
     
-    protected function _getCalendarVTimezone()
-    {
-        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, Tinebase_Core::getUser()->getId());
-
-        // create vcalendar object with timezone information
-        $vcalendar = new VObject\Component('CALENDAR');
-        $vcalendar->add(new Sabre_VObject_Component_VTimezone($timezone));
-        
-        // Taking out \r to not screw up the xml output
-        return str_replace("\r","", $vcalendar->serialize());
-    }
-    
     /**
      * Performs a calendar-query on the contents of this calendar.
      *

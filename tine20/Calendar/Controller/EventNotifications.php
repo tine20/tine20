@@ -1,7 +1,4 @@
 <?php
-
-use Sabre\VObject;
-
 /**
  * Calendar Event Notifications
  * 
@@ -408,7 +405,7 @@ use Sabre\VObject;
             foreach ($vcalendar->children() as $component) {
                 if ($component->name == 'VEVENT') {
                     if (isset($component->{'ORGANIZER'})) {
-                        $component->{'ORGANIZER'}->add(new VObject\Parameter('SEND-BY', 'mailto:' . $_updater->accountEmailAddress));
+                        $component->{'ORGANIZER'}->add('SEND-BY', 'mailto:' . $_updater->accountEmailAddress);
                     }
                 }
             }

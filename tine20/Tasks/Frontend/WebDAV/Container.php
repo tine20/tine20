@@ -232,25 +232,4 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
         
         return $response;
     }
-    
-    protected function _getController()
-    {
-        if ($this->_controller === null) {
-            $this->_controller = Tasks_Controller_Task::getInstance();
-        }
-        
-        return $this->_controller;
-    }
-    
-    protected function _getCalendarVTimezone()
-    {
-        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, Tinebase_Core::getUser()->getId());
-
-        // create vcalendar object with timezone information
-        $vcalendar = new VObject\Component('CALENDAR');
-        $vcalendar->add(new Sabre_VObject_Component_VTimezone($timezone));
-        
-        // Taking out \r to not screw up the xml output
-        return str_replace("\r","", $vcalendar->serialize());
-    }
 }

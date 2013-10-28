@@ -268,7 +268,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $updatedException = Calendar_Controller_Event::getInstance()->update($exception);
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
         $vcalendar = stream_get_contents($event->get());
-        $this->assertContains('DTSTART;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T130000', $vcalendar, 'exception must not be implicitly deleted');
+        $this->assertContains('DTSTART;TZID=Europe/Berlin:20111008T130000', $vcalendar, 'exception must not be implicitly deleted');
         
         // delete attendee from exception -> implicit fallout exception is not longer in displaycal
         $exception = $event->getRecord()->exdate->filter('is_deleted', 0)->getFirstRecord();
@@ -276,13 +276,13 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $updatedException = Calendar_Controller_Event::getInstance()->update($exception);
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
         $vcalendar = stream_get_contents($event->get());
-        $this->assertContains('EXDATE;VALUE=DATE-TIME:20111008T080000Z', $vcalendar, 'exception must be implicitly deleted from event ' . print_r($event->getRecord()->toArray(), TRUE));
+        $this->assertContains('EXDATE:20111008T080000Z', $vcalendar, 'exception must be implicitly deleted from event ' . print_r($event->getRecord()->toArray(), TRUE));
         
         // save back event -> implicit delete must not be deleted on server
         $event->put($vcalendar);
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], $event->getRecord()->getId());
         $vcalendar = stream_get_contents($event->get());
-        $this->assertContains('DTSTART;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T130000', $vcalendar, 'exception must not be implicitly deleted after update');
+        $this->assertContains('DTSTART;TZID=Europe/Berlin:20111008T130000', $vcalendar, 'exception must not be implicitly deleted after update');
     }
     
     /**
@@ -313,8 +313,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $vcalendar = stream_get_contents($event->get());
         #var_dump($vcalendar);
         $this->assertContains('SUMMARY:New Event', $vcalendar);
-        $this->assertContains('EXDATE;VALUE=DATE-TIME:20111005T080000Z', $vcalendar);
-        $this->assertContains('RECURRENCE-ID;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T100000', $vcalendar);
+        $this->assertContains('EXDATE:20111005T080000Z', $vcalendar);
+        $this->assertContains('RECURRENCE-ID;TZID=Europe/Berlin:20111008T100000', $vcalendar);
         $this->assertContains('TRIGGER;VALUE=DURATION:-PT1H30M', $vcalendar); // base alarm
         $this->assertContains('TRIGGER;VALUE=DURATION:-PT1H15M', $vcalendar); // exception alarm
     }

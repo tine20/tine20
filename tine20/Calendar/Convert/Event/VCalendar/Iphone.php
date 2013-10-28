@@ -7,11 +7,10 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- *
  */
 
 /**
- * class to convert a iphone vcalendar to event model and back again
+ * class to convert an iOS VCALENDAR to Tine 2.0 Calendar_Model_Event and back again
  *
  * @package     Calendar
  * @subpackage  Convert

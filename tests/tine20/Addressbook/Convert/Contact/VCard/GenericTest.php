@@ -120,7 +120,7 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         $this->assertContains('VERSION:3.0', $vcard, $vcard);
         
         $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
-        $this->assertContains("PRODID:-//tine20.org//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
+        $this->assertContains("PRODID:-//tine20.com//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
         
         // @todo can not test for folded lines
         $this->assertContains('ADR;TYPE=HOME:;Address Privat 2;Address Privat 1;City Privat;Region Privat;', $vcard, $vcard);
@@ -130,13 +130,13 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         $this->assertContains('N:Kneschke;Lars', $vcard, $vcard);
         $this->assertContains('NOTE:Notes\nwith\nLine Break', $vcard, $vcard);
         $this->assertContains('ORG:Organisation;Business Unit', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=CELL;TYPE=WORK:+49 MOBIL', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=FAX;TYPE=WORK:+49 FAX', $vcard, $vcard);
+        $this->assertContains('TEL;TYPE=CELL,WORK:+49 MOBIL', $vcard, $vcard);
+        $this->assertContains('TEL;TYPE=FAX,WORK:+49 FAX', $vcard, $vcard);
         $this->assertContains('TEL;TYPE=HOME:+49 PRIVAT', $vcard, $vcard);
         $this->assertContains('TEL;TYPE=WORK:+49 BUSINESS', $vcard, $vcard);
         $this->assertContains('TITLE:Titel', $vcard, $vcard);
-        $this->assertContains('URL;TYPE=WORK:http\\\\://www.tine20.com', $vcard, $vcard);
-        $this->assertContains('URL;TYPE=HOME:http\\\\://www.tine20.org', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=WORK:http\\://www.tine20.com', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=HOME:http\\://www.tine20.org', $vcard, $vcard);
     }
     
 }
