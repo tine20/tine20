@@ -208,6 +208,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             record.set('relations', relations);
         } else {
             this.editDialog.loadMask.hide();
+            this.editDialog.saving = false;
             return false;
         }
         interceptor();
