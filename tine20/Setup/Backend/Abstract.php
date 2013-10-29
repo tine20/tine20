@@ -76,6 +76,16 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     }
     
     /**
+     * get db adapter
+     * 
+     * @return Zend_Db_Adapter_Abstract
+     */
+    public function getDb()
+    {
+        return $this->_db;
+    }
+    
+    /**
      * checks if application is installed at all
      *
      * @param unknown_type $_application
@@ -212,7 +222,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * 
      * @param string statement
      * @return stdClass object
-     */       
+     */
     public function execQuery($_statement, $bind = array())
     {
         $stmt = $this->_db->query($_statement, $bind);
