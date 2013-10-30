@@ -699,3 +699,9 @@ msgstr "Das Jahr kann nicht geändert werden"
 
 msgid "You have already selected some dates from another year. Please create a new record to add dates from another year!"
 msgstr "Sie haben bereits ein odere mehrere Tage aus einem anderen Jahr gewählt. Bitte erstellen Sie einen neuen Datensatz, um die gewünschten Tage einzutragen."
+
+msgid "Could not book as vacation"
+msgstr "Konnte nicht als Urlaub gebucht werden"
+
+msgid "The unexcused sickness days could not be booked as vacation. There are not enough days left!"
+msgstr "Die unentschuldigten Krankheitstage konnten nicht als Urlaub gebucht werden, da keine Urlaubstage mehr übrig sind!"

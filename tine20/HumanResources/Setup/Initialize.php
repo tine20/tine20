@@ -136,22 +136,23 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
      */
     function _initializeWorkingTimeModels()
     {
+        $translate = Tinebase_Translation::getTranslation('HumanResources');
         $_record = new HumanResources_Model_WorkingTime(array(
-            'title' => 'Vollzeit 40 Stunden',
+            'title' => $translate->_('Full-time 40 hours'),
             'working_hours' => '40',
             'type'  => 'static',
             'json'  => '{"days":[8,8,8,8,8,0,0]}'
         ));
         HumanResources_Controller_WorkingTime::getInstance()->create($_record);
         $_record = new HumanResources_Model_WorkingTime(array(
-            'title' => 'Vollzeit 37,5 Stunden',
+            'title' => $translate->_('Full-time 37.5 hours'),
             'working_hours' => '37.5',
             'type'  => 'static',
             'json'  => '{"days":[8,8,8,8,5.5,0,0]}'
         ));
         HumanResources_Controller_WorkingTime::getInstance()->create($_record);
         $_record = new HumanResources_Model_WorkingTime(array(
-            'title' => 'Teilzeit 20 Stunden',
+            'title' => $translate->_('Part-time 20 hours'),
             'working_hours' => '20',
             'type'  => 'static',
             'json'  => '{"days":[4,4,4,4,4,0,0]}'

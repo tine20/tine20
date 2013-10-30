@@ -861,7 +861,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         }, this);
         
         if (! invalid && Ext.isArray(this.view.invalidRelatedRecords)) {
-            index = this.view.invalidRelatedRecords.indexOf(record.getId());
+            var index = this.view.invalidRelatedRecords.indexOf(record.getId());
             if (index > -1) {
                 this.view.invalidRelatedRecords.splice(index, 1);
             }
@@ -966,6 +966,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         this.onUpdate(o.grid.store, o.record);
         this.view.refresh();
     },
+    
     /**
      * validates constrains config, is called after row edit
      * @param {Object} o
@@ -976,10 +977,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             var index = -1;
             
             this.store.remove(o.record.getId());
-            
-            if (Ext.isArray(this.view.invalidRowRecords) && (index = this.view.invalidRowRecords.indexOf(o.record.id) > -1)) {
-                this.view.invalidRowRecords.splice(index, 1);
-            }
+            this.removeFromInvalidRelatedRecords(o.record);
             
             var model = o.record.get('related_model').split('_Model_');
             var app = model[0];
@@ -997,15 +995,22 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                     // check new value
                     if(conf.max && conf.max > 0 && (conf.type == o.value)) {
                         var resNew = this.store.queryBy(function(record, id) {
-                            if((o.value == record.get('type')) && (record.get('related_model') == (app + '_Model_' + model))) return true;
-                            else return false;
+                            if ((o.value == record.get('type')) && (record.get('related_model') == (app + '_Model_' + model))) {
+                                return true;
+                            } else {
+                                return false;
+                            }
                         }, this);
                         // add all record ids to invalidRecords, if maximum is reached
                         if(resNew.getCount() >= conf.max) {
                             resNew.each(function(item) {
-                                if(this.view.invalidRowRecords.indexOf(item.id) === -1) this.view.invalidRowRecords.push(item.id);
+                                if(this.view.invalidRowRecords.indexOf(item.id) === -1) {
+                                    this.view.invalidRowRecords.push(item.id);
+                                }
                             }, this);
-                            if(this.view.invalidRowRecords.indexOf(o.record.id) === -1) this.view.invalidRowRecords.push(o.record.id);
+                            if(this.view.invalidRowRecords.indexOf(o.record.id) === -1) {
+                                this.view.invalidRowRecords.push(o.record.id);
+                            }
                         }
                     } 
                     // check old value
@@ -1015,7 +1020,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                             else return false;
                         }, this);
 
-                        if((resOld.getCount()-1) <= conf.max) {
+                        if ((resOld.getCount()-1) <= conf.max) {
                             resOld.each(function(item) {
                                 if(item.id != o.record.get('id')) this.view.invalidRowRecords.remove(item.id);
                             }, this);
@@ -1024,10 +1029,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 }, this);
             }
             
-            var index = -1;
-            if (Ext.isArray(this.view.invalidRelatedRecords) &&( index = this.view.invalidRelatedRecords.indexOf(o.record.id) > -1)) {
-                this.view.invalidRelatedRecords.splice(index, 1);
-            }
+            this.removeFromInvalidRelatedRecords(o.record);
             
             // check constrains from other side
             this.validateRelatedConstrainsConfig(o.record.get('related_record'), o.record, true);
@@ -1035,7 +1037,35 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         
         return true;
     },
-
+    
+    /**
+     * removes a record from invalid records array
+     * 
+     * @param {Tine.Tinebase.data.Record} record
+     */
+    removeFromInvalidRelatedRecords: function(record) {
+        if (Ext.isArray(this.view.invalidRelatedRecords)) {
+            var index = this.view.invalidRelatedRecords.indexOf(record.id);
+            if (index > -1) {
+                this.view.invalidRelatedRecords.splice(index, 1);
+            }
+        }
+    },
+    
+    /**
+     * removes a record from invalid records array
+     * 
+     * @param {Tine.Tinebase.data.Record} record
+     */
+    removeFromInvalidRowRecords: function(record) {
+        if (Ext.isArray(this.view.invalidRowRecords)) {
+            var index = this.view.invalidRowRecords.indexOf(record.id);
+            if (index > -1) {
+                this.view.invalidRowRecords.splice(index, 1);
+            }
+        }
+    },
+    
     /**
      * is called when a record is added to the store
      * @param {Ext.data.SimpleStore} store
@@ -1116,12 +1146,37 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         }
         interceptor();
     },
+    
+    /**
+     * remove handler
+     * 
+     * @param {} button
+     * @param {} event
+     */
+    onRemove: function(button, event) {
+        var selectedRows = this.getSelectionModel().getSelections();
+        
+        for (var index = 0; index < selectedRows.length; index++) {
+            this.removeFromInvalidRowRecords(selectedRows[index]);
+            this.removeFromInvalidRelatedRecords(selectedRows[index]);
+        }
+        
+        Tine.widgets.relation.GenericPickerGridPanel.superclass.onRemove.call(this, button, event);
+    },
+    
     /**
      * checks if there are invalid relations
      * @return {Boolean}
      */
     isValid: function() {
-        if(this.view && this.view.invalidRowRecords && this.view.invalidRowRecords.length > 0) return false;
+        if (this.view) {
+            if (this.view.hasOwnProperty('invalidRowRecords') && (this.view.invalidRowRecords.length > 0)) {
+                return false;
+            }
+            if (this.view.hasOwnProperty('invalidRelatedRecords') && (this.view.invalidRelatedRecords.length > 0)) {
+                return false;
+            }
+        }
         return true;
     },
 

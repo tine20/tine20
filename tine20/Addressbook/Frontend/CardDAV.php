@@ -97,7 +97,10 @@ class Addressbook_Frontend_CardDAV extends DAV\Collection implements DAV\IProper
             case 1:
                 try {
                     // getchild to new collection ou existing one.
-                    if ($_name instanceof Tinebase_Model_Container) {
+                    if ($_name == Addressbook_Frontend_CardDAV_AllContacts::NAME) {
+                        return new Addressbook_Frontend_CardDAV_AllContacts(Tinebase_Core::getUser());
+                    
+                    } else if ($_name instanceof Tinebase_Model_Container) {
                         $container = $_name;
                     } else if (is_numeric($_name)) {
                         $container = Tinebase_Container::getInstance()->getContainerById($_name);
@@ -149,12 +152,19 @@ class Addressbook_Frontend_CardDAV extends DAV\Collection implements DAV\IProper
             # path == /account->contact_id
             # list container
             case 1:
-                $containers = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Model_Grants::GRANT_SYNC);
-                foreach ($containers as $container) {
-                    try {
-                        $children[] = $this->getChild($container);
-                    } catch (DAV\Exception\NotFound $defnf) {
-                        // skip child => no read permissions
+                list ($client, $version) = Addressbook_Convert_Contact_VCard_Factory::getUserAgent();
+                if (in_array($client, array(Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX))) {
+                    $children[] = $this->getChild(Addressbook_Frontend_CardDAV_AllContacts::NAME);
+                }
+                
+                else {
+                    $containers = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_application->name, Tinebase_Model_Grants::GRANT_SYNC);
+                    foreach ($containers as $container) {
+                        try {
+                            $children[] = $this->getChild($container);
+                        } catch (DAV\Exception\NotFound $defnf) {
+                            // skip child => no read permissions
+                        }
                     }
                 }
                 break;

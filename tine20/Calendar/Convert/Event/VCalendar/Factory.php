@@ -69,7 +69,7 @@ class Calendar_Convert_Event_VCalendar_Factory
     }
     
     /**
-     * parse iseragent and return backend and version
+     * parse useragent and return backend and version
      * 
      * @return array
      */

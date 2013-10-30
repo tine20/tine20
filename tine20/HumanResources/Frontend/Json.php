@@ -351,8 +351,9 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $_employeeId
      * @param integer $_year
      * @param string $_freeTimeId
+     * @param string $_accountId
      */
-    public function getFeastAndFreeDays($_employeeId, $_year = NULL, $_freeTimeId = NULL)
+    public function getFeastAndFreeDays($_employeeId, $_year = NULL, $_freeTimeId = NULL, $_accountId = NULL)
     {
         $cController = HumanResources_Controller_Contract::getInstance();
         $eController = HumanResources_Controller_Employee::getInstance();
@@ -380,6 +381,21 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
         
         $account = $aController->search($filter)->getFirstRecord();
+        if (! $_accountId) {
+            // find account
+            $filter = new HumanResources_Model_AccountFilter(array(
+                array('field' => 'year', 'operator' => 'equals', 'value' => intval($_year))
+            ));
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
+            
+            $account = $aController->search($filter)->getFirstRecord();
+        } else {
+            try {
+                $account = $aController->get($_accountId);
+            } catch (Exception $e) {
+                // throws a few lines later: HumanResources_Exception_NoAccount
+            }
+        }
         
         if (! $account) {
             throw new HumanResources_Exception_NoAccount();
