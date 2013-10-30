@@ -897,7 +897,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         self::flushMailer();
         
         // make sure next occurence contains now
-        $event->dtstart = Tinebase_DateTime::now()->subMonth(1)->addDay(1);
+        $event->dtstart = Tinebase_DateTime::now()->subMonth(1)->addDay(1)->subHour(2);
         $event->dtend = clone $event->dtstart;
         $event->dtend->addMinute(60);
         $event->rrule = 'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=' . $event->dtstart->format('d');
