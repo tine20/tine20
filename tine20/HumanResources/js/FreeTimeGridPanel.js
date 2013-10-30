@@ -191,35 +191,35 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         };
         
         // collect free days not saved already
-        var localFreedays = {}, localSicknessdays = {};
+        var localVacationDays = {}, localSicknessDays = {};
         
         this.editDialog.vacationGridPanel.store.each(function(record) {
             if (record.id && record.id.length == 13) {
                 var accountId = Ext.isObject(record.get('account_id')) ? record.get('account_id').id : record.get('account_id');
-                if (! localFreedays.hasOwnProperty(accountId)) {
-                    localFreedays[accountId] = [];
+                if (! localVacationDays.hasOwnProperty(accountId)) {
+                    localVacationDays[accountId] = [];
                 }
-                localFreedays[accountId] = localFreedays[accountId].concat(record.data.freedays ? record.data.freedays : []);
+                localVacationDays[accountId] = localVacationDays[accountId].concat(record.data.freedays ? record.data.freedays : []);
             }
         }, this);
         
         this.editDialog.sicknessGridPanel.store.each(function(record) {
             if (record.id && record.id.length == 13) {
                 var accountId = Ext.isObject(record.get('account_id')) ? record.get('account_id').id : record.get('account_id');
-                if (! localSicknessdays.hasOwnProperty(accountId)) {
-                    localSicknessdays[accountId] = [];
+                if (! localSicknessDays.hasOwnProperty(accountId)) {
+                    localSicknessDays[accountId] = [];
                 }
-                localSicknessdays[accountId] = localSicknessdays[accountId].concat(record.data.freedays ? record.data.freedays : []);
+                localSicknessDays[accountId] = localSicknessDays[accountId].concat(record.data.freedays ? record.data.freedays : []);
             }
         });
         
         var additionalConfig = {
-            localFreedays: localFreedays,
-            localSicknessdays: localSicknessdays
+            localVacationDays: localVacationDays,
+            localSicknessDays: localSicknessDays
         };
         
         this.editDialogClass = (this.freetimeType == 'SICKNESS') ? Tine.HumanResources.SicknessEditDialog : Tine.HumanResources.VacationEditDialog;
-            
+        
         Tine.HumanResources.FreeTimeGridPanel.superclass.onEditInNewWindow.call(this, button, record, plugins, additionalConfig);
     },
     /**

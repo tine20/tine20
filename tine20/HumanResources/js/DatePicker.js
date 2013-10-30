@@ -32,6 +32,27 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
     employee: null,
     
     /**
+     * dates higlighted as vacation day
+     * 
+     * @type {Array}
+     */
+    vacationDates: null,
+    
+    /**
+     * dates higlighted as feast day
+     * 
+     * @type {Array}
+     */
+    feastDates : null,
+    
+    /**
+     * dates higlighted as sickness day
+     * 
+     * @type {Array}
+     */
+    sicknessDates: null,
+    
+    /**
      * holds the freetime type (SICKNESS or VACATION)
      * 
      * @type {String}
@@ -81,6 +102,10 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK')
             }));
         }
+        
+        this.vacationDates = [];
+        this.sicknessDates = [];
+        this.feastDates    = [];
         
         this.initStore();
         
@@ -176,25 +201,40 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         Tine.log.debug(result);
         
         this.disabledDates = [];
+        //  days not to work on by contract
         var exdates = result.results.excludeDates || [];
         var freetime = this.editDialog.record;
         
         // find out local free days to substract. this is by account only
         if (this.accountPickerActive) {
             var accountId = this.editDialog.currentAccount.get('id');
-            var localFreeDaysToSubstract = (this.editDialog.localFreedays[accountId] || []).length ;
+            var localFreeDaysToSubstract = (this.editDialog.localVacationDays[accountId] || []).length ;
         } else {
             var localFreeDaysToSubstract = 0;
         }
-        // add local freedays to exclude days
-        Ext.each([this.editDialog.localFreedays, this.editDialog.localSicknessdays], function(a) {
-            Ext.iterate(a, function(p, b) {
-                Ext.each(b, function(d) {
-                    exdates = exdates.concat(d);
-                });
-            });
-        });
-
+        
+//        // add local sickness days and local vacation days (if this is a vacation ed) to exclude dates
+//        var iterate = (this.freetimeType == 'VACATION') ? [this.editDialog.localSicknessDays, this.editDialog.localVacationDays] : [this.editDialog.localSicknessDays]
+//        Ext.each(iterate, function(a) {
+//            Ext.iterate(a, function(p, b) {
+//                Ext.each(b, function(d) {
+//                    exdates = exdates.concat(d);
+//                });
+//            });
+//        });
+//        
+//        // add found sickness days always to exdates
+//        for (var index = 0; index < result.results.sicknessDays.length; index++) {
+//            exdates.push(result.results.sicknessDays[index]);
+//        }
+//        
+//        // add vacation days to disabled days if this is a vacation ed
+//        if (this.freetimeType == 'VACATION') {
+//            for (var index = 0; index < result.results.vacationDays.length; index++) {
+//                exdates.push(result.results.vacationDays[index]);
+//            }
+//        }
+        
         // format dates to fit the datepicker format
         Ext.each(exdates, function(d) {
             Ext.each(d, function(date) {
@@ -204,8 +244,13 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             }, this);
         }, this);
 
+        this.setVacationDates(this.editDialog.localVacationDays, result.results.vacationDays);
+        this.setSicknessDates(this.editDialog.localSicknessDays, result.results.sicknessDays);
+        this.setFeastDates(result.results.feastDays);
         
         this.setDisabledDates(this.disabledDates);
+        
+        
         this.updateCellClasses();
         
         var split = result.results.firstDay.date.split(' '), dateSplit = split[0].split('-');
@@ -265,6 +310,53 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
     },
     
     /**
+     * set vacation dates
+     */
+    setVacationDates: function(localVacationDays, remoteVacationDays) {
+        this.vacationDates = this.getTimestampsFromDays(localVacationDays, remoteVacationDays);
+    },
+    
+    /**
+     * set sickness dates
+     */
+    setSicknessDates: function(localSicknessDays, remoteSicknessDays) {
+        this.sicknessDates = this.getTimestampsFromDays(localSicknessDays, remoteSicknessDays);
+    },
+    
+    /**
+     * set feast dates
+     */
+    setFeastDates: function(feastDays) {
+        this.feastDates = this.getTimestampsFromDays([], feastDays);
+    },
+    
+    /**
+     * returns a timestamp from a day
+     * 
+     * @param {Object} localDays
+     * @param {Array} remoteDays
+     * 
+     * @return {Array}
+     */
+    getTimestampsFromDays: function(localDays, remoteDays) {
+        var dates = [];
+        
+        Ext.iterate(localDays, function(accountId, localdates) { 
+            for (var index = 0; index < localdates.length; index++) {
+                var newdate = new Date(localdates[index].date);
+                dates.push(newdate.getTime());
+            }
+        });
+        
+        for (var index = 0; index < remoteDays.length; index++) {
+            var newdate = new Date(remoteDays[index].date);
+            dates.push(newdate.getTime());
+        }
+        
+        return dates;
+    },
+    
+    /**
      * is called on year change
      */
     onYearChange: function() {
@@ -315,10 +407,26 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * @param {Object} t
      */
     handleDateClick: function(e, t) {
-        
-        if (!(!this.disabled && t.dateValue && !Ext.fly(t.parentNode).hasClass('x-date-disabled'))) {
+        // don't handle date click, if this is disabled, or the clicked node doesn't have a timestamp assigned
+        if (this.disabled || ! t.dateValue) {
             return;
         }
+        // don't handle click on disabled dates defined by contract or feast calendar
+        if (Ext.fly(t.parentNode).hasClass('x-date-disabled')) {
+            return;
+        }
+        
+        // dont't handle click on already defined sickness days
+        if (Ext.fly(t.parentNode).hasClass('hr-date-sickness')) {
+            return;
+        }
+        
+        // if clicked date is defined as vacation, and we want to define sickness days, handle click (employee my be sick on vacation)
+        // otherwise don't handle (vacation can't be booked on vacation)
+        if (this.freetimeType == 'VACATION' && (Ext.fly(t.parentNode).hasClass('hr-date-vacation'))) {
+            return;
+        }
+        
         var date = new Date(t.dateValue),
             existing;
             
@@ -365,12 +473,26 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * updates the cell classes
      */
     updateCellClasses: function() {
-        this.cells.each(function(c){
+        this.cells.each(function(c) {
+
            if (this.store.getByDate(c.dom.firstChild.dateValue)) {
                c.addClass('x-date-selected');
            } else {
                c.removeClass('x-date-selected');
            }
+           
+           if (this.vacationDates.indexOf(c.dom.firstChild.dateValue) > -1) {
+                c.addClass('hr-date-vacation');
+           }
+           
+           if (this.sicknessDates.indexOf(c.dom.firstChild.dateValue) > -1) {
+                c.addClass('hr-date-sickness');
+           }
+           
+           if (this.feastDates.indexOf(c.dom.firstChild.dateValue) > -1) {
+                c.addClass('hr-date-feast');
+           }
+           
         }, this);
     },
     

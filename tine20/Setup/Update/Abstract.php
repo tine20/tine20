@@ -48,7 +48,7 @@ class Setup_Update_Abstract
     public function getApplicationVersion($_application)
     {
         $select = $this->_db->select()
-                ->from( SQL_TABLE_PREFIX . 'applications')
+                ->from(SQL_TABLE_PREFIX . 'applications')
                 ->where($this->_db->quoteIdentifier('name') . ' = ?', $_application);
 
         $stmt = $select->query();
@@ -256,5 +256,15 @@ class Setup_Update_Abstract
         }
         
         return $userAccount;
+    }
+
+    /**
+     * get db adapter
+     * 
+     * @return Zend_Db_Adapter_Abstract
+     */
+    public function getDb()
+    {
+        return $this->_db;
     }
 }

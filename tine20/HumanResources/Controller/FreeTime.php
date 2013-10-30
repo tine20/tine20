@@ -94,9 +94,15 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
        // update first date
        $freeDays->sort('date', 'ASC');
        $_record->firstday_date = $freeDays->getFirstRecord()->date;
-
+       $freeDays->sort('date', 'DESC');
+       $_record->lastday_date = $freeDays->getFirstRecord()->date;
+       $_record->days_count = $freeDays->count();
        $fc->delete($deleteFreedays->id);
        $_record->freedays = $freeDays->toArray();
+       
+       if ($_record->type == 'sickness') {
+           $this->_handleOverwrittenVacation($_record);
+       }
    }
    
    /**
@@ -119,8 +125,12 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
                }
                $this->_freedaysToCreate->addRecord($fd);
            }
+           // normalize first-,  last date and days_count
            $this->_freedaysToCreate->sort('date', 'ASC');
            $_record->firstday_date = $this->_freedaysToCreate->getFirstRecord()->date;
+           $this->_freedaysToCreate->sort('date', 'DESC');
+           $_record->lastday_date = $this->_freedaysToCreate->getFirstRecord()->date;
+           $_record->days_count = $this->_freedaysToCreate->count();
        } else {
            $_record->firstday_date = NULL;
        }
@@ -144,6 +154,10 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
            $fd[] = $r->toArray();
        }
        $_createdRecord->freedays = $fd;
+       
+       if ($_record->type == 'sickness') {
+           $this->_handleOverwrittenVacation($_createdRecord);
+       }
    }
 
    /**
@@ -159,5 +173,54 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
        
        HumanResources_Controller_FreeDay::getInstance()->deleteByFilter($filter);
        parent::_deleteLinkedObjects($_record);
+   }
+   
+   /**
+    * finds overwritten by sickness days overwritten vacation days. 
+    * deletes the overwritten vacation day and the vacation itself if days_count = 0
+    *
+    * @param Tinebase_Record_Interface $_record
+    */
+   protected function _handleOverwrittenVacation($_record) {
+       
+       $fdController = HumanResources_Controller_FreeDay::getInstance();
+       
+       foreach($_record->freedays as $freeday) {
+           
+           $vacationTimeFilter = new HumanResources_Model_FreeTimeFilter(array(
+               array('field' => 'type', 'operator' => 'equals', 'value' => 'vacation')
+           ));
+           $vacationTimeFilter->addFilter(new Tinebase_Model_Filter_Text(
+               array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->employee_id)
+           ));
+           
+           $vacationTimes = $this->search($vacationTimeFilter);
+           
+           $filter = new HumanResources_Model_FreeDayFilter(array(
+               array('field' => 'date', 'operator' => 'equals', 'value' => $freeday['date'])
+           ));
+           
+           $filter->addFilter(new Tinebase_Model_Filter_Text(
+               array('field' => 'freetime_id', 'operator' => 'not', 'value' => $_record->getId())
+               ));
+           $filter->addFilter(new Tinebase_Model_Filter_Text(
+               array('field' => 'freetime_id', 'operator' => 'in', 'value' => $vacationTimes->id)
+           ));
+           
+           $vacationDay = $fdController->search($filter)->getFirstRecord();
+           
+           if ($vacationDay) {
+               $fdController->delete($vacationDay->getId());
+               
+               $freeTime = $this->get($vacationDay->freetime_id);
+               $count = (int) $freeTime->days_count - 1;
+               if ($count == 0) {
+                   $this->delete($freeTime->getId());
+               } else {
+                   $freeTime->days_count = $count;
+                   $this->update($freeTime);
+               }
+           }
+       }
    }
 }

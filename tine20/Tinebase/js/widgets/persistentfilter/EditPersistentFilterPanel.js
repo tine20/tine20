@@ -126,36 +126,20 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
                               (shipped && this.inputDescription.getValue() != this.app.i18n._(this.window.record.get('description'))) ||
                               (this.hasRight() && ! this.inputCheck.getValue()));
         
-        // Name of the favorite
         if (this.inputTitle.isValid()) {
-            if (this.inputTitle.getValue().length < 40) {
-                if (shipped) {
-                    if (shippedChanged) {
-                        record.set('name', this.inputTitle.getValue());
-                    }
-                } else{
-                    record.set('name', this.inputTitle.getValue());
-                }
-                
-            } else {
-                Ext.Msg.alert(_('Favorite not Saved'), _('You have to supply a shorter name! Names of favorite can only be up to 40 characters long.'));
-                this.onCancel();
+            if (! shipped || shippedChanged) {
+                record.set('name', this.inputTitle.getValue());
             }
         } else {
-            Ext.Msg.alert(_('Favorite not Saved'),_('You have to supply a name for the favorite!'));
-            this.onCancel();
+            Ext.Msg.alert(_('Favorite not saved'), this.inputTitle.getActiveError());
+            return;
         }
 
         // Description of the favorite
         if (this.inputDescription.isValid()) {
-            if (shipped) {
-                if (shippedChanged) {
-                    record.set('description', this.inputDescription.getValue());
-                }
-            } else {
+            if (! shipped || shippedChanged) {
                 record.set('description', this.inputDescription.getValue());
             }
-            
         }
         
         record.set('account_id', Tine.Tinebase.registry.get('currentAccount').accountId);

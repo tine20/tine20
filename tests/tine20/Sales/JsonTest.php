@@ -353,6 +353,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @see 0008586: when saving record with too many relations, modlog breaks
      * @see 0008712: testSaveContractWithManyRelations test lasts too long
+     * @see 0009152: saving of record fails because of too many relations
      */
     public function testSaveContractWithManyRelations()
     {
@@ -366,6 +367,11 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(500, count($updatedAgainContractArray['relations']));
         $this->assertTrue(empty($updatedAgainContractArray['relations'][0]['last_modified_time']), 'relation changed');
+        
+        $updatedAgainContractArray['relations'][0]['related_backend'] = 'sql';
+        $updatedAgainContractArray['relations'][0]['related_record']['adr_one_locality'] = 'örtchen';
+        $updatedAgainContractArray = $this->_instance->saveContract($updatedAgainContractArray);
+        $this->assertEquals(500, count($updatedAgainContractArray['relations']));
     }
     
     /************ protected helper funcs *************/
