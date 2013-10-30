@@ -106,7 +106,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * inits the component
      */
     initComponent: function() {
-        this.app = Tine.Tinebase.appMgr.get('HumanResources')
+        this.app = Tine.Tinebase.appMgr.get('HumanResources');
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
         
         this.calculatedFeastDays = [];
@@ -155,7 +155,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             }
             this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), this.app.i18n._hidden(typeString), this.record.get('employee_id').n_fn));
         } else {
-            this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'), this.app.i18n._hidden(typeString), this.record.get('employee_id').n_fn));
+            this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'),  this.app.i18n._hidden(typeString), this.record.get('employee_id').n_fn));
+            this.statusPicker.setValue((this.freetimeType == 'SICKNESS') ? 'EXCUSED' : 'ACCEPTED');
         }
     },
     
@@ -332,19 +333,23 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             app: 'HumanResources',
             name: 'status'
         };
-        
-        this.statusPicker = (this.freetimeType != 'VACATION') ? 
-            Ext.apply({
-                keyFieldName: 'sicknessStatus',
-                value: 'EXCUSED',
-                columnWidth: 1
-            }, statusPickerDefaults) :
+        if (this.freetimeType != 'VACATION') {
+            this.statusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
                 Ext.apply({
-                keyFieldName: 'vacationStatus',
-                value: 'REQUESTED',
-                columnWidth: 2/3
-            }, 
-            statusPickerDefaults);
+                    keyFieldName: 'sicknessStatus',
+                    value: 'EXCUSED',
+                    columnWidth: 1
+                }, statusPickerDefaults)
+            );
+        } else {
+            this.statusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
+                Ext.apply({
+                    keyFieldName: 'vacationStatus',
+                    value: 'REQUESTED',
+                    columnWidth: 2/3
+                }, statusPickerDefaults)
+            );
+        }
     },
     
     /**

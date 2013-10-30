@@ -31,6 +31,13 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     editDialog: null,
     
     /**
+     * if a vacation record gets deleted, this is needed to calculate
+     * the remaining vacation days in the freetime edit dialog (vacation)
+     * 
+     * @type Number
+     */
+    removedVacationDaysCount: 0,
+    /**
      * set type before to diff vacation/sickness
      * @type 
      */
@@ -114,7 +121,7 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @param {Tine.HumanResources.Model.Freetime} record
      */
     onBookSicknessAsVacationSuccess: function(results, record) {
-        // if there are not enoug vacation days left
+        // if there are not enough vacation days left
         if (results.remainingVacation < record.get('days_count')) {
             Ext.MessageBox.show({
                 title: this.app.i18n._('Could not book as vacation'), 
@@ -215,7 +222,8 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         
         var additionalConfig = {
             localVacationDays: localVacationDays,
-            localSicknessDays: localSicknessDays
+            localSicknessDays: localSicknessDays,
+            removedVacationDaysCount: this.removedVacationDaysCount
         };
         
         this.editDialogClass = (this.freetimeType == 'SICKNESS') ? Tine.HumanResources.SicknessEditDialog : Tine.HumanResources.VacationEditDialog;
@@ -265,6 +273,21 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     },
     
     /**
+     * delete records
+     * 
+     * @param {SelectionModel} sm
+     * @param {Array} records
+     */
+    deleteRecords: function(sm, records) {
+        Ext.each(records, function(record) {
+            if (record.get('type') == 'vacation') {
+                this.removedVacationDaysCount = this.removedVacationDaysCount + parseInt(record.get('days_count'));
+            }
+        }, this);
+        Tine.HumanResources.FreeTimeGridPanel.superclass.deleteRecords.call(this, sm, records);
+    },
+    
+    /**
      * called when the store gets updated, e.g. from editgrid
      * 
      * @param {Ext.data.store} store
@@ -275,6 +298,7 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         if (Ext.isObject(record.get('employee_id'))) {
             record.set('employee_id', record.get('employee_id').id)
         }
+        
         Tine.HumanResources.FreeTimeGridPanel.superclass.onStoreUpdate.call(this, store, record, operation);
     }
 });

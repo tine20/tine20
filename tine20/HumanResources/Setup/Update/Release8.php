@@ -59,4 +59,30 @@ class HumanResources_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_freetime', '7');
         $this->setApplicationVersion('HumanResources', '8.2');
     }
+    
+    /**
+     * update to 8.3 normalize contracts to have fields from update_1 set
+     */
+    public function update_2()
+    {
+        $c = HumanResources_Controller_FreeTime::getInstance();
+        $d = HumanResources_Controller_FreeDay::getInstance();
+        
+        $allC = $c->getAll();
+        $allD = $d->getAll();
+        
+        if ($allC->count() > 0) {
+            try {
+                $this->promptForUsername();
+                
+                foreach($allC as $ct) {
+                    $ct->freedays = $allD->filter('freetime_id', $ct->id)->toArray();
+                    $c->update($ct);
+                }
+            } catch (Exception $e) {
+                // do nothing, update not important
+            }
+        }
+        $this->setApplicationVersion('HumanResources', '8.3');
+    }
 }
