@@ -469,7 +469,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 $dataAdd = array(
                     'member' => $groupDn
                 );
-                $this->_ldap->insertProperty($groupDn, $dataAdd);
+                $this->_ldap->addProperty($groupDn, $dataAdd);
             } else {
                 $ldapData['member'] = $accountMetaData['dn'];
             }
