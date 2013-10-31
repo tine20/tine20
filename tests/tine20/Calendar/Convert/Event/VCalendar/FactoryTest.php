@@ -93,37 +93,24 @@ class Calendar_Convert_Event_VCalendar_FactoryTest extends PHPUnit_Framework_Tes
     }            
     
     /**
-     * test factory with useragent string from MacOS X  Snow Leopard
+     * test factory with useragent string from MacOS X
      */
-    public function testUserAgentMacOSXSnowLeopard()
+    public function testUserAgentMacOSX()
     {
-        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent('DAVKit/4.0.3 (732.2); CalendarStore/4.0.4 (997.7); iCal/4.0.4 (1395.7); Mac OS X/10.6.8 (10K549)');
+        $agents = array(
+            array('version' => '10.6.8', 'identifier' => 'DAVKit/4.0.3 (732.2); CalendarStore/4.0.4 (997.7); iCal/4.0.4 (1395.7); Mac OS X/10.6.8 (10K549)'),
+            array('version' => '10.7.1', 'identifier' => 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)'),
+            array('version' => '10.8',   'identifier' => 'Mac OS X/10.8 (12A269) CalendarAgent/47'),
+            array('version' => '10.9',   'identifier' => 'Mac_OS_X/10.9 (13A603) CalendarAgent/174'),
+        );
         
-        $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, $backend);
-        $this->assertEquals('4.0.4', $version);
-    }            
-    
-    /**
-     * test factory with useragent string from MacOS X Lion
-     */
-    public function testUserAgentMacOSXLion()
-    {
-        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent('CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)');
+        foreach($agents as $agent) {
+            list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($agent["identifier"]);
         
-        $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, $backend);
-        $this->assertEquals('5.0', $version);
-    }            
-    
-    /**
-     * test factory with useragent string from MacOS X Mountain Lion
-     */
-    public function testUserAgentMacOSXMountainLion()
-    {
-        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent('Mac OS X/10.8 (12A269) CalendarAgent/47');
-        
-        $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, $backend);
-        $this->assertEquals('47', $version);
-    }            
+            $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, $backend, $agent["identifier"]);
+            $this->assertEquals($agent["version"], $version, $agent["identifier"]);
+        }
+    }
     
     /**
      * test factory with useragent string from thunderbird 
