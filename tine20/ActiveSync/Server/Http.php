@@ -37,26 +37,12 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
      * @param Zend_Controller_Request_Http $request
      * @param resource $body used mostly for unittesting
      * @return boolean
-     * 
-     * @todo 0007504: research input stream problems / remove the hotfix afterwards
      */
     public function handle(Zend_Controller_Request_Http $request = null, $body = null)
     {
         $this->_request = $request instanceof Zend_Controller_Request_Http ? $request : new Zend_Controller_Request_Http();
         
-        if ($body === null) {
-            // FIXME: this is a hotfix for 0007454: no email reply or forward (iOS/android 4.1.1)
-            // the wbxml decoder seems to run into problems when we just pass the input stream
-            // when the stream is copied first, the problems disappear
-            //$this->_body    = $body !== null ? $body : fopen('php://input', 'r');
-            $tempStream = fopen("php://temp", 'r+');
-            stream_copy_to_stream(fopen('php://input', 'r'), $tempStream);
-            rewind($tempStream);
-            // file_put_contents(tempnam('/var/tmp', 'wbxml'), $tempStream); // for debugging
-            $this->_body = $tempStream;
-        } else {
-            $this->_body = $body;
-        }
+        $this->_body = $this->_getBody($body);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is ActiveSync request.');
@@ -83,29 +69,20 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             return;
         }
         
-        if ($this->_authenticate($loginName, $password, $this->_request->getClientIp()) !== true) {
+        try {
+            $authResult = $this->_authenticate($loginName, $password, $this->_request->getClientIp());
+        } catch (Exception $e) {
+            Tinebase_Exception::log($exception);
+            $authResult = false;
+        }
+        
+        if ($authResult !== true) {
             header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;
         }
         
-        try {
-            $activeSync = Tinebase_Application::getInstance()->getApplicationByName('ActiveSync');
-        } catch (Tinebase_Exception_NotFound $e) {
-            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $loginName);
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not installed');
-            return;
-        }
-        
-        if($activeSync->status != 'enabled') {
-            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $loginName);
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not enabled');
-            return;
-        }
-        
-        if(Tinebase_Core::getUser()->hasRight($activeSync, Tinebase_Acl_Rights::RUN) !== true) {
-            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $loginName);
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not enabled for account');
+        if (! $this->_checkUserPermissions($loginName)) {
             return;
         }
         
@@ -129,6 +106,31 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
     }
     
     /**
+     * get body
+     * 
+     * @param resource $body used mostly for unittesting
+     * @return resource
+     * 
+     * @todo 0007504: research input stream problems / remove the hotfix afterwards
+     */
+    protected function _getBody($body)
+    {
+        if ($body === null) {
+            // FIXME: this is a hotfix for 0007454: no email reply or forward (iOS/android 4.1.1)
+            // the wbxml decoder seems to run into problems when we just pass the input stream
+            // when the stream is copied first, the problems disappear
+            //$this->_body    = $body !== null ? $body : fopen('php://input', 'r');
+            $tempStream = fopen("php://temp", 'r+');
+            stream_copy_to_stream(fopen('php://input', 'r'), $tempStream);
+            rewind($tempStream);
+            // file_put_contents(tempnam('/var/tmp', 'wbxml'), $tempStream); // for debugging
+            return $tempStream;
+        } else {
+            return $body;
+        }
+    }
+    
+    /**
      * authenticate user
      *
      * @param string $_username
@@ -147,6 +149,37 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
         }
         
         return Tinebase_Controller::getInstance()->login($username, $_password, $_ipAddress, 'TineActiveSync');
+    }
+    
+    /**
+     * check user permissions
+     * 
+     * @param string $loginName
+     * @return boolean
+     */
+    protected function _checkUserPermissions($loginName)
+    {
+        try {
+            $activeSync = Tinebase_Application::getInstance()->getApplicationByName('ActiveSync');
+        } catch (Tinebase_Exception_NotFound $e) {
+            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $loginName);
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not installed');
+            return false;
+        }
+        
+        if ($activeSync->status != 'enabled') {
+            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $loginName);
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not enabled');
+            return false;
+        }
+        
+        if (Tinebase_Core::getUser()->hasRight($activeSync, Tinebase_Acl_Rights::RUN) !== true) {
+            header('HTTP/1.1 403 ActiveSync not enabled for account ' . $loginName);
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ActiveSync is not enabled for account');
+            return false;
+        }
+        
+        return true;
     }
     
     /**
