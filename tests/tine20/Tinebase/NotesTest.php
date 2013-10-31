@@ -156,12 +156,15 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         $notes = $this->_instance->searchNotes($filter, new Tinebase_Model_Pagination());
         $notesCount = $this->_instance->searchNotesCount($filter);
         
-        //print_r($notes->toArray());
-        
-        $this->assertEquals($this->_objects['note']->note, $notes[0]->note);
         $this->assertGreaterThan(0, $notesCount);
+        foreach ($notes as $note) {
+            if ($this->_objects['note']->note === $note['note']) {
+                $found = true;
+            }
+        }
+        $this->assertTrue($found, 'note not found in notes: ' . print_r($notes, true));
     }
-
+    
     /**
      * test to array and resolution of account display name
      *

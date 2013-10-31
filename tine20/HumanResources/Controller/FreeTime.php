@@ -74,10 +74,6 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
        foreach($_record->freedays as $freedayArray) {
            $freedayArray['freetime_id'] = $freetimeId;
 
-           if (is_array($freedayArray['account_id'])) {
-               $freedayArray['account_id'] = $freedayArray['account_id']['id'];
-           }
-           
            $freeday = new HumanResources_Model_FreeDay($freedayArray);
            
            if ($freeday->id) {
@@ -88,10 +84,11 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
        }
 
        $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
-       $filter->addFilter(new Tinebase_Model_Filter_Text('freetime_id', 'equals', $_record['id']));
+       $filter->addFilter(new Tinebase_Model_Filter_Text('freetime_id', 'equals', $_record->getId()));
        $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $freeDays->id));
        $deleteFreedays = HumanResources_Controller_FreeDay::getInstance()->search($filter);
-       // update first date
+       
+       // update first and last date
        $freeDays->sort('date', 'ASC');
        $_record->firstday_date = $freeDays->getFirstRecord()->date;
        $freeDays->sort('date', 'DESC');
@@ -185,6 +182,8 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
        
        $fdController = HumanResources_Controller_FreeDay::getInstance();
        
+       $changedFreeTimes = array();
+       
        foreach($_record->freedays as $freeday) {
            
            $vacationTimeFilter = new HumanResources_Model_FreeTimeFilter(array(
@@ -213,13 +212,22 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
                $fdController->delete($vacationDay->getId());
                
                $freeTime = $this->get($vacationDay->freetime_id);
-               $count = (int) $freeTime->days_count - 1;
-               if ($count == 0) {
-                   $this->delete($freeTime->getId());
-               } else {
-                   $freeTime->days_count = $count;
-                   $this->update($freeTime);
+               
+               if (! isset($changedFreeTimes[$vacationDay->freetime_id])) {
+                   $changedFreeTimes[$vacationDay->freetime_id] = $freeTime;
                }
+               
+               $count = (int) $changedFreeTimes[$vacationDay->freetime_id]->days_count - 1;
+               $changedFreeTimes[$vacationDay->freetime_id]->days_count = $count;
+           }
+       }
+       
+       foreach($changedFreeTimes as $freeTimeId => $freetime) {
+           if ($freetime->days_count == 0) {
+               $this->delete($freetime->getId());
+           } else {
+               $freeTime->days_count = $count;
+               $this->update($freetime);
            }
        }
    }

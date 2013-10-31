@@ -213,28 +213,6 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             var localFreeDaysToSubstract = 0;
         }
         
-//        // add local sickness days and local vacation days (if this is a vacation ed) to exclude dates
-//        var iterate = (this.freetimeType == 'VACATION') ? [this.editDialog.localSicknessDays, this.editDialog.localVacationDays] : [this.editDialog.localSicknessDays]
-//        Ext.each(iterate, function(a) {
-//            Ext.iterate(a, function(p, b) {
-//                Ext.each(b, function(d) {
-//                    exdates = exdates.concat(d);
-//                });
-//            });
-//        });
-//        
-//        // add found sickness days always to exdates
-//        for (var index = 0; index < result.results.sicknessDays.length; index++) {
-//            exdates.push(result.results.sicknessDays[index]);
-//        }
-//        
-//        // add vacation days to disabled days if this is a vacation ed
-//        if (this.freetimeType == 'VACATION') {
-//            for (var index = 0; index < result.results.vacationDays.length; index++) {
-//                exdates.push(result.results.vacationDays[index]);
-//            }
-//        }
-        
         // format dates to fit the datepicker format
         Ext.each(exdates, function(d) {
             Ext.each(d, function(date) {
@@ -274,8 +252,11 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         }
         
         if (this.accountPickerActive) {
-            if (freetime && onInit) {
-                localFreeDaysToSubstract -= freetime.get('days_count');
+            if (! freetime && onInit) {
+                localFreeDaysToSubstract += freetime.get('days_count');
+            }
+            if (this.editDialog.removedVacationDaysCount) {
+                localFreeDaysToSubstract = localFreeDaysToSubstract - this.editDialog.removedVacationDaysCount;
             }
             this.editDialog.getForm().findField('remaining_vacation_days').setValue(result.results.remainingVacation - localFreeDaysToSubstract);
         }

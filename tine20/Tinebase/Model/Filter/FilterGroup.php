@@ -253,7 +253,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                     . ' Adding FilterGroup: ' . $this->_className);
                 
                 if (empty($this->_className)) {
-                    throw new Tinebase_Exception_NotFound('className needs to be set in filtergroup');
+                    $this->_className = get_class($this);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
+                        . ' _className was not set, using get_class: ' . $this->_className);
                 }
                 
                 $filtergroup = new $this->_className($filterData['filters'], $filterData['condition'], $this->_options);

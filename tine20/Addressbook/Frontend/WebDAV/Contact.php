@@ -220,7 +220,8 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
      */
     public function getLastModified() 
     {
-        return ($this->getRecord()->last_modified_time instanceof Tinebase_DateTime) ? $this->getRecord()->last_modified_time->toString() : $this->getRecord()->creation_time->toString();
+        return ($this->getRecord()->last_modified_time instanceof Tinebase_DateTime) ? $this->getRecord()->last_modified_time->toString() :
+               (($this->getRecord()->creation_time instanceof Tinebase_DateTime) ? $this->getRecord()->creation_time->toString() : '');
     }
     
     /**

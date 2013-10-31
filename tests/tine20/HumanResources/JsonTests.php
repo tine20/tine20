@@ -300,9 +300,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     }
     
     /**
-     * tests account summary and getFeastAndFreeDays method
+     * tests account summary and getFeastAndFreeDays method calculation
      */
-    public function testAccount()
+    public function testCalculation()
     {
         $employmentBegin  = new Tinebase_DateTime('2012-12-15');
         $employmentChange = new Tinebase_DateTime('2014-01-01');
@@ -523,7 +523,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals(9, count($res['vacationDays']));
         $this->assertEquals(24, $res['remainingVacation']);
         
-        // overwrite last day of previous vacation with sickness
+        // overwrite last 2 days of previous vacation with sickness
+        $day->subDay(1);
         $newFreeTime = array(
             'account_id' => $accountId2013,
             'employee_id' => $employee->getId(),
@@ -544,9 +545,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $result = $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
         $res = $result['results'];
-        $this->assertEquals(8, count($res['vacationDays']));
+        $this->assertEquals(7, count($res['vacationDays']));
         $this->assertEquals(2, count($res['sicknessDays']));
-        $this->assertEquals(25, $res['remainingVacation']);
+        $this->assertEquals(26, $res['remainingVacation']);
     }
     
     /**
