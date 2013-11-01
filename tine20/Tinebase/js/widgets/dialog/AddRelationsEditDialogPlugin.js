@@ -146,7 +146,7 @@ Tine.widgets.dialog.AddRelationsEditDialogPlugin.prototype = {
                     own_degree: "sibling",
                     own_id: this.editDialog.record.get(ownIdProperty),
                     own_model: this.editDialog.app.name + '_Model_' + this.editDialog.recordClass.getMeta('modelName'),
-                    related_backend: "sql",
+                    related_backend: "Sql",
                     related_id: record.get(foreignIdProperty),
                     related_model: this.callingApp + '_Model_' + this.callingModel,
                     related_record: record.data,
