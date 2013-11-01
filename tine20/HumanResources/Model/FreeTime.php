@@ -40,7 +40,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
         'modlogActive'    => TRUE,
         'isDependent'     => TRUE,
         'createModule'    => FALSE,
-        
+        'titleProperty'   => 'description',
         'appName'         => 'HumanResources',
         'modelName'       => 'FreeTime',
         
