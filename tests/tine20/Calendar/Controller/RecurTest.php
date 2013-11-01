@@ -379,7 +379,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         ))));
         Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         
-        // make shure the 17.6. is not in the set
+        // make sure the 17.6. is not in the set
         $this->assertEquals(1, count($weekviewEvents), '17.6. is an exception date and must not be part of this weekview');
     }
     
@@ -438,7 +438,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtstart'       => '2011-04-21 10:00:00',
             'dtend'         => '2011-04-21 12:00:00',
             'originator_tz' => 'Europe/Berlin',
-            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2011-04-28 12:00:00',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2011-04-27 21:59:59',
             'container_id'  => $this->_testCalendar->getId()
         ));
         
@@ -481,7 +481,6 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         ))));
         
         Calendar_Model_Rrule::mergeRecurrenceSet($events, $from, $until);
-        
         $this->assertEquals(6, count($events), 'there should be exactly 6 events');
         
         $oldSeries = $events->filter('uid', $persistentEvent->uid);

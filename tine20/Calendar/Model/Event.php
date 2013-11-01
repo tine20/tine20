@@ -450,6 +450,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 $this->rrule_until = $lastOccurrence->dtend;
                 $this->exdate = $exdates;
             } else {
+                // set until to end of day in organizers timezone.
+                // NOTE: this is in contrast to the iCal spec which says until should be the
+                //       dtstart of the last occurence. But as the client with the name of the
+                //       spec sets it to the end of the day, we do it also.
+                if ($rrule->until instanceof Tinebase_DateTime) {
+                    $rrule->until->setTimezone($this->originator_tz);
+                    // NOTE: subSecond cause some clients send 00:00:00 for midnight
+                    $rrule->until->subSecond(1)->setTime(23, 59, 59);
+                    $rrule->until->setTimezone('UTC');
+                }
+                
                 $this->rrule_until = $rrule->until;
             }
         }

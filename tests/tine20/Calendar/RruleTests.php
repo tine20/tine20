@@ -849,6 +849,30 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan($nextOccurrence->dtstart, $from->modify('+ 3 weeks'));
     }
     
+    public function testComputeNextOccurrenceWithNegativeWhich()
+    {
+        $event = new Calendar_Model_Event(array(
+                'uid'           => Tinebase_Record_Abstract::generateUID(),
+                'summary'       => 'weekly',
+                'dtstart'       => '2013-10-11 08:00:00',
+                'dtend'         => '2013-10-11 10:00:00',
+                'rrule'         => 'FREQ=WEEKLY;BYDAY=FR;INTERVAL=1',
+                'originator_tz' => 'Europe/Berlin',
+        ));
+    
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        
+        // NOTE: ongoing event is considered as previous/next
+        $from = new Tinebase_DateTime('2013-11-01 07:59:59');
+        $previousOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $from, -1);
+        $this->assertEquals('2013-10-25 08:00:00', $previousOccurrence->dtstart->toString());
+        
+        // DST switch
+        $from = new Tinebase_DateTime('2013-11-08 08:59:59');
+        $previousOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $from, -1);
+        $this->assertEquals('2013-11-01 09:00:00', $previousOccurrence->dtstart->toString());
+    }
+    
     public function testWeeklyWithCount()
     {
         $event = new Calendar_Model_Event(array(

@@ -342,6 +342,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     /**
      * returns next occurrence _ignoring exceptions_ or NULL if there is none/not computable
      * 
+     * NOTE: an ongoing event during $from [start, end[ is considered as next 
+     * NOTE: for previous events on ongoing event is considered as previous
+     *  
      * NOTE: computing the next occurrence of an open end rrule can be dangerous, as it might result
      *       in a endless loop. Therefore we only make a limited number of attempts before giving up.
      * 
@@ -383,7 +386,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             return $_event;
         }
         
-        $until->add($interval, $freqMap[$rrule->freq]);
+        $rangeDate = $_which > 0 ? $until : $from;
+        $rangeDate->add($interval, $freqMap[$rrule->freq]);
         $attempts = 0;
         
         if ($_event->rrule_until instanceof DateTime && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -406,7 +410,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $recurSet->merge(self::computeRecurrenceSet($_event, $_exceptions, $from, $until));
             $attempts++;
             
-            if (count($recurSet) >= $_which) {
+            if (count($recurSet) >= abs($_which)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " found next occurrence after $attempts attempt(s)");
                 break;
@@ -422,8 +426,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $until->add($interval, $freqMap[$rrule->freq]);
         }
         
-        $recurSet->sort('dtstart', 'ASC');
-        return $recurSet[$_which-1];
+        $recurSet->sort('dtstart', $_which > 0 ? 'ASC' : 'DESC');
+        return $recurSet[abs($_which)-1];
     }
     
     /**

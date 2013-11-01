@@ -437,7 +437,7 @@ Zeile 3</AirSyncBase:Data>
         $this->assertEquals(Syncroton_Model_EventRecurrence::TYPE_DAILY, $syncrotonEvent->recurrence->type);
         $this->assertEquals(1, $syncrotonEvent->recurrence->interval);
         $this->assertTrue($syncrotonEvent->recurrence->until instanceof DateTime);
-        $this->assertEquals('20101222T230000Z', $syncrotonEvent->recurrence->until->format('Ymd\THis\Z'));
+        $this->assertEquals('20101222T225959Z', $syncrotonEvent->recurrence->until->format('Ymd\THis\Z'));
         
         return array($serverId, $syncrotonEvent);
     }
