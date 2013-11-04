@@ -75,6 +75,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+        $_SERVER['HTTP_USER_AGENT'] = '';
     }
     
     /**
@@ -121,6 +122,17 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
         $child = $collection->getChild($taskContainer->getName());
     
         $this->assertTrue($child instanceof Tasks_Frontend_WebDAV_Container);
+    }
+    
+    /**
+     * test testGetTasksChild (Mac_OS_X)
+     */
+    public function testGetTasksChildMacOSX()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
+        
+        $collection = new Calendar_Frontend_CalDAV();
+        $children = $this->testGetChildren();
     }
     
     /**
