@@ -119,14 +119,14 @@ class Tinebase_Exception extends Exception
         $passwordPatterns = array(
             "/->login\('([^']*)', '[^']*'/",
             "/->loginFromPost\('([^']*)', '[^']*'/",
-            "/->validate\('[^']*', '[^']*'/",
-            "/->authenticate\('[^']*', '[^']*'/",
+            "/->validate\('([^']*)', '[^']*'/",
+            "/->(_{0,1})authenticate\('([^']*)', '[^']*'/",
         );
         $replacements = array(
             "->login('$1', '********'",
             "->loginFromPost('$1', '********'",
             "->validate('$1', '********'",
-            "->authenticate('$1', '********'",
+            "->$1authenticate('$2', '********'",
         );
         
         return preg_replace($passwordPatterns, $replacements, $_traceString);

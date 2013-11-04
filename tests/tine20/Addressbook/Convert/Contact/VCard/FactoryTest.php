@@ -60,14 +60,21 @@ class Addressbook_Convert_Contact_VCard_FactoryTest extends PHPUnit_Framework_Te
     }
     
     /**
-     * test factory with useragent string from MacOS X 
+     * test factory with useragent string from MacOS X
      */
     public function testUserAgentMacOSX()
     {
-        list($backend, $version) = Addressbook_Convert_Contact_VCard_Factory::parseUserAgent('AddressBook/6.0 (1043) CardDAVPlugin/182 CFNetwork/520.0.13 Mac_OS_X/10.7.1 (11B26)');
-        
-        $this->assertEquals(Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX, $backend);
-        $this->assertEquals('10.7.1', $version);
+        $agents = array(
+                array('version' => '10.7.1', 'identifier' => 'AddressBook/6.0 (1043) CardDAVPlugin/182 CFNetwork/520.0.13 Mac_OS_X/10.7.1 (11B26)'),
+                array('version' => '10.9',   'identifier' => 'Mac OS X/10.9 (13A603) AddressBook/1365'),
+        );
+    
+        foreach($agents as $agent) {
+            list($backend, $version) = Addressbook_Convert_Contact_VCard_Factory::parseUserAgent($agent["identifier"]);
+    
+            $this->assertEquals(Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX, $backend, $agent["identifier"]);
+            $this->assertEquals($agent["version"], $version, $agent["identifier"]);
+        }
     }
     
     /**

@@ -22,7 +22,7 @@ class Addressbook_Convert_Contact_VCard_MacOSX extends Addressbook_Convert_Conta
 {
     // AddressBook/6.0 (1043) CardDAVPlugin/182 CFNetwork/520.0.13 Mac_OS_X/10.7.1 (11B26)
     // Mac OS X/10.9 (13A603) AddressBook/1365
-    const HEADER_MATCH = '/Mac[ _]OS[ _]X\/(?P<version>.*) /';
+    const HEADER_MATCH = '/(?J)((^AddressBook.*Mac_OS_X\/(?P<version>\S+))|(^Mac OS X\/(?P<version>\S+).*AddressBook))/';
     
     protected $_emptyArray = array(
         'adr_one_countryname'   => null,
