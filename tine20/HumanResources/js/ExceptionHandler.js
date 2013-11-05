@@ -42,6 +42,8 @@ Tine.HumanResources.handleRequestException = function(exception, callback, callb
         case 911: // HumanResources_Exception_NoContract
         case 913: // HumanResources_Exception_RemainingNotBookable
         case 914: // HumanResources_Exception_NoAccount
+        case 915: // HumanResources_Exception_ContractOverlap
+        case 916: // HumanResources_Exception_ContractDates
             Ext.MessageBox.show(defaults);
             break;
         // return false will the generic exceptionhandler handle the caught exception

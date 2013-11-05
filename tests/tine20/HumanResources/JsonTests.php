@@ -259,7 +259,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         try {
             $this->_json->saveEmployee($employee);
-        } catch (Tinebase_Exception_Data $exception) {
+        } catch (HumanResources_Exception_ContractOverlap $exception) {
             // thrown in HR_Controller_Employee
         }
         
@@ -277,7 +277,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
         try {
             $this->_json->saveEmployee($employee);
-        } catch (Tinebase_Exception_Record_Validation $exception) {
+        } catch (HumanResources_Exception_ContractDates $exception) {
             // thrown in HR_Controller_Contract
         }
         

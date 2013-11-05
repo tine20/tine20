@@ -705,3 +705,16 @@ msgstr "Konnte nicht als Urlaub gebucht werden"
 
 msgid "The unexcused sickness days could not be booked as vacation. There are not enough days left!"
 msgstr "Die unentschuldigten Krankheitstage konnten nicht als Urlaub gebucht werden, da keine Urlaubstage mehr übrig sind!"
+
+
+msgid "The start date of the contract must be before the end date!"
+msgstr "Der Anfang des Vertrages muss vor dem Ende sein!"
+
+msgid "Negative Timespace"
+msgstr "Negativer Zeitraum"
+
+msgid "The contracts must not overlap!"
+msgstr "Die Verträge dürfen sich nicht überlappen!"
+
+msgid "Contracts overlap"
+msgstr "Überlappende Verträge"
