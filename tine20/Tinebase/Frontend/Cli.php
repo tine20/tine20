@@ -716,4 +716,27 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         exit($result);
     }
+    
+
+    /**
+     * 
+     * @param Zend_Console_Getopt $opts
+     */
+    public function transferRelations($opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+        
+        $this->_addOutputLogWriter();
+        
+        try {
+            $args = $this->_parseArgs($opts, array('oldId', 'newId', 'model'));
+        } catch (Tinebase_Exception_InvalidArgument $e) {
+            echo 'Parameters "oldId", "newId" and "model" are required!' . PHP_EOL;
+            exit(1);
+        }
+        
+        Tinebase_Relations::getInstance()->transferRelations($args['oldId'], $args['newId'], $args['model']);
+    }
 }

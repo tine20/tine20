@@ -357,4 +357,32 @@ class Tinebase_Relation_Backend_Sql
             return FALSE;
         }
     }
+    
+    /**
+     * transfers relations
+     * 
+     * @param string $sourceId
+     * @param string $destinationId
+     * @param string $model
+     */
+    public function transferRelations($sourceId, $destinationId, $model)
+    {
+        $controller = Tinebase_Controller_Record_Abstract::getController($model);
+        
+        // just for validation, the records aren't needed
+        $sourceRecord      = $controller->get($sourceId);
+        $destinationRecord = $controller->get($destinationId);
+
+        
+        $adapter = $this->_dbTable->getAdapter();
+        $config = $adapter->getConfig();
+        
+        $tableName = $config['tableprefix'] . 'relations';
+        
+        $sql = 'UPDATE ' . $this->_db->quoteIdentifier($tableName) . ' SET ' . $this->_db->quoteInto($this->_db->quoteIdentifier('related_id') .' = ?', $destinationId) .' WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('related_model') . ' = ?', $model) .' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('related_id') .' = ?', $sourceId);
+        $result = $adapter->query($sql);
+        
+        $sql = 'UPDATE ' . $this->_db->quoteIdentifier($tableName) . ' SET ' . $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') .' = ?', $destinationId) .' WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('own_model') . ' = ?', $model) .' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') .' = ?', $sourceId);
+        $result = $adapter->query($sql);
+    }
 }
