@@ -779,6 +779,24 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     }
     
     /**
+     * get nodes by container (or container id)
+     * 
+     * @param int|Tinebase_Model_Container $container
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getNodesByContainer($container)
+    {
+        $nodeContainer = ($container instanceof Tinebase_Model_Container) ? $container : Tinebase_Container::getInstance()->getContainerById($container);
+        $path = $this->getContainerPath($nodeContainer);
+        $parentNode = $this->stat($path);
+        $filter = new Tinebase_Model_Tree_Node_Filter(array(
+            array('field' => 'parent_id', 'operator' => 'equals', 'value' => $parentNode->getId())
+        ));
+        
+        return $this->searchNodes($filter);
+    }
+    
+    /**
      * get tree node specified by parent node (or id) and name
      * 
      * @param string|Tinebase_Model_Tree_Node $_parentId

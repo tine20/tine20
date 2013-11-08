@@ -525,21 +525,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * get available vacation message templates
      * 
      * @return array
-     * 
-     * @todo perhaps we should use the node controller for the search and move it to tinebase
      */
     public function getVacationMessageTemplates()
     {
         try {
-            $templateContainer = Tinebase_Container::getInstance()->getContainerById(Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID});
-            $path = Tinebase_FileSystem::getInstance()->getContainerPath($templateContainer);
-            $parentNode = Tinebase_FileSystem::getInstance()->stat($path);
-            $filter = new Tinebase_Model_Tree_Node_Filter(array(
-                array('field' => 'parent_id', 'operator' => 'equals', 'value' => $parentNode->getId())
-            ));
-            
-            $templates = Tinebase_FileSystem::getInstance()->searchNodes($filter);
-            $result = $this->_multipleRecordsToJson($templates, $filter);
+            $nodes = Tinebase_FileSystem::getInstance()->getNodesByContainer(Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID});
+            $result = $this->_multipleRecordsToJson($nodes);
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' Could not get vacation template files: ' . $e);
