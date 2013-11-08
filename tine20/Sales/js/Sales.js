@@ -28,7 +28,14 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Product',
     contentTypes: [
         {modelName: 'Product',  requiredRight: null, singularContainerMode: true},
-        {modelName: 'Contract', requiredRight: null, singularContainerMode: true, genericCtxActions: ['grants']}]
+        {modelName: 'Contract', requiredRight: null, singularContainerMode: true, genericCtxActions: ['grants']},
+        {modelName: 'CostCenter', requiredRight: 'edit_costcenters', singularContainerMode: true, genericCtxActions: ['grants']}
+    ],
+    
+    initComponent: function() {
+        Tine.Sales.MainScreen.superclass.initComponent.call(this);
+
+    }
 });
 
 /**
@@ -57,6 +64,15 @@ Tine.Sales.ContractFilterPanel = function(config) {
 
 Ext.extend(Tine.Sales.ContractFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Sales_Model_ContractFilter'}]
+});
+
+Tine.Sales.CostCenterFilterPanel = function(config) {
+    Ext.apply(this, config);
+    Tine.Sales.CostCenterFilterPanel.superclass.constructor.call(this);
+};
+
+Ext.extend(Tine.Sales.CostCenterFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+    filter: [{field: 'model', operator: 'equals', value: 'Sales_Model_CostCenterFilter'}]
 });
 
 /**

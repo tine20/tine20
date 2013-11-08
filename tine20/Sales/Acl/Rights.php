@@ -26,12 +26,18 @@
  */
 class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
-   /**
+    /**
      * the right to manage products
      * @staticvar string
      */
     const MANAGE_PRODUCTS = 'manage_products';
-        
+    
+    /**
+     * the right to manage cost centers
+     * @staticvar string
+     */
+    const MANAGE_COSTCENTERS = 'manage_costcenters';
+    
     /**
      * holds the instance of the singleton
      *
@@ -65,7 +71,7 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Sales_Acl_Rights;
+            self::$_instance = new self();
         }
         
         return self::$_instance;
@@ -99,9 +105,13 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $translate = Tinebase_Translation::getTranslation('Sales');
         
         $rightDescriptions = array(
-            self::MANAGE_PRODUCTS  => array(
+            self::MANAGE_PRODUCTS => array(
                 'text'          => $translate->_('manage products'),
                 'description'   => $translate->_('add, edit and delete products'),
+            ),
+            self::MANAGE_COSTCENTERS => array(
+                'text'          => $translate->_('manage cost centers'),
+                'description'   => $translate->_('add, edit and delete cost centers'),
             ),
         );
         
