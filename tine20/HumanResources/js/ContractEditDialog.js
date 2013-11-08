@@ -84,6 +84,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.getForm().findField('feast_calendar_id').setValue(Tine.HumanResources.registry.get('defaultFeastCalendar'));
         } else {
             this.window.setTitle(String.format(_('Edit {0}'), this.i18nRecordName));
+            this.getForm().findField('workingtime_template').setValue(null);
         }
         
         // disable fields if there are already some vacations booked
@@ -137,7 +138,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             days = [];
         
         for (var index = 0; index < 7; index++) {
-            days[index] = parseInt(values['weekdays_' + index]);
+            days[index] = parseFloat(values['weekdays_' + index]);
         }
         
         return Ext.encode({days: days});
@@ -256,6 +257,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     selectedRecord: this.record,
                                     ref: '../../../../../../../templateChooser',
                                     columnWidth: 1/3,
+                                    name: 'workingtime_template',
                                     listeners: {
                                         scope:  this,
                                         select: this.updateTemplate.createDelegate(this)

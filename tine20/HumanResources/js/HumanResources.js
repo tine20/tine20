@@ -20,7 +20,7 @@ Tine.widgets.grid.RendererManager.register('HumanResources', 'Contract', 'workin
     var object = Ext.decode(v);
     var sum = 0;
     for (var i=0; i < object.days.length; i++) {
-        sum = sum + parseInt(object.days[i]);
+        sum = sum + parseFloat(object.days[i]);
     }
     return sum;
 });
