@@ -183,6 +183,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_delete($ids, $this->_productController);
     }
     
+    // costcenter methods
+    
     /**
      * Search for records matching given arguments
      *
@@ -193,6 +195,39 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchCostCenters($filter, $paging)
     {
         return $this->_search($filter, $paging, Sales_Controller_CostCenter::getInstance(), 'Sales_Model_CostCenterFilter');
+    }
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getCostCenter($id)
+    {
+        return $this->_get($id, Sales_Controller_CostCenter::getInstance());
+    }
+    
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveCostCenter($recordData)
+    {
+        return $this->_save($recordData, Sales_Controller_CostCenter::getInstance(), 'CostCenter');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array $ids
+     * @return string
+     */
+    public function deleteCostCenters($ids)
+    {
+        return $this->_delete($ids, Sales_Controller_CostCenter::getInstance());
     }
     
     // division functions
