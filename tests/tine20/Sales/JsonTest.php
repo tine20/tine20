@@ -479,4 +479,55 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit'),
         );
     }
+    
+    /**
+     * tests CostCenter CRUD Methods
+     */
+    public function testAllCostCenterMethods()
+    {
+        $remark = Tinebase_Record_Abstract::generateUID(10);
+        $number = Tinebase_DateTime::now()->getTimestamp();
+        
+        $cc = $this->_instance->saveCostCenter(
+            array('number' => $number, 'remark' => $remark)
+        );
+        
+        $this->assertEquals(40, strlen($cc['id']));
+        
+        $cc = $this->_instance->getCostCenter($cc['id']);
+        
+        $this->assertEquals($number, $cc['number']);
+        $this->assertEquals($remark, $cc['remark']);
+        
+        $cc['remark'] = $cc['remark'] . '_unittest';
+        $cc['number'] = $number - 5000;
+        
+        $cc = $this->_instance->saveCostCenter($cc);
+        
+        $this->assertEquals($remark . '_unittest', $cc['remark']);
+        $this->assertEquals($number - 5000, $cc['number']);
+        
+        $accountId = Tinebase_Core::getUser()->getId();
+        
+        $this->assertEquals($accountId, $cc['created_by']);
+        $this->assertEquals($accountId, $cc['last_modified_by']);
+        $this->assertEquals(NULL, $cc['deleted_by']);
+        $this->assertEquals(NULL, $cc['deleted_time']);
+        $this->assertEquals(1, $cc['seq']);
+        $this->assertEquals(0, $cc['is_deleted']);
+        
+        $ccs = $this->_instance->searchCostCenters(array(array('field' => 'remark', 'operator' => 'equals', 'value' => $remark . '_unittest')), array());
+        
+        $this->assertEquals(1, $ccs['totalcount']);
+        $this->assertEquals($remark . '_unittest', $ccs['results'][0]['remark']);
+        
+        $this->_instance->deleteCostCenters($cc['id']);
+        
+        $ccs = $this->_instance->searchCostCenters(array(array('field' => 'number', 'operator' => 'equals', 'value' => $number - 5000)), array());
+        
+        $this->assertEquals(1, $ccs['totalcount']);
+        $this->assertEquals(1, $ccs['results'][0]['is_deleted']);
+        
+        
+    }
 }

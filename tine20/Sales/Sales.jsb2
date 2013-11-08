@@ -36,6 +36,14 @@
           "path": "js/"
         },
         {
+          "text": "CostCenterGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "CostCenterEditDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "ContractGridPanel.js",
           "path": "js/"
         },
