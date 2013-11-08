@@ -277,3 +277,15 @@ msgstr ""
 #: Controller/Contract.php:83
 msgid "The number you have tried to set is already in use!"
 msgstr ""
+
+msgid "manage cost centers"
+msgstr ""
+
+msgid "add, edit and delete cost centers"
+msgstr ""
+
+msgid "Cost Centers"
+msgstr ""
+
+msgid "CostCenter"
+msgstr ""
