@@ -301,6 +301,8 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     {
         $this->resolveCredentials(FALSE, TRUE, TRUE);
         
+        $result = array();
+        
         // get values from account
         if ($this->smtp_hostname) {
             $result['hostname'] = $this->smtp_hostname;
@@ -335,7 +337,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         // sanitizing some values
         if (isset($result['primarydomain']) && ! empty($result['primarydomain'])) {
             $result['username'] .= '@' . $result['primarydomain'];
-        }        
+        }
         if (array_key_exists('auth', $result) && $result['auth'] == 'none') {
             unset($result['username']);
             unset($result['password']);
