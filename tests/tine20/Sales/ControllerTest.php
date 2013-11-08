@@ -352,15 +352,9 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
         // check uniquity
         $cc1 = $this->_getCostCenter();
         
-        try {
-            Sales_Controller_CostCenter::getInstance()->create($cc1);
-            $this->fail('A duplicate exception should have been thrown!');
-        } catch (Zend_Db_Statement_Exception $e) {
-            $this->assertEquals(0, $e->getCode());
-            // MySQL: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '217fcc5beddf1744c20d572d7e740a8bf88bf8a1' for key 'number'
-            // PGSQL: SQLSTATE[23505]: Unique violation: 7 ERROR:  duplicate key value violates unique constraint "tine20_sales_cost_centers_number_key"
-            $this->assertContains("SQLSTATE[23", $e->getMessage());
-        }
+        $this->setExpectedException('Tinebase_Exception_Duplicate');
+
+        Sales_Controller_CostCenter::getInstance()->create($cc1);
     }
     
     /**
