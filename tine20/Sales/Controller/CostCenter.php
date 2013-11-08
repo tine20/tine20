@@ -18,6 +18,8 @@
  */
 class Sales_Controller_CostCenter extends Tinebase_Controller_Record_Abstract
 {
+    
+    protected $_duplicateCheckFields = array(array('number'));
 
     /**
      * check for container ACLs
@@ -41,14 +43,15 @@ class Sales_Controller_CostCenter extends Tinebase_Controller_Record_Abstract
      *
      * @var boolean
      */
-    protected $_purgeRecords = TRUE;
+    protected $_purgeRecords = FALSE;
 
     /**
      * omit mod log for this records
      *
      * @var boolean
      */
-    protected $_omitModLog = TRUE;
+    protected $_omitModLog = FALSE;
+    
     /**
      * the constructor
      * don't use the constructor. use the singleton
@@ -59,6 +62,31 @@ class Sales_Controller_CostCenter extends Tinebase_Controller_Record_Abstract
         $this->_modelName = 'Sales_Model_CostCenter';
     }
 
+    /**
+     * if foreign Id fields should be resolved on search and get from json
+     * should have this format:
+     *     array('Calendar_Model_Contact' => 'contact_id', ...)
+     * or for more fields:
+     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
+     * (e.g. resolves contact_id with the corresponding Model)
+     *
+     * @var array
+     */
+    protected static $_resolveForeignIdFields = array(
+        'Tinebase_Model_User' => array('created_by', 'last_modified_by')
+    );
+    
+    /**
+     * name of fields containing datetime or an array of datetime information
+     *
+     * @var array list of datetime fields
+     */
+    protected $_datetimeFields = array(
+        'creation_time',
+        'last_modified_time',
+        'deleted_time'
+    );
+    
     /**
      * holds the instance of the singleton
      * @var Sales_Controller_CostCenter
@@ -72,7 +100,7 @@ class Sales_Controller_CostCenter extends Tinebase_Controller_Record_Abstract
     public static function getInstance()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Sales_Controller_CostCenter();
+            self::$_instance = new self();
         }
 
         return self::$_instance;
