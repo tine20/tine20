@@ -284,3 +284,17 @@ msgstr "Firma"
 #: Controller/Contract.php:83
 msgid "The number you have tried to set is already in use!"
 msgstr "Diese Nummer ist bereits vergeben!"
+
+msgid "manage cost centers"
+msgstr "Kostenstellen verwalten"
+
+msgid "add, edit and delete cost centers"
+msgstr "Kostenstellen hinzufügen, bearbeiten und löschen"
+
+msgid "Cost Center"
+msgid_plural "Cost Centers"
+msgstr[0] "Kostenstelle"
+msgstr[1] "Kostenstellen"
+
+msgid "CostCenter"
+msgstr "Kostenstellen"
