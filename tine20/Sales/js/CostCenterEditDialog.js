@@ -4,7 +4,11 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
+<<<<<<< HEAD
  * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+=======
+ * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+>>>>>>> 0009214: Allow to edit costcenters
  *
  */
  
@@ -23,7 +27,11 @@ Ext.namespace('Tine.Sales');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
+<<<<<<< HEAD
  * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+=======
+ * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+>>>>>>> 0009214: Allow to edit costcenters
  * 
  * @param       {Object} config
  * @constructor
@@ -34,6 +42,18 @@ Tine.Sales.CostCenterEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 650,
     windowHeight: 450,
     
+    /**
+     * @private
+     */
+    windowNamePrefix: 'CostCenterEditWindow_',
+    appName: 'Sales',
+    recordClass: Tine.Sales.Model.CostCenter,
+    recordProxy: Tine.Sales.costcenterBackend,
+    tbarItems: [],
+    
+    initComponent: function() {
+        Tine.Sales.CostCenterEditDialog.superclass.initComponent.call(this);
+    },
     /**
      * called on multiple edit
      * @return {Boolean}
@@ -96,3 +116,18 @@ Tine.Sales.CostCenterEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };
     }
 });
+
+/**
+ * Sales Edit Popup
+ */
+Tine.Sales.CostCenterEditDialog.openWindow = function (config) {
+    var id = (config.record && config.record.id) ? config.record.id : 0;
+    var window = Tine.WindowFactory.getWindow({
+        width: 650,
+        height: 450,
+        name: Tine.Sales.CostCenterEditDialog.prototype.windowNamePrefix + id,
+        contentPanelConstructor: 'Tine.Sales.CostCenterEditDialog',
+        contentPanelConstructorConfig: config
+    });
+    return window;
+};

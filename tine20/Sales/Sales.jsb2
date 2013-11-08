@@ -32,6 +32,14 @@
           "path": "js/"
         },
         {
+          "text": "DivisionEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "CostCenterGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "CostCenterEditDialog.js",
           "path": "js/"
         },
@@ -39,7 +47,6 @@
           "text": "ContractContactInternalFilterModel.js",
           "path": "js/"
         },
-        
         {
           "text": "ContractContactExternalFilterModel.js",
           "path": "js/"

@@ -40,11 +40,11 @@ class Sales_Model_CostCenter extends Tinebase_Record_Abstract
         'hasAttachments'    => FALSE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
-    
+        
         'titleProperty'     => 'remark',
         'appName'           => 'Sales',
         'modelName'         => 'CostCenter',
-    
+        
         'fields'            => array(
             'number' => array(
                 'label' => 'Number', //_('Number')

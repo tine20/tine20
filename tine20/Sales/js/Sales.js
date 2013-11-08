@@ -24,12 +24,34 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     contentTypes: [
         {modelName: 'Product', requiredRight: 'manage_products', singularContainerMode: true},
         {modelName: 'Contract', requiredRight: null, singularContainerMode: true, genericCtxActions: ['grants']},
-        {modelName: 'CostCenter', requiredRight: 'manage_costcenters', singularContainerMode: true},
+        {modelName: 'CostCenter', requiredRight: 'edit_costcenters', singularContainerMode: true, genericCtxActions: ['grants']},
         {modelName: 'Customer', requiredRight: 'manage_customers', singularContainerMode: true},
         {modelName: 'Division', requiredRight: null, singularContainerMode: true},
         {modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true}
     ]
 });
+
+Tine.Sales.addToClipboard = function(record, companyName) {
+    // this is called either from the edit dialog or from the grid, so we have different record types
+    var fieldPrefix = record.data.hasOwnProperty('bic') ? 'adr_' : '';
+    
+    companyName = companyName ? companyName : (record.get('name') ? record.get('name') : '');
+
+    var lines = companyName + "\n";
+    
+        lines += (record.get((fieldPrefix + 'prefix1')) ? record.get((fieldPrefix + 'prefix1')) + "\n" : '');
+        lines += (record.get((fieldPrefix + 'prefix2')) ? record.get((fieldPrefix + 'prefix2')) + "\n" : '');
+        lines += (record.get(fieldPrefix + 'pobox') ? record.get(fieldPrefix + 'pobox') + "\n" : (record.get(fieldPrefix + 'street') ? record.get(fieldPrefix + 'street') + "\n" : ''));
+        lines += (record.get((fieldPrefix + 'postalcode')) ? (record.get((fieldPrefix + 'postalcode')) + ' ') : '') + (record.get((fieldPrefix + 'locality')) ? record.get((fieldPrefix + 'locality')) : '');
+        
+        if (record.get('countryname')) {
+            lines += "\n" + record.get('countryname');
+        }
+    
+    var app = Tine.Tinebase.appMgr.get('Sales');
+    
+    Tine.Sales.CopyAddressDialog.openWindow({winTitle: app.i18n._('Copy address to the clipboard'), app: app, content: lines});
+};
 
 /** @param {Tine.Tinebase.data.Record} record
  * @param {String} companyName

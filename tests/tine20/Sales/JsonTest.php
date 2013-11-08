@@ -516,12 +516,12 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($number - 5000, $cc['number']);
         
         $accountId = Tinebase_Core::getUser()->getId();
-
-        $this->assertEquals($accountId, $cc['created_by']['accountId']);
-        $this->assertEquals($accountId, $cc['last_modified_by']['accountId']);
+        
+        $this->assertEquals($accountId, $cc['created_by']);
+        $this->assertEquals($accountId, $cc['last_modified_by']);
         $this->assertEquals(NULL, $cc['deleted_by']);
         $this->assertEquals(NULL, $cc['deleted_time']);
-        $this->assertEquals(2, $cc['seq']);
+        $this->assertEquals(1, $cc['seq']);
         $this->assertEquals(0, $cc['is_deleted']);
         
         $ccs = $this->_instance->searchCostCenters(array(array('field' => 'remark', 'operator' => 'equals', 'value' => $remark . '_unittest')), array());
