@@ -45,6 +45,16 @@ class Sales_Model_CostCenter extends Tinebase_Record_Abstract
         'remark'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // relations (linked users/groups and customers
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        
+        // modlog information
+        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
