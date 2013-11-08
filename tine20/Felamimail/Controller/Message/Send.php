@@ -206,23 +206,31 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Felamimail_Model_Message $_message
      * @param array $_nonPrivateRecipients
      */
-    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, $_saveInSent = false, $_nonPrivateRecipients = array())
+    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = null, $_saveInSent = false, $_nonPrivateRecipients = array())
     {
         $smtpConfig = $_account->getSmtpConfig();
         if (! empty($smtpConfig) && array_key_exists('hostname', $smtpConfig)) {
             $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
             
-            // send message via smtp
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to send message via SMTP ...');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                if (isset($smtpConfig['password'])) {
+                    unset($smtpConfig['password']);
+                }
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' About to send message via SMTP with the following config: ' . print_r($smtpConfig, true));
+            }
+            
             Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' successful.');
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' successful.');
             
             // append mail to sent folder
             if ($_saveInSent) {
                 $this->_saveInSent($transport, $_account, $this->_getAdditionalHeaders($_message));
             }
             
-            if ($_message !== NULL) {
+            if ($_message !== null) {
                 // add reply/forward flags if set
                 if (! empty($_message->flags) 
                     && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)

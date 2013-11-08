@@ -190,7 +190,6 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _checkContractsOverlap($record)
     {
-        $exceptionMessage = 'The contracts must not overlap!';
         if ($record->contracts) {
             // get intervals
             $intervals = array();
@@ -202,7 +201,8 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                 if ($contract->start_date) {
                     $intervals[] = array(
                         'start' => $contract->start_date,
-                        'stop' => $contract->end_date ? $contract->end_date : NULL
+                        'stop' => $contract->end_date ? $contract->end_date : NULL,
+                        'record' => $contract
                     );
                 }
             }
@@ -213,10 +213,9 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             
             // sort by start date
             uasort($intervals, function($a, $b) {
-                global $exceptionMessage;
                 // throw exception here if start dates are the same
                 if ($a['start'] == $b['start']) {
-                    throw new Tinebase_Exception_Data($exceptionMessage);
+                    throw new HumanResources_Exception_ContractOverlap();
                 }
                 return ($a['start'] < $b['start']) ? -1 : 1;
             });
@@ -229,7 +228,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                     : ($lastInterval['stop'] == $interval['stop']) ? TRUE
                     : ($lastInterval['stop'] > $interval['start']) ? TRUE 
                     : FALSE) {
-                        throw new Tinebase_Exception_Data($exceptionMessage);
+                        throw new HumanResources_Exception_ContractOverlap();
                 }
                 $lastInterval = $interval;
             }

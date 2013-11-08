@@ -77,15 +77,11 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         }
         
         $diff = $_record->diff($_oldRecord, array('created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'notes', 'end_date'))->diff;
-        
+
         if (! empty($diff)) {
-            if ($this->getFreeTimes($_record)->count() > 0) {
+            if ($this->getFreeTimes($_record)->filter('type', 'vacation')->count() > 0) {
                 throw new HumanResources_Exception_ContractNotEditable();
             }
-        }
-        
-        if (is_array($_record->feast_calendar_id)) {
-            $_record->feast_calendar_id = $_record->feast_calendar_id['id'];
         }
         
         $this->_checkDates($_record);
@@ -93,7 +89,8 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
 
     
     /**
-     * returns freetimes
+     * returns freetimes of a contract
+     * 
      * @param HumanResources_Model_Contract $contract
      */
     public function getFreeTimes($contract)
@@ -102,7 +99,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             array('field' => 'firstday_date', 'operator' => 'after', 'value' => $contract->start_date),
         ));
         
-        if ($contract->end_date) {
+        if ($contract->end_date !== NULL) {
             $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Date(
                 array('field' => 'firstday_date', 'operator' => 'before', 'value' => $contract->end_date)
             ));
@@ -132,7 +129,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         }
         
         if ($_record->end_date->isEarlier($_record->start_date)) {
-            throw new Tinebase_Exception_Record_Validation('The start date of the contract must be before the end date!');
+            throw new HumanResources_Exception_ContractDates();
         }
     }
     /**

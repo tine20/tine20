@@ -693,3 +693,15 @@ msgstr ""
 
 msgid "The unexcused sickness days could not be booked as vacation. There are not enough days left!"
 msgstr ""
+
+msgid "The start date of the contract must be before the end date!"
+msgstr ""
+
+msgid "Negative Timespace"
+msgstr ""
+
+msgid "The contracts must not overlap!"
+msgstr ""
+
+msgid "Contracts overlap"
+msgstr ""

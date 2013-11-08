@@ -358,7 +358,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     onAccountLoad: function(calculated) {
         var accountId = this.currentAccount.getId();
-        var localFreeDaysToSubstract = (this.localFreedays[accountId] || []).length ;
+        var localFreeDaysToSubstract = (this.localFreedays && this.localFreedays.hasOwnProperty(accountId) && Ext.isArray(this.localFreedays[accountId]) ? this.localFreedays[accountId] : []).length ;
         this.form.findField('remaining_vacation_days').setValue(calculated.remainingVacation - localFreeDaysToSubstract);
     },
     

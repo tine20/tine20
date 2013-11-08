@@ -29,7 +29,8 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     
     editDialogRecordProperty: null,
     editDialog: null,
-    
+    storeRemoteSort: false,
+    defaultSortInfo: {field: 'firstday_date', direction: 'DESC'},
     /**
      * if a vacation record gets deleted, this is needed to calculate
      * the remaining vacation days in the freetime edit dialog (vacation)
