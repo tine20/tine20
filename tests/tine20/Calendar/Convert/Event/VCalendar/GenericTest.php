@@ -77,6 +77,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals("This is a descpription\nwith a linebreak and a ; , and : a", $event->description);
         $this->assertEquals(2, count($event->attendee));
         $this->assertEquals(1, count($event->alarms));
+        $this->assertContains('CATEGORY 1',                      $event->tags->name);
+        $this->assertContains('CATEGORY 2',                      $event->tags->name);
         
         return $event;
     }
@@ -406,11 +408,12 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertContains('LOCATION:' . $event->location,     $vevent, $vevent);
         $this->assertContains('CLASS:PRIVATE',                    $vevent, $vevent);
         $this->assertContains('TZOFFSETFROM:+0100',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETTO:+0200',  $vevent, $vevent);
-        $this->assertContains('TZNAME:CEST',  $vevent, $vevent);
+        $this->assertContains('TZOFFSETTO:+0200',    $vevent, $vevent);
+        $this->assertContains('TZNAME:CEST',         $vevent, $vevent);
         $this->assertContains('TZOFFSETFROM:+0200',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETTO:+0100',  $vevent, $vevent);
-        $this->assertContains('TZNAME:CET',  $vevent, $vevent);
+        $this->assertContains('TZOFFSETTO:+0100',    $vevent, $vevent);
+        $this->assertContains('TZNAME:CET',          $vevent, $vevent);
+        $this->assertContains('CATEGORIES:CATEGORY 1,CATEGORY 2', $vevent, $vevent);
         
     }
     

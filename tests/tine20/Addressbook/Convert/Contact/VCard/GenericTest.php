@@ -105,6 +105,8 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         $this->assertEquals('Titel',                   $contact->title);
         $this->assertEquals('http\://www.tine20.com',  $contact->url);
         $this->assertEquals('http\://www.tine20.org',  $contact->url_home);
+        $this->assertContains('CATEGORY 1',            $contact->tags->name);
+        $this->assertContains('CATEGORY 2',            $contact->tags->name);
         
         return $contact;
     }
@@ -115,6 +117,8 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         
         $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC);
         $vcard = $converter->fromTine20Model($contact)->serialize();
+        
+        //var_dump($vcard);
         
         // required fields
         $this->assertContains('VERSION:3.0', $vcard, $vcard);
@@ -137,6 +141,8 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         $this->assertContains('TITLE:Titel', $vcard, $vcard);
         $this->assertContains('URL;TYPE=WORK:http\\://www.tine20.com', $vcard, $vcard);
         $this->assertContains('URL;TYPE=HOME:http\\://www.tine20.org', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=HOME:http\\://www.tine20.org', $vcard, $vcard);
+        $this->assertContains('CATEGORIES:CATEGORY 1,CATEGORY 2', $vcard, $vcard);
     }
     
 }

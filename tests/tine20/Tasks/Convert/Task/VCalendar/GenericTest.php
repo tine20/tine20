@@ -77,6 +77,8 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends PHPUnit_Framework_TestCas
         $this->assertEquals("75",                                (string)$task->alarms[0]->minutes_before);
         $this->assertEquals("This is a descpription\nwith a linebreak and a ; , and : a", $task->description);
         $this->assertEquals(1, count($task->alarms));
+        $this->assertContains('CATEGORY 1',                      $task->tags->name);
+        $this->assertContains('CATEGORY 2',                      $task->tags->name);
         
         return $task;
     }
@@ -200,6 +202,7 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends PHPUnit_Framework_TestCas
         $this->assertContains('TZOFFSETFROM:+0200',  $vcalendar, $vcalendar);
         $this->assertContains('TZOFFSETTO:+0100',    $vcalendar, $vcalendar);
         $this->assertContains('TZNAME:CET',          $vcalendar, $vcalendar);
+        $this->assertContains('CATEGORIES:CATEGORY 1,CATEGORY 2', $vcalendar, $vcalendar);
     }
     
     public function testConvertFromTine20ModelWithCustomAlarm()
