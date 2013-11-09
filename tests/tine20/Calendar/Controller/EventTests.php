@@ -842,6 +842,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->exdate = array(new Tinebase_DateTime('2009-04-07 13:00:00'));
         $persistentEvent = $this->_controller->create($event);
         
+        $this->assertEquals('2009-04-30 21:59:59', $persistentEvent->rrule->until->toString(), 'rrule is not adapted');
+        
         $exception = clone $persistentEvent;
         $exception->dtstart->addDay(2);
         $exception->dtend->addDay(2);

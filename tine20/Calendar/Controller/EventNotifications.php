@@ -70,7 +70,7 @@
         $diff = $_event->diff($_oldEvent)->diff;
         
         $orderedUpdateFieldOfInterest = array(
-            'dtstart', 'dtend', 'summary', 'location', 'description',
+            'dtstart', 'dtend', 'rrule', 'summary', 'location', 'description',
             'transp', 'priority', 'status', 'class',
             'url', 'rrule', 'is_all_day_event', 'originator_tz', /*'tags', 'notes',*/
         );
@@ -82,7 +82,12 @@
             }
         }
         
-        // cehck for organizer update
+        // rrule legacy
+        if (array_key_exists('rrule', $updates)) {
+            $updates['rrule'] = $_oldEvent->rrule;
+        }
+        
+        // check for organizer update
         if (Tinebase_Record_Abstract::convertId($_event['organizer'], 'Addressbook_Model_Contact') != 
             Tinebase_Record_Abstract::convertId($_oldEvent['organizer'], 'Addressbook_Model_Contact')) {
             
