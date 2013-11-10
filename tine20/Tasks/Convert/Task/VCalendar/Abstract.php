@@ -491,51 +491,6 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
     }
     
     /**
-     * parse CATEGORIES
-     * 
-     * @param \Sabre\VObject\Property  $property
-     */
-    protected function _toTine20ModelParseCategories(\Sabre\VObject\Property $property)
-    {
-        $categories = $property->getParts();
-        
-        $tags = array();
-        
-        foreach ($categories as $category) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to allocate tag ' . $category);
-             
-            // Lets try to allocate a tag (private or shared) 
-            try {
-                $tag = Tinebase_Tags::GetInstance()->getTagByName($category, Tinebase_Model_TagRight::USE_RIGHT);
-                
-                $tags[] = $tag;
-                 
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // No tag found, so lets try to allocate one
-                $tag = Tinebase_Tags::GetInstance()->createTag(new Tinebase_Model_Tag(array(
-                    'type'        => Tinebase_Model_Tag::TYPE_PERSONAL,
-                    'name'        => $category,
-                    'description' => 'Autocreated during import'
-                )));
-                
-                $tags[] = $tag;
-                 
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-                throw new Tinebase_Exception_AccessDenied("It's not allowed to create tags.");
-                
-            } catch (Exception $e) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) 
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage() . ',  Unknown error while importing VCard');
-                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) 
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Unknown error while importing VCard ' . $e->getTraceAsString());
-            }
-        }
-        
-        return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $tags);
-    }
-    
-    /**
      * parse VTODO part of VCALENDAR
      * 
      * @param  \Sabre\VObject\Component\VTodo  $_vevent  the VTODO to parse
@@ -818,7 +773,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                     break;
                     
                 case 'CATEGORIES':
-                    $task->tags = $this->_toTine20ModelParseCategories($property);
+                    $task->tags = Tinebase_Model_Tag::resolveTagNameToTag($property->getParts(), 'Tasks');
                     break;
                     
                 case 'X-MOZ-LASTACK':
