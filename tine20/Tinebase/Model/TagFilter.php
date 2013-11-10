@@ -69,13 +69,15 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
             ->order('name', 'ASC');
         
         if (!empty($this->application)) {
-            $applicationId = Tinebase_Application::getInstance()->getApplicationByName($this->application)->getId();
+            $applicationId = $this->application instanceof Tinebase_Model_Application 
+                ? $this->application->getId() 
+                : Tinebase_Application::getInstance()->getApplicationByName($this->application)->getId();
             
             $select->join(
                 array('context' => SQL_TABLE_PREFIX . 'tags_context'), 
                 $db->quoteIdentifier('tags.id') . ' = ' . $db->quoteIdentifier('context.tag_id'),
                 array()
-            )->where($db->quoteInto($db->quoteIdentifier('context.application_id') . ' IN (\'0\', ?)', $applicationId));
+            )->where($db->quoteInto($db->quoteIdentifier('context.application_id') . ' IN (?)', array('0', $applicationId)));
         }
         
         $orWhere = array();

@@ -97,6 +97,9 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
             'use_right'     => true,
         ));
         $this->_instance->setRights($right);
+        
+        $this->_instance->setContexts(array('any'), $savedSharedTag);
+        
         $this->assertEquals($sharedTag->name, $savedSharedTag->name);
 
         return $savedSharedTag;
@@ -112,6 +115,18 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         // create tags out of scope for the test user!
     }
 
+    /**
+     * test resolving tag names to Tinebase_Model_Tag
+     */
+    public function testResolveTagNames()
+    {
+        $sharedTag = $this->_createSharedTag();
+        
+        $resolvedTags = Tinebase_Model_Tag::resolveTagNameToTag($sharedTag->name, 'Addressbook');
+        
+        $this->assertContains($sharedTag->name, $resolvedTags->name);
+    }
+    
     /**
      * test search tags
      */
