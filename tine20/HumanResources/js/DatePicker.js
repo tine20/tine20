@@ -220,7 +220,6 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         
         this.setDisabledDates(this.disabledDates);
         
-        
         this.updateCellClasses();
         
         var split = result.results.firstDay.date.split(' '), dateSplit = split[0].split('-');
@@ -323,10 +322,9 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
     getTimestampsFromDays: function(localDays, remoteDays, locallyRemovedDays) {
         
         var dates = [];
-        
         Ext.iterate(localDays, function(accountId, localdates) { 
             for (var index = 0; index < localdates.length; index++) {
-                var newdate = new Date(localdates[index].date);
+                var newdate = new Date(localdates[index].date.replace(/-/g,'/') + ' AM');
                 dates.push(newdate.getTime());
             }
         });
@@ -343,7 +341,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         for (var index = 0; index < remoteDays.length; index++) {
             var day = remoteDays[index].date.split(' ')[0];
             if (remove.indexOf(day) == -1) {
-                var newdate = new Date(remoteDays[index].date);
+                var newdate = new Date(remoteDays[index].date.replace(/-/g,'/') + ' AM');
                 dates.push(newdate.getTime());
             }
         }
@@ -468,25 +466,28 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * updates the cell classes
      */
     updateCellClasses: function() {
+        
         this.cells.each(function(c) {
-
-           if (this.store.getByDate(c.dom.firstChild.dateValue)) {
-               c.addClass('x-date-selected');
-           } else {
-               c.removeClass('x-date-selected');
-           }
-           
-           if (this.vacationDates.indexOf(c.dom.firstChild.dateValue) > -1) {
+            
+            var timestamp = c.dom.firstChild.dateValue;
+            
+            if (this.store.getByDate(timestamp)) {
+                c.addClass('x-date-selected');
+            } else {
+                c.removeClass('x-date-selected');
+            }
+            
+            if (this.vacationDates.indexOf(timestamp) > -1) {
                 c.addClass('hr-date-vacation');
-           }
-           
-           if (this.sicknessDates.indexOf(c.dom.firstChild.dateValue) > -1) {
+            }
+            
+            if (this.sicknessDates.indexOf(timestamp) > -1) {
                 c.addClass('hr-date-sickness');
-           }
-           
-           if (this.feastDates.indexOf(c.dom.firstChild.dateValue) > -1) {
+            }
+            
+            if (this.feastDates.indexOf(timestamp) > -1) {
                 c.addClass('hr-date-feast');
-           }
+            }
            
         }, this);
     },
