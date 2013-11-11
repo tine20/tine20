@@ -794,61 +794,8 @@ class Tinebase_ModelConfiguration {
             if ($this->_modlogActive && array_key_exists('modlogOmit', $fieldDef)) {
                 $this->_modlogOmitFields[] = $fieldKey;
             }
-
-            // populate properties
-            switch ($fieldDef['type']) {
-                case 'string':
-                case 'text':
-                case 'integer':
-                case 'float':
-                case 'boolean':
-                    break;
-                case 'container':
-                    break;
-                case 'date':
-                case 'datetime':
-                    // add to alarm fields
-                    if (array_key_exists('alarm', $fieldDef)) {
-                        $this->_alarmDateTimeField = $fieldKey;
-                    }
-                    // add to datetime fields
-                    $this->_datetimeFields[] = $fieldKey;
-                    break;
-                case 'time':
-                    // add to timefields
-                    $this->_timeFields[] = $fieldKey;
-                    break;
-                case 'user':
-                    $fieldDef['config'] = array(
-                        'refIdField'              => 'id',
-                        'appName'                 => 'Addressbook',
-                        'modelName'               => 'Contact',
-                        'recordClassName'         => 'Addressbook_Model_Contact',
-                        'controllerClassName'     => 'Addressbook_Controller_Contact',
-                        'filterClassName'         => 'Addressbook_Model_ContactFilter',
-                        'addFilters' => array(
-                            array('field' => 'type', 'operator' => 'equals', 'value' => 'user')
-                        )
-                    );
-                    $this->_recordFields[$fieldKey] = $fieldDef;
-                    break;
-                case 'record':
-                    $this->_filterModel[$fieldKey]['options']['controller']  = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Controller');
-                    $this->_filterModel[$fieldKey]['options']['filtergroup'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Model') . 'Filter';
-                case 'records':
-                    $fieldDef['config']['recordClassName']     = array_key_exists('recordClassName', $fieldDef['config'])     ? $fieldDef['config']['recordClassName']     : $this->_getPhpClassName($fieldDef['config']);
-                    $fieldDef['config']['controllerClassName'] = array_key_exists('controllerClassName', $fieldDef['config']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
-                    $fieldDef['config']['filterClassName']     = array_key_exists('filterClassName', $fieldDef['config'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
-                    if ($fieldDef['type'] == 'record') {
-                        $this->_recordFields[$fieldKey] = $fieldDef;
-                    } else {
-                        $fieldDef['config']['dependentRecords'] = array_key_exists('dependentRecords', $fieldDef['config']) ? $fieldDef['config']['dependentRecords'] : FALSE;
-                        $this->_recordsFields[$fieldKey] = $fieldDef;
-                    }
-                    break;
-                default:
-                    break;
-            }
+            
+            $this->_populateProperties($fieldKey, $fieldDef);
         }
         
         // set some default filters
@@ -857,6 +804,81 @@ class Tinebase_ModelConfiguration {
         }
         $this->_filterModel[$this->_idProperty] = array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('idProperty' => $this->_idProperty, 'modelName' => $this->_appName . '_Model_' . $this->_modelName));
         $this->_fieldKeys = array_keys($this->_fields);
+    }
+    
+    /**
+     * populate model config properties
+     * 
+     * @param string $fieldKey
+     * @param array $fieldDef
+     */
+    protected function _populateProperties($fieldKey, $fieldDef)
+    {
+        switch ($fieldDef['type']) {
+            case 'string':
+            case 'text':
+            case 'integer':
+            case 'float':
+            case 'boolean':
+                break;
+            case 'container':
+                break;
+            case 'date':
+            case 'datetime':
+                // add to alarm fields
+                if (array_key_exists('alarm', $fieldDef)) {
+                    $this->_alarmDateTimeField = $fieldKey;
+                }
+                // add to datetime fields
+                $this->_datetimeFields[] = $fieldKey;
+                break;
+            case 'time':
+                // add to timefields
+                $this->_timeFields[] = $fieldKey;
+                break;
+            case 'user':
+                $fieldDef['config'] = array(
+                    'refIdField'              => 'id',
+                    'appName'                 => 'Addressbook',
+                    'modelName'               => 'Contact',
+                    'recordClassName'         => 'Addressbook_Model_Contact',
+                    'controllerClassName'     => 'Addressbook_Controller_Contact',
+                    'filterClassName'         => 'Addressbook_Model_ContactFilter',
+                    'addFilters' => array(
+                        array('field' => 'type', 'operator' => 'equals', 'value' => 'user')
+                    )
+                );
+                $this->_recordFields[$fieldKey] = $fieldDef;
+                break;
+            case 'record':
+                $this->_filterModel[$fieldKey]['options']['controller']  = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Controller');
+                $this->_filterModel[$fieldKey]['options']['filtergroup'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Model') . 'Filter';
+            case 'records':
+                $fieldDef['config']['recordClassName']     = array_key_exists('recordClassName', $fieldDef['config'])     ? $fieldDef['config']['recordClassName']     : $this->_getPhpClassName($fieldDef['config']);
+                $fieldDef['config']['controllerClassName'] = array_key_exists('controllerClassName', $fieldDef['config']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
+                $fieldDef['config']['filterClassName']     = array_key_exists('filterClassName', $fieldDef['config'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
+                if ($fieldDef['type'] == 'record') {
+                    $this->_recordFields[$fieldKey] = $fieldDef;
+                } else {
+                    $fieldDef['config']['dependentRecords'] = array_key_exists('dependentRecords', $fieldDef['config']) ? $fieldDef['config']['dependentRecords'] : FALSE;
+                    $this->_recordsFields[$fieldKey] = $fieldDef;
+                }
+                break;
+            case 'custom':
+                // prepend table name to id prop because of ambiguous ids
+                // TODO find a better way for this, maybe we should put the table name in the modelconfig?
+                $backend = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName)->getBackend();
+                $tableName = $backend->getTableName();
+                $this->_filterModel['customfield'] = array(
+                    'filter' => 'Tinebase_Model_Filter_CustomField', 
+                    'options' => array(
+                        'idProperty' => $tableName . '.' . $this->_idProperty
+                    )
+                );
+                break;
+            default:
+                break;
+        }
     }
     
     /**
