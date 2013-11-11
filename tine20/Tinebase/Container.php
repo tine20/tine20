@@ -1536,14 +1536,19 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param string $name
      * @param string $idConfig save id in config if given
      * @param Tinebase_Record_RecordSet $grants use this to overwrite default grants
-     * @param string $modelName the model the container contains
+     * @param string $model the model the container contains
      * @return Tinebase_Model_Container
      */
-    public function createSystemContainer($application, $name, $configId = NULL, Tinebase_Record_RecordSet $grants = NULL, $modelName = NULL)
+    public function createSystemContainer($application, $name, $configId = NULL, Tinebase_Record_RecordSet $grants = NULL, $model = NULL)
     {
         $application = ($application instanceof Tinebase_Model_Application) ? $application : Tinebase_Application::getInstance()->getApplicationById($application);
-        $controller = Tinebase_Core::getApplicationInstance($application->name);
-        $model = $modelName ? $modelName : $controller->getDefaultModel();
+        if ($model === null) {
+            $controller = Tinebase_Core::getApplicationInstance($application->name);
+            $model = $controller->getDefaultModel();
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Creating system container for model ' . $model);
         
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => $name,
