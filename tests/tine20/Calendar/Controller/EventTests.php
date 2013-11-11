@@ -30,6 +30,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
      */
     protected $_testCalendar;
     
+    /**
+     * (non-PHPdoc)
+     * @see Calendar_TestCase::setUp()
+     */
     public function setUp()
     {
         parent::setUp();
@@ -37,6 +41,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
     }
     
+    /**
+     * testCreateEvent
+     * 
+     * @return Calendar_Model_Event
+     */
     public function testCreateEvent()
     {
         $event = $this->_getEvent();
@@ -49,6 +58,22 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         return $persistentEvent;
     }
     
+    /**
+     * testCreateAlldayEventWithoutDtend
+     */
+    public function testCreateAlldayEventWithoutDtend()
+    {
+        $event = $this->_getEvent();
+        $event->is_all_day_event = true;
+        $event->dtend = null;
+        $persistentEvent = $this->_controller->create($event);
+        
+        $this->assertEquals('2009-04-06 23:59:59', $persistentEvent->dtend->toString());
+    }
+    
+    /**
+     * testGetEvent
+     */
     public function testGetEvent()
     {
         $persistentEvent = $this->testCreateEvent();
@@ -62,6 +87,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::GRANT_DELETE});
     }
     
+    /**
+     * testUpdateEvent
+     */
     public function testUpdateEvent()
     {
         $persistentEvent = $this->testCreateEvent();
