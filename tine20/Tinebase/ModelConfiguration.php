@@ -865,16 +865,21 @@ class Tinebase_ModelConfiguration {
                 }
                 break;
             case 'custom':
-                // prepend table name to id prop because of ambiguous ids
-                // TODO find a better way for this, maybe we should put the table name in the modelconfig?
-                $backend = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName)->getBackend();
-                $tableName = $backend->getTableName();
-                $this->_filterModel['customfield'] = array(
-                    'filter' => 'Tinebase_Model_Filter_CustomField', 
-                    'options' => array(
-                        'idProperty' => $tableName . '.' . $this->_idProperty
-                    )
-                );
+                try {
+                    // prepend table name to id prop because of ambiguous ids
+                    // TODO find a better way to get table name, maybe we should put it in the modelconfig?
+                    $backend = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName)->getBackend();
+                    $tableName = $backend->getTableName();
+                    $this->_filterModel['customfield'] = array(
+                        'filter' => 'Tinebase_Model_Filter_CustomField', 
+                        'options' => array(
+                            'idProperty' => $tableName . '.' . $this->_idProperty
+                        )
+                    );
+                } catch (Exception $e) {
+                    // no customfield filter available (yet?)
+                    Tinebase_Exception::log($e);
+                }
                 break;
             default:
                 break;
