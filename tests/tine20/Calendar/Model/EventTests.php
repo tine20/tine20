@@ -53,7 +53,7 @@ class Calendar_Model_EventTests extends PHPUnit_Framework_TestCase
         $event1 = new Calendar_Model_Event(array(
             'dtstart' => new Tinebase_DateTime('2011-11-23 14:25:00'),
             'dtend'   => new Tinebase_DateTime('2011-11-23 15:25:00'),
-            'rrule' => 'FREQ=DAILY;INTERVAL=2',
+            'rrule' => 'FREQ=DAILY;INTERVAL=2;UNTIL=2011-12-24 15:25:00',
         ));
         $event2 = clone $event1;
         
@@ -67,8 +67,16 @@ class Calendar_Model_EventTests extends PHPUnit_Framework_TestCase
         $this->assertTrue($event1->isRescheduled($event2), 'failed by dtend');
         
         $event2 = clone $event1;
-        $event2->rrule = 'FREQ=DAILY;INTERVAL=1';
-        $this->assertTrue($event1->isRescheduled($event2), 'failed by rrule');
+        $event2->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2011-12-24 15:25:00';
+        $this->assertTrue($event1->isRescheduled($event2), 'failed by rrule interval');
+        
+        $event2 = clone $event1;
+        $event2->rrule = 'FREQ=DAILY;INTERVAL=2;UNTIL=2011-12-23 15:25:00';
+        $this->assertTrue($event1->isRescheduled($event2), 'failed by rrule until diff greater one day');
+        
+        $event2 = clone $event1;
+        $event2->rrule = 'FREQ=DAILY;INTERVAL=2;UNTIL=2011-12-24 22:59:59';
+        $this->assertFalse($event1->isRescheduled($event2), 'failed by rrule until diff less one day');
     }
     
     /**
@@ -98,14 +106,14 @@ class Calendar_Model_EventTests extends PHPUnit_Framework_TestCase
         $event = $event = new Calendar_Model_Event(array(
             'dtstart'   => new Tinebase_DateTime('2011-11-23 14:25:00'),
             'dtend'     => new Tinebase_DateTime('2011-11-23 15:25:00'),
-            'rrule'     => 'FREQ=WEEKLY;INTERVAL=1;WKST=MO;BYDAY=TH',
+            'rrule'     => 'FREQ=WEEKLY;INTERVAL=1;WKST=MO;BYDAY=TH;UNTIL=2011-12-24 15:25:00',
             'summary'   => 'test event',
             'organizer' => Tinebase_Core::getUser()->contact_id
         ));
         
         $update = clone $event;
         
-        $update->rrule = 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TH;WKST=MO';
+        $update->rrule = 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TH;WKST=MO;UNTIL=2011-12-24 22:59:59';
         $diff = $event->diff($update);
         $this->assertFalse(array_key_exists('rrule', $diff->diff), 'parts order change:' . print_r($diff->toArray(), TRUE));
         

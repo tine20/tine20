@@ -322,28 +322,37 @@ class Tinebase_Core
      */
     public static function getApplicationInstance($_applicationName, $_modelName = '', $_ignoreACL = FALSE)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Params: application: ' . $_applicationName . ' / model: ' . $_modelName);
+        
         // modified (some model names can have both . and _ in their names and we should treat them as JS model name
         if (strpos($_applicationName, '_') && ! strpos($_applicationName, '.')) {
             // got (complete) model name name as first param
             list($appName, $i, $modelName) = explode('_', $_applicationName, 3);
-        } 
-        else if (strpos($_applicationName, '.')) {
+        } else if (strpos($_applicationName, '.')) {
             // got (complete) model name name as first param (JS style)
             list($j, $appName, $i, $modelName) = explode('.', $_applicationName, 4);
-        }
-        else {
+        } else {
             $appName = $_applicationName;
             $modelName = $_modelName;
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Extracted appName: ' . $appName . ' modelName: ' . $modelName);
+        
         $controllerName = ucfirst((string) $appName);
-        if ($appName !== 'Tinebase' || ($appName === 'Tinebase' && !$modelName)) {
+        if ($appName !== 'Tinebase' || ($appName === 'Tinebase' && ! $modelName)) {
             // only app controllers are called "App_Controller_Model"
             $controllerName .= '_Controller';
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' controllerName: ' . $controllerName);
 
-        // check for model controller
-        if (!empty($modelName)) {
+        if (! empty($modelName)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Checking for model controller ...');
+            
             $modelName = preg_replace('/^' . $appName . '_' . 'Model_/', '', $modelName);
             $controllerNameModel = $controllerName . '_' . $modelName;
             if (! class_exists($controllerNameModel)) {
@@ -355,13 +364,16 @@ class Tinebase_Core
             } else {
                 $controllerName = $controllerNameModel;
             }
-        } else if (!@class_exists($controllerName)) {
+        } else if (! class_exists($controllerName)) {
             throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
         }
-
+        
         if (! $_ignoreACL && is_object(Tinebase_Core::getUser()) && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
             throw new Tinebase_Exception_AccessDenied('No right to access application ' . $appName);
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Getting instance of ' . $controllerName);
         
         $controller = call_user_func(array($controllerName, 'getInstance'));
 
