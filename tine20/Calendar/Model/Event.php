@@ -238,6 +238,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             
             $rruleDiff = $ownRrule->diff($recordRrule);
             
+            // don't take small ( < one day) rrule_until changes as diff
+            if (
+                    $ownRrule->until instanceof Tinebase_DateTime 
+                    && array_key_exists('until', $rruleDiff->diff) && $rruleDiff->diff['until'] instanceof Tinebase_DateTime
+                    && abs($rruleDiff->diff['until']->getTimestamp() - $ownRrule->until->getTimestamp()) < 86400
+            ){
+                $rruleDiffArray = $rruleDiff->diff;
+                unset($rruleDiffArray['until']);
+                $rruleDiff->diff = $rruleDiffArray;
+            }
+            
             if (! empty($rruleDiff->diff)) {
                 $diffArray = $diff->diff;
                 $diffArray['rrule'] = $rruleDiff;
@@ -596,9 +607,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function isRescheduled($_event)
     {
-        return $this->dtstart != $_event->dtstart
-            || (! $this->is_all_day_event && $this->dtend != $_event->dtend)
-            || $this->rrule != $_event->rrule;
+        $diff = $this->diff($_event)->diff;
+        
+        return array_key_exists('dtstart', $diff)
+            || (! $this->is_all_day_event && array_key_exists('dtend', $diff))
+            || array_key_exists('rrule', $diff);
     }
     
     /**
