@@ -94,4 +94,53 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
     {
         return $this->name;
     }
+    
+    /**
+     * converts an array of tags names to a recordSet of Tinebase_Model_Tag
+     * 
+     * @param  iteratable           $tagNames
+     * @param  bool                 $implicitAddMissingTags
+     * @return Tinebase_Record_RecordSet
+     */
+    public static function resolveTagNameToTag($tagNames, $applicationName, $implicitAddMissingTags = true)
+    {
+        if (empty($tagNames)) {
+            return new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
+        }
+        
+        $resolvedTags = array();
+        
+        foreach ((array)$tagNames as $tagName) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to allocate tag ' . $tagName);
+            
+            $existingTags = Tinebase_Tags::getInstance()->searchTags(
+                new Tinebase_Model_TagFilter(array(
+                    'name'        => $tagName,
+                    'application' => $applicationName
+                )), 
+                new Tinebase_Model_Pagination(array(
+                    'sort'    => 'type', // prefer shared over personal
+                    'dir'     => 'DESC',
+                    'limit'   => 1
+                ))
+            );
+            
+            if (count($existingTags) === 1) {
+                //var_dump($existingTags->toArray());
+                $resolvedTags[] = $existingTags->getFirstRecord();
+        
+            } elseif ($implicitAddMissingTags === true) {
+                // No tag found, lets create a personal tag
+                $resolvedTag = Tinebase_Tags::GetInstance()->createTag(new Tinebase_Model_Tag(array(
+                    'type'        => Tinebase_Model_Tag::TYPE_PERSONAL,
+                    'name'        => $tagName
+                )));
+                
+                $resolvedTags[] = $resolvedTag;
+            }
+        }
+        
+        return new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $resolvedTags);
+    }
 }

@@ -957,11 +957,12 @@ class Tinebase_Tags
             $_contexts = array(0);
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting tag contexts: ' . print_r($_contexts, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting tag contexts: ' . print_r($_contexts, true));
 
         foreach ($_contexts as $context) {
             $this->_db->insert(SQL_TABLE_PREFIX . 'tags_context', array(
-                'tag_id'         => $_tagId,
+                'tag_id'         => $_tagId instanceof Tinebase_Model_Tag ? $_tagId->getId() : $_tagId,
                 'application_id' => $context
             ));
         }

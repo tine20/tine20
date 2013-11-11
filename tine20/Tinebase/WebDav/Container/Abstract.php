@@ -400,6 +400,31 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
     }
     
     /**
+     * generate VTimezone for given folder
+     * 
+     * @return string
+     */
+    protected function _getCalendarVTimezone()
+    {
+        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, Tinebase_Core::getUser()->getId());
+
+        // required vcalendar fields
+        $version = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->version;
+        
+        // create vcalendar object with timezone information
+        $vcalendar = new \Sabre\VObject\Component\VCalendar(array(
+            'PRODID'   => "-//tine20.org//Tine 2.0 {$this->_applicationName} V$version//EN",
+            'VERSION'  => '2.0',
+            'CALSCALE' => 'GREGORIAN'
+        ));
+        $vcalendar->add(new Sabre_VObject_Component_VTimezone($timezone));
+        
+        // Taking out \r to not screw up the xml output
+        return str_replace("\r","", $vcalendar->serialize());
+    }
+    
+    
+    /**
      * 
      */
     public function getSupportedPrivilegeSet()

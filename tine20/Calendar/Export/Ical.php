@@ -47,7 +47,7 @@ class Calendar_Export_Ical
         // start a new vcalendar
         $version = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->version;
         $this->_vcalendar = new qCal_Component_Vcalendar(array(
-            'prodid'    => "-//tine20.org//Calendar v$version//EN",
+            'prodid'    => "-//tine20.com//Calendar v$version//EN",
             'calscale'  => 'GREGORIAN',
             'version'   => '2.0',
         ));

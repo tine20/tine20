@@ -1,7 +1,4 @@
 <?php
-
-use Sabre\VObject;
-
 /**
  * Tine 2.0
  *
@@ -55,15 +52,15 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
      */
     public function fromTine20Model(Tinebase_Record_Abstract $_record)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-            __METHOD__ . '::' . __LINE__ . ' event ' . print_r($_record->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event ' . print_r($_record->toArray(), true));
         
-        $vcalendar = new VObject\Component('VCALENDAR');
+        $vcalendar = new \Sabre\VObject\Component\VCalendar();
         
         // required vcalendar fields
         $version = Tinebase_Application::getInstance()->getApplicationByName('Tasks')->version;
         
-        $vcalendar->PRODID   = "-//tine20.org//Tine 2.0 Tasks V$version//EN";
+        $vcalendar->PRODID   = "-//tine20.com//Tine 2.0 Tasks V$version//EN";
         $vcalendar->VERSION  = '2.0';
         $vcalendar->CALSCALE = 'GREGORIAN';
         
@@ -77,8 +74,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                 __METHOD__ . '::' . __LINE__ . ' timezone exception ' . $e->getTraceAsString());
         }
         
-        $vtodo = $this->_convertTasksModelTask($_record);
-        $vcalendar->add($vtodo);
+        $this->_convertTasksModelTask($vcalendar, $_record);
         
         # Tasks application does not yet support repeating tasks
         #
@@ -113,7 +109,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
      * @param Tasks_Model_Task $mainTask
      * @return \Sabre\VObject\Component
      */
-    protected function _convertTasksModelTask(Tasks_Model_Task $task, Tasks_Model_Task $mainTask = null)
+    protected function _convertTasksModelTask(Sabre\VObject\Component\VCalendar $vcalendar, Tasks_Model_Task $task, Tasks_Model_Task $mainTask = null)
     {
         // clone the event and change the timezone
         $task = clone $task;
@@ -121,68 +117,59 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
             $task->setTimezone($task->originator_tz);
         }
         
-        $vtodo = new VObject\Component('VTODO');
+        $vtodo = $vcalendar->create('VTODO');
         
-        $lastModifiedDatTime = $task->last_modified_time ? $task->last_modified_time : $task->creation_time;
+        $vtodo->add('CREATED', $task->creation_time->getClone()->setTimezone('UTC'));
         
-        $vtodo->CREATED = VObject\Property::create('CREATED');
-        $vtodo->CREATED->setDateTime($task->creation_time, VObject\Property\DateTime::UTC);
+        $lastModifiedDateTime = $task->last_modified_time ? $task->last_modified_time : $task->creation_time;
+        $vtodo->add('LAST-MODIFIED', $lastModifiedDateTime->getClone()->setTimezone('UTC'));
         
-        $vtodo->{'LAST-MODIFIED'} = VObject\Property::create('LAST-MODIFIED');
-        $vtodo->{'LAST-MODIFIED'}->setDateTime($lastModifiedDatTime, VObject\Property\DateTime::UTC);
-        
-        $vtodo->DTSTAMP = VObject\Property::create('DTSTAMP');
-        $vtodo->DTSTAMP->setDateTime(Tinebase_DateTime::now(), VObject\Property\DateTime::UTC);
+        $vtodo->add('DTSTAMP', Tinebase_DateTime::now());
 
-        $vtodo->UID      = $task->uid;
-        $vtodo->SEQUENCE = !empty($task->seq) ? $task->seq : 1;
+        $vtodo->add('UID',      $task->uid);
+        $vtodo->add('SEQUENCE', !empty($task->seq) ? $task->seq : 1);
         
         if(isset($task->dtstart)){
-            $vtodo->DTSTART = VObject\Property::create('DTSTART');
-            $vtodo->DTSTART->setDateTime($task->dtstart);
+            $vtodo->add('DTSTART', $task->dtstart);
         }
         
         if(isset($task->due)){
-            $vtodo->DUE = VObject\Property::create('DUE');
-            $vtodo->DUE->setDateTime($task->due);
+            $vtodo->add('DUE', $task->due);
         }
         
         if(isset($task->completed)){
-             $vtodo->COMPLETED = VObject\Property::create('COMPLETED');
-             $vtodo->COMPLETED->setDateTime($task->completed);
+             $vtodo->add('COMPLETED', $task->completed);
         }
 
         switch($task->priority) {
              case 'LOW':
-                 $vtodo->PRIORITY = VObject\Property::create('PRIORITY','9');
+                 $vtodo->add('PRIORITY', 9);
                  break;
                  
              case 'NORMAL':
-                 $vtodo->PRIORITY = VObject\Property::create('PRIORITY','0');
+                 $vtodo->add('PRIORITY', 0);
                  break;
                  
              case 'HIGH':
-                 $vtodo->PRIORITY = VObject\Property::create('PRIORITY','1');
-                 break;
-                 
              case 'URGENT':
-                 $vtodo->PRIORITY = VObject\Property::create('PRIORITY','1');
+                 $vtodo->add('PRIORITY', 1);
                  break;
         }
 
-
         if(!empty($task->percent)){
-            $vtodo->add(VObject\Property::create('PERCENT-COMPLETE', $task->percent));
+            $vtodo->add('PERCENT-COMPLETE', $task->percent);
         }
 
         // task organizer
         if (!empty($task->organizer)) {
             $organizerContact = $task->resolveOrganizer();
+
             if ($organizerContact instanceof Addressbook_Model_Contact && !empty($organizerContact->email)) {
-                $organizer = VObject\Property::create('ORGANIZER', 'mailto:' . $organizerContact->email);
-                $organizer->add('CN', $organizerContact->n_fileas);
-                $organizer->add('EMAIL', $organizerContact->email);
-                $vtodo->add($organizer);
+                $organizer = $vtodo->add(
+                    'ORGANIZER', 
+                    'mailto:' . $organizerContact->email, 
+                    array('CN' => $organizerContact->n_fileas, 'EMAIL' => $organizerContact->email)
+                );
             }
         }
         
@@ -199,14 +186,13 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
         
         foreach ($optionalProperties as $property) {
             if (!empty($task->$property)) {
-                $vtodo->add(VObject\Property::create($property, $task->$property));
+                $vtodo->add($property, $task->$property);
             }
         }
         
         // categories
         if(isset($task->tags) && count($task->tags) > 0) {
-            $vtodo->CATEGORIES = VObject\Property::create('CATEGORIES');
-            $vtodo->CATEGORIES->setParts((array) $task->tags->name);
+            $vtodo->add('CATEGORIES', (array) $task->tags->name);
         }
         
         // repeating event properties
@@ -256,14 +242,13 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
             //}
             
             // fake X-MOZ-LASTACK
-            $vtodo->{'X-MOZ-LASTACK'} = new VObject\Property\DateTime('X-MOZ-LASTACK');
-            $vtodo->{'X-MOZ-LASTACK'}->setDateTime($task->creation_time, VObject\Property\DateTime::UTC);
+            $vtodo->add('X-MOZ-LASTACK', $task->creation_time->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
                 __METHOD__ . '::' . __LINE__ . ' event ' . print_r($task->alarms,TRUE));
  
             foreach($task->alarms as $alarm) {
-                $valarm = new VObject\Component('VALARM');
+                $valarm = $vcalendar->create('VALARM');
                 $valarm->add('ACTION', 'DISPLAY');
                 $valarm->add('DESCRIPTION', $task->summary);
                 
@@ -281,32 +266,28 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                         );
                     }
                     # TRIGGER;VALUE=DURATION:-PT1H15M
-                    $trigger = VObject\Property::create('TRIGGER', $periodString);
-                    $trigger->add('VALUE', "DURATION");
-                    $valarm->add($trigger);
+                    $trigger = $valarm->add('TRIGGER', $periodString);
+                    $trigger['VALUE'] = "DURATION";
                 } else {
                     # TRIGGER;VALUE=DATE-TIME:...
-                    $trigger = VObject\Property::create('TRIGGER');
-                    $trigger->add('VALUE', "DATE-TIME");
-                    $trigger->setDateTime($alarm->alarm_time, VObject\Property\DateTime::UTC);
-                    $valarm->add($trigger);
+                    $trigger = $valarm->add('TRIGGER', $alarm->alarm_time->getClone()->setTimezone('UTC')->format('Ymd\\THis\\Z'));
+                    $trigger['VALUE'] = "DATE-TIME";
                 }
 
                 $vtodo->add($valarm);
             }
         }
-         
-        return $vtodo;
+        
+        $vcalendar->add($vtodo);
     }
     
     /**
      * to be overwriten in extended classes to modify/cleanup $_vcalendar
      * 
-     * @param \Sabre\VObject\Component $_vcalendar
+     * @param \Sabre\VObject\Component\VCalendar $vcalendar
      */
-    protected function _afterFromTine20Model(VObject\Component $_vcalendar)
+    protected function _afterFromTine20Model(\Sabre\VObject\Component\VCalendar $vcalendar)
     {
-        
     }
     
     /**
@@ -318,7 +299,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
      */
     public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
     {
-        $vcalendar = self::getVcal($_blob);
+        $vcalendar = self::getVObject($_blob);
         
         // contains the VCALENDAR any VEVENTS
         if (!isset($vcalendar->VTODO)) {
@@ -405,9 +386,9 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
      * @param mixed $_blob
      * @return Sabre\VObject\Component
      */
-    public static function getVcal($_blob)
+    public static function getVObject($_blob)
     {
-        if ($_blob instanceof VObject\Component) {
+        if ($_blob instanceof \Sabre\VObject\Component) {
             $vcalendar = $_blob;
         } else {
             if (is_resource($_blob)) {
@@ -444,9 +425,9 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
             ' ' . $blob);
         
         try {
-            $vcalendar = VObject\Reader::read($blob);
+            $vcalendar = \Sabre\VObject\Reader::read($blob);
         } catch (Sabre\VObject\ParseException $svpe) {
-            // NOTE: we try to repair VObject\Reader as it fails to detect followup lines that do not begin with a space or tab
+            // NOTE: we try to repair \Sabre\VObject\Reader as it fails to detect followup lines that do not begin with a space or tab
             if ($failcount < 10 && preg_match(
                 '/Invalid VObject, line ([0-9]+) did not follow the icalendar\/vcard format/', $svpe->getMessage(), $matches
             )) {
@@ -493,7 +474,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
      * @param  \Sabre\VObject\Component    $_vevent
      * @return Tasks_Model_Task
      */
-    protected function _getRecurException(Tinebase_Record_RecordSet $_oldExdates, VObject\Component $_vevent)
+    protected function _getRecurException(Tinebase_Record_RecordSet $_oldExdates, \Sabre\VObject\Component $_vevent)
     {
         $exDate = clone $_vevent->{"RECURRENCE-ID"}->getDateTime();
         $exDate->setTimeZone(new DateTimeZone('UTC'));
@@ -512,10 +493,10 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
     /**
      * parse VTODO part of VCALENDAR
      * 
-     * @param  \Sabre\VObject\Component  $_vevent  the VTODO to parse
+     * @param  \Sabre\VObject\Component\VTodo  $_vevent  the VTODO to parse
      * @param  Tasks_Model_Task     $_vtodo   the Tine 2.0 event to update
      */
-    protected function _convertVtodo(VObject\Component $_vtodo, Tasks_Model_Task $_task)
+    protected function _convertVtodo(\Sabre\VObject\Component\VTodo $_vtodo, Tasks_Model_Task $_task)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vevent ' . $_vtodo->serialize());  
         
@@ -550,12 +531,12 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                     break;
                     
                 case 'LAST-MODIFIED':
-                    $task->last_modified_time = new Tinebase_DateTime($property->value);
+                    $task->last_modified_time = new Tinebase_DateTime($property->getValue());
                     break;
                 
                 case 'CLASS':
-                    if (in_array($property->value, array(Tasks_Model_Task::CLASS_PRIVATE, Tasks_Model_Task::CLASS_PUBLIC))) {
-                        $task->class = $property->value;
+                    if (in_array($property->getValue(), array(Tasks_Model_Task::CLASS_PRIVATE, Tasks_Model_Task::CLASS_PUBLIC))) {
+                        $task->class = $property->getValue();
                     } else {
                         $task->class = Tasks_Model_Task::CLASS_PUBLIC;
                     }
@@ -612,23 +593,23 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                     break;
                     
                 case 'STATUS':
-                    $task->status = $property->value;
+                    $task->status = $property->getValue();
                     
                     break;
                     
                 case 'PERCENT-COMPLETE':
-                    $task->percent = $property->value;
+                    $task->percent = $property->getValue();
                     
                     break;
                            
                 case 'SEQUENCE':
-                    $task->seq = $property->value;
+                    $task->seq = $property->getValue();
                     
                     break;
                     
                 case 'PRIORITY':
-                    if (is_numeric($property->value)) {
-                        switch ($property->value) {
+                    if (is_numeric($property->getValue())) {
+                        switch ($property->getValue()) {
                             case '0':
                                 $task->priority = 'NORMAL';
                                 
@@ -645,7 +626,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                                 break;
                             }
                     } else {
-                        $task->priority = $property->value;
+                        $task->priority = $property->getValue();
                     }
                     
                     break;
@@ -654,15 +635,15 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                 case 'LOCATION':
                 case 'SUMMARY':
                     $key = strtolower($property->name);
-                    //$task->$key = empty($property->value) ?  "With aout summary" : $property->value;
-                    $task->$key = $property->value;
+                    //$task->$key = empty($property->getValue()) ?  "With aout summary" : $property->getValue();
+                    $task->$key = $property->getValue();
                     break;
                     
                 case 'ORGANIZER':
-                    if (preg_match('/mailto:(?P<email>.*)/i', $property->value, $matches)) {
+                    if (preg_match('/mailto:(?P<email>.*)/i', $property->getValue(), $matches)) {
                         // it's not possible to change the organizer by spec
                         if (empty($task->organizer)) {
-//                             $name = isset($property['CN']) ? $property['CN']->value : $matches['email'];
+//                             $name = isset($property['CN']) ? $property['CN']->getValue() : $matches['email'];
 //                             $contact = Calendar_Model_Attender::resolveEmailToContact(array(
 //                                 'email'     => $matches['email'],
 //                                 'lastName'  => $name,
@@ -684,7 +665,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                     break;
                     
                 case 'RRULE':
-                    $task->rrule = $property->value;
+                    $task->rrule = $property->getValue();
                     
                     // convert date format
                     $task->rrule = preg_replace_callback('/UNTIL=([\dTZ]+)(?=;?)/', function($matches) {
@@ -729,8 +710,8 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                     break;
                     
                 case 'TRANSP':
-                    if (in_array($property->value, array(Calendar_Model_Event::TRANSP_OPAQUE, Calendar_Model_Event::TRANSP_TRANSP))) {
-                        $task->transp = $property->value;
+                    if (in_array($property->getValue(), array(Calendar_Model_Event::TRANSP_OPAQUE, Calendar_Model_Event::TRANSP_TRANSP))) {
+                        $task->transp = $property->getValue();
                     } else {
                         $task->transp = Calendar_Model_Event::TRANSP_TRANSP;
                     }
@@ -743,17 +724,17 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                         continue;
                     }
                     
-                    $task->uid = $property->value;
+                    $task->uid = $property->getValue();
                 
                     break;
                     
                 case 'VALARM':
                     foreach($property as $valarm) {
-                        switch(strtoupper($valarm->TRIGGER['VALUE']->value)) {
+                        switch(strtoupper($valarm->TRIGGER['VALUE']->getValue())) {
                             # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
                             case 'DATE-TIME':
                                 //@TODO fixme
-                                $alarmTime = new Tinebase_DateTime($valarm->TRIGGER->value);
+                                $alarmTime = new Tinebase_DateTime($valarm->TRIGGER->getValue());
                                 $alarmTime->setTimezone('UTC');
                                 
                                 $alarm = new Tinebase_Model_Alarm(array(
@@ -773,7 +754,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                                 $alarmTime = $this->_convertToTinebaseDateTime($_vtodo->DUE);
                                 $alarmTime->setTimezone('UTC');
                                 
-                                preg_match('/(?P<invert>[+-]?)(?P<spec>P.*)/', $valarm->TRIGGER->value, $matches);
+                                preg_match('/(?P<invert>[+-]?)(?P<spec>P.*)/', $valarm->TRIGGER->getValue(), $matches);
                                 $duration = new DateInterval($matches['spec']);
                                 $duration->invert = !!($matches['invert'] === '-');
 
@@ -792,7 +773,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                     break;
                     
                 case 'CATEGORIES':
-                    // @todo handle categories
+                    $task->tags = Tinebase_Model_Tag::resolveTagNameToTag($property->getParts(), 'Tasks');
                     break;
                     
                 case 'X-MOZ-LASTACK':
@@ -824,23 +805,23 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
     /**
      * get datetime from sabredav datetime property (user TZ is fallback)
      * 
-     * @param Sabre\VObject\Property $dateTimeProperty
-     * @param boolean $_useUserTZ
+     * @param  \Sabre\VObject\Property  $dateTimeProperty
+     * @param  boolean                  $_useUserTZ
      * @return Tinebase_DateTime
      * 
      * @todo try to guess some common timezones
      */
-    protected function _convertToTinebaseDateTime(VObject\Property $dateTimeProperty, $_useUserTZ = FALSE)
+    protected function _convertToTinebaseDateTime(\Sabre\VObject\Property $dateTimeProperty, $_useUserTZ = FALSE)
     {
         $defaultTimezone = date_default_timezone_get();
         date_default_timezone_set((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
-        if ($dateTimeProperty instanceof VObject\Property\DateTime) {
+        if ($dateTimeProperty instanceof \Sabre\VObject\Property\ICalendar\DateTime) {
             $dateTime = $dateTimeProperty->getDateTime();
             $tz = ($_useUserTZ) ? (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : $dateTime->getTimezone();
             $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
         } else {
-            $result = new Tinebase_DateTime($dateTimeProperty->value);
+            $result = new Tinebase_DateTime($dateTimeProperty->getValue());
         }
         
         date_default_timezone_set($defaultTimezone);
