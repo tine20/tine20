@@ -275,16 +275,24 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding email notes to ' . count($contacts) . ' contacts.');
             
             $noteText = $translate->_('Subject') . ':' . $_subject . "\n\n" . $translate->_('Body') . ':' . substr($_body, 0, 4096);
+            // somehow it's still possible that we have bad chars here. make sure they are filtered.
+            // @see 0008644: error when sending mail with note (wrong charset)
+            $noteText = Tinebase_Core::filterInputForDatabase($noteText);
             
-            foreach ($contacts as $contact) {
-                $note = new Tinebase_Model_Note(array(
-                    'note_type_id'           => Tinebase_Notes::getInstance()->getNoteTypeByName('email')->getId(),
-                    'note'                   => $noteText,
-                    'record_id'              => $contact->getId(),
-                    'record_model'           => 'Addressbook_Model_Contact',
-                ));
-                
-                Tinebase_Notes::getInstance()->addNote($note);
+            try {
+                foreach ($contacts as $contact) {
+                    $note = new Tinebase_Model_Note(array(
+                        'note_type_id'           => Tinebase_Notes::getInstance()->getNoteTypeByName('email')->getId(),
+                        'note'                   => $noteText,
+                        'record_id'              => $contact->getId(),
+                        'record_model'           => 'Addressbook_Model_Contact',
+                    ));
+                    
+                    Tinebase_Notes::getInstance()->addNote($note);
+                }
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Saving note failed: ' . $noteText);
+                throw $zdse;
             }
         } else {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no contacts to add notes to.');

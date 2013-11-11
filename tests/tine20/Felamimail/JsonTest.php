@@ -1033,9 +1033,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveMessageNoteWithInvalidChar()
     {
-        $subject = Tinebase_Core::filterInputForDatabase("\xF0\x9F\x98\x8A"); // :-) emoji
+        $subject = Tinebase_Core::filterInputForDatabase("\xF0\x9F\x98\x8A\xC2"); // :-) emoji &nbsp;
         $messageData = $this->_getMessageData('', $subject);
-        $messageData['note'] = TRUE;
+        $messageData['note'] = true;
+        $messageData['body'] .= "&nbsp;";
+        
         $this->_foldersToClear[] = 'INBOX';
         $this->_json->saveMessage($messageData);
         $message = $this->_searchForMessageBySubject($subject);
