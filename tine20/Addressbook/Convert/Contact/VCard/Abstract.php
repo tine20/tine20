@@ -364,20 +364,25 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     }
     
     /**
-     * add required fields(VERSION, FN, ...) to VCard
+     * initialize vcard object
      * 
      * @param  Tinebase_Record_Abstract  $record
-     * @param  \Sabre\VObject\Component  $card
+     * @return \Sabre\VObject\Component
      */
-    protected function _fromTine20ModelRequiredFields(Tinebase_Record_Abstract $record, \Sabre\VObject\Component $card)
+    protected function _fromTine20ModelRequiredFields(Tinebase_Record_Abstract $record)
     {
-        $card->VERSION = '3.0';
-        $card->FN = $record->n_fileas;
-        
-        $card->add('N', array($record->n_family, $record->n_given, $record->n_middle, $record->n_prefix, $record->n_suffix));
-        
         $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
-        $card->add('PRODID', "-//tine20.com//Tine 2.0 Addressbook V$version//EN");
-        $card->add('UID', $record->getId());
+        
+        $card = new \Sabre\VObject\Component\VCard(array(
+            'VERSION' => '3.0',
+            'FN'      => $record->n_fileas,
+            'N'       => array($record->n_family, $record->n_given, $record->n_middle, $record->n_prefix, $record->n_suffix),
+            'PRODID'  => "-//tine20.com//Tine 2.0 Addressbook V$version//EN",
+            'UID'     => $record->getId(),
+            'ORG'     => array($record->org_name, $record->org_unit),
+            'TITLE'   => $record->title
+        ));
+        
+        return $card;
     }
 }

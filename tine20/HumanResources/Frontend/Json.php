@@ -88,9 +88,9 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
         }
+        
         // TODO: resolve this in controller
         // add feast calendars
-        $ids = array();
         if (! empty($employee['contracts'])) {
             for ($i = 0; $i < count($employee['contracts']); $i++) {
                 if (! $employee['contracts'][$i]['feast_calendar_id']) {
@@ -105,25 +105,39 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         
+        $aids = array();
+        $fids = array();
+        
         // TODO: resolve this in controller
         foreach(array('vacation', 'sickness') as $type) {
             if (! empty($employee[$type]) && is_array($employee[$type])) {
                 foreach($employee[$type] as $v) {
-                    $ids[] = $v['account_id'];
+                    $aids[] = $v['account_id'];
+                    $fids[] = $v['id'];
                 }
             }
         }
         
-        $ids = array_unique($ids);
-        $acs = HumanResources_Controller_Account::getInstance()->getMultiple($ids);
+        $aids = array_unique($aids);
+        $fids = array_unique($fids);
+        $acs = HumanResources_Controller_Account::getInstance()->getMultiple($aids);
+        $freedayFilter = new HumanResources_Model_FreeDayFilter(array());
+        $freedayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $fids)));
+        $fds = HumanResources_Controller_FreeDay::getInstance()->search($freedayFilter);
+        $fds->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
         foreach(array('vacation', 'sickness') as $type) {
             if (! empty($employee[$type]) && is_array($employee[$type])) {
                 for ($i = 0; $i < count($employee[$type]); $i++) {
+                    
                     $account = $acs->filter('id', $employee[$type][$i]['account_id'])->getFirstRecord();
+                    
                     if ($account) {
                         $employee[$type][$i]['account_id'] = $account->toArray();
                     }
+                    
+                    $freedays = $fds->filter('freetime_id', $employee[$type][$i]['id']);
+                    $employee[$type][$i]['freedays'] = $freedays->toArray();
                 }
             }
         }

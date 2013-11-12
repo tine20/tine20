@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Convert_Event_VCalendar_MacOSXTest::main');
-}
 
 /**
  * Test class for Calendar_Convert_Event_VCalendar_MacOSX
@@ -38,36 +34,30 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends PHPUnit_Framework_Test
         $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV MacOSX Event Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
-
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-    }
     
     /**
-     * test converting vcard from sogo connector to Calendar_Model_Event 
+     * testBackslashInDescription
+     * 
+     * @see 0009176: iCal adds another backslash to description field
      */
-    public function testConvertToTine20Model()
+    public function testBackslashInDescription()
     {
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
+        $event = new Calendar_Model_Event(array(
+            'summary' => 'CalDAV test',
+            'dtstart' => Tinebase_DateTime::now(),
+            'dtend' => Tinebase_DateTime::now()->addHour(1),
+            'description' => 'lalala \\\\',
+            'originator_tz' => 'Europe/Berlin',
+            'creation_time' => Tinebase_DateTime::now(),
+            'uid' => Tinebase_Record_Abstract::generateUID(),
+            'seq' => 1,
+        ));
         
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX);
+        $vevent = $converter->fromTine20Model($event)->serialize();
         
-        $event = $converter->toTine20Model($vcalendarStream);
-    }            
+        $convertedEvent = $converter->toTine20Model($vevent);
+        
+        $this->assertEquals($event->description, $convertedEvent->description);
+    }
 }

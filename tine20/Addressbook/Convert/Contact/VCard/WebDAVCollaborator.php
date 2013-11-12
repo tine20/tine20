@@ -34,15 +34,8 @@ class Addressbook_Convert_Contact_VCard_WebDAVCollaborator extends Addressbook_C
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_record->toArray(), true));
         
-        $card = new \Sabre\VObject\Component\VCard();
-        
-        // required vcard fields
-        $this->_fromTine20ModelRequiredFields($_record, $card);
-
-        // optional fields
-        $card->add('ORG', array($_record->org_name, $_record->org_unit));
-        
-        $card->add('TITLE', $_record->title);
+        // initialize vcard object
+        $card = $this->_fromTine20ModelRequiredFields($_record);
         
         $card->add('TEL', $_record->tel_work, array('TYPE' => 'WORK'));
         

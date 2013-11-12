@@ -93,14 +93,28 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * 
      * @type {Object}
      */
-    localFreedays: null,
+    localVacationDays: null,
+    
+    /**
+     * holds already removed sickness days which are not persisted
+     * 
+     * @type {Object}
+     */
+    removedSicknessDays: null,
+    
+    /**
+     * holds already removed vacation days which are not persisted
+     * 
+     * @type {Object}
+     */
+    removedVacationDays: null,
     
     /**
      * holds sickness day records already inserted in the employee by account_id
      * 
      * @type {Object}
      */
-    localSicknessdays: null,
+    localSicknessDays: null,
     
     /**
      * inits the component
@@ -110,6 +124,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
         
         this.calculatedFeastDays = [];
+        this.localVacationDays = {};
+        this.localSicknessDays = {};
         
         // calculate current year and two years ago for the accountPicker search
         var date = new Date();
@@ -357,15 +373,35 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @param {} calculated
      */
     onAccountLoad: function(calculated) {
-        var accountId = this.currentAccount.getId();
-        var localFreeDaysToSubstract = (this.localFreedays && this.localFreedays.hasOwnProperty(accountId) && Ext.isArray(this.localFreedays[accountId]) ? this.localFreedays[accountId] : []).length ;
-        this.form.findField('remaining_vacation_days').setValue(calculated.remainingVacation - localFreeDaysToSubstract);
+        var remaining = calculated.remainingVacation - this.getDaysToSubstract();
+        this.form.findField('remaining_vacation_days').setValue(remaining);
     },
     
     /**
      * if loading feast and freedays failes
      */
     onFeastDaysLoadFailureCallback: function() {
+    },
+    
+    /**
+     * calculates the amount of days to substract for the remaining_vacation_days field
+     * 
+     * @return {Number}
+     */
+    getDaysToSubstract: function() {
+        var substractDays = 0;
+        // find out local free days to substract. this is by account only
+        var accountId = this.currentAccount.get('id');
+        
+        if (this.localVacationDays.hasOwnProperty(accountId)) {
+            substractDays = substractDays + this.localVacationDays[accountId].length;
+        }
+        
+        if (this.removedVacationDays.hasOwnProperty(accountId)) {
+            substractDays = substractDays - this.removedVacationDays[accountId].length;
+        }
+        
+        return substractDays;
     },
     
     /**

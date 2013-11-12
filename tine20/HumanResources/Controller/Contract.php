@@ -519,7 +519,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             
             $freeTimeFilter = new HumanResources_Model_FreeTimeFilter(array(
                 array('field' => 'firstday_date', 'operator' => 'after', 'value' => $sDate),
-                
+                array('field' => 'type', 'operator' => 'equals', 'value' => 'vacation'),
             ));
             
             if ($eDate) {

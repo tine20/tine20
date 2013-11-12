@@ -66,7 +66,12 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $vcalendar->add('METHOD', $this->_method);
         }
         
-        $vcalendar->add(new Sabre_VObject_Component_VTimezone($_records->getFirstRecord()->originator_tz));
+        $originatorTz = $_records->getFirstRecord() ? $_records->getFirstRecord()->originator_tz : NULL;
+        if (empty($originatorTz)) {
+            throw new Tinebase_Exception_Record_Validation('originator_tz needed for conversion to Sabre\VObject\Component');
+        }
+        
+        $vcalendar->add(new Sabre_VObject_Component_VTimezone($originatorTz));
         
         foreach ($_records as $_record) {
             $this->_convertCalendarModelEvent($vcalendar, $_record);
@@ -117,6 +122,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         $event->setTimezone($event->originator_tz);
         
         $lastModifiedDateTime = $_event->last_modified_time ? $_event->last_modified_time : $_event->creation_time;
+        if (! $event->creation_time instanceof Tinebase_DateTime) {
+            throw new Tinebase_Exception_Record_Validation('creation_time needed for conversion to Sabre\VObject\Component');
+        }
         
         $vevent = $vcalendar->create('VEVENT', array(
             'CREATED'       => $_event->creation_time->getClone()->setTimezone('UTC'),
@@ -280,6 +288,10 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     protected function _addEventAttendee(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event)
     {
+        if (empty($event->attendee)) {
+            return;
+        }
+        
         Calendar_Model_Attender::resolveAttendee($event->attendee, FALSE, $event);
         
         foreach($event->attendee as $eventAttendee) {

@@ -35,9 +35,11 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * if a vacation record gets deleted, this is needed to calculate
      * the remaining vacation days in the freetime edit dialog (vacation)
      * 
-     * @type Number
+     * @type array
      */
-    removedVacationDaysCount: 0,
+    removedVacationDays: null,
+    removedSicknessDays: null,
+    
     /**
      * set type before to diff vacation/sickness
      * @type 
@@ -75,6 +77,10 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 this.i18nRecordsName = this.app.i18n._('Vacation Days');
             }
         }
+        
+        this.removedSicknessDays = {};
+        this.removedVacationDays = {};
+        
         this.i18nEmptyText = this.i18nEmptyText || String.format(this.app.i18n._("There could not be found any {0}. Please try to change your filter-criteria or view-options."), this.i18nRecordsName);        
         
         Tine.HumanResources.FreeTimeGridPanel.superclass.initComponent.call(this);
@@ -147,7 +153,6 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         
         // set vacation of parent record (employee)
         var vacation = [];
-        
         this.editDialog.vacationGridPanel.getStore().each(function(item) {
             vacation.push(item.data);
         });
@@ -224,7 +229,8 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         var additionalConfig = {
             localVacationDays: localVacationDays,
             localSicknessDays: localSicknessDays,
-            removedVacationDaysCount: this.removedVacationDaysCount
+            removedVacationDays: this.removedVacationDays,
+            removedSicknessDays: this.removedSicknessDays
         };
         
         this.editDialogClass = (this.freetimeType == 'SICKNESS') ? Tine.HumanResources.SicknessEditDialog : Tine.HumanResources.VacationEditDialog;
@@ -280,11 +286,32 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @param {Array} records
      */
     deleteRecords: function(sm, records) {
+        
+        if (! this.removedVacationDays) {
+            this.removedVacationDays = {};
+        }
+        
+        // collect freetimes deleted locally but not persisted already
         Ext.each(records, function(record) {
-            if (record.get('type') == 'vacation') {
-                this.removedVacationDaysCount = this.removedVacationDaysCount + parseInt(record.get('days_count'));
+            
+            if (record.get('id').length > 13) {
+            
+                var accountId = Ext.isObject(record.get('account_id')) ? record.get('account_id').id : record.get('account_id');
+                
+                if (record.get('type') == 'vacation') {
+                    if (! this.removedVacationDays.hasOwnProperty(accountId)) {
+                        this.removedVacationDays[accountId] = [];
+                    }
+                    this.removedVacationDays[accountId] = this.removedVacationDays[accountId].concat(record.get('freedays'));
+                } else {
+                    if (! this.removedSicknessDays.hasOwnProperty(accountId)) {
+                        this.removedSicknessDays[accountId] = [];
+                    }
+                    this.removedSicknessDays[accountId] = this.removedSicknessDays[accountId].concat(record.get('freedays'));
+                }
             }
         }, this);
+        
         Tine.HumanResources.FreeTimeGridPanel.superclass.deleteRecords.call(this, sm, records);
     },
     
