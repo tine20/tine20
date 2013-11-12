@@ -85,25 +85,29 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
         $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], "$id.vcf", $vcardStream);
         
         $record = $contact->getRecord();
-
+        
         $this->assertEquals('l.kneschke@metaways.de', $record->email);
         $this->assertEquals('Kneschke', $record->n_family);
         $this->assertEquals('+49 BUSINESS', $record->tel_work);
         
         return $contact;
-    }    
+    }
     
     /**
      * test get vcard
-     * @depends testCreateContact
      */
     public function testGetContact()
     {
         $contact = $this->testCreateContact();
-    
-        $vcard = stream_get_contents($contact->get());
+        
+        $backend = new Addressbook_Frontend_WebDAV_Contact($this->objects['initialContainer'], $contact->getName());
+        
+        $contact = $backend->get();
+        
+        $vcard = stream_get_contents($contact);
         
         $this->assertContains('TEL;TYPE=WORK:+49 BUSINESS', $vcard);
+        $this->assertContains('CATEGORIES:CATEGORY 2,CATEGORY 1', $vcard);
     }
 
     /**

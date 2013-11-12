@@ -135,6 +135,11 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
         
         $this->assertEquals($id, $record->getId(), 'ID mismatch');
         
+        $vcard = stream_get_contents($contact->get());
+        
+        $this->assertContains('TEL;TYPE=WORK:+49 BUSINESS', $vcard);
+        $this->assertContains('CATEGORIES:CATEGORY', $vcard);
+        
         return $contact;
     }    
     
