@@ -11,13 +11,13 @@
 /**
  * class to hold contact data
  *
- * @property	account_id	id of associated user
- * @property	email		the email address of the contact
- * @property	n_family
- * @property	n_fileas 	display name
- * @property	n_fn		the full name
- * @property	n_given
- * @property	type		type of contact
+ * @property    account_id   id of associated user
+ * @property    email        the email address of the contact
+ * @property    n_family
+ * @property    n_fileas    display name
+ * @property    n_fn        the full name
+ * @property    n_given
+ * @property    type        type of contact
  * @package     Sipgate
  */
 class Sipgate_Model_Line extends Tinebase_Record_Abstract
@@ -68,3 +68,4 @@ class Sipgate_Model_Line extends Tinebase_Record_Abstract
         'last_sync'
     );
 }
+

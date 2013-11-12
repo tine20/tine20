@@ -7,29 +7,29 @@
 <!-- http://www.phing.info                         -->
 <!-- ============================================  -->
 <project name="tine20" description="Tine 2.0 build file" default="build">
-    
+
     <property name="builddir" value="${project.basedir}/build" override="true" />
     <property name="localedir" value="Tinebase/js/Locale" override="true" />
-    
+
     <!-- ============================================  -->
     <!-- Target: prepare                               -->
     <!-- ============================================  -->
     <target name="prepare">
         <echo msg="$buildDate: ${project.basedir}" />
         <init />
-        
+
         <php expression="getDevelopmentRevision();" returnProperty="buildRevision" />
         <echo msg="$buildRevision: ${buildRevision}" />
-        
+
         <php expression="date_create('now')->format('Y-m-d H:i:s');" returnProperty="buildDate" />
         <echo msg="$buildDate: ${buildDate}" />
-        
+
         <echo msg="Making build directory" />
         <mkdir dir="${builddir}" />
         <mkdir dir="${builddir}/${localedir}/build" />
         <mkdir dir="${builddir}/${localedir}/static" />
     </target>
-    
+
     <!-- ============================================  -->
     <!-- Target: build                                 -->
     <!-- ============================================  -->
@@ -54,17 +54,17 @@
             </fileset>
         </foreach>
     </target>
-    
+
     <!-- ============================================  -->
     <!-- Target: phpdoc                                -->
     <!-- ============================================  -->
     <target name="phpdoc">
         <echo msg="Building Tine 2.0 PHP API Documentation..." />
-        
+
         <includepath classpath="${project.basedir}/vendor/phpdocumentor" />
-        
+
         <mkdir dir="${builddir}/apidocs" />
-        
+
         <phpdoc2 title="Tine 2.0 PHP API Documentation" destdir="${builddir}/apidocs" template="responsive-twig">
             <fileset dir=".">
                 <include name="**/*.php" />
@@ -74,23 +74,23 @@
             </fileset>
         </phpdoc2>
     </target>
-    
+
     <!-- ============================================  -->
     <!-- Target: phpunit                               -->
     <!-- ============================================  -->
     <target name="phpunit">
         <echo msg="Starting Tests..." />
-        
+
         <if>
             <isset property="configPath" />
             <then>
                 <includepath classpath = "${configPath}" />
             </then>
         </if>
-        
+
         <delete dir="${builddir}/reports"/>
         <mkdir dir="${builddir}/reports" />
-        
+
         <phpunit configuration="../tests/tine20/phpunit.xml" haltonfailure="true" haltonerror="true" printsummary="true">
             <formatter type="plain" usefile="false"/>
             <formatter type="xml" todir="${builddir}/reports"/>
@@ -101,16 +101,16 @@
                 </fileset>
             </batchtest>
         </phpunit>
-        
+
         <phpunitreport infile="${builddir}/reports/testsuites.xml" format="frames" todir="${builddir}/reports/tests"/>
     </target>
-    
+
     <!-- ============================================  -->
     <!-- Target: report                                -->
     <!-- ============================================  -->
     <target name="report">
         <echo msg="Starting Tests..." />
-        
+
         <delete dir="${builddir}/reports"/>
         <mkdir dir="${builddir}/reports/tests"/>
         <mkdir dir="${builddir}/reports/coverage"/>
@@ -134,18 +134,18 @@
         <phpunitreport infile="${builddir}/reports/testsuites.xml" format="frames" todir="${builddir}/reports/tests"/>
         <coverage-report outfile="${builddir}/reports/coverage.xml">
             <report todir="${builddir}/reports/coverage" title="Tine 2.0"/>
-        </coverage-report>  
+        </coverage-report>
     </target>
-    
+
     <!-- ============================================  -->
     <!-- Target: build-module                          -->
     <!-- ============================================  -->
     <target name="build-module" description="build single module" depends="prepare">
         <echo msg="Building ${name}" />
-        
+
         <!-- do jsb2tk build -->
         <jsb2tk-build appName="${name}" />
-        
+
         <!-- replace buildstuff -->
         <reflexive>
             <filterchain>
@@ -155,12 +155,12 @@
                     <regexp pattern="Tine\.clientVersion\.buildRevision\s*=[^=]{1}[^;]*" replace='Tine.clientVersion.codeName="${buildRevision}"' modifiers="i"/>
                 </replaceregexp>
             </filterchain>
-            
+
             <fileset dir="${builddir}">
                 <include name="${name}/js/*-FAT*" />
             </fileset>
         </reflexive>
-        
+
         <!-- debug mode for debug files -->
         <reflexive>
             <filterchain>
@@ -168,33 +168,33 @@
                     <regexp pattern="Tine\.clientVersion\.buildType\s*=[^=]{1}[^;]*" replace="Tine.clientVersion.buildType = 'DEBUG'"/>
                 </replaceregexp>
             </filterchain>
-            
+
             <fileset dir="${builddir}">
                 <include name="${name}/js/*-FAT-debug*" />
             </fileset>
         </reflexive>
-        
+
         <!-- original jsb2 builds -->
         <!-- NOTE as jsb2tk has no path adoption yet we need to do it here -->
         <copy toDir="${project.basedir}">
             <fileset dir="${builddir}">
                 <include name="${name}/*/*" />
             </fileset>
-            
+
             <filterchain>
                 <replaceregexp>
                     <regexp pattern="(\.\.\/){2,}images" replace="../../images" modifiers="i"/>
                     <regexp pattern="(\.\.\/){2,}library" replace="../../library" modifiers="i"/>
                 </replaceregexp>
             </filterchain>
-            
+
         </copy>
-        
+
         <!-- adopt path for getJS/getCSS -->
         <!-- TODO add deploymode GETTER and move this to jsb2tk -->
         <copy toDir="${project.basedir}">
             <mapper type="regexp" from="^(.*\.(js|css))" to="\1.inc"/>
-            
+
             <filterchain>
                 <replaceregexp>
                     <regexp pattern="(\.\.\/)+images" replace="images" modifiers="i"/>
@@ -205,9 +205,9 @@
             <fileset dir="${builddir}">
                 <include name="${name}/*/*" />
             </fileset>
-            
+
         </copy>
-        
+
         <!-- translations -->
         <translation-build appName="${name}" />
         <jsMin targetDir="${builddir}/${name}/js" failOnError="false">
@@ -215,23 +215,23 @@
                 <include name="*-lang-*-debug.js"/>
             </fileset>
         </jsMin>
-        
+
         <copy toDir="${project.basedir}/${name}/js">
             <fileset dir="${builddir}/${name}/js">
                 <include name="*-lang-*-debug.js" />
             </fileset>
         </copy>
-        
+
         <copy toDir="${project.basedir}/${name}/js">
             <fileset dir="${builddir}/${name}/js">
                 <include name="*-lang-*-debug-min.js" />
             </fileset>
-            
+
             <mapper type="regexp" from="^(.*)-debug-min.js" to="\1.js"/>
         </copy>
-        
+
     </target>
-    
+
     <!-- ============================================  -->
     <!-- Target: clean                                 -->
     <!-- ============================================  -->
@@ -245,14 +245,14 @@
             </fileset>
         </delete>
     </target>
-    
+
     <!-- ============================================  -->
     <!-- Target: mimetypes                                 -->
     <!-- ============================================  -->
     <target name="mimetypes">
         <build-mimetypes appName="${name}" />
     </target>
-    
+
     <!-- ============================================  -->
     <!-- Target: tx-pull                               -->
     <!-- ============================================  -->
@@ -277,7 +277,7 @@
         <echo msg="git commit -a -m 'update lang templates'" />
         <echo msg="git push gerrit HEAD:refs/heads/master" />
     </target>
-    
+
     <!-- ============================================  -->
     <!-- Task: init                                    -->
     <!-- ============================================  -->
@@ -289,66 +289,66 @@
             }
         }
     ]]></adhoc-task>
-    
+
     <!-- ============================================  -->
     <!-- Task: jsb2tk-build                            -->
     <!-- ============================================  -->
     <adhoc-task name="jsb2tk-build"><![CDATA[
         class jsb2tkTask extends Task {
             private $appName;
-            
+
             function setAppName($appName) {
                 $this->appName = $appName;
             }
-            
+
             function main() {
                 $jsb2 = "${project.basedir}/{$this->appName}/{$this->appName}.jsb2";
                 if (file_exists($jsb2)) {
                     $this->log("In jsb2tkTask: " . $this->appName);
-                    
+
                     require_once('${project.basedir}/library/jsb2tk/jsb2tk.php');
-                    
+
                     $tk = new jsb2tk(array(
                         'homeDir' => '${builddir}'
                     ));
-                    
+
                     $tk->register($jsb2);
                     $tk->buildAll();
                 }
             }
         }
     ]]></adhoc-task>
-    
+
     <!-- ============================================  -->
     <!-- Task: translation-build                       -->
     <!-- ============================================  -->
     <adhoc-task name="translation-build"><![CDATA[
         class translationTask extends Task {
             private $appName;
-        
+
             function setAppName($appName) {
                 $this->appName = $appName;
             }
-            
+
             function main() {
                 if (! file_exists('${builddir}/' . "{$this->appName}/js")) return;
                 $availableTranslations = Tinebase_Translation::getAvailableTranslations();
-                
+
                 foreach ($availableTranslations as $translation) {
                     $localeString = $translation['locale'];
                     $locale = new Zend_Locale($localeString);
-                    
+
                     $jsTranslation = Tinebase_Translation::getJsTranslations($locale, $this->appName);
-                    
+
                     if ($this->appName == 'Tinebase' && file_exists('${project.basedir}/langstatistics.json')) {
                         $langstatistics = json_decode(file_get_contents('${project.basedir}/langstatistics.json'), TRUE);
                         $localeStats = array_values(array_filter($langstatistics['langStats'], function($stats) use ($localeString) {return $stats['locale'] == $localeString;}));
                         $jsTranslation .= ("Locale.translationStats=" . json_encode($localeStats[0]) . ";\n");
                     }
-                    
+
                     file_put_contents('${builddir}/' . "{$this->appName}/js/{$this->appName}-lang-{$locale}-debug.js", $jsTranslation);
                 }
-                
+
                 foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
                     foreach (scandir($translationPath) as $poFile) {
                         if (substr($poFile, -3) == '.po') {
@@ -361,71 +361,68 @@
             }
         }
     ]]></adhoc-task>
-    
-    
+
     <!-- ============================================  -->
     <!-- Task: build-mimetypes                         -->
     <!-- ============================================  -->
     <adhoc-task name="build-mimetypes"><![CDATA[
         class mimetypeTask extends Task {
             private $appName;
-        
+
             function setAppName($appName) {
                 $this->appName = $appName;
             }
-                                  
+
             function buildMimeTypesStyleFile($resolution, &$styleSheet) {
-            
-            	$relatedImgPath = '/images/oxygen/'.$resolution.'/mimetypes/';
-            	$imgPath = '${project.basedir}'.$relatedImgPath;
-            	if (! file_exists($imgPath) || ! is_dir($imgPath)) {
-            		echo 'Mimetype images no found!';
-            		return;
+
+                $relatedImgPath = '/images/oxygen/'.$resolution.'/mimetypes/';
+                $imgPath = '${project.basedir}'.$relatedImgPath;
+                if (! file_exists($imgPath) || ! is_dir($imgPath)) {
+                    echo 'Mimetype images no found!';
+                    return;
                 }
- 
- 				
-    			// öffnen des Verzeichnisses
-    			if ( $handle = opendir($imgPath) ) {
-                	
-                	fwrite($styleSheet, ".standardFileClass_".$resolution." .x-grid3-cell-inner {\n");
-        			fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath."application-octet-stream.png);\n");
-        			fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
-        			fwrite($styleSheet, "    padding-left: 19px;\n");
-        			fwrite($styleSheet, "}\n\n");
-                
-       			    // einlesen der Verzeichnisses
-        			while (($file = readdir($handle)) !== false)
-        			{	
-        				$fileName = basename($file, '.png');
-        				
-        				$addToStyle = strcmp($fileName, "..") + strcmp($fileName, "..");
-        				if($addToStyle > 0) {
-        				
-        					fwrite($styleSheet, ".".$fileName."_".$resolution." .x-grid3-cell-inner {\n");
-        					fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath.$file.") !important;\n");
-        					fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
-        					fwrite($styleSheet, "    padding-left: 19px;\n");
-        					fwrite($styleSheet, "}\n\n");
-        				}
-			        }
-        			
-        			closedir($handle);
-    			}
-            
+
+                // öffnen des Verzeichnisses
+                if ( $handle = opendir($imgPath) ) {
+
+                    fwrite($styleSheet, ".standardFileClass_".$resolution." .x-grid3-cell-inner {\n");
+                    fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath."application-octet-stream.png);\n");
+                    fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
+                    fwrite($styleSheet, "    padding-left: 19px;\n");
+                    fwrite($styleSheet, "}\n\n");
+
+                    // einlesen der Verzeichnisses
+                    while (($file = readdir($handle)) !== false)
+                    {
+                        $fileName = basename($file, '.png');
+
+                        $addToStyle = strcmp($fileName, "..") + strcmp($fileName, "..");
+                        if($addToStyle > 0) {
+
+                            fwrite($styleSheet, ".".$fileName."_".$resolution." .x-grid3-cell-inner {\n");
+                            fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath.$file.") !important;\n");
+                            fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
+                            fwrite($styleSheet, "    padding-left: 19px;\n");
+                            fwrite($styleSheet, "}\n\n");
+                        }
+                    }
+
+                    closedir($handle);
+                }
+
             }
-            
+
             function main() {
-    				$styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
-            		$this->buildMimeTypesStyleFile('16x16', $styleSheet);
-					$this->buildMimeTypesStyleFile('22x22', $styleSheet);
-					$this->buildMimeTypesStyleFile('32x32', $styleSheet);            	
-					fclose($styleSheet);
-        	}	
+                    $styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
+                    $this->buildMimeTypesStyleFile('16x16', $styleSheet);
+                    $this->buildMimeTypesStyleFile('22x22', $styleSheet);
+                    $this->buildMimeTypesStyleFile('32x32', $styleSheet);
+                    fclose($styleSheet);
+            }
         }
     ]]></adhoc-task>
-    
-    
-    
+
+
     <!-- ============================================  -->
     <!-- Task: manifest-build                          -->
     <!-- TODO  make it working (just a codestore)      -->
@@ -433,65 +430,65 @@
     <adhoc-task name="manifest-build"><![CDATA[
         class manifestBuildTask extends Task {
             private $appName;
-        
+
             function setAppName($appName) {
                 $this->appName = $appName;
             }
-            
+
             function main() {
                 $defaultFiles = "CACHE MANIFEST\n# Build by $build\nCACHE:\n";
-                
+
                 $manifest = fopen('${project.basedir}/tine20.manifest', 'w+');
                 fwrite($manifest, $defaultFiles . "\n");
-                
+
                 $files = array(
-                    'Tinebase/css/tine-all.css',                               
+                    'Tinebase/css/tine-all.css',
                     'Tinebase/js/tine-all.js',
-                    'styles/tine20.css',                             
+                    'styles/tine20.css', 
                     'library/ExtJS/ext-all.js',
-                    'library/ExtJS/adapter/ext/ext-base.js',   
+                    'library/ExtJS/adapter/ext/ext-base.js',
                     'library/ExtJS/resources/css/ext-all.css',
                     'images/oxygen/16x16/actions/knewstuff.png' // ???
                 );
-                
+
                 // no subdirs! => solaris does not know find -maxdeps 1
                 exec("cd \"$tine20path\"; ls images/* | grep images/ | egrep '\.png|\.gif|\.jpg'", $baseImages);
                 $files = array_merge($files, $baseImages);
-                
+
                 $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all-debug.css');
                 preg_match_all('/url\(..\/..\/(images.*)\)/U', $tineCSS, $matches);
                 $files = array_merge($files, $matches[1]);
-                
+
                 $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all-debug.css');
                 preg_match_all('/url\(..\/..\/(library.*)\)/U', $tineCSS, $matches);
                 $files = array_merge($files, $matches[1]);
-                    
+
                 $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
                 preg_match_all('/labelIcon: [\'|"](.*png)/U', $tineJs, $matches);
                 $files = array_merge($files, $matches[1]);
-                
+
                 $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
                 preg_match_all('/labelIcon: [\'|"](.*gif)/U', $tineJs, $matches);
                 $files = array_merge($files, $matches[1]);
-                
+
                 $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
                 preg_match_all('/src=[\'|"](.*png)/U', $tineJs, $matches);
                 $files = array_merge($files, $matches[1]);
-                
+
                 $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
                 preg_match_all('/src=[\'|"](.*gif)/U', $tineJs, $matches);
                 $files = array_merge($files, $matches[1]);
-                
+
                 exec("cd \"$tine20path\"; find library/ExtJS/resources/images -type f -name *.gif", $extImages);
                 $files = array_merge($files, $extImages);
                 exec("cd \"$tine20path\"; find library/ExtJS/resources/images -type f -name *.png", $extImages);
                 $files = array_merge($files, $extImages);
-                
+
                 exec("cd \"$tine20path\"; find styles -type f", $tine20Styles);
                 $files = array_merge($files, $tine20Styles);
-                
+
                 $files = array_unique($files);
-                
+
                 foreach($files as $file) {
                     if (! is_file("$tine20path/$file")) {
                         echo "WARNING $file not found, removing it from manifest.\n";
@@ -501,12 +498,12 @@
                         fwrite($manifest, $file . "\n");
                     }
                 }
-                
+
                 fclose($manifest);
             }
         }
     ]]></adhoc-task>
-    
+
     <!-- ============================================  -->
     <!-- Task: zend-translation-build                  -->
     <!-- TODO  make a target for this                  -->
@@ -517,7 +514,7 @@
                 // dump one langfile for every locale
                 $localelist = Zend_Locale::getLocaleList();
                 foreach ($localelist as $locale => $something) {
-                    try {   
+                    try {
                         $js = $this->createJsTranslationLists($locale);
                         file_put_contents('${builddir}/${localedir}/static/' . "generic-$locale-debug.js", $js);
                     } catch (Exception $e) {
@@ -525,7 +522,7 @@
                     }
                 }
             }
-            
+
             /**
              * creates translation lists js files for locale with js object
              *
@@ -534,7 +531,7 @@
              */
             function createJsTranslationLists($_locale) {
                 $jsContent = "Locale.prototype.TranslationLists = {\n";
-            
+
                 $types = array(
                     'Date'           => array('path' => 'Date'),
                     'Time'           => array('path' => 'Time'),
@@ -548,40 +545,40 @@
                     'Territory'      => array('path' => 'Territory', 'value' => 1),
                     'CityToTimezone' => array('path' => 'CityToTimezone'),
                 );
-                
+
                 $zendLocale = new Zend_Locale($_locale);
-                
+
                 foreach ( $types as $name => $path) {
                     $list = $zendLocale->getTranslationList($path['path'], $_locale, array_key_exists('value', $path) ? $path['value'] : false);
                     //print_r ( $list );
-                    
+
                     if ( is_array($list) ) {
-                        $jsContent .= "\n\t$name: {";                
-                            
-                        foreach ( $list as $key => $value ) {    
+                        $jsContent .= "\n\t$name: {";
+
+                        foreach ( $list as $key => $value ) {
                             // convert ISO -> PHP for date formats
                             if ( in_array($name, array('Date', 'Time', 'DateTime')) ) {
                                 $value = $this->convertIsoToPhpFormat($value);
                             }
-                            $value = preg_replace("/\"/", '\"', $value);        
+                            $value = preg_replace("/\"/", '\"', $value);
                             $jsContent .= "\n\t\t'$key': \"$value\",";
                         }
                         // remove last comma
                         $jsContent = chop($jsContent, ",");
-                                
+
                         $jsContent .= "\n\t},";
                     }
-                }    
+                }
                 $jsContent = chop($jsContent, ",");
-                
+
                 $jsContent .= "\n};\n";
                 return $jsContent;
             }
-            
+
             /**
              * Converts a format string from ISO to PHP format
              * reverse the functionality of Zend's convertPhpToIsoFormat()
-             * 
+             *
              * @param  string  $format  Format string in PHP's date format
              * @return string           Format string in ISO format
              */
@@ -589,57 +586,57 @@
                 $convert = array(
                     'c' => '/yyyy-MM-ddTHH:mm:ssZZZZ/',
                     '$1j$2' => '/([^d])d([^d])/',
-                    'j$1' => '/^d([^d])/', 
-                    '$1j' => '/([^d])d$/', 
-                    't' => '/ddd/', 
-                    'd' => '/dd/', 
-                    'l' => '/EEEE/', 
-                    'D' => '/EEE/', 
+                    'j$1' => '/^d([^d])/',
+                    '$1j' => '/([^d])d$/',
+                    't' => '/ddd/',
+                    'd' => '/dd/',
+                    'l' => '/EEEE/',
+                    'D' => '/EEE/',
                     'S' => '/SS/',
-                    'w' => '/eee/', 
-                    'N' => '/e/', 
-                    'z' => '/D/', 
-                    'W' => '/w/', 
-                    '$1n$2' => '/([^M])M([^M])/', 
-                    'n$1' => '/^M([^M])/', 
-                    '$1n' => '/([^M])M$/', 
-                    'F' => '/MMMM/', 
+                    'w' => '/eee/',
+                    'N' => '/e/',
+                    'z' => '/D/',
+                    'W' => '/w/',
+                    '$1n$2' => '/([^M])M([^M])/',
+                    'n$1' => '/^M([^M])/',
+                    '$1n' => '/([^M])M$/',
+                    'F' => '/MMMM/',
                     'M' => '/MMM/',
-                    'm' => '/MM/', 
-                    'L' => '/l/', 
-                    'o' => '/YYYY/', 
-                    'Y' => '/yyyy/', 
+                    'm' => '/MM/',
+                    'L' => '/l/',
+                    'o' => '/YYYY/',
+                    'Y' => '/yyyy/',
                     'y' => '/yy/',
-                    'a' => '/a/', 
-                    'A' => '/a/', 
-                    'B' => '/B/', 
+                    'a' => '/a/',
+                    'A' => '/a/',
+                    'B' => '/B/',
                     'h' => '/hh/',
-                    'g' => '/h/', 
-                    '$1G$2' => '/([^H])H([^H])/', 
-                    'G$1' => '/^H([^H])/', 
-                    '$1G' => '/([^H])H$/', 
-                    'H' => '/HH/', 
-                    'i' => '/mm/', 
-                    's' => '/ss/', 
-                    'e' => '/zzzz/', 
-                    'I' => '/I/', 
-                    'P' => '/ZZZZ/', 
+                    'g' => '/h/',
+                    '$1G$2' => '/([^H])H([^H])/',
+                    'G$1' => '/^H([^H])/',
+                    '$1G' => '/([^H])H$/',
+                    'H' => '/HH/',
+                    'i' => '/mm/',
+                    's' => '/ss/',
+                    'e' => '/zzzz/',
+                    'I' => '/I/',
+                    'P' => '/ZZZZ/',
                     'O' => '/Z/',
-                    'T' => '/z/', 
-                    'Z' => '/X/', 
-                    'r' => '/r/', 
+                    'T' => '/z/',
+                    'Z' => '/X/',
+                    'r' => '/r/',
                     'U' => '/U/',
                 );
-                
+
                 //echo "pre:".$format."\n";
-                
+
                 $patterns = array_values($convert);
                 $replacements = array_keys($convert);
                 $format = preg_replace($patterns, $replacements, $format);
-                
+
                 //echo "post:".$format."\n";
                 //echo "---\n";
-                
+
                 return $format;
             }
         }

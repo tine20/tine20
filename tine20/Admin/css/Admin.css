@@ -8,7 +8,6 @@
     background-image:url(../../images/oxygen/32x32/actions/dialog-apply.png) !important;
 }
 
-
 .action_disable {
     background-image:url(../../images/oxygen/16x16/actions/dialog-cancel.png) !important;
 }
@@ -18,7 +17,6 @@
 .x-btn-large .action_disable {
     background-image:url(../../images/oxygen/32x32/actions/dialog-cancel.png) !important;
 }
-
 
 .action_settings {
     background-image:url(../../images/oxygen/16x16/actions/view-choose.png) !important;
@@ -41,7 +39,6 @@
     background-image:url(../../images/oxygen/32x32/status/dialog-password.png) !important;
 }
 
-
 .action_addGroup {
     background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
 }
@@ -51,7 +48,6 @@
 .x-btn-large .action_addGroup {
     background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
 }
-
 
 .action_password {
     background-image:url(../../images/oxygen/16x16/actions/password.png) !important;
@@ -63,7 +59,6 @@
     background-image:url(../../images/oxygen/32x32/actions/password.png) !important;
 }
 
-
 .AdminIconCls {
     background-image:url(../../images/oxygen/16x16/apps/systemtray.png) !important;
 }
@@ -73,7 +68,6 @@
 .x-btn-large .AdminIconCls {
     background-image:url(../../images/oxygen/32x32/apps/systemtray.png) !important;
 }
-
 
 .admin-node-accesslog {
     background-image:url(../../images/oxygen/16x16/actions/view-process-own.png) !important;
@@ -85,7 +79,6 @@
     background-image:url(../../images/oxygen/32x32/actions/view-process-own.png) !important;
 }
 
-
 .admin-node-user {
     background-image:url(../../images/oxygen/16x16/places/user-identity.png) !important;
 }
@@ -95,7 +88,6 @@
 .x-btn-large .admin-node-user {
     background-image:url(../../images/oxygen/32x32/places/user-identity.png) !important;
 }
-
 
 .admin-node-groups {
     background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
@@ -107,7 +99,6 @@
     background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
 }
 
-
 .admin-node-computers {
     background-image:url(../../images/oxygen/16x16/places/network-local.png) !important;
 }
@@ -117,7 +108,6 @@
 .x-btn-large .admin-node-computers {
     background-image:url(../../images/oxygen/32x32/places/network-local.png) !important;
 }
-
 
 .admin-node-applications {
     background-image:url(../../images/oxygen/16x16/places/user-desktop.png) !important;
@@ -158,10 +148,9 @@
     background-image:url(../../images/oxygen/16x16/apps/kexi.png) !important;
 }
 
-
 .x-tree-node-collapsed .x-tree-node-icon.x-tree-node-leaf-checkbox, 
 .x-tree-node-expanded .x-tree-node-icon.x-tree-node-leaf-checkbox, 
 .x-tree-node-leaf .x-tree-node-icon.x-tree-node-leaf-checkbox ,
 .x-tree-node-leaf-checkbox {
-	width:0px;
+    width:0px;
 }

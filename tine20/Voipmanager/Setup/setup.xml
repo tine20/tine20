@@ -48,7 +48,7 @@
                     <name>description</name>
                     <type>text</type>
                     <length>255</length>
-                </field>                
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -149,7 +149,7 @@
                     <type>text</type>
                     <length>80</length>
                     <notnull>true</notnull>
-                </field>                
+                </field>
                 <field>
                     <name>description</name>
                     <type>text</type>
@@ -166,7 +166,7 @@
                     <type>integer</type>
                     <notnull>false</notnull>
                 </field>
-                <field>                    
+                <field>
                     <name>tone_scheme</name>
                     <type>text</type>
                     <length>32</length>
@@ -175,12 +175,12 @@
                     <name>date_us_format</name>
                     <type>boolean</type>
                     <default>NULL</default>
-                </field>     
+                </field>
                 <field>
                     <name>time_24_format</name>
                     <type>boolean</type>
                     <default>NULL</default>
-                </field>     
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -189,8 +189,8 @@
                     </field>
                 </index>
             </declaration>
-        </table>        
-        
+        </table>
+
         <table>
             <name>snom_templates</name>
             <engine>InnoDB</engine>
@@ -208,7 +208,7 @@
                     <type>text</type>
                     <length>80</length>
                     <notnull>true</notnull>
-                </field>                
+                </field>
                 <field>
                     <name>description</name>
                     <type>text</type>
@@ -239,7 +239,7 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
-                </field>              
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -261,7 +261,7 @@
                 </index>   
             </declaration>
         </table>
-        
+
         <table>
             <name>snom_phones</name>
             <engine>InnoDB</engine>
@@ -331,7 +331,7 @@
                     <type>text</type>
                     <length>32</length>
                     <default>snom300</default>
-                    <notnull>true</notnull>         
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>redirect_number</name>
@@ -342,7 +342,7 @@
                     <name>redirect_time</name>
                     <type>integer</type>
                     <length>11</length>
-                </field>                                
+                </field>
                 <field>
                     <name>http_client_info_sent</name>
                     <type>boolean</type>
@@ -371,7 +371,7 @@
                     <field>
                         <name>macaddress</name>
                     </field>
-                </index>              
+                </index>
                 <index>
                     <name>snom_phone::template_id--snom_templates::id</name>
                     <field>
@@ -383,7 +383,7 @@
                         <field>id</field>
                         <!-- add onupdate/ondelete? -->
                     </reference>
-                </index>   
+                </index>
                 <index>
                     <name>snom_phone::location_id--snom_location::id</name>
                     <field>
@@ -395,7 +395,7 @@
                         <field>id</field>
                         <!-- add onupdate/ondelete? -->
                     </reference>
-                </index>   
+                </index>
                 <index>
                     <name>http_client_user</name>
                     <unique>true</unique>
@@ -428,7 +428,7 @@
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
-                </field>            
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -437,7 +437,7 @@
                     </field>
                 </index>
             </declaration>
-        </table>        
+        </table>
         <table>
             <name>asterisk_sip_peers</name>
             <engine>InnoDB</engine>
@@ -768,7 +768,7 @@
                     <name>cfd_time</name>
                     <type>integer</type>
                     <length>11</length>
-                </field>                                
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -796,7 +796,7 @@
                     </reference>
                 </index>
             </declaration>
-        </table>          
+        </table>
         <table>
             <name>snom_lines</name>
             <engine>InnoDB</engine>
@@ -834,7 +834,7 @@
                     <name>idletext</name>
                     <type>text</type>
                     <length>40</length>
-                </field>                
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -851,7 +851,7 @@
                     <field>
                         <name>linenumber</name>
                     </field>
-                </index>              
+                </index>
                 <index>
                     <name>snom_lines_snomphone_id</name>
                     <field>
@@ -1031,8 +1031,8 @@
                     </reference>
                 </index>
            </declaration>
-        </table>            
-        
+        </table>
+
         <table>
             <name>snom_default_settings</name>
             <engine>InnoDB</engine>
@@ -1143,47 +1143,47 @@
                     <name>call_waiting_w</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>                     
+                </field>
                 <field>
                     <name>mwi_notification_w</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
+                </field>
                 <field>
                     <name>mwi_dialtone_w</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
+                </field>
                 <field>
                     <name>headset_device_w</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
+                </field>
                 <field>
                     <name>message_led_other_w</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
+                </field>
                 <field>
                     <name>global_missed_counter_w</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
+                </field>
                 <field>
                     <name>scroll_outgoing_w</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
+                </field>
                 <field>
                     <name>show_local_line_w</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
+                </field>
                 <field>
                     <name>show_call_status_w</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>          
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1192,7 +1192,7 @@
                     </field>
                 </index>
             </declaration>
-        </table>          
+        </table>
 
         <table>
             <name>asterisk_meetme</name>
@@ -1223,19 +1223,19 @@
                     <type>text</type>
                     <length>80</length>
                     <notnull>true</notnull>
-                </field>								
+                </field>
                 <field>
                     <name>members</name>
                     <type>integer</type>
-                </field>                                
+                </field>
                 <field>
                     <name>starttime</name>
                     <type>datetime</type>
-                </field>                                
+                </field>
                 <field>
                     <name>endtime</name>
                     <type>datetime</type>
-                </field>                                
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1244,8 +1244,8 @@
                     </field>
                 </index>
             </declaration>
-        </table> 
-        
+        </table>
+
         <table>
             <name>snom_phone_settings</name>
             <engine>InnoDB</engine>
@@ -1291,45 +1291,45 @@
                 <field>
                     <name>message_led_other</name>
                     <type>boolean</type>
-                    <notnull>false</notnull>                    
+                    <notnull>false</notnull>
                     <default>NULL</default>
                 </field>
                 <field>
                     <name>global_missed_counter</name>
                     <type>boolean</type>
-                    <notnull>false</notnull>                                        
+                    <notnull>false</notnull>
                     <default>NULL</default>
                 </field>
                 <field>
                     <name>scroll_outgoing</name>
                     <type>boolean</type>
-                    <notnull>false</notnull>                                        
+                    <notnull>false</notnull>
                     <default>NULL</default>
                 </field>
                 <field>
                     <name>show_local_line</name>
                     <type>boolean</type>
-                    <notnull>false</notnull>                                        
+                    <notnull>false</notnull>
                     <default>NULL</default>
                 </field>
                 <field>
                     <name>show_call_status</name>
                     <type>boolean</type>
-                    <notnull>false</notnull>                                        
+                    <notnull>false</notnull>
                     <default>NULL</default>
-                </field>               
+                </field>
                 <field>
                     <name>call_waiting</name>
                     <type>text</type>
                     <length>32</length>
-                </field>     
+                </field>
                 <index>
                     <name>phone_id</name>
                     <unique>true</unique>
                     <field>
                         <name>phone_id</name>
                     </field>
-                </index>       
+                </index>
                 <index>
                     <name>snom_phone_settings::phone_id--snom_phone::id</name>
                     <field>
@@ -1344,7 +1344,7 @@
                     </reference>
                 </index>
             </declaration>
-        </table>         
+        </table>
 
         <table>
             <name>snom_phones_acl</name>
@@ -1371,8 +1371,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-	                <type>text</type>
-	                <length>40</length>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -1389,8 +1389,8 @@
                     <name>dial_right</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>                
-                
+                </field>
+
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1426,7 +1426,7 @@
                 </index>
             </declaration>
         </table>
-        
+
         <table>
             <name>asterisk_redirects</name>
             <engine>InnoDB</engine>

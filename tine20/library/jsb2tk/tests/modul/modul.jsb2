@@ -1,5 +1,5 @@
 {
-	"projectName": "Modul",
+    "projectName": "Modul",
     "deployDir": "deploy",
     "licenseText": "BSD New License",
     "pkgs": [{

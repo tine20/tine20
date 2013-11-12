@@ -22,16 +22,16 @@
     /*padding: 2px;*/
     border-bottom: 1px solid #EDEDED;
     font-family:arial,tahoma,helvetica,sans-serif;
-	font-size:11px;
-	font-size-adjust:none;
-	font-style:normal;
-	font-variant:normal;
-	font-weight:normal;
-	line-height:normal;
+    font-size:11px;
+    font-size-adjust:none;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
 }
 
 .RequestTracker-History-Item {
-	padding: 2px 0px 2px 5px;
+    padding: 2px 0px 2px 5px;
     border-top: 1px solid #EDEDED;
 }
 
@@ -104,3 +104,4 @@
     border-left: 5px solid #888888;
     border-right: 2px solid #888888;
 }
+

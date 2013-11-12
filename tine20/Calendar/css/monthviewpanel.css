@@ -11,7 +11,7 @@
 }
 
 .cal-monthview-inner th {
-	border-top: none;
+    border-top: none;
     text-align: center;
     vertical-align: middle;
 }
@@ -26,8 +26,8 @@
 }
 
 .cal-monthview-wkcell:hover{
-	background: #CDDCEF url(../../library/ExtJS/resources/images/default/toolbar/bg.gif) repeat-x scroll left top;
-	/*cursor: pointer; see ticket #1484*/
+    background: #CDDCEF url(../../library/ExtJS/resources/images/default/toolbar/bg.gif) repeat-x scroll left top;
+    /*cursor: pointer; see ticket #1484*/
 }
 
 .cal-monthview-wkcell-header {
@@ -35,8 +35,8 @@
 }
 
 .cal-monthview-daycell {
-	vertical-align: top;
-	border-right: 1px solid #E1E1E1;
+    vertical-align: top;
+    border-right: 1px solid #E1E1E1;
     border-top: 1px solid #E1E1E1;
 }
 
@@ -53,7 +53,7 @@ cal-monthview-wkcell-header {
 }
 
 .cal-monthview-dayheader {
-	position: relative;
+    position: relative;
     width: 100%;
 }
 
@@ -67,11 +67,11 @@ cal-monthview-wkcell-header {
 }
 
 .cal-monthview-dayheader-date {
-	padding: 2px 5px;
-	border-collapse: separate;
-	color: #233D6D;
-	/*cursor: pointer; see ticket #1484*/
-	text-align: right !important;
+    padding: 2px 5px;
+    border-collapse: separate;
+    color: #233D6D;
+    /*cursor: pointer; see ticket #1484*/
+    text-align: right !important;
 }
 
 .cal-monthview-daybody {
@@ -91,10 +91,10 @@ cal-monthview-wkcell-header {
 }
 
 .cal-monthview-event {
-	margin: 0px 0px;
-	width: 100%;
-	cursor: pointer;
-	/*overflow: hidden;*/
+    margin: 0px 0px;
+    width: 100%;
+    cursor: pointer;
+    /*overflow: hidden;*/
 }
 
 .cal-monthview-eventslice .cal-monthview-event-editgrant {
@@ -106,15 +106,13 @@ cal-monthview-wkcell-header {
     overflow: hidden;
 }
 
-
-
 .cal-monthview-alldayevent {
-	border-radius: 8px;
-	margin: 0px 0px 1px 0px;
-	background-color: red;
-	height: 17px;
-	width: 100%;
-	/*overflow: visible;*/
+    border-radius: 8px;
+    margin: 0px 0px 1px 0px;
+    background-color: red;
+    height: 17px;
+    width: 100%;
+    /*overflow: visible;*/
 }
 
 .ext-gecko .cal-monthview-alldayevent {
@@ -131,7 +129,7 @@ cal-monthview-wkcell-header {
 }
 
 .cal-monthview-alldayevent-cropleft {
-	margin-left: 0px;
+    margin-left: 0px;
     border-left-style: none;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
@@ -154,7 +152,7 @@ cal-monthview-wkcell-header {
 }
 
 .cal-monthview-alldayevent-cropright {
-	margin-right: 0px;
+    margin-right: 0px;
     background-image: none;
     border-right-style: hidden;
     border-top-right-radius: 0px;
@@ -185,18 +183,18 @@ cal-monthview-wkcell-header {
 }
 
 .cal-monthview-event-info-hide {
-	display: none;
+    display: none;
 }
 
 .cal-monthview-daypreviewbox .cal-monthview-event-info-hide {
-	display: block;
+    display: block;
 }
 
 /******************************* daypreviewbox ********************************/
 .cal-monthview-daypreviewbox {
-	position: absolute;
-	border-bottom: 1px solid #E1E1E1;
-	overflow-y: auto;
-	overflow-x: hidden;
-	z-index: 5000;
+    position: absolute;
+    border-bottom: 1px solid #E1E1E1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 5000;
 }

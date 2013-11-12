@@ -9,7 +9,6 @@
  *
  */
 
- 
 .TasksIconCls, .TasksTask {
     background-image:url(../../images/oxygen/16x16/actions/todo.png) !important;
 }
@@ -20,10 +19,9 @@
     background-image:url(../../images/oxygen/32x32/actions/todo.png) !important;
 }
 
-
 .TasksMainGridStatus {
     width: 12px;
-	height: 12px;
+    height: 12px;
 }
 
 /***** tasks grid panel classes ******/

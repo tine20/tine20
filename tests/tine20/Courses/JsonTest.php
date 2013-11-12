@@ -551,7 +551,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         return $definition;
     }
     
- 	/**
+     /**
      * returns course import definition
      * 
      * @return Tinebase_Model_ImportExportDefinition

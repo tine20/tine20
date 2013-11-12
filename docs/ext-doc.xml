@@ -3,9 +3,7 @@
     <sources>
         <!-- <source src="../tine20/library/ExtJS/src" match="*.js"/> -->
 
-
-		<source src="../tine20/Tinebase/js/" match="*.js"/>
-
+        <source src="../tine20/Tinebase/js/" match="*.js"/>
 
         <source src="../tine20/Addressbook/js/ContactGrid.js"/>
         <source src="../tine20/Addressbook/js/SearchCombo.js"/>
@@ -31,7 +29,7 @@
         <source src="../tine20/ExampleApplication/js/ExampleRecordEditDialog.js"/>
         <source src="../tine20/Felamimail/js" match="*.js"/>
         <source src="../tine20/Sales/js" match="*.js"/>
-		<!-- <source src="../tine20/Setup/js" match="*.js"/> -->
+        <!-- <source src="../tine20/Setup/js" match="*.js"/> -->
         <!-- <source src="../tine20/Tasks/js/EditDialog.js"/> -->
         <source src="../tine20/Tasks/js/GridPanel.js"/>
         <source src="../tine20/Timetracker/js/TimesheetGridPanel.js"/>
@@ -44,5 +42,5 @@
         <tag name="version" title="Version"/>
         <tag name="note" format="&lt;i&gt;NOTE: {0}&lt;/i&gt;"/>
         <tag name="demo" title="Demo" format="&lt;a href=&quot;{0}&quot;&gt;{0}&lt;/a&gt;" />   
-	</tags>
+    </tags>
 </doc>

@@ -29,7 +29,7 @@
 }
 
 .cal-sheet-view-type {
-	background-image:url(../../images/oxygen/16x16/actions/view-calendar-week.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/view-calendar-week.png) !important;
 }
 .x-btn-medium .cal-sheet-view-type {
     background-image:url(../../images/oxygen/22x22/actions/view-calendar-week.png) !important;
@@ -58,7 +58,6 @@
     background-image:url(../../images/oxygen/32x32/actions/view-calendar-day.png) !important;
 }
 
-
 .cal-week-view {
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-week.png) !important;
 }
@@ -68,7 +67,6 @@
 .x-btn-large .cal-week-view {
     background-image:url(../../images/oxygen/32x32/actions/view-calendar-week.png) !important;
 }
-
 
 .cal-month-view {
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-month.png) !important;
@@ -80,7 +78,6 @@
     background-image:url(../../images/oxygen/32x32/actions/view-calendar-month.png) !important;
 }
 
-
 .cal-resource {
     background-image:url(../../images/oxygen/16x16/devices/video-projector.png) !important;
 }
@@ -90,7 +87,6 @@
 .x-btn-large .cal-resource {
     background-image:url(../../images/oxygen/32x32/devices/video-projector.png) !important;
 }
-
 
 .cal-attendee-type-resource {
     background-image:url(../../images/oxygen/16x16/devices/video-projector.png) !important;
@@ -120,9 +116,9 @@
 }
 
 .cal-calselectwidget-fakelist-item {
-	position: relative;
-	padding: 0;
-	border: 0;
+    position: relative;
+    padding: 0;
+    border: 0;
 }
 
 .cal-calselectwidget-fakelist-calendar {
@@ -132,12 +128,12 @@
 }
 
 .cal-calselectwidget-fakelist-account {
-	width: 160px;
-	position: absolute;
-	right: 0;
-	border-left: 1px solid #B5B8C8;
-	padding-left: 5px;
-	background:url(../../images/trigger2-bg.gif) repeat-x #EFEFEF;
+    width: 160px;
+    position: absolute;
+    right: 0;
+    border-left: 1px solid #B5B8C8;
+    padding-left: 5px;
+    background:url(../../images/trigger2-bg.gif) repeat-x #EFEFEF;
 }
 
 /*** container select widget
@@ -161,7 +157,7 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 }
 
 .cal-calselectwdgt {
-	position: relative;
+    position: relative;
 }
 
 /**** date picker ****/
@@ -176,8 +172,8 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .cal-event-icon {
     background-image:url(../../images/oxygen/16x16/actions/view-calendar-list.png) !important;
     background-position: 8px;
-	background-repeat:no-repeat;
-	padding: 2px 0px 2px 26px;
+    background-repeat:no-repeat;
+    padding: 2px 0px 2px 26px;
 }
 
 /**** conflict window ****/
@@ -195,17 +191,15 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 
 /**** status icons ****/
 .cal-status-icon {
-	background-image:url(../../images/calendar-status-icons.gif) !important;
+    background-image:url(../../images/calendar-status-icons.gif) !important;
     background-repeat:no-repeat;
     width: 10px;
     height: 10px;
     cursor: pointer;
 }
 
-
-
 .cal-recurring {
-	background-image:url(../../images/calendar-recurring.png);
+    background-image:url(../../images/calendar-recurring.png);
     background-repeat:no-repeat;
     width: 12px;
     height: 12px;

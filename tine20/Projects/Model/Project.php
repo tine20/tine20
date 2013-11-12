@@ -44,7 +44,7 @@ class Projects_Model_Project extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_resolveForeignIdFields = array(
-    	'Tinebase_Model_User' => array('created_by', 'last_modified_by')
+        'Tinebase_Model_User' => array('created_by', 'last_modified_by')
     );    
 
     /**
@@ -99,3 +99,4 @@ class Projects_Model_Project extends Tinebase_Record_Abstract
             )
         );
 }
+

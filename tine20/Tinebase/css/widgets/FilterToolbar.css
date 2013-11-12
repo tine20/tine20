@@ -20,13 +20,13 @@
 }
 
 .x-panel-bwrap .tw-filtertoolbar  {
-	background-image: none;
-	background-color: #E5EDF8;
+    background-image: none;
+    background-color: #E5EDF8;
 }
 
 
 .tw-filtertoolbar  td { 
-	padding: 0px 5px 0px;
+    padding: 0px 5px 0px;
 }
 
 .tw-filtertoolbar .tw-ftb-frow-pbutton { 
@@ -38,7 +38,7 @@
 }
 
 .tw-filtertoolbar .tw-ftb-frow-prefix {
-	text-align: right;
+    text-align: right;
 }
 
 /* fix Ext.Button Layout */

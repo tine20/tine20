@@ -150,7 +150,7 @@ class Tinebase_Auth_ModSsl_Certificate_X509
     
         $out = array();
         // certificate verify ...
-	$w = exec('openssl verify -CAfile '.$this->casfile.' '.$certTempFile,$out);
+        $w = exec('openssl verify -CAfile '.$this->casfile.' '.$certTempFile,$out);
         self::removeTempFiles($temporary_files);
         $aux = explode(' ',$w);
         if(isset($aux[1])) {
@@ -365,7 +365,7 @@ class Tinebase_Auth_ModSsl_Certificate_X509
     {
         return $this->status['isValid'];
     }
-    
+
     public function getAuthorityKeyIdentifier()
     {
         return $this->authorityKeyIdentifier;
@@ -385,7 +385,7 @@ class Tinebase_Auth_ModSsl_Certificate_X509
     {
         return $this->status['errors'];
     }
-    
+
     public static function generateTempFilename(&$tab_arqs, $path)
     {
 
@@ -395,7 +395,7 @@ class Tinebase_Auth_ModSsl_Certificate_X509
         array_push($tab_arqs ,$aux);
         return  $aux;
     }
-    
+
     private static function removeTempFiles($tab_arqs)
     {
         foreach($tab_arqs as $file ) {
@@ -404,10 +404,9 @@ class Tinebase_Auth_ModSsl_Certificate_X509
             }
         }
     }
-    
+
     public static function writeTo($file, $content)
     {
         return file_put_contents($file, $content);   
     }
-
 }

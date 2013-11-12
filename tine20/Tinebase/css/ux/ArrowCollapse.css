@@ -1,5 +1,5 @@
 .ux-arrowcollapse {
-	/*position:relative;*/
+    /*position:relative;*/
     padding-bottom:5px;
     overflow:hidden;
 }
@@ -28,11 +28,11 @@
 }
 
 .ux-arrowcollapse .ux-arrowcollapse-header {
-	line-height: 24px;
+    line-height: 24px;
     padding:0;
     /*border-bottom:1px solid #c3daf9;*/
 }
- 
+
 .ux-arrowcollapse .ux-arrowcollapse-header-text {
     font-size:11px;
     font-family:tahoma,arial,sans-serif;
@@ -48,7 +48,7 @@
 .ux-arrowcollapse-body {
     overflow:hidden;
 }
- 
+
 .ux-arrowcollapse-bwrap {
     overflow:hidden;
     zoom:1;

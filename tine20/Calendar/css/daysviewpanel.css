@@ -29,13 +29,13 @@
 }
 
 .cal-daysviewpanel-dayheader {
-	float: left;
+    float: left;
 }
 
 .cal-daysviewpanel-dayheader-day {
-	padding-top: 3px;
-	text-align: center;
-	color:black;
+    padding-top: 3px;
+    text-align: center;
+    color:black;
     font-family:arial,tahoma,helvetica,sans-serif;
     font-size:11px;
     font-size-adjust:none;
@@ -63,13 +63,13 @@
 }
 /********************************* Body *********************************/
 .cal-daysviewpanel-body-inner {
-	position: relative;
-	top: 0px;
-	left: 0px;
+    position: relative;
+    top: 0px;
+    left: 0px;
 }
 
 .cal-daysviewpanel-scroller {
-	border-top: 1px solid #D0D0D0;
+    border-top: 1px solid #D0D0D0;
     overflow:auto;
     position:relative;
 }
@@ -82,9 +82,9 @@
 }
 
 .cal-daysviewpanel-body-daycolumn {
-	float: left;
-	position: absolute;
-	overflow: hidden;
+    float: left;
+    position: absolute;
+    overflow: hidden;
 }
 
 /*
@@ -137,20 +137,20 @@
 }
 
 .cal-daysviewpanel-body-daycolumn-today .cal-daysviewpanel-daycolumn-row-on {
-	border-top: 1px solid #EDEDED;
+    border-top: 1px solid #EDEDED;
 }
 
 .cal-daysviewpanel-body-daycolumn-inner {
-	border-left: 3px double #EDEDED;
-	height:100%;
+    border-left: 3px double #EDEDED;
+    height:100%;
     position:absolute;
     top:0;
 }
 
 .cal-daysviewpanel-daycolumn-row {
-	margin-left: 3px;
-	text-align: right;
-	font-family:arial,tahoma,helvetica,sans-serif;
+    margin-left: 3px;
+    text-align: right;
+    font-family:arial,tahoma,helvetica,sans-serif;
     font-size:10px;
     font-size-adjust:none;
     font-style:normal;
@@ -166,37 +166,36 @@
 }
 
 .cal-daysviewpanel-daycolumn-row:hover {
-	background-color:#DFE8F6;
-	color: #999999;
+    background-color:#DFE8F6;
+    color: #999999;
     /*cursor: pointer; see ticket #1484*/
 }
 
 .cal-daysviewpanel-timeRow-time {
-	width: 40px;
-	padding-top: 2px;
-	text-align: right;
-	color:black;
-	font-family:arial,tahoma,helvetica,sans-serif;
-	font-size:11px;
-	font-size-adjust:none;
-	font-style:normal;
-	font-variant:normal;
-	font-weight:normal;
-	line-height:normal;
-	white-space:nowrap;
+    width: 40px;
+    padding-top: 2px;
+    text-align: right;
+    color:black;
+    font-family:arial,tahoma,helvetica,sans-serif;
+    font-size:11px;
+    font-size-adjust:none;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
+    white-space:nowrap;
 }
-
 
 .cal-daysviewpanel-timeRow-on {
-	border-top: 1px solid #EDEDED;
-	position: absolute;
-	width: 100%;
-	/*background-color:#F1F1F1;*/
+    border-top: 1px solid #EDEDED;
+    position: absolute;
+    width: 100%;
+    /*background-color:#F1F1F1;*/
 }
 .cal-daysviewpanel-timeRow-off {
-	width: 100%;
-	position: absolute;
-	/*background-color:#FFFFFF;*/
+    width: 100%;
+    position: absolute;
+    /*background-color:#FFFFFF;*/
 }
 
 .cal-daysviewpanel-daycolumn-row-on,
@@ -205,14 +204,14 @@
 }
 
 .cal-daysviewpanel-daycolumn-row-off {
-	border-top: 1px dotted #EDEDED;
+    border-top: 1px dotted #EDEDED;
 }
 
 /********************************* Events *********************************/
 .cal-daysviewpanel-event {
-	margin-left: 3px;
-	background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;
-	border-radius: 8px;
+    margin-left: 3px;
+    background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;
+    border-radius: 8px;
     position: absolute;
     border: 1px solid #808080;
     overflow: hidden;
@@ -287,9 +286,9 @@
 }
 
 .cal-daysviewpanel-event-drop-nodrop .x-dd-drop-icon {
-	left: 3px;
-	top: 0px;
-	background-color: transparent;
+    left: 3px;
+    top: 0px;
+    background-color: transparent;
     background-image:url(../../library/ExtJS/resources/images/default/dd/drop-no.gif);
 }
 
@@ -300,8 +299,8 @@
 }
 
 .cal-daysviewpanel-event-header {
-	width: 100%;
-	position: absolute;
+    width: 100%;
+    position: absolute;
     top: -1px;
     height: 14px;
     background-color: #808080;
@@ -331,7 +330,7 @@
 }
 
 .cal-daysviewpanel-event-croptop .cal-daysviewpanel-event-header {
-	display: none;
+    display: none;
     border-top-style: none;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -354,7 +353,7 @@
 }
 
 .cal-daysviewpanel-event-header-inner {
-	color: white;
+    color: white;
     position: absolute;
     top: 1px;
     left: 4px;
@@ -417,7 +416,7 @@
 }
 
 .cal-daysviewpanel-body-wholedaycolumn-over {
-	width: 100%;
+    width: 100%;
     height: 100%;
     /*margin-left: 3px;*/
 }
@@ -461,7 +460,7 @@
 }
 
 .cal-daysviewpanel-event-cropright {
-	background-image: none;
+    background-image: none;
     border-right-style: hidden;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
@@ -484,8 +483,8 @@
 }
 
 .cal-daysviewpanel-wholedayevent-body .x-form-text {
-	position: absolute;
-	top: 0px;
+    position: absolute;
+    top: 0px;
     padding-top: 0px;
     height: 11px;
 }

@@ -32,9 +32,9 @@
     padding:0;
     /*border-bottom:1px solid #c3daf9;*/
 }
- 
+
 .ux-subformpanel .ux-subformpanel-header-text {
-	color: #a0a0a0;
+    color: #a0a0a0;
     font-size: 18px;
     position: absolute;
     font-weight: bold;
@@ -47,11 +47,11 @@
     /*padding:1px 5px 1px 20px;*/
     /*color:#4e79b2*/;
     }
- 
+
 .ux-subformpanel-body {
     overflow:hidden;
 }
- 
+
 .ux-subformpanel-bwrap {
     overflow:hidden;
     zoom:1;

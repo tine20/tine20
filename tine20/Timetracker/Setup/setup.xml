@@ -95,8 +95,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-	                <type>text</type>
-	                <length>40</length>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -104,8 +104,8 @@
                 </field> 
                 <field>
                     <name>last_modified_by</name>
-	                <type>text</type>
-	                <length>40</length>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>last_modified_time</name>
@@ -175,8 +175,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-	                <type>text</type>
-	                <length>40</length>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -223,8 +223,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-	                <type>text</type>
-	                <length>40</length>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -287,3 +287,4 @@
         </table>
     </tables>
 </application>
+

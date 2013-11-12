@@ -23,8 +23,8 @@
                 </field>
                 <field>
                     <name>created_by</name>
-	                <type>text</type>
-	                <length>40</length>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>creation_time</name>
@@ -92,8 +92,8 @@
                 </field>
                     <field>
                     <name>organizer</name>
-	                <type>text</type>
-	                <length>40</length>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>priority</name>
@@ -540,7 +540,5 @@
                 </index>
             </declaration>
         </table>
-        
-        
     </tables>
 </application>

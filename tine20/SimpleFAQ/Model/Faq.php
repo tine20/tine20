@@ -30,7 +30,7 @@ class SimpleFAQ_Model_Faq extends Tinebase_Record_Abstract
      */
     protected $_application = 'SimpleFAQ';
 
-	/**
+    /**
      * if foreign Id fields should be resolved on search and get from json
      * should have this format: 
      *     array('Calendar_Model_Contact' => 'contact_id', ...)
@@ -96,3 +96,4 @@ class SimpleFAQ_Model_Faq extends Tinebase_Record_Abstract
         // do something here if you like
      }
 }
+

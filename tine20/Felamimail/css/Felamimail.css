@@ -8,7 +8,6 @@
     background-image:url(../../images/oxygen/32x32/actions/flag-red.png) !important;
 }
 
-
 .action_email_reply {
     background-image:url(../../images/oxygen/16x16/actions/mail-reply-sender.png) !important;
 }
@@ -18,7 +17,6 @@
 .x-btn-large .action_email_reply {
     background-image:url(../../images/oxygen/32x32/actions/mail-reply-sender.png) !important;
 }
-
 
 .action_email_replyAll {
     background-image:url(../../images/oxygen/16x16/actions/mail-reply-all.png) !important;
@@ -30,7 +28,6 @@
     background-image:url(../../images/oxygen/32x32/actions/mail-reply-all.png) !important;
 }
 
-
 .action_email_forward {
     background-image:url(../../images/oxygen/16x16/actions/mail-forward.png) !important;
 }
@@ -41,9 +38,8 @@
     background-image:url(../../images/oxygen/32x32/actions/mail-forward.png) !important;
 }
 
-
 .action_update_cache {
-	background-image:url(../../images/oxygen/16x16/actions/mail-receive.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/mail-receive.png) !important;
 }
 .x-btn-medium .action_update_cache {
     background-image:url(../../images/oxygen/22x22/actions/mail-receive.png) !important;
@@ -51,7 +47,6 @@
 .x-btn-large .action_update_cache {
     background-image:url(../../images/oxygen/32x32/actions/mail-receive.png) !important;
 }
-
 
 .action_mark_read {
     background-image:url(../../images/oxygen/16x16/actions/mail-mark-read.png) !important;
@@ -62,7 +57,6 @@
 .x-btn-large .action_mark_read {
     background-image:url(../../images/oxygen/32x32/actions/mail-mark-read.png) !important;
 }
-	
 
 .FelamimailIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
@@ -73,7 +67,6 @@
 .x-btn-large .FelamimailIconCls {
     background-image:url(../../images/oxygen/32x32/apps/kmail.png) !important;
 }
-
 
 .action_folder_emptytrash {
     background-image:url(../../images/oxygen/16x16/actions/emptytrash.png) !important;
@@ -170,8 +163,8 @@
 /**** preview *****/
 
 .preview-panel-felamimail {
-	padding: 5px;
-	overflow: 'hidden';
+    padding: 5px;
+    overflow: 'hidden';
 }
 
 .preview-panel-felamimail-headers {
@@ -180,7 +173,7 @@
 }
 
 .preview-panel-felamimail-attachments {
-	margin-top: 5px;
+    margin-top: 5px;
     background-color: #e8e8e8;
     width: 100%;
 }
@@ -215,9 +208,9 @@
          this need to be restructured e.g. by having a felamimail-message-body-text cls
 */
 .preview-panel-felamimail-body .x-form-textarea {
-	margin-top: 5px;
-	font: normal 13px courier;
-	border: 0px;
+    margin-top: 5px;
+    font: normal 13px courier;
+    border: 0px;
 }
 
 /***** node classes ******/
@@ -225,7 +218,6 @@
 .felamimail-node-unread span {
     font-weight: bold;
 }
-
 
 .felamimail-node-trash img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/user-trash.png);
@@ -237,7 +229,6 @@
     background-image:url(../../images/oxygen/32x32/places/user-trash.png);
 }
 
-
 .felamimail-node-trash-full img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/user-trash-full.png);
 }
@@ -248,7 +239,6 @@
     background-image:url(../../images/oxygen/32x32/places/user-trash-full.png);
 }
 
-
 .felamimail-node-sent img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/mail-folder-sent.png);
 }
@@ -258,7 +248,6 @@
 .x-btn-large .felamimail-node-sent img.x-tree-node-icon {
     background-image:url(../../images/oxygen/32x32/places/mail-folder-sent.png);
 }
-
 
 .felamimail-node-inbox img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/mail-folder-inbox.png);
@@ -281,7 +270,6 @@
     background-image:url(../../images/oxygen/32x32/places/folder-txt.png);
 }
 
-
 .felamimail-node-templates img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/folder-tar.png);
 }
@@ -292,7 +280,6 @@
     background-image:url(../../images/oxygen/32x32/places/folder-tar.png);
 }
 
-
 .felamimail-node-junk img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/trashcan-empty-alt.png);
 }
@@ -302,7 +289,6 @@
 .x-btn-large .felamimail-node-junk img.x-tree-node-icon {
     background-image:url(../../images/oxygen/32x32/places/trashcan-empty-alt.png);
 }
-
 
 .felamimail-node-unselectable img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/folder.png);
@@ -317,7 +303,6 @@
     opacity: 0.5;
 }
 
-
 .felamimail-node-intelligent-marked img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/folder-important.png);
 }
@@ -327,7 +312,6 @@
 .x-btn-large .felamimail-node-intelligent-marked img.x-tree-node-icon {
     background-image:url(../../images/oxygen/32x32/places/folder-important.png);
 }
-
 
 .felamimail-node-intelligent-unread img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/folder-bookmarks.png);
@@ -342,7 +326,6 @@
     /* background-image:url(../../images/oxygen/32x32/places/mail-folder-sent.png); */
 }
 
-
 .felamimail-node-account img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/user-home.png);
 }
@@ -354,13 +337,13 @@
 }
 
 .felamimail-node-statusbox {
-	padding-right: 5px;
-	position: absolute;
-	right: 0px;
+    padding-right: 5px;
+    position: absolute;
+    right: 0px;
 }
 
 .felamimail-node-statusbox-progress {
-	width: 16px;
+    width: 16px;
     height: 16px;
     margin-top: 1px;
     background-repeat: no-repeat;
@@ -384,19 +367,19 @@
     border-radius: 8px;
     background-color: #D9E8FB;
     color: black;
-	line-height: 16px;
-	margin-top: 1px;
-	padding: 0px 5px;
+    line-height: 16px;
+    margin-top: 1px;
+    padding: 0px 5px;
 }
 
 .x-tree-selected .felamimail-node-statusbox-unread {
-	background-color: #FFFFFF;
+    background-color: #FFFFFF;
 }
 
 .felamimail-node-accountfailure {
     position: absolute;
     right: 5px;
-	width: 16px;
+    width: 16px;
     height: 16px;
     background-image:url(../../images/warning.gif);
     margin-right: 10px;
@@ -412,7 +395,7 @@
 .felamimail-recipient-grid .x-grid3 {
     background-color: #DFE8F6;
 }
-	
+
 .felamimail-recipient-grid tr {
     border-color: #DFE8F6;  
 }

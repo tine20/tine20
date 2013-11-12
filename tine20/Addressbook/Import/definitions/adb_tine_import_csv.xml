@@ -193,7 +193,7 @@
             <source>tel_fax</source>
             <destination>tel_fax</destination>
         </field>
-        <field>        	
+        <field>
             <source>tel_fax_home</source>
             <destination>tel_fax_home</destination>
         </field>
@@ -216,3 +216,4 @@
         </field>
     </mapping>
 </config>
+

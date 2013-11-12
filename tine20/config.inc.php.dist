@@ -10,7 +10,7 @@ return array(
     'captcha' => array('count'=>0), 
     'database' => array(
         'host'          => 'ENTER DATABASE HOSTNAME',
-        'dbname'	    => 'ENTER DATABASE NAME',
+        'dbname'        => 'ENTER DATABASE NAME',
         'username'      => 'ENTER DATABASE USERNAME',
         'password'      => 'ENTER DATABASE PASSWORD',
         'adapter'       => 'pdo_mysql',
@@ -20,7 +20,7 @@ return array(
         'username'      => 'SETUP USERNAME',
         'password'      => 'SETUP PASSWORD' 
     ),
-    
+
     /* // optional cache (recommended)
     'caching' => array (
         'active' => true,
@@ -28,7 +28,7 @@ return array(
         'lifetime' => 3600,
     ),
     */
-    
+
     /* // optional logger
     'logger' => array (
         'active' => true,

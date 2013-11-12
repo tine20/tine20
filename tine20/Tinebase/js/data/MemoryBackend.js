@@ -29,7 +29,7 @@ Ext.extend(Tine.Tinebase.data.MemoryBackend, Tine.Tinebase.data.AbstractBackend,
     loadRecord: function(record, options) {
         options.success.defer(1000, options.scope, record);
     },
-    
+
     /**
      * searches all (lightweight) records matching filter
      * 
@@ -40,7 +40,7 @@ Ext.extend(Tine.Tinebase.data.MemoryBackend, Tine.Tinebase.data.AbstractBackend,
      * @success {Object} root:[recrods], totalcount: number
      */
     searchRecords: function(filter, paging, options) {
-        console.log(filter);
+        //Tine.log.info('filter', filter);
         var records = [];
         for (var id in this.list) {
             records.push(this.recordReader({responseText: this.list[id]}));
@@ -66,7 +66,7 @@ Ext.extend(Tine.Tinebase.data.MemoryBackend, Tine.Tinebase.data.AbstractBackend,
         
         options.success.defer(500, options.scope, [this.recordReader({responseText: this.list[record.data.id]})]);
     },
-    
+
     /**
      * deletes multiple records identified by their ids
      * 
@@ -78,7 +78,7 @@ Ext.extend(Tine.Tinebase.data.MemoryBackend, Tine.Tinebase.data.AbstractBackend,
     deleteRecords: function(records, options) {
         options.success.defer(1000, options.scope);
     },
-    
+
     /**
      * updates multiple records with the same data
      * 
@@ -90,7 +90,7 @@ Ext.extend(Tine.Tinebase.data.MemoryBackend, Tine.Tinebase.data.AbstractBackend,
     updateRecords: function(filter, updates, options) {
         options.success.defer(1000, options.scope, []);
     },
-    
+
     /**
      * reads a single 'fully featured' record from json data
      * 
@@ -110,5 +110,4 @@ Ext.extend(Tine.Tinebase.data.MemoryBackend, Tine.Tinebase.data.AbstractBackend,
         
         return record;
     }
-    
 });

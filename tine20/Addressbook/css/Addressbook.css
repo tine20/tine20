@@ -1,5 +1,5 @@
 .action_addList {
-	background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
 }
 .x-btn-medium .action_addList {
     background-image:url(../../images/oxygen/22x22/actions/users.png) !important;
@@ -7,7 +7,6 @@
 .x-btn-large .action_addList {
     background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
 }
-
 
 .AddressbookIconCls, .AddressbookContact {
     background-image:url(../../images/oxygen/16x16/apps/kaddressbook.png) !important;
@@ -22,7 +21,6 @@
 .action_parseAddress {
     background-image:url(../../images/oxygen/16x16/actions/contact-new.png) !important;
 }
-
 
 .x-form-item-float-left {
     float: left;

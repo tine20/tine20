@@ -19,8 +19,8 @@
                 </field>
                 <field>
                     <name>account_id</name>
-	                <type>text</type>
-	                <length>40</length>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -64,7 +64,7 @@
             </declaration>
         </table>
         <table>
-        	<!-- @todo add constraints to phone_id/line_id? -->
+            <!-- @todo add constraints to phone_id/line_id? -->
             <name>phone_callhistory</name>
             <version>2</version>
             <declaration>
@@ -111,7 +111,7 @@
                 <field>
                     <name>ringing</name>
                     <type>integer</type>
-                </field>                
+                </field>
                 <field>
                     <name>direction</name>
                     <type>text</type>

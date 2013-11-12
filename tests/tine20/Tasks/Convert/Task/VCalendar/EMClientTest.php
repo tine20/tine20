@@ -74,7 +74,6 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends PHPUnit_Framework_TestCa
         $this->assertEquals("2013-10-15 10:00:00",               (string)$task->dtstart);
         $this->assertEquals("Beschreibung\nmit\nUmbruch", $task->description);
 
-        
         return $task;
     }
     
@@ -130,11 +129,11 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends PHPUnit_Framework_TestCa
         #var_dump($task->toArray());
     
         $this->assertEquals(Tasks_Model_Task::CLASS_PRIVATE, $task->class);
-        $this->assertEquals('Ort',                	             $task->location);
+        $this->assertEquals('Ort',                               $task->location);
         $this->assertEquals('Europe/Berlin',                     $task->originator_tz);
         $this->assertEquals("2011-10-04 10:00:00",               (string)$task->dtend);
         $this->assertEquals("2011-10-04 08:00:00",               (string)$task->dtstart);
-   
+
         return $task;
     }
     
@@ -170,7 +169,4 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends PHPUnit_Framework_TestCa
         $this->assertContains('TZOFFSETTO:+0100',    $vcalendar, $vcalendar);
         $this->assertContains('TZNAME:CET',          $vcalendar, $vcalendar);
     }
-   
-
-   
 }

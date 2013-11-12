@@ -78,8 +78,8 @@
                 </field>
                 <field>
                     <name>owner_id</name>
-	                <type>text</type>
-	                <length>40</length>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>

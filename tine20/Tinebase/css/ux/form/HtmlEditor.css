@@ -6,7 +6,7 @@
 .x-edit-removeFormat {background: url(../../../../images/oxygen/16x16/actions/eraser.png) 0 0 no-repeat !important;}
 
 /*
-	These are examples of styles for the button icons
+    These are examples of styles for the button icons
 */
 .x-edit-wordpaste {background: url(../images/document-word-text.png) 0 0 no-repeat !important;}
 .x-edit-table {background: url(../images/table.png) 0 0 no-repeat !important;}
@@ -16,26 +16,26 @@
 .x-edit-superscript {background: url(../images/text_super.png) 0 0 no-repeat !important;}
 
 /*
-	These styles are used for the character map
+    These styles are used for the character map
 */
 .char-item {
-	float: left; 
-	border: 1px solid #99BBE8; 
-	margin: 3px; 
-	text-align: center; 
-	vertical-align: middle; 
-	width: 20px; 
-	height: 20px; 
-	font-size: 14px;
-	color: #15428B;
-	cursor: pointer;
+    float: left; 
+    border: 1px solid #99BBE8; 
+    margin: 3px; 
+    text-align: center; 
+    vertical-align: middle; 
+    width: 20px; 
+    height: 20px; 
+    font-size: 14px;
+    color: #15428B;
+    cursor: pointer;
 }
 
 .char-item.x-view-selected {
-	background-color: #777;
+    background-color: #777;
 }
 
 .char-over {
-	border: 1px solid #15428B;
-	background-color:#d0def0;
+    border: 1px solid #15428B;
+    background-color:#d0def0;
 }
