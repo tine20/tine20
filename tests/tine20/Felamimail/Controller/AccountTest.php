@@ -37,6 +37,13 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
     protected $_foldersToDelete = array();
     
     /**
+     * was the pw changed during tests? if yes, revert.
+     * 
+     * @var boolean
+     */
+    protected $_pwChanged = false;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -79,6 +86,11 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         }
         
         Tinebase_TransactionManager::getInstance()->rollBack();
+        
+        if ($this->_pwChanged) {
+            $testConfig = Zend_Registry::get('testConfig');
+            $this->_setCredentials($testConfig->username, $testConfig->password);
+        }
     }
     
     /**
@@ -98,6 +110,8 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
         $event = new Tinebase_Event_User_ChangeCredentialCache($oldCredentialCache);
         Tinebase_Event::fireEvent($event);
+        
+        $this->_pwChanged = true;
     }
 
     /**
