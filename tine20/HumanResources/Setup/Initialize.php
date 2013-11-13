@@ -159,4 +159,32 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         ));
         HumanResources_Controller_WorkingTime::getInstance()->create($_record);
     }
+    
+
+    /**
+     * init application folders
+     */
+    protected function _initializeFolders()
+    {
+        self::createReportTemplatesFolder();
+    }
+    
+    
+    /**
+     * create reporting templates folder
+     */
+    public static function createReportTemplatesFolder()
+    {
+        $templateContainer = Tinebase_Container::getInstance()->createSystemContainer(
+            'HumanResources',
+            'Report Templates',
+            HumanResources_Config::REPORT_TEMPLATES_CONTAINER_ID
+        );
+        try {
+            Tinebase_FileSystem::getInstance()->createContainerNode($templateContainer);
+        } catch (Tinebase_Exception_Backend $teb) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not create template folder: ' . $teb);
+        }
+    }
 }
