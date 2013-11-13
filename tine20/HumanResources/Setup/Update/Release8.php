@@ -85,4 +85,14 @@ class HumanResources_Setup_Update_Release8 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('HumanResources', '8.3');
     }
+    
+    /**
+     * creates report templates folder
+     */
+    public function update_3()
+    {
+        HumanResources_Setup_Initialize::createReportTemplatesFolder();
+    
+        $this->setApplicationVersion('HumanResources', '8.4');
+    }
 }
