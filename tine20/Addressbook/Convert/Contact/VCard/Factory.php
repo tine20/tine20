@@ -99,7 +99,7 @@ class Addressbook_Convert_Contact_VCard_Factory
         // KDE addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_KDE::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE;
-            $version = $matches['version'];
+            $version = isset($matches['version']) ? $matches['version'] : '0.0' ;
         
         // eM Client addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
