@@ -353,14 +353,13 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $event = new Calendar_Model_Event(null, false);
         }
         
-        // @todo this LOC look broken
-        if (!isset($vcalendar->METHOD)) {
-            $this->_method = $vcalendar->METHOD;
+        if (isset($vcalendar->METHOD)) {
+            $this->setMethod($vcalendar->METHOD);
         }
         
         // find the main event - the main event has no RECURRENCE-ID
         foreach ($vcalendar->VEVENT as $vevent) {
-            if(!isset($vevent->{'RECURRENCE-ID'})) {
+            if (! isset($vevent->{'RECURRENCE-ID'})) {
                 $this->_convertVevent($vevent, $event);
                 
                 break;
