@@ -103,6 +103,10 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
             }
         }
         
+        if ($object->has('tags') && !isset($object->tags)) {
+            Tinebase_Tags::getInstance()->getTagsOfRecord($object);
+        }
+        
         $objectClass = $this->_application->name . '_Frontend_WebDAV_' . $this->_model;
         
         return new $objectClass($this->_container, $object);
