@@ -102,12 +102,11 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
         
         $backend = new Addressbook_Frontend_WebDAV_Contact($this->objects['initialContainer'], $contact->getName());
         
-        $contact = $backend->get();
+        $vcard = \Sabre\VObject\Reader::read($backend->get());
         
-        $vcard = stream_get_contents($contact);
-        
-        $this->assertContains('TEL;TYPE=WORK:+49 BUSINESS', $vcard);
-        $this->assertContains('CATEGORIES:CATEGORY 2,CATEGORY 1', $vcard);
+        $this->assertEquals('+49 BUSINESS', $vcard->TEL->getValue());
+        $this->assertContains('CATEGORY 1', $vcard->CATEGORIES->getParts());
+        $this->assertContains('CATEGORY 2', $vcard->CATEGORIES->getParts());
     }
 
     /**
