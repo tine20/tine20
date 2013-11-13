@@ -295,6 +295,3 @@ msgid "Cost Center"
 msgid_plural "Cost Centers"
 msgstr[0] "Kostenstelle"
 msgstr[1] "Kostenstellen"
-
-msgid "CostCenter"
-msgstr "Kostenstellen"
