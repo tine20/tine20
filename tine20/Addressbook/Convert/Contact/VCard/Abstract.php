@@ -349,7 +349,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      */
     protected function _fromTine20ModelAddPhoto(Tinebase_Record_Abstract $record, \Sabre\VObject\Component $card)
     {
-        if (!empty($_record->jpegphoto)) {
+        if (!empty($record->jpegphoto)) {Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
             try {
                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $record->getId());
                 
