@@ -505,4 +505,31 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
 
         return $result;
     }
+
+    /**
+     * get available templates by containerId
+     * 
+     * @param integer $containerId
+     * @return array
+     */
+    public function getTemplates($containerId = NULL)
+    {
+        if (! $containerId) {
+            throw new Tinebase_Exception_InvalidArgument('A container id must be set!');
+        }
+    
+        try {
+            $nodes = Tinebase_FileSystem::getInstance()->getNodesByContainer($containerId);
+            $result = $this->_multipleRecordsToJson($nodes);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Could not get template files: ' . $e);
+            $result = array();
+        }
+    
+        return array(
+            'totalcount' => count($result),
+            'results'    => $result,
+        );
+    }
 }

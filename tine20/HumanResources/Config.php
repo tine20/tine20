@@ -52,6 +52,14 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const EXTRA_FREETIME_TYPE = 'extraFreetimeType';
+    
+    /**
+     * id of (filsystem) container for vacation templates
+     *
+     * @var string
+     */
+    const REPORT_TEMPLATES_CONTAINER_ID = 'reportTemplatesContainerId';
+    
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -115,7 +123,16 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default' => '03-15'
-        )
+        ),
+        self::REPORT_TEMPLATES_CONTAINER_ID => array(
+        //_('Report Templates Container ID')
+            'label'                 => 'Report Templates Container ID',
+            'description'           => 'Report Templates Container ID',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
     );
 
     /**
