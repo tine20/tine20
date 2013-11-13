@@ -18,7 +18,8 @@
 class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_VCard_Abstract
 {
     // Mozilla/5.0 (X11; Linux i686) KHTML/4.7.3 (like Gecko) Konqueror/4.7
-    const HEADER_MATCH = '/Konqueror\/(?P<version>.*)/';
+    // KDE DAV groupware client
+    const HEADER_MATCH = '/Konqueror\/(?P<version>.*)|KDE DAV groupware client/';
     
     protected $_emptyArray = array(
         'adr_one_countryname'   => null,

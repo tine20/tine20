@@ -322,7 +322,7 @@ class Tinebase_Core
      */
     public static function getApplicationInstance($_applicationName, $_modelName = '', $_ignoreACL = FALSE)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Params: application: ' . $_applicationName . ' / model: ' . $_modelName);
         
         // modified (some model names can have both . and _ in their names and we should treat them as JS model name
@@ -337,7 +337,7 @@ class Tinebase_Core
             $modelName = $_modelName;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Extracted appName: ' . $appName . ' modelName: ' . $modelName);
         
         $controllerName = ucfirst((string) $appName);
@@ -346,11 +346,11 @@ class Tinebase_Core
             $controllerName .= '_Controller';
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' controllerName: ' . $controllerName);
 
         if (! empty($modelName)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Checking for model controller ...');
             
             $modelName = preg_replace('/^' . $appName . '_' . 'Model_/', '', $modelName);
@@ -372,7 +372,7 @@ class Tinebase_Core
             throw new Tinebase_Exception_AccessDenied('No right to access application ' . $appName);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Getting instance of ' . $controllerName);
         
         $controller = call_user_func(array($controllerName, 'getInstance'));
