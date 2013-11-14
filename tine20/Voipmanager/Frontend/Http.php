@@ -46,7 +46,7 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $_templateData = Voipmanager_Controller_Snom_Template::getInstance()->get($_phoneData['template_id'])->toArray();
             $_settingsData = Voipmanager_Controller_Snom_Setting::getInstance()->get($_templateData['setting_id'])->toArray();
 
-            $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
+            $_writableFields = array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','pickup_indication','scroll_outgoing','show_local_line','show_call_status','call_waiting');
 
             foreach($_writableFields AS $wField)
             {

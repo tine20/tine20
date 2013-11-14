@@ -39,6 +39,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         "headset_device_w",
         "message_led_other_w",
         "global_missed_counter_w",
+        'pickup_indication_w',
         "scroll_outgoing_w",
         "show_local_line_w",
         "show_call_status_w"
@@ -51,7 +52,7 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         // set lock combos
         Ext.each(this.writableFields, function(_item, _index, _array) {
             var field = _item;
-            field = field.replace(/_w/, '');
+            field = field.replace(/_w$/, '');
             if (this.record.get(_item) == '0') {
                this.getForm().findField(field).onTrigger2Click();
             }
@@ -302,6 +303,19 @@ Tine.Voipmanager.SnomSettingEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             data: [
                                 [ null,  this.app.i18n._('- factory default -')],
                                 ['1', this.app.i18n._('on')],
+                                ['0', this.app.i18n._('off')]
+                            ]
+                        })
+                    }], [{
+                        fieldLabel: this.app.i18n._('Pickup indication'),
+                        name: 'pickup_indication',
+                        hiddenFieldId: 'pickup_indication_w',
+                        store: new Ext.data.SimpleStore({
+                            id: 'id',
+                            fields: ['id', 'name'],
+                            data: [
+                                [ null,  this.app.i18n._('- factory default -')],
+                                ['1', this.app.i18n._('on')], 
                                 ['0', this.app.i18n._('off')]
                             ]
                         })

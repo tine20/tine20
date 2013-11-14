@@ -151,7 +151,7 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             },
             success: function(_result, _request) {
                 _data = Ext.util.JSON.decode(_result.responseText);
-                _writableFields = new Array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','scroll_outgoing','show_local_line','show_call_status','call_waiting');
+                _writableFields = new Array('web_language','language','display_method','mwi_notification','mwi_dialtone','headset_device','message_led_other','global_missed_counter','pickup_indication','scroll_outgoing','show_local_line','show_call_status','call_waiting');
                 this.writeableFields = new Object();
                 var _settingsData = new Object();
 
@@ -534,6 +534,15 @@ Tine.Voipmanager.SnomPhoneEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     store: [
                         [ null,  this.getTranslations()._('- factory default -')],
                         ['1', this.getTranslations()._('on')],
+                        ['0', this.getTranslations()._('off')]
+                    ]
+                }], [{
+                    fieldLabel: this.getTranslations()._('Pickup indication'),
+                    name: 'pickup_indication',
+                    disabled: (this.writeableFields) ? this.writeableFields.pickup_indication : true,
+                    store: [
+                        [ null,  this.getTranslations()._('- factory default -')],
+                        ['1', this.getTranslations()._('on')], 
                         ['0', this.getTranslations()._('off')]
                     ]
                 }]
