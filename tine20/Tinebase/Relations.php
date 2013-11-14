@@ -397,6 +397,8 @@ class Tinebase_Relations
      * @param string $sourceId
      * @param string $destinationId
      * @param string $model
+     * 
+     * @return array
      */
     public function transferRelations($sourceId, $destinationId, $model)
     {
@@ -404,6 +406,6 @@ class Tinebase_Relations
             throw new Tinebase_Exception_AccessDenied('Non admins of Tinebase aren\'t allowed to perform his operation!');
         }
         
-        $this->_backend->transferRelations($sourceId, $destinationId, $model);
+        return $this->_backend->transferRelations($sourceId, $destinationId, $model);
     }
 }

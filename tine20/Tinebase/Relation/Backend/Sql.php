@@ -364,6 +364,8 @@ class Tinebase_Relation_Backend_Sql
      * @param string $sourceId
      * @param string $destinationId
      * @param string $model
+     * 
+     * @return array
      */
     public function transferRelations($sourceId, $destinationId, $model)
     {
@@ -373,16 +375,43 @@ class Tinebase_Relation_Backend_Sql
         $sourceRecord      = $controller->get($sourceId);
         $destinationRecord = $controller->get($destinationId);
 
-        
         $adapter = $this->_dbTable->getAdapter();
         $config = $adapter->getConfig();
         
         $tableName = $config['tableprefix'] . 'relations';
-        
-        $sql = 'UPDATE ' . $this->_db->quoteIdentifier($tableName) . ' SET ' . $this->_db->quoteInto($this->_db->quoteIdentifier('related_id') .' = ?', $destinationId) .' WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('related_model') . ' = ?', $model) .' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('related_id') .' = ?', $sourceId);
+
+        // own side
+        $sql = 'SELECT * FROM ' . $this->_db->quoteIdentifier($tableName) . ' WHERE ' . $this->_db->quoteInto('`own_id` = ? ', $sourceId);
         $result = $adapter->query($sql);
+        $result->setFetchMode(Zend_Db::FETCH_ASSOC);
+        $entries = $result->fetchAll();
         
-        $sql = 'UPDATE ' . $this->_db->quoteIdentifier($tableName) . ' SET ' . $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') .' = ?', $destinationId) .' WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('own_model') . ' = ?', $model) .' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') .' = ?', $sourceId);
+        foreach($entries as $entry) {
+            try {
+                $sql = 'UPDATE ' . $this->_db->quoteIdentifier($tableName) . ' SET ' . $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') .' = ?', $destinationId) .' WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $entry['id']);
+                $result = $adapter->query($sql);
+            } catch (Exception $e) {
+            }
+        }
+        
+        // rel side
+        $sql = 'SELECT * FROM ' . $this->_db->quoteIdentifier($tableName) . ' WHERE ' . $this->_db->quoteInto('`related_id` = ? ', $sourceId);
         $result = $adapter->query($sql);
+        $result->setFetchMode(Zend_Db::FETCH_ASSOC);
+        $entries = $result->fetchAll();
+        
+        $skipped = array();
+        
+        foreach($entries as $entry) {
+            try {
+                $sql = 'UPDATE ' . $this->_db->quoteIdentifier($tableName) . ' SET ' . $this->_db->quoteInto($this->_db->quoteIdentifier('related_id') .' = ?', $destinationId) .' WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $entry['id']);
+                $result = $adapter->query($sql);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Skip transferring: ' . print_r($entry, 1));
+                $skipped[$entry['rel_id']] = $entry;
+            }
+        }
+        
+        return $skipped;
     }
 }
