@@ -1,7 +1,4 @@
 <?php
-
-use Sabre\VObject;
-
 /**
  * Tine 2.0
  *
@@ -19,7 +16,7 @@ use Sabre\VObject;
  * @package     Calendar
  * @subpackage  Frontend
  */
-class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre\DAV\Collection implements Sabre\DAV\IProperties, Sabre\DAVACL\IACL, Sabre\CalDAV\ICalendar
+class Calendar_Frontend_CalDAV_ScheduleInbox extends \Sabre\DAV\Collection implements \Sabre\DAV\IProperties, \Sabre\DAVACL\IACL, \Sabre\CalDAV\ICalendar
 {
     /**
      * @var Tinebase_Model_FullUser
@@ -47,7 +44,7 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre\DAV\Collection implem
         try {
             $event = $_name instanceof Calendar_Model_Event ? $_name : $this->_getController()->get($this->_getIdFromName($_name));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Sabre\DAV\Exception\NotFound('Object not found');
+            throw new \Sabre\DAV\Exception\NotFound('Object not found');
         }
         
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
@@ -166,24 +163,24 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre\DAV\Collection implem
             'id'                => 'schedule-inbox',
             'uri'               => 'schedule-inbox',
             '{DAV:}resource-id'    => 'urn:uuid:schedule-inbox',
-            '{DAV:}owner'       => new Sabre\DAVACL\Property\Principal(Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . $this->_user->contact_id),
+            '{DAV:}owner'       => new \Sabre\DAVACL\Property\Principal(Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . $this->_user->contact_id),
             #'principaluri'      => $principalUri,
             '{DAV:}displayname' => 'Schedule Inbox',
             '{http://apple.com/ns/ical/}calendar-color' => '#666666',
             
-            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
-            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre\CalDAV\Property\SupportedCalendarData(),
-            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description'               => 'Calendar schedule inbox',
-            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new \Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new \Sabre\CalDAV\Property\SupportedCalendarData(),
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description'             => 'Calendar schedule inbox',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => Tinebase_WebDav_Container_Abstract::getCalendarVTimezone('Calendar')
         );
     
         $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_user->getId());
         if (!empty($defaultCalendarId)) {
-            $properties['{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}schedule-default-calendar-URL'] = new Sabre\DAV\Property\Href('calendars/' . $this->_user->contact_id . '/' . $defaultCalendarId);
+            $properties['{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}schedule-default-calendar-URL'] = new \Sabre\DAV\Property\Href('calendars/' . $this->_user->contact_id . '/' . $defaultCalendarId);
         }
         
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            $properties['{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set'    ] = new Sabre\DAV\Property\HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
+            $properties['{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set'    ] = new \Sabre\DAV\Property\HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
         }
     
         $response = array();
@@ -233,10 +230,9 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre\DAV\Collection implem
      * @param array $acl
      * @return void
      */
-    public function setACL(array $acl) {
-    
-        throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
-    
+    public function setACL(array $acl) 
+    {
+        throw new \Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
     
     /**
@@ -304,18 +300,6 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends Sabre\DAV\Collection implem
         $id = ($pos = strrpos($_name, '.')) === false ? $_name : substr($_name, 0, $pos);
         
         return $id;
-    }
-    
-    protected function _getCalendarVTimezone()
-    {
-        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $this->_user->getId());
-
-        // create vcalendar object with timezone information
-        $vcalendar = new VObject\Component('CALENDAR');
-        $vcalendar->add(new Sabre_VObject_Component_VTimezone($timezone));
-        
-        // Taking out \r to not screw up the xml output
-        return str_replace("\r","", $vcalendar->serialize());
     }
     
     public function calendarQuery(array $filters)
