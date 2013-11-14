@@ -328,7 +328,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if (! $container instanceof Tinebase_Model_Container) {
             $container = $this->getContainerById($container);
         }
-        Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($container, $action);
+        Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($container, $action, $container);
         $this->_clearCache($container);
         
         return $this->update($container);
@@ -1007,9 +1007,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             return FALSE;
         }
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
-
+        
         $cache = Tinebase_Core::getCache();
-        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . $container->last_modified_time . implode('', (array)$_grant));
+        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . $container->seq . implode('', (array)$_grant));
         $result = $cache->load($cacheId);
         
         if ($result === FALSE) {
@@ -1101,7 +1101,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         $container          = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
         
-        $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId . $container->last_modified_time);
+        $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId . $container->seq);
         $cache = Tinebase_Core::getCache();
         $grants = $cache->load($cacheKey);
         if($grants === FALSE) {
