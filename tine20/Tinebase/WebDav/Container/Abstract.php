@@ -415,7 +415,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
         
         $application = $applicationName instanceof Tinebase_Model_Application 
             ? $applicationName 
-            : Tinebase_Application::getInstance()->getApplicationByName($application); 
+            : Tinebase_Application::getInstance()->getApplicationByName($applicationName); 
         
         // create vcalendar object with timezone information
         $vcalendar = new \Sabre\VObject\Component\VCalendar(array(
