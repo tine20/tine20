@@ -51,7 +51,7 @@ class Tinebase_WebDav_Root extends DAV\SimpleCollection
             $ownCloudChildren[] = new Filemanager_Frontend_WebDAV('webdav');
         }
         
-        foreach (array('Addressbook', 'Calendar', 'Felamimail', 'Filemanager', 'Tasks') as $application) {
+        foreach (array('Addressbook', 'Calendar', 'Felamimail', 'Filemanager', 'Tasks', 'HumanResources') as $application) {
             $applicationClass = $application . '_Frontend_WebDAV';
             if (Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN) && class_exists($applicationClass)) {
                 $webdavChildren[] = new $applicationClass($application);
