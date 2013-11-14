@@ -24,8 +24,6 @@ class Voipmanager_Setup_Update_Release8 extends Setup_Update_Abstract
     */
     public function update_0()
     {
-        $this->validateTableVersion('snom_default_settings', 3);
-        
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>pickup_indication</name>
@@ -36,7 +34,7 @@ class Voipmanager_Setup_Update_Release8 extends Setup_Update_Abstract
         ');
         $this->_backend->addCol('snom_default_settings', $declaration);
         
-        $this->setTableVersion('snom_default_settings', 4)
+        $this->setTableVersion('snom_default_settings', 4);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
@@ -46,8 +44,6 @@ class Voipmanager_Setup_Update_Release8 extends Setup_Update_Abstract
             </field>
         ');
         $this->_backend->addCol('snom_default_settings', $declaration);
-        
-        $this->validateTableVersion('snom_phone_settings', 2);
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
@@ -59,7 +55,7 @@ class Voipmanager_Setup_Update_Release8 extends Setup_Update_Abstract
         ');
         $this->_backend->addCol('snom_phone_settings', $declaration);
         
-        $this->setTableVersion('snom_phone_settings', 3)
+        $this->setTableVersion('snom_phone_settings', 3);
         
         $this->setApplicationVersion('Voipmanager', '8.1');
     }
