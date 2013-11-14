@@ -349,10 +349,12 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         $contract = new Sales_Model_Contract(array('number' => '23547', 'title' => 'test', 'container_id' => $container->getId()));
         $contract = Sales_Controller_Contract::getInstance()->create($contract);
         
+        $contract2 = new Sales_Model_Contract(array('number' => '23347', 'title' => 'test', 'container_id' => $container->getId()));
+        $contract2 = Sales_Controller_Contract::getInstance()->create($contract2);
+        
         $json = new Sales_Frontend_Json();
         
         $contractJson = $contract->toArray();
-        
         $contractJson['relations'][] = array(
             'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Addressbook_Model_Contact',
@@ -361,9 +363,29 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         );
         
         $contractJson = $json->saveContract($contractJson);
+        
+        $contract2Json = $contract2->toArray();
+        $contract2Json['relations'][] = array(
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Addressbook_Model_Contact',
+            'related_record' => $sclever->toArray(),
+            'type'           => 'CUSTOMER',
+        );
+        $contract2Json['relations'][] = array(
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Addressbook_Model_Contact',
+            'related_record' => $pwulf->toArray(),
+            'type'           => 'CUSTOMER',
+        );
+        $contract2Json = $json->saveContract($contract2Json);
+        
         $this->assertEquals($sclever->getId(), $contractJson['relations'][0]['related_id']);
         
-        Tinebase_Relations::getInstance()->transferRelations($sclever->getId(), $pwulf->getId(), 'Addressbook_Model_Contact');
+        $skipped = Tinebase_Relations::getInstance()->transferRelations($sclever->getId(), $pwulf->getId(), 'Addressbook_Model_Contact');
+        $this->assertEquals(1, count($skipped));
+        $skipped = array_pop($skipped);
+        
+        $this->assertEquals($sclever->getId(), $skipped['related_id']);
         
         $contractJson = $json->getContract($contract->getId());
         $this->assertEquals($pwulf->getId(), $contractJson['relations'][0]['related_id']);

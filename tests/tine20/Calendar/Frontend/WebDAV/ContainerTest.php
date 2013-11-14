@@ -260,6 +260,18 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $this->testCalendarQuery(FALSE);
     }
+
+    /**
+     * test Tinebase_WebDav_Container_Abstract::getCalendarVTimezone
+     */
+    public function testGetCalendarVTimezone()
+    {
+        $vTimezone = Tinebase_WebDav_Container_Abstract::getCalendarVTimezone('Calendar');
+        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar', $vTimezone);
+        
+        $vTimezone = Tinebase_WebDav_Container_Abstract::getCalendarVTimezone(Tinebase_Application::getInstance()->getApplicationByName('Calendar'));
+        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar', $vTimezone);
+    }
     
     /**
      * return vcalendar as string and replace organizers email address with emailaddess of current user

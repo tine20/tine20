@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>8.0</version>
+    <version>8.1</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -190,7 +190,7 @@
                 </index>
             </declaration>
         </table>
-
+        
         <table>
             <name>snom_templates</name>
             <engine>InnoDB</engine>
@@ -258,7 +258,7 @@
                         <field>id</field>
                         <!-- add onupdate/ondelete? -->
                     </reference>
-                </index>   
+                </index>
             </declaration>
         </table>
 
@@ -347,7 +347,7 @@
                     <name>http_client_info_sent</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
+                </field>
                 <field>
                     <name>http_client_user</name>
                     <type>text</type>
@@ -864,7 +864,7 @@
                         <ondelete>cascade</ondelete>
                         <!-- add onupdate? -->
                     </reference>
-                </index>   
+                </index>
                 <index>
                     <name>snom_lines_asteriskline_id</name>
                     <field>
@@ -876,7 +876,7 @@
                         <field>id</field>
                         <!-- add onupdate/ondelete? -->
                     </reference>
-                </index>   
+                </index>
             </declaration>
         </table>
         <table>
@@ -1032,12 +1032,12 @@
                 </index>
            </declaration>
         </table>
-
+        
         <table>
             <name>snom_default_settings</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1102,6 +1102,12 @@
                     <default>NULL</default>
                 </field>
                 <field>
+                    <name>pickup_indication</name>
+                    <type>boolean</type>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
+                </field>
+                <field>
                     <name>scroll_outgoing</name>
                     <type>boolean</type>
                     <notnull>false</notnull>
@@ -1123,17 +1129,17 @@
                     <name>call_waiting</name>
                     <type>text</type>
                     <length>32</length>
-                </field>     
+                </field>
                 <field>
                     <name>web_language_w</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
+                </field>
                 <field>
                     <name>language_w</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>     
+                </field>
                 <field>
                     <name>display_method_w</name>
                     <type>boolean</type>
@@ -1168,6 +1174,11 @@
                     <name>global_missed_counter_w</name>
                     <type>boolean</type>
                     <default>false</default>
+                </field>
+                <field>
+                    <name>pickup_indication_w</name>
+                    <type>boolean</type>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>scroll_outgoing_w</name>
@@ -1250,7 +1261,7 @@
             <name>snom_phone_settings</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>phone_id</name>
@@ -1300,6 +1311,13 @@
                     <notnull>false</notnull>
                     <default>NULL</default>
                 </field>
+                <field>
+                    <name>pickup_indication</name>
+                    <type>boolean</type>
+                    <notnull>false</notnull>
+                    <default>NULL</default>
+                </field>
+                
                 <field>
                     <name>scroll_outgoing</name>
                     <type>boolean</type>
@@ -1390,7 +1408,6 @@
                     <type>boolean</type>
                     <default>false</default>
                 </field>
-
                 <index>
                     <name>id</name>
                     <primary>true</primary>

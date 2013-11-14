@@ -127,28 +127,7 @@ Tine.Voipmanager.SnomLocationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
                 header: this.app.i18n._('Description'), 
                 dataIndex: 'description', 
                 width: 350,
-                sortable: true                
-            },{
-                id: 'filter_registrar', 
-                header: this.app.i18n._('Filter Registrar'), 
-                dataIndex: 'filter_registrar', 
-                width: 10, 
-                sortable: true,
-                hidden: true 
-            },{
-                id: 'callpickup_dialoginfo', 
-                header: this.app.i18n._('CP Dialoginfo'), 
-                dataIndex: 'callpickup_dialoginfo', 
-                width: 10, 
-                sortable: true,
-                hidden: true 
-            },{
-                id: 'pickup_indication',
-                header: this.app.i18n._('Pickup Indic.'), 
-                dataIndex: 'pickup_indication', 
-                width: 10, 
-                sortable: true,
-                hidden: true 
+                sortable: true
             }];
     },
     

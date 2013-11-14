@@ -60,7 +60,23 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
             $this->_backend->addCol('sales_cost_centers', $declaration);
         }
         
-        $this->setTableVersion('sales_cost_centers', 2);;
-        $this->setApplicationVersion('Sales', '8.1');
+        $this->setTableVersion('sales_cost_centers', 2);
+    }
+    
+    /**
+     * @see: 0009048: sometimes the status of sales contract has an icon, sometimes not
+     *       https://forge.tine20.org/mantisbt/view.php?id=9048
+     */
+    public function update_1()
+    {
+        $sql = "UPDATE `" . SQL_TABLE_PREFIX . "sales_contracts` SET `status` = 'OPEN' WHERE `status`='open';
+                UPDATE `" . SQL_TABLE_PREFIX . "sales_contracts` SET `status` = 'CLOSED' WHERE `status`='closed';
+                UPDATE `" . SQL_TABLE_PREFIX . "sales_contracts` SET `cleared` = 'CLEARED' WHERE `cleared`='cleared';
+                UPDATE `" . SQL_TABLE_PREFIX . "sales_contracts` SET `cleared` = 'TO_CLEAR' WHERE `cleared`='to clear';
+                UPDATE `" . SQL_TABLE_PREFIX . "sales_contracts` SET `cleared` = 'NOT_YET_CLEARED' WHERE `cleared`='not yet cleared';'";
+        
+        $this->_db->query($sql);
+        
+        $this->setApplicationVersion('Sales', '8.2');
     }
 }
