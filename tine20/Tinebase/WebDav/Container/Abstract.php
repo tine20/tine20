@@ -406,18 +406,20 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
     /**
      * generate VTimezone for given folder
      * 
+     * @param  string|Tinebase_Model_Application  $applicationName
      * @return string
      */
-    protected function _getCalendarVTimezone()
+    public static function getCalendarVTimezone($applicationName)
     {
         $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, Tinebase_Core::getUser()->getId());
-
-        // required vcalendar fields
-        $version = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->version;
+        
+        $application = $applicationName instanceof Tinebase_Model_Application 
+            ? $applicationName 
+            : Tinebase_Application::getInstance()->getApplicationByName($application); 
         
         // create vcalendar object with timezone information
         $vcalendar = new \Sabre\VObject\Component\VCalendar(array(
-            'PRODID'   => "-//tine20.org//Tine 2.0 {$this->_applicationName} V$version//EN",
+            'PRODID'   => "-//tine20.org//Tine 2.0 {$application->name} V{$application->version}//EN",
             'VERSION'  => '2.0',
             'CALSCALE' => 'GREGORIAN'
         ));
@@ -426,7 +428,6 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
         // Taking out \r to not screw up the xml output
         return str_replace("\r","", $vcalendar->serialize());
     }
-    
     
     /**
      * 
