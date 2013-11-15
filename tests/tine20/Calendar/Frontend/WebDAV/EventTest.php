@@ -165,7 +165,12 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
         $this->_checkExdate($event);
-    
+        
+        // check rrule_until normalisation
+        $record = $event->getRecord();
+        $this->assertEquals('2011-10-30 22:59:59', $record->rrule_until->toString(), 'rrule_until not normalised');
+        $this->assertEquals('2011-10-30 22:59:59', $record->rrule->until->toString(), 'rrule->until not normalised');
+        
         return $event;
     }
     

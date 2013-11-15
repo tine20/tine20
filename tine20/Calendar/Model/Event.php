@@ -462,6 +462,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             if (! $this->rrule instanceof Calendar_Model_Rrule) {
                 $rrule = new Calendar_Model_Rrule(array());
                 $rrule->setFromString($this->rrule);
+                $this->rrule = $rrule;
             }
             
             if (isset($rrule->count)) {
