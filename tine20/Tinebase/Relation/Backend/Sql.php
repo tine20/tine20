@@ -376,10 +376,8 @@ class Tinebase_Relation_Backend_Sql
         $destinationRecord = $controller->get($destinationId);
 
         $adapter = $this->_dbTable->getAdapter();
-        $config = $adapter->getConfig();
+        $tableName = SQL_TABLE_PREFIX . 'relations';
         
-        $tableName = $config['tableprefix'] . 'relations';
-
         // own side
         $sql = 'SELECT * FROM ' . $this->_db->quoteIdentifier($tableName) . ' WHERE ' . $this->_db->quoteInto('`own_id` = ? ', $sourceId);
         $result = $adapter->query($sql);

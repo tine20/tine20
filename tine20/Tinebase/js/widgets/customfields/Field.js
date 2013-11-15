@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.widgets.customfields');
@@ -21,6 +21,11 @@ Tine.widgets.customfields.Field = {
      */
     get: function (app, cfConfig, config, editDialog) {
         Tine.log.debug(cfConfig);
+        
+        if (! cfConfig) {
+            Tine.log.err('cfConfig empty!');
+            return;
+        }
         
         var def = cfConfig.get('definition'),
             uiConfig = def && def.uiconfig ? def.uiconfig : {},

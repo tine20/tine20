@@ -648,7 +648,7 @@ class Tinebase_Acl_Roles
         
         foreach ($rows as $right) {
             $rights[] = array ( 
-                'application_id'    => $right['application_id'], 
+                'application_id'    => $right['application_id'],
                 'right'             => $right['right']
             );
         }
@@ -658,68 +658,112 @@ class Tinebase_Acl_Roles
     /**
      * set role rights 
      *
-     * @param   int $_roleId
-     * @param   array $_roleRights with role rights ("application_id" => app id, "right" => the right to set)
+     * @param   int    $roleId
+     * @param   array  $_roleRights  with role rights array(("application_id" => app id, "right" => the right to set), (...))
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setRoleRights($_roleId, array $_roleRights)
+    public function setRoleRights($roleId, array $roleRights)
     {
-        $roleId = (int)$_roleId;
-        if ( $roleId != $_roleId && $roleId > 0 ) {
+        if (!is_numeric($roleId) || ($roleId = (int)$roleId) === 0) {
             throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
         
-        $this->_invalidateRightsCache($roleId, $_roleRights);
-        
-        // remove old rights
-        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' = ?', $roleId);
-        $this->_roleRightsTable->delete($where);
-        
-        foreach ($_roleRights as $right) {
-            $data = array(
-                'role_id'           => $roleId,
-                'application_id'    => $right['application_id'],
-                'right'             => $right['right'],
-            );
-            $this->_roleRightsTable->insert($data);
+        $currentRights = $this->getRoleRights($roleId);
+        // change array key to string identifying right
+        foreach ($currentRights as $id => $right) {
+            $currentRights[$right['application_id'] . $right['right']] = $right;
+            unset($currentRights[$id]);
         }
+        
+        // change array key to string identifying right
+        foreach ($roleRights as $id => $right) {
+            $roleRights[$right['application_id'] . $right['right']] = $right;
+            unset($roleRights[$id]);
+        }
+        
+        // compare array keys to calculate changes
+        $rightsToBeDeleted = array_diff_key($currentRights, $roleRights);
+        $rightsToBeAdded   = array_diff_key($roleRights, $currentRights);
+        
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        
+        foreach ($rightsToBeDeleted as $right) {
+            $this->deleteRoleRight($roleId, $right['application_id'], $right['right']);
+        }
+        
+        foreach ($rightsToBeAdded as $right) {
+            $this->addRoleRight($roleId, $right['application_id'], $right['right']);
+        }
+        
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        
+        $this->_invalidateRightsCache($roleId, array_merge($rightsToBeDeleted, $rightsToBeAdded));
+    }
+    
+    /**
+     * add one role right
+     * 
+     * @param unknown $roleId
+     * @param unknown $applicationId
+     * @param unknown $right
+     */
+    public function addRoleRight($roleId, $applicationId, $right)
+    {
+        $this->_roleRightsTable->insert(array(
+            'role_id'           => $roleId,
+            'application_id'    => $applicationId,
+            'right'             => $right,
+        ));
+    }
+    
+    /**
+     * remove one role right
+     * 
+     * @param unknown $roleId
+     * @param unknown $applicationId
+     * @param unknown $right
+     */
+    public function deleteRoleRight($roleId, $applicationId, $right)
+    {
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' = ?',        $roleId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?',          $right)
+        );
+        
+        $this->_roleRightsTable->delete($where);
     }
     
     /**
      * invalidate rights cache
      * 
-     * @param int $roleId
-     * @param array $newRoleRights
-     * 
-     * @todo check if this is fast enough. if not: move rights caching to class cache.
+     * @param int   $roleId
+     * @param array $roleRights  the role rights to purge from cache
      */
-    protected function _invalidateRightsCache($roleId, $newRoleRights)
+    protected function _invalidateRightsCache($roleId, $roleRights)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Invalidating rights cache for role id ' . $roleId);
         
-        $currentRights = $this->getRoleRights($roleId);
-        $rightsInvalidateCache = array_merge($currentRights, $newRoleRights);
+        $rightsInvalidateCache = array();
+        foreach ($roleRights as $right) {
+            $rightsInvalidateCache[] = strtoupper($right['right']) . Tinebase_Application::getInstance()->getApplicationById($right['application_id'])->name;
+        }
         
+        // @todo can be further improved, by only selecting the users which are members of this role
         $userIds = Tinebase_User::getInstance()->getUsers()->getArrayOfIds();
-        $appNames = array();
-        $cache = Tinebase_Core::getCache();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' ' . print_r($rightsInvalidateCache, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rightsInvalidateCache, TRUE));
         
         foreach ($rightsInvalidateCache as $rightData) {
             foreach ($userIds as $userId) {
-                if (! isset($appNames[$rightData['application_id']])) {
-                    $appNames[$rightData['application_id']] = Tinebase_Application::getInstance()->getApplicationById($rightData['application_id'])->name;
-                }
-                $appName = $appNames[$rightData['application_id']];
-                $cacheId = convertCacheId('checkRight' . $userId . strtoupper($rightData['right']) . $appName);
+                $cacheId = convertCacheId('checkRight' . $userId . $rightData);
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' Removing cache id ' . $cacheId);
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+                    Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Removing cache id ' . $cacheId);
                 
-                $cache->remove($cacheId);
+                Tinebase_Core::getCache()->remove($cacheId);
             }
         }
     }
@@ -730,22 +774,19 @@ class Tinebase_Acl_Roles
      * @param   int $_roleId
      * @param   int $_applicationId
      * @param   string $_right
+     * 
+     * @todo this function should be removed and setRoleRights should be used instead
      */
     public function addSingleRight($_roleId, $_applicationId, $_right)
     {
         // check if already in
         $select = $this->_roleRightsTable->select();
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' = ?', $_roleId))
-               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', $_right))
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' = ?',        $_roleId))
+               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?',          $_right))
                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId));
         
         if (!$row = $this->_roleRightsTable->fetchRow($select)) {
-            $data = array(
-                'role_id'           => $_roleId,
-                'application_id'    => $_applicationId,
-                'right'             => $_right,
-            );
-            $this->_roleRightsTable->insert($data);
+            $this->addRoleRight($_roleId, $_applicationId, $_right);
         }
     }
     
