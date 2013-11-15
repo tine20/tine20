@@ -659,7 +659,10 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                 
                 case 'ATTENDEE':
-                    $newAttendees[] = $this->_getAttendee($property);
+                    $newAttendee = $this->_getAttendee($property);
+                    if ($newAttendee) {
+                        $newAttendees[] = $newAttendee;
+                    }
                     break;
                     
                 case 'CLASS':
