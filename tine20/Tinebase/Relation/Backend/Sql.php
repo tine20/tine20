@@ -222,7 +222,7 @@ class Tinebase_Relation_Backend_Sql
     }
     
     /**
-     * returns on side of a relation
+     * returns one side of a relation
      *
      * @param  string $_id
      * @param  string $_ownModel 
@@ -374,42 +374,65 @@ class Tinebase_Relation_Backend_Sql
         // just for validation, the records aren't needed
         $sourceRecord      = $controller->get($sourceId);
         $destinationRecord = $controller->get($destinationId);
-
-        $adapter = $this->_dbTable->getAdapter();
+        
         $tableName = SQL_TABLE_PREFIX . 'relations';
         
         // own side
-        $sql = 'SELECT * FROM ' . $this->_db->quoteIdentifier($tableName) . ' WHERE ' . $this->_db->quoteInto('`own_id` = ? ', $sourceId);
-        $result = $adapter->query($sql);
-        $result->setFetchMode(Zend_Db::FETCH_ASSOC);
-        $entries = $result->fetchAll();
-        
-        foreach($entries as $entry) {
-            try {
-                $sql = 'UPDATE ' . $this->_db->quoteIdentifier($tableName) . ' SET ' . $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') .' = ?', $destinationId) .' WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $entry['id']);
-                $result = $adapter->query($sql);
-            } catch (Exception $e) {
-            }
-        }
+        $select = $this->_db->select()->where($this->_db->quoteIdentifier('own_id') . ' = ?', $sourceId);
+        $select->from($tableName);
+        $stmt = $this->_db->query($select);
+        $entries = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $stmt->closeCursor();
         
         // rel side
-        $sql = 'SELECT * FROM ' . $this->_db->quoteIdentifier($tableName) . ' WHERE ' . $this->_db->quoteInto('`related_id` = ? ', $sourceId);
-        $result = $adapter->query($sql);
-        $result->setFetchMode(Zend_Db::FETCH_ASSOC);
-        $entries = $result->fetchAll();
+        $select = $this->_db->select()->where($this->_db->quoteIdentifier('related_id') . ' = ?', $sourceId);
+        $select->from($tableName);
+        $stmt = $this->_db->query($select);
+        $relentries = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $stmt->closeCursor();
         
         $skipped = array();
         
         foreach($entries as $entry) {
-            try {
-                $sql = 'UPDATE ' . $this->_db->quoteIdentifier($tableName) . ' SET ' . $this->_db->quoteInto($this->_db->quoteIdentifier('related_id') .' = ?', $destinationId) .' WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $entry['id']);
-                $result = $adapter->query($sql);
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Skip transferring: ' . print_r($entry, 1));
+            $select = $this->_db->select()->where(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') . ' = ?', $destinationId). ' AND ' . 
+                $this->_db->quoteInto($this->_db->quoteIdentifier('related_id') . ' = ?', $entry['related_id'])
+            );
+            $select->from($tableName);
+            $stmt = $this->_db->query($select);
+            $existing = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+            $stmt->closeCursor();
+            
+            if (count($existing) > 0) {
                 $skipped[$entry['rel_id']] = $entry;
+            } else {
+                $this->_dbTable->update(
+                    array('own_id' => $destinationId),
+                    $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $entry['id'])
+                );
             }
         }
         
+        
+        foreach($relentries as $entry) {
+            $select = $this->_db->select()->where(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('related_id') . ' = ?', $destinationId). ' AND ' . 
+                $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') . ' = ?', $entry['own_id'])
+            );
+            $select->from($tableName);
+            $stmt = $this->_db->query($select);
+            $existing = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+            $stmt->closeCursor();
+            
+            if (count($existing) > 0) {
+            } else {
+                $this->_dbTable->update(
+                    array('related_id' => $destinationId), 
+                    $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $entry['id'])
+                );
+            }
+        }
+
         return $skipped;
     }
 }
