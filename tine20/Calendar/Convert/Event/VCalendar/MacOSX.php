@@ -44,4 +44,27 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
         #'rrule_until',
         'originator_tz'
     );
+    
+    /**
+     * get attendee object for given contact
+     * 
+     * @param Sabre_VObject_Property     $_attendee  the attendee row from the vevent object
+     * @return array
+     */
+    protected function _getAttendee(Sabre_VObject_Property $_attendee)
+    {
+        
+        $newAttendee = parent::_getAttendee($_attendee);
+        
+        // beginning with mavericks iCal adds organiser as attedee without role
+        // so we remove attendee without role 
+        // @TODO check if this attendee is currentuser & organizer?
+        if (version_compare($this->_version, '10.9', '>=')) {
+            if (! isset($_attendee['ROLE'])) {
+                return NULL;
+            }
+        }
+        
+        return $newAttendee;
+    }
 }

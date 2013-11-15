@@ -60,4 +60,20 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends PHPUnit_Framework_Test
         
         $this->assertEquals($event->description, $convertedEvent->description);
     }
+    
+    /**
+     * test converting vcard from apple iCal to Calendar_Model_Event 
+     */
+    public function testConvertToTine20Model()
+    {
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/apple_caldendar_mavericks_organizer_only.ics', 'r');
+        
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, '10.9');
+        
+        $event = $converter->toTine20Model($vcalendarStream);
+        
+        // assert testuser is not attendee
+        $this->assertEquals(1, $event->attendee->count(), 'there sould only be one attendee');
+        $this->assertNotEquals($event->organizer, $event->attendee[0]->user_id, 'organizer should not attend');
+    }
 }

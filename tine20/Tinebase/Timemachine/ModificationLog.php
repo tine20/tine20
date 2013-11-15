@@ -305,7 +305,7 @@ class Tinebase_Timemachine_ModificationLog
         }
         
         $resolved = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
-        if ($curRecord->seq !== $newRecord->seq) {
+        if ($curRecord->seq != $newRecord->seq) {
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 " Concurrent updates: current record last updated '" .

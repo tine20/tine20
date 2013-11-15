@@ -73,6 +73,14 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
     stateful: true,
     
     /**
+     * if a previous state has been applied, this is set to true.
+     * if restoring the last state fails, this is set to false
+     * 
+     * @type Boolean
+     */
+    stateApplied: null,
+    
+    /**
      * define state events
      * 
      * @type {Array}
@@ -123,7 +131,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             if (group) {
                 if(! groupNodes[group]) {
                     groupNodes[group] = new Ext.tree.TreeNode({
-                        id : 'modulenode-' + recordClass.getMeta('modelName'),
+                        id : 'modulenode-' + group,
                         iconCls: modelApp.appName + modelName,
                         text: modelApp.i18n._hidden(group),
                         leaf : false,
@@ -225,10 +233,87 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             var node = this.getNodeById(state.selected);
             if (node) {
                 node.select();
+                this.stateApplied = true;
                 var contentType = node.id.split('-')[1];
                 this.app.getMainScreen().activeContentType = contentType ? contentType : '';
                 this.app.getMainScreen().show();
+            } else {
+                this.stateApplied = false;
             }
-        }).defer(100, this);
+            
+        }).defer(10, this);
+    },
+    
+    /**
+     * is called after render, calls the superclass and this.afterRenderSelectNode
+     */
+    afterRender: function () {
+        Tine.widgets.ContentTypeTreePanel.superclass.afterRender.call(this);
+        
+        this.afterRenderSelectNode();
+    },
+    
+    /**
+     * is called after render and will be deferred, if state restoring is still running
+     */
+    afterRenderSelectNode: function() {
+        // wait if we don't know already if the state could be applied
+        if (this.stateful === true && this.stateApplied === null) {
+            this.afterRenderSelectNode.defer(20, this)
+            return;
+        }
+        
+        // don't do anything, if a state has been applied
+        if (this.stateful === true && this.stateApplied === true) {
+            return;
+        }
+        
+        // find treenode to select
+        var treeNode = this.getRootNode().findChild('id', 'treenode-' + this.contentType);
+        
+        // if no treenode was found, try to find the module node
+        if (! treeNode) {
+            // get group by current contentType
+            for (var index = 0; index < this.contentTypes.length; index++) {
+                if (this.contentTypes[index].modelName == this.contentType) {
+                    var group = this.contentTypes[index].group;
+                }
+            }
+            
+            // if a group was found, try to expand the node
+            if (group) {
+                var moduleNode = this.getRootNode().findChild('id', 'modulenode-' + group);
+                if (moduleNode) {
+                    moduleNode.expand();
+                }
+                // try to find node a bit later after expanding the parent, so we can be sure the node is rendered already
+                (function() {
+                    var treeNode = moduleNode.findChild('id', 'treenode-' + this.contentType);
+                    if (treeNode) {
+                        this.getSelectionModel().select(treeNode);
+                    }
+                }).defer(50, this);
+            }
+        } else {
+            //  select the node if it has been found
+            if (treeNode) {
+                this.getSelectionModel().select(treeNode);
+            }
+        }
+    },
+    
+    /**
+     * initializes the state and is called before afterRender
+     * 
+     * @see Ext.Component
+     */
+    initState: function() {
+        Tine.widgets.ContentTypeTreePanel.superclass.initState.call(this);
+        
+        (function() {
+            if (this.stateApplied === null) {
+                this.stateApplied = false;
+            }
+        }).defer(50, this);
     }
 });
