@@ -90,10 +90,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'description'           => 'phpunit test role',
         ));
         
-        $translate = Tinebase_Translation::getTranslation('Tinebase');
-        
-        // add account for group / role member tests
-        $this->objects['user'] = Admin_Controller_User::getInstance()->create($this->objects['user'], 'lars', 'lars');
+        $personas = Zend_Registry::get('personas');
+        $this->objects['user'] = clone $personas['jsmith'];
     }
 
     /**
@@ -104,6 +102,15 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        // reset cache to its orginal values
+        $personas = Zend_Registry::get('personas');
+        
+        try {
+            Admin_Controller_User::getInstance()->update($personas['jsmith'], null, null);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+        
+        }
+        
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
@@ -112,7 +119,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccounts()
     {
-        $accounts = $this->_json->getUsers('PHPUnit', 'accountDisplayName', 'ASC', 0, 10);
+        $accounts = $this->_json->getUsers('Smith', 'accountDisplayName', 'ASC', 0, 10);
         
         $this->assertGreaterThan(0, $accounts['totalcount']);
     }
@@ -125,7 +132,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetUserCount()
     {
         $this->testSetAccountState();
-        $accounts = $this->_json->getUsers('PHPUnit', 'accountDisplayName', 'ASC', 0, 100);
+        $accounts = $this->_json->getUsers('Smith', 'accountDisplayName', 'ASC', 0, 100);
         $this->assertEquals(count($accounts['results']), $accounts['totalcount'], print_r($accounts['results'], TRUE));
     }
     
@@ -358,7 +365,18 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAccountContactModlog()
     {
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->objects['user']->getId());
+        $user = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'tine20phpunit',
+            'accountDisplayName'    => 'tine20phpunit',
+            'accountStatus'         => 'enabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
+            'accountLastName'       => 'Tine 2.0',
+            'accountFirstName'      => 'PHPUnit',
+            'accountEmailAddress'   => 'phpunit@metaways.de'
+        )), null, null);
+        
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId());
         
         $this->assertTrue(! empty($contact->creation_time));
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contact->created_by);
@@ -615,7 +633,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($this->objects['role']->name);
         
         $this->assertEquals($role->getId(), $roleId);
-
         // check role members
         $result = $this->_json->getRoleMembers($role->getId());
         $this->assertGreaterThan(0, $result['totalcount']);
