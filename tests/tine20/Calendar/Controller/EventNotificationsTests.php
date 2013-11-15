@@ -791,7 +791,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $baseEvent = $this->_eventController->getRecurBaseEvent($persistentEvent);
         if ($allFollowing) {
-            $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=' . $recurSet[0]->dtstart->toString(), (string) $baseEvent->rrule, 'rrule mismatch');
+            $until = $recurSet[0]->dtstart->getClone()
+            ->setTimezone($baseEvent->originator_tz)
+            ->setTime(23,59,59)
+            ->setTimezone('UTC');
+            
+            $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=' . $until->toString(), (string) $baseEvent->rrule, 'rrule mismatch');
             $this->assertEquals(1, count($baseEvent->alarms));
             $this->assertEquals('Nothing to send, series is over', $baseEvent->alarms->getFirstRecord()->sent_message,
                 'alarm adoption failed: ' . print_r($baseEvent->alarms->getFirstRecord()->toArray(), TRUE));
