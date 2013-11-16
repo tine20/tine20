@@ -67,6 +67,16 @@ interface Tinebase_Group_Interface_SyncAble
     public function getGroupsFromSyncBackend($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL);
     
     /**
+     * return whether backend is read only
+     */
+    public function isReadOnlyBackend();
+    
+    /**
+     * return whether backend is disabled
+     */
+    public function isDisabledBackend();
+    
+    /**
      * replace all current groupmembers with the new groupmembers list in sync backend
      *
      * @param  string  $_groupId

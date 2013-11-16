@@ -793,7 +793,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     protected function _ldap2User(array $_userData, $_accountClass)
     {
         $errors = false;
-
+        
         foreach ($_userData as $key => $value) {
             if (is_int($key)) {
                 continue;
@@ -808,7 +808,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                             // account does not expire
                             $accountArray[$keyMapping] = null;
                         } else {
-                            $accountArray[$keyMapping] = new Tinebase_DateTime($shadowExpire * 86400);
+                            $accountArray[$keyMapping] = new Tinebase_DateTime(($shadowExpire < 100000) ? $shadowExpire * 86400 : $shadowExpire);
                         }
                         break;
                         
