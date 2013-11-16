@@ -5,20 +5,21 @@
  * @package     Addressbook
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Thomas Pawassarat <tomp@topanet.de>
- * @copyright   Copyright (c) 2013-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Ingo Ratsdorf <ingo@envirology.co.nz>
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * class to convert a eM Client vcard to contact model and back again
+ * class to convert a KDE vcard to contact model and back again
  *
  * @package     Addressbook
  * @subpackage  Convert
  */
-class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Contact_VCard_Abstract
+class Addressbook_Convert_Contact_VCard_Akonadi extends Addressbook_Convert_Contact_VCard_Abstract
 {
-    // eM Client/5.0.17595.0
-    const HEADER_MATCH = '/eM Client\/(?P<version>.*)/';
+    /// Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.34 (KHTML, like Gecko) akonadi_davgroupware_resource_21/4.11.2 Safari/534.34
+    const HEADER_MATCH = '/akonadi_davgroupware_resource_[0-9]*\/(?P<version>([0-9,\.])*)/';
     
     protected $_emptyArray = array(
         'adr_one_countryname'   => null,
@@ -33,7 +34,7 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
         'adr_two_region'        => null,
         'adr_two_street'        => null,
         'adr_two_street2'       => null,
-        #'assistent'             => null,
+        'assistent'             => null,
         'bday'                  => null,
         #'calendar_uri'          => null,
         'email'                 => null,
@@ -41,7 +42,7 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
         'jpegphoto'             => null,
         #'freebusy_uri'          => null,
         'note'                  => null,
-        #'role'                  => null,
+        'role'                  => null,
         #'salutation'            => null,
         'title'                 => null,
         'url'                   => null,
@@ -50,13 +51,13 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
         'n_fileas'              => null,
         #'n_fn'                  => null,
         'n_given'               => null,
-        #'n_middle'              => null,
+        'n_middle'              => null,
         'n_prefix'              => null,
         'n_suffix'              => null,
         'org_name'              => null,
         'org_unit'              => null,
         #'pubkey'                => null,
-        #'room'                  => null,
+        'room'                  => null,
         #'tel_assistent'         => null,
         #'tel_car'               => null,
         'tel_cell'              => null,
@@ -64,7 +65,7 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
         'tel_fax'               => null,
         'tel_fax_home'          => null,
         'tel_home'              => null,
-        #'tel_pager'             => null,
+        'tel_pager'             => null,
         'tel_work'              => null,
         #'tel_other'             => null,
         #'tel_prefer'            => null,
@@ -75,32 +76,62 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
         'tags'                  => null,
         'notes'                 => null,
     );
-    
+        
+    /**
+     * converts vcard to Addressbook_Model_Contact
+     * 
+     * @param  \Sabre\VObject\Component|stream|string  $blob    the vcard to parse
+     * @param  Tinebase_Record_Abstract                $_record  update existing contact
+     * @return Addressbook_Model_Contact
+     */
+    public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null)
+    {
+        $vcard = self::getVObject($blob);
+        $contact = parent::toTine20Model($blob, $_record);
+        
+        foreach ($vcard->children() as $property) {
+            switch ($property->name) {
+                case 'X-KADDRESSBOOK-X-AssistantsName':
+                    $contact->assistent = $property->getValue();
+                    break;
+
+                default:
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . $property->name);
+                    break;
+            }
+        }
+
+        return $contact;
+    }
+
     /**
      * converts Addressbook_Model_Contact to vcard
      * 
+     * @todo return all supported fields in correct format see http://forge.tine20.org/mantisbt/view.php?id=5346
      * @param  Addressbook_Model_Contact  $_record
      * @return \Sabre\VObject\Component\VCard
      */
     public function fromTine20Model(Tinebase_Record_Abstract $_record)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_record->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_record->toArray(), true));
         
         // initialize vcard object
         $card = $this->_fromTine20ModelRequiredFields($_record);
         
-        $card->add('TEL', $_record->tel_work, array('TYPE' => array('WORK', 'VOICE')));
+        $card->add('TEL', $_record->tel_work, array('TYPE' => 'WORK'));
         
-        $card->add('TEL', $_record->tel_home, array('TYPE' => array('HOME', 'VOICE')));
+        $card->add('TEL', $_record->tel_home, array('TYPE' => 'HOME'));
         
         $card->add('TEL', $_record->tel_cell, array('TYPE' => 'CELL'));
         
-        $card->add('TEL', $_record->tel_cell_private, array('TYPE' => 'OTHER'));
+        $card->add('TEL', $_record->tel_cell_private, array('TYPE' => array('CELL', 'HOME')));
         
-        $card->add('TEL', $_record->tel_fax, array('TYPE' => array('FAX', 'WORK')));
+        $card->add('TEL', $_record->tel_fax, array('TYPE' => array('FAX')));
         
         $card->add('TEL', $_record->tel_fax_home, array('TYPE' => array('FAX', 'HOME')));
+        
+        $card->add('TEL', $_record->tel_pager, array('TYPE' => 'PAGER'));
         
         $card->add('ADR', array(null, $_record->adr_one_street2, $_record->adr_one_street, $_record->adr_one_locality, $_record->adr_one_region, $_record->adr_one_postalcode, $_record->adr_one_countryname), array('TYPE' => 'WORK'));
         
@@ -109,12 +140,12 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
         $card->add('EMAIL', $_record->email, array('TYPE' => 'PREF'));
         
         $card->add('EMAIL', $_record->email_home);
-        
-        $card->add('URL', $_record->url, array('TYPE' => 'WORK'));
-        
-        $card->add('URL', $_record->url_home, array('TYPE' => 'HOME'));
                 
+        $card->add('URL', $_record->url);
+        
         $card->add('NOTE', $_record->note);
+        
+        $card->add('X-KADDRESSBOOK-X-AssistantsName', $_record->assistent);
         
         $this->_fromTine20ModelAddBirthday($_record, $card);
         
@@ -138,12 +169,9 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
     {
         $type = null;
         
-        if (isset($property['TYPE'])) {
-            foreach ($property['TYPE'] as $typeProperty) {
-                if (strtolower($typeProperty) == 'pref') {
-                    $type = 'work';
-                    break;
-                }
+        if ($property['TYPE']) {
+            if ($property['TYPE']->has('pref')) {
+                $type = 'work';
             }
         }
         
@@ -155,56 +183,7 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
             default:
                 $data['email_home'] = $property->getValue();
                 break;
+        
         }
     }
-    
-    /**
-     * (non-PHPdoc)
-     * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseTel()
-     */
-    protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
-    {
-        $telField = null;
-
-        if (isset($property['TYPE'])) {
-            // CELL
-            if ($property['TYPE']->has('cell')) {
-                $telField = 'tel_cell';
-            } elseif ($property['TYPE']->has('other')) {
-                $telField = 'tel_cell_private';
-     
-            // TEL
-            } elseif ($property['TYPE']->has('work') && $property['TYPE']->has('voice')) {
-                $telField = 'tel_work';
-            } elseif ($property['TYPE']->has('home') && $property['TYPE']->has('voice')) {
-                $telField = 'tel_home';
-
-            // FAX
-            } elseif ($property['TYPE']->has('work') && $property['TYPE']->has('fax')) {
-                $telField = 'tel_fax';
-            } elseif ($property['TYPE']->has('home') && $property['TYPE']->has('fax')) {
-                $telField = 'tel_fax_home';
-            }
-        }
-        
-        if (!empty($telField)) {
-            $data[$telField] = $property->getValue();
-        } else {
-            parent::_toTine20ModelParseTel($data, $property);
-        }
-        
-    }
-    
-    /**
-     * parse birthday
-     * 
-     * @param array $data
-     * @param Sabre\VObject\Property $property
-     */
-    protected function _toTine20ModelParseBday(&$_data, \Sabre\VObject\Property $_property)
-    {
-        $tzone = new DateTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        $_data['bday'] = new Tinebase_DateTime($_property->getValue(), $tzone);
-        $_data['bday']->setTimezone(new DateTimeZone('UTC'));
-    }    
 }

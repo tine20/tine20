@@ -17,13 +17,14 @@
  */
 class Addressbook_Convert_Contact_VCard_Factory
 {
-    const CLIENT_GENERIC = 'generic';
-    const CLIENT_IOS     = 'ios';
-    const CLIENT_KDE     = 'kde';
-    const CLIENT_MACOSX  = 'macosx';
-    const CLIENT_SOGO    = 'sogo';
-    const CLIENT_EMCLIENT= 'emclient';
-    const CLIENT_COLLABORATOR     = 'WebDAVCollaborator';
+    const CLIENT_GENERIC        = 'generic';
+    const CLIENT_IOS            = 'ios';
+    const CLIENT_KDE            = 'kde';
+    const CLIENT_MACOSX         = 'macosx';
+    const CLIENT_SOGO           = 'sogo';
+    const CLIENT_EMCLIENT       = 'emclient';
+    const CLIENT_COLLABORATOR   = 'WebDAVCollaborator';
+    const CLIENT_AKONADI        = 'akonadi';
     
     /**
      * factory function to return a selected phone backend class
@@ -50,6 +51,11 @@ class Addressbook_Convert_Contact_VCard_Factory
                 
                 break;
                 
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_AKONADI:
+                return new Addressbook_Convert_Contact_VCard_Akonadi($_version);
+                
+                break;
+            
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX:
                 return new Addressbook_Convert_Contact_VCard_MacOSX($_version);
                 
@@ -101,6 +107,11 @@ class Addressbook_Convert_Contact_VCard_Factory
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE;
             $version = isset($matches['version']) ? $matches['version'] : '0.0' ;
         
+        // Akonadi DAV addressbook
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_Akonadi::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_AKONADI;
+            $version = $matches['version'];
+            
         // eM Client addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT;

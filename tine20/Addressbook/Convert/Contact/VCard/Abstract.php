@@ -307,6 +307,9 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      */
     protected function _toTine20ModelParseBday(&$data, \Sabre\VObject\Property $property)
     {
+        $tzone = new DateTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $data['bday'] = new Tinebase_DateTime($property->getValue(), $tzone);
+        $data['bday']->setTimezone(new DateTimeZone('UTC'));
     }
     
     /**
@@ -342,6 +345,24 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     }
     
     /**
+     * parse categories from Tine20 model to VCard and attach it to VCard $card
+     *
+     * @param Tinebase_Record_Abstract &$_record
+     * @param Sabre\VObject\Component $card
+     */
+        protected function _fromTine20ModelAddCategories(Tinebase_Record_Abstract &$record, Sabre\VObject\Component $card)
+        {
+            if (!isset($record->tags)) {
+                // If the record has not been populated yet with tags, let's try to get them all and update the record
+                $record->tags = Tinebase_Tags::getInstance()->getTagsOfRecord($record);
+            }
+            if (isset($record->tags) && count($record->tags) > 0) {
+                // we have some tags attached, so let's convert them and attach to the VCARD
+                $card->add('CATEGORIES', (array) $record->tags->name);
+            }
+        }
+        
+    /**
      * add photo data to VCard
      * 
      * @param  Tinebase_Record_Abstract  $record
@@ -352,8 +373,8 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         if (!empty($record->jpegphoto)) {Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
             try {
                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $record->getId());
-                
-                $card->add('PHOTO', $image->getBlob('image/jpeg'), array('TYPE' => 'JPEG', 'ENCODING' => 'b'));
+                 $jpegData = $image->getBlob('image/jpeg');      
+                $card->add('PHOTO',  $jpegData, array('TYPE' => 'JPEG', 'ENCODING' => 'b'));
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Image for contact {$record->getId()} not found or invalid: {$e->getMessage()}");

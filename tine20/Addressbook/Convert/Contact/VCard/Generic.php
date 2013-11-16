@@ -65,10 +65,7 @@ class Addressbook_Convert_Contact_VCard_Generic extends Addressbook_Convert_Cont
         
         $this->_fromTine20ModelAddGeoData($_record, $card);
         
-        // categories
-        if (isset($_record->tags) && count($_record->tags) > 0) {
-            $card->add('CATEGORIES', (array) $_record->tags->name);
-        }
+        $this->_fromTine20ModelAddCategories($_record, $card);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
            __METHOD__ . '::' . __LINE__ . ' card ' . $card->serialize());

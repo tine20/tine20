@@ -140,10 +140,7 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
         
         $this->_fromTine20ModelAddGeoData($_record, $card);
         
-        // categories
-        if (isset($_record->tags) && count($_record->tags) > 0) {
-            $card->add('CATEGORIES', (array) $_record->tags->name);
-        }
+        $this->_fromTine20ModelAddCategories($_record, $card);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' card ' . $card->serialize());
@@ -151,16 +148,5 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
         return $card;
     }
     
-    /**
-     * parse birthday
-     * 
-     * @param array                    $data
-     * @param \Sabre\VObject\Property  $property
-     */
-    protected function _toTine20ModelParseBday(&$data, \Sabre\VObject\Property $property)
-    {
-        $tzone = new DateTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        $data['bday'] = new Tinebase_DateTime($property->getValue(), $tzone);
-        $data['bday']->setTimezone(new DateTimeZone('UTC'));
-    }
+
 }
