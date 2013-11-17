@@ -605,20 +605,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $grants[] = Tinebase_Model_Grants::GRANT_ADMIN;
         }
 
-        // @todo fetch wildcard from specific db adapter
-        $grants = str_replace('*', '%', $grants);
-        
-        if (empty($grants)) {
-            $_select->where('1=0');
-            return;
-        }
-        
         // @todo add groupmembers via join
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
         
         $quotedActId   = $db->quoteIdentifier("{$_aclTableName}.account_id");
         $quotedActType = $db->quoteIdentifier("{$_aclTableName}.account_type");
-        $quotedGrant   = $db->quoteIdentifier("{$_aclTableName}.account_grant");
         
         $accountSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         $accountSelect
@@ -628,14 +619,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
             $accountSelect->orWhere("{$quotedActType} = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
         }
-        
-        $grantsSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
-        foreach ($grants as $grant) {
-            $grantsSelect->orWhere("{$quotedGrant} LIKE ?", $grant);
-        }
-        
-        $grantsSelect->appendWhere(Zend_Db_Select::SQL_AND);
         $accountSelect->appendWhere(Zend_Db_Select::SQL_AND);
+        
+        // we only need to filter, if the filter does not contain %
+        if (!in_array('*', $grants)) {
+            // @todo fetch wildcard from specific db adapter
+            $grants = str_replace('*', '%', $grants);
+        
+            $quotedGrant   = $db->quoteIdentifier("{$_aclTableName}.account_grant");
+            
+            $grantsSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+            foreach ($grants as $grant) {
+                $grantsSelect->orWhere("{$quotedGrant} LIKE ?", $grant);
+            }
+            $grantsSelect->appendWhere(Zend_Db_Select::SQL_AND);
+        }
     }
 
     /**
