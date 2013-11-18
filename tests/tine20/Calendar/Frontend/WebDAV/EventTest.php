@@ -97,6 +97,30 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     }
     
     /**
+     * test create event with internal organizer
+     * 
+     * @return Calendar_Frontend_WebDAV_Event
+     */
+    public function testCreateEventWithRRule()
+    {
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        }
+        
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_yearly.ics');
+        
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
+        
+        $record = $event->getRecord();
+        
+        $this->assertEquals('New Event', $record->summary);
+        $this->assertEquals($record->rrule['bymonthday'], 25);
+        
+        return $event;
+    }
+    
+    /**
      * test create event with external organizer
      * 
      * @return Calendar_Frontend_WebDAV_Event
