@@ -107,6 +107,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         try {
             $events = $converter->toTine20RecordSet($_resource);
         } catch (Exception $e) {
+            Tinebase_Exception::log($e);
             $isce = new Calendar_Exception_IcalParser();
             $isce->setParseError($e);
             throw $isce;
