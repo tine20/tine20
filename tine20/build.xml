@@ -10,6 +10,7 @@
     
     <property name="builddir" value="${project.basedir}/build" override="true" />
     <property name="localedir" value="Tinebase/js/Locale" override="true" />
+    <property name="configdir" value="." override="true" />
     
     <!-- ============================================  -->
     <!-- Target: prepare                               -->
@@ -287,6 +288,25 @@
     </target>
     
     <!-- ============================================  -->
+    <!-- Target: tine-install                               -->
+    <!-- ============================================  -->
+    <target name="tine-install">
+        <property file="${configdir}/install.properties" />
+        <echo msg="Installing Tine 2.0" />
+        <exec command="php setup.php \
+            --install -- \
+                adminLoginName=${adminLoginName} \
+                adminPassword=${adminPassword} \
+                adminEmailAddress=${adminEmailAddress} \
+                acceptedTermsVersion=1000 \
+                imap=${imap} \
+                smtp=${smtp} \
+                authentication=${authentication} \
+                accounts=${accounts}
+" passthru="true"/>
+    </target>
+    
+    <!-- ============================================  -->
     <!-- Task: init                                    -->
     <!-- ============================================  -->
     <adhoc-task name="init"><![CDATA[
@@ -384,51 +404,51 @@
                                   
             function buildMimeTypesStyleFile($resolution, &$styleSheet) {
             
-            	$relatedImgPath = '/images/oxygen/'.$resolution.'/mimetypes/';
-            	$imgPath = '${project.basedir}'.$relatedImgPath;
-            	if (! file_exists($imgPath) || ! is_dir($imgPath)) {
-            		echo 'Mimetype images no found!';
-            		return;
+                $relatedImgPath = '/images/oxygen/'.$resolution.'/mimetypes/';
+                $imgPath = '${project.basedir}'.$relatedImgPath;
+                if (! file_exists($imgPath) || ! is_dir($imgPath)) {
+                    echo 'Mimetype images no found!';
+                    return;
                 }
  
- 				
-    			// öffnen des Verzeichnisses
-    			if ( $handle = opendir($imgPath) ) {
-                	
-                	fwrite($styleSheet, ".standardFileClass_".$resolution." .x-grid3-cell-inner {\n");
-        			fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath."application-octet-stream.png);\n");
-        			fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
-        			fwrite($styleSheet, "    padding-left: 19px;\n");
-        			fwrite($styleSheet, "}\n\n");
+                 
+                // öffnen des Verzeichnisses
+                if ( $handle = opendir($imgPath) ) {
+                    
+                    fwrite($styleSheet, ".standardFileClass_".$resolution." .x-grid3-cell-inner {\n");
+                    fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath."application-octet-stream.png);\n");
+                    fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
+                    fwrite($styleSheet, "    padding-left: 19px;\n");
+                    fwrite($styleSheet, "}\n\n");
                 
-       			    // einlesen der Verzeichnisses
-        			while (($file = readdir($handle)) !== false)
-        			{	
-        				$fileName = basename($file, '.png');
-        				
-        				$addToStyle = strcmp($fileName, "..") + strcmp($fileName, "..");
-        				if($addToStyle > 0) {
-        				
-        					fwrite($styleSheet, ".".$fileName."_".$resolution." .x-grid3-cell-inner {\n");
-        					fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath.$file.") !important;\n");
-        					fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
-        					fwrite($styleSheet, "    padding-left: 19px;\n");
-        					fwrite($styleSheet, "}\n\n");
-        				}
-			        }
-        			
-        			closedir($handle);
-    			}
+                       // einlesen der Verzeichnisses
+                    while (($file = readdir($handle)) !== false)
+                    {
+                        $fileName = basename($file, '.png');
+                        
+                        $addToStyle = strcmp($fileName, "..") + strcmp($fileName, "..");
+                        if($addToStyle > 0) {
+                        
+                            fwrite($styleSheet, ".".$fileName."_".$resolution." .x-grid3-cell-inner {\n");
+                            fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath.$file.") !important;\n");
+                            fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
+                            fwrite($styleSheet, "    padding-left: 19px;\n");
+                            fwrite($styleSheet, "}\n\n");
+                        }
+                    }
+                    
+                    closedir($handle);
+                }
             
             }
             
             function main() {
-    				$styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
-            		$this->buildMimeTypesStyleFile('16x16', $styleSheet);
-					$this->buildMimeTypesStyleFile('22x22', $styleSheet);
-					$this->buildMimeTypesStyleFile('32x32', $styleSheet);            	
-					fclose($styleSheet);
-        	}	
+                    $styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
+                    $this->buildMimeTypesStyleFile('16x16', $styleSheet);
+                    $this->buildMimeTypesStyleFile('22x22', $styleSheet);
+                    $this->buildMimeTypesStyleFile('32x32', $styleSheet);
+                    fclose($styleSheet);
+            }
         }
     ]]></adhoc-task>
     
