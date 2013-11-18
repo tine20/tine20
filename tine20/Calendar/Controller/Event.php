@@ -205,7 +205,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        $this->_saveAttendee($_record);
+        $this->_saveAttendee($_record, $_createdRecord);
     }
     
     /**
@@ -506,7 +506,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        $this->_saveAttendee($record, $record->isRescheduled($currentRecord));
+        $this->_saveAttendee($record, $currentRecord, $record->isRescheduled($currentRecord));
         // need to save new attendee set in $updatedRecord for modlog
         $updatedRecord->attendee = clone($record->attendee);
     }
@@ -1756,9 +1756,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @todo add support for resources
      * 
      * @param Calendar_Model_Event $_event
+     * @param Calendar_Model_Event $_currentEvent
      * @param bool                 $_isRescheduled event got rescheduled reset all attendee status
      */
-    protected function _saveAttendee($_event, $_isRescheduled = FALSE)
+    protected function _saveAttendee($_event, $_currentEvent = NULL, $_isRescheduled = FALSE)
     {
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
@@ -1770,8 +1771,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} ");
         
-        $currentEvent = $this->get($_event->getId(), null, false);
-        $currentAttendee = $currentEvent->attendee;
+        $currentAttendee = $_currentEvent->attendee;
         
         $diff = $currentAttendee->getMigration($_event->attendee->getArrayOfIds());
 
