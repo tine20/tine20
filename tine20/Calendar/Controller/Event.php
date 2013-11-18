@@ -178,7 +178,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $sendNotifications = $this->_sendNotifications;
             $this->_sendNotifications = FALSE;
             
-            $event = parent::create($_record);
+            $createdEvent = parent::create($_record);
             
             $this->_sendNotifications = $sendNotifications;
             
@@ -187,8 +187,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
-        
-        $createdEvent = $this->get($event->getId());
         
         // send notifications
         if ($this->_sendNotifications) {
@@ -1094,19 +1092,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
-     * get by id
-     *
-     * @param string $_id
-     * @param int $_containerId
-     * @return Tinebase_Record_Interface
+     * (non-PHPdoc)
+     * @see Tinebase_Controller_Record_Abstract::get()
      */
-    public function get($_id, $_containerId = NULL)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE)
     {
         if (preg_match('/^fakeid/', $_id)) {
             // get base event when trying to fetch a non-persistent recur instance
             return $this->getRecurBaseEvent(new Calendar_Model_Event(array('uid' => substr(str_replace('fakeid', '', $_id), 0, 40))), TRUE);
         } else {
-            return parent::get($_id, $_containerId);
+            return parent::get($_id, $_containerId, $_getRelatedData);
         }
     }
     
@@ -1775,7 +1770,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} ");
         
-        $currentEvent = $this->get($_event->getId());
+        $currentEvent = $this->get($_event->getId(), null, false);
         $currentAttendee = $currentEvent->attendee;
         
         $diff = $currentAttendee->getMigration($_event->attendee->getArrayOfIds());
