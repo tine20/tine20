@@ -780,8 +780,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                         return 'UNTIL=' . $dtUntil->format(Tinebase_Record_Abstract::ISO8601LONG);
                     }, $rruleString);
 
-                    // remove additional days from BYMONTHDAY property
-                    $rruleString = preg_replace('/(BYMONTHDAY=)([\d]+)([,\d]+)/', '$1$2', $rruleString);
+                    // remove additional days from BYMONTHDAY property (BYMONTHDAY=11,15 => BYMONTHDAY=11)
+                    $rruleString = preg_replace('/(BYMONTHDAY=)([\d]+),([,\d]+)/', '$1$2', $rruleString);
                     
                     $event->rrule = $rruleString;
                     
