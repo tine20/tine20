@@ -1029,56 +1029,73 @@ abstract class Tinebase_Controller_Record_Abstract
     
     /**
      * handles relations on update multiple
+     * 
      * @param string $key
      * @param string $value
      * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    protected function _handleRelations($key, $value)
+    protected function _handleRelationsOnUpdateMultiple($key, $value)
     {
-        $model = new $this->_modelName;
-        $relConfig = $model::getRelatableConfig();
-        unset($model);
         $getRelations = true;
         preg_match('/%(.+)-((.+)_Model_(.+))/', $key, $a);
-        if(count($a) < 4) {
+        if (count($a) < 4) {
             throw new Tinebase_Exception_Record_DefinitionFailure('The relation to delete/set is not configured properly!');
-        } 
-        // TODO: check config from foreign side
-        // $relConfig = $a[2]::getRelatableConfig();
+        }
 
-        $constrainsConfig = false;
-        foreach($relConfig as $config) {
-            if($config['relatedApp'] == $a[3] && $config['relatedModel'] == $a[4] && (isset($config['config']) || array_key_exists('config', $config)) && is_array($config['config'])) {
-                foreach($config['config'] as $constrain) {
-                    if($constrain['type'] == $a[1]) {
-                        $constrainsConfig = $constrain;
-                        break 2; 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Handle relations for ' . $this->_modelName);
+        }
+        
+        $relConfig = Tinebase_Relations::getConstraintsConfigs(array($this->_modelName, $a[2]));
+        
+        $constraintsConfig = NULL;
+        
+        if ($relConfig) {
+            foreach ($relConfig as $config) {
+                if ($config['relatedApp'] == $a[3] && $config['relatedModel'] == $a[4] && isset($config['config']) && is_array($config['config'])) {
+                    foreach ($config['config'] as $constraint) {
+                        if ($constraint['type'] == $a[1]) {
+                            $constraintsConfig = $constraint;
+                            break 2;
+                        }
                     }
                 }
             }
         }
-
-        if(!$constrainsConfig) {
+        
+        // update multiple is not possible without having a constraints config
+        if (! $constraintsConfig) {
             throw new Tinebase_Exception_Record_DefinitionFailure('No relation definition could be found for this model!');
         }
 
         $rel = array(
             'own_model' => $this->_modelName,
             'own_backend' => 'Sql',
-            'own_degree' =>(isset($constrainsConfig['sibling']) || array_key_exists('sibling', $constrainsConfig)) ? $constrainsConfig['sibling'] : 'sibling',
+            'own_degree' => isset($constraintsConfig['sibling']) ? $constraintsConfig['sibling'] : 'sibling',
             'related_model' => $a[2],
             'related_backend' => 'Sql',
-            'type' => (isset($constrainsConfig['type']) || array_key_exists('type', $constrainsConfig)) ? $constrainsConfig['type'] : '-',
-            'remark' => (isset($constrainsConfig['defaultRemark']) || array_key_exists('defaultRemark', $constrainsConfig)) ? $constrainsConfig['defaultRemark'] : ' '
+            'type' => isset($constraintsConfig['type']) ? $constraintsConfig['type'] : ' ',
+            'remark' => isset($constraintsConfig['defaultRemark']) ? $constraintsConfig['defaultRemark'] : ' '
         );
         
-        if(empty($value)) { // delete relations in iterator
-            if(!$this->_removeRelations) $this->removeRelations = array();
-            $this->_removeRelations[] = $rel;
+        if (empty($value)) { // delete relations in iterator
+            if (! $this->_removeRelations) {
+                $this->_removeRelations = array($rel);
+            } else {
+                $this->_removeRelations[] = $rel;
+            }
         } else { // create relations in iterator
-            if(! $this->_newRelations) $this->_newRelations = array();
             $rel['related_id'] = $value;
-            $this->_newRelations[] = $rel;
+            if (! $this->_newRelations) {
+                $this->_newRelations = array($rel);
+            } else {
+                $this->_newRelations[] = $rel;
+            }
+        }
+    
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' New relations: ' . print_r($this->_newRelations, true)
+               . ' Remove relations: ' . print_r($this->_removeRelations, true));
         }
     }
     /**
@@ -1106,7 +1123,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             if (stristr($key, '%')) {
                 $getRelations = true;
-                $this->_handleRelations($key, $value);
+                $this->_handleRelationsOnUpdateMultiple($key, $value);
                 unset($_data[$key]);
             }
         }
@@ -1127,7 +1144,9 @@ abstract class Tinebase_Controller_Record_Abstract
         ));
         $result = $iterator->iterate($_data);
     
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $this->_updateMultipleResult['totalcount'] . ' records.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $this->_updateMultipleResult['totalcount'] . ' records.');
+        }
         
         if ($this->_clearCustomFieldsCache) {
             Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
@@ -1174,7 +1193,9 @@ abstract class Tinebase_Controller_Record_Abstract
                     $newRelation['own_id'] = $currentRecord->getId();
                     $rel = new Tinebase_Model_Relation();
                     $rel->setFromArray($newRelation);
-                    if($removeRelations) $currentRecord->relations->removeRecords($removeRelations);
+                    if ($removeRelations) {
+                        $currentRecord->relations->removeRecords($removeRelations);
+                    }
                     $currentRecord->relations->addRecord($rel);
                 }
             }
