@@ -43,6 +43,30 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
     }
 
     /**
+     * returns concatenation expression
+     * 
+     * @param array $values
+     */
+    public function getConcat($values)
+    {
+        $str = 'CONCAT(';
+        $i   = 1;
+        $vc  = count($values);
+        
+        foreach($values as $value) {
+            $str .= $value;
+            if ($i < $vc) {
+                $str .= ', ';
+            }
+            $i++;
+        }
+        
+        $str .= ')';
+        
+        return new Zend_Db_Expr($str);
+    }
+    
+    /**
      * @param string $field
      * @param mixed $returnIfTrue
      * @param mixed $returnIfFalse
