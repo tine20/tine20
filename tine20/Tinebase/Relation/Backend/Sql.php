@@ -29,7 +29,7 @@
  * @package     Tinebase
  * @subpackage  Relations
  */
-class Tinebase_Relation_Backend_Sql
+class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * @var Zend_Db_Adapter_Abstract
@@ -49,6 +49,7 @@ class Tinebase_Relation_Backend_Sql
     public function __construct()
     {
         $this->_db = Tinebase_Core::getDb();
+        $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
         
         // temporary on the fly creation of table
         $this->_dbTable = new Tinebase_Db_Table(array(
@@ -372,8 +373,8 @@ class Tinebase_Relation_Backend_Sql
         $controller = Tinebase_Controller_Record_Abstract::getController($model);
         
         // just for validation, the records aren't needed
-        $sourceRecord      = $controller->get($sourceId);
-        $destinationRecord = $controller->get($destinationId);
+        $controller->get($sourceId);
+        $controller->get($destinationId);
         
         $tableName = SQL_TABLE_PREFIX . 'relations';
         
@@ -434,5 +435,42 @@ class Tinebase_Relation_Backend_Sql
         }
 
         return $skipped;
+    }
+
+    /**
+     * counts related records, gropued by Model, Type and Id but excludes relations which will be updated by $excludeCount
+     *
+     * @param string $ownModel
+     * @param Tinebase_Record_RecordSet $relations
+     * @return array
+     */
+    public function countRelatedConstraints($ownModel, $relations, $excludeCount)
+    {
+        if ($relations->count() == 0) {
+            return array();
+        }
+    
+        $adapter = $this->_dbTable->getAdapter();
+        $tableName = SQL_TABLE_PREFIX . 'relations';
+        
+        $sql = 'SELECT '. $this->_dbCommand->getConcat(array($this->_db->quoteIdentifier('related_model'), "'--'", $this->_db->quoteIdentifier('type'), "'--'", $this->_db->quoteIdentifier('own_id'))) . ' 
+                    AS ' . $this->_db->quoteIdentifier('id') . ',
+                    ' . $this->_db->quoteIdentifier('related_model') .', ' . $this->_db->quoteIdentifier('type') .',
+                    ' . $this->_db->quoteIdentifier('own_model') .', COUNT(*)
+                    AS ' . $this->_db->quoteIdentifier('count') . '
+                FROM ' . $this->_db->quoteIdentifier($tableName) . '
+                WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') . ' IN (?) ', $relations->related_id) . '
+                    AND '. $this->_db->quoteInto($this->_db->quoteIdentifier('related_model'). ' = ? ', $ownModel) . '
+                    AND '. $this->_db->quoteIdentifier('is_deleted'). ' = 0 ';
+        
+        if (! empty($excludeCount)) {
+            $sql .= ' AND '. $this->_db->quoteInto($this->_db->quoteIdentifier('id'). ' NOT IN (?) ', $excludeCount);
+        }
+        
+        $sql .= 'GROUP BY '. $this->_db->quoteIdentifier('own_id') .','.$this->_db->quoteIdentifier('related_model') . ', ' . $this->_db->quoteIdentifier('own_model') . ', ' . $this->_db->quoteIdentifier('type') . ', ' . $this->_db->quoteIdentifier('related_id');
+
+        $result = $adapter->fetchAssoc($sql);
+    
+        return $result;
     }
 }
