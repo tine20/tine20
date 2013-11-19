@@ -126,7 +126,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'url'                   => array('StringTrim'),
         'url_home'              => array('StringTrim'),
     );
-    
+
     /**
      * list of zend validator
      * 
