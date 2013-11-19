@@ -117,20 +117,13 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
         
         $card->add('NOTE', $_record->note);
         
-        // @todo to be validated
-        if ($_record->bday instanceof Tinebase_DateTime) {
-            $bday = $card->create('BDAY');
-            $bday->setValue($_record->bday, $floating = true);
-        }
+        $this->_fromTine20ModelAddBirthday($_record, $card);
         
         $this->_fromTine20ModelAddPhoto($_record, $card);
         
         $this->_fromTine20ModelAddGeoData($_record, $card);
         
-        // categories
-        if (isset($_record->tags) && count($_record->tags) > 0) {
-            $card->add('CATEGORIES', (array) $_record->tags->name);
-        }
+        $this->_fromTine20ModelAddCategories($_record, $card);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' card ' . $card->serialize());

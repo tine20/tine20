@@ -376,6 +376,10 @@ abstract class Tinebase_Controller_Record_Abstract
             // get related data only on request (defaults to TRUE)
             if ($_getRelatedData) {
                 $this->_getRelatedData($record);
+                
+                if ($record->has('notes')) {
+                    $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
+                }
             }
         }
         
@@ -423,9 +427,6 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         if ($record->has('attachments') && Setup_Controller::getInstance()->isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
-        }
-        if ($record->has('notes')) {
-            $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
         }
     }
 
