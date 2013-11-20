@@ -238,3 +238,25 @@ function searchArrayByRegexpKey($pattern, $array)
     
     return array_intersect_key($array, array_flip($result));
 }
+
+/**
+ * checks if a string is valid json
+ * 
+ * @param string $string
+ * @return boolean 
+ */
+function is_json($string)
+{
+    if (! is_string($string) || (substr($string, 0, 1) !== '[' && substr($string, 0, 1) !== '{')) {
+        return false;
+    }
+    
+    try {
+        Zend_Json::decode($string);
+    } catch (Exception $e) {
+        return false;
+    }
+    
+    // check if error occured (only if json_last_error() exists)
+    return (! function_exists('json_last_error') || json_last_error() == JSON_ERROR_NONE);
+}
