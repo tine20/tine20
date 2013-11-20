@@ -32,7 +32,7 @@
     "autoload": {
         "files": ["Tinebase/Helper.php"],
         "psr-0": {
-            "": ["", "library", "../tests/tine20"],
+            "": ["", "library", "../tests/tine20", "../tests/setup"],
             "TimeZoneConvert": "library/TimeZoneConvert/lib/",
             "Zend": ["", "library"],
             "qCal": "library/qCal/lib"

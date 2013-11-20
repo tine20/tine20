@@ -80,8 +80,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
             $result = $this->_uit->uninstallApplications(array('ActiveSync'));
         }
         
-        // check if cache is cleared
-        $this->assertFalse($cache->test($cacheId));
+        $this->assertFalse($cache->test($cacheId), 'cache is not cleared');
 
         $apps = $this->_uit->searchApplications();
         

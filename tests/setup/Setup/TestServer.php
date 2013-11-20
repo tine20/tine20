@@ -14,12 +14,12 @@
  * helper class
  *
  */
-class TestServer
+class Setup_TestServer
 {
     /**
      * holdes the instance of the singleton
      *
-     * @var TestServer
+     * @var Setup_TestServer
      */
     private static $instance = NULL;
     
@@ -34,12 +34,12 @@ class TestServer
     /**
      * the singleton pattern
      *
-     * @return TestServer
+     * @return Setup_TestServer
      */
     public static function getInstance() 
     {
         if (self::$instance === NULL) {
-            self::$instance = new TestServer;
+            self::$instance = new Setup_TestServer;
         }
         
         return self::$instance;
