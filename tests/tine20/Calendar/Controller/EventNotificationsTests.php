@@ -104,6 +104,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * testInvitationWithAttachment
      * 
      * @see 0008592: append event file attachments to invitation mail
+     * @see 0009246: Mail address of organizer is broken in invite mails
      */
     public function testInvitationWithAttachment()
     {
@@ -124,6 +125,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals(2, count($parts));
         $fileAttachment = $parts[1];
         $this->assertEquals('text/plain; name="=?utf-8?Q?tempfile.tmp?="', $fileAttachment->type);
+        
+        // check VEVENT ORGANIZER mailto
+        $vcalendarPart = $parts[0];
+        $vcalendar = quoted_printable_decode($vcalendarPart->getContent());
+        $this->assertContains('SENT-BY="mailto:' . Tinebase_Core::getUser()->accountEmailAddress . '":mailto:', str_replace("\r\n ", '', $vcalendar), 'sent-by mailto not quoted');
         
         // @todo assert attachment content (this seems to not work with array mailer, maybe we need a "real" email test here)
 //         $content = $fileAttachment->getDecodedContent();

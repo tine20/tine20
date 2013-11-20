@@ -405,7 +405,7 @@
             foreach ($vcalendar->children() as $component) {
                 if ($component->name == 'VEVENT') {
                     if (isset($component->{'ORGANIZER'})) {
-                        $component->{'ORGANIZER'}->add('SEND-BY', 'mailto:' . $_updater->accountEmailAddress);
+                        $component->{'ORGANIZER'}->add('SENT-BY', 'mailto:' . $_updater->accountEmailAddress);
                     }
                 }
             }
