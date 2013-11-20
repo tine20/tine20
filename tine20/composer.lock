@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2f460ed282a4e236231c8153bd2e406c",
+    "hash": "b90dadeb6a1ea5de68245a7318c55fc9",
     "packages": [
         {
             "name": "codeplex/phpexcel",
