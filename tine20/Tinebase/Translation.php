@@ -510,25 +510,29 @@ class Tinebase_Translation
     /**
      * convert date to string
      * 
-     * @param Tinebase_DateTime $_date [optional]
-     * @param string            $_timezone [optional]
-     * @param Zend_Locale       $_locale [optional]
-     * @param string            $_part one of date, time or datetime
+     * @param Tinebase_DateTime $date [optional]
+     * @param string            $timezone [optional]
+     * @param Zend_Locale       $locale [optional]
+     * @param string            $part one of date, time or datetime [optional]
+     * @param boolean           $addWeekday should the weekday be added (only works with $part = 'date[time]') [optional] 
      * @return string
      */
-    public static function dateToStringInTzAndLocaleFormat(DateTime $_date = NULL, $_timezone = NULL, Zend_Locale $_locale = NULL, $_part = 'datetime')
+    public static function dateToStringInTzAndLocaleFormat(DateTime $date = null, $timezone = null, Zend_Locale $locale = null, $part = 'datetime', $addWeekday = false)
     {
-        $date = ($_date !== NULL) ? clone($_date) : Tinebase_DateTime::now();
-        $timezone = ($_timezone !== NULL) ? $_timezone : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
-        $locale = ($_locale !== NULL) ? $_locale : Tinebase_Core::get(Tinebase_Core::LOCALE);
+        $date = ($date !== null) ? clone($date) : Tinebase_DateTime::now();
+        $timezone = ($timezone !== null) ? $timezone : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $locale = ($locale !== null) ? $locale : Tinebase_Core::get(Tinebase_Core::LOCALE);
         
         $date = new Zend_Date($date->getTimestamp());
         $date->setTimezone($timezone);
         
         $dateString = $date->toString(Zend_Locale_Format::getDateFormat($locale), $locale);
+        if ($addWeekday) {
+            $dateString = $date->toString('EEEE', $locale) . ', ' . $dateString;
+        }
         $timeString = $date->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
         
-        switch($_part) {
+        switch($part) {
             case 'date': return $dateString;
             case 'time': return $timeString;
             default: return $dateString . ' ' . $timeString;

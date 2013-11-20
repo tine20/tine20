@@ -450,13 +450,13 @@ msgstr "Adjunts"
 msgid "From"
 msgstr "Des de"
 
-#: js/MessageEditDialog.js:933 Controller/Message/Send.php:269
+#: js/MessageEditDialog.js:933 Controller/Message/Send.php:277
 msgid "Body"
 msgstr "Cos"
 
 #: js/MessageEditDialog.js:958 js/GridDetailsPanel.js:245
 #: js/sieve/RuleConditionsPanel.js:72 js/Model.js:155 js/GridPanel.js:482
-#: Controller/Message/Send.php:269
+#: Controller/Message/Send.php:277
 msgid "Subject"
 msgstr "Assumpte"
 

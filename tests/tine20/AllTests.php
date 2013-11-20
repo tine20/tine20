@@ -12,10 +12,6 @@
  */
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-// TODO: remove this after opendocument and timezone convert has been outsourced
-
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'OpenDocument' . DIRECTORY_SEPARATOR . 'AllTests.php';
-
 class AllTests
 {
     public static function main()
@@ -47,7 +43,6 @@ class AllTests
         $suite->addTest(Sipgate_AllTests::suite());
         $suite->addTest(SimpleFAQ_AllTests::suite());
         $suite->addTest(Zend_AllTests::suite());
-        $suite->addTest(OpenDocument_AllTests::suite());
         return $suite;
     }
 }

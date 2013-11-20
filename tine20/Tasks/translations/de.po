@@ -277,6 +277,6 @@ msgstr "Zuletzt geändert von"
 msgid "Created By"
 msgstr "Angelegt von"
 
-#: Controller/Task.php:198
+#: Controller/Task.php:202
 msgid "Notification for Task "
 msgstr "Benachrichtigung für Aufgabe "

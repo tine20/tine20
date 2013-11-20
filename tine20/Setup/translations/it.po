@@ -1,13 +1,14 @@
 # 
 # Translators:
+# Daniele Gobbetti <daniele@gobbetti.name>, 2013
 # sambar <samuel.barbera@email.it>, 2013
 # gurusys <v.anzisi@gurusys.it>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-10 13:52+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-10-29 12:35+0000\n"
+"Last-Translator: Daniele Gobbetti <daniele@gobbetti.name>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -122,7 +123,7 @@ msgstr "Bind richiede DN"
 
 #: js/AuthenticationPanel.js:334 js/AuthenticationPanel.js:572
 msgid "Start TLS"
-msgstr ""
+msgstr "Start TLS"
 
 #: js/AuthenticationPanel.js:340
 msgid "Base DN"
@@ -177,11 +178,11 @@ msgstr "Nome gruppo amministratori di default"
 
 #: js/AuthenticationPanel.js:430
 msgid "Login panel"
-msgstr ""
+msgstr "Pannello di login"
 
 #: js/AuthenticationPanel.js:445
 msgid "Reuse last username logged"
-msgstr ""
+msgstr "Riutilizza l'ultimo username loggato"
 
 #: js/AuthenticationPanel.js:454
 msgid "Password Settings"
@@ -241,47 +242,47 @@ msgstr "Redirige al sito di riferimento, se esiste"
 
 #: js/AuthenticationPanel.js:578
 msgid "Password encryption type"
-msgstr ""
+msgstr "Tipo di encryption della password"
 
 #: js/AuthenticationPanel.js:580
 msgid "des"
-msgstr ""
+msgstr "des"
 
 #: js/AuthenticationPanel.js:581
 msgid "blowfish_crypt"
-msgstr ""
+msgstr "blowfish_crypt"
 
 #: js/AuthenticationPanel.js:582
 msgid "md5_crypt"
-msgstr ""
+msgstr "md5_crypt"
 
 #: js/AuthenticationPanel.js:583
 msgid "ext_crypt"
-msgstr ""
+msgstr "ext_crypt"
 
 #: js/AuthenticationPanel.js:584
 msgid "md5"
-msgstr ""
+msgstr "md5"
 
 #: js/AuthenticationPanel.js:585
 msgid "smd5"
-msgstr ""
+msgstr "smd5"
 
 #: js/AuthenticationPanel.js:586
 msgid "sha"
-msgstr ""
+msgstr "sha"
 
 #: js/AuthenticationPanel.js:587
 msgid "ssha"
-msgstr ""
+msgstr "ssha"
 
 #: js/AuthenticationPanel.js:588
 msgid "ntpassword"
-msgstr ""
+msgstr "ntpassword"
 
 #: js/AuthenticationPanel.js:589
 msgid "plain"
-msgstr ""
+msgstr "plain"
 
 #: js/AuthenticationPanel.js:595
 msgid "User DN"
@@ -317,7 +318,7 @@ msgstr "Usa Rfc 2307 bis"
 
 #: js/AuthenticationPanel.js:627
 msgid "Maintain RFC 2307 attributes"
-msgstr ""
+msgstr "Mantieni attributi RFC 2307"
 
 #: js/AuthenticationPanel.js:633
 msgid "Min User Id"
@@ -505,7 +506,7 @@ msgstr "Password Admin Cyrus"
 
 #: js/EmailPanel.js:266
 msgid "Use proxy auth"
-msgstr ""
+msgstr "Utilizza autenticazione proxy"
 
 #: js/EmailPanel.js:284
 msgid "Smtp"

@@ -1,12 +1,13 @@
 # 
 # Translators:
+# Gurney <inscription@arrakeen.net>, 2013
 # Gurney <inscription@arrakeen.net>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-10-31 09:17+0000\n"
+"Last-Translator: Gurney <inscription@arrakeen.net>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,11 +20,11 @@ msgstr ""
 
 #: Model/Call.php:43
 msgid "Call"
-msgstr ""
+msgstr "Appel"
 
 #: Model/Call.php:44
 msgid "Calls"
-msgstr ""
+msgstr "Appels"
 
 #: Model/Call.php:60 js/DialerPanel.js:76
 msgid "Line"
@@ -75,47 +76,47 @@ msgstr "Téléphones"
 
 #: Model/MyPhone.php:61
 msgid "Settings"
-msgstr ""
+msgstr "Paramètres"
 
 #: Model/MyPhone.php:66
 msgid "Lines"
-msgstr ""
+msgstr "Lignes"
 
 #: Model/MyPhone.php:69
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #: Setup/Update/Release7.php:30 Setup/Initialize.php:33
 msgid "Calls this week"
-msgstr ""
+msgstr "Appels de cette semaine"
 
 #: Setup/Update/Release7.php:40 Setup/Initialize.php:43
 msgid "Calls last week"
-msgstr ""
+msgstr "Appels de la semaine dernière"
 
 #: Setup/Update/Release7.php:50 Setup/Initialize.php:53
 msgid "Calls this month"
-msgstr ""
+msgstr "Appels de ce mois"
 
 #: Setup/Update/Release7.php:60 Setup/Initialize.php:63
 msgid "Calls last month"
-msgstr ""
+msgstr "Appels du mois précédent"
 
 #: Setup/Initialize.php:34
 msgid "Incoming and outgoing calls of this week"
-msgstr ""
+msgstr "Appels entrants et sortants de cette semaine"
 
 #: Setup/Initialize.php:44
 msgid "Incoming and outgoing calls of last week"
-msgstr ""
+msgstr "Appels entrants et sortants de la semaine dernière"
 
 #: Setup/Initialize.php:54
 msgid "Incoming and outgoing calls of this month"
-msgstr ""
+msgstr "Appels entrants et sortants de ce mois"
 
 #: Setup/Initialize.php:64
 msgid "Incoming and outgoing calls of last month"
-msgstr ""
+msgstr "Appels entrants et sortants du mois dernier"
 
 #: js/DialerPanel.js:85
 msgid "Number"
@@ -151,11 +152,11 @@ msgstr "Faire un nouvel appel"
 
 #: js/CallGridPanel.js:216
 msgid "No phone selected"
-msgstr ""
+msgstr "Aucun téléphone sélectionné"
 
 #: js/CallGridPanel.js:217
 msgid "Please select the desired phone in the tree!"
-msgstr ""
+msgstr "Sélectionnez un téléphone dans les choix"
 
 #: js/Phone.js:100
 msgid "Incoming call"

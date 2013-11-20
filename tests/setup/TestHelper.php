@@ -10,11 +10,32 @@
  */
 
 /*
- * Set error reporting 
- * 
- * @todo put that in config.inc as well?
+ * Set include path
  */
-error_reporting( E_ALL | E_STRICT );
+define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../../tine20');
+define('PATH_TO_TINE_LIBRARY', dirname(__FILE__). '/../../tine20/library');
+define('PATH_TO_TEST_DIR', dirname(__FILE__));
+
+$path = array(
+    PATH_TO_REAL_DIR,
+    get_include_path(),
+    PATH_TO_TEST_DIR,
+    PATH_TO_TINE_LIBRARY
+);
+
+set_include_path(implode(PATH_SEPARATOR, $path));
+
+/*
+ * Set parameters  for logging (call via browser)
+ * 
+ * @todo put that in config.inc as well or remove that?
+ */
+define('CONFIGURATION', PATH_TO_TEST_DIR."/conf.xml");
+
+/*
+ * Set up basic tine 2.0 environment
+ */
+require_once 'bootstrap.php';
 
 /*
  * Set white / black lists
@@ -29,36 +50,6 @@ if (version_compare($phpUnitVersion[1], "3.6.0") >= 0) {
     PHPUnit_Util_Filter::addDirectoryToFilter(dirname(__FILE__));
 }
 
-/*
- * Set include path
- */
-define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../../tine20');
-define('PATH_TO_TINE_LIBRARY', dirname(__FILE__). '/../../tine20/library');
-define('PATH_TO_TEST_DIR', dirname(__FILE__));
-
-$path = array(
-    PATH_TO_REAL_DIR,
-    get_include_path(),
-    PATH_TO_TEST_DIR,
-    PATH_TO_TINE_LIBRARY
-);
-        
-set_include_path(implode(PATH_SEPARATOR, $path));
-
-/*
- * Set parameters  for logging (call via browser)
- * 
- * @todo put that in config.inc as well or remove that?
- */
-define('CONFIGURATION', PATH_TO_TEST_DIR."/conf.xml");
-
-/*
- * Set up basic tine 2.0 environment
- */
-require_once 'Zend/Loader/Autoloader.php';
-$autoloader = Zend_Loader_Autoloader::getInstance();
-$autoloader->setFallbackAutoloader(true);
-
 // get config
 if(file_exists(dirname(__FILE__) . '/phpunitconfig.inc.php')) {
     $config = new Zend_Config(require dirname(__FILE__) . '/phpunitconfig.inc.php');
@@ -68,16 +59,7 @@ if(file_exists(dirname(__FILE__) . '/phpunitconfig.inc.php')) {
 
 $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
 
-TestServer::getInstance()->initFramework();
+Setup_TestServer::getInstance()->initFramework();
 
 Tinebase_Core::set('locale', new Zend_Locale($config->locale));
 Tinebase_Core::set('testconfig', $config);
-
-/*
-$tinebaseController = Tinebase_Controller::getInstance();
-if (!$tinebaseController->login($config->username, $config->password, $config->ip)){
-    throw new Exception("Couldn't login, user session required for tests! \n");
-}
-*/
-
- 

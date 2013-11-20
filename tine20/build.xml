@@ -10,6 +10,7 @@
 
     <property name="builddir" value="${project.basedir}/build" override="true" />
     <property name="localedir" value="Tinebase/js/Locale" override="true" />
+    <property name="configdir" value="." override="true" />
 
     <!-- ============================================  -->
     <!-- Target: prepare                               -->
@@ -259,10 +260,12 @@
     <target name="tx-pull">
         <echo msg="pull translations from transifex" />
         <exec command="tx pull -a -f --skip" passthru="true" />
-        <echo msg="commit updated strings now:" />
-        <echo msg="git add */translations" />
-        <echo msg="git commit -m '#7086: update translation files'" />
-        <echo msg="git push gerrit HEAD:refs/heads/master" />
+        <echo msg="Commit updated strings now:" />
+        <echo msg="$ git add */translations" />
+        <echo msg="$ git commit -m '#7086: update translation files'" />
+        <echo msg="$ git push gerrit HEAD:refs/heads/master" />
+        <echo msg="You might run the target translation-test now:" />
+        <echo msg="$ ./vendor/bin/phing translation-test" />
     </target>
 
     <!-- ============================================  -->
@@ -284,6 +287,25 @@
     <target name="translation-test">
         <echo msg="find duplicates or syntax errors" />
         <exec command="for i in `ls ./*/translations/*.po`; do msgfmt -o - --strict $i 1>/dev/null; done" passthru="true"/>
+    </target>
+    
+    <!-- ============================================  -->
+    <!-- Target: tine-install                               -->
+    <!-- ============================================  -->
+    <target name="tine-install">
+        <property file="${configdir}/install.properties" />
+        <echo msg="Installing Tine 2.0" />
+        <exec command="php setup.php \
+            --install -- \
+                adminLoginName=${adminLoginName} \
+                adminPassword=${adminPassword} \
+                adminEmailAddress=${adminEmailAddress} \
+                acceptedTermsVersion=1000 \
+                imap=${imap} \
+                smtp=${smtp} \
+                authentication=${authentication} \
+                accounts=${accounts}
+" passthru="true"/>
     </target>
     
     <!-- ============================================  -->
@@ -417,7 +439,6 @@
 
                     closedir($handle);
                 }
-
             }
 
             function main() {

@@ -39,9 +39,9 @@ class Tinebase_Record_RecordSetDiff extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'model'             => array('allowEmpty' => TRUE),
-        'added'             => array('allowEmpty' => TRUE), // RecordSet of records
-        'removed'           => array('allowEmpty' => TRUE), // RecordSet of records
-        'modified'          => array('allowEmpty' => TRUE), // RecordSet of Tinebase_Record_Diff
+        'added'             => array('allowEmpty' => TRUE), // RecordSet of records _('added')
+        'removed'           => array('allowEmpty' => TRUE), // RecordSet of records _('removed')
+        'modified'          => array('allowEmpty' => TRUE), // RecordSet of Tinebase_Record_Diff  _('modified')
     );
     
     /**
@@ -54,5 +54,25 @@ class Tinebase_Record_RecordSetDiff extends Tinebase_Record_Abstract
         return (count($this->added)    === 0 &&
                 count($this->removed)  === 0 &&
                 count($this->modified) === 0);
+    }
+
+    /**
+     * returns human readable diff text
+     * 
+     * @return string
+     * 
+     * @todo add translated model name?
+     */
+    public function getTranslatedDiffText()
+    {
+        $result = array();
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        foreach (array('added', 'removed', 'modified') as $action) {
+            if (count($this->{$action}) > 0) {
+                $result[] = count($this->{$action}) . ' ' . $translate->_($action);
+            }
+        }
+        
+        return implode(', ', $result);
     }
 }

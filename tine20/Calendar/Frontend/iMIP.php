@@ -272,9 +272,9 @@ class Calendar_Frontend_iMIP
         }
         
         // NOTE: originator might also be reply-to instead of from
-        // NOTE: originator might act on behalf of organizer ("SEND-BY")
-        // NOTE: an existing event might be updateable by an non organizer ("SEND-BY") originator
-        // NOTE: CUA might skip the SEND-BY param => bad luck
+        // NOTE: originator might act on behalf of organizer ("SENT-BY    ")
+        // NOTE: an existing event might be updateable by an non organizer ("SENT-BY    ") originator
+        // NOTE: CUA might skip the SENT-BY     param => bad luck
         /*
         if ($_assertOriginator) {
             $result &= $this->_assertOriginator($_iMIP, $organizer, 'organizer');

@@ -1,11 +1,12 @@
 # 
 # Translators:
 # cblin_decalog <c.blin@decalog.net>, 2012
+# Gurney <inscription@arrakeen.net>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"PO-Revision-Date: 2013-11-20 17:04+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -19,24 +20,28 @@ msgstr ""
 
 #: Acl/Rights.php:105
 msgid "manage shared addressbooks"
-msgstr "gérer les carnets d'adresse partagés"
+msgstr "gérer les répertoires partagés"
 
 #: Acl/Rights.php:106
 msgid "Create new shared addressbook folders"
-msgstr "Créer de nouveaux dossiers de carnets d'adresses partagés"
+msgstr "Ajouter des répertoires partagés"
 
 #: Acl/Rights.php:109
 msgid "manage shared addressbook favorites"
-msgstr "gérer les favoris du carnet d'adresses partagé"
+msgstr "gérer les répertoires partagés favoris"
 
 #: Acl/Rights.php:110
 msgid "Create or update shared addressbook favorites"
-msgstr "Créer ou mettre à jour les favoris du carnet d'adresses partagé"
+msgstr "Créer ou mettre à jour les filtres du répertoire partagé"
+
+#: Frontend/CardDAV/AllContacts.php:41
+msgid "All Contacts"
+msgstr ""
 
 #: Controller.php:105
 #, python-format
 msgid "%s's personal addressbook"
-msgstr "Carnet d'adresses de %s"
+msgstr "Répertoire personnel de %s"
 
 #: Import/definitions/adb_outlook_import_csv.xml:13
 msgid "Contact CSV import from Outlook address book"
@@ -44,7 +49,7 @@ msgstr "Import de contact depuis CSV Outlook"
 
 #: Import/definitions/adb_google_import_csv.xml:12
 msgid "Contact import from Google address book"
-msgstr "Import de contact depuis le carnet d'adresse Google "
+msgstr "Importer les contacts du répertoire Google "
 
 #: Import/definitions/adb_tine_import_csv.xml:11
 msgid "Contact CSV import"
@@ -80,21 +85,21 @@ msgstr "Doublons dans les champs du contact"
 msgid ""
 "These fields are checked when a new contact is created. If a record with the"
 " same data in the fields is found, a duplicate exception is thrown."
-msgstr "Ces champs sont vérifiés quand un nouveau contact est créé. Si un enregistrement avec les mêmes données est trouvé lors de la création, une erreur se produit."
+msgstr "Ces informations sont obligatoires pour la création d'un nouveau contact. En cas de doublon, une erreur se produit."
 
 #: Config.php:59
 msgid "Contact salutations available"
-msgstr "Signatures disponibles"
+msgstr "Civilités disponibles"
 
 #: Config.php:61
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
-msgstr "Signatures disponibles. Attention, certaines valeurs peuvent affectés la synchronisation ou l'export dans d'autres modules que le carnet d'adresses."
+msgstr "Civilités disponibles. Attention, certains choix peuvent affecter la synchronisation ou l'export vers d'autres gestionnaires de répertoires."
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
-msgstr "Règles de formattage des adresses pour la récupération"
+msgstr "Règles de formattage des adresses"
 
 #: Config.php:71
 msgid "Path to a XML file with address parsing rules."
@@ -137,7 +142,7 @@ msgstr "Mes contacts"
 
 #: Setup/Initialize.php:155
 msgid "All contacts in my Addressbooks"
-msgstr "Tous les contacts de mon carnet d'adresses"
+msgstr "Tout mon répertoire"
 
 #: Setup/Initialize.php:167
 msgid "Last modified by me"
@@ -153,11 +158,11 @@ msgstr "Tous les contacts"
 
 #: Preference.php:65
 msgid "Default Addressbook"
-msgstr "Carnet d'adresses par défaut"
+msgstr "Répertoire par défaut"
 
 #: Preference.php:66
 msgid "The default addressbook for new contacts"
-msgstr "Carnet d'adresses par défaut pour les nouveaux contacts"
+msgstr "Répertoire par défaut pour les nouveaux contacts"
 
 #: Preference.php:69
 msgid "Default Favorite"
@@ -165,7 +170,7 @@ msgstr "Favoris par défauts"
 
 #: Preference.php:70
 msgid "The default favorite which is loaded on addressbook startup"
-msgstr "Les favoris chargés par défaut au démarrage"
+msgstr "Filtre utilisé lors de l'ouverture du répertoire"
 
 #: Export/Pdf.php:37
 msgid "Business Contact Data"
@@ -420,8 +425,8 @@ msgstr "Localisation géographique"
 #: js/ContactGrid.js:148 js/ContactGrid.js:149 js/ContactGrid.js:150
 msgid "Export {0}"
 msgid_plural "Export {0}"
-msgstr[0] "Export {0}"
-msgstr[1] "Export {0}"
+msgstr[0] "Exporter le {0}"
+msgstr[1] "Exporter les {0}"
 
 #: js/ContactGrid.js:159
 msgid "Export as PDF"
@@ -441,7 +446,7 @@ msgstr "Exporter au format XLS"
 
 #: js/ContactGrid.js:187
 msgid "Export as ..."
-msgstr "Exporter..."
+msgstr "Exporter au format..."
 
 #: js/ContactGrid.js:199
 msgid "Import contacts"
@@ -449,14 +454,14 @@ msgstr "Importer des contacts"
 
 #: js/ContactGrid.js:288
 msgid "Contact of a user account"
-msgstr ""
+msgstr "Compte utilisateur"
 
 #: js/ContactGrid.js:288 js/ContactFilterModel.js:35 js/Model.js:95
 #: js/Model.js:134
 msgid "Contact"
 msgid_plural "Contacts"
-msgstr[0] "Contact"
-msgstr[1] "Contacts"
+msgstr[0] "contact"
+msgstr[1] "contacts"
 
 #: js/ContactGridDetailsPanel.js:62 js/Model.js:95
 msgid "Contacts"
@@ -518,7 +523,7 @@ msgstr "E-Mail (personnel)"
 #: js/ContactEditDialog.js:270 js/Model.js:34 js/Model.js:151 js/Model.js:152
 #: js/Model.js:153 js/Model.js:154 js/Model.js:155
 msgid "Company Address"
-msgstr "Adresse de l'entreprise"
+msgstr "Adresse professionnelle"
 
 #: js/ContactEditDialog.js:277 js/ContactEditDialog.js:306
 msgid "Street 2"
@@ -644,12 +649,12 @@ msgstr "Site Internet (personnel)"
 #: js/Model.js:99 js/Model.js:206 js/Addressbook.js:32
 msgid "Addressbook"
 msgid_plural "Addressbooks"
-msgstr[0] "Carnet d'adresses"
-msgstr[1] "Carnets d'adresses"
+msgstr[0] "Répertoire"
+msgstr[1] "Répertoires"
 
 #: js/Model.js:99 js/Model.js:206
 msgid "Addressbooks"
-msgstr "Carnets d'adresses"
+msgstr "Répertoires"
 
 #: js/Model.js:134
 msgid "User Account"
@@ -657,7 +662,7 @@ msgstr "Compte d'utilisateur"
 
 #: js/Model.js:137
 msgid "Quick Search"
-msgstr ""
+msgstr "Recherche rapide"
 
 #: js/Model.js:162
 msgid "Last Modified Time"

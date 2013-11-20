@@ -90,17 +90,9 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
             exit;
             
         } catch (Exception $exception) {
-            if (! is_object(Tinebase_Core::getLogger())) {
-                // no logger -> exception happened very early
-                error_log($exception);
-                header('HTTP/1.0 503 Service Unavailable');
-                die('Service Unavailable');
-            }
-            
             Tinebase_Exception::log($exception);
             
             try {
-                // check if setup is required
                 $setupController = Setup_Controller::getInstance();
                 if ($setupController->setupRequired()) {
                     $this->_method = 'Tinebase.setupRequired';
@@ -111,7 +103,6 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 $server->handle(array('method' => $this->_method));
                 
             } catch (Exception $e) {
-                error_log($exception);
                 header('HTTP/1.0 503 Service Unavailable');
                 die('Service Unavailable');
             }

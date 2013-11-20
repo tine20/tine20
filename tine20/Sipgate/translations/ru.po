@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-05 12:53+0000\n"
-"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
+"PO-Revision-Date: 2013-11-20 16:25+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -95,7 +95,7 @@ msgstr ""
 msgid "Possible connection type of services"
 msgstr ""
 
-#: Config.php:68 js/AccountGridPanel.js:98 js/AccountEditDialog.js:261
+#: Config.php:68 js/AccountGridPanel.js:98 js/AccountEditDialog.js:262
 msgid "Account Type"
 msgstr "Тип учётной записи"
 
@@ -179,7 +179,7 @@ msgstr "+1 (Ангилья)"
 
 #: Setup/calling-codes.xml:41
 msgid "+1 (Antigua and Barbuda)"
-msgstr ""
+msgstr "+1 (Антигуа и Барбуда)"
 
 #: Setup/calling-codes.xml:46
 msgid "+54 (Argentine Republic)"
@@ -195,7 +195,7 @@ msgstr "+297 (Аруба)"
 
 #: Setup/calling-codes.xml:61
 msgid "+247 (Ascension)"
-msgstr ""
+msgstr "+247 (Остров Вознесения)"
 
 #: Setup/calling-codes.xml:66
 msgid "+61 (Australia)"
@@ -203,7 +203,7 @@ msgstr "+61 (Австралия)"
 
 #: Setup/calling-codes.xml:71
 msgid "+672 (Australian External Territories)"
-msgstr ""
+msgstr "+672 (Австралийские внешние территории)"
 
 #: Setup/calling-codes.xml:76
 msgid "+43 (Austria)"
@@ -331,7 +331,7 @@ msgstr "+57 (Колумбия (Республика))"
 
 #: Setup/calling-codes.xml:231
 msgid "+269 (Comoros (Union of the))"
-msgstr ""
+msgstr "+269 (Коморы (Союз Коморских Островов))"
 
 #: Setup/calling-codes.xml:236
 msgid "+242 (Congo (Republic of the))"
@@ -339,7 +339,7 @@ msgstr "+242 (Конго (Республика))"
 
 #: Setup/calling-codes.xml:241
 msgid "+682 (Cook Islands)"
-msgstr ""
+msgstr "+682 (Острова Кука)"
 
 #: Setup/calling-codes.xml:246
 msgid "+506 (Costa Rica)"
@@ -347,7 +347,7 @@ msgstr "+506 (Коста-Рика)"
 
 #: Setup/calling-codes.xml:251
 msgid "+225 (Côte d'Ivoire (Republic of))"
-msgstr ""
+msgstr "+225 (Кот-д'Ивуар (Республика))"
 
 #: Setup/calling-codes.xml:256
 msgid "+385 (Croatia (Republic of))"
@@ -363,11 +363,11 @@ msgstr "+357 (Кипр (Республика))"
 
 #: Setup/calling-codes.xml:271
 msgid "+420 (Czech Republic)"
-msgstr ""
+msgstr "+420 (Чешская Республика)"
 
 #: Setup/calling-codes.xml:276
 msgid "+850 (Democratic People's Republic of Korea)"
-msgstr ""
+msgstr "+850 (Корейская Народно-Демократическая Республика)"
 
 #: Setup/calling-codes.xml:281
 msgid "+243 (Democratic Republic of the Congo)"
@@ -375,7 +375,7 @@ msgstr "+243 (Демократическая Республика Конго)"
 
 #: Setup/calling-codes.xml:286
 msgid "+670 (Democratic Republic of Timor-Leste)"
-msgstr ""
+msgstr "+670 (Демократическая Республика Тимор-Лешти)"
 
 #: Setup/calling-codes.xml:291
 msgid "+45 (Denmark)"
@@ -423,19 +423,19 @@ msgstr "+372 (Эстония (Республика))"
 
 #: Setup/calling-codes.xml:346
 msgid "+251 (Ethiopia (Federal Democratic Republic of))"
-msgstr ""
+msgstr "+251 (Эфиопия (Федеративная Демократическая Республика))"
 
 #: Setup/calling-codes.xml:351
 msgid "+500 (Falkland Islands (Malvinas))"
-msgstr ""
+msgstr "+500 (Фолклендские острова)"
 
 #: Setup/calling-codes.xml:356
 msgid "+298 (Faroe Islands)"
-msgstr ""
+msgstr "+298 (Фарерские острова)"
 
 #: Setup/calling-codes.xml:361
 msgid "+679 (Fiji (Republic of))"
-msgstr ""
+msgstr "+679 (Фиджи (Республика))"
 
 #: Setup/calling-codes.xml:366
 msgid "+358 (Finland)"
@@ -447,15 +447,15 @@ msgstr "+33 (Франция)"
 
 #: Setup/calling-codes.xml:376
 msgid "+594 (French Guiana (French Department of))"
-msgstr ""
+msgstr "+594 (Французская Гвиана (Департамент Франции))"
 
 #: Setup/calling-codes.xml:381
 msgid "+689 (French Polynesia (Territoire français d'outre-mer))"
-msgstr ""
+msgstr "+689 (Французская Полинезия (Заморская территория Франции))"
 
 #: Setup/calling-codes.xml:386
 msgid "+241 (Gabonese Republic)"
-msgstr ""
+msgstr "+241 (Габонская Республика)"
 
 #: Setup/calling-codes.xml:391
 msgid "+220 (Gambia (Republic of the))"
@@ -495,7 +495,7 @@ msgstr "+388 (Группа стран, общий код)"
 
 #: Setup/calling-codes.xml:436
 msgid "+590 (Guadeloupe (French Department of))"
-msgstr ""
+msgstr "+590 (Гваделупа (Департамент Франции))"
 
 #: Setup/calling-codes.xml:441
 msgid "+1 (Guam)"
@@ -615,7 +615,7 @@ msgstr "+81 (Япония)"
 
 #: Setup/calling-codes.xml:586
 msgid "+962 (Jordan (Hashemite Kingdom of))"
-msgstr ""
+msgstr "+962 (Иорданское Хашимитское Королевство)"
 
 #: Setup/calling-codes.xml:591
 msgid "+7 (Kazakhstan (Republic of))"
@@ -643,7 +643,7 @@ msgstr "+996 (Киргизия)"
 
 #: Setup/calling-codes.xml:621
 msgid "+856 (Lao People's Democratic Republic)"
-msgstr ""
+msgstr "+856 (Лаосская Народно-Демократическая Республика)"
 
 #: Setup/calling-codes.xml:626
 msgid "+371 (Latvia (Republic of))"
@@ -655,7 +655,7 @@ msgstr "+961 (Ливан)"
 
 #: Setup/calling-codes.xml:636
 msgid "+266 (Lesotho (Kingdom of))"
-msgstr ""
+msgstr "+266 (Лесото (Королевство))"
 
 #: Setup/calling-codes.xml:641
 msgid "+231 (Liberia (Republic of))"
@@ -663,11 +663,11 @@ msgstr "+231 (Либерия (Республика))"
 
 #: Setup/calling-codes.xml:646
 msgid "+218 (Libya (Socialist People's Libyan Arab Jamahiriya))"
-msgstr ""
+msgstr "+218 (Ливия (Государство))"
 
 #: Setup/calling-codes.xml:651
 msgid "+423 (Liechtenstein (Principality of))"
-msgstr ""
+msgstr "+423 (Лихтенштейн (Княжество))"
 
 #: Setup/calling-codes.xml:656
 msgid "+370 (Lithuania (Republic of))"
@@ -679,7 +679,7 @@ msgstr "+352 (Люксембург)"
 
 #: Setup/calling-codes.xml:666
 msgid "+853 (Macao, China)"
-msgstr ""
+msgstr "+853 (Макао, Китай)"
 
 #: Setup/calling-codes.xml:671
 msgid "+261 (Madagascar (Republic of))"
@@ -707,23 +707,23 @@ msgstr "+356 (Мальта)"
 
 #: Setup/calling-codes.xml:701
 msgid "+692 (Marshall Islands (Republic of the))"
-msgstr ""
+msgstr "+692 (Маршалловы Острова (Республика))"
 
 #: Setup/calling-codes.xml:706
 msgid "+596 (Martinique (French Department of))"
-msgstr ""
+msgstr "+596 (Мартиника (Департамент Франции))"
 
 #: Setup/calling-codes.xml:711
 msgid "+222 (Mauritania (Islamic Republic of))"
-msgstr ""
+msgstr "+222 (Мавритания (Исламская Республика))"
 
 #: Setup/calling-codes.xml:716
 msgid "+230 (Mauritius (Republic of))"
-msgstr ""
+msgstr "+230 (Маврикий (Республика))"
 
 #: Setup/calling-codes.xml:721
 msgid "+269 (Mayotte)"
-msgstr ""
+msgstr "+269 (Майотта)"
 
 #: Setup/calling-codes.xml:726
 msgid "+52 (Mexico)"
@@ -731,7 +731,7 @@ msgstr "+52 (Мексика)"
 
 #: Setup/calling-codes.xml:731
 msgid "+691 (Micronesia (Federated States of))"
-msgstr ""
+msgstr "+691 (Микронезия (Федеративные Штаты))"
 
 #: Setup/calling-codes.xml:736
 msgid "+373 (Moldova (Republic of))"
@@ -739,7 +739,7 @@ msgstr "+373 (Молдавия (Республика))"
 
 #: Setup/calling-codes.xml:741
 msgid "+377 (Monaco (Principality of))"
-msgstr ""
+msgstr "+377 (Монако (Княжество))"
 
 #: Setup/calling-codes.xml:746
 msgid "+976 (Mongolia)"
@@ -747,7 +747,7 @@ msgstr "+976 (Монголия)"
 
 #: Setup/calling-codes.xml:751
 msgid "+1 (Montserrat)"
-msgstr ""
+msgstr "+1 (Монтсеррат)"
 
 #: Setup/calling-codes.xml:756
 msgid "+212 (Morocco (Kingdom of))"
@@ -759,7 +759,7 @@ msgstr "+258 (Мозамбик (Республика))"
 
 #: Setup/calling-codes.xml:766
 msgid "+95 (Myanmar (Union of))"
-msgstr ""
+msgstr "+95 (Мьянма (Республика Союза))"
 
 #: Setup/calling-codes.xml:771
 msgid "+264 (Namibia (Republic of))"
@@ -775,15 +775,15 @@ msgstr "+977 (Непал)"
 
 #: Setup/calling-codes.xml:786
 msgid "+31 (Netherlands (Kingdom of the))"
-msgstr ""
+msgstr "+31 (Нидерланды (Королевство))"
 
 #: Setup/calling-codes.xml:791
 msgid "+599 (Netherlands Antilles)"
-msgstr ""
+msgstr "+599 (Нидерландские Антильские острова)"
 
 #: Setup/calling-codes.xml:796
 msgid "+687 (New Caledonia (Territoire français d'outre-mer))"
-msgstr ""
+msgstr "+687 (Новая Каледония (Заморская территория Франции))"
 
 #: Setup/calling-codes.xml:801
 msgid "+64 (New Zealand)"
@@ -807,7 +807,7 @@ msgstr "+683 (Ниуэ)"
 
 #: Setup/calling-codes.xml:826
 msgid "+1 (Northern Mariana Islands (Commonwealth of the))"
-msgstr ""
+msgstr "+1 (Северные Марианские острова (Содружество))"
 
 #: Setup/calling-codes.xml:831
 msgid "+47 (Norway)"
@@ -815,7 +815,7 @@ msgstr "+47 (Ногвегия)"
 
 #: Setup/calling-codes.xml:836
 msgid "+968 (Oman (Sultanate of))"
-msgstr ""
+msgstr "+968 (Оман (Султанат))"
 
 #: Setup/calling-codes.xml:841
 msgid "+92 (Pakistan (Islamic Republic of))"
@@ -859,11 +859,11 @@ msgstr "+1 (Пуэрто-Рико)"
 
 #: Setup/calling-codes.xml:891
 msgid "+974 (Qatar (State of))"
-msgstr ""
+msgstr "+974 (Катар (Государство))"
 
 #: Setup/calling-codes.xml:896
 msgid "+262 (Reunion (French Department of))"
-msgstr ""
+msgstr "+262 (Реюньон (Департамент Франции))"
 
 #: Setup/calling-codes.xml:901
 msgid "+40 (Romania)"
@@ -883,25 +883,25 @@ msgstr "+290 (Остров Святой Елены)"
 
 #: Setup/calling-codes.xml:921
 msgid "+1 (Saint Kitts and Nevis)"
-msgstr ""
+msgstr "+1 (Сент-Китс и Невис)"
 
 #: Setup/calling-codes.xml:926
 msgid "+1 (Saint Lucia)"
-msgstr ""
+msgstr "+1 (Сент-Люсия)"
 
 #: Setup/calling-codes.xml:931
 msgid ""
 "+508 (Saint Pierre and Miquelon (Collectivité territoriale de la République "
 "française))"
-msgstr ""
+msgstr "+508 (Сен-Пьер и Микелон (заморское сообщество Франции))"
 
 #: Setup/calling-codes.xml:936
 msgid "+1 (Saint Vincent and the Grenadines)"
-msgstr ""
+msgstr "+1 (Сент-Винсент и Гренадины)"
 
 #: Setup/calling-codes.xml:941
 msgid "+685 (Samoa (Independent State of))"
-msgstr ""
+msgstr "+685 (Самоа (Независимое Государство))"
 
 #: Setup/calling-codes.xml:946
 msgid "+378 (San Marino (Republic of))"
@@ -909,7 +909,7 @@ msgstr "+378 (Сан-Марино (Светлейшая Республика))"
 
 #: Setup/calling-codes.xml:951
 msgid "+239 (Sao Tome and Principe (Democratic Republic of))"
-msgstr ""
+msgstr "+239 (Сан-Томе и Принсипи (Демократическая Республика))"
 
 #: Setup/calling-codes.xml:956
 msgid "+966 (Saudi Arabia (Kingdom of))"
@@ -945,7 +945,7 @@ msgstr "+386 (Словения (Республика))"
 
 #: Setup/calling-codes.xml:996
 msgid "+677 (Solomon Islands)"
-msgstr ""
+msgstr "+677 (Соломоновы острова)"
 
 #: Setup/calling-codes.xml:1001
 msgid "+252 (Somali Democratic Republic)"
@@ -961,7 +961,7 @@ msgstr "+34 (Испания)"
 
 #: Setup/calling-codes.xml:1016
 msgid "+94 (Sri Lanka (Democratic Socialist Republic of))"
-msgstr ""
+msgstr "+94 (Шри-Ланка (Демократическая Социалистическая Республика))"
 
 #: Setup/calling-codes.xml:1021
 msgid "+249 (Sudan (Republic of the))"
@@ -1216,7 +1216,7 @@ msgstr "Закрыть"
 
 #: js/SmsEditDialog.js:112
 msgid "Loading contact..."
-msgstr ""
+msgstr "Загрузка контакта..."
 
 #: js/SmsEditDialog.js:113
 msgid "Sending message..."
@@ -1240,7 +1240,7 @@ msgstr "Ваш номер телефона"
 
 #: js/SmsEditDialog.js:270
 msgid "please choose your phone number..."
-msgstr ""
+msgstr "выберите ваш номер телефона..."
 
 #: js/SmsEditDialog.js:276 js/SmsEditDialog.js:293
 msgid "The message"
@@ -1256,7 +1256,7 @@ msgstr ""
 
 #: js/SmsEditDialog.js:293
 msgid "Message"
-msgstr ""
+msgstr "Сообщение"
 
 #: js/SmsEditDialog.js:316
 msgid "Send message to \"{0}\""
@@ -1309,7 +1309,7 @@ msgstr "-- создать новый --"
 
 #: js/SearchAddressDialog.js:145
 msgid "Select existing contact or create a new one"
-msgstr ""
+msgstr "Выберите существующий контакт или создайте новый"
 
 #: js/SearchAddressDialog.js:180
 msgid "Choose Device"
@@ -1317,10 +1317,10 @@ msgstr "Выберите устройство"
 
 #: js/SearchAddressDialog.js:211
 msgid "Add number {0} to the addressbook"
-msgstr ""
+msgstr "Добавить номер {0} в адресную книгу"
 
 #: js/LineGridPanel.js:65 js/AssignLinesGrid.js:100 js/AccountGridPanel.js:89
-#: js/AccountEditDialog.js:278
+#: js/AccountEditDialog.js:279
 msgid "Type"
 msgstr "Тип"
 
@@ -1342,11 +1342,11 @@ msgstr ""
 
 #: js/LineGridPanel.js:100 js/AssignLinesGrid.js:104
 msgid "Incoming"
-msgstr ""
+msgstr "Входящий"
 
 #: js/LineGridPanel.js:108 js/AssignLinesGrid.js:103
 msgid "Outgoing"
-msgstr ""
+msgstr "Исходящий"
 
 #: js/LineGridPanel.js:114
 msgid "Created"
@@ -1354,19 +1354,19 @@ msgstr ""
 
 #: js/LineGridPanel.js:170 js/LineGridPanel.js:171
 msgid "Synchronize Line"
-msgstr ""
+msgstr "Синхронизировать линию"
 
 #: js/LineGridPanel.js:172 js/AccountEditDialog.js:68
 msgid "Synchronize Lines"
-msgstr ""
+msgstr "Синхронизировать линии"
 
 #: js/LineGridPanel.js:174
 msgid "Synchronizes the selected line(s)"
-msgstr ""
+msgstr "Синхронизирует выбранную линию(и)"
 
 #: js/LineGridPanel.js:229
 msgid "Synchronizing..."
-msgstr ""
+msgstr "Синхронизация..."
 
 #: js/AssignLinesGrid.js:57
 msgid "Assign Lines"
@@ -1386,15 +1386,15 @@ msgstr ""
 
 #: js/AccountGridPanel.js:54
 msgid "Telephone"
-msgstr ""
+msgstr "Телефон"
 
-#: js/AccountGridPanel.js:107 js/AccountEditDialog.js:285
+#: js/AccountGridPanel.js:107 js/AccountEditDialog.js:286
 msgid "Mobile Number"
-msgstr ""
+msgstr "Мобильный телефон"
 
 #: js/DialNumberDialog.js:97
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: js/DialNumberDialog.js:161
 msgid "Select Line"
@@ -1410,7 +1410,7 @@ msgstr ""
 
 #: js/DialNumberDialog.js:211
 msgid "Dial Number {0}"
-msgstr ""
+msgstr "Набрать номер {0}"
 
 #: js/ExceptionHandler.js:18
 msgid ""
@@ -1498,7 +1498,7 @@ msgstr ""
 
 #: js/AccountEditDialog.js:44
 msgid "Synchronizing lines..."
-msgstr ""
+msgstr "Синхронизация линий..."
 
 #: js/AccountEditDialog.js:60
 msgid "Save Account"
@@ -1540,41 +1540,41 @@ msgid ""
 "lines in the next tab."
 msgstr ""
 
-#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:340
+#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:341
 msgid "Errors"
 msgstr "Ошибки"
 
-#: js/AccountEditDialog.js:257
+#: js/AccountEditDialog.js:258
 msgid "Description"
 msgstr "Описание"
 
-#: js/AccountEditDialog.js:288
+#: js/AccountEditDialog.js:289
 msgid "Sipgate Username"
 msgstr ""
 
-#: js/AccountEditDialog.js:290
+#: js/AccountEditDialog.js:291
 msgid "Hidden due to security reasons."
 msgstr ""
 
-#: js/AccountEditDialog.js:292
+#: js/AccountEditDialog.js:293
 msgid "Password"
 msgstr "Пароль"
 
-#: js/AccountEditDialog.js:296
+#: js/AccountEditDialog.js:297
 msgid "Passwort Repeat"
 msgstr "Повтор пароля"
 
-#: js/AccountEditDialog.js:302
+#: js/AccountEditDialog.js:303
 msgid "Is Validated"
 msgstr ""
 
-#: js/AccountEditDialog.js:340
+#: js/AccountEditDialog.js:341
 msgid "Please validate the account settings before saving!"
 msgstr ""
 
 #: js/Models.js:97 js/Models.js:144 js/Models.js:321
 msgid "Quick Search"
-msgstr ""
+msgstr "Быстрый поиск"
 
 #: js/Models.js:98
 msgid "Created By"

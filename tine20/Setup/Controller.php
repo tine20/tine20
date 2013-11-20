@@ -1527,9 +1527,14 @@ class Setup_Controller
      * uninstall app
      *
      * @param Tinebase_Model_Application $_application
+     * @throws Setup_Exception
      */
     protected function _uninstallApplication(Tinebase_Model_Application $_application)
     {
+        if ($this->_backend === null) {
+            throw new Setup_Exception('No setup backend available');
+        }
+        
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Uninstall ' . $_application);
         try {
             $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
@@ -1571,7 +1576,7 @@ class Setup_Controller
                     
                     unset($applicationTables[$key]);
                     
-                } catch(Zend_Db_Statement_Exception $e) {
+                } catch (Zend_Db_Statement_Exception $e) {
                     // we need to catch exceptions here, as we don't want to break here, as a table
                     // might still have some foreign keys
                     // this works with mysql only

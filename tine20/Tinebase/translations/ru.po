@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-17 18:59+0000\n"
-"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
+"PO-Revision-Date: 2013-11-20 17:04+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,7 +100,7 @@ msgid "Group"
 msgstr ""
 
 #: ModelConfiguration.php:189
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:182
 msgid "Title"
 msgstr "Заголовок"
 
@@ -524,6 +524,18 @@ msgstr "Подтверждение выхода"
 msgid "Show confirmation dialog on logout."
 msgstr "Показывать окно подтверждения при выходе."
 
+#: Record/RecordSetDiff.php:42
+msgid "added"
+msgstr ""
+
+#: Record/RecordSetDiff.php:43
+msgid "removed"
+msgstr ""
+
+#: Record/RecordSetDiff.php:44
+msgid "modified"
+msgstr ""
+
 #: Export/Spreadsheet/Ods.php:278
 msgid "Data"
 msgstr "Данные"
@@ -580,7 +592,7 @@ msgstr "О {0}"
 
 #: js/AboutDialog.js:56 js/MainMenu.js:166
 msgid "Learn more about {0}"
-msgstr ""
+msgstr "Узнать больше о {0}"
 
 #: js/AboutDialog.js:61 js/CreditsScreen.js:53 js/LicenseScreen.js:51
 #: js/PasswordChangeDialog.js:66 js/widgets/EditRecord.js:157
@@ -741,59 +753,59 @@ msgstr ""
 msgid "online open source groupware and crm"
 msgstr ""
 
-#: js/LoginPanel.js:302
+#: js/LoginPanel.js:308
 msgid "about {0} minutes"
 msgstr "около {0} минут"
 
-#: js/LoginPanel.js:307 js/LoginPanel.js:545
+#: js/LoginPanel.js:313 js/LoginPanel.js:551
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0 нужна твоя помощь"
 
-#: js/LoginPanel.js:309 js/LoginPanel.js:547
+#: js/LoginPanel.js:315 js/LoginPanel.js:553
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr "Нам нужны ваши отзывы, чтобы сделать следующую версию Tine 2.0 ещё лучше. Помогая нам, вы поможете и себе:"
 
-#: js/LoginPanel.js:315
+#: js/LoginPanel.js:321
 msgid "participate!"
 msgstr "участие!"
 
-#: js/LoginPanel.js:337
+#: js/LoginPanel.js:343
 msgid "Languages"
 msgstr "Языки"
 
-#: js/LoginPanel.js:338
+#: js/LoginPanel.js:344
 msgid "Duration"
 msgstr "Длительность"
 
-#: js/LoginPanel.js:379
+#: js/LoginPanel.js:385
 msgid "Browser incompatible"
 msgstr "Несовместимый браузер"
 
-#: js/LoginPanel.js:381
+#: js/LoginPanel.js:387
 msgid "Your browser is not supported by Tine 2.0."
 msgstr "Ваш браузер не поддерживается Tine 2.0."
 
-#: js/LoginPanel.js:386
+#: js/LoginPanel.js:392
 msgid "Browser incompatible?"
 msgstr "Несовместимый браузер?"
 
-#: js/LoginPanel.js:388
+#: js/LoginPanel.js:394
 msgid ""
 "You are using an unrecognized browser. This could result in unexpected "
 "behaviour."
 msgstr ""
 
-#: js/LoginPanel.js:394
+#: js/LoginPanel.js:400
 msgid "You might try one of these browsers:"
 msgstr "Вы можете попробовать один из этих браузеров:"
 
-#: js/LoginPanel.js:454
+#: js/LoginPanel.js:460
 msgid "Logging you in..."
 msgstr "Регистрирую Вас в..."
 
-#: js/LoginPanel.js:454 js/widgets/tree/ContextMenu.js:191
+#: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:650
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
@@ -802,31 +814,31 @@ msgstr "Регистрирую Вас в..."
 msgid "Please wait"
 msgstr "Пожалуйста, подождите"
 
-#: js/LoginPanel.js:468
+#: js/LoginPanel.js:474
 msgid "Login successful. Loading {0}..."
 msgstr "Успешный вход. Загрузка {0}..."
 
-#: js/LoginPanel.js:468 js/MainMenu.js:257
+#: js/LoginPanel.js:474 js/MainMenu.js:257
 msgid "Please wait!"
 msgstr "Пожалуйста, подождите!"
 
-#: js/LoginPanel.js:476 js/ExceptionHandler.js:225
+#: js/LoginPanel.js:482 js/ExceptionHandler.js:225
 msgid "Connection lost, please check your network!"
 msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
 
-#: js/LoginPanel.js:480
+#: js/LoginPanel.js:486
 msgid "There was an error verifying your certificate!!!"
 msgstr ""
 
-#: js/LoginPanel.js:481
+#: js/LoginPanel.js:487
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
 
-#: js/LoginPanel.js:483
+#: js/LoginPanel.js:489
 msgid "Login failure"
 msgstr "Регистрация не удалась"
 
-#: js/LoginPanel.js:502 js/widgets/dialog/CredentialsDialog.js:126
+#: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
@@ -834,13 +846,13 @@ msgstr "Регистрация не удалась"
 msgid "Errors"
 msgstr "Ошибки"
 
-#: js/LoginPanel.js:502 js/widgets/dialog/CredentialsDialog.js:126
+#: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:612
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, исправьте отмеченные ошибки."
 
-#: js/LoginPanel.js:517
+#: js/LoginPanel.js:523
 msgid "Please enter your login data"
 msgstr "Пожалуйста, введите свои данные входа в систему"
 
@@ -897,8 +909,8 @@ msgid "Your password has been changed."
 msgstr "Ваш пароль изменен."
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:936
-#: js/widgets/relation/GenericPickerGridPanel.js:949
+#: js/widgets/relation/GenericPickerGridPanel.js:939
+#: js/widgets/relation/GenericPickerGridPanel.js:952
 #: js/widgets/dialog/ImportDialog.js:654
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:287
@@ -1250,8 +1262,8 @@ msgid "Could not update tag."
 msgstr "Не удалось обновить тэг."
 
 #: js/widgets/tags/TagsPanel.js:486
-#: js/widgets/relation/GenericPickerGridPanel.js:448
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
+#: js/widgets/relation/GenericPickerGridPanel.js:449
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:191
 #: js/ExceptionDialog.js:162
 msgid "Description"
 msgstr "Описание"
@@ -1437,7 +1449,7 @@ msgstr "один из"
 
 #: js/widgets/grid/FilterModel.js:232
 msgid "none of"
-msgstr ""
+msgstr "не содержит"
 
 #: js/widgets/grid/FilterModel.js:233
 msgid "is before"
@@ -1483,7 +1495,7 @@ msgstr ""
 
 #: js/widgets/grid/FilterPanel.js:78
 msgid "Attention: There are more filters active!"
-msgstr ""
+msgstr "Внимание: фильтры могут быть скрыты"
 
 #: js/widgets/grid/FilterPanel.js:261
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
@@ -1578,7 +1590,7 @@ msgstr "сохранить в избранном"
 
 #: js/widgets/grid/FilterToolbar.js:191
 msgid "Load a favorite"
-msgstr ""
+msgstr "Загрузить избранное"
 
 #: js/widgets/grid/FilterToolbar.js:356
 msgid "select a field"
@@ -1608,7 +1620,7 @@ msgid "Name"
 msgstr "Имя"
 
 #: js/widgets/grid/LinkGridPanel.js:105
-#: js/widgets/relation/GenericPickerGridPanel.js:451
+#: js/widgets/relation/GenericPickerGridPanel.js:452
 #: js/widgets/ActivitiesPanel.js:468 js/widgets/ActivitiesPanel.js:605
 msgid "Type"
 msgstr "Тип"
@@ -1693,7 +1705,7 @@ msgid "Add to..."
 msgstr "Добавить к..."
 
 #: js/widgets/grid/GridPanel.js:1365
-#: js/widgets/relation/GenericPickerGridPanel.js:452
+#: js/widgets/relation/GenericPickerGridPanel.js:453
 #: js/widgets/dialog/AttachmentsGridPanel.js:104
 msgid "Creation Time"
 msgstr "Время создания"
@@ -1779,47 +1791,47 @@ msgstr ""
 msgid "Child"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:254
+#: js/widgets/relation/GenericPickerGridPanel.js:255
 msgid ""
 "The maximum number of {0} with the type {1} is reached. Please change the "
 "type of this relation"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:263
+#: js/widgets/relation/GenericPickerGridPanel.js:264
 msgid ""
 "The maximum number of {0}s with the type {1} is reached at the {2} you "
 "added. Please change the type of this relation or edit the {2}"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:290
+#: js/widgets/relation/GenericPickerGridPanel.js:291
 msgid "No Dialog"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:291
+#: js/widgets/relation/GenericPickerGridPanel.js:292
 msgid ""
 "The Record can't be opened. There doesn't exist any dialog for editing this "
 "Record!"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:447
+#: js/widgets/relation/GenericPickerGridPanel.js:448
 msgid "Record"
 msgstr "Запись"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:449
+#: js/widgets/relation/GenericPickerGridPanel.js:450
 msgid "Remark"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:450
+#: js/widgets/relation/GenericPickerGridPanel.js:451
 msgid "Dependency"
 msgstr "Зависимость"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:937
+#: js/widgets/relation/GenericPickerGridPanel.js:940
 msgid ""
 "The record you tried to link is already linked. Please edit the existing "
 "link."
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:950
+#: js/widgets/relation/GenericPickerGridPanel.js:953
 #: js/widgets/form/RecordPickerComboBox.js:288
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr ""
@@ -2454,7 +2466,7 @@ msgstr "История"
 
 #: js/widgets/ActivitiesPanel.js:599
 msgid "Quick Search"
-msgstr ""
+msgstr "Быстрый поиск"
 
 #: js/widgets/ActivitiesPanel.js:600 js/widgets/ActivitiesPanel.js:601
 msgid "Time"
@@ -2521,22 +2533,11 @@ msgstr "Сохранение избранного \"{0}\""
 msgid "(shared)"
 msgstr "(общее)"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:141
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:145
-msgid "Favorite not Saved"
-msgstr "Избранное не сохранено"
-
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:141
-msgid ""
-"You have to supply a shorter name! Names of favorite can only be up to 40 "
-"characters long."
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:134
+msgid "Favorite not saved"
 msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:145
-msgid "You have to supply a name for the favorite!"
-msgstr ""
-
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:216
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:200
 msgid "Shared Favorite (visible by all users)"
 msgstr ""
 
@@ -2574,7 +2575,7 @@ msgstr "установка нового языка..."
 
 #: js/widgets/MainScreen.js:264
 msgid "Save current view as favorite"
-msgstr ""
+msgstr "Сохранить этот вид как избранное"
 
 #: js/widgets/mainscreen/WestPanel.js:302
 msgid "containers"
@@ -2964,12 +2965,12 @@ msgstr "Пожалуйста, подождите или обратитесь к 
 msgid "Exception ({0})"
 msgstr ""
 
-#: Container.php:684
+#: Container.php:682
 #, python-format
 msgid "%s's personal container"
 msgstr "Личный контейнер %s"
 
-#: Container.php:1525
+#: Container.php:1523
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"

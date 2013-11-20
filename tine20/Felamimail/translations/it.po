@@ -1,13 +1,14 @@
 # 
 # Translators:
+# Daniele Gobbetti <daniele@gobbetti.name>, 2013
 # sambar <samuel.barbera@email.it>, 2013
 # gurusys <v.anzisi@gurusys.it>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-02 11:06+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-10-27 14:40+0000\n"
+"Last-Translator: Daniele Gobbetti <daniele@gobbetti.name>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -256,7 +257,7 @@ msgstr "Nuove mail"
 
 #: js/Felamimail.js:550
 msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr ""
+msgstr "Ci sono {0} nuove mail(s) nel folder {1} ({2})."
 
 #: js/Felamimail.js:670
 msgid "IMAP Credentials for {0}"
@@ -268,7 +269,7 @@ msgstr "Credenziali"
 
 #: js/Felamimail.js:826 js/Felamimail.js:859
 msgid "IMAP Error"
-msgstr ""
+msgstr "Errore IMAP"
 
 #: js/Felamimail.js:827
 msgid "No connection to IMAP server."
@@ -276,41 +277,41 @@ msgstr "Nessuna connessione al server IMAP."
 
 #: js/Felamimail.js:843
 msgid "IMAP Credentials Error"
-msgstr ""
+msgstr "Errore credenziali IMAP"
 
 #: js/Felamimail.js:844
 msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr ""
+msgstr "LE credenziali per l'email sono errate. Contattare l'amministratore"
 
 #: js/Felamimail.js:860
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
-msgstr ""
+msgstr "Uno dei folder è stato rinominato o cancellato da un altro client. Aggiornare la lista dei folder di questo account."
 
 #: js/Felamimail.js:889
 msgid "SMTP Error"
-msgstr ""
+msgstr "Errore SMTP"
 
 #: js/Felamimail.js:890
 msgid "No connection to SMTP server."
-msgstr ""
+msgstr "Impossibile collegarsi al server SMTP"
 
 #: js/Felamimail.js:898
 msgid "Sieve Error"
-msgstr ""
+msgstr "Errore Sieve"
 
 #: js/Felamimail.js:899
 msgid "No connection to Sieve server."
-msgstr ""
+msgstr "Impossibile collegarsi al server Sieve."
 
 #: js/Felamimail.js:907
 msgid "Save Sieve Script Error"
-msgstr ""
+msgstr "Errore nel salvataggio dello script Sieve"
 
 #: js/Felamimail.js:908
 msgid "Could not save script on Sieve server."
-msgstr ""
+msgstr "Impossibile salvare lo script sul server Sieve."
 
 #: js/RecipientPickerFavoritePanel.js:43
 msgid "Recipient filter"
@@ -326,19 +327,19 @@ msgstr ""
 
 #: js/FolderSelectPanel.js:75
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #: js/FolderSelectPanel.js:84
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: js/FolderSelectPanel.js:175
 msgid "Folders of account {0}"
-msgstr ""
+msgstr "Cartelle dell'Account {0}"
 
 #: js/FolderSelectPanel.js:176
 msgid "Folders of all accounts"
-msgstr ""
+msgstr "Cartelle di tutti gli account"
 
 #: js/GridPanelHook.js:34
 msgid "Compose email"
@@ -363,16 +364,16 @@ msgstr "Inoltra"
 
 #: js/MessageDisplayDialog.js:72
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 #: js/MessageDisplayDialog.js:79 js/GridPanel.js:321
 msgid "Print Message"
-msgstr ""
+msgstr "Stampa messaggio"
 
 #: js/MessageDisplayDialog.js:85 js/GridPanel.js:313 js/GridPanel.js:1345
 #: js/GridPanel.js:1361
 msgid "Print Preview"
-msgstr ""
+msgstr "Anteprima di stampa"
 
 #: js/MessageEditDialog.js:144
 msgid "Send"
@@ -380,25 +381,25 @@ msgstr "Invia"
 
 #: js/MessageEditDialog.js:152
 msgid "Search Recipients"
-msgstr ""
+msgstr "Cerca destinatari"
 
 #: js/MessageEditDialog.js:160
 msgid "Save As Draft"
-msgstr ""
+msgstr "Salva come bozza"
 
 #: js/MessageEditDialog.js:168
 msgid "Save As Template"
-msgstr ""
+msgstr "Salva come modello"
 
 #: js/MessageEditDialog.js:177
 msgid "Save Email Note"
-msgstr ""
+msgstr "Salva mail come nota"
 
 #: js/MessageEditDialog.js:185
 msgid ""
 "Activate this toggle button to save the email text as a note attached to the"
 " recipient(s) contact(s)."
-msgstr ""
+msgstr "Selezionare questa opzione per salvare il testo della email come nota associata ai destinatari."
 
 #: js/MessageEditDialog.js:189
 msgid "Reading Confirmation"
@@ -410,11 +411,11 @@ msgstr ""
 
 #: js/MessageEditDialog.js:215
 msgid "Click to search for and add recipients from the Addressbook."
-msgstr ""
+msgstr "Selezionare per cercare i destinatari nella rubrica."
 
 #: js/MessageEditDialog.js:350
 msgid "On {0}, {1} wrote"
-msgstr ""
+msgstr "In data {0}, {1} ha scritto"
 
 #: js/MessageEditDialog.js:370
 msgid "Original message"
@@ -422,7 +423,7 @@ msgstr "Messaggio originale"
 
 #: js/MessageEditDialog.js:607
 msgid "Fwd:"
-msgstr ""
+msgstr "Fwd:"
 
 #: js/MessageEditDialog.js:610
 msgid "{0} Message"
@@ -438,7 +439,7 @@ msgstr ""
 
 #: js/MessageEditDialog.js:670 js/MessageEditDialog.js:995
 msgid "Files are still uploading."
-msgstr ""
+msgstr "I file sono ancora in caricamento."
 
 #: js/MessageEditDialog.js:735 js/MessageEditDialog.js:968
 msgid "Compose email:"
@@ -452,13 +453,13 @@ msgstr "Attachment"
 msgid "From"
 msgstr "Da"
 
-#: js/MessageEditDialog.js:933 Controller/Message/Send.php:269
+#: js/MessageEditDialog.js:933 Controller/Message/Send.php:277
 msgid "Body"
 msgstr "Corpo"
 
 #: js/MessageEditDialog.js:958 js/GridDetailsPanel.js:245
 #: js/sieve/RuleConditionsPanel.js:72 js/Model.js:155 js/GridPanel.js:482
-#: Controller/Message/Send.php:269
+#: Controller/Message/Send.php:277
 msgid "Subject"
 msgstr "Oggetto"
 
@@ -480,7 +481,7 @@ msgstr "Modifica Testo Nota Email:"
 
 #: js/MessageEditDialog.js:1069
 msgid "No recipients set."
-msgstr ""
+msgstr "Nessun destinatario inserito"
 
 #: js/GridDetailsPanel.js:158
 msgid "Message not available."
@@ -563,7 +564,7 @@ msgstr ""
 
 #: js/sieve/RuleConditionsPanel.js:69 js/Model.js:156 js/GridPanel.js:488
 msgid "From (Email)"
-msgstr ""
+msgstr "Da (Email)"
 
 #: js/sieve/RuleConditionsPanel.js:70
 msgid "From (Email and Name)"
@@ -729,7 +730,7 @@ msgstr "Oggetto/Da"
 
 #: js/Model.js:157 js/GridPanel.js:494
 msgid "From (Name)"
-msgstr ""
+msgstr "Da (Nome)"
 
 #: js/Model.js:158 js/GridPanel.js:507
 msgid "To"
@@ -745,7 +746,7 @@ msgstr "Ccn"
 
 #: js/Model.js:161 js/GridPanel.js:475
 msgid "Flags"
-msgstr ""
+msgstr "Flags"
 
 #: js/Model.js:164 js/GridPanel.js:522
 msgid "Received"
@@ -765,11 +766,11 @@ msgstr[1] ""
 
 #: js/Model.js:513
 msgid "INBOX"
-msgstr ""
+msgstr "Posta in arrivo"
 
 #: js/Model.js:513
 msgid "Drafts"
-msgstr ""
+msgstr "Bozze"
 
 #: js/Model.js:513 js/GridPanel.js:514
 msgid "Sent"
@@ -777,15 +778,15 @@ msgstr "Inviata"
 
 #: js/Model.js:513
 msgid "Templates"
-msgstr ""
+msgstr "Template"
 
 #: js/Model.js:513
 msgid "Junk"
-msgstr ""
+msgstr "Posta indesiderata"
 
 #: js/Model.js:513
 msgid "Trash"
-msgstr ""
+msgstr "Cestino"
 
 #: js/Model.js:522 js/Model.js:642 js/Model.js:707
 msgid "record list"
@@ -847,19 +848,19 @@ msgstr "Rimuovi"
 
 #: js/GridPanel.js:112
 msgid "No Messages found or the cache is empty."
-msgstr ""
+msgstr "Nessun messaggio trovato o cache vuota."
 
 #: js/GridPanel.js:142
 msgid "Quota usage"
-msgstr ""
+msgstr "Utilizzo quota"
 
 #: js/GridPanel.js:240
 msgid "Compose"
-msgstr ""
+msgstr "Scrivi"
 
 #: js/GridPanel.js:275
 msgid "Toggle highlighting"
-msgstr ""
+msgstr "Attiva/disattiva l'evidenziazione"
 
 #: js/GridPanel.js:284
 msgid "Mark read/unread"
@@ -875,7 +876,7 @@ msgstr "Id"
 
 #: js/GridPanel.js:500
 msgid "Sender"
-msgstr ""
+msgstr "Mittente"
 
 #: js/GridPanel.js:577 Controller/Message/Flags.php:24
 msgid "Answered"
@@ -899,15 +900,15 @@ msgstr ""
 
 #: js/GridPanel.js:1190
 msgid "{0} %"
-msgstr ""
+msgstr "{0} %"
 
 #: js/GridPanel.js:1198
 msgid "Your quota"
-msgstr ""
+msgstr "La tua quota"
 
 #: js/GridPanel.js:1199
 msgid "{0} available (total: {1})"
-msgstr ""
+msgstr "{0} disponibile (totale: {1})"
 
 #: js/AccountEditDialog.js:85
 msgid "Signature"
