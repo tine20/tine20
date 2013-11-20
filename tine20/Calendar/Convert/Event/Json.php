@@ -96,7 +96,9 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
 
         Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-        Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($_records);
+        if (Setup_Controller::getInstance()->isFilesystemAvailable()) {
+            Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($_records);
+        }
         
         Calendar_Model_Attender::resolveAttendee($_records->attendee, TRUE, $_records);
         Calendar_Convert_Event_Json::resolveRrule($_records);
