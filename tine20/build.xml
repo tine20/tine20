@@ -260,10 +260,12 @@
     <target name="tx-pull">
         <echo msg="pull translations from transifex" />
         <exec command="tx pull -a -f --skip" passthru="true" />
-        <echo msg="commit updated strings now:" />
-        <echo msg="git add */translations" />
-        <echo msg="git commit -m '#7086: update translation files'" />
-        <echo msg="git push gerrit HEAD:refs/heads/master" />
+        <echo msg="Commit updated strings now:" />
+        <echo msg="$ git add */translations" />
+        <echo msg="$ git commit -m '#7086: update translation files'" />
+        <echo msg="$ git push gerrit HEAD:refs/heads/master" />
+        <echo msg="You might run the target translation-test now:" />
+        <echo msg="$ ./vendor/bin/phing translation-test" />
     </target>
 
     <!-- ============================================  -->
