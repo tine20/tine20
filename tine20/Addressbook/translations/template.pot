@@ -29,6 +29,10 @@ msgstr ""
 msgid "Create or update shared addressbook favorites"
 msgstr ""
 
+#: Frontend/CardDAV/AllContacts.php:41
+msgid "All Contacts"
+msgstr ""
+
 #: Controller.php:105
 #, python-format
 msgid "%s's personal addressbook"
