@@ -373,7 +373,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         if ($_value instanceof Tinebase_DateTime) {
             $locale = new Zend_Locale($_translation->getAdapter()->getLocale());
-            return Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, $_timezone, $locale);
+            return Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, $_timezone, $locale, 'datetime', true);
         }
         
         switch ($_field) {
