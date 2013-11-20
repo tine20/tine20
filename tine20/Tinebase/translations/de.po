@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 11:08+0000\n"
+"PO-Revision-Date: 2013-11-20 17:13+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -103,7 +103,7 @@ msgid "Group"
 msgstr "Gruppe"
 
 #: ModelConfiguration.php:189
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:182
 msgid "Title"
 msgstr "Bezeichnung"
 
@@ -527,6 +527,18 @@ msgstr "Ausloggen bestätigen"
 msgid "Show confirmation dialog on logout."
 msgstr "Bestätigungsdialog beim Ausloggen anzeigen."
 
+#: Record/RecordSetDiff.php:42
+msgid "added"
+msgstr "hinzugefügt"
+
+#: Record/RecordSetDiff.php:43
+msgid "removed"
+msgstr "entfernt"
+
+#: Record/RecordSetDiff.php:44
+msgid "modified"
+msgstr "geändert"
+
 #: Export/Spreadsheet/Ods.php:278
 msgid "Data"
 msgstr "Daten"
@@ -740,59 +752,59 @@ msgstr "Powered by:"
 msgid "online open source groupware and crm"
 msgstr "Open Source Groupware und CRM Lösung"
 
-#: js/LoginPanel.js:302
+#: js/LoginPanel.js:308
 msgid "about {0} minutes"
 msgstr "ungefähr {0} Minuten"
 
-#: js/LoginPanel.js:307 js/LoginPanel.js:545
+#: js/LoginPanel.js:313 js/LoginPanel.js:551
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0 benötigt Deine Hilfe"
 
-#: js/LoginPanel.js:309 js/LoginPanel.js:547
+#: js/LoginPanel.js:315 js/LoginPanel.js:553
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr "Wir brauchen regelmäßiges Feedback von Tine 2.0 -Benutzern um die nächste Version noch besser an Eure Bedürfnisse anzupassen. Helft uns und Euch mit Eurer Teilnahme:"
 
-#: js/LoginPanel.js:315
+#: js/LoginPanel.js:321
 msgid "participate!"
 msgstr "Teilnehmen!"
 
-#: js/LoginPanel.js:337
+#: js/LoginPanel.js:343
 msgid "Languages"
 msgstr "Sprachen"
 
-#: js/LoginPanel.js:338
+#: js/LoginPanel.js:344
 msgid "Duration"
 msgstr "Dauer"
 
-#: js/LoginPanel.js:379
+#: js/LoginPanel.js:385
 msgid "Browser incompatible"
 msgstr "Browser inkompatibel"
 
-#: js/LoginPanel.js:381
+#: js/LoginPanel.js:387
 msgid "Your browser is not supported by Tine 2.0."
 msgstr "Ihr Browser wird von Tine 2.0 nicht unterstützt."
 
-#: js/LoginPanel.js:386
+#: js/LoginPanel.js:392
 msgid "Browser incompatible?"
 msgstr "Browser inkompatibel?"
 
-#: js/LoginPanel.js:388
+#: js/LoginPanel.js:394
 msgid ""
 "You are using an unrecognized browser. This could result in unexpected "
 "behaviour."
 msgstr "Sie benutzen einen unbekannten Browser. Das könnte zu unerwartetem Verhalten führen."
 
-#: js/LoginPanel.js:394
+#: js/LoginPanel.js:400
 msgid "You might try one of these browsers:"
 msgstr "Sie könnten einen dieser Browser ausprobieren:"
 
-#: js/LoginPanel.js:454
+#: js/LoginPanel.js:460
 msgid "Logging you in..."
 msgstr "Sie werden angemeldet..."
 
-#: js/LoginPanel.js:454 js/widgets/tree/ContextMenu.js:191
+#: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:650
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
@@ -801,31 +813,31 @@ msgstr "Sie werden angemeldet..."
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/LoginPanel.js:468
+#: js/LoginPanel.js:474
 msgid "Login successful. Loading {0}..."
 msgstr "Anmeldung erfolgreich. {0} wird geladen..."
 
-#: js/LoginPanel.js:468 js/MainMenu.js:257
+#: js/LoginPanel.js:474 js/MainMenu.js:257
 msgid "Please wait!"
 msgstr "Bitte warten!"
 
-#: js/LoginPanel.js:476 js/ExceptionHandler.js:225
+#: js/LoginPanel.js:482 js/ExceptionHandler.js:225
 msgid "Connection lost, please check your network!"
 msgstr "Verbindungsabbruch. Bitte überprüfen Sie ihre Netzwerkverbindung!"
 
-#: js/LoginPanel.js:480
+#: js/LoginPanel.js:486
 msgid "There was an error verifying your certificate!!!"
 msgstr "Es gab einen Fehler beim verifizieren Ihres Zertifikats!"
 
-#: js/LoginPanel.js:481
+#: js/LoginPanel.js:487
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ihr Benutzername und/oder Ihr Passwort ist falsch!"
 
-#: js/LoginPanel.js:483
+#: js/LoginPanel.js:489
 msgid "Login failure"
 msgstr "Anmeldung fehlgeschlagen"
 
-#: js/LoginPanel.js:502 js/widgets/dialog/CredentialsDialog.js:126
+#: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
@@ -833,13 +845,13 @@ msgstr "Anmeldung fehlgeschlagen"
 msgid "Errors"
 msgstr "Fehler"
 
-#: js/LoginPanel.js:502 js/widgets/dialog/CredentialsDialog.js:126
+#: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:612
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben Sie die genannten Fehler."
 
-#: js/LoginPanel.js:517
+#: js/LoginPanel.js:523
 msgid "Please enter your login data"
 msgstr "Bitte geben Sie ihre Anmeldedaten ein"
 
@@ -896,8 +908,8 @@ msgid "Your password has been changed."
 msgstr "Ihr Passwort wurde geändert."
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:936
-#: js/widgets/relation/GenericPickerGridPanel.js:949
+#: js/widgets/relation/GenericPickerGridPanel.js:939
+#: js/widgets/relation/GenericPickerGridPanel.js:952
 #: js/widgets/dialog/ImportDialog.js:654
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:287
@@ -1242,8 +1254,8 @@ msgid "Could not update tag."
 msgstr "Konnte Tag nicht aktualisieren."
 
 #: js/widgets/tags/TagsPanel.js:486
-#: js/widgets/relation/GenericPickerGridPanel.js:448
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
+#: js/widgets/relation/GenericPickerGridPanel.js:449
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:191
 #: js/ExceptionDialog.js:162
 msgid "Description"
 msgstr "Beschreibung"
@@ -1597,7 +1609,7 @@ msgid "Name"
 msgstr "Name"
 
 #: js/widgets/grid/LinkGridPanel.js:105
-#: js/widgets/relation/GenericPickerGridPanel.js:451
+#: js/widgets/relation/GenericPickerGridPanel.js:452
 #: js/widgets/ActivitiesPanel.js:468 js/widgets/ActivitiesPanel.js:605
 msgid "Type"
 msgstr "Typ"
@@ -1680,7 +1692,7 @@ msgid "Add to..."
 msgstr "Hinzufügen zu ..."
 
 #: js/widgets/grid/GridPanel.js:1365
-#: js/widgets/relation/GenericPickerGridPanel.js:452
+#: js/widgets/relation/GenericPickerGridPanel.js:453
 #: js/widgets/dialog/AttachmentsGridPanel.js:104
 msgid "Creation Time"
 msgstr "Erstelldatum"
@@ -1764,47 +1776,47 @@ msgstr "Eltern"
 msgid "Child"
 msgstr "Kind"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:254
+#: js/widgets/relation/GenericPickerGridPanel.js:255
 msgid ""
 "The maximum number of {0} with the type {1} is reached. Please change the "
 "type of this relation"
 msgstr "Die maximale Anzahl von {0} mit Typ {1} wurde erreicht. Bitte ändern Sie den Typ der Verknüpfung."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:263
+#: js/widgets/relation/GenericPickerGridPanel.js:264
 msgid ""
 "The maximum number of {0}s with the type {1} is reached at the {2} you "
 "added. Please change the type of this relation or edit the {2}"
 msgstr "Die maximale Anzahl von {0} mit Typ {1} wurde bei {2} erreicht. Bitte ändern Sie den Typ der Verknüpfung oder editieren sie den {2}"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:290
+#: js/widgets/relation/GenericPickerGridPanel.js:291
 msgid "No Dialog"
 msgstr "Kein Dialog"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:291
+#: js/widgets/relation/GenericPickerGridPanel.js:292
 msgid ""
 "The Record can't be opened. There doesn't exist any dialog for editing this "
 "Record!"
 msgstr "Der Datensatz konnte nicht geöffnet werden. Es gibt keinen Dialog zum editieren dieses Datensatzes."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:447
+#: js/widgets/relation/GenericPickerGridPanel.js:448
 msgid "Record"
 msgstr "Datensatz"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:449
+#: js/widgets/relation/GenericPickerGridPanel.js:450
 msgid "Remark"
 msgstr "Anmerkung"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:450
+#: js/widgets/relation/GenericPickerGridPanel.js:451
 msgid "Dependency"
 msgstr "Abhängigkeit"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:937
+#: js/widgets/relation/GenericPickerGridPanel.js:940
 msgid ""
 "The record you tried to link is already linked. Please edit the existing "
 "link."
 msgstr "Der Datensatz, den Sie verknüpfen möchten, ist bereits verknüpft. Bitte bearbeiten Sie die bereits vorhandene Verknüpfung."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:950
+#: js/widgets/relation/GenericPickerGridPanel.js:953
 #: js/widgets/form/RecordPickerComboBox.js:288
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr "Sie versuchen den Datensatz mit sich selbst zu verknüpfen. Dieser Vorgang ist nicht erlaubt."
@@ -2505,22 +2517,11 @@ msgstr "Favorit \"{0}\" speichern"
 msgid "(shared)"
 msgstr "(geteilt)"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:141
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:145
-msgid "Favorite not Saved"
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:134
+msgid "Favorite not saved"
 msgstr "Favorit wurde nicht gespeichert"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:141
-msgid ""
-"You have to supply a shorter name! Names of favorite can only be up to 40 "
-"characters long."
-msgstr "Sie müssen einen kürzeren Namen für den Favoriten eingeben. Der Name kann maximal 40 Zeichen lang sein."
-
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:145
-msgid "You have to supply a name for the favorite!"
-msgstr "Sie müssen einen Namen für den Favoriten eingeben!"
-
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:216
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:200
 msgid "Shared Favorite (visible by all users)"
 msgstr "Gemeinsame Favoriten (sichtbar für alle Benutzer)"
 
@@ -2942,12 +2943,12 @@ msgstr "Bitte warten Sie oder kontaktieren Sie den Administrator"
 msgid "Exception ({0})"
 msgstr "Ausnahmefehler ({0})"
 
-#: Container.php:684
+#: Container.php:682
 #, python-format
 msgid "%s's personal container"
 msgstr "%s's persönlicher Ordner"
 
-#: Container.php:1525
+#: Container.php:1523
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"

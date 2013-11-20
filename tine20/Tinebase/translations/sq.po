@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 11:08+0000\n"
-"Last-Translator: jevgu <jevgu@albnet.net>\n"
+"PO-Revision-Date: 2013-11-20 17:04+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -97,7 +97,7 @@ msgid "Group"
 msgstr "Grup"
 
 #: ModelConfiguration.php:189
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:182
 msgid "Title"
 msgstr "Titull"
 
@@ -521,6 +521,18 @@ msgstr "Konfimo Daljen"
 msgid "Show confirmation dialog on logout."
 msgstr "Tredo dialogun e konfirmimit në dalje"
 
+#: Record/RecordSetDiff.php:42
+msgid "added"
+msgstr ""
+
+#: Record/RecordSetDiff.php:43
+msgid "removed"
+msgstr ""
+
+#: Record/RecordSetDiff.php:44
+msgid "modified"
+msgstr ""
+
 #: Export/Spreadsheet/Ods.php:278
 msgid "Data"
 msgstr "Të dhëna"
@@ -734,59 +746,59 @@ msgstr "Mundësuar nga"
 msgid "online open source groupware and crm"
 msgstr "GroupWare dhe CRM Burimeve të Hapura në Rrjet"
 
-#: js/LoginPanel.js:302
+#: js/LoginPanel.js:308
 msgid "about {0} minutes"
 msgstr "rreth {0} minuta"
 
-#: js/LoginPanel.js:307 js/LoginPanel.js:545
+#: js/LoginPanel.js:313 js/LoginPanel.js:551
 msgid "Tine 2.0 needs your help"
 msgstr "Tine dy të pret ty"
 
-#: js/LoginPanel.js:309 js/LoginPanel.js:547
+#: js/LoginPanel.js:315 js/LoginPanel.js:553
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr "Ne na nevoitet në mënyrë të rregullt reagimi juaj......."
 
-#: js/LoginPanel.js:315
+#: js/LoginPanel.js:321
 msgid "participate!"
 msgstr "Merr pjesë"
 
-#: js/LoginPanel.js:337
+#: js/LoginPanel.js:343
 msgid "Languages"
 msgstr "Gjuhë"
 
-#: js/LoginPanel.js:338
+#: js/LoginPanel.js:344
 msgid "Duration"
 msgstr "Kohëzgjatja"
 
-#: js/LoginPanel.js:379
+#: js/LoginPanel.js:385
 msgid "Browser incompatible"
 msgstr "Shfletues i papajtueshëm"
 
-#: js/LoginPanel.js:381
+#: js/LoginPanel.js:387
 msgid "Your browser is not supported by Tine 2.0."
 msgstr "Shfletuesi juaj nuk suportohet nga Tine dy"
 
-#: js/LoginPanel.js:386
+#: js/LoginPanel.js:392
 msgid "Browser incompatible?"
 msgstr "Shfletues i papajtueshëm"
 
-#: js/LoginPanel.js:388
+#: js/LoginPanel.js:394
 msgid ""
 "You are using an unrecognized browser. This could result in unexpected "
 "behaviour."
 msgstr "Ju po përdorni një shfletues të panjohur. Kjo mund te rezultojë me sjellje të pa pritura"
 
-#: js/LoginPanel.js:394
+#: js/LoginPanel.js:400
 msgid "You might try one of these browsers:"
 msgstr "Ju mund të provoni një nga këta shfletues"
 
-#: js/LoginPanel.js:454
+#: js/LoginPanel.js:460
 msgid "Logging you in..."
 msgstr "Duke ju futur brënda..."
 
-#: js/LoginPanel.js:454 js/widgets/tree/ContextMenu.js:191
+#: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:650
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
@@ -795,31 +807,31 @@ msgstr "Duke ju futur brënda..."
 msgid "Please wait"
 msgstr "Ju lutem prisni"
 
-#: js/LoginPanel.js:468
+#: js/LoginPanel.js:474
 msgid "Login successful. Loading {0}..."
 msgstr "Hyrja e suksesshme, Duke ngarkuar {0}..."
 
-#: js/LoginPanel.js:468 js/MainMenu.js:257
+#: js/LoginPanel.js:474 js/MainMenu.js:257
 msgid "Please wait!"
 msgstr "Ju lutem prisni!"
 
-#: js/LoginPanel.js:476 js/ExceptionHandler.js:225
+#: js/LoginPanel.js:482 js/ExceptionHandler.js:225
 msgid "Connection lost, please check your network!"
 msgstr "Lidhja humbi, kontrolloni rrjetin tuaj"
 
-#: js/LoginPanel.js:480
+#: js/LoginPanel.js:486
 msgid "There was an error verifying your certificate!!!"
 msgstr "Pati një gabim gjatë verifikimit të çertifikatës suaj!!!"
 
-#: js/LoginPanel.js:481
+#: js/LoginPanel.js:487
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Emri juaj i përdoruesi dhe/ose fjalëkalimi juaj janë gabim!!!"
 
-#: js/LoginPanel.js:483
+#: js/LoginPanel.js:489
 msgid "Login failure"
 msgstr "Hyrje e dështuar"
 
-#: js/LoginPanel.js:502 js/widgets/dialog/CredentialsDialog.js:126
+#: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
@@ -827,13 +839,13 @@ msgstr "Hyrje e dështuar"
 msgid "Errors"
 msgstr "Gabime"
 
-#: js/LoginPanel.js:502 js/widgets/dialog/CredentialsDialog.js:126
+#: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:612
 msgid "Please fix the errors noted."
 msgstr "Ju lutem rregulloni gabimet e vëna në dukje"
 
-#: js/LoginPanel.js:517
+#: js/LoginPanel.js:523
 msgid "Please enter your login data"
 msgstr "Ju lutem vendosni të dhënat tuaja të hyrjes"
 
@@ -890,8 +902,8 @@ msgid "Your password has been changed."
 msgstr "Fjalëkalimi juaj u ndryshua"
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:936
-#: js/widgets/relation/GenericPickerGridPanel.js:949
+#: js/widgets/relation/GenericPickerGridPanel.js:939
+#: js/widgets/relation/GenericPickerGridPanel.js:952
 #: js/widgets/dialog/ImportDialog.js:654
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:287
@@ -1236,8 +1248,8 @@ msgid "Could not update tag."
 msgstr "Nuk mund të përditësoj etiketën"
 
 #: js/widgets/tags/TagsPanel.js:486
-#: js/widgets/relation/GenericPickerGridPanel.js:448
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
+#: js/widgets/relation/GenericPickerGridPanel.js:449
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:191
 #: js/ExceptionDialog.js:162
 msgid "Description"
 msgstr "Përshkrim"
@@ -1591,7 +1603,7 @@ msgid "Name"
 msgstr "Emër"
 
 #: js/widgets/grid/LinkGridPanel.js:105
-#: js/widgets/relation/GenericPickerGridPanel.js:451
+#: js/widgets/relation/GenericPickerGridPanel.js:452
 #: js/widgets/ActivitiesPanel.js:468 js/widgets/ActivitiesPanel.js:605
 msgid "Type"
 msgstr "Tip"
@@ -1674,7 +1686,7 @@ msgid "Add to..."
 msgstr "Shto tek"
 
 #: js/widgets/grid/GridPanel.js:1365
-#: js/widgets/relation/GenericPickerGridPanel.js:452
+#: js/widgets/relation/GenericPickerGridPanel.js:453
 #: js/widgets/dialog/AttachmentsGridPanel.js:104
 msgid "Creation Time"
 msgstr "Koha e kijimit"
@@ -1758,47 +1770,47 @@ msgstr "Prind"
 msgid "Child"
 msgstr "Fëmijë"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:254
+#: js/widgets/relation/GenericPickerGridPanel.js:255
 msgid ""
 "The maximum number of {0} with the type {1} is reached. Please change the "
 "type of this relation"
 msgstr "është arritur numri kasimal i {0} në llojin {1}. Ju lutem ndryshoni llojin e kësaj marrdhënjeje"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:263
+#: js/widgets/relation/GenericPickerGridPanel.js:264
 msgid ""
 "The maximum number of {0}s with the type {1} is reached at the {2} you "
 "added. Please change the type of this relation or edit the {2}"
 msgstr "U arrit numri maksimal i {0}s me llojin {1} tek  {2} që ju shtuat. Ju lutem ndryshoni llojin e këtij relacioni ose modifikoni  {2}"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:290
+#: js/widgets/relation/GenericPickerGridPanel.js:291
 msgid "No Dialog"
 msgstr "S'ka Dialog "
 
-#: js/widgets/relation/GenericPickerGridPanel.js:291
+#: js/widgets/relation/GenericPickerGridPanel.js:292
 msgid ""
 "The Record can't be opened. There doesn't exist any dialog for editing this "
 "Record!"
 msgstr "E dhëna nuk mund të hapet. Nuk ekziston ndonjë dialog për të modifikuar këtë të dhënë"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:447
+#: js/widgets/relation/GenericPickerGridPanel.js:448
 msgid "Record"
 msgstr "E dhënë"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:449
+#: js/widgets/relation/GenericPickerGridPanel.js:450
 msgid "Remark"
 msgstr "Vërejtje"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:450
+#: js/widgets/relation/GenericPickerGridPanel.js:451
 msgid "Dependency"
 msgstr "Varësi"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:937
+#: js/widgets/relation/GenericPickerGridPanel.js:940
 msgid ""
 "The record you tried to link is already linked. Please edit the existing "
 "link."
 msgstr "E dhëna që po mundoheni të lidhni është tashmë e lidhur. Ju lutem modifikoni lidhjen ekzistuese"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:950
+#: js/widgets/relation/GenericPickerGridPanel.js:953
 #: js/widgets/form/RecordPickerComboBox.js:288
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr "Ju u munduhat të lidhni një të dhënë me vehtëveten. Kjo gjë nuk lejohet!"
@@ -2499,22 +2511,11 @@ msgstr "Duke ruajtur të preferuarën \"{0}\""
 msgid "(shared)"
 msgstr "(ndarë)"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:141
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:145
-msgid "Favorite not Saved"
-msgstr "E preferuara nuk ruajt"
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:134
+msgid "Favorite not saved"
+msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:141
-msgid ""
-"You have to supply a shorter name! Names of favorite can only be up to 40 "
-"characters long."
-msgstr "Ju duhet të jepni një emër më të shkurtër! Emrat e të preferuarave mund të jenë deri me 40 gërma."
-
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:145
-msgid "You have to supply a name for the favorite!"
-msgstr "Ju duhet të jepni një emër për këtë të preferuar"
-
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:216
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:200
 msgid "Shared Favorite (visible by all users)"
 msgstr "Të preferuara të ndara (të dukshme nga të gjithë përdoruesit)"
 
@@ -2936,12 +2937,12 @@ msgstr "Ju lutem prisni ose kontaktoni administratorin"
 msgid "Exception ({0})"
 msgstr "Përjashtim ({0})"
 
-#: Container.php:684
+#: Container.php:682
 #, python-format
 msgid "%s's personal container"
 msgstr "Kontenieri personal i %s"
 
-#: Container.php:1525
+#: Container.php:1523
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"

@@ -306,15 +306,15 @@ msgstr "Facturable"
 msgid "Cleared"
 msgstr "Autorizado"
 
-#: js/TimesheetEditDialog.js:261
+#: js/TimesheetEditDialog.js:263
 msgid "Failed"
 msgstr "Falló"
 
-#: js/TimesheetEditDialog.js:262
+#: js/TimesheetEditDialog.js:264
 msgid "Could not save {0}."
 msgstr "No se pudo grabar {0}."
 
-#: js/TimesheetEditDialog.js:263
+#: js/TimesheetEditDialog.js:265
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Fecha limite de reservación para esta Cuenta de Trabajo  a sido excedida."
 

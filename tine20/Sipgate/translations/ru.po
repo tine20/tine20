@@ -95,7 +95,7 @@ msgstr ""
 msgid "Possible connection type of services"
 msgstr ""
 
-#: Config.php:68 js/AccountGridPanel.js:98 js/AccountEditDialog.js:261
+#: Config.php:68 js/AccountGridPanel.js:98 js/AccountEditDialog.js:262
 msgid "Account Type"
 msgstr "Тип учётной записи"
 
@@ -1320,7 +1320,7 @@ msgid "Add number {0} to the addressbook"
 msgstr "Добавить номер {0} в адресную книгу"
 
 #: js/LineGridPanel.js:65 js/AssignLinesGrid.js:100 js/AccountGridPanel.js:89
-#: js/AccountEditDialog.js:278
+#: js/AccountEditDialog.js:279
 msgid "Type"
 msgstr "Тип"
 
@@ -1388,7 +1388,7 @@ msgstr ""
 msgid "Telephone"
 msgstr "Телефон"
 
-#: js/AccountGridPanel.js:107 js/AccountEditDialog.js:285
+#: js/AccountGridPanel.js:107 js/AccountEditDialog.js:286
 msgid "Mobile Number"
 msgstr "Мобильный телефон"
 
@@ -1540,35 +1540,35 @@ msgid ""
 "lines in the next tab."
 msgstr ""
 
-#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:340
+#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:341
 msgid "Errors"
 msgstr "Ошибки"
 
-#: js/AccountEditDialog.js:257
+#: js/AccountEditDialog.js:258
 msgid "Description"
 msgstr "Описание"
 
-#: js/AccountEditDialog.js:288
+#: js/AccountEditDialog.js:289
 msgid "Sipgate Username"
 msgstr ""
 
-#: js/AccountEditDialog.js:290
+#: js/AccountEditDialog.js:291
 msgid "Hidden due to security reasons."
 msgstr ""
 
-#: js/AccountEditDialog.js:292
+#: js/AccountEditDialog.js:293
 msgid "Password"
 msgstr "Пароль"
 
-#: js/AccountEditDialog.js:296
+#: js/AccountEditDialog.js:297
 msgid "Passwort Repeat"
 msgstr "Повтор пароля"
 
-#: js/AccountEditDialog.js:302
+#: js/AccountEditDialog.js:303
 msgid "Is Validated"
 msgstr ""
 
-#: js/AccountEditDialog.js:340
+#: js/AccountEditDialog.js:341
 msgid "Please validate the account settings before saving!"
 msgstr ""
 

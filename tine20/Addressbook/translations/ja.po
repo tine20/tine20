@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-19 16:33+0000\n"
+"PO-Revision-Date: 2013-11-20 17:04+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/tine20/language/ja/)\n"
 "MIME-Version: 1.0\n"
@@ -30,6 +30,10 @@ msgstr ""
 
 #: Acl/Rights.php:110
 msgid "Create or update shared addressbook favorites"
+msgstr ""
+
+#: Frontend/CardDAV/AllContacts.php:41
+msgid "All Contacts"
 msgstr ""
 
 #: Controller.php:105

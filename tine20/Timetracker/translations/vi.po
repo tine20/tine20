@@ -304,15 +304,15 @@ msgstr "Có thể trả"
 msgid "Cleared"
 msgstr "Đã xóa"
 
-#: js/TimesheetEditDialog.js:261
+#: js/TimesheetEditDialog.js:263
 msgid "Failed"
 msgstr "Lỗi"
 
-#: js/TimesheetEditDialog.js:262
+#: js/TimesheetEditDialog.js:264
 msgid "Could not save {0}."
 msgstr "Không thể lưu lại {0}"
 
-#: js/TimesheetEditDialog.js:263
+#: js/TimesheetEditDialog.js:265
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Đặt thời gian kết thúc cho tài khoản thời gian sẽ kết thúc."
 

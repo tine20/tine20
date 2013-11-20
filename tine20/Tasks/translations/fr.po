@@ -278,6 +278,6 @@ msgstr "Modifié par"
 msgid "Created By"
 msgstr "Créé par"
 
-#: Controller/Task.php:198
+#: Controller/Task.php:202
 msgid "Notification for Task "
 msgstr "Notification "

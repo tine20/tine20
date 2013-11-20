@@ -7,11 +7,12 @@
 # mspahn <ms@ansta.lt>, 2013
 # mspahn <ms@ansta.lt>, 2013
 # pschuele <p.schuele@metaways.de>, 2013
+# pschuele <p.schuele@metaways.de>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-16 14:42+0000\n"
+"PO-Revision-Date: 2013-11-20 17:12+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -22,6 +23,55 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Exception/NoAccount.php:26
+msgid "No personal account found"
+msgstr "Kein Personalkonto gefunden"
+
+#: Exception/NoAccount.php:31
+msgid "An existing personal account could not be found. Please create one!"
+msgstr "Es konnte kein Personalkonto gefunden werden. Bitte erstellen Sie eines!"
+
+#: Exception/ContractDates.php:26
+msgid "Negative Timespace"
+msgstr "Negativer Zeitraum"
+
+#: Exception/ContractDates.php:31
+msgid "The start date of the contract must be before the end date!"
+msgstr "Der Anfang des Vertrages muss vor dem Ende sein!"
+
+#: Exception/NoContract.php:26
+msgid "No contract could be found."
+msgstr "Es  konnte kein Vertrag gefunden werden."
+
+#: Exception/NoContract.php:31
+msgid "Please create a contract for this employee!"
+msgstr "Bitte erstellen Sie einen Vertrag für diesen Mitarbeiter!"
+
+#: Exception/ContractOverlap.php:26
+msgid "Contracts overlap"
+msgstr "Überlappende Verträge"
+
+#: Exception/ContractOverlap.php:31
+msgid "The contracts must not overlap!"
+msgstr "Die Verträge dürfen sich nicht überlappen!"
+
+#: Exception/RemainingNotBookable.php:26
+msgid "Not allowed!"
+msgstr "Nicht erlaubt!"
+
+#: Exception/RemainingNotBookable.php:31
+msgid ""
+"It's only allowed to book remaining vacation days from years in the past!"
+msgstr "Es ist nur erlaubt, Resturlaub aus vergangenen Jahren zu buchen!"
+
+#: Exception/NoCurrentContract.php:33
+msgid "No current contract!"
+msgstr "Kein aktueller Vertrag!"
+
+#: Exception/NoCurrentContract.php:38
+msgid "A current contract could not be found!"
+msgstr "Es  konnte kein aktueller Vertrag gefunden werden!"
 
 #: Exception/ContractNotEditable.php:26
 msgid "Contract not editable"
@@ -47,8 +97,8 @@ msgstr "Bearbeiten von persönlichen Daten und Vertragsdaten des Mitarbeiters."
 msgid "You do not have admin rights on HumanResources"
 msgstr "Sie haben keine Administratorenrechte am Modul Human Ressources"
 
-#: Model/Contract.php:33 js/ContractGridPanel.js:43
-#: js/ContractEditDialog.js:209 js/ContractEditDialog.js:222
+#: Model/Contract.php:33 js/ContractGridPanel.js:42
+#: js/ContractEditDialog.js:210 js/ContractEditDialog.js:223
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Vertrag"
@@ -62,23 +112,23 @@ msgid_plural "Employees"
 msgstr[0] "Mitarbeiter"
 msgstr[1] "Mitarbeiter"
 
-#: Model/Contract.php:60 Model/CostCenter.php:72 js/ContractEditDialog.js:227
+#: Model/Contract.php:61 Model/CostCenter.php:72 js/ContractEditDialog.js:228
 msgid "Start Date"
 msgstr "Anfang"
 
-#: Model/Contract.php:69 js/ContractEditDialog.js:228
+#: Model/Contract.php:71 js/ContractEditDialog.js:229
 msgid "End Date"
 msgstr "Ende"
 
-#: Model/Contract.php:74 js/FreeTimeGridPanel.js:66 js/FreeTimeGridPanel.js:67
+#: Model/Contract.php:77 js/FreeTimeGridPanel.js:76 js/FreeTimeGridPanel.js:77
 msgid "Vacation Days"
 msgstr "Urlaubstage"
 
-#: Model/Contract.php:81 js/ContractEditDialog.js:239
+#: Model/Contract.php:85 js/ContractEditDialog.js:240
 msgid "Feast Calendar"
 msgstr "Feiertagskalender"
 
-#: Model/Contract.php:90
+#: Model/Contract.php:95
 msgid "Workingtime"
 msgstr "Arbeitszeit"
 
@@ -98,12 +148,12 @@ msgid "Type"
 msgstr "Typ"
 
 #: Model/FreeTime.php:77 Model/ExtraFreeTime.php:64 Model/Employee.php:83
-#: js/EmployeeEditDialog.js:428 js/FreeTimeEditDialog.js:299
+#: js/EmployeeEditDialog.js:428 js/FreeTimeEditDialog.js:498
 #: js/ExtraFreeTimeEditDialog.js:154
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:163
+#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:347
 msgid "Status"
 msgstr "Status"
 
@@ -111,7 +161,15 @@ msgstr "Status"
 msgid "First Day"
 msgstr "Erster Tag"
 
-#: Model/FreeTime.php:93
+#: Model/FreeTime.php:92
+msgid "Last Day"
+msgstr "Letzter Tag"
+
+#: Model/FreeTime.php:96
+msgid "Days Count"
+msgstr "Anzahl der Tage"
+
+#: Model/FreeTime.php:102
 msgid "Free Days"
 msgstr "freie Tage"
 
@@ -130,17 +188,21 @@ msgstr "Tage"
 msgid "Expiration date"
 msgstr "Ablaufdatum"
 
-#: Model/Account.php:34
+#: Model/Account.php:34 js/FreeTimeEditDialog.js:262
 msgid "Personal account"
 msgid_plural "Personal accounts"
 msgstr[0] "Personalkonto"
 msgstr[1] "Personalkonten"
 
-#: Model/Account.php:63 js/FreeTimeEditDialog.js:194
+#: Model/Account.php:52
+msgid "Quick search"
+msgstr "Schnellsuche"
+
+#: Model/Account.php:71
 msgid "Year"
 msgstr "Jahr"
 
-#: Model/Account.php:71
+#: Model/Account.php:78
 msgid "Extra free times"
 msgstr "Sonderurlaub"
 
@@ -276,13 +338,13 @@ msgstr "Verträge"
 msgid "Cost Centers"
 msgstr "Kostenstellen"
 
-#: Model/Employee.php:256 Setup/Initialize.php:74 js/FreeTimeGridPanel.js:65
-#: js/FreeTimeGridPanel.js:213
+#: Model/Employee.php:256 Setup/Initialize.php:74 js/FreeTimeGridPanel.js:75
+#: js/FreeTimeGridPanel.js:278
 msgid "Vacation"
 msgstr "Urlaub"
 
-#: Model/Employee.php:269 Setup/Initialize.php:73 js/FreeTimeGridPanel.js:61
-#: js/FreeTimeGridPanel.js:211 js/AccountEditDialog.js:121
+#: Model/Employee.php:269 Setup/Initialize.php:73 js/FreeTimeGridPanel.js:71
+#: js/FreeTimeGridPanel.js:276 js/AccountEditDialog.js:121
 msgid "Sickness"
 msgstr "Krankheit"
 
@@ -411,6 +473,18 @@ msgstr "angenommen"
 msgid "Declined"
 msgstr "abgewiesen"
 
+#: Setup/Initialize.php:141
+msgid "Full-time 40 hours"
+msgstr "Vollzeit 40 Stunden"
+
+#: Setup/Initialize.php:148
+msgid "Full-time 37.5 hours"
+msgstr "Vollzeit 37,5 Stunden"
+
+#: Setup/Initialize.php:155
+msgid "Part-time 20 hours"
+msgstr "Teilzeit 20 Stunden"
+
 #: js/EmployeeGridPanel.js:35 js/EmployeeGridPanel.js:36
 #: js/EmployeeGridPanel.js:37
 msgid "Export {0}"
@@ -438,11 +512,11 @@ msgstr "OK"
 msgid "Please use the following format: MM-DD"
 msgstr "Bitte das folgende Format verwenden: MM-TT"
 
-#: js/AdminPanel.js:219 js/ContractEditDialog.js:232
+#: js/AdminPanel.js:219 js/ContractEditDialog.js:233
 msgid "Calendar"
 msgstr "Kalender"
 
-#: js/AdminPanel.js:220 js/ContractEditDialog.js:233
+#: js/AdminPanel.js:220 js/ContractEditDialog.js:234
 msgid "Calendars"
 msgstr "Kalender"
 
@@ -470,40 +544,40 @@ msgstr "Straße 2"
 msgid "Internal Information"
 msgstr "Interne Informationen"
 
-#: js/EmployeeEditDialog.js:442 js/FreeTimeEditDialog.js:313
+#: js/EmployeeEditDialog.js:442 js/FreeTimeEditDialog.js:512
 #: js/ExtraFreeTimeEditDialog.js:168
 msgid "Enter description"
 msgstr "Geben Sie eine Beschreibung an"
 
-#: js/FreeTimeEditDialog.js:80
+#: js/FreeTimeEditDialog.js:158
 msgid "Edit {0} \"{1}\""
 msgstr "{0} \"{1}\" bearbeiten"
 
-#: js/FreeTimeEditDialog.js:89
+#: js/FreeTimeEditDialog.js:172
 msgid "Edit {0} for {1}"
 msgstr "{0} für {1} bearbeiten"
 
-#: js/FreeTimeEditDialog.js:91
+#: js/FreeTimeEditDialog.js:174
 msgid "Add {0} for {1}"
 msgstr "Füge {0} für {1} hinzu"
 
-#: js/FreeTimeEditDialog.js:98
+#: js/FreeTimeEditDialog.js:188
 msgid "You have to select at least one day to save this sickness entry."
 msgstr "Sie müssen mindestens einen Tag auswählen, um diesen Kranksheitseintrag speichern zu können."
 
-#: js/FreeTimeEditDialog.js:98
+#: js/FreeTimeEditDialog.js:188
 msgid "You have to select at least one day to save this vacation entry."
 msgstr "Sie müssen mindestens einen Tag auswählen, um diesen Urlaub speichern zu können."
 
-#: js/FreeTimeEditDialog.js:102
+#: js/FreeTimeEditDialog.js:192
 msgid "No day selected"
 msgstr "Kein Tag gewählt"
 
-#: js/FreeTimeEditDialog.js:229
+#: js/FreeTimeEditDialog.js:426
 msgid "Remaining"
 msgstr "Übrig"
 
-#: js/FreeTimeEditDialog.js:280
+#: js/FreeTimeEditDialog.js:479
 msgid "Select Days"
 msgstr "Wählen Sie die Tage"
 
@@ -521,46 +595,57 @@ msgid ""
 "successfully!"
 msgstr "Die übrigen Urlaubstage wurden erfolgreich umgebucht!"
 
-#: js/ExceptionHandler.js:41
-msgid "No contract could be found."
-msgstr "Es  konnte kein Vertrag gefunden werden."
-
-#: js/ExceptionHandler.js:42
-msgid "Please create a contract for this employee!"
-msgstr "Bitte erstellen Sie einen Vertrag für diesen Mitarbeiter!"
-
-#: js/ExceptionHandler.js:48
-msgid "Not allowed!"
-msgstr "Nicht erlaubt!"
-
-#: js/FreeTimeGridPanel.js:50
+#: js/FreeTimeGridPanel.js:60
 msgid "Book as vacation"
 msgstr "Als Urlaub buchen"
 
-#: js/FreeTimeGridPanel.js:62 js/FreeTimeGridPanel.js:63
+#: js/FreeTimeGridPanel.js:72 js/FreeTimeGridPanel.js:73
 msgid "Sickness Days"
 msgstr "Krankheitstage"
 
-#: js/FreeTimeGridPanel.js:70
+#: js/FreeTimeGridPanel.js:84
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria "
 "or view-options."
 msgstr "Es konnte keine {0} gefunden werden. Bitte ändern Sie die Filterkriterien oder Ansichtseinstellungen."
 
-#: js/DatePicker.js:49
+#: js/FreeTimeGridPanel.js:134
+msgid "Could not book as vacation"
+msgstr "Konnte nicht als Urlaub gebucht werden"
+
+#: js/FreeTimeGridPanel.js:135
+msgid ""
+"The unexcused sickness days could not be booked as vacation. There are not "
+"enough days left!"
+msgstr "Die unentschuldigten Krankheitstage konnten nicht als Urlaub gebucht werden, da keine Urlaubstage mehr übrig sind!"
+
+#: js/DatePicker.js:102
 msgid "WK"
 msgstr "KW"
 
-#: js/DatePicker.js:111
+#: js/DatePicker.js:162
 msgid "Loading calendar data..."
 msgstr "Lade Kalender.."
 
-#: js/DatePicker.js:231
+#: js/DatePicker.js:374
+msgid "Year can not be changed"
+msgstr "Das Jahr kann nicht geändert werden"
+
+#: js/DatePicker.js:375
+msgid ""
+"You have already selected some dates from another year. Please create a new "
+"record to add dates from another year!"
+msgstr "Sie haben bereits ein odere mehrere Tage aus einem anderen Jahr gewählt. Bitte erstellen Sie einen neuen Datensatz, um die gewünschten Tage einzutragen."
+
+#: js/DatePicker.js:433
 msgid "No more vacation days"
 msgstr "Keine weiteren Urlaubstage vorhanden"
 
-#: js/DatePicker.js:225
-msgid "The Employee has no more possible vacation days left for this year. Create a new vacation and use another personal account the vacation should be taken from."
+#: js/DatePicker.js:434
+msgid ""
+"The Employee has no more possible vacation days left for this year. Create a"
+" new vacation and use another personal account the vacation should be taken "
+"from."
 msgstr "Der Mitarbeiter hat keine Urlaubstage auf dem gewünschten Personalkonto. Erstellen Sie einen neuen Urlaub und wählen Sie ein anderes Personalkonto, von dem die Urlaubstage abgezogen werden sollen."
 
 #: js/AccountEditDialog.js:52
@@ -603,7 +688,7 @@ msgstr "Entschuldigte Krankheitstage"
 msgid "Unexcused sickness days"
 msgstr "Unentschuldigte Krankheitstage"
 
-#: js/AccountEditDialog.js:135 js/Models.js:23 js/ContractEditDialog.js:247
+#: js/AccountEditDialog.js:135 js/Models.js:23 js/ContractEditDialog.js:248
 msgid "Working Time"
 msgid_plural "Working Times"
 msgstr[0] "Arbeitszeitmodell"
@@ -641,80 +726,42 @@ msgstr "Anfangsdatum"
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
 
-#: js/ContractEditDialog.js:255
+#: js/ContractEditDialog.js:256
 msgid "Choose the template"
 msgstr "Vorlage auswählen"
 
-#: js/ContractEditDialog.js:264
+#: js/ContractEditDialog.js:266
 msgid "Working Hours per week"
 msgstr "Arbeitsstunden pro Woche"
 
-#: js/ContractEditDialog.js:272
+#: js/ContractEditDialog.js:274
 msgid "Vacation days of one calendar year"
 msgstr "Urlaubstage eines Kalenderjahrs"
 
-#: js/ContractEditDialog.js:276
+#: js/ContractEditDialog.js:278
 msgid "Mon."
 msgstr "Mo."
 
-#: js/ContractEditDialog.js:279
+#: js/ContractEditDialog.js:281
 msgid "Tue."
 msgstr "Di."
 
-#: js/ContractEditDialog.js:282
+#: js/ContractEditDialog.js:284
 msgid "Wed."
 msgstr "Mi."
 
-#: js/ContractEditDialog.js:285
+#: js/ContractEditDialog.js:287
 msgid "Thu."
 msgstr "Do."
 
-#: js/ContractEditDialog.js:288
+#: js/ContractEditDialog.js:290
 msgid "Fri."
 msgstr "Fr."
 
-#: js/ContractEditDialog.js:291
+#: js/ContractEditDialog.js:293
 msgid "Sat."
 msgstr "Sa."
 
-#: js/ContractEditDialog.js:294
+#: js/ContractEditDialog.js:296
 msgid "Sun."
 msgstr "So."
-
-msgid "Last Day"
-msgstr "Letzter Tag"
-
-msgid "Days Count"
-msgstr "Anzahl der Tage"
-
-
-msgid "No personal account found"
-msgstr "Kein Personalkonto gefunden"
-
-msgid "An existing personal account could not be found. Please create one!"
-msgstr "Es konnte kein Personalkonto gefunden werden. Bitte erstellen Sie eines!"
-
-msgid "Year can not be changed"
-msgstr "Das Jahr kann nicht geändert werden"
-
-msgid "You have already selected some dates from another year. Please create a new record to add dates from another year!"
-msgstr "Sie haben bereits ein odere mehrere Tage aus einem anderen Jahr gewählt. Bitte erstellen Sie einen neuen Datensatz, um die gewünschten Tage einzutragen."
-
-msgid "Could not book as vacation"
-msgstr "Konnte nicht als Urlaub gebucht werden"
-
-msgid "The unexcused sickness days could not be booked as vacation. There are not enough days left!"
-msgstr "Die unentschuldigten Krankheitstage konnten nicht als Urlaub gebucht werden, da keine Urlaubstage mehr übrig sind!"
-
-
-msgid "The start date of the contract must be before the end date!"
-msgstr "Der Anfang des Vertrages muss vor dem Ende sein!"
-
-msgid "Negative Timespace"
-msgstr "Negativer Zeitraum"
-
-msgid "The contracts must not overlap!"
-msgstr "Die Verträge dürfen sich nicht überlappen!"
-
-msgid "Contracts overlap"
-msgstr "Überlappende Verträge"

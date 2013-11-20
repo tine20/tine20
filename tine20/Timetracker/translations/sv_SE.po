@@ -307,15 +307,15 @@ msgstr "Fakturerbar"
 msgid "Cleared"
 msgstr "Rensad"
 
-#: js/TimesheetEditDialog.js:261
+#: js/TimesheetEditDialog.js:263
 msgid "Failed"
 msgstr "Misslyckades"
 
-#: js/TimesheetEditDialog.js:262
+#: js/TimesheetEditDialog.js:264
 msgid "Could not save {0}."
 msgstr "Kunde inte spara {0}."
 
-#: js/TimesheetEditDialog.js:263
+#: js/TimesheetEditDialog.js:265
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Deadline för detta tidkonto har överskridits."
 
