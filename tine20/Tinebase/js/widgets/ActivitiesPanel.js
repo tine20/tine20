@@ -80,7 +80,8 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                 noteTextarea.setValue('');
                 noteTextarea.emptyText = noteTextarea.emptyText;
             }
-        }        
+        }
+        
     },
     
     /**
@@ -201,6 +202,19 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
     },
 
     /**
+     * updates the title
+     */
+    onChange: function() {
+        if (this.recordNotesStore) {
+            this.title = this.translation.gettext('Notes') + ' (' + this.recordNotesStore.getCount() + ')';
+            if (this.header) {
+                this.header.dom.children[2].innerText = this.title;
+            }
+        }
+        
+    },
+    
+    /**
      * @private
      */
     initComponent: function () {
@@ -210,7 +224,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         this.translation.textdomain('Tinebase');
         
         // translate / update title
-        this.title = this.translation.gettext('Notes');
+        this.title = this.translation.gettext('Notes') + ' (0)';
         
         this.idPrefix = Ext.id();
         
@@ -223,6 +237,12 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
             sortInfo: {
                 field: 'creation_time',
                 direction: 'DESC'
+            },
+            listeners: {
+                scope: this,
+                add: this.onChange,
+                remove: this.onChange,
+                load: this.onChange
             }
         });
         
@@ -240,14 +260,14 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                 // this form field is only for fetching and saving notes in the record
                 new Tine.widgets.activities.NotesFormField({
                     recordNotesStore: this.recordNotesStore
-                }),                 
+                }),
                 this.activities
             ];
         } else {
             this.items = [
                 new Tine.widgets.activities.NotesFormField({
                     recordNotesStore: this.recordNotesStore
-                }),                 
+                }),
                 this.activities
             ];
         }

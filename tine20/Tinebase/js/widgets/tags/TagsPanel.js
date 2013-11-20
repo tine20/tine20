@@ -59,10 +59,19 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         
         // init recordTagsStore
         this.tags = [];
+        var that = this;
+        
         this.recordTagsStore = new Ext.data.JsonStore({
             id: 'id',
             fields: Tine.Tinebase.Model.Tag,
-            data: this.tags
+            data: this.tags,
+            scope: that,
+            listeners: {
+                add: that.onChange,
+                load: that.onChange,
+                remove: that.onChange,
+                scope: that
+            }
         });
         
         // init availableTagsStore
@@ -407,7 +416,20 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 scope: this 
             });
         }
+    },
+    
+    /**
+     * updates the title
+     */
+    onChange: function() {
+        if (this.recordTagsStore) {
+            this.title = _('Tags') + ' (' + this.recordTagsStore.getCount() + ')';
+            if (this.header) {
+                this.header.dom.children[2].innerText = this.title;
+            }
+        }
     }
+    
 });
 
 /**
@@ -492,6 +514,7 @@ Tine.widgets.tags.TagEditDialog = Ext.extend(Ext.Window, {
             ]
             
         });
+        
         Tine.widgets.tags.TagEditDialog.superclass.initComponent.call(this);
     }
 });
