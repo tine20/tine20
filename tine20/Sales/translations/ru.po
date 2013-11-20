@@ -1,14 +1,14 @@
 # 
 # Translators:
 # Aleksdem <aleksdem@aleksdem.com>, 2013
-# Nikolay Parukhin <parukhin@gmail.com>, 2012
+# Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-11-18 20:19+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +33,7 @@ msgstr ""
 
 #: Model/Contract.php:109
 msgid "Responsible"
-msgstr ""
+msgstr "Ответственный"
 
 #: Model/Contract.php:110
 msgid "Customer"
@@ -202,7 +202,7 @@ msgstr[2] "списков записей"
 
 #: js/Models.js:78 js/Models.js:147 js/Models.js:207 js/Models.js:244
 msgid "Quick Search"
-msgstr ""
+msgstr "Быстрый поиск"
 
 #: js/Models.js:79
 msgid "Product name"
@@ -267,9 +267,9 @@ msgstr ""
 #: js/Models.js:231
 msgid "Division"
 msgid_plural "Divisions"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Подразделение"
+msgstr[1] "Подразделения"
+msgstr[2] "Подразделения"
 
 #: js/ContractEditDialog.js:96
 msgid "Please use a decimal number here!"

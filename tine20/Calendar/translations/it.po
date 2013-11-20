@@ -1,12 +1,13 @@
 # 
 # Translators:
+# Daniele Gobbetti <daniele@gobbetti.name>, 2013
 # sambar <samuel.barbera@email.it>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-23 12:53+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-11-20 12:24+0000\n"
+"Last-Translator: Daniele Gobbetti <daniele@gobbetti.name>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -57,7 +58,7 @@ msgstr "Questo contatto è stato automaticamente aggiunto dal sistema come parte
 
 #: Model/Attender.php:449
 msgid "The email address has been shortened: "
-msgstr ""
+msgstr "L'indirizzo email è stato accorciato:"
 
 #: Model/Event.php:332
 msgid "Start"
@@ -145,11 +146,11 @@ msgstr ""
 
 #: Model/Rrule.php:293
 msgid "Weekly on "
-msgstr ""
+msgstr "Settimanalmente di "
 
 #: Model/Rrule.php:300
 msgid " and "
-msgstr ""
+msgstr "e"
 
 #: Model/Rrule.php:312
 msgid "Every %1$s month on the %2$s %3$s"
@@ -797,7 +798,7 @@ msgstr "Aggiungi partecipante"
 
 #: js/AttendeeFilterGrid.js:47
 msgid "Sort Attendee"
-msgstr ""
+msgstr "Ordina partecipanti"
 
 #: js/AttendeeFilterGrid.js:60
 msgid "Check to filter for this attendee"
@@ -963,7 +964,7 @@ msgstr "è allarme"
 
 #: js/EventUI.js:263
 msgid "has attachments"
-msgstr ""
+msgstr "ha allegati"
 
 #: js/CalendarSelectWidget.js:124
 msgid "Originally"

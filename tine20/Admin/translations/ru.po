@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-17 13:43+0000\n"
+"PO-Revision-Date: 2013-10-28 06:55+0000\n"
 "Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -971,9 +971,9 @@ msgstr[2] "Пользователей Samba"
 #: js/user/Users.js:146
 msgid "Email User"
 msgid_plural "Email Users"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Электронные адреса пользователей"
+msgstr[1] "Электронные адреса пользователей"
+msgstr[2] "Электронные адреса пользователей"
 
 #: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:110
 msgid "Customfield"
@@ -984,7 +984,7 @@ msgstr[2] "Настраиваемые поля"
 
 #: js/customfield/EditDialog.js:137
 msgid "Please configure store for this field type"
-msgstr ""
+msgstr "Пожалуйста, настройте хранилище для этого типа поля"
 
 #: js/customfield/EditDialog.js:244
 msgid "Default"
@@ -1016,7 +1016,7 @@ msgstr "Значение уже существует"
 
 #: js/customfield/EditDialog.js:407
 msgid "Record Class"
-msgstr ""
+msgstr "Класс записей"
 
 #: js/customfield/EditDialog.js:432
 msgid "Given record class not found"
@@ -1028,7 +1028,7 @@ msgstr "OK"
 
 #: js/customfield/EditDialog.js:504
 msgid "Configure store"
-msgstr ""
+msgstr "Настроить хранилище"
 
 #: js/customfield/EditDialog.js:561
 msgid "Custom field definition"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-23 12:53+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-11-20 12:24+0000\n"
+"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -60,7 +60,7 @@ msgstr "На этот контакт система создала событи�
 
 #: Model/Attender.php:449
 msgid "The email address has been shortened: "
-msgstr ""
+msgstr "Адрес почты был сокращён:"
 
 #: Model/Event.php:332
 msgid "Start"
@@ -135,7 +135,7 @@ msgstr "Да"
 #: Model/Rrule.php:286
 #, python-format
 msgid "Every %s day"
-msgstr ""
+msgstr "Каждый %s день"
 
 #: Model/Rrule.php:287 js/RrulePanel.js:79
 msgid "Daily"
@@ -144,39 +144,39 @@ msgstr "Ежедневно"
 #: Model/Rrule.php:292
 #, python-format
 msgid "Every %s week on "
-msgstr ""
+msgstr "Каждую %s неделю"
 
 #: Model/Rrule.php:293
 msgid "Weekly on "
-msgstr ""
+msgstr "Еженедельно"
 
 #: Model/Rrule.php:300
 msgid " and "
-msgstr ""
+msgstr "и"
 
 #: Model/Rrule.php:312
 msgid "Every %1$s month on the %2$s %3$s"
-msgstr ""
+msgstr "Каждый %1$s месяц из %2$s %3$s"
 
 #: Model/Rrule.php:313
 msgid "Monthly every %1$s %2$s"
-msgstr ""
+msgstr "Ежемесячно каждый %1$s %2$s"
 
 #: Model/Rrule.php:319
 msgid "Every %1$s month on the %2$s"
-msgstr ""
+msgstr "Каждый %1$s месяц из %2$s"
 
 #: Model/Rrule.php:320
 msgid "Monthly on the %1$s"
-msgstr ""
+msgstr "Каждый %1$s месяц"
 
 #: Model/Rrule.php:325
 msgid "Yearly on the %1$s of %2$s"
-msgstr ""
+msgstr "Ежегодно %1$s of %2$s"
 
 #: Model/Rrule.php:363
 msgid "second to last"
-msgstr ""
+msgstr "секунд осталось"
 
 #: Model/Rrule.php:366 js/RrulePanel.js:543 js/RrulePanel.js:724
 msgid "last"
@@ -200,23 +200,23 @@ msgstr "четвёртый"
 
 #: Model/Rrule.php:384
 msgid "fifth"
-msgstr ""
+msgstr "пятый"
 
 #: Model/Rrule.php:389
 msgid "st"
-msgstr ""
+msgstr "ый"
 
 #: Model/Rrule.php:392
 msgid "nd"
-msgstr ""
+msgstr "ой"
 
 #: Model/Rrule.php:395
 msgid "rd"
-msgstr ""
+msgstr "ый"
 
 #: Model/Rrule.php:398
 msgid "th"
-msgstr ""
+msgstr "ый"
 
 #: Config.php:45
 msgid "Fixed Calendars"
@@ -995,7 +995,7 @@ msgstr "Обновления"
 
 #: views/eventNotification.php:21
 msgid "This is an event series exception."
-msgstr ""
+msgstr "Эта серия событий исключена."
 
 #: views/eventNotification.php:25
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""

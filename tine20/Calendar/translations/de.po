@@ -4,6 +4,7 @@
 # Björn Balazs <transifex@lazs.de>, 2013
 # kaystrobach <info@kay-strobach.de>, 2012
 # sysdef <transifex.com@sysdef.de>, 2013
+# corneliusweiss <mail@corneliusweiss.de>, 2013
 # corneliusweiss <mail@corneliusweiss.de>, 2012
 # mspahn <ms@ansta.lt>, 2013
 # pschuele <p.schuele@metaways.de>, 2013
@@ -12,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-23 12:56+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-11-20 12:24+0000\n"
+"Last-Translator: corneliusweiss <mail@corneliusweiss.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -507,7 +508,7 @@ msgstr "niemals"
 
 #: js/RrulePanel.js:261
 msgid "after {0} occurrences"
-msgstr "nach {0} Wiederholungen"
+msgstr "nach {0} Terminen"
 
 #: js/RrulePanel.js:380
 msgid "Until has to be after event start"

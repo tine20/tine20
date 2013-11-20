@@ -1,13 +1,13 @@
 # 
 # Translators:
 # Aleksdem <aleksdem@aleksdem.com>, 2013
-# Nikolay Parukhin <parukhin@gmail.com>, 2012
+# Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-16 14:40+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-11-18 20:23+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -138,7 +138,7 @@ msgstr[2] ""
 
 #: Model/Account.php:63 js/FreeTimeEditDialog.js:194
 msgid "Year"
-msgstr ""
+msgstr "Год"
 
 #: Model/Account.php:71
 msgid "Extra free times"
@@ -186,7 +186,7 @@ msgstr "Улица"
 
 #: Model/Employee.php:113
 msgid "Street 2"
-msgstr ""
+msgstr "Улица 2"
 
 #: Model/Employee.php:118 js/EmployeeEditDialog.js:332
 msgid "E-Mail"
@@ -395,7 +395,7 @@ msgstr "Все учётные записи"
 
 #: Setup/Initialize.php:53
 msgid "All available accounts"
-msgstr ""
+msgstr "Все доступные учётные записи"
 
 #: Setup/Initialize.php:103
 msgid "Requested"
@@ -417,9 +417,9 @@ msgstr "Отклонено"
 #: js/EmployeeGridPanel.js:37
 msgid "Export {0}"
 msgid_plural "Export {0}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Экспорт {0}"
+msgstr[1] "Экспорт {0}"
+msgstr[2] "Экспорт {0}"
 
 #: js/EmployeeGridPanel.js:49
 msgid "Export as ODS"
@@ -500,7 +500,7 @@ msgstr ""
 
 #: js/FreeTimeEditDialog.js:102
 msgid "No day selected"
-msgstr ""
+msgstr "День не выбран"
 
 #: js/FreeTimeEditDialog.js:229
 msgid "Remaining"
@@ -542,7 +542,7 @@ msgstr ""
 
 #: js/FreeTimeGridPanel.js:62 js/FreeTimeGridPanel.js:63
 msgid "Sickness Days"
-msgstr ""
+msgstr "Дни больничного"
 
 #: js/FreeTimeGridPanel.js:70
 msgid ""
@@ -552,7 +552,7 @@ msgstr ""
 
 #: js/DatePicker.js:49
 msgid "WK"
-msgstr ""
+msgstr "НЕД"
 
 #: js/DatePicker.js:111
 msgid "Loading calendar data..."
@@ -656,7 +656,7 @@ msgstr "Выберите шаблон"
 
 #: js/ContractEditDialog.js:264
 msgid "Working Hours per week"
-msgstr ""
+msgstr "Рабочих часов в неделю"
 
 #: js/ContractEditDialog.js:272
 msgid "Vacation days of one calendar year"

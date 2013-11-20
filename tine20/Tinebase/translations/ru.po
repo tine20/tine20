@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-17 18:59+0000\n"
+"PO-Revision-Date: 2013-11-20 11:08+0000\n"
 "Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -580,7 +580,7 @@ msgstr "О {0}"
 
 #: js/AboutDialog.js:56 js/MainMenu.js:166
 msgid "Learn more about {0}"
-msgstr ""
+msgstr "Узнать больше о {0}"
 
 #: js/AboutDialog.js:61 js/CreditsScreen.js:53 js/LicenseScreen.js:51
 #: js/PasswordChangeDialog.js:66 js/widgets/EditRecord.js:157
@@ -1437,7 +1437,7 @@ msgstr "один из"
 
 #: js/widgets/grid/FilterModel.js:232
 msgid "none of"
-msgstr ""
+msgstr "не содержит"
 
 #: js/widgets/grid/FilterModel.js:233
 msgid "is before"
@@ -1483,7 +1483,7 @@ msgstr ""
 
 #: js/widgets/grid/FilterPanel.js:78
 msgid "Attention: There are more filters active!"
-msgstr ""
+msgstr "Внимание: фильтры могут быть скрыты"
 
 #: js/widgets/grid/FilterPanel.js:261
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
@@ -1578,7 +1578,7 @@ msgstr "сохранить в избранном"
 
 #: js/widgets/grid/FilterToolbar.js:191
 msgid "Load a favorite"
-msgstr ""
+msgstr "Загрузить избранное"
 
 #: js/widgets/grid/FilterToolbar.js:356
 msgid "select a field"
@@ -2454,7 +2454,7 @@ msgstr "История"
 
 #: js/widgets/ActivitiesPanel.js:599
 msgid "Quick Search"
-msgstr ""
+msgstr "Быстрый поиск"
 
 #: js/widgets/ActivitiesPanel.js:600 js/widgets/ActivitiesPanel.js:601
 msgid "Time"
@@ -2574,7 +2574,7 @@ msgstr "установка нового языка..."
 
 #: js/widgets/MainScreen.js:264
 msgid "Save current view as favorite"
-msgstr ""
+msgstr "Сохранить этот вид как избранное"
 
 #: js/widgets/mainscreen/WestPanel.js:302
 msgid "containers"

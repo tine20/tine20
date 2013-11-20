@@ -1,12 +1,13 @@
 # 
 # Translators:
+# Daniele Gobbetti <daniele@gobbetti.name>, 2013
 # sambar <samuel.barbera@email.it>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-15 18:07+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-11-20 11:08+0000\n"
+"Last-Translator: Daniele Gobbetti <daniele@gobbetti.name>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,7 +20,7 @@ msgstr ""
 
 #: PersistentFilter.php:138
 msgid "- The last filter I used -"
-msgstr ""
+msgstr "- L'ultimo filtro utilizzato -"
 
 #: Exception/PasswordPolicyViolation.php:22
 msgid "Password Policy Violation"
@@ -94,7 +95,7 @@ msgstr[1] ""
 
 #: ModelConfiguration.php:146 ModelConfiguration.php:232
 msgid "Group"
-msgstr ""
+msgstr "Gruppo"
 
 #: ModelConfiguration.php:189
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
@@ -103,7 +104,7 @@ msgstr "Titolo"
 
 #: ModelConfiguration.php:193
 msgid "New Car"
-msgstr ""
+msgstr "Nuova auto"
 
 #: ModelConfiguration.php:341 ModelConfiguration.php:344
 msgid "Banking Information"
@@ -111,7 +112,7 @@ msgstr ""
 
 #: ModelConfiguration.php:345
 msgid "Private Information"
-msgstr ""
+msgstr "Informazioni private"
 
 #: Preference/Abstract.php:507
 msgid "default"
@@ -254,11 +255,11 @@ msgstr "Reindirizzamento configurato anche per il login."
 
 #: Config.php:399
 msgid "Allowed Origins"
-msgstr ""
+msgstr "Origini ammesse"
 
 #: Config.php:401
 msgid "Allowed Origins for the JSON API."
-msgstr ""
+msgstr "Origini ammesse per l'API JSON."
 
 #: Config.php:409
 msgid "Accepted Terms Version"
@@ -443,7 +444,7 @@ msgstr "dato modificato"
 
 #: Preference.php:122
 msgid "Page size"
-msgstr ""
+msgstr "Dimensione della pagina"
 
 #: Preference.php:123
 msgid "Page size in grids"
@@ -710,7 +711,7 @@ msgstr "Traduzioni"
 
 #: js/LoginPanel.js:232
 msgid "Translation state of {0}: {1}%."
-msgstr ""
+msgstr "Stato della traduzione di {0}: {1}%"
 
 #: js/LoginPanel.js:234
 msgid ""
@@ -724,7 +725,7 @@ msgstr ""
 
 #: js/LoginPanel.js:238
 msgid "Detailed Language Statistics"
-msgstr ""
+msgstr "Statistiche dettagliate dei linguaggi"
 
 #: js/LoginPanel.js:258
 msgid "Powered by:"
@@ -1075,13 +1076,13 @@ msgstr "L'account utente non ha alcun ruolo di appartenenza. Si prega di contatt
 
 #: js/ExceptionHandler.js:273
 msgid "Method Not Found / Insufficent Permissions"
-msgstr ""
+msgstr "Metodo non trovato / Permessi insufficienti"
 
 #: js/ExceptionHandler.js:274
 msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
-msgstr ""
+msgstr "Tentativo di accesso a una funzione non disponibile. Rilanciare il browser e riprovare, oppure contattare l'amministratore."
 
 #: js/Container.js:123
 msgid "All {0}"
