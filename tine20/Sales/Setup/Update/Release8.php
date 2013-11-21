@@ -69,12 +69,17 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_1()
     {
-        $sql = "UPDATE `" . SQL_TABLE_PREFIX . "sales_contracts` SET `status` = 'OPEN' WHERE `status`='open';
-                UPDATE `" . SQL_TABLE_PREFIX . "sales_contracts` SET `status` = 'CLOSED' WHERE `status`='closed';
-                UPDATE `" . SQL_TABLE_PREFIX . "sales_contracts` SET `cleared` = 'CLEARED' WHERE `cleared`='cleared';
-                UPDATE `" . SQL_TABLE_PREFIX . "sales_contracts` SET `cleared` = 'TO_CLEAR' WHERE `cleared`='to clear';
-                UPDATE `" . SQL_TABLE_PREFIX . "sales_contracts` SET `cleared` = 'NOT_YET_CLEARED' WHERE `cleared`='not yet cleared';'";
+        $quotedTableName = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "sales_contracts");
         
+        $sql = "UPDATE " . $quotedTableName . " SET " . $this->_db->quoteIdentifier('status') . " = 'OPEN' WHERE " . $this->_db->quoteIdentifier('status') . " = 'open';";
+        $this->_db->query($sql);
+        $sql =  "UPDATE " . $quotedTableName . " SET " . $this->_db->quoteIdentifier('status') . " = 'CLOSED' WHERE " . $this->_db->quoteIdentifier('status') . " = 'closed';";
+        $this->_db->query($sql);
+        $sql =  "UPDATE " . $quotedTableName . " SET " . $this->_db->quoteIdentifier('cleared') . " = 'CLEARED' WHERE " . $this->_db->quoteIdentifier('cleared') . " = 'cleared';";
+        $this->_db->query($sql);
+        $sql =  "UPDATE " . $quotedTableName . " SET " . $this->_db->quoteIdentifier('cleared') . " = 'TO_CLEAR' WHERE " . $this->_db->quoteIdentifier('cleared') . " = 'to clear';";
+        $this->_db->query($sql);
+        $sql =  "UPDATE " . $quotedTableName . " SET " . $this->_db->quoteIdentifier('cleared') . " = 'NOT_YET_CLEARED' WHERE " . $this->_db->quoteIdentifier('cleared') . " = 'not yet cleared';";
         $this->_db->query($sql);
         
         $this->setApplicationVersion('Sales', '8.2');
