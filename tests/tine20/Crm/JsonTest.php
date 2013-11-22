@@ -115,7 +115,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     public function testGetSettings()
     {
         $result = $this->_instance->getSettings();
-
+        
         $this->assertArrayHasKey('leadstates',  $result);
         $this->assertArrayHasKey('leadtypes',   $result);
         $this->assertArrayHasKey('leadsources', $result);
@@ -521,6 +521,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     {
         // create lead with tag, customfield and related contacts
         $savedLead = $this->_saveLead();
+        
         // change relations, customfields + tags
         $savedLead['tags'][] = array('name' => 'another tag', 'type' => Tinebase_Model_Tag::TYPE_PERSONAL);
         foreach ($savedLead['relations'] as $key => $value) {
