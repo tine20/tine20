@@ -277,7 +277,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $noteText = $translate->_('Subject') . ':' . $_subject . "\n\n" . $translate->_('Body') . ':' . substr($_body, 0, 4096);
             // somehow it's still possible that we have bad chars here. make sure they are filtered.
             // @see 0008644: error when sending mail with note (wrong charset)
-            $noteText = Tinebase_Core::filterInputForDatabase($noteText);
+            // this did not help - we catch db exceptions now ... :(
+            //$noteText = Tinebase_Core::filterInputForDatabase($noteText);
             
             try {
                 foreach ($contacts as $contact) {
@@ -291,8 +292,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                     Tinebase_Notes::getInstance()->addNote($note);
                 }
             } catch (Zend_Db_Statement_Exception $zdse) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Saving note failed: ' . $noteText);
-                throw $zdse;
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Saving note failed: ' . $noteText);
+                Tinebase_Exception::log($zdse);
             }
         } else {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no contacts to add notes to.');
