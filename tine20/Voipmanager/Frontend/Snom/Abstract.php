@@ -5,7 +5,7 @@
  * @package     Voipmanager
  * @subpackage  Snom
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -80,12 +80,18 @@ abstract class Voipmanager_Frontend_Snom_Abstract extends Tinebase_Frontend_Abst
      */
     public static function getBaseUrl($phone = null)
     {
-        $protocol = !empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
+        $protocol = ! empty($_SERVER['HTTPS']) ? 'https://' : 'http://';
         if ($phone instanceof Voipmanager_Model_Snom_Phone) {
             $protocol .= $phone->http_client_user . ':' . $phone->http_client_pass . '@';
         }
-        $name = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-        $port = $_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443' ? ':' . $_SERVER['SERVER_PORT'] : '' ;
+        
+        $name = ! empty($_SERVER['HTTP_HOST']) 
+            ? $_SERVER['HTTP_HOST'] 
+            : (! empty($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost/');
+        
+        $port = ! empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443' 
+            ? ':' . $_SERVER['SERVER_PORT'] 
+            : '' ;
         
         $baseURL = $protocol . $name . $port . $_SERVER['PHP_SELF'];
         
