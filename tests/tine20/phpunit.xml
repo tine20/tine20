@@ -8,7 +8,6 @@
          syntaxCheck="false"
          colors="true">
     <listeners>
-        <listener class="LogListener" file="LogListener.php">
-        </listener>
+        <listener class="LogListener" file="LogListener.php" />
     </listeners>
 </phpunit>

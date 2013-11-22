@@ -10,7 +10,8 @@
     
     <property name="builddir" value="${project.basedir}/build" override="true" />
     <property name="localedir" value="Tinebase/js/Locale" override="true" />
-    <property name="configdir" value="." override="true" />
+    <property name="configdir" value="${project.basedir}" override="true" />
+    <property name="testconfigdir" value="${project.basedir}/../tests/tine20" override="true" />
     
     <!-- ============================================  -->
     <!-- Target: prepare                               -->
@@ -76,38 +77,67 @@
         </phpdoc2>
     </target>
     
-    <!-- ============================================  -->
-    <!-- Target: phpunit                               -->
-    <!-- ============================================  -->
+    <!-- ============================================                       -->
+    <!-- Target: phpunit                                                    -->
+    <!--                                                                    -->
+    <!-- you can define the includes like this (runs all Tinebase tests):   -->
+    <!-- $ vendor/bin/phing phpunit -Dtestinclude=Tinebase/**/*Test.php     -->
+    <!-- ============================================                       -->
     <target name="phpunit">
+    	<!-- TODO we still have some test files that are named *Tests.php, rename them or adjust the include property -->
+        <property name="testinclude" value="**/*Test.php" override="true" />
+        
         <echo msg="Starting Tests..." />
+        <echo msg="Using config file ${testconfigdir}/phpunit.xml" />
         
-        <if>
-            <isset property="configPath" />
-            <then>
-                <includepath classpath = "${configPath}" />
-            </then>
-        </if>
+        <!-- do we need this? -->
+        <!--includepath classpath = "${testconfigdir}" /-->
         
-        <delete dir="${builddir}/reports"/>
+        <delete dir="${builddir}/reports" />
         <mkdir dir="${builddir}/reports" />
+        <mkdir dir="${builddir}/reports/tests" />
         
-        <phpunit configuration="../tests/tine20/phpunit.xml" haltonfailure="true" haltonerror="true" printsummary="true">
-            <formatter type="plain" usefile="false"/>
-            <formatter type="xml" todir="${builddir}/reports"/>
+        <phpunit configuration="${testconfigdir}/phpunit.xml" haltonfailure="true" printsummary="true">
+            <formatter type="plain" usefile="false" />
+            <formatter type="xml" todir="${builddir}/reports" />
             <batchtest>
-                <fileset dir="../tests/tine20">
-                  <include name="**/*Test.php"/>
-                  <exclude name="Tinebase/AccountTest.php"/>
+                <fileset dir="${project.basedir}/../tests/tine20">
+                  <include name="${testinclude}" />
+                  <exclude name="Tinebase/AccountTest.php" />
                 </fileset>
             </batchtest>
         </phpunit>
         
-        <phpunitreport infile="${builddir}/reports/testsuites.xml" format="frames" todir="${builddir}/reports/tests"/>
+        <phpunitreport infile="${builddir}/reports/testsuites.xml" format="frames" todir="${builddir}/reports/tests" />
+    </target>
+
+    <!-- ============================================      -->
+    <!-- Target: phpunit-exec                              -->
+    <!--                                                   -->
+    <!-- this runs phpunit in an exec task. we do this     -->
+    <!-- to overcome some drawbacks (for example we can't  -->
+    <!-- use the LogListener) of the phing phpunit task.   -->
+    <!-- ============================================      -->
+    <target name="phpunit-exec">
+        <property name="testinclude" value="AllTests.php" override="true" />
+        
+        <delete dir="${builddir}/reports" />
+        <mkdir dir="${builddir}/reports" />
+
+        <echo msg="Starting Tests..." />
+        <echo msg="Using config file ${testconfigdir}/phpunit.xml" />
+        
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/../tests/tine20" passthru="true">
+             <arg line="-d max_execution_time=0
+             --configuration ${testconfigdir}/phpunit.xml
+             --log-junit ${builddir}/reports/testsuites.xml
+             ${testinclude} " />
+        </exec>
     </target>
     
     <!-- ============================================  -->
     <!-- Target: report                                -->
+    <!-- TODO remove code duplication (phpunit target) -->
     <!-- ============================================  -->
     <target name="report">
         <echo msg="Starting Tests..." />
