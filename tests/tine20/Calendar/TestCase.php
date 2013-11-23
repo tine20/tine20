@@ -106,6 +106,8 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
+        Calendar_Controller_Event::getInstance()->sendNotifications(false);
+        
         if ($this->_transactionId) {
             Tinebase_TransactionManager::getInstance()->rollBack();
         } else {
