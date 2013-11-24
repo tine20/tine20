@@ -71,8 +71,7 @@ class Tinebase_FileSystem_RecordAttachments
             ' Looking in path ' . $parentPath);
         
         try {
-            $parentNode = $this->_fsController->stat($parentPath);
-            $record->attachments = $this->_fsController->getTreeNodeChildren($parentNode);
+            $record->attachments = $this->_fsController->scanDir($parentPath);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $record->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         }
