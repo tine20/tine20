@@ -325,7 +325,7 @@
     <target name="tine-install">
         <property file="${configdir}/install.properties" />
         <echo msg="Installing Tine 2.0" />
-        <exec command="php setup.php \
+        <exec command="php -d include_path=.:${configdir} setup.php \
             --install -- \
                 adminLoginName=${adminLoginName} \
                 adminPassword=${adminPassword} \
@@ -343,7 +343,7 @@
     <!-- ============================================  -->
     <target name="tine-uninstall">
         <echo msg="Uninstalling Tine 2.0" />
-        <exec command="php setup.php \
+        <exec command="php -d include_path=.:${configdir} setup.php \
             --uninstall" passthru="true"/>
     </target>
 	
