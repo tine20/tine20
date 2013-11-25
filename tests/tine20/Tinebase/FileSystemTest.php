@@ -108,7 +108,6 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(in_array('phpunit2.txt', $nameOfChildren));
     }
     
-    
     public function testRmdir()
     {
         $testPath = $this->testMkdir();

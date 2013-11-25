@@ -85,6 +85,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             'contenttype'        =>  'tree_fileobjects',
             'revision'           =>  'tree_fileobjects',
         );
+        
         foreach ($foreignTableSortFields as $field => $table) {
             if (isset($result[0][$field])) {
                 $result[0][$field] = $table . '.' . $field;
@@ -95,13 +96,47 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * return child identified by name
+     * 
+     * @param  string|Tinebase_Model_Tree_Node  $parentId   the id of the parent node
+     * @param  string|Tinebase_Model_Tree_Node  $childName  the name of the child node
+     * @return Tinebase_Model_Tree_Node
+     */
+    public function getChild($parentId, $childName)
+    {
+        $parentId  = $parentId  instanceof Tinebase_Model_Tree_Node ? $parentId->getId() : $parentId;
+        $childName = $childName instanceof Tinebase_Model_Tree_Node ? $childName->name   : $childName;
+        
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
+            array(
+                'field'     => 'parent_id',
+                'operator'  => $parentId ? 'equals' : 'isnull',
+                'value'     => $parentId
+            ),
+            array(
+                'field'     => 'name',
+                'operator'  => 'equals',
+                'value'     => $childName
+            )
+        ));
+        $child = $this->search($searchFilter)->getFirstRecord();
+        
+        if (!$child) {
+            throw new Tinebase_Exception_NotFound('child: ' . $childName . ' not found!');
+        }
+        
+        return $child;
+    }
+    
+    /**
      * return direct children of tree node
      * 
+     * @param  string|Tinebase_Model_Tree_Node  $nodeId  the id of the node
      * @return Tinebase_Record_RecordSet
      */
-    public function getChildren($_nodeId)
+    public function getChildren($nodeId)
     {
-        $nodeId = $_nodeId instanceof Tinebase_Model_Tree_Node ? $_nodeId->getId() : $_nodeId;
+        $nodeId = $nodeId instanceof Tinebase_Model_Tree_Node ? $nodeId->getId() : $nodeId;
         
         $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
@@ -116,12 +151,12 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * @param unknown_type $_path
+     * @param  string  $path
      * @return Tinebase_Model_Tree_Node
      */
-    public function getLastPathNode($_path)
+    public function getLastPathNode($path)
     {
-        $fullPath = $this->getPathNodes($_path);
+        $fullPath = $this->getPathNodes($path);
         
         return $fullPath[$fullPath->count()-1];
     }
@@ -152,112 +187,42 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @param string $_path
      * @return Tinebase_Record_RecordSet
      */
-    public function getPathNodes($_path)
+    public function getPathNodes($path)
     {
-        $pathParts = $this->splitPath($_path);
+        $pathParts = $this->splitPath($path);
         
         if (empty($pathParts)) {
             throw new Tinebase_Exception_InvalidArgument('empty path provided');
         }
         
-        $level = 0;
-        $select = $this->_db->select();
-
-        $select->from(array('level0' => $this->_tablePrefix . $this->_tableName), array(
-                "level{$level}_id"        => 'id', 
-                "level{$level}_name"      => 'name',
-                "level{$level}_parent_id" => 'parent_id',
-                "level{$level}_object_id" => 'object_id',
-                "level{$level}_islink"    => 'islink'
-            ))
-            ->joinLeft(
-                /* table  */ array("level{$level}_fileobjects" => $this->_tablePrefix . 'tree_fileobjects'), 
-                /* on     */ $this->_db->quoteIdentifier("level{$level}.object_id") . ' = ' . $this->_db->quoteIdentifier("level{$level}_fileobjects.id"),
-                /* select */ array(
-                                 "level{$level}_type"               => 'type', 
-                                 "level{$level}_revision"           => 'revision',
-                                 "level{$level}_contenttype"        => 'contenttype',
-                                 "level{$level}_created_by"         => 'created_by',
-                                 "level{$level}_creation_time"      => 'creation_time',
-                                 "level{$level}_last_modified_by"   => 'last_modified_by',
-                                 "level{$level}_last_modified_time" => 'last_modified_time'
-                             )
-            )
-            ->joinLeft(
-                /* table  */ array("level{$level}_filerevisions" => $this->_tablePrefix . 'tree_filerevisions'), 
-                /* on     */ $this->_db->quoteIdentifier("level{$level}_fileobjects.id") . ' = ' . $this->_db->quoteIdentifier("level{$level}_filerevisions.id") . ' AND ' . $this->_db->quoteIdentifier("level{$level}_fileobjects.revision") . ' = ' . $this->_db->quoteIdentifier("level{$level}_filerevisions.revision"),
-                /* select */ array("level{$level}_hash" => 'hash', "level{$level}_size" => 'size')
-            )
-            ->where($this->_db->quoteIdentifier('level0.name') . ' = ?', $pathParts[0])
-            ->where($this->_db->quoteIdentifier('level0.parent_id') . ' IS NULL');
-
-        while (isset($pathParts[++$level])) {
-            $select->joinLeft(
-                    /* table  */ array('level' . $level => $this->_tablePrefix . $this->_tableName), 
-                    /* on     */ $this->_db->quoteIdentifier('level' . ($level-1) . '.id') . ' = ' . $this->_db->quoteIdentifier("level{$level}.parent_id"),
-                    /* select */ array(
-                                     "level{$level}_id"        => 'id', 
-                                     "level{$level}_name"      => 'name',
-                                     "level{$level}_parent_id" => 'parent_id',
-                                     "level{$level}_object_id" => 'object_id',
-                                     "level{$level}_islink"    => 'islink'
-                                 )
+        $parentId  = null;
+        $pathNodes = new Tinebase_Record_RecordSet($this->_modelName);
+        
+        foreach ($pathParts as $pathPart) {
+            $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
+                array(
+                    'field'     => 'parent_id',
+                    'operator'  => $parentId ? 'equals' : 'isnull',
+                    'value'     => $parentId
+                ),
+                array(
+                    'field'     => 'name',
+                    'operator'  => 'equals',
+                    'value'     => $pathPart
                 )
-                ->joinLeft(
-                    /* table  */ array("level{$level}_fileobjects" => $this->_tablePrefix . 'tree_fileobjects'), 
-                    /* on     */ $this->_db->quoteIdentifier("level{$level}.object_id") . ' = ' . $this->_db->quoteIdentifier("level{$level}_fileobjects.id"),
-                    /* select */ array(
-                                     "level{$level}_type"               => 'type', 
-                                     "level{$level}_revision"           => 'revision',
-                                     "level{$level}_contenttype"        => 'contenttype',
-                                     "level{$level}_created_by"         => 'created_by',
-                                     "level{$level}_creation_time"      => 'creation_time',
-                                     "level{$level}_last_modified_by"   => 'last_modified_by',
-                                     "level{$level}_last_modified_time" => 'last_modified_time'
-                                 )
-                )
-                ->joinLeft(
-                    /* table  */ array("level{$level}_filerevisions" => $this->_tablePrefix . 'tree_filerevisions'), 
-                    /* on     */ $this->_db->quoteIdentifier("level{$level}_fileobjects.id") . ' = ' . $this->_db->quoteIdentifier("level{$level}_filerevisions.id") . ' AND ' . $this->_db->quoteIdentifier("level{$level}_fileobjects.revision") . ' = ' . $this->_db->quoteIdentifier("level{$level}_filerevisions.revision"),
-                    /* select */ array("level{$level}_hash" => 'hash', "level{$level}_size" => 'size')
-                )
-                ->where($this->_db->quoteIdentifier("level{$level}.name") . ' = ?', $pathParts[$level]);
+            ));
+            $node = $this->search($searchFilter)->getFirstRecord();
+            
+            if (!$node) {
+                throw new Tinebase_Exception_NotFound('path: ' . $path . ' not found!');
+            }
+            
+            $pathNodes->addRecord($node);
+            
+            $parentId = $node->getId();
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetch();
-        $stmt->closeCursor();
-        
-        if (!$queryResult) {
-            throw new Tinebase_Exception_NotFound('path: ' . $_path . ' not found!');
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
-
-        for ($i=0; $i < $level; $i++) {
-            $resultArray[] = array(
-                'id'                 => $queryResult["level{$i}_id"],
-                'name'               => $queryResult["level{$i}_name"],
-                'parent_id'          => $queryResult["level{$i}_parent_id"],
-                'object_id'          => $queryResult["level{$i}_object_id"],
-                'islink'             => $queryResult["level{$i}_islink"],
-                'type'               => $queryResult["level{$i}_type"],
-                'hash'               => $queryResult["level{$i}_hash"],
-                'size'               => $queryResult["level{$i}_size"],
-                'revision'           => $queryResult["level{$i}_revision"],
-                'contenttype'        => $queryResult["level{$i}_contenttype"],
-                'created_by'         => $queryResult["level{$i}_created_by"],
-                'creation_time'      => $queryResult["level{$i}_creation_time"],
-                'last_modified_by'   => $queryResult["level{$i}_last_modified_by"],
-                'last_modified_time' => $queryResult["level{$i}_last_modified_time"]
-            );
-        }
-        
-        $resultSet = $this->_rawDataToRecordSet($resultArray);
-        
-        return $resultSet;
+        return $pathNodes;
     }
     
     /**
@@ -285,12 +250,17 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         return true;
     }
     
+    public function sanitizePath($path)
+    {
+        return trim($path, '/');
+    }
+    
     /**
      * @param  string  $_path
      * @return array
      */
-    public function splitPath($_path)
+    public function splitPath($path)
     {
-        return explode('/', trim($_path, '/'));
+        return explode('/', $this->sanitizePath($path));
     }
 }

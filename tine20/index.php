@@ -14,6 +14,8 @@ $time_start = microtime(true);
 
 require_once 'bootstrap.php';
 
+Tinebase_Core::set(Tinebase_Core::STARTTIME, $time_start);
+
 Tinebase_Core::dispatchRequest();
 
 // log profiling information
@@ -23,5 +25,5 @@ $time = $time_end - $time_start;
 
 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
     Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ') ' .
-        'METHOD: ' . Tinebase_Core::get(Tinebase_Core::METHOD) . ' / TIME: ' . $time . ' seconds / ' .Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize());
+        'METHOD: ' . Tinebase_Core::get(Tinebase_Core::METHOD) . ' / TIME: ' . formatMicrotimeDiff($time) . ' / ' .Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize());
 }

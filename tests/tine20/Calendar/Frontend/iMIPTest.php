@@ -66,6 +66,8 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Calendar_Controller_Event::getInstance()->sendNotifications(true);
+        
         $this->_iMIPFrontend = new Calendar_Frontend_iMIP();
         $this->_iMIPFrontendMock = new Calendar_Frontend_iMIPMock();
         
@@ -85,6 +87,8 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Calendar_Controller_Event::getInstance()->sendNotifications(false);
+        
         if (! empty($this->_eventIdsToDelete)) {
             Calendar_Controller_Event::getInstance()->delete($this->_eventIdsToDelete);
         }

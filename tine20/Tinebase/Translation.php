@@ -25,39 +25,11 @@ class Tinebase_Translation
     protected static $_countryLists = array();
     
     /**
-     * List of officially supported languages
-     *
+     * cached instances of Zend_Translate
+     * 
      * @var array
      */
-    private static $SUPPORTED_LANGS = array(
-        'bg',      // Bulgarian            Dimitrina Mileva <d.mileva@metaways.de>
-        'ca',      // Catalan              Damià Verger - JUG Països Catalans <dverger@joomla.cat>
-        'cs',      // Czech                Michael Sladek <msladek@brotel.cz>
-        'da',      // Danish               Sylvester Nielsen
-        'de',      // German               Cornelius Weiss <c.weiss@metaways.de>
-        'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
-        'es',      // Spanish (Castilian)  Enrique Palacios <enriquepalaciosc@gmail.com>
-        'es_MX',   // Spanish (Mexico)     Miguel Gutierrez 
-        'et',      // Estonian             Rivo Zängov
-        'fa_IR',   // Persian (Iran)       hamid112233
-        'fr',      // French               Rémi Peltier <rpeltier@agglo-clermont.fr>
-        'hr_HR',   // Croatian (Croatia)   AirMike
-        'hu',      // Hungarian            Tamás Faragó <admin@kemenyfem.hu>
-        'it',      // Italian              Roberto Rossi <impiastro@gmail.com>
-        'ja',      // Japanese             Yuuki Kitamura <ykitamura@clasi-co.jp>
-        'lt',      // Lithuanian           Aurimas Driskius
-        'nb',      // Norwegian Bokmål     Ronny Gonzales <gonzito@online.no>
-        //'nl',      // Dutch                Joost Venema <post@joostvenema.nl>
-        'pl',      // Polish               Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>
-        //'pt',      // Portuguese           Holger Rothemund <holger@rothemund.org>
-        'pt_BR',   // Portuguese (Brazil)  Eduardo Fukunari
-        'ru',      // Russian              Nikolay Parukhin <parukhin@gmail.com>
-        'sk',      // Slovak               attila623
-        'sv_SE',   // Swedish              Andreas Storbjörk <andreas.storbjork@rambolo.net>
-        'tr_TR',   // Turkish (Turkey)     Furkan Karatopraklı
-        'zh_CN',   // Chinese Simplified   Jason Qi <qry@yahoo.com>
-        'zh_TW',   // Chinese Traditional  Frank Huang <frank.cchuang@gmail.com>
-    );
+    protected static $_applicationTranslations = array();
     
     /**
      * returns list of all available translations
@@ -68,12 +40,12 @@ class Tinebase_Translation
      *
      * @todo add test
      */
-    public static function getAvailableTranslations()
+    public static function getAvailableTranslations($appName = 'Tinebase')
     {
         $availableTranslations = array();
 
         // look for po files in Tinebase 
-        $officialTranslationsDir = dirname(__FILE__) . '/translations';
+        $officialTranslationsDir = dirname(__FILE__) . "/../$appName/translations";
         foreach(scandir($officialTranslationsDir) as $poFile) {
             list ($localestring, $suffix) = explode('.', $poFile);
             if ($suffix == 'po') {
@@ -88,7 +60,7 @@ class Tinebase_Translation
             $customTranslationsDir = Tinebase_Config::getInstance()->translations;
             if ($customTranslationsDir) {
                 foreach((array) @scandir($customTranslationsDir) as $dir) {
-                    $poFile = "$customTranslationsDir/$dir/Tinebase/translations/$dir.po";
+                    $poFile = "$customTranslationsDir/$dir/$appName/translations/$dir.po";
                     if (is_readable($poFile)) {
                         $availableTranslations[$dir] = array(
                             'path' => $poFile
@@ -256,50 +228,39 @@ class Tinebase_Translation
     {
         $locale = ($_locale !== NULL) ? $_locale : Tinebase_Core::get('locale');
         
-        $cache = Tinebase_Core::getCache();
-        $cacheId = 'getTranslation_' . (string)$locale . $_applicationName;
+        $cacheId = (string)$locale . $_applicationName;
         
-        // get translation from cache?
-        if ($cache->test($cacheId)) {
-            $translate = $cache->load($cacheId);
-            if (is_object($translate) && $translate instanceof Zend_Translate) {
-                return $translate;
-            }
+        // get translation from internal class member?
+        if (array_key_exists($cacheId, self::$_applicationTranslations)) {
+            return self::$_applicationTranslations[$cacheId];
         }
-
-        $availableTranslations = self::getAvailableTranslations();
-        $info = array_key_exists((string) $locale, $availableTranslations) ? $availableTranslations[(string) $locale] : array();
-        $basePath = (array_key_exists('path', $info) ? dirname($info['path']) . '/..' : dirname(__FILE__)) . '/..';
+        
+        // get translation from filesystem
+        $availableTranslations = self::getAvailableTranslations(ucfirst($_applicationName));
+        $info = array_key_exists((string) $locale, $availableTranslations) 
+            ? $availableTranslations[(string) $locale] 
+            : $availableTranslations['en'];
         
         // create new translation
-        $path = $basePath . DIRECTORY_SEPARATOR . ucfirst($_applicationName) . DIRECTORY_SEPARATOR . 'translations';
         $options = array(
-                'scan' => Zend_Translate::LOCALE_FILENAME,
-                'disableNotices' => TRUE,
-                );
+            'disableNotices' => true
+        );
+        
         // Switch between Po and Mo adapter depending on the mode
         switch (TINE20_BUILDTYPE) {
             case 'DEVELOPMENT':
-                $translate = new Zend_Translate('gettextPo', $path, null, $options);
+                $translate = new Zend_Translate('gettextPo', $info['path'], $info['locale'], $options);
                 break;
             case 'DEBUG':
             case 'RELEASE':
-                $translate = new Zend_Translate('gettext', $path, null, $options);
+                $translate = new Zend_Translate('gettext', str_replace('.po', '.mo', $info['path']), $info['locale'], $options);
                 break;
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . $_applicationName . '/' . $info['locale']);
         
-        try {
-            $translate->setLocale($locale);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . $_applicationName . '/' . (string)$locale);
-            
-        } catch (Zend_Translate_Exception $e) {
-            // the locale of the user is not available
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)$locale);
-        }
-            
-        // store translation in cache
-        $cache->save($translate, $cacheId, array('Zend_Translate'));
+        self::$_applicationTranslations[$cacheId] = $translate;
         
         return $translate;
     }

@@ -54,3 +54,6 @@ if (!$tinebaseController->login($config->username, $config->password, $config->i
 // do this after login because we need the current user
 TestServer::getInstance()->initTestUsers();
 TestServer::getInstance()->setTestUserEmail();
+
+// speed up tests by disabling calendar notifications
+Calendar_Controller_Event::getInstance()->sendNotifications(false);

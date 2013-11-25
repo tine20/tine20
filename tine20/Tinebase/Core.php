@@ -69,6 +69,11 @@ class Tinebase_Core
     const SESSIONID = 'sessionId';
 
     /**
+     * constant for application start time in ms registry index
+     */
+    const STARTTIME = 'starttime';
+
+    /**
      * constant for current account/user
      */
     const USER = 'currentAccount';

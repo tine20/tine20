@@ -116,7 +116,10 @@ class Crm_JsonTest extends Crm_AbstractTest
     {
         $result = $this->_instance->getSettings();
 
-        $this->assertEquals(array('leadstates', 'leadtypes', 'leadsources', 'defaults'), array_keys($result));
+        $this->assertArrayHasKey('leadstates',  $result);
+        $this->assertArrayHasKey('leadtypes',   $result);
+        $this->assertArrayHasKey('leadsources', $result);
+        $this->assertArrayHasKey('defaults',    $result);
         $this->assertEquals(6, count($result[Crm_Model_Config::LEADSTATES]));
         $this->assertEquals(3, count($result[Crm_Model_Config::LEADTYPES]));
         $this->assertEquals(4, count($result[Crm_Model_Config::LEADSOURCES]));
@@ -520,8 +523,14 @@ class Crm_JsonTest extends Crm_AbstractTest
         $savedLead = $this->_saveLead();
         // change relations, customfields + tags
         $savedLead['tags'][] = array('name' => 'another tag', 'type' => Tinebase_Model_Tag::TYPE_PERSONAL);
-        $savedLead['relations'][0]['type'] = 'CUSTOMER';
-        unset($savedLead['relations'][1]);
+        foreach ($savedLead['relations'] as $key => $value) {
+            if ($value['type'] == 'PARTNER') {
+                $savedLead['relations'][$key]['type'] = 'CUSTOMER';
+            }
+            if ($value['type'] == 'TASK') {
+                unset($savedLead['relations'][$key]);
+            }
+        }
         $savedLead['customfields']['crmcf'] = '5678';
         $updatedLead = $this->_instance->saveLead($savedLead);
         

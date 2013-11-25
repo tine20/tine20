@@ -63,17 +63,16 @@ class Zend_Translate_Adapter_GettextPo extends Zend_Translate_Adapter {
      */
      protected function _loadTranslationData($filename, $locale, array $options = array())
     {
-    
-        //Ignor files except .po
+        //Ignore files except .po
         if (!preg_match('/\.po$/', $filename)) {
-            return array();
+            throw new Zend_Translate_Exception('unsupported file format');
         }
         
-        $this->_data      = array();
-        $this->_file      = @fopen($filename, 'rb');
-        $header = "";
-        $id = "";
-        $str = "";
+        $this->_data = array();
+        $this->_file = @fopen($filename, 'rb');
+        $header      = "";
+        $id          = "";
+        $str         = "";
         
         //Exception: Can't open file.
         if (!$this->_file) {
