@@ -329,11 +329,17 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testTransfer
+     * 
      * @see 0009210: Allow to change relations
      *      https://forge.tine20.org/mantisbt/view.php?id=9210
      */
     public function testTransfer()
     {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            $this->markTestSkipped('@see 0009254: fix Tinebase_Relation_RelationTest::testTransfer (pgsql)');
+        }
+        
         $addresses = Addressbook_Controller_Contact::getInstance()->getAll();
         
         $sclever = $addresses->filter('email', 'sclever@tine20.org')->getFirstRecord();
