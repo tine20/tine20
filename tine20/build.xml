@@ -9,6 +9,7 @@
 <project name="tine20" description="Tine 2.0 build file" default="build">
 
     <property name="builddir" value="${project.basedir}/build" override="true" />
+    <property name="userdatadir" value="${project.basedir}/userdata" override="true" />
     <property name="localedir" value="Tinebase/js/Locale" override="true" />
     <property name="configdir" value="${project.basedir}" override="true" />
     <property name="testconfigdir" value="${project.basedir}/../tests/tine20" override="true" />
@@ -84,7 +85,7 @@
     <!-- $ vendor/bin/phing phpunit -Dtestinclude=Tinebase/**/*Test.php     -->
     <!-- ============================================                       -->
     <target name="phpunit">
-    	<!-- TODO we still have some test files that are named *Tests.php, rename them or adjust the include property -->
+        <!-- TODO we still have some test files that are named *Tests.php, rename them or adjust the include property -->
         <property name="testinclude" value="**/*Test.php" override="true" />
         
         <echo msg="Starting Tests..." />
@@ -111,6 +112,23 @@
         <phpunitreport infile="${builddir}/reports/testsuites.xml" format="frames" todir="${builddir}/reports/tests" />
     </target>
 
+    <!-- ============================================  -->
+    <!-- Target: phpunit-prepare                       -->
+    <!-- ============================================  -->
+    <target name="phpunit-prepare">
+        <echo msg="Preparing for phpunit" />
+
+        <echo msg="Making report directories" />
+        <mkdir dir="${builddir}/reports" />
+
+        <echo msg="Making userdata directories" />
+        <mkdir dir="${userdatadir}/cache"/>
+        <mkdir dir="${userdatadir}/sessions"/>
+        <mkdir dir="${userdatadir}/tmp"/>
+        <mkdir dir="${userdatadir}/files"/>
+        <mkdir dir="${userdatadir}/log"/>
+    </target>
+    
     <!-- ============================================      -->
     <!-- Target: phpunit-exec                              -->
     <!--                                                   -->
@@ -118,17 +136,15 @@
     <!-- to overcome some drawbacks (for example we can't  -->
     <!-- use the LogListener) of the phing phpunit task.   -->
     <!-- ============================================      -->
-    <target name="phpunit-exec">
+    <target name="phpunit-exec" depends="clean, phpunit-prepare">
         <property name="testinclude" value="AllTests.php" override="true" />
         
-        <delete dir="${builddir}/reports" />
-        <mkdir dir="${builddir}/reports" />
-
         <echo msg="Starting Tests..." />
         <echo msg="Using config file ${testconfigdir}/phpunit.xml" />
         
         <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/../tests/tine20" passthru="true">
              <arg line="-d max_execution_time=0
+             -d include_path=.:/usr/share/php/:${configdir}:${project.basedir}
              --configuration ${testconfigdir}/phpunit.xml
              --log-junit ${builddir}/reports/testsuites.xml
              ${testinclude} " />
@@ -268,6 +284,7 @@
     <!-- ============================================  -->
     <target name="clean">
         <delete dir="${builddir}" includeemptydirs="true" verbose="false" failonerror="false" />
+        <delete dir="${userdatadir}" includeemptydirs="true" verbose="false" failonerror="false" />
         <delete>
             <fileset dir=".">
                 <include name="*/*/*-FAT*" />
@@ -346,7 +363,7 @@
         <exec command="php -d include_path=.:${configdir} setup.php \
             --uninstall" passthru="true"/>
     </target>
-	
+    
     <!-- ============================================  -->
     <!-- Task: init                                    -->
     <!-- ============================================  -->
