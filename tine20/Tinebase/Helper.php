@@ -260,3 +260,29 @@ function is_json($string)
     // check if error occured (only if json_last_error() exists)
     return (! function_exists('json_last_error') || json_last_error() == JSON_ERROR_NONE);
 }
+
+/**
+ * formats a microtime diff to an appropriate string containing time unit based on the value range
+ * 
+ * value ranges
+ * below 1s return ms
+ * below 1m return s
+ * below 1h return m
+ * as of 1h return h
+ * 
+ * @param float $timediff
+ * @return string
+ */
+function formatMicrotimeDiff($timediff)
+{
+    $ms = (int)($timediff * 1000);
+    if ($ms>=3600000) {
+        return (((int)($ms / 3600000 * 100.0)) / 100.0).'h';
+    } elseif ($ms>=60000) {
+        return (((int)($ms / 60000 * 100.0)) / 100.0).'m';
+    } elseif ($ms>=1000) {
+        return (((int)($ms / 1000 * 100.0)) / 100.0).'s';
+    } else {
+        return $ms.'ms';
+    }
+}

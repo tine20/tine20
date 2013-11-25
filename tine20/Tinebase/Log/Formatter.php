@@ -22,11 +22,39 @@
 class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
 {
     /**
+     * last time a log message was processed
+     *
+     * @var boolean
+     */
+    protected static $_lastlogtime = NULL;
+    
+    /**
+     * should difftime be logged
+     *
+     * @var boolean
+     */
+    protected static $_logdifftime = NULL;
+    
+    /**
+     * should runtime be logged
+     *
+     * @var boolean
+     */
+    protected static $_logruntime = NULL;
+    
+    /**
      * session id
      * 
      * @var string
      */
     protected static $_prefix;
+    
+    /**
+     * application start time
+     *
+     * @var float
+     */
+    protected static $_starttime = NULL;
     
     /**
      * username
@@ -50,6 +78,42 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     protected $_replace = array();
     
     /**
+     * overwritten parent constructor to load configuration, calls parent constructor
+     * 
+     * supported configuration keys:
+     * logruntime    => prepend time passed since request started
+     * logdifftime   => prepend time passed since last log message
+     *
+     * @param string $format
+     */
+    function __construct(string $format = null)
+    {
+        parent::__construct($format);
+        
+        if (!self::$_prefix) {
+            self::$_prefix = Tinebase_Record_Abstract::generateUID(5);
+        }
+        
+        if (self::$_starttime === NULL) {
+            self::$_starttime = Tinebase_Core::get(Tinebase_Core::STARTTIME);
+        }
+        
+        if (self::$_logruntime === NULL || self::$_logdifftime === NULL) {
+            $config = Tinebase_Core::getConfig();
+            if ($config->logger->logruntime) {
+                self::$_logruntime = true;
+            } else {
+                self::$_logruntime = false;
+            }
+            if ($config->logger->logdifftime) {
+                self::$_logdifftime = true;
+            } else {
+                self::$_logdifftime = false;
+            }
+        }
+    }
+    
+    /**
      * Add session id in front of log line
      *
      * @param  array    $event    event data
@@ -57,14 +121,23 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      */
     public function format($event)
     {
-        if (! self::$_prefix) {
-            self::$_prefix = Tinebase_Record_Abstract::generateUID(5);
-        }
-        
         $output = parent::format($event);
         $output = str_replace($this->_search, $this->_replace, $output);
         
-        return self::getPrefix() . ' ' . self::getUsername() . ' - ' . $output;
+        $timelog = '';
+        if (self::$_logdifftime || self::$_logruntime)
+        {
+            $currenttime = microtime(true);
+            if (self::$_logruntime) {
+                $timelog = formatMicrotimeDiff($currenttime - self::$_starttime) . ' ';
+            }
+            if (self::$_logdifftime) {
+                $timelog .= formatMicrotimeDiff($currenttime - (self::$_lastlogtime ? self::$_lastlogtime : $currenttime)) . ' ';
+                self::$_lastlogtime = $currenttime;
+            }
+        }
+        
+        return self::getPrefix() . ' ' . self::getUsername() . ' ' . $timelog . '- ' . $output;
     }
     
     /**
