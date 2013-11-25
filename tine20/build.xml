@@ -337,7 +337,16 @@
                 accounts=${accounts}
 " passthru="true"/>
     </target>
-    
+
+    <!-- ============================================  -->
+    <!-- Target: tine-uninstall                               -->
+    <!-- ============================================  -->
+    <target name="tine-uninstall">
+        <echo msg="Uninstalling Tine 2.0" />
+        <exec command="php setup.php \
+            --uninstall" passthru="true"/>
+    </target>
+	
     <!-- ============================================  -->
     <!-- Task: init                                    -->
     <!-- ============================================  -->
