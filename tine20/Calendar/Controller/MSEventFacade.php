@@ -831,7 +831,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $_exception->recurid = $_baseEvent->uid . '-' . $_exception->getOriginalDtStart()->format(Tinebase_Record_Abstract::ISO8601LONG);
         
         // NOTE: we always refetch the base event as it might be touched in the meantime
-        $currBaseEvent = $this->_eventController->getRecurBaseEvent($_exception);
+        $currBaseEvent = $this->_eventController->get($_baseEvent, null, false);
         $_exception->last_modified_time = $currBaseEvent->last_modified_time;
     }
 }
