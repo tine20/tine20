@@ -129,6 +129,11 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      */
     protected function _setupConfigOptions($_options)
     {
+        // ignore empty options
+        foreach($_options as $key => $value) {
+            if (empty($_options[$key])) unset($_options[$key]);
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Saving config options (accounts/authentication/email/...)');
         
         // this is a dangerous TRACE as there might be passwords in here!
