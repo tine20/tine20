@@ -96,6 +96,9 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         
         if (self::$_starttime === NULL) {
             self::$_starttime = Tinebase_Core::get(Tinebase_Core::STARTTIME);
+            if (self::$_starttime === NULL) {
+                self::$_starttime = microtime(true);
+            }
         }
         
         if (self::$_logruntime === NULL || self::$_logdifftime === NULL) {
