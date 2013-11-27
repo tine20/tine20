@@ -126,11 +126,16 @@ Tine.widgets.dialog.AddRelationsEditDialogPlugin.prototype = {
     addRelationsOnLoad: function(records) {
         var ownIdProperty = this.editDialog.recordClass.getMeta('idProperty'),
             foreignIdProperty = this.recordClass.getMeta('idProperty');
-
+        
+        var existingRelations = this.editDialog.record.get('relations');
+            existingRelations = Ext.isArray(existingRelations) ? existingRelations : [];
+            
         var addRelations = [];
+        
         Ext.each(records, function(record) {
             var add = true;
-            Ext.each(this.editDialog.record.get('relations'), function(existingRelation) {
+            Ext.each(existingRelations, function(existingRelation) {
+                
                 if((record.get(foreignIdProperty) == existingRelation.related_record[foreignIdProperty])) {
                     add = false;
                     return;
@@ -157,14 +162,14 @@ Tine.widgets.dialog.AddRelationsEditDialogPlugin.prototype = {
                 addRelations.push(relation);
             }
         }, this);
-        var existing = this.editDialog.record.data.hasOwnProperty('relations') ? this.editDialog.record.data.relations : [];
-        Ext.each(existing, function(existingRecord) {
-            if(existingRecord.related_record.hasOwnProperty('relation')) {
-                delete existingRecord.related_record.relation;
+        
+        Ext.each(existingRelations, function(existingRelation) {
+            if (existingRelation.related_record.hasOwnProperty('relation')) {
+                delete existingRelation.related_record.relation;
             }
         }, this);
 
-        this.editDialog.record.set('relations', existing.concat(addRelations));
+        this.editDialog.record.set('relations', existingRelations.concat(addRelations));
         this.interceptor();
     }
 };
