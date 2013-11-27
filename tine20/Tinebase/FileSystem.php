@@ -120,9 +120,11 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     public function getApplicationBasePath($_application, $_type = NULL)
     {
         $application = $_application instanceof Tinebase_Model_Application 
-            ? $_application : Tinebase_Application::getInstance()->getApplicationById($_application);
+            ? $_application 
+            : Tinebase_Application::getInstance()->getApplicationById($_application);
         
         $result = '/' . $application->getId();
+        
         if ($_type !== NULL) {
             if (! in_array($_type, array(Tinebase_Model_Container::TYPE_SHARED, Tinebase_Model_Container::TYPE_PERSONAL, self::FOLDER_TYPE_RECORDS))) {
                 throw new Tinebase_Exception_UnexpectedValue('Type can only be shared or personal.');
@@ -164,11 +166,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     /**
      * create container node
      * 
-     * @param Tinebase_Model_Container $_container
+     * @param Tinebase_Model_Container $container
      */
-    public function createContainerNode(Tinebase_Model_Container $_container)
+    public function createContainerNode(Tinebase_Model_Container $container)
     {
-        $path = $this->getContainerPath($_container);
+        $path = $this->getContainerPath($container);
+        
         if (!$this->fileExists($path)) {
             $this->mkdir($path);
         }
@@ -200,6 +203,59 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             // clear the whole cache
             $this->_statCache = array();
         }
+    }
+    
+    /**
+     * copy file/directory
+     * 
+     * @todo copy recursive
+     * 
+     * @param  string  $sourcePath
+     * @param  string  $destinationPath
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @return Tinebase_Model_Tree_Node
+     */
+    public function copy($sourcePath, $destinationPath)
+    {
+        $destinationNode = $this->stat($sourcePath);
+        $sourcePathParts = $this->_splitPath($sourcePath);
+        
+        try {
+            // does destinationPath exist ...
+            $parentNode = $this->stat($destinationPath);
+            
+            // ... and is a directory?
+            if (! $parentNode->type == Tinebase_Model_Tree_Node::TYPE_FOLDER) {
+                throw new Tinebase_Exception_UnexpectedValue("Destination path exists and is a file. Please remove before.");
+            }
+            
+            $destinationNodeName  = basename(trim($sourcePath, '/'));
+            $destinationPathParts = array_merge($this->_splitPath($destinationPath), (array)$destinationNodeName);
+
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // does parent directory of destinationPath exist?
+            try {
+                $parentNode = $this->stat(dirname($destinationPath));
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                throw new Tinebase_Exception_UnexpectedValue("Parent directory does not exist. Please create before.");
+            }
+            
+            $destinationNodeName = basename(trim($destinationPath, '/'));
+            $destinationPathParts = array_merge($this->_splitPath(dirname($destinationPath)), (array)$destinationNodeName);
+        }
+        
+        if ($sourcePathParts == $destinationPathParts) {
+            throw new Tinebase_Exception_UnexpectedValue("Source path and destination path must be different.");
+        }
+        
+        // set new node properties
+        $destinationNode->setId(null);
+        $destinationNode->parent_id = $parentNode->getId();
+        $destinationNode->name      = $destinationNodeName;
+        
+        $createdNode = $this->_treeNodeBackend->create($destinationNode);
+        
+        return $createdNode;
     }
     
     /**
@@ -306,9 +362,11 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     protected function _updateFileObject($_id, $_hash, $_hashFile)
     {
         $currentFileObject = $this->_fileObjectBackend->get($_id);
+        
         $updatedFileObject = clone($currentFileObject);
         $updatedFileObject->hash = $_hash;
         $updatedFileObject->size = filesize($_hashFile);
+        
         if (version_compare(PHP_VERSION, '5.3.0', '>=') && function_exists('finfo_open')) {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mimeType = finfo_file($finfo, $_hashFile);
@@ -488,7 +546,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      *
      * @param  string  $oldPath
      * @param  string  $newPath
-     * @return boolean
+     * @return Tinebase_Model_Tree_Node
      */
     public function rename($oldPath, $newPath)
     {
@@ -522,7 +580,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         $this->_addStatCache($newPath, $node);
         
-        return true;
+        return $node;
     }
     
     /**
@@ -603,9 +661,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function scanDir($path)
     {
-        $node = $this->stat($path);
-        
-        $children = $this->getTreeNodeChildren($node);
+        $children = $this->getTreeNodeChildren($this->stat($path));
         
         foreach ($children as $node) {
             $this->_addStatCache($path . '/' . $node->name, $node);
@@ -1046,8 +1102,8 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     /**
      * copy tempfile data to file path
      * 
-     * @param string|Tinebase_Model_TempFile $tempFile
-     * @param string $path
+     * @param  string|Tinebase_Model_TempFile  $tempFile
+     * @param  string                          $path
      * @throws Tinebase_Exception_AccessDenied
      */
     public function copyTempfile($tempFile, $path)
@@ -1062,14 +1118,17 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
             $tempFile = ($tempFile instanceof Tinebase_Model_TempFile) ? $tempFile : Tinebase_TempFile::getInstance()->getTempFile($tempFile);
             $tempData = fopen($tempFile->path, 'r');
-            if ($tempData) {
-                stream_copy_to_stream($tempData, $handle);
-                fclose($tempData);
-            } else {
+            if (!$tempData) {
                 throw new Tinebase_Exception_AccessDenied('Could not read tempfile ' . $tempFile->path);
             }
+            
+            stream_copy_to_stream($tempData, $handle);
+            
+            fclose($tempData);
+            
             $this->clearStatCache($path);
         }
+        
         $this->fclose($handle);
     }
 }
