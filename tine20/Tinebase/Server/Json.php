@@ -44,10 +44,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 
                 if (in_array($parsedUrl['host'], $allowedOrigins)) {
                     header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+                    header('Access-Control-Allow-Credentials: true');
                     
                     if ($_SERVER['REQUEST_METHOD'] == "OPTIONS" && isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
                         header('Access-Control-Allow-Methods: POST, OPTIONS');
-                        header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type');
+                        header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type, x-tine20-jsonkey');
                         exit;
                     }
                 } else {

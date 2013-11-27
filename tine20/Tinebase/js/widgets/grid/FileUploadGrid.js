@@ -75,13 +75,13 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             evalGrants: false
         });
         
+        this.i18nFileString = _('File');
         
         this.initToolbarAndContextMenu();
         this.initStore();
         this.initColumnModel();
         this.initSelectionModel();
         
-        this.i18nFileString = _('File');
         this.plugins = [ new Ext.ux.grid.GridViewMenuPlugin({}) ];
         this.enableHdMenu = false;
       

@@ -138,13 +138,15 @@
     <!-- ============================================      -->
     <target name="phpunit-exec" depends="clean, phpunit-prepare">
         <property name="testinclude" value="AllTests.php" override="true" />
+        <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}" override="true" />
         
         <echo msg="Starting Tests..." />
         <echo msg="Using config file ${testconfigdir}/phpunit.xml" />
+        <echo msg="Setting include_path to ${includepath}" />
         
         <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/../tests/tine20" passthru="true">
              <arg line="-d max_execution_time=0
-             -d include_path=.:/usr/share/php/:${configdir}:${project.basedir}
+             -d include_path=${includepath}
              --configuration ${testconfigdir}/phpunit.xml
              --log-junit ${builddir}/reports/testsuites.xml
              ${testinclude} " />

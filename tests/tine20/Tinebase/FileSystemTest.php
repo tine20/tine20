@@ -91,6 +91,71 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         return $testPath;
     }
 
+    /**
+     * test copying directory to existing directory
+     */
+    public function testCopyDirectoryToExistingDirectory()
+    {
+        $sourcePath      = $this->testMkdir();
+        $destinationPath = $this->_basePath . '/TESTCOPY2';
+        $this->_controller->mkdir($destinationPath);
+        
+        $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
+        
+        $this->assertNotEquals($this->_controller->stat($sourcePath)->getId(), $createdNode->getId());
+        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FOLDER, $createdNode->type);
+        $this->assertEquals($this->_controller->stat($sourcePath)->name, $createdNode->name);
+        $this->assertTrue($this->_controller->fileExists($this->_basePath . '/TESTCOPY2/PHPUNIT'));
+    }
+    
+    /**
+     * test copying file to existing directory
+     */
+    public function testCopyFileToExistingDirectory()
+    {
+        $sourcePath      = $this->testCreateFile();
+        $destinationPath = $this->_basePath . '/TESTCOPY2';
+        $this->_controller->mkdir($destinationPath);
+        
+        $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
+        
+        $this->assertNotEquals($this->_controller->stat($sourcePath)->getId(), $createdNode->getId());
+        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $createdNode->type);
+        $this->assertEquals($this->_controller->stat($sourcePath)->name, $createdNode->name);
+        $this->assertTrue($this->_controller->fileExists($this->_basePath . '/TESTCOPY2/' . basename($sourcePath)));
+    }
+    
+    /**
+     * test copying file to existing directory and change name
+     */
+    public function testCopyFileToExistingDirectoryAndChangeName()
+    {
+        $sourcePath      = $this->testCreateFile();
+        $destinationPath = $this->_basePath . '/TESTCOPY2/phpunit2.txt';
+
+        $this->_controller->mkdir($this->_basePath . '/TESTCOPY2');
+        
+        $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
+        
+        $this->assertNotEquals($this->_controller->stat($sourcePath)->getId(), $createdNode->getId());
+        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $createdNode->type);
+        $this->assertEquals(basename($destinationPath), $createdNode->name);
+        $this->assertTrue($this->_controller->fileExists($this->_basePath . '/TESTCOPY2/' . basename($destinationPath)));
+    }
+    
+    /**
+     * test copying directory to existing directory
+     */
+    public function testCopySourceAndDestinationTheSame()
+    {
+        $sourcePath      = $this->testCreateFile();
+        $destinationPath = $this->testMkdir();
+        
+        $this->setExpectedException('Tinebase_Exception_UnexpectedValue');
+
+        $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
+    }
+    
     public function testRename()
     {
         $testPath = $this->testMkdir();
@@ -166,9 +231,11 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
     
     public function testCreateFile()
     {
-        $this->testMkdir();
+        $testDir  = $this->testMkdir();
+        $testFile = 'phpunit.txt';
+        $testPath = $testDir . '/' . $testFile;
         
-        $handle = $this->_controller->fopen($this->_basePath . '/PHPUNIT/phpunit.txt', 'x');
+        $handle = $this->_controller->fopen($testPath, 'x');
         
         $this->assertEquals('resource', gettype($handle), 'opening file failed');
         
@@ -178,9 +245,11 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         
         $this->_controller->fclose($handle);
         
-        $children = $this->_controller->scanDir($this->_basePath . '/PHPUNIT')->name;
+        $children = $this->_controller->scanDir($testDir)->name;
         
-        $this->assertTrue(in_array('phpunit.txt', $children));
+        $this->assertContains($testFile, $children);
+        
+        return $testPath;
     }
     
     /**
