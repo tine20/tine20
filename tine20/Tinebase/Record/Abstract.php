@@ -1026,6 +1026,31 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
+     * merge given record into $this
+     * 
+     * @param Tinebase_Record_Interface $record
+     * @return Tinebase_Record_Interface
+     */
+    public function merge($record)
+    {
+        if (! $this->getId()) {
+            $this->setId($record->getId());
+        }
+        $diff = $this->diff($record);
+        if ($diff === null || empty($diff->diff)) {
+            return $this;
+        }
+        
+        foreach ($diff->diff as $field => $value) {
+            if (empty($this->{$field})) {
+                $this->{$field} = $value;
+            }
+        }
+        
+        return $this;
+    }
+    
+    /**
      * check if data got modified
      * 
      * @return boolean
