@@ -70,7 +70,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         parent::tearDown();
         
-        Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_getTestUser());
     }
     
     /**
@@ -253,15 +253,15 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_persona_attendee.ics');
         
 //         $prefs = new Calendar_Preference();
-//         $prefs->setValueForUser(Calendar_Preference::DEFAULTCALENDAR, '', $this->_personas['pwulf']->getId());
+//         $prefs->setValueForUser(Calendar_Preference::DEFAULTCALENDAR, '', $this->_getPersona('pwulf')->getId());
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
         
         $event = Calendar_Controller_Event::getInstance()->get($id);
-        $pwulf = $event->attendee->filter('user_id', $this->_personasContacts['pwulf']->getId())->getFirstRecord();
+        $pwulf = $event->attendee->filter('user_id', $this->_getPersonasContacts('pwulf')->getId())->getFirstRecord();
         
-        $this->assertEquals($this->_personasDefaultCals['pwulf']->getId(), $pwulf->displaycontainer_id, 'event not in pwulfs personal calendar');
+        $this->assertEquals($this->_getPersonasDefaultCals('pwulf')->getId(), $pwulf->displaycontainer_id, 'event not in pwulfs personal calendar');
     }
     
     public function testCreateEventMissingOwnAttendee()
@@ -751,7 +751,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $exception = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, new Tinebase_DateTime('20131017T140000'));
         $exception->attendee->addRecord(new Calendar_Model_Attender(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['pwulf']->getId(),
+            'user_id'   => $this->_getPersonasContacts('pwulf')->getId(),
         )));
         $persistentException = Calendar_Controller_Event::getInstance()->createRecurException($exception);
         $persistentEvent = Calendar_Controller_Event::getInstance()->get($persistentEvent->getId());

@@ -40,7 +40,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtend'         => '2012-06-01 18:30:00',
             'originator_tz' => 'Europe/Berlin',
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2011-05-31 17:30:00',
-            'container_id'  => $this->_testCalendar->getId(),
+            'container_id'  => $this->_getTestCalendar()->getId(),
         ));
         
         $this->setExpectedException('Tinebase_Exception_Record_Validation');
@@ -59,7 +59,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtend'         => '2011-04-20 15:30:00',
             'originator_tz' => 'Europe/Berlin',
             'rrule'         => 'FREQ=WEEKLY;INTERVAL=3;WKST=SU;BYDAY=TU,TH',
-            'container_id'  => $this->_testCalendar->getId(),
+            'container_id'  => $this->_getTestCalendar()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         
@@ -72,7 +72,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $persistentEventException = $this->_controller->createRecurException($eventException);
         
         $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
         )));
         
         Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
@@ -143,14 +143,14 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
                 'dtend'         => '2012-02-22 15:30:00',
                 'originator_tz' => 'Europe/Berlin',
                 'rrule'         => 'FREQ=DAILY;COUNT=3',
-                'container_id'  => $this->_testCalendar->getId(),
+                'container_id'  => $this->_getTestCalendar()->getId(),
         ));
         
         $persistentEvent = $this->_controller->create($event);
         
         // create exception
         $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
         )));
         Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         $weekviewEvents[2]->dtstart->subHour(5);
@@ -159,7 +159,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         // load series
         $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
         )));
         Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         $weekviewEvents->sort('dtstart', 'ASC');
@@ -184,14 +184,14 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'is_all_day_event'  => true,
             'originator_tz' => 'Europe/Berlin',
             'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH',
-            'container_id'  => $this->_testCalendar->getId(),
+            'container_id'  => $this->_getTestCalendar()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         
         $persistentEvent = $this->_controller->create($event);
         
         $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
         )));
         
         Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
@@ -202,7 +202,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $persistentEventException = $this->_controller->createRecurException($exception, TRUE);
         
         $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
         )));
         
         Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
@@ -223,7 +223,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'originator_tz' => 'Europe/Berlin',
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-03-31 17:30:00',
             'exdate'        => '2009-03-27 18:00:00,2009-03-29 17:00:00',
-            'container_id'  => $this->_testCalendar->getId(),
+            'container_id'  => $this->_getTestCalendar()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         $event->attendee = $this->_getAttendee();
@@ -266,7 +266,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtend'         => '2011-04-20 15:30:00',
             'originator_tz' => 'Europe/Berlin',
             'rrule'         => 'FREQ=WEEKLY;INTERVAL=3;WKST=SU;BYDAY=TU,TH',
-            'container_id'  => $this->_testCalendar->getId(),
+            'container_id'  => $this->_getTestCalendar()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         $event->attendee = $this->_getAttendee();
@@ -279,7 +279,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->_controller->attenderStatusCreateRecurException(clone $persistentEvent, $attendee, $attendee->status_authkey);
         
         $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
         )));
         
         Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
@@ -297,15 +297,15 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $event->dtstart = '2010-05-20 06:00:00';
         $event->dtend = '2010-05-20 06:15:00';
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         $this->_controller->create($event);
 
         $event1 = $this->_getRecurEvent();
         $event1->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         
         $this->setExpectedException('Calendar_Exception_AttendeeBusy');
@@ -321,15 +321,15 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $event->dtstart = '2010-05-20 06:00:00';
         $event->dtend = '2010-05-20 06:15:00';
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         $this->_controller->create($event);
 
         $event1 = $this->_getRecurEvent();
         $event1->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         
         $event1 = $this->_controller->create($event1);
@@ -351,8 +351,8 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $event = $this->_getRecurEvent();
         $event->rrule = "FREQ=MONTHLY;INTERVAL=1;BYDAY=3TH";
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         
         $persistentRecurEvent = $this->_controller->create($event);
@@ -393,7 +393,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
                 'dtstart'       => '2012-03-13 09:00:00',
                 'dtend'         => '2012-03-13 10:00:00',
                 'rrule'         => 'FREQ=DAILY;INTERVAL=1',
-                'container_id'  => $this->_testCalendar->getId(),
+                'container_id'  => $this->_getTestCalendar()->getId(),
                 'attendee'      => $this->_getAttendee(),
         ));
         
@@ -439,7 +439,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtend'         => '2011-04-21 12:00:00',
             'originator_tz' => 'Europe/Berlin',
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2011-04-27 21:59:59',
-            'container_id'  => $this->_testCalendar->getId()
+            'container_id'  => $this->_getTestCalendar()->getId()
         ));
         
         $persistentEvent = $this->_controller->create($event);
@@ -476,7 +476,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $newBaseEvent = $this->_controller->createRecurException($recurSet[3], FALSE, TRUE);
         
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until),
         ))));
         
@@ -535,7 +535,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtstart'       => '2012-02-03 09:00:00',
             'dtend'         => '2012-02-03 10:00:00',
             'rrule'         => 'FREQ=DAILY;INTERVAL=1',
-            'container_id'  => $this->_testCalendar->getId(),
+            'container_id'  => $this->_getTestCalendar()->getId(),
             'attendee'      => $this->_getAttendee(),
         ));
         
@@ -573,7 +573,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtend'         => '2012-06-01 12:00:00',
             'originator_tz' => 'Europe/Berlin',
             'rrule'         => 'FREQ=WEEKLY;INTERVAL=1',
-            'container_id'  => $this->_testCalendar->getId()
+            'container_id'  => $this->_getTestCalendar()->getId()
         ));
         
         $persistentEvent = $this->_controller->create($event);
@@ -606,7 +606,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtstart'       => '2012-02-03 09:00:00',
             'dtend'         => '2012-02-03 10:00:00',
             'rrule'         => 'FREQ=DAILY;INTERVAL=1',
-            'container_id'  => $this->_testCalendar->getId(),
+            'container_id'  => $this->_getTestCalendar()->getId(),
             'attendee'      => $this->_getAttendee(),
         ));
         
@@ -622,7 +622,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->_controller->attenderStatusCreateRecurException($start, $sclever, $sclever->status_authkey, TRUE);
         
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId())
         )))->sort('dtstart', 'ASC');
         
         // assert two baseEvents
@@ -652,7 +652,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $recurSet[5]->attendee->addRecord(new Calendar_Model_Attender(array(
             'user_type'   => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'     => $this->_personasContacts['pwulf']->getId()
+            'user_id'     => $this->_getPersonasContacts('pwulf')->getId()
         )));
         
         $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[5], FALSE, TRUE);
@@ -673,7 +673,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtstart'       => $dtstart->toString(),
             'dtend'         => $dtstart->addHour(1)->toString(),
             'rrule'         => 'FREQ=DAILY;INTERVAL=1',
-            'container_id'  => $this->_testCalendar->getId(),
+            'container_id'  => $this->_getTestCalendar()->getId(),
             'attendee'      => $this->_getAttendee(),
         ));
         return $this->_controller->create($event);
@@ -694,14 +694,14 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtend'         => '2012-02-21 15:30:00',
             'originator_tz' => 'Europe/Berlin',
             'rrule'         => 'FREQ=DAILY;COUNT=5',
-            'container_id'  => $this->_testCalendar->getId(),
+            'container_id'  => $this->_getTestCalendar()->getId(),
         ));
         
         $persistentEvent = $this->_controller->create($event);
         
         // create exception
         $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
         )));
         Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         $weekviewEvents[2]->dtstart->subHour(5);
@@ -710,7 +710,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         // load events
         $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
         )));
         Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         $weekviewEvents->sort('dtstart', 'ASC');
@@ -761,7 +761,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtend'       => '2010-05-20 06:15:00',
             'description' => 'Breakfast',
             'rrule'       => 'FREQ=DAILY;INTERVAL=1',    
-            'container_id' => $this->_testCalendar->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT    => true,
         ));
     }

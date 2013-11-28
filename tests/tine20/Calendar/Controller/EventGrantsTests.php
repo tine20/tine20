@@ -61,7 +61,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testAddPersonalCalendarGrants()
     {
-        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_testCalendar->getId(), TRUE);
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_getTestCalendar()->getId(), TRUE);
         $anyoneIdx = array_search(Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, $grants->account_type);
         $this->assertTrue($anyoneIdx !== false, 'anyone has no grant entry');
         $this->assertTrue($grants[$anyoneIdx]->{Tinebase_Model_Grants::GRANT_FREEBUSY}, 'anyone has not freebusy grant');
@@ -185,7 +185,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'sclever');
         
         $loadedEvent = $this->_uit->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => "/personal/{$this->_personas['sclever']->getId()}"),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => "/personal/{$this->_getPersona('sclever')->getId()}"),
             array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId())
         )))->getFirstRecord();
         
@@ -315,8 +315,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     public function testFreeBusyViaAttendee()
     {
         // whipe grants from jmcblack
-        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['jmcblack'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_personas['jmcblack']->getId(),
+        Tinebase_Container::getInstance()->setGrants($this->_getPersonasDefaultCals('jmcblack'), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_getPersona('jmcblack')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
@@ -336,7 +336,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
                         array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId()),
                         array('field' => 'attender', 'operator' => 'in', 'value' => array(array(
                             'user_type' => 'user',
-                            'user_id'   => $this->_personas['rwright']->contact_id,
+                            'user_id'   => $this->_getPersona('rwright')->contact_id,
                         ))),
                     )
                 )
@@ -360,7 +360,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
 //            array('field' => 'attender', 'operator' => 'in', 'value' => array(
 //                array(
 //                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-//                    'user_id'   => $this->_personasContacts['rwright']->getId()
+//                    'user_id'   => $this->_getPersonasContacts('rwright')->getId()
 //                )
 //            ))
 //        )), NULL, FALSE, FALSE);
@@ -399,7 +399,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright');
         
         // for shure, this is esoteric, but it enshures that record GRANTS are in charge
-        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        Tinebase_Container::getInstance()->setGrants($this->_getTestCalendar(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_FREEBUSY => FALSE,
@@ -444,8 +444,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $this->markTestIncomplete('temporarily disabled until fixed');
         
         // set testuser to have editgrant for sclever
-        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['sclever'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_personas['sclever']->getId(),
+        Tinebase_Container::getInstance()->setGrants($this->_getPersonasDefaultCals('sclever'), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_getPersona('sclever')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
@@ -488,9 +488,9 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     
     protected function _createEventInPersonasCalendar($_calendarPersona, $_organizerPersona = NULL, $_attenderPersona = NULL, $_classification = Calendar_Model_Event::CLASS_PUBLIC)
     {
-        $calendarId  = $this->_personasDefaultCals[$_calendarPersona]->getId();
-        $organizerId = $_organizerPersona ? $this->_personasContacts[$_organizerPersona]->getId() : $this->_testUserContact->getId();
-        $attenderId  = $_attenderPersona ? $this->_personasContacts[$_attenderPersona]->getId() : $this->_testUserContact->getId();
+        $calendarId  = $this->_getPersonasDefaultCals($_calendarPersona)->getId();
+        $organizerId = $_organizerPersona ? $this->_getPersonasContacts($_organizerPersona)->getId() : $this->_getTestUserContact()->getId();
+        $attenderId  = $_attenderPersona ? $this->_getPersonasContacts($_attenderPersona)->getId() : $this->_getTestUserContact()->getId();
         
         $event = $this->_getEvent();
         $event->class = $_classification;
@@ -523,8 +523,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     protected function _setupTestCalendars()
     {
         // jsmith:     anyone freebusyGrant, readGrant, addGrant, editGrant, deleteGrant
-        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['jsmith'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_personas['jsmith']->getId(),
+        Tinebase_Container::getInstance()->setGrants($this->_getPersonasDefaultCals('jsmith'), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_getPersona('jsmith')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
@@ -545,8 +545,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         ))), true);
         
         // pwulf:      anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant, privateGrant
-        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['pwulf'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_personas['pwulf']->getId(),
+        Tinebase_Container::getInstance()->setGrants($this->_getPersonasDefaultCals('pwulf'), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_getPersona('pwulf')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
@@ -564,7 +564,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_DELETE   => false,
             Tinebase_Model_Grants::GRANT_ADMIN    => false,
         ), array(
-            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_id'    => $this->_getPersona('sclever')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
@@ -575,8 +575,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         ))), true);
         
         // sclever:   testuser addGrant, readGrant, editGrant, deleteGrant, privateGrant
-        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['sclever'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_personas['sclever']->getId(),
+        Tinebase_Container::getInstance()->setGrants($this->_getPersonasDefaultCals('sclever'), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_getPersona('sclever')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
@@ -597,8 +597,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         ))), true);
         
         // jmacblack: prim group of testuser readGrant, testuser privateGrant
-        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['jmcblack'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_personas['jmcblack']->getId(),
+        Tinebase_Container::getInstance()->setGrants($this->_getPersonasDefaultCals('jmcblack'), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_getPersona('jmcblack')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
@@ -627,8 +627,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         ))), true);
         
         // rwright:   testuser freebusyGrant, sclever has readGrant and editGrant
-        Tinebase_Container::getInstance()->setGrants($this->_personasDefaultCals['rwright'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_personas['rwright']->getId(),
+        Tinebase_Container::getInstance()->setGrants($this->_getPersonasDefaultCals('rwright'), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_getPersona('rwright')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
@@ -648,7 +648,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADMIN    => false,
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ), array(
-            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_id'    => $this->_getPersona('sclever')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => false,
@@ -663,9 +663,9 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     protected function cleanupTestCalendars()
     {
-        foreach ($this->_personasDefaultCals as $loginName => $calendar) {
+        foreach ($this->_getAllPersonasDefaultCals() as $loginName => $calendar) {
             Tinebase_Container::getInstance()->setGrants($calendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-                'account_id'    => $this->_personas[$loginName]->getId(),
+                'account_id'    => $this->_getPersona($loginName)->getId(),
                 'account_type'  => 'user',
                 Tinebase_Model_Grants::GRANT_READ     => true,
                 Tinebase_Model_Grants::GRANT_ADD      => true,

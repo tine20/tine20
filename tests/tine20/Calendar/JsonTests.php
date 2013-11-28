@@ -54,7 +54,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testCreateEvent($now = FALSE)
     {
-        $scleverDisplayContainerId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_personas['sclever']->getId());
+        $scleverDisplayContainerId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_getPersona('sclever')->getId());
         $contentSeqBefore = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
         
         $eventData = $this->_getEvent($now)->toArray();
@@ -188,7 +188,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $eventData = $event->toArray();
         foreach ($eventData['attendee'] as $key => $attenderData) {
-            if ($eventData['attendee'][$key]['user_id'] != $this->_testUserContact->getId()) {
+            if ($eventData['attendee'][$key]['user_id'] != $this->_getTestUserContact()->getId()) {
                 unset($eventData['attendee'][$key]);
             }
         }
@@ -237,7 +237,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     protected function _getEventFilterArray($containerId = NULL)
     {
-        $containerId = ($containerId) ? $containerId : $this->_testCalendar->getId();
+        $containerId = ($containerId) ? $containerId : $this->_getTestCalendar()->getId();
         return array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $containerId),
             array('field' => 'period', 'operator' => 'within', 'value' =>
@@ -261,7 +261,7 @@ class Calendar_JsonTests extends Calendar_TestCase
                 'from'  => '2009-03-25 00:00:00',
                 'until' => '2009-03-25 23:59:59',
             )),
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
         );
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
@@ -280,7 +280,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testSearchEventsWithOutPeriodFilter()
     {
         $eventData = $this->testCreateRecurEvent();
-        $filter = array(array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()));
+        $filter = array(array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()));
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $returnedFilter = $searchResultData['filter'];
@@ -334,7 +334,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $eventData = $this->testCreateEvent();
         $numAttendee = count($eventData['attendee']);
         $eventData['attendee'][$numAttendee] = array(
-            'user_id' => $this->_personasContacts['pwulf']->getId(),
+            'user_id' => $this->_getPersonasContacts('pwulf')->getId(),
         );
         
         $updatedEventData = $this->_uit->saveEvent($eventData);
@@ -417,7 +417,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
     
         $filter = array(
-        array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
         array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
         );
     
@@ -444,7 +444,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
         );
         
@@ -486,7 +486,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
         );
         
@@ -529,8 +529,8 @@ class Calendar_JsonTests extends Calendar_TestCase
         }
         
         // sclever has only READ grant
-        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_testUser->getId(),
+        Tinebase_Container::getInstance()->setGrants($this->_getTestCalendar(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+            'account_id'    => $this->_getTestUser()->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
@@ -540,24 +540,25 @@ class Calendar_JsonTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ), array(
-            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_id'    => $this->_getPersona('sclever')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ))), TRUE);
         
         $unittestUser = Tinebase_Core::getUser();
-        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
         
         // create persistent exception
         $createdException = $this->_uit->createRecurException($persistentException, FALSE, FALSE);
         Tinebase_Core::set(Tinebase_Core::USER, $unittestUser);
         
         $sclever = $this->_findAttender($createdException['attendee'], 'sclever');
+        $defaultCal = $this->_getPersonasDefaultCals('sclever');
         $this->assertEquals('Susan Clever', $sclever['user_id']['n_fn']);
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $sclever['status'], 'status mismatch: ' . print_r($sclever, TRUE));
         $this->assertTrue(is_array($sclever['displaycontainer_id']));
-        $this->assertEquals($this->_personasDefaultCals['sclever']['id'], $sclever['displaycontainer_id']['id']);
+        $this->assertEquals($defaultCal['id'], $sclever['displaycontainer_id']['id']);
     }
     
     /**
@@ -616,7 +617,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
         );
         
@@ -661,7 +662,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $filter = array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
         );
         
@@ -696,9 +697,9 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testFreeBusyCleanup()
     {
         // give fb grants from sclever
-        $scleverCal = Tinebase_Container::getInstance()->getContainerById($this->_personasDefaultCals['sclever']);
+        $scleverCal = Tinebase_Container::getInstance()->getContainerById($this->_getPersonasDefaultCals('sclever'));
         Tinebase_Container::getInstance()->setGrants($scleverCal->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_personas['sclever']->getId(),
+            'account_id'    => $this->_getPersona('sclever')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
@@ -708,27 +709,27 @@ class Calendar_JsonTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ), array(
-            'account_id'    => $this->_testUser->getId(),
+            'account_id'    => $this->_getTestUser()->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ))), TRUE);
         
-        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
         $eventData = $this->_getEvent()->toArray();
         unset($eventData['organizer']);
         $eventData['container_id'] = $scleverCal->getId();
         $eventData['attendee'] = array(array(
-            'user_id' => $this->_personasContacts['sclever']->getId()
+            'user_id' => $this->_getPersonasContacts('sclever')->getId()
         ));
-        $eventData['organizer'] = $this->_personasContacts['sclever']->getId();
+        $eventData['organizer'] = $this->_getPersonasContacts('sclever')->getId();
         $eventData = $this->_uit->saveEvent($eventData);
-        $filter = $this->_getEventFilterArray($this->_personasDefaultCals['sclever']->getId());
+        $filter = $this->_getEventFilterArray($this->_getPersonasDefaultCals('sclever')->getId());
         $filter[] = array('field' => 'summary', 'operator' => 'equals', 'value' => 'Wakeup');
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected event in search result (search by sclever): ' 
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         
-        Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_getTestUser());
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: ' 
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
@@ -830,7 +831,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     protected function _findAttender($attendeeData, $name) {
         $attenderData = false;
-        $searchedId = $this->_personasContacts[$name]->getId();
+        $searchedId = $this->_getPersonasContacts($name)->getId();
         
         foreach ($attendeeData as $key => $attender) {
             if ($attender['user_type'] == Calendar_Model_Attender::USERTYPE_USER) {
@@ -1287,12 +1288,12 @@ class Calendar_JsonTests extends Calendar_TestCase
         $eventData = $this->testCreateEvent();
         $numAttendee = count($eventData['attendee']);
         $eventData['attendee'][$numAttendee] = array(
-            'user_id' => $this->_personasContacts['pwulf']->getId(),
+            'user_id' => $this->_getPersonasContacts('pwulf')->getId(),
         );
         $this->_uit->saveEvent($eventData);
         
         $eventData['attendee'][$numAttendee] = array(
-            'user_id' => $this->_personasContacts['jsmith']->getId(),
+            'user_id' => $this->_getPersonasContacts('jsmith')->getId(),
         );
         $event = $this->_uit->saveEvent($eventData);
         
@@ -1314,7 +1315,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $eventData['attendee'] = $currentAttendee;
         $numAttendee = count($eventData['attendee']);
         $eventData['attendee'][$numAttendee] = array(
-            'user_id' => $this->_personasContacts['pwulf']->getId(),
+            'user_id' => $this->_getPersonasContacts('pwulf')->getId(),
         );
         $event = $this->_uit->saveEvent($eventData);
         

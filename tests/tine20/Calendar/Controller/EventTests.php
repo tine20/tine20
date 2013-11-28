@@ -27,8 +27,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     /**
      * @var Tinebase_Model_Container
-     */
-    protected $_testCalendar;
+     *
+    protected $_testCalendar; */
     
     /**
      * (non-PHPdoc)
@@ -149,7 +149,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->attendee = $this->_getAttendee();
         $event->attendee[1] = new Calendar_Model_Attender(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['pwulf']->getId(),
+            'user_id'   => $this->_getPersonasContacts('pwulf')->getId(),
         ));
         
         $persistentEvent = $this->_controller->create($event);
@@ -177,7 +177,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             
         $pwulf = $updatedEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
-            ->filter('user_id', $this->_personasContacts['pwulf']->getId())
+            ->filter('user_id', $this->_getPersonasContacts('pwulf')->getId())
             ->getFirstRecord();
 
         $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $currentUser->status, 'current users status must not be touched');
@@ -208,7 +208,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->attendee = $this->_getAttendee();
         $event->attendee[1] = new Calendar_Model_Attender(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['pwulf']->getId()
+            'user_id'   => $this->_getPersonasContacts('pwulf')->getId()
         ));
         
         $persistendEvent = $this->_controller->create($event);
@@ -232,30 +232,30 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event1 = $this->_getEvent();
         $event1->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_id' => Tinebase_Core::getUser()->contact_id),
-            array('user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         $persistentEvent1 = $this->_controller->create($event1);
         
         $event2 = $this->_getEvent();
         $event2->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_id' => Tinebase_Core::getUser()->contact_id),
-            array('user_id' => $this->_personasContacts['sclever']->getId()),
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId()),
         ));
         $persistentEvent2 = $this->_controller->create($event2);
         
         $event3 = $this->_getEvent();
         $event3->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_id' => Tinebase_Core::getUser()->contact_id),
-            array('user_id' => $this->_personasContacts['sclever']->getId()),
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId()),
         ));
         $persistentEvent3 = $this->_controller->create($event3);
         
         // test sclever
         $filter = new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'   => $this->_personasContacts['sclever']->getId()
+                'user_id'   => $this->_getPersonasContacts('sclever')->getId()
             )),
         ));
         $eventsFound = $this->_controller->search($filter, new Tinebase_Model_Pagination());
@@ -263,10 +263,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         // test pwulf
         $filter = new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'   => $this->_personasContacts['pwulf']->getId()
+                'user_id'   => $this->_getPersonasContacts('pwulf')->getId()
             )),
         ));
         $eventsFound = $this->_controller->search($filter, new Tinebase_Model_Pagination());
@@ -274,15 +274,15 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         // test sclever OR pwulf
         $filter = new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'attender'    , 'operator' => 'in',     'value' => array(
                 array(
                     'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                    'user_id'   => $this->_personasContacts['sclever']->getId()
+                    'user_id'   => $this->_getPersonasContacts('sclever')->getId()
                 ),
                 array (
                     'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                    'user_id'   => $this->_personasContacts['pwulf']->getId()
+                    'user_id'   => $this->_getPersonasContacts('pwulf')->getId()
                 )
             )),
         ));
@@ -295,16 +295,16 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event = $this->_getEvent();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_id' => Tinebase_Core::getUser()->contact_id),
-            array('user_id' => $this->_personasContacts['sclever']->getId())
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId())
         ));
         $persistentEvent = $this->_controller->create($event);
         
         $filter = new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'attender'    , 'operator' => 'in',     'value' => array(
                 array(
                     'user_type' => Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF,
-                    'user_id'   => $this->_personas['sclever']->accountPrimaryGroup
+                    'user_id'   => $this->_getPersona('sclever')->accountPrimaryGroup
                 )
             )),
         ));
@@ -316,8 +316,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         $persistentEvent = $this->_controller->create($event);
         
@@ -346,7 +346,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
         ), true));
         
-        $this->_testCalendars->addRecord($testCal);
+        $this->_getTestCalendars()->addRecord($testCal);
         
         // create event in testcal
         $event = $this->_getEvent();
@@ -361,7 +361,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'equals', 'value' => array(
                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'   => $this->_testUserContact->getId()
+                'user_id'   => $this->_getTestUserContact()->getId()
             ))
         )), NULL, FALSE, FALSE);
         
@@ -374,15 +374,15 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $event = $this->_getEvent();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         $persistentEvent = $this->_controller->create($event);
         
         $conflictEvent = $this->_getEvent();
         $conflictEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         
         try {
@@ -409,8 +409,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $conflictEvent = $this->_getEvent();
         $conflictEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         
         try {
@@ -434,8 +434,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $nonConflictEvent = $this->_getEvent();
         $nonConflictEvent->transp = Calendar_Model_Event::TRANSP_TRANSP;
         $nonConflictEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         
         $this->_controller->create($nonConflictEvent, TRUE);
@@ -450,8 +450,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $nonConflictEvent = $this->_getEvent();
         $nonConflictEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['sclever']->getId()),
-            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_personasContacts['pwulf']->getId())
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('sclever')->getId()),
+            array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         
         $this->_controller->create($nonConflictEvent, TRUE);
@@ -647,10 +647,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         // assert test condition
         $pwulf = $persistentEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
-            ->filter('user_id', $this->_personasContacts['pwulf']->getId());
+            ->filter('user_id', $this->_getPersonasContacts('pwulf')->getId());
         $this->assertEquals(0, count($pwulf), 'invalid test condition, pwulf should not be member or admin group');
         
-        Admin_Controller_Group::getInstance()->addGroupMember($defaultAdminGroup->getId(), $this->_personasContacts['pwulf']->account_id);
+        Admin_Controller_Group::getInstance()->addGroupMember($defaultAdminGroup->getId(), $this->_getPersonasContacts('pwulf')->account_id);
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
             Tinebase_ActionQueue::getInstance()->processQueue(10000);
         }
@@ -659,11 +659,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         // assert pwulf is in
         $pwulf = $loadedEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
-            ->filter('user_id', $this->_personasContacts['pwulf']->getId());
+            ->filter('user_id', $this->_getPersonasContacts('pwulf')->getId());
         $this->assertEquals(1, count($pwulf), 'pwulf is not attender of event, but should be');
         
         
-        Admin_Controller_Group::getInstance()->removeGroupMember($defaultAdminGroup->getId(), $this->_personasContacts['pwulf']->account_id);
+        Admin_Controller_Group::getInstance()->removeGroupMember($defaultAdminGroup->getId(), $this->_getPersonasContacts('pwulf')->account_id);
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
             Tinebase_ActionQueue::getInstance()->processQueue(10000);
         }
@@ -672,7 +672,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         // assert pwulf is missing
         $pwulf = $loadedEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
-            ->filter('user_id', $this->_personasContacts['pwulf']->getId());
+            ->filter('user_id', $this->_getPersonasContacts('pwulf')->getId());
         $this->assertEquals(0, count($pwulf), 'pwulf is attender of event, but not should be');
         
         // Test the same with update
@@ -687,7 +687,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $loadedEvent = $this->_controller->get($persistentEvent->getId());
         $pwulf = $loadedEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
-            ->filter('user_id', $this->_personasContacts['pwulf']->getId());
+            ->filter('user_id', $this->_getPersonasContacts('pwulf')->getId());
         $this->assertEquals(1, count($pwulf), 'pwulf is not attender of event, but should be (via update)');
         
         $group->members = array_diff(Admin_Controller_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId()), array(array_value('pwulf', Zend_Registry::get('personas'))->getId()));
@@ -699,7 +699,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $loadedEvent = $this->_controller->get($persistentEvent->getId());
         $pwulf = $loadedEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
-            ->filter('user_id', $this->_personasContacts['pwulf']->getId());
+            ->filter('user_id', $this->_getPersonasContacts('pwulf')->getId());
         $this->assertEquals(0, count($pwulf), 'pwulf is attender of event, but not should be');
     }
     
@@ -813,7 +813,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         }
         
         $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
+            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_getTestCalendars()->getId()),
         )), new Tinebase_Model_Pagination(array()));
         
         $oldSeries = $events->filter('rrule_until', '/.+/', TRUE)->getFirstRecord();
@@ -838,7 +838,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         }
         
         $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
+            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_getTestCalendars()->getId()),
         )), new Tinebase_Model_Pagination(array()));
         
         $newSeries = $events->filter('rrule_until', '/^$/', TRUE)->getFirstRecord();
@@ -917,7 +917,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'originator_tz' => 'Europe/Berlin',
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-02 21:59:59',
             'exdate'        => '2009-03-27 18:00:00,2009-03-31 17:00:00',
-            'container_id'  => $this->_testCalendar->getId(),
+            'container_id'  => $this->_getTestCalendar()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         
@@ -996,7 +996,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $this->_controller->delete($persistentEvent->getId());
         
-        $contentSeq = Tinebase_Container::getInstance()->getContentSequence($this->_testCalendar);
+        $contentSeq = Tinebase_Container::getInstance()->getContentSequence($this->_getTestCalendar());
         $this->assertEquals(2, $contentSeq, 'container content seq should be increased 2 times!');
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
@@ -1206,7 +1206,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persistentEvent = $this->testCreateEvent();
         
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'period', 'operator' => 'within', 'value' => array(
                 'from'  => '2009-04-07',
                 'until' => '2010-04-07'
@@ -1229,7 +1229,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'dtend'       => '2009-04-06 13:30:00',
             'description' => 'Wieslaw Brudzinski: Das Gesetz garantiert zwar die Mittagspause, aber nicht das Mittagessen...',
         
-            'container_id' => $this->_testCalendar->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT    => true,
         ));
         

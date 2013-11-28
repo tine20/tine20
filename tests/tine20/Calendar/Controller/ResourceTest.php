@@ -71,8 +71,8 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
         
         // we need to adopt conainer through backend, to bypass rights control
-        $persistentEvent->container_id = $this->_personasDefaultCals['rwright']->getId();
-        $persistentEvent->organizer = $this->_personasContacts['rwright']->getId();
+        $persistentEvent->container_id = $this->_getPersonasDefaultCals('rwright')->getId();
+        $persistentEvent->organizer = $this->_getPersonasContacts('rwright')->getId();
         $this->_backend->update($persistentEvent);
 
         

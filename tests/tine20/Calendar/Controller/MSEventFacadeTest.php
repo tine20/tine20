@@ -53,22 +53,22 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         ), TRUE);
         $event->alarms[0]->setOption('skip', array(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_testUserContact->getId(),
+            'user_id'   => $this->_getTestUserContact()->getId(),
             'organizer' => Tinebase_Core::getUser()->contact_id
         )));
         $event->alarms[1]->setOption('attendee', array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_testUserContact->getId(),
+            'user_id'   => $this->_getTestUserContact()->getId(),
             'organizer' => Tinebase_Core::getUser()->contact_id
         ));
         $event->alarms[2]->setOption('skip', array(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['sclever']->getId(),
+            'user_id'   => $this->_getPersonasContacts('sclever')->getId(),
             'organizer' => Tinebase_Core::getUser()->contact_id
         )));
         $event->alarms[3]->setOption('attendee', array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['sclever']->getId(),
+            'user_id'   => $this->_getPersonasContacts('sclever')->getId(),
             'organizer' => Tinebase_Core::getUser()->contact_id
         ));
         
@@ -125,7 +125,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->testCreate();
         
         $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
+            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_getTestCalendars()->getId()),
         )));
         
         $this->assertEquals(1, $events->count());
@@ -141,7 +141,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $cbe->delete($event->getId());
         
         $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
+            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_getTestCalendars()->getId()),
         )));
         
         $this->assertEquals(1, $events->count());
@@ -167,7 +167,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->_assertTestEvent($event);
         
         $sclever = new Calendar_Model_Attender(array(
-            'user_id'        => $this->_personasContacts['sclever']->getId(),
+            'user_id'        => $this->_getPersonasContacts('sclever')->getId(),
             'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
         ));
         
@@ -200,7 +200,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $event = $this->testCreate();
         
         $sclever = new Calendar_Model_Attender(array(
-            'user_id'        => $this->_personasContacts['sclever']->getId(),
+            'user_id'        => $this->_getPersonasContacts('sclever')->getId(),
             'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
         ));
         $currUser = $this->_uit->setCalendarUser($sclever);
@@ -368,7 +368,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $persistentException = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
         
         $sclever = new Calendar_Model_Attender(array(
-            'user_id'        => $this->_personasContacts['sclever']->getId(),
+            'user_id'        => $this->_getPersonasContacts('sclever')->getId(),
             'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
         ));
         
@@ -379,7 +379,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->_uit->setEventFilter(new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'equals', 'value' => array(
                 'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'      => $this->_personasContacts['sclever']->getId(),
+                'user_id'      => $this->_getPersonasContacts('sclever')->getId(),
             )),
             array(
                 'field' => 'attender_status', 'operator' => 'notin', 'value' => array(

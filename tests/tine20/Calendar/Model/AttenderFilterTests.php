@@ -28,7 +28,7 @@ class Calendar_Model_AttenderFilterTests extends Calendar_TestCase
     {
         $filterArray = array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['sclever']->getId()
+            'user_id'   => $this->_getPersonasContacts('sclever')->getId()
         );
         
         $filterModel = new Calendar_Model_AttenderFilter('attendee', 'equals', $filterArray);
@@ -43,7 +43,7 @@ class Calendar_Model_AttenderFilterTests extends Calendar_TestCase
     {
         $filterArray = array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['sclever']->toArray()
+            'user_id'   => $this->_getPersonasContacts('sclever')->toArray()
         );
         
         $filterModel = new Calendar_Model_AttenderFilter('attendee', 'equals', $filterArray);
@@ -51,17 +51,17 @@ class Calendar_Model_AttenderFilterTests extends Calendar_TestCase
         $tvalue = $filterModel->getValue();
         $this->assertEquals(1, count($tvalue), 'only one attender should be set');
         $this->assertEquals($filterArray['user_type'], $tvalue[0]['user_type']);
-        $this->assertEquals($this->_personasContacts['sclever']->getId(), $tvalue[0]['user_id']);
+        $this->assertEquals($this->_getPersonasContacts('sclever')->getId(), $tvalue[0]['user_id']);
     }
     
     public function testSetFromMultipleResolvedArray()
     {
         $filterArray = array(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['sclever']->toArray()
+            'user_id'   => $this->_getPersonasContacts('sclever')->toArray()
         ), array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['pwulf']->toArray()
+            'user_id'   => $this->_getPersonasContacts('pwulf')->toArray()
         ));
         
         $filterModel = new Calendar_Model_AttenderFilter('attendee', 'in', $filterArray);
@@ -70,15 +70,15 @@ class Calendar_Model_AttenderFilterTests extends Calendar_TestCase
         $this->assertEquals(2, count($tvalue), 'only one attender should be set');
         $this->assertEquals($filterArray[0]['user_type'], $tvalue[0]['user_type']);
         $this->assertEquals($filterArray[1]['user_type'], $tvalue[1]['user_type']);
-        $this->assertEquals($this->_personasContacts['sclever']->getId(), $tvalue[0]['user_id']);
-        $this->assertEquals($this->_personasContacts['pwulf']->getId(), $tvalue[1]['user_id']);
+        $this->assertEquals($this->_getPersonasContacts('sclever')->getId(), $tvalue[0]['user_id']);
+        $this->assertEquals($this->_getPersonasContacts('pwulf')->getId(), $tvalue[1]['user_id']);
     }
     
     public function testToSimpleArray()
     {
         $filterArray = array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['sclever']->getId()
+            'user_id'   => $this->_getPersonasContacts('sclever')->getId()
         );
         
         $filterModel = new Calendar_Model_AttenderFilter('attendee', 'equals', $filterArray);
@@ -95,7 +95,7 @@ class Calendar_Model_AttenderFilterTests extends Calendar_TestCase
     {
         $filterArray = array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['sclever']->getId()
+            'user_id'   => $this->_getPersonasContacts('sclever')->getId()
         );
         
         $filterModel = new Calendar_Model_AttenderFilter('attendee', 'equals', $filterArray);

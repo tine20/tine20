@@ -28,35 +28,35 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     /**
      * @var Tinebase_Model_Container
      */
-    protected $_testCalendar;
+    protected $_testCalendar = NULL;
     
     /**
      * @var Tinebase_Record_RecordSet test calendars to be deleted on tearDown
      */
-    protected $_testCalendars;
+    protected $_testCalendars = NULL;
     
     /**
      * @var Tinebase_Model_FullUser
      */
-    protected $_testUser;
+    protected $_testUser = NULL;
     
     /**
      * @var Addressbook_Model_Contact
      */
-    protected $_testUserContact;
+    protected $_testUserContact = NULL;
     
     /**
      * personas
      *
      * @var array
      */
-    protected $_personas;
+    protected $_personas = NULL;
     
     /**
      * personas contacts
      * @var array
      */
-    protected $_personasContacts;
+    protected $_personasContacts = array();
     
     /**
      * persona calendars
@@ -78,26 +78,7 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     {
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_backend = new Calendar_Backend_Sql();
-        
-        $this->_personas = Zend_Registry::get('personas');
-        foreach ($this->_personas as $loginName => $user) {
-            $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $user->getId());
-            $this->_personasContacts[$loginName] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId());
-            $this->_personasDefaultCals[$loginName] = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId);
-        }
-        
         $this->_testUser = Tinebase_Core::getUser();
-        $this->_testUserContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_testUser->getId());
-        $this->_testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => 'PHPUnit test calendar',
-            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'       => Tinebase_Core::getUser(),
-            'backend'        => $this->_backend->getType(),
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
-        ), true));
-        
-        $this->_testCalendars = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
-        $this->_testCalendars->addRecord($this->_testCalendar);
     }
     
     /**
@@ -110,7 +91,7 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
         
         if ($this->_transactionId) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-        } else {
+        } elseif ($this->_testCalendar !== NULL) {
             $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
                 array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
             )), new Tinebase_Model_Pagination(array()));
@@ -126,6 +107,138 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
                 Tinebase_Container::getInstance()->deleteContainer($cal, true);
             }
         }
+        // do NOT unset _testUser,the tear down of Calendar_Frontend_WebDAV_EventTest still requires _testUser
+        $this->_testUserContact = NULL;
+        $this->_testCalendar = NULL;
+        $this->_testCalendars = NULL;
+        $this->_personas = NULL;
+        $this->_personasContacts = array();
+        $this->_personasDefaultCals = array();
+    }
+    
+    /**
+     * returns test persons contacts
+     * 
+     * @param string $loginName
+     * @return Addressbook_Model_Contact
+     */
+    protected function _getPersonasContacts($loginName)
+    {
+        if (!isset($this->_personasContacts[$loginName])) {
+            $user = $this->_getPersona($loginName);
+            $this->_personasContacts[$loginName] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId());
+        }
+        return $this->_personasContacts[$loginName];
+    }
+    
+    /**
+     * returns test persons default calendar
+     * 
+     * @param string $loginName
+     * @return Tinebase_Model_Container
+     */
+    protected function _getPersonasDefaultCals($loginName)
+    {
+        if (!isset($this->_personasDefaultCals[$loginName])) {
+            $user = $this->_getPersona($loginName);
+            $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $user->getId());
+            $this->_personasDefaultCals[$loginName] = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId);
+        }
+        return $this->_personasDefaultCals[$loginName];
+    }
+    
+    /**
+     * returns all test persons default calendar
+     * 
+     * @return array
+     */
+    protected function _getAllPersonasDefaultCals()
+    {
+        foreach ($this->_getPersonas() as $loginName => $user)
+        {
+            $this->_getPersonasDefaultCals($loginName);
+        }
+        return $this->_personasDefaultCals;
+    }
+    
+    /** return a test person
+     * @return 
+     */
+    protected function _getPersona($loginName)
+    {
+        if ($this->_personas === NULL) {
+            $this->_getPersonas();
+        }
+        return $this->_personas[$loginName];
+    }
+    
+    /**
+     * returns an array of test persons
+     * 
+     * @return array
+     */
+    protected function _getPersonas()
+    {
+        if ($this->_personas === NULL) {
+            $this->_personas = Zend_Registry::get('personas');
+        }
+        return $this->_personas;
+    }
+    
+    /**
+     * returns a test user
+     * 
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _getTestUser()
+    {
+        return $this->_testUser;
+    }
+    
+    /**
+     * returns the test users contact
+     * 
+     * @return
+     */
+    protected function _getTestUserContact()
+    {
+        if ($this->_testUserContact === NULL) {
+            $this->_testUserContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_getTestUser()->getId());
+        }
+        return $this->_testUserContact;
+    }
+    /**
+     * returns a test calendar set
+     * 
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _getTestCalendars()
+    {
+        if ($this->_testCalendars === NULL) {
+            $this->_getTestCalendar();
+        }
+        return $this->_testCalendars;
+    }
+    /**
+     * returns a test calendar
+     * 
+     * @return Tinebase_Model_Container
+     */
+    protected function _getTestCalendar()
+    {
+        if ($this->_testCalendar === NULL) {
+            $this->_testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+                    'name'           => 'PHPUnit test calendar',
+                    'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
+                    'owner_id'       => Tinebase_Core::getUser(),
+                    'backend'        => $this->_backend->getType(),
+                    'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
+            ), true));
+            
+            $this->_testCalendars = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
+            $this->_testCalendars->addRecord($this->_testCalendar);
+        }
+        return $this->_testCalendar;
     }
     
     /**
@@ -143,8 +256,8 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             'description' => 'Early to bed and early to rise, makes a men healthy, wealthy and wise',
             'attendee'    => $this->_getAttendee(),
         
-            'container_id' => $this->_testCalendar->getId(),
-            'organizer'    => $this->_testUserContact->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
+            'organizer'    => $this->_getTestUserContact()->getId(),
             'uid'          => Calendar_Model_Event::generateUID(),
         
             Tinebase_Model_Grants::GRANT_READ    => true,
@@ -187,13 +300,13 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     {
         return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
-                'user_id'        => $this->_testUserContact->getId(),
+                'user_id'        => $this->_getTestUserContact()->getId(),
                 'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
                 'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
                 'status_authkey' => Tinebase_Record_Abstract::generateUID(),
             ),
             array(
-                'user_id'        => $this->_personasContacts['sclever']->getId(),
+                'user_id'        => $this->_GetPersonasContacts('sclever')->getId(),
                 'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
                 'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
                 'status_authkey' => Tinebase_Record_Abstract::generateUID(),

@@ -22,14 +22,14 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportSimpleFromString()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'importContainerId' => $this->_getTestCalendar()->getId(),
         ));
 
         $icalData = file_get_contents(dirname(__FILE__) . '/files/simple.ics');
         $importer->importData($icalData);
         
         $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId())
         )), NULL);
         
         $this->assertEquals(6, $events->count(), 'events was not imported');
@@ -42,12 +42,12 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportSimpleFromFile()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'importContainerId' => $this->_getTestCalendar()->getId(),
         ));
         
         $importer->importFile(dirname(__FILE__) . '/files/simple.ics');
         $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId())
         )), NULL);
         
         $this->assertEquals(6, $events->count(), 'events where not imported');
@@ -60,13 +60,13 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportRecur()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'importContainerId' => $this->_getTestCalendar()->getId(),
         ));
         
         $importer->importFile(dirname(__FILE__) . '/files/XMAS_DE.ics');
         
         $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'period', 'operator' => 'within', 'value' => array(
                 'from'  => '2015-12-23 22:00:00',
                 'until' => '2015-12-26 22:00:00'
@@ -79,7 +79,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportHorde()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'importContainerId' => $this->_getTestCalendar()->getId(),
         ));
         
         $importer->importFile(dirname(__FILE__) . '/files/horde.ics');
@@ -95,7 +95,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     protected function _checkImport($failMessage = '', $assertNumber = 1)
     {
         $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId())
         )), NULL);
         
         $this->assertEquals($assertNumber, $events->count(), 'events where not imported ' . $failMessage);
@@ -107,7 +107,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportHordeBroken()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'importContainerId' => $this->_getTestCalendar()->getId(),
         ));
         
         try {
@@ -121,12 +121,12 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportOutlook12()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'importContainerId' => $this->_getTestCalendar()->getId(),
         ));
         
         $importer->importFile(dirname(__FILE__) . '/files/outlook12.ics');
         $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId())
         )), NULL);
         
         $this->assertEquals(1, $events->count(), 'events where not imported');
@@ -142,7 +142,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $this->_testNeedsTransaction();
         
         $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.import ' .
-            'plugin=Calendar_Import_Ical importContainerId=' . $this->_testCalendar->getId() .
+            'plugin=Calendar_Import_Ical importContainerId=' . $this->_getTestCalendar()->getId() .
             ' ' . dirname(__FILE__) . '/files/horde.ics';
         
         $cmd = TestServer::assembleCliCommand($cmd, TRUE);
@@ -162,7 +162,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $this->_testNeedsTransaction();
         
         $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.import ' .
-            'plugin=Calendar_Import_Ical forceUpdateExisting=1 importContainerId=' . $this->_testCalendar->getId() .
+            'plugin=Calendar_Import_Ical forceUpdateExisting=1 importContainerId=' . $this->_getTestCalendar()->getId() .
             ' ' . dirname(__FILE__) . '/files/termine.ics';
         
         $cmd = TestServer::assembleCliCommand($cmd, TRUE);

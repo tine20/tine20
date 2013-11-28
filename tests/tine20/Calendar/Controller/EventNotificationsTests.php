@@ -37,8 +37,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     
     /**
      * @var Tinebase_Model_Container
-     */
-    protected $_testCalendar;
+     *
+    protected $_testCalendar;*/
     
    /**
     * email test class
@@ -164,11 +164,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $persistentEvent->attendee->merge($this->_getPersonaAttendee('jsmith, sclever'));
         $persistentEvent->attendee->removeRecord(
-            $persistentEvent->attendee->find('user_id', $this->_personasContacts['pwulf']->getId())
+            $persistentEvent->attendee->find('user_id', $this->_getPersonasContacts('pwulf')->getId())
         );
-        $persistentEvent->attendee->find('user_id', $this->_personasContacts['rwright']->getId())->status =
+        $persistentEvent->attendee->find('user_id', $this->_getPersonasContacts('rwright')->getId())->status =
             Calendar_Model_Attender::STATUS_ACCEPTED;
-        $persistentEvent->attendee->find('user_id', $this->_personasContacts['jmcblack']->getId())->status =
+        $persistentEvent->attendee->find('user_id', $this->_getPersonasContacts('jmcblack')->getId())->status =
             Calendar_Model_Attender::STATUS_DECLINED;
             
         self::flushMailer();
@@ -241,7 +241,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf');
-        $event->organizer = $this->_personasContacts['jsmith']->getId();
+        $event->organizer = $this->_getPersonasContacts('jsmith')->getId();
         $persistentEvent = $this->_eventController->create($event);
         
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
@@ -258,7 +258,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf');
-        $event->organizer = $this->_personasContacts['pwulf']->getId();
+        $event->organizer = $this->_getPersonasContacts('pwulf')->getId();
         $persistentEvent = $this->_eventController->create($event);
         
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
@@ -276,7 +276,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('pwulf');
-        $event->organizer = $this->_personasContacts['pwulf']->getId();
+        $event->organizer = $this->_getPersonasContacts('pwulf')->getId();
         
         // add nonaccount attender
         $nonAccountEmail = 'externer@example.org';
@@ -313,7 +313,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             if (in_array($nonAccountEmail, $message->getRecipients())) {
                 $foundNonAccountMessage = TRUE;
             }
-            if (in_array($this->_personas['pwulf']->accountEmailAddress, $message->getRecipients())) {
+            if (in_array($this->_getPersona('pwulf')->accountEmailAddress, $message->getRecipients())) {
                 $foundPWulfMessage = TRUE;
             }
         }
@@ -335,7 +335,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 'dtstart'       => '2012-03-14 09:00:00',
                 'dtend'         => '2012-03-14 10:00:00',
                 'rrule'         => 'FREQ=DAILY;INTERVAL=1',
-                'container_id'  => $this->_testCalendar->getId(),
+                'container_id'  => $this->_getTestCalendar()->getId(),
                 'attendee'      => $this->_getPersonaAttendee('jmcblack'),
         ));
         
@@ -388,7 +388,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('sclever, pwulf');
-        $event->organizer = $this->_personasContacts['sclever']->getId();
+        $event->organizer = $this->_getPersonasContacts('sclever')->getId();
         
         $event->dtstart = Tinebase_DateTime::now()->addMinute(25);
         $event->dtend = clone $event->dtstart;
@@ -403,7 +403,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $event->alarms->setOption('skip', array(
             array(
                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'   => $this->_personasContacts['pwulf']->getId(),
+                'user_id'   => $this->_getPersonasContacts('pwulf')->getId(),
             )
         ));
         
@@ -420,7 +420,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('sclever, pwulf');
-        $event->organizer = $this->_personasContacts['sclever']->getId();
+        $event->organizer = $this->_getPersonasContacts('sclever')->getId();
         
         $event->dtstart = Tinebase_DateTime::now()->addMinute(25);
         $event->dtend = clone $event->dtstart;
@@ -432,7 +432,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         ));
         $event->alarms->setOption('attendee', array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $this->_personasContacts['pwulf']->getId()
+            'user_id'   => $this->_getPersonasContacts('pwulf')->getId()
         ));
         
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
@@ -565,7 +565,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('pwulf');
-        $event->organizer = $this->_personasContacts['pwulf']->getId();
+        $event->organizer = $this->_getPersonasContacts('pwulf')->getId();
         
         // lets flush mailer so next flushing ist faster!
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
@@ -615,7 +615,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('pwulf');
-        $event->organizer = $this->_personasContacts['pwulf']->getId();
+        $event->organizer = $this->_getPersonasContacts('pwulf')->getId();
         
         $event->dtstart = Tinebase_DateTime::now()->subDay(1)->addMinute(15);
         $event->dtend = clone $event->dtstart;
@@ -664,7 +664,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('pwulf');
-        $event->organizer = $this->_personasContacts['pwulf']->getId();
+        $event->organizer = $this->_getPersonasContacts('pwulf')->getId();
         
         $event->dtstart = Tinebase_DateTime::now()->addWeek(1)->addMinute(15);
         $event->dtend = clone $event->dtstart;
@@ -736,7 +736,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             'summary'      => 'Cleanup',
             'dtstart'      => '2012-01-31 07:30:00',
             'dtend'        => '2012-01-31 10:30:00',
-            'container_id' => $this->_testCalendar->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
             'uid'          => Calendar_Model_Event::generateUID(),
             'rrule'        => 'FREQ=WEEKLY;INTERVAL=1;WKST=MO;BYDAY=TU',
             'originator_tz'=> 'Europe/Berlin',
@@ -758,7 +758,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('sclever, pwulf');
-        $event->organizer = $this->_personasContacts['sclever']->getId();
+        $event->organizer = $this->_getPersonasContacts('sclever')->getId();
         
         $event->dtstart = Tinebase_DateTime::now()->addMinute(25);
         $event->dtend = clone $event->dtstart;
@@ -1066,7 +1066,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         foreach (explode(',', $_personas) as $personaName) {
             $mailsForPersona = array();
-            $personaEmail = $this->_personas[trim($personaName)]->accountEmailAddress;
+            $personaEmail = $this->_getPersona(trim($personaName))->accountEmailAddress;
             
             foreach ($messages as $message) {
                 if (array_value(0, $message->getRecipients()) == $personaEmail) {
@@ -1122,7 +1122,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         foreach (explode(',', $_personas) as $personaName) {
-            $attendee->addRecord($this->_createAttender($this->_personasContacts[trim($personaName)]->getId()));
+            $attendee->addRecord($this->_createAttender($this->_getPersonasContacts(trim($personaName))->getId()));
         }
         
         return $attendee;
@@ -1162,32 +1162,32 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $calPreferences->setValueForUser(
             Calendar_Preference::NOTIFICATION_LEVEL, 
             Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_NONE,
-            $this->_personas['jsmith']->getId(), TRUE
+            $this->_getPersona('jsmith')->getId(), TRUE
         );
         $calPreferences->setValueForUser(
             Calendar_Preference::NOTIFICATION_LEVEL, 
             Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_INVITE_CANCEL,
-            $this->_personas['pwulf']->getId(), TRUE
+            $this->_getPersona('pwulf')->getId(), TRUE
         );
         $calPreferences->setValueForUser(
             Calendar_Preference::NOTIFICATION_LEVEL, 
             Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_EVENT_RESCHEDULE,
-            $this->_personas['sclever']->getId(), TRUE
+            $this->_getPersona('sclever')->getId(), TRUE
         );
         $calPreferences->setValueForUser(
             Calendar_Preference::NOTIFICATION_LEVEL, 
             Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_EVENT_UPDATE,
-            $this->_personas['jmcblack']->getId(), TRUE
+            $this->_getPersona('jmcblack')->getId(), TRUE
         );
         $calPreferences->setValueForUser(
             Calendar_Preference::NOTIFICATION_LEVEL, 
             Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE,
-            $this->_personas['rwright']->getId(), TRUE
+            $this->_getPersona('rwright')->getId(), TRUE
         );
         
         // set all languages to en
         $preferences = Tinebase_Core::getPreference('Tinebase');
-        foreach ($this->_personas as $name => $account) {
+        foreach ($this->_getPersonas() as $name => $account) {
             $preferences->setValueForUser(Tinebase_Preference::LOCALE, 'en', $account->getId(), TRUE);
         }
     }
