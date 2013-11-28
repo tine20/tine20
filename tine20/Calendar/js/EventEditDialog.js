@@ -336,8 +336,42 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
+        
+        this.addAttendee();
     },
 
+    /**
+     * if this addRelations is set, iterate and create attendee
+     */
+    addAttendee: function() {
+        var attendee = this.record.get('attendee');
+        var attendee = Ext.isArray(attendee) ? attendee : [];
+        
+        if (Ext.isArray(this.plugins)) {
+            for (var index = 0; index < this.plugins.length; index++) {
+                if (this.plugins[index].hasOwnProperty('addRelations')) {
+
+                    var config = this.plugins[index].hasOwnProperty('relationConfig') ? this.plugins[index].relationConfig : {};
+                    
+                    for (var index2 = 0; index2 < this.plugins[index].addRelations.length; index2++) {
+                        var item = this.plugins[index].addRelations[index2];
+                        var attender = Ext.apply({
+                            user_type: 'user',
+                            role: 'REQ',
+                            quantity: 1,
+                            status: 'NEEDS-ACTION',
+                            user_id: item
+                        }, config);
+                        
+                        attendee.push(attender);
+                    }
+                }
+            }
+        }
+        
+        this.record.set('attendee', attendee);
+    },
+    
     /**
      * checks if form data is valid
      * 
