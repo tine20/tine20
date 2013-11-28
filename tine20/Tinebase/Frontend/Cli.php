@@ -672,8 +672,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $this->_addOutputLogWriter();
         
-        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
-        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
+        Tinebase_FileSystem::getInstance()->clearDeletedFiles();
     }
     
     /**
