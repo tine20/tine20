@@ -1019,6 +1019,15 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     }
     
     /**
+     * clears deleted files from filesystem + database
+     */
+    public function clearDeletedFiles()
+    {
+        $this->clearDeletedFilesFromFilesystem();
+        $this->clearDeletedFilesFromDatabase();
+    }
+    
+    /**
      * removes deleted files that no longer exist in the database from the filesystem
      * 
      * @return integer number of deleted files

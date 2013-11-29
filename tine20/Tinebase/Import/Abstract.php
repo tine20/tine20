@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -26,6 +26,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         'results'           => NULL,
         'exceptions'        => NULL,
         'totalcount'        => 0,
+        'updatecount'       => 0,
         'failcount'         => 0,
         'duplicatecount'    => 0,
     );
@@ -36,7 +37,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @var array
      */
     protected $_options = array(
-        'dryrun'            => FALSE,
+        'dryrun'            => false,
         'updateMethod'      => 'update',
         'createMethod'      => 'create',
         'model'             => '',
@@ -44,8 +45,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         'autotags'          => array(),
         'encoding'          => 'auto',
         'encodingTo'        => 'UTF-8',
-        'useStreamFilter'   => TRUE,
-        'postMappingHook'   => null
+        'useStreamFilter'   => true,
+        'postMappingHook'   => null,
+        // if this is set, always resolve duplicates
+        'duplicateResolveStrategy' => null,
     );
     
     /**
@@ -804,28 +807,36 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      *                              ['mergeMine',   ('Merge, keeping my details')],
      *                              ['keep',        ('Keep both records')]
      * 
-     * @param Tinebase_Record_Abstract $_record
-     * @param string $_resolveStrategy
+     * @param Tinebase_Record_Abstract $record
+     * @param string $resolveStrategy
+     * @param Tinebase_Record_Abstract $existingRecord
      * @return Tinebase_Record_Abstract
-     * 
-     * @todo replace mergeTheirs + mergeMine (=merge)
      */
-    protected function _importAndResolveConflict(Tinebase_Record_Abstract $_record, $_resolveStrategy = NULL)
+    protected function _importAndResolveConflict(Tinebase_Record_Abstract $record, $resolveStrategy = null, $existingRecord = null)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' resolveStrategy: ' . $_resolveStrategy);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' resolveStrategy: ' . $resolveStrategy);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' record to import: ' . print_r($record->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $existingRecord) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' existing record: ' . print_r($existingRecord->toArray(), TRUE));
         
-        switch ($_resolveStrategy) {
+        switch ($resolveStrategy) {
             case 'mergeTheirs':
             case 'mergeMine':
-                $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $_record, FALSE);
+                if ($resolveStrategy === 'mergeTheirs') {
+                    $record = $record->merge($existingRecord);
+                } else if ($existingRecord) {
+                    $record = $existingRecord->merge($record);
+                }
+                $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $record, FALSE);
                 break;
             case 'keep':
-                // do not check for duplicates
-                $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $_record, FALSE);
+                // do not check for duplicates (keep both)
+                $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $record, FALSE);
                 break;
             default:
-                $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $_record);
+                $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $record);
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), TRUE));
@@ -836,36 +847,72 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * handle import exceptions
      * 
-     * @param Exception $_e
-     * @param integer $_recordIndex
-     * @param Tinebase_Record_Abstract|array $_record
+     * @param Exception $e
+     * @param integer $recordIndex
+     * @param Tinebase_Record_Abstract|array $record
+     * @param boolean $allowToResolveDuplicates
      * 
      * @todo use json converter for client record
      */
-    protected function _handleImportException(Exception $_e, $_recordIndex, $_record = NULL)
+    protected function _handleImportException(Exception $e, $recordIndex, $record = null, $allowToResolveDuplicates = true)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getMessage());
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_e->getTraceAsString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
         
-        if ($_e instanceof Tinebase_Exception_Duplicate) {
-            $this->_importResult['duplicatecount']++;
-            $exception = $_e->toArray();
+        if ($e instanceof Tinebase_Exception_Duplicate) {
+            $exception = $this->_handleDuplicateExceptions($e, $recordIndex, $record, $allowToResolveDuplicates);
         } else {
             $this->_importResult['failcount']++;
             $exception = array(
-                'code'           => $_e->getCode(),
-                'message'       => $_e->getMessage(),
-                'clientRecord' => ($_record !== NULL && $_record instanceof Tinebase_Record_Abstract) ? $_record->toArray() 
-                    : (is_array($_record) ? $_record : array()),
+                'code'         => $e->getCode(),
+                'message'      => $e->getMessage(),
+                'clientRecord' => ($record !== NULL && $record instanceof Tinebase_Record_Abstract) ? $record->toArray() 
+                    : (is_array($record) ? $record : array()),
             );
         }
-
-        $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
-            'code'          => $_e->getCode(),
-            'message'       => $_e->getMessage(),
-            'exception'     => $exception,
-            'index'         => $_recordIndex,
-        )));
+        
+        if ($exception) {
+            $this->_importResult['exceptions']->addRecord(new Tinebase_Model_ImportException(array(
+                'code'          => $e->getCode(),
+                'message'       => $e->getMessage(),
+                'exception'     => $exception,
+                'index'         => $recordIndex,
+            )));
+        }
+    }
+    
+    /**
+     * handle duplicate exceptions
+     * 
+     * @param Tinebase_Exception_Duplicate $ted
+     * @param integer $recordIndex
+     * @param Tinebase_Record_Abstract|array $record
+     * @param boolean $allowToResolveDuplicates
+     * @return array|null exception
+     */
+    protected function _handleDuplicateExceptions(Tinebase_Exception_Duplicate $ted, $recordIndex, $record = null, $allowToResolveDuplicates = true)
+    {
+        if (! empty($this->_options['duplicateResolveStrategy']) && $allowToResolveDuplicates) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Trying to resolve with configured strategy: ' . $this->_options['duplicateResolveStrategy']);
+            
+            try {
+                $updatedRecord = $this->_importAndResolveConflict($ted->getData()->getFirstRecord(), $this->_options['duplicateResolveStrategy'], $ted->getClientRecord());
+                $this->_importResult['updatecount']++;
+                $this->_importResult['results']->addRecord($updatedRecord);
+            } catch (Exception $newException) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . " Resolving failed. Don't try to resolve duplicates this time");
+                
+                $this->_handleImportException($newException, $recordIndex, $record, false);
+            }
+            $result = null;
+        } else {
+            $this->_importResult['duplicatecount']++;
+            $result = $ted->toArray();
+        }
+        
+        return $result;
     }
     
     /**
@@ -876,7 +923,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Import finished. (total: ' . $this->_importResult['totalcount'] 
             . ' fail: ' . $this->_importResult['failcount'] 
-            . ' duplicates: ' . $this->_importResult['duplicatecount']. ')');
+            . ' duplicates: ' . $this->_importResult['duplicatecount'] 
+            . ' updates: ' . $this->_importResult['updatecount'] 
+            . ')');
     }
     
     /**
