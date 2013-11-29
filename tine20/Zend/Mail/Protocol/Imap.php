@@ -702,9 +702,9 @@ class Zend_Mail_Protocol_Imap
         
         $result = array();
         
-        while (!$this->readLine($tokens, $tag)) {
-             if ($tokens[0] == 'QUOTA'/* && $tokens[1] == $mailbox*/) {
-                 if (is_array($tokens[2]) && !empty($tokens[2])) {
+        while (! $this->readLine($tokens, $tag)) {
+             if ($tokens[0] == 'QUOTA') {
+                 if (! empty($tokens[2]) && is_array($tokens[2])) {
                      $result[strtoupper($tokens[2][0])] = array(
                          'resource' => strtoupper($tokens[2][0]),
                          'usage'    => $tokens[2][1],
@@ -713,10 +713,6 @@ class Zend_Mail_Protocol_Imap
                  }
              }
         }
-
-        #if ($tokens[0] != 'OK') {
-        #    return false;
-        #}
         
         return $result;
     }
