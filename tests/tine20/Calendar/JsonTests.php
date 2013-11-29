@@ -979,7 +979,12 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals(2, count($searchResultManager['results']), 'with manage grants all records should be found');
         
         // steal manage right and reactivate container checks
-        Tinebase_Acl_Roles::getInstance()->deleteAllRoles();
+        $roleManager = Tinebase_Acl_Roles::getInstance();
+        $roleManager->deleteRoles(array(
+                $roleManager->getRoleByName('manager role')->getId(),
+                $roleManager->getRoleByName('admin role')->getId()
+                ));
+        
         Calendar_Controller_Resource::getInstance()->doContainerACLChecks(TRUE);
         
         $searchResult = $this->_uit->searchResources($filer, array());

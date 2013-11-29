@@ -21,6 +21,12 @@
 class Felamimail_Controller extends Tinebase_Controller_Event
 {
     /**
+     * holds the default Model of this application
+     * @var string
+     */
+    protected static $_defaultModel = 'Felamimail_Model_Message';
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Felamimail_Controller

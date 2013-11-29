@@ -365,20 +365,23 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * used to get a list of all containers accesssible by the current user
      * 
      * @param   string|Tinebase_Model_User          $accountId
-     * @param   string                              $applicationName
+     * @param   string|Tinebase_Model_Application   $recordClass
      * @param   array|string                        $grant
      * @param   bool                                $onlyIds return only ids
      * @param   bool                                $ignoreACL
      * @return  Tinebase_Record_RecordSet|array
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getContainerByACL($accountId, $applicationName, $grant, $onlyIds = FALSE, $ignoreACL = FALSE)
+    public function getContainerByACL($accountId, $recordClass, $grant, $onlyIds = FALSE, $ignoreACL = FALSE)
     {
+        // legacy handling 
+        $meta = $this->_resolveRecordClassArgument($recordClass);
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' app: ' . $applicationName . ' / account: ' . $accountId . ' / grant:' . implode('', (array)$grant));
+            . ' app: ' . $meta['appName'] . ' / account: ' . $accountId . ' / grant:' . implode('', (array)$grant));
         
         $accountId     = Tinebase_Model_User::convertUserIdToInt($accountId);
-        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId();
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($meta['appName'])->getId();
         $grant         = $ignoreACL ? '*' : $grant;
         
         $select = $this->_getSelect($onlyIds ? 'id' : '*')
@@ -410,7 +413,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         // any account should have at least one personal folder
         // @todo add test for empty case
         if (empty($result)) {
-            $personalContainer = $this->getDefaultContainer($applicationName, $accountId);
+            $personalContainer = $this->getDefaultContainer($meta['appName'], $accountId);
             if ($personalContainer instanceof Tinebase_Model_Container) {
                 $result = ($onlyIds) ? 
                     array($personalContainer->getId()) : 
@@ -470,16 +473,19 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     /**
      * return a container by container name
      *
-     * @param   string $appName app name
-     * @param   int|Tinebase_Model_Container $containerName
-     * @param   string $type
-     * @param   string $ownerId
+     * @param   string|Tinebase_Model_Application  $recordClass app name
+     * @param   int|Tinebase_Model_Container       $containerName
+     * @param   string                             $type
+     * @param   string                             $ownerId
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
      */
-    public function getContainerByName($appName, $containerName, $type, $ownerId = NULL)
+    public function getContainerByName($recordClass, $containerName, $type, $ownerId = NULL)
     {
+        // legacy handling
+        $meta = $this->_resolveRecordClassArgument($recordClass);
+        
         if ($type !== Tinebase_Model_Container::TYPE_PERSONAL && $type !== Tinebase_Model_Container::TYPE_SHARED) {
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $type supplied.");
         }
@@ -490,7 +496,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $ownerId = $ownerId instanceof Tinebase_Model_User ? $ownerId->getId() : $ownerId;
         
-        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($meta['appName'])->getId();
 
         $select = $this->_getSelect()
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId)
@@ -699,16 +705,19 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * returns the shared container for a given application accessible by the current user
      *
      * @param   string|Tinebase_Model_User          $_accountId
-     * @param   string|Tinebase_Model_Application   $_application
+     * @param   string|Tinebase_Model_Application   $recordClass
      * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getSharedContainer($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
+    public function getSharedContainer($_accountId, $recordClass, $_grant, $_ignoreACL = FALSE)
     {
+        // legacy handling
+        $meta = $this->_resolveRecordClassArgument($recordClass);
+        
         $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($meta['appName']);
         $grant       = $_ignoreACL ? '*' : $_grant;
         
         $select = $this->_getSelect()
@@ -739,14 +748,17 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * return users which made personal containers accessible to given account
      *
      * @param   string|Tinebase_Model_User          $_accountId
-     * @param   string|Tinebase_Model_Application   $_application
+     * @param   string|Tinebase_Model_Application   $recordClass
      * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet set of Tinebase_Model_User
      */
-    public function getOtherUsers($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
+    public function getOtherUsers($_accountId, $recordClass, $_grant, $_ignoreACL = FALSE)
     {
-        $containersData = $this->_getOtherUsersContainerData($_accountId, $_application, $_grant, $_ignoreACL);
+        // legacy handling
+        $meta = $this->_resolveRecordClassArgument($recordClass);
+        
+        $containersData = $this->_getOtherUsersContainerData($_accountId, $meta['appName'], $_grant, $_ignoreACL);
         
         $userIds = array();
         foreach($containersData as $containerData) {
@@ -763,14 +775,17 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * return set of all personal container of other users made accessible to the given account 
      *
      * @param   string|Tinebase_Model_User          $_accountId
-     * @param   string|Tinebase_Model_Application   $_application
+     * @param   string|Tinebase_Model_Application   $recordClass
      * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
      */
-    public function getOtherUsersContainer($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
+    public function getOtherUsersContainer($_accountId, $recordClass, $_grant, $_ignoreACL = FALSE)
     {
-        $containerData = $this->_getOtherUsersContainerData($_accountId, $_application, $_grant, $_ignoreACL);
+        // legacy handling
+        $meta = $this->_resolveRecordClassArgument($recordClass);
+        
+        $containerData = $this->_getOtherUsersContainerData($_accountId, $meta['appName'], $_grant, $_ignoreACL);
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $containerData, TRUE);
         
         return $result;
