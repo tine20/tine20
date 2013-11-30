@@ -1146,7 +1146,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if(!count($myFields)) { return 0; } 
 
         $identifier = $this->_getRecordIdentifier();
-  
+        
         $recordArray = $myFields;
         $recordArray = array_intersect_key($recordArray, $this->_schema);
         

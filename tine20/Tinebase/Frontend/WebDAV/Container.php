@@ -177,7 +177,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         $children = array();
         
         // Loop through the directory, and create objects for each node
-        foreach(Tinebase_FileSystem::getInstance()->scanDir($this->_path) as $node) {
+        foreach (Tinebase_FileSystem::getInstance()->scanDir($this->_path) as $node) {
             $children[] = $this->getChild($node->name);
         }
         
@@ -185,30 +185,13 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     }
     
     /**
-     * Returns the list of properties
-     *
-     * @param array $requestedProperties
-     * @return array
+     * return etag
+     * 
+     * @return string
      */
-    public function getProperties($requestedProperties) 
+    public function getETag()
     {
-    #    $displayName = $this->_container->name;
-    #    
-    #    $properties = array(
-    #        'id'                                     => $this->_container->getId(),
-    #        'uri'                                    => $this->_container->name,
-    #        '{DAV:}displayname'                      => $displayName,
-    #    );
-    #    
-        $response = array();
-    # 
-    #    foreach($requestedProperties as $prop) {
-    #        if (isset($properties[$prop])) {
-    #            $response[$prop] = $properties[$prop];
-    #        }
-    #    }
-    #    
-        return $response;
+        return '"' . Tinebase_FileSystem::getInstance()->stat($this->_path)->hash . '"';
     }
     
     /**

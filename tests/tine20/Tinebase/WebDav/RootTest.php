@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  WebDav
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -14,13 +14,11 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_WebDav_RootTest::main');
-}
-
 /**
- * Test class for Tinebase_Group
- * @depricated, some fns might be moved to other testclasses
+ * Test class for Tinebase_WebDav_Root
+ * 
+ * @package     Tinebase
+ * @subpackage  WebDav
  */
 class Tinebase_WebDav_RootTest extends PHPUnit_Framework_TestCase
 {
@@ -67,15 +65,56 @@ class Tinebase_WebDav_RootTest extends PHPUnit_Framework_TestCase
     {
     }
     
+    /**
+     * test getChildren method
+     */
     public function testGetChildren()
     {
         $children = $this->_rootNode->getChildren();
         
         $this->assertEquals(6, count($children));
     }
-}
-
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_WebDav_RootTest::main') {
-    Tinebase_WebDav_RootTest::main();
+    
+    /**
+     * test getLastModified method
+     */
+    public function testGetLastModified()
+    {
+        $remoteWebDav = $this->_rootNode->getChild('remote.php')->getChild('webdav');
+        
+        $this->assertNotEmpty($remoteWebDav->getLastModified());
+        
+        $personal = $remoteWebDav->getChild('personal');
+        
+        $this->assertNotEmpty($personal->getLastModified());
+        
+        $shared = $remoteWebDav->getChild('shared');
+        
+        $this->assertNotEmpty($shared->getLastModified());
+        
+        $this->assertContains($remoteWebDav->getLastModified(), array($personal->getLastModified(), $shared->getLastModified()));
+    }
+    
+    /**
+     * test getETag 
+     */
+    public function testGetETag()
+    {
+        $remoteWebDav = $this->_rootNode->getChild('remote.php')->getChild('webdav');
+        $properties = $remoteWebDav->getProperties(array('{DAV:}getetag'));
+        $this->assertArrayHasKey('{DAV:}getetag', $properties);
+        
+        $personal = $remoteWebDav->getChild('personal');
+        $properties = $personal->getProperties(array('{DAV:}getetag'));
+        $this->assertArrayHasKey('{DAV:}getetag', $properties);
+        
+        $currentUser = $personal->getChild(Tinebase_Core::getUser()->accountLoginName);
+        $properties = $currentUser->getProperties(array('{DAV:}getetag'));
+        $this->assertArrayHasKey('{DAV:}getetag', $properties);
+        
+        foreach ($currentUser->getChildren() as $child) {
+            $properties = $child->getProperties(array('{DAV:}getetag'));
+            $this->assertArrayHasKey('{DAV:}getetag', $properties);
+        }
+    }
 }
