@@ -138,12 +138,9 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
     {
         $type = null;
         
-        if (isset($property['TYPE'])) {
-            foreach ($property['TYPE'] as $typeProperty) {
-                if (strtolower($typeProperty) == 'pref') {
-                    $type = 'work';
-                    break;
-                }
+        if ($property['TYPE']) {
+            if ($property['TYPE']->has('pref')) {
+                $type = 'work';
             }
         }
         
