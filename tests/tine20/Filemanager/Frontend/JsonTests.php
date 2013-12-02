@@ -76,18 +76,6 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     protected $_originalTestUser;
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 webdav tree tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -101,73 +89,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $this->_fsController = Tinebase_FileSystem::getInstance();
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
         $this->_originalTestUser = Tinebase_Core::getUser();
-        
-        $this->_setupTestContainers();
     }
     
-    /**
-     * init test container
-     */
-    protected function _setupTestContainers()
-    {
-        $this->_personalContainer = Tinebase_Container::getInstance()->getDefaultContainer('Filemanager');
-        
-        $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
-            'application_id' => $this->_application->getId(),
-            'name'           => 'shared',
-            'type'           => Tinebase_Model_Container::TYPE_SHARED,
-        )));
-        $this->_sharedContainer = (count($search) > 0) 
-            ? $search->getFirstRecord()
-            : Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-                'name'           => 'shared',
-                'type'           => Tinebase_Model_Container::TYPE_SHARED,
-                'backend'        => 'sql',
-                'application_id' => $this->_application->getId(),
-            )));
-            
-        $personas = Zend_Registry::get('personas');
-        $this->_otherUserContainer = Tinebase_Container::getInstance()->getDefaultContainer('Filemanager', $personas['sclever']->getId());
-        Tinebase_Container::getInstance()->addGrants($this->_otherUserContainer->getId(), Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, NULL, array(
-            Tinebase_Model_Grants::GRANT_READ
-        ), TRUE);
-    }
-    
-    /**
-     * setup the test paths
-     * 
-     * @param string|array $_types
-     */
-    protected function _setupTestPath($_types)
-    {
-        $testPaths = array();
-        $types = (array) $_types;
-        
-        foreach ($types as $type) {
-            switch ($type) {
-                case Tinebase_Model_Container::TYPE_PERSONAL:
-                    $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->getId() . '/' 
-                        . $this->_personalContainer->getId() . '/unittestdir_personal';
-                    break;
-                case Tinebase_Model_Container::TYPE_SHARED:
-                    $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->getId();
-                    $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->getId() . '/unittestdir_shared';
-                    break;
-                case Tinebase_Model_Container::TYPE_OTHERUSERS:
-                    $personas = Zend_Registry::get('personas');
-                    $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . $personas['sclever']->getId() . '/' 
-                        . $this->_otherUserContainer->getId() . '/unittestdir_other';
-                    break;
-            }
-        }
-        
-        foreach ($testPaths as $path) {
-            $path = Filemanager_Controller_Node::getInstance()->addBasePath($path);
-            $this->_objects['paths'][] = $path;
-            $this->_fsController->mkdir($path);
-        }
-    }
-
     /**
      * Tears down the fixture
      * This method is called after a test is executed.
@@ -178,22 +101,13 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     {
         Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
         
-        if (isset($this->_objects['paths'])) {
-            foreach ($this->_objects['paths'] as $path) {
-                try {
-                    $this->_fsController->rmdir($path, TRUE);
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    // already deleted
-                }
-            }
-        }
-        if (isset($this->_objects['containerids'])) {
-            foreach ($this->_objects['containerids'] as $containerId) {
-                Tinebase_Container::getInstance()->delete($containerId);
-            }
-        }
-        
         Tinebase_TransactionManager::getInstance()->rollBack();
+        Tinebase_FileSystem::getInstance()->clearStatCache();
+        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        
+        $this->_personalContainer  = null;
+        $this->_sharedContainer    = null;
+        $this->_otherUserContainer = null;
     }
     
     /**
@@ -231,7 +145,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_personalContainer->name
+            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalContainer()->name
         ));
         $this->_searchHelper($filter, 'unittestdir_personal');
     }
@@ -283,7 +197,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/' . Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->name
+            'value'    => '/' . Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_getSharedContainer()->name
         ));
         $this->_searchHelper($filter, 'unittestdir_shared');
     }
@@ -298,7 +212,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/sclever/' . $this->_otherUserContainer->name
+            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/sclever/' . $this->_getOtherUserContainer()->name
         ));
         $this->_searchHelper($filter, 'unittestdir_other');
     }
@@ -315,7 +229,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
             'operator' => 'equals', 
             'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
         ));
-        $this->_searchHelper($filter, $this->_personalContainer->name, TRUE);
+        $this->_searchHelper($filter, $this->_getPersonalContainer()->name, TRUE);
         
         $another = $this->testCreateContainerNodeInPersonalFolder();
         $this->_searchHelper($filter, $another['name']['name'], TRUE);
@@ -333,7 +247,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
             'operator' => 'equals', 
             'value'    => '/' . Tinebase_Model_Container::TYPE_SHARED
         ));
-        $result = $this->_searchHelper($filter, $this->_sharedContainer->name, TRUE);
+        $result = $this->_searchHelper($filter, $this->_getSharedContainer()->name, TRUE);
     }
 
     /**
@@ -341,11 +255,15 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      */
     public function testSearchTopLevelContainersOfOtherUsers()
     {
-        $filter = array(array(
-            'field'    => 'path', 
-            'operator' => 'equals', 
-            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL
-        ));
+        $this->_getOtherUserContainer();
+        
+        $filter = array(
+            array(
+                'field'    => 'path', 
+                'operator' => 'equals', 
+                'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL
+            )
+        );
         $this->_searchHelper($filter, 'Clever, Susan', FALSE, FALSE);
     }
 
@@ -365,9 +283,9 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
             'operator' => 'within', 
             'value'    => 'weekThis',
         ));
-        $result = $this->_searchHelper($filter, $this->_otherUserContainer->name, TRUE);
+        $result = $this->_searchHelper($filter, $this->_getOtherUserContainer()->name, TRUE);
         
-        $expectedPath = $filter[0]['value'] . '/' . $this->_otherUserContainer->name;
+        $expectedPath = $filter[0]['value'] . '/' . $this->_getOtherUserContainer()->name;
         $this->assertEquals($expectedPath, $result['results'][0]['path'], 'node path mismatch');
         $this->assertEquals($filter[0]['value'], $result['filter'][0]['value']['path'], 'filter path mismatch');
     }
@@ -847,6 +765,9 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     */
     public function testMoveFolderNodesToTopLevel()
     {
+        // we need the personal folder for the test user
+        $this->_setupTestPath(Tinebase_Model_Container::TYPE_PERSONAL);
+        
         $dirsToMove = $this->testCreateDirectoryNodesInShared();
         $targetPath = '/personal/' . Tinebase_Core::getUser()->accountLoginName;
         $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($targetPath . '/dir1');
@@ -1010,29 +931,6 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test cleanup of deleted files (filesystem)
-     */
-    public function testDeletedFileCleanupFromFilesystem()
-    {
-        // remove all files with size 0 first
-        $size0Nodes = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(array(
-            'field' => 'size', 'operator' => 'equals', 'value' => 0
-        ))));
-        foreach ($size0Nodes as $node) {
-            Tinebase_FileSystem::getInstance()->deleteFileNode($node);
-        }
-        
-        $this->testDeleteFileNodes();
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
-        $this->assertGreaterThan(0, $result, 'should cleanup one file or more');
-        $this->tearDown();
-        
-        $this->testDeleteFileNodes();
-        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
-        $this->assertEquals(1, $result, 'should cleanup one file');
-    }
-
-    /**
      * test cleanup of deleted files (database)
      * 
      * @see 0008062: add cleanup script for deleted files
@@ -1083,15 +981,15 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     public function testSetContainerInPathRecord()
     {
         $flatpath = Filemanager_Controller_Node::getInstance()->addBasePath(
-            '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_personalContainer->name);
+            '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalContainer()->name);
         $path = Tinebase_Model_Tree_Node_Path::createFromPath($flatpath);
-        $path->setContainer($this->_sharedContainer);
-        $this->assertEquals('/' . $this->_application->getId() . '/folders/shared/' . $this->_sharedContainer->getId(), $path->statpath);
+        $path->setContainer($this->_getSharedContainer());
+        $this->assertEquals('/' . $this->_application->getId() . '/folders/shared/' . $this->_getSharedContainer()->getId(), $path->statpath);
         
         // move it back
-        $path->setContainer($this->_personalContainer);
+        $path->setContainer($this->_getPersonalContainer());
         $this->assertEquals('/' . $this->_application->getId() . '/folders/personal/' 
-            . Tinebase_Core::getUser()->getId() . '/' . $this->_personalContainer->getId(), $path->statpath, 'wrong statpath: ' . print_r($path->toArray(), TRUE));
+            . Tinebase_Core::getUser()->getId() . '/' . $this->_getPersonalContainer()->getId(), $path->statpath, 'wrong statpath: ' . print_r($path->toArray(), TRUE));
     }
 
     /**
@@ -1227,5 +1125,128 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         
         $result = $this->_json->searchNodes($filter, array('sort' => 'name', 'start' => 0, 'limit' => 0));
         $this->assertEquals(3, count($result), '3 files should have been found!');
+    }
+    
+    /**
+     * test cleanup of deleted files (filesystem)
+     */
+    public function testDeletedFileCleanupFromFilesystem()
+    {
+        // remove all files with size 0 first
+        $size0Nodes = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(array(
+            'field' => 'size', 'operator' => 'equals', 'value' => 0
+        ))));
+        foreach ($size0Nodes as $node) {
+            Tinebase_FileSystem::getInstance()->deleteFileNode($node);
+        }
+        
+        $this->testDeleteFileNodes();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        $this->assertGreaterThan(0, $result, 'should cleanup one file or more');
+        $this->tearDown();
+        
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $this->testDeleteFileNodes();
+        $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        $this->assertEquals(1, $result, 'should cleanup one file');
+    }
+    
+    /**
+     * get other users container
+     * 
+     * @return Tinebase_Model_Container
+     */
+    protected function _getOtherUserContainer()
+    {
+        if (!$this->_otherUserContainer) {
+            $sclever = array_value('sclever', Zend_Registry::get('personas'));
+            
+            $this->_otherUserContainer = Tinebase_Container::getInstance()->getDefaultContainer('Filemanager', $sclever->getId());
+            Tinebase_Container::getInstance()->addGrants(
+                $this->_otherUserContainer->getId(), 
+                Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, 
+                NULL, 
+                array(Tinebase_Model_Grants::GRANT_READ), 
+                TRUE
+            );
+        }
+        
+        return $this->_otherUserContainer;
+    }
+    
+    /**
+     * get personal container
+     * 
+     * @return Tinebase_Model_Container
+     */
+    protected function _getPersonalContainer()
+    {
+        if (!$this->_personalContainer) {
+            $this->_personalContainer = Tinebase_Container::getInstance()->getDefaultContainer('Filemanager');
+        }
+        
+        return $this->_personalContainer;
+    }
+    
+    /**
+     * get shared container
+     * 
+     * @return Tinebase_Model_Container
+     */
+    protected function _getSharedContainer()
+    {
+        if (!$this->_sharedContainer) {
+            $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
+                'application_id' => $this->_application->getId(),
+                'name'           => 'shared',
+                'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            )));
+            $this->_sharedContainer = (count($search) > 0) 
+                ? $search->getFirstRecord()
+                : Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+                    'name'           => 'shared',
+                    'type'           => Tinebase_Model_Container::TYPE_SHARED,
+                    'backend'        => 'sql',
+                    'application_id' => $this->_application->getId(),
+                ))
+            );
+        }
+        
+        return $this->_sharedContainer;
+    }
+    
+    /**
+     * setup the test paths
+     * 
+     * @param string|array $_types
+     */
+    protected function _setupTestPath($_types)
+    {
+        $testPaths = array();
+        $types = (array) $_types;
+        
+        foreach ($types as $type) {
+            switch ($type) {
+                case Tinebase_Model_Container::TYPE_PERSONAL:
+                    $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->getId() . '/' 
+                        . $this->_getPersonalContainer()->getId() . '/unittestdir_personal';
+                    break;
+                case Tinebase_Model_Container::TYPE_SHARED:
+                    $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_getSharedContainer()->getId();
+                    $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_getSharedContainer()->getId() . '/unittestdir_shared';
+                    break;
+                case Tinebase_Model_Container::TYPE_OTHERUSERS:
+                    $personas = Zend_Registry::get('personas');
+                    $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . $personas['sclever']->getId() . '/' 
+                        . $this->_getOtherUserContainer()->getId() . '/unittestdir_other';
+                    break;
+            }
+        }
+        
+        foreach ($testPaths as $path) {
+            $path = Filemanager_Controller_Node::getInstance()->addBasePath($path);
+            $this->_objects['paths'][] = $path;
+            $this->_fsController->mkdir($path);
+        }
     }
 }
