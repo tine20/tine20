@@ -289,21 +289,47 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testPrivateCleanup()
     {
+        $this->_assertPrivateEvent();
+    }
+    
+    /**
+     * assert private event
+     * 
+     * @param string $searchMethod
+     * @throws InvalidArgumentException
+     */
+    protected function _assertPrivateEvent($searchMethod = 'search')
+    {
         $persistentEvent = $this->_createEventInPersonasCalendar('pwulf', 'pwulf', 'pwulf', Calendar_Model_Event::CLASS_PRIVATE);
         
-        $filterData = array(
-            array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId())
-        );
-        
-        $events = $this->_uit->search(new Calendar_Model_EventFilter($filterData), NULL, FALSE, FALSE);
+        if ($searchMethod === 'search') {
+            $filterData = array(
+                array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId())
+            );
+            $events = $this->_uit->search(new Calendar_Model_EventFilter($filterData), NULL, FALSE, FALSE);
+            
+            // assert json fe does not add history
+            $json = new Calendar_Frontend_Json();
+            $resolvedEvents = $json->searchEvents($filterData, array());
+            $this->assertTrue(empty($resolvedEvents['results'][0]['notes']));
+            
+        } else if ($searchMethod === 'getMultiple') {
+            $events = $this->_uit->getMultiple(array($persistentEvent->getId()));
+        } else {
+            throw new InvalidArgumentException('unknown search method: ' . $searchMethod);
+        }
         
         $this->assertTrue($events[0]->summary == '');
-        
-        // assert json fe does not add history
-        $json = new Calendar_Frontend_Json();
-        $resolvedEvents = $json->searchEvents($filterData, array());
-        $this->assertTrue(empty($resolvedEvents['results'][0]['notes']));
-        
+    }
+    
+    /**
+     * testPrivateCleanupGetMultiple
+     * 
+     * @see 0005400: private must lever out admin grant on get/Multiple in controller
+     */
+    public function testPrivateCleanupGetMultiple()
+    {
+        $this->_assertPrivateEvent('getMultiple');
     }
     
     /**

@@ -374,6 +374,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
+     * Returns a set of records identified by their id's
+     *
+     * @param   array $_ids       array of record identifiers
+     * @param   bool  $_ignoreACL don't check acl grants
+     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     */
+    public function getMultiple($_ids, $_ignoreACL = false)
+    {
+        $events = parent::getMultiple($_ids, $_ignoreACL = false);
+        if ($_ignoreACL !== true) {
+            $this->_freeBusyCleanup($events, 'get');
+        }
+        
+        return $events;
+    }
+    
+    /**
      * cleanup search results (freebusy)
      * 
      * @param Tinebase_Record_RecordSet $_events
@@ -1470,9 +1487,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
-        if (    !$this->_doContainerACLChecks 
-            // admin grant includes all others
-            ||  ($_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))) {
+        if (    ! $this->_doContainerACLChecks 
+            // admin grant includes all others (only if class is PUBLIC)
+            ||  (! empty($this->class) && $this->class === Calendar_Model_Event::CLASS_PUBLIC 
+                && $_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))
+        ) {
             return TRUE;
         }
 
