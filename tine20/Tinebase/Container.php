@@ -689,6 +689,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
                 'owner_id'          => $account->getId(),
                 'backend'           => 'Sql',
+                'model'             => $meta['recordClass'],
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($meta['appName'])->getId() 
             )));
         }
