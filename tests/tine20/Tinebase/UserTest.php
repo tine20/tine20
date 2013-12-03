@@ -98,11 +98,36 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         Tinebase_User::setBackendConfiguration($testValue, $key);
         $this->assertEquals($testValue, Tinebase_User::getBackendConfiguration($key));
 
-        $testValues = array('host' => 'phpunit-test-host2',
-           'username' => 'cn=testcn,ou=teestou,o=testo',
-           'password' => 'secret'
+        $testValues = array(
+            'host' => 'phpunit-test-host2',
+            'username' => 'cn=testcn,ou=teestou,o=testo',
+            'password' => 'secret',
         );
         Tinebase_User::setBackendConfiguration($testValues, null);
+        foreach ($testValues as $key => $testValue) {
+            $this->assertEquals($testValue, Tinebase_User::getBackendConfiguration($key));
+        }
+    }
+    
+    /**
+     * testSetBackendConfigurationWithDefaults
+     * 
+     * @see 0009298: installing with LDAP via CLI should apply default settings for missing options
+     */
+    public function testSetBackendConfigurationWithDefaults()
+    {
+        Tinebase_User::setBackendType(Tinebase_User::LDAP);
+        $options = array(
+            'host' => 'phpunit-test-host2'
+        );
+        Tinebase_User::setBackendConfiguration($options, null, true);
+        
+        $testValues = array(
+            'host' => 'phpunit-test-host2',
+            'minUserId' => '10000',
+            'maxUserId' => '29999',
+        );
+        
         foreach ($testValues as $key => $testValue) {
             $this->assertEquals($testValue, Tinebase_User::getBackendConfiguration($key));
         }
