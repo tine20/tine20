@@ -984,7 +984,7 @@ class Setup_Controller
             }
         }
         
-        Tinebase_Auth::setBackendConfiguration($config);
+        Tinebase_Auth::setBackendConfiguration($config, null, true);
         Tinebase_Auth::saveBackendConfiguration();
     }
     
@@ -1001,7 +1001,7 @@ class Setup_Controller
         
         Tinebase_User::setBackendType($_data['backend']);
         $config = (isset($_data[$_data['backend']])) ? $_data[$_data['backend']] : $_data;
-        Tinebase_User::setBackendConfiguration($config);
+        Tinebase_User::setBackendConfiguration($config, null, true);
         Tinebase_User::saveBackendConfiguration();
         
         if ($originalBackend != $newBackend && $this->isInstalled('Addressbook') && $originalBackend == Tinebase_User::SQL) {
