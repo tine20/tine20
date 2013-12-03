@@ -148,7 +148,7 @@
              <arg line="-d max_execution_time=0
              -d include_path=${includepath}
              --configuration ${testconfigdir}/phpunit.xml
-             --log-junit ${builddir}/reports/testsuites.xml
+             --log-junit ${builddir}/reports/junit.xml
              ${testinclude} " />
         </exec>
     </target>
