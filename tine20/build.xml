@@ -353,7 +353,8 @@
                 imap=${imap} \
                 smtp=${smtp} \
                 authentication=${authentication} \
-                accounts=${accounts}
+                accounts=${accounts} \
+                sieve=${sieve}
 " passthru="true"/>
     </target>
 
