@@ -351,6 +351,8 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * testSaveContractWithManyRelations
      * 
+     * @group longrunning
+     * 
      * @see 0008586: when saving record with too many relations, modlog breaks
      * @see 0008712: testSaveContractWithManyRelations test lasts too long
      * @see 0009152: saving of record fails because of too many relations

@@ -145,6 +145,16 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
     }
     
     /**
+     * return etag
+     * 
+     * @return string
+     */
+    public function getETag()
+    {
+        return '"' . $this->_container->seq . '"';
+    }
+    
+    /**
      * Returns a group principal
      *
      * This must be a url to a principal, or null if there's no owner
@@ -259,6 +269,24 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
     }
     
     /**
+     * Returns the last modification date as a unix timestamp
+     *
+     * @return time
+     */
+    public function getLastModified() 
+    {
+        if ($this->_container->last_modified_time instanceof Tinebase_DateTime) {
+            return $this->_container->last_modified_time->getTimestamp();
+        }
+        
+        if ($this->_container->creation_time instanceof Tinebase_DateTime) {
+            return $this->_container->creation_time->getTimestamp();
+        }
+        
+        return Tinebase_DateTime::now()->getTimestamp();
+    }
+    
+    /**
      * Returns the name of the node
      *
      * @return string
@@ -287,6 +315,33 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
         }
         
         return 'principals/users/' . Tinebase_Core::getUser()->contact_id;
+    }
+    
+    /**
+     * Returns the list of properties
+     *
+     * @param array $requestedProperties
+     * @return array
+     */
+    public function getProperties($requestedProperties) 
+    {
+        $properties = array();
+        
+        $response = array();
+        
+        foreach ($requestedProperties as $prop) {
+            switch($prop) {
+                case '{DAV:}getetag':
+                    $response[$prop] = $this->getETag();
+                    break;
+                    
+                default:
+                    if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
+                    break;
+            }
+        }
+        
+        return $response;
     }
     
     /**

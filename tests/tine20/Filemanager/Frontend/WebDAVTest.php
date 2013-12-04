@@ -73,6 +73,9 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+        
+        unset($_SERVER['HTTP_OC_CHUNKED']);
+        unset($_SERVER['CONTENT_LENGTH']);
     }
     
     /**
@@ -252,6 +255,91 @@ class Filemanager_Frontend_WebDAVTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('Filemanager_Frontend_WebDAV_File', get_class($node), 'wrong type');
         $this->assertTrue(preg_match('/"\w+"/', $etag) === 1);
+    }
+    
+    /**
+     * test chunked upload from OwnCloud clients
+     * 
+     * @return Filemanager_Frontend_WebDAV_File
+     */
+    public function testOwnCloudChunkedUpload()
+    {
+        $_SERVER['HTTP_OC_CHUNKED'] = 1;
+        
+        $fileStream = fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r');
+        
+        $parent = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory();
+        
+        // upload first chunk
+        $tempStream = fopen('php://temp', 'w');
+        $_SERVER['CONTENT_LENGTH'] = stream_copy_to_stream($fileStream, $tempStream, 1000);
+        rewind($tempStream);
+        $etag = $parent->createFile('tine_logo.png-chunking-1000-3-0', $tempStream);
+        fclose($tempStream);
+        
+        // upload second chunk
+        $tempStream = fopen('php://temp', 'w');
+        $_SERVER['CONTENT_LENGTH'] = stream_copy_to_stream($fileStream, $tempStream, 1000);
+        rewind($tempStream);
+        $etag = $parent->createFile('tine_logo.png-chunking-1000-3-1', $tempStream);
+        fclose($tempStream);
+        
+        // upload last chunk
+        $tempStream = fopen('php://temp', 'w');
+        $_SERVER['CONTENT_LENGTH'] = stream_copy_to_stream($fileStream, $tempStream);
+        rewind($tempStream);
+        $etag = $parent->createFile('tine_logo.png-chunking-1000-3-2', $tempStream);
+        fclose($tempStream);
+        fclose($fileStream);
+        
+        // retrieve final node
+        $this->_webdavTree->markDirty('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
+        $node = $this->_webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
+        
+        $this->assertTrue($node instanceof Filemanager_Frontend_WebDAV_File, 'wrong node class: ' . get_class($node));
+        $this->assertTrue(is_resource($node->get()));
+        $this->assertEquals('tine_logo.png', $node->getName());
+        $this->assertEquals(7246, $node->getSize());
+        $this->assertEquals('image/png', $node->getContentType());
+        $this->assertEquals('"7424e2c16388bf388af1c4fe44c1dd67d31f468b"', $node->getETag());
+        $this->assertTrue(preg_match('/"\w+"/', $etag) === 1);
+        
+        $fileStream = fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo_setup.png', 'r');
+        
+        // upload first chunk
+        $tempStream = fopen('php://temp', 'w');
+        $_SERVER['CONTENT_LENGTH'] = stream_copy_to_stream($fileStream, $tempStream, 1000);
+        rewind($tempStream);
+        $etag = $parent->createFile('tine_logo.png-chunking-1001-3-0', $tempStream);
+        fclose($tempStream);
+        
+        // upload second chunk
+        $tempStream = fopen('php://temp', 'w');
+        $_SERVER['CONTENT_LENGTH'] = stream_copy_to_stream($fileStream, $tempStream, 1000);
+        rewind($tempStream);
+        $etag = $parent->createFile('tine_logo.png-chunking-1001-3-1', $tempStream);
+        fclose($tempStream);
+        
+        // upload last chunk
+        $tempStream = fopen('php://temp', 'w');
+        $_SERVER['CONTENT_LENGTH'] = stream_copy_to_stream($fileStream, $tempStream);
+        rewind($tempStream);
+        $etag = $parent->createFile('tine_logo.png-chunking-1001-3-2', $tempStream);
+        fclose($tempStream);
+        
+        // retrieve final node
+        $this->_webdavTree->markDirty('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
+        $node = $this->_webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
+        
+        $this->assertTrue($node instanceof Filemanager_Frontend_WebDAV_File, 'wrong node class: ' . get_class($node));
+        $this->assertTrue(is_resource($node->get()));
+        $this->assertEquals('tine_logo.png', $node->getName());
+        $this->assertEquals(7258, $node->getSize());
+        $this->assertEquals('image/png', $node->getContentType());
+        $this->assertEquals('"434f1e3474a04ce3a10febad78a64e65d7b4f531"', $node->getETag());
+        $this->assertTrue(preg_match('/"\w+"/', $etag) === 1);
+        
+        return $node;
     }
     
     public function testDeleteFile()

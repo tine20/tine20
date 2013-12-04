@@ -255,6 +255,9 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         $createdNode = $this->_treeNodeBackend->create($destinationNode);
         
+        // update hash of all parent folders
+        $this->_updateDirectoryNodesHash(dirname(implode('/', $destinationPathParts)));
+        
         return $createdNode;
     }
     
@@ -348,6 +351,9 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         fclose($handle);
         
+        // update hash of all parent folders
+        $this->_updateDirectoryNodesHash(dirname($options['tine20']['path']));
+        
         return true;
     }
     
@@ -388,6 +394,32 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         }
         
         return $this->_fileObjectBackend->update($updatedFileObject);
+    }
+    
+    /**
+     * update hash of all directories for given path
+     * 
+     * @param string $path
+     */
+    protected function _updateDirectoryNodesHash($path)
+    {
+        // update hash of all parent folders
+        $parentNodes = $this->_getPathNodes($path);
+        $updatedNodes = $this->_fileObjectBackend->updateDirectoryNodesHash($parentNodes);
+        
+        // update nodes stored in local statCache
+        $subPath = null;
+        foreach ($parentNodes as $node) {
+            $directoryObject = $updatedNodes->getById($node->object_id);
+            
+            if ($directoryObject) {
+                $node->revision = $directoryObject->revision;
+                $node->hash     = $directoryObject->hash;
+            }
+            
+            $subPath .= "/" . $node->name;
+            $this->_addStatCache($subPath, $node);
+        }
     }
     
     /**
@@ -602,13 +634,20 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             $currentPath[]= $pathPart;
             
             try {
-                $parentNode = $this->stat('/' . implode('/', $currentPath));
+                $node = $this->stat('/' . implode('/', $currentPath));
             } catch (Tinebase_Exception_NotFound $tenf) {
-                $parentNode = $this->createDirectoryTreeNode($parentNode, $pathPart);
+                $node = $this->createDirectoryTreeNode($parentNode, $pathPart);
                 
-                $this->_addStatCache($currentPath, $parentNode);
+                $this->_addStatCache($currentPath, $node);
             }
+            
+            $parentNode = $node;
         }
+        
+        // update hash of all parent folders
+        $this->_updateDirectoryNodesHash($path);
+        
+        return $node;
     }
     
     /**
@@ -748,6 +787,9 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         $this->clearStatCache($path);
         
+        // update hash of all parent folders
+        $this->_updateDirectoryNodesHash(dirname($path));
+        
         return true;
     }
     
@@ -784,6 +826,8 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $directoryObject = new Tinebase_Model_Tree_FileObject(array(
             'type'          => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
             'contentytype'  => null,
+            'hash'          => Tinebase_Record_Abstract::generateUID(),
+            'size'          => 0
         ));
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($directoryObject, 'create');
         $directoryObject = $this->_fileObjectBackend->create($directoryObject);
@@ -1018,6 +1062,26 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         return $result;
     }
     
+    protected function _getPathNodes($path)
+    {
+        $pathParts = $this->_splitPath($path);
+        
+        if (empty($pathParts)) {
+            throw new Tinebase_Exception_InvalidArgument('empty path provided');
+        }
+        
+        $subPath   = null;
+        $pathNodes = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        
+        foreach ($pathParts as $pathPart) {
+            $subPath .= "/$pathPart"; 
+            
+            $pathNodes->addRecord($this->stat($subPath));
+        }
+        
+        return $pathNodes;
+    }
+    
     /**
      * clears deleted files from filesystem + database
      */
@@ -1090,7 +1154,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $toDeleteIds = array();
         $fileObjects = $this->_fileObjectBackend->getAll();
         foreach ($fileObjects as $fileObject) {
-            if ($fileObject->hash && ! file_exists($fileObject->getFilesystemPath())) {
+            if ($fileObject->type == Tinebase_Model_Tree_FileObject::TYPE_FILE && $fileObject->hash && ! file_exists($fileObject->getFilesystemPath())) {
                 $toDeleteIds[] = $fileObject->getId();
             }
         }

@@ -267,6 +267,8 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     
     /**
      * testSendEmail
+     * 
+     * @group longrunning
      */
     public function testSendEmail()
     {
@@ -354,6 +356,8 @@ dGVzdAo=&#13;
      * testCalendarInvitation (should not be sent)
      * 
      * @see 0007568: do not send iMIP-messages via ActiveSync
+     * 
+     * @group longrunning
      */
     public function testCalendarInvitation()
     {
@@ -444,6 +448,8 @@ from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->bod
      * testReplyEmailNexus
      * 
      * @see 0008572: email reply text garbled
+     * 
+     * @group longrunning
      */
     public function testReplyEmailNexus1()
     {

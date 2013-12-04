@@ -12,7 +12,6 @@
 
 /**
  * helper class
- *
  */
 class TestServer
 {
@@ -187,10 +186,12 @@ class TestServer
             '/--debug\s*/',
             '/--filter [\S]+\D/',
             '/--configuration [\S]+\D/',
+            '/--exclude-group [\S]+\D/',
             '/-c [\S]+\D/',
             '/--log-junit [\S]+\D/'
         ), array(
             'php',
+            '',
             '',
             '',
             '',

@@ -51,6 +51,8 @@ class HumanResources_CliTests extends HumanResources_TestCase
         
     /**
      * test employee import
+     * 
+     * @group longrunning
      */
     public function testImportEmployee()
     {
@@ -130,6 +132,8 @@ class HumanResources_CliTests extends HumanResources_TestCase
 
     /**
      * test employee import update
+     * 
+     * @group longrunning
      */
     public function testImportUpdate()
     {

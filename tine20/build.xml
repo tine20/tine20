@@ -139,6 +139,7 @@
     <target name="phpunit-exec" depends="clean, phpunit-prepare">
         <property name="testinclude" value="AllTests.php" override="true" />
         <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}" override="true" />
+        <property name="testadditionalparams" value="" override="true" />
         
         <echo msg="Starting Tests..." />
         <echo msg="Using config file ${testconfigdir}/phpunit.xml" />
@@ -149,6 +150,7 @@
              -d include_path=${includepath}
              --configuration ${testconfigdir}/phpunit.xml
              --log-junit ${builddir}/reports/junit.xml
+             ${testadditionalparams}
              ${testinclude} " />
         </exec>
     </target>

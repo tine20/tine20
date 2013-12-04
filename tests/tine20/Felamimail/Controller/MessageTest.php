@@ -117,6 +117,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     /**
      * test getting multiple messages
+     * 
+     * @group longrunning
      */
     public function testGetMultipleMessages()
     {
@@ -806,6 +808,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     /**
      * test forward with attachment
+     * 
+     * @group longrunning
      */
     public function testForwardMessageWithAttachment()
     {
@@ -855,6 +859,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
 
     /**
      * test forward message part
+     * 
+     * @group longrunning
      */
     public function testForwardMessagePart()
     {
@@ -982,7 +988,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('longfrom.eml');
         $this->assertEquals('nDqIxSoSTIC', $cachedMessage->subject);
     }
-        
+    
     /**
      * testGetMessageWithQuotedPrintableDecodeProblem
      */
@@ -996,6 +1002,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     /**
      * test move to another account
+     * 
+     * @group longrunning
      */
     public function testMoveMessageToAnotherAccount()
     {
@@ -1008,6 +1016,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     /**
      * test move to another account (with message filter)
+     * 
+     * @group longrunning
      */
     public function testMoveMessageToAnotherAccountWithFilter()
     {
@@ -1053,6 +1063,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
      /**
      * test delete in different accounts
+     * 
+     * @group longrunning
      */
     public function testDeleteMessagesInDifferentAccounts()
     {

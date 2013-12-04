@@ -102,6 +102,22 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
         }
         
+        // OwnCloud chunked file upload
+        if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
+            $completeFile = Tinebase_Frontend_WebDAV_Directory::handleOwnCloudChunkedFileUpload($name, $data);
+            
+            if (! $completeFile instanceof Tinebase_Model_TempFile) {
+                return null;
+            }
+            
+            $name = $completeFile->name;
+            $data = fopen($completeFile->path, 'r');
+            
+            if ($this->childExists($name)) {
+                return $this->getChild($name)->put($data);
+            }
+        }
+        
         $path = $this->_path . '/' . $name;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
@@ -168,4 +184,64 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         }
     }
     
+    /**
+     * handle chunked upload
+     * 
+     * @param string $name Name of the file
+     * @param resource $data payload, passed as a readable stream resource.
+     * @throws \Sabre\DAV\Exception\BadRequest
+     * @return boolean|Tinebase_Model_TempFile
+     */
+    public static function handleOwnCloudChunkedFileUpload($name, $data)
+    {
+        $matched = preg_match('/(?P<name>.*)-chunking-(?P<tempId>\d+)-(?P<totalCount>\d+)-(?P<chunkId>\d+)/', $name, $chunkInfo);
+        
+        if (!$matched) {
+            throw new \Sabre\DAV\Exception\BadRequest('bad filename provided: ' . $name);
+        }
+        
+        $stat = fstat($data);
+        
+        if (isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] != $stat['size']) {
+            throw new \Sabre\DAV\Exception\BadRequest('uploaded part incomplete! expected size of: ' . $_SERVER['CONTENT_LENGTH'] . ' got: ' . $stat['size']);
+        }
+        
+        // copy chunk to temp file
+        $path = Tinebase_TempFile::getTempPath();
+        
+        $tempfileHandle = fopen($path, "w");
+        if (! $tempfileHandle) {
+            throw new \Sabre\DAV\Exception\BadRequest('Could not open tempfile while uploading! ');
+        }
+        
+        do {
+            stream_copy_to_stream($data, $tempfileHandle);
+        } while (!feof($data));
+        
+        fclose($tempfileHandle);
+        
+        Tinebase_TempFile::getInstance()->createTempFile($path, $chunkInfo['name'] . '-' . $chunkInfo['tempId'], $chunkInfo['chunkId'] + 1);
+        
+        // check if the client send all chunks
+        $uploadedChunks = Tinebase_TempFile::getInstance()->search(
+            new Tinebase_Model_TempFileFilter(array(
+                array('field' => 'name', 'operator' => 'equals', 'value' => $chunkInfo['name'] . '-' . $chunkInfo['tempId'])
+            )), 
+            new Tinebase_Model_Pagination(array('sort' => 'type', 'dir' => 'ASC'))
+        );
+        
+        if ($uploadedChunks->count() != $chunkInfo['totalCount']) {
+            return false;
+        }
+        
+        // combine all chunks to one file
+        $joinedFile = Tinebase_TempFile::getInstance()->joinTempFiles($uploadedChunks);
+        $joinedFile->name = $chunkInfo['name'];
+        
+        foreach ($uploadedChunks as $chunk) {
+            unlink($chunk->path);
+        }
+        
+        return $joinedFile;
+    }
 }
