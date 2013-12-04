@@ -14,6 +14,8 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ * @property    string  name
+ * @property    string  path
  */
 class Tinebase_Model_TempFile extends Tinebase_Record_Abstract 
 {

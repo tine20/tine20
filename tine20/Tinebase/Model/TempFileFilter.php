@@ -33,6 +33,7 @@ class Tinebase_Model_TempFileFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'time'   => array('filter' => 'Tinebase_Model_Filter_DateTime')
+        'time'   => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'name'   => array('filter' => 'Tinebase_Model_Filter_Text')
     );
 }

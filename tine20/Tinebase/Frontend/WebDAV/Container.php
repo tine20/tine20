@@ -99,6 +99,22 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
         }
         
+        // OwnCloud chunked file upload
+        if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
+            $completeFile = Tinebase_Frontend_WebDAV_Directory::handleOwnCloudChunkedFileUpload($name, $data);
+            
+            if (! $completeFile instanceof Tinebase_Model_TempFile) {
+                return null;
+            }
+            
+            $name = $completeFile->name;
+            $data = fopen($completeFile->path, 'r');
+            
+            if ($this->childExists($name)) {
+                return $this->getChild($name)->put($data);
+            }
+        }
+        
         $path = $this->_path . '/' . $name;
     
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
