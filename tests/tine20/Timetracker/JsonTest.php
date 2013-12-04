@@ -779,6 +779,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     /**
      * testUpdateMultipleTimesheets
      * 
+     * @group longrunning
+     * 
      * @see 0005878: multi update timeout and strange behaviour (server)
      */
     public function testUpdateMultipleTimesheets()

@@ -188,6 +188,8 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test for import of members (2)
+     * 
+     * @group longrunning
      */
     public function testImportMembersIntoCourse2()
     {
@@ -228,6 +230,8 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      * test for import of members (4) / json import
      * 
      * @see 0006672: allow to import (csv) files with only CR linebreaks
+     * 
+     * @group longrunning
      */
     public function testImportMembersIntoCourse4()
     {
