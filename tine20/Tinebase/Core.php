@@ -164,6 +164,12 @@ class Tinebase_Core
      */
     const ORACLE_MINIMAL_VERSION = '9.0.0';
     
+    /**
+     * Application Instance Cache
+     * @var array
+     */
+    protected static $appInstanceCache = array();
+    
     /******************************* DISPATCH *********************************/
     
     /**
@@ -330,6 +336,11 @@ class Tinebase_Core
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Params: application: ' . $_applicationName . ' / model: ' . $_modelName);
         
+        $cacheKey = $_applicationName . '_' . $_modelName . '_' . ($_ignoreACL?1:0);
+        if (isset(self::$appInstanceCache[$cacheKey])) {
+            return self::$appInstanceCache[$cacheKey];
+        }
+        
         // modified (some model names can have both . and _ in their names and we should treat them as JS model name
         if (strpos($_applicationName, '_') && ! strpos($_applicationName, '.')) {
             // got (complete) model name name as first param
@@ -381,7 +392,8 @@ class Tinebase_Core
             . ' Getting instance of ' . $controllerName);
         
         $controller = call_user_func(array($controllerName, 'getInstance'));
-
+        self::$appInstanceCache[$cacheKey] = $controller;
+        
         return $controller;
     }
     

@@ -220,12 +220,14 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         
         fclose($tempfileHandle);
         
-        Tinebase_TempFile::getInstance()->createTempFile($path, $chunkInfo['name'] . '-' . $chunkInfo['tempId'], $chunkInfo['chunkId'] + 1);
+        $tempFileName = sha1(Tinebase_Core::getUser()->accountId . $chunkInfo['name'] . $chunkInfo['tempId']);
         
-        // check if the client send all chunks
+        Tinebase_TempFile::getInstance()->createTempFile($path, $tempFileName, $chunkInfo['chunkId'] + 1);
+        
+        // check if the client sent all chunks
         $uploadedChunks = Tinebase_TempFile::getInstance()->search(
             new Tinebase_Model_TempFileFilter(array(
-                array('field' => 'name', 'operator' => 'equals', 'value' => $chunkInfo['name'] . '-' . $chunkInfo['tempId'])
+                array('field' => 'name', 'operator' => 'equals', 'value' => $tempFileName)
             )), 
             new Tinebase_Model_Pagination(array('sort' => 'type', 'dir' => 'ASC'))
         );
