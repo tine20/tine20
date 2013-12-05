@@ -43,27 +43,18 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      */
     public function testEmployee()
     {
-        $e = $this->_getEmployee();
-        
         $date = new Tinebase_DateTime();
         $date->subMonth(5);
-        
         $firstDate = substr($date->toString(), 0, 10);
-        
+
         $costCenter1 = $this->_getCostCenter($date);
-        
-        $e->contracts = array($this->_getContract()->toArray());
-        $e->costcenters = array($costCenter1->toArray());
-        
-        $savedEmployee = $this->_json->saveEmployee($e->toArray());
+        $savedEmployee = $this->_saveEmployee($costCenter1);
 
         $this->assertArrayHasKey('account_id', $savedEmployee);
         $this->assertTrue(is_array($savedEmployee['account_id']));
         
         $this->assertArrayHasKey('contracts', $savedEmployee);
         $this->assertArrayHasKey('costcenters', $savedEmployee);
-        
-        $this->assertEquals($e->n_fn, $savedEmployee['n_fn']);
         
         $this->assertEquals(1, count($savedEmployee['contracts']));
         $this->assertEquals(1, count($savedEmployee['costcenters']));
@@ -100,6 +91,27 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $freeTimes = $this->_json->getFeastAndFreeDays($savedEmployee['id'], $date2->format('Y'));
         
         $this->assertEquals($savedEmployee['id'], $freeTimes['results']['contracts'][0]['employee_id']);
+    }
+    
+    /**
+     * save employee
+     * 
+     * @param HumanResources_Model_CostCenter $costCenter
+     * @return array
+     */
+    protected function _saveEmployee($costCenter = null)
+    {
+        $e = $this->_getEmployee();
+        $e->contracts = array($this->_getContract()->toArray());
+        if ($costCenter) {
+            $e->costcenters = array($costCenter->toArray());
+        }
+        
+        $savedEmployee = $this->_json->saveEmployee($e->toArray());
+        
+        $this->assertEquals($e->n_fn, $savedEmployee['n_fn']);
+        
+        return $savedEmployee;
     }
 
     /**
@@ -646,5 +658,23 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $savedEmployee = $json->saveEmployee($json->saveEmployee($employee->toArray()));
         $this->assertStringEndsWith('12:00:00', $savedEmployee['employment_begin']);
         $this->assertStringEndsWith('12:00:00', $savedEmployee['contracts'][0]['start_date']);
+    }
+
+    /**
+     * testSearchForEmptyEmploymentEnd
+     * 
+     * @see 0009362: allow to filter for empty datetimes
+     */
+    public function testSearchForEmptyEmploymentEnd()
+    {
+        $savedEmployee = $this->_saveEmployee();
+        
+        $result = $this->_json->searchEmployees(array(array(
+            'field' => 'employment_end',
+            'operator' => 'equals',
+            'value' => '',
+        )), array());
+        
+        $this->assertGreaterThan(0, $result['totalcount'], 'should find employee with no employment_end');
     }
 }
