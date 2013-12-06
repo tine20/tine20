@@ -221,6 +221,12 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
                 if ($this->_pathParts[1] == Tinebase_Model_Container::TYPE_SHARED) {
                     $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC));
                     foreach ($containers as $container) {
+                        // skip container if the user does not have the read AND the sync grant
+                        if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || 
+                            !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
+                            continue;
+                        }
+                        
                         $children[] = $this->getChild($container);
                     }
                 } elseif ($this->_hasPersonalFolders && $this->_pathParts[1] == Tinebase_Model_Container::TYPE_PERSONAL) {
