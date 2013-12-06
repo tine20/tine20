@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Group
  */
-class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
+class Tinebase_Group_SqlTest extends TestCase
 {
     /**
      * sql user backend
@@ -30,19 +30,7 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      * @var array test objects
      */
     protected $objects = array();
-
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Group_SqlTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
+    
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -51,6 +39,8 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
+        
         $this->_backend = new Tinebase_Group_Sql();
         
         $this->objects['initialGroup'] = new Tinebase_Model_Group(array(
@@ -65,27 +55,19 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
             'description'   => 'updated group'
         ));
     }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-    
-    }
     
     /**
      * try to add a group
-     *
+     * 
+     * @return Tinebase_Model_Group
      */
     public function testAddGroup()
     {
         $group = $this->_backend->addGroup($this->objects['initialGroup']);
         
         $this->assertEquals($this->objects['initialGroup']->id, $group->id);
+        
+        return $group;
     }
     
     /**
@@ -94,7 +76,9 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGroups()
     {
-        $groups = $this->_backend->getGroups('phpunit');
+        $this->testAddGroup();
+        
+        $groups = $this->_backend->getGroups('tine20phpunit');
         
         $this->assertEquals(1, count($groups));
     }
@@ -105,6 +89,8 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGroupByName()
     {
+        $this->testAddGroup();
+        
         $group = $this->_backend->getGroupByName('tine20phpunit');
         
         $this->assertEquals($this->objects['initialGroup']->name, $group->name);
@@ -116,6 +102,8 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testGetGroupById()
     {
+        $this->testAddGroup();
+        
         $group = $this->_backend->getGroupById($this->objects['initialGroup']->id);
         
         $this->assertEquals($this->objects['initialGroup']->id, $group->id);
@@ -127,6 +115,8 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateGroup()
     {
+        $this->testAddGroup();
+        
         $group = $this->_backend->updateGroup($this->objects['updatedGroup']);
         
         $this->assertEquals($this->objects['updatedGroup']->name, $group->name);
@@ -138,6 +128,8 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteGroups()
     {
+        $this->testAddGroup();
+        
         $this->_backend->deleteGroups($this->objects['initialGroup']);
 
         $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
@@ -206,7 +198,5 @@ class Tinebase_Group_SqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->setGroupMembershipsInSqlBackend($accountId, $oldGroupMemberships);
         
         $this->_backend->deleteGroups(array($groupId1, $groupId2));
-        
-        
     }
 }

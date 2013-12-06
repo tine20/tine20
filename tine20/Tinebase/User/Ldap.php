@@ -467,19 +467,19 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
         
         $ldapEntry = $this->_getLdapEntry('accountId', $_account);
-
+        
         $ldapData = $this->_user2ldap($_account, $ldapEntry);
         
         foreach ($this->_ldapPlugins as $plugin) {
             $plugin->inspectUpdateUser($_account, $ldapData, $ldapEntry);
         }
-
+        
         // no need to update this attribute, it's not allowed to change and even might not be updateable
         unset($ldapData[$this->_userUUIDAttribute]);
-
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $ldapEntry['dn']);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-
+        
         $this->_ldap->update($ldapEntry['dn'], $ldapData);
         
         $dn = Zend_Ldap_Dn::factory($ldapEntry['dn'], null);
@@ -516,29 +516,29 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     /**
      * add an user
      * 
-     * @param   Tinebase_Model_FullUser  $_user
-     * @return  Tinebase_Model_FullUser|NULL
+     * @param   Tinebase_Model_FullUser  $user
+     * @return  Tinebase_Model_FullUser|null
      */
-    public function addUserToSyncBackend(Tinebase_Model_FullUser $_user)
+    public function addUserToSyncBackend(Tinebase_Model_FullUser $user)
     {
         if ($this->_isReadOnlyBackend) {
-            return NULL;
+            return null;
         }
         
-        $ldapData = $this->_user2ldap($_user);
+        $ldapData = $this->_user2ldap($user);
 
         $ldapData['uidnumber'] = $this->_generateUidNumber();
         $ldapData['objectclass'] = $this->_requiredObjectClass;
 
         foreach ($this->_ldapPlugins as $plugin) {
-            $plugin->inspectAddUser($_user, $ldapData);
+            $plugin->inspectAddUser($user, $ldapData);
         }
 
-        $dn = $this->_generateDn($_user);
+        $dn = $this->_generateDn($user);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  ldapData: ' . print_r($ldapData, true));
-
+        
         $this->_ldap->add($dn, $ldapData);
 
         $userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute));
@@ -564,12 +564,14 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         try {
             $metaData = $this->_getMetaData($_userId);
     
-            // user does not exist in ldap anymore
-            if (!empty($metaData['dn'])) {
+            if (! empty($metaData['dn'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' delete user ' . $metaData['dn'] .' from sync backend (LDAP)');
                 $this->_ldap->delete($metaData['dn']);
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $_userId);
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                . ' user not found in sync backend: ' . $_userId);
         }
     }
 
