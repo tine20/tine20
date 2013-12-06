@@ -601,7 +601,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $role = Calendar_Model_Attender::ROLE_REQUIRED;
         }
         
-        if (in_array($calAddress['PARTSTAT']->getValue(), array(
+        if (isset($calAddress['PARTSTAT']) && in_array($calAddress['PARTSTAT']->getValue(), array(
             Calendar_Model_Attender::STATUS_ACCEPTED,
             Calendar_Model_Attender::STATUS_DECLINED,
             Calendar_Model_Attender::STATUS_NEEDSACTION,
