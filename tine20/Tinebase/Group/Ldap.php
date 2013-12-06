@@ -608,8 +608,11 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             $groupIds[] = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         }
         
+        
         foreach ($groupIds as $groupId) {
             $dn = $this->_getDn($groupId);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Deleting group ' . $dn . ' from LDAP');
             $this->_ldap->delete($dn);
         }
     }

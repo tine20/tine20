@@ -4,9 +4,8 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
  */
 
 /**
@@ -15,9 +14,9 @@
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Courses_Frontend_Json
  */
-class Courses_JsonTest extends PHPUnit_Framework_TestCase
+class Courses_JsonTest extends TestCase
 {
     /**
      * @var Courses_Frontend_Json
@@ -32,23 +31,16 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     protected $_configGroups = array();
     
     /**
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_groupsToDelete = null;
+    
+    /**
      * test department
      * 
      * @var Tinebase_Model_Department
      */
     protected $_department = NULL;
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Courses Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -58,7 +50,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_json = new Courses_Frontend_Json();
         
@@ -66,10 +58,12 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             'name'  => Tinebase_Record_Abstract::generateUID()
         )));
         
+        $this->_groupsToDelete = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
         foreach (array(Courses_Config::INTERNET_ACCESS_GROUP_ON, Courses_Config::INTERNET_ACCESS_GROUP_FILTERED, Courses_Config::STUDENTS_GROUP) as $configgroup) {
             $this->_configGroups[$configgroup] = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
                 'name'   => $configgroup
             )));
+            $this->_groupsToDelete->addRecord($this->_configGroups[$configgroup]);
             Courses_Config::getInstance()->set($configgroup, $this->_configGroups[$configgroup]->getId());
         }
         
@@ -90,7 +84,9 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_groupsIdsToDelete = $this->_groupsToDelete->getArrayOfIds();
+        
+        parent::tearDown();
     }
     
     /**
@@ -100,6 +96,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
         
         // checks
         $this->assertEquals($course['description'], $courseData['description']);
@@ -123,6 +120,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
         $courseData = $this->_json->getCourse($courseData['id']);
         
         // checks
@@ -140,6 +138,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
 
         // update Course
         $courseData['description'] = "blubbblubb";
@@ -165,6 +164,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         // create
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
         
         // search & check
         $search = $this->_json->searchCourses($this->_getCourseFilter($courseData['name']), $this->_getPaging());
@@ -312,6 +312,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         // create new course with internet access
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
         $userId = $courseData['members'][0]['id'];
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
         $this->assertTrue(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_ON]->getId(), $groupMemberships), $userId . ' not member of the internet group ' . print_r($groupMemberships, TRUE));
@@ -343,6 +344,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
         
         $result = $this->_json->addNewMember(array(
             'accountFirstName' => 'jams',
@@ -403,6 +405,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
         $teacher = Tinebase_User::getInstance()->getFullUserById($courseData['members'][0]['id']);
         
         $filter = Tinebase_PersistentFilter::getInstance()->getFilterById(
@@ -474,13 +477,12 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
         
         if ($removeGroupList) {
             $group = Admin_Controller_Group::getInstance()->get($courseData['group_id']);
             Addressbook_Controller_List::getInstance()->delete($group->list_id);
         }
-        
-        $this->_coursesToDelete[] = $courseData['id'];
         
         if ($_useJsonImportFn) {
             $tempFileBackend = new Tinebase_TempFile();

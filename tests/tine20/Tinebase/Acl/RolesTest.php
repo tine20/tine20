@@ -5,10 +5,8 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
- * @todo        add test for addSingleRight
  */
 
 /**
@@ -19,25 +17,13 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Acl_Roles
  */
-class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
+class Tinebase_Acl_RolesTest extends TestCase
 {
     /**
      * @var array test objects
      */
     protected $objects = array();
     
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Acl_RolesTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -46,9 +32,10 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
+        
         $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
         $this->objects['user'] = new Tinebase_Model_FullUser(array(
-            'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',
             'accountStatus'         => 'enabled',
@@ -68,18 +55,11 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
             'name'                  => 'phpunitrole 2',
             'description'           => 'test role 2 for phpunit',
         ));
-
-        
-        $translate = Tinebase_Translation::getTranslation('Tinebase');
         
         // add account for group / role member tests
-        try {
-            $user = Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId) ;
-        } catch (Tinebase_Exception_NotFound $e) {
-            $user = Tinebase_User::getInstance()->addUser($this->objects['user']);
-            Tinebase_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
-        }
-                
+        $this->objects['user'] = Tinebase_User::getInstance()->addUser($this->objects['user']);
+        Tinebase_Group::getInstance()->addGroupMember($this->objects['user']->accountPrimaryGroup, $this->objects['user']);
+        
         return;
     }
 
@@ -91,8 +71,9 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        // remove account
-        Tinebase_User::getInstance()->deleteUser(  $this->objects['user']->accountId );
+        Tinebase_User::getInstance()->deleteUser($this->objects['user']->accountId);
+        
+        parent::tearDown();
     }
 
     /**
@@ -104,7 +85,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
         $role = Tinebase_Acl_Roles::getInstance()->createRole($this->objects['role']);
         
         $this->assertEquals($role->getId(), $this->objects['role']->getId());
-    }    
+    }
     
     /**
      * try to add a role membership
@@ -112,6 +93,8 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
      */
     public function testSetRoleMember()
     {
+        $this->testCreateRole();
+        
         $member = array(
             array(
                 "type"  => 'user',
@@ -130,6 +113,8 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
      */
     public function removeRoleMember()
     {
+        $this->testCreateRole();
+        
         Tinebase_Acl_Roles::getInstance()->removeRoleMember(10, $this->objects['user']);
         
         $members = Tinebase_Acl_Roles::getInstance()->getRoleMembers($this->objects['role']->getId());
@@ -142,6 +127,8 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
      */
     public function testAddRoleMember()
     {
+        $this->testCreateRole();
+        
         Tinebase_Acl_Roles::getInstance()->addRoleMember($this->objects['role']->getId(), array(
             'type'     => 'user',
             'id'    => $this->objects['user']->getId()
@@ -157,6 +144,8 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
      */
     public function testSetRoleMemberships()
     {
+        $this->testCreateRole();
+        
         // create role 2 for test
         $role2 = Tinebase_Acl_Roles::getInstance()->createRole($this->objects['role_2']);
         
@@ -187,6 +176,8 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
      */
     public function testSetRoleRight()
     {
+        $this->testCreateRole();
+        
         $right = array(
             array(
                 "application_id"    => $this->objects['application']->getId(),
@@ -202,20 +193,16 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to check getting applications
-     *
      */
     public function testGetApplications()
     {
         $result = Tinebase_Acl_Roles::getInstance()->getApplications($this->objects['user']->getId());
-
-        //print_r ( $result->toArray() );
         
         $this->assertGreaterThan(0, count($result->toArray()));
-    }    
+    }
 
     /**
      * try to check getting applications
-     *
      */
     public function testGetApplicationRights()
     {
@@ -223,15 +210,12 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
             $this->objects['application']->name, 
             $this->objects['user']->getId()
         );
-
-        //print_r ( $result );
         
         $this->assertGreaterThan(0, count($result));
     }    
     
     /**
      * try to check if user with a role has right
-     *
      */
     public function testHasRight()
     {
@@ -267,6 +251,8 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteRole()
     {
+        $this->testSetRoleMemberships();
+        
         // remove role members and rights first
         Tinebase_Acl_Roles::getInstance()->setRoleRights($this->objects['role']->getId(), array());
         

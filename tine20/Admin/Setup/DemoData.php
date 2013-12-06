@@ -103,6 +103,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             try {
                 $this->_groups[$groupArray['groupData']['name']] = $fe->saveGroup($groupArray['groupData'], $members);
             } catch (Exception $e) {
+                Tinebase_Exception::log($e);
                 echo 'Group "' . $groupArray['groupData']['name'] . '" already exists. Skipping...' . PHP_EOL;
                 $gr = Tinebase_Group::getInstance()->getGroupByName($groupArray['groupData']['name']);
                 $this->_groups[$groupArray['groupData']['name']] = $fe->getGroup($gr->getId());

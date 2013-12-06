@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Admin json frontend
  */
-class Admin_JsonTest extends PHPUnit_Framework_TestCase
+class Admin_JsonTest extends TestCase
 {
     /**
      * Backend
@@ -29,18 +29,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      * @var array test objects
      */
     protected $objects = array();
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -50,7 +38,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_json = new Admin_Frontend_Json();
         
@@ -89,29 +77,67 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'name'                  => 'phpunit test role',
             'description'           => 'phpunit test role',
         ));
-        
-        $personas = Zend_Registry::get('personas');
-        $this->objects['user'] = clone $personas['jsmith'];
     }
-
+    
     /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
+     * try to save group data
+     * 
+     * @return array
      */
-    protected function tearDown()
+    public function testAddGroup()
     {
-        // reset cache to its orginal values
-        $personas = Zend_Registry::get('personas');
+        $result = $this->_json->saveGroup($this->objects['initialGroup']->toArray(), array());
+        $this->_groupsIdsToDelete[] = $result['id'];
         
-        try {
-            Admin_Controller_User::getInstance()->update($personas['jsmith'], null, null);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        $this->assertEquals($this->objects['initialGroup']->description, $result['description']);
         
+        return $result;
+    }
+    
+    /**
+     * try to save an account
+     * 
+     * @return array
+     */
+    public function testSaveAccount()
+    {
+        $this->testAddGroup();
+        
+        $accountData = $this->objects['user']->toArray();
+        $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getGroupByName('tine20phpunit')->getId();
+        $accountData['accountPassword'] = 'test';
+        $accountData['accountPassword2'] = 'test';
+        $accountData['accountFirstName'] = 'PHPUnitup';
+        
+        $account = $this->_createUser($accountData);
+        
+        $this->assertTrue(is_array($account));
+        $this->assertEquals('PHPUnitup', $account['accountFirstName']);
+        $this->assertEquals(Tinebase_Group::getInstance()->getGroupByName('tine20phpunit')->getId(), $account['accountPrimaryGroup']['id']);
+        $this->assertTrue(! empty($account['accountId']), 'no account id');
+        // check password
+        $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], 'test');
+        $this->assertTrue($authResult->isValid());
+        
+        $account['accountPrimaryGroup'] = $accountData['accountPrimaryGroup'];
+        return $account;
+    }
+    
+    /**
+     * create user account
+     * 
+     * @param array $data
+     * @return array
+     */
+    protected function _createUser($data = null)
+    {
+        if ($data === null) {
+            $data = $this->objects['user']->toArray();
         }
+        $user = $this->_json->saveUser($data);
+        $this->_usernamesToDelete[] = $user['accountLoginName'];
         
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        return $user;
     }
     
     /**
@@ -119,7 +145,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccounts()
     {
-        $accounts = $this->_json->getUsers('Smith', 'accountDisplayName', 'ASC', 0, 10);
+        $this->testSaveAccount();
+        
+        $accounts = $this->_json->getUsers('tine20phpunit', 'accountDisplayName', 'ASC', 0, 10);
         
         $this->assertGreaterThan(0, $accounts['totalcount']);
     }
@@ -132,7 +160,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetUserCount()
     {
         $this->testSetAccountState();
-        $accounts = $this->_json->getUsers('Smith', 'accountDisplayName', 'ASC', 0, 100);
+        $accounts = $this->_json->getUsers('tine20phpunit', 'accountDisplayName', 'ASC', 0, 100);
         $this->assertEquals(count($accounts['results']), $accounts['totalcount'], print_r($accounts['results'], TRUE));
     }
     
@@ -161,47 +189,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to save group data
-     * 
-     * @return array
-     */
-    public function testAddGroup()
-    {
-        $result = $this->_json->saveGroup($this->objects['initialGroup']->toArray(), array());
-        
-        $this->assertEquals($this->objects['initialGroup']->description, $result['description']);
-        
-        return $result;
-    }
-    
-    /**
-     * try to save an account
-     * 
-     * @return array
-     */
-    public function testSaveAccount()
-    {
-        $this->testAddGroup();
-        
-        $accountData = $this->objects['user']->toArray();
-        $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getGroupByName('tine20phpunit')->getId();
-        $accountData['accountPassword'] = 'test';
-        $accountData['accountPassword2'] = 'test';
-        $accountData['accountFirstName'] = 'PHPUnitup';
-        
-        $account = $this->_json->saveUser($accountData);
-        
-        $this->assertTrue(is_array($account));
-        $this->assertEquals('PHPUnitup', $account['accountFirstName']);
-        $this->assertEquals(Tinebase_Group::getInstance()->getGroupByName('tine20phpunit')->getId(), $account['accountPrimaryGroup']['id']);
-        // check password
-        $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], 'test');
-        $this->assertTrue($authResult->isValid());
-        
-        return $account;
-    }
-
-    /**
      * try to create an account with existing login name 
      * 
      * @return array
@@ -210,7 +197,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveAccountWithExistingName()
     {
-        $accountData = $this->objects['user']->toArray();
+        $accountData = $this->testSaveAccount();
         unset($accountData['accountId']);
         
         try {
@@ -243,7 +230,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $accountData['visibility'] = Tinebase_Model_User::VISIBILITY_HIDDEN;
         $accountData['container_id'] = 0;
         
-        $account = $this->_json->saveUser($accountData);
+        $account = $this->_createUser($accountData);
         
         $this->assertTrue(is_array($account));
         $this->assertTrue(! empty($account['contact_id']));
@@ -262,7 +249,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $internalContainer = Tinebase_Container::getInstance()->get($account['container_id']['id']);
         Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet('Tinebase_Model_Grants'), TRUE, FALSE);
         
-        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
         $account['groups'] = array($account['accountPrimaryGroup'], Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId());
         $account['container_id'] = $internalContainer->getId();
         $account = $this->_json->saveUser($account);
@@ -282,7 +268,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         Tinebase_Container::getInstance()->setGrants($internalContainer, new Tinebase_Record_RecordSet('Tinebase_Model_Grants'), TRUE, FALSE);
         
         $adminGroupId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
-        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
         $account['groups'] = array($account['accountPrimaryGroup'], $adminGroupId);
         $account['container_id'] = $account['container_id']['id'];
         $account = $this->_json->saveUser($account);
@@ -300,7 +285,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         }
         
         $account = $this->_json->saveUser($account);
-        
         
         $roles = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account['accountId']);
         $this->assertEquals(array(), $roles);
@@ -320,7 +304,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         Admin_Controller_Group::getInstance()->delete(array($accountData['accountPrimaryGroup']));
         
-        $savedAccount = $this->_json->saveUser($accountData);
+        $savedAccount = $this->_createUser($accountData);
+        
         $this->assertEquals(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $savedAccount['accountPrimaryGroup']['id']);
     }
     
@@ -340,9 +325,11 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSetAccountState()
     {
-        $this->_json->setAccountState(array($this->objects['user']->getId()), 'disabled');
+        $userArray = $this->testSaveAccount();
         
-        $account = Tinebase_User::getInstance()->getFullUserById($this->objects['user']);
+        $this->_json->setAccountState(array($userArray['accountId']), 'disabled');
+        
+        $account = Tinebase_User::getInstance()->getFullUserById($userArray['accountId']);
         
         $this->assertEquals('disabled', $account->accountStatus);
     }
@@ -352,7 +339,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testResetPassword()
     {
-        $this->_json->resetPassword($this->objects['user']->toArray(), 'password', FALSE);
+        $userArray = $this->testSaveAccount();
+        
+        $this->_json->resetPassword($userArray, 'password', false);
         
         $authResult = Tinebase_Auth::getInstance()->authenticate($this->objects['user']->accountLoginName, 'password');
         $this->assertTrue($authResult->isValid());
@@ -365,7 +354,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAccountContactModlog()
     {
-        $user = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array(
+        $user = $this->_createUser(array(
             'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',
             'accountStatus'         => 'enabled',
@@ -374,9 +363,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'
-        )), null, null);
+        ));
         
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId());
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user['accountId']);
         
         $this->assertTrue(! empty($contact->creation_time));
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $contact->created_by);
@@ -391,7 +380,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $groups = $this->_json->getGroups(NULL, 'id', 'ASC', 0, 10);
         
         $this->assertGreaterThan(0, $groups['totalcount']);
-    }    
+    }
 
     /**
      * try to update group data
@@ -406,13 +395,14 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $data['id'] = $group->getId();
         
         // add group members array
-        $groupMembers = array($this->objects['user']->accountId);
+        $userArray = $this->_createUser();
+        $groupMembers = array($userArray['accountId']);
         
         $result = $this->_json->saveGroup($data, $groupMembers);
 
         $this->assertGreaterThan(0,sizeof($result['groupMembers']));
         $this->assertEquals($this->objects['updatedGroup']->description, $result['description']);
-    }    
+    }
 
     /**
      * try to get group members
@@ -423,12 +413,13 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['updatedGroup']->name);
 
         // set group members
-        Tinebase_Group::getInstance()->setGroupMembers($group->getId(), array($this->objects['user']->accountId));
+        $userArray = $this->_createUser();
+        Tinebase_Group::getInstance()->setGroupMembers($group->getId(), array($userArray['accountId']));
         
         // get group members with json
         $getGroupMembersArray = $this->_json->getGroupMembers($group->getId());
         
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->objects['user']->accountId);
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($userArray['accountId']);
         
         $this->assertTrue(isset($getGroupMembersArray['results'][0]));
         $this->assertEquals($contact->n_fileas, $getGroupMembersArray['results'][0]['name']);
@@ -529,11 +520,11 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     public function testGetAccessLogsWithDeletedUser()
     {
         $clienttype = 'Unittest';
-        $user = $this->objects['user'];
-        $this->_addAccessLog($user, $clienttype);
+        $user = $this->testSaveAccount();
+        $this->_addAccessLog(new Tinebase_Model_FullUser($user), $clienttype);
         
-        Admin_Controller_User::getInstance()->delete($user->getId());
-        $accessLogs = $this->_json->searchAccessLogs($this->_getAccessLogFilter($user->accountLoginName, $clienttype), array());
+        Admin_Controller_User::getInstance()->delete($user['accountId']);
+        $accessLogs = $this->_json->searchAccessLogs($this->_getAccessLogFilter($user['accountLoginName'], $clienttype), array());
 
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));
         $this->assertGreaterThan(0, $accessLogs['totalcount']);
@@ -542,7 +533,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($clienttype, $testLogEntry['clienttype']);
         
         $this->_json->deleteAccessLogs(array($testLogEntry['id']));
-    }    
+    }
     
     /**
      * try to delete access log entries
@@ -564,7 +555,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $accessLogs = $this->_json->searchAccessLogs($this->_getAccessLogFilter('tine20admin'), array());
         $this->assertEquals(0, sizeof($accessLogs['results']), 'results not matched');
         $this->assertEquals(0, $accessLogs['totalcount'], 'totalcount not matched');
-    }        
+    }
     
     /**
      * try to get an application
@@ -608,7 +599,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     public function testAddRole()
     {
         // account to add as role member
-        $account = Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId);
+        $user = $this->testSaveAccount();
+        $account = Tinebase_User::getInstance()->getUserById($user['accountId']);
         
         $roleData = $this->objects['role']->toArray();
         $roleMembers = array(
@@ -1050,9 +1042,10 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         ));
         $containerUpdated = $this->_json->saveContainer($container);
         
-        Tinebase_Group::getInstance()->setGroupMembers($adminGroup->getId(), array($this->objects['user']->accountId));
+        $userArray = $this->_createUser();
+        Tinebase_Group::getInstance()->setGroupMembers($adminGroup->getId(), array($userArray['accountId']));
         
-        $containers = Tinebase_Container::getInstance()->getContainerByACL($this->objects['user']->accountId, 'Addressbook', Tinebase_Model_Grants::GRANT_ADD);
+        $containers = Tinebase_Container::getInstance()->getContainerByACL($userArray['accountId'], 'Addressbook', Tinebase_Model_Grants::GRANT_ADD);
         $this->assertTrue(count($containers->filter('name', 'testcontainer')) === 1, 'testcontainer ' . print_r($containerUpdated, TRUE) . ' not found: ' . print_r($containers->toArray(), TRUE));
     }
     
