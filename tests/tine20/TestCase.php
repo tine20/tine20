@@ -49,12 +49,22 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected $_removeGroupMembers = true;
     
     /**
+     * test personas
+     * 
+     * @var array
+     */
+    protected $_personas = array();
+    
+    /**
      * set up tests
      */
     protected function setUp()
     {
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
+        
+        $this->_personas = Zend_Registry::get('personas');
     }
     
     /**

@@ -496,6 +496,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
+            $this->_updatePrimaryGroupsOfUsers($groupIds);
+            
             $this->deleteGroupsInSqlBackend($groupIds);
             if ($this instanceof Tinebase_Group_Interface_SyncAble) {
                 $this->deleteGroupsInSyncBackend($groupIds);
@@ -505,7 +507,29 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Exception::log($e);
             throw new Tinebase_Exception_Backend($e->getMessage());
+        }
+    }
+    
+    /**
+     * set primary group for accounts with given primary group id
+     * 
+     * @param array $groupIds
+     * @param string $newPrimaryGroupId
+     * @throws Tinebase_Exception_Record_NotDefined
+     */
+    protected function _updatePrimaryGroupsOfUsers($groupIds, $newPrimaryGroupId = null)
+    {
+        if ($newPrimaryGroupId === null) {
+            $newPrimaryGroupId = $this->getDefaultGroup()->getId();
+        }
+        foreach ($groupIds as $groupId) {
+            $users = Tinebase_User::getInstance()->getUsersByPrimaryGroup($groupId);
+            $users->accountPrimaryGroup = $newPrimaryGroupId;
+            foreach ($users as $user) {
+                Tinebase_User::getInstance()->updateUser($user);
+            }
         }
     }
     
