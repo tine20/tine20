@@ -87,7 +87,7 @@ class Admin_JsonTest extends TestCase
     public function testAddGroup()
     {
         $result = $this->_json->saveGroup($this->objects['initialGroup']->toArray(), array());
-        $this->_groupsIdsToDelete[] = $result['id'];
+        $this->_groupIdsToDelete[] = $result['id'];
         
         $this->assertEquals($this->objects['initialGroup']->description, $result['description']);
         

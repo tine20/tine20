@@ -110,7 +110,9 @@ class TestServer
     {
         $personas = $this->_getPersonas();
         if (count($personas) !== 5) {
+            Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
             Admin_Setup_DemoData::getInstance()->createDemoData(array('en'));
+            Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
             $personas = $this->_getPersonas();
         }
         

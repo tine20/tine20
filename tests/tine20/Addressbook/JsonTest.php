@@ -1515,7 +1515,7 @@ Steuernummer 33/111/32212";
         // search for her with ContactDisabledFilter
         $filter = array(array('field' => 'n_given',      'operator' => 'equals',   'value' => 'Susan'));
         $result = $this->_instance->searchContacts($filter, array());
-        $this->assertEquals(0, $result['totalcount']);
+        $this->assertEquals(0, $result['totalcount'], 'found contacts: ' . print_r($result, true));
         
         $filter[] = array('field' => 'showDisabled', 'operator' => 'equals',   'value' => TRUE);
         $result = $this->_instance->searchContacts($filter, array());

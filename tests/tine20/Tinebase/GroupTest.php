@@ -25,6 +25,13 @@ class Tinebase_GroupTest extends TestCase
     protected $objects = array();
     
     /**
+     * remove group members, too when deleting groups
+     * 
+     * @var boolean
+     */
+    protected $_removeGroupMembers = false;
+    
+    /**
      * try to add a group
      * 
      * @return Tinebase_Model_Group
@@ -36,7 +43,7 @@ class Tinebase_GroupTest extends TestCase
             'description'   => 'Group from test testAddGroup'
         )));
         
-        $this->_groupsIdsToDelete[] = $group->getId();
+        $this->_groupIdsToDelete[] = $group->getId();
         
         $this->assertEquals(Tinebase_Model_Group::VISIBILITY_HIDDEN, $group->visibility);
         
