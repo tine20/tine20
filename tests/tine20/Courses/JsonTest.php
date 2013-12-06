@@ -84,7 +84,7 @@ class Courses_JsonTest extends TestCase
      */
     protected function tearDown()
     {
-        $this->_groupsIdsToDelete = $this->_groupsToDelete->getArrayOfIds();
+        $this->_groupIdsToDelete = $this->_groupsToDelete->getArrayOfIds();
         
         parent::tearDown();
     }

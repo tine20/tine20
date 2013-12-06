@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo implement search test
@@ -18,7 +18,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Addressbook_Controller_List
  */
-class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
+class Addressbook_Controller_ListTest extends TestCase
 {
     /**
      * @var array test objects
@@ -33,18 +33,6 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
     protected $_instance = NULL; 
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook List Controller Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -52,8 +40,7 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
+        parent::setUp();
         
         $this->_instance = Addressbook_Controller_List::getInstance();
         
@@ -157,18 +144,6 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
             'members'      => array($this->objects['contact1'], $this->objects['contact2']),
         ));
     }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(TRUE);
-    }
     
     /**
      * try to add a list
@@ -268,6 +243,7 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
             'visibility'    => Tinebase_Model_Group::VISIBILITY_DISPLAYED
         ));
         $group = Admin_Controller_Group::getInstance()->create($group);
+        $this->_groupIdsToDelete[] = $group->getId();
         $list = $this->_instance->get($group->list_id);
         
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');

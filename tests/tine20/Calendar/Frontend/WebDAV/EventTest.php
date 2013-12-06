@@ -252,16 +252,14 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_persona_attendee.ics');
         
-//         $prefs = new Calendar_Preference();
-//         $prefs->setValueForUser(Calendar_Preference::DEFAULTCALENDAR, '', $this->_getPersona('pwulf')->getId());
-        
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
         
         $event = Calendar_Controller_Event::getInstance()->get($id);
         $pwulf = $event->attendee->filter('user_id', $this->_getPersonasContacts('pwulf')->getId())->getFirstRecord();
         
-        $this->assertEquals($this->_getPersonasDefaultCals('pwulf')->getId(), $pwulf->displaycontainer_id, 'event not in pwulfs personal calendar');
+        $this->assertTrue($pwulf !== null, 'could not find pwulf in attendee: ' . print_r($event->attendee->toArray(), true));
+        $this->assertEquals($this->_personasDefaultCals['pwulf']->getId(), $pwulf->displaycontainer_id, 'event not in pwulfs personal calendar');
     }
     
     public function testCreateEventMissingOwnAttendee()
@@ -609,6 +607,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         ));
         
         $pwulfAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $pwulf);
+        $this->assertTrue($pwulfAttendee !== null, 'could not find pwulf in attendee');
         $pwulfPersonalCal = Tinebase_Container::getInstance()->getContainerById($pwulfAttendee->displaycontainer_id);
         $pwulfPersonalEvent = new Calendar_Frontend_WebDAV_Event($pwulfPersonalCal, "$id.ics");
         $pwulfPersonalEvent->delete();

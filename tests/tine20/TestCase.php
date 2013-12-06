@@ -39,7 +39,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * 
      * @var array
      */
-    protected $_groupsIdsToDelete = array();
+    protected $_groupIdsToDelete = array();
     
     /**
      * remove group members, too when deleting groups
@@ -54,6 +54,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
     }
     
     /**
@@ -68,6 +69,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if ($this->_transactionId) {
             Tinebase_TransactionManager::getInstance()->rollBack();
         }
+        
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
     }
     
     /**
@@ -88,7 +91,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _deleteGroups()
     {
-        foreach ($this->_groupsIdsToDelete as $groupId) {
+        foreach ($this->_groupIdsToDelete as $groupId) {
             if ($this->_removeGroupMembers) {
                 foreach (Tinebase_Group::getInstance()->getGroupMembers($groupId) as $userId) {
                     try {
