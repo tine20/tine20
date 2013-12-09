@@ -100,8 +100,8 @@ class Inventory_JsonTest extends Inventory_TestCase
     {
         $inventoryRecord = $this->testCreateInventoryItem();
         $inventoryRecordID = $inventoryRecord['id'];
-        
-        $returned = $this->_json->autoCompleteInventoryItemProperty('name', 'mini');
+        $json = new Tinebase_Frontend_Json();
+        $returned = $json->autoComplete('Inventory', 'InventoryItem', 'name', 'mini');
         
         $this->assertEquals('minimal inventory item by PHPUnit::Inventory_JsonTest', $returned['results'][0]['name']);
     }
