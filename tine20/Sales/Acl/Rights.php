@@ -89,6 +89,7 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $addRights = array ( 
             self::MANAGE_PRODUCTS,
+            self::MANAGE_COSTCENTERS
         );
         $allRights = array_merge($allRights, $addRights);
         
