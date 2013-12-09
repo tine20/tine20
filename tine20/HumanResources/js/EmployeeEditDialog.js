@@ -488,6 +488,5 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             activeTab: 0,
             items: tabs
         };
-        return tabs;
     }
 });
