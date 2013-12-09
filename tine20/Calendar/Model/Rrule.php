@@ -502,7 +502,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     public static function computeNextOccurrence($_event, $_exceptions, $_from, $_which = 1)
     {
-        if ($_which === 0) {
+        if ($_which === 0 || $_event->dtstart == $_from) {
             return $_event;
         }
         

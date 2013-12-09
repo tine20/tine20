@@ -378,6 +378,13 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_eventController->createRecurException($recurSet[16], TRUE, TRUE); //2012-03-31
         $this->_assertMail('jmcblack', 'cancel');
         
+        // first instance exception (update not reschedule)
+        self::flushMailer();
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($persistentEvent);
+        $updatedBaseEvent->summary = 'update first occurence';
+        $this->_eventController->createRecurException($updatedBaseEvent, FALSE, FALSE); // 2012-03-14
+        $this->_assertMail('jmcblack', 'has been updated');
+        
         // update thisandfuture
         
         // reschedule thisandfuture

@@ -818,7 +818,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertTrue($event === $nextOccurrence, 'given event is next occurrence');
 
         
-        $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $nextOccurrence->dtstart);
+        $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $nextOccurrence->dtstart->getClone()->addSecond(1));
         
         $this->assertEquals('2009-09-11 08:00:00', $nextOccurrence->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
