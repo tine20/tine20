@@ -259,7 +259,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $pwulf = $event->attendee->filter('user_id', $this->_getPersonasContacts('pwulf')->getId())->getFirstRecord();
         
         $this->assertTrue($pwulf !== null, 'could not find pwulf in attendee: ' . print_r($event->attendee->toArray(), true));
-        $this->assertEquals($this->_personasDefaultCals['pwulf']->getId(), $pwulf->displaycontainer_id, 'event not in pwulfs personal calendar');
+        $this->assertEquals($this->_getPersonasDefaultCals('pwulf')->getId(), $pwulf->displaycontainer_id, 'event not in pwulfs personal calendar');
     }
     
     public function testCreateEventMissingOwnAttendee()
