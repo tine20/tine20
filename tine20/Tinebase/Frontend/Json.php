@@ -1105,4 +1105,56 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = parent::_multipleRecordsToJson($_records, $_filter, $_pagination);
         return $result;
     }
+    
+    /**
+     * return autocomplete suggestions for a given recordclass, the property and value
+     *
+     * @param string $appName
+     * @param string $modelName
+     * @param string $property
+     * @param string $startswith
+     * 
+     * @return array
+     */
+    public function autoComplete($appName, $modelName, $property, $startswith)
+    {
+        $recordClassName = $appName . '_Model_' . $modelName;
+        $controller      = Tinebase_Core::getApplicationInstance($appName, $modelName);
+        $filterClassName = $recordClassName . 'Filter';
+    
+        if (! class_exists($recordClassName)) {
+            throw new Tinebase_Exception_InvalidArgument('A record class for the given appName and modelName does not exist!');
+        }
+    
+        if (! $controller) {
+            throw new Tinebase_Exception_InvalidArgument('A controller for the given appName and modelName does not exist!');
+        }
+    
+        if (! class_exists($filterClassName)) {
+            throw new Tinebase_Exception_InvalidArgument('A filter for the given appName and modelName does not exist!');
+        }
+    
+        if (! in_array($property, $recordClassName::getAutocompleteFields())) {
+            throw new Tinebase_Exception_UnexpectedValue('bad property name');
+        }
+    
+        $filter = new $filterClassName(array(
+            array('field' => $property, 'operator' => 'startswith', 'value' => $startswith),
+        ));
+    
+        $paging = new Tinebase_Model_Pagination(array('sort' => $property));
+    
+        $values = array_unique($controller->search($filter, $paging)->{$property});
+    
+        $result = array(
+            'results'   => array(),
+            'totalcount' => count($values)
+        );
+    
+        foreach($values as $value) {
+            $result['results'][] = array($property => $value);
+        }
+    
+        return $result;
+    }
 }
