@@ -21,35 +21,17 @@
 class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
-     * Contract controller
-     *
-     * @var Sales_Controller_Contract
+     * @see Tinebase_Frontend_Json_Abstract
+     * 
+     * @var string
      */
-    protected $_contractController = NULL;
+    protected $_applicationName = 'Sales';
 
-    /**
-     * Product controller
-     *
-     * @var Sales_Controller_Product
-     */
-    protected $_productController = NULL;
-    
     /**
      * @see Tinebase_Frontend_Json_Abstract
      */
     protected $_relatableModels = array('Sales_Model_Contract', 'Sales_Model_CostCenter');
-
-    /**
-     * the constructor
-     *
-     */
-    public function __construct()
-    {
-        $this->_applicationName     = 'Sales';
-        $this->_contractController  = Sales_Controller_Contract::getInstance();
-        $this->_productController   = Sales_Controller_Product::getInstance();
-    }
-
+    
    /**
      * Returns registry data of the application.
      *
@@ -75,7 +57,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * Sets the config for Sales
      * @param array $config
      */
-    public function setConfig($config) {
+    public function setConfig($config)
+    {
         return Sales_Controller::getInstance()->setConfig($config);
     }
     
@@ -83,7 +66,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * Get Config for Sales
      * @return array
      */
-    public function getConfig() {
+    public function getConfig()
+    {
         return Sales_Controller::getInstance()->getConfig();
     }
     
@@ -98,7 +82,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchContracts($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_contractController, 'Sales_Model_ContractFilter');
+        return $this->_search($filter, $paging, Sales_Controller_Contract::getInstance(), 'Sales_Model_ContractFilter');
     }
 
     /**
@@ -109,7 +93,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getContract($id)
     {
-        return $this->_get($id, $this->_contractController);
+        return $this->_get($id, Sales_Controller_Contract::getInstance());
     }
 
     /**
@@ -120,7 +104,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveContract($recordData)
     {
-        return $this->_save($recordData, $this->_contractController, 'Contract');
+        return $this->_save($recordData, Sales_Controller_Contract::getInstance(), 'Contract');
     }
 
     /**
@@ -131,7 +115,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteContracts($ids)
     {
-        return $this->_delete($ids, $this->_contractController);
+        return $this->_delete($ids, Sales_Controller_Contract::getInstance());
     }
 
     /*************************** products functions *****************************/
@@ -145,7 +129,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchProducts($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_productController, 'Sales_Model_ProductFilter');
+        return $this->_search($filter, $paging, Sales_Controller_Product::getInstance(), 'Sales_Model_ProductFilter');
     }
 
     /**
@@ -156,7 +140,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getProduct($id)
     {
-        return $this->_get($id, $this->_productController);
+        return $this->_get($id, Sales_Controller_Product::getInstance());
     }
 
     /**
@@ -167,7 +151,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveProduct($recordData)
     {
-        return $this->_save($recordData, $this->_productController, 'Product');
+        return $this->_save($recordData, Sales_Controller_Product::getInstance(), 'Product');
     }
 
     /**
@@ -178,7 +162,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteProducts($ids)
     {
-        return $this->_delete($ids, $this->_productController);
+        return $this->_delete($ids, Sales_Controller_Product::getInstance());
     }
     
     // costcenter methods
