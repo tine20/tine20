@@ -150,6 +150,10 @@
           "path": "js/ux/grid/"
         },
         {
+          "text": "ActionColumnPlugin.js",
+          "path": "js/ux/grid/"
+        },
+        {
           "text": "QuickaddGridPanel.js",
           "path": "js/ux/grid/"
         },
@@ -874,6 +878,10 @@
         },
         {
           "text": "GridDropZone.css",
+          "path": "css/ux/grid/"
+        },
+        {
+          "text": "ActionColumnPlugin.css",
           "path": "css/ux/grid/"
         },
         {
