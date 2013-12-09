@@ -251,16 +251,15 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'name'  => $tagName,
                 'description' => 'this is the shared tag ' . $tagName,
                 'color' => '#' . $this->_generateRandomColor(),
+                'contexts' => array('any'),
+                'appList'  => $appList,
+                'rights'   => array(array(
+                    'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                    'account_id'    => 0,
+                    'view_right'    => TRUE,
+                    'use_right'     => TRUE,
+                ))
             )));
-    
-            $right = new Tinebase_Model_TagRight(array(
-                'tag_id'        => $savedSharedTag->getId(),
-                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                'account_id'    => 0,
-                'view_right'    => TRUE,
-                'use_right'     => TRUE,
-            ));
-            Tinebase_Tags::getInstance()->setRights($right);
         }
     }
     
