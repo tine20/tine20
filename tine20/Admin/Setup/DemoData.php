@@ -234,23 +234,26 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createSharedTags()
     {
+        $appList = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->toArray();
+        $adminJson = new Admin_Frontend_Json();
+        
         for ($i = 0; $i < 105; $i++) {
-            $sharedTag = new Tinebase_Model_Tag(array(
+            $sharedTag = array(
                 'type'  => Tinebase_Model_Tag::TYPE_SHARED,
                 'name'  => 'tag::shared #' . $i,
                 'description' => 'this is a shared tag',
                 'color' => '#' . $this->_generateRandomColor(),
-            ));
-            $savedSharedTag = Tinebase_Tags::getInstance()->createTag($sharedTag);
-    
-            $right = new Tinebase_Model_TagRight(array(
-                'tag_id'        => $savedSharedTag->getId(),
-                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                'account_id'    => 0,
-                'view_right'    => TRUE,
-                'use_right'     => TRUE,
-            ));
-            Tinebase_Tags::getInstance()->setRights($right);
+                'contexts' => array('any'),
+                'appList'  => $appList,
+                'rights'   => array(array(
+                    'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                    'account_id'    => 0,
+                    'view_right'    => TRUE,
+                    'use_right'     => TRUE,
+                ))
+            );
+            
+            $adminJson->saveTag($sharedTag);
         }
     }
     
