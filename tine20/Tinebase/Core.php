@@ -170,6 +170,12 @@ class Tinebase_Core
      */
     protected static $appInstanceCache = array();
     
+    /**
+     * current cache status, maybe NULL / uninitialized, true / enabled, false / disabled
+     * @var boolean
+     */
+    protected static $cacheStatus = NULL;
+    
     /******************************* DISPATCH *********************************/
     
     /**
@@ -605,6 +611,10 @@ class Tinebase_Core
      */
     public static function setupCache($_enabled = true)
     {
+        if ( self::$cacheStatus !== NULL && self::$cacheStatus === $_enabled ) {
+            return;
+        }
+        
         $config = self::getConfig();
         if ($config->caching && $config->caching->active) {
             if (isset($config->caching->shared) && ($config->caching->shared === true)) {
@@ -717,6 +727,7 @@ class Tinebase_Core
         
         Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
         self::set(self::CACHE, $cache);
+        self::$cacheStatus = $_enabled;
     }
     
     /**
