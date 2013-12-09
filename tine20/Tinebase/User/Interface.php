@@ -64,4 +64,12 @@ interface Tinebase_User_Interface
      * @param string $_loginName
      */
     public function setLastLoginFailure($_loginName);
+
+    /**
+     * get users by primary group
+     * 
+     * @param string $groupId
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getUsersByPrimaryGroup($groupId);
 }

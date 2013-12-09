@@ -43,7 +43,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
         #return new Zend_Db_Expr("string_agg(DISTINCT $quotedField, ',')");
         
         // before 9.0
-        return new Zend_Db_Expr("array_to_string(ARRAY(SELECT DISTINCT unnest(array_agg($quotedField)) ORDER BY 1),',')");
+        return new Zend_Db_Expr("array_to_string(ARRAY(SELECT DISTINCT unnest(array_agg($quotedField))),',')");
     }
 
     /**
