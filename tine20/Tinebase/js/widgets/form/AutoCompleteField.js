@@ -44,10 +44,10 @@ Tine.Tinebase.widgets.form.AutoCompleteField = Ext.extend(Ext.form.ComboBox, {
         this.store = new Ext.data.JsonStore({
             fields: [this.property],
             baseParams: {
-                method: this.recordClass.getMeta('appName') + '.autoComplete' + this.recordClass.getMeta('modelName') + 'Property',
-                property: this.property,
-                sort: this.property,
-                dir: 'ASC'
+                method:  'Tinebase.autoComplete',
+                appName: this.recordClass.getMeta('appName'),
+                modelName: this.recordClass.getMeta('modelName'),
+                property: this.property
             },
             root: 'results',
             totalProperty: 'totalcount'

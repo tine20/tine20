@@ -147,19 +147,4 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             ),
         )
      );
-    
-    /**
-     * Returns every valid key to manage in Frontend/Json.php
-     * 
-     * @todo to be removed if we have a similiar function in the core
-     * @param void
-     * @return array
-     */
-    public static function getValidFields()
-    {
-        if (static::$_configurationObject===NULL){
-            static::getConfiguration();
-        }
-        return static::$_configurationObject->fieldKeys;
-    }
 }
