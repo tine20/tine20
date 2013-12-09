@@ -59,6 +59,7 @@ class Phone_JsonTest extends TestCase
         parent::setUp();
         
         $this->_json = new Phone_Frontend_Json();
+        $this->_adminUser = Tinebase_Core::getUser();
         
         $this->_objects['location'] = new Voipmanager_Model_Snom_Location(array(
             'id'        => Tinebase_Record_Abstract::generateUID(),
@@ -130,7 +131,7 @@ class Phone_JsonTest extends TestCase
         ));
         
         $this->_objects['phoneOwner'] = array(
-            'account_id' => Zend_Registry::get('currentAccount')->getId(),
+            'account_id' => $this->_adminUser->getId(),
             'account_type' => 'user'
         );
         
@@ -330,7 +331,7 @@ class Phone_JsonTest extends TestCase
         $phoneController->callStarted($this->_objects['call3']);
         $phoneController->callStarted($this->_objects['call4']);
         
-        $this->_adminUser = Tinebase_Core::getUser();
+        
     }
 
     /**
