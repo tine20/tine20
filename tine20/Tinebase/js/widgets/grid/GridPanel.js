@@ -441,6 +441,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 columns = columns.concat(this.getCustomfieldColumns());
             }
             
+            columns = columns.concat(this.getCustomColumns());
+            
             this.gridConfig.cm = new Ext.grid.ColumnModel({
                 defaults: {
                     resizable: true
@@ -448,6 +450,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 columns: columns
             });
         }
+    },
+    
+    /**
+     * template method to allow adding custom columns
+     * 
+     * @return {Array}
+     */
+    getCustomColumns: function() {
+        return [];
     },
     
     /**
@@ -800,6 +811,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     store.each(function(item) {
                         items.push(item.data);
                     });
+                    
                     this.editDialog.record.set(this.editDialogRecordProperty, items);
                     this.editDialog.fireEvent('updateDependent');
                 } else {
