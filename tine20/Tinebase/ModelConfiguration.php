@@ -329,6 +329,14 @@ class Tinebase_ModelConfiguration {
     protected $_recordFields  = NULL;
 
     /**
+     * if this is set to true, related data will be fetched on fetching dependent records by frontend json
+     * look at: Tinebase_Convert_Json._resolveMultipleRecordFields
+     * 
+     * @var boolean
+     */
+    protected $_resolveRelated = FALSE;
+    
+    /**
      * holds virtual field definitions used for non-persistent fields getting calculated on each call of the record
      * no backend property will be build, no filters etc. will exist. they must be filled in frontend json
      * 
@@ -347,8 +355,8 @@ class Tinebase_ModelConfiguration {
      * 
      * @var array
      */
-    
     protected $_fieldGroups = NULL;
+    
     /**
      * here you can define one right (Tinebase_Acl_Rights_Abstract) for each field
      * group ('group'-property of a field definition of this._fields), the user must
@@ -717,7 +725,7 @@ class Tinebase_ModelConfiguration {
             }
 
             if ($fieldDef['type'] == 'virtual') {
-                $fieldDef = $fieldDef['config'];
+                $fieldDef = isset($fieldDef['config']) ? $fieldDef['config'] : array();
                 $fieldDef['sortable'] = FALSE;
                 $this->_virtualFields[] = $fieldDef;
                 continue;
