@@ -390,4 +390,22 @@ class Tinebase_Relations
         
         return $this->_backend->updateRelation($_relation);
     }
+    
+    /**
+     * replaces all relations to or from a record with $sourceId to a record with $destinationId
+     * 
+     * @param string $sourceId
+     * @param string $destinationId
+     * @param string $model
+     * 
+     * @return array
+     */
+    public function transferRelations($sourceId, $destinationId, $model)
+    {
+        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::ADMIN)) {
+            throw new Tinebase_Exception_AccessDenied('Non admins of Tinebase aren\'t allowed to perform his operation!');
+        }
+        
+        return $this->_backend->transferRelations($sourceId, $destinationId, $model);
+    }
 }

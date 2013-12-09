@@ -360,7 +360,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         
         #Sabre_CalDAV_ICalendarUtil::validateICalendarObject($cardData, array('VEVENT', 'VFREEBUSY'));
         
-        $vobject = Calendar_Convert_Event_VCalendar_Abstract::getVcal($cardData);
+        $vobject = Calendar_Convert_Event_VCalendar_Abstract::getVObject($cardData);
         foreach ($vobject->children() as $component) {
             if (isset($component->{'X-TINE20-CONTAINER'})) {
                 $xTine20Container = $component->{'X-TINE20-CONTAINER'};
@@ -391,7 +391,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         
         // client sends CalDAV event -> handle a container move
         else if (isset($xTine20Container)) {
-            if ($xTine20Container->value == $currentContainer->getId()) {
+            if ($xTine20Container->getValue() == $currentContainer->getId()) {
                 $event->container_id = $this->_container->getId();
             } else {
                 // @TODO allow organizer to move original cal when he edits the displaycal event?
@@ -502,12 +502,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             foreach ($this->_vevent->children() as $component) {
                 if ($component->name == 'VEVENT') {
                     // NOTE: we store the requested container here to have an origin when the event is moved
-                    $component->{'X-TINE20-CONTAINER'} = $this->_container->getId();
+                    $component->add('X-TINE20-CONTAINER', $this->_container->getId());
                     
                     if (isset($component->{'VALARM'}) && !$this->_container->isPersonalOf(Tinebase_Core::getUser())) {
                         // prevent duplicate alarms
-                        $component->{'X-MOZ-LASTACK'} = new VObject\Property\DateTime('X-MOZ-LASTACK');
-                        $component->{'X-MOZ-LASTACK'}->setDateTime(Tinebase_DateTime::now()->addYear(100), VObject\Property\DateTime::UTC);
+                        $component->add('X-MOZ-LASTACK', Tinebase_DateTime::now()->addYear(100)->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
                     }
                 }
             }

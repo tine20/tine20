@@ -205,14 +205,6 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         var exdates = result.results.excludeDates || [];
         var freetime = this.editDialog.record;
         
-        // find out local free days to substract. this is by account only
-        if (this.accountPickerActive) {
-            var accountId = this.editDialog.currentAccount.get('id');
-            var localFreeDaysToSubstract = (this.editDialog.localVacationDays[accountId] || []).length ;
-        } else {
-            var localFreeDaysToSubstract = 0;
-        }
-        
         // format dates to fit the datepicker format
         Ext.each(exdates, function(d) {
             Ext.each(d, function(date) {
@@ -222,12 +214,11 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             }, this);
         }, this);
 
-        this.setVacationDates(this.editDialog.localVacationDays, result.results.vacationDays);
-        this.setSicknessDates(this.editDialog.localSicknessDays, result.results.sicknessDays);
+        this.setVacationDates(this.editDialog.localVacationDays, result.results.vacationDays, this.editDialog.removedVacationDays);
+        this.setSicknessDates(this.editDialog.localSicknessDays, result.results.sicknessDays, this.editDialog.removedSicknessDays);
         this.setFeastDates(result.results.feastDays);
         
         this.setDisabledDates(this.disabledDates);
-        
         
         this.updateCellClasses();
         
@@ -252,13 +243,13 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         }
         
         if (this.accountPickerActive) {
+            var substractDays = this.editDialog.getDaysToSubstract();
+            
             if (! freetime && onInit) {
-                localFreeDaysToSubstract += freetime.get('days_count');
+                substractDays = substractDays + freetime.get('days_count');
             }
-            if (this.editDialog.removedVacationDaysCount) {
-                localFreeDaysToSubstract = localFreeDaysToSubstract - this.editDialog.removedVacationDaysCount;
-            }
-            this.editDialog.getForm().findField('remaining_vacation_days').setValue(result.results.remainingVacation - localFreeDaysToSubstract);
+
+            this.editDialog.getForm().findField('remaining_vacation_days').setValue(result.results.remainingVacation - substractDays);
         }
         
         this.updateCellClasses();
@@ -292,16 +283,24 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
     
     /**
      * set vacation dates
+     * 
+     * @param {Object} localVacationDays
+     * @param {Array} remoteVacationDays
+     * @param {Object} locallyRemovedDays
      */
-    setVacationDates: function(localVacationDays, remoteVacationDays) {
-        this.vacationDates = this.getTimestampsFromDays(localVacationDays, remoteVacationDays);
+    setVacationDates: function(localVacationDays, remoteVacationDays, locallyRemovedDays) {
+        this.vacationDates = this.getTimestampsFromDays(localVacationDays, remoteVacationDays, locallyRemovedDays);
     },
     
     /**
      * set sickness dates
+     * 
+     * @param {Object} localSicknessDays
+     * @param {Array} remoteSicknessDays
+     * @param {Object} locallyRemovedDays
      */
-    setSicknessDates: function(localSicknessDays, remoteSicknessDays) {
-        this.sicknessDates = this.getTimestampsFromDays(localSicknessDays, remoteSicknessDays);
+    setSicknessDates: function(localSicknessDays, remoteSicknessDays, locallyRemovedDays) {
+        this.sicknessDates = this.getTimestampsFromDays(localSicknessDays, remoteSicknessDays, locallyRemovedDays);
     },
     
     /**
@@ -316,22 +315,35 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * 
      * @param {Object} localDays
      * @param {Array} remoteDays
+     * @param {Object} locallyRemovedDays
      * 
      * @return {Array}
      */
-    getTimestampsFromDays: function(localDays, remoteDays) {
-        var dates = [];
+    getTimestampsFromDays: function(localDays, remoteDays, locallyRemovedDays) {
         
+        var dates = [];
         Ext.iterate(localDays, function(accountId, localdates) { 
             for (var index = 0; index < localdates.length; index++) {
-                var newdate = new Date(localdates[index].date);
+                var newdate = new Date(localdates[index].date.replace(/-/g,'/') + ' AM');
                 dates.push(newdate.getTime());
             }
         });
         
+        // find out removed dates
+        var remove = [];
+        Ext.iterate(locallyRemovedDays, function(accountId, removeDays) {
+            for (var index = 0; index < removeDays.length; index++) {
+                remove.push(removeDays[index].date.split(' ')[0]);
+            }
+        }, this);
+        
+        // do not mark day as taken, if it is deleted already in the grid
         for (var index = 0; index < remoteDays.length; index++) {
-            var newdate = new Date(remoteDays[index].date);
-            dates.push(newdate.getTime());
+            var day = remoteDays[index].date.split(' ')[0];
+            if (remove.indexOf(day) == -1) {
+                var newdate = new Date(remoteDays[index].date.replace(/-/g,'/') + ' AM');
+                dates.push(newdate.getTime());
+            }
         }
         
         return dates;
@@ -454,25 +466,28 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * updates the cell classes
      */
     updateCellClasses: function() {
+        
         this.cells.each(function(c) {
-
-           if (this.store.getByDate(c.dom.firstChild.dateValue)) {
-               c.addClass('x-date-selected');
-           } else {
-               c.removeClass('x-date-selected');
-           }
-           
-           if (this.vacationDates.indexOf(c.dom.firstChild.dateValue) > -1) {
+            
+            var timestamp = c.dom.firstChild.dateValue;
+            
+            if (this.store.getByDate(timestamp)) {
+                c.addClass('x-date-selected');
+            } else {
+                c.removeClass('x-date-selected');
+            }
+            
+            if (this.vacationDates.indexOf(timestamp) > -1) {
                 c.addClass('hr-date-vacation');
-           }
-           
-           if (this.sicknessDates.indexOf(c.dom.firstChild.dateValue) > -1) {
+            }
+            
+            if (this.sicknessDates.indexOf(timestamp) > -1) {
                 c.addClass('hr-date-sickness');
-           }
-           
-           if (this.feastDates.indexOf(c.dom.firstChild.dateValue) > -1) {
+            }
+            
+            if (this.feastDates.indexOf(timestamp) > -1) {
                 c.addClass('hr-date-feast');
-           }
+            }
            
         }, this);
     },

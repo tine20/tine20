@@ -308,15 +308,15 @@ msgstr "Do przeliczenia"
 msgid "Cleared"
 msgstr "Przeliczone"
 
-#: js/TimesheetEditDialog.js:261
+#: js/TimesheetEditDialog.js:263
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/TimesheetEditDialog.js:262
+#: js/TimesheetEditDialog.js:264
 msgid "Could not save {0}."
 msgstr "Zapisanie {0} było niemożliwe."
 
-#: js/TimesheetEditDialog.js:263
+#: js/TimesheetEditDialog.js:265
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Ostateczny termin rezerwacji dla niniejszego konta godzin został przekroczony."
 

@@ -108,5 +108,10 @@ class Addressbook_Convert_Contact_VCard_FactoryTest extends PHPUnit_Framework_Te
         
         $this->assertEquals(Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE, $backend);
         $this->assertEquals('4.7', $version);
-    }            
+        
+        list($backend, $version) = Addressbook_Convert_Contact_VCard_Factory::parseUserAgent('KDE DAV groupware client');
+        
+        $this->assertEquals(Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE, $backend);
+        $this->assertEquals('0.0', $version);
+    }
 }

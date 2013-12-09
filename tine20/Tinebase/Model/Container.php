@@ -15,6 +15,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @property    string application_id
+ * @property    int    seq
  * @property    string type
  * @property    sting  owner_id
  * 

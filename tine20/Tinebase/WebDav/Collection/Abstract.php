@@ -128,7 +128,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' name: ' . $_name);
     
-        switch(count($this->_pathParts)) {
+        switch (count($this->_pathParts)) {
             # path == ApplicationName
             # return personal and shared folder
             case 1:
@@ -158,7 +158,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
                     
                     return new $objectClass($container);
                 } elseif ($this->_pathParts[1] == Tinebase_Model_Container::TYPE_PERSONAL) {
-                    if ($_name != Tinebase_Core::getUser()->accountLoginName) {
+                    if ($_name != Tinebase_Core::getUser()->accountLoginName && $_name != 'currentUser') {
                         throw new Sabre\DAV\Exception\NotFound('Child not found');
                     }
                     
@@ -205,7 +205,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
     {
         $children = array();
         
-        switch(count($this->_pathParts)) {
+        switch (count($this->_pathParts)) {
             # path == ApplicationName
             # return personal and shared folder
             case 1:
@@ -221,6 +221,12 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
                 if ($this->_pathParts[1] == Tinebase_Model_Container::TYPE_SHARED) {
                     $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC));
                     foreach ($containers as $container) {
+                        // skip container if the user does not have the read AND the sync grant
+                        if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || 
+                            !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
+                            continue;
+                        }
+                        
                         $children[] = $this->getChild($container);
                     }
                 } elseif ($this->_hasPersonalFolders && $this->_pathParts[1] == Tinebase_Model_Container::TYPE_PERSONAL) {
@@ -245,6 +251,22 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
     }
     
     /**
+     * return etag
+     * 
+     * @return string
+     */
+    public function getETag()
+    {
+        $etags = array();
+        
+        foreach ($this->getChildren() as $child) {
+            $etags[] = $child->getETag();
+        }
+        
+        return '"' . sha1(implode(null, $etags)) . '"';
+    }
+    
+    /**
      * Returns a group principal
      *
      * This must be a url to a principal, or null if there's no owner
@@ -254,6 +276,21 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
     public function getGroup()
     {
         return null;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Sabre\DAV\Node::getLastModified()
+     */
+    public function getLastModified()
+    {
+        $lastModified = 1;
+        
+        foreach ($this->getChildren() as $child) {
+            $lastModified = $child->getLastModified() > $lastModified ? $child->getLastModified() : $lastModified;
+        }
+        
+        return $lastModified;
     }
     
     /**
@@ -330,7 +367,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
         
         list(, $basename) = Sabre\DAV\URLUtil::splitPath($this->_path);
         
-        switch(count($pathParts)) {
+        switch (count($pathParts)) {
             # path == /accountLoginName
             # list personal and shared folder
             case 1:
@@ -349,15 +386,21 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
         
         $response = array();
     
-        foreach($requestedProperties as $prop) switch($prop) {
-            case '{DAV:}owner' :
-                $response[$prop] = new Sabre\DAVACL\Property\Principal(Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id);
-                break;
+        foreach ($requestedProperties as $prop) {
+            switch($prop) {
+                case '{DAV:}owner' :
+                    $response[$prop] = new Sabre\DAVACL\Property\Principal(Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id);
+                    break;
                 
-            default :
-                if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
-                break;
-    
+                case '{DAV:}getetag':
+                    $response[$prop] = $this->getETag();
+                    break;
+                
+                default :
+                    if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
+                    break;
+        
+            }
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' ' . print_r($response, true));

@@ -1,12 +1,13 @@
 # 
 # Translators:
+# Gurney <inscription@arrakeen.net>, 2013
 # Gurney <inscription@arrakeen.net>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-10-31 09:14+0000\n"
+"Last-Translator: Gurney <inscription@arrakeen.net>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,19 +32,19 @@ msgstr "Ajouter un compte de temps"
 
 #: Acl/Rights.php:128
 msgid "Manage shared timeaccount favorites"
-msgstr ""
+msgstr "Gérer les comptes de temps partagés"
 
 #: Acl/Rights.php:129
 msgid "Create or update shared timeaccount favorites"
-msgstr ""
+msgstr "Créer ou ajouter des comptes de temps partagés"
 
 #: Acl/Rights.php:132
 msgid "Manage shared timesheet favorites"
-msgstr ""
+msgstr "Gérer les tables de pointages partagées"
 
 #: Acl/Rights.php:133
 msgid "Create or update shared timesheet favorites"
-msgstr ""
+msgstr "Ajouter ou modifier les tables de pointages partagées"
 
 #: Model/Timeaccount.php:43 Model/Timeaccount.php:47
 #: js/TimeaccountEditDialog.js:125
@@ -169,11 +170,11 @@ msgstr "semaine dernière"
 #: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:114
 #: js/Models.js:179
 msgid "Cleared at"
-msgstr ""
+msgstr "Acquitté le"
 
 #: js/TimeaccountEditDialog.js:140
 msgid "Responsible person"
-msgstr ""
+msgstr "Personne responsable"
 
 #: js/TimeaccountEditDialog.js:151
 msgid "Timesheets are billable"
@@ -306,15 +307,15 @@ msgstr "Facturable"
 msgid "Cleared"
 msgstr "Acquitté"
 
-#: js/TimesheetEditDialog.js:261
+#: js/TimesheetEditDialog.js:263
 msgid "Failed"
 msgstr "Échec"
 
-#: js/TimesheetEditDialog.js:262
+#: js/TimesheetEditDialog.js:264
 msgid "Could not save {0}."
 msgstr "Impossible de sauver {0}."
 
-#: js/TimesheetEditDialog.js:263
+#: js/TimesheetEditDialog.js:265
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "La date limite de réservation pour ce compte a été dépassée."
 
@@ -431,7 +432,7 @@ msgstr[1] "listes feuilles de temps"
 
 #: js/Models.js:90 js/Models.js:173
 msgid "Quick Search"
-msgstr ""
+msgstr "Recherche rapide"
 
 #: js/Models.js:96 js/Models.js:180
 msgid "Last Modified Time"

@@ -94,17 +94,30 @@ class Tinebase_Exception extends Exception
      * @param Exception $exception
      * @param boolean $suppressTrace
      */
-    public static function log(Exception $exception, $suppressTrace = NULL)
+    public static function log(Exception $exception, $suppressTrace = null)
     {
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
-        
-        $suppressTrace = ($suppressTrace !== NULL) ? $suppressTrace : Tinebase_Core::getConfig()->suppressExceptionTraces === TRUE;
-        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE) && ! $suppressTrace) {
-            $traceString = $exception->getTraceAsString();
-            $traceString = self::_replaceBasePath($traceString);
-            $traceString = self::_removeCredentials($traceString);
-             
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $traceString);
+        if (! is_object(Tinebase_Core::getLogger())) {
+            // no logger -> exception happened very early
+            error_log($exception);
+        } else {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
+            
+            if ($suppressTrace === null) {
+                try {
+                    $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
+                } catch (Exception $e) {
+                    // catch all config exceptions here
+                    $suppressTrace = true;
+                }
+            }
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE) && ! $suppressTrace) {
+                $traceString = $exception->getTraceAsString();
+                $traceString = self::_replaceBasePath($traceString);
+                $traceString = self::_removeCredentials($traceString);
+                 
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $traceString);
+            }
         }
     }
     

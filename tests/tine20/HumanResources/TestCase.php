@@ -179,6 +179,7 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
     /**
      * get hr cost center 
      * @param Tinebase_DateTime $startDate
+     * @return HumanResources_Model_CostCenter
      */
     protected function _getCostCenter($startDate = NULL)
     {

@@ -1,0 +1,41 @@
+install openldap
+----------------
+
+$ apt-get install slapd ldap-utils
+
+init database
+-------------
+/// is this needed?
+---????
+$ sudo mkdir /var/lib/ldap/example
+$ sudo chown openldap /var/lib/ldap/example
+$ slappasswd
+New password: 
+Re-enter new password: 
+{SSHA}****
+$ sudo ldapadd -Y EXTERNAL -H ldapi:/// -f initial.ldif
+---????
+
+ldif import
+-----------
+
+- replace unittest user password in nodomain.ldif first
+
+- not so good but works:
+$ sudo service slapd stop
+$ sudo slapadd -l nodomain.ldif
+$ sudo service slapd start
+
+this does not work :/
+$ ldapadd -D cn=admin,dc=nodomain -wpassword -f nodomain.ldif
+
+reset all users/groups
+--------
+
+$ ldapdelete -D cn=admin,dc=nodomain -wpassword "cn=Administrators,ou=groups,dc=nodomain"
+$ ldapdelete -D cn=admin,dc=nodomain -wpassword "cn=Users,ou=groups,dc=nodomain"
+$ ldapdelete -D cn=admin,dc=nodomain -wpassword "uid=unittest,ou=users,dc=nodomain"
+$ ldapdelete -D cn=admin,dc=nodomain -wpassword "ou=users,dc=nodomain"
+$ ldapdelete -D cn=admin,dc=nodomain -wpassword "ou=groups,dc=nodomain"
+
+// more users/groups to delete?

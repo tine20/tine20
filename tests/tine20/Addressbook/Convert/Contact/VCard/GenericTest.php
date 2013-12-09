@@ -105,6 +105,8 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         $this->assertEquals('Titel',                   $contact->title);
         $this->assertEquals('http\://www.tine20.com',  $contact->url);
         $this->assertEquals('http\://www.tine20.org',  $contact->url_home);
+        $this->assertContains('CATEGORY 1',            $contact->tags->name);
+        $this->assertContains('CATEGORY 2',            $contact->tags->name);
         
         return $contact;
     }
@@ -116,11 +118,13 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC);
         $vcard = $converter->fromTine20Model($contact)->serialize();
         
+        //var_dump($vcard);
+        
         // required fields
         $this->assertContains('VERSION:3.0', $vcard, $vcard);
         
         $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
-        $this->assertContains("PRODID:-//tine20.org//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
+        $this->assertContains("PRODID:-//tine20.com//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
         
         // @todo can not test for folded lines
         $this->assertContains('ADR;TYPE=HOME:;Address Privat 2;Address Privat 1;City Privat;Region Privat;', $vcard, $vcard);
@@ -130,13 +134,15 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         $this->assertContains('N:Kneschke;Lars', $vcard, $vcard);
         $this->assertContains('NOTE:Notes\nwith\nLine Break', $vcard, $vcard);
         $this->assertContains('ORG:Organisation;Business Unit', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=CELL;TYPE=WORK:+49 MOBIL', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=FAX;TYPE=WORK:+49 FAX', $vcard, $vcard);
+        $this->assertContains('TEL;TYPE=CELL,WORK:+49 MOBIL', $vcard, $vcard);
+        $this->assertContains('TEL;TYPE=FAX,WORK:+49 FAX', $vcard, $vcard);
         $this->assertContains('TEL;TYPE=HOME:+49 PRIVAT', $vcard, $vcard);
         $this->assertContains('TEL;TYPE=WORK:+49 BUSINESS', $vcard, $vcard);
         $this->assertContains('TITLE:Titel', $vcard, $vcard);
-        $this->assertContains('URL;TYPE=WORK:http\\\\://www.tine20.com', $vcard, $vcard);
-        $this->assertContains('URL;TYPE=HOME:http\\\\://www.tine20.org', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=WORK:http\\://www.tine20.com', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=HOME:http\\://www.tine20.org', $vcard, $vcard);
+        $this->assertContains('URL;TYPE=HOME:http\\://www.tine20.org', $vcard, $vcard);
+        $this->assertContains('CATEGORIES:CATEGORY 1,CATEGORY 2', $vcard, $vcard);
     }
     
 }

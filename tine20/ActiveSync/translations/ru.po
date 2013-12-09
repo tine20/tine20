@@ -1,13 +1,14 @@
 # 
 # Translators:
+# Aleksdem <aleksdem@aleksdem.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-11-20 13:09+0000\n"
+"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,27 +29,27 @@ msgstr "Введите ID политики для применения к вно
 
 #: Config.php:62
 msgid "Disable Access Log"
-msgstr ""
+msgstr "Отключить лог"
 
 #: Config.php:64
 msgid "Disable ActiveSync Access Log creation."
-msgstr ""
+msgstr "Отключить создание лога подключений ActiveSync"
 
 #: Config.php:73
 msgid "Filter timeslot for emails"
-msgstr ""
+msgstr "Фильтрация писем по времени"
 
 #: Config.php:75
 msgid "For how long in the past the emails should be synchronized."
-msgstr ""
+msgstr "Насколько давние письма должны быть синхронизированы."
 
 #: Config.php:96
 msgid "Filter timeslot for events"
-msgstr ""
+msgstr "Фильтрация событий по времени"
 
 #: Config.php:98
 msgid "For how long in the past the events should be synchronized."
-msgstr ""
+msgstr "Насколько давние события должны быть синхронизированы."
 
 #: Setup/setup.xml:546 Setup/Update/Release6.php:290
 msgid "Default Policy"

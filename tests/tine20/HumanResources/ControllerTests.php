@@ -80,7 +80,7 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
             'status'        => 'ACCEPTED',
             'employee_id'   => $employee->getId(),
             'account_id'    => $myAccount->getId(),
-            'type'          => 'VACATION',
+            'type'          => 'vacation',
             'freedays'      => array(
                 array('date' => $firstDayDate, 'duration' => 1)
             )

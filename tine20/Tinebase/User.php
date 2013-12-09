@@ -283,18 +283,22 @@ class Tinebase_User
      * To persist the change call {@see saveBackendConfiguration()}
      * 
      * @param mixed $_value
-     * @param string  optional $_key
+     * @param string $_key
+     * @param boolean $_applyDefaults
      * @return void
+     * 
+     * @todo generalize this (see Tinebase_Auth::setBackendConfiguration)
      */
-    public static function setBackendConfiguration($_value, $_key = null)
+    public static function setBackendConfiguration($_value, $_key = null, $_applyDefaults = false)
     {
         $defaultValues = self::$_backendConfigurationDefaults[self::getConfiguredBackend()];
-
+        
         if (is_null($_key) && !is_array($_value)) {
             throw new Tinebase_Exception_InvalidArgument('To set backend configuration either a key and value '
                 . 'parameter are required or the value parameter should be a hash');
         } elseif (is_null($_key) && is_array($_value)) {
-            foreach ($_value as $key=> $value) {
+            $configToSet = $_applyDefaults ? array_merge($defaultValues, $_value) : $_value;
+            foreach ($configToSet as $key => $value) {
                 self::setBackendConfiguration($value, $key);
             }
         } else {

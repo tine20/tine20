@@ -85,10 +85,15 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
      */
     public static function createVacationTemplatesFolder()
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Creating vacation template in vfs ...');
+        
         $templateContainer = Tinebase_Container::getInstance()->createSystemContainer(
             'Felamimail', 
             'Vacation Templates', 
-            Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID
+            Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID,
+            null,
+            'Tinebase_Model_Tree_Node'
         );
         try {
             Tinebase_FileSystem::getInstance()->createContainerNode($templateContainer);

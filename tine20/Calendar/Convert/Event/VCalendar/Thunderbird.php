@@ -1,7 +1,4 @@
 <?php
-
-use Sabre\VObject;
-
 /**
  * Tine 2.0
  *
@@ -13,7 +10,7 @@ use Sabre\VObject;
  */
 
 /**
- * class to convert single event (repeating with exceptions) to/from VCalendar
+ * class to convert a Thunderbird VCALENDAR to Tine 2.0 Calendar_Model_Event and back again
  *
  * @package     Calendar
  * @subpackage  Convert
@@ -47,29 +44,33 @@ class Calendar_Convert_Event_VCalendar_Thunderbird extends Calendar_Convert_Even
         'originator_tz'
     );
     
-    protected function _addEventAttendee(VObject\Component $_vevent, Calendar_Model_Event $_event)
+    /**
+     * (non-PHPdoc)
+     * @see Calendar_Convert_Event_VCalendar_Abstract::_addEventAttendee()
+     */
+    protected function _addEventAttendee(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event)
     {
         if (version_compare($this->_version, '1.0b2' , '>')) {
-            parent::_addEventAttendee($_vevent, $_event);
+            parent::_addEventAttendee($vevent, $event);
         } else {
             // special handling for Lightning <= 1.0b2
             // attendees get screwed up, if the CN contains commas
-            Calendar_Model_Attender::resolveAttendee($_event->attendee, FALSE, $_event);
+            Calendar_Model_Attender::resolveAttendee($event->attendee, FALSE, $event);
             
-            foreach($_event->attendee as $eventAttendee) {
+            foreach($event->attendee as $eventAttendee) {
                 $attendeeEmail = $eventAttendee->getEmail();
                 if ($attendeeEmail) {
-                    $attendee = new VObject\Property('ATTENDEE', (strpos($attendeeEmail, '@') !== false ? 'mailto:' : 'urn:uuid:') . $attendeeEmail);
-                    $attendee->add('CN',       str_replace(',', null, $eventAttendee->getName()));
-                    $attendee->add('CUTYPE',   Calendar_Convert_Event_VCalendar_Abstract::$cutypeMap[$eventAttendee->user_type]);
-                    $attendee->add('PARTSTAT', $eventAttendee->status);
-                    $attendee->add('ROLE',     "{$eventAttendee->role}-PARTICIPANT");
-                    $attendee->add('RSVP',     'FALSE');
+                    $parameters = array(
+                        'CN'       => str_replace(',', null, $eventAttendee->getName()),
+                        'CUTYPE'   => Calendar_Convert_Event_VCalendar_Abstract::$cutypeMap[$eventAttendee->user_type],
+                        'PARTSTAT' => $eventAttendee->status,
+                        'ROLE'     => "{$eventAttendee->role}-PARTICIPANT",
+                        'RSVP'     => 'FALSE'
+                    );
                     if (strpos($attendeeEmail, '@') !== false) {
-                        $attendee->add('EMAIL',    $attendeeEmail);
+                        $parameters['EMAIL'] = $attendeeEmail;
                     }
-    
-                    $_vevent->add($attendee);
+                    $vevent->add('ATTENDEE', (strpos($attendeeEmail, '@') !== false ? 'mailto:' : 'urn:uuid:') . $attendeeEmail, $parameters);                    
                 }
             }
         }

@@ -52,7 +52,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
     public function __construct(Tinebase_Model_Container $_container, $_contact = null) 
     {
         $this->_container = $_container;
-        $this->_contact = $_contact;
+        $this->_contact   = $_contact;
 
         list($backend, $version) = Addressbook_Convert_Contact_VCard_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         

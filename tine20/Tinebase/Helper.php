@@ -238,3 +238,51 @@ function searchArrayByRegexpKey($pattern, $array)
     
     return array_intersect_key($array, array_flip($result));
 }
+
+/**
+ * checks if a string is valid json
+ * 
+ * @param string $string
+ * @return boolean 
+ */
+function is_json($string)
+{
+    if (! is_string($string) || (substr($string, 0, 1) !== '[' && substr($string, 0, 1) !== '{')) {
+        return false;
+    }
+    
+    try {
+        Zend_Json::decode($string);
+    } catch (Exception $e) {
+        return false;
+    }
+    
+    // check if error occured (only if json_last_error() exists)
+    return (! function_exists('json_last_error') || json_last_error() == JSON_ERROR_NONE);
+}
+
+/**
+ * formats a microtime diff to an appropriate string containing time unit based on the value range
+ * 
+ * value ranges
+ * below 1s return ms
+ * below 1m return s
+ * below 1h return m
+ * as of 1h return h
+ * 
+ * @param float $timediff
+ * @return string
+ */
+function formatMicrotimeDiff($timediff)
+{
+    $ms = (int)($timediff * 1000);
+    if ($ms>=3600000) {
+        return (((int)($ms / 3600000 * 100.0)) / 100.0).'h';
+    } elseif ($ms>=60000) {
+        return (((int)($ms / 60000 * 100.0)) / 100.0).'m';
+    } elseif ($ms>=1000) {
+        return (((int)($ms / 1000 * 100.0)) / 100.0).'s';
+    } else {
+        return $ms.'ms';
+    }
+}

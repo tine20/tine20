@@ -55,6 +55,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         parent::setUp();
         
+        Calendar_Controller_Event::getInstance()->sendNotifications(true);
+        
         $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         if (empty($smtpConfig)) {
              $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
@@ -104,6 +106,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * testInvitationWithAttachment
      * 
      * @see 0008592: append event file attachments to invitation mail
+     * @see 0009246: Mail address of organizer is broken in invite mails
      */
     public function testInvitationWithAttachment()
     {
@@ -124,6 +127,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals(2, count($parts));
         $fileAttachment = $parts[1];
         $this->assertEquals('text/plain; name="=?utf-8?Q?tempfile.tmp?="', $fileAttachment->type);
+        
+        // check VEVENT ORGANIZER mailto
+        $vcalendarPart = $parts[0];
+        $vcalendar = quoted_printable_decode($vcalendarPart->getContent());
+        $this->assertContains('SENT-BY="mailto:' . Tinebase_Core::getUser()->accountEmailAddress . '":mailto:', str_replace("\r\n ", '', $vcalendar), 'sent-by mailto not quoted');
         
         // @todo assert attachment content (this seems to not work with array mailer, maybe we need a "real" email test here)
 //         $content = $fileAttachment->getDecodedContent();
@@ -825,7 +833,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $baseEvent = $this->_eventController->getRecurBaseEvent($persistentEvent);
         if ($allFollowing) {
-            $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=' . $recurEvent->dtstart->subHour(1)->toString(), (string) $baseEvent->rrule, 'rrule mismatch');
+            $until = $recurSet[0]->dtstart->getClone()
+            ->setTimezone($baseEvent->originator_tz)
+            ->setTime(23,59,59)
+            ->setTimezone('UTC');
+            
+            $this->assertEquals('FREQ=DAILY;INTERVAL=1;UNTIL=' . $until->toString(), (string) $baseEvent->rrule, 'rrule mismatch');
             $this->assertEquals(1, count($baseEvent->alarms));
             $this->assertEquals('Nothing to send, series is over', $baseEvent->alarms->getFirstRecord()->sent_message,
                 'alarm adoption failed: ' . print_r($baseEvent->alarms->getFirstRecord()->toArray(), TRUE));

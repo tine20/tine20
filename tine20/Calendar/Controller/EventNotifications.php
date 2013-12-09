@@ -1,7 +1,4 @@
 <?php
-
-use Sabre\VObject;
-
 /**
  * Calendar Event Notifications
  * 
@@ -75,7 +72,7 @@ use Sabre\VObject;
         $diff = $_event->diff($_oldEvent)->diff;
         
         $orderedUpdateFieldOfInterest = array(
-            'dtstart', 'dtend', 'summary', 'location', 'description',
+            'dtstart', 'dtend', 'rrule', 'summary', 'location', 'description',
             'transp', 'priority', 'status', 'class',
             'url', 'is_all_day_event', 'originator_tz', /*'tags', 'notes',*/
         );
@@ -87,8 +84,8 @@ use Sabre\VObject;
             }
         }
         
-        // check for rrule update
-        if ((string) $_event->rrule != (string) $_oldEvent->rrule) {
+        // rrule legacy
+        if (array_key_exists('rrule', $updates)) {
             $updates['rrule'] = $_oldEvent->rrule;
         }
         
@@ -408,7 +405,7 @@ use Sabre\VObject;
             foreach ($vcalendar->children() as $component) {
                 if ($component->name == 'VEVENT') {
                     if (isset($component->{'ORGANIZER'})) {
-                        $component->{'ORGANIZER'}->add(new VObject\Parameter('SEND-BY', 'mailto:' . $_updater->accountEmailAddress));
+                        $component->{'ORGANIZER'}->add('SENT-BY', 'mailto:' . $_updater->accountEmailAddress);
                     }
                 }
             }

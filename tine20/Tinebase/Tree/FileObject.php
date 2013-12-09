@@ -133,9 +133,10 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      */
     protected function _updateForeignKeys($_mode, Tinebase_Record_Abstract $_record)
     {
-        if ($_record->type != Tinebase_Model_Tree_FileObject::TYPE_FILE || empty($_record->hash)) {
+        if (empty($_record->hash)) {
             return;
         }
+        
         $createRevision = $this->_keepOldRevisions || $_mode === 'create';
         $updateRevision = FALSE;
         
@@ -164,7 +165,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         if ($createRevision) {
             $data['id'] = $_record->getId();
             $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
-        } else if ($updateRevision) {
+        } elseif ($updateRevision) {
             $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_record->getId()),
             );
@@ -192,5 +193,39 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $queryResult = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
         
         return $queryResult;
+    }
+    
+    /**
+     * update hash of multiple directory at once
+     * 
+     * @param  Tinebase_Record_RecordSet  $nodes
+     * @return Tinebase_Record_RecordSet
+     */
+    public function updateDirectoryNodesHash(Tinebase_Record_RecordSet $nodes)
+    {
+        // legacy code => add missing revision to directory nodes 
+        foreach ($nodes as $node) {
+            if (!empty($node->hash)) {
+                continue;
+            }
+            
+            $object = $this->get($node->object_id);
+            
+            $object->hash = Tinebase_Record_Abstract::generateUID();
+            $object->size = 0;
+            
+            $this->update($object);
+        }
+        
+        $data  = array(
+            'hash' => Tinebase_Record_Abstract::generateUID()
+        );
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $nodes->object_id),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('revision') . ' = ?', 1)
+        );
+        $this->_db->update($this->_tablePrefix . 'tree_filerevisions', $data, $where);
+        
+        return $this->getMultiple($nodes->object_id);
     }
 }

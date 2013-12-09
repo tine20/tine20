@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Admin
  */
-class Admin_CliTest extends PHPUnit_Framework_TestCase
+class Admin_CliTest extends TestCase
 {
     /**
      * Backend
@@ -31,18 +31,6 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Cli Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -50,9 +38,11 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_cli = new Admin_Frontend_Cli();
+        
+        $this->_usernamesToDelete = array('hmaster', 'hmeister', 'hmoster', 'irmeli');
         
         $this->objects['config'] = '<?xml version="1.0" encoding="UTF-8"?>
         <config>
@@ -145,17 +135,6 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
         </config>';
     }
 
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-    
     /**
      * test to import admin users
      *

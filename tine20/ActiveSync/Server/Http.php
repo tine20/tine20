@@ -59,7 +59,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
         if (empty($loginName)) {
             $basicAuthData = $this->_getBasicAuthData();
             if ($basicAuthData) {
-                list($loginName, $password) = explode(":", $basicAuthData);
+                list($loginName, $password) = explode(":", $basicAuthData, 2);
             }
         }
         

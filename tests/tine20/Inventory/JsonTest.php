@@ -5,7 +5,7 @@
  * @package     Inventory
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Spahn <m.spahn@metaways.de>
  */
 
@@ -141,5 +141,71 @@ class Inventory_JsonTest extends Inventory_TestCase
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $returnValueGet = $this->_json->getInventoryItem($inventoryRecordID);
+    }
+    
+    /**
+     * testSearchByCustomfield
+     * 
+     * @see 0009230: customfield search fails in MC apps
+     */
+    public function testSearchByCustomfield()
+    {
+        $cf = $this->_getCustomField();
+        $invItem = $this->testCreateInventoryItem();
+        $invItem['customfields']['invcustom'] = 'abc';
+        $returnedRecord = $this->_json->saveInventoryItem($invItem);
+        $this->assertEquals('abc', $returnedRecord['customfields']['invcustom']);
+        
+        $filter = array(array(
+            'condition' => 'AND',
+            'filters' => array(array(
+                'field' => 'customfield',
+                'operator' => 'contains',
+                'value' => array(
+                    'cfId' => $cf->getId(),
+                    'value' => 'abc',
+                )
+            )),
+            'id' => 'ext-comp-1222',
+            'label' => 'Inventargegenstände'
+        ));
+        
+        $searchResult = $this->_json->searchInventoryItems($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount'], 'not found: ' . print_r($searchResult, true));
+        $this->assertEquals($filter, $searchResult['filter']);
+    }
+    
+    /**
+    * get custom field config record
+    *
+    * @return Tinebase_Model_CustomField_Config
+    */
+    protected function _getCustomField()
+    {
+        $cfData = new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId(),
+            'name'              => 'invcustom',
+            'model'             => 'Inventory_Model_InventoryItem',
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )
+        ));
+        
+        try {
+            $result = Tinebase_CustomField::getInstance()->addCustomField($cfData);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // customfield already exists
+            $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication('Inventory');
+            $result = $cfs->filter('name', 'invcustom')->getFirstRecord();
+        }
+        
+        return $result;
     }
 }

@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Frontend_Cli
  */
-class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
+class Tinebase_Frontend_CliTest extends TestCase
 {
     /**
      * Backend
@@ -59,6 +59,8 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
+        
         $this->_cli = new Tinebase_Frontend_Cli();
         $this->_testUser = Tinebase_Core::getUser();
         $this->_userPlugins = Tinebase_User::getInstance()->getPlugins();
@@ -80,6 +82,8 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         if ($currentUser->accountLoginName !== $this->_testUser->accountLoginName) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
         }
+        
+        parent::tearDown();
     }
     
     /**
@@ -210,6 +214,7 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
     {
         $opts = new Zend_Console_Getopt('abp:');
         $opts->setArguments(array());
+        $this->_usernamesToDelete[] = 'cronuser';
         
         ob_start();
         $this->_cli->triggerAsyncEvents($opts);

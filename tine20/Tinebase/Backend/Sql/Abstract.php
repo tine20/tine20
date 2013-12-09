@@ -288,6 +288,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier) . ' IN (?)', (array) $ids);
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
+        $this->_checkTracing($select);
+        
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
         $stmt->closeCursor();
@@ -354,6 +356,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         } else {
                 $select = $this->_getSelect('*', $_getDeleted)->where('1=0');
         }
+        
+        $this->_checkTracing($select);
+        
         $stmt = $this->_db->query($select);
         
         $resultSet = $this->_rawDataToRecordSet($stmt->fetchAll());
@@ -421,7 +426,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        $this->_checkTracing($select);
         
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
@@ -665,6 +670,32 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     }
     
     /**
+     * Checks if backtrace and query should be logged
+     * 
+     * For enabling this feature, you must add a key in config.inc.php:
+     * 
+     *     'logger' => 
+     *         array(
+     *             // logger stuff
+     *             'traceQueryOrigins' => true,
+     *             'priority' => 8
+     *         ),
+     *
+     * @param Zend_Db_Select $select
+     */
+    protected function _checkTracing(Zend_Db_Select $select)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $config = Tinebase_Core::getConfig()->logger) {
+            if ($config->traceQueryOrigins) {
+                $e = new Exception();
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "\n" . 
+                    "BACKTRACE: \n" . $e->getTraceAsString() . "\n" . 
+                    "SQL QUERY: \n" . $select);
+            }
+        }
+    }
+    
+    /**
      * fetch rows from db
      * 
      * @param Zend_Db_Select $_select
@@ -676,6 +707,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
         
         Tinebase_Backend_Sql_Abstract::traitGroup($_select);
+        
+        $this->_checkTracing($_select);
         
         $stmt = $this->_db->query($_select);
         
@@ -1113,7 +1146,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if(!count($myFields)) { return 0; } 
 
         $identifier = $this->_getRecordIdentifier();
-  
+        
         $recordArray = $myFields;
         $recordArray = array_intersect_key($recordArray, $this->_schema);
         

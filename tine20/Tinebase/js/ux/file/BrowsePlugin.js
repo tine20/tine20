@@ -212,16 +212,18 @@ Ext.ux.file.BrowsePlugin.prototype = {
     },
     
     /**
-    * clean up
-    */
+     * clean up
+     */
     onDestroy: function() {
         this.floatingLayer.remove();
         this.floatingLayer = null;
         this.input_file = null;
-        this.dropEl.un('dragleave', this.onDragLeave, this);
-        this.dropEl.un('dragover', this.onDragOver, this);
-        this.dropEl.un('drop', this.onDrop, this);
-        this.dropEl = null;
+        if (this.dropEl) {
+            this.dropEl.un('dragleave', this.onDragLeave, this);
+            this.dropEl.un('dragover', this.onDragOver, this);
+            this.dropEl.un('drop', this.onDrop, this);
+            this.dropEl = null;
+        }
     },
     
     onEnable: function() {

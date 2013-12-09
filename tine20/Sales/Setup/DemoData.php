@@ -131,7 +131,9 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'number'       => $cNumber,
                 'title'        => $title,
                 'description'  => 'Created by Tine 2.0 DemoData',
-                'container_id' => $cid
+                'container_id' => $cid,
+                'status'       => 'OPEN',
+                'cleared'      => 'NOT_YET_CLEARED'
             ));
             
             $relations = array(

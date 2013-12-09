@@ -2,7 +2,7 @@ BEGIN:VCARD
 VERSION:3.0
 N:Kneschke;Lars;;;
 FN:Vorname Nachname
-ORG:Organisation;
+ORG:ORGANI\,SATION;UN\;IT
 EMAIL;type=INTERNET;type=WORK;type=pref:l.kneschke@metaways.de
 EMAIL;type=INTERNET;type=HOME:lars@kneschke.de
 item1.EMAIL;type=INTERNET:email other
@@ -25,7 +25,7 @@ item4.ADR;type=HOME:;;Address Privat 1;City Privat;;12345;COUNTRY PRIVAT
 item4.X-ABADR:de
 item5.ADR;type=OTHER:;;andere sta..e;andere stan..e;;andere plz;andere land
 item5.X-ABADR:de
-NOTE:Notes\nwith\nLine Break
+NOTE:Notes\nwith\nLine Break and \, and \; yeah!
 X-AIM;type=WORK;type=pref:Messenger Work (AIM)
 X-AIM;type=HOME:Messenger Private (AIM)
 item6.X-AIM:Messenger Other (AIM)
@@ -63,4 +63,5 @@ item20.X-ABLabel:_$!<Other>!$_
 UID:2d935ec3-c22d-4aa5-aa80-66ea39bd9703
 REV:2011-09-29T14:29:39Z
 PRODID:-//Apple Inc.//AddressBook 6.0//EN
+PHOTO:TGFycw==
 END:VCARD

@@ -140,16 +140,15 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             '{http://calendarserver.org/ns/}getctag' => $ctags,
             'id'                => $this->_container->getId(),
             'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
-            '{DAV:}resource-id'    => 'urn:uuid:' . $this->_container->getId(),
+            '{DAV:}resource-id' => 'urn:uuid:' . $this->_container->getId(),
             '{DAV:}owner'       => new Sabre\DAVACL\Property\Principal(Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
-            #'principaluri'      => $principalUri,
             '{DAV:}displayname' => $displayName,
             '{http://apple.com/ns/ical/}calendar-color' => (empty($this->_container->color)) ? '#000000' : $this->_container->color,
             
             '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
             '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre\CalDAV\Property\SupportedCalendarData(),
-            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description'               => 'Calendar ' . $displayName,
-            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => $this->_getCalendarVTimezone()
+            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description'             => 'Calendar ' . $displayName,
+            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => Tinebase_WebDav_Container_Abstract::getCalendarVTimezone($this->_application)
         );
         
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
@@ -182,18 +181,6 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         return $this->_controller;
     }
     
-    protected function _getCalendarVTimezone()
-    {
-        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, Tinebase_Core::getUser()->getId());
-
-        // create vcalendar object with timezone information
-        $vcalendar = new VObject\Component('CALENDAR');
-        $vcalendar->add(new Sabre_VObject_Component_VTimezone($timezone));
-        
-        // Taking out \r to not screw up the xml output
-        return str_replace("\r","", $vcalendar->serialize());
-    }
-    
     /**
      * Performs a calendar-query on the contents of this calendar.
      *
@@ -216,23 +203,11 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filters ' . print_r($filters, true));
         
-        //var_dump($filters['comp-filters'][0]);
-        
-        $filterArray = array(
-            array(
-                'field'    => 'attender',
-                'operator' => 'equals',
-                'value'    => array(
-                    'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
-                    'user_id'      => Tinebase_Core::getUser()->contact_id,
-                )
-            ),
-            array(
-                'field'    => 'container_id',
-                'operator' => 'equals',
-                'value'    => $this->_container->getId()
-            )
-        );
+        $filterArray = array(array(
+            'field'    => 'container_id',
+            'operator' => 'equals',
+            'value'    => $this->_container->getId()
+        ));
         
         if (isset($filters['comp-filters']) && isset($filters['comp-filters'][0]['time-range'])) {
             $timeRange = $filters['comp-filters'][0]['time-range'];

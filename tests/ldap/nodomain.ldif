@@ -1,0 +1,67 @@
+dn: ou=groups,dc=nodomain
+ou: groups
+objectClass: organizationalUnit
+objectClass: top
+structuralObjectClass: organizationalUnit
+entryUUID: 5a3a2b20-dba5-1030-964c-4deef62e5c86
+creatorsName: cn=admin,dc=nodomain
+createTimestamp: 20120125133638Z
+entryCSN: 20120125133638.695977Z#000000#000#000000
+modifiersName: cn=admin,dc=nodomain
+modifyTimestamp: 20120125133638Z
+
+dn: cn=Administrators,ou=groups,dc=nodomain
+cn: Administrators
+gidNumber: 1062
+memberUid: admin
+objectClass: posixGroup
+objectClass: top
+structuralObjectClass: posixGroup
+entryUUID: c3c7b0d0-dba5-1030-964f-4deef62e5c86
+creatorsName: cn=admin,dc=nodomain
+createTimestamp: 20120125133935Z
+entryCSN: 20120125133935.784228Z#000000#000#000000
+modifiersName: cn=admin,dc=nodomain
+modifyTimestamp: 20120125133935Z
+
+dn: cn=Users,ou=groups,dc=nodomain
+cn: Users
+gidNumber: 1063
+memberUid: admin
+objectClass: posixGroup
+objectClass: top
+structuralObjectClass: posixGroup
+entryUUID: c3c7b0d0-dba5-1030-964f-4deef62e5c55
+creatorsName: cn=admin,dc=nodomain
+createTimestamp: 20120125133935Z
+entryCSN: 20120125133935.784228Z#000000#000#000000
+modifiersName: cn=admin,dc=nodomain
+modifyTimestamp: 20120125133935Z
+
+dn: ou=users,dc=nodomain
+ou: users
+objectClass: organizationalUnit
+objectClass: top
+structuralObjectClass: organizationalUnit
+entryUUID: 5a3a2b20-dba5-1030-964c-4deef62e5c55
+creatorsName: cn=admin,dc=nodomain
+createTimestamp: 20120125133638Z
+entryCSN: 20120125133638.695977Z#000000#000#000000
+modifiersName: cn=admin,dc=nodomain
+modifyTimestamp: 20120125133638Z
+
+dn: uid=unittest,ou=users,dc=nodomain
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: unittest
+sn: Test
+givenName: Unit
+cn: Unit Test
+displayName: Unit Test
+uidNumber: 10000
+gidNumber: 1062
+userPassword: testpw
+mail: unittest@tine20.org
+homeDirectory: /home/unittest
+

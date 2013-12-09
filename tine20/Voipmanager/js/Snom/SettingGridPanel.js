@@ -113,6 +113,13 @@ Tine.Voipmanager.SnomSettingGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 sortable: true,
                 hidden: true 
             },{
+                id: 'pickup_indication', 
+                header: this.app.i18n._('Pickup indication'), 
+                dataIndex: 'pickup_indication', 
+                width: 10, 
+                sortable: true,
+                hidden: true 
+            },{
                 id: 'scroll_outgoing', 
                 header: this.app.i18n._('scroll_outgoing'), 
                 dataIndex: 'scroll_outgoing', 

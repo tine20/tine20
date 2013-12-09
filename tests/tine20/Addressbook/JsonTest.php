@@ -450,6 +450,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      * test tags modlog
      * 
      * @return array contact with tag
+     * 
+     * @see 0008546: When edit event, history show "code" ...
      */
     public function testTagsModlog()
     {
@@ -467,9 +469,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($tagName, $result['tags'][0]['name']);
         $this->_checkChangedNote($result['id'], array(
-            '[] -> {"model":"Tinebase_Model_Tag","added":[{"id":"',
-            '"type":"personal"',
-            ',"name":"' . $tagName . '","description":"testModlog","color":"#009B31"'
+            'tags',
+            '1 ' . Tinebase_Translation::getTranslation('Tinebase')->_('added'),
         ));
         
         return $result;
@@ -499,7 +500,10 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $contact['tags'] = array();
         sleep(1); // make sure that the second change always gets last when fetching notes
         $result = $this->_instance->saveContact($contact);
-        $this->_checkChangedNote($result['id'], array('-> {"model":"Tinebase_Model_Tag","added":[],"removed":[{"id":"'), 4);
+        $this->_checkChangedNote($result['id'], array(
+            'tags',
+            '1 ' . Tinebase_Translation::getTranslation('Tinebase')->_('removed'),
+        ), 4);
     }
     
     /**
@@ -1511,7 +1515,7 @@ Steuernummer 33/111/32212";
         // search for her with ContactDisabledFilter
         $filter = array(array('field' => 'n_given',      'operator' => 'equals',   'value' => 'Susan'));
         $result = $this->_instance->searchContacts($filter, array());
-        $this->assertEquals(0, $result['totalcount']);
+        $this->assertEquals(0, $result['totalcount'], 'found contacts: ' . print_r($result, true));
         
         $filter[] = array('field' => 'showDisabled', 'operator' => 'equals',   'value' => TRUE);
         $result = $this->_instance->searchContacts($filter, array());

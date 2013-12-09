@@ -328,7 +328,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if (! $container instanceof Tinebase_Model_Container) {
             $container = $this->getContainerById($container);
         }
-        Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($container, $action);
+        Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($container, $action, $container);
         $this->_clearCache($container);
         
         return $this->update($container);
@@ -605,20 +605,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $grants[] = Tinebase_Model_Grants::GRANT_ADMIN;
         }
 
-        // @todo fetch wildcard from specific db adapter
-        $grants = str_replace('*', '%', $grants);
-        
-        if (empty($grants)) {
-            $_select->where('1=0');
-            return;
-        }
-        
         // @todo add groupmembers via join
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
         
         $quotedActId   = $db->quoteIdentifier("{$_aclTableName}.account_id");
         $quotedActType = $db->quoteIdentifier("{$_aclTableName}.account_type");
-        $quotedGrant   = $db->quoteIdentifier("{$_aclTableName}.account_grant");
         
         $accountSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         $accountSelect
@@ -628,14 +619,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
             $accountSelect->orWhere("{$quotedActType} = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
         }
-        
-        $grantsSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
-        foreach ($grants as $grant) {
-            $grantsSelect->orWhere("{$quotedGrant} LIKE ?", $grant);
-        }
-        
-        $grantsSelect->appendWhere(Zend_Db_Select::SQL_AND);
         $accountSelect->appendWhere(Zend_Db_Select::SQL_AND);
+        
+        // we only need to filter, if the filter does not contain %
+        if (!in_array('*', $grants)) {
+            // @todo fetch wildcard from specific db adapter
+            $grants = str_replace('*', '%', $grants);
+        
+            $quotedGrant   = $db->quoteIdentifier("{$_aclTableName}.account_grant");
+            
+            $grantsSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+            foreach ($grants as $grant) {
+                $grantsSelect->orWhere("{$quotedGrant} LIKE ?", $grant);
+            }
+            $grantsSelect->appendWhere(Zend_Db_Select::SQL_AND);
+        }
     }
 
     /**
@@ -685,6 +683,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
                 'owner_id'          => $account->getId(),
                 'backend'           => 'Sql',
+                'model'             => $meta['recordClass'],
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($meta['appName'])->getId() 
             )));
         }
@@ -1007,9 +1006,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             return FALSE;
         }
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
-
+        
         $cache = Tinebase_Core::getCache();
-        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . $container->last_modified_time . implode('', (array)$_grant));
+        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . $container->seq . implode('', (array)$_grant));
         $result = $cache->load($cacheId);
         
         if ($result === FALSE) {
@@ -1101,7 +1100,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         $container          = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
         
-        $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId . $container->last_modified_time);
+        $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId . $container->seq);
         $cache = Tinebase_Core::getCache();
         $grants = $cache->load($cacheKey);
         if($grants === FALSE) {
@@ -1536,14 +1535,19 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param string $name
      * @param string $idConfig save id in config if given
      * @param Tinebase_Record_RecordSet $grants use this to overwrite default grants
-     * @param string $modelName the model the container contains
+     * @param string $model the model the container contains
      * @return Tinebase_Model_Container
      */
-    public function createSystemContainer($application, $name, $configId = NULL, Tinebase_Record_RecordSet $grants = NULL, $modelName = NULL)
+    public function createSystemContainer($application, $name, $configId = NULL, Tinebase_Record_RecordSet $grants = NULL, $model = NULL)
     {
         $application = ($application instanceof Tinebase_Model_Application) ? $application : Tinebase_Application::getInstance()->getApplicationById($application);
-        $controller = Tinebase_Core::getApplicationInstance($application->name);
-        $model = $modelName ? $modelName : $controller->getDefaultModel();
+        if ($model === null) {
+            $controller = Tinebase_Core::getApplicationInstance($application->name);
+            $model = $controller->getDefaultModel();
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Creating system container for model ' . $model);
         
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => $name,

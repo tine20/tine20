@@ -1,14 +1,15 @@
 # 
 # Translators:
 # ctplate <ctplate@gmail.com>, 2012
+# Daniele Gobbetti <daniele@gobbetti.name>, 2013
 # sambar <samuel.barbera@email.it>, 2013
 # gurusys <v.anzisi@gurusys.it>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-10-27 14:24+0000\n"
+"Last-Translator: Daniele Gobbetti <daniele@gobbetti.name>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -110,7 +111,7 @@ msgstr "Responsabile"
 
 #: Model/Lead.php:125
 msgid "Task"
-msgstr ""
+msgstr "Attività"
 
 #: Setup/Update/Release3.php:37 Setup/Initialize.php:55
 msgid "All leads I have read grants for"
@@ -427,7 +428,7 @@ msgstr "Liste dei Leads"
 
 #: js/Model.js:104
 msgid "Quick Search"
-msgstr ""
+msgstr "Ricerca veloce"
 
 #: js/Model.js:106 js/LeadGridPanel.js:119
 msgid "Lead name"

@@ -152,6 +152,17 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('US', Tinebase_Translation::getRegionCodeByCountryName('United States'));
     }
     
+    /**
+     * try to translate something
+     */
+    public function testTranslation()
+    {
+        // test the translation
+        $translation = Tinebase_Translation::getTranslation('Tinebase', new Zend_Locale('de'));
+        
+        $this->assertEquals('Fehler melden', $translation->_('Report bugs'));
+    }
+    
     public function testCustomTranslations()
     {
         $lang = 'en_GB';

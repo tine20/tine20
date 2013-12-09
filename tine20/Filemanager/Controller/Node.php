@@ -899,8 +899,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param string $_action
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
-     * 
-     * @todo use copy() of Tinebase_FileSystem  
      */
     protected function _copyOrMoveFileNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination, $_action, $_forceOverwrite = FALSE)
     {
@@ -912,22 +910,20 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             if ($_forceOverwrite && $_source->statpath !== $_destination->statpath) {
                 // delete old node
                 $this->_backend->unlink($_destination->statpath);
-            } else if (! $_forceOverwrite) {
+            } elseif (! $_forceOverwrite) {
                 throw $fene;
             }
         }
-            
+        
         switch ($_action) {
             case 'copy':
-                copy($_source->streamwrapperpath, $_destination->streamwrapperpath);
+                $newNode = $this->_backend->copy($_source->statpath, $_destination->statpath);
                 break;
             case 'move':
-                $this->_backend->rename($_source->statpath, $_destination->statpath);
+                $newNode = $this->_backend->rename($_source->statpath, $_destination->statpath);
                 break;
         }
 
-        $newNode = $this->_backend->stat($_destination->statpath);
-        
         return $newNode;
     }
     

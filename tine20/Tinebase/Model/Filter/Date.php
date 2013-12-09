@@ -63,7 +63,14 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     public function appendFilterSql($_select, $_backend)
     {
         // prepare value
-        $value = (array)$this->_getDateValues($this->_operator, $this->_value);
+        if ($this->_operator === 'equals' && empty($this->_value)) {
+            // @see 0009362: allow to filter for empty datetimes
+            $operator = 'isnull';
+            $value[0] = $this->_value;
+        } else {
+            $operator = $this->_operator;
+            $value = (array)$this->_getDateValues($operator, $this->_value);
+        }
         
         // quote field identifier
         $field = $this->_getQuotedFieldName($_backend);
@@ -72,9 +79,9 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         $dbCommand = Tinebase_Backend_Sql_Command::factory($db);
          
         // append query to select object
-        foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
+        foreach ((array)$this->_opSqlMap[$operator]['sqlop'] as $num => $operator) {
             if (array_key_exists($num, $value)) {
-                if (get_parent_class($this) === 'Tinebase_Model_Filter_Date' || in_array($this->_operator, array('isnull', 'notnull'))) {
+                if (get_parent_class($this) === 'Tinebase_Model_Filter_Date' || in_array($operator, array('isnull', 'notnull'))) {
                     $_select->where($field . $operator, $value[$num]);
                 } else {
                     $_select->where($dbCommand->setDate($field). $operator, new Zend_Db_Expr($dbCommand->setDateValue($value[$num])));

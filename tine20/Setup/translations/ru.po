@@ -2,13 +2,14 @@
 # Translators:
 # Aleksdem <aleksdem@aleksdem.com>, 2013
 # артур Мудрых <arturmon82@gmail.com>, 2012
+# Nikolay Parukhin <parukhin@gmail.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-10 13:52+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-11-18 20:14+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -198,11 +199,11 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:481
 msgid "Only ASCII"
-msgstr ""
+msgstr "Только ASCII"
 
 #: js/AuthenticationPanel.js:486
 msgid "Minimum length"
-msgstr ""
+msgstr "Минимальная длина"
 
 #: js/AuthenticationPanel.js:489
 msgid "Minimum word chars"
@@ -218,7 +219,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:498
 msgid "Minimum numbers"
-msgstr ""
+msgstr "Минимум цифр"
 
 #: js/AuthenticationPanel.js:502
 msgid "Forbid part of username in password"
@@ -242,43 +243,43 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:578
 msgid "Password encryption type"
-msgstr ""
+msgstr "Тип шифрования пароля"
 
 #: js/AuthenticationPanel.js:580
 msgid "des"
-msgstr ""
+msgstr "des"
 
 #: js/AuthenticationPanel.js:581
 msgid "blowfish_crypt"
-msgstr ""
+msgstr "blowfish_crypt"
 
 #: js/AuthenticationPanel.js:582
 msgid "md5_crypt"
-msgstr ""
+msgstr "md5_crypt"
 
 #: js/AuthenticationPanel.js:583
 msgid "ext_crypt"
-msgstr ""
+msgstr "ext_crypt"
 
 #: js/AuthenticationPanel.js:584
 msgid "md5"
-msgstr ""
+msgstr "md5"
 
 #: js/AuthenticationPanel.js:585
 msgid "smd5"
-msgstr ""
+msgstr "smd5"
 
 #: js/AuthenticationPanel.js:586
 msgid "sha"
-msgstr ""
+msgstr "sha"
 
 #: js/AuthenticationPanel.js:587
 msgid "ssha"
-msgstr ""
+msgstr "ssha"
 
 #: js/AuthenticationPanel.js:588
 msgid "ntpassword"
-msgstr ""
+msgstr "ntpassword"
 
 #: js/AuthenticationPanel.js:589
 msgid "plain"

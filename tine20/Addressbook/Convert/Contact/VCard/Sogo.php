@@ -1,7 +1,4 @@
 <?php
-
-use Sabre\VObject;
-
 /**
  * Tine 2.0
  *
@@ -107,126 +104,49 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
      */
     public function fromTine20Model(Tinebase_Record_Abstract $_record)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_record->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' contact ' . print_r($_record->toArray(), true));
         
-        $card = new VObject\Component('VCARD');
-        
-        // required vcard fields
-        $card->VERSION = '3.0';
-        $card->FN = $_record->n_fileas;
-        
-        $card->N = new VObject\Property\Compound('N');
-        $card->N->setParts(array($_record->n_family, $_record->n_given));
-        
-        $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
-        $card->add(new VObject\Property('PRODID', "-//tine20.org//Tine 2.0 Addressbook V$version//EN"));
-        $card->add(new VObject\Property('UID', $_record->getId()));
+        // initialize vcard object
+        $card = $this->_fromTine20ModelRequiredFields($_record);
 
-        // optional fields
-        $org = new VObject\Property\Compound('ORG');
-        $org->setParts(array($_record->org_name, $_record->org_unit));
-        $card->add($org);
+        $card->add('TEL', $_record->tel_work, array('TYPE' => 'WORK'));
         
-        $card->add(new VObject\Property('TITLE', $_record->title));
+        $card->add('TEL', $_record->tel_home, array('TYPE' => 'HOME'));
         
-        $tel = new VObject\Property('TEL', $_record->tel_work);
-        $tel->add('TYPE', 'WORK');
-        $card->add($tel);
+        $card->add('TEL', $_record->tel_cell, array('TYPE' => 'CELL'));
         
-        $tel = new VObject\Property('TEL', $_record->tel_home);
-        $tel->add('TYPE', 'HOME');
-        $card->add($tel);
+        $card->add('TEL', $_record->tel_fax, array('TYPE' => 'FAX'));
         
-        $tel = new VObject\Property('TEL', $_record->tel_cell);
-        $tel->add('TYPE', 'CELL');
-        $card->add($tel);
+        $card->add('TEL', $_record->tel_pager, array('TYPE' => 'PAGER'));
         
-        $tel = new VObject\Property('TEL', $_record->tel_pager);
-        $tel->add('TYPE', 'PAGER');
-        $card->add($tel);
+        $card->add('ADR', array(null, $_record->adr_one_street2, $_record->adr_one_street, $_record->adr_one_locality, $_record->adr_one_region, $_record->adr_one_postalcode, $_record->adr_one_countryname), array('TYPE' => 'WORK'));
         
-        $tel = new VObject\Property('TEL', $_record->tel_fax);
-        $tel->add('TYPE', 'FAX');
-        $card->add($tel);
+        $card->add('ADR', array(null, $_record->adr_two_street2, $_record->adr_two_street, $_record->adr_two_locality, $_record->adr_two_region, $_record->adr_two_postalcode, $_record->adr_two_countryname), array('TYPE' => 'HOME'));
         
-        #$tel = new VObject\Property('TEL', $_record->tel_fax_home);
-        #$tel->add('TYPE', 'FAX');
-        #$tel->add('TYPE', 'HOME');
-        #$card->add($tel);
+        $card->add('EMAIL', $_record->email, array('TYPE' => 'WORK'));
         
-        $adr = new VObject\Property\Compound('ADR');
-        $adr->setParts(array(null, $_record->adr_one_street2, $_record->adr_one_street, $_record->adr_one_locality, $_record->adr_one_region, $_record->adr_one_postalcode, $_record->adr_one_countryname));
-        $adr->add('TYPE', 'WORK');
-        $card->add($adr);
+        $card->add('EMAIL', $_record->email_home, array('TYPE' => 'HOME'));
         
-        $adr = new VObject\Property\Compound('ADR');
-        $adr->setParts(array(null, $_record->adr_two_street2, $_record->adr_two_street, $_record->adr_two_locality, $_record->adr_two_region, $_record->adr_two_postalcode, $_record->adr_two_countryname));
-        $adr->add('TYPE', 'HOME');
-        $card->add($adr);
+        $card->add('URL', $_record->url, array('TYPE' => 'WORK'));
         
-        $email = new VObject\Property('EMAIL', $_record->email);
-        $email->add('TYPE', 'WORK');
-        $card->add($email);
+        $card->add('URL', $_record->url_home, array('TYPE' => 'HOME'));
+                
+        $card->add('NOTE', $_record->note);
         
-        $email = new VObject\Property('EMAIL', $_record->email_home);
-        $email->add('TYPE', 'HOME');
-        $card->add($email);
+        $this->_fromTine20ModelAddBirthday($_record, $card);
         
-        $url = new VObject\Property('URL', $_record->url);
-        $url->add('TYPE', 'WORK');
-        $card->add($url);
-        
-        $url = new VObject\Property('URL', $_record->url_home);
-        $url->add('TYPE', 'HOME');
-        $card->add($url);
-        
-        $card->add(new VObject\Property('NOTE', $_record->note));
-        
-        if ($_record->bday instanceof Tinebase_DateTime) {
-            $date = $_record->bday;
-            $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-            $date = $date->format('Y-m-d');
-            $card->add(new VObject\Property('BDAY', $date));
-        }
-        
-        if (!empty($_record->jpegphoto)) {
-            try {
-                $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $_record->getId());
-                $jpegData = $image->getBlob('image/jpeg');
-                $photo = new VObject\Property('PHOTO', base64_encode($jpegData));
-                $photo->add('ENCODING', 'b');
-                $photo->add('TYPE', 'JPEG');
-                $card->add($photo);
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->info(
-                    __METHOD__ . '::' . __LINE__ . " Image for contact {$_record->getId()} not found or invalid");
-            }
-        }
+        $this->_fromTine20ModelAddPhoto($_record, $card);
         
         $this->_fromTine20ModelAddGeoData($_record, $card);
         
-        // categories
-        if (isset($_record->tags) && count($_record->tags) > 0) {
-            $card->CATEGORIES = VObject\Property::create('CATEGORIES');
-            $card->CATEGORIES->setParts((array) $_record->tags->name);
-        }
+        $this->_fromTine20ModelAddCategories($_record, $card);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' card ' . $card->serialize());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' card ' . $card->serialize());
         
         return $card;
     }
     
-    /**
-     * parse birthday
-     * 
-     * @param array $data
-     * @param Sabre\VObject\Property $property
-     */
-    protected function _toTine20ModelParseBday(&$_data, VObject\Property $_property)
-    {
-        $tzone = new DateTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        $_data['bday'] = new Tinebase_DateTime($_property->value, $tzone);
-        $_data['bday']->setTimezone(new DateTimeZone('UTC'));
-    }
+
 }

@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -22,6 +22,13 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      * @var array test objects
      */
     protected $objects = array();
+    
+    /**
+     * the converter
+     * 
+     * @var Calendar_Convert_Event_VCalendar_Abstract
+     */
+    protected $_converter = null;
     
     /**
      * Runs the test methods of this class.
@@ -74,9 +81,11 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals("2011-10-04 08:00:00",               (string)$event->dtstart);
         $this->assertEquals("2011-10-04 06:45:00",               (string)$event->alarms[0]->alarm_time);
         $this->assertEquals("75",                                (string)$event->alarms[0]->minutes_before);
-        $this->assertEquals("This is a descpription\nwith a linebreak and a \\; \\, and :", $event->description);
+        $this->assertEquals("This is a descpription\nwith a linebreak and a ; , and : a", $event->description);
         $this->assertEquals(2, count($event->attendee));
         $this->assertEquals(1, count($event->alarms));
+        $this->assertContains('CATEGORY 1',                      $event->tags->name);
+        $this->assertContains('CATEGORY 2',                      $event->tags->name);
         
         return $event;
     }
@@ -90,8 +99,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     protected function _convertHelper($filename)
     {
         $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar($filename);
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-        $event = $converter->toTine20Model($vcalendar);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $event = $this->_converter->toTine20Model($vcalendar);
         
         return $event;
     }
@@ -104,8 +113,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     public function testConvertToTine20ModelFromICloud()
     {
         $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/calendarserver_external_invitation.ics');
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-        $event = $converter->toTine20Model($vcalendar);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $event = $this->_converter->toTine20Model($vcalendar);
     
         //var_dump($event->toArray());
     
@@ -125,8 +134,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     public function testConvertToTine20ModelFromLotusNotes()
     {
         $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lotusnotes_external_invitation.ics');
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-        $event = $converter->toTine20Model($vcalendar);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $event = $this->_converter->toTine20Model($vcalendar);
     
         //var_dump($event->toArray());
     
@@ -144,8 +153,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     public function testConvertToTine20ModelWithBadTZ()
     {
         $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_badTZ.ics', 'r');
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-        $event = $converter->toTine20Model($vcalendarStream);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $event = $this->_converter->toTine20Model($vcalendarStream);
         
         $this->assertEquals('Europe/Berlin', $event->originator_tz);
     }
@@ -164,12 +173,12 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
     
-        $vcalendar = preg_replace('/lars@kneschke.de/', 'users@' . $smtpConfig['primarydomain'], $vcalendar);
+        $vcalendar = preg_replace('/lars@kneschke.de/', 'Users@' . $smtpConfig['primarydomain'], $vcalendar);
     
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-        $event = $converter->toTine20Model($vcalendar);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $event = $this->_converter->toTine20Model($vcalendar);
     
-        #var_dump($event->attendee->toArray());
+        //var_dump($event->attendee->toArray());
     
         $this->assertEquals(2, count($event->attendee));
         $this->assertContains('group', $event->attendee->user_type);
@@ -183,18 +192,18 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     public function testConvertToTine20ModelWithStatus()
     {
         $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $vcalendar = str_replace('LOCATION:Hamburg', 'STATUS:CONFIRMED', $vcalendar);
-        $event = $converter->toTine20Model($vcalendar);
+        $event = $this->_converter->toTine20Model($vcalendar);
         $this->assertEquals(Calendar_Model_Event::STATUS_CONFIRMED, $event->status);
         
         $vcalendar = str_replace('STATUS:CONFIRMED', 'STATUS:TENTATIVE', $vcalendar);
-        $event = $converter->toTine20Model($vcalendar);
+        $event = $this->_converter->toTine20Model($vcalendar);
         $this->assertEquals(Calendar_Model_Event::STATUS_TENTATIVE, $event->status);
         
         $vcalendar = str_replace('STATUS:TENTATIVE', 'STATUS:CANCELED', $vcalendar);
-        $event = $converter->toTine20Model($vcalendar);
+        $event = $this->_converter->toTine20Model($vcalendar);
         $this->assertEquals(Calendar_Model_Event::STATUS_CANCELED, $event->status);
     }
     
@@ -206,9 +215,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
     
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
     
-        $event = $converter->toTine20Model($vcalendarStream);
+        $event = $this->_converter->toTine20Model($vcalendarStream);
     
         #var_dump($event->toArray());
     
@@ -231,9 +240,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_allday.ics', 'r');
     
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
     
-        $event = $converter->toTine20Model($vcalendarStream);
+        $event = $this->_converter->toTine20Model($vcalendarStream);
         
         #var_dump($event->toArray());
         #var_dump($event->dtend);
@@ -256,9 +265,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_repeating_daily.ics', 'r');
     
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
     
-        $event = $converter->toTine20Model($vcalendarStream);
+        $event = $this->_converter->toTine20Model($vcalendarStream);
     
         #var_dump($event->exdate[3]->recurid->format('hm'));
         #var_dump($event->dtstart->format('hm'));
@@ -281,9 +290,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/apple_caldendar_repeating_allday.ics', 'r');
     
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
     
-        $event = $converter->toTine20Model($vcalendarStream);
+        $event = $this->_converter->toTine20Model($vcalendarStream);
     
         #var_dump($event->exdate->toArray());
         #var_dump($event->dtstart->format('hm'));
@@ -313,16 +322,16 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
             $raw->organizer          = Tinebase_Core::getUser()->contact_id;
         }
         
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $vevent = $converter->fromTine20Model($event)->serialize();
+        $vevent = $this->_converter->fromTine20Model($event)->serialize();
         
         //var_dump($vevent);
         $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar V',      $vevent, $vevent);
-        $this->assertContains('CREATED;VALUE=DATE-TIME:20111111T111100Z',       $vevent, $vevent);
-        $this->assertContains('LAST-MODIFIED;VALUE=DATE-TIME:20111111T121200Z', $vevent, $vevent);
-        $this->assertContains('DTSTAMP;VALUE=DATE-TIME:',                       $vevent, $vevent);
+        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
+        $this->assertContains('CREATED:20111111T111100Z',                       $vevent, $vevent);
+        $this->assertContains('LAST-MODIFIED:20111111T121200Z',                 $vevent, $vevent);
+        $this->assertContains('DTSTAMP:',                                       $vevent, $vevent);
         $this->assertContains('RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20111112',     $vevent, $vevent);
         $this->assertContains('EXDATE;VALUE=DATE:20111111',                     $vevent, $vevent);
         #$this->assertContains('ORGANIZER;CN="' . Tinebase_Core::getUser()->accountDisplayName . '";EMAIL=' . Tinebase_Core::getUser()->accountEmailAddress . ':', $vevent, $vevent);
@@ -340,11 +349,11 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_repeating_daily.ics', 'r');
     
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $event->exdate[3]->attendee[0]->status_authkey = 'TestMe';
         
-        $updatedEvent = $converter->toTine20Model($vcalendarStream, clone $event);
+        $updatedEvent = $this->_converter->toTine20Model($vcalendarStream, clone $event);
     
         //var_dump($event->exdate->toArray());
         #var_dump($updatedEvent->exdate[3]->attendee->toArray());
@@ -363,9 +372,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
         
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $event = $converter->toTine20Model($vcalendarStream);
+        $event = $this->_converter->toTine20Model($vcalendarStream);
         
         // status_authkey must be kept after second convert
         $event->attendee[0]->quantity = 10;
@@ -374,7 +383,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         // remove alarm part from vcalendar
         $vcalendar = preg_replace('/BEGIN:VALARM.*END:VALARM(\n|\r\n)/s', null, $vcalendar);
         
-        $event = $converter->toTine20Model($vcalendar, $event);
+        $event = $this->_converter->toTine20Model($vcalendar, $event);
         
         $this->assertEquals(10, $event->attendee[0]->quantity);
         $this->assertTrue($event->alarms instanceof Tinebase_Record_RecordSet);
@@ -391,26 +400,27 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $vevent = $converter->fromTine20Model($event)->serialize();
+        $vevent = $this->_converter->fromTine20Model($event)->serialize();
         // var_dump($vevent);
         // required fields
         $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar V',      $vevent, $vevent);
-        $this->assertContains('CREATED;VALUE=DATE-TIME:20111111T111100Z',       $vevent, $vevent);
-        $this->assertContains('LAST-MODIFIED;VALUE=DATE-TIME:20111111T121200Z', $vevent, $vevent);
-        $this->assertContains('DTSTAMP;VALUE=DATE-TIME:',                       $vevent, $vevent);
+        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
+        $this->assertContains('CREATED:20111111T111100Z',         $vevent, $vevent);
+        $this->assertContains('LAST-MODIFIED:20111111T121200Z',   $vevent, $vevent);
+        $this->assertContains('DTSTAMP:',                         $vevent, $vevent);
         $this->assertContains('TZID:Europe/Berlin',               $vevent, $vevent);
         $this->assertContains('UID:' . $event->uid,               $vevent, $vevent);
         $this->assertContains('LOCATION:' . $event->location,     $vevent, $vevent);
         $this->assertContains('CLASS:PRIVATE',                    $vevent, $vevent);
         $this->assertContains('TZOFFSETFROM:+0100',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETTO:+0200',  $vevent, $vevent);
-        $this->assertContains('TZNAME:CEST',  $vevent, $vevent);
+        $this->assertContains('TZOFFSETTO:+0200',    $vevent, $vevent);
+        $this->assertContains('TZNAME:CEST',         $vevent, $vevent);
         $this->assertContains('TZOFFSETFROM:+0200',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETTO:+0100',  $vevent, $vevent);
-        $this->assertContains('TZNAME:CET',  $vevent, $vevent);
+        $this->assertContains('TZOFFSETTO:+0100',    $vevent, $vevent);
+        $this->assertContains('TZNAME:CET',          $vevent, $vevent);
+        $this->assertContains('CATEGORIES:CATEGORY 1,CATEGORY 2', $vevent, $vevent);
         
     }
     
@@ -429,16 +439,16 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
             'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
         )));
         
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $vevent = $converter->fromTine20Model($event)->serialize();
+        $vevent = $this->_converter->fromTine20Model($event)->serialize();
         // var_dump($vevent);
         // required fields
-        $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar V',      $vevent, $vevent);
-        $this->assertContains('CREATED;VALUE=DATE-TIME:20111111T111100Z',       $vevent, $vevent);
-        $this->assertContains('LAST-MODIFIED;VALUE=DATE-TIME:20111111T121200Z', $vevent, $vevent);
-        $this->assertContains('DTSTAMP;VALUE=DATE-TIME:',         $vevent, $vevent);
+        $this->assertContains('VERSION:2.0',                               $vevent, $vevent);
+        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Calendar V', $vevent, $vevent);
+        $this->assertContains('CREATED:20111111T111100Z',                  $vevent, $vevent);
+        $this->assertContains('LAST-MODIFIED:20111111T121200Z',            $vevent, $vevent);
+        $this->assertContains('DTSTAMP:',                                  $vevent, $vevent);
         $this->assertContains('TZID:Europe/Berlin',               $vevent, $vevent);
         $this->assertContains('UID:' . $event->uid,               $vevent, $vevent);
         $this->assertContains('LOCATION:' . $event->location,     $vevent, $vevent);
@@ -469,16 +479,16 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
             'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
         )));
         
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $vevent = $converter->fromTine20Model($event)->serialize();
+        $vevent = $this->_converter->fromTine20Model($event)->serialize();
         // var_dump($vevent);
         // required fields
         $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar V',      $vevent, $vevent);
-        $this->assertContains('CREATED;VALUE=DATE-TIME:20111111T111100Z',       $vevent, $vevent);
-        $this->assertContains('LAST-MODIFIED;VALUE=DATE-TIME:20111111T121200Z', $vevent, $vevent);
-        $this->assertContains('DTSTAMP;VALUE=DATE-TIME:',         $vevent, $vevent);
+        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
+        $this->assertContains('CREATED:20111111T111100Z',         $vevent, $vevent);
+        $this->assertContains('LAST-MODIFIED:20111111T121200Z',   $vevent, $vevent);
+        $this->assertContains('DTSTAMP:',                         $vevent, $vevent);
         $this->assertContains('DTSTART;VALUE=DATE:20111019',      $vevent, $vevent);
         $this->assertContains('DTEND;VALUE=DATE:20111020',        $vevent, $vevent);
         $this->assertContains('TZID:Europe/Berlin',               $vevent, $vevent);
@@ -506,20 +516,20 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event->last_modified_time     = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
         $event->exdate->creation_time  = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
         
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $vevent = $converter->fromTine20Model($event)->serialize();
+        $vevent = $this->_converter->fromTine20Model($event)->serialize();
         #var_dump($vevent);
         // required fields
         $this->assertContains('VERSION:2.0', $vevent, $vevent);
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar V',      $vevent, $vevent);
-        $this->assertContains('CREATED;VALUE=DATE-TIME:20111111T111100Z',       $vevent, $vevent);
-        $this->assertContains('LAST-MODIFIED;VALUE=DATE-TIME:20111111T121200Z', $vevent, $vevent);
-        $this->assertContains('DTSTAMP;VALUE=DATE-TIME:',                       $vevent, $vevent);
-        $this->assertContains('RRULE:FREQ=DAILY;UNTIL=20111030T060000Z',        $vevent, $vevent);
-        $this->assertContains('EXDATE;VALUE=DATE-TIME:20111005T080000Z',        $vevent, $vevent);
-        $this->assertContains('EXDATE;VALUE=DATE-TIME:20111006T080000Z',        $vevent, $vevent);
-        $this->assertContains('EXDATE;VALUE=DATE-TIME:20111007T080000Z',        $vevent, $vevent);
+        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Calendar V', $vevent, $vevent);
+        $this->assertContains('CREATED:20111111T111100Z',                  $vevent, $vevent);
+        $this->assertContains('LAST-MODIFIED:20111111T121200Z',            $vevent, $vevent);
+        $this->assertContains('DTSTAMP:',                                  $vevent, $vevent);
+        $this->assertContains('RRULE:FREQ=DAILY;UNTIL=20111030T060000Z',   $vevent, $vevent);
+        $this->assertContains('EXDATE:20111005T080000Z',      $vevent, $vevent);
+        $this->assertContains('EXDATE:20111006T080000Z',      $vevent, $vevent);
+        $this->assertContains('EXDATE:20111007T080000Z',      $vevent, $vevent);
         $this->assertContains('TZID:Europe/Berlin',           $vevent, $vevent);
         $this->assertContains('UID:' . $event->uid,           $vevent, $vevent);
         $this->assertContains('LOCATION:' . $event->location, $vevent, $vevent);
@@ -539,9 +549,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
             'minutes_before'   => Tinebase_Model_Alarm::OPTION_CUSTOM
         )));
         
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $vevent = $converter->fromTine20Model($event)->serialize();
+        $vevent = $this->_converter->fromTine20Model($event)->serialize();
         #var_dump($vevent);
         $this->assertContains('TRIGGER;VALUE=DATE-TIME:20111004T071000Z',        $vevent, $vevent);
     }
@@ -552,15 +562,15 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event->creation_time      = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
         $event->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
         $event->organizer          = Tinebase_Core::getUser()->contact_id;
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $event->status = Calendar_Model_Event::STATUS_CONFIRMED;
-        $vevent = $converter->fromTine20Model($event)->serialize();
+        $vevent = $this->_converter->fromTine20Model($event)->serialize();
         #var_dump($vevent);
         $this->assertContains('STATUS:CONFIRMED',        $vevent, $vevent);
         
         $event->is_deleted = 1;
-        $vevent = $converter->fromTine20Model($event)->serialize();
+        $vevent = $this->_converter->fromTine20Model($event)->serialize();
         #var_dump($vevent);
         $this->assertContains('STATUS:CANCELED',        $vevent, $vevent);
     }
@@ -569,9 +579,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/event_with_custom_alarm.ics');
         
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
-        $event = $converter->toTine20Model($vcalendar);
+        $event = $this->_converter->toTine20Model($vcalendar);
         
         $this->assertTrue($event->alarms instanceof Tinebase_Record_RecordSet);
         $this->assertEquals(1, count($event->alarms));
@@ -593,5 +603,6 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $this->assertEquals('133st5tjius426l9n1k1sil5rk@google.com', $event->uid);
         $this->assertEquals('Test-Termin aus Google an Tine20', $event->summary);
+        $this->assertEquals('REQUEST', $this->_converter->getMethod());
     }
 }

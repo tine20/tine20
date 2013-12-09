@@ -394,7 +394,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                 
                 $noteText .= ' | ' .$translate->_('Changed fields:');
                 foreach ($_mods as $mod) {
-                    $noteText .= ' ' . $translate->_($mod->modified_attribute) .' (' . $mod->old_value . ' -> ' . $mod->new_value . ')';
+                    $noteText .= ' ' . $translate->_($mod->modified_attribute) .' (' . $this->_getSystemNoteChangeText($mod) . ')';
                 }
             } else if (is_string($_mods)) {
                 $noteText = $_mods;
@@ -411,6 +411,31 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         ));
         
         return $this->addNote($note);
+    }
+    
+    /**
+     * get system note change text
+     * 
+     * @param Tinebase_Model_ModificationLog $modification
+     * @return string
+     */
+    protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification)
+    {
+        // check if $modification->new_value is json string and record set diff
+        // @see 0008546: When edit event, history show "code" ...
+        if (is_json($modification->new_value)) {
+            $newValueArray = Zend_Json::decode($modification->new_value);
+            if (array_key_exists('model', $newValueArray) && array_key_exists('added', $newValueArray)) {
+                $diff = new Tinebase_Record_RecordSetDiff($newValueArray);
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                    .' fetching translated text for diff: ' . print_r($diff->toArray(), true));
+                
+                return $diff->getTranslatedDiffText();
+            }
+        }
+        
+        return $modification->old_value . ' -> ' . $modification->new_value;
     }
     
     /**

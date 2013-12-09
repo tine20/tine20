@@ -61,6 +61,7 @@ class Voipmanager_Model_Snom_Setting extends Tinebase_Record_Abstract
         'headset_device'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'message_led_other'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'global_missed_counter'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'pickup_indication'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'scroll_outgoing'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'show_local_line'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'show_call_status'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
@@ -74,6 +75,7 @@ class Voipmanager_Model_Snom_Setting extends Tinebase_Record_Abstract
         'headset_device_w'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'message_led_other_w' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'global_missed_counter_w' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'pickup_indication_w' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'scroll_outgoing_w'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'show_local_line_w'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'show_call_status_w' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)
@@ -90,18 +92,19 @@ class Voipmanager_Model_Snom_Setting extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         // set default value if field is empty
-        $this->_filters['web_language'] = new Zend_Filter_Empty('English');
-        $this->_filters['language'] = new Zend_Filter_Empty('English');
-        $this->_filters['display_method'] = new Zend_Filter_Empty('full_contact');
-        $this->_filters['mwi_notification'] = new Zend_Filter_Empty('silent');
-        $this->_filters['mwi_dialtone'] = new Zend_Filter_Empty('normal');
-        $this->_filters['headset_device'] = new Zend_Filter_Empty('none');
-        $this->_filters['message_led_other'] = new Zend_Filter_Empty(0);
+        $this->_filters['web_language']          = new Zend_Filter_Empty('English');
+        $this->_filters['language']              = new Zend_Filter_Empty('English');
+        $this->_filters['display_method']        = new Zend_Filter_Empty('full_contact');
+        $this->_filters['mwi_notification']      = new Zend_Filter_Empty('silent');
+        $this->_filters['mwi_dialtone']          = new Zend_Filter_Empty('normal');
+        $this->_filters['headset_device']        = new Zend_Filter_Empty('none');
+        $this->_filters['message_led_other']     = new Zend_Filter_Empty(0);
         $this->_filters['global_missed_counter'] = new Zend_Filter_Empty(0);
-        $this->_filters['scroll_outgoing'] = new Zend_Filter_Empty(0);
-        $this->_filters['show_local_line'] = new Zend_Filter_Empty(0);
-        $this->_filters['show_call_status'] = new Zend_Filter_Empty(0);
-        $this->_filters['call_waiting'] = new Zend_Filter_Empty('on');
+        $this->_filters['pickup_indication']     = new Zend_Filter_Empty(0);
+        $this->_filters['scroll_outgoing']       = new Zend_Filter_Empty(0);
+        $this->_filters['show_local_line']       = new Zend_Filter_Empty(0);
+        $this->_filters['show_call_status']      = new Zend_Filter_Empty(0);
+        $this->_filters['call_waiting']          = new Zend_Filter_Empty('on');
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);
     }

@@ -6,12 +6,11 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * class to convert a SOGO vcard to contact model and back again
+ * class to convert a Mac OS X VCALENDAR to Tine 2.0 Calendar_Model_Event and back again
  *
  * @package     Calendar
  * @subpackage  Convert
@@ -45,4 +44,27 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
         #'rrule_until',
         'originator_tz'
     );
+    
+    /**
+     * get attendee array for given contact
+     * 
+     * @param  \Sabre\VObject\Property\ICalendar\CalAddress  $calAddress  the attendee row from the vevent object
+     * @return array
+     */
+    protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress)
+    {
+        
+        $newAttendee = parent::_getAttendee($calAddress);
+        
+        // beginning with mavericks iCal adds organiser as attedee without role
+        // so we remove attendee without role 
+        // @TODO check if this attendee is currentuser & organizer?
+        if (version_compare($this->_version, '10.9', '>=')) {
+            if (! isset($calAddress['ROLE'])) {
+                return NULL;
+            }
+        }
+        
+        return $newAttendee;
+    }
 }

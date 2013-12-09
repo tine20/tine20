@@ -360,7 +360,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         
         #Sabre_CalDAV_ICalendarUtil::validateICalendarObject($cardData, array('VTODO', 'VFREEBUSY'));
         
-        $vobject = Tasks_Convert_Task_VCalendar_Abstract::getVcal($cardData);
+        $vobject = Tasks_Convert_Task_VCalendar_Abstract::getVObject($cardData);
         foreach ($vobject->children() as $component) {
             if (isset($component->{'X-TINE20-CONTAINER'})) {
                 $xContainerId = $component->{'X-TINE20-CONTAINER'};

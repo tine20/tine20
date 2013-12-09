@@ -276,6 +276,6 @@ msgstr "Modifikimi i fundit nga "
 msgid "Created By"
 msgstr "Krijuar nga"
 
-#: Controller/Task.php:198
+#: Controller/Task.php:202
 msgid "Notification for Task "
 msgstr "Njoftim për Detyrë"

@@ -142,8 +142,8 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            Timetracker_Model_TimeaccountGrants::VIEW_ALL      => TRUE,
-            Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE      => TRUE,
+            Timetracker_Model_TimeaccountGrants::VIEW_ALL        => TRUE,
+            Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE => TRUE
         )));
         
         $this->_grantTestHelper($grants, 'create', 'Exception');

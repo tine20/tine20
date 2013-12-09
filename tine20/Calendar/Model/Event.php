@@ -238,6 +238,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             
             $rruleDiff = $ownRrule->diff($recordRrule);
             
+            // don't take small ( < one day) rrule_until changes as diff
+            if (
+                    $ownRrule->until instanceof Tinebase_DateTime 
+                    && array_key_exists('until', $rruleDiff->diff) && $rruleDiff->diff['until'] instanceof Tinebase_DateTime
+                    && abs($rruleDiff->diff['until']->getTimestamp() - $ownRrule->until->getTimestamp()) < 86400
+            ){
+                $rruleDiffArray = $rruleDiff->diff;
+                unset($rruleDiffArray['until']);
+                $rruleDiff->diff = $rruleDiffArray;
+            }
+            
             if (! empty($rruleDiff->diff)) {
                 $diffArray = $diff->diff;
                 $diffArray['rrule'] = $rruleDiff;
@@ -362,7 +373,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         if ($_value instanceof Tinebase_DateTime) {
             $locale = new Zend_Locale($_translation->getAdapter()->getLocale());
-            return Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, $_timezone, $locale);
+            return Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, $_timezone, $locale, 'datetime', true);
         }
         
         switch ($_field) {
@@ -451,6 +462,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             if (! $this->rrule instanceof Calendar_Model_Rrule) {
                 $rrule = new Calendar_Model_Rrule(array());
                 $rrule->setFromString($this->rrule);
+                $this->rrule = $rrule;
             }
             
             if (isset($rrule->count)) {
@@ -462,6 +474,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 $this->rrule_until = $lastOccurrence->dtend;
                 $this->exdate = $exdates;
             } else {
+                // set until to end of day in organizers timezone.
+                // NOTE: this is in contrast to the iCal spec which says until should be the
+                //       dtstart of the last occurence. But as the client with the name of the
+                //       spec sets it to the end of the day, we do it also.
+                if ($rrule->until instanceof Tinebase_DateTime) {
+                    $rrule->until->setTimezone($this->originator_tz);
+                    // NOTE: subSecond cause some clients send 00:00:00 for midnight
+                    $rrule->until->subSecond(1)->setTime(23, 59, 59);
+                    $rrule->until->setTimezone('UTC');
+                }
+                
                 $this->rrule_until = $rrule->until;
             }
         }
@@ -585,9 +608,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function isRescheduled($_event)
     {
-        return $this->dtstart != $_event->dtstart
-            || (! $this->is_all_day_event && $this->dtend != $_event->dtend)
-            || $this->rrule != $_event->rrule;
+        $diff = $this->diff($_event)->diff;
+        
+        return array_key_exists('dtstart', $diff)
+            || (! $this->is_all_day_event && array_key_exists('dtend', $diff))
+            || array_key_exists('rrule', $diff);
     }
     
     /**

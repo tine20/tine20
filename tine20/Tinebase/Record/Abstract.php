@@ -540,36 +540,39 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function isValid($_throwExceptionOnInvalidData = false)
     {
-        if ($this->_isValidated === false) {
-            
-            $inputFilter = $this->_getFilter();
-            $inputFilter->setData($this->_properties);
-            
-            if ($inputFilter->isValid()) {
-                // set $this->_properties with the filtered values
-                $this->_properties = $inputFilter->getUnescaped();
-                $this->_isValidated = true;
-                
-            } else {
-                $this->_validationErrors = array();
-                
-                foreach($inputFilter->getMessages() as $fieldName => $errorMessage) {
-                    //print_r($inputFilter->getMessages());
-                    $this->_validationErrors[] = array(
-                        'id'  => $fieldName,
-                        'msg' => $errorMessage
-                    );
-                }
-                if ($_throwExceptionOnInvalidData) {
-                    $e = new Tinebase_Exception_Record_Validation('some fields ' . implode(',', array_keys($inputFilter->getMessages())) . ' have invalid content');
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" .
-                        print_r($this->_validationErrors,true). $e);
-                    throw $e;
-                }
-            }
+        if ($this->_isValidated === true) {
+            return true;
         }
         
-        return $this->_isValidated;
+        $inputFilter = $this->_getFilter()
+            ->setData($this->_properties);
+        
+        if ($inputFilter->isValid()) {
+            // set $this->_properties with the filtered values
+            $this->_properties  = $inputFilter->getUnescaped();
+            $this->_isValidated = true;
+            
+            return true;
+        }
+        
+        $this->_validationErrors = array();
+        
+        foreach ($inputFilter->getMessages() as $fieldName => $errorMessage) {
+            //print_r($inputFilter->getMessages());
+            $this->_validationErrors[] = array(
+                'id'  => $fieldName,
+                'msg' => $errorMessage
+            );
+        }
+        
+        if ($_throwExceptionOnInvalidData) {
+            $e = new Tinebase_Exception_Record_Validation('some fields ' . implode(',', array_keys($inputFilter->getMessages())) . ' have invalid content');
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" .
+                print_r($this->_validationErrors,true). $e);
+            throw $e;
+        }
+        
+        return false;
     }
     
     /**
@@ -597,13 +600,41 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
         }
         
-        $this->_properties[$_name] = $_value;
-        $this->_isValidated = false;
-        $this->_isDirty     = true;
-        
         if ($this->bypassFilters !== true) {
-            $this->isValid(true);
+            $this->_properties[$_name] = $this->_validateField($_name, $_value);
+        } else {
+            $this->_properties[$_name] = $_value;
+            
+            $this->_isValidated = false;
         }
+        
+        $this->_isDirty = true;
+    }
+    
+    protected function _validateField($name, $value)
+    {
+        $inputFilter = $this->_getFilter($name);
+        $inputFilter->setData(array(
+            $name => $value
+        ));
+        
+        if ($inputFilter->isValid()) {
+            return $inputFilter->getUnescaped($name);
+        }
+        
+        $this->_validationErrors = array();
+        
+        foreach($inputFilter->getMessages() as $fieldName => $errorMessage) {
+            $this->_validationErrors[] = array(
+                'id'  => $fieldName,
+                'msg' => $errorMessage
+            );
+        }
+        
+        $e = new Tinebase_Exception_Record_Validation('the field ' . implode(',', array_keys($inputFilter->getMessages())) . ' has invalid content');
+        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" .
+            print_r($this->_validationErrors,true). $e);
+        throw $e;
     }
     
     /**
@@ -618,7 +649,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         if (!array_key_exists ($_name, $this->_validators)) {
             throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
         }
-        
+
         unset($this->_properties[$_name]);
         
         $this->_isValidated = false;
@@ -670,14 +701,22 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * 
      * @return Zend_Filter_Input
      */
-    protected function _getFilter()
+    protected function _getFilter($field = null)
     {
-        $myClassName = get_class($this);
+        $keyName = get_class($this) . $field;
         
-        if (! array_key_exists($myClassName, self::$_inputFilters)) {
-            self::$_inputFilters[$myClassName] = new Zend_Filter_Input($this->_filters, $this->_validators);
+        if (! array_key_exists($keyName, self::$_inputFilters)) {
+            if ($field !== null) {
+                $filters    = array_key_exists($field, $this->_filters) ? array($field => $this->_filters[$field]) : array();
+                $validators = array($field => $this->_validators[$field]); 
+                
+                self::$_inputFilters[$keyName] = new Zend_Filter_Input($filters, $validators);
+            } else {
+                self::$_inputFilters[$keyName] = new Zend_Filter_Input($this->_filters, $this->_validators);
+            }
         }
-        return self::$_inputFilters[$myClassName];
+        
+        return self::$_inputFilters[$keyName];
     }
     
     /**
@@ -984,6 +1023,31 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         $result->diff = $diff;
         return $result;
+    }
+    
+    /**
+     * merge given record into $this
+     * 
+     * @param Tinebase_Record_Interface $record
+     * @return Tinebase_Record_Interface
+     */
+    public function merge($record)
+    {
+        if (! $this->getId()) {
+            $this->setId($record->getId());
+        }
+        $diff = $this->diff($record);
+        if ($diff === null || empty($diff->diff)) {
+            return $this;
+        }
+        
+        foreach ($diff->diff as $field => $value) {
+            if (empty($this->{$field})) {
+                $this->{$field} = $value;
+            }
+        }
+        
+        return $this;
     }
     
     /**

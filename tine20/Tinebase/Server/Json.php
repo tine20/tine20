@@ -34,25 +34,29 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     {
         // handle CORS requests
         if (isset($_SERVER['HTTP_ORIGIN'])) {
-            $allowedOrigins = array_merge(
-                (array) Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()),
-                array($_SERVER['SERVER_NAME'])
-            );
-            $origin = parse_url($_SERVER['HTTP_ORIGIN'], PHP_URL_HOST);
+            $parsedUrl = parse_url($_SERVER['HTTP_ORIGIN']);
             
-            if (in_array($origin, $allowedOrigins)) {
-                header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+            if ($parsedUrl['scheme'] == 'http' || $parsedUrl['scheme'] == 'https') {
+                $allowedOrigins = array_merge(
+                    (array) Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()),
+                    array($_SERVER['SERVER_NAME'])
+                );
                 
-                if ($_SERVER['REQUEST_METHOD'] == "OPTIONS" && isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
-                    header('Access-Control-Allow-Methods: POST, OPTIONS');
-                    header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type');
+                if (in_array($parsedUrl['host'], $allowedOrigins)) {
+                    header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+                    header('Access-Control-Allow-Credentials: true');
+                    
+                    if ($_SERVER['REQUEST_METHOD'] == "OPTIONS" && isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+                        header('Access-Control-Allow-Methods: POST, OPTIONS');
+                        header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type, x-tine20-jsonkey');
+                        exit;
+                    }
+                } else {
+                    Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " forbidden CORS request from {$_SERVER['HTTP_ORIGIN']}");
+                    Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " allowed origins: " . print_r($allowedOrigins, TRUE));
+                    header("HTTP/1.1 403 Access Forbidden");
                     exit;
                 }
-            } else {
-                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " forbidden CORS request from {$_SERVER['HTTP_ORIGIN']}");
-                Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " allowed origins: " . print_r($allowedOrigins, TRUE));
-                header("HTTP/1.1 403 Access Forbidden");
-                exit;
             }
         }
         

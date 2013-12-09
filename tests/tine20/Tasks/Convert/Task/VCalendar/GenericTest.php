@@ -75,8 +75,10 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends PHPUnit_Framework_TestCas
         $this->assertEquals("2013-07-14 10:00:00",               (string)$task->dtstart);
         #$this->assertEquals("2013-07-14 08:45:00",               (string)$task->alarms[0]->alarm_time);
         $this->assertEquals("75",                                (string)$task->alarms[0]->minutes_before);
-        $this->assertEquals("This is a descpription\nwith a linebreak and a \\; \\, and :", $task->description);
+        $this->assertEquals("This is a descpription\nwith a linebreak and a ; , and : a", $task->description);
         $this->assertEquals(1, count($task->alarms));
+        $this->assertContains('CATEGORY 1',                      $task->tags->name);
+        $this->assertContains('CATEGORY 2',                      $task->tags->name);
         
         return $task;
     }
@@ -186,10 +188,10 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends PHPUnit_Framework_TestCas
         // var_dump($vcalendar);
         // required fields
         $this->assertContains('VERSION:2.0',                                    $vcalendar, $vcalendar);
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Tasks V',         $vcalendar, $vcalendar);
-        $this->assertContains('CREATED;VALUE=DATE-TIME:20111111T111100Z',       $vcalendar, $vcalendar);
-        $this->assertContains('LAST-MODIFIED;VALUE=DATE-TIME:20111111T121200Z', $vcalendar, $vcalendar);
-        $this->assertContains('DTSTAMP;VALUE=DATE-TIME:',                       $vcalendar, $vcalendar);
+        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Tasks V',         $vcalendar, $vcalendar);
+        $this->assertContains('CREATED:20111111T111100Z',       $vcalendar, $vcalendar);
+        $this->assertContains('LAST-MODIFIED:20111111T121200Z', $vcalendar, $vcalendar);
+        $this->assertContains('DTSTAMP:',                       $vcalendar, $vcalendar);
         $this->assertContains('TZID:Europe/Berlin',               $vcalendar, $vcalendar);
         $this->assertContains('UID:' . $task->uid,                $vcalendar, $vcalendar);
         $this->assertContains('LOCATION:' . $task->location,      $vcalendar, $vcalendar);
@@ -200,6 +202,7 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends PHPUnit_Framework_TestCas
         $this->assertContains('TZOFFSETFROM:+0200',  $vcalendar, $vcalendar);
         $this->assertContains('TZOFFSETTO:+0100',    $vcalendar, $vcalendar);
         $this->assertContains('TZNAME:CET',          $vcalendar, $vcalendar);
+        $this->assertContains('CATEGORIES:CATEGORY 1,CATEGORY 2', $vcalendar, $vcalendar);
     }
     
     public function testConvertFromTine20ModelWithCustomAlarm()

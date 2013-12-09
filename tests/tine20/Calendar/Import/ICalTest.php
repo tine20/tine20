@@ -114,7 +114,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
             $importer->importFile(dirname(__FILE__) . '/files/horde_broken.ics');
             $this->fail('expected Calendar_Exception_IcalParser');
         } catch (Calendar_Exception_IcalParser $ceip) {
-            $this->assertEquals('Sabre\VObject\ParseException', get_class($ceip->getParseError()));
+            $this->assertEquals('Sabre\VObject\EofException', get_class($ceip->getParseError()));
         }
     }
     

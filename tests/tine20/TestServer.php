@@ -12,7 +12,6 @@
 
 /**
  * helper class
- *
  */
 class TestServer
 {
@@ -110,8 +109,10 @@ class TestServer
     public function initTestUsers()
     {
         $personas = $this->_getPersonas();
-        if (empty($personas)) {
+        if (count($personas) !== 5) {
+            Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
             Admin_Setup_DemoData::getInstance()->createDemoData(array('en'));
+            Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
             $personas = $this->_getPersonas();
         }
         
@@ -187,10 +188,12 @@ class TestServer
             '/--debug\s*/',
             '/--filter [\S]+\D/',
             '/--configuration [\S]+\D/',
+            '/--exclude-group [\S]+\D/',
             '/-c [\S]+\D/',
             '/--log-junit [\S]+\D/'
         ), array(
             'php',
+            '',
             '',
             '',
             '',

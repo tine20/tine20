@@ -6,12 +6,11 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * class to convert single event to/from VCalendar
+ * class to convert a generic VCALENDAR to Tine 2.0 Calendar_Model_Event and back again
  *
  * @package     Calendar
  * @subpackage  Convert

@@ -6,12 +6,11 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2012-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * class to convert a kde vcalendar to event model and back again
+ * class to convert a KDE VCALENDAR to Tine 2.0 Calendar_Model_Event and back again
  *
  * @package     Calendar
  * @subpackage  Convert

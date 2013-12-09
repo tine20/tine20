@@ -92,9 +92,10 @@ class Addressbook_Convert_Contact_VCard_MacOSXTest extends PHPUnit_Framework_Tes
         $this->assertEquals(null,                      $contact->n_middle);
         $this->assertEquals(null,                      $contact->n_prefix);
         $this->assertEquals(null,                      $contact->n_suffix);
-        $this->assertEquals("Notes\nwith\nLine Break", $contact->note);
-        $this->assertEquals('Organisation',            $contact->org_name);
-        $this->assertEquals(null,                      $contact->org_unit);
+        $this->assertEquals("Notes\nwith\nLine Break "
+                           ."and , and ; yeah!",       $contact->note);
+        $this->assertEquals('ORGANI,SATION',           $contact->org_name);
+        $this->assertEquals('UN;IT',                   $contact->org_unit);
         $this->assertEquals('+49 MOBIL',               $contact->tel_cell);
         $this->assertEquals(null,                      $contact->tel_cell_private);
         $this->assertEquals('+49 FAX',                 $contact->tel_fax);
@@ -105,6 +106,7 @@ class Addressbook_Convert_Contact_VCard_MacOSXTest extends PHPUnit_Framework_Tes
         $this->assertEquals(null,                      $contact->title);
         $this->assertEquals(null,                      $contact->url);
         $this->assertEquals(null,                      $contact->url_home);
+        $this->assertEquals('Lars',                    $contact->jpegphoto);
                 
         return $contact;
     }
@@ -121,7 +123,7 @@ class Addressbook_Convert_Contact_VCard_MacOSXTest extends PHPUnit_Framework_Tes
         $this->assertContains('VERSION:3.0', $vcard, $vcard);
         
         $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
-        $this->assertContains("PRODID:-//tine20.org//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
+        $this->assertContains("PRODID:-//tine20.com//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
         
         // @todo can not test for folded lines
         $this->assertContains('ADR;TYPE=HOME:;;Address Privat 1;City Privat;;12345;C', $vcard, $vcard);
@@ -129,11 +131,11 @@ class Addressbook_Convert_Contact_VCard_MacOSXTest extends PHPUnit_Framework_Tes
         $this->assertContains('EMAIL;TYPE=HOME:lars@kneschke.de', $vcard, $vcard);
         $this->assertContains('EMAIL;TYPE=WORK:l.kneschke@metaways.de', $vcard, $vcard);
         $this->assertContains('N:Kneschke;Lars', $vcard, $vcard);
-        $this->assertContains('NOTE:Notes\nwith\nLine Break', $vcard, $vcard);
-        $this->assertContains('ORG:Organisation;', $vcard, $vcard);
+        $this->assertContains('NOTE:Notes\nwith\nLine Break and \, and \; yeah!', $vcard, $vcard);
+        $this->assertContains('ORG:ORGANI\,SATION;UN\;IT', $vcard, $vcard);
         $this->assertContains('TEL;TYPE=CELL:+49 MOBIL', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=FAX;TYPE=HOME:+49 FAX PRIVAT', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=FAX;TYPE=WORK:+49 FAX', $vcard, $vcard);
+        $this->assertContains('TEL;TYPE=FAX,HOME:+49 FAX PRIVAT', $vcard, $vcard);
+        $this->assertContains('TEL;TYPE=FAX,WORK:+49 FAX', $vcard, $vcard);
         $this->assertContains('TEL;TYPE=HOME:+49 PRIVAT', $vcard, $vcard);
         $this->assertContains('TEL;TYPE=PAGER:+49 PAGER', $vcard, $vcard);
         $this->assertContains('TEL;TYPE=WORK:+49 BUSINESS', $vcard, $vcard);

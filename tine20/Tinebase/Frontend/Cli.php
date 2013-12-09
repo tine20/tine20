@@ -672,8 +672,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $this->_addOutputLogWriter();
         
-        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
-        Tinebase_FileSystem::getInstance()->clearDeletedFilesFromDatabase();
+        Tinebase_FileSystem::getInstance()->clearDeletedFiles();
     }
     
     /**
@@ -715,5 +714,38 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         
         exit($result);
+    }
+    
+    /**
+     * transfer relations
+     * 
+     * @param Zend_Console_Getopt $opts
+     */
+    public function transferRelations($opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+        
+        $this->_addOutputLogWriter();
+        
+        try {
+            $args = $this->_parseArgs($opts, array('oldId', 'newId', 'model'));
+        } catch (Tinebase_Exception_InvalidArgument $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Parameters "oldId", "newId" and "model" are required!');
+            }
+            exit(1);
+        }
+        
+        $skippedEntries = Tinebase_Relations::getInstance()->transferRelations($args['oldId'], $args['newId'], $args['model']);
+
+        if (! empty($skippedEntries) && Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . count($skippedEntries) . ' entries has been skipped:');
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' The operation has been terminated successfully.');
+        }
     }
 }

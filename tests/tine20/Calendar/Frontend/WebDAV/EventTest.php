@@ -97,6 +97,30 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     }
     
     /**
+     * test create event with internal organizer
+     * 
+     * @return Calendar_Frontend_WebDAV_Event
+     */
+    public function testCreateEventWithRRule()
+    {
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        }
+        
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_yearly.ics');
+        
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
+        
+        $record = $event->getRecord();
+        
+        $this->assertEquals('New Event', $record->summary);
+        $this->assertEquals($record->rrule['bymonthday'], 25);
+        
+        return $event;
+    }
+    
+    /**
      * test create event with external organizer
      * 
      * @return Calendar_Frontend_WebDAV_Event
@@ -165,7 +189,12 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendarStream);
         $this->_checkExdate($event);
-    
+        
+        // check rrule_until normalisation
+        $record = $event->getRecord();
+        $this->assertEquals('2011-10-30 22:59:59', $record->rrule_until->toString(), 'rrule_until not normalised');
+        $this->assertEquals('2011-10-30 22:59:59', $record->rrule->until->toString(), 'rrule->until not normalised');
+        
         return $event;
     }
     
@@ -223,15 +252,13 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_persona_attendee.ics');
         
-//         $prefs = new Calendar_Preference();
-//         $prefs->setValueForUser(Calendar_Preference::DEFAULTCALENDAR, '', $this->_personas['pwulf']->getId());
-        
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
         
         $event = Calendar_Controller_Event::getInstance()->get($id);
         $pwulf = $event->attendee->filter('user_id', $this->_personasContacts['pwulf']->getId())->getFirstRecord();
         
+        $this->assertTrue($pwulf !== null, 'could not find pwulf in attendee: ' . print_r($event->attendee->toArray(), true));
         $this->assertEquals($this->_personasDefaultCals['pwulf']->getId(), $pwulf->displaycontainer_id, 'event not in pwulfs personal calendar');
     }
     
@@ -268,7 +295,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $updatedException = Calendar_Controller_Event::getInstance()->update($exception);
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
         $vcalendar = stream_get_contents($event->get());
-        $this->assertContains('DTSTART;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T130000', $vcalendar, 'exception must not be implicitly deleted');
+        $this->assertContains('DTSTART;TZID=Europe/Berlin:20111008T130000', $vcalendar, 'exception must not be implicitly deleted');
         
         // delete attendee from exception -> implicit fallout exception is not longer in displaycal
         $exception = $event->getRecord()->exdate->filter('is_deleted', 0)->getFirstRecord();
@@ -276,13 +303,13 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $updatedException = Calendar_Controller_Event::getInstance()->update($exception);
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
         $vcalendar = stream_get_contents($event->get());
-        $this->assertContains('EXDATE;VALUE=DATE-TIME:20111008T080000Z', $vcalendar, 'exception must be implicitly deleted from event ' . print_r($event->getRecord()->toArray(), TRUE));
+        $this->assertContains('EXDATE:20111008T080000Z', $vcalendar, 'exception must be implicitly deleted from event ' . print_r($event->getRecord()->toArray(), TRUE));
         
         // save back event -> implicit delete must not be deleted on server
         $event->put($vcalendar);
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], $event->getRecord()->getId());
         $vcalendar = stream_get_contents($event->get());
-        $this->assertContains('DTSTART;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T130000', $vcalendar, 'exception must not be implicitly deleted after update');
+        $this->assertContains('DTSTART;TZID=Europe/Berlin:20111008T130000', $vcalendar, 'exception must not be implicitly deleted after update');
     }
     
     /**
@@ -313,8 +340,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $vcalendar = stream_get_contents($event->get());
         #var_dump($vcalendar);
         $this->assertContains('SUMMARY:New Event', $vcalendar);
-        $this->assertContains('EXDATE;VALUE=DATE-TIME:20111005T080000Z', $vcalendar);
-        $this->assertContains('RECURRENCE-ID;VALUE=DATE-TIME;TZID=Europe/Berlin:20111008T100000', $vcalendar);
+        $this->assertContains('EXDATE:20111005T080000Z', $vcalendar);
+        $this->assertContains('RECURRENCE-ID;TZID=Europe/Berlin:20111008T100000', $vcalendar);
         $this->assertContains('TRIGGER;VALUE=DURATION:-PT1H30M', $vcalendar); // base alarm
         $this->assertContains('TRIGGER;VALUE=DURATION:-PT1H15M', $vcalendar); // exception alarm
     }
@@ -580,6 +607,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         ));
         
         $pwulfAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $pwulf);
+        $this->assertTrue($pwulfAttendee !== null, 'could not find pwulf in attendee');
         $pwulfPersonalCal = Tinebase_Container::getInstance()->getContainerById($pwulfAttendee->displaycontainer_id);
         $pwulfPersonalEvent = new Calendar_Frontend_WebDAV_Event($pwulfPersonalCal, "$id.ics");
         $pwulfPersonalEvent->delete();

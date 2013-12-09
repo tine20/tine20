@@ -9,7 +9,10 @@
 <project name="tine20" description="Tine 2.0 build file" default="build">
     
     <property name="builddir" value="${project.basedir}/build" override="true" />
+    <property name="userdatadir" value="${project.basedir}/userdata" override="true" />
     <property name="localedir" value="Tinebase/js/Locale" override="true" />
+    <property name="configdir" value="${project.basedir}" override="true" />
+    <property name="testconfigdir" value="${project.basedir}/../tests/tine20" override="true" />
     
     <!-- ============================================  -->
     <!-- Target: prepare                               -->
@@ -75,38 +78,86 @@
         </phpdoc2>
     </target>
     
-    <!-- ============================================  -->
-    <!-- Target: phpunit                               -->
-    <!-- ============================================  -->
+    <!-- ============================================                       -->
+    <!-- Target: phpunit                                                    -->
+    <!--                                                                    -->
+    <!-- you can define the includes like this (runs all Tinebase tests):   -->
+    <!-- $ vendor/bin/phing phpunit -Dtestinclude=Tinebase/**/*Test.php     -->
+    <!-- ============================================                       -->
     <target name="phpunit">
+        <!-- TODO we still have some test files that are named *Tests.php, rename them or adjust the include property -->
+        <property name="testinclude" value="**/*Test.php" override="true" />
+        
         <echo msg="Starting Tests..." />
+        <echo msg="Using config file ${testconfigdir}/phpunit.xml" />
         
-        <if>
-            <isset property="configPath" />
-            <then>
-                <includepath classpath = "${configPath}" />
-            </then>
-        </if>
+        <!-- do we need this? -->
+        <!--includepath classpath = "${testconfigdir}" /-->
         
-        <delete dir="${builddir}/reports"/>
+        <delete dir="${builddir}/reports" />
         <mkdir dir="${builddir}/reports" />
+        <mkdir dir="${builddir}/reports/tests" />
         
-        <phpunit configuration="../tests/tine20/phpunit.xml" haltonfailure="true" haltonerror="true" printsummary="true">
-            <formatter type="plain" usefile="false"/>
-            <formatter type="xml" todir="${builddir}/reports"/>
+        <phpunit configuration="${testconfigdir}/phpunit.xml" haltonfailure="true" printsummary="true">
+            <formatter type="plain" usefile="false" />
+            <formatter type="xml" todir="${builddir}/reports" />
             <batchtest>
-                <fileset dir="../tests/tine20">
-                  <include name="**/*Test.php"/>
-                  <exclude name="Tinebase/AccountTest.php"/>
+                <fileset dir="${project.basedir}/../tests/tine20">
+                  <include name="${testinclude}" />
+                  <exclude name="Tinebase/AccountTest.php" />
                 </fileset>
             </batchtest>
         </phpunit>
         
-        <phpunitreport infile="${builddir}/reports/testsuites.xml" format="frames" todir="${builddir}/reports/tests"/>
+        <phpunitreport infile="${builddir}/reports/testsuites.xml" format="frames" todir="${builddir}/reports/tests" />
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: phpunit-prepare                       -->
+    <!-- ============================================  -->
+    <target name="phpunit-prepare">
+        <echo msg="Preparing for phpunit" />
+
+        <echo msg="Making report directories" />
+        <mkdir dir="${builddir}/reports" />
+
+        <echo msg="Making userdata directories" />
+        <mkdir dir="${userdatadir}/cache"/>
+        <mkdir dir="${userdatadir}/sessions"/>
+        <mkdir dir="${userdatadir}/tmp"/>
+        <mkdir dir="${userdatadir}/files"/>
+        <mkdir dir="${userdatadir}/log"/>
+    </target>
+    
+    <!-- ============================================      -->
+    <!-- Target: phpunit-exec                              -->
+    <!--                                                   -->
+    <!-- this runs phpunit in an exec task. we do this     -->
+    <!-- to overcome some drawbacks (for example we can't  -->
+    <!-- use the LogListener) of the phing phpunit task.   -->
+    <!-- ============================================      -->
+    <target name="phpunit-exec" depends="clean, phpunit-prepare">
+        <property name="testinclude" value="AllTests.php" override="true" />
+        <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}" override="true" />
+        <property name="testadditionalparams" value="" override="true" />
+        
+        <echo msg="Starting Tests..." />
+        <echo msg="Using config file ${testconfigdir}/phpunit.xml" />
+        <echo msg="Setting include_path to ${includepath}" />
+        
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/../tests/tine20" passthru="true">
+             <arg line="-d max_execution_time=0
+             -d include_path=${includepath}
+             --configuration ${testconfigdir}/phpunit.xml
+             --log-junit ${builddir}/reports/junit.xml
+             ${testadditionalparams}
+             ${testinclude} " />
+        </exec>
     </target>
     
     <!-- ============================================  -->
     <!-- Target: report                                -->
+    <!-- TODO remove code duplication (phpunit target) -->
     <!-- ============================================  -->
     <target name="report">
         <echo msg="Starting Tests..." />
@@ -237,6 +288,7 @@
     <!-- ============================================  -->
     <target name="clean">
         <delete dir="${builddir}" includeemptydirs="true" verbose="false" failonerror="false" />
+        <delete dir="${userdatadir}" includeemptydirs="true" verbose="false" failonerror="false" />
         <delete>
             <fileset dir=".">
                 <include name="*/*/*-FAT*" />
@@ -259,10 +311,12 @@
     <target name="tx-pull">
         <echo msg="pull translations from transifex" />
         <exec command="tx pull -a -f --skip" passthru="true" />
-        <echo msg="commit updated strings now:" />
-        <echo msg="git add */translations" />
-        <echo msg="git commit -m '#7086: update translation files'" />
-        <echo msg="git push gerrit HEAD:refs/heads/master" />
+        <echo msg="Commit updated strings now:" />
+        <echo msg="$ git add */translations" />
+        <echo msg="$ git commit -m '#7086: update translation files'" />
+        <echo msg="$ git push gerrit HEAD:refs/heads/master" />
+        <echo msg="You might run the target translation-test now:" />
+        <echo msg="$ ./vendor/bin/phing translation-test" />
     </target>
 
     <!-- ============================================  -->
@@ -276,6 +330,43 @@
         <echo msg="commit updated strings now:" />
         <echo msg="git commit -a -m 'update lang templates'" />
         <echo msg="git push gerrit HEAD:refs/heads/master" />
+    </target>
+    
+    <!-- ============================================  -->
+    <!-- Target: translation-test                      -->
+    <!-- ============================================  -->
+    <target name="translation-test">
+        <echo msg="find duplicates or syntax errors" />
+        <exec command="for i in `ls ./*/translations/*.po`; do msgfmt -o - --strict $i 1>/dev/null; done" passthru="true"/>
+    </target>
+    
+    <!-- ============================================  -->
+    <!-- Target: tine-install                               -->
+    <!-- ============================================  -->
+    <target name="tine-install">
+        <property file="${configdir}/install.properties" />
+        <echo msg="Installing Tine 2.0" />
+        <exec command="php -d include_path=.:${configdir} setup.php \
+            --install -- \
+                adminLoginName=${adminLoginName} \
+                adminPassword=${adminPassword} \
+                adminEmailAddress=${adminEmailAddress} \
+                acceptedTermsVersion=1000 \
+                imap=${imap} \
+                smtp=${smtp} \
+                authentication=${authentication} \
+                accounts=${accounts} \
+                sieve=${sieve}
+" passthru="true"/>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: tine-uninstall                               -->
+    <!-- ============================================  -->
+    <target name="tine-uninstall">
+        <echo msg="Uninstalling Tine 2.0" />
+        <exec command="php -d include_path=.:${configdir} setup.php \
+            --uninstall" passthru="true"/>
     </target>
     
     <!-- ============================================  -->
@@ -376,51 +467,51 @@
                                   
             function buildMimeTypesStyleFile($resolution, &$styleSheet) {
             
-            	$relatedImgPath = '/images/oxygen/'.$resolution.'/mimetypes/';
-            	$imgPath = '${project.basedir}'.$relatedImgPath;
-            	if (! file_exists($imgPath) || ! is_dir($imgPath)) {
-            		echo 'Mimetype images no found!';
-            		return;
+                $relatedImgPath = '/images/oxygen/'.$resolution.'/mimetypes/';
+                $imgPath = '${project.basedir}'.$relatedImgPath;
+                if (! file_exists($imgPath) || ! is_dir($imgPath)) {
+                    echo 'Mimetype images no found!';
+                    return;
                 }
  
- 				
-    			// öffnen des Verzeichnisses
-    			if ( $handle = opendir($imgPath) ) {
-                	
-                	fwrite($styleSheet, ".standardFileClass_".$resolution." .x-grid3-cell-inner {\n");
-        			fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath."application-octet-stream.png);\n");
-        			fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
-        			fwrite($styleSheet, "    padding-left: 19px;\n");
-        			fwrite($styleSheet, "}\n\n");
+                 
+                // öffnen des Verzeichnisses
+                if ( $handle = opendir($imgPath) ) {
+                    
+                    fwrite($styleSheet, ".standardFileClass_".$resolution." .x-grid3-cell-inner {\n");
+                    fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath."application-octet-stream.png);\n");
+                    fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
+                    fwrite($styleSheet, "    padding-left: 19px;\n");
+                    fwrite($styleSheet, "}\n\n");
                 
-       			    // einlesen der Verzeichnisses
-        			while (($file = readdir($handle)) !== false)
-        			{	
-        				$fileName = basename($file, '.png');
-        				
-        				$addToStyle = strcmp($fileName, "..") + strcmp($fileName, "..");
-        				if($addToStyle > 0) {
-        				
-        					fwrite($styleSheet, ".".$fileName."_".$resolution." .x-grid3-cell-inner {\n");
-        					fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath.$file.") !important;\n");
-        					fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
-        					fwrite($styleSheet, "    padding-left: 19px;\n");
-        					fwrite($styleSheet, "}\n\n");
-        				}
-			        }
-        			
-        			closedir($handle);
-    			}
+                       // einlesen der Verzeichnisses
+                    while (($file = readdir($handle)) !== false)
+                    {
+                        $fileName = basename($file, '.png');
+                        
+                        $addToStyle = strcmp($fileName, "..") + strcmp($fileName, "..");
+                        if($addToStyle > 0) {
+                        
+                            fwrite($styleSheet, ".".$fileName."_".$resolution." .x-grid3-cell-inner {\n");
+                            fwrite($styleSheet, "    background-image: url(../..".$relatedImgPath.$file.") !important;\n");
+                            fwrite($styleSheet, "    background-repeat:  no-repeat;\n");
+                            fwrite($styleSheet, "    padding-left: 19px;\n");
+                            fwrite($styleSheet, "}\n\n");
+                        }
+                    }
+                    
+                    closedir($handle);
+                }
             
             }
             
             function main() {
-    				$styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
-            		$this->buildMimeTypesStyleFile('16x16', $styleSheet);
-					$this->buildMimeTypesStyleFile('22x22', $styleSheet);
-					$this->buildMimeTypesStyleFile('32x32', $styleSheet);            	
-					fclose($styleSheet);
-        	}	
+                    $styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
+                    $this->buildMimeTypesStyleFile('16x16', $styleSheet);
+                    $this->buildMimeTypesStyleFile('22x22', $styleSheet);
+                    $this->buildMimeTypesStyleFile('32x32', $styleSheet);
+                    fclose($styleSheet);
+            }
         }
     ]]></adhoc-task>
     

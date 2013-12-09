@@ -5,10 +5,8 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
-         colors="true">
+         syntaxCheck="false">
     <listeners>
-        <listener class="LogListener" file="LogListener.php">
-        </listener>
+        <listener class="LogListener" file="LogListener.php" />
     </listeners>
 </phpunit>

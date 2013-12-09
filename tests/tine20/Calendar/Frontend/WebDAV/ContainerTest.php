@@ -215,14 +215,24 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      * test calendarQuery with start and end time set
      * 
      * @param boolean $timeRangeEndSet
+     * @param boolean $removeOwnAttender
      */
-    public function testCalendarQuery($timeRangeEndSet = TRUE)
+    public function testCalendarQuery($timeRangeEndSet = true, $removeOwnAttender = false)
     {
         $event = $this->testCreateFile()->getRecord();
         
         // reschedule to match period filter
         $event->dtstart = Tinebase_DateTime::now();
         $event->dtend   = Tinebase_DateTime::now()->addMinute(30);
+        if ($removeOwnAttender) {
+            $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+                array(
+                    'user_id'   => Tinebase_User::getInstance()->getUserByLoginName('sclever')->contact_id,
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+                )
+            ));
+        }
         Calendar_Controller_MSEventFacade::getInstance()->update($event);
         
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
@@ -258,7 +268,29 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testCalendarQueryNoEnd()
     {
-        $this->testCalendarQuery(FALSE);
+        $this->testCalendarQuery(false);
+    }
+    
+    /**
+     * testCalendarQueryNotAttender
+     * 
+     * @see 0009204: "Foreign" events won't sync/show up via CalDAV.
+     */
+    public function testCalendarQueryNotAttender()
+    {
+        $this->testCalendarQuery(true, true);
+    }
+    
+    /**
+     * test Tinebase_WebDav_Container_Abstract::getCalendarVTimezone
+     */
+    public function testGetCalendarVTimezone()
+    {
+        $vTimezone = Tinebase_WebDav_Container_Abstract::getCalendarVTimezone('Calendar');
+        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar', $vTimezone);
+        
+        $vTimezone = Tinebase_WebDav_Container_Abstract::getCalendarVTimezone(Tinebase_Application::getInstance()->getApplicationByName('Calendar'));
+        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar', $vTimezone);
     }
     
     /**

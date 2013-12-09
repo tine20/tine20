@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-23 12:54+0000\n"
+"PO-Revision-Date: 2013-11-20 12:24+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -59,73 +59,73 @@ msgstr "Liên hệ này đã tự động được thêm vào hệ thống như 
 msgid "The email address has been shortened: "
 msgstr ""
 
-#: Model/Event.php:332
+#: Model/Event.php:343
 msgid "Start"
 msgstr "Bắt đầu"
 
-#: Model/Event.php:333 js/RrulePanel.js:321
+#: Model/Event.php:344 js/RrulePanel.js:321
 msgid "End"
 msgstr "Kết thúc"
 
-#: Model/Event.php:334 js/GridView.js:127 js/EventDetailsPanel.js:262
+#: Model/Event.php:345 js/GridView.js:127 js/EventDetailsPanel.js:262
 msgid "Blocking"
 msgstr "Ngăn chặn"
 
-#: Model/Event.php:335
+#: Model/Event.php:346
 msgid "Classification"
 msgstr "Phân loại"
 
-#: Model/Event.php:336 js/GridView.js:161 js/ResourceEditDialog.js:84
+#: Model/Event.php:347 js/GridView.js:161 js/ResourceEditDialog.js:84
 #: js/Model.js:207 js/EventEditDialog.js:256
 msgid "Description"
 msgstr "Mô tả"
 
-#: Model/Event.php:337 js/GridView.js:148 js/EventDetailsPanel.js:272
+#: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:272
 #: js/Model.js:206 js/EventEditDialog.js:124 js/ResourcesGridPanel.js:54
 msgid "Location"
 msgstr "Địa điểm"
 
-#: Model/Event.php:338 js/GridView.js:154 js/PerspectiveCombo.js:127
+#: Model/Event.php:349 js/GridView.js:154 js/PerspectiveCombo.js:127
 #: js/EventDetailsPanel.js:276 js/Model.js:226 js/EventEditDialog.js:300
 msgid "Organizer"
 msgstr "Tổ chức"
 
-#: Model/Event.php:339
+#: Model/Event.php:350
 msgid "Priority"
 msgstr "Quan trọng"
 
-#: Model/Event.php:340 js/GridView.js:173 js/AddToEventPanel.js:88
+#: Model/Event.php:351 js/GridView.js:173 js/AddToEventPanel.js:88
 #: js/AttendeeGridPanel.js:214 js/ContactEventsGridPanel.js:126
 #: js/EventEditDialog.js:178
 msgid "Status"
 msgstr "Trạng thái"
 
-#: Model/Event.php:341 js/GridView.js:143 js/Model.js:205
+#: Model/Event.php:352 js/GridView.js:143 js/Model.js:205
 #: js/ContactEventsGridPanel.js:113 js/EventEditDialog.js:79
 msgid "Summary"
 msgstr "Tóm tắt"
 
-#: Model/Event.php:342
+#: Model/Event.php:353
 msgid "Url"
 msgstr "URL"
 
-#: Model/Event.php:343
+#: Model/Event.php:354
 msgid "Recurrance rule"
 msgstr "Quy tắc lặp lại"
 
-#: Model/Event.php:344
+#: Model/Event.php:355
 msgid "Is all day event"
 msgstr "Sự kiện hàng ngày"
 
-#: Model/Event.php:345
+#: Model/Event.php:356
 msgid "Organizer timezone"
 msgstr "Múi giờ tổ chức"
 
-#: Model/Event.php:370
+#: Model/Event.php:381
 msgid "No"
 msgstr "Không"
 
-#: Model/Event.php:370
+#: Model/Event.php:381
 msgid "Yes"
 msgstr "Có"
 
@@ -1020,42 +1020,42 @@ msgstr "\"%2$s\" trả lời từ %1$s"
 msgid "Event details"
 msgstr "Chi tiết sự kiện"
 
-#: Controller/EventNotifications.php:317
+#: Controller/EventNotifications.php:314
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Nhắc cho sự kiện  \"%1$s\" tại %2$s"
 
-#: Controller/EventNotifications.php:320
+#: Controller/EventNotifications.php:317
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Mời tham dự sự kiện \"%1$s\" tại %2$s"
 
-#: Controller/EventNotifications.php:324
+#: Controller/EventNotifications.php:321
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "Sự kiện \"%1$s\" tại %2$s đã bị hủy"
 
-#: Controller/EventNotifications.php:332
+#: Controller/EventNotifications.php:329
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr "Sự kiện \"%1$s\" đã được đặt lại lịch từ %2$s đến %3$s"
 
-#: Controller/EventNotifications.php:339
+#: Controller/EventNotifications.php:336
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Sự kiện \"%1$s\" tại %2$s đã được cập nhật"
 
-#: Controller/EventNotifications.php:350
+#: Controller/EventNotifications.php:347
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s chấp nhận sự kiện \"%2$s\" tại %3$s"
 
-#: Controller/EventNotifications.php:354
+#: Controller/EventNotifications.php:351
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s từ chối sự kiện \"%2$s\" tại %3$s"
 
-#: Controller/EventNotifications.php:358
+#: Controller/EventNotifications.php:355
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Trả lời phân vân từ %1$s cho sự kiện \"%2$s\" tại %3$s"
 
-#: Controller/EventNotifications.php:362
+#: Controller/EventNotifications.php:359
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Không trả lời từ %1$s cho sự kiện  \"%2$s\" tại %3$s"
 
-#: Controller/EventNotifications.php:366
+#: Controller/EventNotifications.php:363
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Người tham dự cho sự kiện  \"%1$s\" tại %2$s"

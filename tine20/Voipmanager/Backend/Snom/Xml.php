@@ -5,7 +5,7 @@
  * @package     Voipmanager Management
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        extend Tinebase_Backend_Sql_Abstract?
  */
@@ -74,13 +74,21 @@ class Voipmanager_Backend_Snom_Xml
         $this->_baseURL = Voipmanager_Frontend_Snom_Abstract::getBaseUrl();
     }
     
+    /**
+     * appendLocationSettings
+     * 
+     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @param SimpleXMLElement $_xml
+     */
     protected function _appendLocationSettings(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
         $snomLocation     = new Voipmanager_Backend_Snom_Location($this->_db);
         $locationSettings = $snomLocation->get($_phone->location_id);
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localtion_id " . print_r($locationSettings, true));
         $locationSettings = $locationSettings->toArray();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . " location settings:  " . print_r($locationSettings, true));
         
         unset($locationSettings['id']);
         unset($locationSettings['name']);
@@ -115,10 +123,16 @@ class Voipmanager_Backend_Snom_Xml
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " xml " . $_xml->asXML());
     }
     
+    /**
+     * appendPhoneUrls
+     * 
+     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @param SimpleXMLElement $_xml
+     */
     protected function _appendPhoneUrls(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
     {
         $locationSettings = array();
-                                
+        
         $locationSettings['setting_server']          = $this->_baseURL . '?method=Voipmanager.settings&amp;mac=' . $_phone->macaddress;
         $locationSettings['settings_refresh_timer']  = 3600;
         $locationSettings['firmware_status']         = $this->_baseURL . '?method=Voipmanager.firmware&amp;mac=' . $_phone->macaddress;
@@ -152,6 +166,12 @@ class Voipmanager_Backend_Snom_Xml
         }        
     }
     
+    /**
+     * appendPhoneSettings
+     * 
+     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @param SimpleXMLElement $_xml
+     */
     protected function _appendPhoneSettings(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
     {
         $phoneSettings['http_client_user']['value'] = $_phone->http_client_user;
@@ -198,17 +218,23 @@ class Voipmanager_Backend_Snom_Xml
         $phoneSettings['transfer_on_hangup']['perms'] = 'RO';
         $phoneSettings['transfer_on_hangup']['value'] = 'on';
         
-        foreach($phoneSettings as $key => $value) {
+        foreach ($phoneSettings as $key => $value) {
             $child = $_xml->addChild($key, $value['value']);
             $child->addAttribute('perm', $value['perms']);
         }
     }
     
+    /**
+     * appends user settings
+     * 
+     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @param SimpleXMLElement $_xml
+     */
     protected function _appendUserSettings(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
     {
         $phoneSettinsgBackend = new Voipmanager_Backend_Snom_PhoneSettings($this->_db);
         $phoneSettings = $phoneSettinsgBackend->get($_phone->getId());
-                
+        
         $templateBackend = new Voipmanager_Backend_Snom_Template($this->_db);
         $template = $templateBackend->get($_phone->template_id);
         
@@ -217,22 +243,28 @@ class Voipmanager_Backend_Snom_Xml
 
         $userSettings = array();
         
-        foreach($phoneSettings AS $key => $value) {
-            if($key == 'phone_id') {
+        foreach ($phoneSettings AS $key => $value) {
+            if ($key == 'phone_id') {
                 continue;
             }
             
-            $isWriteAbleProperty = $key . '_writable';
-            if (! $defaultPhoneSettings->has($isWriteAbleProperty)) {
+            $isWritableProperty = $key . '_w';
+            if (! $defaultPhoneSettings->has($isWritableProperty)) {
                 continue;
             }
             
-            if ($defaultPhoneSettings->$isWriteAbleProperty == true && $value !== NULL) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' Writable property: ' . $key);
+            
+            if ($defaultPhoneSettings->$isWritableProperty == true && $value !== NULL) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Setting ' . $key . ' = ' . $value);
+                
                 $userSettings[$key]['value'] = $value;
                 $userSettings[$key]['perms'] = 'RW';
-            } elseif($defaultPhoneSettings->$key !== NULL) {
+            } else if ($defaultPhoneSettings->$key !== NULL) {
                 $userSettings[$key]['value'] = $defaultPhoneSettings->$key;
-                if($defaultPhoneSettings->$isWriteAbleProperty == true) {
+                if ($defaultPhoneSettings->$isWritableProperty == true) {
                     $userSettings[$key]['perms'] = 'RW';
                 } else {
                     $userSettings[$key]['perms'] = 'RO';
@@ -240,21 +272,31 @@ class Voipmanager_Backend_Snom_Xml
             }
         }
         
-        foreach($userSettings as $key => $value) {
+        foreach ($userSettings as $key => $value) {
             $child = $_xml->addChild($key, $value['value']);
             $child->addAttribute('perm', $value['perms']);
         }
     }
     
+    /**
+     * appendPhoneLines
+     * 
+     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @param SimpleXMLElement $_xml
+     */
     protected function _appendPhoneLines(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
     {
+        if (! $_phone->lines) {
+            return;
+        }
+        
         $asteriskPeer = new Voipmanager_Backend_Asterisk_SipPeer($this->_db);
         $snomLocation = new Voipmanager_Backend_Snom_Location($this->_db);
         
         $lines = array();
         $location = $snomLocation->get($_phone->location_id);
         
-        foreach($_phone->lines as $snomLine) {
+        foreach ($_phone->lines as $snomLine) {
             $line = array();
             $line['user_active']    = ($snomLine->lineactive == 1 ? 'on' : 'off');
             $line['user_idle_text'] = $snomLine->idletext;
@@ -271,8 +313,8 @@ class Voipmanager_Backend_Snom_Xml
             $lines[$snomLine->linenumber] = $line;
         }
         
-        foreach($lines as $lineId => $line) {
-            foreach($line as $key => $value) {
+        foreach ($lines as $lineId => $line) {
+            foreach ($line as $key => $value) {
                 $child = $_xml->addChild($key, $value);
                 $child->addAttribute('idx', $lineId);
                 $child->addAttribute('perm', 'RO');
@@ -285,9 +327,16 @@ class Voipmanager_Backend_Snom_Xml
         
     }
     
+    /**
+     * appendDialPlan
+     * 
+     * @param Voipmanager_Model_Snom_Phone $_phone
+     * @param SimpleXMLElement $_xml
+     */
     protected function _appendDialPlan(Voipmanager_Model_Snom_Phone $_phone, SimpleXMLElement $_xml)
     {
         // Metaways specific dialplan
+        // @todo should be moved to config
         
         $child = $_xml->addChild('template');
         $child->addAttribute('match', '[1-4].');
@@ -312,7 +361,6 @@ class Voipmanager_Backend_Snom_Xml
         $child->addAttribute('timeout', 0);
         $child->addAttribute('scheme', 'sip');
         $child->addAttribute('user', 'phone');
-        
     }
     
     /**
@@ -324,7 +372,8 @@ class Voipmanager_Backend_Snom_Xml
      */
     public function getConfig(Voipmanager_Model_Snom_Phone $_phone)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " phone " . print_r($_phone->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " phone " . print_r($_phone->toArray(), true));
         
         if (!$_phone->isValid()) {
             throw new Voipmanager_Exception_Validation('invalid phone');

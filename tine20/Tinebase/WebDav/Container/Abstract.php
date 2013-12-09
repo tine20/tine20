@@ -103,6 +103,10 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
             }
         }
         
+        if ($object->has('tags') && !isset($object->tags)) {
+            Tinebase_Tags::getInstance()->getTagsOfRecord($object);
+        }
+        
         $objectClass = $this->_application->name . '_Frontend_WebDAV_' . $this->_model;
         
         return new $objectClass($this->_container, $object);
@@ -138,6 +142,16 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
         }
 
         return $children;
+    }
+    
+    /**
+     * return etag
+     * 
+     * @return string
+     */
+    public function getETag()
+    {
+        return '"' . $this->_container->seq . '"';
     }
     
     /**
@@ -255,6 +269,24 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
     }
     
     /**
+     * Returns the last modification date as a unix timestamp
+     *
+     * @return time
+     */
+    public function getLastModified() 
+    {
+        if ($this->_container->last_modified_time instanceof Tinebase_DateTime) {
+            return $this->_container->last_modified_time->getTimestamp();
+        }
+        
+        if ($this->_container->creation_time instanceof Tinebase_DateTime) {
+            return $this->_container->creation_time->getTimestamp();
+        }
+        
+        return Tinebase_DateTime::now()->getTimestamp();
+    }
+    
+    /**
      * Returns the name of the node
      *
      * @return string
@@ -283,6 +315,33 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
         }
         
         return 'principals/users/' . Tinebase_Core::getUser()->contact_id;
+    }
+    
+    /**
+     * Returns the list of properties
+     *
+     * @param array $requestedProperties
+     * @return array
+     */
+    public function getProperties($requestedProperties) 
+    {
+        $properties = array();
+        
+        $response = array();
+        
+        foreach ($requestedProperties as $prop) {
+            switch($prop) {
+                case '{DAV:}getetag':
+                    $response[$prop] = $this->getETag();
+                    break;
+                    
+                default:
+                    if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
+                    break;
+            }
+        }
+        
+        return $response;
     }
     
     /**
@@ -397,6 +456,32 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
         $id = strlen($id) > 40 ? sha1($id) : $id;
         
         return $id;
+    }
+    
+    /**
+     * generate VTimezone for given folder
+     * 
+     * @param  string|Tinebase_Model_Application  $applicationName
+     * @return string
+     */
+    public static function getCalendarVTimezone($applicationName)
+    {
+        $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, Tinebase_Core::getUser()->getId());
+        
+        $application = $applicationName instanceof Tinebase_Model_Application 
+            ? $applicationName 
+            : Tinebase_Application::getInstance()->getApplicationByName($applicationName); 
+        
+        // create vcalendar object with timezone information
+        $vcalendar = new \Sabre\VObject\Component\VCalendar(array(
+            'PRODID'   => "-//tine20.org//Tine 2.0 {$application->name} V{$application->version}//EN",
+            'VERSION'  => '2.0',
+            'CALSCALE' => 'GREGORIAN'
+        ));
+        $vcalendar->add(new Sabre_VObject_Component_VTimezone($timezone));
+        
+        // Taking out \r to not screw up the xml output
+        return str_replace("\r","", $vcalendar->serialize());
     }
     
     /**

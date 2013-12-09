@@ -48,6 +48,16 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
     }
     
     /**
+     * get client record
+     * 
+     * @return Tinebase_Record_Interface
+     */
+    public function getClientRecord()
+    {
+        return $this->_clientRecord;
+    }
+    
+    /**
      * returns existing nodes info as array
      * 
      * @return array

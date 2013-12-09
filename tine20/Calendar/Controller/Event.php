@@ -178,7 +178,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $sendNotifications = $this->_sendNotifications;
             $this->_sendNotifications = FALSE;
             
-            $event = parent::create($_record);
+            $createdEvent = parent::create($_record);
             
             $this->_sendNotifications = $sendNotifications;
             
@@ -187,8 +187,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
-        
-        $createdEvent = $this->get($event->getId());
         
         // send notifications
         if ($this->_sendNotifications) {
@@ -207,7 +205,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        $this->_saveAttendee($_record);
+        $this->_saveAttendee($_record, $_createdRecord);
     }
     
     /**
@@ -376,6 +374,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
+     * Returns a set of records identified by their id's
+     *
+     * @param   array $_ids       array of record identifiers
+     * @param   bool  $_ignoreACL don't check acl grants
+     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     */
+    public function getMultiple($_ids, $_ignoreACL = false)
+    {
+        $events = parent::getMultiple($_ids, $_ignoreACL = false);
+        if ($_ignoreACL !== true) {
+            $this->_freeBusyCleanup($events, 'get');
+        }
+        
+        return $events;
+    }
+    
+    /**
      * cleanup search results (freebusy)
      * 
      * @param Tinebase_Record_RecordSet $_events
@@ -508,7 +523,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        $this->_saveAttendee($record, $record->isRescheduled($currentRecord));
+        $this->_saveAttendee($record, $currentRecord, $record->isRescheduled($currentRecord));
         // need to save new attendee set in $updatedRecord for modlog
         $updatedRecord->attendee = clone($record->attendee);
     }
@@ -978,8 +993,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 $rrule->count = $idx+1;
             } else {
-                $rrule->until = $_event->getOriginalDtStart();
-                $rrule->until->subHour(1);
+                $lastBaseOccurence = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $_event->getOriginalDtStart()->subSecond(1), -1);
+                $rrule->until = $lastBaseOccurence ? $lastBaseOccurence->getOriginalDtStart() : $baseEvent->dtstart;
             }
             $baseEvent->rrule = (string) $rrule;
             $baseEvent->exdate = $pastExdates;
@@ -1094,19 +1109,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
-     * get by id
-     *
-     * @param string $_id
-     * @param int $_containerId
-     * @return Tinebase_Record_Interface
+     * (non-PHPdoc)
+     * @see Tinebase_Controller_Record_Abstract::get()
      */
-    public function get($_id, $_containerId = NULL)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE)
     {
         if (preg_match('/^fakeid/', $_id)) {
             // get base event when trying to fetch a non-persistent recur instance
             return $this->getRecurBaseEvent(new Calendar_Model_Event(array('uid' => substr(str_replace('fakeid', '', $_id), 0, 40))), TRUE);
         } else {
-            return parent::get($_id, $_containerId);
+            return parent::get($_id, $_containerId, $_getRelatedData);
         }
     }
     
@@ -1384,6 +1396,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         if ($_record->is_all_day_event) {
             // harmonize dtend of all day events
+            if (! $_record->dtend) { //if no DTEND is given
+                $_record->dtend = clone $_record->dtstart;
+                $_record->dtend->setTime(23,59,59);
+            }
             $_record->dtend->addSecond($_record->dtend->get('s') == 0 ? 59 : 0);
             $_record->dtend->subMinute($_record->dtend->get('i') == 0 ? 1 : 0);
         }
@@ -1471,9 +1487,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
-        if (    !$this->_doContainerACLChecks 
-            // admin grant includes all others
-            ||  ($_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))) {
+        if (    ! $this->_doContainerACLChecks 
+            // admin grant includes all others (only if class is PUBLIC)
+            ||  (! empty($this->class) && $this->class === Calendar_Model_Event::CLASS_PUBLIC 
+                && $_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))
+        ) {
             return TRUE;
         }
 
@@ -1757,9 +1775,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @todo add support for resources
      * 
      * @param Calendar_Model_Event $_event
+     * @param Calendar_Model_Event $_currentEvent
      * @param bool                 $_isRescheduled event got rescheduled reset all attendee status
      */
-    protected function _saveAttendee($_event, $_isRescheduled = FALSE)
+    protected function _saveAttendee($_event, $_currentEvent = NULL, $_isRescheduled = FALSE)
     {
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
@@ -1771,8 +1790,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} ");
         
-        $currentEvent = $this->get($_event->getId());
-        $currentAttendee = $currentEvent->attendee;
+        $currentAttendee = $_currentEvent->attendee;
         
         $diff = $currentAttendee->getMigration($_event->attendee->getArrayOfIds());
 

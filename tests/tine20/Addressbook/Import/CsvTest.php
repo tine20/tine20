@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -233,9 +233,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     public function testImportWithUmlautsWin1252()
     {
-        $filename = dirname(__FILE__) . '/files/adb_import_csv_win1252.xml';
-        $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
+        $definition = $this->_getDefinitionFromFile('adb_import_csv_win1252.xml');
         
         $this->_filename = dirname(__FILE__) . '/files/importtest_win1252.csv';
         $this->_deleteImportFile = FALSE;
@@ -245,6 +243,21 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(4, $result['totalcount']);
         $this->assertEquals('Üglü, ÖzdemirÖ', $result['results'][2]->n_fileas, 'Umlauts were not imported correctly: ' . print_r($result['results'][2]->toArray(), TRUE));
+    }
+    
+    /**
+     * returns import defintion from file
+     * 
+     * @param string $filename
+     * @return Tinebase_Model_ImportExportDefinition
+     */
+    protected function _getDefinitionFromFile($filename)
+    {
+        $filename = dirname(__FILE__) . '/files/' . $filename;
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
+        
+        return $definition;
     }
     
     /**
@@ -304,5 +317,30 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         }
         
         return $result;
+    }
+
+    /**
+     * testImportDuplicateResolve
+     * 
+     * @see 0009316: add duplicate resolving to cli import
+     */
+    public function testImportDuplicateResolve()
+    {
+        $definition = $this->_getDefinitionFromFile('adb_import_csv_duplicate.xml');
+        
+        $this->_filename = dirname(__FILE__) . '/files/import_duplicate_1.csv';
+        $this->_deleteImportFile = FALSE;
+        
+        $result = $this->_doImport(array(), $definition);
+        $this->_deletePersonalContacts = TRUE;
+
+        $this->_filename = dirname(__FILE__) . '/files/import_duplicate_2.csv';
+        $this->_deleteImportFile = FALSE;
+        
+        $result = $this->_doImport(array(), $definition);
+        
+        $this->assertEquals(1, $result['updatecount'], 'should have updated 1 contact');
+        $this->assertEquals('joerg@home.com', $result['results'][0]->email_home, 'duplicates resolving did not work: ' . print_r($result['results']->toArray(), true));
+        $this->assertEquals('Jörg', $result['results'][0]->n_given, 'wrong encoding: ' . print_r($result['results']->toArray(), true));
     }
 }

@@ -62,7 +62,7 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_controller = new Tinebase_FileSystem();
-        $this->_basePath   = '/' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/' . Tinebase_Model_Container::TYPE_SHARED;
+        $this->_basePath   = '/' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/folders/' . Tinebase_Model_Container::TYPE_SHARED;
         
         $this->_controller->initializeApplication(Tinebase_Application::getInstance()->getApplicationByName('Tinebase'));
     }
@@ -82,15 +82,101 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
     
     public function testMkdir()
     {
-        $testPath = $this->_basePath . '/PHPUNIT';
-        $this->_controller->mkdir($testPath);
+        $basePathNode = $this->_controller->stat($this->_basePath);
         
+        $testPath = $this->_basePath . '/PHPUNIT';
+        $node = $this->_controller->mkdir($testPath);
+        
+        $this->assertInstanceOf('Tinebase_Model_Tree_Node', $node);
         $this->assertTrue($this->_controller->fileExists($testPath), 'path created by mkdir not found');
         $this->assertTrue($this->_controller->isDir($testPath),      'path created by mkdir is not a directory');
+        $this->assertEquals(1, $node->revision);
+        $this->assertNotEquals($basePathNode->hash, $this->_controller->stat($this->_basePath)->hash);
         
         return $testPath;
     }
+    
+    public function testDirectoryHashUpdate()
+    {
+        $testPath = $this->testMkdir();
+        
+        $basePathNode = $this->_controller->stat($testPath);
+        
+        $this->assertEquals(1, $basePathNode->revision);
+        $this->assertNotEmpty($basePathNode->hash);
+        
+        $testNode = $this->_controller->mkdir($testPath . '/phpunit');
+        
+        $this->assertEquals(1, $testNode->revision);
+        $this->assertNotEmpty($testNode->hash);
+        $this->assertNotEquals($basePathNode->hash, $this->_controller->stat($testPath)->hash);
+    }
+    
+    /**
+     * test copying directory to existing directory
+     */
+    public function testCopyDirectoryToExistingDirectory()
+    {
+        $sourcePath      = $this->testMkdir();
+        $destinationPath = $this->_basePath . '/TESTCOPY2';
+        $this->_controller->mkdir($destinationPath);
+        
+        $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
+        
+        $this->assertNotEquals($this->_controller->stat($sourcePath)->getId(), $createdNode->getId());
+        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FOLDER, $createdNode->type);
+        $this->assertEquals($this->_controller->stat($sourcePath)->name, $createdNode->name);
+        $this->assertTrue($this->_controller->fileExists($this->_basePath . '/TESTCOPY2/PHPUNIT'));
+    }
+    
+    /**
+     * test copying file to existing directory
+     */
+    public function testCopyFileToExistingDirectory()
+    {
+        $sourcePath      = $this->testCreateFile();
+        $destinationPath = $this->_basePath . '/TESTCOPY2';
+        $this->_controller->mkdir($destinationPath);
+        
+        $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
+        
+        $this->assertNotEquals($this->_controller->stat($sourcePath)->getId(), $createdNode->getId());
+        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $createdNode->type);
+        $this->assertEquals($this->_controller->stat($sourcePath)->name, $createdNode->name);
+        $this->assertTrue($this->_controller->fileExists($this->_basePath . '/TESTCOPY2/' . basename($sourcePath)));
+    }
+    
+    /**
+     * test copying file to existing directory and change name
+     */
+    public function testCopyFileToExistingDirectoryAndChangeName()
+    {
+        $sourcePath      = $this->testCreateFile();
+        $destinationPath = $this->_basePath . '/TESTCOPY2/phpunit2.txt';
 
+        $this->_controller->mkdir($this->_basePath . '/TESTCOPY2');
+        
+        $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
+        
+        $this->assertNotEquals($this->_controller->stat($sourcePath)->getId(), $createdNode->getId());
+        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $createdNode->type);
+        $this->assertEquals(basename($destinationPath), $createdNode->name);
+        $this->assertTrue($this->_controller->fileExists($this->_basePath . '/TESTCOPY2/' . basename($destinationPath)));
+    }
+    
+    /**
+     * test copying directory to existing directory
+     */
+    public function testCopySourceAndDestinationTheSame()
+    {
+        $sourcePath      = $this->testCreateFile();
+        $destinationPath = $this->testMkdir();
+        
+        $this->setExpectedException('Tinebase_Exception_UnexpectedValue');
+
+        $createdNode = $this->_controller->copy($sourcePath, $destinationPath);
+    }
+    
     public function testRename()
     {
         $testPath = $this->testMkdir();
@@ -107,7 +193,6 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $nameOfChildren = Tinebase_FileSystem::getInstance()->scandir($testPath2)->name;
         $this->assertTrue(in_array('phpunit2.txt', $nameOfChildren));
     }
-    
     
     public function testRmdir()
     {
@@ -167,9 +252,13 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
     
     public function testCreateFile()
     {
-        $this->testMkdir();
+        $testDir  = $this->testMkdir();
+        $testFile = 'phpunit.txt';
+        $testPath = $testDir . '/' . $testFile;
         
-        $handle = $this->_controller->fopen($this->_basePath . '/PHPUNIT/phpunit.txt', 'x');
+        $basePathNode = $this->_controller->stat($testDir);
+        
+        $handle = $this->_controller->fopen($testPath, 'x');
         
         $this->assertEquals('resource', gettype($handle), 'opening file failed');
         
@@ -179,9 +268,12 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         
         $this->_controller->fclose($handle);
         
-        $children = $this->_controller->scanDir($this->_basePath . '/PHPUNIT')->name;
+        $children = $this->_controller->scanDir($testDir)->name;
         
-        $this->assertTrue(in_array('phpunit.txt', $children));
+        $this->assertContains($testFile, $children);
+        $this->assertNotEquals($basePathNode->hash, $this->_controller->stat($testDir)->hash);
+        
+        return $testPath;
     }
     
     /**

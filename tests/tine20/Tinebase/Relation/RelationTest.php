@@ -327,5 +327,78 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         $backend->purgeAllRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         $backend->purgeAllRelations($this->_crmId2['model'], $this->_crmId2['backend'], $this->_crmId2['id']);
     }
+    
+    /**
+     * testTransfer
+     * 
+     * @see 0009210: Allow to change relations
+     *      https://forge.tine20.org/mantisbt/view.php?id=9210
+     */
+    public function testTransfer()
+    {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            $this->markTestSkipped('@see 0009254: fix Tinebase_Relation_RelationTest::testTransfer (pgsql)');
+        }
+        
+        $addresses = Addressbook_Controller_Contact::getInstance()->getAll();
+        
+        $sclever = $addresses->filter('email', 'sclever@tine20.org')->getFirstRecord();
+        $pwulf = $addresses->filter('email', 'pwulf@tine20.org')->getFirstRecord();
+        
+        $container = Tinebase_Container::getInstance()->create(new Tinebase_Model_Container(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
+            'type' => Tinebase_Model_Container::TYPE_SHARED,
+            'backend' => 'sql',
+            'name' => 'testsdf'
+        )));
+        
+        $contract = new Sales_Model_Contract(array('number' => '23547', 'title' => 'test', 'container_id' => $container->getId()));
+        $contract = Sales_Controller_Contract::getInstance()->create($contract);
+        
+        $contract2 = new Sales_Model_Contract(array('number' => '23347', 'title' => 'test', 'container_id' => $container->getId()));
+        $contract2 = Sales_Controller_Contract::getInstance()->create($contract2);
+        
+        $json = new Sales_Frontend_Json();
+        
+        $contractJson = $contract->toArray();
+        $contractJson['relations'][] = array(
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Addressbook_Model_Contact',
+            'related_record' => $sclever->toArray(),
+            'type'           => 'CUSTOMER',
+        );
+        
+        $contractJson = $json->saveContract($contractJson);
+        
+        $contract2Json = $contract2->toArray();
+        $contract2Json['relations'][] = array(
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Addressbook_Model_Contact',
+            'related_record' => $sclever->toArray(),
+            'type'           => 'CUSTOMER',
+        );
+        $contract2Json['relations'][] = array(
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Addressbook_Model_Contact',
+            'related_record' => $pwulf->toArray(),
+            'type'           => 'CUSTOMER',
+        );
+        $contract2Json = $json->saveContract($contract2Json);
+        
+        $this->assertEquals($sclever->getId(), $contractJson['relations'][0]['related_id']);
+        
+        $skipped = Tinebase_Relations::getInstance()->transferRelations($sclever->getId(), $pwulf->getId(), 'Addressbook_Model_Contact');
+        $this->assertEquals(1, count($skipped));
+        $skipped = array_pop($skipped);
+        
+        $this->assertEquals($sclever->getId(), $skipped['related_id']);
+        
+        $contractJson = $json->getContract($contract->getId());
+        $this->assertEquals($pwulf->getId(), $contractJson['relations'][0]['related_id']);
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        
+        Tinebase_Relations::getInstance()->transferRelations($sclever->getId(), $pwulf->getId(), 'Addressbook_Model_Contract');
+    }
 }
 

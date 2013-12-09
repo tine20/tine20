@@ -271,7 +271,7 @@ Ext.ns('Tine.Felamimail');
             
             showDate: function(sent, messageData) {
                 var date = (sent) ? sent : messageData.received;
-                return Tine.Tinebase.common.dateTimeRenderer(date);
+                return date.format('l') + ', ' + Tine.Tinebase.common.dateTimeRenderer(date);
             },
             
             showFrom: function(email, name, addText, qtip) {

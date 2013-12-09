@@ -117,7 +117,7 @@ class Tinebase_Application
             return $this->_applicationCache[$applicationId];
         }
         
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cache = Tinebase_Core::getCache();
         if ($cache instanceof Zend_Cache_Core) {
             $cacheId = 'getApplicationById_' . $_applicationId;
             if ($cache->test($cacheId)) {
@@ -130,7 +130,7 @@ class Tinebase_Application
         }
         
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?' , $applicationId);
-        $rows = $this->_applicationTable->fetchAll($where)->toArray();
+        $rows  = $this->_applicationTable->fetchAll($where)->toArray();
         
         if (empty($rows)) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Application not found. Id: ' . $applicationId);
@@ -168,7 +168,7 @@ class Tinebase_Application
             return $this->_applicationCache[$_applicationName];
         }
         
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cache = Tinebase_Core::getCache();
         
         if ($cache instanceof Zend_Cache_Core) {
             $cacheId = 'getApplicationByName_' . $_applicationName;
@@ -293,7 +293,7 @@ class Tinebase_Application
      */
     public function setApplicationState(array $_applicationIds, $_state)
     {
-        if($_state != Tinebase_Application::DISABLED && $_state != Tinebase_Application::ENABLED) {
+        if ($_state != Tinebase_Application::DISABLED && $_state != Tinebase_Application::ENABLED) {
             throw new Tinebase_Exception_InvalidArgument('$_state can be only Tinebase_Application::DISABLED  or Tinebase_Application::ENABLED');
         }
         $where = array(
@@ -307,13 +307,16 @@ class Tinebase_Application
         $affectedRows = $this->_applicationTable->update($data, $where);
         
         if ($affectedRows === count($_applicationIds)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Disabled ' . $affectedRows . ' applications.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Disabled/Enabled ' . $affectedRows . ' applications.');
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' Could not disable all requested applications: ' . print_r($_applicationIds, TRUE));
         }
         
-        $this->_cleanCache();
+        foreach ($_applicationIds as $applicationId) {
+            $this->_cleanCache($applicationId);
+        }
     }
     
     /**
@@ -454,13 +457,14 @@ class Tinebase_Application
         
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
+        $this->_cleanCache($applicationId);
+        
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . '= ?', $applicationId)
         );
         
         $this->_db->delete(SQL_TABLE_PREFIX . 'applications', $where);
         
-        $this->_cleanCache($applicationId);
     }
     
     /**
@@ -569,36 +573,31 @@ class Tinebase_Application
     /**
      * remove TMA from "in class" cache and Zend Cache
      * 
-     * remove cache entry for given class only, when application id AND name are known
-     * otherwise forget all cached TMA
-     * 
      * @return void
      */
-    protected function _cleanCache($_applicationId = null)
+    protected function _cleanCache($_applicationId)
     {
-        if ($_applicationId instanceof Tinebase_Model_Application) {
-            $application = $_applicationId;
-        } elseif (isset($this->_applicationCache[$_applicationId])) {
-            $application = $this->_applicationCache[$_applicationId];
+        try {
+            $application = $_applicationId instanceof Tinebase_Model_Application 
+                ? $_applicationId 
+                : $this->getApplicationById($_applicationId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // application can not be found
         }
 
+        if (isset($application)) {
+            Tinebase_Core::getCache()->remove('getApplicationById_'   . $application->getId());
+            Tinebase_Core::getCache()->remove('getApplicationByName_' . $application->name);
+        } else {
+            // something went wrong
+            Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
+        }
+        
         /*
          *  we always reset the "in class" cache. Otherwise we rum into problems when we 
          *  try to uninstall and install all applications again
          *  hint: Tinebase can't be uninstalled because the app tables got droped before 
          */
-        if (isset($application)) {
-            // remove from Zend Cache
-            $cacheId = 'getApplicationById_' . $application->getId();
-            Tinebase_Core::get(Tinebase_Core::CACHE)->remove($cacheId);
-            
-            $cacheId = 'getApplicationByName_' . $application->name;
-            Tinebase_Core::get(Tinebase_Core::CACHE)->remove($cacheId);
-        } else {
-            Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
-            
-        }
-        
         $this->_applicationCache = array();
     }
 }

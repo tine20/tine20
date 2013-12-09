@@ -329,7 +329,14 @@ abstract class Tinebase_Config_Abstract
             }
         }
 
-        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
+        try {
+            $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
+        } catch (Zend_Db_Adapter_Exception $zdae) {
+            // DB might not exist, yet
+            Tinebase_Exception::log($zdae);
+            $this->_cachedApplicationConfig = array();
+            return;
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
     
