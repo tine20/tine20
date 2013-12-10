@@ -26,12 +26,17 @@ Ext.ns('Tine.HumanResources');
  * Create a new Tine.HumanResources.EmployeeGridPanel
  */
 Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+    
     /**
-     * @private
+     * @todo: make this generally available
+     * @todo: this should be also available in the context menu
+     * 
+     * returns additional toobar items
+     * 
+     * @return {Array} of Ext.Action
      */
-    initActions: function() {
-        
-        this.actions_exportEmployees = new Ext.Action({
+    getActionToolbarItems: function() {
+        this.actions_export = new Ext.Action({
             text: String.format(this.app.i18n.ngettext('Export {0}', 'Export {0}', 50), this.i18nRecordsName),
             singularText: String.format(this.app.i18n.ngettext('Export {0}', 'Export {0}', 1), this.i18nRecordName),
             pluralText:  String.format(this.app.i18n.ngettext('Export {0}', 'Export {0}', 1), this.i18nRecordsName),
@@ -63,13 +68,28 @@ Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             }
         });
         
-        this.actionToolbarItems = [this.actions_exportEmployees];
+        this.actionUpdater.addActions([this.actions_export]);
         
-        // register actions in updater
-        this.actionUpdater.addActions([
-            this.actions_exportEmployees
-        ]);
+        var button = Ext.apply(new Ext.Button(this.actions_export), {
+            scale: 'medium',
+            rowspan: 2,
+            iconAlign: 'top'
+        });
         
-        Tine.HumanResources.EmployeeGridPanel.superclass.initActions.call(this);
+        return [button];
+    },
+    
+    /**
+     * add custom items to context menu
+     * 
+     * @return {Array}
+     */
+    getContextMenuItems: function() {
+        var items = [
+            '-',
+            this.actions_export
+            ];
+        
+        return items;
     }
 });
