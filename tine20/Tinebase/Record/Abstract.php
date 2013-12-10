@@ -1220,4 +1220,22 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         return static::$_resolveForeignIdFields;
     }
+    
+    /**
+     * returns all textfields having labels for the autocomplete field function
+     * 
+     * @return array
+     */
+    public static function getAutocompleteFields()
+    {
+        $keys = array();
+        
+        foreach (self::getConfiguration()->getFields() as $key => $fieldDef) {
+            if ($fieldDef['type'] == 'string' || $fieldDef['type'] == 'text') {
+                $keys[] = $key;
+            }
+        }
+        
+        return $keys;
+    }
 }

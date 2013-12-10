@@ -256,13 +256,13 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         foreach ($resolveFields as $fieldKey => $c) {
             $config = $c['config'];
             // fetch the fields by the refIfField
-            $controller = array_key_exists('controllerClassName', $config) ? $config['controllerClassName']::getInstance() : Tinebase_Core::getApplicationInstance($foreignRecordClassName);
+            $controller = isset($config['controllerClassName']) ? $config['controllerClassName']::getInstance() : Tinebase_Core::getApplicationInstance($foreignRecordClassName);
             $filterName = $config['filterClassName'];
             
             $filterArray = array();
             
             // addFilters can be added and must be added if the same model resides in more than one records fields
-            if (array_key_exists('addFilters', $config) && is_array($config['addFilters'])) {
+            if (isset($config['addFilters']) && is_array($config['addFilters'])) {
                 $useaddFilters = true;
                 $filterArray = $config['addFilters'];
             }
@@ -271,7 +271,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)));
             
             $paging = NULL;
-            if (array_key_exists('paging', $config) && is_array($config['paging'])) {
+            if (isset($config['paging']) && is_array($config['paging'])) {
                 $paging = new Tinebase_Model_Pagination($config['paging']);
             }
             
@@ -284,8 +284,25 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             
             $fr = $foreignRecords->getFirstRecord();
 
-            if ($fr && $fr->has('notes')) {
-                Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
+            // @todo: resolve alarms?
+            // @todo: use parts parameter?
+            if ($foreignRecordModelConfiguration->resolveRelated && $fr) {
+                if ($fr->has('notes')) {
+                    Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
+                }
+                if ($fr->has('tags')) {
+                    Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($foreignRecords);
+                }
+                if ($fr->has('relations')) {
+                    $relations = Tinebase_Relations::getInstance()->getMultipleRelations($foreignRecordClass, 'Sql', $foreignRecords->{$fr->getIdProperty()} );
+                    $foreignRecords->setByIndices('relations', $relations);
+                }
+                if ($fr->has('customfields')) {
+                    Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($foreignRecords);
+                }
+                if ($fr->has('attachments') && Setup_Controller::getInstance()->isFilesystemAvailable()) {
+                    Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($foreignRecords);
+                }
             }
             
             if ($foreignRecords->count() > 0) {
