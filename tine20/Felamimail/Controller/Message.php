@@ -224,7 +224,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 'messageuid'  => $_message->messageuid,
                 'folder_id'   => $_message->folder_id,
                 'received'    => $_message->received,
-                'size'        => (array_key_exists('size', $structure)) ? $structure['size'] : 0,
+                'size'        => ((isset($structure['size']) || array_key_exists('size', $structure))) ? $structure['size'] : 0,
                 'partid'      => $_partId,
                 'body'        => $body,
                 'headers'     => $headers,
@@ -233,7 +233,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
             $message->parseHeaders($headers);
         
-            $structure = array_key_exists('messageStructure', $structure) ? $structure['messageStructure'] : $structure;
+            $structure = (isset($structure['messageStructure']) || array_key_exists('messageStructure', $structure)) ? $structure['messageStructure'] : $structure;
             $message->parseStructure($structure);
         }
         
@@ -443,7 +443,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if ($_partId !== NULL && $_partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
             if ($_onlyBodyOfRfc822) {
                 $logmessage = 'Fetch message part (TEXT) ' . $_partId . ' of messageuid ' . $_message->messageuid;
-                if (array_key_exists('messageStructure', $_partStructure)) {
+                if ((isset($_partStructure['messageStructure']) || array_key_exists('messageStructure', $_partStructure))) {
                     $_partStructure = $_partStructure['messageStructure'];
                 }
             } else {
@@ -488,22 +488,22 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $part = new Zend_Mime_Part($stream);
         $part->type        = $_partStructure['contentType'];
-        $part->encoding    = array_key_exists('encoding', $_partStructure) ? $_partStructure['encoding'] : null;
-        $part->id          = array_key_exists('id', $_partStructure) ? $_partStructure['id'] : null;
-        $part->description = array_key_exists('description', $_partStructure) ? $_partStructure['description'] : null;
-        $part->charset     = array_key_exists('charset', $_partStructure['parameters']) 
+        $part->encoding    = (isset($_partStructure['encoding']) || array_key_exists('encoding', $_partStructure)) ? $_partStructure['encoding'] : null;
+        $part->id          = (isset($_partStructure['id']) || array_key_exists('id', $_partStructure)) ? $_partStructure['id'] : null;
+        $part->description = (isset($_partStructure['description']) || array_key_exists('description', $_partStructure)) ? $_partStructure['description'] : null;
+        $part->charset     = (isset($_partStructure['parameters']['charset']) || array_key_exists('charset', $_partStructure['parameters'])) 
             ? $_partStructure['parameters']['charset'] 
             : Tinebase_Mail::DEFAULT_FALLBACK_CHARSET;
-        $part->boundary    = array_key_exists('boundary', $_partStructure['parameters']) ? $_partStructure['parameters']['boundary'] : null;
+        $part->boundary    = (isset($_partStructure['parameters']['boundary']) || array_key_exists('boundary', $_partStructure['parameters'])) ? $_partStructure['parameters']['boundary'] : null;
         $part->location    = $_partStructure['location'];
         $part->language    = $_partStructure['language'];
         if (is_array($_partStructure['disposition'])) {
             $part->disposition = $_partStructure['disposition']['type'];
-            if (array_key_exists('parameters', $_partStructure['disposition'])) {
-                $part->filename    = array_key_exists('filename', $_partStructure['disposition']['parameters']) ? $_partStructure['disposition']['parameters']['filename'] : null;
+            if ((isset($_partStructure['disposition']['parameters']) || array_key_exists('parameters', $_partStructure['disposition']))) {
+                $part->filename    = (isset($_partStructure['disposition']['parameters']['filename']) || array_key_exists('filename', $_partStructure['disposition']['parameters'])) ? $_partStructure['disposition']['parameters']['filename'] : null;
             }
         }
-        if (empty($part->filename) && array_key_exists('parameters', $_partStructure) && array_key_exists('name', $_partStructure['parameters'])) {
+        if (empty($part->filename) && (isset($_partStructure['parameters']) || array_key_exists('parameters', $_partStructure)) && (isset($_partStructure['parameters']['name']) || array_key_exists('name', $_partStructure['parameters']))) {
             $part->filename = $_partStructure['parameters']['name'];
         }
         
@@ -835,7 +835,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $attachments = array();
         
-        if (!array_key_exists('parts', $structure)) {
+        if (!(isset($structure['parts']) || array_key_exists('parts', $structure))) {
             return $attachments;
         }
         
@@ -849,7 +849,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $filename = $this->_getAttachmentFilename($part);
                 
                 if ($part['type'] == 'text' && 
-                    (! is_array($part['disposition']) || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && ! array_key_exists("parameters", $part['disposition'])))
+                    (! is_array($part['disposition']) || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && ! (isset($part['disposition']["parameters"]) || array_key_exists("parameters", $part['disposition']))))
                 ) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' Skipping DISPOSITION_INLINE attachment with name ' . $filename);
@@ -885,11 +885,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _getAttachmentFilename($part)
     {
-        if (is_array($part['disposition']) && array_key_exists('parameters', $part['disposition']) 
-            && array_key_exists('filename', $part['disposition']['parameters'])) 
+        if (is_array($part['disposition']) && (isset($part['disposition']['parameters']) || array_key_exists('parameters', $part['disposition'])) 
+            && (isset($part['disposition']['parameters']['filename']) || array_key_exists('filename', $part['disposition']['parameters']))) 
         {
             $filename = $part['disposition']['parameters']['filename'];
-        } elseif (is_array($part['parameters']) && array_key_exists('name', $part['parameters'])) {
+        } elseif (is_array($part['parameters']) && (isset($part['parameters']['name']) || array_key_exists('name', $part['parameters']))) {
             $filename = $part['parameters']['name'];
         } else {
             $filename = 'Part ' . $part['partId'];
@@ -921,13 +921,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $folder = Felamimail_Controller_Folder::getInstance()->get($folderId);
             
             // get error condition and update array by checking $counter keys
-            if (array_key_exists('incrementUnreadCounter', $counter)) {
+            if ((isset($counter['incrementUnreadCounter']) || array_key_exists('incrementUnreadCounter', $counter))) {
                 // this is only used in clearFlags() atm
                 $errorCondition = ($folder->cache_unreadcount + $counter['incrementUnreadCounter'] > $folder->cache_totalcount);
                 $updatedCounters = array(
                     'cache_unreadcount' => '+' . $counter['incrementUnreadCounter'],
                 );
-            } else if (array_key_exists('decrementMessagesCounter', $counter) && array_key_exists('decrementUnreadCounter', $counter)) {
+            } else if ((isset($counter['decrementMessagesCounter']) || array_key_exists('decrementMessagesCounter', $counter)) && (isset($counter['decrementUnreadCounter']) || array_key_exists('decrementUnreadCounter', $counter))) {
                 $errorCondition = ($folder->cache_unreadcount < $counter['decrementUnreadCounter'] || $folder->cache_totalcount < $counter['decrementMessagesCounter']);
                 $updatedCounters = array(
                     'cache_totalcount'  => '-' . $counter['decrementMessagesCounter'],

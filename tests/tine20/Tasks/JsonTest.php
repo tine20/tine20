@@ -227,7 +227,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, count($_taskData['alarms']));
         $this->assertEquals('Tasks_Model_Task', $_taskData['alarms'][0]['model']);
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $_taskData['alarms'][0]['sent_status']);
-        $this->assertTrue(array_key_exists('minutes_before', $_taskData['alarms'][0]), 'minutes_before is missing');
+        $this->assertTrue((isset($_taskData['alarms'][0]['minutes_before']) || array_key_exists('minutes_before', $_taskData['alarms'][0])), 'minutes_before is missing');
     }
     
     /**
@@ -254,7 +254,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, count($loadedTaskData['alarms']));
         $this->assertEquals('Tasks_Model_Task', $loadedTaskData['alarms'][0]['model']);
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedTaskData['alarms'][0]['sent_status']);
-        $this->assertTrue(array_key_exists('minutes_before', $loadedTaskData['alarms'][0]), 'minutes_before is missing');
+        $this->assertTrue((isset($loadedTaskData['alarms'][0]['minutes_before']) || array_key_exists('minutes_before', $loadedTaskData['alarms'][0])), 'minutes_before is missing');
         $this->assertEquals(2*24*60, $loadedTaskData['alarms'][0]['minutes_before']);
 
        // reset automatic alarms config

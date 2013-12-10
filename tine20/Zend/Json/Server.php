@@ -410,7 +410,7 @@ class Zend_Json_Server extends Zend_Server_Abstract
         $defaultParams = array_slice($params, count($args));
         foreach ($defaultParams as $param) {
             $value = null;
-            if (array_key_exists('default', $param)) {
+            if ((isset($param['default']) || array_key_exists('default', $param))) {
                 $value = $param['default'];
             }
             array_push($args, $value);

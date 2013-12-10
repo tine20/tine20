@@ -742,13 +742,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         }
         
         // body md5
-        if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
+        if((isset($_structure[$index]) || array_key_exists($index, $_structure)) && $_structure[$index] != 'NIL') {
             $structure['md5'] = strtolower($_structure[$index]);
         }
         $index++;
         
         // body disposition
-        if (array_key_exists($index, $_structure) && $_structure[$index] != 'NIL') {
+        if ((isset($_structure[$index]) || array_key_exists($index, $_structure)) && $_structure[$index] != 'NIL') {
             $structure['disposition']['type'] = $_structure[$index][0];
             
             if (isset($_structure[$index][1]) && $_structure[$index][1] != 'NIL' && is_array($_structure[$index][1])) {
@@ -764,13 +764,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $index++;
         
         // body language
-        if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL' && ! is_array($_structure[$index])) {
+        if((isset($_structure[$index]) || array_key_exists($index, $_structure)) && $_structure[$index] != 'NIL' && ! is_array($_structure[$index])) {
             $structure['language'] = strtolower($_structure[$index]);
         }
         $index++;
         
         // body location
-        if(array_key_exists($index, $_structure) && $_structure[$index] != 'NIL' && ! is_array($_structure[$index])) {
+        if((isset($_structure[$index]) || array_key_exists($index, $_structure)) && $_structure[$index] != 'NIL' && ! is_array($_structure[$index])) {
             $structure['location'] = strtolower($_structure[$index]);
         }
         

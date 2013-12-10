@@ -104,7 +104,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      */
     protected function _setOptions(array $_options)
     {
-        if (! array_key_exists('isGeneric', $_options)) {
+        if (! (isset($_options['isGeneric']) || array_key_exists('isGeneric', $_options))) {
             $_options['isGeneric'] = FALSE;
         }
         

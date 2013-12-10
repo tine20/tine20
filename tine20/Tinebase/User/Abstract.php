@@ -95,7 +95,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function __construct(array $_options = array())
     {
-        if (array_key_exists('plugins', $_options)) {
+        if ((isset($_options['plugins']) || array_key_exists('plugins', $_options))) {
             $this->registerPlugins($_options['plugins']);
         }
     }

@@ -338,12 +338,12 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         if (isset($result['primarydomain']) && ! empty($result['primarydomain'])) {
             $result['username'] .= '@' . $result['primarydomain'];
         }
-        if (array_key_exists('auth', $result) && $result['auth'] == 'none') {
+        if ((isset($result['auth']) || array_key_exists('auth', $result)) && $result['auth'] == 'none') {
             unset($result['username']);
             unset($result['password']);
             unset($result['auth']);
         }
-        if (array_key_exists('ssl', $result) && $result['ssl'] == 'none') {
+        if ((isset($result['ssl']) || array_key_exists('ssl', $result)) && $result['ssl'] == 'none') {
             unset($result['ssl']);
         }
         
@@ -456,7 +456,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 $credentials = $userCredentialCache;
                 
                 // allow to set credentials in config
-                if (array_key_exists('user', $imapConfig) && array_key_exists('password', $imapConfig) && ! empty($imapConfig['user'])) {
+                if ((isset($imapConfig['user']) || array_key_exists('user', $imapConfig)) && (isset($imapConfig['password']) || array_key_exists('password', $imapConfig)) && ! empty($imapConfig['user'])) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                         ' Using credentials from config for system account.');
                     $credentials->username = $imapConfig['user'];
@@ -464,7 +464,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 }
                 
                 // allow to set pw suffix in config
-                if (array_key_exists('pwsuffix', $imapConfig) && ! preg_match('/' . preg_quote($imapConfig['pwsuffix']) . '$/', $credentials->password)) {
+                if ((isset($imapConfig['pwsuffix']) || array_key_exists('pwsuffix', $imapConfig)) && ! preg_match('/' . preg_quote($imapConfig['pwsuffix']) . '$/', $credentials->password)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                         ' Appending configured pwsuffix to system account password.');
                     $credentials->password .= $imapConfig['pwsuffix'];

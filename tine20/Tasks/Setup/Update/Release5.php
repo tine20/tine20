@@ -100,7 +100,7 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
         foreach($pfiltersDatas as $pfilterData) {
             $filtersData = Zend_Json::decode($pfilterData['filters']);
             foreach($filtersData as &$filterData) {
-                if (array_key_exists('field', $filterData) && $filterData['field'] == 'status_id') {
+                if ((isset($filterData['field']) || array_key_exists('field', $filterData)) && $filterData['field'] == 'status_id') {
                     $filterData['field'] = 'status';
                     $newStatusIds = array();
                     foreach((array) $filterData['value'] as $oldStatusId) {

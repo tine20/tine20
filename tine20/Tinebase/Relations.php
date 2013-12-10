@@ -288,7 +288,7 @@ class Tinebase_Relations
         // seperate relations by model
         $modelMap = array();
         foreach ($_relations as $relation) {
-            if (!array_key_exists($relation->related_model, $modelMap)) {
+            if (!(isset($modelMap[$relation->related_model]) || array_key_exists($relation->related_model, $modelMap))) {
                 $modelMap[$relation->related_model] = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
             }
             $modelMap[$relation->related_model]->addRecord($relation);

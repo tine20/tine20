@@ -158,6 +158,6 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
     public function getOption($_key)
     {
         $options = $this->options ? Zend_Json::decode($this->options) : array();
-        return array_key_exists($_key, $options) ? $options[$_key] : NULL;
+        return (isset($options[$_key]) || array_key_exists($_key, $options)) ? $options[$_key] : NULL;
     }
 }

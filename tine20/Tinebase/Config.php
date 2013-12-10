@@ -669,7 +669,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                         . ' ' . print_r($definition, TRUE));
                     
-                    if (array_key_exists('clientRegistryInclude', $definition) && $definition['clientRegistryInclude'] === TRUE) {
+                    if ((isset($definition['clientRegistryInclude']) || array_key_exists('clientRegistryInclude', $definition)) && $definition['clientRegistryInclude'] === TRUE) {
                         // add definition here till we have a better place
                         $configRegistryItem = new Tinebase_Config_Struct(array(
                             'value'         => $config->{$name},

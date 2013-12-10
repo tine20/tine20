@@ -319,7 +319,7 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
         
         $rrule = new Calendar_Model_Rrule(array());
         
-        if (! array_key_exists($egwRrule['recur_type'], $this->_rruleFreqMap)) {
+        if (! (isset($this->_rruleFreqMap[$egwRrule['recur_type']]) || array_key_exists($egwRrule['recur_type'], $this->_rruleFreqMap))) {
             throw new Exception('unsupported rrule freq');
         }
         
@@ -362,7 +362,7 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                 $tineAttenderArray = array(
                     'quantity'          => $egwAttender['cal_quantity'],
                     'role'              => Calendar_Model_Attender::ROLE_REQUIRED,
-                    'status'            => array_key_exists($egwAttender['cal_status'], $this->_attenderStatusMap) ? 
+                    'status'            => (isset($this->_attenderStatusMap[$egwAttender['cal_status']]) || array_key_exists($egwAttender['cal_status'], $this->_attenderStatusMap)) ? 
                                                $this->_attenderStatusMap[$egwAttender['cal_status']] : 
                                                Calendar_Model_Attender::STATUS_NEEDSACTION,
                     'status_authkey'    => Calendar_Model_Attender::generateUID(),
@@ -437,7 +437,7 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
      */
     protected function _getContactIdByAccountId($_accountId)
     {
-        if (! array_key_exists($_accountId,$this->_contactIdCache)) {
+        if (! (isset($this->_contactIdCache[$_accountId]) || array_key_exists($_accountId,$this->_contactIdCache))) {
             
             $tineDb = Tinebase_Core::getDb();
             $select = $tineDb->select()

@@ -40,7 +40,7 @@ class Felamimail_Backend_SieveFactory
             // we need to instantiate a new sieve backend
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Connecting to server ' . $sieveConfig['host'] . ':' . $sieveConfig['port'] 
-                . ' (secure: ' . ((array_key_exists('ssl', $sieveConfig) && $sieveConfig['ssl'] !== FALSE) ? $sieveConfig['ssl'] : 'none') 
+                . ' (secure: ' . (((isset($sieveConfig['ssl']) || array_key_exists('ssl', $sieveConfig)) && $sieveConfig['ssl'] !== FALSE) ? $sieveConfig['ssl'] : 'none') 
                 . ') with user ' . $sieveConfig['username']);
             
             self::$_backends[$accountId] = new Felamimail_Backend_Sieve($sieveConfig);

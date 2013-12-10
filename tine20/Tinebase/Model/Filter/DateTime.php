@@ -66,7 +66,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
     {
         if ($_operator === 'within') {
             // get beginning / end date and add 00:00:00 / 23:59:59
-            date_default_timezone_set(array_key_exists('timezone', $this->_options) && ! empty($this->_options['timezone']) ? $this->_options['timezone'] : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            date_default_timezone_set((isset($this->_options['timezone']) || array_key_exists('timezone', $this->_options)) && ! empty($this->_options['timezone']) ? $this->_options['timezone'] : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
             $value = parent::_getDateValues(
                 $_operator, 
                 $_value

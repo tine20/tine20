@@ -928,7 +928,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Verbessurüngsvorschlag.eml', $forwardMessageComplete['attachments'][0]['filename'], 'umlaut missing from attachment filename');
         
         $forwardMessage = $this->_json->getMessage($forwardMessage['id']);
-        $this->assertTrue(array_key_exists('structure', $forwardMessage), 'structure should be set when fetching complete message: ' . print_r($forwardMessage, TRUE));
+        $this->assertTrue((isset($forwardMessage['structure']) || array_key_exists('structure', $forwardMessage)), 'structure should be set when fetching complete message: ' . print_r($forwardMessage, TRUE));
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardMessage['structure']['parts'][2]['contentType']);
         
         $message = $this->_json->getMessage($message['id']);
@@ -1570,7 +1570,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_setTestScriptname();
         
         // check which save fn to use
-        if (array_key_exists('reason', $_sieveData)) {
+        if ((isset($_sieveData['reason']) || array_key_exists('reason', $_sieveData))) {
             $resultSet = $this->_json->saveVacation($_sieveData);
             $this->assertEquals($this->_account->email, $resultSet['addresses'][0]);
             
@@ -1592,7 +1592,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 $this->assertEquals($_sieveData['reason'], $resultSet['reason']);
             }
             
-        } else if (array_key_exists('action_type', $_sieveData[0])) {
+        } else if ((isset($_sieveData[0]['action_type']) || array_key_exists('action_type', $_sieveData[0]))) {
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
             $this->assertEquals($_sieveData, $resultSet);
         }

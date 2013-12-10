@@ -145,7 +145,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertGreaterThan(0, count($loadedEventData['alarms']));
         $this->assertEquals('Calendar_Model_Event', $loadedEventData['alarms'][0]['model']);
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedEventData['alarms'][0]['sent_status']);
-        $this->assertTrue(array_key_exists('minutes_before', $loadedEventData['alarms'][0]), 'minutes_before is missing');
+        $this->assertTrue((isset($loadedEventData['alarms'][0]['minutes_before']) || array_key_exists('minutes_before', $loadedEventData['alarms'][0])), 'minutes_before is missing');
         
         $scheduler = Tinebase_Core::getScheduler();
         $scheduler->addTask('Tinebase_Alarm', $this->createTask());
@@ -499,7 +499,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         foreach ($searchResultData['results'] as $event) {
             $summaryMap[$event['dtstart']] = $event['summary'];
         }
-        $this->assertTrue(array_key_exists('2009-04-01 06:00:00', $summaryMap));
+        $this->assertTrue((isset($summaryMap['2009-04-01 06:00:00']) || array_key_exists('2009-04-01 06:00:00', $summaryMap)));
         $this->assertEquals($persistentException['summary'], $summaryMap['2009-04-01 06:00:00']);
         
         return $searchResultData;
@@ -593,7 +593,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             $summaryMap[$event['dtstart']] = $event['summary'];
         }
         
-        $this->assertTrue(array_key_exists('2009-04-01 20:00:00', $summaryMap));
+        $this->assertTrue((isset($summaryMap['2009-04-01 20:00:00']) || array_key_exists('2009-04-01 20:00:00', $summaryMap)));
         $this->assertEquals('go sleeping', $summaryMap['2009-04-01 20:00:00']);
         
         $fishings = array_keys($summaryMap, 'go fishing');
@@ -735,13 +735,13 @@ class Calendar_JsonTests extends Calendar_TestCase
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         $eventData = $searchResultData['results'][0];
         
-        $this->assertFalse(array_key_exists('summary', $eventData), 'summary not empty: ' . print_r($eventData, TRUE));
-        $this->assertFalse(array_key_exists('description', $eventData), 'description not empty');
-        $this->assertFalse(array_key_exists('tags', $eventData), 'tags not empty');
-        $this->assertFalse(array_key_exists('notes', $eventData), 'notes not empty');
-        $this->assertFalse(array_key_exists('attendee', $eventData), 'attendee not empty');
-        $this->assertFalse(array_key_exists('organizer', $eventData), 'organizer not empty');
-        $this->assertFalse(array_key_exists('alarms', $eventData), 'alarms not empty');
+        $this->assertFalse((isset($eventData['summary']) || array_key_exists('summary', $eventData)), 'summary not empty: ' . print_r($eventData, TRUE));
+        $this->assertFalse((isset($eventData['description']) || array_key_exists('description', $eventData)), 'description not empty');
+        $this->assertFalse((isset($eventData['tags']) || array_key_exists('tags', $eventData)), 'tags not empty');
+        $this->assertFalse((isset($eventData['notes']) || array_key_exists('notes', $eventData)), 'notes not empty');
+        $this->assertFalse((isset($eventData['attendee']) || array_key_exists('attendee', $eventData)), 'attendee not empty');
+        $this->assertFalse((isset($eventData['organizer']) || array_key_exists('organizer', $eventData)), 'organizer not empty');
+        $this->assertFalse((isset($eventData['alarms']) || array_key_exists('alarms', $eventData)), 'alarms not empty');
     }
     
     /**
@@ -813,11 +813,11 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals(count($expectedEventData['tags']), count($eventData['tags']), $msg . ': failed to append tag');
         $this->assertEquals(count($expectedEventData['notes']), count($eventData['notes']), $msg . ': failed to create note or wrong number of notes');
         
-        if (array_key_exists('alarms', $expectedEventData)) {
-            $this->assertTrue(array_key_exists('alarms', $eventData), ': failed to create alarms');
+        if ((isset($expectedEventData['alarms']) || array_key_exists('alarms', $expectedEventData))) {
+            $this->assertTrue((isset($eventData['alarms']) || array_key_exists('alarms', $eventData)), ': failed to create alarms');
             $this->assertEquals(count($expectedEventData['alarms']), count($eventData['alarms']), $msg . ': failed to create correct number of alarms');
             if (count($expectedEventData['alarms']) > 0) {
-                $this->assertTrue(array_key_exists('minutes_before', $eventData['alarms'][0]));
+                $this->assertTrue((isset($eventData['alarms'][0]['minutes_before']) || array_key_exists('minutes_before', $eventData['alarms'][0])));
             }
         }
     }
@@ -835,7 +835,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         foreach ($attendeeData as $key => $attender) {
             if ($attender['user_type'] == Calendar_Model_Attender::USERTYPE_USER) {
-                if (is_array($attender['user_id']) && array_key_exists('id', $attender['user_id'])) {
+                if (is_array($attender['user_id']) && (isset($attender['user_id']['id']) || array_key_exists('id', $attender['user_id']))) {
                     if ($attender['user_id']['id'] == $searchedId) {
                         $attenderData = $attendeeData[$key];
                     }

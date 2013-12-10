@@ -70,7 +70,7 @@ Class SimpleFAQ_Model_Config extends Tinebase_Record_Abstract
     {
         if ($this->has($_property) && isset($this->$_property) && is_array($this->$_property)) {
             foreach ($this->$_property as $sub) {
-                if (array_key_exists($_idProperty, $sub) && $sub[$_idProperty] == $_id) {
+                if ((isset($sub[$_idProperty]) || array_key_exists($_idProperty, $sub)) && $sub[$_idProperty] == $_id) {
                     return $sub;
                 }
             }

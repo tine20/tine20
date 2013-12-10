@@ -137,10 +137,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         if (isset($_options['requiredObjectClass'])) {
             $this->_requiredObjectClass = (array)$_options['requiredObjectClass'];
         }
-        if (array_key_exists('readonly', $_options)) {
+        if ((isset($_options['readonly']) || array_key_exists('readonly', $_options))) {
             $this->_isReadOnlyBackend = (bool)$_options['readonly'];
         }
-        if (array_key_exists('ldap', $_options)) {
+        if ((isset($_options['ldap']) || array_key_exists('ldap', $_options))) {
             $this->_ldap = $_options['ldap'];
         }
         
@@ -316,7 +316,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function getUserByPropertyFromSyncBackend($_property, $_accountId, $_accountClass = 'Tinebase_Model_User')
     {
-        if (!array_key_exists($_property, $this->_rowNameMapping)) {
+        if (!(isset($this->_rowNameMapping[$_property]) || array_key_exists($_property, $this->_rowNameMapping))) {
             throw new Tinebase_Exception_NotFound("can't get user by property $_property. property not supported by ldap backend.");
         }
 
@@ -807,8 +807,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                         break;
                         
                     case 'accountStatus':
-                        if (array_key_exists('shadowmax', $_userData) && array_key_exists('shadowinactive', $_userData)) {
-                            $lastChange = array_key_exists('shadowlastchange', $_userData) ? $_userData['shadowlastchange'] : 0;
+                        if ((isset($_userData['shadowmax']) || array_key_exists('shadowmax', $_userData)) && (isset($_userData['shadowinactive']) || array_key_exists('shadowinactive', $_userData))) {
+                            $lastChange = (isset($_userData['shadowlastchange']) || array_key_exists('shadowlastchange', $_userData)) ? $_userData['shadowlastchange'] : 0;
                             if (($lastChange + $_userData['shadowmax'] + $_userData['shadowinactive']) * 86400 <= Tinebase_DateTime::now()->getTimestamp()) {
                                 $accountArray[$keyMapping] = 'enabled';
                             } else {
@@ -914,7 +914,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $ldapData = array();
 
         foreach ($_user as $key => $value) {
-            $ldapProperty = array_key_exists($key, $this->_rowNameMapping) ? $this->_rowNameMapping[$key] : false;
+            $ldapProperty = (isset($this->_rowNameMapping[$key]) || array_key_exists($key, $this->_rowNameMapping)) ? $this->_rowNameMapping[$key] : false;
 
             if ($ldapProperty) {
                 switch ($key) {

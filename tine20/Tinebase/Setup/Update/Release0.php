@@ -2287,7 +2287,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                             $field = $match[1];
                             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                                 . ' Converting field ' . $field 
-                                . ((array_key_exists('id', $row)) ? ' of record ' . $row['id'] : '') 
+                                . (((isset($row['id']) || array_key_exists('id', $row))) ? ' of record ' . $row['id'] : '') 
                                 //. ' value: ' . $row[$field]
                             );
                             $row[$field] = utf8_encode($row[$field]);

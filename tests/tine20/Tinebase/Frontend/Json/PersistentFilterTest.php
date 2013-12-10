@@ -168,7 +168,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $tfj = new Tinebase_Frontend_Json();
         $allRegData = $tfj->getRegistryData();
         
-        $this->assertTrue(array_key_exists('persistentFilters', $allRegData), 'persistentFilters is missing in $allRegData');
+        $this->assertTrue((isset($allRegData['persistentFilters']) || array_key_exists('persistentFilters', $allRegData)), 'persistentFilters is missing in $allRegData');
         
         $ids = array();
         foreach($allRegData['persistentFilters']['results'] as $filterData) {
@@ -284,8 +284,8 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $this->assertTrue(is_array($savedFilterData), 'saved filter should be an array');
         $this->assertEquals($expectedFilterData['name'],  $savedFilterData['name'], 'name does not match');
         
-        $this->assertTrue(array_key_exists('filters', $savedFilterData), 'saved filter data is not included');
-        $this->assertTrue(array_key_exists('name', $savedFilterData), 'saved filter name is not included');
+        $this->assertTrue((isset($savedFilterData['filters']) || array_key_exists('filters', $savedFilterData)), 'saved filter data is not included');
+        $this->assertTrue((isset($savedFilterData['name']) || array_key_exists('name', $savedFilterData)), 'saved filter name is not included');
         
         foreach($expectedFilterData['filters'] as $requestFilter) {
             $responseFilter = $this->_getFilter($requestFilter['field'], $savedFilterData);

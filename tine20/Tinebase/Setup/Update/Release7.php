@@ -220,7 +220,7 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         $db = Tinebase_Core::getDb();
         $modlogTable = SQL_TABLE_PREFIX . 'timemachine_modlog';
         $modlogTableColumns = Tinebase_Db_Table::getTableDescriptionFromCache($modlogTable, $db);
-        if (!  array_key_exists('seq', $modlogTableColumns)) {
+        if (!  (isset($modlogTableColumns['seq']) || array_key_exists('seq', $modlogTableColumns))) {
             throw new Tinebase_Exception_SystemGeneric('You need to update Tinebase before updating any other application');
         }
         

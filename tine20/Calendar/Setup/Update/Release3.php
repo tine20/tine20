@@ -246,15 +246,15 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
         
         foreach ($states as $state) {
             $data = Zend_Json::decode($state['data']);
-            if (array_key_exists('cal-color-mgr-containers', $data)) {
+            if ((isset($data['cal-color-mgr-containers']) || array_key_exists('cal-color-mgr-containers', $data))) {
                 $colorMgrData = Tinebase_State::decode($data['cal-color-mgr-containers']);
                 $containerColorMap = $colorMgrData['colorMap'];
                 foreach ($containerColorMap as $containerId => $colorId) {
-                    if (! array_key_exists($containerId, $colorHistogram)) {
+                    if (! (isset($colorHistogram[$containerId]) || array_key_exists($containerId, $colorHistogram))) {
                         $colorHistogram[$containerId] = array();
                     }
                     
-                    if (! array_key_exists($colorId, $colorHistogram[$containerId])) {
+                    if (! (isset($colorHistogram[$containerId][$colorId]) || array_key_exists($colorId, $colorHistogram[$containerId]))) {
                         $colorHistogram[$containerId][$colorId] = 0;
                     }
                     

@@ -310,7 +310,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 
                 // @todo maybe it will be possible to add a generic/implicite foreign id filter 
                 // .... but we have to solve the problem of the foreign id field first
-//                if (! array_key_exists('filterName', $_filterData['value'])) {
+//                if (! (isset($_filterData['value']['filterName']) || array_key_exists('filterName', $_filterData['value']))) {
 //                    $modelName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'modelName');
 //                    $filter = new Tinebase_Model_Filter_ForeignId($_filterData['field'], $_filterData['operator'], $_filterData['value'], array(
 //                        'filtergroup'       => $modelName . 'Filter', 
@@ -339,8 +339,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected function _getModelNameFromLinkInfo($_linkInfo, $_modelKey)
     {
         if (   ! in_array($_modelKey, array('modelName', 'filterName')) 
-            || ! array_key_exists('appName', $_linkInfo) 
-            || ! array_key_exists($_modelKey, $_linkInfo)
+            || ! (isset($_linkInfo['appName']) || array_key_exists('appName', $_linkInfo)) 
+            || ! (isset($_linkInfo[$_modelKey]) || array_key_exists($_modelKey, $_linkInfo))
         ) {
             throw new Tinebase_Exception_InvalidArgument('Foreign record filter needs appName and modelName or filterName');
         }
@@ -376,12 +376,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . '[' . $this->_className . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
         
-        } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $_filterData)) {
+        } elseif ((isset($fieldModel['filter']) || array_key_exists('filter', $fieldModel)) && (isset($_filterData['value']) || array_key_exists('value', $_filterData))) {
             // create a 'single' filter
             $filter = $this->createFilter($_filterData);
             $this->addFilter($filter, TRUE);
         
-        } elseif (array_key_exists('custom', $fieldModel) && $fieldModel['custom'] == true) {
+        } elseif ((isset($fieldModel['custom']) || array_key_exists('custom', $fieldModel)) && $fieldModel['custom'] == true) {
             // silently skip data, as they will be evaluated by the concrete filtergroup
             $this->_customData[] = $_filterData;
         
@@ -476,7 +476,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
 
         foreach (array('field', 'operator', 'value') as $requiredKey) {
-            if (! array_key_exists($requiredKey, $data)) {
+            if (! (isset($data[$requiredKey]) || array_key_exists($requiredKey, $data))) {
                 throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
             }
         }
@@ -769,9 +769,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             if ($filter instanceof Tinebase_Model_Filter_Abstract) {
                 $field = $filter->getField();
                 if (   is_string($field) 
-                    && array_key_exists($field, $this->_filterModel) 
-                    && array_key_exists('options', $this->_filterModel[$field]) 
-                    && array_key_exists('requiredCols', $this->_filterModel[$field]['options'])
+                    && (isset($this->_filterModel[$field]) || array_key_exists($field, $this->_filterModel)) 
+                    && (isset($this->_filterModel[$field]['options']) || array_key_exists('options', $this->_filterModel[$field])) 
+                    && (isset($this->_filterModel[$field]['options']['requiredCols']) || array_key_exists('requiredCols', $this->_filterModel[$field]['options']))
                 ) {
                     $result = array_merge($result, $this->_filterModel[$field]['options']['requiredCols']);
                 }
@@ -782,7 +782,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         
         foreach ($this->_customData as $custom) {
             // check custom filter for requirements
-            if (array_key_exists('requiredCols', $this->_filterModel[$custom['field']])) {
+            if ((isset($this->_filterModel[$custom['field']]['requiredCols']) || array_key_exists('requiredCols', $this->_filterModel[$custom['field']]))) {
                 $result = array_merge($result, $this->_filterModel[$custom['field']]['requiredCols']);
             }
         }

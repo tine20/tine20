@@ -146,7 +146,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         if ($this->_clientId !== NULL) {
             $cond = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'client_idnr') . ' = ?', $this->_clientId);
         } else {
-            if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
+            if ((isset($this->_config['domain']) || array_key_exists('domain', $this->_config)) && ! empty($this->_config['domain'])) {
                 $cond = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',   $this->_config['domain']);
             } else {
                 $cond = $this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " =''";
@@ -217,7 +217,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
     public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE)
     {
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-        if (array_key_exists('pwsuffix', $imapConfig)) {
+        if ((isset($imapConfig['pwsuffix']) || array_key_exists('pwsuffix', $imapConfig))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' Appending configured pwsuffix to new email account password.');
             $password = $_password . $imapConfig['pwsuffix'];

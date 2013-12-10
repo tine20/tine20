@@ -502,7 +502,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     public static function computeNextOccurrence($_event, $_exceptions, $_from, $_which = 1)
     {
-        if ($_which === 0) {
+        if ($_which === 0 || $_event->dtstart == $_from) {
             return $_event;
         }
         
@@ -921,7 +921,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $byDayInterval = (int) substr($_rrule->byday, 0, -2);
         $byDayWeekday  = substr($_rrule->byday, -2);
         
-        if ($byDayInterval === 0 || ! array_key_exists($byDayWeekday, self::$WEEKDAY_DIGIT_MAP)) {
+        if ($byDayInterval === 0 || ! (isset(self::$WEEKDAY_DIGIT_MAP[$byDayWeekday]) || array_key_exists($byDayWeekday, self::$WEEKDAY_DIGIT_MAP))) {
             throw new Exception('mal formated rrule byday part: "' . $_rrule->byday . '"');
         }
         

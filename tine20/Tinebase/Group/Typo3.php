@@ -173,7 +173,7 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
             $t3userGroups = explode(',', $t3user['usergroup']);
                         
             foreach((array) $t3userGroups as $groupId) {
-                if (! array_key_exists($groupId, $groupMap)) {
+                if (! (isset($groupMap[$groupId]) || array_key_exists($groupId, $groupMap))) {
                     $groupMap[$groupId] = array();
                 }
                 

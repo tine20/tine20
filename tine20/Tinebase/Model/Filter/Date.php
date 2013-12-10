@@ -80,7 +80,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
          
         // append query to select object
         foreach ((array)$this->_opSqlMap[$operator]['sqlop'] as $num => $operator) {
-            if (array_key_exists($num, $value)) {
+            if ((isset($value[$num]) || array_key_exists($num, $value))) {
                 if (get_parent_class($this) === 'Tinebase_Model_Filter_Date' || in_array($operator, array('isnull', 'notnull'))) {
                     $_select->where($field . $operator, $value[$num]);
                 } else {

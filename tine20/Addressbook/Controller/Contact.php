@@ -460,7 +460,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             preg_match('/^' . $pattern . ' /', $_street, $matches);
         }
         
-        if (array_key_exists(1, $matches)) {
+        if ((isset($matches[1]) || array_key_exists(1, $matches))) {
             $result = $matches[1];
             $_street = str_replace($matches[0], '', $_street);
         } else {

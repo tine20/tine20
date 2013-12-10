@@ -62,7 +62,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $GLOBALS['Crm_ControllerTest'] = array_key_exists('Crm_ControllerTest', $GLOBALS) ? $GLOBALS['Crm_ControllerTest'] : array();
+        $GLOBALS['Crm_ControllerTest'] = (isset($GLOBALS['Crm_ControllerTest']) || array_key_exists('Crm_ControllerTest', $GLOBALS)) ? $GLOBALS['Crm_ControllerTest'] : array();
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 

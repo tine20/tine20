@@ -101,7 +101,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 // TODO: resolve recursive records of records better in controller
                 // TODO: resolve containers
                 } else {
-                    $controller = array_key_exists('controllerClassName', $cfg['config']) ? $cfg['config']['controllerClassName']::getInstance() : Tinebase_Core::getApplicationInstance($foreignRecordClassName);
+                    $controller = (isset($cfg['config']['controllerClassName']) || array_key_exists('controllerClassName', $cfg['config'])) ? $cfg['config']['controllerClassName']::getInstance() : Tinebase_Core::getApplicationInstance($foreignRecordClassName);
                     $foreignRecords = $controller->getMultiple($foreignIds);
                 }
                 
@@ -170,8 +170,8 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      */
     protected static function _resolveForeignIdFields($records, $foreignRecordClassName, $fields)
     {
-        $options = array_key_exists('options', $fields) ? $fields['options'] : array();
-        $fields = array_key_exists('fields', $fields) ? $fields['fields'] : $fields;
+        $options = (isset($fields['options']) || array_key_exists('options', $fields)) ? $fields['options'] : array();
+        $fields = (isset($fields['fields']) || array_key_exists('fields', $fields)) ? $fields['fields'] : $fields;
         
         $foreignIds = array();
         foreach ($fields as $field) {
@@ -199,7 +199,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Fetching ' . $foreignRecordClassName . ' by id: ' . print_r($foreignIds, TRUE));
         
-        if (array_key_exists('ignoreAcl', $options) && $options['ignoreAcl']) {
+        if ((isset($options['ignoreAcl']) || array_key_exists('ignoreAcl', $options)) && $options['ignoreAcl']) {
             // @todo make sure that second param of getMultiple() is $ignoreAcl
             $foreignRecords = $controller->getMultiple($foreignIds, TRUE);
         } else {
@@ -332,7 +332,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
         
         foreach($virtualFields as $field) {
-            if (array_key_exists('function', $field)) {
+            if ((isset($field['function']) || array_key_exists('function', $field))) {
                 if (is_array($field['function'])) {
                     if (count($field['function']) > 1) { // static method call
                         $class  = $field['function'][0];

@@ -63,7 +63,7 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
-        if (array_key_exists('definition', $_data)) {
+        if ((isset($_data['definition']) || array_key_exists('definition', $_data))) {
             if (is_string($_data['definition'])) {
                 $_data['definition'] = Zend_Json::decode($_data['definition']);
             }

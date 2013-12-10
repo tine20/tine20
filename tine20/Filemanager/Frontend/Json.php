@@ -160,7 +160,7 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveNode($recordData)
     {
-        if(array_key_exists('created_by', $recordData)) {
+        if((isset($recordData['created_by']) || array_key_exists('created_by', $recordData))) {
             return $this->_save($recordData, Filemanager_Controller_Node::getInstance(), 'Node');
         } else {    // on upload complete
             return $recordData;

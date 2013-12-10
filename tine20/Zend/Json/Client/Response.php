@@ -46,7 +46,7 @@ class Zend_Json_Client_Response extends Zend_Json_Server_Response
     {
         $response = Zend_Json::decode($json);
         
-        if(array_key_exists('error', $response)) {
+        if((isset($response['error']) || array_key_exists('error', $response))) {
             $this->setError(new Zend_Json_Server_Error(
                 $response['error']['message'],
                 $response['error']['code'],
@@ -56,11 +56,11 @@ class Zend_Json_Client_Response extends Zend_Json_Server_Response
             $this->setResult($response['result']);
         }
         
-        if(array_key_exists('jsonrpc', $response)) {
+        if((isset($response['jsonrpc']) || array_key_exists('jsonrpc', $response))) {
             $this->setVersion($response['jsonrpc']);
         }
         
-        if(array_key_exists('id', $response)) {
+        if((isset($response['id']) || array_key_exists('id', $response))) {
             $this->setId($response['jsonrpc']);
         }
     }

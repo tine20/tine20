@@ -99,7 +99,7 @@ abstract class Tinebase_Model_Filter_Abstract
         }
 
         foreach (array('field', 'operator', 'value') as $requiredKey) {
-            if (! array_key_exists($requiredKey, $data)) {
+            if (! (isset($data[$requiredKey]) || array_key_exists($requiredKey, $data))) {
                 throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
             }
         }
@@ -210,7 +210,7 @@ abstract class Tinebase_Model_Filter_Abstract
     public function setValue($_value)
     {
         // cope with resolved records
-        if (is_array($_value) && array_key_exists('id', $_value)) {
+        if (is_array($_value) && (isset($_value['id']) || array_key_exists('id', $_value))) {
             $_value = $_value['id'];
         }
         

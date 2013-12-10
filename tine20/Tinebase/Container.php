@@ -1058,8 +1058,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param   string                       $_grantModel
      * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
      * @throws  Tinebase_Exception_AccessDenied
-     * 
-     * @todo add caching?
      */
     public function getGrantsOfContainer($_containerId, $_ignoreAcl = FALSE, $_grantModel = 'Tinebase_Model_Grants') 
     {
@@ -1067,14 +1065,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
-        $select = $this->_getSelect('*', TRUE)
-            ->where("{$this->_db->quoteIdentifier('container.id')} = ?", $containerId)
-            ->join(array(
-                /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
-                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                /* select */ array('*', 'account_grants' => $this->_dbCommand->getAggregate('container_acl.account_grant'))
-            )
-            ->group(array('container.id', 'container_acl.account_type', 'container_acl.account_id'));
+        $select = $this->_getAclSelectByContainerId($containerId)
+            ->group(array('container_acl.container_id', 'container_acl.account_type', 'container_acl.account_id'));
         
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
@@ -1102,6 +1094,23 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * get select with acl (grants) by container ID
+     * 
+     * @param integer $containerId
+     * @return Zend_Db_Select
+     */
+    protected function _getAclSelectByContainerId($containerId)
+    {
+         $select = $this->_db->select()
+            ->from(
+                array('container_acl' => SQL_TABLE_PREFIX . 'container_acl'),
+                array('*', 'account_grants' => $this->_dbCommand->getAggregate('container_acl.account_grant'))
+            )
+            ->where("{$this->_db->quoteIdentifier('container_acl.container_id')} = ?", $containerId);
+         return $select;
+    }
+    
+    /**
      * get grants assigned to one account of one container
      *
      * @param   string|Tinebase_Model_User          $_accountId
@@ -1118,16 +1127,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId . $container->seq);
         $cache = Tinebase_Core::getCache();
         $grants = $cache->load($cacheKey);
-        if($grants === FALSE) {
-            $select = $this->_getSelect('*', TRUE)
-                ->where("{$this->_db->quoteIdentifier('container.id')} = ?", $containerId)
-                ->join(array(
-                    /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
-                    /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                    /* select */ array('*', 'account_grants' => $this->_dbCommand->getAggregate('container_acl.account_grant'))
-                )
+        if ($grants === FALSE) {
+            $select = $this->_getAclSelectByContainerId($containerId)
                 ->group('container_acl.account_grant');
-    
+            
             $this->addGrantsSql($select, $accountId, '*');
             
             Tinebase_Backend_Sql_Abstract::traitGroup($select);
@@ -1173,7 +1176,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 /* select */ array('*', 'account_grants' => $this->_dbCommand->getAggregate('container_acl.account_grant'))
             )
             ->group('container.id', 'container_acl.account_type', 'container_acl.account_id');
-        
+            
         $this->addGrantsSql($select, $accountId, '*');
         
         Tinebase_Backend_Sql_Abstract::traitGroup($select);

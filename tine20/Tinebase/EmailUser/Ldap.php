@@ -64,7 +64,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
      */
     protected function _appendDomain($_userName)
     {
-        if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
+        if ((isset($this->_config['domain']) || array_key_exists('domain', $this->_config)) && ! empty($this->_config['domain'])) {
             $_userName .= '@' . $this->_config['domain'];
         }
         
@@ -187,7 +187,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
             }
         }
         
-        if (array_key_exists('emailForwards', $this->_propertyMapping) && empty($_ldapData[$this->_propertyMapping['emailForwards']])) {
+        if ((isset($this->_propertyMapping['emailForwards']) || array_key_exists('emailForwards', $this->_propertyMapping)) && empty($_ldapData[$this->_propertyMapping['emailForwards']])) {
             $_ldapData[$this->_propertyMapping['emailForwardOnly']] = array();
         }
         

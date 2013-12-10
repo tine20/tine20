@@ -290,7 +290,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // create a typemap
         $typeMap = array();
         foreach($attendee as $attender) {
-            if (! array_key_exists($attender['user_type'], $typeMap)) {
+            if (! (isset($typeMap[$attender['user_type']]) || array_key_exists($attender['user_type'], $typeMap))) {
                 $typeMap[$attender['user_type']] = array();
             }
             
@@ -330,7 +330,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     continue;
                 }
                 
-                if (array_key_exists($attender->user_type, $typeMap) && array_key_exists($attender->user_id, $typeMap[$attender->user_type])) {
+                if ((isset($typeMap[$attender->user_type]) || array_key_exists($attender->user_type, $typeMap)) && (isset($typeMap[$attender->user_type][$attender->user_id]) || array_key_exists($attender->user_id, $typeMap[$attender->user_type]))) {
                     $fbInfo = new Calendar_Model_FreeBusy(array(
                         'user_type' => $attender->user_type,
                         'user_id'   => $attender->user_id,
@@ -649,7 +649,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
-        if (array_key_exists('dtstart', $diff->diff) || array_key_exists('dtend', $diff->diff)) {
+        if ((isset($diff->diff['dtstart']) || array_key_exists('dtstart', $diff->diff)) || (isset($diff->diff['dtend']) || array_key_exists('dtend', $diff->diff))) {
             $this->_applyTimeDiff($event, $exdate);
         }
     }

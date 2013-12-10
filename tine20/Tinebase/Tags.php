@@ -136,7 +136,7 @@ class Tinebase_Tags
         $tagData = array();
         
         foreach ($_tags as $tag) {
-            if (array_key_exists($tag['id'], $tagData)) {
+            if ((isset($tagData[$tag['id']]) || array_key_exists($tag['id'], $tagData))) {
                 $tagData[$tag['id']]['selection_occurrence']++;
             } else {
                 $tag['selection_occurrence'] = 1;

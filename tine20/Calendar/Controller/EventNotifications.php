@@ -79,13 +79,13 @@
         
         $updates = array();
         foreach ($orderedUpdateFieldOfInterest as $field) {
-            if (array_key_exists($field, $diff)) {
+            if ((isset($diff[$field]) || array_key_exists($field, $diff))) {
                 $updates[$field] = $diff[$field];
             }
         }
         
         // rrule legacy
-        if (array_key_exists('rrule', $updates)) {
+        if ((isset($updates['rrule']) || array_key_exists('rrule', $updates))) {
             $updates['rrule'] = $_oldEvent->rrule;
         }
         
@@ -324,7 +324,7 @@
             case 'changed':
                 switch ($_notificationLevel) {
                     case self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE:
-                        if (array_key_exists('dtstart', $_updates)) {
+                        if ((isset($_updates['dtstart']) || array_key_exists('dtstart', $_updates))) {
                             $oldStartDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_updates['dtstart'], $timezone, $locale);
                             $messageSubject = sprintf($translate->_('Event "%1$s" has been rescheduled from %2$s to %3$s' ), $_event->summary, $oldStartDateString, $startDateString);
                             $method = Calendar_Model_iMIP::METHOD_REQUEST;

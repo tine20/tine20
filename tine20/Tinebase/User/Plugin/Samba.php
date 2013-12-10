@@ -214,7 +214,7 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
         
         if ($_user->sambaSAM instanceof Tinebase_Model_SAMUser) {
             foreach ($_user->sambaSAM as $key => $value) {
-                if (array_key_exists($key, $this->_propertyMapping)) {
+                if ((isset($this->_propertyMapping[$key]) || array_key_exists($key, $this->_propertyMapping))) {
                     switch ($key) {
                         case 'pwdLastSet':
                         case 'logonTime':

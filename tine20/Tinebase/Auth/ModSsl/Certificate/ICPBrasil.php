@@ -50,11 +50,11 @@ class Tinebase_Auth_ModSsl_Certificate_ICPBrasil extends Tinebase_Auth_ModSsl_Ce
     public function __construct($certificate, $icpBrasilData)
     {
         // parse $oid and get specific info from
-        if (array_key_exists(self::OID_PF, $icpBrasilData)) {
+        if ((isset($icpBrasilData[self::OID_PF]) || array_key_exists(self::OID_PF, $icpBrasilData))) {
             $this->pf = true;
-        } else if (array_key_exists(self::OID_PJ_CEI, $icpBrasilData)) {
+        } else if ((isset($icpBrasilData[self::OID_PJ_CEI]) || array_key_exists(self::OID_PJ_CEI, $icpBrasilData))) {
             $this->pj = true;
-        } else if (array_key_exists(self::OID_APP_NOMEEMPRESARIAL, $icpBrasilData)) {
+        } else if ((isset($icpBrasilData[self::OID_APP_NOMEEMPRESARIAL]) || array_key_exists(self::OID_APP_NOMEEMPRESARIAL, $icpBrasilData))) {
             $this->app = true;
         }
         

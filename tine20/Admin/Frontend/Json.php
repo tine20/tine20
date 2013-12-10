@@ -82,8 +82,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'manageSAM'                     => $this->_manageSAM,
             'manageImapEmailUser'           => $this->_manageImapEmailUser,
             'manageSmtpEmailUser'           => $this->_manageSmtpEmailUser,
-            'primarydomain'                 => (array_key_exists('primarydomain', $smtpConfig))     ? $smtpConfig['primarydomain'] : '',
-            'secondarydomains'              => (array_key_exists('secondarydomains', $smtpConfig))  ? $smtpConfig['secondarydomains'] : '',
+            'primarydomain'                 => ((isset($smtpConfig['primarydomain']) || array_key_exists('primarydomain', $smtpConfig)))     ? $smtpConfig['primarydomain'] : '',
+            'secondarydomains'              => ((isset($smtpConfig['secondarydomains']) || array_key_exists('secondarydomains', $smtpConfig)))  ? $smtpConfig['secondarydomains'] : '',
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
             'defaultInternalAddressbook'    => ($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] !== NULL) 
                 ? Tinebase_Container::getInstance()->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray() 
@@ -203,7 +203,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $userArray = $this->_recordToJson($user);
             
             // don't send some infos to the client: unset email uid+gid
-            if (array_key_exists('emailUser', $userArray)) {
+            if ((isset($userArray['emailUser']) || array_key_exists('emailUser', $userArray))) {
                 $unsetFields = array('emailUID', 'emailGID');
                 foreach ($unsetFields as $field) {
                     unset($userArray['emailUser'][$field]);
@@ -1069,7 +1069,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $recordData['model'] = strstr($recordData['model'], '_Model_') ? $recordData['model'] : $application . '_Model_' . $recordData['model'];
         }
-        $additionalArguments = (array_key_exists('note', $recordData)) ? array(array('note' => $recordData['note'])) : array();
+        $additionalArguments = ((isset($recordData['note']) || array_key_exists('note', $recordData))) ? array(array('note' => $recordData['note'])) : array();
         return $this->_save($recordData, Admin_Controller_Container::getInstance(), 'Tinebase_Model_Container', 'id', $additionalArguments);
     }
     

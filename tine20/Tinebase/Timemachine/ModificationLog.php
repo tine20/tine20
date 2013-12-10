@@ -217,7 +217,7 @@ class Tinebase_Timemachine_ModificationLog
     {
         $diff = array();
         foreach ($modifications as $modification) {
-            if (array_key_exists($modification->modified_attribute, $diff)) {
+            if ((isset($diff[$modification->modified_attribute]) || array_key_exists($modification->modified_attribute, $diff))) {
                 $modification->old_value = $diff[$modification->modified_attribute]->old_value;
             }
             $diff[$modification->modified_attribute] = $modification;
@@ -701,7 +701,7 @@ class Tinebase_Timemachine_ModificationLog
         
         foreach ($_ids as $id) {
             $commonModLog->record_id = $id;
-            if (isset($updateMetaData['recordSeqs']) && array_key_exists($id, $updateMetaData['recordSeqs'])) {
+            if (isset($updateMetaData['recordSeqs']) && (isset($updateMetaData['recordSeqs'][$id]) || array_key_exists($id, $updateMetaData['recordSeqs']))) {
                 $commonModLog->seq = (! empty($updateMetaData['recordSeqs'][$id])) ? $updateMetaData['recordSeqs'][$id] + 1 : 1;
             }
             $this->_loopModifications($_newData, $commonModLog, $modifications, $_currentData);

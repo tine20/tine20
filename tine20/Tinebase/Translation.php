@@ -231,13 +231,13 @@ class Tinebase_Translation
         $cacheId = (string)$locale . $_applicationName;
         
         // get translation from internal class member?
-        if (array_key_exists($cacheId, self::$_applicationTranslations)) {
+        if ((isset(self::$_applicationTranslations[$cacheId]) || array_key_exists($cacheId, self::$_applicationTranslations))) {
             return self::$_applicationTranslations[$cacheId];
         }
         
         // get translation from filesystem
         $availableTranslations = self::getAvailableTranslations(ucfirst($_applicationName));
-        $info = array_key_exists((string) $locale, $availableTranslations) 
+        $info = (isset($availableTranslations[(string) $locale]) || array_key_exists((string) $locale, $availableTranslations)) 
             ? $availableTranslations[(string) $locale] 
             : $availableTranslations['en'];
         
@@ -283,8 +283,8 @@ class Tinebase_Translation
         $localeString = (string) $_locale;
         
         $availableTranslations = self::getAvailableTranslations();
-        $info = array_key_exists($localeString, $availableTranslations) ? $availableTranslations[$localeString] : array('locale' => $localeString);
-        $baseDir = (array_key_exists('path', $info) ? dirname($info['path']) . '/..' : dirname(__FILE__)) . '/..';
+        $info = (isset($availableTranslations[$localeString]) || array_key_exists($localeString, $availableTranslations)) ? $availableTranslations[$localeString] : array('locale' => $localeString);
+        $baseDir = ((isset($info['path']) || array_key_exists('path', $info)) ? dirname($info['path']) . '/..' : dirname(__FILE__)) . '/..';
         
         $defaultDir = dirname(__FILE__) . "/..";
         

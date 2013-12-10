@@ -72,7 +72,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->_backend = new Felamimail_Backend_Account();
         
         $this->_imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-        $this->_useSystemAccount = (array_key_exists('useSystemAccount', $this->_imapConfig) && $this->_imapConfig['useSystemAccount']);
+        $this->_useSystemAccount = ((isset($this->_imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $this->_imapConfig)) && $this->_imapConfig['useSystemAccount']);
     }
     
     /**
@@ -338,12 +338,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $diff = $_record->diff($_oldRecord)->diff;
         
         // delete message body cache because display format has changed
-        if (array_key_exists('display_format', $diff)) {
+        if ((isset($diff['display_format']) || array_key_exists('display_format', $diff))) {
             Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
         }
         
         // reset capabilities if imap host / port changed
-        if (isset(Tinebase_Core::getSession()->Felamimail) && (array_key_exists('host', $diff) || array_key_exists('port', $diff))) {
+        if (isset(Tinebase_Core::getSession()->Felamimail) && ((isset($diff['host']) || array_key_exists('host', $diff)) || (isset($diff['port']) || array_key_exists('port', $diff)))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Resetting capabilities for account ' . $_record->name);
             unset(Tinebase_Core::getSession()->Felamimail[$_record->getId()]);
@@ -846,7 +846,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _getAccountEmail(Tinebase_Model_FullUser $_user)
     {
-        $email = ((! $_user->accountEmailAddress || empty($_user->accountEmailAddress)) && array_key_exists('user', $this->_imapConfig)) 
+        $email = ((! $_user->accountEmailAddress || empty($_user->accountEmailAddress)) && (isset($this->_imapConfig['user']) || array_key_exists('user', $this->_imapConfig))) 
             ? $this->_imapConfig['user']
             : $_user->accountEmailAddress;
             

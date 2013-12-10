@@ -94,7 +94,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     {
         $configData = include('config.inc.php');
         
-        if (! array_key_exists('Overwrite Test', $configData)) {
+        if (! (isset($configData['Overwrite Test']) || array_key_exists('Overwrite Test', $configData))) {
             $this->markTestSkipped('config.inc.php has no test key "Overwrite Test"');
             return;
         }
@@ -144,7 +144,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($clientConfig->Calendar instanceof Tinebase_Config_Struct, 'calendar clientconfig is not a struct');
         $this->assertEquals(Calendar_Config::getInstance()->fixedCalendars, $clientConfig->Calendar->fixedCalendars->value, 'fixed calendar config not correct');
         
-        $this->assertFalse(array_key_exists('SMTP', $clientConfig->Tinebase), 'SMTP is not a client config');
+        $this->assertFalse((isset($clientConfig->Tinebase['SMTP']) || array_key_exists('SMTP', $clientConfig->Tinebase)), 'SMTP is not a client config');
     }
     
     /**

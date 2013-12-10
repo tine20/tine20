@@ -538,7 +538,7 @@ abstract class Zend_Db_Table_Abstract
     public function setDefaultValues(Array $defaultValues)
     {
         foreach ($defaultValues as $defaultName => $defaultValue) {
-            if (array_key_exists($defaultName, $this->_metadata)) {
+            if ((isset($this->_metadata[$defaultName]) || array_key_exists($defaultName, $this->_metadata))) {
                 $this->_defaultValues[$defaultName] = $defaultValue;
             }
         }
@@ -988,7 +988,7 @@ abstract class Zend_Db_Table_Abstract
             return $info;
         }
 
-        if (!array_key_exists($key, $info)) {
+        if (!(isset($info[$key]) || array_key_exists($key, $info))) {
             require_once 'Zend/Db/Table/Exception.php';
             throw new Zend_Db_Table_Exception('There is no table information for the key "' . $key . '"');
         }
@@ -1044,7 +1044,7 @@ abstract class Zend_Db_Table_Abstract
          * If the primary key can be generated automatically, and no value was
          * specified in the user-supplied data, then omit it from the tuple.
          */
-        if (array_key_exists($pkIdentity, $data) && $data[$pkIdentity] === null) {
+        if ((isset($data[$pkIdentity]) || array_key_exists($pkIdentity, $data)) && $data[$pkIdentity] === null) {
             unset($data[$pkIdentity]);
         }
 
@@ -1133,7 +1133,7 @@ abstract class Zend_Db_Table_Abstract
                         for ($i = 0; $i < count($map[self::COLUMNS]); ++$i) {
                             $col = $this->_db->foldCase($map[self::COLUMNS][$i]);
                             $refCol = $this->_db->foldCase($map[self::REF_COLUMNS][$i]);
-                            if (array_key_exists($refCol, $newPrimaryKey)) {
+                            if ((isset($newPrimaryKey[$refCol]) || array_key_exists($refCol, $newPrimaryKey))) {
                                 $newRefs[$col] = $newPrimaryKey[$refCol];
                             }
                             $type = $this->_metadata[$col]['DATA_TYPE'];
@@ -1416,7 +1416,7 @@ abstract class Zend_Db_Table_Abstract
             }
         } elseif ($defaultSource == self::DEFAULT_CLASS && $this->_defaultValues) {
             foreach ($this->_defaultValues as $defaultName => $defaultValue) {
-                if (array_key_exists($defaultName, $defaults)) {
+                if ((isset($defaults[$defaultName]) || array_key_exists($defaultName, $defaults))) {
                     $defaults[$defaultName] = $defaultValue;
                 }
             }

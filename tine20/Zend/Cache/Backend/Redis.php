@@ -111,19 +111,19 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
         $this->_redis = new Redis;
         
         foreach ($this->_options['servers'] as $server) {
-            if (!array_key_exists('port', $server)) {
+            if (!(isset($server['port']) || array_key_exists('port', $server))) {
                 $server['port'] = self::DEFAULT_PORT;
             }
-            if (!array_key_exists('persistent', $server)) {
+            if (!(isset($server['persistent']) || array_key_exists('persistent', $server))) {
                 $server['persistent'] = self::DEFAULT_PERSISTENT;
             }
-            #if (!array_key_exists('weight', $server)) {
+            #if (!(isset($server['weight']) || array_key_exists('weight', $server))) {
             #    $server['weight'] = self::DEFAULT_WEIGHT;
             #}
-            if (!array_key_exists('timeout', $server)) {
+            if (!(isset($server['timeout']) || array_key_exists('timeout', $server))) {
                 $server['timeout'] = self::DEFAULT_TIMEOUT;
             }
-            if (!array_key_exists('prefix', $server)) {
+            if (!(isset($server['prefix']) || array_key_exists('prefix', $server))) {
                 $server['prefix'] = self::DEFAULT_PREFIX;
             }
             

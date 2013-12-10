@@ -47,7 +47,7 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
     public function setValue($_value)
     {
         // cope with resolved records
-        if (is_array($_value) && array_key_exists('accountId', $_value)) {
+        if (is_array($_value) && (isset($_value['accountId']) || array_key_exists('accountId', $_value))) {
             $_value = $_value['accountId'];
         }
         
