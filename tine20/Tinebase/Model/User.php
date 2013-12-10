@@ -126,7 +126,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
                 $_data['accountDisplayName'] .= ', ' . $_data['accountFirstName'];
             }
             
-            if (! array_key_exists('accountFullName', $_data)) {
+            if (! (isset($_data['accountFullName']) || array_key_exists('accountFullName', $_data))) {
                 $_data['accountFullName'] = $_data['accountLastName'];
                 if (!empty($_data['accountFirstName'])) {
                     $_data['accountFullName'] = $_data['accountFirstName'] . ' ' . $_data['accountLastName'];

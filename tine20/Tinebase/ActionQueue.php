@@ -78,7 +78,7 @@
         if (isset(Tinebase_Core::getConfig()->actionqueue) && Tinebase_Core::getConfig()->actionqueue->active) {
             $options = Tinebase_Core::getConfig()->actionqueue->toArray();
             
-            $backend = array_key_exists('backend', $options) ? ucfirst(strtolower($options['backend'])) : $backend;
+            $backend = (isset($options['backend']) || array_key_exists('backend', $options)) ? ucfirst(strtolower($options['backend'])) : $backend;
             unset($options['backend']);
         }
         
@@ -106,7 +106,7 @@
      */
     public function executeAction($message)
     {
-        if (! is_array($message) || ! array_key_exists('action', $message) || strpos($message['action'], '.') === FALSE) {
+        if (! is_array($message) || ! (isset($message['action']) || array_key_exists('action', $message)) || strpos($message['action'], '.') === FALSE) {
             throw new Tinebase_Exception_NotFound('Could not execute action, invalid message/action param');
         }
 

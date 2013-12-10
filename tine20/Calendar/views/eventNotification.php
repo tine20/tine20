@@ -26,18 +26,18 @@ foreach ($this->updates as $field => $update) {
     }
 }
 
-if (array_key_exists('attendee', $this->updates)) {
-    if (array_key_exists('toCreate', $this->updates['attendee'])) {
+if ((isset($this->updates['attendee']) || array_key_exists('attendee', $this->updates))) {
+    if ((isset($this->updates['attendee']['toCreate']) || array_key_exists('toCreate', $this->updates['attendee']))) {
         foreach ($this->updates['attendee']['toCreate'] as $attender) {
             echo sprintf($this->translate->_('%1$s has been invited'), $attender->getName()) . "\n";
         }
     }
-    if (array_key_exists('toDelete', $this->updates['attendee'])) {
+    if ((isset($this->updates['attendee']['toDelete']) || array_key_exists('toDelete', $this->updates['attendee']))) {
         foreach ($this->updates['attendee']['toDelete'] as $attender) {
             echo sprintf($this->translate->_('%1$s has been removed'), $attender->getName()) . "\n";
         }
     }
-    if (array_key_exists('toUpdate', $this->updates['attendee'])) {
+    if ((isset($this->updates['attendee']['toUpdate']) || array_key_exists('toUpdate', $this->updates['attendee']))) {
         foreach ($this->updates['attendee']['toUpdate'] as $attender) {
             switch ($attender->status) {
                 case Calendar_Model_Attender::STATUS_ACCEPTED:

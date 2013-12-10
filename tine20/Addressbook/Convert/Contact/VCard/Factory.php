@@ -138,7 +138,7 @@ class Addressbook_Convert_Contact_VCard_Factory
      */
     public static function getUserAgent()
     {
-        $userAgent = array_key_exists('HTTP_USER_AGENT', $_SERVER) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
+        $userAgent = (isset($_SERVER['HTTP_USER_AGENT']) || array_key_exists('HTTP_USER_AGENT', $_SERVER)) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
         
         return self::parseUserAgent($userAgent);
     }

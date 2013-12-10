@@ -476,10 +476,10 @@ class Addressbook_Backend_Ldap implements Tinebase_Backend_Interface
         foreach ($this->_getSupportedRecordFields() as $field) {
             foreach ($this->_attributesMaps as $schemaName => $mapping) {
                 if(in_array($schemaName, $this->_availableSchemas)) {
-                    if (array_key_exists($field, $mapping)) {
+                    if ((isset($mapping[$field]) || array_key_exists($field, $mapping))) {
                         
                         $attributeName = $mapping[$field];
-                        if (array_key_exists($attributeName, $_data) && $_data[$attributeName]['count'] > 0) {
+                        if ((isset($_data[$attributeName]) || array_key_exists($attributeName, $_data)) && $_data[$attributeName]['count'] > 0) {
                             // heureka! we found a value for the current field.
                             // Lets take it and search for the next field.
                             $schemaMap[$field] = $schemaName;

@@ -227,7 +227,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass = 'Tinebase_Model_User')
     {
-        if(!array_key_exists($_property, $this->rowNameMapping)) {
+        if(!(isset($this->rowNameMapping[$_property]) || array_key_exists($_property, $this->rowNameMapping))) {
             throw new Tinebase_Exception_InvalidArgument("invalid property $_property requested");
         }
         

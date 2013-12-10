@@ -65,11 +65,11 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
      */
     protected function _setOptions(array $_options)
     {
-        if (! array_key_exists('related_model', $_options)) {
+        if (! (isset($_options['related_model']) || array_key_exists('related_model', $_options))) {
             throw new Tinebase_Exception_UnexpectedValue('related model is needed in options');
         }
 
-        if (! array_key_exists('filtergroup', $_options)) {
+        if (! (isset($_options['filtergroup']) || array_key_exists('filtergroup', $_options))) {
             $_options['filtergroup'] = $_options['related_model'] . 'Filter';
         }
         
@@ -90,7 +90,7 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
         $this->_resolveForeignIds();
         $ownIds = $this->_getOwnIds($_backend->getModelName());
         
-        $idField = array_key_exists('idProperty', $this->_options) ? $this->_options['idProperty'] : 'id';
+        $idField = (isset($this->_options['idProperty']) || array_key_exists('idProperty', $this->_options)) ? $this->_options['idProperty'] : 'id';
         $db = $_backend->getAdapter();
         $qField = $db->quoteIdentifier($_backend->getTableName() . '.' . $idField);
         if (empty($ownIds)) {

@@ -19,7 +19,7 @@
  */
 function array_value($_key, array $_array)
 {
-    return array_key_exists($_key, $_array) ? $_array[$_key] : NULL;
+    return (isset($_array[$_key]) || array_key_exists($_key, $_array)) ? $_array[$_key] : NULL;
 }
 
 /**

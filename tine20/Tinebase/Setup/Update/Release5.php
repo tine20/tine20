@@ -52,7 +52,7 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         foreach ($cfConfigs as $cfConfig) {
             $definition = array(
                 'label'          => $cfConfig['label'],
-                'type'           => array_key_exists($cfConfig['type'], $typeMap) ? $typeMap[$cfConfig['type']] : 'string',
+                'type'           => (isset($typeMap[$cfConfig['type']]) || array_key_exists($cfConfig['type'], $typeMap)) ? $typeMap[$cfConfig['type']] : 'string',
                 'length'         => $cfConfig['length'], // validation like definiton
                 'value_search'   => $cfConfig['value_search'],
                 'uiconfig' => array(

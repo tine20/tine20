@@ -302,7 +302,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $userPhone = $this->_json->getMyPhone($this->_objects['phone']->getId());
         
         $this->assertEquals('user phone', $userPhone['description'], 'no description');
-        $this->assertTrue(array_key_exists('web_language', $userPhone), 'missing web_language:' . print_r($userPhone, TRUE));
+        $this->assertTrue((isset($userPhone['web_language']) || array_key_exists('web_language', $userPhone)), 'missing web_language:' . print_r($userPhone, TRUE));
         $this->assertEquals('English', $userPhone['web_language'], 'wrong web_language');
         $this->assertGreaterThan(0, count($userPhone['lines']), 'no lines attached');
 
@@ -341,7 +341,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $status = $this->_json->dialNumber($number, $phoneId, $lineId);
         
         $this->assertEquals('array', gettype($status));
-        $this->assertTrue(array_key_exists('success', $status));
+        $this->assertTrue((isset($status['success']) || array_key_exists('success', $status)));
         $this->assertTrue($status['success']);
     }
 }

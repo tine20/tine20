@@ -25,7 +25,7 @@ class Tinebase_Config_Struct extends ArrayObject
      */
     public function get($_name, $_default = null)
     {
-        return array_key_exists($_name, $this) 
+        return (isset($this[$_name]) || array_key_exists($_name, $this)) 
             ? (is_array($this[$_name]) ? new Tinebase_Config_Struct($this[$_name]) : $this[$_name]) 
             : $_default;
     }

@@ -59,7 +59,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */
     public function getTypeMapping($_type)
     {
-        if (array_key_exists($_type, $this->_typeMappings)) {
+        if ((isset($this->_typeMappings[$_type]) || array_key_exists($_type, $this->_typeMappings))) {
             return $this->_typeMappings[$_type];
         }
         return null;
@@ -307,7 +307,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     public function columnExists($_columnName, $_tableName)
     {
         $columns = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $_tableName, $this->_db); 
-        return array_key_exists($_columnName, $columns);
+        return (isset($columns[$_columnName]) || array_key_exists($_columnName, $columns));
     }
     
     /**

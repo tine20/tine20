@@ -19,7 +19,7 @@ class Admin_Setup_Update_Release3 extends Setup_Update_Abstract
     {
         $settings = Admin_Controller::getInstance()->getConfigSettings();
         
-        if (! array_key_exists(Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK, $settings)) {
+        if (! (isset($settings[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK]) || array_key_exists(Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK, $settings))) {
             try {
                 $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
                 Admin_Controller::getInstance()->saveConfigSettings(array(

@@ -154,7 +154,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
         foreach ($this->_fixtures as $timezoneIdentifier => $offsets) {
             $timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
             $result = $this->_uit->getListOfTimezones($offsets);
-            $this->assertTrue(array_key_exists($timezoneIdentifier, $result));
+            $this->assertTrue((isset($result[$timezoneIdentifier]) || array_key_exists($timezoneIdentifier, $result)));
             $this->assertEquals($timezoneAbbr,$result[$timezoneIdentifier]);
         }        
     }
@@ -164,7 +164,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
         foreach ($this->_packedFixtrues as $timezoneIdentifier => $packedTimezoneInfo) {
             $timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
             $result = $this->_uit->getListOfTimezones($packedTimezoneInfo);
-            $this->assertTrue(array_key_exists($timezoneIdentifier, $result));
+            $this->assertTrue((isset($result[$timezoneIdentifier]) || array_key_exists($timezoneIdentifier, $result)));
             $this->assertEquals($timezoneAbbr, $result[$timezoneIdentifier]);
             
 //            $result = $this->_uit->getTimezoneForPackedTimezoneInfo($packedTimezoneInfo);
@@ -177,7 +177,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
         foreach ($this->_fixtures as $timezoneIdentifier => $offsets) {
             $timezoneAbbr = $this->_timezoneIdentifierToAbbreviation[$timezoneIdentifier];
             $matchedTimezones = $this->_uit->getListOfTimezones($offsets, $timezoneIdentifier);
-            $this->assertTrue(array_key_exists($timezoneIdentifier, $matchedTimezones));
+            $this->assertTrue((isset($matchedTimezones[$timezoneIdentifier]) || array_key_exists($timezoneIdentifier, $matchedTimezones)));
             $this->assertEquals($timezoneAbbr, $matchedTimezones[$timezoneIdentifier]);
         }
         

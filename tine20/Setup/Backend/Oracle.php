@@ -628,7 +628,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             if (!empty($keyfield->length)) {
                 $key .= ' (' . $keyfield->length . ')';
             }
-            else if (array_key_exists((string)$keyfield, $_key->fieldLength)) {
+            else if ((isset($_key->fieldLength[(string)$keyfield]) || array_key_exists((string)$keyfield, $_key->fieldLength))) {
             // TODO: need fix  Error: ORA-00904: "value": invalid identifier 00904. 00000 -  "%s: invalid identifier"
             //    $key .= ' (' . $_key->fieldLength[(string)$keyfield] . ')';
             }

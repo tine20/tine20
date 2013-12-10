@@ -519,11 +519,11 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $profile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
 
         $this->assertTrue(is_array($profile));
-        $this->assertTrue(array_key_exists('userProfile', $profile));
+        $this->assertTrue((isset($profile['userProfile']) || array_key_exists('userProfile', $profile)));
         $this->assertTrue(is_array($profile['userProfile']));
-        $this->assertTrue(array_key_exists('readableFields', $profile));
+        $this->assertTrue((isset($profile['readableFields']) || array_key_exists('readableFields', $profile)));
         $this->assertTrue(is_array($profile['readableFields']));
-        $this->assertTrue(array_key_exists('updateableFields', $profile));
+        $this->assertTrue((isset($profile['updateableFields']) || array_key_exists('updateableFields', $profile)));
         $this->assertTrue(is_array($profile['updateableFields']));
         
         // try to get user profile of different user
@@ -541,11 +541,11 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $config = $this->_instance->getUserProfileConfig();
         
         $this->assertTrue(is_array($config));
-        $this->assertTrue(array_key_exists('possibleFields', $config));
+        $this->assertTrue((isset($config['possibleFields']) || array_key_exists('possibleFields', $config)));
         $this->assertTrue(is_array($config['possibleFields']));
-        $this->assertTrue(array_key_exists('readableFields', $config));
+        $this->assertTrue((isset($config['readableFields']) || array_key_exists('readableFields', $config)));
         $this->assertTrue(is_array($config['readableFields']));
-        $this->assertTrue(array_key_exists('updateableFields', $config));
+        $this->assertTrue((isset($config['updateableFields']) || array_key_exists('updateableFields', $config)));
         $this->assertTrue(is_array($config['updateableFields']));
     }
     

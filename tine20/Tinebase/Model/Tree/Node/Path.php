@@ -174,7 +174,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     {
         parent::setFromArray($_data);
         
-        if (array_key_exists('flatpath', $_data)) {
+        if ((isset($_data['flatpath']) || array_key_exists('flatpath', $_data))) {
             $this->_parsePath($_data['flatpath']);
         }
     }

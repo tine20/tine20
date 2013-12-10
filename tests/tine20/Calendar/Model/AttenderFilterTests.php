@@ -86,7 +86,7 @@ class Calendar_Model_AttenderFilterTests extends Calendar_TestCase
         $generatedFilterArray = $filterModel->toArray(false);
         
         $this->assertEquals('equals', $generatedFilterArray['operator'], 'operator missmatch');
-        $this->assertTrue(array_key_exists('user_type', $generatedFilterArray['value']), 'broken value structure');
+        $this->assertTrue((isset($generatedFilterArray['value']['user_type']) || array_key_exists('user_type', $generatedFilterArray['value'])), 'broken value structure');
         $this->assertEquals($filterArray['user_type'], $generatedFilterArray['value']['user_type']);
         $this->assertEquals($filterArray['user_id'], $generatedFilterArray['value']['user_id']);
     }
@@ -103,7 +103,7 @@ class Calendar_Model_AttenderFilterTests extends Calendar_TestCase
         $generatedFilterArray = $filterModel->toArray(true);
         
         $this->assertEquals('equals', $generatedFilterArray['operator'], 'operator missmatch');
-        $this->assertTrue(array_key_exists('user_type', $generatedFilterArray['value']), 'broken value structure');
+        $this->assertTrue((isset($generatedFilterArray['value']['user_type']) || array_key_exists('user_type', $generatedFilterArray['value'])), 'broken value structure');
         $this->assertEquals($filterArray['user_type'], $generatedFilterArray['value']['user_type']);
         $this->assertTrue(is_array($generatedFilterArray['value']['user_id']), "value['user_id'] should be an array");
         $this->assertEquals($filterArray['user_id'], $generatedFilterArray['value']['user_id']['id'],  "id missmatch");

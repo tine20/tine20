@@ -230,7 +230,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     public static function pathIsContainer($_path)
     {
         if (preg_match("/^\/personal\/[0-9a-z_\-]+\/([a-f0-9]+)|^\/shared\/([a-f0-9]+)/i", $_path, $matches)) {
-            return array_key_exists(2, $matches) ? $matches[2] : $matches[1];
+            return (isset($matches[2]) || array_key_exists(2, $matches)) ? $matches[2] : $matches[1];
         }
         
         return false;

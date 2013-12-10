@@ -160,7 +160,7 @@ abstract class Tinebase_Config_Abstract
        // get default from definition if needed
        if ($default === NULL) {
            $definition = self::getDefinition($name);
-           if ($definition && array_key_exists('default', $definition)) {
+           if ($definition && (isset($definition['default']) || array_key_exists('default', $definition))) {
                return $definition['default'];
            }
        }
@@ -286,8 +286,8 @@ abstract class Tinebase_Config_Abstract
         $configFileData = $this->_getConfigFileData();
         
         // appName section overwrites global section in config file
-        return array_key_exists($this->_appName, $configFileData) && array_key_exists($_name, $configFileData[$this->_appName]) ? $configFileData[$this->_appName] :
-              (array_key_exists($_name, $configFileData) ? $configFileData : NULL);
+        return (isset($configFileData[$this->_appName]) || array_key_exists($this->_appName, $configFileData)) && (isset($configFileData[$this->_appName][$_name]) || array_key_exists($_name, $configFileData[$this->_appName])) ? $configFileData[$this->_appName] :
+              ((isset($configFileData[$_name]) || array_key_exists($_name, $configFileData)) ? $configFileData : NULL);
     }
     
     /**
@@ -452,7 +452,7 @@ abstract class Tinebase_Config_Abstract
             case self::TYPE_STRING:     return (string) $_rawData;
             case self::TYPE_FLOAT:      return (float) $_rawData;
             case self::TYPE_DATETIME:   return new DateTime($_rawData);
-            case self::TYPE_KEYFIELD:   return Tinebase_Config_KeyField::create($_rawData, array_key_exists('options', $definition) ? (array) $definition['options'] : array());
+            case self::TYPE_KEYFIELD:   return Tinebase_Config_KeyField::create($_rawData, (isset($definition['options']) || array_key_exists('options', $definition)) ? (array) $definition['options'] : array());
             default:                    return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
     }
@@ -468,7 +468,7 @@ abstract class Tinebase_Config_Abstract
         // NOTE we can't call statecally here (static late binding again)
         $properties = $this->getProperties();
         
-        return array_key_exists($_name, $properties) ? $properties[$_name] : NULL;
+        return (isset($properties[$_name]) || array_key_exists($_name, $properties)) ? $properties[$_name] : NULL;
     }
     
     /**

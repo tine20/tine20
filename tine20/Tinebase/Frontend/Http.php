@@ -348,7 +348,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             Zend_Session::destroy();
             
             // redirect back to loginurl if needed
-            $defaultUrl = (array_key_exists('HTTP_REFERER', $_SERVER)) ? $_SERVER['HTTP_REFERER'] : '';
+            $defaultUrl = ((isset($_SERVER['HTTP_REFERER']) || array_key_exists('HTTP_REFERER', $_SERVER))) ? $_SERVER['HTTP_REFERER'] : '';
             $redirectUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL, $defaultUrl);
             if (! empty($redirectUrl)) {
                 header('Location: ' . $redirectUrl);

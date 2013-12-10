@@ -161,14 +161,14 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
     public function testGetBackendConfigurationDefaults()
     {
         $defaults = Tinebase_User::getBackendConfigurationDefaults();
-        $this->assertTrue(array_key_exists(Tinebase_User::SQL, $defaults));
-        $this->assertTrue(array_key_exists(Tinebase_User::LDAP, $defaults));
+        $this->assertTrue((isset($defaults[Tinebase_User::SQL]) || array_key_exists(Tinebase_User::SQL, $defaults)));
+        $this->assertTrue((isset($defaults[Tinebase_User::LDAP]) || array_key_exists(Tinebase_User::LDAP, $defaults)));
         $this->assertTrue(is_array($defaults[Tinebase_User::LDAP]));
-        $this->assertFalse(array_key_exists('host', $defaults));
+        $this->assertFalse((isset($defaults['host']) || array_key_exists('host', $defaults)));
         
         $defaults = Tinebase_User::getBackendConfigurationDefaults(Tinebase_User::LDAP);
-        $this->assertTrue(array_key_exists('host', $defaults));
-        $this->assertFalse(array_key_exists(Tinebase_User::LDAP, $defaults));
+        $this->assertTrue((isset($defaults['host']) || array_key_exists('host', $defaults)));
+        $this->assertFalse((isset($defaults[Tinebase_User::LDAP]) || array_key_exists(Tinebase_User::LDAP, $defaults)));
     }
     
     /**

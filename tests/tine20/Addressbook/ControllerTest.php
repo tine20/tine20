@@ -171,7 +171,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     {
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
         
-        if (array_key_exists('contact', $this->objects)) {
+        if ((isset($this->objects['contact']) || array_key_exists('contact', $this->objects))) {
             $this->_instance->delete($this->objects['contact']);
         }
     }

@@ -69,7 +69,7 @@ class Felamimail_Model_AccountTest extends PHPUnit_Framework_TestCase
         ));
         $accountSmtpConfig = $account->getSmtpConfig();
         
-        if (array_key_exists('primarydomain', $smtpConfig)) {
+        if ((isset($smtpConfig['primarydomain']) || array_key_exists('primarydomain', $smtpConfig))) {
             $this->assertContains($smtpConfig['primarydomain'], $accountSmtpConfig['username']);
         }
         

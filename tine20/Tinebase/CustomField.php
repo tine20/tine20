@@ -236,7 +236,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $cfAcl = $this->_backendConfig->getAclForIds($user->getId(), $_cfConfigs->getArrayOfIds());
         
         foreach ($_cfConfigs as $config) {
-            $config->account_grants = (array_key_exists($config->getId(), $cfAcl)) ? explode(',', $cfAcl[$config->getId()]) : array();
+            $config->account_grants = ((isset($cfAcl[$config->getId()]) || array_key_exists($config->getId(), $cfAcl))) ? explode(',', $cfAcl[$config->getId()]) : array();
         }
     }
     
@@ -372,7 +372,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             . ' App cf names: ' . print_r($appCustomFields->name, TRUE));
         
         foreach ($appCustomFields as $customField) {
-            if (is_array($_record->customfields) && array_key_exists($customField->name, $_record->customfields)) {
+            if (is_array($_record->customfields) && (isset($_record->customfields[$customField->name]) || array_key_exists($customField->name, $_record->customfields))) {
                 $value = $_record->customfields[$customField->name];
                 $filtered = $existingCustomFields->filter('customfield_id', $customField->id);
                 

@@ -45,7 +45,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         // update account types for users with userEmailAccount preference
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         
-        if (array_key_exists('host', $imapConfig)) {
+        if ((isset($imapConfig['host']) || array_key_exists('host', $imapConfig))) {
             $accounts = Felamimail_Controller_Account::getInstance()->getAll();
             $accountBackend = new Felamimail_Backend_Account();
             foreach ($accounts as $account) {
@@ -78,7 +78,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     public function update_2()
     {
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-        if (array_key_exists('useAsDefault', $imapConfig)) {
+        if ((isset($imapConfig['useAsDefault']) || array_key_exists('useAsDefault', $imapConfig))) {
             $imapConfig['useSystemAccount'] = $imapConfig['useAsDefault'];
             unset($imapConfig['useAsDefault']);
             Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $imapConfig);

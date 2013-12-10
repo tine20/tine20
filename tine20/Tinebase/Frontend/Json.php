@@ -695,7 +695,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     
                     try {
                         $applicationJson = new $jsonAppName();
-                        $registryData[$application->name] = (array_key_exists($application->name, $registryData))
+                        $registryData[$application->name] = ((isset($registryData[$application->name]) || array_key_exists($application->name, $registryData)))
                             ? array_merge_recursive($registryData[$application->name], $applicationJson->getRegistryData()) 
                             : $applicationJson->getRegistryData();
                     
@@ -746,7 +746,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             $registryData['Tinebase']['genericRelatableModels'] = $genericRelatableModels;
             
-            if (! array_key_exists('Tinebase', $registryData)) {
+            if (! (isset($registryData['Tinebase']) || array_key_exists('Tinebase', $registryData))) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' User has no permissions to run Tinebase or unable to get Tinebase preferences. Aborting ...');
                 $this->logout();
             }

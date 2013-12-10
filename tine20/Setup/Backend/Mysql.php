@@ -272,7 +272,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             if ($_key->length !== NULL) {
                 $key .= ' (' . $_key->length . ')';
             }
-            else if (array_key_exists((string)$keyfield, $_key->fieldLength)) {
+            else if ((isset($_key->fieldLength[(string)$keyfield]) || array_key_exists((string)$keyfield, $_key->fieldLength))) {
                 $key .= ' (' . $_key->fieldLength[(string)$keyfield] . ')';
             }
             $keys[] = $key;

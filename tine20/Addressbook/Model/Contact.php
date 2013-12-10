@@ -280,7 +280,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @return array $_data
      */
     protected function _resolveAutoValues(array $_data) {
-        if (! array_key_exists('org_name', $_data)) {
+        if (! (isset($_data['org_name']) || array_key_exists('org_name', $_data))) {
             $_data['org_name'] = '';
         }
         

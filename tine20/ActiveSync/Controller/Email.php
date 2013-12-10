@@ -971,7 +971,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     {
         $folders = $this->getSupportedFolders();
         
-        if(!array_key_exists($_folderId, $folders)) {
+        if(!(isset($folders[$_folderId]) || array_key_exists($_folderId, $folders))) {
             throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
         }
         

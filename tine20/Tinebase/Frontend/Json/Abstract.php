@@ -84,7 +84,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                 if (is_array($cItems)) {
                     foreach($cItems as $cItem) {
                         
-                        if (! array_key_exists('config', $cItem)) {
+                        if (! (isset($cItem['config']) || array_key_exists('config', $cItem))) {
                             continue;
                         }
                         
@@ -99,11 +99,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                             'ownModel'     => $cItem['relatedModel'], 
                             'relatedModel' => $ownModel,
                             'relatedApp'   => $this->_applicationName,
-                            'default'      => array_key_exists('default', $cItem) ? $cItem['default'] : NULL
+                            'default'      => (isset($cItem['default']) || array_key_exists('default', $cItem)) ? $cItem['default'] : NULL
                         );
                         
                         // KeyfieldConfigs
-                        if (array_key_exists('keyfieldConfig', $cItem)) {
+                        if ((isset($cItem['keyfieldConfig']) || array_key_exists('keyfieldConfig', $cItem))) {
                             $foreignConfigItem['keyfieldConfig'] = $cItem['keyfieldConfig'];
                             if ($cItem['keyfieldConfig']['from']){
                                 $foreignConfigItem['keyfieldConfig']['from'] = $cItem['keyfieldConfig']['from'] == 'foreign' ? 'own' : 'foreign';

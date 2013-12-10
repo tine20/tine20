@@ -123,27 +123,27 @@ class Zend_Queue_Adapter_Db extends Zend_Queue_Adapter_AdapterAbstract
     protected function _initDbAdapter()
     {
         $options = &$this->_options['driverOptions'];
-        if (!array_key_exists('type', $options)) {
+        if (!(isset($options['type']) || array_key_exists('type', $options))) {
             require_once 'Zend/Queue/Exception.php';
             throw new Zend_Queue_Exception("Configuration array must have a key for 'type' for the database type to use");
         }
 
-        if (!array_key_exists('host', $options)) {
+        if (!(isset($options['host']) || array_key_exists('host', $options))) {
             require_once 'Zend/Queue/Exception.php';
             throw new Zend_Queue_Exception("Configuration array must have a key for 'host' for the host to use");
         }
 
-        if (!array_key_exists('username', $options)) {
+        if (!(isset($options['username']) || array_key_exists('username', $options))) {
             require_once 'Zend/Queue/Exception.php';
             throw new Zend_Queue_Exception("Configuration array must have a key for 'username' for the username to use");
         }
 
-        if (!array_key_exists('password', $options)) {
+        if (!(isset($options['password']) || array_key_exists('password', $options))) {
             require_once 'Zend/Queue/Exception.php';
             throw new Zend_Queue_Exception("Configuration array must have a key for 'password' for the password to use");
         }
 
-        if (!array_key_exists('dbname', $options)) {
+        if (!(isset($options['dbname']) || array_key_exists('dbname', $options))) {
             require_once 'Zend/Queue/Exception.php';
             throw new Zend_Queue_Exception("Configuration array must have a key for 'dbname' for the database to use");
         }
@@ -253,7 +253,7 @@ class Zend_Queue_Adapter_Db extends Zend_Queue_Adapter_AdapterAbstract
             }
         }
 
-        if (array_key_exists($name, $this->_queues)) {
+        if ((isset($this->_queues[$name]) || array_key_exists($name, $this->_queues))) {
             unset($this->_queues[$name]);
         }
 
@@ -517,7 +517,7 @@ class Zend_Queue_Adapter_Db extends Zend_Queue_Adapter_AdapterAbstract
      */
     protected function getQueueId($name)
     {
-        if (array_key_exists($name, $this->_queues)) {
+        if ((isset($this->_queues[$name]) || array_key_exists($name, $this->_queues))) {
             return $this->_queues[$name];
         }
 

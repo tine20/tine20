@@ -196,7 +196,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         
         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
         $this->assertFalse(empty($prepared->preconditions));
-        $this->assertTrue(array_key_exists(Calendar_Model_iMIP::PRECONDITION_RECENT, $prepared->preconditions));
+        $this->assertTrue((isset($prepared->preconditions[Calendar_Model_iMIP::PRECONDITION_RECENT]) || array_key_exists(Calendar_Model_iMIP::PRECONDITION_RECENT, $prepared->preconditions)));
     }
     
     /**
@@ -351,7 +351,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
         
         $this->assertFalse(empty($prepared->preconditions), 'empty preconditions');
-        $this->assertTrue(array_key_exists(Calendar_Model_iMIP::PRECONDITION_TOPROCESS, $prepared->preconditions), 'missing PRECONDITION_TOPROCESS');
+        $this->assertTrue((isset($prepared->preconditions[Calendar_Model_iMIP::PRECONDITION_TOPROCESS]) || array_key_exists(Calendar_Model_iMIP::PRECONDITION_TOPROCESS, $prepared->preconditions)), 'missing PRECONDITION_TOPROCESS');
     }
     
     /**

@@ -100,8 +100,8 @@ class Tinebase_Frontend_Cli_Abstract
                 $containers, 
                 $data['grants'],
                 $data['accountId'], 
-                (array_key_exists('accountType', $data)) ? $data['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                (array_key_exists('overwrite', $data) && $data['overwrite'] == '1')
+                ((isset($data['accountType']) || array_key_exists('accountType', $data))) ? $data['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                ((isset($data['overwrite']) || array_key_exists('overwrite', $data)) && $data['overwrite'] == '1')
             );
             
             echo "Updated " . count($containers) . " container(s).\n";
@@ -154,7 +154,7 @@ class Tinebase_Frontend_Cli_Abstract
             if ($_opts) {
                 $args = $this->_parseArgs($_opts, array());
                 
-                if (array_key_exists('other', $args)) {
+                if ((isset($args['other']) || array_key_exists('other', $args))) {
                     $options['createUsers']  = in_array('sharedonly', $args['other']) ? FALSE : TRUE;
                     $options['createShared'] = in_array('noshared',   $args['other']) ? FALSE : TRUE;
                     $options['full']         = in_array('full',       $args['other']) ? FALSE : TRUE;
@@ -206,9 +206,9 @@ class Tinebase_Frontend_Cli_Abstract
             array('field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()),
         );
         
-        if (array_key_exists('containerId', $_params)) {
+        if ((isset($_params['containerId']) || array_key_exists('containerId', $_params))) {
             $containerFilterData[] = array('field' => 'id', 'operator' => 'equals', 'value' => $_params['containerId']);
-        } else if (array_key_exists('namefilter', $_params)) {
+        } else if ((isset($_params['namefilter']) || array_key_exists('namefilter', $_params))) {
             $containerFilterData[] = array('field' => 'name', 'operator' => 'contains', 'value' => $_params['namefilter']);
         } else {
             throw new Timetracker_Exception_UnexpectedValue('Parameter containerId or namefilter missing!');
@@ -248,7 +248,7 @@ class Tinebase_Frontend_Cli_Abstract
         
         if (! empty($_requiredKeys)) {
             foreach ($_requiredKeys as $requiredKey) {
-                if (! array_key_exists($requiredKey, $result)) {
+                if (! (isset($result[$requiredKey]) || array_key_exists($requiredKey, $result))) {
                     throw new Tinebase_Exception_InvalidArgument('Required parameter not found: ' . $requiredKey);
                 }
             }
@@ -290,7 +290,7 @@ class Tinebase_Frontend_Cli_Abstract
             }
         }
         
-        if (array_key_exists('definition', $args))  {
+        if ((isset($args['definition']) || array_key_exists('definition', $args)))  {
             if (preg_match("/\.xml/", $args['definition'])) {
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
                     $args['definition'],
@@ -301,7 +301,7 @@ class Tinebase_Frontend_Cli_Abstract
             }
         
             $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, $args);
-        } else if (array_key_exists('plugin', $args)) {
+        } else if ((isset($args['plugin']) || array_key_exists('plugin', $args))) {
             $importer =  new $args['plugin']($args);
         } else {
             echo "You need to define a plugin OR a definition at least! \n";

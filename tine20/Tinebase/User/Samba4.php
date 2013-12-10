@@ -97,7 +97,7 @@ class Tinebase_User_Samba4 extends Tinebase_User_Ldap
         if (isset($_options['requiredObjectClass'])) {
             $this->_requiredObjectClass = (array)$_options['requiredObjectClass'];
         }
-        if (array_key_exists('readonly', $_options)) {
+        if ((isset($_options['readonly']) || array_key_exists('readonly', $_options))) {
             $this->_isReadOnlyBackend = (bool)$_options['readonly'];
         }
         

@@ -129,7 +129,7 @@ class Tinebase_Ldap extends Zend_Ldap
             'objectguid', 'usnchanged', 'usncreated', 'whenchanged', 'whencreated');
         $stripAttributes = array_merge(array_keys($rdnParts), $adAttributes);
         foreach ($stripAttributes as $attr) {
-            if (array_key_exists($attr, $entry)) {
+            if ((isset($entry[$attr]) || array_key_exists($attr, $entry))) {
                 unset($entry[$attr]);
             }
         }
@@ -168,7 +168,7 @@ class Tinebase_Ldap extends Zend_Ldap
             'objectguid', 'usnchanged', 'usncreated', 'whenchanged', 'whencreated');
         $stripAttributes = array_merge(array_keys($rdnParts), $adAttributes);
         foreach ($stripAttributes as $attr) {
-            if (array_key_exists($attr, $entry)) {
+            if ((isset($entry[$attr]) || array_key_exists($attr, $entry))) {
                 unset($entry[$attr]);
             }
         }

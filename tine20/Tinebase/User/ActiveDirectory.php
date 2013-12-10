@@ -479,7 +479,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         );
         
         foreach ($_user as $key => $value) {
-            $ldapProperty = array_key_exists($key, $this->_rowNameMapping) ? $this->_rowNameMapping[$key] : false;
+            $ldapProperty = (isset($this->_rowNameMapping[$key]) || array_key_exists($key, $this->_rowNameMapping)) ? $this->_rowNameMapping[$key] : false;
 
             if ($ldapProperty === false) {
                 continue;

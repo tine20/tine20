@@ -302,7 +302,7 @@ class Tinebase_User
                 self::setBackendConfiguration($value, $key);
             }
         } else {
-            if ( ! array_key_exists($_key, $defaultValues)) {
+            if ( ! (isset($defaultValues[$_key]) || array_key_exists($_key, $defaultValues))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                     " Cannot set backend configuration option '$_key' for accounts storage " . self::getConfiguredBackend());
                 return;
@@ -324,7 +324,7 @@ class Tinebase_User
     {
         if (is_null($_key)) {
             self::$_backendConfiguration = array();
-        } elseif (array_key_exists($_key, self::$_backendConfiguration)) {
+        } elseif ((isset(self::$_backendConfiguration[$_key]) || array_key_exists($_key, self::$_backendConfiguration))) {
             unset(self::$_backendConfiguration[$_key]);
         } else {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' configuration option does not exist: ' . $_key);
@@ -362,7 +362,7 @@ class Tinebase_User
         }
 
         if (isset($_key)) {
-            return array_key_exists($_key, self::$_backendConfiguration) ? self::$_backendConfiguration[$_key] : $_default;
+            return (isset(self::$_backendConfiguration[$_key]) || array_key_exists($_key, self::$_backendConfiguration)) ? self::$_backendConfiguration[$_key] : $_default;
         } else {
             return self::$_backendConfiguration;
         }
@@ -383,7 +383,7 @@ class Tinebase_User
             $config[$backendType] = ($_getConfiguredBackend && $backendType == self::getConfiguredBackend() ? self::getBackendConfiguration() : array());
             if (is_array($config[$backendType])) {
                 foreach ($backendConfig as $key => $value) {
-                    if (! array_key_exists($key, $config[$backendType])) {
+                    if (! (isset($config[$backendType][$key]) || array_key_exists($key, $config[$backendType]))) {
                         $config[$backendType][$key] = $value;
                     }
                 }
@@ -401,7 +401,7 @@ class Tinebase_User
      */
     public static function getBackendConfigurationDefaults($_backendType = null) {
         if ($_backendType) {
-            if (!array_key_exists($_backendType, self::$_backendConfigurationDefaults)) {
+            if (!(isset(self::$_backendConfigurationDefaults[$_backendType]) || array_key_exists($_backendType, self::$_backendConfigurationDefaults))) {
                 throw new Tinebase_Exception_InvalidArgument("Unknown backend type '$_backendType'");
             }
             return self::$_backendConfigurationDefaults[$_backendType];
@@ -635,7 +635,7 @@ class Tinebase_User
         $adminPassword      = $_options['adminPassword'];
         $adminFirstName     = isset($_options['adminFirstName'])    ? $_options['adminFirstName'] : 'Tine 2.0';
         $adminLastName      = isset($_options['adminLastName'])     ? $_options['adminLastName']  : 'Admin Account';
-        $adminEmailAddress  = (array_key_exists('adminEmailAddress', $_options)) ? $_options['adminEmailAddress'] : NULL;
+        $adminEmailAddress  = ((isset($_options['adminEmailAddress']) || array_key_exists('adminEmailAddress', $_options))) ? $_options['adminEmailAddress'] : NULL;
 
         // get admin & user groups
         $userBackend   = Tinebase_User::factory(Tinebase_User::SQL);

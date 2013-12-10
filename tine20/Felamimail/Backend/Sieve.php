@@ -26,8 +26,8 @@ class Felamimail_Backend_Sieve extends Zend_Mail_Protocol_Sieve
      */
     public function __construct($_config)
     {
-        $_config['port'] = (array_key_exists('port', $_config)) ? $_config['port'] : NULL;
-        $_config['ssl'] = (array_key_exists('ssl', $_config)) ? $_config['ssl'] : FALSE;
+        $_config['port'] = ((isset($_config['port']) || array_key_exists('port', $_config))) ? $_config['port'] : NULL;
+        $_config['ssl'] = ((isset($_config['ssl']) || array_key_exists('ssl', $_config))) ? $_config['ssl'] : FALSE;
         
         try {
             parent::__construct($_config['host'], $_config['port'], $_config['ssl']);

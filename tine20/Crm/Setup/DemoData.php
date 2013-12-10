@@ -186,12 +186,12 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createLead($data, $username = 'shared')
     {
         $tasks = NULL;
-        if (array_key_exists('tasks', $data)) {
+        if ((isset($data['tasks']) || array_key_exists('tasks', $data))) {
             $tasks = $data['tasks'];
             unset($data['tasks']);
         }
         $contacts = NULL;
-        if (array_key_exists('contacts', $data)) {
+        if ((isset($data['contacts']) || array_key_exists('contacts', $data))) {
             $contacts = $data['contacts'];
             unset($data['contacts']);
         }

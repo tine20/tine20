@@ -209,7 +209,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = null, $_saveInSent = false, $_nonPrivateRecipients = array())
     {
         $smtpConfig = $_account->getSmtpConfig();
-        if (! empty($smtpConfig) && array_key_exists('hostname', $smtpConfig)) {
+        if (! empty($smtpConfig) && (isset($smtpConfig['hostname']) || array_key_exists('hostname', $smtpConfig))) {
             $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -586,7 +586,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             } else {
                 $tempFile = ($attachment instanceof Tinebase_Model_TempFile) 
                     ? $attachment 
-                    : ((array_key_exists('tempFile', $attachment)) ? $tempFileBackend->get($attachment['tempFile']['id']) : NULL);
+                    : (((isset($attachment['tempFile']) || array_key_exists('tempFile', $attachment))) ? $tempFileBackend->get($attachment['tempFile']['id']) : NULL);
                 
                 if ($tempFile === NULL) {
                     continue;

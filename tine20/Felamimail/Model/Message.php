@@ -257,7 +257,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->headers = Felamimail_Controller_Message::getInstance()->getMessageHeaders($this->getId(), NULL, TRUE);
         }
         
-        if (array_key_exists('disposition-notification-to', $this->headers) && $this->headers['disposition-notification-to']) {
+        if ((isset($this->headers['disposition-notification-to']) || array_key_exists('disposition-notification-to', $this->headers)) && $this->headers['disposition-notification-to']) {
             $translate = Tinebase_Translation::getTranslation($this->_application);
             $from = Felamimail_Controller_Account::getInstance()->get($this->account_id);
             
@@ -300,9 +300,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         // @see 0008644: error when sending mail with note (wrong charset)
         $this->subject = (isset($_headers['subject'])) ? Tinebase_Core::filterInputForDatabase(Felamimail_Message::convertText($_headers['subject'])) : null;
         
-        if (array_key_exists('date', $_headers)) {
+        if ((isset($_headers['date']) || array_key_exists('date', $_headers))) {
             $this->sent = Felamimail_Message::convertDate($_headers['date']);
-        } elseif (array_key_exists('resent-date', $_headers)) {
+        } elseif ((isset($_headers['resent-date']) || array_key_exists('resent-date', $_headers))) {
             $this->sent = Felamimail_Message::convertDate($_headers['resent-date']);
         }
         
@@ -320,13 +320,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                     $value = Felamimail_Message::convertAddresses($_headers[$field], $punycodeConverter);
                     switch ($field) {
                         case 'from':
-                            $this->from_email = (isset($value[0]) && array_key_exists('email', $value[0])) ? $value[0]['email'] : '';
-                            $this->from_name = (isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
+                            $this->from_email = (isset($value[0]) && (isset($value[0]['email']) || array_key_exists('email', $value[0]))) ? $value[0]['email'] : '';
+                            $this->from_name = (isset($value[0]) && (isset($value[0]['name']) || array_key_exists('name', $value[0])) && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
                             break;
                             
                         case 'sender':
-                            $this->sender = (isset($value[0]) && array_key_exists('email', $value[0])) ? '<' . $value[0]['email'] . '>' : '';
-                            if ((isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name']))) {
+                            $this->sender = (isset($value[0]) && (isset($value[0]['email']) || array_key_exists('email', $value[0]))) ? '<' . $value[0]['email'] . '>' : '';
+                            if ((isset($value[0]) && (isset($value[0]['name']) || array_key_exists('name', $value[0])) && ! empty($value[0]['name']))) {
                                 $this->sender = '"' . $value[0]['name'] . '" ' . $this->sender;
                             }
                             break;
@@ -363,7 +363,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     protected function _setBodyContentType()
     {
-        if (array_key_exists('parts', $this->structure)) {
+        if ((isset($this->structure['parts']) || array_key_exists('parts', $this->structure))) {
             $bodyContentTypes = $this->_getBodyContentTypes($this->structure['parts']);
             $this->body_content_type = (in_array(self::CONTENT_TYPE_HTML, $bodyContentTypes)) ? self::CONTENT_TYPE_HTML : self::CONTENT_TYPE_PLAIN;
         } else {
@@ -383,11 +383,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     {
         $_bodyContentTypes = array();
         foreach ($_parts as $part) {
-            if (is_array($part) && array_key_exists('contentType', $part)) {
+            if (is_array($part) && (isset($part['contentType']) || array_key_exists('contentType', $part))) {
                 if (in_array($part['contentType'], array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)) && ! $this->_partIsAttachment($part)) {
                     $_bodyContentTypes[] = $part['contentType'];
                 } else if (($part['contentType'] == self::CONTENT_TYPE_MULTIPART || $part['contentType'] == self::CONTENT_TYPE_MULTIPART_RELATED) 
-                    && array_key_exists('parts', $part))
+                    && (isset($part['parts']) || array_key_exists('parts', $part)))
                 {
                     $_bodyContentTypes = array_merge($_bodyContentTypes, $this->_getBodyContentTypes($part['parts']));
                 }
@@ -425,8 +425,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             );
             
             foreach ($iterator as $key => $value) {
-                if ($key == $_partId && is_array($value) && array_key_exists('partId', $value)) {
-                    $result = ($_useMessageStructure && is_array($value) && array_key_exists('messageStructure', $value)) ? $value['messageStructure'] : $value;
+                if ($key == $_partId && is_array($value) && (isset($value['partId']) || array_key_exists('partId', $value))) {
+                    $result = ($_useMessageStructure && is_array($value) && (isset($value['messageStructure']) || array_key_exists('messageStructure', $value))) ? $value['messageStructure'] : $value;
                 }
             }
         }
@@ -455,7 +455,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             return $bodyParts;
         }
         
-        if (array_key_exists('parts', $structure)) {
+        if ((isset($structure['parts']) || array_key_exists('parts', $structure))) {
             $bodyParts = $bodyParts + $this->_parseMultipart($structure, $_preferedMimeType);
         } else {
             $bodyParts = $bodyParts + $this->_parseSinglePart($structure, in_array($_preferedMimeType, array(Zend_Mime::TYPE_HTML, Zend_Mime::TYPE_TEXT)));
@@ -474,7 +474,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     {
         $result = array();
         
-        if (! array_key_exists('type', $_structure) || $_structure['type'] != 'text') {
+        if (! (isset($_structure['type']) || array_key_exists('type', $_structure)) || $_structure['type'] != 'text') {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Structure has no type key or type != text: ' . print_r($_structure, TRUE));
             return $result;
         }
@@ -503,7 +503,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             isset($_structure['disposition']['type']) && 
                 ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_ATTACHMENT ||
                 // treat as attachment if structure contains parameters 
-                ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && array_key_exists("parameters", $_structure['disposition'])
+                ($_structure['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && (isset($_structure['disposition']["parameters"]) || array_key_exists("parameters", $_structure['disposition']))
             )
         ));
     }
@@ -530,14 +530,14 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Found parts: ' . print_r($foundParts, TRUE));
             
-            if (array_key_exists($_preferedMimeType, $foundParts)) {
+            if ((isset($foundParts[$_preferedMimeType]) || array_key_exists($_preferedMimeType, $foundParts))) {
                 // found our desired body part
                 $result[$foundParts[$_preferedMimeType]] = $_structure['parts'][$foundParts[$_preferedMimeType]];
             }
             
             $multipartTypes = array(self::CONTENT_TYPE_MULTIPART, self::CONTENT_TYPE_MULTIPART_RELATED, self::CONTENT_TYPE_MULTIPART_MIXED);
             foreach ($multipartTypes as $multipartType) {
-                if (array_key_exists($multipartType, $foundParts)) {
+                if ((isset($foundParts[$multipartType]) || array_key_exists($multipartType, $foundParts))) {
                     // dig deeper into the structure to find the desired part(s)
                     $partStructure = $_structure['parts'][$foundParts[$multipartType]];
                     $result = $this->getBodyParts($partStructure, $_preferedMimeType);
@@ -547,7 +547,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $alternativeType = ($_preferedMimeType == Zend_Mime::TYPE_HTML) 
                 ? Zend_Mime::TYPE_TEXT 
                 : (($_preferedMimeType == Zend_Mime::TYPE_TEXT) ? Zend_Mime::TYPE_HTML : '');
-            if (empty($result) && array_key_exists($alternativeType, $foundParts)) {
+            if (empty($result) && (isset($foundParts[$alternativeType]) || array_key_exists($alternativeType, $foundParts))) {
                 // found the alternative body part
                 $result[$foundParts[$alternativeType]] = $_structure['parts'][$foundParts[$alternativeType]];
             }

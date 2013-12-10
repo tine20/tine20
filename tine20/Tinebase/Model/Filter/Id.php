@@ -88,7 +88,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
          if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
              . ' schema: ' . print_r($schema, TRUE));
          
-         $type = (array_key_exists($this->_field, $schema)) ? $schema[$this->_field]['DATA_TYPE'] : NULL;
+         $type = ((isset($schema[$this->_field]) || array_key_exists($this->_field, $schema))) ? $schema[$this->_field]['DATA_TYPE'] : NULL;
          return $type;
      }
      

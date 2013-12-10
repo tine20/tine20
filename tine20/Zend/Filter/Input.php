@@ -3,7 +3,7 @@
 /**
  * 
  * Copied from library/Zend/Filter/Input.php and fixed null value validation bug  * 
- * (see http://framework.zend.com/issues/browse/ZF-7135) in line 834 (if (array_key_exists($field, $this->_data)) {) 
+ * (see http://framework.zend.com/issues/browse/ZF-7135) in line 834 (if ((isset($this->_data[$field]) || array_key_exists($field, $this->_data))) {) 
  * 
  * Zend Framework
  *
@@ -340,7 +340,7 @@ class Zend_Filter_Input
         if ($fieldName === null) {
             return $this->_escapeRecursive($this->_validFields);
         }
-        if (array_key_exists($fieldName, $this->_validFields)) {
+        if ((isset($this->_validFields[$fieldName]) || array_key_exists($fieldName, $this->_validFields))) {
             return $this->_escapeRecursive($this->_validFields[$fieldName]);
         }
         return null;
@@ -375,7 +375,7 @@ class Zend_Filter_Input
         if ($fieldName === null) {
             return $this->_validFields;
         }
-        if (array_key_exists($fieldName, $this->_validFields)) {
+        if ((isset($this->_validFields[$fieldName]) || array_key_exists($fieldName, $this->_validFields))) {
             return $this->_validFields[$fieldName];
         }
         return null;
@@ -436,7 +436,7 @@ class Zend_Filter_Input
         if ($fieldName === null) {
             return !($this->hasMissing() || $this->hasInvalid());
         }
-        return array_key_exists($fieldName, $this->_validFields);
+        return (isset($this->_validFields[$fieldName]) || array_key_exists($fieldName, $this->_validFields));
     }
 
     /**
@@ -635,7 +635,7 @@ class Zend_Filter_Input
     protected function _filterRule(array $filterRule)
     {
         $field = $filterRule[self::FIELDS];
-        if (!array_key_exists($field, $this->_data)) {
+        if (!(isset($this->_data[$field]) || array_key_exists($field, $this->_data))) {
             return;
         }
         if (is_array($this->_data[$field])) {
@@ -831,7 +831,7 @@ class Zend_Filter_Input
          */
         $data = array();
         foreach ((array) $validatorRule[self::FIELDS] as $key => $field) {
-            if (array_key_exists($field, $this->_data)) {
+            if ((isset($this->_data[$field]) || array_key_exists($field, $this->_data))) {
                 $data[$field] = $this->_data[$field];
             } else if (isset($validatorRule[self::DEFAULT_VALUE])) {
                 /** @todo according to this code default value can't be an array. It has to be reviewed */
@@ -965,7 +965,7 @@ class Zend_Filter_Input
          * If we got this far, the inputs for this rule pass validation.
          */
         foreach ((array) $validatorRule[self::FIELDS] as $field) {
-            if (array_key_exists($field, $data)) {
+            if ((isset($data[$field]) || array_key_exists($field, $data))) {
                 $this->_validFields[$field] = $data[$field];
             }
         }

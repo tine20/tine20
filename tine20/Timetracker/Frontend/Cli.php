@@ -144,7 +144,7 @@ class Timetracker_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     if (in_array($groupId, $groupMemberships)) {
                         echo 'Transfering timesheet of user ' . $timesheet->account_id . ' to timeaccount ' . $timeaccountId . ".\n";
                         
-                        if (array_key_exists('dryrun', $params) && $params['dryrun'] == 0) {
+                        if ((isset($params['dryrun']) || array_key_exists('dryrun', $params)) && $params['dryrun'] == 0) {
                             $timesheet->timeaccount_id = $timeaccountId;
                             Timetracker_Controller_Timesheet::getInstance()->update($timesheet);
                             $transferCount++;
