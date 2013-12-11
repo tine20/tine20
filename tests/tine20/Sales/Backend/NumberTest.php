@@ -61,17 +61,16 @@ class Sales_Backend_NumberTest extends PHPUnit_Framework_TestCase
     
     /**
      * get next number
-     *
      */
     public function testGetNextNumber()
     {
         $userId = Tinebase_Core::getUser()->getId();
-        $number = $this->_backend->getNext(Sales_Model_Number::TYPE_CONTRACT, $userId);
+        $number = $this->_backend->getNext('Sales_Model_Contract', $userId);
         
-        $nextNumber = $this->_backend->getNext(Sales_Model_Number::TYPE_CONTRACT, $userId);
+        $nextNumber = $this->_backend->getNext('Sales_Model_Contract', $userId);
         
         $this->assertEquals($number->number+1, $nextNumber->number);
-        $this->assertEquals($number->type, $nextNumber->type);
+        $this->assertEquals($number->model, $nextNumber->model);
         
         // reset or delete old number
         if ($number->number == 1) {
