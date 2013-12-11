@@ -4,8 +4,8 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -14,16 +14,11 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Sales_Backend_ContractTest::main');
-}
-
 /**
  * Test class for Sales_Backend_ContractTest
  */
 class Sales_Backend_ContractTest extends PHPUnit_Framework_TestCase
 {
-    
     /**
      * the contract backend
      *
@@ -31,15 +26,6 @@ class Sales_Backend_ContractTest extends PHPUnit_Framework_TestCase
      */
     protected $_backend;
     
-    /**
-     * Runs the test methods of this class.
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Contract Backend Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * Sets up the fixture.
      * 
@@ -93,7 +79,7 @@ class Sales_Backend_ContractTest extends PHPUnit_Framework_TestCase
         
         // add number
         $numberBackend = new Sales_Backend_Number();
-        $number = $numberBackend->getNext(Sales_Model_Number::TYPE_CONTRACT, Tinebase_Core::getUser()->getId());
+        $number = $numberBackend->getNext('Sales_Model_Contract', Tinebase_Core::getUser()->getId());
         $contract->number = $number->number;
 
         return $contract;
@@ -106,7 +92,7 @@ class Sales_Backend_ContractTest extends PHPUnit_Framework_TestCase
     protected function _decreaseNumber()
     {
         $numberBackend = new Sales_Backend_Number();
-        $number = $numberBackend->getNext(Sales_Model_Number::TYPE_CONTRACT, Tinebase_Core::getUser()->getId());
+        $number = $numberBackend->getNext('Sales_Model_Contract', Tinebase_Core::getUser()->getId());
         // reset or delete old number
         if ($number->number == 2) {
             $numberBackend->delete($number);
