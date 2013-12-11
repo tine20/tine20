@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -325,9 +325,19 @@ Zeile 3</AirSyncBase:Data>
         parent::setUp();
         
         // replace email to make current user organizer and attendee
-        $this->_testXMLInput = str_replace('lars@kneschke.de', Tinebase_Core::getUser()->accountEmailAddress, $this->_testXMLInput);
+        $testConfig = Zend_Registry::get('testConfig');
+        $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
+        
+        $this->_testXMLInput = str_replace(array(
+            'lars@kneschke.de',
+            'unittest@tine20.org',
+        ), $email, $this->_testXMLInput);
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync_TestCase::testCreateEntry()
+     */
     public function testCreateEntry($syncrotonFolder = null)
     {
         if ($syncrotonFolder === null) {
