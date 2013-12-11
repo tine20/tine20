@@ -1,7 +1,7 @@
 <?php
 /**
  * class to hold contract data
-'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true), *
+ *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
