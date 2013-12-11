@@ -3,12 +3,12 @@
  * class to hold number data
  * 
  * @package     Sales
- * @subpackage    Model
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo        add more types
+ * @todo        put this into tinebase, don't use types but model names
  */
 
 /**
@@ -19,12 +19,6 @@
  */
 class Sales_Model_Number extends Tinebase_Record_Abstract
 {
-    /**
-     * constant for contract type
-     *
-     */
-    const TYPE_CONTRACT = 'contract';
-    
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -48,15 +42,11 @@ class Sales_Model_Number extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'number'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'account_id'       => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'type'             => array(
-            Zend_Filter_Input::ALLOW_EMPTY => false, 
-            'presence' => 'required',
-            array('InArray', array(self::TYPE_CONTRACT)),
-        ),
-        'update_time'      => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'id'               => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'number'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'account_id'       => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'model'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+        'update_time'      => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
     );
 
     /**
