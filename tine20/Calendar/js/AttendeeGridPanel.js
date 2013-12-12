@@ -4,7 +4,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -71,6 +71,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     attendeeStore: null,
     
+    /**
+     * grid panel phone hook for calling attendee
+     * 
+     * @type Tine.Phone.AddressbookGridPanelHook
+     */
+    phoneHook: null,
+    
     stateful: true,
     stateId: 'cal-attendeegridpanel',
     
@@ -118,6 +125,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         };
         
         Tine.Calendar.AttendeeGridPanel.superclass.initComponent.call(this);
+        
+        this.initPhoneGridPanelHook();
     },
     
     initColumns: function() {
@@ -134,16 +143,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 app:   'Calendar',
                 keyFieldName: 'attendeeRoles'
             }
-        },/* {
-            id: 'quantity',
-            dataIndex: 'quantity',
-            width: 40,
-            sortable: true,
-            hidden: this.showNamesOnly || true,
-            header: '&#160;',
-            tooltip: this.app.i18n._('Quantity'),
-            renderer: this.renderAttenderQuantity.createDelegate(this)
-        },*/ {
+        }, {
             id: 'displaycontainer_id',
             dataIndex: 'displaycontainer_id',
             width: 200,
@@ -157,7 +157,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 blurOnSelect: true,
                 selectOnFocus: true,
                 appName: 'Calendar',
-                //startNode: 'personalOf', -> rework to startPath!
                 getValue: function() {
                     if (this.selectedContainer) {
                         // NOTE: the store checks if data changed. If we don't overwrite to string, 
@@ -384,20 +383,73 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (! attender.get('user_id')) {
                 return;
             }
-                        
-            this.ctxMenu = new Ext.menu.Menu({
-                items: [{
-                    text: this.app.i18n._('Remove Attender'),
-                    iconCls: 'action_delete',
+            
+            Tine.log.debug('onContextMenu - attender:');
+            Tine.log.debug(attender);
+            
+            var items = [{
+                text: this.app.i18n._('Remove Attender'),
+                iconCls: 'action_delete',
+                scope: this,
+                disabled: ! this.record.get('editGrant'),
+                handler: function() {
+                    this.store.removeAt(row);
+                }
+            }, '-'];
+
+            var felamimailApp = Tine.Tinebase.appMgr.get('Felamimail');
+            if (felamimailApp && attender.get('user_type') == 'user') {
+                Tine.log.debug('Adding email compose hook for attender');
+                items = items.concat(new Ext.Action({
+                    text: felamimailApp.i18n._('Compose email'),
+                    iconCls: felamimailApp.getIconCls(),
+                    disabled: false,
                     scope: this,
-                    disabled: !this.record.get('editGrant'),
                     handler: function() {
-                        this.store.removeAt(row);
+                        var email = Tine.Felamimail.getEmailStringFromContact(new Tine.Addressbook.Model.Contact(attender.get('user_id')));
+                        var record = new Tine.Felamimail.Model.Message({
+                            subject: this.record.get('summary'),
+                            to: [email]
+                        }, 0);
+                        var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
+                            record: record
+                        });
                     }
-                    
-                }]
+                }));
+            }
+            
+            var plugins = [];
+            if (this.phoneHook && attender.get('user_type') == 'user') {
+                var contact = new Tine.Addressbook.Model.Contact(attender.get('user_id'));
+                this.phoneHook.setContactAndUpdateAction(contact);
+                plugins = [{
+                    ptype: 'ux.itemregistry',
+                    key:   'Addressbook-GridPanel-ContextMenu'
+                }];
+            }
+            
+            Tine.log.debug(items);
+            
+            this.ctxMenu = new Ext.menu.Menu({
+                items: items,
+                // add phone call action via item registry
+                plugins: plugins
             });
             this.ctxMenu.showAt(e.getXY());
+        }
+    },
+    
+    /**
+     * init phone grid panel hook if Phone app is available
+     */
+    initPhoneGridPanelHook: function() {
+        var phoneApp = Tine.Tinebase.appMgr.get('Phone');
+        if (phoneApp) {
+            Tine.log.debug('Adding Phone call hook');
+            this.phoneHook = new Tine.Phone.AddressbookGridPanelHook({
+                app: phoneApp,
+                useActionUpdater: false
+            });
         }
     },
     
