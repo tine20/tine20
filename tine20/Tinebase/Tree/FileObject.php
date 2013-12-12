@@ -156,7 +156,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
         $data = array(
             'creation_time' => Tinebase_DateTime::now()->toString(Tinebase_Record_Abstract::ISO8601LONG),
-            'created_by'    => Tinebase_Core::getUser()->getId(),
+            'created_by'    => is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : null,
             'hash'          => $_record->hash,
             'size'          => $_record->size,
             'revision'      => $this->_getNextRevision($_record),
