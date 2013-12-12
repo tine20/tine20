@@ -79,16 +79,18 @@ class Sales_Controller extends Tinebase_Controller_Abstract
      */
     public function getConfig()
     {
-        if(!Tinebase_Core::getUser()->hasRight('Sales', 'admin')) {
+        if (! Tinebase_Core::getUser()->hasRight('Sales', 'admin')) {
             throw new Tinebase_Exception_AccessDenied(_('You do not have admin rights on Sales'));
         }
         
         return array(
             'contractNumberValidation' => Sales_Config::getInstance()->get('contractNumberValidation', 'integer'),
-            'contractNumberGeneration' => Sales_Config::getInstance()->get('contractNumberGeneration', 'auto')
+            'contractNumberGeneration' => Sales_Config::getInstance()->get('contractNumberGeneration', 'auto'),
+            'ownCurrency' => Sales_Config::getInstance()->get('ownCurrency', 'EUR')
         );
     }
 
+    
     /**
      * save Sales settings
      *
@@ -99,13 +101,16 @@ class Sales_Controller extends Tinebase_Controller_Abstract
      */
     public function setConfig($config)
     {
-        if(!Tinebase_Core::getUser()->hasRight('Sales', 'admin')) {
+        if (! Tinebase_Core::getUser()->hasRight('Sales', 'admin')) {
             throw new Tinebase_Exception_AccessDenied(_('You do not have admin rights on Sales'));
         }
+
+        Sales_Controller_Customer::validateCurrencyCode($config['ownCurrency']);
         
         $ret[] = array(
             Sales_Config::getInstance()->set('contractNumberGeneration', $config['contractNumberGeneration']),
-            Sales_Config::getInstance()->set('contractNumberValidation', $config['contractNumberValidation'])
+            Sales_Config::getInstance()->set('contractNumberValidation', $config['contractNumberValidation']),
+            Sales_Config::getInstance()->set('ownCurrency', $config['ownCurrency'])
         );
         return $ret;
     }

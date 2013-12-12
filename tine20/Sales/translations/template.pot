@@ -289,3 +289,134 @@ msgstr ""
 
 msgid "CostCenter"
 msgstr ""
+
+msgid "Prefix"
+msgstr ""
+
+msgid "Additional Prefix"
+msgstr ""
+
+msgid "Street"
+msgstr ""
+
+msgid "Postalcode"
+msgstr ""
+
+msgid "Region"
+msgstr ""
+
+msgid "Locality"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Number Debit"
+msgstr ""
+
+msgid "Postbox"
+msgstr ""
+
+msgid "Address"
+msgid_plural "Addresses"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Customer"
+msgid_plural "Customers"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Billing Address"
+msgid_plural "Billing Addresses"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Delivery Address"
+msgid_plural "Delivery Addresses"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Web"
+msgstr ""
+
+msgid "Contact Person (external)"
+msgstr ""
+
+msgid "Contact Person (internal)"
+msgstr ""
+
+msgid "VAT No."
+msgstr ""
+
+msgid "Credit Term (days)"
+msgstr ""
+
+msgid "Currency"
+msgstr ""
+
+msgid "Currency Translation Rate"
+msgstr ""
+
+msgid "IBAN"
+msgstr ""
+
+msgid "BIC"
+msgstr ""
+
+msgid "Discount (%)"
+msgstr ""
+
+msgid "Postal address"
+msgstr ""
+
+msgid "Core Data"
+msgstr ""
+
+msgid "Accounting"
+msgstr ""
+
+msgid "Unknown Currency Code"
+msgstr ""
+
+msgid "The Currency Code you tried to use is not valid. Please use a valid Currency Code as defined in ISO 4217."
+msgstr ""
+
+msgid "Select customer"
+msgstr ""
+
+msgid "All Customers"
+msgstr ""
+
+msgid "All customer records"
+msgstr ""
+
+msgid "Copy address to the clipboard"
+msgstr ""
+
+msgid "Clipboard"
+msgstr ""
+
+msgid "Postal Address"
+msgstr ""
+
+msgid "Either street or postbox is required!"
+msgstr ""
+
+msgid "Number duplicate"
+msgstr ""
+
+msgid "The number you tried to use has been taken already. Please use another one leave the field blank to take the next free number."
+msgstr ""
+
+msgid "Export Customers"
+msgstr ""
+
+msgid "Export selected customers as ODS"
+msgstr ""
+
+msgid "Export selected customer as ODS"
+msgstr ""

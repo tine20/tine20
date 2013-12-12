@@ -1,0 +1,213 @@
+<?php
+/**
+ * Tine 2.0
+
+ * @package     Sales
+ * @subpackage  Model
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
+ * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+
+/**
+ * class to hold Customer data
+ *
+ * @package     Sales
+ * @subpackage  Model
+ */
+
+class Sales_Model_Customer extends Tinebase_Record_Abstract
+{
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+    
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
+     */
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'Customer',
+        'recordsName'       => 'Customers', // ngettext('Customer', 'Customers', n)
+        'hasRelations'      => TRUE,
+        'hasCustomFields'   => TRUE,
+        'hasNotes'          => TRUE,
+        'hasTags'           => TRUE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => TRUE,
+        'createModule'      => TRUE,
+        'containerProperty' => NULL,
+      
+        'titleProperty'     => 'name',
+        'appName'           => 'Sales',
+        'modelName'         => 'Customer',
+        
+        'fieldGroups'       => array(
+            'core'       => 'Core Data',     // _('Core Data')
+            'accounting' => 'Accounting',    // _('Accounting')
+        ),
+        
+        'fields'            => array(
+            'number' => array(
+                'label' => 'Number', //_('Number')
+                'group' => 'core',
+                'type'  => 'integer'
+            ),
+            'name' => array(
+                'label'   => 'Name', // _('Name')
+                'type'    => 'text',
+                'duplicateCheckGroup' => 'name',
+                'group' => 'core',
+                'queryFilter' => TRUE,
+            ),
+            'url' => array(
+                'label'   => 'Web', // _('Web')
+                'type'    => 'text',
+                'group' => 'core',
+                'queryFilter' => TRUE,
+            ),
+            'description' => array(
+                'label'   => 'Description', // _('Description')
+                'group' => 'core',
+                'type'    => 'text',
+                'queryFilter' => TRUE,
+            ),
+            'cpextern_id'       => array(
+                'label'      => 'Contact Person (external)',    // _('Contact Person (external)')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'type'       => 'record',
+                'group' => 'core',
+                'config' => array(
+                    'appName'     => 'Addressbook',
+                    'modelName'   => 'Contact',
+                    'idProperty'  => 'id',
+                )
+            ),
+            'cpintern_id'       => array(
+                'label'      => 'Contact Person (internal)',    // _('Contact Person (internal)')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'type'       => 'record',
+                'group' => 'core',
+                'config' => array(
+                    'appName'     => 'Addressbook',
+                    'modelName'   => 'Contact',
+                    'idProperty'  => 'id',
+                )
+            ),
+            'vatid' => array(
+                'label'   => 'VAT No.', // _('VAT No.')
+                'type'    => 'text',
+                'group' => 'accounting',
+                'queryFilter' => TRUE,
+            ),
+            'credit_term' => array(
+                'label'   => 'Credit Term (days)', // _('Credit Term (days)')
+                'type'    => 'integer',
+                'group' => 'accounting',
+                'default' => 0,
+            ),
+            'currency' => array(
+                'label'   => 'Currency', // _('Currency')
+                'type'    => 'text',
+                'group' => 'accounting'
+            ),
+            'currency_trans_rate' => array(
+                'label'   => 'Currency Translation Rate', // _('Currency Translation Rate')
+                'type'    => 'float',
+                'group' => 'accounting',
+                'default' => 1
+            ),
+            'iban' => array(
+                'label' => 'IBAN',
+                'group' => 'accounting',
+                'queryFilter' => TRUE,
+            ),
+            'bic' => array(
+                'label' => 'BIC',
+                'group' => 'accounting',
+                'queryFilter' => TRUE,
+            ),
+            'discount' => array(
+                'label'   => 'Discount (%)', // _('Discount (%)')
+                'type'    => 'float',
+                'group' => 'accounting',
+                'default'    => 0
+            ),
+            'delivery' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Delivery Addresses', // _('Delivery Addresses')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName' => 'Sales',
+                    'modelName'   => 'Address',
+                    'refIdField'  => 'customer_id',
+                    'addFilters' => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'delivery')),
+                    'paging'        => array('sort' => 'locality', 'dir' => 'ASC'),
+                    'dependentRecords' => TRUE
+                ),
+            ),
+            'billing' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Billing Addresses', // _('Billing Addresses')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName' => 'Sales',
+                    'modelName'   => 'Address',
+                    'refIdField'  => 'customer_id',
+                    'addFilters' => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'billing')),
+                    'paging'        => array('sort' => 'locality', 'dir' => 'ASC'),
+                    'dependentRecords' => TRUE
+                ),
+            ),
+            
+            // the postal address
+            
+            'adr_prefix1' => array(
+                'type' => 'virtual',
+                'label'   => 'Prefix', //_('Prefix')
+            ),
+            'adr_prefix2' => array(
+                'type' => 'virtual',
+                'label'   => 'Additional Prefix', //_('Additional Prefix')
+            ),
+            'adr_street' => array(
+                'type' => 'virtual',
+                'label' => 'Street', //_('Street')
+            ),
+            'adr_postalcode' => array(
+                'type' => 'virtual',
+                'label' => 'Postalcode', //_('Postalcode')
+            ),
+            'adr_locality' => array(
+                'type' => 'virtual',
+                'label' => 'Locality', //_('Locality')
+            ),
+            'adr_region' => array(
+                'type' => 'virtual',
+                'label' => 'Region', //_('Region')
+            ),
+            'adr_countryname' => array(
+                'type' => 'virtual',
+                'label'   => 'Country', //_('Country')
+            ),
+            'adr_pobox' => array(
+                'type' => 'virtual',
+                'label' => 'Postbox', //_('Postbox')
+            )
+        )
+    );
+    
+    /**
+     * @see Tinebase_Record_Abstract
+     */
+    protected static $_relatableConfig = array(
+        array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
+            array('type' => 'CUSTOMER', 'degree' => 'sibling', 'text' => 'Customer', 'max' => '0:0'), // _('Customer')
+        ), 'defaultType' => 'CUSTOMER'
+        )
+    );
+}

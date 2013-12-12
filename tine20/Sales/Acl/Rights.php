@@ -39,6 +39,13 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_COSTCENTERS = 'manage_costcenters';
     
     /**
+     * the right to manage customers
+     * 
+     * @staticvar string
+     */
+    const MANAGE_CUSTOMERS = 'manage_customers';
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Sales_Acl_Rights
@@ -53,15 +60,6 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     private function __clone() 
     {
     }
-    
-    /**
-     * the constructor
-     *
-     */
-    private function __construct()
-    {
-        
-    }    
     
     /**
      * the singleton pattern
@@ -89,7 +87,8 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $addRights = array ( 
             self::MANAGE_PRODUCTS,
-            self::MANAGE_COSTCENTERS
+            self::MANAGE_COSTCENTERS,
+            self::MANAGE_CUSTOMERS
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -113,6 +112,10 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_COSTCENTERS => array(
                 'text'          => $translate->_('manage cost centers'),
                 'description'   => $translate->_('add, edit and delete cost centers'),
+            ),
+            self::MANAGE_CUSTOMERS => array(
+                'text'          => $translate->_('manage customers'),
+                'description'   => $translate->_('add, edit and delete customers'),
             ),
         );
         

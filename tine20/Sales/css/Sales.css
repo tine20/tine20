@@ -1,11 +1,10 @@
 /**
  * Tine 2.0
  * 
- * @package     Erp
+ * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Tasks.css 3797 2008-08-11 08:33:21Z c.weiss@metaways.de $
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -26,4 +25,19 @@
 
 .SalesCostCenter {
     background-image:url("../../images/oxygen/16x16/apps/preferences-web-browser-cache.png") !important;
+}
+
+.SalesCustomer {
+    background-image:url("../../images/oxygen/16x16/apps/system-users.png") !important;
+}
+
+.SalesAddress {
+    background-image:url("../../images/oxygen/16x16/apps/khangman.png") !important;
+}
+
+.preview-panel-symbolcompare.wide {width: 160px}
+.preview-panel-customer { margin: 5px 2px 5px 5px; }
+
+.clipboard {
+    background-image:url("../../images/oxygen/16x16/apps/klipper.png") !important;
 }

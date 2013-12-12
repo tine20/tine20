@@ -29,6 +29,27 @@ class Sales_Config extends Tinebase_Config_Abstract
     const CONTRACT_NUMBER_VALIDATION = 'contractNumberValidation';
     
     /**
+     * Contract Status
+     * 
+     * @var string
+     */
+    const CONTRACT_STATUS = 'contractStatus';
+    
+    /**
+     * Contract attendee role
+     * 
+     * @var string
+     */
+    const CONTRACT_CLEARED = 'contractCleared';
+    
+    /**
+     * the own currency
+     *
+     * @var string
+     */
+    const OWN_CURRENCY = 'ownCurrency';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -58,6 +79,36 @@ class Sales_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default'               => 'integer'
+        ),
+        self::CONTRACT_STATUS => array(
+                                   //_('Contract Status Available')
+            'label'                 => 'Contract Status Available',
+                                   //_('Possible Contract status. Please note that additional contract status might impact other Sales systems on export or syncronisation.')
+            'description'           => 'Possible Contract status.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Sales_Model_Status'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'OPEN'
+        ),
+        self::CONTRACT_CLEARED => array(
+                                   //_('Contract Cleared State Available')
+            'label'                 => 'Contract Cleared State Available',
+                                   //_('Possible Contract cleared states.')
+            'description'           => 'Possible Contract cleared states.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Sales_Model_Cleared'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'NOTCLEARED'
+        ),
+        self::OWN_CURRENCY => array(
+            // _('Own Currency')
+            'label'                 => 'Own Currency',
+            // _('The currency defined here is used as default currency in the customerd edit dialog.')
+            'description'           => 'The currency defined here is used as default currency in the customerd edit dialog.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => 'EUR'
         ),
     );
     

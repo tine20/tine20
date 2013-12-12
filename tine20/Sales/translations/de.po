@@ -291,3 +291,135 @@ msgid "Cost Center"
 msgid_plural "Cost Centers"
 msgstr[0] "Kostenstelle"
 msgstr[1] "Kostenstellen"
+
+
+msgid "Prefix"
+msgstr "Zusatz"
+
+msgid "Additional Prefix"
+msgstr "Zusatz 2"
+
+msgid "Street"
+msgstr "Straße"
+
+msgid "Postalcode"
+msgstr "Postleitzahl"
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Locality"
+msgstr "Ort"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Number Debit"
+msgstr "Debitorennummer"
+
+msgid "Postbox"
+msgstr "Postfach"
+
+msgid "Address"
+msgid_plural "Addresses"
+msgstr[0] "Anschrift"
+msgstr[1] "Anschriften"
+
+msgid "Customer"
+msgid_plural "Customers"
+msgstr[0] "Kunde"
+msgstr[1] "Kunden"
+
+msgid "Billing Address"
+msgid_plural "Billing Addresses"
+msgstr[0] "Rechnungsanschrift"
+msgstr[1] "Rechnungsanschriften"
+
+msgid "Delivery Address"
+msgid_plural "Delivery Addresses"
+msgstr[0] "Lieferanschrift"
+msgstr[1] "Lieferanschriften"
+
+msgid "Name"
+msgstr "Firmenname"
+
+msgid "Web"
+msgstr "Internet"
+
+msgid "Contact Person (external)"
+msgstr "Kontaktperson (extern)"
+
+msgid "Contact Person (internal)"
+msgstr "Kontaktperson (intern)"
+
+msgid "VAT No."
+msgstr "USt.-ID"
+
+msgid "Credit Term (days)"
+msgstr "Zahlungsziel in Tagen"
+
+msgid "Currency"
+msgstr "Währung"
+
+msgid "Currency Translation Rate"
+msgstr "Wechselkurs"
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "Discount (%)"
+msgstr "Rabatt in Prozent"
+
+msgid "Postal address"
+msgstr "Postadresse"
+
+msgid "Core Data"
+msgstr "Stammdaten"
+
+msgid "Accounting"
+msgstr "Abrechnung"
+
+msgid "Unknown Currency Code"
+msgstr "Unbekannter Währungscode"
+
+msgid "The Currency Code you tried to use is not valid. Please use a valid Currency Code as defined in ISO 4217."
+msgstr "Der Währungscode, den Sie versucht haben, einzugeben, ist nicht gültig. Bitte verwenden Sie einen gültigen Währungscode nach ISO 4217."
+
+msgid "Select customer"
+msgstr "Kunden auswählen"
+
+msgid "All Customers"
+msgstr "Alle Kunden"
+
+msgid "All customer records"
+msgstr "Datensätze aller Kunden"
+
+msgid "Copy address to the clipboard"
+msgstr "Adresse in die Zwischenablage kopieren"
+
+msgid "Clipboard"
+msgstr "Zwischenablage"
+
+msgid "Either street or postbox is required!"
+msgstr "Bitte geben Sie entweder eine Straße oder ein Postfach an!"
+
+msgid "Postal Address"
+msgstr "Postanschrift"
+
+msgid "Number duplicate"
+msgstr "Mehrfach vergebene Nummer"
+
+msgid "The number you tried to use has been taken already. Please use another one leave the field blank to take the next free number."
+msgstr "Die Nummer die Sie für diesen Datensatz verwenden wollten, ist bereits vergeben. Bitte versuchen Sie es mit einer anderen, oder lassen das Feld leer, um die nächst freie Nummer zu verwenden."
+
+msgid "Export Customers"
+msgstr "Export"
+
+msgid "Export selected customers as ODS"
+msgstr "Exportiere markierte Kunden als ODS"
+
+msgid "Export selected customer as ODS"
+msgstr "Exportiere markierten Kunden als ODS"

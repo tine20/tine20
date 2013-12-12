@@ -59,5 +59,22 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 ),
             ))
         ));
+        
+        // Customers
+        $commonValues['model'] = 'Sales_Model_CustomerFilter';
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Customers", // _('All Customers')
+                'description' => "All customer records", // _('All customer records')
+                'filters'     => array(
+                    array(
+                        'field'     => 'created_by',
+                        'operator'  => 'equals',
+                        'value'     => Tinebase_Model_User::CURRENTACCOUNT
+                    )
+                ),
+            ))
+        ));
     }
 }

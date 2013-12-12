@@ -30,21 +30,20 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * @see Tinebase_Frontend_Json_Abstract
      */
-    protected $_relatableModels = array(
-        'Sales_Model_Contract',
-        'Sales_Model_CostCenter',
-    );
-    
+    protected $_relatableModels = array('Sales_Model_Contract', 'Sales_Model_CostCenter', 'Sales_Model_Customer', 'Sales_Model_Address');
+
     /**
      * All configured models
      *
      * @var array
-     */
+    */
     protected $_configuredModels = array(
         'Product',
         'Contract',
         'Division',
         'CostCenter',
+        'Customer',
+        'Address'
     );
     
    /**
@@ -274,5 +273,117 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchDivisions($filter, $paging)
     {
         return $this->_search($filter, $paging, Sales_Controller_Division::getInstance(), 'Sales_Model_DivisionFilter');
+    }
+    
+    // customer methods
+    
+    /**
+     * Search for records matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchCustomers($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Sales_Controller_Customer::getInstance(), 'Sales_Model_CustomerFilter');
+    }
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getCustomer($id)
+    {
+        $customerController = Sales_Controller_Customer::getInstance();
+        $customerRecord = $customerController->get($id);
+        $customer = $this->_recordToJson($customerRecord);
+        $customer = array_merge($customer, $customerController->resolveVirtualFields($customerRecord));
+    
+        return $customer;
+    }
+    
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveCustomer($recordData)
+    {
+        $postalAddress = array();
+    
+        foreach($recordData as $field => $value) {
+            if (strpos($field, 'adr_') !== FALSE && ! empty($value)) {
+                $postalAddress[substr($field, 4)] = $value;
+                unset($recordData[$field]);
+            }
+        }
+    
+        foreach (array('cpextern_id', 'cpintern_id') as $prop) {
+            if (is_array($recordData[$prop])) {
+                $recordData[$prop] = $recordData[$prop]['id'];
+            }
+        }
+    
+        $ret = $this->_save($recordData, Sales_Controller_Customer::getInstance(), 'Customer');
+    
+        $postalAddress['customer_id'] = $ret['id'];
+    
+        $addressController = Sales_Controller_Address::getInstance();
+        $filter = new Sales_Model_AddressFilter(array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(
+            array('field' => 'customer_id', 'operator' => 'equals', 'value' => $ret['id'])
+        ));
+    
+        $postalAddressRecord = $addressController->search($filter)->getFirstRecord();
+    
+        // delete if fields are empty
+        if (empty($postalAddress) && $postalAddressRecord) {
+            $addressController->delete(array($postalAddressRecord->getId()));
+            $postalAddressRecord = NULL;
+        } else {
+            // create if none has been found
+            if (! $postalAddressRecord) {
+                $postalAddressRecord = $addressController->create(new Sales_Model_Address($postalAddress));
+            } else {
+                // update if it has changed
+                $postalAddress['id'] = $postalAddressRecord->getId();
+                $postalAddress = new Sales_Model_Address($postalAddress);
+                $diff = $postalAddressRecord->diff($postalAddress);
+                if (! empty($diff)) {
+                    $postalAddressRecord = $addressController->update($postalAddress);
+                }
+            }
+        }
+    
+        return $ret;
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array $ids
+     * @return string
+     */
+    public function deleteCustomers($ids)
+    {
+        return $this->_delete($ids, Sales_Controller_Customer::getInstance());
+    }
+    
+    // customer address method - addresses are dependent records, so we need a search method, no more (relation picker combo)
+    
+    /**
+     * Search for records matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchAddresss($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Sales_Controller_Address::getInstance(), 'Sales_Model_AddressFilter');
     }
 }

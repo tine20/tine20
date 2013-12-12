@@ -363,6 +363,249 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         if (! $this->_backend->columnExists('start_date', 'sales_contracts')) {
             $this->_updateContractsFields();
         }
+    }
+    
+    /**
+     * update to 8.5
+     *   - add customer module
+     */
+    public function update_4()
+    {
+        // create customer table
+        $tableDefinition = '<table>
+            <name>sales_customers</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>number</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                    <length>32</length>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>cpextern_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>cpintern_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>vatid</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>url</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>iban</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>bic</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>credit_term</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                    <length>10</length>
+                </field>
+                <field>
+                    <name>currency</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                    <length>4</length>
+                </field>
+                <field>
+                    <name>currency_trans_rate</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>discount</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>';
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
+        $this->_backend->createTable($table);
+        
+        // create addresses table
+        $tableDefinition = '<table>
+            <name>sales_addresses</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>customer_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>text</type>
+                    <notnull>true</notnull>
+                    <default>postal</default>
+                    <length>64</length>
+                </field>
+                <field>
+                    <name>prefix1</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>prefix2</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>street</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>postalcode</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>locality</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>region</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>countryname</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>pobox</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>custom1</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>';
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
+        $this->_backend->createTable($table);
+        
+        // create one persistent filter (looks better)
+        
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array(
+                'account_id'        => NULL,
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
+                'model' => 'Sales_Model_CustomerFilter',
+                'name'        => "All Customers", // _('All Customers')
+                'description' => "All customer records", // _('All customer records')
+                'filters'     => array(
+                    array(
+                        'field'     => 'created_by',
+                        'operator'  => 'equals',
+                        'value'     => Tinebase_Model_User::CURRENTACCOUNT
+                    )
+                ),
+            )
+        ));
         
         $this->setApplicationVersion('Sales', '8.5');
     }

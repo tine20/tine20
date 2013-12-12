@@ -54,6 +54,42 @@
         {
           "text": "ProductEditDialog.js",
           "path": "js/"
+        },
+        {
+          "text": "CustomerEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AddressGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "DeliveryAddressGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "BillingAddressGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AddressEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "CustomerDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "CustomerGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ExceptionHandler.js",
+          "path": "js/"
+        },
+        {
+          "text": "CopyAddressDialog.js",
+          "path": "js/"
         }
       ]
     },

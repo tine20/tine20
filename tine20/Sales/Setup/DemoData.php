@@ -54,7 +54,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * models to work on
      * @var array
      */
-    protected $_models = array('product', 'contract');
+    protected $_models = array('product', 'contract', 'customer');
     
     /**
      * the constructor
@@ -166,6 +166,96 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         foreach($products as $product) {
             $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
+        }
+    }
+
+    /**
+     * creates the customers with some addresses getting from the addressbook
+     */
+    protected function _createSharedCustomers()
+    {
+        $pagination = new Tinebase_Model_Pagination(array('limit' => 6, 'sort' => 'id', 'dir' => 'ASC'));
+        // @todo: use shared addresses only
+        $filter = new Addressbook_Model_ContactFilter(array(array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CONTACTTYPE_CONTACT)));
+        $addresses = Addressbook_Controller_Contact::getInstance()->search($filter, $pagination);
+        
+        $customers = array(
+            array(
+                'name' => 'ELKO Elektronik und Söhne',
+                'url' => 'www.elko-elektronik.de',
+            ), 
+            array(
+                'name' => 'Reifenlieferant Gebrüder Platt',
+                'url' => 'www.platt-reifen.de',
+            ), 
+            array(
+                'name' => 'Frische Fische Gmbh & Co. KG',
+                'url' => 'www.frische-fische-hamburg.de',
+                'discount' => 15.2
+            )
+        );
+        
+        $i=0;
+        
+        $customerController = Sales_Controller_Customer::getInstance();
+        $addressController = Sales_Controller_Address::getInstance();
+        
+        $customerRecords = new Tinebase_Record_RecordSet('Sales_Model_Customer');
+        
+        foreach ($customers as $customer) {
+            $customer['cpextern_id'] = $addresses->getByIndex($i)->getId();
+            $i++;
+            $customer['cpintern_id'] = $addresses->getByIndex($i)->getId();
+            $i++;
+            $customer['iban'] = Tinebase_Record_Abstract::generateUID(20);
+            $customer['bic'] = Tinebase_Record_Abstract::generateUID(12);
+            $customer['credit_term'] = 30;
+            $customer['currency'] = 'EUR';
+            $customer['currency_trans_rate'] = 1;
+            
+            $customerRecords->addRecord($customerController->create(new Sales_Model_Customer($customer)));
+        }
+        
+        $pagination = new Tinebase_Model_Pagination(array('limit' => 16, 'sort' => 'id', 'dir' => 'DESC'));
+        $addresses = Addressbook_Controller_Contact::getInstance()->search($filter, $pagination);
+        
+        $i=0;
+        foreach($customerRecords as $customer) {
+            foreach(array('postal', 'billing', 'delivery', 'billing', 'delivery') as $type) {
+                $caddress = $addresses->getByIndex($i);
+                $address = new Sales_Model_Address(array(
+                    'customer_id' => $customer->getId(),
+                    'type'        => $type,
+                    'prefix1'     => $caddress->title,
+                    'prefix2'     => $caddress->n_fn,
+                    'street'      => $caddress->adr_two_street,
+                    'postalcode'  => $caddress->adr_two_postalcode,
+                    'locality'    => $caddress->adr_two_locality,
+                    'region'      => $caddress->adr_two_region,
+                    'countryname' => $caddress->adr_two_countryname,
+                    'custom1'     => ($type == 'billing') ? Tinebase_Record_Abstract::generateUID(5) : NULL
+                ));
+                
+                $addressController->create($address);
+                
+                $i++;
+            }
+            // the last customer gets plus one delivery address
+            $caddress = $addresses->getByIndex($i);
+            $address = new Sales_Model_Address(array(
+                'customer_id' => $customer->getId(),
+                'type'        => $type,
+                'prefix1'     => $caddress->title,
+                'prefix2'     => $caddress->n_fn,
+                'street'      => $caddress->adr_two_street,
+                'postalcode'  => $caddress->adr_two_postalcode,
+                'locality'    => $caddress->adr_two_locality,
+                'region'      => $caddress->adr_two_region,
+                'countryname' => $caddress->adr_two_countryname,
+                'custom1'     => NULL
+            ));
+            
+            $addressController->create($address);
         }
     }
     
