@@ -276,7 +276,6 @@ Tine.Tinebase.ApplicationStarter = {
             globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation')));
         
         if (! label) {
-            Tine.log.err('Label not found!');
             return null;
         }
         // prepare filter
