@@ -384,6 +384,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 return;
             }
             
+            // select name cell
+            this.getSelectionModel().select(row, 3);
+            
             Tine.log.debug('onContextMenu - attender:');
             Tine.log.debug(attender);
             
@@ -433,7 +436,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.ctxMenu = new Ext.menu.Menu({
                 items: items,
                 // add phone call action via item registry
-                plugins: plugins
+                plugins: plugins,
+                listeners: {
+                    scope: this,
+                    hide: function() {
+                        this.getSelectionModel().clearSelections();
+                    }
+                }
             });
             this.ctxMenu.showAt(e.getXY());
         }
