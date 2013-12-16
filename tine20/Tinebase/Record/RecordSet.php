@@ -326,13 +326,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param string $_name
      * @param mixed $_value
      * @return void
+     * 
+     * @todo reactivate indices (@see 0007558: reactivate indices in Tinebase_Record_RecordSet)
      */
     public function __set($_name, $_value)
     {
         foreach ($this->_listOfRecords as $record) {
             $record->$_name = $_value;
         }
-        if ((isset($this->_indices[$_name]) || array_key_exists($_name, $this->_indices))) {
+        if (FALSE && (isset($this->_indices[$_name]) || array_key_exists($_name, $this->_indices))) {
             foreach ($this->_indices[$_name] as $key => $oldvalue) {
                 $this->_indices[$_name][$key] = $_value;
             }
