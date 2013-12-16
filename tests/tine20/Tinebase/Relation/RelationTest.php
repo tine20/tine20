@@ -5,19 +5,14 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tinebase_Relations
  */
-class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
+class Tinebase_Relation_RelationTest extends TestCase
 {
     /**
      * @var    Tinebase_Relations
@@ -70,7 +65,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_object = Tinebase_Relations::getInstance();
         $this->_relations = array();
@@ -134,15 +129,6 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $this->_relationData);
     }
     
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-
     /**
      * testGetInstance().
      */
@@ -334,10 +320,8 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
      */
     public function testTransfer()
     {
-        $addresses = Addressbook_Controller_Contact::getInstance()->getAll();
-        
-        $sclever = $addresses->filter('email', 'sclever@tine20.org')->getFirstRecord();
-        $pwulf = $addresses->filter('email', 'pwulf@tine20.org')->getFirstRecord();
+        $sclever = Addressbook_Controller_Contact::getInstance()->get($this->_personas['sclever']->contact_id, null, false);
+        $pwulf   = Addressbook_Controller_Contact::getInstance()->get($this->_personas['pwulf']->contact_id, null, false);
         
         $container = Tinebase_Container::getInstance()->create(new Tinebase_Model_Container(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
