@@ -122,8 +122,9 @@ Tine.Sales.AddressGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onEditInNewWindow: function(button, record, plugins) {
         // the name 'button' should be changed as this can be called in other ways also
         button.fixedFields = {
-            'customer_id': this.editDialog.record.data,
-            'type':        this.addressType
+            'customer_id':  this.editDialog.record.data,
+            'type':         this.addressType,
+            'parentRecord': this.editDialog.record.data
         };
         
         var additionalConfig = {addressType: this.addressType};

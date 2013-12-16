@@ -80,7 +80,7 @@ Tine.Sales.CopyAddressDialog = Ext.extend(Ext.FormPanel, {
                     height: 120,
                     labelSeparator: '',
                     columnWidth: 1,
-                    allowBlank: false
+                    allowBlank: true
                 }]]
             }]
         };
@@ -101,6 +101,8 @@ Tine.Sales.CopyAddressDialog = Ext.extend(Ext.FormPanel, {
             fn : this.onOk,
             scope : this
         }]);
+        
+        this.window.setTitle(this.app.i18n._hidden(this.winTitle));
     },
     
     /**

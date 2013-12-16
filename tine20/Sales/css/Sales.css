@@ -36,7 +36,8 @@
 }
 
 .preview-panel-symbolcompare.wide {width: 160px}
-.preview-panel-customer { margin: 5px 2px 5px 5px; }
+.preview-panel-customer { margin: 5px 2px 5px 5px; width: 32%; min-width: 200px}
+.preview-panel-description.preview-panel-customer {width: 22%; min-width: 200px}
 
 .clipboard {
     background-image:url("../../images/oxygen/16x16/apps/klipper.png") !important;

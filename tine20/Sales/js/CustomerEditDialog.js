@@ -31,7 +31,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     
     windowWidth: 800,
-    windowHeight: 630,
+    windowHeight: 660,
     
     initComponent: function() {
         this.tbarItems = [{xtype: 'widget-activitiesaddbutton'}];
@@ -73,7 +73,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };
         
         this.clipboardButton = new Ext.Button({
-           columnWidth: .045,
+           columnWidth: 5/100,
            iconCls: 'clipboard',
            tooltip: Ext.util.Format.htmlEncode(this.app.i18n._('Copy address to the clipboard')),
            fieldLabel: '&nbsp;',
@@ -81,6 +81,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
            listeners: {
                 scope: this,
                 click: function() {
+                    this.onRecordUpdate();
                     Tine.Sales.addToClipboard(this.record);
                 }
            }
@@ -157,49 +158,20 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 name: 'name',
                                 xtype: 'tine.widget.field.AutoCompleteField',
                                 recordClass: this.recordClass
-                            }], [{
-                                columnWidth: 1/3,
-                                fieldLabel: this.app.i18n._('Web'),
-                                xtype: 'mirrortextfield',
-                                name: 'url',
-                                maxLength: 128,
-                                listeners: {
-                                    scope: this,
-                                    focus: function (field) {
-                                        if (! field.getValue()) {
-                                            field.setValue('http://www.');
-                                            field.selectText.defer(100, field, [7, 11]);
-                                        }
-                                    },
-                                    blur: function (field) {
-                                        if (field.getValue() === 'http://www.') {
-                                            field.setValue(null);
-                                            field.validate();
-                                        }
-                                        if (field.getValue().indexOf('http://http://') == 0 || field.getValue().indexOf('http://https://') == 0) {
-                                            field.setValue(field.getValue().substr(7));
-                                            field.validate();
-                                        }
-                                        if (field.getValue().indexOf('http://www.http://') == 0 || field.getValue().indexOf('http://www.https://') == 0) {
-                                            field.setValue(field.getValue().substr(11));
-                                            field.validate();
-                                        }
-                                    }
-                                }
-                            }, Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
-                                    columnWidth: 1/3,
+                            }], [Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                                    columnWidth: 1/2,
                                     blurOnSelect: true,
                                     name: 'cpextern_id',
                                     allowBlank: true,
                                     fieldLabel: this.app.i18n._('Contact Person (external)')
                             }), Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
-                                    columnWidth: 1/3,
+                                    columnWidth: 1/2,
                                     blurOnSelect: true,
                                     name: 'cpintern_id',
                                     allowBlank: true,
                                     fieldLabel: this.app.i18n._('Contact Person (internal)')
                                 })
-                            ]]
+                        ]]
                     }]
                 }, {
                     xtype: 'fieldset',
@@ -275,34 +247,85 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         formDefaults: formFieldDefaults,
                         items: [
                             [{
-                                name: 'adr_prefix1',
-                                fieldLabel: this.app.i18n._('Prefix')
-                            }, {
-                                name: 'adr_prefix2',
-                                fieldLabel: this.app.i18n._('Additional Prefix')
-                            }],[{
                                 name: 'adr_street',
-                                fieldLabel: this.app.i18n._('Street')
-                            }, {
-                                name: 'adr_postalcode',
-                                allowBlank: false,
-                                fieldLabel: this.app.i18n._('Postalcode')
-                            }],[{
-                                name: 'adr_locality',
-                                allowBlank: false,
-                                fieldLabel: this.app.i18n._('Locality')
-                            }, {
-                                name: 'adr_region',
-                                fieldLabel: this.app.i18n._('Region')
-                            }],[{
-                                xtype: 'widget-countrycombo',
-                                name: 'adr_countryname',
-                                fieldLabel: this.app.i18n._('Country')
+                                fieldLabel: this.app.i18n._('Street'),
+                                columnWidth: 47/100
                             }, {
                                 name: 'adr_pobox',
                                 fieldLabel: this.app.i18n._('Postbox'),
-                                columnWidth: 0.455
-                            }, this.clipboardButton
+                                columnWidth: 47/100
+                                
+                            }], [{
+                                name: 'adr_postalcode',
+                                allowBlank: false,
+                                fieldLabel: this.app.i18n._('Postalcode'),
+                                columnWidth: 47/100
+                            }, {
+                                name: 'adr_locality',
+                                allowBlank: false,
+                                fieldLabel: this.app.i18n._('Locality'),
+                                columnWidth: 47/100
+                            }], [{
+                                name: 'adr_region',
+                                fieldLabel: this.app.i18n._('Region'),
+                                columnWidth: 47/100
+                            }, {
+                                xtype: 'widget-countrycombo',
+                                name: 'adr_countryname',
+                                fieldLabel: this.app.i18n._('Country'),
+                                columnWidth: 47/100
+                            }
+                            ], [{
+                                name: 'adr_prefix1',
+                                fieldLabel: this.app.i18n._('Prefix'),
+                                columnWidth: 47/100
+                            }, {
+                                name: 'adr_prefix2',
+                                fieldLabel: this.app.i18n._('Additional Prefix'),
+                                columnWidth: 48/100
+                            }, this.clipboardButton]
+                        ]
+                    }]
+                }, {
+                    xtype: 'fieldset',
+                    layout: 'hfit',
+                    autoHeight: true,
+                    title: this.app.i18n._('Miscellaneous'),
+                    items: [{
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: formFieldDefaults,
+                        items: [[
+                            {
+                                columnWidth: 1/3,
+                                fieldLabel: this.app.i18n._('Web'),
+                                xtype: 'mirrortextfield',
+                                name: 'url',
+                                maxLength: 128,
+                                listeners: {
+                                    scope: this,
+                                    focus: function (field) {
+                                        if (! field.getValue()) {
+                                            field.setValue('http://www.');
+                                            field.selectText.defer(100, field, [7, 11]);
+                                        }
+                                    },
+                                    blur: function (field) {
+                                        if (field.getValue() === 'http://www.') {
+                                            field.setValue(null);
+                                            field.validate();
+                                        }
+                                        if (field.getValue().indexOf('http://http://') == 0 || field.getValue().indexOf('http://https://') == 0) {
+                                            field.setValue(field.getValue().substr(7));
+                                            field.validate();
+                                        }
+                                        if (field.getValue().indexOf('http://www.http://') == 0 || field.getValue().indexOf('http://www.https://') == 0) {
+                                            field.setValue(field.getValue().substr(11));
+                                            field.validate();
+                                        }
+                                    }
+                                }
+                            }
                         ]]
                     }]
                 }]

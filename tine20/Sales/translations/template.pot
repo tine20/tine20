@@ -337,9 +337,6 @@ msgid_plural "Delivery Addresses"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Name"
-msgstr ""
-
 msgid "Web"
 msgstr ""
 
@@ -394,9 +391,6 @@ msgstr ""
 msgid "All customer records"
 msgstr ""
 
-msgid "Copy address to the clipboard"
-msgstr ""
-
 msgid "Clipboard"
 msgstr ""
 
@@ -419,4 +413,28 @@ msgid "Export selected customers as ODS"
 msgstr ""
 
 msgid "Export selected customer as ODS"
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+msgid "Add new Billing Address"
+msgstr ""
+
+msgid "Add new Delivery Address"
+msgstr ""
+
+msgid "Billing Addresses"
+msgstr ""
+
+msgid "Delivery Addresses"
+msgstr ""
+
+msgid "Copy address to the clipboard"
+msgstr ""
+
+msgid "Enter description"
+msgstr ""
+
+msgid "Apply postal address"
 msgstr ""

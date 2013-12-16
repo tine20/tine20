@@ -58,14 +58,11 @@ class Sales_Model_Address extends Tinebase_Record_Abstract
                     'isParent'    => TRUE
                 )
             ),
-            'prefix1' => array(
-                'label'   => 'Prefix', //_('Prefix')
-            ),
-            'prefix2' => array(
-                'label'   => 'Additional Prefix', //_('Additional Prefix')
-            ),
             'street' => array(
                 'label' => 'Street', //_('Street')
+            ),
+            'pobox' => array(
+                'label' => 'Postbox', //_('Postbox')
             ),
             'postalcode' => array(
                 'label' => 'Postalcode', //_('Postalcode')
@@ -80,8 +77,11 @@ class Sales_Model_Address extends Tinebase_Record_Abstract
                 'label'   => 'Country', //_('Country')
                 'default' => 'Germany', // _('Germany')
             ),
-            'pobox' => array(
-                'label' => 'Postbox', //_('Postbox')
+            'prefix1' => array(
+                'label'   => 'Prefix', //_('Prefix')
+            ),
+            'prefix2' => array(
+                'label'   => 'Additional Prefix', //_('Additional Prefix')
             ),
             'custom1' => array(
                 'label' => 'Number Debit', //_('Number Debit')

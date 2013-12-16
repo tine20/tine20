@@ -36,10 +36,6 @@ msgstr "Sie haben kein Adminrecht in der Sales-Applikation"
 msgid "Responsible"
 msgstr "Verantwortlicher"
 
-#: Model/Contract.php:110
-msgid "Customer"
-msgstr "Kunde"
-
 #: Model/Contract.php:111
 msgid "Partner"
 msgstr "Partner"
@@ -340,9 +336,6 @@ msgid_plural "Delivery Addresses"
 msgstr[0] "Lieferanschrift"
 msgstr[1] "Lieferanschriften"
 
-msgid "Name"
-msgstr "Firmenname"
-
 msgid "Web"
 msgstr "Internet"
 
@@ -397,9 +390,6 @@ msgstr "Alle Kunden"
 msgid "All customer records"
 msgstr "Datensätze aller Kunden"
 
-msgid "Copy address to the clipboard"
-msgstr "Adresse in die Zwischenablage kopieren"
-
 msgid "Clipboard"
 msgstr "Zwischenablage"
 
@@ -423,3 +413,27 @@ msgstr "Exportiere markierte Kunden als ODS"
 
 msgid "Export selected customer as ODS"
 msgstr "Exportiere markierten Kunden als ODS"
+
+msgid "Miscellaneous"
+msgstr "Sonstiges"
+
+msgid "Add new Billing Address"
+msgstr "Neue Rechnungsanschrift hinzufügen"
+
+msgid "Add new Delivery Address"
+msgstr "Neue Lieferanschrift hinzufügen"
+
+msgid "Billing Addresses"
+msgstr "Rechnungsanschriften"
+
+msgid "Delivery Addresses"
+msgstr "Lieferanschriften"
+
+msgid "Copy address to the clipboard"
+msgstr "Adresse in die Zwischenablage kopieren"
+
+msgid "Enter description"
+msgstr "Bitte geben Sie eine Beschreibung an"
+
+msgid "Apply postal address"
+msgstr "Postanschrift anwenden"

@@ -49,6 +49,8 @@ Tine.Sales.CustomerDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
     /**
      * init default template
+     * 
+     * @todo: generalize this
      */
     initDefaultTemplate: function() {
         
@@ -112,35 +114,21 @@ Tine.Sales.CustomerDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     initTemplate: function() {
         this.tpl = new Ext.XTemplate(
             '<tpl for=".">',
-                '<div class="preview-panel-adressbook-nobreak">',
-                '<div class="preview-panel-left">',
-                    '<!-- Preview image -->',
-
-// we may show a logo here sometimes
-//                    '<div class="preview-panel preview-panel-left preview-panel-image">',
-//                        '<div class="bordercorner_1"></div>',
-//                        '<div class="bordercorner_2"></div>',
-//                        '<div class="bordercorner_3"></div>',
-//                        '<div class="bordercorner_4"></div>',
-//                        '<img src="{[this.getImageUrl(values.jpegphoto, 90, 113, values)]}"/>',
-//                    '</div>',
-                
-                    '<!-- Preview core data -->',
-                    '<div class="preview-panel preview-panel-left preview-panel-customer">',
-                        '<div class="bordercorner_1"></div>',
-                        '<div class="bordercorner_2"></div>',
-                        '<div class="bordercorner_3"></div>',
-                        '<div class="bordercorner_4"></div>',
-                        '<div class="preview-panel-declaration">' + this.app.i18n._('Core Data') + '</div>',
-                        '<div class="preview-panel-left">',
-                            '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Number') + '</span>{[this.encode(values.number)]}<br/>',
-                            '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Name') + '</span>{[this.encode(values.name)]}<br/>',
-                            '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Web') + '</span><a href="{[this.encode(values.url, "text")]}" target="_blank">{[this.encode(values.url, "text")]}</a><br/>',
-                            '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Contact Person (external)') + '</span>{[this.encode(values.cpextern_id, "address")]}<br/>',
-                            '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Contact Person (internal)') + '</span>{[this.encode(values.cpintern_id, "address")]}<br/>',
-                            
-                            
-                        '</div>',
+                '<!-- Preview core data -->',
+                '<div class="preview-panel preview-panel-left preview-panel-customer">',
+                    '<div class="bordercorner_1"></div>',
+                    '<div class="bordercorner_2"></div>',
+                    '<div class="bordercorner_3"></div>',
+                    '<div class="bordercorner_4"></div>',
+                    '<div class="preview-panel-declaration">' + this.app.i18n._('Core Data') + '</div>',
+                    '<div class="preview-panel-left">',
+                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Number') + '</span>{[this.encode(values.number)]}<br/>',
+                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Name') + '</span>{[this.encode(values.name)]}<br/>',
+                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Web') + '</span><a href="{[this.encode(values.url, "text")]}" target="_blank">{[this.encode(values.url, "text")]}</a><br/>',
+                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Contact Person (external)') + '</span>{[this.encode(values.cpextern_id, "address")]}<br/>',
+                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Contact Person (internal)') + '</span>{[this.encode(values.cpintern_id, "address")]}<br/>',
+                        
+                        
                     '</div>',
                 '</div>',
 
@@ -151,7 +139,7 @@ Tine.Sales.CustomerDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                     '<div class="bordercorner_3"></div>',
                     '<div class="bordercorner_4"></div>',
                     '<div class="preview-panel-declaration">' + this.app.i18n._('Accounting') + '</div>',
-                    '<div class="preview-panel-left preview-panel-customer">',
+                    '<div>',
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('IBAN') + '</span>{[this.encode(values.iban)]}<br/>',
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('BIC') + '</span>{[this.encode(values.bic)]}<br/>',
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('VAT No.') + '</span>{[this.encode(values.vatid)]}<br/>',
@@ -159,6 +147,15 @@ Tine.Sales.CustomerDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Currency Translation Rate') + '</span>{[this.encode(values.currency_trans_rate)]}<br/>',
                     '</div>',
                 '</div>',
+            
+                '<!-- Preview description -->',
+                '<div class="preview-panel-description preview-panel-left preview-panel-customer">',
+                    '<div class="bordercorner_gray_1"></div>',
+                    '<div class="bordercorner_gray_2"></div>',
+                    '<div class="bordercorner_gray_3"></div>',
+                    '<div class="bordercorner_gray_4"></div>',
+                    '<div class="preview-panel-declaration">' + _('Description') + '</div>',
+                    '{[this.encode(values.description)]}',
                 '</div>',
             '</tpl>',
             {

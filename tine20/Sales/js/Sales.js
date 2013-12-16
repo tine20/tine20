@@ -118,22 +118,20 @@ Tine.Sales.addToClipboard = function(record, companyName) {
     // this is called either from the edit dialog or from the grid, so we have different record types
     var fieldPrefix = record.data.hasOwnProperty('bic') ? 'adr_' : '';
     
-    companyName = companyName ? companyName : record.get('name');
+    companyName = companyName ? companyName : (record.get('name') ? record.get('name') : '');
 
     var lines = companyName + "\n";
     
-        lines += record.get((fieldPrefix + 'prefix1')) + "\n";
-        lines += record.get((fieldPrefix + 'prefix2')) + "\n";
-        lines += (record.get(fieldPrefix + 'pobox') ? record.get(fieldPrefix + 'pobox') : record.get(fieldPrefix + 'street')) + "\n";
-        lines += record.get((fieldPrefix + 'postalcode')) + ' ' + record.get((fieldPrefix + 'locality'));
+        lines += (record.get((fieldPrefix + 'prefix1')) ? record.get((fieldPrefix + 'prefix1')) + "\n" : '');
+        lines += (record.get((fieldPrefix + 'prefix2')) ? record.get((fieldPrefix + 'prefix2')) + "\n" : '');
+        lines += (record.get(fieldPrefix + 'pobox') ? record.get(fieldPrefix + 'pobox') + "\n" : (record.get(fieldPrefix + 'street') ? record.get(fieldPrefix + 'street') + "\n" : ''));
+        lines += (record.get((fieldPrefix + 'postalcode')) ? (record.get((fieldPrefix + 'postalcode')) + ' ') : '') + (record.get((fieldPrefix + 'locality')) ? record.get((fieldPrefix + 'locality')) : '');
         
         if (record.get('countryname')) {
             lines += "\n" + record.get('countryname');
         }
     
-    var app = Tine.Tinebase.appMgr.get('Calendar');
-    var i18n = app.i18n;
+    var app = Tine.Tinebase.appMgr.get('Sales');
     
     Tine.Sales.CopyAddressDialog.openWindow({winTitle: app.i18n._('Copy address to the clipboard'), app: app, content: lines});
 };
->>>>>>> rt118142: [Metaways] Kundenverwaltung Implementierung

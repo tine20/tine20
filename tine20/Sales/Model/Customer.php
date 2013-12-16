@@ -108,7 +108,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'label'   => 'Credit Term (days)', // _('Credit Term (days)')
                 'type'    => 'integer',
                 'group' => 'accounting',
-                'default' => 0,
+                'default' => 10,
             ),
             'currency' => array(
                 'label'   => 'Currency', // _('Currency')
@@ -135,7 +135,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'label'   => 'Discount (%)', // _('Discount (%)')
                 'type'    => 'float',
                 'group' => 'accounting',
-                'default'    => 0
+                'default'    => 0.0
             ),
             'delivery' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),

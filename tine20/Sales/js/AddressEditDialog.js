@@ -31,7 +31,7 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     
     windowWidth: 600,
-    windowHeight: 430,
+    windowHeight: 280,
     
     /**
      * just update the contract grid panel, no persisten
@@ -69,6 +69,26 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('type',        this.fixedFields.get('type').toLowerCase());
         
         Tine.Sales.AddressEditDialog.superclass.onRecordLoad.call(this);
+        
+        if (this.fixedFields.get('type').toLowerCase() == 'billing') {
+            this.i18nRecordName = this.app.i18n._('Billing Address');
+            this.i18nRecordsName = this.app.i18n._('Billing Addresses');
+        } else {
+            this.i18nRecordName = this.app.i18n._('Delivery Address');
+            this.i18nRecordsName = this.app.i18n._('Delivery Addresses');
+        }
+        
+        if ((! this.copyRecord) && this.record.id) {
+            var c = this.record.get('customer_id');
+            var l = this.record.get('locality') ? ' (' + this.record.get('locality') + ')' : '';
+            this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, c.name + l));
+        } else if (! this.record.id) {
+            if (this.fixedFields.get('type').toLowerCase() == 'billing') {
+                this.window.setTitle(this.app.i18n._('Add new Billing Address'));
+            } else {
+                this.window.setTitle(this.app.i18n._('Add new Delivery Address'));
+            }
+        }
     },
     
     /**
@@ -96,24 +116,66 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             xtype:'textfield',
             anchor: '100%',
             labelSeparator: '',
-            columnWidth: 1/3
+            columnWidth: 1/2
         };
         
         
-        var lastRow = [{
-            xtype: 'widget-countrycombo',
-            name: 'countryname',
-            fieldLabel: this.app.i18n._('Country')
-        }, {
-            name: 'pobox',
-            fieldLabel: this.app.i18n._('Postbox')
-        }];
+        var items = [
+            [{
+               columnWidth: .045,
+               xtype:'button',
+               iconCls: 'applyContactData',
+               tooltip: Ext.util.Format.htmlEncode(this.app.i18n._('Apply postal address')),
+               fieldLabel: '&nbsp;',
+               lazyLoading: false,
+               listeners: {
+                    scope: this,
+                    click: function() {
+                        Ext.iterate(this.fixedFields.get('parentRecord'), function(property, value) {
+                            var split = property.split(/_/);
+                            if (split[0] == 'adr') {
+                                console.warn(property, value);
+                                if (value) {
+                                    this.getForm().findField(split[1]).setValue(value);
+                                }
+                            }
+                        }, this);
+                    }
+               }
+            }, {
+                columnWidth: 0.455,
+                name: 'street',
+                fieldLabel: this.app.i18n._('Street')
+            }, {
+                name: 'pobox',
+                fieldLabel: this.app.i18n._('Postbox')
+            }], [{
+                name: 'postalcode',
+                fieldLabel: this.app.i18n._('Postalcode')
+            }, {
+                name: 'locality',
+                fieldLabel: this.app.i18n._('Locality')
+            }], [{
+                name: 'region',
+                fieldLabel: this.app.i18n._('Region')
+            }, {
+                xtype: 'widget-countrycombo',
+                name: 'countryname',
+                fieldLabel: this.app.i18n._('Country')
+            }], [{
+                name: 'prefix1',
+                fieldLabel: this.app.i18n._('Prefix')
+            }, {
+                name: 'prefix2',
+                fieldLabel: this.app.i18n._('Additional Prefix')
+            }]
+        ];
         
         if (this.addressType == 'billing') {
-            lastRow.push({
+            items.push([{
                 name: 'custom1',
                 fieldLabel: this.app.i18n._('Number Debit')
-            });
+            }]);
         }
         
         return {
@@ -140,27 +202,7 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         xtype: 'columnform',
                         labelAlign: 'top',
                         formDefaults: formFieldDefaults,
-                        items: [
-                            [{
-                                name: 'prefix1',
-                                fieldLabel: this.app.i18n._('Prefix')
-                            }, {
-                                name: 'prefix2',
-                                fieldLabel: this.app.i18n._('Additional Prefix')
-                            },{
-                                name: 'street',
-                                fieldLabel: this.app.i18n._('Street')
-                            }], [{
-                                name: 'postalcode',
-                                fieldLabel: this.app.i18n._('Postalcode')
-                            }, {
-                                name: 'locality',
-                                fieldLabel: this.app.i18n._('Locality')
-                            }, {
-                                name: 'region',
-                                fieldLabel: this.app.i18n._('Region')
-                            }], lastRow
-                        ]
+                        items: items
                     }]
                 }]
             }]
