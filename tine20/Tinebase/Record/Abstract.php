@@ -673,17 +673,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * gets record related properties
      * 
-     * @param string _name of property
-     * @throws Tinebase_Exception_UnexpectedValue
+     * @param  string  $name  name of property
      * @return mixed value of property
      */
-    public function __get($_name)
+    public function __get($name)
     {
-        if (!(isset($this->_validators[$_name]) || array_key_exists ($_name, $this->_validators))) {
-            throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
-        }
-        
-        return (isset($this->_properties[$_name]) || array_key_exists($_name, $this->_properties)) ? $this->_properties[$_name] : NULL;
+        return (isset($this->_properties[$name]) || array_key_exists($name, $this->_properties))
+            ? $this->_properties[$name] 
+            : NULL;
     }
     
    /** convert this to string
