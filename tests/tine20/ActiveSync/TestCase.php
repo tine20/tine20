@@ -501,6 +501,19 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
                 ));
                 break;
                 
+            case 'windowsoutlook15':
+                $device = new Syncroton_Model_Device(array(
+                    'deviceid'   => Tinebase_Record_Abstract::generateUID(64),
+                    'devicetype' => 'WindowsOutlook15',
+                    'policy_id'  => null,
+                    'policykey'  => null,
+                    'owner_id'   => Tinebase_Core::getUser()->getId(),
+                    'useragent'  => 'Microsoft.Outlook.15',
+                    'acsversion' => '14.0',
+                    'remotewipe' => 0
+                ));
+                break;
+                
             case Syncroton_Model_Device::TYPE_IPHONE:
             default:
                 $device = new Syncroton_Model_Device(array(

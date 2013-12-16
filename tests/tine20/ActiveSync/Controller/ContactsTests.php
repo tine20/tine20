@@ -29,8 +29,6 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
     
     protected $_controllerName = 'ActiveSync_Controller_Contacts';
     
-    #protected $_specialFolderName = 'addressbook-root';
-    
     protected $_class = Syncroton_Data_Factory::CLASS_CONTACTS;
     
     protected $_testXMLInput = '<?xml version="1.0" encoding="utf-8"?>
@@ -84,6 +82,10 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
     
     protected $_setGeoData = TRUE;
     
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync_TestCase::setUp()
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -104,6 +106,10 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_setGeoData);
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync_TestCase::testCreateEntry()
+     */
     public function testCreateEntry($syncrotonFolder = null)
     {
         if ($syncrotonFolder === null) {
@@ -157,6 +163,11 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
         return array($serverId, $syncrotonContact);
     }
     
+    /**
+     * testCreateEntryWithNoFamilyName
+     * 
+     * @param unknown_type $syncrotonFolder
+     */
     public function testCreateEntryWithNoFamilyName($syncrotonFolder = null)
     {
         if ($syncrotonFolder === null) {
@@ -183,6 +194,10 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
         return array($serverId, $syncrotonContact);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync_TestCase::testUpdateEntry()
+     */
     public function testUpdateEntry($syncrotonFolder = null)
     {
         if ($syncrotonFolder === null) {
@@ -204,5 +219,19 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
         $this->assertEquals(NULL,     $syncrotonContact->webPage, 'facebook url should be removed');
         
         return array($serverId, $syncrotonContact);
+    }
+
+    /**
+     * testGetFolderForOutlook
+     * 
+     * @see 0009184: Only Admin Contact Data is synced (Outlook 2013)
+     */
+    public function testGetFolderForOutlook()
+    {
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice('windowsoutlook15'), Tinebase_DateTime::now());
+        $folders = $controller->getAllFolders();
+        
+        $this->assertEquals(1, count($folders));
+        $this->assertTrue(array_key_exists('addressbook-root', $folders));
     }
 }
