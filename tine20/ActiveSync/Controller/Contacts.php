@@ -343,4 +343,19 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
         
         return $contact;
     }
+    
+    /**
+     * get devices with multiple folders
+     * 
+     * @return array
+     */
+    protected function _getDevicesWithMultipleFolders()
+    {
+        // outlook currently (Microsoft.Outlook.15) does not support mutliple addressbooks
+        // @see 0009184: Only Admin Contact Data is synced (Outlook 2013)
+        $doesNotSupportMultipleFolders = array('windowsoutlook15');
+        $result = array_diff(parent::_getDevicesWithMultipleFolders(), $doesNotSupportMultipleFolders);
+        
+        return $result;
+    }
 }
