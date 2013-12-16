@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -58,17 +58,12 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     protected $_headerValueToDelete = NULL;
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
+     * test user
+     * 
+     * @var Tinebase_Model_FullUser
      */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Message Cache Controller Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
+    protected $_testUser = null;
+    
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -97,6 +92,8 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         
         $this->_emailTestClass = new Felamimail_Controller_MessageTest();
         $this->_emailTestClass->setup();
+        
+        $this->_testUser   = Tinebase_Core::getUser();
     }
 
     /**
@@ -118,6 +115,11 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             foreach($result as $messageUid) {
                 $this->_imap->removeMessage($messageUid);
             }
+        }
+        
+        // reset user if changed
+        if (Tinebase_Core::getUser()->getId() !== $this->_testUser->getId()) {
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
         }
     }
     
@@ -362,5 +364,24 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($quota['STORAGE']['usage'], $folderToTest->quota_usage);
             $this->assertEquals($quota['STORAGE']['limit'], $folderToTest->quota_limit);
         }
+    }
+
+    /**
+     * testGetFolderStatusOfOtherUser
+     * 
+     * @see 0009408: getFolderStatus must check user accounts
+     */
+    public function testGetFolderStatusOfOtherUser()
+    {
+        $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        Tinebase_Core::set(Tinebase_Core::USER, $sclever);
+        
+        $filter = new Felamimail_Model_FolderFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($this->_getFolder()->getId()))
+        ));
+        $status = $this->_controller->getFolderStatus($filter);
+        
+        $this->assertEquals(0, count($status), 'no folders should be found for update');
     }
 }

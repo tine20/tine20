@@ -129,7 +129,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $this->_availableUpdateTime = NULL;
         
         // add user account ids to filter and use the folder backend to search as the folder controller has some special handling in its search function
-        $_filter->createFilter(array('field' => 'account_id', 'operator' => 'in', 'value' => Felamimail_Controller_Account::getInstance()->search()->getArrayOfIds()));
+        $accountIdFilter = $_filter->createFilter(array('field' => 'account_id', 'operator' => 'in', 'value' => Felamimail_Controller_Account::getInstance()->search()->getArrayOfIds()));
+        $_filter->addFilter($accountIdFilter);
         $folderBackend = new Felamimail_Backend_Folder();
         $folders = $folderBackend->search($_filter);
         
