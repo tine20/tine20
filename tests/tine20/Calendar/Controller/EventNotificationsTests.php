@@ -667,6 +667,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertTrue($nextAlarmEventStart < Tinebase_DateTime::now()->addHour(1), 'alarmtime of exception is wrong');
     }
     
+    /**
+     * testRecuringAlarmCustomDate
+     */
     public function testRecuringAlarmCustomDate()
     {
         $event = $this->_getEvent();
@@ -1103,6 +1106,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                         $bodyPartStream = new Zend_Mime_Part($s);
                         $bodyPartStream->encoding = $bodyPart->encoding;
                         $bodyText = $bodyPartStream->getDecodedContent();
+                        
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                            . ' body text: ' . $bodyText);
                         
                         $this->assertContains($_assertString, $bodyText);
                         break;
