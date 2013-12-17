@@ -56,4 +56,19 @@ abstract class Sales_Controller_NumberableAbstract extends Tinebase_Controller_R
         $number = $numberBackend->getNext($this->_modelName, Tinebase_Core::getUser()->getId());
         $record->number = intval($number->number);
     }
+    
+    /**
+     * sets the last number by a given record, if the number has been manually set
+     * 
+     * @param Tinebase_Record_Interface $record
+     */
+    protected function _setLastNumber($record)
+    {
+        $numberBackend = new Sales_Backend_Number();
+        $number = $numberBackend->getCurrent($this->_modelName);
+        
+        if (intval($record->number) > $number) {
+            $numberBackend->setCurrent($this->_modelName, $record->number);
+        }
+    }
 }
