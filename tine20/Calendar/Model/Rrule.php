@@ -322,7 +322,15 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 break;
             case self::FREQ_YEARLY:
                 $month = Zend_Locale::getTranslationList('month', $locale);
-                $rule .= sprintf($translation->_('Yearly on the %1$s of %2$s'), $this->_formatInterval($this->bymonthday, $translation, $numberFormatter), $month[$this->bymonth]);
+                if ($this->byday) {
+                    $byDayInterval = (int) substr($this->byday, 0, -2);
+                    $byDayIntervalTranslation = $this->_getIntervalTranslation($byDayInterval, $translation);
+                    $byDayWeekday  = substr($this->byday, -2);
+                    $rule .= sprintf($translation->_('Yearly every %1$s %2$s of %3$s'), $byDayIntervalTranslation, $weekDays[self::$WEEKDAY_MAP[$byDayWeekday]], $month[$this->bymonth]);
+                } else {
+                    $rule .= sprintf($translation->_('Yearly on the %1$s of %2$s'), $this->_formatInterval($this->bymonthday, $translation, $numberFormatter), $month[$this->bymonth]);
+                }
+                
                 break;
         }
         

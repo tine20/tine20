@@ -209,6 +209,8 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             'value'    => $this->_container->getId()
         ));
         
+        $periodFrom = null;
+        $periodUntil = null;
         if (isset($filters['comp-filters']) && isset($filters['comp-filters'][0]['time-range'])) {
             $timeRange = $filters['comp-filters'][0]['time-range'];
             if (isset($timeRange['start'])) {
@@ -218,25 +220,35 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     $timeRange['end']->add(new DateInterval('P4Y'));
                 }
                 
-                $filterArray[] = array(
-                    'field'    => 'period', 
-                    'operator' => 'within', 
-                    'value'    => array(
-                        'from'  => new Tinebase_DateTime($timeRange['start']),
-                        'until' => new Tinebase_DateTime($timeRange['end'])
-                    )
-                );
+                $periodFrom = new Tinebase_DateTime($timeRange['start']);
+                $periodUntil = new Tinebase_DateTime($timeRange['end']);
             }
         }
+
+        // @see 0009162: CalDAV Performance issues for many events
+        // create default time-range end in 4 years from now and 2 months back (configurable) if no filter was set by client
+        if ($periodFrom === null) {
+            $periodFrom = Tinebase_DateTime::now()->subMonth(Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV, 2));
+        }
+        if ($periodUntil === null) {
+            $periodUntil = Tinebase_DateTime::now()->addYear(4);
+        }
+        
+        $filterArray[] = array(
+            'field' => 'period',
+            'operator' => 'within',
+            'value' => array(
+                'from'  => $periodFrom,
+                'until' => $periodUntil
+            )
+        );
         
         $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
         $filter = new $filterClass($filterArray);
     
-        /**
-         * see http://forge.tine20.org/mantisbt/view.php?id=5122
-         * we must use action 'sync' and not 'get' as
-         * otherwise the calendar also return events the user only can see because of freebusy
-         */
+        // @see http://forge.tine20.org/mantisbt/view.php?id=5122
+        // we must use action 'sync' and not 'get' as
+        // otherwise the calendar also return events the user only can see because of freebusy
         $ids = $this->_getController()->search($filter, null, false, true, 'sync');
     
         return $ids;
