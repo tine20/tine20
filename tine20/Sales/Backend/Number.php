@@ -40,6 +40,24 @@ class Sales_Backend_Number extends Tinebase_Backend_Sql_Abstract
     protected $_defaultCountCol = 'id';
 
     /**
+     * finds the record for the specified modelName
+     * 
+     * @param string $modelName
+     * @return mixed
+     */
+    protected function _findNumberRecord($modelName)
+    {
+        // get number for model
+        $select = $this->_getSelect();
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('model') . ' = ? ', $modelName));
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+        
+        return $queryResult;
+    }
+    
+    /**
      * get next number identified by $model (e.g. Sales_Model_Contract) and update db
      *
      * @param   string $model
@@ -50,19 +68,12 @@ class Sales_Backend_Number extends Tinebase_Backend_Sql_Abstract
      */
     public function getNext($model, $userId)
     {
-        // get number for model
-        $select = $this->_getSelect();
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('model') . ' = ? ', $model));
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetch();
-        $stmt->closeCursor();
+        $queryResult = $this->_findNumberRecord($model);
         
         if (! $queryResult) {
             // find latest used number if there is already one or more numbers has been created manually
             
-            $c = explode('_Model_', $model);
-            $cName = $c[0] . '_Controller_' . $c[1];
-            $controller = $cName::getInstance();
+            $controller = Tinebase_Core::getApplicationInstance($model);
             $latestRecord = $controller->getAll('number', 'DESC')->getFirstRecord();
             
             $nextNumber = $latestRecord ? intval($latestRecord->number) + 1 : 1;
@@ -88,5 +99,41 @@ class Sales_Backend_Number extends Tinebase_Backend_Sql_Abstract
         }
         
         return $number;
+    }
+    
+    /**
+     * returns the lastest used number for the given model
+     * 
+     * @param string $model
+     * @return number|mixed
+     */
+    public function getCurrent($model)
+    {
+        $queryResult = $this->_findNumberRecord($model);
+        
+        if (! $queryResult) {
+            $controller = Tinebase_Core::getApplicationInstance($model);
+            $latestRecord = $controller->getAll('number', 'DESC')->getFirstRecord();
+            
+            return $latestRecord ? $latestRecord->number : 0;
+            
+        } else {
+            return $queryResult['number'];
+        }
+        
+    }
+    
+    /**
+     * sets the current number
+     * 
+     * @param string $model
+     * @param integer $number
+     * @return boolean
+     */
+    public function setCurrent($model, $number)
+    {
+        $this->_db->query('UPDATE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_tableName) . ' SET ' . $this->_db->quoteIdentifier('number') . ' = ' . intval($number) . ' WHERE ' . $this->_db->quoteInto($this->_db->quoteIdentifier('model') . ' = ? ', $model));
+        
+        return true;
     }
 }
