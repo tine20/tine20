@@ -28,6 +28,7 @@ class Tinebase_WebDav_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All WebDAV Tests');
         $suite->addTestSuite('Tinebase_WebDav_PrincipalBackendTest');
         $suite->addTestSuite('Tinebase_WebDav_Plugin_InverseTest');
+        $suite->addTestSuite('Tinebase_WebDav_Plugin_OwnCloudTest');
         $suite->addTestSuite('Tinebase_WebDav_RootTest');
         
         return $suite;

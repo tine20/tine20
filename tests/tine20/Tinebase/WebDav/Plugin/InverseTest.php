@@ -12,17 +12,12 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 require_once 'vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Frontend_CalDAVTest::main');
-}
 
 /**
  * Test class for Tinebase_WebDav_Plugin_Inverse
  */
-class Tinebase_WebDav_Plugin_InverseTest extends PHPUnit_Framework_TestCase
+class Tinebase_WebDav_Plugin_InverseTest extends TestCase
 {
     /**
      * @var array test objects
@@ -55,7 +50,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
@@ -74,17 +69,6 @@ class Tinebase_WebDav_Plugin_InverseTest extends PHPUnit_Framework_TestCase
         $this->server->httpResponse = $this->response;
     }
 
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-    
     /**
      * test getPluginName method
      */
