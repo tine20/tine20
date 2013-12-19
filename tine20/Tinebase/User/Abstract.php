@@ -610,12 +610,4 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * @return Tinebase_Record_RecordSet
      */
     abstract public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User');
-
-    /**
-     * get users by primary group
-     * 
-     * @param string $groupId
-     * @return Tinebase_Record_RecordSet
-     */
-    abstract public function getUsersByPrimaryGroup($groupId);
 }

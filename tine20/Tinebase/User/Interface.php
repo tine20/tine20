@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @deprecated  user backends should be refactored
@@ -64,12 +64,4 @@ interface Tinebase_User_Interface
      * @param string $_loginName
      */
     public function setLastLoginFailure($_loginName);
-
-    /**
-     * get users by primary group
-     * 
-     * @param string $groupId
-     * @return Tinebase_Record_RecordSet
-     */
-    public function getUsersByPrimaryGroup($groupId);
 }
