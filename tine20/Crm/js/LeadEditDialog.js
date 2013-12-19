@@ -124,6 +124,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         // do not do recursion!
+        record.data.relation = null;
         delete record.data.relation;
         
         // save record data
@@ -181,6 +182,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         for (var i=0; i < relations.length; i++) {
             var newLinkObject = relations[i]['related_record'];
+            relations[i]['related_record']['relation'] = null;
             delete relations[i]['related_record']['relation'];
             newLinkObject.relation = relations[i];
             newLinkObject.relation_type = relations[i]['type'].toLowerCase();
