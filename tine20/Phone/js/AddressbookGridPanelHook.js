@@ -52,8 +52,8 @@ Tine.Phone.AddressbookGridPanelHook = function(config) {
     }),
 
     // register in toolbar + contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ActionToolbar-leftbtngrp', this.callContactBtn, 30);
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.callContactAction, 80);
+    Ext.ux.ItemRegistry.registerItem(this.keyPrefix + '-GridPanel-ActionToolbar-leftbtngrp', this.callContactBtn, 30);
+    Ext.ux.ItemRegistry.registerItem(this.keyPrefix + '-GridPanel-ContextMenu', this.callContactAction, 80);
 };
 
 Ext.apply(Tine.Phone.AddressbookGridPanelHook.prototype, {
@@ -78,6 +78,12 @@ Ext.apply(Tine.Phone.AddressbookGridPanelHook.prototype, {
      * @private
      */
     app: null,
+    
+    /**
+     * hook registry prefix
+     * @type String
+     */
+    keyPrefix: 'Addressbook',
     
     /**
      * @property callContactAction

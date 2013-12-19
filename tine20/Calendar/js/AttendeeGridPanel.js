@@ -427,7 +427,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.phoneHook.setContactAndUpdateAction(contact);
                 plugins = [{
                     ptype: 'ux.itemregistry',
-                    key:   'Addressbook-GridPanel-ContextMenu'
+                    key:   'Attendee-GridPanel-ContextMenu'
                 }];
             }
             
@@ -457,6 +457,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             Tine.log.debug('Adding Phone call hook');
             this.phoneHook = new Tine.Phone.AddressbookGridPanelHook({
                 app: phoneApp,
+                keyPrefix: 'Attendee',
                 useActionUpdater: false
             });
         }
