@@ -183,10 +183,21 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($data, true));
         
-        if (empty($data['n_family'])) {
-            $parts = explode(' ', $data['n_fn']);
-            $data['n_family'] = $parts[count($parts) - 1];
-            $data['n_given'] = (count($parts) > 1) ? $parts[0] : null;
+        // Some email clients will only set a contact with FN (formatted name) without surname
+        if (empty($data['n_family']) && (!empty($data['n_fn']))) {
+            if (strpos($data['n_fn'], ",") > 0) {
+                list($lastname, $firstname) = explode(",", $data['n_fn'], 2);
+                $data['n_family'] = trim($lastname);
+                $data['n_given']  = trim($firstname);
+                
+            } elseif (strpos($data['n_fn'], " ") > 0) {
+                list($firstname, $lastname) = explode(" ", $data['n_fn'], 2);
+                $data['n_family'] = trim($lastname);
+                $data['n_given']  = trim($firstname);
+                
+            } else {
+                $data['n_family'] = $data['n_fn'];
+            }
         }
         
         $contact->setFromArray($data);

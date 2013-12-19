@@ -774,9 +774,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _addSystemAccount(Tinebase_Record_RecordSet $_accounts)
     {
-        $userId = Tinebase_Core::getUser()->getId();
-        $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
-        $email = $this->_getAccountEmail($fullUser);
+        $email = $this->_getAccountEmail(Tinebase_Core::getUser());
         
         // only create account if email address is set
         if ($email) {
@@ -784,9 +782,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             
             $this->_addSystemAccountConfigValues($systemAccount);
             
-            $systemAccount->type = Felamimail_Model_Account::TYPE_SYSTEM;
-            $systemAccount->user_id = $userId;
-            $this->_addUserValues($systemAccount, $fullUser, $email);
+            $systemAccount->type    = Felamimail_Model_Account::TYPE_SYSTEM;
+            $systemAccount->user_id = Tinebase_Core::getUser()->getId();
+            $this->_addUserValues($systemAccount, Tinebase_Core::getUser(), $email);
             
             $this->_addFolderDefaults($systemAccount, TRUE);
             
@@ -937,7 +935,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             }
         }
         
-        $this->_addUserValues($_account);
+        $this->_addUserValues($_account, Tinebase_Core::getUser());
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE));
     }
@@ -973,12 +971,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param string $_email
      * @return void
      */
-    protected function _addUserValues(Felamimail_Model_Account $_account, Tinebase_Model_FullUser $_user = NULL, $_email = NULL)
+    protected function _addUserValues(Felamimail_Model_Account $_account, Tinebase_Model_FullUser $_user, $_email = NULL)
     {
-        if ($_user === NULL) {
-            $_user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
-        }
-        
         if ($_email === NULL) {
             $_email = $this->_getAccountEmail($_user);
         }

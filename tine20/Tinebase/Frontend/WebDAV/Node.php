@@ -44,6 +44,11 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode
         $this->_path      = $_path;
     }
     
+    public function getId()
+    {
+        return $this->_node->getId();
+    }
+    
     public function getName() 
     {
         list(, $basename) = Sabre\DAV\URLUtil::splitPath($this->_path);
