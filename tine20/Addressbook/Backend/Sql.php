@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -189,8 +189,9 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 Tinebase_ImageHelper::getImageInfoFromBlob($imageData);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                    . ' Invalid image blob data, preserving old image. Error: ' . $e);
-                    
+                    . ' Invalid image blob data, preserving old image');
+                Tinebase_Exception::log($e);
+                
                 // return current image
                 return $this->getImage($contactId);
             }
