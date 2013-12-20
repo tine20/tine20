@@ -61,7 +61,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'cc'            => array('custom' => true, 'requiredCols' => array('cc' => 'felamimail_cache_message_cc.*')),
         'bcc'           => array('custom' => true, 'requiredCols' => array('bcc' => 'felamimail_cache_message_bcc.*')),
         'flags'         => array('custom' => true, 'requiredCols' => array('flags' => 'felamimail_cache_msg_flag.flag')),
-        'account_id'    => array('custom' => true),
+        'account_id'    => array('custom' => true)
     );
 
     /**
@@ -110,11 +110,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No email accounts found');
             $_select->where('1=0');
         } else {
-            $correlationName = Tinebase_Record_Abstract::generateUID() . 'folder';
-            $what = array($correlationName => SQL_TABLE_PREFIX . 'felamimail_folder');
-            $on = $db->quoteIdentifier("$correlationName.id")      . " = felamimail_cache_message.folder_id";
-            $_select->joinLeft($what, $on, array());
-            $_select->where($db->quoteInto($db->quoteIdentifier("$correlationName.account_id") . ' IN (?)', $accountIds));
+            $_select->where($db->quoteInto($db->quoteIdentifier("felamimail_cache_message.account_id") . ' IN (?)', $accountIds));
         }
     }
     
@@ -128,6 +124,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         if (empty($this->_userAccountIds)) {
             $this->_userAccountIds = Felamimail_Controller_Account::getInstance()->search(NULL, NULL, FALSE, TRUE);
         }
+        
         return $this->_userAccountIds;
     }
 
@@ -174,9 +171,8 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected function _getFolderIdsOfAllInboxes()
     {
-        $accounts = Felamimail_Controller_Account::getInstance()->search();
         $folderFilter = new Felamimail_Model_FolderFilter(array(
-            array('field' => 'account_id',  'operator' => 'in',     'value' => $accounts->getArrayOfIds()),
+            array('field' => 'account_id',  'operator' => 'in',     'value' => $this->_getUserAccountIds()),
             array('field' => 'localname',   'operator' => 'equals', 'value' => 'INBOX')
         ));
         $folderBackend = new Felamimail_Backend_Folder();
