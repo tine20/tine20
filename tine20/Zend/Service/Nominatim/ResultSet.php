@@ -97,7 +97,7 @@ class Zend_Service_Nominatim_ResultSet implements SeekableIterator,Countable
     /**
      * Implements SeekableIterator::current()
      *
-     * @return Zend_Service_Flickr_Result
+     * @return Zend_Service_Nominatim_Result
      */
     public function current()
     {
