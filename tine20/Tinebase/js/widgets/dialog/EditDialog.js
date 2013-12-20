@@ -782,6 +782,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
             
             this.record = resolveGridPanel.store.getResolvedRecord();
+            
+            // quit copy mode before populating form with resolved data
+            this.copyRecord = false;
             this.onRecordLoad();
             
             mainCardPanel.layout.setActiveItem(this.id);
