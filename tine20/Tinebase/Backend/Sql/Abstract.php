@@ -500,7 +500,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $_pagination->appendPaginationSql($select);
 
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
-
+        
         if ($getIdValuePair) {
             return $this->_fetch($select, self::FETCH_MODE_PAIR);
         } else {
@@ -549,30 +549,28 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $searchCountCols = array_merge(array('count' => 'COUNT(' . $defaultCountCol . ')'), $this->_additionalSearchCountCols);
         
         if ($this->_useSubselectForCount) {
-            // use normal search query as subselect to get count -> select count(*) from (select [...]) as count
-            $subselectCols = (count($searchCountCols) === 1) 
-                ? array_merge(array_keys($this->_foreignTables), array($this->_defaultCountCol)) : '*';
+            list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch(self::IDCOL, $_filter);
             
-            $select = $this->_getSelect($subselectCols);
+            $colsToFetch = !empty($this->_additionalSearchCountCols) 
+                ? array_merge($colsToFetch, array_keys($this->_additionalSearchCountCols)) 
+                : $colsToFetch;
+            
+            $select = $this->_getSelect($colsToFetch);
             $this->_addFilter($select, $_filter);
+            
             Tinebase_Backend_Sql_Abstract::traitGroup($select);
             $countSelect = $this->_db->select()->from($select, $searchCountCols);
             
         } else {
             $countSelect = $this->_getSelect($searchCountCols);
             $this->_addFilter($countSelect, $_filter);
+            
+            Tinebase_Backend_Sql_Abstract::traitGroup($countSelect);
         }
         
-        Tinebase_Backend_Sql_Abstract::traitGroup($countSelect);
-        
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect);
-        
-        if (! empty($this->_additionalSearchCountCols)) {
+        if (!empty($this->_additionalSearchCountCols)) {
             $result = $this->_db->fetchRow($countSelect);
         } else {
-            $countSelect->reset(Zend_Db_Select::COLUMNS); 
-            $countSelect->reset(Zend_Db_Select::GROUP);
-            $countSelect->columns(array('count' => 'COUNT(' . $defaultCountCol . ')'));
             $result = $this->_db->fetchOne($countSelect);
         }
         
@@ -612,9 +610,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $colsToFetch = $this->_addFilterColumns($colsToFetch, $_filter);
         }
         
-        foreach((array) $_pagination->sort as $sort) {
-            if (! (isset($colsToFetch[$sort]) || array_key_exists($sort, $colsToFetch))) {
-                $colsToFetch[$sort] = (substr_count($sort, $this->_tableName) === 0) ? $this->_tableName . '.' . $sort : $sort;
+        if ($_pagination instanceof Tinebase_Model_Pagination) {
+            foreach((array) $_pagination->sort as $sort) {
+                if (! (isset($colsToFetch[$sort]) || array_key_exists($sort, $colsToFetch))) {
+                    $colsToFetch[$sort] = (substr_count($sort, $this->_tableName) === 0) ? $this->_tableName . '.' . $sort : $sort;
+                }
             }
         }
         
