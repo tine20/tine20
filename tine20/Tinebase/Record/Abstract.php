@@ -525,10 +525,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected function _hasToArray($mixed)
     {
-        return (is_object($mixed) && 
-                        (in_array('Tinebase_Record_Interface', class_implements($mixed)) || 
-                        $mixed instanceof Tinebase_Record_Recordset) ||
-                        (is_object($mixed) && method_exists($mixed, 'toArray')));
+        return is_object($mixed) && method_exists($mixed, 'toArray');
     }
     
     /**
