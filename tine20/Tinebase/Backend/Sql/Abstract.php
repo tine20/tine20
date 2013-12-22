@@ -489,10 +489,22 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         } else if ($_cols === FALSE) {
             $_cols = '*';
         }
-        
-        // (1) get ids or id/value pair
+    
+        // (1) eventually get only ids or id/value pair
         list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols, $_filter, $_pagination);
-        $select = $this->_getSelect($colsToFetch);
+        // check if we should do one or two queries
+        $doSecondQuery = true;
+        if (!$getIdValuePair && $_cols !== self::IDCOL)
+        {
+            if ($this->_compareRequiredJoins($_cols, $colsToFetch)) {
+                $doSecondQuery = false;
+            }
+        }
+        if ($doSecondQuery) {
+            $select = $this->_getSelect($colsToFetch);
+        } else {
+            $select = $this->_getSelect($_cols);
+        }
         if ($_filter !== NULL) {
             $this->_addFilter($select, $_filter);
         }
@@ -503,26 +515,32 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
 
         if ($getIdValuePair) {
             return $this->_fetch($select, self::FETCH_MODE_PAIR);
-        } else {
-            $ids = $this->_fetch($select);
+        } elseif($_cols === self::IDCOL) {
+            return $this->_fetch($select);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Fetched ' . count($ids) .' ids.');
-        
-        if ($_cols === self::IDCOL) {
-            return $ids;
-        } else if (empty($ids)) {
-            return new Tinebase_Record_RecordSet($this->_modelName);
-        } else {
-            // (2) get other columns and do joins
-            $select = $this->_getSelect($_cols);
-            $this->_addWhereIdIn($select, $ids);
-            $_pagination->appendSort($select);
-            
+        if (!$doSecondQuery) {
             $rows = $this->_fetch($select, self::FETCH_ALL);
-            
-            return $this->_rawDataToRecordSet($rows);
+            if (empty($rows)) {
+                return new Tinebase_Record_RecordSet($this->_modelName);
+            } else {
+                return $this->_rawDataToRecordSet($rows);
+            }
         }
+        
+        // (2) get other columns and do joins
+        $ids = $this->_fetch($select);
+        if (empty($ids)) {
+            return new Tinebase_Record_RecordSet($this->_modelName);
+        }
+        
+        $select = $this->_getSelect($_cols);
+        $this->_addWhereIdIn($select, $ids);
+        $_pagination->appendSort($select);
+        
+        $rows = $this->_fetch($select, self::FETCH_ALL);
+        
+        return $this->_rawDataToRecordSet($rows);
     }
 
     /**
@@ -809,6 +827,35 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 }
             }
         }
+    }
+    
+    /**
+     * returns true if joins are equal, false if not
+     * 
+     * @param array $finalCols
+     * @param array $interimCols
+     */
+    protected function _compareRequiredJoins( $finalCols, $interimCols )
+    {
+        $ret = true;
+        if (! empty($this->_foreignTables)) {
+            $finalCols = (array) $finalCols;
+            $finalColsJoins = array();
+            $interimColsJoins = array();
+            foreach ($this->_foreignTables as $foreignColumn => $join) {
+                // only join if field is in cols
+                if (in_array('*', $finalCols) || (isset($finalCols[$foreignColumn]) || array_key_exists($foreignColumn, $finalCols))) {
+                    $finalColsJoins[$join['table']] = 1;
+                }
+                if (in_array('*', $interimCols) || (isset($interimCols[$foreignColumn]) || array_key_exists($foreignColumn, $interimCols))) {
+                    $interimColsJoins[$join['table']] = 1;
+                }
+            }
+            if (count(array_diff_key($finalColsJoins,$interimColsJoins)) > 0) {
+                $ret = false;
+            }
+        }
+        return $ret;
     }
     
     /**
