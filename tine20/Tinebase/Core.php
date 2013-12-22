@@ -1399,12 +1399,12 @@ class Tinebase_Core
      */
     public static function getLogLevel()
     {
-        if (! self::get(self::LOGLEVEL)) {
+        if (! ($logLevel = self::get(self::LOGLEVEL))) {
             $config = self::getConfig();
             $logLevel = Tinebase_Log::getMaxLogLevel(isset($config->logger) ? $config->logger : NULL);
             self::set(self::LOGLEVEL, $logLevel);
         }
-        return self::get(self::LOGLEVEL);
+        return $logLevel;
     }
     
     /**
