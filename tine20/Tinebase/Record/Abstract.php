@@ -460,7 +460,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         if ($_recursive) {
             foreach ($this->_properties as $property => $value) {
-                if (is_object($value) && 
+                if ($value && is_object($value) && 
                         (in_array('Tinebase_Record_Interface', class_implements($value)) || 
                         $value instanceof Tinebase_Record_Recordset) ) {
                        
