@@ -39,9 +39,10 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
         'hasAttachments'    => TRUE,
-        'createModule'      => TRUE,
+        'createModule'      => FALSE,
         'containerProperty' => NULL,
-      
+        'resolveVFGlobally' => TRUE,
+        
         'titleProperty'     => 'name',
         'appName'           => 'Sales',
         'modelName'         => 'Customer',
@@ -49,11 +50,12 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         'fieldGroups'       => array(
             'core'       => 'Core Data',     // _('Core Data')
             'accounting' => 'Accounting',    // _('Accounting')
+            'misc'       => 'Miscellaneous',    // _('Miscellaneous')
         ),
         
         'fields'            => array(
             'number' => array(
-                'label' => 'Number', //_('Number')
+                'label' => 'Customer Number', //_('Customer Number')
                 'group' => 'core',
                 'type'  => 'integer'
             ),
@@ -67,7 +69,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             'url' => array(
                 'label'   => 'Web', // _('Web')
                 'type'    => 'text',
-                'group' => 'core',
+                'group' => 'misc',
                 'queryFilter' => TRUE,
             ),
             'description' => array(
@@ -167,36 +169,64 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             // the postal address
             
             'adr_prefix1' => array(
+                'config' => array(
+                    'duplicateOmit' => TRUE,
+                    'label'   => 'Prefix', //_('Prefix')
+                ),
                 'type' => 'virtual',
-                'label'   => 'Prefix', //_('Prefix')
             ),
             'adr_prefix2' => array(
+                'config' => array(
+                    'duplicateOmit' => TRUE,
+                    'label'   => 'Additional Prefix', //_('Additional Prefix')
+                ),
                 'type' => 'virtual',
-                'label'   => 'Additional Prefix', //_('Additional Prefix')
+                
             ),
             'adr_street' => array(
+                'config' => array(
+                    'label' => 'Street', //_('Street')
+                    'duplicateOmit' => TRUE
+                ),
                 'type' => 'virtual',
-                'label' => 'Street', //_('Street')
+                
             ),
             'adr_postalcode' => array(
                 'type' => 'virtual',
-                'label' => 'Postalcode', //_('Postalcode')
+                'config' => array(
+                    'duplicateOmit' => TRUE,
+                    'label' => 'Postalcode', //_('Postalcode')
+                ),
             ),
             'adr_locality' => array(
                 'type' => 'virtual',
-                'label' => 'Locality', //_('Locality')
+                'config' => array(
+                    'label' => 'Locality', //_('Locality')
+                    'duplicateOmit' => TRUE
+                ),
             ),
             'adr_region' => array(
                 'type' => 'virtual',
-                'label' => 'Region', //_('Region')
+                'config' => array(
+                    'label' => 'Region', //_('Region')
+                    'duplicateOmit' => TRUE
+                ),
             ),
             'adr_countryname' => array(
                 'type' => 'virtual',
-                'label'   => 'Country', //_('Country')
+                'config' => array(
+                    'duplicateOmit' => TRUE,
+                    'default' => 'DE',
+                    'label'   => 'Country', //_('Country')
+                ),
+                
             ),
             'adr_pobox' => array(
                 'type' => 'virtual',
-                'label' => 'Postbox', //_('Postbox')
+                'config' => array(
+                    'label' => 'Postbox', //_('Postbox')
+                    'duplicateOmit' => TRUE
+                ),
             )
         )
     );

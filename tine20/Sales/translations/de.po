@@ -437,3 +437,6 @@ msgstr "Bitte geben Sie eine Beschreibung an"
 
 msgid "Apply postal address"
 msgstr "Postanschrift anwenden"
+
+msgid "Customer Number"
+msgstr "Kundennummer"

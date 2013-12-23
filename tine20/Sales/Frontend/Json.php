@@ -297,24 +297,21 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getCustomer($id)
     {
-        $customerController = Sales_Controller_Customer::getInstance();
-        $customerRecord = $customerController->get($id);
-        $customer = $this->_recordToJson($customerRecord);
-        $customer = array_merge($customer, $customerController->resolveVirtualFields($customerRecord));
-    
-        return $customer;
+        return $this->_get($id, Sales_Controller_Customer::getInstance());
     }
     
     /**
      * creates/updates a record
      *
      * @param  array $recordData
+     * @param  boolean $duplicateCheck
+     * 
      * @return array created/updated record
      */
-    public function saveCustomer($recordData)
+    public function saveCustomer($recordData, $duplicateCheck = TRUE)
     {
         $postalAddress = array();
-    
+
         foreach($recordData as $field => $value) {
             if (strpos($field, 'adr_') !== FALSE && ! empty($value)) {
                 $postalAddress[substr($field, 4)] = $value;
@@ -328,8 +325,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
     
-        $ret = $this->_save($recordData, Sales_Controller_Customer::getInstance(), 'Customer');
-    
+        $ret = $this->_save($recordData, Sales_Controller_Customer::getInstance(), 'Customer', 'id', array($duplicateCheck));
         $postalAddress['customer_id'] = $ret['id'];
     
         $addressController = Sales_Controller_Address::getInstance();

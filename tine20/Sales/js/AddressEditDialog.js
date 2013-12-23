@@ -134,7 +134,6 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         Ext.iterate(this.fixedFields.get('parentRecord'), function(property, value) {
                             var split = property.split(/_/);
                             if (split[0] == 'adr') {
-                                console.warn(property, value);
                                 if (value) {
                                     this.getForm().findField(split[1]).setValue(value);
                                 }

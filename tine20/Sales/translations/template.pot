@@ -438,3 +438,6 @@ msgstr ""
 
 msgid "Apply postal address"
 msgstr ""
+
+msgid "Customer Number"
+msgstr ""

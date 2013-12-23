@@ -44,7 +44,7 @@ class Sales_Model_Address extends Tinebase_Record_Abstract
         'appName'         => 'Sales',
         'modelName'       => 'Address',
         'resolveRelated'  => TRUE,
-        
+        'defaultFilter'   => 'query',
         'fields'          => array(
             'customer_id'       => array(
                 'label'      => 'Customer',    // _('Customer')
@@ -60,35 +60,45 @@ class Sales_Model_Address extends Tinebase_Record_Abstract
             ),
             'street' => array(
                 'label' => 'Street', //_('Street')
+                'queryFilter' => TRUE
             ),
             'pobox' => array(
                 'label' => 'Postbox', //_('Postbox')
+                'queryFilter' => TRUE
             ),
             'postalcode' => array(
                 'label' => 'Postalcode', //_('Postalcode')
+                'queryFilter' => TRUE
             ),
             'locality' => array(
                 'label' => 'Locality', //_('Locality')
+                'queryFilter' => TRUE
             ),
             'region' => array(
                 'label' => 'Region', //_('Region')
+                'queryFilter' => TRUE
             ),
             'countryname' => array(
                 'label'   => 'Country', //_('Country')
-                'default' => 'Germany', // _('Germany')
+                'default' => 'DE',
+                'queryFilter' => TRUE
             ),
             'prefix1' => array(
                 'label'   => 'Prefix', //_('Prefix')
+                'queryFilter' => TRUE
             ),
             'prefix2' => array(
                 'label'   => 'Additional Prefix', //_('Additional Prefix')
+                'queryFilter' => TRUE
             ),
             'custom1' => array(
                 'label' => 'Number Debit', //_('Number Debit')
+                'queryFilter' => TRUE
             ),
             'type' => array(
                 'label' => NULL,
-                'default' => 'postal'
+                'default' => 'postal',
+                'queryFilter' => TRUE
             ),
         )
     );

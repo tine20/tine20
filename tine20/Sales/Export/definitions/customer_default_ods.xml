@@ -13,7 +13,7 @@
     <columns>
         <column>
             <identifier>number</identifier>
-            <header>Number</header>
+            <header>Customer Number</header>
         </column>
         <column>
             <identifier>name</identifier>

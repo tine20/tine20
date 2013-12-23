@@ -57,6 +57,19 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * duplicate(s) found exception handler
+     * 
+     * @todo: make this globally, smoothly the virtual fields (modelconfig) don't fit anywhere
+     * 
+     * @param {Object} exception
+     */
+    onDuplicateException: function(exception) {
+        this.onRecordUpdate();
+        exception.clientRecord = this.record.data;
+        Tine.Sales.CustomerEditDialog.superclass.onDuplicateException.call(this, exception);
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -137,7 +150,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         labelAlign: 'top',
                         formDefaults: formFieldDefaults,
                         items: [[{
-                                fieldLabel: this.app.i18n._('Number'),
+                                fieldLabel: this.app.i18n._('Customer Number'),
                                 name: 'number',
                                 allowBlank: true,
                                 columnWidth: .250,

@@ -118,26 +118,40 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     /**
      * resolves all virtual fields for the customer
      *
-     * @param Sales_Model_Customer $customer
+     * @param array $customer
      * @return array with property => value
      */
-    public function resolveVirtualFields(Sales_Model_Customer $customer)
+    public function resolveVirtualFields($customer)
     {
         $addressController = Sales_Controller_Address::getInstance();
         $filter = new Sales_Model_AddressFilter(array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $customer->getId())));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $customer['id'])));
         
         $postalAddressRecord = $addressController->search($filter)->getFirstRecord();
         
-        $ret = array();
-        
         if ($postalAddressRecord) {
             foreach($postalAddressRecord as $field => $value) {
-                $ret[('adr_' . $field)] = $value;
+                $customer[('adr_' . $field)] = $value;
             }
         }
         
-        return $ret;
+        return $customer;
+    }
+    
+    /**
+     * @todo make this better, faster
+     * 
+     * @param array $resultSet
+     * 
+     * @return array
+     */
+    public function resolveMultipleVirtualFields($resultSet)
+    {
+        foreach($resultSet as &$result) {
+            $result = $this->resolveVirtualFields($result);
+        }
+        
+        return $resultSet;
     }
     
     /**
