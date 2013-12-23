@@ -182,6 +182,8 @@ class Tinebase_ModelConfiguration {
      * Holds the field definitions in an associative array where the key
      * corresponds to the db-table name. Possible definitions and their defaults:
      *
+     * !! Get sure to have at least one default value set and added one field to the query filter !!
+     *
      * - validators: Use Zend Input Filters to validate the values.
      *       @type: Array, @default: array(Zend_Filter_Input::ALLOW_EMPTY => true)
      *
@@ -313,7 +315,14 @@ class Tinebase_ModelConfiguration {
      * @var array
      */
     protected $_fields = array();
-
+    
+    /**
+     * if this is set to true, all virtual fields get resolved by the record controller method "resolveVirtualFields"
+     *
+     * @var boolean
+     */
+    protected $_resolveVFGlobally = FALSE;
+    
     /**
      * holds all field definitions of type records
      *
@@ -727,13 +736,17 @@ class Tinebase_ModelConfiguration {
             if ($fieldDef['type'] == 'virtual') {
                 $fieldDef = isset($fieldDef['config']) ? $fieldDef['config'] : array();
                 $fieldDef['sortable'] = FALSE;
+                if ((isset($fieldDef['default']))) {
+                    // @todo: better handling of virtualfields
+                    $this->_defaultData[$fieldKey] = $fieldDef['default'];
+                }
                 $this->_virtualFields[] = $fieldDef;
                 continue;
             }
             
             // set default value
             // TODO: implement complex default values
-            if ((isset($fieldDef['default']) || array_key_exists('default', $fieldDef))) {
+            if ((isset($fieldDef['default']))) {
 //                 // allows dynamic default values
 //                 if (is_array($fieldDef['default'])) {
 //                     switch ($fieldDef['type']) {
@@ -892,6 +905,16 @@ class Tinebase_ModelConfiguration {
             default:
                 break;
         }
+    }
+    
+    /**
+     * returns an instance of the record controller
+     * 
+     * @return Tinebase_Controller_Record_Interface
+     */
+    public function getControllerInstance()
+    {
+        return Tinebase_Core::getApplicationInstance($this->_appName, $this->_modelName);
     }
     
     /**
