@@ -20,7 +20,7 @@
 class Tinebase_Acl_Roles
 {
     /**
-     * @var Zend_Db_Adapter_Pdo_Mysql
+     * @var Zend_Db_Adapter
      */
     protected $_db;
     
@@ -353,11 +353,19 @@ class Tinebase_Acl_Roles
         }
         $data['creation_time'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
-        $newId = $this->_rolesTable->insert($data);
-        
-        if ($newId === NULL) {
-           $newId = $this->_db->lastSequenceId(substr(SQL_TABLE_PREFIX . 'roles', 0,25) . '_s');
-        }
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        try {
+            $newId = $this->_rolesTable->insert($data);
+            
+            if ($newId === NULL) {
+                $newId = $this->_db->lastSequenceId(substr(SQL_TABLE_PREFIX . 'roles', 0,25) . '_s');
+            }            
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch(Exception $e){            
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
+        }        
         
         $role = $this->getRoleById($newId);
         return $role;

@@ -895,61 +895,69 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function create(Tinebase_Record_Interface $_record) 
     {
-        $identifier = $_record->getIdProperty();
-        
-        if (!$_record instanceof $this->_modelName) {
-            throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . get_class($_record) . '". but should be instance of ' . $this->_modelName);
-        }
-        
-        // set uid if record has hash id and id is empty
-        if ($this->_hasHashId() && empty($_record->$identifier)) {
-            $newId = $_record->generateUID();
-            $_record->setId($newId);
-        }
-        
-        $recordArray = $this->_recordToRawData($_record);
-        
-        // unset id if autoincrement & still empty
-        if (empty($_record->$identifier) || $_record->$identifier == 'NULL' ) {
-            unset($recordArray['id']);
-        }
-        
-        $recordArray = array_intersect_key($recordArray, $this->_schema);
-
-        $this->_prepareData($recordArray);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . " Prepared data for INSERT: " . print_r($recordArray, true)
-        );
-        
-        $this->_db->insert($this->_tablePrefix . $this->_tableName, $recordArray);
-        
-        if (!$this->_hasHashId()) {
-            $newId = $this->_db->lastInsertId($this->getTablePrefix() . $this->getTableName(), $identifier);
-            if(!$newId && isset($_record[$identifier])){
-                $newId = $_record[$identifier];
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        try {
+            $identifier = $_record->getIdProperty();
+            
+            if (!$_record instanceof $this->_modelName) {
+                throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . get_class($_record) . '". but should be instance of ' . $this->_modelName);
             }
-        }
-
-        // if we insert a record without an id, we need to get back one
-        if (empty($_record->$identifier) && $newId == 0) {
-            throw new Tinebase_Exception_UnexpectedValue("Returned record id is 0.");
-        }
-        
-        // if the record had no id set, set the id now
-        if ($_record->$identifier == NULL || $_record->$identifier == 'NULL') {
-            $_record->$identifier = $newId;
-        }
-        
-        // add custom fields
-        if ($_record->has('customfields') && !empty($_record->customfields)) {
-            Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
-        }
-        
-        $this->_updateForeignKeys('create', $_record);
-        
-        $result = $this->get($_record->$identifier);
-        
-        $this->_inspectAfterCreate($result, $_record);
+            
+            // set uid if record has hash id and id is empty
+            if ($this->_hasHashId() && empty($_record->$identifier)) {
+                $newId = $_record->generateUID();
+                $_record->setId($newId);
+            }
+            
+            $recordArray = $this->_recordToRawData($_record);
+            
+            // unset id if autoincrement & still empty
+            if (empty($_record->$identifier) || $_record->$identifier == 'NULL' ) {
+                unset($recordArray['id']);
+            }
+            
+            $recordArray = array_intersect_key($recordArray, $this->_schema);
+            
+            $this->_prepareData($recordArray);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . " Prepared data for INSERT: " . print_r($recordArray, true)
+            );
+            
+            $this->_db->insert($this->_tablePrefix . $this->_tableName, $recordArray);
+            
+            if (!$this->_hasHashId()) {
+                $newId = $this->_db->lastInsertId($this->getTablePrefix() . $this->getTableName(), $identifier);
+                if(!$newId && isset($_record[$identifier])){
+                    $newId = $_record[$identifier];
+                }
+            }
+            
+            // if we insert a record without an id, we need to get back one
+            if (empty($_record->$identifier) && $newId == 0) {
+                throw new Tinebase_Exception_UnexpectedValue("Returned record id is 0.");
+            }
+            
+            // if the record had no id set, set the id now
+            if ($_record->$identifier == NULL || $_record->$identifier == 'NULL') {
+                $_record->$identifier = $newId;
+            }
+            
+            // add custom fields
+            if ($_record->has('customfields') && !empty($_record->customfields)) {
+                Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
+            }
+            
+            $this->_updateForeignKeys('create', $_record);
+            
+            $result = $this->get($_record->$identifier);
+            
+            $this->_inspectAfterCreate($result, $_record);
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch(Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
+        }       
         
         return $result;
     }
