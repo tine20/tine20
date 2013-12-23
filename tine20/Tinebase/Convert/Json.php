@@ -327,11 +327,22 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @param array $resultSet
      * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
      */
-    protected function _resolveVirtualFields($resultSet, $modelConfiguration = NULL)
+    protected function _resolveVirtualFields($resultSet, $modelConfiguration = NULL, $multiple = FALSE)
     {
         if (! $modelConfiguration || ! ($virtualFields = $modelConfiguration->virtualFields)) {
             return $resultSet;
+        }
+        
+        if ($modelConfiguration->resolveVFGlobally === TRUE) {
+            
+            $controller = $modelConfiguration->getControllerInstance();
+            
+            if ($multiple) {
+                return $controller->resolveMultipleVirtualFields($resultSet);
+            }
+            return $controller->resolveVirtualFields($resultSet);
         }
         
         foreach($virtualFields as $field) {
@@ -390,11 +401,13 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @param array $result
      * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean multiple
+     * 
      * @return array
      */
-    protected function _resolveAfterToArray($result, $modelConfiguration)
+    protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = FALSE)
     {
-        $result = $this->_resolveVirtualFields($result, $modelConfiguration);
+        $result = $this->_resolveVirtualFields($result, $modelConfiguration, $multiple);
         return $result;
     }
     
@@ -425,7 +438,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $result = $_records->toArray();
         
         // resolve all virtual fields after converting to array, so we can add these properties "virtually"
-        $result = $this->_resolveAfterToArray($result, $config);
+        $result = $this->_resolveAfterToArray($result, $config, TRUE);
 
         return $result;
     }
