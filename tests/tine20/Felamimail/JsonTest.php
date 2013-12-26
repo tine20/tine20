@@ -492,7 +492,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // send email
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
         $messageToSend['note'] = 1;
-        $messageToSend['bcc']  = array('unittest@' . $this->_mailDomain);
+        $messageToSend['bcc']  = array(Tinebase_Core::getUser()->accountEmailAddress);
         //print_r($messageToSend);
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
@@ -945,7 +945,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $subject = 'attachment test';
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain, $subject);
         $tempfileName = 'jsontest' . Tinebase_Record_Abstract::generateUID(10);
-        $tempfilePath = Tinebase_Core::getTempDir() . $tempfileName;
+        $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
         file_put_contents($tempfilePath, 'some content');
         $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
         $messageToSend['attachments'] = array(array('tempFile' => array('id' => $tempFile->getId())));
@@ -1464,7 +1464,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         return array(
             'account_id'    => $this->_account->getId(),
             'subject'       => $_subject,
-            'to'            => array('unittest@' . $this->_mailDomain),
+            'to'            => array(Tinebase_Core::getUser()->accountEmailAddress),
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
             'from_email'    => $_emailFrom,
