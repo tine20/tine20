@@ -1163,7 +1163,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $baseEvent = $this->_controller->getRecurBaseEvent($persistentException);
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, $baseEvent->dtstart);
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, $baseEvent->dtend);
         $this->_controller->createRecurException($nextOccurance, TRUE);
         
         $exceptions = $this->_controller->getRecurExceptions($persistentException, TRUE);

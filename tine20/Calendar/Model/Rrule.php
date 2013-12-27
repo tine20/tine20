@@ -356,7 +356,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     public static function computeNextOccurrence($_event, $_exceptions, $_from, $_which = 1)
     {
-        if ($_which === 0) {
+        if ($_which === 0 || ($_event->dtstart >= $_from && $_event->dtend > $_from)) {
             return $_event;
         }
         
@@ -377,7 +377,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         // we don't want to compute ourself
         $ownEvent = clone $_event;
         $ownEvent->setRecurId();
-        $_exceptions->addRecord($ownEvent);
+        $exceptions = clone $_exceptions;
+        $exceptions->addRecord($ownEvent);
         $recurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
         if ($_from->isEarlier($_event->dtstart)) {
@@ -407,7 +408,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 ? clone $_event->rrule_until 
                 : $until;
 
-            $recurSet->merge(self::computeRecurrenceSet($_event, $_exceptions, $from, $until));
+            $recurSet->merge(self::computeRecurrenceSet($_event, $exceptions, $from, $until));
             $attempts++;
             
             if (count($recurSet) >= abs($_which)) {
@@ -416,7 +417,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 break;
             }
             
-            if ($attempts > count($_exceptions) + 5) {
+            if ($attempts > count($exceptions) + 5) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " could not find the next occurrence after $attempts attempts, giving up");
                 return NULL;
@@ -495,7 +496,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     self::_computeRecurDaily($baseEvent, $dailyrrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                     
                     // check if base event (recur instance) needs to be added to the set
-                    if ($baseEvent->dtstart->isLater($_event->dtstart) && $baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
+                    if ($baseEvent->dtstart > $_event->dtstart && $baseEvent->dtstart >= $_from && $baseEvent->dtstart < $_until) {
                         if (! in_array($baseEvent->setRecurId(), $exceptionRecurIds)) {
                             self::addRecurrence($baseEvent, $recurSet);
                         }

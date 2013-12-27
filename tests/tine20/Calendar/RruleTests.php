@@ -816,14 +816,16 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $from = new Tinebase_DateTime('2008-01-21 00:00:00');
         $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $from);
         $this->assertTrue($event === $nextOccurrence, 'given event is next occurrence');
-
         
+        $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $nextOccurrence->dtend);
+        $this->assertEquals('2009-09-11 08:00:00', $nextOccurrence->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG), 'next (dtend is exluded)');
+        
+        // assert computeRecurrenceSet computes first BYDAY=TH event
         $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $nextOccurrence->dtstart);
+        $this->assertEquals('2009-09-11 08:00:00', $nextOccurrence->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG), ' same (dtstart is included)');
         
-        $this->assertEquals('2009-09-11 08:00:00', $nextOccurrence->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        
-        $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $nextOccurrence->dtstart);
-        $this->assertEquals('2009-09-16 08:00:00', $nextOccurrence->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG));
+        $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $nextOccurrence->dtend);
+        $this->assertEquals('2009-09-16 08:00:00', $nextOccurrence->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG), ' second next');
         
     }
     
