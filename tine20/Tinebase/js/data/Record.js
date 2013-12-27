@@ -159,6 +159,10 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
     /**
      * returns true if given record obsoletes this one
      * 
+     * - returns false if record has no modlog properties to make 
+     *   handling of updated records work in the grid panel
+     * @see 0009464: user grid does not refresh after ctx menu action
+     * 
      * @param {Tine.Tinebase.data.Record} record
      * @return {Boolean}
      */
@@ -171,7 +175,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
             return record.get('seq') > this.get('seq');
         }
         
-        return (this.constructor.hasField('last_modified_time')) ? record.get('last_modified_time') > this.get('last_modified_time') : true;
+        return (this.constructor.hasField('last_modified_time')) ? record.get('last_modified_time') > this.get('last_modified_time') : false;
     }
 });
 
