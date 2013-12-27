@@ -251,12 +251,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const MAX_LOGIN_FAILURES = 'maxLoginFailures';
      
-    /*
+    /**
      * ANYONE_ACCOUNT_DISABLED
      *
      * @var string
      */
     const ANYONE_ACCOUNT_DISABLED = 'anyoneAccountDisabled';
+    
+    /**
+     * ALARMS_EACH_JOB
+     *
+     * @var string
+     */
+    const ALARMS_EACH_JOB = 'alarmsEachJob';
     
     /**
      * (non-PHPdoc)
@@ -576,6 +583,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Disallow anyone account in grant configurations',
             'type'                  => 'bool',
             'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::ALARMS_EACH_JOB => array(
+                                   //_('Alarms sent each job')
+            'label'                 => 'Alarms sent each job',
+                                   //_('Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)')
+            'description'           => 'Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)',
+            'type'                  => 'integer',
+            'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
