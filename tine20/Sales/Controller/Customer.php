@@ -199,4 +199,26 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
             $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
         }
     }
+    
+    /**
+     * check if user has the right to manage invoices
+     *
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        switch ($_action) {
+            case 'create':
+            case 'update':
+            case 'delete':
+                if (! Tinebase_Core::getUser()->hasRight('Sales', Sales_Acl_Rights::MANAGE_CUSTOMERS)) {
+                    throw new Tinebase_Exception_AccessDenied("You don't have the right to manage customers!");
+                }
+                break;
+            default;
+            break;
+        }
+    }
 }

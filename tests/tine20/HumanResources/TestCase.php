@@ -176,7 +176,7 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
             'remark' => Tinebase_Record_Abstract::generateUID(),
         ));
         
-        $c = Sales_Controller_CostCenter::getInstance()->create($c);
+        $c = Sales_Controller_CostCenter::getInstance()->create($c, FALSE);
         
         return $c;
     }

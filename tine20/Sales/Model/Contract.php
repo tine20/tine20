@@ -51,6 +51,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'createModule'      => TRUE,
         
         'containerProperty' => 'container_id',
+
         'containerName'    => 'Contracts',
         'containersName'    => 'Contracts',
         'containerUsesFilter' => FALSE,
@@ -58,6 +59,27 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'titleProperty'     => 'title',
         'appName'           => 'Sales',
         'modelName'         => 'Contract',
+        'filterModel' => array(
+//             'costcenter'           => array(
+//                 'filter' => 'Sales_Model_ContractCostCenterFilter',
+//                 'jsConfig' => array('filtertype' => 'sales.contractcostcenter'),
+//                 'label' => 'CostCenter', // _('CostCenter')
+//             ),
+//             'customer'          => array(
+//                 'filter' => 'Sales_Model_ContractCustomerFilter',
+//                 'jsConfig' => array('filtertype' => 'sales.contractcustomer'),
+//                 'label' => 'Customer', // _('Customer')
+//             ),
+            'customer'          => array(
+                'filter' => 'Sales_Model_ContractCustomerFilter',
+                'label' => 'Customer', // _('Customer')
+                'options' => array(
+                    'related_model'     => 'Sales_Model_Customer',
+                    'filtergroup'       => 'Sales_Model_CustomerFilter'
+                ),
+                'jsConfig' => array('filtertype' => 'sales.contractcustomer')
+            ),
+        ),
         
         'filterModel' => array(
             'costcenter' => array(
@@ -100,6 +122,33 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'idProperty'  => 'id',
                 )
             ),
+            'last_autobill' => array(
+                'label'      => NULL,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'type'       => 'datetime',
+            ),
+            'billing_address_id' => array(
+                'label'      => 'Billing Address', // _('Billing Address')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'type'       => 'record',
+                'config' => array(
+                    'appName'     => 'Sales',
+                    'modelName'   => 'Address',
+                    'idProperty'  => 'id',
+                )
+            ),
+            'billing_point' => array(
+                'label' => 'Billing Point', // _('Billing Point')
+                'type'  => 'string',
+                'default' => 'end',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE)
+            ),
+            'interval' => array(
+                'label'      => 'Billing Interval', // _('Billing Interval')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'type'       => 'integer',
+                'default'    => 1
+            ),
             'start_date' => array(
                 'type' => 'date',
                 'label'      => 'Start Date',    // _('Start Date')
@@ -136,6 +185,10 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         ),
         array('relatedApp' => 'Timetracker', 'relatedModel' => 'Timeaccount', 'config' => array(
             array('type' => 'TIME_ACCOUNT', 'degree' => 'sibling', 'text' => 'Time Account', 'max' => '0:1'), // _('Time Account')
+            ), 'defaultType' => ''
+        ),
+        array('relatedApp' => 'Sales', 'relatedModel' => 'Customer', 'config' => array(
+            array('type' => 'CUSTOMER', 'degree' => 'sibling', 'text' => 'Customer', 'max' => '1:0'), // _('Customer')
             ), 'defaultType' => ''
         ),
     );

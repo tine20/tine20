@@ -178,4 +178,88 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
         
         return $sharedContracts;
     }
+    
+    /**
+     * sets the last billed date to the next date by interval and returns the updated contract
+     * 
+     * @param Sales_Model_Contract $contract
+     * @return Sales_Model_Contract 
+     */
+    public function updateLastBilledDate(Sales_Model_Contract $contract)
+    {
+        // update last billed information -> set last_autobill to the date the invoice should have
+        // been created and not to the current date, so we can calculate the interval properly
+        $lastBilled = $contract->last_autobill ? clone $contract->last_autobill : NULL;
+        
+        if ($lastBilled === NULL) {
+            // begin / end
+            if ($contract->billing_point == 'begin') {
+                // set billing date to start date
+                $contract->last_autobill = clone $contract->start_date;
+            } else {
+                $contract->last_autobill = clone $contract->start_date;
+                $contract->last_autobill->addMonth($contract->interval);
+            }
+        } else {
+            $contract->last_autobill->addMonth($contract->interval);
+        }
+        
+        $this->update($contract);
+    }
+    
+    /**
+     * returns all billable contracts for the specified date. If a invoice has 
+     * been created for the interval already, the contract will not be returned.
+     * relations are returned
+     * 
+     * @param Tinebase_DateTime $date
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getBillableContracts(Tinebase_DateTime $date)
+    {
+        $dateBig = clone $date;
+        $dateBig->addSecond(2);
+        
+        $dateSmall = clone $date;
+        $dateSmall->subSecond(2);
+        
+        $ids = $this->_backend->getBillableContractIds($date);
+        
+        $filter = new Sales_Model_ContractFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => $ids),
+        ), 'AND');
+
+        $contracts = $this->search($filter, NULL, /* get relations = */ TRUE);
+        
+        foreach($contracts as $contract) {
+            if ($contract->end_date && $contract->last_autobill > $contract->end_date) {
+                $contracts->removeRecord($contract);
+                continue;
+            }
+            
+            $lastBilled = $contract->last_autobill === NULL ? NULL : clone $contract->last_autobill;
+        
+            if ($lastBilled) {
+                $nextBill = $lastBilled->addMonth($contract->interval);
+            } else {
+                $nextBill = clone $contract->start_date;
+                
+                if ($contract->billing_point == 'end') {
+                    $nextBill->addMonth($contract->interval);
+                }
+            }
+            
+            if (($contract->end_date !== NULL) && $nextBill->isLater($contract->end_date)) {
+                $nextBill = clone $contract->end_date;
+            }
+            
+            $nextBill->setTime(0,0,0);
+            
+            if ($nextBill->isLater($dateBig)) {
+                $contracts->removeRecord($contract);
+            }
+        }
+        
+        return $contracts;
+    }
 }

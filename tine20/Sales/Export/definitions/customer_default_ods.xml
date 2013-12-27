@@ -10,10 +10,15 @@
         <header>{date}</header>
         <header>{user}</header>
     </headers>
+    <defaultColumnStyle>
+        <column-width>4cm</column-width>
+    </defaultColumnStyle>
     <columns>
         <column>
             <identifier>number</identifier>
             <header>Customer Number</header>
+            <type>number</type>
+            <width>10cm</width>
         </column>
         <column>
             <identifier>name</identifier>

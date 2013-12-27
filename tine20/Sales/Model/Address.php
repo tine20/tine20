@@ -40,7 +40,7 @@ class Sales_Model_Address extends Tinebase_Record_Abstract
         'containerProperty' => NULL,
         'createModule'    => FALSE,
         'isDependent'     => TRUE,
-        'titleProperty'   => 'customer_id',
+        'titleProperty'   => 'street',
         'appName'         => 'Sales',
         'modelName'       => 'Address',
         'resolveRelated'  => TRUE,

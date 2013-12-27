@@ -32,11 +32,11 @@
           "path": "js/"
         },
         {
-          "text": "DivisionEditDialog.js",
+          "text": "CostCenterEditDialog.js",
           "path": "js/"
         },
         {
-          "text": "CostCenterEditDialog.js",
+          "text": "DivisionEditDialog.js",
           "path": "js/"
         },
         {
@@ -89,6 +89,34 @@
         },
         {
           "text": "CopyAddressDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContractFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "CustomerFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "InvoiceEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "InvoiceGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AddressSearchCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "InvoiceDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContractCustomerFilterModel.js",
           "path": "js/"
         }
       ]

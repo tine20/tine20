@@ -34,6 +34,20 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowHeight: 490,
 
     /**
+     * autoset
+     * 
+     * @type combo
+     */
+    customerPicker: null,
+    
+    /**
+     * autoset
+     * 
+     * @type combo
+     */
+    addressPicker: null,
+    
+    /**
      * if true, number will be readOnly and will be generated automatically
      * @type {Boolean} autoGenerateNumber
      */
@@ -73,6 +87,81 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+<<<<<<< HEAD
+=======
+     * executed after record got updated from proxy
+     * 
+     * @private
+     */
+    onRecordLoad: function() {
+        // interrupt process flow until dialog is rendered
+        if (! this.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
+        
+        Tine.Sales.ContractEditDialog.superclass.onRecordLoad.call(this);
+        
+        if (this.record.id) {
+            var relations = this.record.get('relations'), foundCustomer = false;
+            
+            if (Ext.isArray(relations)) {
+                for (var index = 0; index < relations.length; index++) {
+                    if (relations[index].related_model == 'Sales_Model_Customer') {
+                        if (relations[index].type == 'CUSTOMER') {
+                            foundCustomer = relations[index].related_record;
+                        }
+                    }
+                }
+            }
+            
+            if (foundCustomer) {
+                this.addressPicker.enable();
+                var ba = this.record.get('billing_address_id');
+                
+                if (ba && ba.hasOwnProperty('locality')) {
+                    var record = new Tine.Sales.Model.Address(ba);
+                    this.onAddressLoad(null, record, null);
+                } else {
+                    this.setAddressPickerFilter();
+                }
+            }
+        }
+    },
+    
+    /**
+     * sets the filter used for the addresspicker by the selected customer
+     */
+    setAddressPickerFilter: function() {
+        this.addressPicker.additionalFilters = [
+            {field: 'type', operator: 'not', value: 'delivery'},
+            {field: 'customer_id', operator: 'AND', value: [
+                {field: ':id', operator: 'in', value: [this.customerPicker.getValue()] }
+            ]}
+        ];
+    },
+    
+    /**
+     * loads the full-featured record, if a contract gets selected
+     * 
+     * @param {Tine.widgets.relation.PickerCombo} combo
+     * @param {Tine.Sales.Model.Contract} record
+     * @param {Number} index
+     */
+    onCustomerLoad: function(combo, record, index) {
+        if (this.addressPicker.disabled) {
+            this.addressPicker.enable();
+        } else {
+            this.addressPicker.reset();
+        }
+        
+        this.addressPicker.lastQuery = null;
+        
+        this.setAddressPickerFilter();
+    },
+    
+    /**
+>>>>>>> create invoice module
      * 
      * @param {Tine.widgets.relation.PickerCombo} combo
      * @param {Tine.Sales.Model.Address} record
@@ -130,17 +219,64 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'title',
                         allowBlank: false
                     }], [{
+                        columnWidth: 1,
+                        allowBlank: true,
+                        editDialog: this,
+                        xtype: 'tinerelationpickercombo',
+                        allowBlank: true,
+                        app: 'Sales',
+                        recordClass: Tine.Sales.Model.Customer,
+                        relationType: 'CUSTOMER',
+                        relationDegree: 'sibling',
+                        modelUnique: true,
+                        listeners: {
+                            scope: this,
+                            select: this.onCustomerLoad
+                        },
+                        ref: '../../../../../customerPicker',
+                        fieldLabel: this.app.i18n._('Customer')
+                    }], [ Tine.widgets.form.RecordPickerManager.get('Sales', 'Address', {
+                            fieldLabel: this.app.i18n._('Billing Address'),
+                            name: 'billing_address_id',
+                            ref: '../../../../../addressPicker',
+                            columnWidth: 1/2,
+                            disabled: true,
+                            listeners: {
+                                scope: this,
+                                select: this.onAddressLoad
+                            }
+                        }), {
+                            fieldLabel: this.app.i18n._('Billing Address Locality'),
+                            columnWidth: 1/2,
+                            name: 'show_city',
+                            readOnly: true
+                        }], [{
                                 xtype: 'datefield',
                                 name: 'start_date',
-                                columnWidth: 1/2,
+                                columnWidth: 1/6,
                                 fieldLabel: this.app.i18n._('Start Date'),
                                 allowBlank: false
                             }, {
                                 xtype: 'datefield',
                                 name: 'end_date',
                                 fieldLabel: this.app.i18n._('End Date'),
-                                columnWidth: 1/2
+                                columnWidth: 1/6
                             }], [{
+                                columnWidth: 2/6,
+                                name: 'interval',
+                                fieldLabel: this.app.i18n._('Billing Interval'),
+                                xtype: 'combo',
+                                store: [0,1,2,3,4,5,6,7,8,9,10,11,12]
+                            }, {
+                                name: 'billing_point',
+                                fieldLabel: this.app.i18n._('Billing Point'),
+                                xtype: 'combo',
+                                store: [
+                                    ['begin', this.app.i18n._('begin') ],
+                                    [  'end', this.app.i18n._('end') ]
+                                ],
+                                columnWidth: 2/6
+                        }], [{
                             columnWidth: 1/3,
                             xtype: 'tinerelationpickercombo',
                             fieldLabel: this.app.i18n._('Contract Contact'),

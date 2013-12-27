@@ -440,3 +440,155 @@ msgstr "Postanschrift anwenden"
 
 msgid "Customer Number"
 msgstr "Kundennummer"
+
+msgid "add, edit and delete customers"
+msgstr "Kunden hinzufügen, bearbeiten und löschen"
+
+msgid "add, edit and delete invoices"
+msgstr "Rechnungen hinzufügen, bearbeiten und löschen"
+
+msgid "manage invoices"
+msgstr "Rechungen verwalten"
+
+msgid "manage customers"
+msgstr "Kunden verwalten"
+
+
+msgid "Credit Term"
+msgstr "Zahlungsziel in Tagen"
+
+msgid "Invoice Number"
+msgstr "Rechnungsnummer"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "invoice"
+msgstr "Rechnung"
+
+msgid "reversal"
+msgstr "Storno"
+
+msgid "credit"
+msgstr "Gutschrift"
+
+msgid "automatically set..."
+msgstr "automatisch ausgefüllt..."
+
+msgid "Invoice"
+msgid_plural "Invoices"
+msgstr[0] "Rechnung"
+msgstr[1] "Rechnungen"
+
+msgid "The selected contract doesn't have a customer assigned, yet. Add a customer to the contract with the contract edit dialog."
+msgstr "Dem ausgewählten Vertrag ist bisher kein Kunde zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einem Kunden."
+
+msgid "No customer assigned"
+msgstr "Kein Kunde zugeordnet"
+
+msgid "Edit Customer \"{0}\""
+msgstr "Kunden \"{0}\" bearbeiten"
+
+msgid "Add New Customer"
+msgstr "Neuen Kunden hinzufügen"
+
+msgid "Copy Customer"
+msgstr "Kunden kopieren"
+
+msgid "Add New Invoice"
+msgstr "Neue Rechnung hinzufügen"
+
+msgid "Copy Invoice"
+msgstr "Rechnung kopieren"
+
+msgid "Edit Invoice \"{0}\""
+msgstr "Rechnung \"{0}\" bearbeiten"
+
+msgid "cleared"
+msgstr "abgerechnet"
+
+msgid "to clear"
+msgstr "abzurechnen"
+
+msgid "The selected contract doesn't have a cost center assigned, yet. Add a cost center to the contract with the contract edit dialog."
+msgstr "Dem ausgewählten Vertrag ist bisher keine Kostenstelle zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einer Kostenstelle."
+
+msgid "No cost center assigned"
+msgstr "Keine Kostenstelle zugeordnet"
+
+msgid "Billing Interval"
+msgstr "Abrechnungsintervall in Monaten"
+
+msgid "Billing Address Locality"
+msgstr "Rechnungsanschrift Ort"
+
+msgid "End Date"
+msgstr "Ende"
+
+msgid "Start Date"
+msgstr "Anfang"
+
+msgid "postal"
+msgstr "Niederlassung"
+
+msgid "billing"
+msgstr "Rechnung"
+
+msgid "delivery"
+msgstr "Lieferanten"
+
+msgid "Invoice is cleared already"
+msgstr "Rechnung ist bereits abgerechnet"
+
+msgid "The Invoice you tried to edit is cleared already, so no editing is possible anymore!"
+msgstr "Die Rechnung die Sie bearbeiten wollten, ist bereits abgerechnet und kann nicht weiter bearbeitet werden!"
+
+msgid "The Invoice you tried to delete is cleared already, so deleting is not possible anymore!"
+msgstr "Die Rechnung die Sie löschen wollten, ist bereits abgerechnet und kann nicht mehr gelöscht werden!"
+
+msgid "Select invoice"
+msgstr "Rechnung auswählen"
+
+msgid "Export selected invoice as ODS"
+msgstr "Ausgewählte Rechnung als ODS exportieren"
+
+msgid "Export selected invoices as ODS"
+msgstr "Ausgewählte Rechnungen als ODS exportieren"
+
+msgid "Export Invoices"
+msgstr "Rechnungen exportieren"
+
+msgid "Create Reversal Invoice"
+msgstr "Storno-Rechnung erstellen"
+
+msgid "Reversal Invoice"
+msgstr "Storno-Rechnung"
+
+msgid "Billing Point"
+msgstr "Zeitpunkt der Rechnungslegung"
+
+msgid "begin"
+msgstr "Anfang der Periode"
+
+msgid "end"
+msgstr "Ende der Periode"
+
+
+msgid "not yet cleared"
+msgstr "noch nicht abgerechnet"
+
+msgid "open"
+msgstr "offen"
+
+msgid "closed"
+msgstr "geschlossen"
+
+
+msgid "Interval Begins"
+msgstr "Abrechnungszeitraum Beginn"
+
+msgid "Interval Ends"
+msgstr "Abrechnungszeitraum Ende"

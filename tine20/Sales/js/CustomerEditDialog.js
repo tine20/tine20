@@ -23,13 +23,6 @@ Ext.ns('Tine.Sales');
  * Create a new Tine.Sales.CustomerEditDialog
  */
 Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    
-    /**
-     * @private
-     */
-    tbarItems: null,
-    evalGrants: false,
-    
     windowWidth: 800,
     windowHeight: 660,
     
@@ -66,11 +59,19 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return;
         }
         
-        if (this.record.id) {
-            this.getForm().findField('number').disable();
-        }
-        
         Tine.Sales.CustomerEditDialog.superclass.onRecordLoad.call(this);
+        
+        if (this.copyRecord) {
+            this.doCopyRecord();
+            this.window.setTitle(this.app.i18n._('Copy Customer'));
+        } else {
+            if (! this.record.id) {
+                this.window.setTitle(this.app.i18n._('Add New Customer'));
+            } else {
+                this.window.setTitle(String.format(this.app.i18n._('Edit Customer "{0}"'), this.record.getTitle()));
+                this.getForm().findField('number').disable();
+            }
+        }
     },
     
     /**

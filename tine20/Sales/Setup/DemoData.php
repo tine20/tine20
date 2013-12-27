@@ -54,7 +54,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * models to work on
      * @var array
      */
-    protected $_models = array('product', 'contract', 'customer');
+    protected $_models = array('product', 'customer', 'contract', 'invoice');
     
     /**
      * the constructor
@@ -260,6 +260,67 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     }
     
     /**
+     * creates the invoices - no containers, just "shared"
+     */
+    protected function _createSharedInvoices()
+    {
+        $contracts = Sales_Controller_Contract::getInstance()->getAll();
+        $addresses = Sales_Controller_Address::getInstance()->getAll()->filter('type', 'billing');
+        $costcenters = Sales_Controller_CostCenter::getInstance()->getAll();
+        
+        $cCount = $contracts->count();
+        $ccCount = $costcenters->count();
+        
+        if ($cCount < 1) {
+            throw new Tinebase_Exeption('Please create some contracts before creating the invoices!');
+        }
+        
+        $c = Sales_Controller_Invoice::getInstance();
+        $i = 0;
+        $ccI = 0;
+        $cI = 0;
+        
+        while ($i < 120) {
+            
+            $contract = $contracts->getByIndex($cI);
+            
+            $invoice = new Sales_Model_Invoice(array(
+                'description' => 'Invoice - ' . Tinebase_Record_Abstract::generateUID(4),
+                'type' => 'INVOICE',
+                'costcenter_id' => $costcenters->getByIndex($ccI),
+                'relations' => array(
+                    array(
+                        'own_model'              => 'Sales_Model_Invoice',
+                        'own_backend'            => Tasks_Backend_Factory::SQL,
+                        'own_id'                 => NULL,
+                        'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                        'related_model'          => 'Sales_Model_Contract',
+                        'related_backend'        => Tasks_Backend_Factory::SQL,
+                        'related_id'             => $contract->getId(),
+                        'related_record'         => $contract->toArray(),
+                        'type'                   => 'CONTRACT'
+                    ),
+                )
+            ));
+            
+            $c->create($invoice);
+            
+            if ($cI == ($cCount - 1)) {
+                $cI = 0;
+            } else {
+                $cI++;
+            }
+            
+            if ($ccI == ($ccCount - 1)) {
+                $ccI = 0;
+            } else {
+                $ccI++;
+            }
+            $i++;
+        }
+    }
+    
+    /**
      * creates the contracts - no containers, just "shared"
      */
     protected function _createSharedContracts()
@@ -272,9 +333,15 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         $i = 0;
         
+        $customers = Sales_Controller_Customer::getInstance()->getAll();
+        $customersCount = $customers->count();
+        $ccIndex = 0;
+        
         while ($i < 12) {
             $costcenter = $ccs[$i%2];
             $i++;
+            
+            $customer = $customers->getByIndex($ccIndex);
             
             $title = self::$_de ? ('Vertrag für KST ' . $costcenter->number . ' - ' . $costcenter->remark) : ('Contract for costcenter ' . $costcenter->number . ' - ' . $costcenter->remark) . ' ' . Tinebase_Record_Abstract::generateUID(3);
             $ccid = $costcenter->getId();
@@ -298,12 +365,26 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'related_backend'        => Tasks_Backend_Factory::SQL,
                     'related_id'             => $ccid,
                     'type'                   => 'LEAD_COST_CENTER'
+                ),
+                array(
+                    'own_model'              => 'Sales_Model_Contract',
+                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_id'                 => NULL,
+                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_model'          => 'Sales_Model_Customer',
+                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_id'             => $customer->getId(),
+                    'type'                   => 'CUSTOMER'
                 )
             );
             $contract->relations = $relations;
             
             $this->_contractController->create($contract);
             $cNumber++;
+            $ccIndex++;
+            if ($ccIndex == $customersCount) {
+                $ccIndex = 0;
+            }
         }
     }
     

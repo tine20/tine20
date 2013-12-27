@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
@@ -146,10 +146,9 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     }
     
     /**
-     * update to 8.5
-     *   - add customer module
+     * creates the customer and related address table
      */
-    public function update_4()
+    protected function _createCustomerAndAddressTables()
     {
         // create customer table
         $tableDefinition = '<table>
@@ -241,7 +240,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 <field>
                     <name>creation_time</name>
                     <type>datetime</type>
-                </field> 
+                </field>
                 <field>
                     <name>last_modified_by</name>
                     <type>text</type>
@@ -280,10 +279,10 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 </index>
             </declaration>
         </table>';
-        
+    
         $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
         $this->_backend->createTable($table);
-        
+    
         // create addresses table
         $tableDefinition = '<table>
             <name>sales_addresses</name>
@@ -362,14 +361,14 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 </index>
             </declaration>
         </table>';
-        
+    
         $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
         $this->_backend->createTable($table);
-        
+    
         // create one persistent filter (looks better)
-        
+    
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
-        
+    
         $pfe->create(new Tinebase_Model_PersistentFilter(
             array(
                 'account_id'        => NULL,
@@ -386,8 +385,6 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 ),
             )
         ));
-        
-        $this->setApplicationVersion('Sales', '8.5');
     }
     
     /**
@@ -588,21 +585,269 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     }
     
     /**
+     * creates invoice table and keyfields, config and so on
+     */
+    protected function _createInvoiceTableAndRelated()
+    {
+        // create invoice table
+        $tableDefinition = '<table>
+            <name>sales_invoices</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>number</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>address_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>fixed_address</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>is_auto</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>date</name>
+                    <type>date</type>
+                </field>
+                <field>
+                    <name>start_date</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>end_date</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>credit_term</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                    <length>10</length>
+                </field>
+                <field>
+                    <name>costcenter_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cleared</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <default>TO_CLEAR</default>
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>';
+    
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
+        $this->_backend->createTable($table);
+    
+        // create keyfield config
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
+    
+        $tc = array(
+            'name'    => Sales_Config::INVOICE_TYPE,
+            'records' => array(
+                array('id' => 'INVOICE',  'value' => 'invoice',   'system' => TRUE),
+                array('id' => 'REVERSAL', 'value' => 'reversal',  'system' => TRUE),
+                array('id' => 'CREDIT',   'value' => 'credit',    'system' => TRUE)
+            ),
+        );
+    
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sales_Config::INVOICE_TYPE,
+            'value'             => json_encode($tc),
+        )));
+    
+        // create cleared state keyfields
+        $tc = array(
+            'name'    => Sales_Config::INVOICE_CLEARED,
+            'records' => array(
+                array('id' => 'TO_CLEAR',  'value' => 'to clear',   'system' => TRUE),
+                array('id' => 'CLEARED', 'value' => 'cleared',  'system' => TRUE),
+            ),
+        );
+    
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sales_Config::INVOICE_CLEARED,
+            'value'             => json_encode($tc),
+        )));
+    }
+    
+    /**
+     * adds invoice related fields to contract
+     */
+    protected function _addInvoiceFieldsToContract()
+    {
+        // add new sales contract fields
+        $fields = array('<field>
+            <name>billing_address_id</name>
+            <type>text</type>
+            <length>40</length>
+            <notnull>false</notnull>
+        </field>','
+        <field>
+            <name>last_autobill</name>
+            <type>datetime</type>
+            <notnull>false</notnull>
+        </field>','
+        <field>
+            <name>interval</name>
+            <type>integer</type>
+            <default>1</default>
+        </field>','
+        <field>
+            <name>billing_point</name>
+            <type>text</type>
+            <length>64</length>
+            <notnull>false</notnull>
+        </field>'
+        );
+    
+        foreach($fields as $field) {
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->addCol('sales_contracts', $declaration);
+        }
+    
+        if ($this->getTableVersion('sales_contracts') == 5) {
+            $this->setTableVersion('sales_contracts', 6);
+        } else {
+            $this->setTableVersion('sales_contracts', 7);
+        }
+    }
+    
+    /**
      * update to 8.5
-     * 
+     *
      * switch to modelconfig, create divison module
      * remove "status", "cleared", "cleared_in", but append values to the description field
      */
-    public function update_5()
+    public function update_4()
     {
+        // repeat from update_3 if setup has been run on another branch
+        if (! $this->_backend->tableExists('sales_customers')) {
+            $this->_createCustomerAndAddressTables();
+        }
+        
         if (! $this->_backend->columnExists('seq', 'sales_divisions')) {
             $this->_addDivisionsModlog();
         }
-        
+    
         if (! $this->_backend->columnExists('start_date', 'sales_contracts')) {
             $this->_updateContractsFields();
         }
         
+        $this->setApplicationVersion('Sales', '8.5');
+    }
+    
+    /**
+     * update to 8.6
+     * 
+     *  - add invoice module
+     */
+    public function update_5()
+    {
+        // repeat from update_3 if setup has been run on another branch
+        if (! $this->_backend->tableExists('sales_customers')) {
+            $this->_createCustomerAndAddressTables();
+        }
+        
+        // repeat from update_4 if setup has been run on another branch
+        if (! $this->_backend->columnExists('seq', 'sales_divisions')) {
+            $this->_addDivisionsModlog();
+        }
+        // repeat from update_4 if setup has been run on another branch
+        if (! $this->_backend->columnExists('start_date', 'sales_contracts')) {
+            $this->_updateContractsFields();
+        }
+        
+        if (! $this->_backend->tableExists('sales_invoices')) {
+            $this->_createInvoiceTableAndRelated();
+        }
+        
+        if (! $this->_backend->columnExists('billing_point', 'sales_contracts')) {
+            $this->_addInvoiceFieldsToContract();
+        }
+        
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'));
+
         $this->setApplicationVersion('Sales', '8.6');
     }
 }

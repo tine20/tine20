@@ -45,4 +45,28 @@ class Sales_Backend_Contract extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
+
+    /**
+     *
+     * @param Tinebase_DateTime $date
+     * @return array
+     */
+    public function getBillableContractIds(Tinebase_DateTime $date)
+    {
+        $dateBig = clone $date;
+        $dateBig->addSecond(2);
+    
+        $dateSmall = clone $date;
+        $dateSmall->subSecond(2);
+    
+        $be = new Sales_Backend_Contract();
+        $db = $be->getAdapter();
+    
+        $sql = 'SELECT ' . $db->quoteIdentifier('id') . ' FROM ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_contracts') .
+        ' WHERE (' . $db->quoteInto($db->quoteIdentifier('end_date') . ' > ?', $dateSmall) . ' OR ' . $db->quoteIdentifier('end_date') . ' IS NULL ) ' .
+        ' AND '   . $db->quoteInto($db->quoteIdentifier('interval') . ' > ?', 0) .
+        ' AND '   . $db->quoteInto($db->quoteIdentifier('start_date') . ' < ?', $dateBig);
+    
+        return array_keys($db->fetchAssoc($sql));
+    }
 }

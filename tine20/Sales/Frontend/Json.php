@@ -30,7 +30,13 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * @see Tinebase_Frontend_Json_Abstract
      */
-    protected $_relatableModels = array('Sales_Model_Contract', 'Sales_Model_CostCenter', 'Sales_Model_Customer', 'Sales_Model_Address');
+    protected $_relatableModels = array(
+        'Sales_Model_Contract',
+        'Sales_Model_CostCenter',
+        'Sales_Model_Customer',
+        'Sales_Model_Address',
+        'Sales_Model_Invoice'
+    );
 
     /**
      * All configured models
@@ -43,7 +49,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Division',
         'CostCenter',
         'Customer',
-        'Address'
+        'Address',
+        'Invoice'
     );
     
    /**
@@ -231,11 +238,11 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     // division functions
     
     /**
-      * Return a single record
-      *
-      * @param   string $id
-      * @return  array record data
-      */
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
     public function getDivision($id)
     {
         return $this->_get($id, Sales_Controller_Division::getInstance());
@@ -381,5 +388,59 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchAddresss($filter, $paging)
     {
         return $this->_search($filter, $paging, Sales_Controller_Address::getInstance(), 'Sales_Model_AddressFilter');
+    }
+    
+    
+    // invoice methods
+    
+    /**
+     * Search for records matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchInvoices($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Sales_Controller_Invoice::getInstance(), 'Sales_Model_InvoiceFilter', TRUE);
+    }
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getInvoice($id)
+    {
+        return $this->_get($id, Sales_Controller_Invoice::getInstance());
+    }
+    
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @param  boolean $duplicateCheck
+     *
+     * @return array created/updated record
+     */
+    public function saveInvoice($recordData, $duplicateCheck = TRUE)
+    {
+        if (is_array($recordData["address_id"])) {
+            $recordData["address_id"] = $recordData["address_id"]['id'];
+        }
+
+        return $this->_save($recordData, Sales_Controller_Invoice::getInstance(), 'Invoice', 'id', array($duplicateCheck));
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array $ids
+     * @return string
+     */
+    public function deleteInvoices($ids)
+    {
+        return $this->_delete($ids, Sales_Controller_Invoice::getInstance());
     }
 }

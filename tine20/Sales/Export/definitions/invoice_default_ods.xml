@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Sales_Model_Invoice</model>
+    <name>invoice_default_ods</name>
+    <type>export</type>
+    <plugin>Sales_Export_Ods_Invoice</plugin>
+    <description>default ods invoice export definition</description>
+    <header>1</header>
+    <headers>
+        <header>{date}</header>
+        <header>{user}</header>
+    </headers>
+    <defaultColumnStyle>
+        <column-width>3cm</column-width>
+    </defaultColumnStyle>
+    <columns>
+        <column>
+            <identifier>number</identifier>
+            <header>Invoice Number</header>
+            <style>
+                <column-width>4cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>date</identifier>
+            <header>Date</header>
+            <type>date</type>
+            <customStyle>germanDateCell</customStyle>
+        </column>
+        <column>
+            <identifier>type</identifier>
+            <header>Type</header>
+            <style>
+                <column-width>2cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>description</identifier>
+            <header>Description</header>
+            <style>
+                <column-width>6cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>customer</identifier>
+            <header>Customer</header>
+            <!--type>customer</type-->
+            <style>
+                <column-width>6cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>fixed_address</identifier>
+            <header>Address</header>
+            <!--type>address</type-->
+            <style>
+                <column-width>20cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>credit_term</identifier>
+            <header>Credit Term</header>
+            <type>number</type>
+            <style>
+                <column-width>4cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>costcenter_id</identifier>
+            <header>Cost Center</header>
+            <!--type>costcenter</type-->
+        </column>
+        <column>
+            <identifier>cleared</identifier>
+            <header>Cleared</header>
+        </column>
+    </columns>
+</config>

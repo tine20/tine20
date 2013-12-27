@@ -441,3 +441,159 @@ msgstr ""
 
 msgid "Customer Number"
 msgstr ""
+
+msgid "manage invoices"
+msgstr ""
+
+msgid "manage customers"
+msgstr ""
+
+msgid "add, edit and delete customers"
+msgstr ""
+
+msgid "add, edit and delete invoices"
+msgstr ""
+
+msgid "Credit Term"
+msgstr ""
+
+msgid "Invoice Number"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "invoice"
+msgstr ""
+
+msgid "reversal"
+msgstr ""
+
+msgid "credit"
+msgstr ""
+
+msgid "automatically set..."
+msgstr ""
+
+msgid "Invoice"
+msgid_plural "Invoices"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "The selected contract doesn't have a customer assigned, yet. Add a customer to the contract with the contract edit dialog."
+msgstr ""
+
+msgid "No customer assigned"
+msgstr ""
+
+msgid 'Edit Customer "{0}"'
+msgstr ""
+
+msgid "Add New Customer"
+msgstr ""
+
+msgid "Copy Customer"
+msgstr ""
+
+msgid "Add New Invoice"
+msgstr ""
+
+msgid "Copy Invoice"
+msgstr ""
+
+msgid 'Edit Invoice "{0}"'
+msgstr ""
+
+msgid "cleared"
+msgstr ""
+
+msgid "to clear"
+msgstr ""
+
+msgid "The selected contract doesn't have a cost center assigned, yet. Add a cost center to the contract with the contract edit dialog."
+msgstr ""
+
+msgid "No cost center assigned"
+msgstr ""
+
+msgid "Billing Interval"
+msgstr ""
+
+msgid "Billing Address Locality"
+msgstr ""
+
+msgid "End Date"
+msgstr ""
+
+msgid "Start Date"
+msgstr ""
+
+msgid "postal"
+msgstr ""
+
+msgid "billing"
+msgstr ""
+
+msgid "delivery"
+msgstr ""
+
+msgid "Invoice is cleared already"
+msgstr ""
+
+msgid "The Invoice you tried to edit is cleared already, so no editing is possible anymore!"
+msgstr ""
+
+msgid "The Invoice you tried to delete is cleared already, so deleting is not possible anymore!"
+msgstr ""
+
+msgid "Select invoice"
+msgstr ""
+
+msgid "Export selected invoice as ODS"
+msgstr ""
+
+msgid "Export selected invoices as ODS"
+msgstr ""
+
+msgid "Export Invoices"
+msgstr ""
+
+msgid "Create Reversal Invoice"
+msgstr ""
+
+msgid "Reversal Invoice"
+msgstr ""
+
+msgid "Billing Point"
+msgstr ""
+
+msgid "begin"
+msgstr ""
+
+msgid "end"
+msgstr ""
+
+msgid "not yet cleared"
+msgstr ""
+
+msgid "cleared"
+msgstr ""
+
+msgid "open"
+msgstr ""
+
+
+msgid "closed"
+msgstr ""
+
+msgid "to clear"
+msgstr ""
+
+msgid "Interval Begins"
+msgstr ""
+
+msgid "Interval Ends"
+msgstr ""

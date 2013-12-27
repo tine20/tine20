@@ -55,7 +55,7 @@
         </table>
         <table>
             <name>sales_contracts</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -67,11 +67,17 @@
                     <name>container_id</name>
                     <type>integer</type>
                     <notnull>true</notnull>
-                </field>                
+                </field>
                 <field>
                     <name>parent_id</name>
                     <type>text</type>
                     <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>billing_point</name>
+                    <type>text</type>
+                    <length>64</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -97,6 +103,22 @@
                 <field>
                     <name>end_date</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>billing_address_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>interval</name>
+                    <type>integer</type>
+                    <default>1</default>
+                </field>
+                <field>
+                    <name>last_autobill</name>
+                    <type>datetime</type>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -581,6 +603,125 @@
                     <notnull>true</notnull>
                     <default>postal</default>
                     <length>64</length>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>sales_invoices</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>number</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>address_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>fixed_address</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>is_auto</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>date</name>
+                    <type>date</type>
+                </field>
+                <field>
+                    <name>credit_term</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                    <length>10</length>
+                </field>
+                <field>
+                    <name>costcenter_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>cleared</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <default>TO_CLEAR</default>
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>start_date</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>end_date</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
                 </field>
                 <index>
                     <name>id</name>

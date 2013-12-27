@@ -29,18 +29,18 @@ class Sales_Config extends Tinebase_Config_Abstract
     const CONTRACT_NUMBER_VALIDATION = 'contractNumberValidation';
     
     /**
-     * Contract Status
+     * Invoice Type
      * 
      * @var string
      */
-    const CONTRACT_STATUS = 'contractStatus';
+    const INVOICE_TYPE = 'invoiceType';
     
     /**
-     * Contract attendee role
-     * 
+     * Invoice Type
+     *
      * @var string
      */
-    const CONTRACT_CLEARED = 'contractCleared';
+    const INVOICE_CLEARED = 'invoiceCleared';
     
     /**
      * the own currency
@@ -80,26 +80,6 @@ class Sales_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => 'integer'
         ),
-        self::CONTRACT_STATUS => array(
-                                   //_('Contract Status Available')
-            'label'                 => 'Contract Status Available',
-                                   //_('Possible Contract status. Please note that additional contract status might impact other Sales systems on export or syncronisation.')
-            'description'           => 'Possible Contract status.',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'Sales_Model_Status'),
-            'clientRegistryInclude' => TRUE,
-            'default'               => 'OPEN'
-        ),
-        self::CONTRACT_CLEARED => array(
-                                   //_('Contract Cleared State Available')
-            'label'                 => 'Contract Cleared State Available',
-                                   //_('Possible Contract cleared states.')
-            'description'           => 'Possible Contract cleared states.',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'Sales_Model_Cleared'),
-            'clientRegistryInclude' => TRUE,
-            'default'               => 'NOTCLEARED'
-        ),
         self::OWN_CURRENCY => array(
             // _('Own Currency')
             'label'                 => 'Own Currency',
@@ -109,6 +89,26 @@ class Sales_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default'               => 'EUR'
+        ),
+        self::INVOICE_TYPE => array(
+                                   //_('Invoice Type')
+            'label'                 => 'Invoice Type',
+                                   //_('Possible Invoice Types.')
+            'description'           => 'Possible Invoice Types.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Sales_Model_InvoiceType'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'INVOICE'
+        ),
+        self::INVOICE_CLEARED => array(
+                                   //_('Invoice Cleared')
+            'label'                 => 'Invoice Cleared',
+                                   //_('Possible Invoice Cleared States.')
+            'description'           => 'Possible Invoice Cleared States.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Sales_Model_InvoiceCleared'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'TO_CLEAR'
         ),
     );
     

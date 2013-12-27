@@ -45,6 +45,14 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     const MANAGE_CUSTOMERS = 'manage_customers';
     
+    
+    /**
+     * the right to manage invoices
+     * 
+     * @staticvar string
+     */
+    const MANAGE_INVOICES = 'manage_invoices';
+    
     /**
      * holds the instance of the singleton
      *
@@ -88,8 +96,10 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $addRights = array ( 
             self::MANAGE_PRODUCTS,
             self::MANAGE_COSTCENTERS,
-            self::MANAGE_CUSTOMERS
+            self::MANAGE_CUSTOMERS,
+            self::MANAGE_INVOICES
         );
+        
         $allRights = array_merge($allRights, $addRights);
         
         return $allRights;
@@ -117,6 +127,10 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('manage customers'),
                 'description'   => $translate->_('add, edit and delete customers'),
             ),
+            self::MANAGE_INVOICES => array(
+                'text'          => $translate->_('manage invoices'),
+                'description'   => $translate->_('add, edit and delete invoices'),
+            )
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());

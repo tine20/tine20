@@ -35,10 +35,43 @@
     background-image:url("../../images/oxygen/16x16/apps/khangman.png") !important;
 }
 
+.SalesInvoice {
+    background-image:url("../../images/oxygen/16x16/actions/edit-select-all.png") !important;
+}
+
+.SalesDivision {
+    background-image:url("../../images/oxygen/16x16/actions/view-process-users.png") !important;
+}
+
+.action_reversal {
+    background-image:url("../../images/oxygen/22x22/actions/document-revert.png") !important;
+}
+
+
 .preview-panel-symbolcompare.wide {width: 160px}
 .preview-panel-customer { margin: 5px 2px 5px 5px; width: 32%; min-width: 200px}
 .preview-panel-description.preview-panel-customer {width: 22%; min-width: 200px}
 
 .clipboard {
     background-image:url("../../images/oxygen/16x16/apps/klipper.png") !important;
+}
+
+.preview-panel-invoice-default {
+    display: block;
+    height: 122px;
+    padding: 5px;
+    margin: 5px;
+    font-family: verdana;
+}
+
+.preview-panel-invoice-left {
+    float: left;
+    position: relative;
+    width: 32%;
+    height: 122px;
+    padding: 5px;
+    margin: 5px 2px 5px 5px;
+    font-family: verdana;
+    font-size: 10px;
+    color: #404040;
 }

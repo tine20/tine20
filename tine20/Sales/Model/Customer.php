@@ -39,7 +39,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
         'hasAttachments'    => TRUE,
-        'createModule'      => FALSE,
+        'createModule'      => TRUE,
         'containerProperty' => NULL,
         'resolveVFGlobally' => TRUE,
         

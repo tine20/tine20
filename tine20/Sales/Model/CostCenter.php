@@ -56,7 +56,7 @@ class Sales_Model_CostCenter extends Tinebase_Record_Abstract
             'remark' => array(
                 'label'   => 'Remark', // _('Remark')
                 'queryFilter' => TRUE,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true)
             ),
         )
     );
