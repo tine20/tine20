@@ -1242,7 +1242,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $eventLength = $_record->dtstart->diff($_record->dtend);
         
                 // make sure we hit the next instance
+                $instanceStart->setTimezone($_record->originator_tz);
                 $from = $instanceStart->add($eventLength)->addMinute(1);
+                $from->setTimezone('UTC');
             }
             
             // compute next

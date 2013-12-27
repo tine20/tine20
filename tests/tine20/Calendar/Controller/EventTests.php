@@ -1184,6 +1184,50 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertTrue($alarmTime->equals($persistentException->alarms->getFirstRecord()->alarm_time), 'alarmtime of persistent exception is not correnct/set');
     }
     
+    /**
+     * testAdoptAlarmTimeOfYearlyEvent
+     * 
+     * @see 0009320: Wrong notification on first occurrence exceptions
+     */
+    public function testAdoptAlarmTimeOfYearlyEvent()
+    {
+        $event = $this->_getEvent();
+        $event->dtstart = new Tinebase_DateTime('2012-10-26 22:00:00');
+        $event->dtend = new Tinebase_DateTime('2012-10-27 21:59:00');
+        $event->is_all_day_event = 1;
+        $event->rrule = 'FREQ=YEARLY;BYMONTH=10;BYMONTHDAY=27;INTERVAL=1';
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 2880
+            ), TRUE)
+        ));
+        $persistentEvent = $this->_controller->create($event);
+        //print_r($persistentEvent->toArray());
+        $alarm = $persistentEvent->alarms->getFirstRecord();
+        $this->_controller->adoptAlarmTime($persistentEvent, $alarm);
+        
+        $this->assertEquals('2014-10-24 23:00:00', $alarm->alarm_time->toString(), print_r($alarm->toArray(), true));
+        
+        // mock send alarm and check next occurrence
+        $alarm->sent_status = Tinebase_Model_Alarm::STATUS_PENDING;
+        $alarm->sent_time = new Tinebase_DateTime('2012-10-24 22:01:03');
+        $alarm->alarm_time = new Tinebase_DateTime('2013-10-24 22:00:00');
+        $alarm->options = '{"custom":false,"minutes_before":2880,"recurid":"' . $persistentEvent->uid . '-2013-10-26 22:00:00"}';
+        $alarmBackend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Alarm', 
+            'tableName' => 'alarm',
+        ));
+        
+        $updatedAlarm = $alarmBackend->update($alarm);
+        
+        $updatedAlarm->sent_time = Tinebase_DateTime::now();
+        $updatedAlarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
+        $updatedAlarm->minutes_before = 2880;
+        
+        $this->_controller->adoptAlarmTime($persistentEvent, $updatedAlarm, 'instance');
+        $this->assertEquals('2014-10-24 23:00:00', $updatedAlarm->alarm_time->toString(), print_r($updatedAlarm->toArray(), true));
+    }
+    
     public function testGetRecurExceptions()
     {
         $persistentException = $this->testCreateRecurException();
