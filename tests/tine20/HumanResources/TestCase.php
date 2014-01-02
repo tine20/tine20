@@ -221,15 +221,14 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
     protected function _getEmployee($loginName = NULL) 
     {
         $a = $this->_getAccount($loginName);
-        $c = $this->_getContact($loginName);
 
         $this->_lastEmployeeNumber++;
         
         $ea = array(
             'number'     => $this->_lastEmployeeNumber,
-            'n_fn'       => $c->n_fn,
-            'n_given'    => $c->n_given,
-            'n_family'   => $c->n_family,
+            'n_fn'       => $a->accountFullName,
+            'n_given'    => $a->accountFirstName,
+            'n_family'   => $a->accountLastName,
             'account_id' => $a->getId(),
             'position'   => 'Photographer'
         );

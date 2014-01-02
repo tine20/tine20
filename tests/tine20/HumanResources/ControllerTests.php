@@ -27,7 +27,7 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $employeeController = HumanResources_Controller_Employee::getInstance();
         $contractBackend = new HumanResources_Backend_Contract();
 
-        $employee = $employeeController->create($this->_getEmployee('unittest'));
+        $employee = $employeeController->create($this->_getEmployee('sclever'));
 
         $now = new Tinebase_DateTime();
 
@@ -58,14 +58,14 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $contract2->start_date    = $startDate2;
         $contract2->end_date = $edate1;
         $contract2 = $contractBackend->create($contract2);
-
+ 
         // account
 
         $accountInstance = HumanResources_Controller_Account::getInstance();
         $accountInstance->createMissingAccounts();
 
         $accountFilter = new HumanResources_Model_AccountFilter(array(
-            array('field' => 'year', 'operator' => 'equals', 'value' => $startDate2->format('Y'))
+            array('field' => 'year', 'operator' => 'equals', 'value' => $now->format('Y'))
         ));
 
         $accountFilter->addFilter(new Tinebase_Model_Filter_Text(
