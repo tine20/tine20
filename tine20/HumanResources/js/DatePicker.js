@@ -193,7 +193,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         // wait until the accountpicker has found the current account
         if (this.accountPickerActive) {
             if (! (this.editDialog && this.editDialog.currentAccount)) {
-                this.onFeastDaysLoad.defer(100, this, [result]);
+                this.onFeastDaysLoad.defer(100, this, [result, onInit]);
                 return;
             }
         }
@@ -256,8 +256,12 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         this.updateCellClasses();
         this.loadMask.hide();
         
-        if (this.disableYearChange == true) {
-            var focusDate = firstDay;
+        if (this.disableYearChange) {
+            if (this.previousYear < this.currentYear) {
+                var focusDate = new Date(this.currentYear + '/01/01 12:00:00 AM');
+            } else {
+                var focusDate = new Date(this.currentYear + '/12/31 12:00:00 AM');
+            }
         } else {
             var focusDate = freetime.get('firstday_date');
         }
