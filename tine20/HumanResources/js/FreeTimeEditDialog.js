@@ -227,6 +227,13 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * creates the date picker
      */
     initDatePicker: function() {
+        var date = null;
+        if (this.record.id && (date = this.record.get('firstday_date'))) {
+            var year = parseInt(date.format('Y'));
+        } else {
+            var year = this.startYear;
+        }
+
         this.datePicker = new Tine.HumanResources.DatePicker({
             accountPickerActive: (this.freetimeType == 'VACATION') ? true : false,
             recordClass: Tine.HumanResources.Model.FreeDay,
@@ -236,7 +243,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             recordsProperty: 'freedays',
             foreignIdProperty: 'freeday_id',
             freetimeType: this.freetimeType,
-            currentYear: this.startYear
+            currentYear: year,
+            value: date || new Date()
         });
     },
     
