@@ -27,7 +27,7 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     evalGrants: false,
 
     windowWidth: 550,
-    windowHeight: 450,
+    windowHeight: 490,
     
     /**
      * inits the component
@@ -144,6 +144,24 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                                 {fieldLabel: this.app.i18n._('Days to work after vacation and sickness'), name: 'working_days_real' },
                                 {fieldLabel: this.app.i18n._('Hours to work after vacation and sickness'), name: 'working_hours_real' }
                             ]]
+                        }]
+                    }, {
+                        xtype: 'fieldset',
+                        layout: 'hfit',
+                        autoHeight: true,
+                        title: this.app.i18n._('Miscellaneous'),
+                        items: [{
+                            xtype: 'columnform',
+                            labelAlign: 'top',
+                            items: [[{
+                                xtype: 'textarea',
+                                height: 180,
+                                disabled: false,
+                                readOnly: false,
+                                fieldLabel: this.app.i18n._('Description'),
+                                name: 'description', 
+                                columnWidth: 1 
+                            }]]
                         }]
                     }]
                 }]},
