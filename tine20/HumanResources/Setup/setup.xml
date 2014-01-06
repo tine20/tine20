@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>8.4</version>
+    <version>8.5</version>
     <order>51</order>
     <depends>
         <application>Calendar</application>
@@ -671,7 +671,7 @@
         </table>
         <table>
             <name>humanresources_account</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -684,6 +684,10 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
                 </field>
                 <field>
                     <name>year</name>
