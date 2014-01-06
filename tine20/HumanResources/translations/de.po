@@ -921,3 +921,7 @@ msgstr "Sa."
 #: js/ContractEditDialog.js:296
 msgid "Sun."
 msgstr "So."
+
+
+msgid "Miscellaneous"
+msgstr "Sonstiges"
