@@ -95,4 +95,21 @@ class HumanResources_Setup_Update_Release8 extends Setup_Update_Abstract
     
         $this->setApplicationVersion('HumanResources', '8.4');
     }
+    
+    /**
+     * add description field to account
+     */
+    public function update_4()
+    {
+        $field = '<field>
+            <name>description</name>
+            <type>text</type>
+        </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('humanresources_account', $declaration);
+        
+        $this->setTableVersion('humanresources_account', '3');
+        $this->setApplicationVersion('HumanResources', '8.5');
+    }
 }
