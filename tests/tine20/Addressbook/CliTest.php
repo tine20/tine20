@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -81,7 +81,7 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
      */
     public function testSetContainerGrantsWithFilterAndOverwrite()
     {
-        $nameFilter = 'Tine 2.0 Admin Account';
+        $nameFilter = Tinebase_Core::getUser()->accountLastName;
         $filter = new Tinebase_Model_ContainerFilter(array(
             array('field' => 'application_id', 'operator' => 'equals', 
                 'value' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()),

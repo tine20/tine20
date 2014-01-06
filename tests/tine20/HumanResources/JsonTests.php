@@ -261,7 +261,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'end_date' => $nextMonth,
             'vacation_days' => 22,
             'feast_calendar_id' => $fcId,
-            'creation_time' => $now->toString()
+            'creation_time' => $now->toString(),
+            'number' => 1,
         );
         
         // doing this manually, this won't be the last assertion, and more assertions are needed
@@ -277,23 +278,26 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $this->assertEquals('The contracts must not overlap!', $exception->getMessage());
         
+        // prevent duplicate exception
+        $employee['account_id'] = $this->_getAccount('rwright')->getId();
         // test startdate after end_date
-        
         $employee['contracts'][2] = array(
             'start_date' => $edate1->toString(),
             'end_date' => $sdate1->toString(),
             'vacation_days' => 22,
             'feast_calendar_id' => $fcId,
-            'creation_time' => $now->toString()
+            'creation_time' => $now->toString(),
         );
 
         try {
             $this->_json->saveEmployee($employee);
+            $this->fail('HumanResources_Exception_ContractDates exception expected');
         } catch (HumanResources_Exception_ContractDates $exception) {
             // thrown in HR_Controller_Contract
+            $this->assertEquals('The start date of the contract must be before the end date!', $exception->getMessage());
+        } catch (Tinebase_Exception_Duplicate $ted) {
+            $this->fail('got duplicate exception: ' . print_r($ted->toArray(), true));
         }
-        
-        $this->assertEquals('The start date of the contract must be before the end date!', $exception->getMessage());
     }
     
     /**
@@ -451,9 +455,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals(1, $result['totalcount']);
         
         // test account quicksearch filter
-        $qsFilter = array(array('field' => "query", 'operator' => "contains", 'value' => 'Admin'));
+        $qsFilter = array(array('field' => "query", 'operator' => "contains", 'value' => Tinebase_Core::getUser()->accountFirstName));
         $result = $json->searchAccounts($qsFilter, array());
-        $this->assertEquals(3, $result['totalcount']);
+        $this->assertEquals(3, $result['totalcount'], 'should find exactly 3 accounts');
         
         $qsFilter = array(array('field' => "query", 'operator' => "contains", 'value' => 'Adsmin'));
         $result = $json->searchAccounts($qsFilter, array());
