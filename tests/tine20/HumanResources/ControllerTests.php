@@ -27,20 +27,20 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $employeeController = HumanResources_Controller_Employee::getInstance();
         $contractBackend = new HumanResources_Backend_Contract();
 
-        $employee = $employeeController->create($this->_getEmployee('unittest'));
+        $employee = $employeeController->create($this->_getEmployee('sclever'));
 
-        $now = new Tinebase_DateTime();
+        $testDate = Tinebase_DateTime::now()->setDate(Tinebase_DateTime::now()->format('Y'), 5, 13);
 
-        $inAMonth = clone $now;
+        $inAMonth = clone $testDate;
         $inAMonth->addMonth(1);
 
-        $threeHrAgo = clone $now;
+        $threeHrAgo = clone $testDate;
         $threeHrAgo->subHour(3);
 
-        $startDate1 = clone $now;
+        $startDate1 = clone $testDate;
         $startDate1->subMonth(2);
 
-        $startDate2 = clone $now;
+        $startDate2 = clone $testDate;
         $startDate2->subMonth(1);
 
         $edate1 = clone $startDate2;
@@ -50,7 +50,7 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $contract1 = $this->_getContract();
         $contract1->employee_id = $employee->getId();
         $contract1->start_date = $startDate1;
-        $contract1->creation_time = $now;
+        $contract1->creation_time = $testDate;
         $contract1 = $contractBackend->create($contract1);
 
         $contract2 = $this->_getContract();
@@ -58,14 +58,14 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $contract2->start_date    = $startDate2;
         $contract2->end_date = $edate1;
         $contract2 = $contractBackend->create($contract2);
-
+ 
         // account
 
         $accountInstance = HumanResources_Controller_Account::getInstance();
         $accountInstance->createMissingAccounts();
 
         $accountFilter = new HumanResources_Model_AccountFilter(array(
-            array('field' => 'year', 'operator' => 'equals', 'value' => $startDate2->format('Y'))
+            array('field' => 'year', 'operator' => 'equals', 'value' => $testDate->format('Y'))
         ));
 
         $accountFilter->addFilter(new Tinebase_Model_Filter_Text(
