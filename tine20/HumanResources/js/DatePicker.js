@@ -193,16 +193,17 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         // wait until the accountpicker has found the current account
         if (this.accountPickerActive) {
             if (! (this.editDialog && this.editDialog.currentAccount)) {
-                this.onFeastDaysLoad.defer(100, this, [result]);
+                this.onFeastDaysLoad.defer(100, this, [result, onInit]);
                 return;
             }
         }
         Tine.log.debug('Loaded feast and freedays:');
-        Tine.log.debug(result);
+        var rr = result.results;
+        Tine.log.debug(rr);
         
         this.disabledDates = [];
         //  days not to work on by contract
-        var exdates = result.results.excludeDates || [];
+        var exdates = rr.excludeDates || [];
         var freetime = this.editDialog.record;
         
         // format dates to fit the datepicker format
@@ -214,24 +215,24 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             }, this);
         }, this);
 
-        this.setVacationDates(this.editDialog.localVacationDays, result.results.vacationDays, this.editDialog.removedVacationDays);
-        this.setSicknessDates(this.editDialog.localSicknessDays, result.results.sicknessDays, this.editDialog.removedSicknessDays);
-        this.setFeastDates(result.results.feastDays);
+        this.setVacationDates(this.editDialog.localVacationDays, rr.vacationDays, this.editDialog.removedVacationDays);
+        this.setSicknessDates(this.editDialog.localSicknessDays, rr.sicknessDays, this.editDialog.removedSicknessDays);
+        this.setFeastDates(rr.feastDays);
         
         this.setDisabledDates(this.disabledDates);
         
         this.updateCellClasses();
         
-        var split = result.results.firstDay.date.split(' '), dateSplit = split[0].split('-');
+        var split = rr.firstDay.date.split(' '), dateSplit = split[0].split('-');
         var firstDay = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
         this.setMinDate(firstDay);
         
-        var split = result.results.lastDay.date.split(' '), dateSplit = split[0].split('-');
+        var split = rr.lastDay.date.split(' '), dateSplit = split[0].split('-');
         var lastDay = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
         this.setMaxDate(lastDay);
         
         // if ownFreeDays is empty, the record hasn't been saved already, so use the properties from the local record
-        var iterate = (result.results.ownFreeDays && result.results.ownFreeDays.length > 0) ? result.results.ownFreeDays : (freetime ? freetime.get('freedays') : null);
+        var iterate = (rr.ownFreeDays && rr.ownFreeDays.length > 0) ? rr.ownFreeDays : (freetime ? freetime.get('freedays') : null);
         
         if (Ext.isArray(iterate)) {
             Ext.each(iterate, function(fd) {
@@ -249,17 +250,23 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 substractDays = substractDays + freetime.get('days_count');
             }
 
-            this.editDialog.getForm().findField('remaining_vacation_days').setValue(result.results.remainingVacation - substractDays);
+            this.editDialog.getForm().findField('remaining_vacation_days').setValue(rr.remainingVacation - substractDays);
         }
         
         this.updateCellClasses();
         this.loadMask.hide();
         
-        if (this.disableYearChange == true) {
-            var focusDate = firstDay;
+        if (this.disableYearChange) {
+            if (this.previousYear < this.currentYear) {
+                var focusDate = new Date(this.currentYear + '/01/01 12:00:00 AM');
+            } else {
+                var focusDate = new Date(this.currentYear + '/12/31 12:00:00 AM');
+            }
         } else {
             var focusDate = freetime.get('firstday_date');
         }
+        
+        this.currentYear = parseInt(rr.firstDay.date.split('-')[0]);
         
         // focus
         if (focusDate) {
@@ -363,11 +370,10 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * @param {} forceRefresh
      */
     update : function(date, forceRefresh) {
-        
         Tine.HumanResources.DatePicker.superclass.update.call(this, date, forceRefresh);
         
         if (! this.disableYearChange) {
-            var year = date.format('Y');
+            var year = parseInt(date.format('Y'));
             if (year !== this.currentYear) {
                 if (this.getData().length > 0) {
                     Ext.MessageBox.show({
@@ -384,7 +390,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                     });
                 } else {
                     this.previousYear = this.currentYear;
-                    this.currentYear = date.format('Y');
+                    this.currentYear = parseInt(date.format('Y'));
                     this.onYearChange();
                 }
             }

@@ -858,9 +858,17 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                             continue;
                         }
                         
+                        # TRIGGER:-PT15M
+                        if (is_string($valarm->TRIGGER->getValue()) && $valarm->TRIGGER instanceof Sabre\VObject\Property\ICalendar\Duration) {
+                            $valarm->TRIGGER->add('VALUE', 'DURATION');
+                        }
+                        
                         $trigger = is_object($valarm->TRIGGER['VALUE']) ? $valarm->TRIGGER['VALUE'] : (is_object($valarm->TRIGGER['RELATED']) ? $valarm->TRIGGER['RELATED'] : NULL);
+                        
                         if ($trigger === NULL) {
                             // added Trigger/Related for eM Client alarms
+                            // 2014-01-03 - Bullshit, why don't we have testdata for emclient alarms?
+                            //              this alarm handling should be refactored, the logic is scrambled
                             // @see 0006110: handle iMIP messages from outlook
                             // @todo fix 0007446: handle broken alarm in outlook invitation message
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 

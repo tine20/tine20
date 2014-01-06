@@ -4,21 +4,16 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Syncroton_Command_Sync
  * 
  * @package     ActiveSync
  */
-class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
+class ActiveSync_Command_SyncTests extends TestCase
 {
     /**
      * @var ActiveSync_Model_Device
@@ -46,26 +41,12 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
     protected $_contentStateBackend;
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Sync Command Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-    
-    /**
      * (non-PHPdoc)
      * @see ActiveSync/ActiveSync_TestCase::setUp()
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
-        $this->_setGeoData = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
+        parent::setUp();
         
         Syncroton_Registry::setDatabase(Tinebase_Core::getDb());
         Syncroton_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
@@ -75,6 +56,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         Syncroton_Registry::set(Syncroton_Registry::SYNCSTATEBACKEND,    new Syncroton_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set(Syncroton_Registry::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set(Syncroton_Registry::POLICYBACKEND,       new Syncroton_Backend_Policy(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set('loggerBackend', Tinebase_Core::getLogger());
         
         Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
         Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
@@ -87,81 +69,30 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-    
-    /**
      * test sync of existing contacts folder
      */
     public function testSyncOfContacts()
     {
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Tinebase_Core::getUser(),
-            'Addressbook', 
-            Tinebase_Core::getUser(),
-            Tinebase_Model_Grants::GRANT_EDIT
-        )->getFirstRecord();
+        $container = $this->_getPersonalContainer('Addressbook');
         
-        // first do a foldersync
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
-        );
-        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
-        $folderSync->handle();
-        $folderSync->getResponse();
-        
-        
-        // request initial synckey
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>0</SyncKey><CollectionId>' . $personalContainer->getId() . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
-        );
-        
-        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
-        
-        $sync->handle();
-        
-        $syncDoc = $sync->getResponse();
-        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
-        
-        $xpath = new DomXPath($syncDoc);
-        $xpath->registerNamespace('AirSync', 'uri:AirSync');
-        
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals('Contacts', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
-        
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(1, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
-        
-        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
-        
+        $this->_syncFolder();
+        $this->_requestInitialSynckey($container);
         
         // now do the first sync
-        $doc = new DOMDocument();
-        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>' . $personalContainer->getId() . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
-        );
-        
-        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
-        
-        $sync->handle();
-        
+        $sync = $this->_sync($container);
         $syncDoc = $sync->getResponse();
+        
+        // we make sure that there are always > 0 contacts in this container
+        if ($syncDoc === null) {
+            $contact = new Addressbook_Model_Contact(array(
+                'n_family'     => 'lala',
+                'container_id' => $container->getId()
+            ));
+            Addressbook_Controller_Contact::getInstance()->create($contact);
+            $sync = $this->_sync($container);
+            $syncDoc = $sync->getResponse();
+        }
+        
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
         
         $xpath = new DomXPath($syncDoc);
@@ -181,19 +112,90 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Commands');
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
-        #$this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $this->assertEquals("uri:Contacts", $syncDoc->lookupNamespaceURI('Contacts'), $syncDoc->saveXML());
     }
     
+    /**
+     * sync folder
+     */
+    protected function _syncFolder()
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <FolderSync xmlns="uri:FolderHierarchy"><SyncKey>0</SyncKey></FolderSync>'
+        );
+        $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
+        $folderSync->handle();
+        $folderSync->getResponse();
+    }
+    
+    /**
+     * request inital synckey
+     * 
+     * @param Tinebase_Model_Container $container
+     */
+    protected function _requestInitialSynckey($container)
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>0</SyncKey><CollectionId>'
+                . $container->getId() . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options>'
+                . '<AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize>'
+                . '</AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+        );
+        
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        $sync->handle();
+        $syncDoc = $sync->getResponse();
+        #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+        
+        $xpath = new DomXPath($syncDoc);
+        $xpath->registerNamespace('AirSync', 'uri:AirSync');
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals('Contacts', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(1, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+        
+        $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Status');
+        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
+    }
+    
+    /**
+     * do sync request
+     * 
+     * @param Tinebase_Model_Container
+     * @return Syncroton_Command_Sync
+     */
+    protected function _sync($container)
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+            <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>'
+                . $container->getId() . '</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options></Collection></Collections></Sync>'
+        );
+        
+        $sync = new Syncroton_Command_Sync($doc, $this->_device, $this->_device->policykey);
+        
+        $sync->handle();
+        
+        return $sync;
+    }
+    
+    /**
+     * test create contact
+     */
     public function testCreateContact()
     {
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Tinebase_Core::getUser(),
-            'Addressbook', 
-            Tinebase_Core::getUser(),
-            Tinebase_Model_Grants::GRANT_EDIT
-        )->getFirstRecord();
+        $personalContainer = $this->_getPersonalContainer('Addressbook');
         
         $this->testSyncOfContacts();
         
@@ -233,7 +235,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:Class');
-        $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
+        $this->assertEquals(1, $nodes->length, 'one contact should be in here: ' . $syncDoc->saveXML());
         $this->assertEquals('Contacts', $nodes->item(0)->nodeValue, $syncDoc->saveXML());
         
         $nodes = $xpath->query('//AirSync:Sync/AirSync:Collections/AirSync:Collection/AirSync:SyncKey');
@@ -258,13 +260,7 @@ class ActiveSync_Command_SyncTests extends PHPUnit_Framework_TestCase
      */
     public function testSyncOfEvents()
     {
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Tinebase_Core::getUser(),
-            'Calendar', 
-            Tinebase_Core::getUser(),
-            Tinebase_Model_Grants::GRANT_EDIT
-        )->getFirstRecord();
-        
+        $personalContainer = $this->_getPersonalContainer('Calendar');
         
         // add a test event
         $event = new Calendar_Model_Event(array(
