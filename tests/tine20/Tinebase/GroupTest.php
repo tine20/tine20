@@ -112,14 +112,12 @@ class Tinebase_GroupTest extends TestCase
      */
     public function testSetGroupMembers($testGroup = null, $testGroupMembersArray = null)
     {
-        $personas = Zend_Registry::get('personas');
-        
         if ($testGroup === null) {
             $testGroup = $this->testAddGroup();
         }
         
         if ($testGroupMembersArray === null) {
-            $testGroupMembersArray = array($personas['sclever']->accountId, $personas['pwulf']->accountId);
+            $testGroupMembersArray = array($this->_personas['sclever']->accountId, $this->_personas['pwulf']->accountId);
         }
         Tinebase_Group::getInstance()->setGroupMembers($testGroup->getId(), $testGroupMembersArray);
         
@@ -135,15 +133,13 @@ class Tinebase_GroupTest extends TestCase
      */
     public function testAddGroupMember()
     {
-        $personas = Zend_Registry::get('personas');
-        
         $testGroup = $this->testSetGroupMembers();
         
-        Tinebase_Group::getInstance()->addGroupMember($testGroup->getId(), $personas['jmcblack']->accountId);
+        Tinebase_Group::getInstance()->addGroupMember($testGroup->getId(), $this->_personas['jmcblack']->accountId);
 
         $getGroupMembersArray = Tinebase_Group::getInstance()->getGroupMembers($testGroup->getId());
         
-        $expectedValues = array($personas['sclever']->accountId, $personas['pwulf']->accountId, $personas['jmcblack']->accountId);
+        $expectedValues = array($this->_personas['sclever']->accountId, $this->_personas['pwulf']->accountId, $this->_personas['jmcblack']->accountId);
         $this->assertEquals(sort($expectedValues), sort($getGroupMembersArray));
     }
     
@@ -152,16 +148,14 @@ class Tinebase_GroupTest extends TestCase
      */
     public function testRemoveGroupMember()
     {
-        $personas = Zend_Registry::get('personas');
-        
         $testGroup = $this->testSetGroupMembers();
         
-        Tinebase_Group::getInstance()->removeGroupMember($testGroup->getId(), $personas['sclever']->accountId);
+        Tinebase_Group::getInstance()->removeGroupMember($testGroup->getId(), $this->_personas['sclever']->accountId);
         
         $getGroupMembersArray = Tinebase_Group::getInstance()->getGroupMembers($testGroup->getId());
         
         $this->assertEquals(1, count($getGroupMembersArray));
-        $expectedValues = array($personas['pwulf']->accountId);
+        $expectedValues = array($this->_personas['pwulf']->accountId);
         $this->assertEquals(sort($expectedValues), sort($getGroupMembersArray));
     }
 
@@ -224,21 +218,19 @@ class Tinebase_GroupTest extends TestCase
      */
     public function testSetGroupMemberships()
     {
-        $personas = Zend_Registry::get('personas');
-        
-        $currentGroupMemberships = $personas['pwulf']->getGroupMemberships();
+        $currentGroupMemberships = $this->_personas['pwulf']->getGroupMemberships();
         
         $newGroupMemberships = current($currentGroupMemberships);
         
-        Tinebase_Group::getInstance()->setGroupMemberships($personas['pwulf'], array($newGroupMemberships));
-        $newGroupMemberships = $personas['pwulf']->getGroupMemberships();
+        Tinebase_Group::getInstance()->setGroupMemberships($this->_personas['pwulf'], array($newGroupMemberships));
+        $newGroupMemberships = $this->_personas['pwulf']->getGroupMemberships();
         
         if (count($currentGroupMemberships) > 1) {
             $this->assertNotEquals($currentGroupMemberships, $newGroupMemberships);
         }
         
-        Tinebase_Group::getInstance()->setGroupMemberships($personas['pwulf'], $currentGroupMemberships);
-        $newGroupMemberships = $personas['pwulf']->getGroupMemberships();
+        Tinebase_Group::getInstance()->setGroupMemberships($this->_personas['pwulf'], $currentGroupMemberships);
+        $newGroupMemberships = $this->_personas['pwulf']->getGroupMemberships();
         
         $this->assertEquals(sort($currentGroupMemberships), sort($newGroupMemberships));
     }
@@ -301,5 +293,23 @@ class Tinebase_GroupTest extends TestCase
         $group = Tinebase_Group::getInstance()->updateGroup($group);
         Tinebase_Group::syncListsOfUserContact(array($group->getId()), $testUser->contact_id);
         $this->assertEquals($list->getId(), Tinebase_Group::getInstance()->getGroupById($group)->list_id);
+    }
+    
+    /**
+     * testRemoveAccountPrimaryGroup
+     * 
+     * @see 0007384: deleting a group that is an accounts primary group fails
+     */
+    public function testRemoveAccountPrimaryGroup()
+    {
+        $testGroup = $this->testAddGroup();
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $sclever->accountPrimaryGroup = $testGroup->getId();
+        Tinebase_User::getInstance()->updateUser($sclever);
+        
+        Tinebase_Group::getInstance()->deleteGroups($testGroup);
+        
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $this->assertEquals(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $sclever->accountPrimaryGroup);
     }
 }

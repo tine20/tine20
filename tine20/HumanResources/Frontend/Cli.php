@@ -64,7 +64,7 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function create_missing_accounts($_opts)
     {
         $args = $this->_parseArgs($_opts, array());
-        $year = array_key_exists('year', $args) ? intval($args['year']) : 0;
+        $year = (isset($args['year']) || array_key_exists('year', $args)) ? intval($args['year']) : 0;
         
         if ($year !==0 && $year < 2010 || $year > 2100) {
             echo 'Please use a valid year with 4 digits!' . PHP_EOL;
@@ -84,9 +84,9 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $args = $this->_parseArgs($_opts, array());
         $deletePrivateInfo = in_array('delete_private', $args['other']);
-        $workingTimeModelId = array_key_exists('working_time_model_id', $args) ? $args['working_time_model_id'] : NULL;
-        $feastCalendarId = array_key_exists('feast_calendar_id', $args) ? $args['feast_calendar_id'] : NULL;
-        $vacationDays = array_key_exists('vacation_days', $args) ? $args['vacation_days'] : NULL;
+        $workingTimeModelId = (isset($args['working_time_model_id']) || array_key_exists('working_time_model_id', $args)) ? $args['working_time_model_id'] : NULL;
+        $feastCalendarId = (isset($args['feast_calendar_id']) || array_key_exists('feast_calendar_id', $args)) ? $args['feast_calendar_id'] : NULL;
+        $vacationDays = (isset($args['vacation_days']) || array_key_exists('vacation_days', $args)) ? $args['vacation_days'] : NULL;
         HumanResources_Controller_Employee::getInstance()->transferUserAccounts($deletePrivateInfo, $feastCalendarId, $workingTimeModelId, $vacationDays, TRUE);
         
         return 0;

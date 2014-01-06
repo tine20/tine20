@@ -238,7 +238,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             $this->dateConversionFormat = $_convertDates;
         }
 
-        if ($this->has('description') && (! array_key_exists('description', $this->_filters))) {
+        if ($this->has('description') && (! (isset($this->_filters['description']) || array_key_exists('description', $this->_filters)))) {
             $this->_filters['description'] = new Tinebase_Model_InputFilter_CrlfConvert();
         }
 
@@ -386,7 +386,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         $bypassFilter = $this->bypassFilters;
         $this->bypassFilters = true;
         foreach ($_data as $key => $value) {
-            if (array_key_exists ($key, $this->_validators)) {
+            if ((isset($this->_validators[$key]) || array_key_exists ($key, $this->_validators))) {
                 $this->$key = $value;
             } else if (in_array($key, $customFields)) {
                 $recordCustomFields[$key] = $value;
@@ -460,7 +460,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         if ($_recursive) {
             foreach ($this->_properties as $property => $value) {
-                if (is_object($value) && 
+                if ($value && is_object($value) && 
                         (in_array('Tinebase_Record_Interface', class_implements($value)) || 
                         $value instanceof Tinebase_Record_Recordset) ) {
                        
@@ -525,10 +525,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected function _hasToArray($mixed)
     {
-        return (is_object($mixed) && 
-                        (in_array('Tinebase_Record_Interface', class_implements($mixed)) || 
-                        $mixed instanceof Tinebase_Record_Recordset) ||
-                        (is_object($mixed) && method_exists($mixed, 'toArray')));
+        return is_object($mixed) && method_exists($mixed, 'toArray');
     }
     
     /**
@@ -596,7 +593,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function __set($_name, $_value)
     {
-        if (! array_key_exists ($_name, $this->_validators)) {
+        if (! (isset($this->_validators[$_name]) || array_key_exists ($_name, $this->_validators))) {
             throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
         }
         
@@ -646,7 +643,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function __unset($_name)
     {
-        if (!array_key_exists ($_name, $this->_validators)) {
+        if (!(isset($this->_validators[$_name]) || array_key_exists ($_name, $this->_validators))) {
             throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
         }
 
@@ -673,17 +670,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * gets record related properties
      * 
-     * @param string _name of property
-     * @throws Tinebase_Exception_UnexpectedValue
+     * @param  string  $name  name of property
      * @return mixed value of property
      */
-    public function __get($_name)
+    public function __get($name)
     {
-        if (!array_key_exists ($_name, $this->_validators)) {
-            throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
-        }
-        
-        return array_key_exists($_name, $this->_properties) ? $this->_properties[$_name] : NULL;
+        return (isset($this->_properties[$name]) || array_key_exists($name, $this->_properties))
+            ? $this->_properties[$name] 
+            : NULL;
     }
     
    /** convert this to string
@@ -705,9 +699,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         $keyName = get_class($this) . $field;
         
-        if (! array_key_exists($keyName, self::$_inputFilters)) {
+        if (! (isset(self::$_inputFilters[$keyName]) || array_key_exists($keyName, self::$_inputFilters))) {
             if ($field !== null) {
-                $filters    = array_key_exists($field, $this->_filters) ? array($field => $this->_filters[$field]) : array();
+                $filters    = (isset($this->_filters[$field]) || array_key_exists($field, $this->_filters)) ? array($field => $this->_filters[$field]) : array();
                 $validators = array($field => $this->_validators[$field]); 
                 
                 self::$_inputFilters[$keyName] = new Zend_Filter_Input($filters, $validators);
@@ -730,12 +724,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         //$_format = "Y-m-d H:i:s";
         foreach ($_toConvert as $field => &$value) {
-            if ($value instanceof DateTime) {
+            if (! $value) {
+                if (in_array($field, $this->_datetimeFields)) {
+                    $_toConvert[$field] = NULL;
+                }
+            } elseif ($value instanceof DateTime) {
                 $_toConvert[$field] = $value->format($_format);
             } elseif (is_array($value)) {
                 $this->_convertDateTimeToString($value, $_format);
-            } elseif (! $value && in_array($field, $this->_datetimeFields)) {
-                $_toConvert[$field] = NULL;
             }
         }
     }
@@ -1118,7 +1114,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function has($_field) 
     {
-        return (array_key_exists ($_field, $this->_validators));
+        return ((isset($this->_validators[$_field]) || array_key_exists ($_field, $this->_validators)));
     }   
 
     /**

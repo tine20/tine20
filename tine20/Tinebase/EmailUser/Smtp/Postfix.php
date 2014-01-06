@@ -306,7 +306,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
      */
     protected function _createAliasDestinations($_smtpSettings)
     {
-        if (! (array_key_exists($this->_propertyMapping['emailAliases'], $_smtpSettings) && is_array($_smtpSettings[$this->_propertyMapping['emailAliases']]))) {
+        if (! ((isset($_smtpSettings[$this->_propertyMapping['emailAliases']]) || array_key_exists($this->_propertyMapping['emailAliases'], $_smtpSettings)) && is_array($_smtpSettings[$this->_propertyMapping['emailAliases']]))) {
             return;
         }
         
@@ -341,7 +341,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
      */
     protected function _hasForwards($_smtpSettings)
     {
-        return (array_key_exists($this->_propertyMapping['emailForwards'], $_smtpSettings) && is_array($_smtpSettings[$this->_propertyMapping['emailForwards']]));
+        return ((isset($_smtpSettings[$this->_propertyMapping['emailForwards']]) || array_key_exists($this->_propertyMapping['emailForwards'], $_smtpSettings)) && is_array($_smtpSettings[$this->_propertyMapping['emailForwards']]));
     }
 
     /**
@@ -490,7 +490,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
         
         if (isset($_newUserProperties->smtpUser)) {
             foreach ($_newUserProperties->smtpUser as $key => $value) {
-                $property = array_key_exists($key, $this->_propertyMapping) ? $this->_propertyMapping[$key] : false;
+                $property = (isset($this->_propertyMapping[$key]) || array_key_exists($key, $this->_propertyMapping)) ? $this->_propertyMapping[$key] : false;
                 if ($property) {
                     switch ($key) {
                         case 'emailPassword':

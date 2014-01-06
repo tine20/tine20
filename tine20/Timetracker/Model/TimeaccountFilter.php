@@ -84,7 +84,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
      */
     protected function _setOptions(array $_options)
     {
-        $_options['useTimesheetAcl']    = array_key_exists('useTimesheetAcl', $_options) ? $_options['useTimesheetAcl'] : FALSE;
+        $_options['useTimesheetAcl']    = (isset($_options['useTimesheetAcl']) || array_key_exists('useTimesheetAcl', $_options)) ? $_options['useTimesheetAcl'] : FALSE;
         parent::_setOptions($_options);
     }
     

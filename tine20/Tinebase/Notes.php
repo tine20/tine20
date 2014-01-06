@@ -425,7 +425,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         // @see 0008546: When edit event, history show "code" ...
         if (is_json($modification->new_value)) {
             $newValueArray = Zend_Json::decode($modification->new_value);
-            if (array_key_exists('model', $newValueArray) && array_key_exists('added', $newValueArray)) {
+            if ((isset($newValueArray['model']) || array_key_exists('model', $newValueArray)) && (isset($newValueArray['added']) || array_key_exists('added', $newValueArray))) {
                 $diff = new Tinebase_Record_RecordSetDiff($newValueArray);
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 

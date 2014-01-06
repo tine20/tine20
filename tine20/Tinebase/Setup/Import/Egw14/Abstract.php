@@ -328,7 +328,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
      */
     public function getPersonalContainer($userId)
     {
-        if (! array_key_exists($userId, $this->_personalContainerCache)) {
+        if (! (isset($this->_personalContainerCache[$userId]) || array_key_exists($userId, $this->_personalContainerCache))) {
             // get container by preference to ensure its the default personal
             $defaultContainerId = Tinebase_Core::getPreference($this->getApplication()->name)->getValueForUser($this->_defaultContainerConfigProperty, $userId, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
             $container = Tinebase_Container::getInstance()->getContainerById($defaultContainerId);
@@ -361,7 +361,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
     {
         $privateString = 'Private';
         
-        if (! array_key_exists($userId, $this->_privateContainerCache)) {
+        if (! (isset($this->_privateContainerCache[$userId]) || array_key_exists($userId, $this->_privateContainerCache))) {
             $personalContainers = Tinebase_Container::getInstance()->getPersonalContainer($userId, $this->getApplication()->name, $userId, Tinebase_Model_Grants::GRANT_ADMIN, TRUE);
             $privateContainer = $personalContainers->filter('name', $privateString);
             
@@ -444,7 +444,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             $grantsDestination = $egwGrantData['acl_location'];
             $grantsGiven       = $egwGrantData['acl_rights'];
             
-            if (! array_key_exists($grantsDestination, $effectiveGrants)) {
+            if (! (isset($effectiveGrants[$grantsDestination]) || array_key_exists($grantsDestination, $effectiveGrants))) {
                 $effectiveGrants[$grantsDestination] = 0;
             }
             $effectiveGrants[$grantsDestination] |= $grantsGiven;
@@ -524,7 +524,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
      */
     public function getTag($catId)
     {
-        if (! array_key_exists($catId, $this->_tagMapCache)) {
+        if (! (isset($this->_tagMapCache[$catId]) || array_key_exists($catId, $this->_tagMapCache))) {
             $select = $this->_egwDb->select()
                 ->from(array('cats' => 'egw_categories'))
                 ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cat_id') . ' = ?', $catId));

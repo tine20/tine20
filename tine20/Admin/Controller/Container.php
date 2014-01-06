@@ -139,7 +139,7 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         $container = parent::update($_record);
         
         if ($container->type === Tinebase_Model_Container::TYPE_PERSONAL) {
-            $this->_sendNotification($container, (array_key_exists('note', $_additionalArguments)) ? $_additionalArguments['note'] : '');
+            $this->_sendNotification($container, ((isset($_additionalArguments['note']) || array_key_exists('note', $_additionalArguments))) ? $_additionalArguments['note'] : '');
         }    
         return $container;
     }
@@ -216,10 +216,12 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      */
     public function delete($_ids)
     {
+        $this->_checkRight('delete');
+        
         $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
         
-        foreach($_ids as $id) {
-            $containers->addRecord(Tinebase_Container::getInstance()->deleteContainer($id));
+        foreach ($_ids as $id) {
+            $containers->addRecord(Tinebase_Container::getInstance()->deleteContainer($id, true));
         }
         
         return $containers;

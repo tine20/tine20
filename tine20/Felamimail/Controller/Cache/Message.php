@@ -129,7 +129,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $this->_availableUpdateTime = NULL;
         
         // add user account ids to filter and use the folder backend to search as the folder controller has some special handling in its search function
-        $_filter->createFilter(array('field' => 'account_id', 'operator' => 'in', 'value' => Felamimail_Controller_Account::getInstance()->search()->getArrayOfIds()));
+        $accountIdFilter = $_filter->createFilter(array('field' => 'account_id', 'operator' => 'in', 'value' => Felamimail_Controller_Account::getInstance()->search()->getArrayOfIds()));
+        $_filter->addFilter($accountIdFilter);
         $folderBackend = new Felamimail_Backend_Folder();
         $folders = $folderBackend->search($_filter);
         
@@ -827,7 +828,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     public function addMessage(array $_message, Felamimail_Model_Folder $_folder, $_updateFolderCounter = true)
     {
-        if (! array_key_exists('header', $_message) || ! is_array($_message['header'])) {
+        if (! (isset($_message['header']) || array_key_exists('header', $_message)) || ! is_array($_message['header'])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Email uid ' . $_message['uid'] . ' has no headers. Skipping ...');
             return FALSE;
         }
@@ -1142,7 +1143,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $updateCount = 0;
         foreach ($_messages as $cachedMessage) {
-            if (array_key_exists($cachedMessage->messageuid, $_flags)) {
+            if ((isset($_flags[$cachedMessage->messageuid]) || array_key_exists($cachedMessage->messageuid, $_flags))) {
                 $newFlags = array_intersect($_flags[$cachedMessage->messageuid]['flags'], $supportedFlags);
                 $cachedFlags = array_intersect($cachedMessage->flags, $supportedFlags);
                 $diff1 = array_diff($cachedFlags, $newFlags);

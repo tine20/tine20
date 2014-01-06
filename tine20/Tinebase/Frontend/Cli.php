@@ -225,7 +225,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         
         $args = $this->_parseArgs($_opts, array('tables'), 'tables');
-        $dateString = array_key_exists('date', $args) ? $args['date'] : NULL;
+        $dateString = (isset($args['date']) || array_key_exists('date', $args)) ? $args['date'] : NULL;
 
         $db = Tinebase_Core::getDb();
         foreach ($args['tables'] as $table) {
@@ -277,14 +277,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $args = $this->_parseArgs($_opts, array(), 'tables');
 
-        if (! array_key_exists('tables', $args) || empty($args['tables'])) {
+        if (! (isset($args['tables']) || array_key_exists('tables', $args)) || empty($args['tables'])) {
             echo "No tables given.\nPurging records from all tables!\n";
             $args['tables'] = $this->_getAllApplicationTables();
         }
         
         $db = Tinebase_Core::getDb();
         
-        if (array_key_exists('date', $args)) {
+        if ((isset($args['date']) || array_key_exists('date', $args))) {
             echo "\nRemoving all deleted entries before {$args['date']} ...";
             $where = array(
                 $db->quoteInto($db->quoteIdentifier('deleted_time') . ' < ?', $args['date'])
@@ -302,7 +302,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 echo "\nCould not get schema (" . $zdse->getMessage() ."). Skipping table $table";
                 continue;
             }
-            if (! array_key_exists('is_deleted', $schema) || ! array_key_exists('deleted_time', $schema)) {
+            if (! (isset($schema['is_deleted']) || array_key_exists('is_deleted', $schema)) || ! (isset($schema['deleted_time']) || array_key_exists('deleted_time', $schema))) {
                 continue;
             }
             

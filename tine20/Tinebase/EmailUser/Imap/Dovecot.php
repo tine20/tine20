@@ -292,7 +292,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
             ->limit(1);
         
         // append domain if set or domain IS NULL
-        if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
+        if ((isset($this->_config['domain']) || array_key_exists('domain', $this->_config)) && ! empty($this->_config['domain'])) {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',   $this->_config['domain']);
         } else {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " = ''");
@@ -355,7 +355,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->imapUser->toArray(), true));
             
             foreach ($_newUserProperties->imapUser as $key => $value) {
-                $property = array_key_exists($key, $this->_propertyMapping) ? $this->_propertyMapping[$key] : false;
+                $property = (isset($this->_propertyMapping[$key]) || array_key_exists($key, $this->_propertyMapping)) ? $this->_propertyMapping[$key] : false;
                 if ($property && ! in_array($key, $this->_readOnlyFields)) {
                     switch ($key) {
                         case 'emailUserId':
@@ -387,7 +387,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
         }
         
         foreach (array('uid', 'gid') as $key) {
-            if (! array_key_exists($key, $rawData)) {
+            if (! (isset($rawData[$key]) || array_key_exists($key, $rawData))) {
                 $rawData[$key] = $this->_config[$key];
             }
         }

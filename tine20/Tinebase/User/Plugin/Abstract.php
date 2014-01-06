@@ -74,7 +74,7 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      */
     protected function _appendDomain($_userName)
     {
-        if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
+        if ((isset($this->_config['domain']) || array_key_exists('domain', $this->_config)) && ! empty($this->_config['domain'])) {
             $domain = '@' . $this->_config['domain'];
             if (strpos($_userName, $domain) === FALSE) {
                 $_userName .= $domain;

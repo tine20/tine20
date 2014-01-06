@@ -202,9 +202,9 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      */
     protected function _flatten(&$_value) {
         if (is_array($_value)) {
-            if(array_key_exists('path', $_value)) {
+            if((isset($_value['path']) || array_key_exists('path', $_value))) {
                 $_value = $_value['path'];
-            } else if(array_key_exists('id', $_value)) {
+            } else if((isset($_value['id']) || array_key_exists('id', $_value))) {
                 $_value = $_value['id'];
             }
         }

@@ -106,11 +106,17 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                     'value'     => Tinebase_Model_Alarm::STATUS_PENDING // STATUS_FAILURE?
                 ),
             ));
-        
-            $alarms = $this->_backend->search($filter);
-    
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Sending ' . count($alarms) . ' alarms.');
-    
+            
+            $limit = Tinebase_Config::getInstance()->get(Tinebase_Config::ALARMS_EACH_JOB, 100);
+            $pagination = ($limit > 0) ? new Tinebase_Model_Pagination(array(
+                'limit' => $limit
+            )) : null;
+            
+            $alarms = $this->_backend->search($filter, $pagination);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Sending ' . count($alarms) . ' alarms (limit: ' . $limit . ').');
+            
             // loop alarms and call sendAlarm in controllers
             foreach ($alarms as $alarm) {
                 list($appName, $i, $itemName) = explode('_', $alarm->model);
@@ -126,14 +132,13 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                         $appController->sendAlarm($alarm);
                     
                     } catch (Exception $e) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                    
+                        Tinebase_Exception::log($e);
                         $alarm->sent_message = $e->getMessage();
                         $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
                     } 
                 
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating alarm status: ' . $alarm->sent_status);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Updating alarm status: ' . $alarm->sent_status);
                 
                     $this->update($alarm);
                 }

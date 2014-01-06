@@ -492,7 +492,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // send email
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
         $messageToSend['note'] = 1;
-        $messageToSend['bcc']  = array('unittest@' . $this->_mailDomain);
+        $messageToSend['bcc']  = array(Tinebase_Core::getUser()->accountEmailAddress);
         //print_r($messageToSend);
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
@@ -928,7 +928,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Verbessurüngsvorschlag.eml', $forwardMessageComplete['attachments'][0]['filename'], 'umlaut missing from attachment filename');
         
         $forwardMessage = $this->_json->getMessage($forwardMessage['id']);
-        $this->assertTrue(array_key_exists('structure', $forwardMessage), 'structure should be set when fetching complete message: ' . print_r($forwardMessage, TRUE));
+        $this->assertTrue((isset($forwardMessage['structure']) || array_key_exists('structure', $forwardMessage)), 'structure should be set when fetching complete message: ' . print_r($forwardMessage, TRUE));
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardMessage['structure']['parts'][2]['contentType']);
         
         $message = $this->_json->getMessage($message['id']);
@@ -945,7 +945,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $subject = 'attachment test';
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain, $subject);
         $tempfileName = 'jsontest' . Tinebase_Record_Abstract::generateUID(10);
-        $tempfilePath = Tinebase_Core::getTempDir() . $tempfileName;
+        $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
         file_put_contents($tempfilePath, 'some content');
         $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
         $messageToSend['attachments'] = array(array('tempFile' => array('id' => $tempFile->getId())));
@@ -1464,7 +1464,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         return array(
             'account_id'    => $this->_account->getId(),
             'subject'       => $_subject,
-            'to'            => array('unittest@' . $this->_mailDomain),
+            'to'            => array(Tinebase_Core::getUser()->accountEmailAddress),
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
             'from_email'    => $_emailFrom,
@@ -1570,7 +1570,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_setTestScriptname();
         
         // check which save fn to use
-        if (array_key_exists('reason', $_sieveData)) {
+        if ((isset($_sieveData['reason']) || array_key_exists('reason', $_sieveData))) {
             $resultSet = $this->_json->saveVacation($_sieveData);
             $this->assertEquals($this->_account->email, $resultSet['addresses'][0]);
             
@@ -1592,7 +1592,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 $this->assertEquals($_sieveData['reason'], $resultSet['reason']);
             }
             
-        } else if (array_key_exists('action_type', $_sieveData[0])) {
+        } else if ((isset($_sieveData[0]['action_type']) || array_key_exists('action_type', $_sieveData[0]))) {
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
             $this->assertEquals($_sieveData, $resultSet);
         }

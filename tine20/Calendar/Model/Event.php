@@ -241,7 +241,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             // don't take small ( < one day) rrule_until changes as diff
             if (
                     $ownRrule->until instanceof Tinebase_DateTime 
-                    && array_key_exists('until', $rruleDiff->diff) && $rruleDiff->diff['until'] instanceof Tinebase_DateTime
+                    && (isset($rruleDiff->diff['until']) || array_key_exists('until', $rruleDiff->diff)) && $rruleDiff->diff['until'] instanceof Tinebase_DateTime
                     && abs($rruleDiff->diff['until']->getTimestamp() - $ownRrule->until->getTimestamp()) < 86400
             ){
                 $rruleDiffArray = $rruleDiff->diff;
@@ -402,7 +402,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function hasGrant($_grant)
     {
-        $hasGrant = array_key_exists($_grant, $this->_properties) && (bool)$this->{$_grant};
+        $hasGrant = (isset($this->_properties[$_grant]) || array_key_exists($_grant, $this->_properties)) && (bool)$this->{$_grant};
         
         if ($this->class !== Calendar_Model_Event::CLASS_PUBLIC) {
             $hasGrant &= (
@@ -610,9 +610,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         $diff = $this->diff($_event)->diff;
         
-        return array_key_exists('dtstart', $diff)
-            || (! $this->is_all_day_event && array_key_exists('dtend', $diff))
-            || array_key_exists('rrule', $diff);
+        return (isset($diff['dtstart']) || array_key_exists('dtstart', $diff))
+            || (! $this->is_all_day_event && (isset($diff['dtend']) || array_key_exists('dtend', $diff)))
+            || (isset($diff['rrule']) || array_key_exists('rrule', $diff));
     }
     
     /**

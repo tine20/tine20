@@ -256,7 +256,7 @@ class ActiveSync_TimezoneConverter
     public function encodeTimezone($_timezone, $_startDate = null)
     {
         foreach ($this->_knownTimezones as $packedString => $knownTimezone) {
-            if (array_key_exists($_timezone, $knownTimezone)) {
+            if ((isset($knownTimezone[$_timezone]) || array_key_exists($_timezone, $knownTimezone))) {
                 return $packedString;
             }
         }

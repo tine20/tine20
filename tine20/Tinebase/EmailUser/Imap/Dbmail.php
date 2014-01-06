@@ -114,7 +114,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         $this->_getDb($this->_config);
         
         $columns = Tinebase_Db_Table::getTableDescriptionFromCache('dbmail_users', $this->_db);
-        if(array_key_exists('tine20_userid', $columns) && array_key_exists('tine20_clientid', $columns)) {
+        if((isset($columns['tine20_userid']) || array_key_exists('tine20_userid', $columns)) && (isset($columns['tine20_clientid']) || array_key_exists('tine20_clientid', $columns))) {
             $this->_hasTine20Userid = true;
             $this->_propertyMapping['emailUserId'] = 'tine20_userid';
             $this->_propertyMapping['emailGID']    = 'tine20_clientid';
@@ -429,7 +429,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         $rawData = array();
         
         foreach ($_newUserProperties->imapUser as $key => $value) {
-            $property = array_key_exists($key, $this->_propertyMapping) ? $this->_propertyMapping[$key] : false;
+            $property = (isset($this->_propertyMapping[$key]) || array_key_exists($key, $this->_propertyMapping)) ? $this->_propertyMapping[$key] : false;
             if ($property && ! in_array($key, $this->_readOnlyFields)) {
                 switch ($key) {
                     case 'emailPassword':

@@ -541,7 +541,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                             __METHOD__ . '::' . __LINE__ . " attendee email " . $attendee->email);
                         
-                        if(isset($attendee->attendeeType) && array_key_exists($attendee->attendeeType, $this->_attendeeTypeMapping)) {
+                        if(isset($attendee->attendeeType) && (isset($this->_attendeeTypeMapping[$attendee->attendeeType]) || array_key_exists($attendee->attendeeType, $this->_attendeeTypeMapping))) {
                             $role = $this->_attendeeTypeMapping[$attendee->attendeeType];
                         } else {
                             $role = Calendar_Model_Attender::ROLE_REQUIRED;

@@ -64,7 +64,7 @@ class Tinebase_Exception extends Exception
         $traceArray = array();
         
         foreach($trace as $part) {
-            if (array_key_exists('file', $part)) {
+            if ((isset($part['file']) || array_key_exists('file', $part))) {
                 // don't send full paths to the client
                 $part['file'] = self::_replaceBasePath($part['file']);
             }

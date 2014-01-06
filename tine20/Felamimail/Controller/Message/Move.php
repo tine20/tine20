@@ -256,7 +256,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
     {
         $folderCounterById = array();
         foreach($_messages as $message) {
-            if (! array_key_exists($message->folder_id, $folderCounterById)) {
+            if (! (isset($folderCounterById[$message->folder_id]) || array_key_exists($message->folder_id, $folderCounterById))) {
                 $folderCounterById[$message->folder_id] = array(
                     'decrementUnreadCounter'    => 0,
                     'decrementMessagesCounter'  => 0,

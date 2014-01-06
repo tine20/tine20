@@ -86,7 +86,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
      */
     protected function _getRawData($_resource)
     {
-        $delimiter = (array_key_exists($this->_options['delimiter'], $this->_specialDelimiter)) ? $this->_specialDelimiter[$this->_options['delimiter']] : $this->_options['delimiter'];
+        $delimiter = ((isset($this->_specialDelimiter[$this->_options['delimiter']]) || array_key_exists($this->_options['delimiter'], $this->_specialDelimiter))) ? $this->_specialDelimiter[$this->_options['delimiter']] : $this->_options['delimiter'];
         
         $lineData = fgetcsv(
             $_resource,
@@ -148,7 +148,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         foreach ($this->_options['mapping']['field'] as $index => $field) {
             if (empty($_data_indexed)) {
                 // use import definition order
-                if (! array_key_exists('destination', $field) || $field['destination'] == '' || ! isset($_data[$index])) {
+                if (! (isset($field['destination']) || array_key_exists('destination', $field)) || $field['destination'] == '' || ! isset($_data[$index])) {
                     continue;
                 }
                 $data[$field['destination']] = $_data[$index];
@@ -164,7 +164,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         if ($this->_options['mapUndefinedFieldsEnable'] == 1) {
             $undefinedFieldsText = $this->_createInfoTextForUnmappedFields($_data_indexed);
             if (! $undefinedFieldsText === false) {
-                if (array_key_exists($this->_options['mapUndefinedFieldsTo'], $data)) {
+                if ((isset($data[$this->_options['mapUndefinedFieldsTo']]) || array_key_exists($this->_options['mapUndefinedFieldsTo'], $data))) {
                     $data[$this->_options['mapUndefinedFieldsTo']] .= $this->_createInfoTextForUnmappedFields($_data_indexed);
                 } else {
                     $data[$this->_options['mapUndefinedFieldsTo']] = $this->_createInfoTextForUnmappedFields($_data_indexed);

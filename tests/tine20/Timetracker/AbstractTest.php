@@ -365,8 +365,8 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
         $timesheetData = $this->_json->saveTimesheet($timesheetArray);
 
         // checks
-        $this->assertTrue(array_key_exists($_customField1->name, $timesheetData['customfields']), 'cf 1 not found');
-        $this->assertTrue(array_key_exists($customField2->name, $timesheetData['customfields']), 'cf 2 not found');
+        $this->assertTrue((isset($timesheetData['customfields'][$_customField1->name]) || array_key_exists($_customField1->name, $timesheetData['customfields'])), 'cf 1 not found');
+        $this->assertTrue((isset($timesheetData['customfields'][$customField2->name]) || array_key_exists($customField2->name, $timesheetData['customfields'])), 'cf 2 not found');
         $this->assertGreaterThan(0, count($timesheetData['customfields']));
         $this->assertEquals($timesheetArray[$_customField1->name], $timesheetData['customfields'][$_customField1->name]);
         $this->assertEquals($timesheetArray[$customField2->name], $timesheetData['customfields'][$customField2->name]);
@@ -380,8 +380,8 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
             }
         }
         $this->assertTrue(isset($ts));
-        $this->assertTrue(array_key_exists($_customField1->name, $ts['customfields']));
-        $this->assertTrue(array_key_exists($customField2->name, $ts['customfields']));
+        $this->assertTrue((isset($ts['customfields'][$_customField1->name]) || array_key_exists($_customField1->name, $ts['customfields'])));
+        $this->assertTrue((isset($ts['customfields'][$customField2->name]) || array_key_exists($customField2->name, $ts['customfields'])));
         $this->assertEquals($timesheetArray[$_customField1->name], $ts['customfields'][$_customField1->name]);
         $this->assertEquals($timesheetArray[$customField2->name], $ts['customfields'][$customField2->name]);
 

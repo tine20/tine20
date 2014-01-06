@@ -78,7 +78,7 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
     {
         $result = parent::_doConversions($_data);
         
-        if (array_key_exists("name", $result)) {
+        if ((isset($result["name"]) || array_key_exists("name", $result))) {
             if ($result['name'] == "")
                 $result['name'] = "!Not defined!";
         }

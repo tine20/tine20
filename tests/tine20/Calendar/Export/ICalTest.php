@@ -76,7 +76,7 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
     public function testExportRecurId()
     {
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($this->_testEvent, $exceptions, $this->_testEvent->dtstart);
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($this->_testEvent, $exceptions, $this->_testEvent->dtend);
         
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($nextOccurance);

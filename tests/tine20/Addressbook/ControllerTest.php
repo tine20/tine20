@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -171,7 +171,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     {
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
         
-        if (array_key_exists('contact', $this->objects)) {
+        if ((isset($this->objects['contact']) || array_key_exists('contact', $this->objects))) {
             $this->_instance->delete($this->objects['contact']);
         }
     }
@@ -278,7 +278,6 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to update a contact
-     *
      */
     public function testUpdateContact()
     {
@@ -304,6 +303,24 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($count > 0);
     }
 
+    /**
+     * try to update a contact with missing postalcode
+     * 
+     * @see 0009424: missing postalcode prevents saving of contact
+     */
+    public function testUpdateContactWithMissingPostalcode()
+    {
+        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
+        $contact = $this->_addContact();
+        $contact->adr_two_street = null;
+        $contact->adr_two_postalcode = null;
+        $contact->adr_two_locality = 'Münster';
+        $contact->adr_two_region = 'Nordrhein-Westfalen';
+        
+        $updatedContact = $this->_instance->update($contact);
+        $this->assertEquals('481xx', $updatedContact->adr_two_postalcode);
+    }
+    
     /**
      * test remove image
      */

@@ -322,7 +322,15 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 break;
             case self::FREQ_YEARLY:
                 $month = Zend_Locale::getTranslationList('month', $locale);
-                $rule .= sprintf($translation->_('Yearly on the %1$s of %2$s'), $this->_formatInterval($this->bymonthday, $translation, $numberFormatter), $month[$this->bymonth]);
+                if ($this->byday) {
+                    $byDayInterval = (int) substr($this->byday, 0, -2);
+                    $byDayIntervalTranslation = $this->_getIntervalTranslation($byDayInterval, $translation);
+                    $byDayWeekday  = substr($this->byday, -2);
+                    $rule .= sprintf($translation->_('Yearly every %1$s %2$s of %3$s'), $byDayIntervalTranslation, $weekDays[self::$WEEKDAY_MAP[$byDayWeekday]], $month[$this->bymonth]);
+                } else {
+                    $rule .= sprintf($translation->_('Yearly on the %1$s of %2$s'), $this->_formatInterval($this->bymonthday, $translation, $numberFormatter), $month[$this->bymonth]);
+                }
+                
                 break;
         }
         
@@ -502,7 +510,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     public static function computeNextOccurrence($_event, $_exceptions, $_from, $_which = 1)
     {
-        if ($_which === 0) {
+        if ($_which === 0 || ($_event->dtstart >= $_from && $_event->dtend > $_from)) {
             return $_event;
         }
         
@@ -523,7 +531,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         // we don't want to compute ourself
         $ownEvent = clone $_event;
         $ownEvent->setRecurId();
-        $_exceptions->addRecord($ownEvent);
+        $exceptions = clone $_exceptions;
+        $exceptions->addRecord($ownEvent);
         $recurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
         if ($_from->isEarlier($_event->dtstart)) {
@@ -553,7 +562,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 ? clone $_event->rrule_until 
                 : $until;
 
-            $recurSet->merge(self::computeRecurrenceSet($_event, $_exceptions, $from, $until));
+            $recurSet->merge(self::computeRecurrenceSet($_event, $exceptions, $from, $until));
             $attempts++;
             
             if (count($recurSet) >= abs($_which)) {
@@ -562,7 +571,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 break;
             }
             
-            if ($attempts > count($_exceptions) + 5) {
+            if ($attempts > count($exceptions) + 5) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " could not find the next occurrence after $attempts attempts, giving up");
                 return NULL;
@@ -641,7 +650,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     self::_computeRecurDaily($baseEvent, $dailyrrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                     
                     // check if base event (recur instance) needs to be added to the set
-                    if ($baseEvent->dtstart->isLater($_event->dtstart) && $baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
+                    if ($baseEvent->dtstart > $_event->dtstart && $baseEvent->dtstart >= $_from && $baseEvent->dtstart < $_until) {
                         if (! in_array($baseEvent->setRecurId(), $exceptionRecurIds)) {
                             self::addRecurrence($baseEvent, $recurSet);
                         }
@@ -921,7 +930,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $byDayInterval = (int) substr($_rrule->byday, 0, -2);
         $byDayWeekday  = substr($_rrule->byday, -2);
         
-        if ($byDayInterval === 0 || ! array_key_exists($byDayWeekday, self::$WEEKDAY_DIGIT_MAP)) {
+        if ($byDayInterval === 0 || ! (isset(self::$WEEKDAY_DIGIT_MAP[$byDayWeekday]) || array_key_exists($byDayWeekday, self::$WEEKDAY_DIGIT_MAP))) {
             throw new Exception('mal formated rrule byday part: "' . $_rrule->byday . '"');
         }
         

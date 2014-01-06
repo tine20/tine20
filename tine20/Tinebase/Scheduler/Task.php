@@ -51,7 +51,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         $request = new Zend_Controller_Request_Simple();
         $request->setControllerName($_requestOptions['controller']);
         $request->setActionName($_requestOptions['action']);
-        if (array_key_exists('params', $_requestOptions)) {
+        if ((isset($_requestOptions['params']) || array_key_exists('params', $_requestOptions))) {
             foreach ($_requestOptions['params'] as $key => $value) {
                 $request->setParam($key, $value);
             }

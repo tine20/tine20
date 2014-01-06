@@ -1021,7 +1021,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         $constrainsConfig = false;
         foreach($relConfig as $config) {
-            if($config['relatedApp'] == $a[3] && $config['relatedModel'] == $a[4] && array_key_exists('config', $config) && is_array($config['config'])) {
+            if($config['relatedApp'] == $a[3] && $config['relatedModel'] == $a[4] && (isset($config['config']) || array_key_exists('config', $config)) && is_array($config['config'])) {
                 foreach($config['config'] as $constrain) {
                     if($constrain['type'] == $a[1]) {
                         $constrainsConfig = $constrain;
@@ -1038,11 +1038,11 @@ abstract class Tinebase_Controller_Record_Abstract
         $rel = array(
             'own_model' => $this->_modelName,
             'own_backend' => 'Sql',
-            'own_degree' =>array_key_exists('sibling', $constrainsConfig) ? $constrainsConfig['sibling'] : 'sibling',
+            'own_degree' =>(isset($constrainsConfig['sibling']) || array_key_exists('sibling', $constrainsConfig)) ? $constrainsConfig['sibling'] : 'sibling',
             'related_model' => $a[2],
             'related_backend' => 'Sql',
-            'type' => array_key_exists('type', $constrainsConfig) ? $constrainsConfig['type'] : '-',
-            'remark' => array_key_exists('defaultRemark', $constrainsConfig) ? $constrainsConfig['defaultRemark'] : ' '
+            'type' => (isset($constrainsConfig['type']) || array_key_exists('type', $constrainsConfig)) ? $constrainsConfig['type'] : '-',
+            'remark' => (isset($constrainsConfig['defaultRemark']) || array_key_exists('defaultRemark', $constrainsConfig)) ? $constrainsConfig['defaultRemark'] : ' '
         );
         
         if(empty($value)) { // delete relations in iterator
@@ -1699,7 +1699,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _createDependentRecords(Tinebase_Record_Interface $_createdRecord, Tinebase_Record_Interface $_record, $_property, $_fieldConfig)
     {
-        if (! array_key_exists('dependentRecords', $_fieldConfig) || ! $_fieldConfig['dependentRecords']) {
+        if (! (isset($_fieldConfig['dependentRecords']) || array_key_exists('dependentRecords', $_fieldConfig)) || ! $_fieldConfig['dependentRecords']) {
             return;
         }
         
@@ -1740,7 +1740,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _updateDependentRecords(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_oldRecord, $_property, $_fieldConfig)
     {
-        if (! array_key_exists('dependentRecords', $_fieldConfig) || ! $_fieldConfig['dependentRecords']) {
+        if (! (isset($_fieldConfig['dependentRecords']) || array_key_exists('dependentRecords', $_fieldConfig)) || ! $_fieldConfig['dependentRecords']) {
             return;
         }
     

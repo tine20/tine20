@@ -519,22 +519,22 @@ abstract class Tinebase_Setup_DemoData_Abstract
      */
     public function createDemoData(array $options)
     {
-        static::$_createFullData = array_key_exists('full', $options) ? TRUE : FALSE;
+        static::$_createFullData = (isset($options['full']) || array_key_exists('full', $options)) ? TRUE : FALSE;
         
-        $this->_createShared = array_key_exists('createShared', $options) ? $options['createShared'] : TRUE;
-        $this->_createUsers  = array_key_exists('createUsers', $options)  ? $options['createUsers']  : TRUE;
+        $this->_createShared = (isset($options['createShared']) || array_key_exists('createShared', $options)) ? $options['createShared'] : TRUE;
+        $this->_createUsers  = (isset($options['createUsers']) || array_key_exists('createUsers', $options))  ? $options['createUsers']  : TRUE;
 
-        if (array_key_exists('locale', $options)) {
+        if ((isset($options['locale']) || array_key_exists('locale', $options))) {
             static::$_locale = $options['locale'];
         }
         // just shortcuts
         static::$_de = (static::$_locale == 'de') ? true : false;
         static::$_en = ! static::$_de;
-        static::$_defaultPassword = array_key_exists('password', $options) ? $options['password'] : '';
+        static::$_defaultPassword = (isset($options['password']) || array_key_exists('password', $options)) ? $options['password'] : '';
         $this->_beforeCreate();
 
         // look for defined models
-        if (array_key_exists('models', $options) && is_array($options['models'])) {
+        if ((isset($options['models']) || array_key_exists('models', $options)) && is_array($options['models'])) {
             foreach ($options['models'] as $model) {
                 if (! in_array($model, $this->_models)) {
                     echo 'Model ' . $model . ' is not defined for demo data creation!' . chr(10);
@@ -545,9 +545,9 @@ abstract class Tinebase_Setup_DemoData_Abstract
         }
 
         // get User Accounts
-        if (array_key_exists('users', $options) && is_array($options['users'])) {
+        if ((isset($options['users']) || array_key_exists('users', $options)) && is_array($options['users'])) {
             foreach ($options['users'] as $user) {
-                if (! array_key_exists($user, $this->_personas)) {
+                if (! (isset($this->_personas[$user]) || array_key_exists($user, $this->_personas))) {
                     echo 'User ' . $user . ' is not defined for demo data creation!' . chr(10);
                     return false;
                 } else {
@@ -707,7 +707,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
     protected function _getContact($_data)
     {
         // handle user
-        if (array_key_exists('user', $_data)) {
+        if ((isset($_data['user']) || array_key_exists('user', $_data))) {
             $account = $this->_personas[$_data['user']];
             $contact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id);
         } else { // handle contact

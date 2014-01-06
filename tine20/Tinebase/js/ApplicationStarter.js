@@ -265,8 +265,13 @@ Tine.Tinebase.ApplicationStarter = {
         var appName = modelConfig.appName;
         var modelName = modelConfig.modelName;
         
-        var app = Tine.Tinebase.appMgr.get(appName),
-            fieldTypeKey = (fieldconfig && fieldconfig.type) ? fieldconfig.type : (filterconfig && filterconfig.type) ? filterconfig.type : 'default',
+        var app = Tine.Tinebase.appMgr.get(appName);
+        if (! app) {
+            Tine.log.err('Application ' + appName + ' not found!');
+            return null;
+        }
+        
+        var fieldTypeKey = (fieldconfig && fieldconfig.type) ? fieldconfig.type : (filterconfig && filterconfig.type) ? filterconfig.type : 'default',
             label = (filterconfig && filterconfig.hasOwnProperty('label')) ? filterconfig.label : (fieldconfig && fieldconfig.hasOwnProperty('label')) ? fieldconfig.label : null,
             globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation')));
         

@@ -632,7 +632,7 @@ class Tinebase_ModelConfiguration {
         self::$_availableApplications[$this->_appName] = TRUE;
         
         $this->_modelName   = $modelClassConfiguration['modelName'];
-        $this->_idProperty  = $this->_identifier = array_key_exists('idProperty', $modelClassConfiguration) ? $modelClassConfiguration['idProperty'] : 'id';
+        $this->_idProperty  = $this->_identifier = (isset($modelClassConfiguration['idProperty']) || array_key_exists('idProperty', $modelClassConfiguration)) ? $modelClassConfiguration['idProperty'] : 'id';
 
         // some cruid validating
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {
@@ -714,12 +714,12 @@ class Tinebase_ModelConfiguration {
         
         foreach ($this->_fields as $fieldKey => &$fieldDef) {
             // set default type to string, if no type is given
-            if (! array_key_exists('type', $fieldDef)) {
+            if (! (isset($fieldDef['type']) || array_key_exists('type', $fieldDef))) {
                 $fieldDef['type'] = 'string';
             }
             
             // don't handle field if app is not available
-            if (array_key_exists('config', $fieldDef) && ($fieldDef['type'] == 'record' || $fieldDef['type'] == 'records') && (! $this->_isAvailable($fieldDef['config']))) {
+            if ((isset($fieldDef['config']) || array_key_exists('config', $fieldDef)) && ($fieldDef['type'] == 'record' || $fieldDef['type'] == 'records') && (! $this->_isAvailable($fieldDef['config']))) {
                 $fieldDef['type'] = 'string';
                 $fieldDef['label'] = NULL;
                 continue;
@@ -728,7 +728,7 @@ class Tinebase_ModelConfiguration {
             $fieldDef['key'] = $fieldKey;
 
             // if any field has a group set, enable grouping globally
-            if (! $this->_useGroups && array_key_exists('group', $fieldDef)) {
+            if (! $this->_useGroups && (isset($fieldDef['group']) || array_key_exists('group', $fieldDef))) {
                 $this->_useGroups = TRUE;
             }
 
@@ -766,14 +766,14 @@ class Tinebase_ModelConfiguration {
             // also see ticket 8944 (https://forge.tine20.org/mantisbt/view.php?id=8944)
             
             // set filter model
-            if (array_key_exists('filterDefinition', $fieldDef)) {
+            if ((isset($fieldDef['filterDefinition']) || array_key_exists('filterDefinition', $fieldDef))) {
                 // use filter from definition
                 $key = isset($fieldDef['filterDefinition']['key']) ? $fieldDef['filterDefinition']['key'] : $fieldKey;
                 $this->_filterModel[$key] = $fieldDef['filterDefinition'];
-            } else if (array_key_exists($fieldDef['type'], $this->_filterModelMapping)) {
+            } else if ((isset($this->_filterModelMapping[$fieldDef['type']]) || array_key_exists($fieldDef['type'], $this->_filterModelMapping))) {
                 // if no filterDefinition is given, try to use the default one
                 $this->_filterModel[$fieldKey] = array('filter' => $this->_filterModelMapping[$fieldDef['type']]);
-                if (array_key_exists('config', $fieldDef)) {
+                if ((isset($fieldDef['config']) || array_key_exists('config', $fieldDef))) {
                     $this->_filterModel[$fieldKey]['options'] = $fieldDef['config'];
                     
                     // set id filter controller
@@ -785,15 +785,15 @@ class Tinebase_ModelConfiguration {
                 }
             }
             
-            if (array_key_exists('queryFilter', $fieldDef)) {
+            if ((isset($fieldDef['queryFilter']) || array_key_exists('queryFilter', $fieldDef))) {
                 $queryFilters[] = $fieldKey;
             }
 
             // set validators
-            if (array_key_exists('validators', $fieldDef)) {
+            if ((isset($fieldDef['validators']) || array_key_exists('validators', $fieldDef))) {
                 // use _validators from definition
                 $this->_validators[$fieldKey] = $fieldDef['validators'];
-            } else if (array_key_exists($fieldDef['type'], $this->_validatorMapping)) {
+            } else if ((isset($this->_validatorMapping[$fieldDef['type']]) || array_key_exists($fieldDef['type'], $this->_validatorMapping))) {
                 // if no validatorsDefinition is given, try to use the default one
                 $fieldDef['validators'] = $this->_validators[$fieldKey] = $this->_validatorMapping[$fieldDef['type']];
             } else {
@@ -801,18 +801,18 @@ class Tinebase_ModelConfiguration {
             }
 
             // set input filters, append defined if any or use defaults from _inputFilterDefaultMapping 
-            if (array_key_exists('inputFilters', $fieldDef)) {
+            if ((isset($fieldDef['inputFilters']) || array_key_exists('inputFilters', $fieldDef))) {
                 foreach ($fieldDef['inputFilters'] as $if => $val) { 
                     $this->_filters[$fieldKey][] = $if ? new $if($val) : new $val();
                 }
-            } else if (array_key_exists($fieldDef['type'], $this->_inputFilterDefaultMapping)) {
+            } else if ((isset($this->_inputFilterDefaultMapping[$fieldDef['type']]) || array_key_exists($fieldDef['type'], $this->_inputFilterDefaultMapping))) {
                 foreach ($this->_inputFilterDefaultMapping[$fieldDef['type']] as $if => $val) {
                     $this->_filters[$fieldKey][] = $if ? new $if($val) : new $val();
                 }
             }
             
             // add field to modlog omit, if configured and modlog is used
-            if ($this->_modlogActive && array_key_exists('modlogOmit', $fieldDef)) {
+            if ($this->_modlogActive && (isset($fieldDef['modlogOmit']) || array_key_exists('modlogOmit', $fieldDef))) {
                 $this->_modlogOmitFields[] = $fieldKey;
             }
             
@@ -847,7 +847,7 @@ class Tinebase_ModelConfiguration {
             case 'date':
             case 'datetime':
                 // add to alarm fields
-                if (array_key_exists('alarm', $fieldDef)) {
+                if ((isset($fieldDef['alarm']) || array_key_exists('alarm', $fieldDef))) {
                     $this->_alarmDateTimeField = $fieldKey;
                 }
                 // add to datetime fields
@@ -875,13 +875,13 @@ class Tinebase_ModelConfiguration {
                 $this->_filterModel[$fieldKey]['options']['controller']  = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Controller');
                 $this->_filterModel[$fieldKey]['options']['filtergroup'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Model') . 'Filter';
             case 'records':
-                $fieldDef['config']['recordClassName']     = array_key_exists('recordClassName', $fieldDef['config'])     ? $fieldDef['config']['recordClassName']     : $this->_getPhpClassName($fieldDef['config']);
-                $fieldDef['config']['controllerClassName'] = array_key_exists('controllerClassName', $fieldDef['config']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
-                $fieldDef['config']['filterClassName']     = array_key_exists('filterClassName', $fieldDef['config'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
+                $fieldDef['config']['recordClassName']     = (isset($fieldDef['config']['recordClassName']) || array_key_exists('recordClassName', $fieldDef['config']))     ? $fieldDef['config']['recordClassName']     : $this->_getPhpClassName($fieldDef['config']);
+                $fieldDef['config']['controllerClassName'] = (isset($fieldDef['config']['controllerClassName']) || array_key_exists('controllerClassName', $fieldDef['config'])) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
+                $fieldDef['config']['filterClassName']     = (isset($fieldDef['config']['filterClassName']) || array_key_exists('filterClassName', $fieldDef['config']))     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
                 if ($fieldDef['type'] == 'record') {
                     $this->_recordFields[$fieldKey] = $fieldDef;
                 } else {
-                    $fieldDef['config']['dependentRecords'] = array_key_exists('dependentRecords', $fieldDef['config']) ? $fieldDef['config']['dependentRecords'] : FALSE;
+                    $fieldDef['config']['dependentRecords'] = (isset($fieldDef['config']['dependentRecords']) || array_key_exists('dependentRecords', $fieldDef['config'])) ? $fieldDef['config']['dependentRecords'] : FALSE;
                     $this->_recordsFields[$fieldKey] = $fieldDef;
                 }
                 break;
@@ -937,7 +937,7 @@ class Tinebase_ModelConfiguration {
      */
     protected function _isAvailable($_fieldConfig)
     {
-        if (! array_key_exists($_fieldConfig['appName'], self::$_availableApplications)) {
+        if (! (isset(self::$_availableApplications[$_fieldConfig['appName']]) || array_key_exists($_fieldConfig['appName'], self::$_availableApplications))) {
             self::$_availableApplications[$_fieldConfig['appName']] = Tinebase_Application::getInstance()->isInstalled($_fieldConfig['appName'], TRUE);
         }
         return self::$_availableApplications[$_fieldConfig['appName']];

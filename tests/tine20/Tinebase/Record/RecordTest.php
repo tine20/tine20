@@ -128,7 +128,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $record2->date_single = $record2->date_single->addDay(1);
         $diff = $record1->diff($record2)->diff;
         $this->assertEquals(1, count($diff));
-        $this->assertTrue(array_key_exists('date_single', $diff));
+        $this->assertTrue((isset($diff['date_single']) || array_key_exists('date_single', $diff)));
     }
 
     /**

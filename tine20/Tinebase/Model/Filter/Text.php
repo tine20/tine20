@@ -94,7 +94,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         // quote field identifier, set action and replace wildcards
         $field = $this->_getQuotedFieldName($_backend);
         
-        if (! array_key_exists($this->_operator, $this->_opSqlMap)) {
+        if (! (isset($this->_opSqlMap[$this->_operator]) || array_key_exists($this->_operator, $this->_opSqlMap))) {
             throw new Tinebase_Exception_InvalidArgument('Operator "' . $this->_operator . '" not defined in sql map of ' . get_class($this));
         }
         $action = $this->_opSqlMap[$this->_operator];

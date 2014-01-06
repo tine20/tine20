@@ -342,11 +342,11 @@ class Setup_Controller
     public function checkDir($_name, $_group = NULL, $allowEmptyPath = TRUE)
     {
         $config = $this->getConfigData();
-        if ($_group !== NULL && array_key_exists($_group, $config)) {
+        if ($_group !== NULL && (isset($config[$_group]) || array_key_exists($_group, $config))) {
             $config = $config[$_group];
         }
         
-        $path = array_key_exists($_name, $config) ? $config[$_name] : false;
+        $path = (isset($config[$_name]) || array_key_exists($_name, $config)) ? $config[$_name] : false;
         if (empty($path)) {
             return $allowEmptyPath;
         } else {
@@ -612,7 +612,7 @@ class Setup_Controller
                 $applications = array();
                 foreach ($installed as $application) {
                     
-                    if (! array_key_exists($application['name'], $installable)) {
+                    if (! (isset($installable[$application['name']]) || array_key_exists($application['name'], $installable))) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' App ' . $application['name'] . ' does not exist any more.');
                         continue;
                     }
@@ -799,7 +799,7 @@ class Setup_Controller
         # (2) moved session config to subgroup 'session'
         if (empty($configArray['session']) || empty($configArray['session']['path'])) {
             foreach (array('session.save_path', 'sessiondir') as $deprecatedSessionDir) {
-                $sessionDir = array_key_exists($deprecatedSessionDir, $configArray) ? $configArray[$deprecatedSessionDir] : '';
+                $sessionDir = (isset($configArray[$deprecatedSessionDir]) || array_key_exists($deprecatedSessionDir, $configArray)) ? $configArray[$deprecatedSessionDir] : '';
                 if (! empty($sessionDir)) {
                     if (empty($configArray['session'])) {
                         $configArray['session'] = array();
@@ -979,7 +979,7 @@ class Setup_Controller
         
         $excludeKeys = array('adminLoginName', 'adminPassword', 'adminPasswordConfirmation');
         foreach ($excludeKeys as $key) {
-            if (array_key_exists($key, $config)) {
+            if ((isset($config[$key]) || array_key_exists($key, $config))) {
                 unset($config[$key]);
             }
         }
@@ -1074,7 +1074,7 @@ class Setup_Controller
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, 1));
         $keys = array(Tinebase_Config::REDIRECTURL, Tinebase_Config::REDIRECTALWAYS, Tinebase_Config::REDIRECTTOREFERRER);
         foreach ($keys as $key) {
-            if (array_key_exists($key, $_data)) {
+            if ((isset($_data[$key]) || array_key_exists($key, $_data))) {
                 if (strlen($_data[$key]) === 0) {
                     Tinebase_Config::getInstance()->delete($key);
                 } else {
@@ -1241,7 +1241,7 @@ class Setup_Controller
         $this->_enableCaching();
         
         foreach ($this->_emailConfigKeys as $configName => $configKey) {
-            if (array_key_exists($configName, $_data)) {
+            if ((isset($_data[$configName]) || array_key_exists($configName, $_data))) {
                 // fetch current config first and preserve all values that aren't in $_data array
                 $currentConfig = Tinebase_Config::getInstance()->get($configKey, new Tinebase_Config_Struct(array()))->toArray();
                 $newConfig = array_merge($_data[$configName], array_diff_key($currentConfig, $_data[$configName]));

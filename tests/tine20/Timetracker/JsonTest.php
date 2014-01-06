@@ -249,20 +249,20 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $ts = $this->_json->saveTimesheet($timesheetArray);
 
         // test with default grants
-        $this->assertTrue(array_key_exists($cf->name, $ts['customfields']), 'customfield should be readable');
+        $this->assertTrue((isset($ts['customfields'][$cf->name]) || array_key_exists($cf->name, $ts['customfields'])), 'customfield should be readable');
         $this->assertEquals($value, $ts['customfields'][$cf->name]);
 
         // remove all grants
         Tinebase_CustomField::getInstance()->setGrants($cf, array());
         $ts = $this->_json->getTimesheet($ts['id']);
 
-        $this->assertTrue(! array_key_exists('customfields', $ts), 'customfields should not be readable');
+        $this->assertTrue(! (isset($ts['customfields']) || array_key_exists('customfields', $ts)), 'customfields should not be readable');
         $ts = $this->_updateCfOfTs($ts, $cf->name, 'try to update');
 
         // only read allowed
         Tinebase_CustomField::getInstance()->setGrants($cf, array(Tinebase_Model_CustomField_Grant::GRANT_READ));
         $ts = $this->_json->getTimesheet($ts['id']);
-        $this->assertTrue(array_key_exists($cf->name, $ts['customfields']), 'customfield should be readable again');
+        $this->assertTrue((isset($ts['customfields'][$cf->name]) || array_key_exists($cf->name, $ts['customfields'])), 'customfield should be readable again');
         $this->assertEquals($value, $ts['customfields'][$cf->name], 'value should not have changed');
         $ts = $this->_updateCfOfTs($ts, $cf->name, 'try to update');
         $this->assertEquals($value, $ts['customfields'][$cf->name], 'value should still not have changed');

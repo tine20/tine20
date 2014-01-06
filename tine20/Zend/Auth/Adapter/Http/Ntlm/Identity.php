@@ -11,11 +11,11 @@ class Zend_Auth_Adapter_Http_Ntlm_Identity
     
     public function __construct(array $idData = array())
     {
-        if (array_key_exists('flags', $idData)) {
+        if ((isset($idData['flags']) || array_key_exists('flags', $idData))) {
             $this->_flags = $idData['flags'];
         }
         
-    if (array_key_exists('ntlmData', $idData)) {
+    if ((isset($idData['ntlmData']) || array_key_exists('ntlmData', $idData))) {
         
             $which = array('domain', 'workstation');
             foreach( (array) $idData['ntlmData'] as $key => $value) {

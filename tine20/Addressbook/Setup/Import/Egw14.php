@@ -126,10 +126,10 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
                 $contactData['adr_two_countryname'] = $this->convertCountryname2Iso($egwContactData['adr_two_countryname']);
                 
                 // handle bday
-                if (array_key_exists('contact_bday', $egwContactData) && $egwContactData['contact_bday']) {
+                if ((isset($egwContactData['contact_bday']) || array_key_exists('contact_bday', $egwContactData)) && $egwContactData['contact_bday']) {
                     // @TODO evaluate contact_tz
                     $contactData['bday'] = new Tinebase_DateTime($egwContactData['contact_bday'], $this->_config->birthdayDefaultTimezone);
-                } else if (array_key_exists('bday', $egwContactData) && $egwContactData['bday']) {
+                } else if ((isset($egwContactData['bday']) || array_key_exists('bday', $egwContactData)) && $egwContactData['bday']) {
                     // egw <= 1.4
                     $contactData['bday'] = $this->convertDate($egwContactData['bday']);
                 }
@@ -202,7 +202,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         
         $countryname = strtoupper(trim($countryname));
         
-        if (! array_key_exists($countryname, $this->_countryMapping)) {
+        if (! (isset($this->_countryMapping[$countryname]) || array_key_exists($countryname, $this->_countryMapping))) {
             $this->_log->WARN(__METHOD__ . '::' . __LINE__ . " could not get coutry code for {$countryname}");
             
             return NULL;

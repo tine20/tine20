@@ -142,23 +142,23 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      */
     public function __construct(Syncroton_Model_IDevice $_device, DateTime $_syncTimeStamp)
     {
-        if(empty($this->_applicationName)) {
+        if (empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('$this->_applicationName can not be empty');
         }
         
-        if(empty($this->_modelName)) {
+        if (empty($this->_modelName)) {
             throw new Tinebase_Exception_UnexpectedValue('$this->_modelName can not be empty');
         }
         
-        if(empty($this->_defaultFolderType)) {
+        if (empty($this->_defaultFolderType)) {
             throw new Tinebase_Exception_UnexpectedValue('$this->_defaultFolderType can not be empty');
         }
         
-        if(empty($this->_folderType)) {
+        if (empty($this->_folderType)) {
             throw new Tinebase_Exception_UnexpectedValue('$this->_folderType can not be empty');
         }
-                
-        if(empty($this->_specialFolderName)) {
+        
+        if (empty($this->_specialFolderName)) {
             $this->_specialFolderName = strtolower($this->_applicationName) . '-root';
         }
         
@@ -170,6 +170,9 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             $this->_contentControllerName = $this->_applicationName . '_Controller_' . $this->_modelName;
         }
         $this->_contentController   = call_user_func(array($this->_contentControllerName, 'getInstance'));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Created controller for device type ' . $this->_device->devicetype);
     }
     
     /**
@@ -181,7 +184,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         $syncrotonFolders = array();
         
         // device supports multiple folders?
-        if(in_array(strtolower($this->_device->devicetype), $this->_devicesWithMultipleFolders)) {
+        if (in_array(strtolower($this->_device->devicetype), $this->_getDevicesWithMultipleFolders())) {
         
             $folders = $this->_getAllFolders();
             
@@ -195,6 +198,9 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             }
             
         } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Device does not support multiple folders for " . $this->_specialFolderName . '. Returning default container.');
+            
             $syncrotonFolders[$this->_specialFolderName] = new Syncroton_Model_Folder(array(
                 'serverId'      => $this->_specialFolderName,
                 'parentId'      => 0,
@@ -204,6 +210,16 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         }
         
         return $syncrotonFolders;
+    }
+    
+    /**
+     * get devices with multiple folders
+     * 
+     * @return array
+     */
+    protected function _getDevicesWithMultipleFolders()
+    {
+        return $this->_devicesWithMultipleFolders;
     }
     
     /**
@@ -498,7 +514,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         $syncrotonFolders = array();
         
         // device supports multiple folders ?
-        if(! in_array(strtolower($this->_device->devicetype), $this->_devicesWithMultipleFolders)) {
+        if(! in_array(strtolower($this->_device->devicetype), $this->_getDevicesWithMultipleFolders())) {
             return $syncrotonFolders;
         }
         

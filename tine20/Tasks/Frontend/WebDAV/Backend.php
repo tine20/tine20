@@ -88,7 +88,7 @@ class Tasks_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBackend
         
         
         // NOTE: at the moment we only support a predefined set of colors
-//        if (array_key_exists('{http://apple.com/ns/ical/}calendar-color', $properties)) {
+//        if ((isset($properties['{http://apple.com/ns/ical/}calendar-color']) || array_key_exists('{http://apple.com/ns/ical/}calendar-color', $properties))) {
 //            $color = substr($properties['{http://apple.com/ns/ical/}calendar-color'], 0, 7);
 //            $container->color = $color;
 //        }
@@ -157,12 +157,12 @@ class Tasks_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBackend
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            if (array_key_exists('{DAV:}displayname', $properties)) {
+            if ((isset($properties['{DAV:}displayname']) || array_key_exists('{DAV:}displayname', $properties))) {
                 Tinebase_Container::getInstance()->setContainerName($calendarId, $properties['{DAV:}displayname']);
             }
             
             // NOTE: at the moment we only support a predefined set of colors
-//            if (array_key_exists('{http://apple.com/ns/ical/}calendar-color', $properties)) {
+//            if ((isset($properties['{http://apple.com/ns/ical/}calendar-color']) || array_key_exists('{http://apple.com/ns/ical/}calendar-color', $properties))) {
 //                $color = substr($properties['{http://apple.com/ns/ical/}calendar-color'], 0, 7);
 //                Tinebase_Container::getInstance()->setContainerColor($calendarId, $color);
 //            }

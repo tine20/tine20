@@ -46,10 +46,10 @@ class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_Foreign
      */
     protected function _setOptions(array $_options)
     {
-        if (! array_key_exists('controller', $_options)) {
+        if (! (isset($_options['controller']) || array_key_exists('controller', $_options))) {
             $_options['controller'] = 'Calendar_Controller_Event';
         }
-        if (! array_key_exists('filtergroup', $_options)) {
+        if (! (isset($_options['filtergroup']) || array_key_exists('filtergroup', $_options))) {
             $_options['filtergroup'] = 'Calendar_Model_EventFilter';
         }
         
@@ -124,7 +124,7 @@ class Calendar_Model_ContactAttendeeFilter extends Tinebase_Model_Filter_Foreign
      */
     protected function _matchFilter($_record, $_filterField, $_recordField)
     {
-        if (! array_key_exists($_filterField, $this->_filterData)) {
+        if (! (isset($this->_filterData[$_filterField]) || array_key_exists($_filterField, $this->_filterData))) {
             return TRUE;
         }
         

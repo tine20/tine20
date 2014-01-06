@@ -135,25 +135,25 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
         }
         $this->_memcache = new Memcache;
         foreach ($this->_options['servers'] as $server) {
-            if (!array_key_exists('port', $server)) {
+            if (!(isset($server['port']) || array_key_exists('port', $server))) {
                 $server['port'] = self::DEFAULT_PORT;
             }
-            if (!array_key_exists('persistent', $server)) {
+            if (!(isset($server['persistent']) || array_key_exists('persistent', $server))) {
                 $server['persistent'] = self::DEFAULT_PERSISTENT;
             }
-            if (!array_key_exists('weight', $server)) {
+            if (!(isset($server['weight']) || array_key_exists('weight', $server))) {
                 $server['weight'] = self::DEFAULT_WEIGHT;
             }
-            if (!array_key_exists('timeout', $server)) {
+            if (!(isset($server['timeout']) || array_key_exists('timeout', $server))) {
                 $server['timeout'] = self::DEFAULT_TIMEOUT;
             }
-            if (!array_key_exists('retry_interval', $server)) {
+            if (!(isset($server['retry_interval']) || array_key_exists('retry_interval', $server))) {
                 $server['retry_interval'] = self::DEFAULT_RETRY_INTERVAL;
             }
-            if (!array_key_exists('status', $server)) {
+            if (!(isset($server['status']) || array_key_exists('status', $server))) {
                 $server['status'] = self::DEFAULT_STATUS;
             }
-            if (!array_key_exists('failure_callback', $server)) {
+            if (!(isset($server['failure_callback']) || array_key_exists('failure_callback', $server))) {
                 $server['failure_callback'] = self::DEFAULT_FAILURE_CALLBACK;
             }
             if ($this->_options['compatibility']) {

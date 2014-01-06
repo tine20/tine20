@@ -1499,10 +1499,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $imap = $this->_getImapFromFolder($_folder);
         
         $count = 0;
-        do {
+        
+        $result = $this->_searchOnImap($_testHeaderValue, $_folder, $imap, $testHeader);
+        
+        while (count($result) === 0 && $count++ < 5) {
             sleep(1);
             $result = $this->_searchOnImap($_testHeaderValue, $_folder, $imap, $testHeader);
-        } while (count($result) === 0 && $count++ < 5);
+        };
         
         if ($_assert) {
             $this->assertGreaterThan(0, count($result), 'No messages with HEADER ' . $testHeader . ': ' . $_testHeaderValue . ' in folder ' . $_folder->globalname . ' found.');

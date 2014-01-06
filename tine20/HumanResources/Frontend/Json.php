@@ -70,7 +70,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $employee = $this->_get($id, HumanResources_Controller_Employee::getInstance());
 
-        if (array_key_exists('account_id', $employee) && ! empty($employee['account_id']['contact_id'])) {
+        if ((isset($employee['account_id']) || array_key_exists('account_id', $employee)) && ! empty($employee['account_id']['contact_id'])) {
             try {
                 $employee['account_id']['contact_id'] = Addressbook_Controller_Contact::getInstance()->get($employee['account_id']['contact_id']);
             } catch (Tinebase_Exception_NotFound $e) {

@@ -113,7 +113,7 @@ class Tinebase_Record_Iterator
             $this->_options = array_merge($this->_options, $_params['options']);
         }
         
-        if (! array_key_exists('idProperty', $this->_options)) {
+        if (! (isset($this->_options['idProperty']) || array_key_exists('idProperty', $this->_options))) {
             // TODO:resolve this by modelconfiguration when mc has been applied to all models
             $mn = $this->_filter->getModelName();
             $model = new $mn();
@@ -187,7 +187,7 @@ class Tinebase_Record_Iterator
         $filterClassname = get_class($this->_filter);
         $recordIdsForIteration = array_splice($this->_recordIds, 0, $this->_options['limit']);
         $idFilter = new $filterClassname(array(
-            array('field' => array_key_exists('idProperty', $this->_options) ? $this->_options['idProperty'] : 'id', 'operator' => 'in', 'value' => $recordIdsForIteration)
+            array('field' => (isset($this->_options['idProperty']) || array_key_exists('idProperty', $this->_options)) ? $this->_options['idProperty'] : 'id', 'operator' => 'in', 'value' => $recordIdsForIteration)
         ));
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Getting records using filter: ' . print_r($idFilter->toArray(), TRUE));

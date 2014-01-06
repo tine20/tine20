@@ -227,7 +227,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass = 'Tinebase_Model_User')
     {
-        if(!array_key_exists($_property, $this->rowNameMapping)) {
+        if(!(isset($this->rowNameMapping[$_property]) || array_key_exists($_property, $this->rowNameMapping))) {
             throw new Tinebase_Exception_InvalidArgument("invalid property $_property requested");
         }
         
@@ -262,6 +262,22 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         
         return $account;
+    }
+    
+    /**
+     * get users by primary group
+     * 
+     * @param string $groupId
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_FullUser
+     */
+    public function getUsersByPrimaryGroup($groupId)
+    {
+        $select = $this->_getUserSelectObject()
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.primary_group_id') . ' = ?', $groupId));
+        $stmt = $select->query();
+        $data = (array) $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_FullUser', $data, true);
+        return $result;
     }
     
     /**

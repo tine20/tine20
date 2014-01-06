@@ -258,12 +258,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const MAX_LOGIN_FAILURES = 'maxLoginFailures';
      
-    /*
+    /**
      * ANYONE_ACCOUNT_DISABLED
      *
      * @var string
      */
     const ANYONE_ACCOUNT_DISABLED = 'anyoneAccountDisabled';
+    
+    /**
+     * ALARMS_EACH_JOB
+     *
+     * @var string
+     */
+    const ALARMS_EACH_JOB = 'alarmsEachJob';
     
     /**
      * (non-PHPdoc)
@@ -596,6 +603,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        self::ALARMS_EACH_JOB => array(
+                                   //_('Alarms sent each job')
+            'label'                 => 'Alarms sent each job',
+                                   //_('Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)')
+            'description'           => 'Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)',
+            'type'                  => 'integer',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
     );
     
     /**
@@ -669,7 +686,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                         . ' ' . print_r($definition, TRUE));
                     
-                    if (array_key_exists('clientRegistryInclude', $definition) && $definition['clientRegistryInclude'] === TRUE) {
+                    if ((isset($definition['clientRegistryInclude']) || array_key_exists('clientRegistryInclude', $definition)) && $definition['clientRegistryInclude'] === TRUE) {
                         // add definition here till we have a better place
                         $configRegistryItem = new Tinebase_Config_Struct(array(
                             'value'         => $config->{$name},

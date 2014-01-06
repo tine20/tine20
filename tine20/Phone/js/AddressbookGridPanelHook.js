@@ -30,20 +30,20 @@ Tine.Phone.AddressbookGridPanelHook = function(config) {
     // NOTE: due to the action updater this action is bound the the adb grid only!
     this.phoneMenu = new Ext.menu.Menu({
     });
-        
+    
     this.callContactAction = new Ext.Action({
         text: this.app.i18n._('Call contact'),
         iconCls: 'PhoneIconCls',
-        disabled: true,
+        disabled: this.useActionUpdater ? true : false,
         scope: this,
-        actionUpdater: this.updateAction,
+        actionUpdater: this.useActionUpdater ? this.updateAction : Ext.emptyFn,
         menu: this.phoneMenu,
         listeners: {
             scope: this,
-            render: this.onRender
+            render: this.useActionUpdater ? this.onRender : Ext.emptyFn
         }
     });
-            
+    
     this.callContactBtn = Ext.apply(new Ext.SplitButton(this.callContactAction), {
         scale: 'medium',
         rowspan: 2,
@@ -52,11 +52,25 @@ Tine.Phone.AddressbookGridPanelHook = function(config) {
     }),
 
     // register in toolbar + contextmenu
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ActionToolbar-leftbtngrp', this.callContactBtn, 30);
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.callContactAction, 80);
+    Ext.ux.ItemRegistry.registerItem(this.keyPrefix + '-GridPanel-ActionToolbar-leftbtngrp', this.callContactBtn, 30);
+    Ext.ux.ItemRegistry.registerItem(this.keyPrefix + '-GridPanel-ContextMenu', this.callContactAction, 80);
 };
 
 Ext.apply(Tine.Phone.AddressbookGridPanelHook.prototype, {
+    
+    /**
+     * do we use the grids action updater
+     * 
+     * @type Boolean
+     */
+    useActionUpdater: true,
+    
+    /**
+     * contact to call
+     * 
+     * @type Tine.Addressbook.Model.Contact
+     */
+    contact: null,
     
     /**
      * @property app
@@ -64,6 +78,12 @@ Ext.apply(Tine.Phone.AddressbookGridPanelHook.prototype, {
      * @private
      */
     app: null,
+    
+    /**
+     * hook registry prefix
+     * @type String
+     */
+    keyPrefix: 'Addressbook',
     
     /**
      * @property callContactAction
@@ -111,7 +131,7 @@ Ext.apply(Tine.Phone.AddressbookGridPanelHook.prototype, {
     onCallContact: function(btn) {
         var number;
 
-        var contact = this.getContactGridPanel().grid.getSelectionModel().getSelected();
+        var contact = this.contact ? this.contact : this.getContactGridPanel().grid.getSelectionModel().getSelected();
         
         if (! contact) {
             return;
@@ -203,5 +223,15 @@ Ext.apply(Tine.Phone.AddressbookGridPanelHook.prototype, {
                 action.setDisabled(false);
             }
         }
+    },
+    
+    /**
+     * set contact for action and update phoneMenu items
+     * 
+     * @param {Tine.Addressbook.Model.Contact} contact
+     */
+    setContactAndUpdateAction: function(contact) {
+        this.contact = contact;
+        this.updateAction(this.callContactAction, null, [contact]);
     }
 });

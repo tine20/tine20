@@ -720,7 +720,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $cacheId = $this->_getCacheId($pathParts);
         
         // let's see if the path is cached in statCache
-        if (array_key_exists($cacheId, $this->_statCache)) {
+        if ((isset($this->_statCache[$cacheId]) || array_key_exists($cacheId, $this->_statCache))) {
             try {
                 // let's try to get the node from backend, to make sure it still exists
                 return $this->_treeNodeBackend->get($this->_statCache[$cacheId]);
@@ -737,7 +737,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         while ($pathPart = array_pop($pathParts)) {
             $cacheId = $this->_getCacheId($pathParts);
             
-            if (array_key_exists($cacheId, $this->_statCache)) {
+            if ((isset($this->_statCache[$cacheId]) || array_key_exists($cacheId, $this->_statCache))) {
                 $parentNode = $this->_statCache[$cacheId];
                 break;
             }

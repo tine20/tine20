@@ -136,7 +136,7 @@ class Tinebase_Tags
         $tagData = array();
         
         foreach ($_tags as $tag) {
-            if (array_key_exists($tag['id'], $tagData)) {
+            if ((isset($tagData[$tag['id']]) || array_key_exists($tag['id'], $tagData))) {
                 $tagData[$tag['id']]['selection_occurrence']++;
             } else {
                 $tag['selection_occurrence'] = 1;
@@ -716,7 +716,11 @@ class Tinebase_Tags
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Detaching 1 Tag from ' . count($attachedIds) . ' records.');
         foreach ($attachedIds as $recordId) {
-            $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', 'tag_id=\'' . $tagId . '\' AND record_id=\'' . $recordId. '\' AND application_id=\'' . $appId . '\'');
+            $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', array(
+                $this->_db->quoteIdentifier('tag_id') . ' = ?'         => $tagId,
+                $this->_db->quoteIdentifier('record_id') . ' = ?'      => $recordId,
+                $this->_db->quoteIdentifier('application_id') . ' = ?' => $appId
+            ));
         }
         
         $recordIds = array_merge($recordIds, $attachedIds);
@@ -859,8 +863,9 @@ class Tinebase_Tags
      */
     public function purgeRights($_tagId)
     {
-        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId);
-        $this->_db->delete(SQL_TABLE_PREFIX . 'tags_acl', $where);
+        $this->_db->delete(SQL_TABLE_PREFIX . 'tags_acl', array(
+            $this->_db->quoteIdentifier('tag_id') . ' = ?' => $_tagId
+        ));
     }
 
     /**
@@ -936,8 +941,9 @@ class Tinebase_Tags
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' removing contexts for tag ' . $_tagId);
 
-        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId);
-        $this->_db->delete(SQL_TABLE_PREFIX . 'tags_context', $where);
+        $this->_db->delete(SQL_TABLE_PREFIX . 'tags_context', array(
+            $this->_db->quoteIdentifier('tag_id') . ' = ?' => $_tagId
+        ));
     }
 
     /**
@@ -1062,11 +1068,14 @@ class Tinebase_Tags
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                     ' Found ' . count($recordIdsWithTagToMerge) . ' ' . $model . '(s) with tags to be merged.');
                 
-                $recordFilter = new $recordFilterModel(array(
-                    array('field' => 'id', 'operator' => 'in', 'value' => $recordIdsWithTagToMerge)
-                ));
-                $this->attachTagToMultipleRecords($recordFilter, $targetTag);
-                $this->detachTagsFromMultipleRecords($recordFilter, $tag->getId());
+                if (!empty($recordIdsWithTagToMerge)) {
+                    $recordFilter = new $recordFilterModel(array(
+                        array('field' => 'id', 'operator' => 'in', 'value' => $recordIdsWithTagToMerge)
+                    ));
+                    
+                    $this->attachTagToMultipleRecords($recordFilter, $targetTag);
+                    $this->detachTagsFromMultipleRecords($recordFilter, $tag->getId());
+                }
                 
                 // check occurrence of the merged tag and remove it if obsolete
                 $tag = $this->get($tag);

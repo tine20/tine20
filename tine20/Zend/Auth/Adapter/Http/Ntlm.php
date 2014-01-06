@@ -240,29 +240,29 @@ class Zend_Auth_Adapter_Http_Ntlm extends Zend_Auth_Adapter_Http_Abstract
      */
     public function __construct(array $config = array())
     {
-        if (array_key_exists('log', $config) && $config['log'] instanceof Zend_Log) {
+        if ((isset($config['log']) || array_key_exists('log', $config)) && $config['log'] instanceof Zend_Log) {
             $this->_log = $config['log'];
         } else {
             $this->_log = new Zend_Log(new Zend_Log_Writer_Null());
         }
         
-        if (array_key_exists('resolver', $config) /*&& $config['resolver'] instanceof Zend_Auth_Adapter_Http_Resolver_Interface*/) {
+        if ((isset($config['resolver']) || array_key_exists('resolver', $config)) /*&& $config['resolver'] instanceof Zend_Auth_Adapter_Http_Resolver_Interface*/) {
             $this->setResolver($config['resolver']);
         }
         
-        if (array_key_exists('session', $config) && $config['session'] instanceof Zend_Session_Namespace) {
+        if ((isset($config['session']) || array_key_exists('session', $config)) && $config['session'] instanceof Zend_Session_Namespace) {
             $this->setSession($config['session']);
         }
         
-        if (array_key_exists('challenge', $config)) {
+        if ((isset($config['challenge']) || array_key_exists('challenge', $config))) {
             $this->_challenge = $config['challenge'];
         }
         
-        if (array_key_exists('targetInfo', $config)) {
+        if ((isset($config['targetInfo']) || array_key_exists('targetInfo', $config))) {
             $this->_targetInfo = $config['targetInfo'];
         }
         
-        if (! array_key_exists('serverFlags', $config)) {
+        if (! (isset($config['serverFlags']) || array_key_exists('serverFlags', $config))) {
             $config['serverFlags'] = dechex(
                 (0x00000000 | self::FLAG_NEGOTIATE_UNICODE | self::FLAG_NEGOTIATE_NTLM)
             );
@@ -601,7 +601,7 @@ class Zend_Auth_Adapter_Http_Ntlm extends Zend_Auth_Adapter_Http_Abstract
     {
         $buffer = '';
         foreach ($this->_targetInfoBufferTypMap as $type => $typeIdentifier) {
-            $data = array_key_exists($type, $targetInfo) ? $targetInfo[$type] : '';
+            $data = (isset($targetInfo[$type]) || array_key_exists($type, $targetInfo)) ? $targetInfo[$type] : '';
             $buffer .= $this->_getTargetInfoSubBuffer($type, $data);
         }
         

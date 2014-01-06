@@ -75,7 +75,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $this->_options = array_merge($this->_options, $this->_additionalOptions);
         
         foreach($_options as $key => $cfg) {
-            if (array_key_exists($key, $this->_options)) {
+            if ((isset($this->_options[$key]) || array_key_exists($key, $this->_options))) {
                 $this->_options[$key] = $cfg;
             }
         }
@@ -222,7 +222,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $recordToImport = NULL;
             try {
                 // client record overwrites record in import data (only if set)
-                $clientRecordData = array_key_exists($recordIndex, $clientRecordDatas) ? $clientRecordDatas[$recordIndex]['recordData'] : NULL;
+                $clientRecordData = (isset($clientRecordDatas[$recordIndex]) || array_key_exists($recordIndex, $clientRecordDatas)) ? $clientRecordDatas[$recordIndex]['recordData'] : NULL;
                 if ($clientRecordData && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                     Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Client record: ' . print_r($clientRecordData, TRUE));
                 }
@@ -291,7 +291,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         $mappedData = $this->_doMapping($_data);
         
-        if (array_key_exists("postMappingHook", $this->_options)) {
+        if ((isset($this->_options["postMappingHook"]) || array_key_exists("postMappingHook", $this->_options))) {
             if (isset($this->_options['postMappingHook']['path'])) {
                $mappedData = $this->_postMappingHook($mappedData);
             }
@@ -464,7 +464,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         $data = $_data;
         foreach ($this->_options['mapping']['field'] as $index => $field) {
-            if (! array_key_exists('destination', $field) || $field['destination'] == '' || ! isset($_data[$field['destination']])) {
+            if (! (isset($field['destination']) || array_key_exists('destination', $field)) || $field['destination'] == '' || ! isset($_data[$field['destination']])) {
                 continue;
             }
         
@@ -788,12 +788,12 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _sanitizeAutotagsOption()
     {
-        $autotags = (array_key_exists('tag', $this->_options['autotags']) && count($this->_options['autotags']) == 1) 
+        $autotags = ((isset($this->_options['autotags']['tag']) || array_key_exists('tag', $this->_options['autotags'])) && count($this->_options['autotags']) == 1) 
             ? $this->_options['autotags']['tag'] : $this->_options['autotags'];
 
-        $autotags = (array_key_exists('name', $autotags)) ? array($autotags) : $autotags;
+        $autotags = ((isset($autotags['name']) || array_key_exists('name', $autotags))) ? array($autotags) : $autotags;
         
-        if (array_key_exists('tag', $autotags)) {
+        if ((isset($autotags['tag']) || array_key_exists('tag', $autotags))) {
             unset($autotags['tag']);
         }
         

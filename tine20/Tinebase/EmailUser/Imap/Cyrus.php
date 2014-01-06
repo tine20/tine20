@@ -96,7 +96,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " search for {$mailboxString} in " . print_r($mailboxes, true));
         
         // does mailbox exist at all?
-        if (array_key_exists($mailboxString, $mailboxes)) {
+        if ((isset($mailboxes[$mailboxString]) || array_key_exists($mailboxString, $mailboxes))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' must delete mailbox ');
             if ($imap->setACL($mailboxString, $this->_config['admin'], 'lrswipcda') === true) {
                 $imap->delete($mailboxString);
@@ -174,7 +174,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " search for {$mailboxString} in " . print_r($mailboxes, true));
         
-        if (!array_key_exists($mailboxString, $mailboxes)) {
+        if (!(isset($mailboxes[$mailboxString]) || array_key_exists($mailboxString, $mailboxes))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' must create mailbox: '. $mailboxString);
             if ($imap->create($mailboxString) == true) {
                 if ($imap->setACL($mailboxString, $this->_appendDomain($_addedUser->accountLoginName), 'lrswipcda') !== true) {
@@ -284,7 +284,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " search for {$mailboxString} in " . print_r($mailboxes, true));
         
         // does mailbox exist at all?
-        if (!array_key_exists($mailboxString, $mailboxes)) {
+        if (!(isset($mailboxes[$mailboxString]) || array_key_exists($mailboxString, $mailboxes))) {
             return false;
         }
         

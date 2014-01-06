@@ -593,7 +593,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         // create prefs that don't exist in the db
         foreach ($_data as $id => $prefData) {
-            if (preg_match('/^default/', $id) && array_key_exists('name', $prefData) && (string)$prefData['value'] != Tinebase_Model_Preference::DEFAULT_VALUE) {
+            if (preg_match('/^default/', $id) && (isset($prefData['name']) || array_key_exists('name', $prefData)) && (string)$prefData['value'] != Tinebase_Model_Preference::DEFAULT_VALUE) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Create admin pref: ' . $prefData['name'] . ' = ' . $prefData['value']);
                 $newPref = $this->getApplicationPreferenceDefaults($prefData['name']);

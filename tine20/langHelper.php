@@ -557,7 +557,7 @@ function statistics($_verbose)
                 $poFilesStats[] = $poFileStats;
                 
                 // sum up lang statistics
-                $langStats[$langCode] = array_key_exists($langCode,$langStats) ? $langStats[$langCode] : array(
+                $langStats[$langCode] = (isset($langStats[$langCode]) || array_key_exists($langCode,$langStats)) ? $langStats[$langCode] : array(
                     'locale'       => '',
                     'language'     => '',
                     'region'       => $locale->getTranslation($langLocale->getRegion(), 'country'),

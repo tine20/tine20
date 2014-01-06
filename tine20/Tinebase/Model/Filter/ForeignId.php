@@ -52,7 +52,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
      */
     protected function _setOptions(array $_options)
     {
-        if (! array_key_exists('controller', $_options) || ! array_key_exists('filtergroup', $_options)) {
+        if (! (isset($_options['controller']) || array_key_exists('controller', $_options)) || ! (isset($_options['filtergroup']) || array_key_exists('filtergroup', $_options))) {
             throw new Tinebase_Exception_InvalidArgument('a controller and a filtergroup must be specified in the options');
         }
         parent::_setOptions($_options);

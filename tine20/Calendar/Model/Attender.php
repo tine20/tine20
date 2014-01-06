@@ -228,12 +228,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         if (isset($_data['user_id']) && is_array($_data['user_id'])) {
-            if (array_key_exists('accountId', $_data['user_id'])) {
+            if ((isset($_data['user_id']['accountId']) || array_key_exists('accountId', $_data['user_id']))) {
                 // NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
                 $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'], TRUE)->getId();
-            } elseif (array_key_exists('group_id', $_data['user_id'])) {
+            } elseif ((isset($_data['user_id']['group_id']) || array_key_exists('group_id', $_data['user_id']))) {
                 $_data['user_id'] = is_array($_data['user_id']['group_id']) ? $_data['user_id']['group_id'][0] : $_data['user_id']['group_id'];
-            } else if (array_key_exists('id', $_data['user_id'])) {
+            } else if ((isset($_data['user_id']['id']) || array_key_exists('id', $_data['user_id']))) {
                 $_data['user_id'] = $_data['user_id']['id'];
             }
         }
@@ -683,11 +683,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 if ($attender->user_id instanceof Tinebase_Record_Abstract) {
                     // already resolved
                     continue;
-                } elseif (array_key_exists($attender->user_type, self::$_resovedAttendeeCache) && array_key_exists($attender->user_id, self::$_resovedAttendeeCache[$attender->user_type])){
+                } elseif ((isset(self::$_resovedAttendeeCache[$attender->user_type]) || array_key_exists($attender->user_type, self::$_resovedAttendeeCache)) && (isset(self::$_resovedAttendeeCache[$attender->user_type][$attender->user_id]) || array_key_exists($attender->user_id, self::$_resovedAttendeeCache[$attender->user_type]))){
                     // already in cache
                     $attender->user_id = self::$_resovedAttendeeCache[$attender->user_type][$attender->user_id];
                 } else {
-                    if (! array_key_exists($attender->user_type, $typeMap)) {
+                    if (! (isset($typeMap[$attender->user_type]) || array_key_exists($attender->user_type, $typeMap))) {
                         $typeMap[$attender->user_type] = array();
                     }
                     $typeMap[$attender->user_type][] = $attender->user_id;
@@ -754,7 +754,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 }
                 if ($idx !== false) {
                     // copy to cache
-                    if (! array_key_exists($attender->user_type, self::$_resovedAttendeeCache)) {
+                    if (! (isset(self::$_resovedAttendeeCache[$attender->user_type]) || array_key_exists($attender->user_type, self::$_resovedAttendeeCache))) {
                         self::$_resovedAttendeeCache[$attender->user_type] = array();
                     }
                     self::$_resovedAttendeeCache[$attender->user_type][$attender->user_id] = $attendeeTypeSet[$idx];
@@ -766,11 +766,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         
         foreach ($eventAttendee as $idx => $attendee) {
-            $event = is_array($events) && array_key_exists($idx, $events) ? $events[$idx] : NULL;
+            $event = is_array($events) && (isset($events[$idx]) || array_key_exists($idx, $events)) ? $events[$idx] : NULL;
             
             foreach ($attendee as $attender) {
                 // keep authkey if user has editGrant to displaycontainer
-                if (isset($attender['displaycontainer_id']) && !is_scalar($attender['displaycontainer_id']) && array_key_exists(Tinebase_Model_Grants::GRANT_EDIT, $attender['displaycontainer_id']['account_grants']) &&  $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) {
+                if (isset($attender['displaycontainer_id']) && !is_scalar($attender['displaycontainer_id']) && (isset($attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) || array_key_exists(Tinebase_Model_Grants::GRANT_EDIT, $attender['displaycontainer_id']['account_grants'])) &&  $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) {
                     continue;
                 }
                 

@@ -374,9 +374,18 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     /*
      * is called when a trigger event is fired
      */
-    onTriggerField: function() {
+    onTriggerField: function(calledOnAfterRender) {
         // scope on formField
         Tine.log.info('Trigger handler called for field "' + this.name + '".');
+        
+        if (! this.el && calledOnAfterRender) {
+            return;
+        }
+        if (! this.el && ! calledOnAfterRender) {
+            this.on('afterrender', Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.onTriggerField.createDelegate(this, [true]));
+            return;
+        }
+        
         var ar = this.el.parent().select('.tinebase-editmultipledialog-dirty');
         var originalValue = this.hasOwnProperty('startingValue') ? this.startingValue : this.originalValue,
             currentValue;

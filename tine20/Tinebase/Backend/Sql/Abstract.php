@@ -148,11 +148,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_db        = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
         $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
         
-        $this->_modelName            = array_key_exists('modelName', $_options)            ? $_options['modelName']    : $this->_modelName;
-        $this->_tableName            = array_key_exists('tableName', $_options)            ? $_options['tableName']    : $this->_tableName;
-        $this->_tablePrefix          = array_key_exists('tablePrefix', $_options)          ? $_options['tablePrefix']  : $this->_db->table_prefix;
-        $this->_modlogActive         = array_key_exists('modlogActive', $_options)         ? $_options['modlogActive'] : $this->_modlogActive;
-        $this->_useSubselectForCount = array_key_exists('useSubselectForCount', $_options) ? $_options['useSubselectForCount'] : $this->_useSubselectForCount;
+        $this->_modelName            = (isset($_options['modelName']) || array_key_exists('modelName', $_options))            ? $_options['modelName']    : $this->_modelName;
+        $this->_tableName            = (isset($_options['tableName']) || array_key_exists('tableName', $_options))            ? $_options['tableName']    : $this->_tableName;
+        $this->_tablePrefix          = (isset($_options['tablePrefix']) || array_key_exists('tablePrefix', $_options))          ? $_options['tablePrefix']  : $this->_db->table_prefix;
+        $this->_modlogActive         = (isset($_options['modlogActive']) || array_key_exists('modlogActive', $_options))         ? $_options['modlogActive'] : $this->_modlogActive;
+        $this->_useSubselectForCount = (isset($_options['useSubselectForCount']) || array_key_exists('useSubselectForCount', $_options)) ? $_options['useSubselectForCount'] : $this->_useSubselectForCount;
         
         if (! ($this->_tableName && $this->_modelName)) {
             throw new Tinebase_Exception_Backend_Database('modelName and tableName must be configured or given.');
@@ -324,7 +324,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _explodeForeignValues(Tinebase_Record_Interface $_record)
     {
         foreach (array_keys($this->_foreignTables) as $field) {
-            $isSingleValue = (array_key_exists('singleValue', $this->_foreignTables[$field]) && $this->_foreignTables[$field]['singleValue']);
+            $isSingleValue = ((isset($this->_foreignTables[$field]['singleValue']) || array_key_exists('singleValue', $this->_foreignTables[$field])) && $this->_foreignTables[$field]['singleValue']);
             if (! $isSingleValue) {
                 $_record->{$field} = (! empty($_record->{$field})) ? explode(',', $_record->{$field}) : array();
             }
@@ -500,7 +500,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $_pagination->appendPaginationSql($select);
 
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
-
+        
         if ($getIdValuePair) {
             return $this->_fetch($select, self::FETCH_MODE_PAIR);
         } else {
@@ -549,30 +549,28 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $searchCountCols = array_merge(array('count' => 'COUNT(' . $defaultCountCol . ')'), $this->_additionalSearchCountCols);
         
         if ($this->_useSubselectForCount) {
-            // use normal search query as subselect to get count -> select count(*) from (select [...]) as count
-            $subselectCols = (count($searchCountCols) === 1) 
-                ? array_merge(array_keys($this->_foreignTables), array($this->_defaultCountCol)) : '*';
+            list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch(self::IDCOL, $_filter);
             
-            $select = $this->_getSelect($subselectCols);
+            $colsToFetch = !empty($this->_additionalSearchCountCols) 
+                ? array_merge($colsToFetch, array_keys($this->_additionalSearchCountCols)) 
+                : $colsToFetch;
+            
+            $select = $this->_getSelect($colsToFetch);
             $this->_addFilter($select, $_filter);
+            
             Tinebase_Backend_Sql_Abstract::traitGroup($select);
             $countSelect = $this->_db->select()->from($select, $searchCountCols);
             
         } else {
             $countSelect = $this->_getSelect($searchCountCols);
             $this->_addFilter($countSelect, $_filter);
+            
+            Tinebase_Backend_Sql_Abstract::traitGroup($countSelect);
         }
         
-        Tinebase_Backend_Sql_Abstract::traitGroup($countSelect);
-        
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect);
-        
-        if (! empty($this->_additionalSearchCountCols)) {
+        if (!empty($this->_additionalSearchCountCols)) {
             $result = $this->_db->fetchRow($countSelect);
         } else {
-            $countSelect->reset(Zend_Db_Select::COLUMNS); 
-            $countSelect->reset(Zend_Db_Select::GROUP);
-            $countSelect->columns(array('count' => 'COUNT(' . $defaultCountCol . ')'));
             $result = $this->_db->fetchOne($countSelect);
         }
         
@@ -612,9 +610,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $colsToFetch = $this->_addFilterColumns($colsToFetch, $_filter);
         }
         
-        foreach((array) $_pagination->sort as $sort) {
-            if (! array_key_exists($sort, $colsToFetch)) {
-                $colsToFetch[$sort] = (substr_count($sort, $this->_tableName) === 0) ? $this->_tableName . '.' . $sort : $sort;
+        if ($_pagination instanceof Tinebase_Model_Pagination) {
+            foreach((array) $_pagination->sort as $sort) {
+                if (! (isset($colsToFetch[$sort]) || array_key_exists($sort, $colsToFetch))) {
+                    $colsToFetch[$sort] = (substr_count($sort, $this->_tableName) === 0) ? $this->_tableName . '.' . $sort : $sort;
+                }
             }
         }
         
@@ -633,7 +633,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         // need to ask filter if it needs additional columns
         $filterCols = $_filter->getRequiredColumnsForSelect();
         foreach ($filterCols as $key => $filterCol) {
-            if (! array_key_exists($key, $_colsToFetch)) {
+            if (! (isset($_colsToFetch[$key]) || array_key_exists($key, $_colsToFetch))) {
                 $_colsToFetch[$key] = $filterCol;
             }
         }
@@ -781,15 +781,15 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $cols = (array) $_cols;
             foreach ($this->_foreignTables as $foreignColumn => $join) {
                 // only join if field is in cols
-                if (in_array('*', $cols) || array_key_exists($foreignColumn, $cols)) {
+                if (in_array('*', $cols) || (isset($cols[$foreignColumn]) || array_key_exists($foreignColumn, $cols))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' foreign column: ' . $foreignColumn);
                     
-                    $selectArray = (array_key_exists('select', $join))
+                    $selectArray = ((isset($join['select']) || array_key_exists('select', $join)))
                         ? $join['select'] 
-                        : ((array_key_exists('field', $join) && (! array_key_exists('singleValue', $join) || ! $join['singleValue']))
+                        : (((isset($join['field']) || array_key_exists('field', $join)) && (! (isset($join['singleValue']) || array_key_exists('singleValue', $join)) || ! $join['singleValue']))
                             ? array($foreignColumn => $this->_dbCommand->getAggregate($join['table'] . '.' . $join['field']))
                             : array($foreignColumn => $join['table'] . '.id'));
-                    $joinId = (array_key_exists('joinId', $join)) ? $join['joinId'] : $this->_identifier;
+                    $joinId = ((isset($join['joinId']) || array_key_exists('joinId', $join))) ? $join['joinId'] : $this->_identifier;
                     
                     $this->_removeColFromSelect($_select, $cols, $foreignColumn);
                     
@@ -800,7 +800,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                             /* select */ $selectArray
                         );
                         // need to add it to cols to prevent _removeColFromSelect from removing it
-                        if (array_key_exists('preserve', $join) && $join['preserve'] && array_key_exists($foreignColumn, $selectArray)) {
+                        if ((isset($join['preserve']) || array_key_exists('preserve', $join)) && $join['preserve'] && (isset($selectArray[$foreignColumn]) || array_key_exists($foreignColumn, $selectArray))) {
                             $cols[$foreignColumn] = $selectArray[$foreignColumn];
                         }
                     } catch (Zend_Db_Select_Exception $zdse) {
@@ -976,7 +976,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             
             foreach ($this->_foreignTables as $modelName => $join) {
                 
-                if (! array_key_exists('field', $join)) {
+                if (! (isset($join['field']) || array_key_exists('field', $join))) {
                     continue;
                 }
                 
@@ -1196,7 +1196,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function deleteByProperty($_value, $_property, $_operator = 'equals')
     {
-        if (! array_key_exists($_property, $this->_schema)) {
+        if (! (isset($this->_schema[$_property]) || array_key_exists($_property, $this->_schema))) {
             throw new Tinebase_Exception_InvalidArgument('Property ' . $_property . ' does not exist in table ' . $this->_tableName);
         }
         

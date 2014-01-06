@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -35,6 +35,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const ATTENDEE_ROLES = 'attendeeRoles';
+    
+    /**
+     * MAX_FILTER_PERIOD_CALDAV
+     * 
+     * @var string
+     */
+    const MAX_FILTER_PERIOD_CALDAV = 'maxfilterperiodcaldav';
     
     /**
      * (non-PHPdoc)
@@ -70,6 +77,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'options'               => array('recordModel' => 'Calendar_Model_AttendeeRole'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'REQ'
+        ),
+        self::MAX_FILTER_PERIOD_CALDAV => array(
+        //_('Filter timeslot for CalDAV events')
+            'label'                 => 'Filter timeslot for events',
+        //_('For how long in the past (in months) the events should be synchronized.')
+            'description'           => 'For how long in the past (in months) the events should be synchronized.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => 2,
         ),
     );
     

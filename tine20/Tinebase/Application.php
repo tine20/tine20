@@ -545,7 +545,7 @@ class Tinebase_Application
                       $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
                       break;
                 default:
-                    if (array_key_exists('tablename', $info) && ! empty($info['tablename'])) {
+                    if ((isset($info['tablename']) || array_key_exists('tablename', $info)) && ! empty($info['tablename'])) {
                         $count = $this->_db->delete(SQL_TABLE_PREFIX . $info['tablename'], $where);
                     } else {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No tablename defined for ' . $dataType);

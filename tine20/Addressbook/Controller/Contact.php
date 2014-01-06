@@ -377,7 +377,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         if (! empty($_record->{$_address . 'countryname'})) {
             $country = Zend_Locale::getTranslation($_record->{$_address . 'countryname'}, 'Country', $_record->{$_address . 'countryname'});
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' country ' . $country);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' country ' . $country);
             $nominatim->setCountry($country);
         }
         
@@ -386,22 +387,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             
             if (count($places) > 0) {
                 $place = $places->current();
-                
-                $_record->{$_address . 'lon'} = $place->lon;
-                $_record->{$_address . 'lat'} = $place->lat;
-                
-                if (empty($_record->{$_address . 'countryname'}) && ! empty($place->country_code)) {
-                    $_record->{$_address . 'countryname'} = $place->country_code;
-                }
-                if (empty($_record->{$_address . 'postalcode'}) && ! empty($place->postcode)) {
-                    $_record->{$_address . 'postalcode'} = $place->postcode;
-                }
-                if (empty($_record->{$_address . 'locality'}) && ! empty($place->city)) {
-                    $_record->{$_address . 'locality'} = $place->city;
-                }
-                
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-                    ($_address == 'adr_one_' ? ' Company' : ' Private') . ' Place found: lon/lat ' . $_record->{$_address . 'lon'} . ' / ' . $_record->{$_address . 'lat'});
+                $this->_applyNominatimPlaceToRecord($_address, $_record, $place);
                 
             } else {
                 if (! in_array($_address . 'postalcode', $_ommitFields)) {
@@ -412,7 +398,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                     return;
                 }
                 
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ($_address == 'adr_one_' ? 'Company address' : 'Private address') . ' Could not find place.');
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                    ' ' . ($_address == 'adr_one_' ? 'Company address' : 'Private address') . ' Could not find place.');
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                     ' ' . $_record->{$_address . 'street'} . ', ' . $_record->{$_address . 'postalcode'} . ', ' . $_record->{$_address . 'locality'} . ', ' . $_record->{$_address . 'countryname'});
                 
@@ -426,6 +413,73 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $_record->{$_address . 'lon'} = NULL;
             $_record->{$_address . 'lat'} = NULL;
         }
+    }
+    
+    /**
+     * _applyNominatimPlaceToRecord
+     * 
+     * @param string $address
+     * @param Addressbook_Model_Contact $record
+     * @param Zend_Service_Nominatim_Result $place
+     */
+    protected function _applyNominatimPlaceToRecord($address, $record, $place)
+    {
+        $record->{$address . 'lon'} = $place->lon;
+        $record->{$address . 'lat'} = $place->lat;
+        
+        if (empty($record->{$address . 'countryname'}) && ! empty($place->country_code)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Updating record countryname from Nominatim: ' . $place->country_code);
+            $record->{$address . 'countryname'} = $place->country_code;
+        }
+        
+        if (empty($record->{$address . 'postalcode'}) && ! empty($place->postcode)) {
+            $this->_applyNominatimPostcode($address, $record, $place->postcode);
+        }
+        
+        if (empty($record->{$address . 'locality'}) && ! empty($place->city)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Updating record locality from Nominatim: ' . $place->city);
+            $record->{$address . 'locality'} = $place->city;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ($address == 'adr_one_' ? ' Company' : ' Private') . ' Place found: lon/lat ' . $record->{$address . 'lon'} . ' / ' . $record->{$address . 'lat'});
+    }
+    
+    /**
+     * _applyNominatimPostcode
+     * 
+     * @param string $address
+     * @param Addressbook_Model_Contact $record
+     * @param string $postcode
+     */
+    protected function _applyNominatimPostcode($address, $record, $postcode)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Got postalcode from Nominatim: ' . $postcode);
+        
+        
+        // @see 0009424: missing postalcode prevents saving of contact
+        if (strpos($postcode, ',') !== false) {
+            $postcodes = explode(',', $postcode);
+            $postcode = $postcodes[0];
+            if (preg_match('/^[0-9]+$/',$postcode)) {
+                // find the similar numbers to create a postcode with placeholders ('x')
+                foreach ($postcodes as $code) {
+                    for ($i = 0; $i < strlen($postcode); $i++) {
+                        if ($code[$i] !== $postcode[$i]) {
+                            $postcode[$i] = 'x';
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Updating record postalcode from Nominatim: ' . $postcode);
+        
+        $record->{$address . 'postalcode'} = $postcode;
     }
     
     /**
@@ -460,7 +514,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             preg_match('/^' . $pattern . ' /', $_street, $matches);
         }
         
-        if (array_key_exists(1, $matches)) {
+        if ((isset($matches[1]) || array_key_exists(1, $matches))) {
             $result = $matches[1];
             $_street = str_replace($matches[0], '', $_street);
         } else {

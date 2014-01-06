@@ -5,19 +5,14 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tinebase_Relations
  */
-class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
+class Tinebase_Relation_RelationTest extends TestCase
 {
     /**
      * @var    Tinebase_Relations
@@ -70,7 +65,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_object = Tinebase_Relations::getInstance();
         $this->_relations = array();
@@ -133,18 +128,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $this->_relationData);
     }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-
+    
     /**
      * testGetInstance().
      */
@@ -336,20 +320,14 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
      */
     public function testTransfer()
     {
-        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-            $this->markTestSkipped('@see 0009254: fix Tinebase_Relation_RelationTest::testTransfer (pgsql)');
-        }
-        
-        $addresses = Addressbook_Controller_Contact::getInstance()->getAll();
-        
-        $sclever = $addresses->filter('email', 'sclever@tine20.org')->getFirstRecord();
-        $pwulf = $addresses->filter('email', 'pwulf@tine20.org')->getFirstRecord();
+        $sclever = Addressbook_Controller_Contact::getInstance()->get($this->_personas['sclever']->contact_id, null, false);
+        $pwulf   = Addressbook_Controller_Contact::getInstance()->get($this->_personas['pwulf']->contact_id, null, false);
         
         $container = Tinebase_Container::getInstance()->create(new Tinebase_Model_Container(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
-            'type' => Tinebase_Model_Container::TYPE_SHARED,
-            'backend' => 'sql',
-            'name' => 'testsdf'
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'backend'        => 'sql',
+            'name'           => 'testsdf'
         )));
         
         $contract = new Sales_Model_Contract(array('number' => '23547', 'title' => 'test', 'container_id' => $container->getId()));
@@ -362,8 +340,8 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         
         $contractJson = $contract->toArray();
         $contractJson['relations'][] = array(
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'related_model'          => 'Addressbook_Model_Contact',
+            'own_degree'     => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'  => 'Addressbook_Model_Contact',
             'related_record' => $sclever->toArray(),
             'type'           => 'CUSTOMER',
         );
@@ -372,14 +350,14 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         
         $contract2Json = $contract2->toArray();
         $contract2Json['relations'][] = array(
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'related_model'          => 'Addressbook_Model_Contact',
+            'own_degree'     => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'  => 'Addressbook_Model_Contact',
             'related_record' => $sclever->toArray(),
             'type'           => 'CUSTOMER',
         );
         $contract2Json['relations'][] = array(
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'related_model'          => 'Addressbook_Model_Contact',
+            'own_degree'     => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'  => 'Addressbook_Model_Contact',
             'related_record' => $pwulf->toArray(),
             'type'           => 'CUSTOMER',
         );
@@ -388,10 +366,12 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($sclever->getId(), $contractJson['relations'][0]['related_id']);
         
         $skipped = Tinebase_Relations::getInstance()->transferRelations($sclever->getId(), $pwulf->getId(), 'Addressbook_Model_Contact');
+        
         $this->assertEquals(1, count($skipped));
+        
         $skipped = array_pop($skipped);
         
-        $this->assertEquals($sclever->getId(), $skipped['related_id']);
+        $this->assertEquals($sclever->getId(), $skipped['own_id']);
         
         $contractJson = $json->getContract($contract->getId());
         $this->assertEquals($pwulf->getId(), $contractJson['relations'][0]['related_id']);

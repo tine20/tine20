@@ -158,7 +158,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts: ' . print_r($scripts, TRUE));
    
         foreach (array($this->_scriptName, $this->_oldScriptName) as $scriptNameToFetch) {
-            if (count($scripts) > 0 && array_key_exists($scriptNameToFetch, $scripts)) {
+            if (count($scripts) > 0 && (isset($scripts[$scriptNameToFetch]) || array_key_exists($scriptNameToFetch, $scripts))) {
                 $scriptName = $scripts[$scriptNameToFetch]['name'];
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Get SIEVE script: ' . $scriptName);
