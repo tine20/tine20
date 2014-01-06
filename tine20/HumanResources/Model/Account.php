@@ -85,6 +85,10 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                     'dependentRecords' => TRUE
                 ),
             ),
+            'description' => array(
+                'label' => 'Description', //_('Description')
+                'group' => 'Miscellaneous', //_('Miscellaneous')
+            ),
             // virtual fields
             'remaining_vacation_days' => array(
                 'type' => 'virtual',
