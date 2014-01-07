@@ -87,7 +87,7 @@ class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
             if ($this->_operator == 'before') {
                 $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " < (?)", $dateString));
             } else {
-                $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " >= (?)", $dateString));
+                $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " > (?)", $dateString));
             }
         } elseif ($this->_operator == 'equals') {
             $split = explode('-', $this->_value);
