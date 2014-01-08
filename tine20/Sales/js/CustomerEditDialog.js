@@ -57,6 +57,23 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * executed after record got updated from proxy
+     */
+    onRecordLoad: function() {
+        // interrupt process flow until dialog is rendered
+        if (! this.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
+        
+        if (this.record.id) {
+            this.getForm().findField('number').disable();
+        }
+        
+        Tine.Sales.CustomerEditDialog.superclass.onRecordLoad.call(this);
+    },
+    
+    /**
      * duplicate(s) found exception handler
      * 
      * @todo: make this globally, smoothly the virtual fields (modelconfig) don't fit anywhere
@@ -67,6 +84,23 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.onRecordUpdate();
         exception.clientRecord = this.record.data;
         Tine.Sales.CustomerEditDialog.superclass.onDuplicateException.call(this, exception);
+    },
+    
+    /**
+     * Fill address with contact data, if not set already
+     * 
+     * @param {} combo
+     * @param {} record
+     * @param {} index
+     */
+    onSelectContactPerson: function(combo, record, index) {
+        var form = this.getForm();
+        if (record.get('adr_one_street') && ! form.findField('adr_street').getValue()) {
+            var ar = ['street', 'postalcode', 'region', 'locality', 'countryname'];
+            for (var index = 0; index < ar.length; index++) {
+                form.findField('adr_' + ar[index]).setValue(record.get('adr_one_' + ar[index]));
+            }
+        }
     },
     
     /**
@@ -176,7 +210,11 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     blurOnSelect: true,
                                     name: 'cpextern_id',
                                     allowBlank: true,
-                                    fieldLabel: this.app.i18n._('Contact Person (external)')
+                                    fieldLabel: this.app.i18n._('Contact Person (external)'),
+                                    listeners: {
+                                        scope: this,
+                                        select: this.onSelectContactPerson
+                                    }
                             }), Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                                     columnWidth: 1/2,
                                     blurOnSelect: true,
