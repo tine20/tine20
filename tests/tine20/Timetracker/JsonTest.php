@@ -303,18 +303,19 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // create customfield
         $cf = $this->_getCustomField()->toArray();
 
-        $changes = array( array('name' => 'duration', 'value' => '111'),
-                          array('name' => 'description', 'value' => 'PHPUNIT_multipleUpdate'),
-                          array('name' => 'customfield_' . $cf['name'], 'value' => 'PHPUNIT_multipleUpdate' ));
+        $changes = array( array('name' => 'duration',                   'value' => '111'),
+                          array('name' => 'description',                'value' => 'PHPUNIT_multipleUpdate'),
+                          array('name' => 'customfield_' . $cf['name'], 'value' => 'PHPUNIT_multipleUpdate' )
+        );
 
-        foreach($durations as $duration) {
+        foreach ($durations as $duration) {
             $timeSheet = $this->_getTimesheet(array('timeaccount_id' => $taId, 'duration' => $duration),true);
             $lr = $this->_getLastCreatedRecord();
             $timesheetIds[] = $lr['id'];
         }
 
-        $filter = array(array('field' => 'id','operator' => 'in', 'value' => $timesheetIds),
-                        array('field' => 'account_id', 'operator' => 'equals', Tinebase_Core::getUser()->getId())
+        $filter = array( array('field' => 'id',         'operator' => 'in',     'value' => $timesheetIds),
+                         array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
         );
 
         $json = new Tinebase_Frontend_Json();
@@ -325,8 +326,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(3, $result['totalcount'],'Could not update the correct number of records');
 
         // check if default field duration value was found
-        $sFilter = array(array('field' => 'duration','operator' => 'equals', 'value' => '111'),
-                         array('field' => 'account_id', 'operator' => 'equals', Tinebase_Core::getUser()->getId())
+        $sFilter = array( array('field' => 'duration',   'operator' => 'equals', 'value' => '111'),
+                          array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
         );
         $searchResult = $this->_json->searchTimesheets($sFilter,$this->_getPaging());
 
