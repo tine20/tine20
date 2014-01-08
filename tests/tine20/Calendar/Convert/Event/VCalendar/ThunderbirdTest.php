@@ -87,4 +87,21 @@ class Calendar_Convert_Event_VCalendar_ThunderbirdTest extends PHPUnit_Framework
         $this->assertTrue(isset($event->attendee[0]->alarm_snooze_time));
         $this->assertEquals('2013-04-12 06:24:46', $event->attendee[0]->alarm_snooze_time->toString());
     }
+    
+    /**
+     * testXMozAckExdate
+     * 
+     * @see 0009396: alarm_ack_time and alarm_snooze_time are not updated
+     */
+    public function testXMozAckExdate()
+    {
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_repeating_exdate_mozlastack.ics');
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD);
+        $event = $converter->toTine20Model($vcalendarStream);
+        
+        $exdate = $event->exdate->getFirstRecord();
+        
+        $this->assertTrue($exdate->attendee[2]->alarm_ack_time instanceof Tinebase_DateTime, 'no alarm_ack_time set in attendee: ' . print_r($exdate->attendee[2]->toArray(), true));
+        $this->assertEquals('2014-01-08 15:01:54', $exdate->attendee[2]->alarm_ack_time->toString());
+    }
 }

@@ -308,25 +308,23 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertTrue($diff->isEmpty());
     }
     
+    /**
+     * testAttendeeStatusUpdate
+     */
     public function testAttendeeStatusUpdate()
     {
         $event = $this->testCreate();
         
-        $testAttendee = new Calendar_Model_Attender(array(
-            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => Tinebase_Core::getUser()->contact_id,
-        ));
-        
         // update base events status
-        Calendar_Model_Attender::getAttendee($event->attendee, $testAttendee)->status = Calendar_Model_Attender::STATUS_TENTATIVE;
+        $testAttendee = $this->_getAttenderFromAttendeeSet($event->attendee);
+        $testAttendee->status = Calendar_Model_Attender::STATUS_TENTATIVE;
         $updatedEvent = $this->_uit->attenderStatusUpdate($event, $testAttendee);
         
         $this->assertEquals(2, count($updatedEvent->exdate), 'num exdate mismatch');
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, Calendar_Model_Attender::getAttendee($updatedEvent->attendee, $testAttendee)->status, 'status of baseevent was not updated');
         $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, Calendar_Model_Attender::getAttendee($updatedEvent->exdate->filter('is_deleted', 0)->getFirstRecord()->attendee, $testAttendee)->status, 'status of exdate must not be updated');
         
-        
-        // update exiting persitent exception
+        // update exiting persistent exception
         Calendar_Model_Attender::getAttendee($updatedEvent->exdate->filter('is_deleted', 0)->getFirstRecord()->attendee, $testAttendee)->status = Calendar_Model_Attender::STATUS_ACCEPTED;
         $updatedEvent = $this->_uit->attenderStatusUpdate($updatedEvent, $testAttendee);
         
@@ -334,7 +332,23 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, Calendar_Model_Attender::getAttendee($updatedEvent->attendee, $testAttendee)->status, 'persistent exdate status of baseevent was not updated');
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, Calendar_Model_Attender::getAttendee($updatedEvent->exdate->filter('is_deleted', 0)->getFirstRecord()->attendee, $testAttendee)->status, 'persistent exdate status of exdate must not be updated');
         
-        // new exception
+        $newException = $this->_createEventException($event);
+        $updatedEvent->exdate->addRecord($newException);
+        
+        Calendar_Model_Attender::getAttendee($newException->attendee, $testAttendee)->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $updatedEvent = $this->_uit->attenderStatusUpdate($updatedEvent, $testAttendee);
+        
+        $this->assertEquals(3, count($updatedEvent->exdate), 'new exdate num exdate mismatch');
+    }
+    
+    /**
+     * create event exception
+     * 
+     * @param Calendar_Model_Event $event
+     * @return Calendar_Model_Event
+     */
+    protected function _createEventException($event)
+    {
         $newException = clone $event;
         $newException->id = NULL;
         $newException->recurid = clone $newException->dtstart;
@@ -343,12 +357,29 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $newException->dtend->addDay(3)->addHour(2);
         $newException->summary = 'new exception';
         $newException->exdate = NULL;
-        $updatedEvent->exdate->addRecord($newException);
         
-        Calendar_Model_Attender::getAttendee($newException->attendee, $testAttendee)->status = Calendar_Model_Attender::STATUS_DECLINED;
-        $updatedEvent = $this->_uit->attenderStatusUpdate($updatedEvent, $testAttendee);
+        return $newException;
+    }
+    
+    /**
+     * testAlarmAckInRecurException
+     * 
+     * @see 0009396: alarm_ack_time and alarm_snooze_time are not updated
+     */
+    public function testAlarmAckInRecurException()
+    {
+        $event = $this->testCreate();
         
-        $this->assertEquals(3, count($updatedEvent->exdate), 'new exdate num exdate mismatch');
+        // save event as sclever to ack sclevers alarm
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        
+        $sclever = $this->_getAttenderFromAttendeeSet($event->exdate->getFirstRecord()->attendee, 'sclever');
+        $ackTime = Tinebase_DateTime::now();
+        $sclever->alarm_ack_time = $ackTime;
+        $updatedEvent = $this->_uit->update($event);
+        $updatedSclever = $this->_getAttenderFromAttendeeSet($updatedEvent->exdate->getFirstRecord()->attendee, 'sclever');
+        
+        $this->assertEquals($ackTime, $updatedSclever->alarm_ack_time, 'alarm ack time not updated for attender: ' . print_r($updatedSclever->toArray(), true));
     }
     
     /**
@@ -361,15 +392,10 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         
         $persistentException = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
         
-        $sclever = new Calendar_Model_Attender(array(
-            'user_id'        => $this->_personasContacts['sclever']->getId(),
-            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
-        ));
-        
-        $persistentSClever = Calendar_Model_Attender::getAttendee($persistentException->attendee, $sclever);
+        $persistentSClever = $this->_getAttenderFromAttendeeSet($persistentException->attendee, 'sclever');
         $persistentException->attendee->removeRecord($persistentSClever);
         
-        $currUser = $this->_uit->setCalendarUser($sclever);
+        $currUser = $this->_uit->setCalendarUser($persistentSClever);
         $this->_uit->setEventFilter(new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'equals', 'value' => array(
                 'user_type'    => Calendar_Model_Attender::USERTYPE_USER,

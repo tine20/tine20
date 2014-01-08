@@ -107,9 +107,7 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     {
         if ($this->_transactionId) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-        }
-        
-        else {
+        } else {
             $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
                 array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
             )), new Tinebase_Model_Pagination(array()));
@@ -124,6 +122,11 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             foreach ($this->_testCalendars as $cal) {
                 Tinebase_Container::getInstance()->deleteContainer($cal, true);
             }
+        }
+        
+        if ($this->_testUser->getId() !== Tinebase_Core::getUser()->getId()) {
+            // reset test user
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
         }
     }
     
@@ -207,11 +210,32 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
         ));
     }
     
+    /**
+     * unset transaction id to make sure this tests transaction is never rolled back
+     */
     protected function _testNeedsTransaction()
     {
         if ($this->_transactionId) {
             Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
             $this->_transactionId = NULL;
         }
+    }
+    
+    /**
+     * helper function for getting attender (current user or persona) from attendee set
+     * 
+     * @param Tinebase_Record_RecordSet $attendee
+     * @param string $persona
+     * @return Calendar_Model_Attender
+     */
+    protected function _getAttenderFromAttendeeSet($attendee, $persona = null)
+    {
+        $contactId = $persona ? $this->_personasContacts[$persona]->getId() : Tinebase_Core::getUser()->contact_id;
+        $attender = new Calendar_Model_Attender(array(
+            'user_id'        => $contactId,
+            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+        ));
+        
+        return Calendar_Model_Attender::getAttendee($attendee, $attender);
     }
 }

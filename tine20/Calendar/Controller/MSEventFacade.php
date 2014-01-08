@@ -310,6 +310,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         foreach($migration['toUpdate'] as $exception) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                . ' Update exdate ' . $exception->getId() . ' at ' . $exception->dtstart->toString());
+            
             $_event->assertCurrentUserAsAttendee(TRUE, TRUE);
             $this->_prepareException($updatedBaseEvent, $exception);
             $this->_eventController->update($exception, $_checkBusyConflicts);
