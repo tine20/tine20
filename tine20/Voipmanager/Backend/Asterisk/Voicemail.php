@@ -32,27 +32,19 @@ class Voipmanager_Backend_Asterisk_Voicemail extends Tinebase_Backend_Sql_Abstra
     protected $_modelName = 'Voipmanager_Model_Asterisk_Voicemail';
     
     /**
-     * get the basic select object to fetch records from the database
-     *  
-     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
-     * @param boolean $_getDeleted get deleted records (if modlog is active)
-     * @return Zend_Db_Select
+     * foreign tables (key => tablename)
+     *
+     * @var array
      */
-    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {
-        $select = parent::_getSelect($_cols, $_getDeleted);
-
-        // add join only if needed and allowed
-        if (($_cols == '*') || (is_array($_cols) && isset($_cols['context']))) {
-            $select->joinLeft(
-                array('contexts'  => $this->_tablePrefix . 'asterisk_context'),
-                'context_id = contexts.id',
-                array('context' => 'name')
-            );
-        }
-        
-        return $select;
-    }
+    protected $_foreignTables = array(
+        'context'  => array(
+            'table'         => 'asterisk_context',
+            'joinOn'        => 'id',
+            'joinId'        => 'context_id',
+            'select'        => array('context' => 'name'),
+            'singleValue'   => true,
+        ),
+    );
     
     /**
      * converts record into raw data for adapter

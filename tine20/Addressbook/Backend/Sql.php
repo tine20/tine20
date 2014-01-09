@@ -63,7 +63,6 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             'joinOn'        => 'contact_id',
             'select'        => null, // set by constructor
             'singleValue'   => TRUE,
-            'preserve'      => TRUE,
         ),
         'account_id'    => array(
             'table'         => 'accounts',
