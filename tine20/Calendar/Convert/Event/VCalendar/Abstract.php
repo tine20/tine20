@@ -359,6 +359,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         }
         
         // find the main event - the main event has no RECURRENCE-ID
+        $baseVevent = null;
         foreach ($vcalendar->VEVENT as $vevent) {
             if (! isset($vevent->{'RECURRENCE-ID'})) {
                 $this->_convertVevent($vevent, $event);
@@ -368,7 +369,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             }
         }
 
-        // if we have found no VEVENT component something went wrong, lets stop here
+        // TODO check if this is correct! spec?
+        // @see 0009510: is it allowed to have no main vevent in ics?
+        // if we have found no VEVENT component or something went wrong, lets stop here
         if (! $baseVevent) {
             throw new Tinebase_Exception_UnexpectedValue('no main VEVENT component found in VCALENDAR');
         }
