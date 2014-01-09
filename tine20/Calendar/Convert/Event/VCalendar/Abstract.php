@@ -6,7 +6,8 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
  */
 
 /**
@@ -361,19 +362,20 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         foreach ($vcalendar->VEVENT as $vevent) {
             if (! isset($vevent->{'RECURRENCE-ID'})) {
                 $this->_convertVevent($vevent, $event);
+                $baseVevent = $vevent;
                 
                 break;
             }
         }
 
         // if we have found no VEVENT component something went wrong, lets stop here
-        if (! $event->toArray()) {
+        if (! $baseVevent) {
             throw new Tinebase_Exception_UnexpectedValue('no main VEVENT component found in VCALENDAR');
         }
         
         // TODO only do this for events with rrule?
         // if (! empty($event->rrule)) {
-        $this->_parseEventExceptions($event, $vcalendar);
+        $this->_parseEventExceptions($event, $vcalendar, $baseVevent);
         $event->isValid(true);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
@@ -387,8 +389,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      * 
      * @param  Calendar_Model_Event                $event
      * @param  \Sabre\VObject\Component\VCalendar  $vcalendar
+     * @param  \Sabre\VObject\Component\VCalendar  $baseVevent
      */
-    protected function _parseEventExceptions(Calendar_Model_Event $event, \Sabre\VObject\Component\VCalendar $vcalendar)
+    protected function _parseEventExceptions(Calendar_Model_Event $event, \Sabre\VObject\Component\VCalendar $vcalendar, $baseVevent = null)
     {
         $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate->filter('is_deleted', false) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
@@ -411,12 +414,32 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     }
                 }
                 
+                if ($baseVevent) {
+                    $this->_adaptBaseEventProperties($vevent, $baseVevent);
+                }
+                
                 $this->_convertVevent($vevent, $recurException);
                 
                 if (! $event->exdate instanceof Tinebase_Record_RecordSet) {
                     $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
                 }
                 $event->exdate->addRecord($recurException);
+            }
+        }
+    }
+    
+    /**
+     * adapt X-MOZ-LASTACK / X-MOZ-SNOOZE-TIME from base vevent
+     * 
+     * @see 0009396: alarm_ack_time and alarm_snooze_time are not updated
+     */
+    protected function _adaptBaseEventProperties($vevent, $baseVevent)
+    {
+        $propertiesToAdapt = array('X-MOZ-LASTACK', 'X-MOZ-SNOOZE-TIME');
+        
+        foreach ($propertiesToAdapt as $property) {
+            if (isset($baseVevent->{$property})) {
+                $vevent->{$property} = $baseVevent->{$property};
             }
         }
     }

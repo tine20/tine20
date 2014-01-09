@@ -318,6 +318,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     selectOnFocus: true,
                     forceSelection: false,
                     renderAttenderName: this.renderAttenderName,
+                    // sort by type (users first)
+                    sortBy: 'type',
+                    sortDir: 'DESC',
+                    
                     getValue: function() {
                         var value = this.selectedRecord ? this.selectedRecord.data : ((this.getRawValue() && Ext.form.VTypes.email(this.getRawValue())) ? this.getRawValue() : null);
                         return value;
@@ -330,6 +334,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 colModel.config[o.column].setEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                     minListWidth: 350,
                     blurOnSelect: true,
+                    sortBy: 'name',
                     recordClass: Tine.Addressbook.Model.List,
                     getValue: function() {
                         return this.selectedRecord ? this.selectedRecord.data : null;
@@ -341,6 +346,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 colModel.config[o.column].setEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                     minListWidth: 350,
                     blurOnSelect: true,
+                    sortBy: 'name',
                     recordClass: Tine.Calendar.Model.Resource,
                     getValue: function() {
                         return this.selectedRecord ? this.selectedRecord.data : null;

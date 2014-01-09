@@ -320,8 +320,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      */
     public function testCalculation()
     {
-        $this->markTestSkipped('currently fails without any change to the code ... :( [Failed asserting that 3 matches expected 6.]');
-        
         $employmentBegin  = new Tinebase_DateTime('2012-12-15');
         $employmentChange = new Tinebase_DateTime('2014-01-01');
         $employmentEnd    = new Tinebase_DateTime('2014-06-30');
@@ -378,7 +376,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         }
         
         // what about the holy evening? it's recurring
-        // @see 0009114: Freeetime edit dialog doesn't calculate recurring feast days
+        // @see 0009114: Freetime edit dialog doesn't calculate recurring feast days
         //      https://forge.tine20.org/mantisbt/view.php?id=9114
         
         $this->_createRecurringFeastDay(new Tinebase_DateTime('2011-12-24'));
@@ -431,11 +429,11 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'status' => 'ACCEPTED',
             'firstday_date' => $yesterday->subWeek(1)->toString()
         );
-        
+        $nd = $referenceDate->subMonth(2);
         $freetime['freedays'] = array(
-            array('duration' => '1', 'date' => $yesterday->toString()),
-            array('duration' => '1', 'date' => $yesterday->addDay(1)->toString()),
-            array('duration' => '1', 'date' => $yesterday->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $nd->toString()),
+            array('duration' => '1', 'date' => $nd->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $nd->addDay(1)->toString()),
         );
         
         $freetime = $this->_json->saveFreeTime($freetime);

@@ -391,13 +391,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $minDate->setDate($minDate->format('Y'), 1, 1);
         }
         
-        // find account
-        $filter = new HumanResources_Model_AccountFilter(array(
-            array('field' => 'year', 'operator' => 'equals', 'value' => intval($_year))
-        ));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
-        
-        $account = $aController->search($filter)->getFirstRecord();
         if (! $_accountId) {
             // find account
             $filter = new HumanResources_Model_AccountFilter(array(
@@ -527,6 +520,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // find all vacation days of the period
         $vacationDayFilter = clone $freeDayFilter;
         $vacationDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $vacationTimes->id)));
+        
         $vacationDays = $fdController->search($vacationDayFilter);
         
         // find out accepted vacation days. Vacation days will be substracted from remainingVacation only if they are accepted,
