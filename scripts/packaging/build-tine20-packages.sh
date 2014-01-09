@@ -206,7 +206,9 @@ function createArchives()
                     
                     # Tinebase/js/ux/Printer/print.css
                     (cd $TEMPDIR/tine20/Tinebase/js/ux/Printer; rm -rf $(ls | grep -v print.css))
-                    (cd $TEMPDIR/tine20/Tinebase/js/ux;  rm -rf $(ls | grep -v Printer))
+                    # Tinebase/js/ux/data/windowNameConnection*
+                    (cd $TEMPDIR/tine20/Tinebase/js/ux/data; rm -rf $(ls | grep -v windowNameConnection))
+                    (cd $TEMPDIR/tine20/Tinebase/js/ux;  rm -rf $(ls | grep -v Printer | grep -v data))
                     (cd $TEMPDIR/tine20/Tinebase/js;     rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v Locale | grep -v ux | grep -v "\-lang\-"))
                     (cd $TEMPDIR/tine20/Tinebase/css;    rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
                     
