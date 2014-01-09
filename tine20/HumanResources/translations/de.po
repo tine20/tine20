@@ -765,3 +765,10 @@ msgstr "Sa."
 #: js/ContractEditDialog.js:296
 msgid "Sun."
 msgstr "So."
+
+
+msgid "Hours to work after vacation and sickness"
+msgstr "Zu leistende Stunden nach Urlaub und Krankheit"
+
+msgid "Days to work after vacation and sickness"
+msgstr "Arbeitstage nach Urlaub und Krankheit"

@@ -196,13 +196,16 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
     
     /**
      * returns a new contract
-     * return HumanResources_Model_Contract
+     * 
+     * @param Tinebase_DateTime $sdate
+     * @return HumanResources_Model_Contract
      */
-    protected function _getContract()
+    protected function _getContract($sdate = NULL)
     {
-        $sdate = new Tinebase_DateTime();
-        $sdate->subMonth(1);
-
+        if (! $sdate) {
+            $sdate = new Tinebase_DateTime();
+            $sdate->subMonth(1);
+        }
         $c = new HumanResources_Model_Contract(array(
             'start_date' => $sdate,
             'end_date'   => null,

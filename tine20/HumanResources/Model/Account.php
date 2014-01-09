@@ -140,6 +140,18 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                     'type' => 'integer'
                 )
             ),
+            'working_days_real' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'integer'
+                )
+            ),
+            'working_hours_real' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'integer'
+                )
+            ),
         )
     );
 }
