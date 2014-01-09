@@ -359,6 +359,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         }
         
         // find the main event - the main event has no RECURRENCE-ID
+        $baseVevent = null;
         foreach ($vcalendar->VEVENT as $vevent) {
             if (! isset($vevent->{'RECURRENCE-ID'})) {
                 $this->_convertVevent($vevent, $event);
