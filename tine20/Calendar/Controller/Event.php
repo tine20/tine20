@@ -1733,8 +1733,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $updatedAttender->alarm_snooze_time   = isset($_attender->alarm_snooze_time) ? $_attender->alarm_snooze_time : $updatedAttender->alarm_snooze_time;
             $updatedAttender->transp              = isset($_attender->transp) ? $_attender->transp : Calendar_Model_Event::TRANSP_OPAQUE;
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " update attender status to {$_attender->status} for {$currentAttender->user_type} {$currentAttender->user_id}");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " update attender status to {$_attender->status} for {$currentAttender->user_type} {$currentAttender->user_id}");
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' set alarm_ack_time / alarm_snooze_time: ' . $updatedAttender->alarm_ack_time . ' / ' . $updatedAttender->alarm_snooze_time);
+            }
             
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
