@@ -149,8 +149,9 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      * 
      * @param {Boolean} fromYearChange
      * @param {Boolean} onInit
+     * @param {Date} date
      */
-    loadFeastDays: function(fromYearChange, onInit) {
+    loadFeastDays: function(fromYearChange, onInit, date) {
         
         this.disableYearChange = fromYearChange;
         
@@ -175,7 +176,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 _freeTimeId: freeTimeId
             },
             success : function(_result, _request) {
-                that.onFeastDaysLoad(Ext.decode(_result.responseText), onInit);
+                that.onFeastDaysLoad(Ext.decode(_result.responseText), onInit, date);
             },
             failure : function(exception) {
                 Tine.Tinebase.ExceptionHandler.handleRequestException(exception, that.onFeastDaysLoadFailureCallback, that);
@@ -186,14 +187,16 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
     
     /**
      * loads the feast days from loadFeastDays
+     * 
      * @param {Object} result
      * @param {Boolean} onInit
+     * @param {Date} date
      */
-    onFeastDaysLoad: function(result, onInit) {
+    onFeastDaysLoad: function(result, onInit, date) {
         // wait until the accountpicker has found the current account
         if (this.accountPickerActive) {
             if (! (this.editDialog && this.editDialog.currentAccount)) {
-                this.onFeastDaysLoad.defer(100, this, [result, onInit]);
+                this.onFeastDaysLoad.defer(100, this, [result, onInit, date]);
                 return;
             }
         }
@@ -256,7 +259,9 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         this.updateCellClasses();
         this.loadMask.hide();
         
-        if (this.disableYearChange) {
+        if (date) {
+            var focusDate = date;
+        } else if (this.disableYearChange) {
             if (this.previousYear < this.currentYear) {
                 var focusDate = new Date(this.currentYear + '/01/01 12:00:00 AM');
             } else {
@@ -358,9 +363,11 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
     
     /**
      * is called on year change
+     *
+     * @param {Date} date
      */
-    onYearChange: function() {
-        this.loadFeastDays(true);
+    onYearChange: function(date) {
+        this.loadFeastDays(true, false, date);
     },
     
     /**
@@ -391,7 +398,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 } else {
                     this.previousYear = this.currentYear;
                     this.currentYear = parseInt(date.format('Y'));
-                    this.onYearChange();
+                    this.onYearChange(date);
                 }
             }
         }

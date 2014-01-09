@@ -51,24 +51,27 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
      * @var array
      */
     protected $_foreignTables = array(
-        'is_billable_combined'    => array(
+        'is_billable_combined'  => array(
             'table'         => 'timetracker_timeaccount',
             'joinOn'        => 'id',
             'joinId'        => 'timeaccount_id',
             'select'        => '', // set in contructor
-            'singleValue'   => TRUE,
-            // needs to be preserved in select
-            'preserve'      => TRUE,
+            'singleValue'   => true,
         ),
-        'is_cleared_combined'    => array(
+        'is_cleared_combined'   => array(
             'table'         => 'timetracker_timeaccount',
             'joinOn'        => 'id',
             'joinId'        => 'timeaccount_id',
             'select'        => '', // set in contructor
-            'singleValue'   => TRUE,
-            // needs to be preserved in select
-            'preserve'      => TRUE,
+            'singleValue'   => true,
         ),
+        'duration_billable'   => array(
+            'table'         => 'timetracker_timeaccount',
+            'joinOn'        => 'id',
+            'joinId'        => 'timeaccount_id',
+            'select'        => '', // set in contructor
+            'singleValue'   => true,
+        )
     );
     
     /**
@@ -79,7 +82,6 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
      *  - tableName
      *  - tablePrefix
      *  - modlogActive
-     *  - useSubselectForCount
      *
      * @param Zend_Db_Adapter_Abstract $_db (optional)
      * @param array $_options (optional)
@@ -90,15 +92,19 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
         parent::__construct($_dbAdapter, $_options);
         
         $this->_additionalSearchCountCols =  array(
-            'is_billable_combined' => new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier('is_billable_combined') .')'),
-            'duration'             => new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier('duration') .')')
+            'is_billable_combined' => null, // taken from _foreignTables
+            'duration'             => 'duration',
+            'duration_billable'    => null  // taken from _foreignTables
         );
         
         $this->_foreignTables['is_billable_combined']['select'] = array(
-            'is_billable_combined' => new Zend_Db_Expr('(' . $this->_db->quoteIdentifier('timetracker_timesheet.is_billable') . '*' . $this->_db->quoteIdentifier('timetracker_timeaccount.is_billable') . ')')
+            'is_billable_combined'  => new Zend_Db_Expr('(' . $this->_db->quoteIdentifier('timetracker_timesheet.is_billable') . '*' . $this->_db->quoteIdentifier('timetracker_timeaccount.is_billable') . ')')
         );
         $this->_foreignTables['is_cleared_combined']['select']  = array(
-            'is_cleared_combined'  => new Zend_Db_Expr('(CASE WHEN ' . $this->_db->quoteIdentifier('timetracker_timesheet.is_cleared') . " = '1' OR " . $this->_db->quoteIdentifier('timetracker_timeaccount.status') . " = 'billed' THEN 1 ELSE 0 END)")
+            'is_cleared_combined'   => new Zend_Db_Expr('(CASE WHEN ' . $this->_db->quoteIdentifier('timetracker_timesheet.is_cleared') . " = '1' OR " . $this->_db->quoteIdentifier('timetracker_timeaccount.status') . " = 'billed' THEN 1 ELSE 0 END)")
+        );
+        $this->_foreignTables['duration_billable']['select'] = array(
+            'duration_billable' => new Zend_Db_Expr('(' . $this->_db->quoteIdentifier('duration') . '*' . $this->_db->quoteIdentifier('timetracker_timesheet.is_billable') . '*' . $this->_db->quoteIdentifier('timetracker_timeaccount.is_billable') . ')')
         );
     }
 }

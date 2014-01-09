@@ -56,7 +56,6 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
             'table'  => 'addressbook_list_members',
             'field'  => 'contact_id',
             'joinOn' => 'list_id',
-            'preserve' => TRUE,
         ),
         'group_id'    => array(
             'table'        => 'groups',
@@ -75,7 +74,6 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
      *  - tableName
      *  - tablePrefix
      *  - modlogActive
-     *  - useSubselectForCount
      *  
      * @param Zend_Db_Adapter_Abstract $_db (optional)
      * @param array $_options (optional)

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about removing the appendForeignRecord* functions
@@ -70,13 +70,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected $_modlogActive = FALSE;
     
     /**
-     * use subselect in searchCount fn
-     *
-     * @var boolean
-     */
-    protected $_useSubselectForCount = TRUE;
-    
-    /**
      * Identifier
      *
      * @var string
@@ -137,7 +130,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      *  - tableName
      *  - tablePrefix
      *  - modlogActive
-     *  - useSubselectForCount
      *  
      * @param Zend_Db_Adapter_Abstract $_db (optional)
      * @param array $_options (optional)
@@ -152,7 +144,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_tableName            = (isset($_options['tableName']) || array_key_exists('tableName', $_options))            ? $_options['tableName']    : $this->_tableName;
         $this->_tablePrefix          = (isset($_options['tablePrefix']) || array_key_exists('tablePrefix', $_options))          ? $_options['tablePrefix']  : $this->_db->table_prefix;
         $this->_modlogActive         = (isset($_options['modlogActive']) || array_key_exists('modlogActive', $_options))         ? $_options['modlogActive'] : $this->_modlogActive;
-        $this->_useSubselectForCount = (isset($_options['useSubselectForCount']) || array_key_exists('useSubselectForCount', $_options)) ? $_options['useSubselectForCount'] : $this->_useSubselectForCount;
         
         if (! ($this->_tableName && $this->_modelName)) {
             throw new Tinebase_Exception_Backend_Database('modelName and tableName must be configured or given.');
@@ -559,32 +550,28 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * Gets total count of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return int
+     * @return int|array
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
         $defaultCountCol = $this->_defaultCountCol == '*' ?  '*' : $this->_db->quoteIdentifier($this->_defaultCountCol);
-        $searchCountCols = array_merge(array('count' => 'COUNT(' . $defaultCountCol . ')'), $this->_additionalSearchCountCols);
         
-        if ($this->_useSubselectForCount) {
-            list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch(self::IDCOL, $_filter);
-            
-            $colsToFetch = !empty($this->_additionalSearchCountCols) 
-                ? array_merge($colsToFetch, array_keys($this->_additionalSearchCountCols)) 
-                : $colsToFetch;
-            
-            $select = $this->_getSelect($colsToFetch);
-            $this->_addFilter($select, $_filter);
-            
-            Tinebase_Backend_Sql_Abstract::traitGroup($select);
-            $countSelect = $this->_db->select()->from($select, $searchCountCols);
-            
-        } else {
-            $countSelect = $this->_getSelect($searchCountCols);
-            $this->_addFilter($countSelect, $_filter);
-            
-            Tinebase_Backend_Sql_Abstract::traitGroup($countSelect);
+        $searchCountCols = array('count' => 'COUNT(' . $defaultCountCol . ')');
+        foreach ($this->_additionalSearchCountCols as $column => $select) {
+            $searchCountCols['sum_' . $column] = new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($column) . ')');
         }
+        
+        list($subSelectColumns, $getIdValuePair) = $this->_getColumnsToFetch(self::IDCOL, $_filter);
+        if (!empty($this->_additionalSearchCountCols)) {
+            $subSelectColumns = array_merge($subSelectColumns, $this->_additionalSearchCountCols);
+        }
+        
+        $subSelect = $this->_getSelect($subSelectColumns);
+        $this->_addFilter($subSelect, $_filter);
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($subSelect);
+        
+        $countSelect = $this->_db->select()->from($subSelect, $searchCountCols);
         
         if (!empty($this->_additionalSearchCountCols)) {
             $result = $this->_db->fetchRow($countSelect);
@@ -787,8 +774,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param Zend_Db_Select $_select
      * @param array|string $_cols columns to get, * per default
      * 
-     * @todo find a way to preserve columns if needed without the need for the preserve setting
-     * @todo get joins from Zend_Db_Select before trying to join the same tables twice (+ remove try/catch)
+     * @todo joining the same table twice with same name but different "on"'s is not possible currently
      */
     protected function _addForeignTableJoins(Zend_Db_Select $_select, $_cols, $_groupBy = NULL)
     {
@@ -807,21 +793,21 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                         : (((isset($join['field']) || array_key_exists('field', $join)) && (! (isset($join['singleValue']) || array_key_exists('singleValue', $join)) || ! $join['singleValue']))
                             ? array($foreignColumn => $this->_dbCommand->getAggregate($join['table'] . '.' . $join['field']))
                             : array($foreignColumn => $join['table'] . '.id'));
-                    $joinId = ((isset($join['joinId']) || array_key_exists('joinId', $join))) ? $join['joinId'] : $this->_identifier;
+                    $joinId = isset($join['joinId']) ? $join['joinId'] : $this->_identifier;
                     
-                    $this->_removeColFromSelect($_select, $cols, $foreignColumn);
+                    // avoid duplicate columns => will be added again in the next few lines of code
+                    $this->_removeColFromSelect($_select, $foreignColumn);
                     
-                    try {
+                    $from = $_select->getPart(Zend_Db_Select::FROM);
+                    
+                    if (!isset($from[$join['table']])) {
                         $_select->joinLeft(
                             /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
                             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.' . $joinId) . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
                             /* select */ $selectArray
                         );
-                        // need to add it to cols to prevent _removeColFromSelect from removing it
-                        if ((isset($join['preserve']) || array_key_exists('preserve', $join)) && $join['preserve'] && (isset($selectArray[$foreignColumn]) || array_key_exists($foreignColumn, $selectArray))) {
-                            $cols[$foreignColumn] = $selectArray[$foreignColumn];
-                        }
-                    } catch (Zend_Db_Select_Exception $zdse) {
+                    } else {
+                        // join is defined already => just add the column
                         $_select->columns($selectArray, $join['table']);
                     }
                 }
@@ -862,21 +848,27 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * remove column from select to avoid duplicates 
      * 
      * @param Zend_Db_Select $_select
-     * @param array|string $_cols
      * @param string $_column
+     * @todo remove $_cols parameter
      */
-    protected function _removeColFromSelect(Zend_Db_Select $_select, &$_cols, $_column)
+    protected function _removeColFromSelect(Zend_Db_Select $_select, $_column)
     {
-        if (! is_array($_cols)) {
-            return;
-        }
+        $columns = $_select->getPart(Zend_Db_Select::COLUMNS);
         
-        foreach ($_cols as $name => $correlation) {
-            if ($name == $_column) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Removing ' . $_column . ' from columns.');
-                unset($_cols[$_column]);
+        foreach ($columns as $id => $column) {
+            if ($column[2] == $_column) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                    __METHOD__ . '::' . __LINE__ . ' Removing ' . $_column . ' from columns.');
+                
+                unset($columns[$id]);
+                
+                // reset all all columns and add as again
                 $_select->reset(Zend_Db_Select::COLUMNS);
-                $_select->columns($_cols);
+                foreach ($columns as $newColumn) {
+                    $_select->columns(!empty($newColumn[2]) ? array($newColumn[2] => $newColumn[1]) : $newColumn[1], $newColumn[0]);
+                }
+                
+                break;
             }
         }
     }

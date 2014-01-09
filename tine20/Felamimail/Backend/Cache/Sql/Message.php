@@ -47,25 +47,21 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             'table'     => 'felamimail_cache_message_to',
             'joinOn'    => 'message_id',
             'field'     => 'email',
-            'preserve'  => TRUE,
         ),
         'cc'    => array(
             'table'  => 'felamimail_cache_message_cc',
             'joinOn' => 'message_id',
             'field'  => 'email',
-            'preserve'  => TRUE,
         ),
         'bcc'    => array(
             'table'  => 'felamimail_cache_message_bcc',
             'joinOn' => 'message_id',
             'field'  => 'email',
-            'preserve'  => TRUE,
         ),
         'flags'    => array(
             'table'         => 'felamimail_cache_msg_flag',
             'joinOn'        => 'message_id',
             'field'         => 'flag',
-            'preserve'  => TRUE,
         ),
     );
 
