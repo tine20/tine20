@@ -28,6 +28,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     /**
      * @private
      */
+    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     windowHeight: 470,
     windowWidth: 800,
     
