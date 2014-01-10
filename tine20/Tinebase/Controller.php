@@ -95,10 +95,20 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
         
         if ($accessLog->result === Tinebase_Auth::SUCCESS && $user !== NULL && $user->accountStatus === Tinebase_User::STATUS_ENABLED) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . " Login with username $_loginname from $_ipAddress succeeded.");
+
             $this->_initUser($user, $accessLog, $_password);
+            
             $result = true;
         } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . " Login with username $_loginname from $_ipAddress failed ($authResultCode)!");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Failure messages: ' . print_r($authResult->getMessages(), TRUE));
+
             $this->_loginFailed($_loginname ? $_loginname : $authResultIdentity, $accessLog);
+            
             $result = false;
         } 
 
@@ -258,15 +268,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * login failed
      * 
-     * @param unknown_type $_loginname
-     * @param Tinebase_Model_AccessLog $_accessLog
+     * @param  string                    $loginName
+     * @param  Tinebase_Model_AccessLog  $accessLog
      */
-    protected function _loginFailed($_loginname, Tinebase_Model_AccessLog $_accessLog)
+    protected function _loginFailed($loginName, Tinebase_Model_AccessLog $accessLog)
     {
-        Tinebase_User::getInstance()->setLastLoginFailure($_loginname);
+        Tinebase_User::getInstance()->setLastLoginFailure($loginName);
         
-        $_accessLog->login_name = $_loginname;
-        $_accessLog->lo = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $accessLog->login_name = $loginName;
+        $accessLog->lo = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         sleep(mt_rand(2,5));
     }
