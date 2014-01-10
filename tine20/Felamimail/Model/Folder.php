@@ -22,6 +22,8 @@
  * @property  string  globalname
  * @property  boolean has_children
  * @property  boolean is_selectable
+ * @property  boolean supports_condstore
+ * @property  integer imap_lastmodseq
  */
 class Felamimail_Model_Folder extends Tinebase_Record_Abstract
 {
@@ -118,6 +120,7 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
         'delimiter'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_selectable'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'has_children'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'supports_condstore'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'recent'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'system_folder'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // imap values
@@ -129,6 +132,8 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
         'imap_uidvalidity'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'imap_totalcount'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'imap_timestamp'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // used for CONDSTORE flag sync
+        'imap_lastmodseq'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
     // cache values 
         'cache_status'           => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 

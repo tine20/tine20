@@ -272,7 +272,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $this->_checkForMissingMessages($folder, $imap);
         $this->_updateFolderStatus($folder);
         
-        if (rand(1, $_updateFlagFactor) == 1) {
+        if ($folder->supports_condstore || rand(1, $_updateFlagFactor) == 1) {
             $folder = $this->updateFlags($folder);
         }
         
@@ -1081,7 +1081,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     public function updateFlags($_folder, $_time = 60)
     {
         // always read folder from database
-        $folder = Felamimail_Controller_Folder::getInstance()->get($_folder);
+        $folder  = Felamimail_Controller_Folder::getInstance()->get($_folder);
         
         if ($folder->cache_status !== Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
@@ -1096,27 +1096,55 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Updating flags of folder ' . $folder->globalname 
-            . ' / start time: ' . Tinebase_DateTime::now()->toString() 
-            . ' / available seconds: ' . ($this->_availableUpdateTime - $this->_timeElapsed)
+            ' Updating flags of folder ' . $folder->globalname .
+            ' / start time: ' . Tinebase_DateTime::now()->toString() .
+            ' / available seconds: ' . ($this->_availableUpdateTime - $this->_timeElapsed)
         );
-
-        // get all flags for folder
-        $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
-        $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
-        $flags = $imap->getFlags(1, INF);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Folder: ' . print_r($folder->toArray(), true));
         
-        for ($i = $folder->cache_totalcount; $i > 0; $i -= $this->_flagSyncCountPerStep) {
-            $firstMessageSequence = ($i - $this->_flagSyncCountPerStep) >= 0 ? $i - $this->_flagSyncCountPerStep : 0;
-            $messagesWithFlags = $this->_backend->getFlagsForFolder($folder->getId(), $firstMessageSequence, $this->_flagSyncCountPerStep);
-            $this->_setFlagsOnCache($messagesWithFlags, $flags, $folder->getId());
+        $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
+        
+        // switch to folder (read-only)
+        $imap->examineFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
+        
+        if ($folder->supports_condstore) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' Folder supports condstore, fetching flags since last mod seq ' . $folder->imap_lastmodseq);
             
-            if(! $this->_timeLeft()) {
-                break;
+            $flags = $imap->getChangedFlags($folder->imap_lastmodseq);
+            
+            if (! empty($flags)) {
+                
+                $this->_setFlagsOnCache($flags, $folder, null, false);
+                
+                foreach ($flags as $flag) {
+                    if ($folder->imap_lastmodseq < $flag['modseq']) {
+                        $folder->imap_lastmodseq = $flag['modseq'];
+                    }
+                }
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                    ' Got ' . count($flags) . ' changed flags and updated last mod seq to ' . $folder->imap_lastmodseq);
+                $folder = Felamimail_Controller_Folder::getInstance()->update($folder);
+            }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' Get all flags for folder');
+            $flags = $imap->getFlags(1, INF);
+            
+            for ($i = $folder->cache_totalcount; $i > 0; $i -= $this->_flagSyncCountPerStep) {
+                $firstMessageSequence = ($i - $this->_flagSyncCountPerStep) >= 0 ? $i - $this->_flagSyncCountPerStep : 0;
+                $messagesWithFlags = $this->_backend->getFlagsForFolder($folder->getId(), $firstMessageSequence, $this->_flagSyncCountPerStep);
+                $this->_setFlagsOnCache($flags, $folder, $messagesWithFlags);
+                
+                if(! $this->_timeLeft()) {
+                    break;
+                }
             }
         }
         
-        $updatedCounters = Felamimail_Controller_Cache_Folder::getInstance()->getCacheFolderCounter($_folder);
+        $updatedCounters = Felamimail_Controller_Cache_Folder::getInstance()->getCacheFolderCounter($folder);
         $folder = Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, array(
             'cache_unreadcount' => $updatedCounters['cache_unreadcount'],
         ));
@@ -1130,32 +1158,50 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     /**
      * set flags on cache if different
      * 
-     * @param Tinebase_Record_RecordSet $_messages
-     * @param array $_flags
-     * @param string $_folderId
-     * 
-     * @todo check which flags our imap server supports and allow more
+     * @param array $flags
+     * @param Felamimail_Model_Folder $_folderId
+     * @param Tinebase_Record_RecordSet $messages
+     * @param boolean $checkDiff
      */
-    protected function _setFlagsOnCache($_messages, $_flags, $_folderId)
+    protected function _setFlagsOnCache($flags, $folder, $messages = null, $checkDiff = true)
     {
+        if ($messages === null) {
+            $filter = new Felamimail_Model_MessageFilter(array(
+                array(
+                    'field' => 'account_id', 'operator' => 'equals', 'value' => $folder->account_id
+                ),
+                array(
+                    'field' => 'folder_id',  'operator' => 'equals', 'value' => $folder->getId()
+                ),
+                array(
+                    'field' => 'messageuid', 'operator' => 'in', 'value' => array_keys($flags)
+                )
+            ));
+            $messages = $this->_backend->search($filter);
+        }
+        
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $supportedFlags = array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(FALSE));
         
         $updateCount = 0;
-        foreach ($_messages as $cachedMessage) {
-            if ((isset($_flags[$cachedMessage->messageuid]) || array_key_exists($cachedMessage->messageuid, $_flags))) {
-                $newFlags = array_intersect($_flags[$cachedMessage->messageuid]['flags'], $supportedFlags);
-                $cachedFlags = array_intersect($cachedMessage->flags, $supportedFlags);
-                $diff1 = array_diff($cachedFlags, $newFlags);
-                $diff2 = array_diff($newFlags, $cachedFlags);
-                if (count($diff1) > 0 || count($diff2) > 0) {
-                    $this->_backend->setFlags(array($cachedMessage->getId()), $newFlags, $_folderId);
+        foreach ($messages as $cachedMessage) {
+            if (isset($flags[$cachedMessage->messageuid]) || array_key_exists($cachedMessage->messageuid, $flags)) {
+                $newFlags = array_intersect($flags[$cachedMessage->messageuid]['flags'], $supportedFlags);
+                
+                if ($checkDiff) {
+                    $cachedFlags = array_intersect($cachedMessage->flags, $supportedFlags);
+                    $diff1 = array_diff($cachedFlags, $newFlags);
+                    $diff2 = array_diff($newFlags, $cachedFlags);
+                }
+                
+                if (! $checkDiff || count($diff1) > 0 || count($diff2) > 0) {
+                    $this->_backend->setFlags(array($cachedMessage->getId()), $newFlags, $folder->getId());
                     $updateCount++;
                 }
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $updateCount . ' flags.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $updateCount . ' messages.');
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
     }

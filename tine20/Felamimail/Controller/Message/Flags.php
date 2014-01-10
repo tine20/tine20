@@ -137,7 +137,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
                             'decrementMessagesCounter' => 0, 
                             'decrementUnreadCounter'   => 0
                         );
-                    } else if ($_mode === 'clear') {
+                    } elseif ($_mode === 'clear') {
                         $folderCounterById[$lastFolderId] = array(
                             'incrementUnreadCounter' => 0
                         );
