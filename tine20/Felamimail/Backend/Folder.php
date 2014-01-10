@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        set timestamp field (add default to model?)
  */
@@ -43,9 +43,11 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
         
         // fetch total count
-        $cols = array('cache_totalcount' => new Zend_Db_Expr('COUNT(*)'));
         $select = $this->_db->select()
-            ->from(array('felamimail_cache_message' => $this->_tablePrefix . 'felamimail_cache_message'), $cols)
+            ->from(array(
+                'felamimail_cache_message' => $this->_tablePrefix . 'felamimail_cache_message'),
+                array('cache_totalcount' => new Zend_Db_Expr('COUNT(*)'))
+            )
             ->where($this->_db->quoteIdentifier('felamimail_cache_message.folder_id') . ' = ?', $folderId);
         
         $stmt = $this->_db->query($select);
@@ -57,10 +59,10 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         $select = $this->_db->select()
             ->from(array(
                 'felamimail_cache_msg_flag' => $this->_tablePrefix . 'felamimail_cache_msg_flag'), 
-                array('cache_totalcount' => new Zend_Db_Expr('COUNT(DISTINCT(felamimail_cache_msg_flag.message_id))'))
+                array('cache_totalcount' => new Zend_Db_Expr('COUNT(DISTINCT(' . $this->_db->quoteIdentifier('felamimail_cache_msg_flag.message_id') . '))'))
             )
             ->where($this->_db->quoteIdentifier('felamimail_cache_msg_flag.folder_id') . ' = ?', $folderId)
-            ->where($this->_db->quoteIdentifier('felamimail_cache_msg_flag.flag') . ' = ?', $this->_dbCommand->escapeSpecialChar(Zend_Mail_Storage::FLAG_SEEN));
+            ->where($this->_db->quoteIdentifier('felamimail_cache_msg_flag.flag') . ' = ?', Zend_Mail_Storage::FLAG_SEEN);
         
         $stmt = $this->_db->query($select);
         $seenCount = $stmt->fetchColumn(0);

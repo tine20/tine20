@@ -574,6 +574,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, preg_match('/aaaaaä/', $message['body']));
         
         // delete message on imap server and check if correct exception is thrown when trying to get it
+        $this->_imap->selectFolder('INBOX');
         $this->_imap->removeMessage($message['messageuid']);
         Tinebase_Core::getCache()->clean();
         $this->setExpectedException('Felamimail_Exception_IMAPMessageNotFound');
