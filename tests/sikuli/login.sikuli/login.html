@@ -70,12 +70,55 @@
 <h2>login.sikuli</h2> <a href="login.zip">(Download this script)</a>
 </div>
 <pre class="sikuli-code">
-Region(<span class="dig">109</span>,<span class="dig">28</span>,<span class="dig">1022</span>,<span class="dig">712</span>)
-<span class="skw">click</span>(<img src="1379932428118.png" />)
-<span class="skw">type</span>(<span class="str">"unittest"</span>)
-<span class="skw">click</span>(<img src="1379932466303.png" />)
-<span class="skw">type</span>(<span class="str">"picola124"</span>)
-<span class="skw">click</span>(<img src="1379932483974.png" />)
+<span class="kw">from</span> __future__ <span class="kw">import</span> with_statement
+<span class="kw">import</span> unittest
+
+<span class="kw">from</span> sikuli.Sikuli <span class="kw">import</span> *
+
+<span class="kw">class</span> Chromium(object):
+
+    <span class="kw">def</span> __init__(self, url):
+        self.url = url
+
+    <span class="kw">def</span> __enter__(self):
+        Screen(<span class="dig">0</span>)
+        app = App.open(<span class="str">'chromium-browser'</span>)
+        <span class="skw">wait</span>(<span class="dig">2</span>)
+        <span class="skw">type</span>(<span class="str">"%s\n"</span> % self.url)
+        <span class="skw">wait</span>(<span class="dig">2</span>)
+
+    <span class="kw">def</span> __exit__(self, type_, value, traceback):
+        <span class="skw">type</span>(Key.F4, KEY_ALT)
+
+
+<span class="kw">class</span> TestBasicScenario(unittest.TestCase):
+
+    <span class="kw">def</span> test_01_login(self):
+        <span class="skw">click</span>(<img src="username.png" />)
+        <span class="skw">type</span>(<span class="str">"unittest"</span>)
+        <span class="skw">click</span>(<img src="password.png" />)
+        <span class="skw">type</span>(<span class="str">"password"</span>)
+        <span class="skw">click</span>(<img src="1379932483974.png" />)
+        <span class="skw">wait</span>(<span class="dig">3</span>)
+        <span class="kw">assert</span> exists(<img src="1389349522098.png" />)
+
+
+    <span class="kw">def</span> test_02_logout(self):
+        <span class="skw">click</span>(<img src="logout.png" />)
+        <span class="skw">click</span>(<img src="1389349732360.png" />)
+        <span class="skw">wait</span>(<span class="dig">3</span>)
+        <span class="kw">assert</span> exists(<img src="loginlogo.png" />)
+
+
+
+<span class="cmt"># Sikuli settings (no logs)
+</span>Settings.ActionLogs = False
+Settings.InfoLogs = False
+Settings.DebugLogs = False
+
+<span class="kw">with</span> Chromium(<span class="str">'localhost&amp;tine20'</span>):
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestBasicScenario)
+    unittest.TextTestRunner(verbosity=<span class="dig">2</span>).run(suite)
 </pre>
 </body>
 </html>
