@@ -1128,12 +1128,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $attachment->charset     = 'ISO-8859-1';
         $attachment->filename    = 'attach.eml';
         $attachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
-                
+        
         $mail->addAttachment($attachment);
         
         $smtpConfig = $this->_account->getSmtpConfig();
         $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
+        Zend_Mail_Protocol_Abstract::$loggingEnabled = true;
         $mail->send($transport);
+        Zend_Mail_Protocol_Abstract::$loggingEnabled = false;
         
         $smtpLog = $transport->getConnection()->getLog();
         
