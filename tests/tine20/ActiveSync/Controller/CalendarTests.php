@@ -699,6 +699,9 @@ Zeile 3</AirSyncBase:Data>
         $this->assertTrue(in_array('test tag', $syncrotonEvent->categories), 'tag not found in categories: ' . print_r($syncrotonEvent->categories, TRUE));
     }
     
+    /**
+     * testEventWithAlarmToSyncrotonModel
+     */
     public function testEventWithAlarmToSyncrotonModel()
     {
         $event = ActiveSync_TestCase::getTestEvent();
@@ -847,5 +850,55 @@ Zeile 3</AirSyncBase:Data>
         
         #var_dump(Calendar_Controller_Event::getInstance()->get($serverId)->toArray());
         $this->assertEquals(1, count(Calendar_Controller_Event::getInstance()->get($serverId)->attendee), 'count after update');
+    }
+
+    /**
+     * testAddAlarm
+     * 
+     * @see 0008230: added alarm to event on iOS 6.1 -> description removed
+     */
+    public function testAddAlarm()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        
+        $event = ActiveSync_TestCase::getTestEvent();
+        $event->summary = 'testtermin';
+        $event->description = 'some text';
+        $event->dtstart = new Tinebase_DateTime('2013-10-22 16:00:00');
+        $event->dtend = new Tinebase_DateTime('2013-10-22 17:00:00');
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        
+        $xml = new SimpleXMLElement('
+          <ApplicationData>
+            <Timezone xmlns="uri:Calendar">xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMAAAAAAAAAxP///w==</Timezone>
+            <AllDayEvent xmlns="uri:Calendar">0</AllDayEvent>
+            <BusyStatus xmlns="uri:Calendar">2</BusyStatus>
+            <DtStamp xmlns="uri:Calendar">20131021T142015Z</DtStamp>
+            <EndTime xmlns="uri:Calendar">20131022T170000Z</EndTime>
+            <Reminder xmlns="uri:Calendar">60</Reminder>
+            <Sensitivity xmlns="uri:Calendar">0</Sensitivity>
+            <Subject xmlns="uri:Calendar">testtermin</Subject>
+            <StartTime xmlns="uri:Calendar">20131022T160000Z</StartTime>
+            <UID xmlns="uri:Calendar">' . $event->uid . '</UID>
+            <MeetingStatus xmlns="uri:Calendar">1</MeetingStatus>
+            <Attendees xmlns="uri:Calendar">
+              <Attendee>
+                <Name>' . Tinebase_Core::getUser()->accountDisplayName . '</Name>
+                <Email>' . Tinebase_Core::getUser()->accountEmailAddress . '</Email>
+                <AttendeeType>1</AttendeeType>
+              </Attendee>
+            </Attendees>
+          </ApplicationData>
+        ');
+        $syncrotonEvent = new Syncroton_Model_Event($xml);
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $event->creation_time);
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $event->getId(), $syncrotonEvent);
+        
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($serverId);
+        
+        $this->assertEquals(1, count($updatedEvent->alarms));
+        $this->assertEquals($event->description, $updatedEvent->description, 'description mismatch: ' . print_r($updatedEvent->toArray(), true));
     }
 }

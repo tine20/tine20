@@ -754,5 +754,8 @@ msgstr ""
 msgid "Sun."
 msgstr ""
 
-msgid "Miscellaneous"
+msgid "Hours to work after vacation and sickness"
+msgstr ""
+
+msgid "Days to work after vacation and sickness"
 msgstr ""

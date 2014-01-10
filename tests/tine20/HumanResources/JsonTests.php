@@ -391,10 +391,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account2014 = $json->getAccount($accountId2014);
         
         $this->assertEquals(25, $account2013['possible_vacation_days']);
-        $this->assertEquals(225, $account2013['working_days']);
+        $this->assertEquals(250, $account2013['working_days']);
         
         $this->assertEquals(15, $account2014['possible_vacation_days']);
-        $this->assertEquals(160, $account2014['working_days']);
+        $this->assertEquals(175, $account2014['working_days']);
         
         // add 5 extra free days to the account with different expiration dates, 2 days aren't expired already
         $tomorrow = Tinebase_DateTime::now();
@@ -412,13 +412,13 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account2013 = $json->getAccount($accountId2013);
         $this->assertEquals(27, $account2013['possible_vacation_days']);
         $this->assertEquals(27, $account2013['remaining_vacation_days']);
-        $this->assertEquals(223, $account2013['working_days']);
+        $this->assertEquals(250, $account2013['working_days']);
         $this->assertEquals(3, $account2013['expired_vacation_days'], 'There should be 3 expired vacation days at first!');
         
         // the extra freetimes added to the account2013 should not affect account 2014
         $account2014 = $json->getAccount($accountId2014);
         $this->assertEquals(15, $account2014['possible_vacation_days']);
-        $this->assertEquals(160, $account2014['working_days']);
+        $this->assertEquals(175, $account2014['working_days']);
         
         // now add 3 vacation days before the expiration day of the second extra free time
         // #8202: Allow to book remaining free days from last years' account, respect expiration
@@ -495,7 +495,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account2014 = $json->getAccount($accountId2014);
         $this->assertEquals(15, $account2014['possible_vacation_days']);
         $this->assertEquals(12, $account2014['remaining_vacation_days']);
-        $this->assertEquals(160, $account2014['working_days']);
+        $this->assertEquals(175, $account2014['working_days']);
         
         
         // now let's test the getFeastAndFreeTimes method with the same fixtures

@@ -140,6 +140,9 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                             items: [[
                                 {fieldLabel: this.app.i18n._('Days to work'), name: 'working_days' },
                                 {fieldLabel: this.app.i18n._('Hours to work'), name: 'working_hours' }
+                            ], [
+                                {fieldLabel: this.app.i18n._('Days to work after vacation and sickness'), name: 'working_days_real' },
+                                {fieldLabel: this.app.i18n._('Hours to work after vacation and sickness'), name: 'working_hours_real' }
                             ]]
                         }]
                     }, {

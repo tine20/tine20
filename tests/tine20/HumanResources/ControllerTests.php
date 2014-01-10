@@ -105,8 +105,13 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
      */
     public function testContract()
     {
+        $sdate = new Tinebase_DateTime('2013-01-01 00:00:00');
+        $employee = $this->_getEmployee('rwright');
+        
         $contractController = HumanResources_Controller_Contract::getInstance();
-        $contract = $this->_getContract();
+        $employeeController = HumanResources_Controller_Employee::getInstance();
+        $employee = $employeeController->create($employee);
+        $contract = $this->_getContract($sdate);
         $contract->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
 
         // create feast days
@@ -148,7 +153,10 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
 
         $newStartDate = new Tinebase_DateTime('2013-07-01');
         $contract->start_date = $newStartDate;
-
+        
+        $contract->employee_id = $employee->getId();
+        
+        $contractController->create($contract);
         $this->assertEquals(15, $contractController->calculateVacationDays($contract, $start, $stop));
 
         // test "getDatesToWorkOn"
@@ -158,7 +166,38 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         // so we expect 365-52-52-10 = 251 days
         $workingDates = $contractController->getDatesToWorkOn($contract, $start, $stop);
         $this->assertEquals(251, count($workingDates['results']));
-
+        
+        
+        // test $respectTakenVacationDays parameter of getDatesToWorkOn 
+        $accountController = HumanResources_Controller_Account::getInstance();
+        $accounts = $accountController->createMissingAccounts(2013, $contract->employee_id);
+        
+        $account = $accounts->getFirstRecord();
+        
+        $refDate = clone $newStartDate;
+        // get a monday
+        $refDate->addWeek(1)->addDay(1);
+        // now add 3 vacation days
+        $freetime = array(
+            'account_id' => $account->getId(),
+            'employee_id' => $contract->employee_id,
+            'type' => 'vacation',
+            'status' => 'ACCEPTED',
+            'firstday_date' => $refDate->toString()
+        );
+        
+        $freetime['freedays'] = array(
+            array('duration' => '1', 'date' => $refDate->toString()),
+            array('duration' => '1', 'date' => $refDate->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $refDate->addDay(1)->toString()),
+        );
+        
+        $json = new HumanResources_Frontend_Json();
+        $freetime = $json ->saveFreeTime($freetime);
+        
+        $workingDates = $contractController->getDatesToWorkOn($contract, $start, $stop, TRUE);
+        $this->assertEquals(248, count($workingDates['results']));
+        
         // test "getFeastDays"
         $feastDays = $contractController->getFeastDays($contract, $start, $stop);
 
