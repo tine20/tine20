@@ -195,8 +195,8 @@ class Tinebase_Auth
      */
     public function authenticate($_username, $_password)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Trying to authenticate '. $_username);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Trying to authenticate '. $_username);
         
         $this->_backend->setIdentity($_username);
         $this->_backend->setCredential($_password);
@@ -207,17 +207,6 @@ class Tinebase_Auth
             Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_NonPersistent());
         }
         $result = Zend_Auth::getInstance()->authenticate($this->_backend);
-        
-        $username = empty($_username) ? $result->getIdentity() : $_username;
-        if ($result->isValid()) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Authentication of '. $username . ' succeeded');
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' Authentication of '. $username . ' failed');
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Failure messages: ' . print_r($result->getMessages(), TRUE));
-        }
         
         return $result;
     }

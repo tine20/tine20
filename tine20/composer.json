@@ -17,7 +17,7 @@
     }],
     "require": {
         "syncroton/syncroton": "1.*",
-        "ezyang/htmlpurifier": "v4.5.0",
+        "ezyang/htmlpurifier": "v4.6.0",
         "codeplex/phpexcel": "1.7.8",
         "sabre/dav": "1.8.*",
         "sabre/vobject": "3.1.3 as 2.1.313",
