@@ -141,6 +141,12 @@ class Tinebase_Auth
             'ssl'       => 'tls',
             'domain'    => '',
          ),
+         self::MODSSL => array(
+             'casfile'           => null,
+             'crlspath'          => null,
+             'validation'        => null,
+             'tryUsernameSplit'  => '1'
+         )
      );
     
     /**
@@ -155,7 +161,8 @@ class Tinebase_Auth
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct() 
+    {
         $this->setBackend();
     }
     
@@ -255,16 +262,11 @@ class Tinebase_Auth
      */
     public function setBackend()
     {
-        // test mod_ssl server variables
-        if (Zend_Auth_Adapter_ModSsl::hasModSsl()) {
-            self::setBackendType(self::MODSSL);
-            $backendType =  self::MODSSL;
-        }
-        else {
-            $backendType = self::getConfiguredBackend();
-        }
+        $backendType = self::getConfiguredBackend();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' authentication backend: ' . $backendType);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ .' authentication backend: ' . $backendType);
+        
         $this->_backend = Tinebase_Auth_Factory::factory($backendType);
     }
     

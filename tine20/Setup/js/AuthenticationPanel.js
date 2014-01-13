@@ -202,7 +202,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
         this.authenticationBackendCombo = new Ext.form.ComboBox(Ext.applyIf({
             name: 'authentication_backend',
             fieldLabel: this.app.i18n._('Backend'),
-            store: [['Sql', 'Sql'], ['Ldap', 'Ldap'], ['Imap', 'IMAP']],
+            store: [['Sql', 'SQL'], ['Ldap', 'LDAP'], ['Imap', 'IMAP'], ['ModSsl', this.app.i18n._('TLS client certificate')]],
             value: 'Sql',
             width: 300,
             listeners: {
@@ -381,6 +381,35 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         {
                             name: 'authentication_Imap_domain',
                             fieldLabel: this.app.i18n._('Append domain to login name')
+                        }
+                        ]
+                    }, {
+                        id: this.authProviderIdPrefix + 'ModSsl',
+                        layout: 'form',
+                        autoHeight: 'auto',
+                        defaults: {
+                            width: 300,
+                            xtype: 'textfield',
+                            tabIndex: this.getTabIndex
+                        },
+                        items: [Ext.applyIf({
+                            fieldLabel: this.app.i18n._('Certificate validation'),
+                            name: 'authentication_ModSsl_validation',
+                            store: [['Apache', 'Apache'], ['X509', 'X509'], ['ICPBrasil', 'ICP Brasil']],
+                            value: 'Apache'
+                        }, commonComboConfig),
+                        Ext.applyIf({
+                            name: 'authentication_ModSsl_tryUsernameSplit',
+                            fieldLabel: this.app.i18n._('Try to split username'),
+                            store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
+                            value: '1'
+                        }, commonComboConfig), 
+                        {
+                            name: 'authentication_ModSsl_casfile',
+                            fieldLabel: this.app.i18n._('CA file')
+                        }, {
+                            name: 'authentication_ModSsl_crlspath',
+                            fieldLabel: this.app.i18n._('CRL directory')
                         }
                         ]
                     }]

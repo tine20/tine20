@@ -1,22 +1,38 @@
 <?php
-
 /**
- * Tine 2.0
+ * Zend Framework
  *
- * @package     Tinebase
- * @subpackage  Auth
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Antonio Carlos da Silva <antonio-carlos.silva@serpro.gov.br>
- * @author      Mario Cesar Kolling <mario.kolling@serpro.gov.br>
- * @copyright   Copyright (c) 2009-2013 Serpro (http://www.serpro.gov.br)
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
- * @todo        support titulo and INSS Data
- * @todo        support pf and app/server certificates data.
- * @todo        treat other OIDs
- * 
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @category   Zend
+ * @package    Zend_Auth
+ * @subpackage Zend_Auth_Adapter
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @author     Antonio Carlos da Silva <antonio-carlos.silva@serpro.gov.br>
+ * @author     Mario Cesar Kolling <mario.kolling@serpro.gov.br>
+ * @copyright  Copyright (c) 2009-2013 Serpro (http://www.serpro.gov.br)
+ * @copyright  Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-class Tinebase_Auth_ModSsl_Certificate_ICPBrasil extends Tinebase_Auth_ModSsl_Certificate_X509
+/**
+ * class to handle ICP Brasil specific certificate attributes
+ *
+ * @category   Zend
+ * @package    Zend_Auth
+ * @subpackage Zend_Auth_Adapter
+ * @todo       support titulo and INSS Data
+ * @todo       support pf and app/server certificates data.
+ * @todo       treat other OIDs
+ */
+class Zend_Auth_Adapter_ModSsl_Certificate_ICPBrasil extends Zend_Auth_Adapter_ModSsl_Certificate_X509
 {
     const OID_PF = '2.16.76.1.3.1';
     const OID_PJ_RESPONSAVEL = '2.16.76.1.3.2';
@@ -40,15 +56,19 @@ class Tinebase_Auth_ModSsl_Certificate_ICPBrasil extends Tinebase_Auth_ModSsl_Ce
     /**
      * @var boolean
      */
-    protected $app = false;
-    protected $cpf = null;
+    protected $app        = false;
+    protected $cpf        = null;
     protected $nascimento = null;
-    protected $nis = null;
-    protected $rg = null;
-    protected $orgaoUF = null;
+    protected $nis        = null;
+    protected $rg         = null;
+    protected $orgaoUF    = null;
     
     public function __construct($certificate, $icpBrasilData)
     {
+        parent::__construct($options, $certificate);
+        
+        $icpBrasilData = self::parseICPBrasilData($this->_certificate);
+        
         // parse $oid and get specific info from
         if ((isset($icpBrasilData[self::OID_PF]) || array_key_exists(self::OID_PF, $icpBrasilData))) {
             $this->pf = true;
@@ -68,8 +88,6 @@ class Tinebase_Auth_ModSsl_Certificate_ICPBrasil extends Tinebase_Auth_ModSsl_Ce
                 $this->orgaoUF['ORGAOUF'];
             }
         }
-        
-        parent::__construct($certificate);
     }
     
     /**
@@ -194,6 +212,16 @@ class Tinebase_Auth_ModSsl_Certificate_ICPBrasil extends Tinebase_Auth_ModSsl_Ce
         return $this->rg;
     }
 
+    public function getUserName()
+    {
+        if ($this->isPF()) {
+            return $this->getCPF();
+        } else {
+            // TODO: throw an exception
+            return null;
+        }
+    }
+    
     public function getOrgaoUF()
     {
         return $this->orgaoUF;
