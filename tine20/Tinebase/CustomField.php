@@ -249,7 +249,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     {
         $cfId = ($_customField instanceof Tinebase_Model_CustomField_Config) ? $_customField->getId() : $_customField;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting custom field config ' . $cfId . ' and values.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Deleting custom field config ' . $cfId . ' and values.');
         
         $this->_clearCache();
         $this->_backendValue->deleteByProperty($cfId, 'customfield_id');

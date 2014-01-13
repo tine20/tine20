@@ -364,8 +364,6 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     {name: 'status', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
     {name: 'status_authkey'},
     {name: 'displaycontainer_id'},
-    {name: 'alarm_ack_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    {name: 'alarm_snooze_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'transp'},
     {name: 'checked'} // filter grid helper field
 ], {

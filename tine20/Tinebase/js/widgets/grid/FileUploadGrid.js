@@ -65,6 +65,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @private
      */
     initComponent: function () {
+        this.i18nFileString = this.i18nFileString ? this.i18nFileString : _('File');
         
         this.record = this.record || null;
         this.id = this.id + Ext.id();
@@ -74,8 +75,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             containerProperty: 'container_id', 
             evalGrants: false
         });
-        
-        this.i18nFileString = _('File');
         
         this.initToolbarAndContextMenu();
         this.initStore();

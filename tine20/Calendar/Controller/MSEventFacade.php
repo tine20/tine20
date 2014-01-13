@@ -744,7 +744,13 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 $alarmUpdate = Calendar_Controller_Alarm::getMatchingAlarm($_event->alarms, $currentAlarm);
                 
                 if ($alarmUpdate) {
-                    // we could map the alarm => no change required
+                    // we could map the alarm => save ack & snooze options
+                    if ($dtAck = Calendar_Controller_Alarm::getAcknowledgeTime($alarmUpdate)) {
+                        Calendar_Controller_Alarm::setAcknowledgeTime($currentAlarm, $dtAck, $this->getCalendarUser()->user_id);
+                    }
+                    if ($dtSnooze = Calendar_Controller_Alarm::getSnoozeTime($alarmUpdate)) {
+                        Calendar_Controller_Alarm::setSnoozeTime($currentAlarm, $dtSnooze, $this->getCalendarUser()->user_id);
+                    }
                     $_event->alarms->removeRecord($alarmUpdate);
                 } else {
                     // alarm is to be skiped/deleted

@@ -238,20 +238,23 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
         
-        if ($ownAttendee && $ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
-            $vevent->add('X-MOZ-LASTACK', $ownAttendee->alarm_ack_time->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
-        }
-        
-        if ($ownAttendee && $ownAttendee->alarm_snooze_time instanceof Tinebase_DateTime) {
-            $vevent->add('X-MOZ-SNOOZE-TIME', $ownAttendee->alarm_snooze_time->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
-        }
-        
         if ($event->alarms instanceof Tinebase_Record_RecordSet) {
+            $mozLastAck = NULL;
+            $mozSnooze = NULL;
+            
             foreach ($event->alarms as $alarm) {
                 $valarm = $vcalendar->create('VALARM');
                 $valarm->add('ACTION', 'DISPLAY');
                 $valarm->add('DESCRIPTION', $event->summary);
                 
+                if ($dtack = Calendar_Controller_Alarm::getAcknowledgeTime($alarm)) {
+                    $valarm->add('ACKNOWLEDGED', $dtack->getClone()->setTimezone('UTC')->format('Ymd\\THis\\Z'));
+                    $mozLastAck = $dtack > $mozLastAck ? $dtack : $mozLastAck;
+                }
+                
+                if ($dtsnooze = Calendar_Controller_Alarm::getSnoozeTime($alarm)) {
+                    $mozSnooze = $dtsnooze > $mozSnooze ? $dtsnooze : $mozSnooze;
+                }
                 if (is_numeric($alarm->minutes_before)) {
                     if ($event->dtstart == $alarm->alarm_time) {
                         $periodString = 'PT0S';
@@ -275,6 +278,14 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 }
                 
                 $vevent->add($valarm);
+            }
+            
+            if ($mozLastAck instanceof DateTime) {
+                $vevent->add('X-MOZ-LASTACK', $mozLastAck->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
+            }
+            
+            if ($mozSnooze instanceof DateTime) {
+                $vevent->add('X-MOZ-SNOOZE-TIME', $mozSnooze->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
             }
         }
         
@@ -914,8 +925,6 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                                     'model'             => 'Calendar_Model_Event'
                                 ));
                                 
-                                $event->alarms->addRecord($alarm);
-                                
                                 break;
                                 
                             # TRIGGER;VALUE=DURATION:-PT1H15M
@@ -934,10 +943,15 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                                     'model'             => 'Calendar_Model_Event'
                                 ));
                                 
-                                $event->alarms->addRecord($alarm);
-                                
                                 break;
                         }
+                        
+                        if ($valarm->ACKNOWLEDGED) {
+                            $dtack = $valarm->ACKNOWLEDGED->getDateTime();
+                            Calendar_Controller_Alarm::setAcknowledgeTime($alarm, $dtack);
+                        }
+                        
+                        $event->alarms->addRecord($alarm);
                     }
                     
                     break;
@@ -966,17 +980,15 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             }
         }
         
+        if (isset($lastAck)) {
+            Calendar_Controller_Alarm::setAcknowledgeTime($event->alarms, $lastAck);
+        }
+        if (isset($snoozeTime)) {
+            Calendar_Controller_Alarm::setSnoozeTime($event->alarms, $snoozeTime);
+        }
+        
         // merge old and new attendee
         Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
-        
-        if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
-            if (isset($lastAck)) {
-                $ownAttendee->alarm_ack_time = $lastAck;
-            }
-            if (isset($snoozeTime)) {
-                $ownAttendee->alarm_snooze_time = $snoozeTime;
-            }
-        }
         
         if (empty($event->seq)) {
             $event->seq = 0;
