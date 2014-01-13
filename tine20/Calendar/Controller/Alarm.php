@@ -100,4 +100,72 @@ class Calendar_Controller_Alarm
             'user_id'   => $_attendee->user_id instanceof Tinebase_Record_Abstract ? $_attendee->user_id->getId() : $_attendee->user_id
         );
     }
+    
+    /**
+     * gets acknowledged time in alarm
+     *
+     * @param Tinebase_Model_Alarm     $alarm
+     * @param Tinebase_Model_User      $user
+     */
+    public static function getAcknowledgeTime($alarm, $user = null)
+    {
+        $user = $user instanceof Tinebase_Model_User ?: Tinebase_Core::getUser();
+        $times = $alarm->getOption("acknowledged-{$user->contact_id}");
+        
+        if (is_array($times)) {
+            foreach($times as $idx => $time) {
+                $times[$idx] = $times[$idx] ? new Tinebase_DateTime($time) : $times[$idx];
+            }
+            return $times;
+        } else {
+            return $times ? new Tinebase_DateTime($times) : $times;
+        }
+    }
+    
+    /**
+     * sets acknowledged time in alarm
+     * 
+     * @param Tinebase_Model_Alarm     $alarm
+     * @param DateTime                 $time
+     * @param Tinebase_Model_User      $user
+     */
+    public static function setAcknowledgeTime($alarm, $time, $user = null)
+    {
+        $user = $user instanceof Tinebase_Model_User ?: Tinebase_Core::getUser();
+        $alarm->setOption("acknowledged-{$user->contact_id}", $time->format(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+    
+    /**
+     * gets snoozed time in alarm
+     *
+     * @param Tinebase_Model_Alarm     $alarm
+     * @param Tinebase_Model_User      $user
+     */
+    public static function getSnoozeTime($alarm, $user = null)
+    {
+        $user = $user instanceof Tinebase_Model_User ?: Tinebase_Core::getUser();
+        $times = $alarm->getOption("snoozed-{$user->contact_id}");
+        
+        if (is_array($times)) {
+            foreach($times as $idx => $time) {
+                $times[$idx] = $times[$idx] ? new Tinebase_DateTime($time) : $times[$idx];
+            }
+            return $times;
+        } else {
+            return $times ? new Tinebase_DateTime($times) : $times;
+        }
+    }
+    
+    /**
+     * sets snoozed time in alarm
+     *
+     * @param Tinebase_Model_Alarm     $alarm
+     * @param DateTime                 $time
+     * @param Tinebase_Model_User      $user
+     */
+    public static function setSnoozeTime($alarm, $time, $user = null)
+    {
+        $user = $user instanceof Tinebase_Model_User ?: Tinebase_Core::getUser();
+        $alarm->setOption("snoozed-{$user->contact_id}", $time->format(Tinebase_Record_Abstract::ISO8601LONG));
+    }
 }

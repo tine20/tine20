@@ -1717,8 +1717,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // check if something what can be set as user has changed
             if ($currentAttender->status == $_attender->status &&
                 $currentAttenderDisplayContainerId  == $attenderDisplayContainerId   &&
-                $currentAttender->alarm_ack_time    == $_attender->alarm_ack_time    &&
-                $currentAttender->alarm_snooze_time == $_attender->alarm_snooze_time &&
                 $currentAttender->transp            == $_attender->transp            &&
                 ! Calendar_Controller_Alarm::hasUpdates($_event, $event)
             ) {
@@ -1729,8 +1727,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $updatedAttender->status              = $_attender->status;
             $updatedAttender->displaycontainer_id = isset($_attender->displaycontainer_id) ? $_attender->displaycontainer_id : $updatedAttender->displaycontainer_id;
-            $updatedAttender->alarm_ack_time      = isset($_attender->alarm_ack_time) ? $_attender->alarm_ack_time : $updatedAttender->alarm_ack_time;
-            $updatedAttender->alarm_snooze_time   = isset($_attender->alarm_snooze_time) ? $_attender->alarm_snooze_time : $updatedAttender->alarm_snooze_time;
             $updatedAttender->transp              = isset($_attender->transp) ? $_attender->transp : Calendar_Model_Event::TRANSP_OPAQUE;
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -1959,12 +1955,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     . ' Wrong authkey, resetting status (' . $attender->status . ' -> ' . $currentAttender->status . ')');
                 $attender->status = $currentAttender->status;
             }
-        }
-        
-        // reset alarm ack and snooze times
-        if ($isRescheduled) {
-            $attender->alarm_ack_time = null;
-            $attender->alarm_snooze_time = null;
         }
         
         // preserve old authkey

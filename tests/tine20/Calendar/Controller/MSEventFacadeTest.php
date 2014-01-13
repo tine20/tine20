@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -303,6 +303,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $event = $this->_uit->get($event->getId());
         $persistentAlarm = $event->exdate[0]->alarms->getFirstRecord();
         $event->alarms = $event->alarms = clone $alarm30;
+        Calendar_Controller_Alarm::setAcknowledgeTime($event->alarms, Tinebase_DateTime::now());
         foreach ($event->exdate as $exdate) {
             $exdate->alarms = clone $alarm30;
         }
@@ -310,7 +311,8 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $updatedAlarm = $updatedEvent->exdate[0]->alarms->getFirstRecord();
         
         $diff = $persistentAlarm->diff($updatedAlarm);
-        $this->assertTrue($diff->isEmpty());
+        $this->assertTrue($diff->isEmpty(), 'no diff');
+        $this->assertTrue(Calendar_Controller_Alarm::getAcknowledgeTime($updatedEvent->alarms->getFirstRecord()) instanceof Tinebase_DateTime, 'ack time missing');
     }
     
     /**
@@ -384,13 +386,20 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         // save event as sclever to ack sclevers alarm
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
         
-        $sclever = $this->_getAttenderFromAttendeeSet($event->exdate->getFirstRecord()->attendee, 'sclever');
+        $exdateAlarms = $event->exdate->getFirstRecord()->alarms;
         $ackTime = Tinebase_DateTime::now();
-        $sclever->alarm_ack_time = $ackTime;
+        $scleverAlarm = new Tinebase_Model_Alarm(array(
+            'model'          => 'Calendar_Model_Event',
+            'alarm_time'     => $ackTime,
+            'minutes_before' => 90
+        ));
+        $ackAlarm = Calendar_Controller_Alarm::getMatchingAlarm($exdateAlarms, $scleverAlarm);
+        Calendar_Controller_Alarm::setAcknowledgeTime($ackAlarm, $ackTime);
         $updatedEvent = $this->_uit->update($event);
-        $updatedSclever = $this->_getAttenderFromAttendeeSet($updatedEvent->exdate->getFirstRecord()->attendee, 'sclever');
         
-        $this->assertEquals($ackTime, $updatedSclever->alarm_ack_time, 'alarm ack time not updated for attender: ' . print_r($updatedSclever->toArray(), true));
+        $this->assertEquals(3, count($updatedEvent->alarms));
+        $updatedAlarm = Calendar_Controller_Alarm::getMatchingAlarm($updatedEvent->exdate->getFirstRecord()->alarms, $scleverAlarm);
+        $this->assertEquals($ackTime, Calendar_Controller_Alarm::getAcknowledgeTime($updatedAlarm));
     }
     
     /**
