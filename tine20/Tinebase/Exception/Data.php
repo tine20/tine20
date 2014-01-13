@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -98,14 +98,15 @@ class Tinebase_Exception_Data extends Tinebase_Exception
     * get exception data as array
     *
     * @return array
-    *
-    * @todo check if model has a specific json converter (use factory?)
     */
     protected function _dataToArray()
     {
-        $converter = Tinebase_Convert_Factory::factory($this->_modelName);
-        $result = $converter->fromTine20RecordSet($this->_exceptionData);
-    
+        $result = array();
+        if ($this->_exceptionData !== null) {
+            $converter = Tinebase_Convert_Factory::factory($this->_modelName);
+            $result = $converter->fromTine20RecordSet($this->_exceptionData);
+        }
+        
         return $result;
     }
 }
