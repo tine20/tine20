@@ -131,6 +131,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _onCreate()
     {
         $controller = Sales_Controller_CostCenter::getInstance();
+        
         $this->_costcenters = new Tinebase_Record_RecordSet('Sales_Model_CostCenter');
         $ccs = (static::$_de)
             ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
@@ -138,18 +139,21 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ;
         
         $id = 1;
-        foreach($ccs as $title) {
-            $cc = new Sales_Model_CostCenter(
-                array('remark' => $title, 'number' => $id)
-            );
-            try {
+        
+        // will throw duplicate exception, so it has been run already
+        try {
+            foreach($ccs as $title) {
+                $cc = new Sales_Model_CostCenter(
+                    array('remark' => $title, 'number' => $id)
+                );
+                
                 $record = $controller->create($cc);
                 $this->_costcenters->addRecord($record);
-            } catch (Zend_Db_Statement_Exception $e) {
-                $this->_costcenters = $controller->search(new Sales_Model_CostCenterFilter(array()));
+    
+                $id++;
             }
-
-            $id++;
+        } catch (Exception $e) {
+            $this->_costcenters = $controller->search(new Sales_Model_CostCenterFilter(array()));
         }
         
         $divisionsArray = (static::$_de)
