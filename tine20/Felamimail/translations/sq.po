@@ -185,7 +185,7 @@ msgid "New {0}"
 msgstr "E re {0}"
 
 #: js/TreeContextMenu.js:64 js/TreeContextMenu.js:67 js/TreeContextMenu.js:70
-#: js/FolderFilterModel.js:30 js/Model.js:55 js/Model.js:519
+#: js/FolderFilterModel.js:30 js/Model.js:55 js/Model.js:520
 #: js/GridPanel.js:529
 msgid "Folder"
 msgid_plural "Folders"
@@ -248,65 +248,65 @@ msgstr "Mesazh Aktiv Pushimesh "
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Llogaria e E-Postës  \"{0}\" ka një mesazh aktiv pushimesh"
 
-#: js/Felamimail.js:549
+#: js/Felamimail.js:554
 msgid "New mails"
 msgstr "Posta të reja"
 
-#: js/Felamimail.js:550
+#: js/Felamimail.js:555
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Ju keni {0} postë të re në dosjen {1} ({2})."
 
-#: js/Felamimail.js:670
+#: js/Felamimail.js:675
 msgid "IMAP Credentials for {0}"
 msgstr "kredencialet IMAP për {0}"
 
-#: js/Felamimail.js:673
+#: js/Felamimail.js:678
 msgid "Credentials"
 msgstr "Kredencialet"
 
-#: js/Felamimail.js:826 js/Felamimail.js:859
+#: js/Felamimail.js:831 js/Felamimail.js:864
 msgid "IMAP Error"
 msgstr "Gabim IMAP"
 
-#: js/Felamimail.js:827
+#: js/Felamimail.js:832
 msgid "No connection to IMAP server."
 msgstr "Nuk ka lidhje tek serveri IMAP"
 
-#: js/Felamimail.js:843
+#: js/Felamimail.js:848
 msgid "IMAP Credentials Error"
 msgstr "Gabim kredencialesh IMAP"
 
-#: js/Felamimail.js:844
+#: js/Felamimail.js:849
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Kredencialet tuaja të E-Postës janë gabim. Ju lutem kontaktoni administratorin tuaj"
 
-#: js/Felamimail.js:860
+#: js/Felamimail.js:865
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "Një nga dosjet tuaja është fshirë ose riemëruar nga një klient tjetër. Ju lutem përditësonilistën e dosjeve për këtë llogari"
 
-#: js/Felamimail.js:889
+#: js/Felamimail.js:894
 msgid "SMTP Error"
 msgstr "Gabim SMTP"
 
-#: js/Felamimail.js:890
+#: js/Felamimail.js:895
 msgid "No connection to SMTP server."
 msgstr "Nuk ka lidhje tek serveri SMTP"
 
-#: js/Felamimail.js:898
+#: js/Felamimail.js:903
 msgid "Sieve Error"
 msgstr "Gabim Sieve"
 
-#: js/Felamimail.js:899
+#: js/Felamimail.js:904
 msgid "No connection to Sieve server."
 msgstr "Nuk ka lidhje tek servieri Sieve"
 
-#: js/Felamimail.js:907
+#: js/Felamimail.js:912
 msgid "Save Sieve Script Error"
 msgstr "Ruaj gabimin e dorëshkrimit të Sieve "
 
-#: js/Felamimail.js:908
+#: js/Felamimail.js:913
 msgid "Could not save script on Sieve server."
 msgstr "Nuk mund të ruhej dorëshkrimi në serverin e Sieve"
 
@@ -450,13 +450,13 @@ msgstr "Bashkangjitje"
 msgid "From"
 msgstr "Nga"
 
-#: js/MessageEditDialog.js:933 Controller/Message/Send.php:277
+#: js/MessageEditDialog.js:933 Controller/Message/Send.php:281
 msgid "Body"
 msgstr "Trupi"
 
 #: js/MessageEditDialog.js:958 js/GridDetailsPanel.js:245
 #: js/sieve/RuleConditionsPanel.js:72 js/Model.js:155 js/GridPanel.js:482
-#: Controller/Message/Send.php:277
+#: Controller/Message/Send.php:281
 msgid "Subject"
 msgstr "Subjekti"
 
@@ -761,55 +761,55 @@ msgid_plural "Email Accounts"
 msgstr[0] "Llogari E-Poste"
 msgstr[1] "Llogari E-Poste"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "INBOX"
 msgstr "Posta Hyrëse"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Drafts"
 msgstr "Drafte"
 
-#: js/Model.js:513 js/GridPanel.js:514
+#: js/Model.js:514 js/GridPanel.js:514
 msgid "Sent"
 msgstr "Dërgo"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Templates"
 msgstr "Shabllone"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Junk"
 msgstr "Hedhurina"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Trash"
 msgstr "Plehëra"
 
-#: js/Model.js:522 js/Model.js:642 js/Model.js:707
+#: js/Model.js:523 js/Model.js:643 js/Model.js:708
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "lista e të dhënave"
 msgstr[1] "listat e të dhënave"
 
-#: js/Model.js:639
+#: js/Model.js:640
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Pushim"
 msgstr[1] "Pushime"
 
-#: js/Model.js:704
+#: js/Model.js:705
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Rregull"
 msgstr[1] "Rregulla"
 
-#: js/Model.js:830
+#: js/Model.js:831
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flamur"
 msgstr[1] "Flamuj"
 
-#: js/Model.js:833
+#: js/Model.js:834
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Lista e Flamujve"

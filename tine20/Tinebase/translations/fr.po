@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 17:04+0000\n"
+"PO-Revision-Date: 2014-01-15 13:51+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -158,250 +158,260 @@ msgstr "Les champs suivant n'ont pas été importés : %s"
 msgid "N/A"
 msgstr "N/A"
 
-#: Config.php:274
+#: Config.php:281
 msgid "System IMAP"
 msgstr "IMAP"
 
-#: Config.php:276
+#: Config.php:283
 msgid "System IMAP server configuration."
 msgstr "Configuration IMAP"
 
-#: Config.php:285
+#: Config.php:292
 msgid "System SMTP"
 msgstr "SMTP"
 
-#: Config.php:287
+#: Config.php:294
 msgid "System SMTP server configuration."
 msgstr "Configuration SMTP"
 
-#: Config.php:296
+#: Config.php:303
 msgid "System SIEVE"
 msgstr "SIEVE"
 
-#: Config.php:298
+#: Config.php:305
 msgid "System SIEVE server configuration."
 msgstr "Configuration SIEVE"
 
-#: Config.php:307
+#: Config.php:314
 msgid "Authentication Backend"
 msgstr "Système d'authentification"
 
-#: Config.php:309
+#: Config.php:316
 msgid "Backend adapter for user authentication."
 msgstr "Source du système d'authentification"
 
-#: Config.php:317
+#: Config.php:324
 msgid "Authentication Configuration"
 msgstr "Configuration de l'authentification"
 
-#: Config.php:319
+#: Config.php:326
 msgid "Authentication backend configuration."
 msgstr "Configuration de la source de l'authentification"
 
-#: Config.php:328
+#: Config.php:335
 msgid "User Backend"
 msgstr "Utilisateurs"
 
-#: Config.php:330
+#: Config.php:337
 msgid "Backend adapter for user data."
 msgstr "Source d'utilisateurs"
 
-#: Config.php:338
+#: Config.php:345
 msgid "User Configuration"
 msgstr "Configuration utilisateur"
 
-#: Config.php:340
+#: Config.php:347
 msgid "User backend configuration."
 msgstr "Configuration de la source d'utilisateurs"
 
-#: Config.php:349
+#: Config.php:356
 msgid "Cronuser ID"
 msgstr "Cronuser ID"
 
-#: Config.php:351
+#: Config.php:358
 msgid "User ID of the cron user."
 msgstr "ID of the cron user"
 
-#: Config.php:359
+#: Config.php:366
 msgid "Title Postfix"
 msgstr "Postfix"
 
-#: Config.php:361
+#: Config.php:368
 msgid "Postfix string appended to the title of this installation."
 msgstr "Postfix string appended to the title of this installation."
 
-#: Config.php:369
+#: Config.php:376
 msgid "Redirect URL"
 msgstr "URL de redirection"
 
-#: Config.php:371
+#: Config.php:378
 msgid "Redirect to this URL after logout."
 msgstr "Rediriger sur cette URL après une déconnexion"
 
-#: Config.php:379
+#: Config.php:386
 msgid "Redirect to Referrer"
 msgstr "Rediriger sur la page précédente"
 
-#: Config.php:381
+#: Config.php:388
 msgid "Redirect to referrer after logout."
 msgstr "Rediriger sur lap age précédente après une déconnexion"
 
-#: Config.php:389
+#: Config.php:396
 msgid "Redirect Always"
 msgstr "Toujours rediriger"
 
-#: Config.php:391
+#: Config.php:398
 msgid "Redirect to configured redirect URL also for login."
 msgstr "Rediriger sur l'URL pour une connexion"
 
-#: Config.php:399
+#: Config.php:406
 msgid "Allowed Origins"
 msgstr "Provenances autorisées"
 
-#: Config.php:401
+#: Config.php:408
 msgid "Allowed Origins for the JSON API."
 msgstr "Provenances autorisées des connections aux API JSON."
 
-#: Config.php:409
+#: Config.php:416
 msgid "Accepted Terms Version"
 msgstr "Accepted Terms Version"
 
-#: Config.php:411
+#: Config.php:418
 msgid "Accepted version number of the terms and conditions document."
 msgstr "Accepted version number of the terms and conditions document."
 
-#: Config.php:419
+#: Config.php:426
 msgid "Use Geolocation Services"
 msgstr "Utiliser les services de Géolocalisation"
 
-#: Config.php:421
+#: Config.php:428
 msgid "Use of external Geolocation services is allowed."
 msgstr "Autoriser les services de Géolocalisation"
 
-#: Config.php:429
+#: Config.php:436
 msgid "IP Session Validator"
 msgstr "IP Session Validator"
 
-#: Config.php:431
+#: Config.php:438
 msgid "Destroy session if the users IP changes."
 msgstr "Supprimer la session si l'adresse IP de l'utilisateur change."
 
-#: Config.php:439
+#: Config.php:446
 msgid "UA Session Validator"
 msgstr "UA Session Validator"
 
-#: Config.php:441
+#: Config.php:448
 msgid "Destroy session if the users user agent string changes."
 msgstr "Supprimer la session si le User Agent de l'utilisateur change."
 
-#: Config.php:449
+#: Config.php:456
 msgid "Files Directory"
 msgstr "Système d efichiers"
 
-#: Config.php:451
+#: Config.php:458
 msgid "Directory with web server write access for user files."
 msgstr "Répertoire pour les dossiers utilisateurs"
 
-#: Config.php:459 Config.php:461
+#: Config.php:466 Config.php:468
 msgid "Reuse last username logged"
 msgstr "Afficher le nom du dernier compte"
 
-#: Config.php:469 Config.php:471
+#: Config.php:476 Config.php:478
 msgid "User may change password"
 msgstr "L'utilisateur peut changer son mot de passe"
 
-#: Config.php:480 Config.php:482
+#: Config.php:487 Config.php:489
 msgid "Enable password policy"
 msgstr "Activer la politique de mot de passe"
 
-#: Config.php:490
+#: Config.php:497
 msgid "Only ASCII"
 msgstr "Seulement ASCII"
 
-#: Config.php:492
+#: Config.php:499
 msgid "Only ASCII characters are allowed in passwords."
 msgstr "Seuls les caractères ASCII sont autorisés"
 
-#: Config.php:500
+#: Config.php:507
 msgid "Minimum length"
 msgstr "Longueur minimum"
 
-#: Config.php:502
+#: Config.php:509
 msgid "Minimum password length"
 msgstr "Longueur minimum"
 
-#: Config.php:510
+#: Config.php:517
 msgid "Minimum word chars"
 msgstr "Nb minimum de lettres"
 
-#: Config.php:512
+#: Config.php:519
 msgid "Minimum word chars in password"
 msgstr "Nb minium de lettres dans le mot de passe"
 
-#: Config.php:520
+#: Config.php:527
 msgid "Minimum uppercase chars"
 msgstr "Nb minimum de lettres en majuscule"
 
-#: Config.php:522
+#: Config.php:529
 msgid "Minimum uppercase chars in password"
 msgstr "Nb minimum de lettres en majuscule dans le mot de passe"
 
-#: Config.php:530
+#: Config.php:537
 msgid "Minimum special chars"
 msgstr "Nb minimum de caractères spéciaux "
 
-#: Config.php:532
+#: Config.php:539
 msgid "Minimum special chars in password"
 msgstr "Nb minimum de caractères spéciaux dans un mot de passe"
 
-#: Config.php:540
+#: Config.php:547
 msgid "Minimum numbers"
 msgstr "Longueur minimum"
 
-#: Config.php:542
+#: Config.php:549
 msgid "Minimum numbers in password"
 msgstr "Longueur minimum du mot de passe"
 
-#: Config.php:550
+#: Config.php:557
 msgid "Forbid part of username"
 msgstr "Interdire le nom d'utilisateur"
 
-#: Config.php:552
+#: Config.php:559
 msgid "Forbid part of username in password"
 msgstr "Interdire l'utilisation de tout ou partie du nom d'utilisateur dans le mot de passe"
 
-#: Config.php:560
+#: Config.php:567
 msgid "Automatic bugreports"
 msgstr "Rapports de bugs automatiques"
 
-#: Config.php:562
+#: Config.php:569
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr "Toujours envoyer un rapport automatique en cas d'erreur"
 
-#: Config.php:570
+#: Config.php:577
 msgid "Last sessions cleanup run"
 msgstr "Nettoyage des sessions "
 
-#: Config.php:572
+#: Config.php:579
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr "Stocker l'heure du dernier nettoyage des sessions"
 
-#: Config.php:580
+#: Config.php:587
 msgid "Maximum login failures"
 msgstr "Tentatives de connexions maximum"
 
-#: Config.php:582
+#: Config.php:589
 msgid "Maximum allowed login failures before blocking account"
 msgstr "Tentatives de connexions maximum avant blocage du compte"
 
-#: Config.php:590
+#: Config.php:597
 msgid "Disable Anyone Account"
 msgstr "Désactiver \"Tout le monde\""
 
-#: Config.php:592
+#: Config.php:599
 msgid "Disallow anyone account in grant configurations"
 msgstr "Désactiver la possibilité d'assigner des droits à \"Tout le monde\""
+
+#: Config.php:607
+msgid "Alarms sent each job"
+msgstr ""
+
+#: Config.php:609
+msgid ""
+"Allows to configure the maximum number of alarm notifications in each run of"
+" sendPendingAlarms (0 = no limit)"
+msgstr ""
 
 #: Setup/setup.xml:3209
 msgid "note"
@@ -540,6 +550,7 @@ msgid "Data"
 msgstr "Donnée"
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
+#: js/widgets/tags/TagsPanel.js:426
 msgid "Tags"
 msgstr "Marqueurs"
 
@@ -600,7 +611,7 @@ msgstr "Découvrir {0}"
 #: js/widgets/dialog/ExceptionHandlerDialog.js:194
 #: js/widgets/dialog/AddToRecordPanel.js:111
 #: js/widgets/dialog/PreferencesDialog.js:109
-#: js/widgets/dialog/EditDialog.js:373 js/widgets/ActivitiesPanel.js:319
+#: js/widgets/dialog/EditDialog.js:373 js/widgets/ActivitiesPanel.js:340
 #: js/widgets/container/ContainerSelect.js:490 js/ux/form/LayerCombo.js:186
 msgid "Ok"
 msgstr "Ok"
@@ -646,7 +657,7 @@ msgid "Usage:&#160;"
 msgstr "Utilisation:&#160;"
 
 #: js/common.js:255 js/common.js:260 js/widgets/tags/TagToggleBox.js:112
-#: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagsPanel.js:128
+#: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagsPanel.js:137
 #: js/widgets/tags/TagCombo.js:134 js/widgets/tags/TagCombo.js:139
 msgid "personal"
 msgstr "Personnel"
@@ -801,7 +812,7 @@ msgid "Logging you in..."
 msgstr "Connexion..."
 
 #: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:650
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:659
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -837,13 +848,13 @@ msgstr "Erreur de connexion"
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:612
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
 msgid "Errors"
 msgstr "Erreurs"
 
 #: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:612
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
 msgid "Please fix the errors noted."
 msgstr "Veuillez corriger les erreurs."
 
@@ -880,7 +891,7 @@ msgstr "Confirmer le nouveau mot de passe"
 #: js/widgets/dialog/AddToRecordPanel.js:103
 #: js/widgets/dialog/PreferencesDialog.js:117
 #: js/widgets/dialog/EditDialog.js:393 js/widgets/dialog/WizardPanel.js:187
-#: js/widgets/ActivitiesPanel.js:311
+#: js/widgets/ActivitiesPanel.js:332
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
 #: js/widgets/container/ContainerSelect.js:481 js/ExceptionDialog.js:109
 #: js/ExceptionDialog.js:119 js/ux/form/LayerCombo.js:193
@@ -908,7 +919,7 @@ msgstr "Votre mot de passe a été changé."
 #: js/widgets/relation/GenericPickerGridPanel.js:952
 #: js/widgets/dialog/ImportDialog.js:654
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
-#: js/widgets/form/RecordPickerComboBox.js:287
+#: js/widgets/form/RecordPickerComboBox.js:294
 msgid "Failure"
 msgstr "Erreur"
 
@@ -966,7 +977,7 @@ msgstr "Installer Tine20 comme web app"
 
 #: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:647
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:656
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr "Confirmer"
@@ -979,13 +990,13 @@ msgstr "Êtes-vous sûr de vouloir vous déconnecter?"
 msgid "Logging you out..."
 msgstr "Déconnexion..."
 
-#: js/data/Record.js:195
+#: js/data/Record.js:199
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Tâche"
 msgstr[1] "Tâches"
 
-#: js/data/Record.js:199
+#: js/data/Record.js:203
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "liste \"à faire\""
@@ -1142,121 +1153,121 @@ msgstr "Veuillez patienter ..."
 msgid "Detaching Tags"
 msgstr "Effacement des marqueurs..."
 
-#: js/widgets/tags/TagsPanel.js:105
+#: js/widgets/tags/TagsPanel.js:114
 msgid "Add a new personal tag"
 msgstr "Créer un marqueur personnel"
 
-#: js/widgets/tags/TagsPanel.js:108
+#: js/widgets/tags/TagsPanel.js:117
 msgid "Add New Personal Tag"
 msgstr "Créer un marqueur personnel"
 
-#: js/widgets/tags/TagsPanel.js:109
+#: js/widgets/tags/TagsPanel.js:118
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr "Information: Vous créez un marqueur personnel, vous seul pourrez le voir!"
 
-#: js/widgets/tags/TagsPanel.js:109
+#: js/widgets/tags/TagsPanel.js:118
 msgid "Enter tag name:"
 msgstr "Saisissez le nom du marqueur:"
 
-#: js/widgets/tags/TagsPanel.js:150
+#: js/widgets/tags/TagsPanel.js:159
 msgid "No Tags to display"
 msgstr "Aucun marqueur à afficher"
 
-#: js/widgets/tags/TagsPanel.js:173
+#: js/widgets/tags/TagsPanel.js:182
 msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] "Enlever le marqueur"
 msgstr[1] "Enlever les marqueurs"
 
-#: js/widgets/tags/TagsPanel.js:183
+#: js/widgets/tags/TagsPanel.js:192
 msgid "Edit tag"
 msgstr "Éditer"
 
-#: js/widgets/tags/TagsPanel.js:188 js/widgets/tags/TagsPanel.js:193
+#: js/widgets/tags/TagsPanel.js:197 js/widgets/tags/TagsPanel.js:202
 msgid "Rename Tag"
 msgstr "Renommer le marqueur"
 
-#: js/widgets/tags/TagsPanel.js:193
+#: js/widgets/tags/TagsPanel.js:202
 msgid "Please enter a new name:"
 msgstr "Veuillez saisir un nouveau nom:"
 
-#: js/widgets/tags/TagsPanel.js:202
+#: js/widgets/tags/TagsPanel.js:211
 msgid "Edit Description"
 msgstr "Éditer la description"
 
-#: js/widgets/tags/TagsPanel.js:207
+#: js/widgets/tags/TagsPanel.js:216
 msgid "Description for tag"
 msgstr "Description du marqueur"
 
-#: js/widgets/tags/TagsPanel.js:207
+#: js/widgets/tags/TagsPanel.js:216
 msgid "Please enter new description:"
 msgstr "Veuillez saisir une nouvelle description:"
 
-#: js/widgets/tags/TagsPanel.js:216
+#: js/widgets/tags/TagsPanel.js:225
 msgid "Change Color"
 msgstr "Changer de couleur"
 
-#: js/widgets/tags/TagsPanel.js:245
+#: js/widgets/tags/TagsPanel.js:254
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] "Supprimer le marqueur"
 msgstr[1] "Supprimer les marqueurs"
 
-#: js/widgets/tags/TagsPanel.js:258
+#: js/widgets/tags/TagsPanel.js:267
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] "Supprimer définitivement le marqueur?"
 msgstr[1] "Supprimer définitivement les marqueurs?"
 
-#: js/widgets/tags/TagsPanel.js:259
+#: js/widgets/tags/TagsPanel.js:268
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] "le marqueur sélectionné sera supprimé et enlevé de toutes les entrées associées"
 msgstr[1] "les marqueur sélectionnés seront supprimés et enlevés de toutes les entrées associées"
 
-#: js/widgets/tags/TagsPanel.js:263
+#: js/widgets/tags/TagsPanel.js:272
 msgid "Please wait a moment..."
 msgstr "Veuillez patienter..."
 
-#: js/widgets/tags/TagsPanel.js:263
+#: js/widgets/tags/TagsPanel.js:272
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Suppression du marqueur"
 msgstr[1] "Suppression des marqueurs"
 
-#: js/widgets/tags/TagsPanel.js:279 js/widgets/tags/TagsPanel.js:371
-#: js/widgets/tags/TagsPanel.js:404 js/widgets/dialog/EditDialog.js:839
+#: js/widgets/tags/TagsPanel.js:288 js/widgets/tags/TagsPanel.js:380
+#: js/widgets/tags/TagsPanel.js:413 js/widgets/dialog/EditDialog.js:839
 msgid "Failed"
 msgstr "Échoué"
 
-#: js/widgets/tags/TagsPanel.js:279
+#: js/widgets/tags/TagsPanel.js:288
 msgid "Could not delete Tag(s)."
 msgstr "Erreur de suppression."
 
-#: js/widgets/tags/TagsPanel.js:323 js/widgets/tags/TagsPanel.js:385
+#: js/widgets/tags/TagsPanel.js:332 js/widgets/tags/TagsPanel.js:394
 msgid "Notice"
 msgstr "Information"
 
-#: js/widgets/tags/TagsPanel.js:324 js/widgets/tags/TagsPanel.js:386
+#: js/widgets/tags/TagsPanel.js:333 js/widgets/tags/TagsPanel.js:395
 msgid "The minimum tag length is three."
 msgstr "La longueur minimum est de 3 caractères."
 
-#: js/widgets/tags/TagsPanel.js:371
+#: js/widgets/tags/TagsPanel.js:380
 msgid "Could not create tag."
 msgstr "Impossible de créer le marqueur."
 
-#: js/widgets/tags/TagsPanel.js:404
+#: js/widgets/tags/TagsPanel.js:413
 msgid "Could not update tag."
 msgstr "Impossible de mettre à jour le marqueur."
 
-#: js/widgets/tags/TagsPanel.js:486
+#: js/widgets/tags/TagsPanel.js:509
 #: js/widgets/relation/GenericPickerGridPanel.js:449
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:191
 #: js/ExceptionDialog.js:162
 msgid "Description"
 msgstr "Description"
 
-#: js/widgets/tags/TagsPanel.js:490
+#: js/widgets/tags/TagsPanel.js:513
 #: js/widgets/container/PropertiesDialog.js:113
 msgid "Color"
 msgstr "Couleur"
@@ -1504,48 +1515,48 @@ msgid_plural "Your view is limited by {0} criterias:"
 msgstr[0] "Le filtre actuel utilise {0} critère :"
 msgstr[1] "Le filtre actuel utilise {0} critères :"
 
-#: js/widgets/grid/FileUploadGrid.js:84 js/Models.js:475
+#: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:475
 msgid "File"
 msgid_plural "Files"
 msgstr[0] "Fichier"
 msgstr[1] "Fichiers"
 
-#: js/widgets/grid/FileUploadGrid.js:115 js/ux/form/ImageField.js:211
+#: js/widgets/grid/FileUploadGrid.js:114 js/ux/form/ImageField.js:211
 msgid "Upload Failed"
 msgstr "Echec de l'envoi"
 
-#: js/widgets/grid/FileUploadGrid.js:116
+#: js/widgets/grid/FileUploadGrid.js:115
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size: "
 msgstr "Impossible de charger le fichier. Sa taille est peut être trop importante. Veuillez avertir votre Administrateur. Taille maximum : "
 
-#: js/widgets/grid/FileUploadGrid.js:180
+#: js/widgets/grid/FileUploadGrid.js:179
 msgid "Remove {0}"
 msgstr "Supprimer {0}"
 
-#: js/widgets/grid/FileUploadGrid.js:188 js/widgets/tree/ContextMenu.js:116
+#: js/widgets/grid/FileUploadGrid.js:187 js/widgets/tree/ContextMenu.js:116
 msgid "Pause upload"
 msgstr "Mettre en pause"
 
-#: js/widgets/grid/FileUploadGrid.js:196 js/widgets/tree/ContextMenu.js:100
+#: js/widgets/grid/FileUploadGrid.js:195 js/widgets/tree/ContextMenu.js:100
 msgid "Resume upload"
 msgstr "Reprendre"
 
-#: js/widgets/grid/FileUploadGrid.js:242 js/widgets/grid/GridPanel.js:543
+#: js/widgets/grid/FileUploadGrid.js:241 js/widgets/grid/GridPanel.js:543
 #: js/widgets/tree/ContextMenu.js:35
 msgid "Add {0}"
 msgstr "Ajouter {0}"
 
-#: js/widgets/grid/FileUploadGrid.js:284
+#: js/widgets/grid/FileUploadGrid.js:283
 msgid "name"
 msgstr "nom"
 
-#: js/widgets/grid/FileUploadGrid.js:291
+#: js/widgets/grid/FileUploadGrid.js:290
 msgid "size"
 msgstr "taille"
 
-#: js/widgets/grid/FileUploadGrid.js:298
+#: js/widgets/grid/FileUploadGrid.js:297
 msgid "type"
 msgstr "type"
 
@@ -1606,7 +1617,7 @@ msgstr "Nom"
 
 #: js/widgets/grid/LinkGridPanel.js:105
 #: js/widgets/relation/GenericPickerGridPanel.js:452
-#: js/widgets/ActivitiesPanel.js:468 js/widgets/ActivitiesPanel.js:605
+#: js/widgets/ActivitiesPanel.js:489 js/widgets/ActivitiesPanel.js:626
 msgid "Type"
 msgstr "Type"
 
@@ -1695,7 +1706,7 @@ msgstr "Heure de création"
 
 #: js/widgets/grid/GridPanel.js:1366
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
-#: js/widgets/ActivitiesPanel.js:471
+#: js/widgets/ActivitiesPanel.js:492
 msgid "Created By"
 msgstr "Auteur"
 
@@ -1813,7 +1824,7 @@ msgid ""
 msgstr "Un lien existe déjà sur cette entrée, vous devez le modifier."
 
 #: js/widgets/relation/GenericPickerGridPanel.js:953
-#: js/widgets/form/RecordPickerComboBox.js:288
+#: js/widgets/form/RecordPickerComboBox.js:295
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr "Il est impossible de lier une entrée à elle même."
 
@@ -2247,7 +2258,7 @@ msgstr "Êtes-vous sûr de vouloir supprimer {0}?"
 msgid "Could not delete {0}."
 msgstr "Impossible de supprimer {0}."
 
-#: js/widgets/dialog/EditDialog.js:891
+#: js/widgets/dialog/EditDialog.js:894
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr "Résoudre les suspicions de doublons {0}"
 
@@ -2293,33 +2304,33 @@ msgid "Select Export Definition ..."
 msgstr "Choisissez la définition de l'exportation"
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:318
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:432
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:441
 msgid "Delete value from all selected records"
 msgstr "Supprimer les valeurs des enregistrements sélectionnés"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:415
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:424
 msgid "Undo change for all selected records"
 msgstr "Annuler les changements"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:490
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:499
 msgid "Edit {0} {1}"
 msgstr "Modifier {0} {1}"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:549
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:558
 msgid "Different Values"
 msgstr "Valeurs différentes"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:550
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:559
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr "Ce champ a des valeurs différentes : le modifier écrasera les anciennes valeurs."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:647
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:656
 msgid "Do you really want to change these {0} records?"
 msgstr "Etes vous sûr de modificer ces {0} enregistrements ?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:650
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:659
 msgid "Applying changes"
 msgstr "Application des modifications"
 
@@ -2395,64 +2406,64 @@ msgstr "Général"
 msgid "Custom Fields"
 msgstr "Champs personnalisés"
 
-#: js/widgets/ActivitiesPanel.js:152
+#: js/widgets/ActivitiesPanel.js:153
 msgid "Add a Note..."
 msgstr "Ajouter une note..."
 
-#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:180
+#: js/widgets/ActivitiesPanel.js:168 js/widgets/ActivitiesPanel.js:181
 #: js/widgets/container/GrantsGrid.js:45
 msgid "Add"
 msgstr "Ajouter un"
 
-#: js/widgets/ActivitiesPanel.js:167 js/widgets/ActivitiesPanel.js:470
+#: js/widgets/ActivitiesPanel.js:168 js/widgets/ActivitiesPanel.js:491
 msgid "Note"
 msgstr "Note"
 
-#: js/widgets/ActivitiesPanel.js:181 js/widgets/ActivitiesPanel.js:392
+#: js/widgets/ActivitiesPanel.js:182 js/widgets/ActivitiesPanel.js:413
 msgid "Add new note"
 msgstr "Ajouter une nouvelle note"
 
-#: js/widgets/ActivitiesPanel.js:213
+#: js/widgets/ActivitiesPanel.js:209 js/widgets/ActivitiesPanel.js:228
 msgid "Notes"
 msgstr "Notes"
 
-#: js/widgets/ActivitiesPanel.js:290
+#: js/widgets/ActivitiesPanel.js:311
 msgid "Enter new note:"
 msgstr "Saisie de la nouvelle note:"
 
-#: js/widgets/ActivitiesPanel.js:335 js/widgets/ActivitiesPanel.js:391
+#: js/widgets/ActivitiesPanel.js:356 js/widgets/ActivitiesPanel.js:412
 msgid "Add Note"
 msgstr "Ajouter une note"
 
-#: js/widgets/ActivitiesPanel.js:378
+#: js/widgets/ActivitiesPanel.js:399
 msgid "Add a {0} Note"
 msgstr "{0}"
 
-#: js/widgets/ActivitiesPanel.js:472
+#: js/widgets/ActivitiesPanel.js:493
 msgid "Timestamp"
 msgstr "Horodatage"
 
-#: js/widgets/ActivitiesPanel.js:486
+#: js/widgets/ActivitiesPanel.js:507
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Afficher l'historique des enregistrements {0} - {1} de {2}"
 
-#: js/widgets/ActivitiesPanel.js:487
+#: js/widgets/ActivitiesPanel.js:508
 msgid "No history to display"
 msgstr "Pas d'historique"
 
-#: js/widgets/ActivitiesPanel.js:587
+#: js/widgets/ActivitiesPanel.js:608
 msgid "History"
 msgstr "Historique"
 
-#: js/widgets/ActivitiesPanel.js:599
+#: js/widgets/ActivitiesPanel.js:620
 msgid "Quick Search"
 msgstr "Recherche rapide"
 
-#: js/widgets/ActivitiesPanel.js:600 js/widgets/ActivitiesPanel.js:601
+#: js/widgets/ActivitiesPanel.js:621 js/widgets/ActivitiesPanel.js:622
 msgid "Time"
 msgstr "Date"
 
-#: js/widgets/ActivitiesPanel.js:603
+#: js/widgets/ActivitiesPanel.js:624
 msgid "User"
 msgstr "Utilisateur"
 
@@ -2713,7 +2724,7 @@ msgid "Please select a file with one of the following extensions:"
 msgstr "Veuillez sélectionner un fichier avec une de ces extensions"
 
 #: js/widgets/form/RecordPickerManager.js:48
-#: js/widgets/form/RecordPickerComboBox.js:112
+#: js/widgets/form/RecordPickerComboBox.js:119
 msgid "Searching..."
 msgstr "Recherche en cours..."
 
@@ -2944,7 +2955,7 @@ msgstr "Exception ({0})"
 msgid "%s's personal container"
 msgstr "Dossier personnel de %s"
 
-#: Container.php:1523
+#: Container.php:1527
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"

@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-12-22 12:57+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -101,11 +101,11 @@ msgstr[0] "one:Hỏi đáp\nother:Hỏi đáp"
 
 #: js/SimpleFAQ.js:26
 msgid "Find Question"
-msgstr ""
+msgstr "Tìm câu hỏi"
 
 #: js/SimpleFAQ.js:35
 msgid "Search question"
-msgstr ""
+msgstr "Tìm câu hỏi"
 
 #: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:118
 #: js/FaqGridDetailsPanel.js:157
@@ -147,7 +147,7 @@ msgstr "Danh sách hỏi đáp"
 
 #: js/Model.js:74
 msgid "Quick Search"
-msgstr ""
+msgstr "Tìm nhanh"
 
 #: js/FaqEditDialog.js:112
 msgid "Enter a question..."
@@ -159,7 +159,7 @@ msgstr "Nhập 1 câu trả lời"
 
 #: js/SearchCombo.js:8
 msgid "Search FAQ"
-msgstr ""
+msgstr "Tìm câu FAQ"
 
 #: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
 msgid "FAQ Infos"

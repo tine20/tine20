@@ -112,11 +112,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         
         $filter = new Calendar_Model_EventFilter(array(
             array(
-                'field' => 'containerType', 
-                'operator' => 'equals', 
-                'value' => 'all'
-            ),
-            array(
                 'field' => 'dtstart', 
                 'operator' => 'equals', 
                 'value' => $event->dtstart

@@ -75,5 +75,11 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends PHPUnit_Framework_Test
         // assert testuser is not attendee
         $this->assertEquals(1, $event->attendee->count(), 'there sould only be one attendee');
         $this->assertNotEquals($event->organizer, $event->attendee[0]->user_id, 'organizer should not attend');
+        
+        // assert alarm
+        $this->assertEquals(1,$event->alarms->count(), 'there should be exactly one alarm');
+        $this->assertFalse((bool)$event->alarms->getFirstRecord()->getOption('custom'), 'alarm should be duration alarm');
+        $this->assertEquals(15, $event->alarms->getFirstRecord()->minutes_before, 'alarm shoud be 15 min. before');
+        $this->assertEquals('2013-11-15 11:47:23', Calendar_Controller_Alarm::getAcknowledgeTime($event->alarms->getFirstRecord())->format(Tinebase_Record_Abstract::ISO8601LONG), 'ACKNOWLEDGED was not imported properly');
     }
 }

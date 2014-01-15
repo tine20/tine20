@@ -89,22 +89,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         'status'               => array('allowEmpty' => true          ),
         'status_authkey'       => array('allowEmpty' => true, 'Alnum' ),
         'displaycontainer_id'  => array('allowEmpty' => true, 'Int'   ),
-        'alarm_ack_time'       => array('allowEmpty' => true),
-        'alarm_snooze_time'    => array('allowEmpty' => true),
         'transp'               => array(
             'allowEmpty' => true,
             array('InArray', array(Calendar_Model_Event::TRANSP_TRANSP, Calendar_Model_Event::TRANSP_OPAQUE))
         ),
-    );
-    
-    /**
-     * datetime fields
-     *
-     * @var array
-     */
-    protected $_datetimeFields = array(
-        'alarm_ack_time',
-        'alarm_snooze_time'
     );
     
     /**

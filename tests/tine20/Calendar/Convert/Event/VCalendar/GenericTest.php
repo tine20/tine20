@@ -421,7 +421,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertContains('TZOFFSETTO:+0100',    $vevent, $vevent);
         $this->assertContains('TZNAME:CET',          $vevent, $vevent);
         $this->assertContains('CATEGORIES:CATEGORY 1,CATEGORY 2', $vevent, $vevent);
-        
+        $this->assertNotContains('X-MOZ-LASTACK', $vevent, $vevent);
     }
     
     /**

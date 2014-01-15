@@ -33,41 +33,19 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Backend_Sql_Abstract
     protected $_modelName = 'Voipmanager_Model_Asterisk_SipPeer';
     
     /**
-     * use subselect in searchCount fn
-     * -> can't use subselect because of the regseconds 
-     *    (Zend_Db_Statement_Exception: SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'regseconds')
+     * foreign tables (key => tablename)
      *
-     * @var boolean
+     * @var array
      */
-    protected $_useSubselectForCount = FALSE;
-    
-    /**
-     * get the basic select object to fetch records from the database
-     *  
-     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
-     * @param boolean $_getDeleted get deleted records (if modlog is active)
-     * @return Zend_Db_Select
-     */
-    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {
-        $select = parent::_getSelect($_cols, $_getDeleted);
-        
-        // add join only if needed and allowed
-        if (($_cols == '*') || (is_array($_cols) && isset($_cols['context']))) {
-            $select->joinLeft(
-                array('contexts'  => $this->_tablePrefix . 'asterisk_context'),
-                'context_id = contexts.id',
-                array('context' => 'name')
-            );
-        }
-        
-        // add regseconds only if needed and allowed
-        if (($_cols == '*') || (is_array($_cols) && isset($_cols['regseconds']))) {
-            $select->columns('regseconds');
-        }
-        
-        return $select;
-    }
+    protected $_foreignTables = array(
+        'context'  => array(
+            'table'         => 'asterisk_context',
+            'joinOn'        => 'id',
+            'joinId'        => 'context_id',
+            'select'        => array('context' => 'name'),
+            'singleValue'   => true,
+        ),
+    );
     
     /**
      * converts record into raw data for adapter

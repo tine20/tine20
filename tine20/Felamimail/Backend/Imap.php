@@ -354,7 +354,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         if (!$folders) {
             throw new Zend_Mail_Storage_Exception('folder not found');
         }
-
+        
         ksort($folders, SORT_STRING);
         
         $result = array();
@@ -417,9 +417,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     {
         $useUid = ($_useUid === null) ? $this->_useUid : (bool) $_useUid;
         $summary = $this->_protocol->fetch(array('UID', 'FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE', 'BODYSTRUCTURE'), $from, $to, $useUid);
-                
+        
         // fetch returns a different structure when fetching one or multiple messages
-        if($to === null && ctype_digit("$from")) {
+        if ($to === null && ctype_digit($from)) {
             $summary = array(
                 $from => $summary
             );
@@ -455,13 +455,39 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             );
         }
         
-        if($to === null && ctype_digit("$from")) {
+        if ($to === null && ctype_digit($from)) {
             // only one message requested
             return $messages[$from];
         } else {
             // multiple messages requested
             return $messages;
         }
+    }
+    
+    /**
+     * Fetch message uids with flags changed since $modseq
+     *
+     * @param  integer     $modseq  -  $modSeq to search messages since
+     * @return array       list of messages ids, flags changed since last modseq
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function getChangedFlags($modseq)
+    {
+        $summary = $this->_protocol->fetchIdsChangedSinceModSeq($modseq ? $modseq : 1);
+        
+        $messages = array();
+
+        if (isset($summary['messages'])) {
+            foreach ($summary['messages'] as $id => $data) {
+                $messages[$data['UID']] = array(
+                    'flags'  => $data['FLAGS'],
+                    'uid'    => $data['UID'],
+                    'modseq' => $data['MODSEQ'][0]
+                );
+            }
+        }
+        
+        return $messages;
     }
     
     /**

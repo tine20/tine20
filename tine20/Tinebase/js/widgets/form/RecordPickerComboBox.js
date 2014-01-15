@@ -65,6 +65,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     sortBy: null,
     
     /**
+     * sort direction
+     * 
+     * @type String 
+     */
+    sortDir: 'ASC',
+    
+    /**
      * @type string
      * @property lastStoreTransactionId
      */
@@ -157,7 +164,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             limit: options.params.limit,
             // if sort is not set, use display field as default sort
             sort: (this.sortBy) ? this.sortBy : this.displayField,
-            dir: 'ASC'
+            dir: this.sortDir
         };
         
         Ext.applyIf(options.params, paging);

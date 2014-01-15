@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 12:24+0000\n"
+"PO-Revision-Date: 2014-01-15 13:51+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
@@ -48,16 +48,16 @@ msgstr "Sva prava za administriranje resursa"
 msgid "%s's personal calendar"
 msgstr "%s osobni kalendar"
 
-#: Model/Attender.php:168
+#: Model/Attender.php:156
 msgid "unknown"
 msgstr "nepoznato"
 
-#: Model/Attender.php:446
+#: Model/Attender.php:434
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "Ovaj kontakt je automatski dodan od strane sustava kao sudionik događaja"
 
-#: Model/Attender.php:449
+#: Model/Attender.php:437
 msgid "The email address has been shortened: "
 msgstr ""
 
@@ -78,17 +78,17 @@ msgid "Classification"
 msgstr "Klasifikacija"
 
 #: Model/Event.php:347 js/GridView.js:161 js/ResourceEditDialog.js:84
-#: js/Model.js:207 js/EventEditDialog.js:256
+#: js/Model.js:207 js/EventEditDialog.js:264
 msgid "Description"
 msgstr "Opis"
 
 #: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:272
-#: js/Model.js:206 js/EventEditDialog.js:124 js/ResourcesGridPanel.js:54
+#: js/Model.js:206 js/EventEditDialog.js:132 js/ResourcesGridPanel.js:54
 msgid "Location"
 msgstr "Lokacija"
 
 #: Model/Event.php:349 js/GridView.js:154 js/PerspectiveCombo.js:127
-#: js/EventDetailsPanel.js:276 js/Model.js:226 js/EventEditDialog.js:300
+#: js/EventDetailsPanel.js:276 js/Model.js:226 js/EventEditDialog.js:308
 msgid "Organizer"
 msgstr "Organizator"
 
@@ -97,13 +97,13 @@ msgid "Priority"
 msgstr "Prioritet"
 
 #: Model/Event.php:351 js/GridView.js:173 js/AddToEventPanel.js:88
-#: js/AttendeeGridPanel.js:214 js/ContactEventsGridPanel.js:126
-#: js/EventEditDialog.js:178
+#: js/AttendeeGridPanel.js:213 js/ContactEventsGridPanel.js:126
+#: js/EventEditDialog.js:186
 msgid "Status"
 msgstr "Status"
 
 #: Model/Event.php:352 js/GridView.js:143 js/Model.js:205
-#: js/ContactEventsGridPanel.js:113 js/EventEditDialog.js:79
+#: js/ContactEventsGridPanel.js:113 js/EventEditDialog.js:87
 msgid "Summary"
 msgstr "Sažetak"
 
@@ -169,83 +169,96 @@ msgstr ""
 msgid "Monthly on the %1$s"
 msgstr ""
 
-#: Model/Rrule.php:325
+#: Model/Rrule.php:329
+msgid "Yearly every %1$s %2$s of %3$s"
+msgstr ""
+
+#: Model/Rrule.php:331
 msgid "Yearly on the %1$s of %2$s"
 msgstr ""
 
-#: Model/Rrule.php:363
+#: Model/Rrule.php:371
 msgid "second to last"
 msgstr ""
 
-#: Model/Rrule.php:366 js/RrulePanel.js:543 js/RrulePanel.js:724
+#: Model/Rrule.php:374 js/RrulePanel.js:543 js/RrulePanel.js:724
 msgid "last"
 msgstr "zadnji"
 
-#: Model/Rrule.php:372 js/RrulePanel.js:539 js/RrulePanel.js:720
+#: Model/Rrule.php:380 js/RrulePanel.js:539 js/RrulePanel.js:720
 msgid "first"
 msgstr "prvi"
 
-#: Model/Rrule.php:375 js/RrulePanel.js:540 js/RrulePanel.js:721
+#: Model/Rrule.php:383 js/RrulePanel.js:540 js/RrulePanel.js:721
 msgid "second"
 msgstr "drugi"
 
-#: Model/Rrule.php:378 js/RrulePanel.js:541 js/RrulePanel.js:722
+#: Model/Rrule.php:386 js/RrulePanel.js:541 js/RrulePanel.js:722
 msgid "third"
 msgstr "treći"
 
-#: Model/Rrule.php:381 js/RrulePanel.js:542 js/RrulePanel.js:723
+#: Model/Rrule.php:389 js/RrulePanel.js:542 js/RrulePanel.js:723
 msgid "fourth"
 msgstr "četvrti"
 
-#: Model/Rrule.php:384
+#: Model/Rrule.php:392
 msgid "fifth"
 msgstr ""
 
-#: Model/Rrule.php:389
+#: Model/Rrule.php:397
 msgid "st"
 msgstr ""
 
-#: Model/Rrule.php:392
+#: Model/Rrule.php:400
 msgid "nd"
 msgstr ""
 
-#: Model/Rrule.php:395
+#: Model/Rrule.php:403
 msgid "rd"
 msgstr ""
 
-#: Model/Rrule.php:398
+#: Model/Rrule.php:406
 msgid "th"
 msgstr ""
 
-#: Config.php:45
+#: Config.php:52
 msgid "Fixed Calendars"
 msgstr "Fiksni kalendar"
 
-#: Config.php:47
+#: Config.php:54
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
 msgstr "Kalendari su uvijek odabrani bez obzira na parametare u filtru. Stoga postoji mogućnost da se uporno prikazuju određeni neradni dani u kalendaru."
 
-#: Config.php:55
+#: Config.php:62
 msgid "Attendee Status Available"
 msgstr "Status za sudjelovanje je dostupan"
 
-#: Config.php:57
+#: Config.php:64
 msgid ""
 "Possible event attendee status. Please note that additional attendee status "
 "might impact other calendar systems on export or syncronisation."
 msgstr "Mogući statusi sudionika sastanka. Imajte na umu da bi dodatni sudionici sastanka mogli utjecati na ostale kalendare sustava prilikom izvoza ili sinkronizacije."
 
-#: Config.php:65
+#: Config.php:72
 msgid "Attendee Roles Available"
 msgstr "Raspoložive uloge sudionika"
 
-#: Config.php:67
+#: Config.php:74
 msgid ""
 "Possible event attendee roles. Please note that additional attendee roles "
 "might impact other calendar systems on export or syncronisation."
 msgstr "Moguće uloge sudionika sastanaka. Imajte na umu da dodatne uloge sudionika mogu utjecati na ostale kalendare u sustavu prilikom izvoza ili sinkronizacije."
+
+#: Config.php:82
+msgid "Filter timeslot for CalDAV events"
+msgstr ""
+
+#: Config.php:84
+msgid ""
+"For how long in the past (in months) the events should be synchronized."
+msgstr ""
 
 #: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:70
 msgid "Calendar"
@@ -275,7 +288,7 @@ msgid "Declined"
 msgstr "Odbijeno"
 
 #: Setup/Update/Release5.php:94 Setup/Initialize.php:115 js/GridView.js:135
-#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:198
+#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:206
 msgid "Tentative"
 msgstr "Uvjetan"
 
@@ -312,7 +325,7 @@ msgid "All my events"
 msgstr "Svi moji događaji"
 
 #: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:252
-#: js/ContactEventsGridPanel.js:119 js/EventEditDialog.js:130
+#: js/ContactEventsGridPanel.js:119 js/EventEditDialog.js:138
 msgid "Start Time"
 msgstr "Početno vrijeme"
 
@@ -399,7 +412,7 @@ msgstr "Novi događaj"
 msgid "Manage Resources"
 msgstr "Upravljanje resursima"
 
-#: js/GridView.js:94 js/EventEditDialog.js:212
+#: js/GridView.js:94 js/EventEditDialog.js:220
 msgid "Private"
 msgstr "Privatno"
 
@@ -407,16 +420,16 @@ msgstr "Privatno"
 msgid "Tags"
 msgstr "Oznake"
 
-#: js/GridView.js:115 js/EventDetailsPanel.js:257 js/EventEditDialog.js:144
+#: js/GridView.js:115 js/EventDetailsPanel.js:257 js/EventEditDialog.js:152
 msgid "End Time"
 msgstr "Završno vrijeme"
 
-#: js/GridView.js:121 js/Printer/Base.js:73 js/EventEditDialog.js:138
+#: js/GridView.js:121 js/Printer/Base.js:73 js/EventEditDialog.js:146
 #: js/SearchCombo.js:201
 msgid "whole day"
 msgstr "cijeli dan"
 
-#: js/ResourceEditDialog.js:68 js/AttendeeGridPanel.js:206
+#: js/ResourceEditDialog.js:68 js/AttendeeGridPanel.js:205
 #: js/ResourcesGridPanel.js:43
 msgid "Name"
 msgstr "Ime"
@@ -437,7 +450,7 @@ msgstr "Unesite opis..."
 msgid "Grants"
 msgstr "Dozvole"
 
-#: js/PerspectiveCombo.js:84 js/EventEditDialog.js:182
+#: js/PerspectiveCombo.js:84 js/EventEditDialog.js:190
 msgid "non-blocking"
 msgstr "nije blokirajući"
 
@@ -449,7 +462,7 @@ msgstr "Prikaži u"
 msgid "Please choose the Event to add the contacts to"
 msgstr "Molimo izaberite događaj za dodavanje kontakata"
 
-#: js/AddToEventPanel.js:78 js/AttendeeGridPanel.js:130
+#: js/AddToEventPanel.js:78 js/AttendeeGridPanel.js:139
 msgid "Role"
 msgstr "Uloga"
 
@@ -752,9 +765,9 @@ msgstr "Ovaj događaj je izvorno pohranjen u {0}"
 msgid "This event is additionally displayed in your personal calendar {0}"
 msgstr "Ovaj događaj dodatno je prikazan u tvoj osobni kalendar {0}"
 
-#: js/EventDetailsPanel.js:28 js/AttendeeGridPanel.js:507
-#: js/AttendeeGridPanel.js:525 js/AttendeeGridPanel.js:542
-#: js/AttendeeGridPanel.js:554 js/Model.js:392
+#: js/EventDetailsPanel.js:28 js/AttendeeGridPanel.js:575
+#: js/AttendeeGridPanel.js:593 js/AttendeeGridPanel.js:610
+#: js/AttendeeGridPanel.js:622 js/Model.js:390
 msgid "No Information"
 msgstr "Nema informacija"
 
@@ -771,7 +784,7 @@ msgid "recurring event exception"
 msgstr "iznimka od ponavljanja događaja"
 
 #: js/EventDetailsPanel.js:294 js/AttendeeFilterModel.js:35
-#: js/AttendeeGridPanel.js:82 js/WestPanel.js:90 js/Model.js:376
+#: js/AttendeeGridPanel.js:89 js/WestPanel.js:90 js/Model.js:374
 msgid "Attendee"
 msgstr "Sudionik"
 
@@ -811,46 +824,46 @@ msgstr "Označite za filtriranje ovog sudionika"
 msgid "Click here to invite another attender..."
 msgstr "Kliknite ovdje za pozivanje drugih sudionika"
 
-#: js/AttendeeGridPanel.js:144
-msgid "Quantity"
-msgstr "Količina"
-
 #: js/AttendeeGridPanel.js:153
 msgid "This is the calendar where the attender has saved this event in"
 msgstr "Ovo je kalendar u koji je sudionik spremio ovaj događaj"
 
-#: js/AttendeeGridPanel.js:189
+#: js/AttendeeGridPanel.js:188
 msgid "Type"
 msgstr "Tip"
 
-#: js/AttendeeGridPanel.js:196
+#: js/AttendeeGridPanel.js:195
 msgid "User"
 msgstr "Korisnik"
 
-#: js/AttendeeGridPanel.js:197
+#: js/AttendeeGridPanel.js:196
 msgid "Group"
 msgstr "Grupa"
 
-#: js/AttendeeGridPanel.js:198 js/Model.js:572
+#: js/AttendeeGridPanel.js:197 js/Model.js:570
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Resurs"
 msgstr[1] "Resursa"
 msgstr[2] "Resursa"
 
-#: js/AttendeeGridPanel.js:199
+#: js/AttendeeGridPanel.js:198
 msgid "Member of group"
 msgstr "Član grupe"
 
-#: js/AttendeeGridPanel.js:390
+#: js/AttendeeGridPanel.js:400
 msgid "Remove Attender"
 msgstr "Ukloni sudionika"
 
-#: js/AttendeeGridPanel.js:512
+#: js/AttendeeGridPanel.js:413
+msgid "Compose email"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:580
 msgid "(as a group member)"
 msgstr "(kao član grupe)"
 
-#: js/AttendeeGridPanel.js:603
+#: js/AttendeeGridPanel.js:671
 msgid "External Attendee"
 msgstr "Vanjski sudionici"
 
@@ -858,14 +871,14 @@ msgstr "Vanjski sudionici"
 msgid "Mini Calendar"
 msgstr "Mini Kalendar"
 
-#: js/Model.js:66 js/Model.js:380 js/SearchCombo.js:79
+#: js/Model.js:66 js/Model.js:378 js/SearchCombo.js:79
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Događaj"
 msgstr[1] "Događaja"
 msgstr[2] "Događaja"
 
-#: js/Model.js:66 js/Model.js:380 js/ContactEventsGridPanel.js:50
+#: js/Model.js:66 js/Model.js:378 js/ContactEventsGridPanel.js:50
 msgid "Events"
 msgstr "Događaji"
 
@@ -897,46 +910,46 @@ msgstr "Događaj (kao organizator)"
 msgid "Event attendee"
 msgstr "Događaj sudionik"
 
-#: js/Model.js:376
+#: js/Model.js:374
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Sudionik"
 msgstr[1] "Sudionika"
 msgstr[2] "Sudionika"
 
-#: js/Model.js:572
+#: js/Model.js:570
 msgid "Resources"
 msgstr "Resursi"
 
-#: js/EventEditDialog.js:95
+#: js/EventEditDialog.js:103
 msgid "View"
 msgstr "Pregled"
 
-#: js/EventEditDialog.js:111
+#: js/EventEditDialog.js:119
 msgid "Details"
 msgstr "Detalji"
 
-#: js/EventEditDialog.js:160
+#: js/EventEditDialog.js:168
 msgid "Saved in"
 msgstr "Spremljeno u"
 
-#: js/EventEditDialog.js:270
+#: js/EventEditDialog.js:278
 msgid "Enter description"
 msgstr "Unesite opis"
 
-#: js/EventEditDialog.js:468
+#: js/EventEditDialog.js:510
 msgid "End date is not valid"
 msgstr "Datum završetka nije pravilan"
 
-#: js/EventEditDialog.js:471
+#: js/EventEditDialog.js:513
 msgid "End date must be after start date"
 msgstr "Datum završetka mora biti poslije datuma početka"
 
-#: js/EventEditDialog.js:484
+#: js/EventEditDialog.js:526
 msgid "Start date is not valid"
 msgstr "Datum početka nije pravilan"
 
-#: js/EventEditDialog.js:504
+#: js/EventEditDialog.js:546
 msgid "Errors"
 msgstr "Greške"
 

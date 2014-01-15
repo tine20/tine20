@@ -510,24 +510,36 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
      */
     public function toTineModel(Syncroton_Model_IEntry $data, $entry = null)
     {
-        if($entry instanceof Calendar_Model_Event) {
+        if ($entry instanceof Calendar_Model_Event) {
             $event = $entry;
         } else {
             $event = new Calendar_Model_Event(array(), true);
         }
         
-        if($data instanceof Syncroton_Model_Event) {
+        if ($data instanceof Syncroton_Model_Event) {
             $data->copyFieldsFromParent();
         }
         
-        foreach($this->_mapping as $syncrotonProperty => $tine20Property) {
-            if (!isset($data->$syncrotonProperty)) {
-                $event->$tine20Property = null;
-            
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . " Event before mapping: " . print_r($event->toArray(), true));
+        
+        foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
+            if (! isset($data->$syncrotonProperty)) {
+                if ($tine20Property === 'description' && $this->_device->devicetype == Syncroton_Model_Device::TYPE_IPHONE) {
+                    // @see #8230: added alarm to event on iOS 6.1 -> description removed
+                    // this should be removed when Tine 2.0 / Syncroton supports ghosted properties
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                        __METHOD__ . '::' . __LINE__ . ' Unsetting description');
+                    unset($event->$tine20Property);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                        __METHOD__ . '::' . __LINE__ . ' Removing ' . $tine20Property);
+                    $event->$tine20Property = null;
+                }
                 continue;
             }
             
-            switch($tine20Property) {
+            switch ($tine20Property) {
                 case 'alarms':
                     // handled after switch statement
                     
@@ -599,6 +611,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     if ($data->$syncrotonProperty instanceof Syncroton_Model_EmailBody) {
                         $event->$tine20Property = $data->$syncrotonProperty->data;
                     } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                            __METHOD__ . '::' . __LINE__ . ' Removing description.');
                         $event->$tine20Property = null;
                     }
                 
@@ -609,7 +623,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     if ($data->$syncrotonProperty instanceof Syncroton_Model_EventRecurrence && isset($data->$syncrotonProperty->type)) {
                         $rrule = new Calendar_Model_Rrule();
                     
-                        switch($data->$syncrotonProperty->type) {
+                        switch ($data->$syncrotonProperty->type) {
                             case Syncroton_Model_EventRecurrence::TYPE_DAILY:
                                 $rrule->freq = Calendar_Model_Rrule::FREQ_DAILY;
                                 
@@ -691,7 +705,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
         }
         
         // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in AS
-        if(isset($event->is_all_day_event) && $event->is_all_day_event == 1) {
+        if (isset($event->is_all_day_event) && $event->is_all_day_event == 1) {
             $event->dtend->subSecond(1);
         }
         
@@ -723,8 +737,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
         
         // event should be valid now
         $event->isValid();
-        
-        #var_dump($event->toArray());
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . " eventData " . print_r($event->toArray(), true));

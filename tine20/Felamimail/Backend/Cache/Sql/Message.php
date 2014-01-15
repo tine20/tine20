@@ -47,25 +47,21 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             'table'     => 'felamimail_cache_message_to',
             'joinOn'    => 'message_id',
             'field'     => 'email',
-            'preserve'  => TRUE,
         ),
         'cc'    => array(
             'table'  => 'felamimail_cache_message_cc',
             'joinOn' => 'message_id',
             'field'  => 'email',
-            'preserve'  => TRUE,
         ),
         'bcc'    => array(
             'table'  => 'felamimail_cache_message_bcc',
             'joinOn' => 'message_id',
             'field'  => 'email',
-            'preserve'  => TRUE,
         ),
         'flags'    => array(
             'table'         => 'felamimail_cache_msg_flag',
             'joinOn'        => 'message_id',
             'field'         => 'flag',
-            'preserve'  => TRUE,
         ),
     );
 
@@ -166,7 +162,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             $messages = $_messages;
         } elseif ($_messages instanceof Felamimail_Model_Message) {
             $messages = new Tinebase_Record_RecordSet('Felamimail_Model_Message', array($_messages));
-        } else if (is_array($_messages) && $_folderId !== NULL) {
+        } elseif (is_array($_messages) && $_folderId !== NULL) {
             // array of ids
             $messages = $_messages;
         } else {

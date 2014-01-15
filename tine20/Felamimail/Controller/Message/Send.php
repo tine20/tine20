@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -156,7 +156,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
             ' ' . $mailAsString);
         
-        Felamimail_Backend_ImapFactory::factory($targetAccount)->appendMessage($mailAsString, $folder->globalname, $flags);
+        Felamimail_Backend_ImapFactory::factory($targetAccount)->appendMessage(
+            $mailAsString,
+            Felamimail_Model_Folder::encodeFolderName($folder->globalname),
+            $flags
+        );
         
         return $_message;
     }
@@ -314,8 +318,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $mailAsString = $_transport->getRawMessage(NULL, $_additionalHeaders);
             $sentFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($_account, Felamimail_Model_Folder::FOLDER_SENT);
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder (' . $sentFolder->globalname . ') ...');
-            Felamimail_Backend_ImapFactory::factory($_account)->appendMessage($mailAsString, $sentFolder->globalname);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' About to save message in sent folder (' . $sentFolder->globalname . ') ...');
+            
+            Felamimail_Backend_ImapFactory::factory($_account)->appendMessage(
+                $mailAsString,
+                Felamimail_Model_Folder::encodeFolderName($sentFolder->globalname)
+            );
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Saved sent message in "' . $sentFolder->globalname . '".'

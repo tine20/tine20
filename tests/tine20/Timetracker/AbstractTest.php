@@ -264,7 +264,7 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
                 'field' => 'value',
                 'operator' => 'group',
                 'value' => ''
-            ),
+            )
         );
     }
 
@@ -363,7 +363,7 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
         $timesheetArray[$customField2->name] = Tinebase_Record_Abstract::generateUID();
 
         $timesheetData = $this->_json->saveTimesheet($timesheetArray);
-
+        
         // checks
         $this->assertTrue((isset($timesheetData['customfields'][$_customField1->name]) || array_key_exists($_customField1->name, $timesheetData['customfields'])), 'cf 1 not found');
         $this->assertTrue((isset($timesheetData['customfields'][$customField2->name]) || array_key_exists($customField2->name, $timesheetData['customfields'])), 'cf 2 not found');

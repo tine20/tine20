@@ -207,6 +207,8 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             $this->_headerValueToDelete
         ));
         
+        $this->_imap->selectFolder($this->_folder->globalname);
+        
         if ($_mode == 'oldest') {
             // now lets delete one message from folder and add another one
             $this->_imap->removeMessage($result[0]);
@@ -256,12 +258,14 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($unreadcount, $updatedFolder->cache_unreadcount, 'unreadcount should have been sanitized');
         
         // add new unread message
+        $this->_imap->selectFolder($this->_folder->globalname);
         $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         $this->_imap->clearFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_SEEN));
         $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
         $this->assertEquals($unreadcount+1, $updatedFolder->cache_unreadcount, 'unreadcount should have been increased by 1');
         
         // mark message as seen twice
+        $this->_imap->selectFolder($this->_folder->globalname);
         Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
         Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
         $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
@@ -319,6 +323,8 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
         }
         
+        $this->_imap->selectFolder($this->_folder->globalname);
+        
         // clear/add flag on imap
         $this->_imap->clearFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_SEEN));
         $flagsToAdd = array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT, Zend_Mail_Storage::FLAG_PASSED);
@@ -330,8 +336,9 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             $this->_imap->addFlags($message->messageuid,  array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT));
         }
         
-        $this->_controller->updateFlags($updatedFolder);
+        $updatedFolder = $this->_controller->updateFlags($updatedFolder);
         
+        $this->_imap->selectFolder($updatedFolder->globalname);
         $cachedMessage = Felamimail_Controller_Message::getInstance()->get($message->getId());
         $this->assertTrue(! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags),  'SEEN flag found: ' . print_r($cachedMessage->flags, TRUE));
         

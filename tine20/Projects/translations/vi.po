@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-12-22 12:44+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,11 +19,11 @@ msgstr ""
 
 #: Acl/Rights.php:91
 msgid "Manage shared project favorites"
-msgstr ""
+msgstr "Quản lý lối tắt dự án dùng chung"
 
 #: Acl/Rights.php:92
 msgid "Create new shared project favorites"
-msgstr ""
+msgstr "Tạo lối tắt dự án dùng chung"
 
 #: Controller.php:79
 #, python-format
@@ -137,7 +137,7 @@ msgstr "Thêm {0} người tham gia vào dự án"
 
 #: js/ProjectGridPanel.js:75
 msgid "Search FAQ"
-msgstr ""
+msgstr "Tìm FAQ"
 
 #: js/ProjectGridPanel.js:118
 msgid "Tags"
@@ -171,7 +171,7 @@ msgstr "Danh sách dự án"
 
 #: js/Model.js:74
 msgid "Quick Search"
-msgstr ""
+msgstr "Tìm nhanh"
 
 #: js/Model.js:77 js/ProjectEditDialog.js:174
 msgid "Description"

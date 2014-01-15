@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>8.0</version>
+    <version>8.1</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
@@ -239,7 +239,7 @@
         </table>
         <table>
             <name>felamimail_folder</name>
-            <version>12</version>
+            <version>13</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -283,6 +283,11 @@
                     <default>false</default>
                 </field>
                 <field>
+                    <name>supports_condstore</name>
+                    <type>boolean</type>
+                    <default>null</default>
+                </field>
+                <field>
                     <name>system_folder</name>
                     <type>boolean</type>
                     <default>false</default>
@@ -304,6 +309,11 @@
                 <field>
                     <name>imap_timestamp</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>imap_lastmodseq</name>
+                    <type>integer</type>
+                    <length>64</length>
                 </field>
                 <field>
                     <name>cache_status</name>

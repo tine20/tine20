@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -138,13 +138,17 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
     /**
      * sets an option
      * 
-     * @param string $_key
+     * @param string|array $_key
      * @param scalar|array of scalar $_value
      */
-    public function setOption($_key, $_value)
+    public function setOption($_key, $_value = null)
     {
         $options = $this->options ? Zend_Json::decode($this->options) : array();
-        $options[$_key] = $_value;
+        
+        $_key = is_array($_key) ?: array($_key => $_value);
+        foreach ($_key as $key => $value) {
+            $options[$key] = $value;
+        }
         
         $this->options = Zend_Json::encode($options);
     }

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 17:05+0000\n"
+"PO-Revision-Date: 2013-11-20 17:35+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -194,7 +194,7 @@ msgstr "Anrufstatusinfo anzeigen"
 #: js/Snom/SettingEditDialog.js:310 js/Snom/PhoneEditDialog.js:540
 #: js/Snom/SettingGridPanel.js:117
 msgid "Pickup indication"
-msgstr ""
+msgstr "Tonsignal als Pickup-Info"
 
 #: js/Snom/PhoneGridPanel.js:34
 msgid "reset phones HTTP authentication"

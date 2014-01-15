@@ -4,10 +4,8 @@
  *
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- *
- * @todo        add test for contract <-> timeaccount relations
  */
 
 /**
@@ -200,7 +198,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $value1 = 'abcd';
         $value2 = 'efgh';
         $cf = $this->_getCustomField();
-
+        
         // create two timesheets with customfields
         $this->_addTsWithCf($cf, $value1);
         $this->_addTsWithCf($cf, $value2);
@@ -293,7 +291,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      */
     public function testUpdateMultipleRecords()
     {
-
         $durations = array(75,90,105);
         $timeAccount = $this->_getTimeaccount(array('description' => 'blablub'),true);
         $lr = $this->_getLastCreatedRecord();
@@ -303,18 +300,19 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // create customfield
         $cf = $this->_getCustomField()->toArray();
 
-        $changes = array( array('name' => 'duration', 'value' => '111'),
-                          array('name' => 'description', 'value' => 'PHPUNIT_multipleUpdate'),
-                          array('name' => 'customfield_' . $cf['name'], 'value' => 'PHPUNIT_multipleUpdate' ));
+        $changes = array( array('name' => 'duration',                   'value' => '111'),
+                          array('name' => 'description',                'value' => 'PHPUNIT_multipleUpdate'),
+                          array('name' => 'customfield_' . $cf['name'], 'value' => 'PHPUNIT_multipleUpdate' )
+        );
 
-        foreach($durations as $duration) {
+        foreach ($durations as $duration) {
             $timeSheet = $this->_getTimesheet(array('timeaccount_id' => $taId, 'duration' => $duration),true);
             $lr = $this->_getLastCreatedRecord();
             $timesheetIds[] = $lr['id'];
         }
 
-        $filter = array(array('field' => 'id','operator' => 'in', 'value' => $timesheetIds),
-                        array('field' => 'account_id', 'operator' => 'equals', Tinebase_Core::getUser()->getId())
+        $filter = array( array('field' => 'id',         'operator' => 'in',     'value' => $timesheetIds),
+                         array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
         );
 
         $json = new Tinebase_Frontend_Json();
@@ -325,8 +323,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(3, $result['totalcount'],'Could not update the correct number of records');
 
         // check if default field duration value was found
-        $sFilter = array(array('field' => 'duration','operator' => 'equals', 'value' => '111'),
-                         array('field' => 'account_id', 'operator' => 'equals', Tinebase_Core::getUser()->getId())
+        $sFilter = array( array('field' => 'duration',   'operator' => 'equals', 'value' => '111'),
+                          array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
         );
         $searchResult = $this->_json->searchTimesheets($sFilter,$this->_getPaging());
 
@@ -552,7 +550,24 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         )), $this->_getPaging());
         $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
     }
-
+    
+    /**
+     * testSearchTimesheetsSumBillable
+     */
+    public function testSearchTimesheetsSumBillable()
+    {
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $timesheet = $this->_getTimesheet();
+        $timesheet->is_billable = false;
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        
+        // search & check
+        $search = $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
+        $this->assertEquals(60, $search['totalsum']);
+        $this->assertEquals(30, $search['totalsumbillable']);
+    }
+    
     /**
      * try to save and search persistent filter
      *

@@ -175,6 +175,9 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
                 case 'RECENT':
                     $result[strtolower($tokens[1])] = $tokens[0];
                     break;
+                case '[HIGHESTMODSEQ':
+                    $result['highestmodseq'] = (int)$tokens[2];
+                    break;
                 case '[UIDVALIDITY':
                     $result['uidvalidity'] = (int)$tokens[2];
                     break;
@@ -306,4 +309,44 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
                 throw new Exception("Sasl method $_method not implemented!");
         }
     }
+
+     /**
+     * Fetch Messages UIDs changed since $modseq
+     * 
+     * TAG3 UID FETCH 1:* (FLAGS) (CHANGEDSINCE 1)
+     * * OK [HIGHESTMODSEQ 21] Highest
+     * * 1 FETCH (UID 4 FLAGS (\Seen) MODSEQ (20))
+     * * 2 FETCH (UID 5 FLAGS (\Seen) MODSEQ (21))
+     * TAG3 OK Fetch completed.
+     *
+     * @param  integer     $modseq  -  $modSeq to search messages since
+     * @return array       list of messages ids, flags changed since last modseq
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function fetchIdsChangedSinceModSeq($modseq)
+    {
+        $params = array('1:* (FLAGS) (CHANGEDSINCE ' . $modseq .')');
+        
+        $this->sendRequest('UID FETCH', $params, $tag);
+
+        $result = array();
+        
+        while (!$this->readLine($tokens, $tag)) {
+            switch ($tokens[1]) {
+                case '[HIGHESTMODSEQ':
+                    $result['highestModSeq'] = (int)substr($tokens[2], 0, -1);
+                    
+                    break;
+                
+                case 'FETCH':
+                    while (key($tokens[2]) !== null) {
+                        $result['messages'][$tokens[0]][current($tokens[2])] = next($tokens[2]);
+                        next($tokens[2]);
+                    }
+                    break;
+            }
+        }
+        
+        return $result;
+     }
 }

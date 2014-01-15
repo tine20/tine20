@@ -1083,7 +1083,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($contact['relations']));
         $relatedNode = $contact['relations'][0]['related_record'];
         $this->assertEquals($node['name'], $relatedNode['name']);
-        $pathRegEx = '@^/personal/[a-f0-9]+/[0-9]+/' . preg_quote($relatedNode['name']) . '$@';
+        $pathRegEx = '@^/personal/[a-f0-9-]+/[0-9]+/' . preg_quote($relatedNode['name']) . '$@';
         $this->assertTrue(preg_match($pathRegEx, $relatedNode['path']) === 1, 'path mismatch: ' . print_r($relatedNode, TRUE) . ' regex: ' . $pathRegEx);
     }
     

@@ -6,13 +6,13 @@
 # lkneschke <l.kneschke@metaways.de>, 2013
 # mspahn <ms@ansta.lt>, 2013
 # mspahn <ms@ansta.lt>, 2013
-# pschuele <p.schuele@metaways.de>, 2013
+# pschuele <p.schuele@metaways.de>, 2013-2014
 # pschuele <p.schuele@metaways.de>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 17:12+0000\n"
+"PO-Revision-Date: 2014-01-15 14:10+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -148,12 +148,12 @@ msgid "Type"
 msgstr "Typ"
 
 #: Model/FreeTime.php:77 Model/ExtraFreeTime.php:64 Model/Employee.php:83
-#: js/EmployeeEditDialog.js:428 js/FreeTimeEditDialog.js:498
+#: js/EmployeeEditDialog.js:428 js/FreeTimeEditDialog.js:506
 #: js/ExtraFreeTimeEditDialog.js:154
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:347
+#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:355
 msgid "Status"
 msgstr "Status"
 
@@ -188,7 +188,7 @@ msgstr "Tage"
 msgid "Expiration date"
 msgstr "Ablaufdatum"
 
-#: Model/Account.php:34 js/FreeTimeEditDialog.js:262
+#: Model/Account.php:34 js/FreeTimeEditDialog.js:270
 msgid "Personal account"
 msgid_plural "Personal accounts"
 msgstr[0] "Personalkonto"
@@ -485,18 +485,18 @@ msgstr "Vollzeit 37,5 Stunden"
 msgid "Part-time 20 hours"
 msgstr "Teilzeit 20 Stunden"
 
-#: js/EmployeeGridPanel.js:35 js/EmployeeGridPanel.js:36
-#: js/EmployeeGridPanel.js:37
+#: js/EmployeeGridPanel.js:40 js/EmployeeGridPanel.js:41
+#: js/EmployeeGridPanel.js:42
 msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] "{0} exportieren"
 msgstr[1] "{0} exportieren"
 
-#: js/EmployeeGridPanel.js:49
+#: js/EmployeeGridPanel.js:54
 msgid "Export as ODS"
 msgstr "Als ODS exportieren"
 
-#: js/EmployeeGridPanel.js:56
+#: js/EmployeeGridPanel.js:61
 msgid "Export as XLS"
 msgstr "Als XLS exportieren"
 
@@ -544,7 +544,7 @@ msgstr "Straße 2"
 msgid "Internal Information"
 msgstr "Interne Informationen"
 
-#: js/EmployeeEditDialog.js:442 js/FreeTimeEditDialog.js:512
+#: js/EmployeeEditDialog.js:442 js/FreeTimeEditDialog.js:520
 #: js/ExtraFreeTimeEditDialog.js:168
 msgid "Enter description"
 msgstr "Geben Sie eine Beschreibung an"
@@ -573,11 +573,11 @@ msgstr "Sie müssen mindestens einen Tag auswählen, um diesen Urlaub speichern 
 msgid "No day selected"
 msgstr "Kein Tag gewählt"
 
-#: js/FreeTimeEditDialog.js:426
+#: js/FreeTimeEditDialog.js:434
 msgid "Remaining"
 msgstr "Übrig"
 
-#: js/FreeTimeEditDialog.js:479
+#: js/FreeTimeEditDialog.js:487
 msgid "Select Days"
 msgstr "Wählen Sie die Tage"
 
@@ -623,25 +623,25 @@ msgstr "Die unentschuldigten Krankheitstage konnten nicht als Urlaub gebucht wer
 msgid "WK"
 msgstr "KW"
 
-#: js/DatePicker.js:162
+#: js/DatePicker.js:163
 msgid "Loading calendar data..."
 msgstr "Lade Kalender.."
 
-#: js/DatePicker.js:374
+#: js/DatePicker.js:387
 msgid "Year can not be changed"
 msgstr "Das Jahr kann nicht geändert werden"
 
-#: js/DatePicker.js:375
+#: js/DatePicker.js:388
 msgid ""
 "You have already selected some dates from another year. Please create a new "
 "record to add dates from another year!"
 msgstr "Sie haben bereits ein odere mehrere Tage aus einem anderen Jahr gewählt. Bitte erstellen Sie einen neuen Datensatz, um die gewünschten Tage einzutragen."
 
-#: js/DatePicker.js:433
+#: js/DatePicker.js:446
 msgid "No more vacation days"
 msgstr "Keine weiteren Urlaubstage vorhanden"
 
-#: js/DatePicker.js:434
+#: js/DatePicker.js:447
 msgid ""
 "The Employee has no more possible vacation days left for this year. Create a"
 " new vacation and use another personal account the vacation should be taken "
@@ -701,6 +701,14 @@ msgstr "Anzahl Arbeitstage"
 #: js/AccountEditDialog.js:142
 msgid "Hours to work"
 msgstr "Anzahl der zu leistenden Stunden"
+
+#: js/AccountEditDialog.js:144
+msgid "Days to work after vacation and sickness"
+msgstr "Arbeitstage nach Urlaub und Krankheit"
+
+#: js/AccountEditDialog.js:145
+msgid "Hours to work after vacation and sickness"
+msgstr "Zu leistende Stunden nach Urlaub und Krankheit"
 
 #: js/Models.js:26
 msgid "Working Times"

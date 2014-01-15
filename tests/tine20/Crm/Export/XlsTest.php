@@ -72,16 +72,13 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         
         $csvFilename = tempnam(sys_get_temp_dir(), 'csvtest');
         $xlswriter->save($csvFilename);
-        //$noteString = Tinebase_Translation::getTranslation('Tinebase')->_('created') . ' ' . Tinebase_Translation::getTranslation('Tinebase')->_('by');
         
         $this->assertTrue(file_exists($csvFilename));
         $export = file_get_contents($csvFilename);
         $this->assertEquals(1, preg_match("/PHPUnit/",                          $export), 'no name');
         $this->assertEquals(1, preg_match("/Description/",                      $export), 'no description');
-        $this->assertEquals(1, preg_match('/Admin Account, Tine 2.0/',          $export), 'no creator');
+        $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountDisplayName) . '/',          $export), 'no creator');
         $this->assertEquals(1, preg_match('/open/',                             $export), 'no leadstate');
-        //$this->assertEquals(1, preg_match('/Kneschke/',                         $export), 'no partner');
-        //$this->assertEquals(1, preg_match('/' . $noteString . '/',              $export), 'no note');
         
         unlink($csvFilename);
     }

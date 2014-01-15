@@ -48,7 +48,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        $this->_account    = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_controller = Felamimail_Controller_Folder::getInstance();
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
         

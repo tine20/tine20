@@ -497,6 +497,7 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'imap_timestamp',     type: 'date', dateFormat: Date.patterns.ISO8601Long },
       { name: 'imap_uidvalidity',   type: 'int' },
       { name: 'imap_totalcount',    type: 'int' },
+      { name: 'imap_lastmodseq',    type: 'int' },
       { name: 'cache_status' },
       { name: 'cache_recentcount',  type: 'int' },
       { name: 'cache_totalcount',   type: 'int' },

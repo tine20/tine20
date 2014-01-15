@@ -135,4 +135,25 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             }
         }
     }
+
+    /**
+     * get personal container
+     * 
+     * @param string $applicationName
+     * @param Tinebase_Model_User $user
+     * @return Tinebase_Model_Container
+     */
+    protected function _getPersonalContainer($applicationName, $user = null)
+    {
+        if ($user === null) {
+            $user = Tinebase_Core::getUser();
+        }
+        
+        return Tinebase_Container::getInstance()->getPersonalContainer(
+            $user,
+            $applicationName, 
+            $user,
+            Tinebase_Model_Grants::GRANT_EDIT
+        )->getFirstRecord();
+    }
 }

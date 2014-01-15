@@ -209,10 +209,10 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchTimesheets($filter, $paging)
     {
         $result = $this->_search($filter, $paging, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter');
-
-        $result['totalcountbillable'] = $result['totalcount']['is_billable_combined'];
-        $result['totalsum']           = $result['totalcount']['duration'];
-        $result['totalsumbillable']   = $result['totalcountbillable'] * $result['totalsum'];
+        
+        $result['totalcountbillable'] = $result['totalcount']['sum_is_billable_combined'];
+        $result['totalsum']           = $result['totalcount']['sum_duration'];
+        $result['totalsumbillable']   = $result['totalcount']['sum_duration_billable'];
         $result['totalcount']         = $result['totalcount']['count'];
 
         return $result;

@@ -42,11 +42,11 @@ msgstr "Lista wpisów ewidencyjnych"
 msgid "Inventory items lists"
 msgstr "Listy wpisów ewidencyjnych"
 
-#: Model/InventoryItem.php:55 js/InventoryItemEditDialog.js:100
+#: Model/InventoryItem.php:55 js/InventoryItemEditDialog.js:101
 msgid "Name"
 msgstr "Nazwa"
 
-#: Model/InventoryItem.php:60 js/InventoryItemEditDialog.js:196
+#: Model/InventoryItem.php:60 js/InventoryItemEditDialog.js:197
 msgid "Status"
 msgstr "Status"
 
@@ -54,31 +54,31 @@ msgstr "Status"
 msgid "Inventory ID"
 msgstr "ID ewidencji"
 
-#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:120
+#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:121
 msgid "Description"
 msgstr "Opis"
 
-#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:154
+#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:155
 msgid "Location"
 msgstr "Miejsce"
 
-#: Model/InventoryItem.php:79 js/InventoryItemEditDialog.js:282
+#: Model/InventoryItem.php:79 js/InventoryItemEditDialog.js:283
 msgid "Invoice date"
 msgstr "Data faktury"
 
-#: Model/InventoryItem.php:94 js/InventoryItemEditDialog.js:276
+#: Model/InventoryItem.php:94 js/InventoryItemEditDialog.js:277
 msgid "Invoice"
 msgstr "Faktura"
 
-#: Model/InventoryItem.php:99 js/InventoryItemEditDialog.js:256
+#: Model/InventoryItem.php:99 js/InventoryItemEditDialog.js:257
 msgid "Price"
 msgstr "Cena"
 
-#: Model/InventoryItem.php:105 js/InventoryItemEditDialog.js:263
+#: Model/InventoryItem.php:105 js/InventoryItemEditDialog.js:264
 msgid "Cost centre"
 msgstr "Centrum kosztów"
 
-#: Model/InventoryItem.php:117 js/InventoryItemEditDialog.js:167
+#: Model/InventoryItem.php:117 js/InventoryItemEditDialog.js:168
 msgid "Warranty"
 msgstr "Gwarancja"
 
@@ -90,7 +90,7 @@ msgstr "Pozycja dodana"
 msgid "Item removed"
 msgstr "Pozycja usunięta"
 
-#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:288
+#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:289
 msgid "Depreciate"
 msgstr "Deprecjacja"
 
@@ -160,39 +160,39 @@ msgstr "Domyślny kontener wpisów z ewidencji"
 msgid "The default container for new items"
 msgstr "Domyślny kontener nowych pozycji"
 
-#: js/InventoryItemEditDialog.js:41
+#: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
 msgstr "Aktywna ilość musi być mniejsza albo równa całkowitej ilości."
 
-#: js/InventoryItemEditDialog.js:67
+#: js/InventoryItemEditDialog.js:68
 msgid "General"
 msgstr "Ogólnie"
 
-#: js/InventoryItemEditDialog.js:91
+#: js/InventoryItemEditDialog.js:92
 msgid "ID"
 msgstr "ID"
 
-#: js/InventoryItemEditDialog.js:124
+#: js/InventoryItemEditDialog.js:125
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
-#: js/InventoryItemEditDialog.js:161
+#: js/InventoryItemEditDialog.js:162
 msgid "Added"
 msgstr "Dodano"
 
-#: js/InventoryItemEditDialog.js:173
+#: js/InventoryItemEditDialog.js:174
 msgid "Removed"
 msgstr "Usunięto"
 
-#: js/InventoryItemEditDialog.js:180
+#: js/InventoryItemEditDialog.js:181
 msgid "Total number"
 msgstr "Całkowita ilość"
 
-#: js/InventoryItemEditDialog.js:188
+#: js/InventoryItemEditDialog.js:189
 msgid "Available number"
 msgstr "Dostępny numer"
 
-#: js/InventoryItemEditDialog.js:235
+#: js/InventoryItemEditDialog.js:236
 msgid "Accounting"
 msgstr "Księgowość"
 

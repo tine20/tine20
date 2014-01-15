@@ -92,6 +92,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         
         try {
             $folders = $this->_getFoldersFromIMAP($account, $_folderName);
+            
             $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
             
             $hasChildren = (empty($folders) || count($folders) > 0 && count($result) == 0) ? 0 : 1;
@@ -337,14 +338,16 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             try {
                 $folderData['localName'] = Felamimail_Model_Folder::decodeFolderName($folderData['localName']);
                 $folderData['globalName'] = Felamimail_Model_Folder::decodeFolderName($folderData['globalName']);
-                $isSelectable = $this->_isSelectable($folderData, $_account);
+                
+                $isSelectable      = $this->_isSelectable($folderData, $_account);
                 
                 $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_account->getId(), $folderData['globalName']);
                 
-                $folder->is_selectable = $isSelectable;
-                $folder->imap_status   = Felamimail_Model_Folder::IMAP_STATUS_OK;
-                $folder->has_children  = ($folderData['hasChildren'] == '1');
-                $folder->parent  = $parentFolder;
+                $folder->is_selectable      = $isSelectable;
+                $folder->supports_condstore = $this->_supportsCondStore($folder, $_account);
+                $folder->imap_status        = Felamimail_Model_Folder::IMAP_STATUS_OK;
+                $folder->has_children       = ($folderData['hasChildren'] == '1');
+                $folder->parent             = $parentFolder;
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update cached folder ' . $folderData['globalName']);
                 
@@ -360,17 +363,18 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                     $delimiter = (strlen($folderData['delimiter']) === 1) ? $folderData['delimiter'] : '';
                     
                     $folder = new Felamimail_Model_Folder(array(
-                        'localname'         => $folderData['localName'],
-                        'globalname'        => $folderData['globalName'],
-                        'is_selectable'     => $isSelectable,
-                        'has_children'      => ($folderData['hasChildren'] == '1'),
-                        'account_id'        => $_account->getId(),
-                        'imap_timestamp'    => Tinebase_DateTime::now(),
-                        'imap_status'       => Felamimail_Model_Folder::IMAP_STATUS_OK,
-                        'user_id'           => Tinebase_Core::getUser()->getId(),
-                        'parent'            => $parentFolder,
-                        'system_folder'     => in_array(strtolower($folderData['localName']), $systemFolders),
-                        'delimiter'         => $delimiter,
+                        'localname'          => $folderData['localName'],
+                        'globalname'         => $folderData['globalName'],
+                        'is_selectable'      => $isSelectable,
+                        'supports_condstore' => $this->_supportsCondStore($folderData['globalName'], $_account),
+                        'has_children'       => ($folderData['hasChildren'] == '1'),
+                        'account_id'         => $_account->getId(),
+                        'imap_timestamp'     => Tinebase_DateTime::now(),
+                        'imap_status'        => Felamimail_Model_Folder::IMAP_STATUS_OK,
+                        'user_id'            => Tinebase_Core::getUser()->getId(),
+                        'parent'             => $parentFolder,
+                        'system_folder'      => in_array(strtolower($folderData['localName']), $systemFolders),
+                        'delimiter'          => $delimiter,
                     ));
                     
                     // update delimiter setting of account
@@ -397,6 +401,39 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
     }
     
     /**
+     * check if folder support condstore: try to exmime folder on imap server if supports_condstore is null
+     * 
+     * @param string|Felamimail_Model_Folder $folder
+     * @param Felamimail_Model_Account $_account
+     * @return boolean
+     */
+    protected function _supportsCondStore($folder, $account)
+    {
+        if (is_string($folder) || $folder->supports_condstore === null) {
+            $folderName = is_string($folder) ? $folder : $folder->globalname;
+            
+            $imap = Felamimail_Backend_ImapFactory::factory($account);
+            
+            try {
+                $folderData = $imap->examineFolder(Felamimail_Model_Folder::encodeFolderName($folderName));
+                
+                $result = isset($folderData['highestmodseq']) || array_key_exists('highestmodseq', $folderData);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                    ' Folder ' . $folderName . ' supports condstore: ' . intval($result));
+                
+                return $result;
+                
+            } catch (Zend_Mail_Storage_Exception $zmse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . " Could not examine folder $folderName. Skipping it.");
+                return null;
+            }
+        }
+        
+        return $folder->supports_condstore;
+    }
+    
+    /**
      * check if folder is selectable: try to select folder on imap server if isSelectable is false/not set
      * - courier imap servers subfolder have isSelectable = 0 but they still can be selected 
      *   @see http://www.tine20.org/bugtracker/view.php?id=2736
@@ -410,12 +447,16 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $result = TRUE;
         
         if (! $_folderData['isSelectable'] == '1') {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Folder ' . $_folderData['globalName'] . ' is not selectable.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Folder ' . $_folderData['globalName'] . ' is not selectable.');
+            
             $imap = Felamimail_Backend_ImapFactory::factory($_account);
+            
             try {
-                $folderData = $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($_folderData['globalName']));
+                $folderData = $imap->examineFolder(Felamimail_Model_Folder::encodeFolderName($_folderData['globalName']));
             } catch (Zend_Mail_Storage_Exception $zmse) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Could not select folder. Skipping it.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Could not select folder. Skipping it.');
                 $result = FALSE;
             }
         }

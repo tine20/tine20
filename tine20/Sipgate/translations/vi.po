@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-12-22 12:55+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1250,11 +1250,11 @@ msgstr "nhận nội dung"
 
 #: js/SmsEditDialog.js:293
 msgid "Character"
-msgstr ""
+msgstr "Ký tự"
 
 #: js/SmsEditDialog.js:293
 msgid "Message"
-msgstr ""
+msgstr "Nội dung"
 
 #: js/SmsEditDialog.js:316
 msgid "Send message to \"{0}\""
@@ -1572,7 +1572,7 @@ msgstr "Xin hãy xác nhận các thiết lập tài khoản trước khi lưu l
 
 #: js/Models.js:97 js/Models.js:144 js/Models.js:321
 msgid "Quick Search"
-msgstr ""
+msgstr "Tìm nhanh"
 
 #: js/Models.js:98
 msgid "Created By"

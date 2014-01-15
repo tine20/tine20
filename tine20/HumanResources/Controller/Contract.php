@@ -342,24 +342,44 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     
     /**
      * returns all dates the employee have to work on by contract. the feast days are removed already
-     * if the period exceeds the contracts' period, the contracts' period will be used. freetimes are not respected here
+     * if the period exceeds the contracts' period, the contracts' period will be used. 
+     * freetimes are not respected here, if $respectTakenVacationDays is not set to TRUE
      * 
      * @param HumanResources_Model_Contract|Tinebase_Record_RecordSet $contracts
      * @param Tinebase_DateTime $firstDate
      * @param Tinebase_DateTime $lastDate
+     * @param boolean $respectTakenVacationDays
      * 
      * @return array
      */
-    public function getDatesToWorkOn($contracts, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
+    public function getDatesToWorkOn($contracts, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate, $respectTakenVacationDays = FALSE)
     {
         $contracts = $this->_convertToRecordSet($contracts);
         
         // find out feast days
         $feastDays = $this->getFeastDays($contracts, $firstDate, $lastDate);
-        $feastDayStrings = array();
+        $freeDayStrings = array();
+        
         
         foreach($feastDays as $feastDay) {
-            $feastDayStrings[] = $feastDay->format('Y-m-d');
+            $freeDayStrings[] = $feastDay->format('Y-m-d');
+        }
+        
+        if ($respectTakenVacationDays) {
+            $vacationTimes = new Tinebase_Record_RecordSet('HumanResources_Model_FreeTime');
+            
+            foreach($contracts as $contract) {
+                $vacationTimes = $vacationTimes->merge($this->getFreeTimes($contract));
+            }
+            
+            $filter = new HumanResources_Model_FreeDayFilter(array());
+            $filter->addFilter(new Tinebase_Model_Filter_Text(
+                array('field' => 'freetime_id','operator' => 'in', 'value' => $vacationTimes->id)
+            ));
+            $vacationDays = HumanResources_Controller_FreeDay::getInstance()->search($filter);
+            foreach($vacationDays as $vDay) {
+                $freeDayStrings[] = $vDay->date->format('Y-m-d');
+            }
         }
         
         $hoursToWorkOn = 0;
@@ -385,7 +405,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
                 $weekday = $date->format('w');
                 $hrs = $weekdays[$weekday];
                 
-                if (! in_array($ds, $feastDayStrings) && $hrs > 0) {
+                if (! in_array($ds, $freeDayStrings) && $hrs > 0) {
                     $results[] = clone $date;
                     $sumHours += $hrs;
                 }

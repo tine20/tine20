@@ -93,7 +93,6 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         $existingFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'in', 'value' => $validEmployeeIds)));
         
         $result = $this->search($existingFilter)->employee_id;
-        
         $validEmployeeIds = array_diff($validEmployeeIds, $result);
         $createdAccounts = new Tinebase_Record_RecordSet('HumanResources_Model_Account');
         
@@ -170,7 +169,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         $rebookedVacationDays = $freedayController->search($filter);
         
         $datesToWorkOn = $this->_contractController->getDatesToWorkOn($contracts, $yearBegins, $yearEnds);
-        
+        $datesToWorkOnReal = $this->_contractController->getDatesToWorkOn($contracts, $yearBegins, $yearEnds, TRUE);
         $expiredVacationDays = 0;
         
         // add extra free times of this year, if not expired (defined by account)
@@ -187,8 +186,10 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
             'taken_vacation_days'     => $acceptedVacationDays->count(),
             'excused_sickness'        => $excusedSicknessDays->count(),
             'unexcused_sickness'      => $unexcusedSicknessDays->count(),
-            'working_days'            => intval((count($datesToWorkOn['results']) - $possibleVacationDays)),
-            'working_hours'           => $datesToWorkOn['hours']
+            'working_days'            => count($datesToWorkOn['results']),
+            'working_hours'           => $datesToWorkOn['hours'],
+            'working_days_real'       => count($datesToWorkOnReal['results']),
+            'working_hours_real'      => $datesToWorkOnReal['hours']
         );
     }
     

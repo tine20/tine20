@@ -261,7 +261,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'end_date' => $nextMonth,
             'vacation_days' => 22,
             'feast_calendar_id' => $fcId,
-            'creation_time' => $now->toString()
+            'creation_time' => $now->toString(),
+            'number' => 1,
         );
         
         // doing this manually, this won't be the last assertion, and more assertions are needed
@@ -277,23 +278,26 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $this->assertEquals('The contracts must not overlap!', $exception->getMessage());
         
+        // prevent duplicate exception
+        $employee['account_id'] = $this->_getAccount('rwright')->getId();
         // test startdate after end_date
-        
         $employee['contracts'][2] = array(
             'start_date' => $edate1->toString(),
             'end_date' => $sdate1->toString(),
             'vacation_days' => 22,
             'feast_calendar_id' => $fcId,
-            'creation_time' => $now->toString()
+            'creation_time' => $now->toString(),
         );
 
         try {
             $this->_json->saveEmployee($employee);
+            $this->fail('HumanResources_Exception_ContractDates exception expected');
         } catch (HumanResources_Exception_ContractDates $exception) {
             // thrown in HR_Controller_Contract
+            $this->assertEquals('The start date of the contract must be before the end date!', $exception->getMessage());
+        } catch (Tinebase_Exception_Duplicate $ted) {
+            $this->fail('got duplicate exception: ' . print_r($ted->toArray(), true));
         }
-        
-        $this->assertEquals('The start date of the contract must be before the end date!', $exception->getMessage());
     }
     
     /**
@@ -372,7 +376,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         }
         
         // what about the holy evening? it's recurring
-        // @see 0009114: Freeetime edit dialog doesn't calculate recurring feast days
+        // @see 0009114: Freetime edit dialog doesn't calculate recurring feast days
         //      https://forge.tine20.org/mantisbt/view.php?id=9114
         
         $this->_createRecurringFeastDay(new Tinebase_DateTime('2011-12-24'));
@@ -387,10 +391,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account2014 = $json->getAccount($accountId2014);
         
         $this->assertEquals(25, $account2013['possible_vacation_days']);
-        $this->assertEquals(225, $account2013['working_days']);
+        $this->assertEquals(250, $account2013['working_days']);
         
         $this->assertEquals(15, $account2014['possible_vacation_days']);
-        $this->assertEquals(160, $account2014['working_days']);
+        $this->assertEquals(175, $account2014['working_days']);
         
         // add 5 extra free days to the account with different expiration dates, 2 days aren't expired already
         $tomorrow = Tinebase_DateTime::now();
@@ -408,13 +412,13 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account2013 = $json->getAccount($accountId2013);
         $this->assertEquals(27, $account2013['possible_vacation_days']);
         $this->assertEquals(27, $account2013['remaining_vacation_days']);
-        $this->assertEquals(223, $account2013['working_days']);
+        $this->assertEquals(250, $account2013['working_days']);
         $this->assertEquals(3, $account2013['expired_vacation_days'], 'There should be 3 expired vacation days at first!');
         
         // the extra freetimes added to the account2013 should not affect account 2014
         $account2014 = $json->getAccount($accountId2014);
         $this->assertEquals(15, $account2014['possible_vacation_days']);
-        $this->assertEquals(160, $account2014['working_days']);
+        $this->assertEquals(175, $account2014['working_days']);
         
         // now add 3 vacation days before the expiration day of the second extra free time
         // #8202: Allow to book remaining free days from last years' account, respect expiration
@@ -425,11 +429,11 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'status' => 'ACCEPTED',
             'firstday_date' => $yesterday->subWeek(1)->toString()
         );
-        
+        $nd = $referenceDate->subMonth(2);
         $freetime['freedays'] = array(
-            array('duration' => '1', 'date' => $yesterday->toString()),
-            array('duration' => '1', 'date' => $yesterday->addDay(1)->toString()),
-            array('duration' => '1', 'date' => $yesterday->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $nd->toString()),
+            array('duration' => '1', 'date' => $nd->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $nd->addDay(1)->toString()),
         );
         
         $freetime = $this->_json->saveFreeTime($freetime);
@@ -451,9 +455,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals(1, $result['totalcount']);
         
         // test account quicksearch filter
-        $qsFilter = array(array('field' => "query", 'operator' => "contains", 'value' => 'Admin'));
+        $qsFilter = array(array('field' => "query", 'operator' => "contains", 'value' => Tinebase_Core::getUser()->accountFirstName));
         $result = $json->searchAccounts($qsFilter, array());
-        $this->assertEquals(3, $result['totalcount']);
+        $this->assertEquals(3, $result['totalcount'], 'should find exactly 3 accounts');
         
         $qsFilter = array(array('field' => "query", 'operator' => "contains", 'value' => 'Adsmin'));
         $result = $json->searchAccounts($qsFilter, array());
@@ -491,7 +495,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account2014 = $json->getAccount($accountId2014);
         $this->assertEquals(15, $account2014['possible_vacation_days']);
         $this->assertEquals(12, $account2014['remaining_vacation_days']);
-        $this->assertEquals(160, $account2014['working_days']);
+        $this->assertEquals(175, $account2014['working_days']);
         
         
         // now let's test the getFeastAndFreeTimes method with the same fixtures

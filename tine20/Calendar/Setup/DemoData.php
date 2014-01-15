@@ -145,8 +145,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $lastFriday = clone $this->_lastFriday;
 
         $defaultAttendeeData = array(
-            'alarm_ack_time'  => null,
-            'alarm_snooze_time'  => null,
             'quantity'  => "1",
             'role'  => "REQ",
             'status'  => "ACCEPTED",
@@ -304,8 +302,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'class' => 'PRIVATE',
             Tinebase_Model_Grants::GRANT_EDIT    => true,
             'attendee' => array(array(
-                'alarm_ack_time'  => null,
-                'alarm_snooze_time'  => null,
                 'quantity'  => "1",
                 'role'  => "REQ",
                 'status'  => "ACCEPTED",
@@ -453,8 +449,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'class' => 'PRIVATE',
             Tinebase_Model_Grants::GRANT_EDIT    => true,
             'attendee' => array(array(
-                'alarm_ack_time'  => null,
-                'alarm_snooze_time'  => null,
                 'quantity'  => "1",
                 'role'  => "REQ",
                 'status'  => "ACCEPTED",
@@ -541,8 +535,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         $defaultEventData['container_id'] = $cal->getId();
         $defaultEventData['attendee'][] = array(
-            'alarm_ack_time'  => null,
-            'alarm_snooze_time'  => null,
             'quantity'  => "1",
             'role'  => "REQ",
             'status'  => "NEEDS-ACTION",
@@ -592,8 +584,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'class' => 'PRIVATE',
             Tinebase_Model_Grants::GRANT_EDIT    => true,
             'attendee' => array(array(
-                'alarm_ack_time'  => null,
-                'alarm_snooze_time'  => null,
                 'quantity'  => "1",
                 'role'  => "REQ",
                 'status'  => "ACCEPTED",
@@ -762,8 +752,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'class' => 'PRIVATE',
             Tinebase_Model_Grants::GRANT_EDIT    => true,
             'attendee' => array(array(
-                'alarm_ack_time'  => null,
-                'alarm_snooze_time'  => null,
                 'quantity'  => "1",
                 'role'  => "REQ",
                 'status'  => "ACCEPTED",
@@ -898,8 +886,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'class' => 'PRIVATE',
             Tinebase_Model_Grants::GRANT_EDIT    => true,
             'attendee' => array(array(
-                'alarm_ack_time'  => null,
-                'alarm_snooze_time'  => null,
                 'quantity'  => "1",
                 'role'  => "REQ",
                 'status'  => "ACCEPTED",

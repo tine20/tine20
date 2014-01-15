@@ -26,7 +26,6 @@ class Tinebase_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      *  - tableName
      *  - tablePrefix
      *  - modlogActive
-     *  - useSubselectForCount
      *
      * @param array $_options (optional)
      * @param Zend_Db_Adapter_Abstract $_db (optional) the db adapter

@@ -6,7 +6,8 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
  */
 
 /**
@@ -237,20 +238,23 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
         
-        if ($ownAttendee && $ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
-            $vevent->add('X-MOZ-LASTACK', $ownAttendee->alarm_ack_time->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
-        }
-        
-        if ($ownAttendee && $ownAttendee->alarm_snooze_time instanceof Tinebase_DateTime) {
-            $vevent->add('X-MOZ-SNOOZE-TIME', $ownAttendee->alarm_snooze_time->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
-        }
-        
         if ($event->alarms instanceof Tinebase_Record_RecordSet) {
+            $mozLastAck = NULL;
+            $mozSnooze = NULL;
+            
             foreach ($event->alarms as $alarm) {
                 $valarm = $vcalendar->create('VALARM');
                 $valarm->add('ACTION', 'DISPLAY');
                 $valarm->add('DESCRIPTION', $event->summary);
                 
+                if ($dtack = Calendar_Controller_Alarm::getAcknowledgeTime($alarm)) {
+                    $valarm->add('ACKNOWLEDGED', $dtack->getClone()->setTimezone('UTC')->format('Ymd\\THis\\Z'));
+                    $mozLastAck = $dtack > $mozLastAck ? $dtack : $mozLastAck;
+                }
+                
+                if ($dtsnooze = Calendar_Controller_Alarm::getSnoozeTime($alarm)) {
+                    $mozSnooze = $dtsnooze > $mozSnooze ? $dtsnooze : $mozSnooze;
+                }
                 if (is_numeric($alarm->minutes_before)) {
                     if ($event->dtstart == $alarm->alarm_time) {
                         $periodString = 'PT0S';
@@ -274,6 +278,14 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 }
                 
                 $vevent->add($valarm);
+            }
+            
+            if ($mozLastAck instanceof DateTime) {
+                $vevent->add('X-MOZ-LASTACK', $mozLastAck->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
+            }
+            
+            if ($mozSnooze instanceof DateTime) {
+                $vevent->add('X-MOZ-SNOOZE-TIME', $mozSnooze->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
             }
         }
         
@@ -358,22 +370,19 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         }
         
         // find the main event - the main event has no RECURRENCE-ID
+        $baseVevent = null;
         foreach ($vcalendar->VEVENT as $vevent) {
             if (! isset($vevent->{'RECURRENCE-ID'})) {
                 $this->_convertVevent($vevent, $event);
+                $baseVevent = $vevent;
                 
                 break;
             }
         }
-
-        // if we have found no VEVENT component something went wrong, lets stop here
-        if (! $event->toArray()) {
-            throw new Tinebase_Exception_UnexpectedValue('no main VEVENT component found in VCALENDAR');
-        }
         
         // TODO only do this for events with rrule?
         // if (! empty($event->rrule)) {
-        $this->_parseEventExceptions($event, $vcalendar);
+        $this->_parseEventExceptions($event, $vcalendar, $baseVevent);
         $event->isValid(true);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
@@ -387,8 +396,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      * 
      * @param  Calendar_Model_Event                $event
      * @param  \Sabre\VObject\Component\VCalendar  $vcalendar
+     * @param  \Sabre\VObject\Component\VCalendar  $baseVevent
      */
-    protected function _parseEventExceptions(Calendar_Model_Event $event, \Sabre\VObject\Component\VCalendar $vcalendar)
+    protected function _parseEventExceptions(Calendar_Model_Event $event, \Sabre\VObject\Component\VCalendar $vcalendar, $baseVevent = null)
     {
         $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate->filter('is_deleted', false) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
@@ -411,12 +421,32 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     }
                 }
                 
+                if ($baseVevent) {
+                    $this->_adaptBaseEventProperties($vevent, $baseVevent);
+                }
+                
                 $this->_convertVevent($vevent, $recurException);
                 
                 if (! $event->exdate instanceof Tinebase_Record_RecordSet) {
                     $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
                 }
                 $event->exdate->addRecord($recurException);
+            }
+        }
+    }
+    
+    /**
+     * adapt X-MOZ-LASTACK / X-MOZ-SNOOZE-TIME from base vevent
+     * 
+     * @see 0009396: alarm_ack_time and alarm_snooze_time are not updated
+     */
+    protected function _adaptBaseEventProperties($vevent, $baseVevent)
+    {
+        $propertiesToAdapt = array('X-MOZ-LASTACK', 'X-MOZ-SNOOZE-TIME');
+        
+        foreach ($propertiesToAdapt as $property) {
+            if (isset($baseVevent->{$property})) {
+                $vevent->{$property} = $baseVevent->{$property};
             }
         }
     }
@@ -858,9 +888,17 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                             continue;
                         }
                         
+                        # TRIGGER:-PT15M
+                        if (is_string($valarm->TRIGGER->getValue()) && $valarm->TRIGGER instanceof Sabre\VObject\Property\ICalendar\Duration) {
+                            $valarm->TRIGGER->add('VALUE', 'DURATION');
+                        }
+                        
                         $trigger = is_object($valarm->TRIGGER['VALUE']) ? $valarm->TRIGGER['VALUE'] : (is_object($valarm->TRIGGER['RELATED']) ? $valarm->TRIGGER['RELATED'] : NULL);
+                        
                         if ($trigger === NULL) {
                             // added Trigger/Related for eM Client alarms
+                            // 2014-01-03 - Bullshit, why don't we have testdata for emclient alarms?
+                            //              this alarm handling should be refactored, the logic is scrambled
                             // @see 0006110: handle iMIP messages from outlook
                             // @todo fix 0007446: handle broken alarm in outlook invitation message
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
@@ -880,8 +918,6 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                                     'model'             => 'Calendar_Model_Event'
                                 ));
                                 
-                                $event->alarms->addRecord($alarm);
-                                
                                 break;
                                 
                             # TRIGGER;VALUE=DURATION:-PT1H15M
@@ -900,10 +936,15 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                                     'model'             => 'Calendar_Model_Event'
                                 ));
                                 
-                                $event->alarms->addRecord($alarm);
-                                
                                 break;
                         }
+                        
+                        if ($valarm->ACKNOWLEDGED) {
+                            $dtack = $valarm->ACKNOWLEDGED->getDateTime();
+                            Calendar_Controller_Alarm::setAcknowledgeTime($alarm, $dtack);
+                        }
+                        
+                        $event->alarms->addRecord($alarm);
                     }
                     
                     break;
@@ -932,17 +973,15 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             }
         }
         
+        if (isset($lastAck)) {
+            Calendar_Controller_Alarm::setAcknowledgeTime($event->alarms, $lastAck);
+        }
+        if (isset($snoozeTime)) {
+            Calendar_Controller_Alarm::setSnoozeTime($event->alarms, $snoozeTime);
+        }
+        
         // merge old and new attendee
         Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
-        
-        if (($ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee)) !== null) {
-            if (isset($lastAck)) {
-                $ownAttendee->alarm_ack_time = $lastAck;
-            }
-            if (isset($snoozeTime)) {
-                $ownAttendee->alarm_snooze_time = $snoozeTime;
-            }
-        }
         
         if (empty($event->seq)) {
             $event->seq = 0;

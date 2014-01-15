@@ -509,6 +509,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 if (record.isInbox() && record.isModified('cache_unreadcount')) {
                     this.showNewMessageNotification(record);
                 }
+                
+                if (record.isModified('imap_lastmodseq')) {
+                    Tine.log.info('Tine.Felamimail.Application::onUpdateFolder(): reload messages because flags have changed');
+                    this.getMainScreen().getCenterPanel().getStore().reload();
+                }
             }
 
             if (record.isInbox()) {

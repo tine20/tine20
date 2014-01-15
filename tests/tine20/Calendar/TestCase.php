@@ -120,6 +120,11 @@ abstract class Calendar_TestCase extends TestCase
                 Tinebase_Container::getInstance()->deleteContainer($cal, true);
             }
         }
+        
+        if ($this->_testUser->getId() !== Tinebase_Core::getUser()->getId()) {
+            // reset test user
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+        }
     }
     
     /**
@@ -221,5 +226,23 @@ abstract class Calendar_TestCase extends TestCase
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         );
+    }
+    
+    /**
+     * helper function for getting attender (current user or persona) from attendee set
+     * 
+     * @param Tinebase_Record_RecordSet $attendee
+     * @param string $persona
+     * @return Calendar_Model_Attender
+     */
+    protected function _getAttenderFromAttendeeSet($attendee, $persona = null)
+    {
+        $contactId = $persona ? $this->_personasContacts[$persona]->getId() : Tinebase_Core::getUser()->contact_id;
+        $attender = new Calendar_Model_Attender(array(
+            'user_id'        => $contactId,
+            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+        ));
+        
+        return Calendar_Model_Attender::getAttendee($attendee, $attender);
     }
 }

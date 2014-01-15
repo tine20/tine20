@@ -5,19 +5,14 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tinebase_Relations
  */
-class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_AbstractControllerTest
+class Tasks_ControllerTest extends TestCase
 {
     /**
      * @var array test Task 1 data
@@ -43,12 +38,6 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
      */
     protected $_modelNames = array('Tasks_Model_Task' => 'Task');
     
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tasks_ControllerTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -57,7 +46,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_controller = Tasks_Controller_Task::getInstance();
         $this->_minimalDatas = array('Task' => array(
@@ -90,17 +79,6 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         $this->_testTask1->convertDates = true;
         
         $this->_persistantTestTask1 = $this->_controller->create($this->_testTask1);
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
     }
 
     /**
@@ -167,7 +145,12 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
                 case 'notes':
                     break;
                 default:
-                    $this->assertEquals($value, $utask->$field, "field $field not equal: " . print_r($value, TRUE));
+                    if ($value instanceof Tinebase_Record_Abstract || $value instanceof Tinebase_Record_RecordSet) {
+                        $diff = $value->diff($utask->$field);
+                        $this->assertEquals(0, count($diff->diff), "field $field not equal: " . print_r($diff->toArray(), TRUE));
+                    } else {
+                        $this->assertEquals($value, $utask->$field, "field $field not equal: " . print_r($value, TRUE));
+                    }
             }
         }
         return $utask;

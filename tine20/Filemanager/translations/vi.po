@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-12-22 13:12+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,11 +27,11 @@ msgstr "Tạo 1 thư mục chung"
 
 #: Acl/Rights.php:109
 msgid "manage module"
-msgstr ""
+msgstr "quản lý mô đun"
 
 #: Acl/Rights.php:110
 msgid "show module main screen"
-msgstr ""
+msgstr "hiển thị mà hình mô đun chính"
 
 #: Controller.php:102
 #, python-format
@@ -137,7 +137,7 @@ msgstr "Xin hãy đợi"
 
 #: js/Model.js:529
 msgid "Quick Search"
-msgstr ""
+msgstr "Tìm nhanh"
 
 #: js/Model.js:531 js/NodeGridPanel.js:149
 msgid "Contenttype"
