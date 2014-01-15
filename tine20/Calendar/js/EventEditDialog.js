@@ -32,6 +32,14 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     showContainerSelector: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
+    /**
+     * hide relations panel because we can't load them on demand yet
+     * 
+     * @see 0009412: event loses saved relations on reload
+     * @type Boolean
+     */
+    hideRelationsPanel: true,
+    
     mode: 'local',
     
     // note: we need up use new action updater here or generally in the widget!
