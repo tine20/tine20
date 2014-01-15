@@ -742,6 +742,7 @@ class Tinebase_ModelConfiguration {
 
             if ($fieldDef['type'] == 'virtual') {
                 $fieldDef = isset($fieldDef['config']) ? $fieldDef['config'] : array();
+                $fieldDef['key'] = $fieldKey;
                 $fieldDef['sortable'] = FALSE;
                 if ((isset($fieldDef['default']))) {
                     // @todo: better handling of virtualfields
