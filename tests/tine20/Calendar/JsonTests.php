@@ -582,7 +582,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $someRecurInstance['dtstart'] = '2009-04-08 10:00:00';
         $someRecurInstance['dtend']   = '2009-04-08 12:30:00';
         
-        $someRecurInstance['seq'] = 2;
+        $someRecurInstance['seq'] = 3;
         $this->_uit->updateRecurSeries($someRecurInstance, FALSE, FALSE);
         
         $searchResultData = $this->_searchRecurSeries($recurSet[0]);
@@ -1343,7 +1343,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $eventData['attendee'][$adminIndex]['status'] = Calendar_Model_Attender::STATUS_TENTATIVE;
         $event = $this->_uit->saveEvent($eventData);
         
-        $loggedMods = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(new Calendar_Model_Attender($eventData['attendee'][$adminIndex]), 1);
+        $loggedMods = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(new Calendar_Model_Attender($eventData['attendee'][$adminIndex]), 2);
         $this->assertEquals(1, count($loggedMods), 'attender modification has not been logged');
         
         $eventData['attendee'] = $currentAttendee;

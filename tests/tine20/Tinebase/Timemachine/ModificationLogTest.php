@@ -267,7 +267,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $modlog = $this->_modLogClass->getModifications('Addressbook', $contact->getId(), NULL, 'Sql',
             Tinebase_DateTime::now()->subSecond(5), Tinebase_DateTime::now())->getFirstRecord();
         $this->assertTrue($modlog !== NULL);
-        $this->assertEquals(1, $modlog->seq);
+        $this->assertEquals(2, $modlog->seq);
         $this->assertEquals('+491234', $modlog->old_value);
         
         $filter = new Tinebase_Model_ModificationLogFilter(array(
@@ -326,8 +326,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $task->due = Tinebase_DateTime::now();
         $updatedTask = Tasks_Controller_Task::getInstance()->update($task);
         
-        $task->seq = 0;
-        $modlog = $this->_modLogClass->getModificationsBySeq($task, 1);
+        $task->seq = 1;
+        $modlog = $this->_modLogClass->getModificationsBySeq($task, 2);
         
         $this->assertEquals(1, count($modlog));
         $this->assertEquals((string) $task->due, (string) $modlog->getFirstRecord()->new_value, 'new value mismatch: ' . print_r($modlog->toArray(), TRUE));

@@ -1,11 +1,12 @@
 # 
 # Translators:
+# jevgu <jevgu@albnet.net>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-23 09:55+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-01-04 09:54+0000\n"
+"Last-Translator: jevgu <jevgu@albnet.net>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1154,11 +1155,11 @@ msgstr ""
 
 #: js/ConnectionGridPanel.js:72 js/Models.js:107 js/Models.js:325
 msgid "Status"
-msgstr ""
+msgstr "Statusi"
 
 #: js/ConnectionGridPanel.js:80
 msgid "Remote Number"
-msgstr ""
+msgstr "Numëri i largët"
 
 #: js/ConnectionGridPanel.js:86
 msgid "Local Number"
@@ -1170,7 +1171,7 @@ msgstr ""
 
 #: js/ConnectionGridPanel.js:99
 msgid "Call started"
-msgstr ""
+msgstr "Thirrja filloi"
 
 #: js/ConnectionGridPanel.js:106
 msgid "Contact"
@@ -1182,17 +1183,17 @@ msgstr ""
 
 #: js/ConnectionGridPanel.js:179
 msgid "Adds this number to the Addressbook"
-msgstr ""
+msgstr "Shton këtë nr. tek Blloku i Adresave"
 
 #: js/ConnectionGridPanel.js:186 js/LineGridPanel.js:163
 #: js/AccountGridPanel.js:124
 msgid "Dial number"
-msgstr ""
+msgstr "Formo Numër"
 
 #: js/ConnectionGridPanel.js:187 js/LineGridPanel.js:164
 #: js/AccountGridPanel.js:125
 msgid "Initiates a new outgoing call"
-msgstr ""
+msgstr "Inicion një thirrje të re dalëse"
 
 #: js/ConnectionGridPanel.js:196 js/LineGridPanel.js:203
 msgid "Add Account"
@@ -1205,11 +1206,11 @@ msgstr ""
 #: js/SmsEditDialog.js:74 js/SearchAddressDialog.js:63
 #: js/DialNumberDialog.js:89 js/CallStateWindow.js:106
 msgid "Cancel"
-msgstr ""
+msgstr "Anullo"
 
 #: js/SmsEditDialog.js:81 js/SearchAddressDialog.js:71
 msgid "Close"
-msgstr ""
+msgstr "Mbyll"
 
 #: js/SmsEditDialog.js:112
 msgid "Loading contact..."
@@ -1265,52 +1266,52 @@ msgstr ""
 
 #: js/SearchAddressDialog.js:55
 msgid "Add Number"
-msgstr ""
+msgstr "Shto Numër"
 
 #: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
 msgid "Phone"
-msgstr ""
+msgstr "Telefon"
 
 #: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
 msgid "Mobile"
-msgstr ""
+msgstr "Celular"
 
 #: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
 #: js/AccountGridPanel.js:55
 msgid "Fax"
-msgstr ""
+msgstr "Faks"
 
 #: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
 msgid "Car phone"
-msgstr ""
+msgstr "Telefon makine"
 
 #: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
 msgid "Pager"
-msgstr ""
+msgstr "Biper"
 
 #: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
 msgid "Phone (private)"
-msgstr ""
+msgstr "Telefon(privat)"
 
 #: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
 msgid "Fax (private)"
-msgstr ""
+msgstr "Faks(privat)"
 
 #: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
 msgid "Mobile (private)"
-msgstr ""
+msgstr "Celular(privat)"
 
 #: js/SearchAddressDialog.js:144
 msgid "-- create new --"
-msgstr ""
+msgstr "-- krijo të ri--"
 
 #: js/SearchAddressDialog.js:145
 msgid "Select existing contact or create a new one"
-msgstr ""
+msgstr "Zgjidh kontakt ekzistues ose krijo një të ri"
 
 #: js/SearchAddressDialog.js:180
 msgid "Choose Device"
-msgstr ""
+msgstr "Zgjidh Paisje"
 
 #: js/SearchAddressDialog.js:211
 msgid "Add number {0} to the addressbook"
@@ -1399,7 +1400,7 @@ msgstr ""
 
 #: js/DialNumberDialog.js:166
 msgid "Number to call"
-msgstr ""
+msgstr "Numëri për të thirrur"
 
 #: js/DialNumberDialog.js:171
 msgid "Please use a valid telephone number!"
@@ -1467,7 +1468,7 @@ msgstr ""
 
 #: js/CallStateWindow.js:167
 msgid "call 1 busy"
-msgstr ""
+msgstr "Thirrja 1 e zënë"
 
 #: js/CallStateWindow.js:174
 msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
@@ -1487,7 +1488,7 @@ msgstr ""
 
 #: js/CallStateWindow.js:244
 msgid "Connecting to: "
-msgstr ""
+msgstr "Duke u lidhur tek:"
 
 #: js/AccountEditDialog.js:43
 msgid "Validating account..."
@@ -1593,27 +1594,27 @@ msgstr[1] ""
 
 #: js/AddressbookGridPanelHook.js:38
 msgid "Call contact"
-msgstr ""
+msgstr "Thërrit kontaktin"
 
 #: js/AddressbookGridPanelHook.js:61
 msgid "Compose SMS"
-msgstr ""
+msgstr "Krijo SMS"
 
 #: js/AddressbookGridPanelHook.js:260
 msgid "Work"
-msgstr ""
+msgstr "Punë"
 
 #: js/AddressbookGridPanelHook.js:270
 msgid "Home"
-msgstr ""
+msgstr "Shtëpi"
 
 #: js/AddressbookGridPanelHook.js:280 js/AddressbookGridPanelHook.js:325
 msgid "Cell"
-msgstr ""
+msgstr "Celular"
 
 #: js/AddressbookGridPanelHook.js:290 js/AddressbookGridPanelHook.js:335
 msgid "Cell private"
-msgstr ""
+msgstr "Celular privat"
 
 #: Controller/Connection.php:242
 msgid "anonymous"

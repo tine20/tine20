@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 12:24+0000\n"
+"PO-Revision-Date: 2014-01-15 13:51+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
@@ -48,16 +48,16 @@ msgstr "Alla rättigheter för att administrera resurser"
 msgid "%s's personal calendar"
 msgstr "%s's personliga kalender"
 
-#: Model/Attender.php:168
+#: Model/Attender.php:156
 msgid "unknown"
 msgstr "okänd"
 
-#: Model/Attender.php:446
+#: Model/Attender.php:434
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "Denna kontakt har automatiskt lagts till av systemet som en händelse deltagare"
 
-#: Model/Attender.php:449
+#: Model/Attender.php:437
 msgid "The email address has been shortened: "
 msgstr ""
 
@@ -78,17 +78,17 @@ msgid "Classification"
 msgstr "Klassificering"
 
 #: Model/Event.php:347 js/GridView.js:161 js/ResourceEditDialog.js:84
-#: js/Model.js:207 js/EventEditDialog.js:256
+#: js/Model.js:207 js/EventEditDialog.js:264
 msgid "Description"
 msgstr "Beskrivning"
 
 #: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:272
-#: js/Model.js:206 js/EventEditDialog.js:124 js/ResourcesGridPanel.js:54
+#: js/Model.js:206 js/EventEditDialog.js:132 js/ResourcesGridPanel.js:54
 msgid "Location"
 msgstr "Plats"
 
 #: Model/Event.php:349 js/GridView.js:154 js/PerspectiveCombo.js:127
-#: js/EventDetailsPanel.js:276 js/Model.js:226 js/EventEditDialog.js:300
+#: js/EventDetailsPanel.js:276 js/Model.js:226 js/EventEditDialog.js:308
 msgid "Organizer"
 msgstr "Organiserare"
 
@@ -97,13 +97,13 @@ msgid "Priority"
 msgstr "Prioritet"
 
 #: Model/Event.php:351 js/GridView.js:173 js/AddToEventPanel.js:88
-#: js/AttendeeGridPanel.js:214 js/ContactEventsGridPanel.js:126
-#: js/EventEditDialog.js:178
+#: js/AttendeeGridPanel.js:213 js/ContactEventsGridPanel.js:126
+#: js/EventEditDialog.js:186
 msgid "Status"
 msgstr "Status"
 
 #: Model/Event.php:352 js/GridView.js:143 js/Model.js:205
-#: js/ContactEventsGridPanel.js:113 js/EventEditDialog.js:79
+#: js/ContactEventsGridPanel.js:113 js/EventEditDialog.js:87
 msgid "Summary"
 msgstr "Sammanfattning"
 
@@ -169,83 +169,96 @@ msgstr ""
 msgid "Monthly on the %1$s"
 msgstr ""
 
-#: Model/Rrule.php:325
+#: Model/Rrule.php:329
+msgid "Yearly every %1$s %2$s of %3$s"
+msgstr ""
+
+#: Model/Rrule.php:331
 msgid "Yearly on the %1$s of %2$s"
 msgstr ""
 
-#: Model/Rrule.php:363
+#: Model/Rrule.php:371
 msgid "second to last"
 msgstr ""
 
-#: Model/Rrule.php:366 js/RrulePanel.js:543 js/RrulePanel.js:724
+#: Model/Rrule.php:374 js/RrulePanel.js:543 js/RrulePanel.js:724
 msgid "last"
 msgstr "sista"
 
-#: Model/Rrule.php:372 js/RrulePanel.js:539 js/RrulePanel.js:720
+#: Model/Rrule.php:380 js/RrulePanel.js:539 js/RrulePanel.js:720
 msgid "first"
 msgstr "först"
 
-#: Model/Rrule.php:375 js/RrulePanel.js:540 js/RrulePanel.js:721
+#: Model/Rrule.php:383 js/RrulePanel.js:540 js/RrulePanel.js:721
 msgid "second"
 msgstr "andra"
 
-#: Model/Rrule.php:378 js/RrulePanel.js:541 js/RrulePanel.js:722
+#: Model/Rrule.php:386 js/RrulePanel.js:541 js/RrulePanel.js:722
 msgid "third"
 msgstr "tredje"
 
-#: Model/Rrule.php:381 js/RrulePanel.js:542 js/RrulePanel.js:723
+#: Model/Rrule.php:389 js/RrulePanel.js:542 js/RrulePanel.js:723
 msgid "fourth"
 msgstr "fjärde"
 
-#: Model/Rrule.php:384
+#: Model/Rrule.php:392
 msgid "fifth"
 msgstr ""
 
-#: Model/Rrule.php:389
+#: Model/Rrule.php:397
 msgid "st"
 msgstr ""
 
-#: Model/Rrule.php:392
+#: Model/Rrule.php:400
 msgid "nd"
 msgstr ""
 
-#: Model/Rrule.php:395
+#: Model/Rrule.php:403
 msgid "rd"
 msgstr ""
 
-#: Model/Rrule.php:398
+#: Model/Rrule.php:406
 msgid "th"
 msgstr ""
 
-#: Config.php:45
+#: Config.php:52
 msgid "Fixed Calendars"
 msgstr "Korrigerade kalendrar"
 
-#: Config.php:47
+#: Config.php:54
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
 msgstr "Kalendrar alltid utvalda oavsett av alla filter parametrar. En godkännd användning kan vara att tvinga visning av en viss helgdag kalender."
 
-#: Config.php:55
+#: Config.php:62
 msgid "Attendee Status Available"
 msgstr "Deltagarstatus tillgänglig"
 
-#: Config.php:57
+#: Config.php:64
 msgid ""
 "Possible event attendee status. Please note that additional attendee status "
 "might impact other calendar systems on export or syncronisation."
 msgstr "Möjlig deltagarstatus vid händelse. Var vänlig notera att ytterliggare deltagar status kan påverka andra kalendersystem vid export eller synkronisering."
 
-#: Config.php:65
+#: Config.php:72
 msgid "Attendee Roles Available"
 msgstr "Tillgängliga deltagarroller"
 
-#: Config.php:67
+#: Config.php:74
 msgid ""
 "Possible event attendee roles. Please note that additional attendee roles "
 "might impact other calendar systems on export or syncronisation."
 msgstr "Möjlig deltagarroll vid händelse. Var vänlig notera att ytterliggare deltagar roller kan påverka andra kalendersystem vid export eller synkronisering."
+
+#: Config.php:82
+msgid "Filter timeslot for CalDAV events"
+msgstr ""
+
+#: Config.php:84
+msgid ""
+"For how long in the past (in months) the events should be synchronized."
+msgstr ""
 
 #: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:70
 msgid "Calendar"
@@ -274,7 +287,7 @@ msgid "Declined"
 msgstr "Nekat"
 
 #: Setup/Update/Release5.php:94 Setup/Initialize.php:115 js/GridView.js:135
-#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:198
+#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:206
 msgid "Tentative"
 msgstr "Preliminärt"
 
@@ -311,7 +324,7 @@ msgid "All my events"
 msgstr "Alla mina event"
 
 #: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:252
-#: js/ContactEventsGridPanel.js:119 js/EventEditDialog.js:130
+#: js/ContactEventsGridPanel.js:119 js/EventEditDialog.js:138
 msgid "Start Time"
 msgstr "Starttid"
 
@@ -398,7 +411,7 @@ msgstr "Ny händelse"
 msgid "Manage Resources"
 msgstr "Hantera resurser"
 
-#: js/GridView.js:94 js/EventEditDialog.js:212
+#: js/GridView.js:94 js/EventEditDialog.js:220
 msgid "Private"
 msgstr "Privat"
 
@@ -406,16 +419,16 @@ msgstr "Privat"
 msgid "Tags"
 msgstr "Taggar"
 
-#: js/GridView.js:115 js/EventDetailsPanel.js:257 js/EventEditDialog.js:144
+#: js/GridView.js:115 js/EventDetailsPanel.js:257 js/EventEditDialog.js:152
 msgid "End Time"
 msgstr "Sluttid"
 
-#: js/GridView.js:121 js/Printer/Base.js:73 js/EventEditDialog.js:138
+#: js/GridView.js:121 js/Printer/Base.js:73 js/EventEditDialog.js:146
 #: js/SearchCombo.js:201
 msgid "whole day"
 msgstr "hela dagen"
 
-#: js/ResourceEditDialog.js:68 js/AttendeeGridPanel.js:206
+#: js/ResourceEditDialog.js:68 js/AttendeeGridPanel.js:205
 #: js/ResourcesGridPanel.js:43
 msgid "Name"
 msgstr "Namn"
@@ -436,7 +449,7 @@ msgstr "Fyll i beskrivning"
 msgid "Grants"
 msgstr ""
 
-#: js/PerspectiveCombo.js:84 js/EventEditDialog.js:182
+#: js/PerspectiveCombo.js:84 js/EventEditDialog.js:190
 msgid "non-blocking"
 msgstr "icke-blockerande"
 
@@ -448,7 +461,7 @@ msgstr ""
 msgid "Please choose the Event to add the contacts to"
 msgstr "Vänligen välj en händelse att lägga till kontakterna på"
 
-#: js/AddToEventPanel.js:78 js/AttendeeGridPanel.js:130
+#: js/AddToEventPanel.js:78 js/AttendeeGridPanel.js:139
 msgid "Role"
 msgstr "Roll"
 
@@ -750,9 +763,9 @@ msgstr "Den här händelsen lagrades ursprungligen i {0}"
 msgid "This event is additionally displayed in your personal calendar {0}"
 msgstr "Denna händelse visas också i din personliga kalender {0}"
 
-#: js/EventDetailsPanel.js:28 js/AttendeeGridPanel.js:507
-#: js/AttendeeGridPanel.js:525 js/AttendeeGridPanel.js:542
-#: js/AttendeeGridPanel.js:554 js/Model.js:392
+#: js/EventDetailsPanel.js:28 js/AttendeeGridPanel.js:575
+#: js/AttendeeGridPanel.js:593 js/AttendeeGridPanel.js:610
+#: js/AttendeeGridPanel.js:622 js/Model.js:390
 msgid "No Information"
 msgstr "Ingen information"
 
@@ -769,7 +782,7 @@ msgid "recurring event exception"
 msgstr "återkommande händelse undantag"
 
 #: js/EventDetailsPanel.js:294 js/AttendeeFilterModel.js:35
-#: js/AttendeeGridPanel.js:82 js/WestPanel.js:90 js/Model.js:376
+#: js/AttendeeGridPanel.js:89 js/WestPanel.js:90 js/Model.js:374
 msgid "Attendee"
 msgstr "Deltagare"
 
@@ -809,45 +822,45 @@ msgstr ""
 msgid "Click here to invite another attender..."
 msgstr "Klicka här för att bjuda in ytterligare deltagare"
 
-#: js/AttendeeGridPanel.js:144
-msgid "Quantity"
-msgstr "Kvantitet"
-
 #: js/AttendeeGridPanel.js:153
 msgid "This is the calendar where the attender has saved this event in"
 msgstr "Detta är den kalender som deltagaren har sparat händelsen i"
 
-#: js/AttendeeGridPanel.js:189
+#: js/AttendeeGridPanel.js:188
 msgid "Type"
 msgstr "Typ"
 
-#: js/AttendeeGridPanel.js:196
+#: js/AttendeeGridPanel.js:195
 msgid "User"
 msgstr "Användare"
 
-#: js/AttendeeGridPanel.js:197
+#: js/AttendeeGridPanel.js:196
 msgid "Group"
 msgstr "Grupp"
 
-#: js/AttendeeGridPanel.js:198 js/Model.js:572
+#: js/AttendeeGridPanel.js:197 js/Model.js:570
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Resurs"
 msgstr[1] "Resurser"
 
-#: js/AttendeeGridPanel.js:199
+#: js/AttendeeGridPanel.js:198
 msgid "Member of group"
 msgstr "Medlem i grupp"
 
-#: js/AttendeeGridPanel.js:390
+#: js/AttendeeGridPanel.js:400
 msgid "Remove Attender"
 msgstr "Ta bort deltagare"
 
-#: js/AttendeeGridPanel.js:512
+#: js/AttendeeGridPanel.js:413
+msgid "Compose email"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:580
 msgid "(as a group member)"
 msgstr "(som gruppmedlem)"
 
-#: js/AttendeeGridPanel.js:603
+#: js/AttendeeGridPanel.js:671
 msgid "External Attendee"
 msgstr ""
 
@@ -855,13 +868,13 @@ msgstr ""
 msgid "Mini Calendar"
 msgstr "Mini Kalender"
 
-#: js/Model.js:66 js/Model.js:380 js/SearchCombo.js:79
+#: js/Model.js:66 js/Model.js:378 js/SearchCombo.js:79
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Händelse"
 msgstr[1] "Händelser"
 
-#: js/Model.js:66 js/Model.js:380 js/ContactEventsGridPanel.js:50
+#: js/Model.js:66 js/Model.js:378 js/ContactEventsGridPanel.js:50
 msgid "Events"
 msgstr "Händelse"
 
@@ -893,45 +906,45 @@ msgstr "Händelse (som organiserare)"
 msgid "Event attendee"
 msgstr "Händelse deltagare"
 
-#: js/Model.js:376
+#: js/Model.js:374
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Deltagare"
 msgstr[1] "Deltagare"
 
-#: js/Model.js:572
+#: js/Model.js:570
 msgid "Resources"
 msgstr "Resurser"
 
-#: js/EventEditDialog.js:95
+#: js/EventEditDialog.js:103
 msgid "View"
 msgstr "Visa"
 
-#: js/EventEditDialog.js:111
+#: js/EventEditDialog.js:119
 msgid "Details"
 msgstr "Detaljer"
 
-#: js/EventEditDialog.js:160
+#: js/EventEditDialog.js:168
 msgid "Saved in"
 msgstr "Sparad i"
 
-#: js/EventEditDialog.js:270
+#: js/EventEditDialog.js:278
 msgid "Enter description"
 msgstr "Beskrivning"
 
-#: js/EventEditDialog.js:468
+#: js/EventEditDialog.js:510
 msgid "End date is not valid"
 msgstr "Slutdatum är ogiltigt"
 
-#: js/EventEditDialog.js:471
+#: js/EventEditDialog.js:513
 msgid "End date must be after start date"
 msgstr "Slutdatum måste vara efter startdatum"
 
-#: js/EventEditDialog.js:484
+#: js/EventEditDialog.js:526
 msgid "Start date is not valid"
 msgstr "Startdatum är ogiligt"
 
-#: js/EventEditDialog.js:504
+#: js/EventEditDialog.js:546
 msgid "Errors"
 msgstr "Fel"
 

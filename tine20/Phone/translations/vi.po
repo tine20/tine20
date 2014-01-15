@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-12-22 12:49+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,11 +19,11 @@ msgstr ""
 
 #: Model/Call.php:43
 msgid "Call"
-msgstr ""
+msgstr "Gọi"
 
 #: Model/Call.php:44
 msgid "Calls"
-msgstr ""
+msgstr "Các cuộc gọi"
 
 #: Model/Call.php:60 js/DialerPanel.js:76
 msgid "Line"
@@ -75,47 +75,47 @@ msgstr "Điện thoại"
 
 #: Model/MyPhone.php:61
 msgid "Settings"
-msgstr ""
+msgstr "Thiết lập"
 
 #: Model/MyPhone.php:66
 msgid "Lines"
-msgstr ""
+msgstr "Đường dây"
 
 #: Model/MyPhone.php:69
 msgid "Description"
-msgstr ""
+msgstr "Mô tả"
 
 #: Setup/Update/Release7.php:30 Setup/Initialize.php:33
 msgid "Calls this week"
-msgstr ""
+msgstr "Cuộc gọi trong tuần"
 
 #: Setup/Update/Release7.php:40 Setup/Initialize.php:43
 msgid "Calls last week"
-msgstr ""
+msgstr "Cuộc gọi tuần trước"
 
 #: Setup/Update/Release7.php:50 Setup/Initialize.php:53
 msgid "Calls this month"
-msgstr ""
+msgstr "Cuộc gọi tháng này"
 
 #: Setup/Update/Release7.php:60 Setup/Initialize.php:63
 msgid "Calls last month"
-msgstr ""
+msgstr "Cuộc gọi tháng trước"
 
 #: Setup/Initialize.php:34
 msgid "Incoming and outgoing calls of this week"
-msgstr ""
+msgstr "Cuộc gọi đi và đến trong tuần"
 
 #: Setup/Initialize.php:44
 msgid "Incoming and outgoing calls of last week"
-msgstr ""
+msgstr "Cuộc gọi đi và đến tuần trước"
 
 #: Setup/Initialize.php:54
 msgid "Incoming and outgoing calls of this month"
-msgstr ""
+msgstr "Cuộc gọi đi và đến tháng này"
 
 #: Setup/Initialize.php:64
 msgid "Incoming and outgoing calls of last month"
-msgstr ""
+msgstr "Cuộc gọi đi và đến tháng trước"
 
 #: js/DialerPanel.js:85
 msgid "Number"
@@ -151,11 +151,11 @@ msgstr "Bắt đầu 1 cuộc gọi đi mới"
 
 #: js/CallGridPanel.js:216
 msgid "No phone selected"
-msgstr ""
+msgstr "Chưa chọn điện thoại"
 
 #: js/CallGridPanel.js:217
 msgid "Please select the desired phone in the tree!"
-msgstr ""
+msgstr "Xin chọn điện thoại bạn muốn trong cây danh mục"
 
 #: js/Phone.js:100
 msgid "Incoming call"
@@ -173,18 +173,18 @@ msgstr "không rõ số"
 msgid "Call contact"
 msgstr "Liên lạc điện thoại"
 
-#: js/AddressbookGridPanelHook.js:171
+#: js/AddressbookGridPanelHook.js:191
 msgid "Work"
 msgstr "Cơ quan"
 
-#: js/AddressbookGridPanelHook.js:180
+#: js/AddressbookGridPanelHook.js:200
 msgid "Home"
 msgstr "Nhà riêng"
 
-#: js/AddressbookGridPanelHook.js:189
+#: js/AddressbookGridPanelHook.js:209
 msgid "Cell"
 msgstr "Di động"
 
-#: js/AddressbookGridPanelHook.js:198
+#: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr "Di động riêng"

@@ -945,7 +945,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $until->addDay(5); //08
         
         $currentPersistentEvent = $this->_controller->get($persistentEvent);
-        $persistentEvent->seq = 2; // satisfy modlog
+        $persistentEvent->seq = 3; // satisfy modlog
         $updatedPersistenEvent = $this->_controller->update($persistentEvent);
         
         $persistentEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(

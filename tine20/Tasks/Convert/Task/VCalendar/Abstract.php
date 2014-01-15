@@ -18,6 +18,13 @@
  */
 class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interface
 {
+    /**
+     * use servers modlogProperties instead of given DTSTAMP & SEQUENCE
+     * use this if the concurrency checks are done differntly like in CalDAV
+     * where the etag is checked
+     */
+    const OPTION_USE_SERVER_MODLOG = 'useServerModlog';
+    
     public static $cutypeMap = array(
         //Tasks_Model_Attender::USERTYPE_USER          => 'INDIVIDUAL',
         //Tasks_Model_Attender::USERTYPE_GROUPMEMBER   => 'INDIVIDUAL',
@@ -295,9 +302,10 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
      * 
      * @param  mixed                 $_blob   the vcalendar to parse
      * @param  Calendar_Model_Event  $_record  update existing event
+     * @param  array                 $options
      * @return Calendar_Model_Event
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
+    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null, $options = array())
     {
         $vcalendar = self::getVObject($_blob);
         
@@ -330,7 +338,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
         // find the main event - the main event has no RECURRENCE-ID
         foreach($vcalendar->VTODO as $vtodo) {
             if(!isset($vtodo->{"RECURRENCE-ID"})) {
-                $this->_convertVtodo($vtodo, $task);
+                $this->_convertVtodo($vtodo, $task, $options);
                 
                 break;
             }
@@ -496,33 +504,16 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
      * @param  \Sabre\VObject\Component\VTodo  $_vevent  the VTODO to parse
      * @param  Tasks_Model_Task     $_vtodo   the Tine 2.0 event to update
      */
-    protected function _convertVtodo(\Sabre\VObject\Component\VTodo $_vtodo, Tasks_Model_Task $_task)
+    protected function _convertVtodo(\Sabre\VObject\Component\VTodo $_vtodo, Tasks_Model_Task $_task, $options)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vevent ' . $_vtodo->serialize());  
         
         $task = $_task;
         
-        // unset supported fields
-        foreach ($this->_supportedFields as $field) {
-            switch ($field) {
-                case 'alarms':
-                    $task->$field = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
-                    break;
-                    
-                case 'priority':
-                     $task->$field = 'NORMAL';
-                     break;
-                     
-                case 'status':
-                     $task->$field = 'NEEDS-ACTION';
-                     break;
-                     
-                default:
-                     $task->$field = null;
-                     break;
-            }
-        }
-
+        $task->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        $task->priority = 'NORMAL';
+        $task->status = 'NEEDS-ACTION';
+        
         foreach($_vtodo->children() as $property) {
             switch($property->name) {
                 case 'CREATED':
@@ -603,7 +594,9 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                     break;
                            
                 case 'SEQUENCE':
-                    $task->seq = $property->getValue();
+                    if (! isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
+                        $task->seq = $property->getValue();
+                    }
                     
                     break;
                     

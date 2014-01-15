@@ -817,7 +817,7 @@ class Tinebase_Timemachine_ModificationLog
                 $_newRecord->created_by    = $currentAccountId;
                 $_newRecord->creation_time = $currentTime;
                 if ($_newRecord->has('seq')) {
-                    $_newRecord->seq       = 0;
+                    $_newRecord->seq       = 1;
                 }
                 break;
             case 'update':

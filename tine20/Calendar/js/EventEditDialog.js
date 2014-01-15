@@ -538,10 +538,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     doApplyChanges: function(closeWindow) {
         this.onRecordUpdate();
-        if(this.isValid()) {
+        if (this.isValid()) {
             this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
             this.onAfterApplyChanges(closeWindow);
         } else {
+            this.saving = false;
             this.loadMask.hide();
             Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
         }

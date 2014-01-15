@@ -107,11 +107,11 @@ msgstr "Meus Produtos"
 msgid "Products created by myself"
 msgstr "Produtos criados por mim"
 
-#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
+#: Setup/Update/Release5.php:84 Setup/Initialize.php:51
 msgid "My Contracts"
 msgstr "Meus Contratos"
 
-#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
+#: Setup/Update/Release5.php:85 Setup/Initialize.php:52
 msgid "Contracts created by myself"
 msgstr "Contratos criados por mim"
 

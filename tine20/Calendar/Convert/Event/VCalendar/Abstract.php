@@ -18,6 +18,13 @@
  */
 class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Interface
 {
+    /**
+     * use servers modlogProperties instead of given DTSTAMP & SEQUENCE
+     * use this if the concurrency checks are done differently like in CalDAV
+     * where the etag is checked
+     */
+    const OPTION_USE_SERVER_MODLOG = 'useServerModlog';
+    
     public static $cutypeMap = array(
         Calendar_Model_Attender::USERTYPE_USER          => 'INDIVIDUAL',
         Calendar_Model_Attender::USERTYPE_GROUPMEMBER   => 'INDIVIDUAL',
@@ -345,11 +352,12 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
     /**
      * converts vcalendar to Calendar_Model_Event
      * 
-     * @param  mixed                 $_blob   the VCALENDAR to parse
+     * @param  mixed                 $_blob    the VCALENDAR to parse
      * @param  Calendar_Model_Event  $_record  update existing event
+     * @param  array                 $options  array of options
      * @return Calendar_Model_Event
      */
-    public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null)
+    public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null, $options = array())
     {
         $vcalendar = self::getVObject($blob);
         
@@ -373,16 +381,17 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         $baseVevent = null;
         foreach ($vcalendar->VEVENT as $vevent) {
             if (! isset($vevent->{'RECURRENCE-ID'})) {
-                $this->_convertVevent($vevent, $event);
-                $baseVevent = $vevent;
                 
+                $this->_convertVevent($vevent, $event, $options);
+                $baseVevent = $vevent;
                 break;
             }
         }
         
         // TODO only do this for events with rrule?
         // if (! empty($event->rrule)) {
-        $this->_parseEventExceptions($event, $vcalendar, $baseVevent);
+        $this->_parseEventExceptions($event, $vcalendar, $baseVevent, $options);
+
         $event->isValid(true);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
@@ -397,8 +406,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      * @param  Calendar_Model_Event                $event
      * @param  \Sabre\VObject\Component\VCalendar  $vcalendar
      * @param  \Sabre\VObject\Component\VCalendar  $baseVevent
+     * @param  array                               $options
      */
-    protected function _parseEventExceptions(Calendar_Model_Event $event, \Sabre\VObject\Component\VCalendar $vcalendar, $baseVevent = null)
+    protected function _parseEventExceptions(Calendar_Model_Event $event, \Sabre\VObject\Component\VCalendar $vcalendar, $baseVevent = null, $options = array())
     {
         $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate->filter('is_deleted', false) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
@@ -425,7 +435,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     $this->_adaptBaseEventProperties($vevent, $baseVevent);
                 }
                 
-                $this->_convertVevent($vevent, $recurException);
+                $this->_convertVevent($vevent, $recurException, $options);
                 
                 if (! $event->exdate instanceof Tinebase_Record_RecordSet) {
                     $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -455,9 +465,10 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      * convert VCALENDAR to Tinebase_Record_RecordSet of Calendar_Model_Event
      * 
      * @param  mixed  $blob  the vcalendar to parse
+     * @param  array  $options
      * @return Tinebase_Record_RecordSet
      */
-    public function toTine20RecordSet($blob)
+    public function toTine20RecordSet($blob, $options = array())
     {
         $vcalendar = self::getVObject($blob);
         
@@ -466,9 +477,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         foreach ($vcalendar->VEVENT as $vevent) {
             if (! isset($vevent->{'RECURRENCE-ID'})) {
                 $event = new Calendar_Model_Event();
-                $this->_convertVevent($vevent, $event);
+                $this->_convertVevent($vevent, $event, $options);
                 if (! empty($event->rrule)) {
-                    $this->_parseEventExceptions($event, $vcalendar);
+                    $this->_parseEventExceptions($event, $vcalendar, $options);
                 }
                 $result->addRecord($event);
             }
@@ -678,28 +689,23 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      * 
      * @param  \Sabre\VObject\Component\VEvent  $vevent  the VEVENT to parse
      * @param  Calendar_Model_Event             $event   the Tine 2.0 event to update
+     * @param  array                            $options
      */
-    protected function _convertVevent(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event)
+    protected function _convertVevent(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event, $options)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vevent ' . $vevent->serialize());
         
         $newAttendees = array();
-        
-        // unset supported fields
-        foreach ($this->_supportedFields as $field) {
-            if ($field == 'alarms') {
-                $event->$field = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
-            } else {
-                $event->$field = null;
-            }
-        }
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         
         foreach ($vevent->children() as $property) {
             switch ($property->name) {
                 case 'CREATED':
                 case 'DTSTAMP':
-                    // do nothing
+                    if (! isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
+                        $event->{$property->name == 'CREATED' ? 'creation_time' : 'last_modified_time'} = $this->_convertToTinebaseDateTime($property);
+                    }
                     break;
                     
                 case 'LAST-MODIFIED':
@@ -764,7 +770,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                     
                 case 'SEQUENCE':
-                    $event->seq = $property->getValue();
+                    if (! isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
+                        $event->seq = $property->getValue();
+                    }
                     break;
                     
                 case 'DESCRIPTION':
@@ -984,7 +992,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
         
         if (empty($event->seq)) {
-            $event->seq = 0;
+            $event->seq = 1;
         }
         
         if (empty($event->class)) {

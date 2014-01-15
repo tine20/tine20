@@ -167,7 +167,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
      */
     updateTitle: function(count) {
         count = Ext.isNumber(count) ? count : this.store.getCount();
-        this.setTitle((count > 0) ?  this.i18nTitle + ' (' + count + ')' : this.i18nTitle);
+        this.setTitle(this.i18nTitle + ' (' + count + ')');
     },
     
     /**
@@ -189,6 +189,8 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
                 attachmentRecords.push(new Tine.Tinebase.Model.Node(attachment, attachment.id));
             }, this);
             this.store.add(attachmentRecords);
+        } else {
+            this.updateTitle(0);
         }
         
         // add other listeners after population

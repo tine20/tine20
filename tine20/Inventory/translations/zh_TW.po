@@ -38,11 +38,11 @@ msgstr ""
 msgid "Inventory items lists"
 msgstr ""
 
-#: Model/InventoryItem.php:55 js/InventoryItemEditDialog.js:100
+#: Model/InventoryItem.php:55 js/InventoryItemEditDialog.js:101
 msgid "Name"
 msgstr ""
 
-#: Model/InventoryItem.php:60 js/InventoryItemEditDialog.js:196
+#: Model/InventoryItem.php:60 js/InventoryItemEditDialog.js:197
 msgid "Status"
 msgstr ""
 
@@ -50,31 +50,31 @@ msgstr ""
 msgid "Inventory ID"
 msgstr ""
 
-#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:120
+#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:121
 msgid "Description"
 msgstr ""
 
-#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:154
+#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:155
 msgid "Location"
 msgstr ""
 
-#: Model/InventoryItem.php:79 js/InventoryItemEditDialog.js:282
+#: Model/InventoryItem.php:79 js/InventoryItemEditDialog.js:283
 msgid "Invoice date"
 msgstr ""
 
-#: Model/InventoryItem.php:94 js/InventoryItemEditDialog.js:276
+#: Model/InventoryItem.php:94 js/InventoryItemEditDialog.js:277
 msgid "Invoice"
 msgstr ""
 
-#: Model/InventoryItem.php:99 js/InventoryItemEditDialog.js:256
+#: Model/InventoryItem.php:99 js/InventoryItemEditDialog.js:257
 msgid "Price"
 msgstr ""
 
-#: Model/InventoryItem.php:105 js/InventoryItemEditDialog.js:263
+#: Model/InventoryItem.php:105 js/InventoryItemEditDialog.js:264
 msgid "Cost centre"
 msgstr ""
 
-#: Model/InventoryItem.php:117 js/InventoryItemEditDialog.js:167
+#: Model/InventoryItem.php:117 js/InventoryItemEditDialog.js:168
 msgid "Warranty"
 msgstr ""
 
@@ -86,7 +86,7 @@ msgstr ""
 msgid "Item removed"
 msgstr ""
 
-#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:288
+#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:289
 msgid "Depreciate"
 msgstr ""
 
@@ -156,39 +156,39 @@ msgstr ""
 msgid "The default container for new items"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:41
+#: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:67
+#: js/InventoryItemEditDialog.js:68
 msgid "General"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:91
+#: js/InventoryItemEditDialog.js:92
 msgid "ID"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:124
+#: js/InventoryItemEditDialog.js:125
 msgid "Enter description"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:161
+#: js/InventoryItemEditDialog.js:162
 msgid "Added"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:173
+#: js/InventoryItemEditDialog.js:174
 msgid "Removed"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:180
+#: js/InventoryItemEditDialog.js:181
 msgid "Total number"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:188
+#: js/InventoryItemEditDialog.js:189
 msgid "Available number"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:235
+#: js/InventoryItemEditDialog.js:236
 msgid "Accounting"
 msgstr ""
 

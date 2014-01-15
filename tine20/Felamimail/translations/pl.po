@@ -187,7 +187,7 @@ msgid "New {0}"
 msgstr "Nowy {0}"
 
 #: js/TreeContextMenu.js:64 js/TreeContextMenu.js:67 js/TreeContextMenu.js:70
-#: js/FolderFilterModel.js:30 js/Model.js:55 js/Model.js:519
+#: js/FolderFilterModel.js:30 js/Model.js:55 js/Model.js:520
 #: js/GridPanel.js:529
 msgid "Folder"
 msgid_plural "Folders"
@@ -251,65 +251,65 @@ msgstr "Aktywna wiadomość o nieobecności"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Konto pocztowe \"{0}\" ma włączone powiadamianie o nieobecności."
 
-#: js/Felamimail.js:549
+#: js/Felamimail.js:554
 msgid "New mails"
 msgstr "Nowe wiadomości"
 
-#: js/Felamimail.js:550
+#: js/Felamimail.js:555
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Masz {0} nową/e wiadomość/i w folderze {1} ({2})."
 
-#: js/Felamimail.js:670
+#: js/Felamimail.js:675
 msgid "IMAP Credentials for {0}"
 msgstr "Dane dostępowe IMAP dla {0}"
 
-#: js/Felamimail.js:673
+#: js/Felamimail.js:678
 msgid "Credentials"
 msgstr "Dane dostępowe"
 
-#: js/Felamimail.js:826 js/Felamimail.js:859
+#: js/Felamimail.js:831 js/Felamimail.js:864
 msgid "IMAP Error"
 msgstr "Błąd IMAP"
 
-#: js/Felamimail.js:827
+#: js/Felamimail.js:832
 msgid "No connection to IMAP server."
 msgstr "Brak połączenia z serwerem IMAP."
 
-#: js/Felamimail.js:843
+#: js/Felamimail.js:848
 msgid "IMAP Credentials Error"
 msgstr "Błędne dane logowania do serwera IMAP"
 
-#: js/Felamimail.js:844
+#: js/Felamimail.js:849
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Nieprawidłowe dane dostępowe do konta email. Proszę skontaktuj się ze swoim administratorem."
 
-#: js/Felamimail.js:860
+#: js/Felamimail.js:865
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "Jeden z Twoich folderów został usunięty albo inny klient zmienił jego nazwę. Zaktualizuj proszę listę katalogów dla tego konta."
 
-#: js/Felamimail.js:889
+#: js/Felamimail.js:894
 msgid "SMTP Error"
 msgstr "Błąd SMTP"
 
-#: js/Felamimail.js:890
+#: js/Felamimail.js:895
 msgid "No connection to SMTP server."
 msgstr "Brak połączenia z serwerem SMTP."
 
-#: js/Felamimail.js:898
+#: js/Felamimail.js:903
 msgid "Sieve Error"
 msgstr "Błąd filtrowania"
 
-#: js/Felamimail.js:899
+#: js/Felamimail.js:904
 msgid "No connection to Sieve server."
 msgstr "Brak połączenia z serwerem filtrów."
 
-#: js/Felamimail.js:907
+#: js/Felamimail.js:912
 msgid "Save Sieve Script Error"
 msgstr "Zapisz błąd skryptu filtrującego"
 
-#: js/Felamimail.js:908
+#: js/Felamimail.js:913
 msgid "Could not save script on Sieve server."
 msgstr "Zapisanie skryptu na serwerze filtrującym było niemożliwe."
 
@@ -453,13 +453,13 @@ msgstr "Załączniki"
 msgid "From"
 msgstr "Od"
 
-#: js/MessageEditDialog.js:933 Controller/Message/Send.php:277
+#: js/MessageEditDialog.js:933 Controller/Message/Send.php:281
 msgid "Body"
 msgstr "wiadomość"
 
 #: js/MessageEditDialog.js:958 js/GridDetailsPanel.js:245
 #: js/sieve/RuleConditionsPanel.js:72 js/Model.js:155 js/GridPanel.js:482
-#: Controller/Message/Send.php:277
+#: Controller/Message/Send.php:281
 msgid "Subject"
 msgstr "Temat"
 
@@ -768,59 +768,59 @@ msgstr[0] "Konto e-mail"
 msgstr[1] "konta e-mail"
 msgstr[2] "konta-email"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "INBOX"
 msgstr "Pobrane"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Drafts"
 msgstr "Szkice"
 
-#: js/Model.js:513 js/GridPanel.js:514
+#: js/Model.js:514 js/GridPanel.js:514
 msgid "Sent"
 msgstr "Wysłane"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Templates"
 msgstr "Szablony"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Junk"
 msgstr "Spam"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Trash"
 msgstr "Kosz"
 
-#: js/Model.js:522 js/Model.js:642 js/Model.js:707
+#: js/Model.js:523 js/Model.js:643 js/Model.js:708
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Lista wiadomości"
 msgstr[1] "listy wiadomości"
 msgstr[2] "listy wiadomości"
 
-#: js/Model.js:639
+#: js/Model.js:640
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Urlop"
 msgstr[1] "urlopy"
 msgstr[2] "urlopy"
 
-#: js/Model.js:704
+#: js/Model.js:705
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Reguła"
 msgstr[1] "reguły"
 msgstr[2] "reguły"
 
-#: js/Model.js:830
+#: js/Model.js:831
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flaga"
 msgstr[1] "flagi"
 msgstr[2] "flagi"
 
-#: js/Model.js:833
+#: js/Model.js:834
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Lista flag"

@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 13:09+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-12-22 12:46+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,11 +27,11 @@ msgstr "Nhập vào mã chính sách muốn áp dụng mỗi khi thiết bị m�
 
 #: Config.php:62
 msgid "Disable Access Log"
-msgstr ""
+msgstr "Tắt nhật ký truy cập"
 
 #: Config.php:64
 msgid "Disable ActiveSync Access Log creation."
-msgstr ""
+msgstr "Ngừng tạo nhật ký truy cập ActiveSync"
 
 #: Config.php:73
 msgid "Filter timeslot for emails"
