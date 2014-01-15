@@ -148,6 +148,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
     setValue: function(v) {
         return this.combo.setValue(v);
     },
+    
     /**
      * Shortcut for the equivalent method of the combo
      */
@@ -155,11 +156,19 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
         this.combo.startRecord = null;
         return this.combo.setValue(null);
     },
+    
     /**
      * Shortcut for the equivalent method of the combo
      */
     getValue: function() {
         return this.combo.getValue();
+    },
+    
+    /**
+     * Shortcut for the equivalent method of the combo
+     */
+    setReadOnly: function(v) {
+        return this.combo.setReadOnly(v);
     }
 });
 
