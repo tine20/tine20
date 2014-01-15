@@ -145,7 +145,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('Tinebase_Model_Container', get_class($container), 'wrong type');
         $this->assertEquals('renamed container', $container->name);
-        $this->assertEquals(1, $container->seq);
+        $this->assertEquals(2, $container->seq);
         $this->_validateOwnerId($container);
         $this->_validatePath($container);
     }

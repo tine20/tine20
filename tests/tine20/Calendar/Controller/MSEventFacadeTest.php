@@ -189,7 +189,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
      */
     protected function _fixConcurrency($event)
     {
-        $event->seq = 2;
+        $event->seq = 3;
     }
     
     /**

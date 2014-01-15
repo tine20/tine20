@@ -366,16 +366,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         // keep old record for reference
         $recordBeforeUpdate = clone $this->getRecord();
         
-        $event = $this->_converter->toTine20Model($vobject, $this->getRecord());
-        
-        // concurrency management is based on etag in CalDAV, so we set last_modified to
-        // now to circumvent internal concurrency checks
-        $event->last_modified_time = Tinebase_DateTime::now();
-        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
-            foreach ($event->exdate as $idx => $exdate) {
-                $exdate->last_modified_time = $event->last_modified_time;
-            }
-        }
+        // concurrency management is based on etag in CalDAV
+        $event = $this->_converter->toTine20Model($vobject, $this->getRecord(), array(
+            Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
+        ));
         
         $currentContainer = Tinebase_Container::getInstance()->getContainerById($this->getRecord()->container_id);
         

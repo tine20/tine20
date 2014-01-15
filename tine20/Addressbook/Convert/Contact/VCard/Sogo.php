@@ -82,9 +82,9 @@ class Addressbook_Convert_Contact_VCard_Sogo extends Addressbook_Convert_Contact
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::toTine20Model()
      */
-    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null)
+    public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null, $options = array())
     {
-        $contact = parent::toTine20Model($_blob, $_record);
+        $contact = parent::toTine20Model($_blob, $_record, $options);
         
         if (!empty($contact->url)) {
             $contact->url = strtr($contact->url, array('http\:' => 'http:'));
