@@ -100,6 +100,13 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
      * @var OpenDocument_SpreadSheet_Table
      */
     protected $_activeTable = NULL;
+
+    /**
+     * holds style names for each column
+     * 
+     * @var array
+     */
+    protected $_columnStyles = array();
     
     /**
      * generate export
@@ -122,6 +129,8 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         } else {
             $this->_activeTable = $spreadSheet->appendTable($this->_getDataTableName());
         }
+        
+        $this->_setColumnStyles();
         
         // add header (disabled at the moment)
         if (isset($this->_config->header) && $this->_config->header) {
@@ -169,6 +178,55 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
     }
     
     /**
+     * defines column styles by the config xml
+     */
+    protected function _setColumnStyles()
+    {
+        $index = 1;
+        $classPrefix = 'co';
+        $defaultStyles = NULL;
+        
+        if ($this->_config->defaultColumnStyle) {
+            $defaultStyles = array();
+            foreach ($this->_config->defaultColumnStyle as $name => $style) {
+                $defaultStyles[$name] = (string) $style;
+            }
+            $this->_addColumnStyle('co0', $defaultStyles);
+        }
+        
+        foreach($this->_config->columns->column as $column) {
+
+            if ($column->style) {
+                if (! $defaultStyles) {
+                    $msg = 'If a column contains style, the "defaultColumnStyle" has to be defined!';
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $msg . ' Definition Name: ' . (string) $this->_config->name);
+                    }
+                    
+                    throw new Tinebase_Exception_UnexpectedValue($msg);
+                }
+                
+                $columnStyles = array();
+                foreach($column->style as $name => $style) {
+                    $columnStyles[$name] = (string) $style;
+                }
+                
+                $this->_addColumnStyle($classPrefix . $index, $columnStyles);
+                
+                $this->_columnStyles[$index] = $classPrefix . $index;
+            } else {
+                $this->_columnStyles[$index] = 'co0';
+            }
+            
+            $index++;
+        }
+        
+        foreach($this->_columnStyles as $key => $style) {
+            $this->_activeTable->appendColumn($style);
+        }
+    }
+    /**
      * add ods head (headline, column styles)
      */
     protected function _addHead()
@@ -192,6 +250,10 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
                 // replace data
                 $value = preg_replace($patterns, $replacements, $headerCell);
                 $cell = $row->appendCell($value, OpenDocument_SpreadSheet_Cell::TYPE_STRING);
+                
+                if ($this->_config->headerStyle) {
+                    $cell->setStyle((string) $this->_config->headerStyle);
+                }
             }
         }
         
@@ -199,10 +261,18 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         
         // add table headline
         $row = $this->_activeTable->appendRow();
+        
+        $i18n = $this->_translate->getAdapter();
+        
         foreach($this->_config->columns->column as $field) {
-            $headerValue = ($field->header) ? $field->header : $field->identifier;
+            $headerValue = ($field->header) ? $i18n->translate($field->header) : $field->identifier;
             $cell = $row->appendCell($headerValue, OpenDocument_SpreadSheet_Cell::TYPE_STRING);
-            $cell->setStyle('ceHeader');
+            
+            if (isset($field->headerStyle)) {
+                $cell->setStyle((string) $field->headerStyle);
+            } else {
+                $cell->setStyle('ceHeader');
+            }
         }
     }
     
@@ -239,6 +309,10 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
                 // create cell with type and value and add style
                 $cell = $row->appendCell($cellValue, $cellType);
                 
+                if ($field->columnStyle) {
+                    $cell->setStyle((string) $field->columnStyle);
+                }
+                
                 // add formula
                 if ($field->formula) {
                     $cell->setFormula($field->formula);
@@ -260,12 +334,20 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
     /**
      * add style/width to column
      *
-     * @param string $_styleName
-     * @param string $_columnWidth (for example: '2,5cm')
+     * @param string $styleName
+     * @param string $values
      */
-    protected function _addColumnStyle($_styleName, $_columnWidth) 
+    protected function _addColumnStyle($styleName, $values)
     {
-        $this->_openDocumentObject->addStyle('<style:style style:name="' . $_styleName . '" style:family="table-column" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><style:table-column-properties style:column-width="' . $_columnWidth . '"/></style:style>');
+        $xml = '<style:style style:name="' . $styleName . '" style:family="table-column"><style:table-column-properties';
+
+        foreach($values as $attr => $value) {
+            $xml .= ' style:' . $attr . '="' . $value . '"';
+        }
+        
+        $xml .= ' /></style:style>';
+        
+        $this->_openDocumentObject->addStyle(array($xml));
     }
     
     /**
