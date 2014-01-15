@@ -743,6 +743,27 @@ if has_key($beanstalkd_values, 'install') and $beanstalkd_values['install'] == 1
 
 # tine20 manifest
 
+# /www/tine.vagrant logs userdata files htdocs
+file { ["/www", "/www/tine.vagrant"]:
+    ensure => directory,
+    owner  => $::ssh_username,
+    mode    => 0775,
+}
+
+file { ["/www/tine.vagrant/logs", "/www/tine.vagrant/cache", "/www/tine.vagrant/files", "/www/tine.vagrant/temp"]:
+    ensure => directory,
+    owner  => 'www-data',
+    mode    => 0775,
+}
+
+file { "/www/tine.vagrant/htdocs":
+    ensure => 'link',
+    target => '/usr/local/share/tine20.git/tine20',
+}
+
+
+# vhost config with logs rewrites config
+
 if $tine20_values == undef {
   $tine20_values = loadyaml('/vagrant/puphpet/tine20.yaml')
 }
@@ -756,7 +777,7 @@ mysql::db { $tine20_values['database']['name']:
 }
   
 file { "config.inc.php":
-  path    => "/var/www/config.inc.php",
+  path    => "/usr/local/share/tine20.git/tine20/config.inc.php",
   ensure  => present,
   owner   => 'root',
   group   => 'root',
@@ -777,13 +798,13 @@ file { "config.inc.php":
     
     'caching' => array (
         'active' => true,
-        'path' => '/tmp',
+        'path' => '/www/tine.vagrant/cache',
         'lifetime' => 3600,
     ),
     
     'logger' => array (
         'active' => true,
-        'filename' => '/tmp/tine20.log',
+        'filename' => '/www/tine.vagrant/logs/tine20.log',
         'priority' => '7',
     ),
   );"
@@ -792,13 +813,13 @@ file { "config.inc.php":
 # coposer install
 composer::exec { 'tine20-composer-run':
   cmd     => 'install',
-  cwd     => '/var/www/',
+  cwd     => '/usr/local/share/tine20.git/tine20/',
   dev     => true,
 }
  
 # phing install
 file { "install.properties":
-  path    => "/var/www/install.properties",
+  path    => "/usr/local/share/tine20.git/tine20/install.properties",
   ensure  => present,
   owner   => 'root',
   group   => 'root',
@@ -813,9 +834,9 @@ adminEmailAddress=${tine20_values['initialuser']['email']}
 }
 
 exec { 'phing-tine-install':
-  cwd     => "/var/www/",
-  command => "sudo sudo -u www-data /var/www/vendor/bin/phing tine-install",
+  cwd     => "/usr/local/share/tine20.git/tine20/",
+  command => "sudo sudo -u www-data /usr/local/share/tine20.git/tine20/vendor/bin/phing tine-install",
   require => [
-    File['/var/www/install.properties']
+    File['/usr/local/share/tine20.git/tine20/install.properties']
   ]
 }

@@ -52,15 +52,15 @@ apache:
         - rewrite
     vhosts:
         dYDR07tVlxGd:
-            servername: example.com
+            servername: tine.vagrant
             serveraliases:
-                - tine.exaple.com
-            docroot: /var/www
+                - tine.vagrant
+            docroot: /www/tine.vagrant/htdocs
             port: '80'
             setenv:
                 - 'APP_ENV dev'
-            override:
-                - All
+            additional_includes:
+                - /vagrant/puphpet/files/dot/apache.conf
     user: www-data
     group: www-data
     default_vhost: true

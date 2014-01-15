@@ -13,6 +13,7 @@ tine20/*/*/*FAT*
 tine20/*/js/*-lang-*
 tine20/Tinebase/js/Locale/build/*.js
 scripts/packaging/tine20build/
+.vagrant
 tine20/build
 scripts/weeklyevents
 scripts/custom
