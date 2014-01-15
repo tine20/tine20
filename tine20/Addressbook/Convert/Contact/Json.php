@@ -24,7 +24,7 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
     * @param  Tinebase_Record_RecordSet  $_records
     * @return mixed
     */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL)
     {
         if (count($_records) == 0) {
             return array();
