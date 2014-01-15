@@ -716,8 +716,6 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      */
     public function testAcceptInvitationForRecurringEventException()
     {
-        $this->markTestSkipped('@see 0009510: is it allowed to have no main vevent in ics?');
-        
         Tinebase_Container::getInstance()->setGrants($this->objects['initialContainer'], new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
             $this->_getAllCalendarGrants(),
             array(
