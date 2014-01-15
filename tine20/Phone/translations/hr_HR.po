@@ -173,18 +173,18 @@ msgstr "nepoznati broj"
 msgid "Call contact"
 msgstr "Pozovi kontakt"
 
-#: js/AddressbookGridPanelHook.js:171
+#: js/AddressbookGridPanelHook.js:191
 msgid "Work"
 msgstr "radni"
 
-#: js/AddressbookGridPanelHook.js:180
+#: js/AddressbookGridPanelHook.js:200
 msgid "Home"
 msgstr "kućni"
 
-#: js/AddressbookGridPanelHook.js:189
+#: js/AddressbookGridPanelHook.js:209
 msgid "Cell"
 msgstr "Mobitel"
 
-#: js/AddressbookGridPanelHook.js:198
+#: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr "Privatni mobitel"

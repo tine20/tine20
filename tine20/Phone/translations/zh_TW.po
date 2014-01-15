@@ -173,18 +173,18 @@ msgstr "未知號碼"
 msgid "Call contact"
 msgstr "撥電話給聯絡人"
 
-#: js/AddressbookGridPanelHook.js:171
+#: js/AddressbookGridPanelHook.js:191
 msgid "Work"
 msgstr "工作"
 
-#: js/AddressbookGridPanelHook.js:180
+#: js/AddressbookGridPanelHook.js:200
 msgid "Home"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:189
+#: js/AddressbookGridPanelHook.js:209
 msgid "Cell"
 msgstr ""
 
-#: js/AddressbookGridPanelHook.js:198
+#: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr ""

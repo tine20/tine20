@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 17:05+0000\n"
+"PO-Revision-Date: 2014-01-15 13:52+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -138,12 +138,12 @@ msgid "Type"
 msgstr "Loại"
 
 #: Model/FreeTime.php:77 Model/ExtraFreeTime.php:64 Model/Employee.php:83
-#: js/EmployeeEditDialog.js:428 js/FreeTimeEditDialog.js:498
+#: js/EmployeeEditDialog.js:428 js/FreeTimeEditDialog.js:506
 #: js/ExtraFreeTimeEditDialog.js:154
 msgid "Description"
 msgstr "Mô tả"
 
-#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:347
+#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:355
 msgid "Status"
 msgstr "Trạng thái"
 
@@ -177,7 +177,7 @@ msgstr ""
 msgid "Expiration date"
 msgstr ""
 
-#: Model/Account.php:34 js/FreeTimeEditDialog.js:262
+#: Model/Account.php:34 js/FreeTimeEditDialog.js:270
 msgid "Personal account"
 msgid_plural "Personal accounts"
 msgstr[0] ""
@@ -471,17 +471,17 @@ msgstr ""
 msgid "Part-time 20 hours"
 msgstr ""
 
-#: js/EmployeeGridPanel.js:35 js/EmployeeGridPanel.js:36
-#: js/EmployeeGridPanel.js:37
+#: js/EmployeeGridPanel.js:40 js/EmployeeGridPanel.js:41
+#: js/EmployeeGridPanel.js:42
 msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] ""
 
-#: js/EmployeeGridPanel.js:49
+#: js/EmployeeGridPanel.js:54
 msgid "Export as ODS"
 msgstr ""
 
-#: js/EmployeeGridPanel.js:56
+#: js/EmployeeGridPanel.js:61
 msgid "Export as XLS"
 msgstr ""
 
@@ -529,7 +529,7 @@ msgstr "Phố 2"
 msgid "Internal Information"
 msgstr "Thông tin nội bội"
 
-#: js/EmployeeEditDialog.js:442 js/FreeTimeEditDialog.js:512
+#: js/EmployeeEditDialog.js:442 js/FreeTimeEditDialog.js:520
 #: js/ExtraFreeTimeEditDialog.js:168
 msgid "Enter description"
 msgstr "Nhập mô tả"
@@ -558,11 +558,11 @@ msgstr ""
 msgid "No day selected"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:426
+#: js/FreeTimeEditDialog.js:434
 msgid "Remaining"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:479
+#: js/FreeTimeEditDialog.js:487
 msgid "Select Days"
 msgstr "Chọn ngày"
 
@@ -608,25 +608,25 @@ msgstr ""
 msgid "WK"
 msgstr "WK"
 
-#: js/DatePicker.js:162
+#: js/DatePicker.js:163
 msgid "Loading calendar data..."
 msgstr "Đang nạp dữ liệu lịch"
 
-#: js/DatePicker.js:374
+#: js/DatePicker.js:387
 msgid "Year can not be changed"
 msgstr ""
 
-#: js/DatePicker.js:375
+#: js/DatePicker.js:388
 msgid ""
 "You have already selected some dates from another year. Please create a new "
 "record to add dates from another year!"
 msgstr ""
 
-#: js/DatePicker.js:433
+#: js/DatePicker.js:446
 msgid "No more vacation days"
 msgstr ""
 
-#: js/DatePicker.js:434
+#: js/DatePicker.js:447
 msgid ""
 "The Employee has no more possible vacation days left for this year. Create a"
 " new vacation and use another personal account the vacation should be taken "
@@ -684,6 +684,14 @@ msgstr ""
 
 #: js/AccountEditDialog.js:142
 msgid "Hours to work"
+msgstr ""
+
+#: js/AccountEditDialog.js:144
+msgid "Days to work after vacation and sickness"
+msgstr ""
+
+#: js/AccountEditDialog.js:145
+msgid "Hours to work after vacation and sickness"
 msgstr ""
 
 #: js/Models.js:26

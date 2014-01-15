@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-18 20:19+0000\n"
+"PO-Revision-Date: 2013-11-24 21:15+0000\n"
 "Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -49,7 +49,7 @@ msgstr ""
 
 #: Model/Contract.php:127
 msgid "Time Account"
-msgstr ""
+msgstr "Временный счет"
 
 #: Config.php:51
 msgid "Contract Number Creation"
@@ -109,11 +109,11 @@ msgstr "Мои продукты"
 msgid "Products created by myself"
 msgstr "Созданные мной продукты"
 
-#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
+#: Setup/Update/Release5.php:84 Setup/Initialize.php:51
 msgid "My Contracts"
 msgstr "Мои контракты"
 
-#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
+#: Setup/Update/Release5.php:85 Setup/Initialize.php:52
 msgid "Contracts created by myself"
 msgstr "Созданные мной контракты"
 
@@ -180,11 +180,11 @@ msgstr "Ввести описание..."
 
 #: js/ContractCostCenterFilterModel.js:30
 msgid "Cost Center"
-msgstr ""
+msgstr "Затраты"
 
 #: js/ContractCostCenterFilterModel.js:32
 msgid "without CostCenter"
-msgstr ""
+msgstr "без затрат"
 
 #: js/Models.js:41
 msgid "Product"
@@ -262,7 +262,7 @@ msgstr[2] "Все траты"
 
 #: js/Models.js:209
 msgid "Remark"
-msgstr ""
+msgstr "Примечание"
 
 #: js/Models.js:231
 msgid "Division"
@@ -273,7 +273,7 @@ msgstr[2] "Подразделения"
 
 #: js/ContractEditDialog.js:96
 msgid "Please use a decimal number here!"
-msgstr ""
+msgstr "Пожалуйста, используйте десятичные цифры!"
 
 #: js/ContractEditDialog.js:151
 msgid "Contract Contact"
@@ -281,7 +281,7 @@ msgstr ""
 
 #: js/ContractEditDialog.js:163
 msgid "Account Manager"
-msgstr ""
+msgstr "Персональный менеджер"
 
 #: js/ContractEditDialog.js:183
 msgid "Company"
@@ -289,4 +289,4 @@ msgstr "Компания"
 
 #: Controller/Contract.php:83
 msgid "The number you have tried to set is already in use!"
-msgstr ""
+msgstr "Число, которое вы пытались установить, уже используется!"

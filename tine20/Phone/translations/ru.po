@@ -174,18 +174,18 @@ msgstr "неизвестный номер"
 msgid "Call contact"
 msgstr "Позвонить"
 
-#: js/AddressbookGridPanelHook.js:171
+#: js/AddressbookGridPanelHook.js:191
 msgid "Work"
 msgstr "Рабочий"
 
-#: js/AddressbookGridPanelHook.js:180
+#: js/AddressbookGridPanelHook.js:200
 msgid "Home"
 msgstr "Домашний"
 
-#: js/AddressbookGridPanelHook.js:189
+#: js/AddressbookGridPanelHook.js:209
 msgid "Cell"
 msgstr "Мобильный"
 
-#: js/AddressbookGridPanelHook.js:198
+#: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr "Мобильный личный"

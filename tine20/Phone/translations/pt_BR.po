@@ -172,18 +172,18 @@ msgstr "número desconhecido"
 msgid "Call contact"
 msgstr "Chamar contato"
 
-#: js/AddressbookGridPanelHook.js:171
+#: js/AddressbookGridPanelHook.js:191
 msgid "Work"
 msgstr "Operar"
 
-#: js/AddressbookGridPanelHook.js:180
+#: js/AddressbookGridPanelHook.js:200
 msgid "Home"
 msgstr "Início"
 
-#: js/AddressbookGridPanelHook.js:189
+#: js/AddressbookGridPanelHook.js:209
 msgid "Cell"
 msgstr "Celular"
 
-#: js/AddressbookGridPanelHook.js:198
+#: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr "Celular particular"

@@ -174,18 +174,18 @@ msgstr "未知号码"
 msgid "Call contact"
 msgstr "致电联系人"
 
-#: js/AddressbookGridPanelHook.js:171
+#: js/AddressbookGridPanelHook.js:191
 msgid "Work"
 msgstr "工作"
 
-#: js/AddressbookGridPanelHook.js:180
+#: js/AddressbookGridPanelHook.js:200
 msgid "Home"
 msgstr "家庭"
 
-#: js/AddressbookGridPanelHook.js:189
+#: js/AddressbookGridPanelHook.js:209
 msgid "Cell"
 msgstr "手机"
 
-#: js/AddressbookGridPanelHook.js:198
+#: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr "手机（私人）"

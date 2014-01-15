@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-12-22 12:59+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43,11 +43,11 @@ msgstr "Đối tác"
 
 #: Model/Contract.php:123 js/ContractEditDialog.js:174
 msgid "Lead Cost Center"
-msgstr ""
+msgstr "Trung tâm giá"
 
 #: Model/Contract.php:127
 msgid "Time Account"
-msgstr ""
+msgstr "Tài khoản theo thời gian"
 
 #: Config.php:51
 msgid "Contract Number Creation"
@@ -107,11 +107,11 @@ msgstr "Sản phẩm của tôi"
 msgid "Products created by myself"
 msgstr "Sản phẩm tạo bởi tôi"
 
-#: Setup/Update/Release5.php:84 Setup/Initialize.php:55
+#: Setup/Update/Release5.php:84 Setup/Initialize.php:51
 msgid "My Contracts"
 msgstr "Hợp đồng của tôi"
 
-#: Setup/Update/Release5.php:85 Setup/Initialize.php:56
+#: Setup/Update/Release5.php:85 Setup/Initialize.php:52
 msgid "Contracts created by myself"
 msgstr "Hợp đồng tạo bởi tôi"
 
@@ -178,11 +178,11 @@ msgstr "Nhập vào mô tả"
 
 #: js/ContractCostCenterFilterModel.js:30
 msgid "Cost Center"
-msgstr ""
+msgstr "Trung tâm giá"
 
 #: js/ContractCostCenterFilterModel.js:32
 msgid "without CostCenter"
-msgstr ""
+msgstr "Không thông qua trung tâm giá"
 
 #: js/Models.js:41
 msgid "Product"
@@ -196,7 +196,7 @@ msgstr[0] "one: danh sách biểu ghi\nother: danh sách biểu ghi"
 
 #: js/Models.js:78 js/Models.js:147 js/Models.js:207 js/Models.js:244
 msgid "Quick Search"
-msgstr ""
+msgstr "Tìm nhanh"
 
 #: js/Models.js:79
 msgid "Product name"
@@ -222,19 +222,19 @@ msgstr "Tên hợp đồng"
 
 #: js/Models.js:167
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Thời gian sửa cu"
 
 #: js/Models.js:168
 msgid "Last Modified By"
-msgstr ""
+msgstr "Sửa lần cuối bởi"
 
 #: js/Models.js:169
 msgid "Creation Time"
-msgstr ""
+msgstr "Thời gian tạo"
 
 #: js/Models.js:170
 msgid "Created By"
-msgstr ""
+msgstr "Tạo bởi"
 
 #: js/Models.js:194
 msgid "CostCenter"
@@ -261,11 +261,11 @@ msgstr "Xin sử dụng 1 số thập phân tại đây!"
 
 #: js/ContractEditDialog.js:151
 msgid "Contract Contact"
-msgstr ""
+msgstr "Tên hợp đồng"
 
 #: js/ContractEditDialog.js:163
 msgid "Account Manager"
-msgstr ""
+msgstr "Quản lý kinh doanh"
 
 #: js/ContractEditDialog.js:183
 msgid "Company"

@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 17:05+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-12-22 13:02+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -194,7 +194,7 @@ msgstr "show_call_status"
 #: js/Snom/SettingEditDialog.js:310 js/Snom/PhoneEditDialog.js:540
 #: js/Snom/SettingGridPanel.js:117
 msgid "Pickup indication"
-msgstr ""
+msgstr "Chọn chính xác"
 
 #: js/Snom/PhoneGridPanel.js:34
 msgid "reset phones HTTP authentication"
@@ -424,7 +424,7 @@ msgstr "Software Id"
 #: js/Models.js:193 js/Models.js:235 js/Models.js:313 js/Models.js:377
 #: js/Models.js:481 js/Models.js:520 js/Models.js:579 js/Models.js:617
 msgid "Quick Search"
-msgstr ""
+msgstr "Tìm nhanh"
 
 #: js/Snom/LocationGridPanel.js:58
 msgid "FW Interval"

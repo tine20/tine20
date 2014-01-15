@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-29 12:34+0000\n"
+"PO-Revision-Date: 2013-12-17 14:59+0000\n"
 "Last-Translator: Daniele Gobbetti <daniele@gobbetti.name>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -432,7 +432,7 @@ msgstr[1] "liste schede attività"
 
 #: js/Models.js:90 js/Models.js:173
 msgid "Quick Search"
-msgstr ""
+msgstr "Ricerca veloce"
 
 #: js/Models.js:96 js/Models.js:180
 msgid "Last Modified Time"

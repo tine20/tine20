@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-12-22 13:05+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -108,7 +108,7 @@ msgstr "Trách nhiệm"
 
 #: Model/Lead.php:125
 msgid "Task"
-msgstr ""
+msgstr "Công việc"
 
 #: Setup/Update/Release3.php:37 Setup/Initialize.php:55
 msgid "All leads I have read grants for"
@@ -175,17 +175,17 @@ msgid "Lead Data"
 msgstr "Dữ liệu đầu mối"
 
 #: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadStateFilterModel.js:32
-#: js/LeadEditDialog.js:341 js/LeadGridPanel.js:123
+#: js/LeadEditDialog.js:343 js/LeadGridPanel.js:123
 msgid "Leadstate"
 msgstr "Trạng thái đầu mối"
 
 #: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:454
-#: js/LeadEditDialog.js:360
+#: js/LeadEditDialog.js:362
 msgid "Leadtype"
 msgstr "Loại đầu mối"
 
 #: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:459
-#: js/LeadEditDialog.js:367
+#: js/LeadEditDialog.js:369
 msgid "Leadsource"
 msgstr "Nguồn đầu mối"
 
@@ -194,17 +194,17 @@ msgstr "Nguồn đầu mối"
 msgid "Turnover"
 msgstr "Doanh số"
 
-#: Export/Pdf.php:90 js/Model.js:108 js/LeadEditDialog.js:220
+#: Export/Pdf.php:90 js/Model.js:108 js/LeadEditDialog.js:222
 #: js/LeadGridPanel.js:124 Controller/Lead.php:194
 msgid "Probability"
 msgstr "Có khả năng"
 
-#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:444 js/LeadEditDialog.js:399
+#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:444 js/LeadEditDialog.js:401
 #: Controller/Lead.php:190
 msgid "Start"
 msgstr "Bắt đầu"
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:227 Controller/Lead.php:192
+#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:192
 msgid "End"
 msgstr "Kết thúc"
 
@@ -220,7 +220,7 @@ msgstr "Liên lạc"
 msgid "Address"
 msgstr "Địa chỉ"
 
-#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:243
+#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:245
 msgid "Tasks"
 msgstr "Công việc"
 
@@ -232,7 +232,7 @@ msgstr "Ngày đến hạn"
 msgid "Priority"
 msgstr "Độ quan trọng"
 
-#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:254
+#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:256
 msgid "Products"
 msgstr "Sản phẩm"
 
@@ -286,7 +286,7 @@ msgstr "Xin chọn đầu mối để thêm liên lạc"
 msgid "Please select the attenders' role"
 msgstr "Chọn vai trò người tham gia"
 
-#: js/AddToLeadPanel.js:73 js/Model.js:50 js/LeadEditDialog.js:272
+#: js/AddToLeadPanel.js:73 js/Model.js:50 js/LeadEditDialog.js:274
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "one: Đầu mối\nother: Đầu mối khác"
@@ -352,7 +352,7 @@ msgstr "Hiển thị đã bị đóng"
 msgid "Product"
 msgstr "Sản phẩm"
 
-#: js/Product.js:139 js/LeadEditDialog.js:437
+#: js/Product.js:139 js/LeadEditDialog.js:439
 msgid "Description"
 msgstr "Mô tả"
 
@@ -396,7 +396,7 @@ msgstr "Email"
 msgid "Web"
 msgstr "Web"
 
-#: js/LeadGridDetailsPanel.js:449 js/LeadEditDialog.js:405
+#: js/LeadGridDetailsPanel.js:449 js/LeadEditDialog.js:407
 msgid "Estimated end"
 msgstr "Dự kiến thời gian kết thúc"
 
@@ -420,7 +420,7 @@ msgstr "danh sách lãnh đạo"
 
 #: js/Model.js:104
 msgid "Quick Search"
-msgstr ""
+msgstr "Tìm nhanh"
 
 #: js/Model.js:106 js/LeadGridPanel.js:119
 msgid "Lead name"
@@ -452,27 +452,27 @@ msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "one: Danh sách biểu ghi\nother: Danh sách biểu ghi"
 
-#: js/LeadEditDialog.js:244
+#: js/LeadEditDialog.js:246
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
 msgstr "Bạn không có quyền chạy ứng dụng Công việc hoặc nó chưa được kích hoạt"
 
-#: js/LeadEditDialog.js:255
+#: js/LeadEditDialog.js:257
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
 msgstr "Bạn không có quyền chạy ứng dụng Bán hàng hoặc nó chưa được kích hoạt"
 
-#: js/LeadEditDialog.js:299
+#: js/LeadEditDialog.js:301
 msgid "Enter short name"
 msgstr "Nhâp tên ngắn"
 
-#: js/LeadEditDialog.js:383
+#: js/LeadEditDialog.js:385
 msgid "Expected turnover"
 msgstr "Doanh số mong đợi"
 
-#: js/LeadEditDialog.js:451
+#: js/LeadEditDialog.js:453
 msgid "Enter description"
 msgstr "Nhập mô tả"
 

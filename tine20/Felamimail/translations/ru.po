@@ -189,7 +189,7 @@ msgid "New {0}"
 msgstr "Новая {0}"
 
 #: js/TreeContextMenu.js:64 js/TreeContextMenu.js:67 js/TreeContextMenu.js:70
-#: js/FolderFilterModel.js:30 js/Model.js:55 js/Model.js:519
+#: js/FolderFilterModel.js:30 js/Model.js:55 js/Model.js:520
 #: js/GridPanel.js:529
 msgid "Folder"
 msgid_plural "Folders"
@@ -253,65 +253,65 @@ msgstr "Активное сообщение на время отпуска"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Почта \"{0}\" активировала автоответ."
 
-#: js/Felamimail.js:549
+#: js/Felamimail.js:554
 msgid "New mails"
 msgstr "Новые письма"
 
-#: js/Felamimail.js:550
+#: js/Felamimail.js:555
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "У вас {0} новых сообщений в {1} ({2}."
 
-#: js/Felamimail.js:670
+#: js/Felamimail.js:675
 msgid "IMAP Credentials for {0}"
 msgstr "Учётные данные IMAP для {0}"
 
-#: js/Felamimail.js:673
+#: js/Felamimail.js:678
 msgid "Credentials"
 msgstr "Учётные данные"
 
-#: js/Felamimail.js:826 js/Felamimail.js:859
+#: js/Felamimail.js:831 js/Felamimail.js:864
 msgid "IMAP Error"
 msgstr "Ошибка IMAP"
 
-#: js/Felamimail.js:827
+#: js/Felamimail.js:832
 msgid "No connection to IMAP server."
 msgstr "Нет соединения с почтовым сервером по протоколу IMAP"
 
-#: js/Felamimail.js:843
+#: js/Felamimail.js:848
 msgid "IMAP Credentials Error"
 msgstr "Ошибка учётных записей IMAP"
 
-#: js/Felamimail.js:844
+#: js/Felamimail.js:849
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Ваши данные для почтовой записи не верны. Пожалуйста, обратитесь к администратору"
 
-#: js/Felamimail.js:860
+#: js/Felamimail.js:865
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "Одна из ваших папок была удалена или переименована другим почтовым клиентом. Пожалуйста, обновите список папок этой почты."
 
-#: js/Felamimail.js:889
+#: js/Felamimail.js:894
 msgid "SMTP Error"
 msgstr "Ошибка SMTP"
 
-#: js/Felamimail.js:890
+#: js/Felamimail.js:895
 msgid "No connection to SMTP server."
 msgstr "Нет соединения с сервером по протоколу SMTP"
 
-#: js/Felamimail.js:898
+#: js/Felamimail.js:903
 msgid "Sieve Error"
 msgstr "Ошибка Sieve"
 
-#: js/Felamimail.js:899
+#: js/Felamimail.js:904
 msgid "No connection to Sieve server."
 msgstr "Невозможно подключится к серверу Sieve."
 
-#: js/Felamimail.js:907
+#: js/Felamimail.js:912
 msgid "Save Sieve Script Error"
 msgstr "Ошибка скрипта на сервере Sieve"
 
-#: js/Felamimail.js:908
+#: js/Felamimail.js:913
 msgid "Could not save script on Sieve server."
 msgstr "Скрипт не сохранён на сервере Sieve."
 
@@ -455,13 +455,13 @@ msgstr "Вложения"
 msgid "From"
 msgstr "От"
 
-#: js/MessageEditDialog.js:933 Controller/Message/Send.php:277
+#: js/MessageEditDialog.js:933 Controller/Message/Send.php:281
 msgid "Body"
 msgstr "Тело"
 
 #: js/MessageEditDialog.js:958 js/GridDetailsPanel.js:245
 #: js/sieve/RuleConditionsPanel.js:72 js/Model.js:155 js/GridPanel.js:482
-#: Controller/Message/Send.php:277
+#: Controller/Message/Send.php:281
 msgid "Subject"
 msgstr "Тема"
 
@@ -770,59 +770,59 @@ msgstr[0] "Учётные записи электронной почты"
 msgstr[1] "Учётные записи электронной почты"
 msgstr[2] "Учетная запись электронной почты"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "INBOX"
 msgstr "Входящие"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Drafts"
 msgstr "Черновики"
 
-#: js/Model.js:513 js/GridPanel.js:514
+#: js/Model.js:514 js/GridPanel.js:514
 msgid "Sent"
 msgstr "Отправлено"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Templates"
 msgstr "Шаблоны"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Junk"
 msgstr "Спам"
 
-#: js/Model.js:513
+#: js/Model.js:514
 msgid "Trash"
 msgstr "Корзина"
 
-#: js/Model.js:522 js/Model.js:642 js/Model.js:707
+#: js/Model.js:523 js/Model.js:643 js/Model.js:708
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "список записей"
 msgstr[1] "списка записей"
 msgstr[2] "списков записей"
 
-#: js/Model.js:639
+#: js/Model.js:640
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Отдых"
 msgstr[1] "Отдых"
 msgstr[2] "Отдых"
 
-#: js/Model.js:704
+#: js/Model.js:705
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Правило"
 msgstr[1] "Правила"
 msgstr[2] "Правила"
 
-#: js/Model.js:830
+#: js/Model.js:831
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Флаг"
 msgstr[1] "Флаги"
 msgstr[2] "Флаги"
 
-#: js/Model.js:833
+#: js/Model.js:834
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Список флагов"

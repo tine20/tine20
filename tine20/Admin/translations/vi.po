@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2013-12-22 13:04+0000\n"
+"Last-Translator: saosangm <saosangmo@yahoo.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -78,11 +78,11 @@ msgstr "thêm, xóa và sửa bộ chứa, và quản lý quyền bộ chứa"
 
 #: Acl/Rights.php:236
 msgid "manage customfields"
-msgstr ""
+msgstr "quản lý trường tùy biến"
 
 #: Acl/Rights.php:237
 msgid "add and edit customfields"
-msgstr ""
+msgstr "thêm/sửa trường tùy biến"
 
 #: Acl/Rights.php:240
 msgid "view access log"
@@ -134,19 +134,19 @@ msgstr "xem bộ chứa chia sẻ và cá nhân"
 
 #: Acl/Rights.php:264
 msgid "view customfields"
-msgstr ""
+msgstr "xem trường tùy bién"
 
 #: Acl/Rights.php:265
 msgid "view customfields list"
-msgstr ""
+msgstr "xem danh sách trường tùy biến"
 
 #: Acl/Rights.php:268
 msgid "view serverinfo"
-msgstr ""
+msgstr "xem thông tin máy chủ"
 
 #: Acl/Rights.php:269
 msgid "view serverinfo list"
-msgstr ""
+msgstr "xem danh sách thông tin máy chủ"
 
 #: Config.php:33 Config.php:35
 msgid "Default IMAP user settings"

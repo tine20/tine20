@@ -1,11 +1,12 @@
 # 
 # Translators:
+# jevgu <jevgu@albnet.net>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 17:05+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-01-04 09:46+0000\n"
+"Last-Translator: jevgu <jevgu@albnet.net>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,7 +35,7 @@ msgstr ""
 #: js/Snom/LocationGridPanel.js:127 js/Asterisk/ContextEditDialog.js:48
 #: js/Asterisk/ContextGridPanel.js:58
 msgid "Description"
-msgstr ""
+msgstr "Përshkrimi"
 
 #: js/Snom/SettingEditDialog.js:124 js/Snom/PhoneEditDialog.js:402
 #: js/Snom/SettingGridPanel.js:61
@@ -276,7 +277,7 @@ msgstr ""
 #: js/Snom/LocationGridPanel.js:114 js/Asterisk/VoicemailGridPanel.js:42
 #: js/Asterisk/ContextGridPanel.js:42 js/Asterisk/MeetmeGridPanel.js:42
 msgid "id"
-msgstr ""
+msgstr "ID"
 
 #: js/Snom/PhoneEditDialog.js:222
 msgid "Lines"
@@ -294,7 +295,7 @@ msgstr[1] ""
 #: js/Asterisk/ContextEditDialog.js:40 js/Asterisk/ContextGridPanel.js:49
 #: js/Models.js:482
 msgid "Name"
-msgstr ""
+msgstr "Emri"
 
 #: js/Snom/PhoneEditDialog.js:279
 msgid "Phone Model"
@@ -466,30 +467,30 @@ msgstr ""
 
 #: js/Asterisk/SipPeerEditDialog.js:49
 msgid "Call Forwards"
-msgstr ""
+msgstr "Ridrejtim thirrjeje"
 
 #: js/Asterisk/SipPeerEditDialog.js:60 js/Asterisk/VoicemailEditDialog.js:41
 msgid "General"
-msgstr ""
+msgstr "Përgjithshëm"
 
 #: js/Asterisk/SipPeerEditDialog.js:75 js/Asterisk/VoicemailEditDialog.js:55
 #: js/Voipmanager.js:50 js/Models.js:500
 msgid "Context"
 msgid_plural "Contexts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Konteksti"
+msgstr[1] "Kontekstet"
 
 #: js/Asterisk/SipPeerEditDialog.js:88
 msgid "Type"
-msgstr ""
+msgstr "Tipi"
 
 #: js/Asterisk/SipPeerEditDialog.js:97
 msgid "friend"
-msgstr ""
+msgstr "Shok"
 
 #: js/Asterisk/SipPeerEditDialog.js:98
 msgid "user"
-msgstr ""
+msgstr "përdorues"
 
 #: js/Asterisk/SipPeerEditDialog.js:99
 msgid "peer"
@@ -497,19 +498,19 @@ msgstr ""
 
 #: js/Asterisk/SipPeerEditDialog.js:103
 msgid "Secret"
-msgstr ""
+msgstr "Sekret"
 
 #: js/Asterisk/SipPeerEditDialog.js:110
 msgid "Callerid"
-msgstr ""
+msgstr "ID e Telefonuesit"
 
 #: js/Asterisk/SipPeerEditDialog.js:117 js/Asterisk/VoicemailEditDialog.js:47
 msgid "Mailbox"
-msgstr ""
+msgstr "Kuti Postare"
 
 #: js/Asterisk/SipPeerEditDialog.js:124
 msgid "Callgroup"
-msgstr ""
+msgstr "Grup Telefonues"
 
 #: js/Asterisk/SipPeerEditDialog.js:131
 msgid "Pickup group"
@@ -798,11 +799,11 @@ msgstr ""
 
 #: js/Asterisk/MeetmeGridPanel.js:58 js/Asterisk/MeetmeEditDialog.js:48
 msgid "pin"
-msgstr ""
+msgstr "pin"
 
 #: js/Asterisk/MeetmeGridPanel.js:67 js/Asterisk/MeetmeEditDialog.js:56
 msgid "adminpin"
-msgstr ""
+msgstr "adminpin"
 
 #: js/Voipmanager.js:22
 msgid "Asterisk"
