@@ -65,5 +65,12 @@ class Calendar_Convert_Event_VCalendar_EMClientTest extends PHPUnit_Framework_Te
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $event = $converter->toTine20Model($vcalendarStream);
+        
+        $this->assertEquals('eM Patch Upload', $event->summary);
+        $this->assertEquals('2013-05-27 06:00:00', $event->dtstart->toString());
+        $this->assertEquals('UTC', $event->dtstart->getTimeZone()->getName());
+        $this->assertEquals('Europe/Berlin', $event->originator_tz);
+        $this->assertCount(1, $event->alarms, 'there should be one alarm');
+        $this->assertEquals(15, $event->alarms->getFirstRecord()->minutes_before, 'alarm should be 15 minutes before');
     }
 }

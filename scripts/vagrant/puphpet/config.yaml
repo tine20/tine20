@@ -2,31 +2,27 @@
 vagrantfile-local:
     vm:
         box: debian-wheezy72-x64-vbox43
-        box_url: 'https://puphpet.s3.amazonaws.com/debian-wheezy72-x64-vbox43.box'
+        box_url: 'http://box.puphpet.com/debian-wheezy72-x64-vbox43.box'
         hostname: null
         network:
             private_network: 192.168.56.101
-            forwarded_port:
-                hS7jk0Np9Ab5:
-                    host: ''
-                    guest: ''
+            forwarded_port: {  }
         provider:
             virtualbox:
                 modifyvm:
-                    name: my-vm-box
                     natdnshostresolver1: on
                     memory: '512'
                 setextradata:
                     VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root: 1
         provision:
             puppet:
-                manifests_path: puppet/manifests
+                manifests_path: puphpet/puppet/manifests
                 options:
-                    - --verbose
-                    - '--hiera_config /vagrant/hiera.yaml'
+                    - '--verbose'
+                    - '--hiera_config /vagrant/puphpet/puppet/hiera.yaml'
                     - '--parser future'
         synced_folder:
-            LxME30gm6SNU:
+            LZhss9UMsFXn:
                 id: vagrant-root
                 source: ./
                 target: /var/www
@@ -55,11 +51,11 @@ apache:
         - php
         - rewrite
     vhosts:
-        Xan8mqMbuDOQ:
-            servername: awesome.dev
+        dYDR07tVlxGd:
+            servername: example.com
             serveraliases:
-                - www.awesome.dev
-            docroot: /var/www/awesome
+                - tine.exaple.com
+            docroot: /var/www
             port: '80'
             setenv:
                 - 'APP_ENV dev'
@@ -69,6 +65,8 @@ apache:
     group: www-data
     default_vhost: true
     mpm_module: prefork
+    mod_pagespeed: 0
+    mod_spdy: 0
 php:
     version: '55'
     composer: '1'
@@ -77,8 +75,8 @@ php:
             - cli
             - intl
             - mcrypt
-            - ldap
             - xsl
+            - ldap
         pear: {  }
         pecl:
             - pecl_http
@@ -86,7 +84,7 @@ php:
         display_errors: On
         error_reporting: '-1'
         session.save_path: /var/lib/php/session
-    timezone: Europe/Berlin
+    timezone: America/Chicago
 xdebug:
     install: '1'
     settings:
@@ -98,9 +96,22 @@ xdebug:
         xdebug.remote_port: '9000'
 xhprof:
     install: '1'
-    location: /var/www/xhprof
+drush:
+    install: 0
+    settings:
+        drush.tag_branch: 6.x
 mysql:
-    root_password: '123'
+    root_password: '1234'
     phpmyadmin: '1'
-
+    adminer: 0
+    databases: {  }
+beanstalkd:
+    install: 0
+    listenaddress: 0.0.0.0
+    listenport: '13000'
+    maxjobsize: '65535'
+    maxconnections: '1024'
+    binlogdir: /var/lib/beanstalkd/binlog
+    binlogfsync: null
+    binlogsize: '10485760'
 

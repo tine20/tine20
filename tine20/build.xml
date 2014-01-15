@@ -375,7 +375,7 @@
     <adhoc-task name="init"><![CDATA[
         class initTask extends Task {
             function main() {
-                passthru('composer install');
+                passthru('composer install --prefer-source --no-interaction');
                 require_once 'vendor/autoload.php';
             }
         }

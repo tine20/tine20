@@ -208,7 +208,8 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
         if (this.recordNotesStore) {
             this.title = this.translation.gettext('Notes') + ' (' + this.recordNotesStore.getCount() + ')';
             if (this.header) {
-                this.header.dom.children[2].innerText = this.title;
+                var el = this.header.dom.children[2];
+                el.innerHTML = this.title;
             }
         }
         

@@ -379,13 +379,6 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 break;
             }
         }
-
-        // TODO check if this is correct! spec?
-        // @see 0009510: is it allowed to have no main vevent in ics?
-        // if we have found no VEVENT component or something went wrong, lets stop here
-        if (! $baseVevent) {
-            throw new Tinebase_Exception_UnexpectedValue('no main VEVENT component found in VCALENDAR');
-        }
         
         // TODO only do this for events with rrule?
         // if (! empty($event->rrule)) {

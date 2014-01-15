@@ -932,6 +932,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             if (this.items.items[0]) {
                 this.items.items[0].add(this.relationsPanel);
             }
+            
+            Tine.log.debug('Tine.widgets.dialog.EditDialog::initRelationsPanel() - Initialized relations panel and added to dialog tab items.');
         }
     },
     

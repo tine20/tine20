@@ -425,7 +425,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         if (this.recordTagsStore) {
             this.title = _('Tags') + ' (' + this.recordTagsStore.getCount() + ')';
             if (this.header) {
-                this.header.dom.children[2].innerText = this.title;
+                var el = this.header.dom.children[2];
+                el.innerHTML = this.title;
             }
         }
     }
