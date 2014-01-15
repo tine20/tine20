@@ -123,8 +123,53 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $f = new HumanResources_Model_EmployeeFilter(array(
             array('field' => 'n_fn', 'operator' => 'equals', 'value' => 'Paul Wulf'),
         ), 'AND');
-
+        
         return ($c->search($f)->count() == 1) ? true : false;
+    }
+    
+    /**
+     * create some costcenters
+     * 
+     * @see Tinebase_Setup_DemoData_Abstract
+     */
+    protected function _onCreate()
+    {
+        $controller = Sales_Controller_CostCenter::getInstance();
+        
+        $this->_costcenters = new Tinebase_Record_RecordSet('Sales_Model_CostCenter');
+        $ccs = (static::$_de)
+            ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
+            : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
+        ;
+        
+        $id = 1;
+        
+        // will throw duplicate exception, so it has been run already
+        try {
+            foreach($ccs as $title) {
+                $cc = new Sales_Model_CostCenter(
+                    array('remark' => $title, 'number' => $id)
+                );
+                
+                $record = $controller->create($cc);
+                $this->_costcenters->addRecord($record);
+    
+                $id++;
+            }
+        } catch (Exception $e) {
+            $this->_costcenters = $controller->search(new Sales_Model_CostCenterFilter(array()));
+        }
+        
+        $divisionsArray = (static::$_de)
+            ? array('Management', 'EDV', 'Marketing', 'Public Relations', 'Produktion', 'Verwaltung')
+            : array('Management', 'IT', 'Marketing', 'Public Relations', 'Production', 'Administration')
+        ;
+        
+        $this->_divisions = new Tinebase_Record_RecordSet('Sales_Model_Division');
+        
+        foreach($divisionsArray as $divisionName) {
+            $this->_divisions->addRecord(Sales_Controller_Division::getInstance()->create(new Sales_Model_Division(array('title' => $divisionName))));
+        }
     }
     
     /**
