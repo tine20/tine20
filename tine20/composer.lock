@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "aa9347b5c420d89b60f6ecc6c475f4aa",
+    "hash": "f17fbbff083b2fd38fc41f53959397df",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -102,11 +102,11 @@
         },
         {
             "name": "metaways/opendocument",
-            "version": "0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/opendocument",
-                "reference": "b677ebf20728df634158537e8b931d344381ce63"
+                "reference": "e8bdfdc483453468b7264c8cb4cbf8c0913f407e"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -130,7 +130,7 @@
                 "OpenDocument",
                 "Template"
             ],
-            "time": "2013-08-26 10:15:16"
+            "time": "2014-01-15 13:32:55"
         },
         {
             "name": "metaways/timezoneconvert",
@@ -3169,9 +3169,9 @@
         }
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "metaways/opendocument": 20
+    },
     "platform": [
 
     ],

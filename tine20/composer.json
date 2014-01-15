@@ -21,7 +21,7 @@
         "codeplex/phpexcel": "1.7.8",
         "sabre/dav": "1.8.*",
         "sabre/vobject": "3.1.3 as 2.1.313",
-        "metaways/opendocument": "0.1",
+        "metaways/opendocument": "dev-master",
         "metaways/timezoneconvert": "0.1"
     },
     "require-dev": {
