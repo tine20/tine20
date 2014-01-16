@@ -531,17 +531,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             var container = this.record.get('container_id');
             
             // handle default container
-            // TODO is this still needed? don't we already have generic default container handling?
-            if (! this.record.id) {
-                if (this.forceContainer) {
-                    container = this.forceContainer;
-                    // only force initially!
-                    this.forceContainer = null;
-                } else if (! Ext.isObject(container)) {
-                    container = Tine.Addressbook.registry.get('defaultAddressbook');
-                }
-                
-                this.record.set('container_id', '');
+            // TODO should be generalized
+            if (! this.record.id && ! Ext.isObject(container)) {
+                container = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', Tine.Addressbook.registry.get('defaultAddressbook'));
                 this.record.set('container_id', container);
             }
             
@@ -559,15 +551,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
  * @return {Ext.ux.Window}
  */
 Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
-    
-    // if a container is selected in the tree, take this as default container
-    var treeNode = Ext.getCmp('Addressbook_Tree') ? Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode() : null;
-    if (treeNode && treeNode.attributes && treeNode.attributes.container.type) {
-        config.forceContainer = treeNode.attributes.container;
-    } else {
-        config.forceContainer = null;
-    }
-    
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
