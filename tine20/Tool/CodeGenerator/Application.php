@@ -6,13 +6,15 @@
  * @subpackage  CodeGenerator
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
 {
     const APPLICATION_NAME = '[APPLICATION_NAME]';
     const DS = DIRECTORY_SEPARATOR;
+    
+    public static $_resultMessage = null;
 
     /**
      * List of source and target files
@@ -39,11 +41,29 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
             'translations'
     );
 
+    /**
+     * 
+     * @var application root directory
+     */
     protected $_applicationFolder = null;
 
+    /**
+     * 
+     * @var name of application applied to every class
+     */
     protected $_applicationName = null;
 
+    /**
+     * 
+     * @var reference folder for finding templates 
+     */
     protected $_rootFolder = null;
+    
+    /**
+     * 
+     * @var absolute path for templates
+     */
+    protected $_templateFolder = null;
 
     public function __construct()
     {
@@ -73,6 +93,10 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
         );
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Tool_CodeGenerator_Interface::build()
+     */
     public function build(array $args)
     {
         try {
@@ -82,13 +106,17 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
             $this->_applicationFolder = $args[count($args)-1] . self::DS . $args[0];
                     
             $this->_rootFolder = $args[count($args)-1];
+            
+            $this->_templateFolder = realpath($this->_rootFolder . self::DS . 'ExampleApplication');
                     
             $this->_createFolders();
 
             $this->_copyFiles();
+            
+            return "Application {$this->_applicationName} was created successfully into tine20 folder! \n";
                     
         } catch (Exception $e) {
-            echo $e->getMessage();
+            return self::$_resultMessage = $e->getMessage();
         }
 
     }
@@ -98,11 +126,11 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
      */
     protected function _createFolders()
     {
-        mkdir($this->fsOsSintax($this->_applicationFolder));
+        mkdir($this->_fsOsSintax($this->_applicationFolder));
 
         foreach ($this->_folders as $folder)
         {
-            mkdir($this->fsOsSintax($this->_applicationFolder . self::DS . $folder));
+            mkdir($this->_fsOsSintax($this->_applicationFolder . self::DS . $folder));
         }
     }
 
@@ -111,26 +139,24 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
      */
     protected function _copyFiles()
     {
-        $templateFolder = $this->_rootFolder . self::DS . 'Tool/Application/templates';
-
         foreach($this->_sourceAndTargets as $source => $target) {
             $target = str_replace(self::APPLICATION_NAME, $this->_applicationName, $target);
 
             if (in_array($target, $this->recursiveSources)) {                
-                $directory = scandir($this->fsOsSintax($templateFolder . self::DS . $source));
+                $directory = scandir($this->_fsOsSintax($this->_templateFolder . self::DS . $source));
                 unset($directory[0]); // this directory
                 unset($directory[1]); // parent directory
                 
                 foreach($directory as $file) {
-                    $sourcePath = $templateFolder . self::DS . $source . self::DS . $file;
+                    $sourcePath = $this->_templateFolder . self::DS . $source . self::DS . $file;
                     $targetPath = $this->_applicationFolder . self::DS . $target . self::DS . $file;
                     $this->_copyFile($sourcePath, $targetPath);
                 }
                 
             } else {
-                $sourcePath = $templateFolder . self::DS . $source;
+                $sourcePath = $this->_templateFolder . self::DS . $source;
                 $targetPath = $this->_applicationFolder . self::DS . $target;
-                $this->_copyFile($templateFolder . self::DS . $source, $targetPath);
+                $this->_copyFile($this->_templateFolder . self::DS . $source, $targetPath);
             }
         }
     }
@@ -142,7 +168,7 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
      */
     protected function _copyFile($sourcePath, $targetPath)
     {
-        copy($this->fsOsSintax($sourcePath), $this->fsOsSintax($targetPath));
+        copy($this->_fsOsSintax($sourcePath), $this->_fsOsSintax($targetPath));
         $this->_changeFile($targetPath);
     }
 
@@ -152,7 +178,7 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
      */
     protected function _changeFile($targetPath)
     {
-        $content = file_get_contents($this->fsOsSintax($targetPath));
+        $content = file_get_contents($this->_fsOsSintax($targetPath));
 
         $content = str_replace('ExampleApplication', $this->_applicationName, $content);
         $content = str_replace('ExampleRecord', $this->_applicationName . 'Record', $content);
@@ -171,8 +197,8 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
      * @param string $path
      * @return string
      */
-    protected function fsOsSintax($path)
+    protected function _fsOsSintax($path)
     {
         return str_replace('/', self::DS, $path);
-    }    
+    }  
 }

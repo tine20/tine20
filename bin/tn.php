@@ -5,7 +5,7 @@
  * @package     Tine_Tool
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$ 
  */
 
@@ -31,11 +31,10 @@ function main()
 
     if ($applicationName = $opts->getOption('a'))
     {
-        create(APPLICATION, array($applicationName));
-        echo "Application $applicationName was created successfully into tine20 folder! \n";
+        echo create(APPLICATION, array($applicationName));
         exit;
     }
-    echo $e->getUsageMessage();
+    echo "UNEXPECTED ERROR: missing argument. Type tn -help to see parameters \n";
     exit;
 }
 
@@ -45,28 +44,28 @@ function main()
 function prepareEnvironment()
 {
     $paths = array(
-            realpath(dirname(__FILE__) . '/../tine20'),
-            realpath(dirname(__FILE__) . '/../tine20/library'),
+            realpath(__DIR__ . '/../tine20'),
+            realpath(__DIR__ . '/../tine20/library'),
             get_include_path()
     );
     set_include_path(implode(PATH_SEPARATOR, $paths));
 
-    require_once 'Zend/Loader/Autoloader.php';
-    $autoloader = Zend_Loader_Autoloader::getInstance();
-    $autoloader->setFallbackAutoloader(true);
-    Tinebase_Autoloader::initialize($autoloader);
+    require_once realpath(__DIR__ . '/../tine20') . '/bootstrap.php';
 }
 
 /**
  * Creates an instance of a class that knows how to build the requested structure
+ * Command can executed from everywhere, because the path is determined by __DIR__
  * @param string $builder
+ * @param array $args
+ * @return string message
  */
 function create($builder, array $args)
 {
     // last argument is path of Tine 2.0
-    $args[] = realpath(dirname(__FILE__) . '/../tine20');
+    $args[] = realpath(__DIR__ . '/../tine20');
 
     $className = 'Tool_CodeGenerator_' . $builder;
     $tcg = new $className();
-    $tcg->build($args);
+    return $tcg->build($args);
 }
