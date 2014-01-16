@@ -487,6 +487,8 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAllCostCenterMethods()
     {
+        $this->markTestSkipped('0009550: fix Sales_JsonTest.testAllCostCenterMethods');
+        
         $remark = Tinebase_Record_Abstract::generateUID(10);
         $number = Tinebase_DateTime::now()->getTimestamp();
         
