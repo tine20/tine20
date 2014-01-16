@@ -1315,9 +1315,11 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Permission denied to add records to container.');
                 throw new Tinebase_Exception_AccessDenied('You are not allowed to move records to this container');
             }
-
+            
             // check delete grant in source container
             $containerIdsWithDeleteGrant = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_DELETE, TRUE);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Containers with delete grant: ' . print_r($containerIdsWithDeleteGrant, true));
             foreach ($records as $index => $record) {
                 if (! in_array($record->{$_containerProperty}, $containerIdsWithDeleteGrant)) {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -1327,9 +1329,10 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
         }
-
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Moving ' . count($records) . ' ' . $this->_modelName . '(s) to container ' . $targetContainerId);
-
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Moving ' . count($records) . ' ' . $this->_modelName . '(s) to container ' . $targetContainerId);
+        
         // move (update container id)
         $idsToMove = $records->getArrayOfIds();
         $filterClass = $this->_modelName . 'Filter';
