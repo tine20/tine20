@@ -266,19 +266,37 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
         
-        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/iphone.ics');
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/apple_caldendar_repeating.ics');
         
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
         
         $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->attendee), 'own attendee has not been added');
+        $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->exdate->getFirstRecord()->attendee), 'own attendee has not been added to exdate');
         
         // Simulate OSX which updates w.o. fetching first
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/iphone.ics', 'r');
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/apple_caldendar_repeating.ics', 'r');
+        
+        $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
         $event->put($vcalendarStream);
         
         $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->attendee), 'own attendee has not been preserved');
+        $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->exdate->getFirstRecord()->attendee), 'own attendee has not been preserved in exdate');
+        
+        // create new exception from client w.o. fetching first
+        Calendar_Controller_Event::getInstance()->purgeRecords(TRUE);
+        Calendar_Controller_Event::getInstance()->delete($event->getRecord()->exdate->getFirstRecord());
+        Calendar_Controller_Event::getInstance()->purgeRecords(FALSE);
+        
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/apple_caldendar_repeating.ics', 'r');
+        
+        $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
+        $event->put($vcalendarStream);
+        
+        $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->attendee), 'own attendee has not been created in exdate');
+        $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->exdate->getFirstRecord()->attendee), 'own attendee has not been created in exdate');
+        
     }
     
     public function testFilterRepeatingException()
