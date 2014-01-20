@@ -506,13 +506,17 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     this.checkMailsDelayedTask.delay(1000);
                 }
                 
-                if (record.isInbox() && record.isModified('cache_unreadcount')) {
+                // this should not be shown for messages that have been marked "unread" by another client
+                if (record.isInbox() && record.isModified('cache_unreadcount') && record.isModified('cache_totalcount')) {
                     this.showNewMessageNotification(record);
                 }
                 
                 if (record.isModified('imap_lastmodseq')) {
-                    Tine.log.info('Tine.Felamimail.Application::onUpdateFolder(): reload messages because flags have changed');
-                    this.getMainScreen().getCenterPanel().getStore().reload();
+                    Tine.log.info('Tine.Felamimail.Application::onUpdateFolder(): flags have changed');
+                    // TODO this needs to be reviewed: grid is loaded way to often, selection is lost. maybe we need to have the updated flags here or the messages with updated flags
+                    // TODO maybe server needs to be reviewed, too as flags should not be synced if the tine client herself changes the flags
+                    // TODO maybe we need cache_lastmodseq, too
+                    //this.getMainScreen().getCenterPanel().getStore().reload();
                 }
             }
 

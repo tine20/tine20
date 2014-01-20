@@ -54,7 +54,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function(){
-        this.title =  _('Tags');
+        this.title =  _('Tags') + ' (0)';
         this.app = Ext.isString(this.app) ? Tine.Tinebase.appMgr.get(this.app) : this.app;
         
         // init recordTagsStore

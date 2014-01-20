@@ -292,24 +292,17 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * This way the etag changes when the general properties or the user specific properties change.
      * 
      * @return string
+     * 
+     * @todo add a unittest for this function to verify desired behavior
      */
     public function getETag() 
     {
-        $attendeeHash = null;
-        
-        if ( ($ownAttendee = Calendar_Model_Attender::getOwnAttender($this->getRecord()->attendee)) instanceof Calendar_Model_Attender) {
-            $attendeeHash = sha1(Zend_Json::encode($ownAttendee->toArray()));
-        }
-        
-        if ($this->getRecord()->exdate instanceof Tinebase_Record_RecordSet) {
-            foreach ($this->getRecord()->exdate as $exdate) {
-                if ( ($ownAttendee = Calendar_Model_Attender::getOwnAttender($exdate->attendee)) instanceof Calendar_Model_Attender) {
-                    $attendeeHash = sha1($attendeeHash . Zend_Json::encode($ownAttendee->toArray()));
-                }
-            }
-        }
-        
-        return '"' . sha1($this->getRecord()->getId() . $this->getLastModified()) . $attendeeHash . '"';
+        // NOTE: We don't distinguish between scheduling and attendee sequences.
+        //       Every action increases the record sequence atm.
+        //       If we once should implement different sequences we also need 
+        //       to consider sequences for non-attendee for X-MOZ-LASTACK
+        $record = $this->getRecord();
+        return '"' . sha1($record->getId() . $record->seq) . '"';
     }
     
     /**
@@ -366,16 +359,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         // keep old record for reference
         $recordBeforeUpdate = clone $this->getRecord();
         
-        $event = $this->_converter->toTine20Model($vobject, $this->getRecord());
-        
-        // concurrency management is based on etag in CalDAV, so we set last_modified to
-        // now to circumvent internal concurrency checks
-        $event->last_modified_time = Tinebase_DateTime::now();
-        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
-            foreach ($event->exdate as $idx => $exdate) {
-                $exdate->last_modified_time = $event->last_modified_time;
-            }
-        }
+        // concurrency management is based on etag in CalDAV
+        $event = $this->_converter->toTine20Model($vobject, $this->getRecord(), array(
+            Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
+        ));
         
         $currentContainer = Tinebase_Container::getInstance()->getContainerById($this->getRecord()->container_id);
         

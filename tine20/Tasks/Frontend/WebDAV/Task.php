@@ -371,7 +371,9 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         // keep old record for reference
         $recordBeforeUpdate = clone $this->getRecord();
         
-        $task = $this->_converter->toTine20Model($vobject, $this->getRecord());
+        $task = $this->_converter->toTine20Model($vobject, $this->getRecord(), array(
+            Tasks_Convert_Task_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
+        ));
         
         // iCal does sends back an old value, because it does not refresh the vcalendar after 
         // update. Therefor we must reapply the value of last_modified_time after the convert

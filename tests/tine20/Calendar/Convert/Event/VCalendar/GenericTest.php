@@ -122,7 +122,11 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals('9320E052-6AF0-45E7-9352-04BBEC898D47', $event->uid);
         $this->assertEquals(2, count($event->attendee));
         $this->assertTrue(!empty($event->organizer));
-    
+        $this->assertEquals('2012-02-27 15:56:00', $event->creation_time->toString(), 'CREATED not taken from ics');
+        $this->assertEquals('2012-02-27 15:56:20', $event->last_modified_time, 'DTSTAMP not taken from ics');
+        $this->assertEquals(3, $event->seq, 'SEQUENCE not taken from ics');
+        
+        
         return $event;
     }
     
@@ -380,15 +384,23 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event->attendee[0]->quantity = 10;
         
         $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
+        
         // remove alarm part from vcalendar
         $vcalendar = preg_replace('/BEGIN:VALARM.*END:VALARM(\n|\r\n)/s', null, $vcalendar);
         
-        $event = $this->_converter->toTine20Model($vcalendar, $event);
+        // add a sequence
+        $vcalendar = preg_replace('/DTSTAMP:20111007T160719Z(\n|\r\n)/s', "DTSTAMP:20121007T160719Z\nSEQUENCE:5\n", $vcalendar);
+        
+        $event = $this->_converter->toTine20Model($vcalendar, $event, array(
+            Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true
+        ));
         
         $this->assertEquals(10, $event->attendee[0]->quantity);
         $this->assertTrue($event->alarms instanceof Tinebase_Record_RecordSet);
         $this->assertEquals(0, count($event->alarms));
-    }    
+        $this->assertEquals(1, $event->seq, 'seq should be preserved');
+        $this->assertEquals('2011-10-07 16:07:19', $event->last_modified_time->toString(), 'last_modified_time should be preserved');
+    }
 
     /**
      * @depends testConvertToTine20Model

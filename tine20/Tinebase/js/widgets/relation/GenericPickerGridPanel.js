@@ -220,7 +220,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     updateTitle: function(count) {
         count = Ext.isNumber(count) ? count : this.store.getCount();
-        this.setTitle((count > 0) ?  this.i18nTitle + ' (' + count + ')' : this.i18nTitle);
+        this.setTitle(this.i18nTitle + ' (' + count + ')');
     },
     
     /**
@@ -1127,7 +1127,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             // sort by creation time
             this.store.sort('creation_time', 'DESC');
             
-            this.updateTitle();
+        } else {
+            this.updateTitle(0);
         }
 
         // add other listeners after population

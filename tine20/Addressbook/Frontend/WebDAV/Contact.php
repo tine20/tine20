@@ -248,7 +248,9 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
             throw new DAV\Exception\Forbidden('Update denied for unknow client');
         }
         
-        $contact = $this->_converter->toTine20Model($cardData, $this->getRecord());
+        $contact = $this->_converter->toTine20Model($cardData, $this->getRecord(), array(
+            Addressbook_Convert_Contact_VCard_Abstract::OPTION_USE_SERVER_MODLOG => true,
+        ));
         
         $this->_contact = Addressbook_Controller_Contact::getInstance()->update($contact, false);
         $this->_vcard   = null;

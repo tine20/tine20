@@ -96,18 +96,16 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     onBookSicknessAsVacation: function(grid, e) {
         var record = this.getGrid().getSelectionModel().getSelections()[0];
-        
+
         // check if enough vacation days are available
-        var year = record.get('year');
-            
         var request = Ext.Ajax.request({
             url : 'index.php',
             params : { 
                 method : 'HumanResources.getFeastAndFreeDays',
                 _employeeId: record.get('employee_id'),
-                _year: null, 
+                _year: parseInt(record.get('firstday_date').format('Y')), 
                 _freeTimeId: null,
-                _accountId: record.get('account_id').id
+                _accountId: record.get('account_id') ? record.get('account_id').id : null
             },
             success : function(_result, _request) {
                 var response = Ext.decode(_result.responseText);

@@ -18,6 +18,13 @@
 abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Convert_Interface
 {
     /**
+     * use servers modlogProperties instead of given DTSTAMP & SEQUENCE
+     * use this if the concurrency checks are done differntly like in CardDAV 
+     * where the etag is checked
+     */
+    const OPTION_USE_SERVER_MODLOG = 'useServerModlog';
+    
+    /**
      * the version string
      * 
      * @var string
@@ -54,11 +61,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * converts vcard to Addressbook_Model_Contact
      * 
-     * @param  \Sabre\VObject\Component|stream|string  $blob    the vcard to parse
-     * @param  Tinebase_Record_Abstract                $_record  update existing contact
+     * @param  \Sabre\VObject\Component|stream|string  $blob       the vcard to parse
+     * @param  Tinebase_Record_Abstract                $_record    update existing contact
+     * @param  array                                   $options    array of options
      * @return Addressbook_Model_Contact
      */
-    public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null)
+    public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null, $options = array())
     {
         $vcard = self::getVObject($blob);
         
@@ -204,6 +212,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($contact->toArray(), true));
+        
+        if (isset($options[self::OPTION_USE_SERVER_MODLOG]) && $options[self::OPTION_USE_SERVER_MODLOG] === true) {
+            $contact->creation_time = $_record->creation_time;
+            $contact->last_modified_time = $_record->last_modified_time;
+            $contact->seq = $_record->seq;
+        }
         
         return $contact;
     }
