@@ -166,6 +166,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $this->_assertEventFilter();
         $event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
         
+        // disallow event cleanup in the past
+        if (max($event->dtend, $event->rrule_until) < Tinebase_DateTime::now()->subMonth(2)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " deleting events in the past is not allowed via CalDAV");
+            return;
+        }
+        
         // allow delete only if deleted in origin calendar
         if ($event->container_id == $this->_container->getId()) {
             if (strpos($_SERVER['REQUEST_URI'], Calendar_Frontend_CalDAV_ScheduleInbox::NAME) === false) {

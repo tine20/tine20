@@ -580,6 +580,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_custom_alarm.ics');
+        $vcalendar = preg_replace('#DTSTART;TZID=Europe/Berlin:20120214T100000#', 'DTSTART;TZID=Europe/Berlin:' . Tinebase_DateTime::now()->format('Ymd\THis'), $vcalendar);
+        $vcalendar = preg_replace('#DTEND;TZID=Europe/Berlin:20120214T140000#', 'DTEND;TZID=Europe/Berlin:' . Tinebase_DateTime::now()->addHour(1)->format('Ymd\THis'), $vcalendar);
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
@@ -597,6 +599,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/event_with_custom_alarm.ics');
+        $vcalendar = preg_replace('#DTSTART;TZID=Europe/Berlin:20120214T100000#', 'DTSTART;TZID=Europe/Berlin:' . Tinebase_DateTime::now()->format('Ymd\THis'), $vcalendar);
+        $vcalendar = preg_replace('#DTEND;TZID=Europe/Berlin:20120214T140000#', 'DTEND;TZID=Europe/Berlin:' . Tinebase_DateTime::now()->addHour(1)->format('Ymd\THis'), $vcalendar);
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
@@ -630,6 +634,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        $vcalendar = preg_replace('#DTSTART;TZID=Europe/Berlin:20111004T100000#', 'DTSTART;TZID=Europe/Berlin:' . Tinebase_DateTime::now()->format('Ymd\THis'), $vcalendar);
+        $vcalendar = preg_replace('#DTEND;TZID=Europe/Berlin:20111004T120000#', 'DTEND;TZID=Europe/Berlin:' . Tinebase_DateTime::now()->addHour(1)->format('Ymd\THis'), $vcalendar);
         
         $id = Tinebase_Record_Abstract::generateUID();
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
@@ -652,6 +658,22 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], "$id.ics");
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($loadedEvent->getRecord()->attendee);
         $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $ownAttendee->status, 'event must be declined');
+    }
+    
+    public function testDeletePastEvent()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+        
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
+        
+        $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
+        $loadedEvent->delete();
+        
+        $notDeletedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
+        $this->assertTrue(!! $notDeletedEvent, 'past event must not be deleted');
     }
     
     /**
