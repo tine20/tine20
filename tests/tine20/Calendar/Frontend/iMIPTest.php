@@ -152,7 +152,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $ics = $vevent->serialize();
         
         $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
+        $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
         
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
@@ -254,7 +254,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->_checkIMAPConfig();
         
         $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
+        $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
         
         // handle message with fmail (add to cache)
         $message = $this->_emailTestClass->messageTestHelper('calendar_request.eml', NULL, NULL, array('unittest@tine20.org', $email));
@@ -386,7 +386,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
     public function testInvitationExternalReply()
     {
         $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
+        $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
         
         $ics = file_get_contents(dirname(__FILE__) . '/files/invitation_reply_external_accepted.ics' );
         $ics = preg_replace('/unittest@tine20\.org/', $email, $ics);
