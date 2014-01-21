@@ -92,7 +92,7 @@ class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framewor
         $user->smtpUser = new Tinebase_Model_EmailUser(array(
             'emailAddress'     => $user->accountEmailAddress,
             'emailForwardOnly' => true,
-            'emailForwards'    => array('unittest@tine20.org', 'test@tine20.org'),
+            'emailForwards'    => array(Tinebase_Core::getUser()->accountEmailAddress, 'test@tine20.org'),
             'emailAliases'     => array('bla@tine20.org', 'blubb@tine20.org')
         ));
         
@@ -102,7 +102,7 @@ class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framewor
         #var_dump($testUser->toArray());
         #var_dump($this->_config);
         
-        $this->assertEquals(array('unittest@tine20.org', 'test@tine20.org'), $testUser->smtpUser->emailForwards);
+        $this->assertEquals(array(Tinebase_Core::getUser()->accountEmailAddress, 'test@tine20.org'), $testUser->smtpUser->emailForwards);
         $this->assertEquals(array('bla@tine20.org', 'blubb@tine20.org'),     $testUser->smtpUser->emailAliases);
         $this->assertEquals(true,                                            $testUser->smtpUser->emailForwardOnly);
         $this->assertEquals($user->accountEmailAddress,                      $testUser->smtpUser->emailAddress);

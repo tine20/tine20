@@ -7,8 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
- *
- * @todo        implement testTagsAcl test
  */
 
 /**
@@ -298,34 +296,27 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test search tags with multiple acl
+     * test search tags count
      * 
      * @see 0008170: wrong paging in admin menu for TAGS
      */
-    public function testSearchTagsWithMultipleACL()
+    public function testSearchTagsCount()
     {
-        $sharedTag = $this->_createSharedTag();
-        $rights = new Tinebase_Record_RecordSet('Tinebase_Model_TagRight', array(array(
-            'tag_id'        => $sharedTag->getId(),
-            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
-            'account_id'    => Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(),
-            'view_right'    => true,
-            'use_right'     => true,
-        ), array(
-            'tag_id'        => $sharedTag->getId(),
-            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            'account_id'    => Tinebase_Core::getUser()->getId(),
-            'view_right'    => true,
-            'use_right'     => true,
-        )));
-        $this->_instance->setRights($rights);
-
         $filter = new Tinebase_Model_TagFilter(array('type' => Tinebase_Model_Tag::TYPE_SHARED));
+        $count = $this->_instance->getSearchTagsCount($filter);
+        
+        if ($count < 50) {
+            // create up to 50 tags
+            for ($i = 0; $i < (50 - $count); $i++) {
+                $this->_createSharedTag();
+            }
+        }
+        
         $paging = new Tinebase_Model_Pagination(array('limit' => 50));
         $tags = $this->_instance->searchTags($filter, $paging);
         $count = $this->_instance->getSearchTagsCount($filter);
-
-        $this->assertEquals(50, count($tags), 'did not find created tag');
-        $this->assertGreaterThan(50, $count);
+        
+        $this->assertEquals(50, count($tags), 'did not find 50 tags');
+        $this->assertGreaterThanOrEqual(50, $count, 'count mismatch');
     }
 }
