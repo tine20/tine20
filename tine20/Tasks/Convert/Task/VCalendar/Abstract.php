@@ -198,6 +198,9 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
         }
         
         // categories
+        if (!isset($task->tags)) {
+            $task->tags = Tinebase_Tags::getInstance()->getTagsOfRecord($task);
+        }
         if(isset($task->tags) && count($task->tags) > 0) {
             $vtodo->add('CATEGORIES', (array) $task->tags->name);
         }
@@ -572,7 +575,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                         //$task->is_all_day_event = true;
                         $dtstart = $this->_convertToTinebaseDateTime($property, TRUE);
                         // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in vcalendar
-                        $dstart->subSecond(1);
+                        $dtstart->subSecond(1);
                     } else {
                         //$task->is_all_day_event = false;
                         $dtstart = $this->_convertToTinebaseDateTime($property);
@@ -766,7 +769,12 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                     break;
                     
                 case 'CATEGORIES':
-                    $task->tags = Tinebase_Model_Tag::resolveTagNameToTag($property->getParts(), 'Tasks');
+                    $tags = Tinebase_Model_Tag::resolveTagNameToTag($property->getParts(), 'Tasks');
+                    if (! isset($task->tags)) {
+                        $task->tags = $tags;
+                    } else {
+                        $task->tags->merge($tags);
+                    }
                     break;
                     
                 case 'X-MOZ-LASTACK':
@@ -809,9 +817,12 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
         $defaultTimezone = date_default_timezone_get();
         date_default_timezone_set((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
-        if ($dateTimeProperty instanceof \Sabre\VObject\Property\ICalendar\DateTime) {
+        if ($dateTimeProperty instanceof Sabre\VObject\Property\ICalendar\DateTime) {
             $dateTime = $dateTimeProperty->getDateTime();
-            $tz = ($_useUserTZ) ? (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : $dateTime->getTimezone();
+            $tz = ($_useUserTZ || (isset($dateTimeProperty['VALUE']) && strtoupper($dateTimeProperty['VALUE']) == 'DATE')) ? 
+                (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : 
+                $dateTime->getTimezone();
+            
             $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
         } else {
             $result = new Tinebase_DateTime($dateTimeProperty->getValue());
