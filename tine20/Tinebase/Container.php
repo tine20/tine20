@@ -733,6 +733,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
 
         $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC), TRUE);
         
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Found ' . count($containers) . ' shared container(s) in application ' . $application->name);
+        
         return $containers;
     }
     
