@@ -30,7 +30,22 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * @see Tinebase_Frontend_Json_Abstract
      */
-    protected $_relatableModels = array('Sales_Model_Contract', 'Sales_Model_CostCenter');
+    protected $_relatableModels = array(
+        'Sales_Model_Contract',
+        'Sales_Model_CostCenter',
+    );
+    
+    /**
+     * All configured models
+     *
+     * @var array
+     */
+    protected $_configuredModels = array(
+        'Product',
+        'Contract',
+        'Division',
+        'CostCenter',
+    );
     
    /**
      * Returns registry data of the application.
@@ -215,7 +230,40 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     // division functions
-
+    
+    /**
+      * Return a single record
+      *
+      * @param   string $id
+      * @return  array record data
+      */
+    public function getDivision($id)
+    {
+        return $this->_get($id, Sales_Controller_Division::getInstance());
+    }
+    
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveDivision($recordData)
+    {
+        return $this->_save($recordData, Sales_Controller_Division::getInstance(), 'Division');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array $ids
+     * @return string
+     */
+    public function deleteDivisions($ids)
+    {
+        return $this->_delete($ids, Sales_Controller_Division::getInstance());
+    }
+    
     /**
      * Search for records matching given arguments
      *
@@ -225,6 +273,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchDivisions($filter, $paging)
     {
-        return $this->_search($filter, $paging, Sales_Controller_Division::getInstance(), 'Sales_Model_ContractFilter');
+        return $this->_search($filter, $paging, Sales_Controller_Division::getInstance(), 'Sales_Model_DivisionFilter');
     }
 }
