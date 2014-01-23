@@ -510,9 +510,9 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($number - 5000, $cc['number']);
         
         $accountId = Tinebase_Core::getUser()->getId();
-        
-        $this->assertEquals($accountId, $cc['created_by']);
-        $this->assertEquals($accountId, $cc['last_modified_by']);
+
+        $this->assertEquals($accountId, $cc['created_by']['accountId']);
+        $this->assertEquals($accountId, $cc['last_modified_by']['accountId']);
         $this->assertEquals(NULL, $cc['deleted_by']);
         $this->assertEquals(NULL, $cc['deleted_time']);
         $this->assertEquals(2, $cc['seq']);
@@ -529,5 +529,38 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, $ccs['totalcount']);
         $this->assertEquals(1, $ccs['results'][0]['is_deleted']);
+    }
+    
+    /**
+     * tests crud methods of division
+     */
+    public function testAllDivisionMethods()
+    {
+        $title = Tinebase_Record_Abstract::generateUID(10);
+        $d = $this->_instance->saveDivision(
+            array('title' => $title)
+        );
+        
+        $this->assertEquals(40, strlen($d['id']));
+        $this->assertEquals($title, $d['title']);
+        
+        $d = $this->_instance->getDivision($d['id']);
+        
+        $this->assertEquals(40, strlen($d['id']));
+        $this->assertEquals($title, $d['title']);
+        
+        $title = Tinebase_Record_Abstract::generateUID(10);
+        $d['title'] = $title;
+        
+        $d = $this->_instance->saveDivision($d);
+        
+        $this->assertEquals(40, strlen($d['id']));
+        $this->assertEquals($title, $d['title']);
+        
+        $this->_instance->deleteDivisions(array($d['id']));
+        
+        $this->setExpectedException('Exception');
+        
+        $d = $this->_instance->getDivision($d['id']);
     }
 }

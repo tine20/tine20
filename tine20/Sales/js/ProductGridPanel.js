@@ -4,7 +4,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -29,38 +29,10 @@ Ext.namespace('Tine.Sales');
  */
 Tine.Sales.ProductGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
-     * record class
-     * @cfg {Tine.Sales.Model.Product} recordClass
-     */
-    recordClass: Tine.Sales.Model.Product,
-    
-    /**
-     * eval grants
-     * @cfg {Boolean} evalGrants
-     */
-    evalGrants: false,
-    
-    /**
-     * grid specific
-     * @private
-     */
-    defaultSortInfo: {field: 'name', direction: 'DESC'},
-    gridConfig: {
-        autoExpandColumn: 'name'
-    },
-     
-    /**
      * inits this cmp
      * @private
      */
     initComponent: function() {
-        this.recordProxy = Tine.Sales.productBackend;
-        
-        this.actionToolbarItems = this.getToolbarItems();
-        this.contextMenuItems = [];
-
-        this.gridConfig.cm = this.getColumnModel();
-        
         Tine.Sales.ProductGridPanel.superclass.initComponent.call(this);
         
         // actions depend on manage_products right
@@ -80,37 +52,5 @@ Tine.Sales.ProductGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, this);
 
         this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Sales', 'products'));
-    },
-    
-    /**
-     * returns cm
-     * 
-     * @return Ext.grid.ColumnModel
-     * @private
-     */
-    getColumnModel: function(){
-        return new Ext.grid.ColumnModel({
-            defaults: {
-                sortable: true
-            },
-            columns: [
-                {header: this.app.i18n._('Tags'), id: 'tags', dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
-                {header: this.app.i18n._('Name'), id: 'name', dataIndex: 'name', width: 200},
-                {header: this.app.i18n._('Manufacturer'), id: 'manufacturer', dataIndex: 'manufacturer', width: 100},
-                {header: this.app.i18n._('Category'), id: 'category', dataIndex: 'category', width: 100},
-                {header: this.app.i18n._('Description'), id: 'description', dataIndex: 'description', width: 150, sortable: false, hidden: true},
-                {header: this.app.i18n._('Price'), id: 'price', dataIndex: 'price', width: 75, renderer: Ext.util.Format.euMoney}
-            ]
-        });
-    },
-
-    /**
-     * return additional tb items
-     * @private
-     */
-    getToolbarItems: function(){
-        
-        return [
-        ];
-    }    
+    }
 });

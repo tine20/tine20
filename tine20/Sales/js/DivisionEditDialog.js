@@ -11,13 +11,13 @@
 Ext.namespace('Tine.Sales');
 
 /**
- * CostCenter edit dialog
+ * Division edit dialog
  * 
  * @namespace   Tine.Sales
- * @class       Tine.Sales.CostCenterEditDialog
+ * @class       Tine.Sales.DivisionEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
  * 
- * <p>CostCenter Edit Dialog</p>
+ * <p>Division Edit Dialog</p>
  * <p><pre>
  * </pre></p>
  * 
@@ -27,9 +27,9 @@ Ext.namespace('Tine.Sales');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.Sales.CostCenterGridPanel
+ * Create a new Tine.Sales.DivisionGridPanel
  */
-Tine.Sales.CostCenterEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.Sales.DivisionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     windowWidth: 650,
     windowHeight: 450,
@@ -62,7 +62,7 @@ Tine.Sales.CostCenterEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }],
             items:[
                 {
-                title: this.app.i18n.n_('Cost Center', 'Cost Centers', 1),
+                title: this.app.i18n.n_('Division', 'Division', 1),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -75,24 +75,20 @@ Tine.Sales.CostCenterEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         xtype:'textfield',
                         anchor: '100%',
                         labelSeparator: '',
-                        columnWidth: .333
+                        columnWidth: 1
                     },
                     items: [[{
-                        columnWidth: .25,
-                        fieldLabel: this.app.i18n._('Number'),
-                        name: 'number',
-                        xtype:  'numberfield',
-                        multiEditable: false,
-                        allowBlank: false
-                    },{
-                        columnWidth: .75,
-                        fieldLabel: this.app.i18n._('Remark'),
-                        name: 'remark',
+                        fieldLabel: this.app.i18n._('Title'),
+                        name: 'title',
                         allowBlank: false
                     }]
                     ]
                 }]
-            }]
+            }, new Tine.widgets.activities.ActivitiesTabPanel({
+                app: this.appName,
+                record_id: this.record.id,
+                record_model: 'Sales_Model_Division'
+            })]
         };
     }
 });
