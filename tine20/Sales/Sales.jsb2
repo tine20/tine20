@@ -12,10 +12,6 @@
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Models.js",
-          "path": "js/"
-        },
-        {
           "text": "Sales.js",
           "path": "js/"
         },
@@ -36,7 +32,7 @@
           "path": "js/"
         },
         {
-          "text": "CostCenterGridPanel.js",
+          "text": "DivisionEditDialog.js",
           "path": "js/"
         },
         {
