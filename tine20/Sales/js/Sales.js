@@ -33,7 +33,8 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         {modelName: 'CostCenter', requiredRight: 'manage_costcenters', singularContainerMode: true},
         {modelName: 'Division', requiredRight: null, singularContainerMode: true},
         // the customer and the dependent address records are configured using the modelconfiguration
-        {modelName: 'Customer', requiredRight: 'manage_customers', singularContainerMode: true}
+        {modelName: 'Customer', requiredRight: 'manage_customers', singularContainerMode: true},
+        {modelName: 'Division', requiredRight: null, singularContainerMode: true}
     ]
 });
 
