@@ -68,14 +68,22 @@ class Courses_CliTest extends PHPUnit_Framework_TestCase
         
         $this->_cli = new Courses_Frontend_Cli();
         
-        $internetGroup = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
-            'name'   => 'internetOn'
-        )));
+        try {
+            $internetGroup = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
+                'name'   => 'internetOn'
+            )));
+        } catch (Exception $e) {
+            $internetGroup = Tinebase_Group::getInstance()->getGroupByName('internetOn');
+        }
         Courses_Config::getInstance()->set(Courses_Config::INTERNET_ACCESS_GROUP_ON, $internetGroup->getId());
-
-        $this->_internetFilteredGroup = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
-            'name'   => 'internetFiltered'
-        )));
+        
+        try {
+            $this->_internetFilteredGroup = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
+                'name'   => 'internetFiltered'
+            )));
+        } catch (Exception $e) {
+            $this->_internetFilteredGroup = Tinebase_Group::getInstance()->getGroupByName('internetFiltered');
+        }
         Courses_Config::getInstance()->set(Courses_Config::INTERNET_ACCESS_GROUP_FILTERED, $this->_internetFilteredGroup->getId());
         
         $department = Tinebase_Department::getInstance()->create(new Tinebase_Model_Department(array(

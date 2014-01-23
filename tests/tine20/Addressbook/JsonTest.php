@@ -4,7 +4,7 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * @todo        add testSetImage (NOTE: we can't test the upload yet, so we needd to simulate the upload)
@@ -1534,7 +1534,13 @@ Steuernummer 33/111/32212";
             'description'   => 'hidden group',
             'visibility'    => Tinebase_Model_Group::VISIBILITY_HIDDEN
         ));
-        $hiddenGroup = Admin_Controller_Group::getInstance()->create($hiddenGroup);
+        try {
+            $hiddenGroup = Admin_Controller_Group::getInstance()->create($hiddenGroup);
+        } catch (Exception $e) {
+            // group already exists
+            $hiddenGroup = Tinebase_Group::getInstance()->getGroupByName($hiddenGroup->name);
+        }
+        
         $this->_groupIdsToDelete = array($hiddenGroup->getId());
         
         $filter = array(array(

@@ -1238,7 +1238,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected function _getTestEmailAddress()
     {
         $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
+        $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
         return $email;
     }
     

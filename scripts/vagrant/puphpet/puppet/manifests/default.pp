@@ -744,7 +744,7 @@ if has_key($beanstalkd_values, 'install') and $beanstalkd_values['install'] == 1
 # tine20 manifest
 
 # /www/tine.vagrant logs userdata files htdocs
-file { ["/www", "/www/tine.vagrant"]:
+file { ["/www", "/www/tine.vagrant", "/www/tine.vagrant/conf"]:
     ensure => directory,
     owner  => $::ssh_username,
     mode    => 0775,
@@ -777,7 +777,7 @@ mysql::db { $tine20_values['database']['name']:
 }
   
 file { "config.inc.php":
-  path    => "/usr/local/share/tine20.git/tine20/config.inc.php",
+  path    => "/www/tine.vagrant/conf/config.inc.php",
   ensure  => present,
   owner   => 'root',
   group   => 'root',
@@ -819,7 +819,7 @@ composer::exec { 'tine20-composer-run':
  
 # phing install
 file { "install.properties":
-  path    => "/usr/local/share/tine20.git/tine20/install.properties",
+  path    => "/www/tine.vagrant/conf/install.properties",
   ensure  => present,
   owner   => 'root',
   group   => 'root',
@@ -835,8 +835,8 @@ adminEmailAddress=${tine20_values['initialuser']['email']}
 
 exec { 'phing-tine-install':
   cwd     => "/usr/local/share/tine20.git/tine20/",
-  command => "sudo sudo -u www-data /usr/local/share/tine20.git/tine20/vendor/bin/phing tine-install",
+  command => "sudo sudo -u www-data /usr/local/share/tine20.git/tine20/vendor/bin/phing -D configdir=/www/tine.vagrant/conf/ tine-install",
   require => [
-    File['/usr/local/share/tine20.git/tine20/install.properties']
+    File['/www/tine.vagrant/conf/install.properties']
   ]
 }

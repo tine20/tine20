@@ -168,8 +168,8 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
             'adr_two_street'        => 'Pickhuben 4',
             'adr_two_street2'       => 'no second street2',
             'bday'                  => '1975-01-02 03:00:00', // new Tinebase_DateTime???
-            'email'                 => 'unittests@tine20.org',
-            'email_home'            => 'unittests@tine20.org',
+            'email'                 => Tinebase_Core::getUser()->accountEmailAddress,
+            'email_home'            => Tinebase_Core::getUser()->accountEmailAddress,
             'container_id'          => $personalContainer->getId(),
             'role'                  => 'Role',
             'n_given'               => 'Lars',
