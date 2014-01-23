@@ -18,7 +18,6 @@
  */
 class Sales_Controller_CostCenter extends Tinebase_Controller_Record_Abstract
 {
-    
     protected $_duplicateCheckFields = array(array('number'));
 
     /**
@@ -63,36 +62,24 @@ class Sales_Controller_CostCenter extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * if foreign Id fields should be resolved on search and get from json
-     * should have this format:
-     *     array('Calendar_Model_Contact' => 'contact_id', ...)
-     * or for more fields:
-     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
-     * (e.g. resolves contact_id with the corresponding Model)
-     *
-     * @var array
-     */
-    protected static $_resolveForeignIdFields = array(
-        'Tinebase_Model_User' => array('created_by', 'last_modified_by')
-    );
-    
-    /**
-     * name of fields containing datetime or an array of datetime information
-     *
-     * @var array list of datetime fields
-     */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time'
-    );
-    
-    /**
      * holds the instance of the singleton
      * @var Sales_Controller_CostCenter
      */
     private static $_instance = NULL;
 
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        $this->_duplicateCheck($_record);
+    }
+    
+    
     /**
      * the singleton pattern
      * @return Sales_Controller_CostCenter
