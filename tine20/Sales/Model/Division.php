@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add Division status table
  */
@@ -18,31 +18,40 @@
 class Sales_Model_Division extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the filed which
-     * represents the identifier
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var string
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_identifier = 'id';
-
+    protected static $_configurationObject = NULL;
+    
     /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Sales';
-
-    /**
-     * list of zend validator
-     *
-     * this validators get used when validating user generated content with Zend_Input_Filter
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'title'                => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        // relations (linked users/groups and customers
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'Division',
+        'recordsName'       => 'Divisions', // ngettext('Division', 'Divisions', n)
+        'hasRelations'      => TRUE,
+        'hasCustomFields'   => FALSE,
+        'hasNotes'          => FALSE,
+        'hasTags'           => FALSE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => FALSE,
+        'createModule'      => TRUE,
+        'containerProperty' => NULL,
+    
+        'titleProperty'     => 'title',
+        'appName'           => 'Sales',
+        'modelName'         => 'Division',
+    
+        'fields'            => array(
+            'title' => array(
+                'label'   => 'Title', // _('Title')
+                'type'    => 'string',
+                'duplicateCheckGroup' => 'title',
+                'queryFilter' => TRUE,
+            ),
+        )
     );
 }

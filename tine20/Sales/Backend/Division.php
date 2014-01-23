@@ -37,5 +37,5 @@ class Sales_Backend_Division extends Tinebase_Backend_Sql_Abstract
      *
      * @var boolean
      */
-    protected $_modlogActive = false;
+    protected $_modlogActive = TRUE;
 }
