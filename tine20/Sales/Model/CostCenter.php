@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add CostCenter status table
  */
@@ -18,45 +18,49 @@
 class Sales_Model_CostCenter extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the filed which
-     * represents the identifier
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var string
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_identifier = 'id';
-
+    protected static $_configurationObject = NULL;
+    
     /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Sales';
-
-    /**
-     * list of zend validator
-     *
-     * this validators get used when validating user generated content with Zend_Input_Filter
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'number'                => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'remark'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        // relations (linked users/groups and customers
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        
-        // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'Costcenter',
+        'recordsName'       => 'Costcenters', // ngettext('Costcenter', 'Costcenters', n)
+        'hasRelations'      => TRUE,
+        'hasCustomFields'   => FALSE,
+        'hasNotes'          => FALSE,
+        'hasTags'           => FALSE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => FALSE,
+        'createModule'      => TRUE,
+        'containerProperty' => NULL,
     
+        'titleProperty'     => 'remark',
+        'appName'           => 'Sales',
+        'modelName'         => 'CostCenter',
+    
+        'fields'            => array(
+            'number' => array(
+                'label' => 'Number', //_('Number')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+                'type'  => 'integer',
+                'duplicateCheckGroup' => 'number',
+                
+            ),
+            'remark' => array(
+                'label'   => 'Remark', // _('Remark')
+                'queryFilter' => TRUE,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+        )
+    );
+
     /**
      * returns the title of the record
      *

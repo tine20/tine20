@@ -20,6 +20,10 @@
     background-image:url(../../images/oxygen/32x32/apps/kcalc.png) !important;
 }
 
+.SalesDivision {
+    background-image:url("../../images/oxygen/16x16/actions/view-process-users.png") !important;
+}
+
 .SalesCostCenter {
     background-image:url("../../images/oxygen/16x16/apps/preferences-web-browser-cache.png") !important;
 }
