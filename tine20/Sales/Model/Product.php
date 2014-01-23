@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        get categories from settings/config
  */
@@ -18,59 +18,59 @@
 class Sales_Model_Product extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the field which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var string
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_application = 'Sales';
+    protected static $_configurationObject = NULL;
     
     /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array(
-        'id'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'name'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
-        'description'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'price'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'manufacturer'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'category'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // linked objects
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),    
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'Product',
+        'recordsName'       => 'Products', // ngettext('Product', 'Products', n)
+        'hasRelations'      => TRUE,
+        'hasCustomFields'   => TRUE,
+        'hasNotes'          => TRUE,
+        'hasTags'           => TRUE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => TRUE,
+        'createModule'      => TRUE,
+        'containerProperty' => NULL,
         
-        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
-    
-    /**
-     * name of fields containing datetime or an array of datetime information
-     *
-     * @var array list of datetime fields
-     */    
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time'
+        'titleProperty'     => 'name',
+        'appName'           => 'Sales',
+        'modelName'         => 'Product',
+        
+        'fields'            => array(
+            'name'              => array(
+                'label'      => 'Name',    // _('Name')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                'queryFilter' => TRUE,
+            ),
+            'description'       => array(
+                'label'      => 'Description',    // _('Description')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'queryFilter' => TRUE,
+                'type' => 'text',
+            ),
+            'price'             => array(
+                'label'      => 'Price',    // _('Price')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+            ),
+            'manufacturer'      => array(
+                'label'      => 'Manufacturer',    // _('Manufacturer')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'queryFilter' => TRUE,
+            ),
+            'category'          => array(
+                'label'      => 'Category',    // _('Category')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'queryFilter' => TRUE,
+            ),
+        )
     );
 }

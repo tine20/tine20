@@ -23,3 +23,7 @@
 .SalesCostCenter {
     background-image:url("../../images/../Sales/images/16x16/costcenter.png") !important;
 }
+
+.SalesDivision {
+    background-image:url("../../images/oxygen/16x16/actions/view-process-users.png") !important;
+}

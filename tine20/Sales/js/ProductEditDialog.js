@@ -31,15 +31,7 @@ Ext.namespace('Tine.Sales');
  * Create a new Tine.Sales.ProductGridPanel
  */
 Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    /**
-     * @private
-     */
-    windowNamePrefix: 'ProductEditWindow_',
-    appName: 'Sales',
-    recordClass: Tine.Sales.Model.Product,
-    recordProxy: Tine.Sales.productBackend,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
-    evalGrants: false,
     
     /**
      * @private
@@ -152,18 +144,3 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };
     }
 });
-
-/**
- * Sales Edit Popup
- */
-Tine.Sales.ProductEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
-    var window = Tine.WindowFactory.getWindow({
-        width: 600,
-        height: 500,
-        name: Tine.Sales.ProductEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.Sales.ProductEditDialog',
-        contentPanelConstructorConfig: config
-    });
-    return window;
-};
