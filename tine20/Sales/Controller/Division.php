@@ -48,7 +48,7 @@ class Sales_Controller_Division extends Tinebase_Controller_Record_Abstract
      *
      * @var boolean
      */
-    protected $_omitModLog = TRUE;
+    protected $_omitModLog = FALSE;
     /**
      * the constructor
      * don't use the constructor. use the singleton
