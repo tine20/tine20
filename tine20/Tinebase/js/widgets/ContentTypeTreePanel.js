@@ -126,6 +126,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             var modelApp = ct.appName ? Tine.Tinebase.appMgr.get(ct.appName) : this.app;
             
             var recordClass = Tine[modelApp.appName].Model[modelName];
+            
             var group = recordClass.getMeta('group');
             
             if (group) {
@@ -153,12 +154,18 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
                 ! Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('modelName').toLowerCase() + 's')
             ) return true;
             
-            var child = new Ext.tree.TreeNode({
+            var c = {
                 id : 'treenode-' + recordClass.getMeta('modelName'),
                 iconCls: modelApp.appName + modelName,
                 text: recordClass.getRecordsName(),
                 leaf : true
-            });
+            };
+            
+            if (ct.genericCtxActions) {
+                c.container = modelApp.getRegistry().get('default' + recordClass.getMeta('modelName') + 'Container');
+            }
+            
+            var child = new Ext.tree.TreeNode(c);
             
             child.on('click', function() {
                 this.app.getMainScreen().activeContentType = modelName;
@@ -168,7 +175,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             // append generic ctx-items (Tine.widgets.tree.ContextMenu)
             if (ct.genericCtxActions) {
                 this['contextMenu' + modelName] = Tine.widgets.tree.ContextMenu.getMenu({
-                    nodeName: modelApp.i18n._hidden(recordClass.getMeta('recordsName')),
+                    nodeName: modelApp.i18n.ngettext(recordClass.getMeta('recordName'), recordClass.getMeta('recordsName'), 12),
                     actions: ct.genericCtxActions,
                     scope: this,
                     backend: 'Tinebase_Container',
