@@ -47,9 +47,11 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $sharedContainer = Sales_Controller_Contract::getSharedContractsContainer();
         $sharedContainer->resolveGrantsAndPath();
-        
+        // defaultContainer is deprecated, use defaultContractContainer
+        // todo: remove first if sure it works everywhere
         return array(
-            'defaultContainer' => $sharedContainer->toArray()
+            'defaultContainer' => $sharedContainer->toArray(),
+            'defaultContractContainer' => $sharedContainer->toArray(),
         );
     }
     
