@@ -517,7 +517,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($accountId, $cc['last_modified_by']);
         $this->assertEquals(NULL, $cc['deleted_by']);
         $this->assertEquals(NULL, $cc['deleted_time']);
-        $this->assertEquals(1, $cc['seq']);
+        $this->assertEquals(2, $cc['seq']);
         $this->assertEquals(0, $cc['is_deleted']);
         
         $ccs = $this->_instance->searchCostCenters(array(array('field' => 'remark', 'operator' => 'equals', 'value' => $remark . '_unittest')), array());
@@ -531,7 +531,5 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, $ccs['totalcount']);
         $this->assertEquals(1, $ccs['results'][0]['is_deleted']);
-        
-        
     }
 }

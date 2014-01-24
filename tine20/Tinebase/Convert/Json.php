@@ -343,7 +343,16 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
         
         foreach($virtualFields as $field) {
-            if ((isset($field['function']) || array_key_exists('function', $field))) {
+            // resolve virtual relation record from relations property
+            if (! $multiple && $field['type'] == 'relation') {
+                $fc = $field['config'];
+                foreach($resultSet['relations'] as $relation) {
+                    if (($relation['type'] == $fc['type']) && ($relation['related_model'] == ($fc['appName'] . '_Model_' . $fc['modelName']))) {
+                        $resultSet[$field['key']] = $relation['related_record'];
+                    }
+                }
+            // resolve virtual field by function
+            } elseif ((isset($field['function']) || array_key_exists('function', $field))) {
                 if (is_array($field['function'])) {
                     if (count($field['function']) > 1) { // static method call
                         $class  = $field['function'][0];
@@ -417,9 +426,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @return mixed
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
     {
-        if (count($_records) == 0) {
+        if (! $_records || count($_records) == 0) {
             return array();
         }
         

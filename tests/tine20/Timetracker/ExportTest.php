@@ -114,9 +114,15 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         $this->assertTrue(file_exists($result));
         
         $xmlBody = $odsExportClass->getDocument()->asXML();
+
         $this->assertEquals(1, preg_match("/0.5/", $xmlBody), 'no duration');
         $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $xmlBody), 'no description');
-        $this->assertEquals(1, preg_match("/Description/", $xmlBody), 'no headline');
+        
+        // test translation of headers
+        $i18n = Tinebase_Translation::getTranslation('Timetracker');
+        $i18nValue = $i18n->_('Description');
+        $match = preg_match("/".$i18nValue."/", $xmlBody);
+        $this->assertEquals(1, $match, 'no headline');
         
         // cleanup / delete file
         unlink($result);
