@@ -416,7 +416,11 @@ Tine.Tinebase.ApplicationStarter = {
                             recordClass: Tine[appName].Model[modelName]
                         });
                     }
-                    
+                    // if default data is empty, it will be resolved to an array
+                    if (Ext.isArray(modelConfig.defaultData)) {
+                        modelConfig.defaultData = {};
+                    }
+                            
                     // overwrite function
                     Tine[appName].Model[modelName].getDefaultData = function() {
                         if (! dd) {

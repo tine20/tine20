@@ -118,9 +118,9 @@ Tine.Sales.Model.Contract = Tine.Tinebase.data.Record.create(Tine.Sales.Model.Co
     recordName: 'Contract',
     recordsName: 'Contracts',
     containerProperty: 'container_id',
-    // ngettext('All Contracts', 'contracts lists', n);
-    containerName: 'All Contracts',
-    containersName: 'contracts lists',
+    // ngettext('Contracts', 'Contracts', n);
+    containerName: 'Contracts',
+    containersName: 'Contracts',
     getTitle: function() {
         return this.get('number')  + ' - ' + this.get('title');
     }
