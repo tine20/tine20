@@ -380,7 +380,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $_freeTimeId = (strlen($_freeTimeId) == 40) ? $_freeTimeId : NULL;
         
         // set period to search for
-        $minDate = new Tinebase_DateTime();
+        $minDate = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
         if ($_year && (! $_freeTimeId)) {
             $minDate->setDate($_year, 1, 1);
         } elseif ($_freeTimeId) {
@@ -411,7 +411,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new HumanResources_Exception_NoAccount();
         }
         
-        $minDate->setTime(0,0,0);
         $maxDate = clone $minDate;
         $maxDate->addYear(1)->subSecond(1);
 
@@ -428,6 +427,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $remainingVacation = 0;
         $feastDays = array();
+        
+        $contracts->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
         // find out disabled days for the different contracts
         foreach ($contracts as $contract) {
@@ -448,9 +449,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     if ($hours === 0) {
                         $day = clone $startDay;
                         $day->setWeekDay(($index+1));
-                        
                         while ($day->compare($stopDay) == -1) {
-                            $excludeDates[] = clone $day;
+                            $exdate = clone $day;
+                            $exdate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                            $excludeDates[] = $exdate;
                             $day->addWeek(1);
                         }
                     }
@@ -568,8 +570,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'feastDays'         => $feastDays,
                 'contracts'         => $contracts->toArray(),
                 'employee'          => $employee->toArray(),
-                'firstDay'          => $firstDay,
-                'lastDay'           => $stopDay,
+                'firstDay'          => $firstDay->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)),
+                'lastDay'           => $stopDay->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)),
              )
         );
     }

@@ -183,7 +183,15 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertFalse(is_array($e['account_id']));
         $this->assertEquals($a->accountId, $e['account_id']);
     }
-    
+    protected function _removeAllEmployees()
+    {
+        $es = $this->_json->searchEmployees(array(), array());
+        $eIds = array();
+        foreach ($es['results'] as $e) {
+            $eIds[] = $e['id'];
+        }
+        $this->_json->deleteEmployees($eIds);
+    } 
     /**
      * test employee creation/update with contracts
      */
@@ -221,25 +229,13 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'creation_time' => $now
         );
         
-        $es = $this->_json->searchEmployees(array(), array());
-        $eIds = array();
-        foreach ($es['results'] as $e) {
-            $eIds = $e['id'];
-        }
-        $this->_json->deleteEmployees($eIds);
-        
         $employee = $this->_getEmployee('unittest')->toArray();
         $employee['contracts'] = $contracts;
         
         $employee = $this->_json->saveEmployee($employee);
         $this->assertEquals(2, count($employee['contracts']));
         
-        $es = $this->_json->searchEmployees(array(), array());
-        $eIds = array();
-        foreach ($es['results'] as $e) {
-            $eIds = $e['id'];
-        }
-        $this->_json->deleteEmployees($eIds);
+        $this->_removeAllEmployees();
         
         // remove ids
         unset($employee['contracts'][0]['id']);
@@ -277,6 +273,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         }
         
         $this->assertEquals('The contracts must not overlap!', $exception->getMessage());
+        
+        $this->_removeAllEmployees();
         
         // prevent duplicate exception
         $employee['account_id'] = $this->_getAccount('rwright')->getId();
@@ -680,5 +678,54 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         )), array());
         
         $this->assertGreaterThan(0, $result['totalcount'], 'should find employee with no employment_end');
+    }
+    
+    /**
+     * @see: 0009574: vacation or sickness days can't be booked on the last working day
+     *       https://forge.tine20.org/mantisbt/view.php?id=9574
+     */
+    public function testGetFeastAndFreeDays()
+    {
+            $employmentBegin = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+            $employmentEnd   = clone $employmentBegin;
+            $employmentEnd->setDate(2014, 1, 30);
+        
+            $employee = $this->_getEmployee('unittest');
+            $employee->employment_begin = $employmentBegin;
+            $employee->employment_end = $employmentEnd;
+        
+            $contract1 = $this->_getContract();
+            $contract1->start_date = $employmentBegin;
+            $contract1->end_date = $employmentEnd;
+            $contract1->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
+            $contract1->vacation_days = 25;
+        
+            $recordData = $employee->toArray();
+            $recordData['contracts'] = array($contract1->toArray());
+            $recordData = $this->_json->saveEmployee($recordData);
+
+            $accountController = HumanResources_Controller_Account::getInstance();
+            
+            // should not be created, exist already
+            $accountController->createMissingAccounts(2014, $employee);
+            
+            $result = $this->_json->getFeastAndFreeDays($recordData['id'], "2014");
+
+            $res = $result['results'];
+            $this->assertEquals(2, $res['remainingVacation']);
+            $this->assertEquals(0, $res['extraFreeTimes']['remaining']);
+            $this->assertEquals(0, count($res['vacationDays']));
+            $this->assertEquals(0, count($res['sicknessDays']));
+            $this->assertEquals(8, count($res['excludeDates']));
+            $this->assertEquals(NULL, $res['ownFreeDays']);
+            $this->assertEquals(0, count($res['feastDays']));
+            $this->assertEquals(1, count($res['contracts']));
+            $this->assertEquals($recordData['id'], $res['employee']['id']);
+            $this->assertEquals('2014-01-02 00:00:00', $res['firstDay']->toString());
+            $this->assertEquals('2014-01-30 23:59:59', $res['lastDay']->toString());
+            
+            $this->setExpectedException('HumanResources_Exception_NoAccount');
+            
+            $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
     }
 }
