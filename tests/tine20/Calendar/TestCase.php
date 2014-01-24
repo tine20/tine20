@@ -332,7 +332,7 @@ abstract class Calendar_TestCase extends TestCase
             'is_location'          => TRUE,
         ));
     }
-    
+
     /**
      * get all calendar grants
      * 

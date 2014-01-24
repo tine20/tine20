@@ -961,6 +961,37 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
     }
 
     /**
+     * test get free busy info with recurring event and dst
+     *
+     * @see 0009558: sometimes free/busy conflicts are not detected
+     */
+    public function testFreeBusyWithRecurSeriesAndRessourceInDST()
+    {
+        $event = $this->_getEvent();
+        $resource = Calendar_Controller_Resource::getInstance()->create($this->_getResource());
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(array(
+            'user_id'   => $resource->getId(),
+            'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+        )));
+        $event->dtstart = new Tinebase_DateTime('2013-10-14 10:30:00'); // this is UTC
+        $event->dtend = new Tinebase_DateTime('2013-10-14 11:45:00');
+        $event->rrule = 'FREQ=WEEKLY;INTERVAL=1;WKST=SU;BYDAY=MO';
+        $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
+
+        // check free busy in DST
+        $newEvent = $this->_getEvent();
+        $newEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(array(
+            'user_id'   => $resource->getId(),
+            'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+        )));
+        $newEvent->dtstart = new Tinebase_DateTime('2014-01-20 12:30:00');
+        $newEvent->dtend = new Tinebase_DateTime('2014-01-20 13:30:00');
+
+        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $savedEvent = Calendar_Controller_Event::getInstance()->create($newEvent, /* $checkBusyConflicts = */ true);
+    }
+
+    /**
      * returns a simple recure event
      *
      * @return Calendar_Model_Event

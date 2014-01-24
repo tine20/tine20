@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_RruleTests::main');
-}
-
 /**
  * Test class for Calendar_Model_Rrule
  * 
@@ -150,7 +146,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $from = new Tinebase_DateTime('2009-06-01 00:00:00');
         $until = new Tinebase_DateTime('2009-06-30 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
-        $this->assertEquals(4, count($recurSet), '2013-06 has 4 sundays');
+        $this->assertEquals(4, count($recurSet), '2009-06 has 4 sundays');
         
         $from = new Tinebase_DateTime('2013-06-01 00:00:00');
         $until = new Tinebase_DateTime('2013-06-30 23:59:59');
@@ -998,14 +994,14 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     {
         $date  = new Tinebase_DateTime('2009-01-31 00:00:00');
         for ($i=0; $i<12; $i++) {
-            $dateArr = Calendar_Model_Rrule::addMonthIngnoringDay($date, $i);
+            $dateArr = Calendar_Model_Rrule::addMonthIgnoringDay($date, $i);
             $this->assertEquals(31, $dateArr['day']);
             $this->assertEquals($i+1, $dateArr['month']);
             $this->assertEquals(2009, $dateArr['year']);
         }
         
         for ($i=12; $i<24; $i++) {
-            $dateArr = Calendar_Model_Rrule::addMonthIngnoringDay($date, $i);
+            $dateArr = Calendar_Model_Rrule::addMonthIgnoringDay($date, $i);
             $this->assertEquals(31, $dateArr['day']);
             $this->assertEquals($i-11, $dateArr['month']);
             $this->assertEquals(2010, $dateArr['year']);
@@ -1080,8 +1076,4 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         }
     }
 }
-    
 
-if (PHPUnit_MAIN_METHOD == 'Calendar_RruleTests::main') {
-    Calendar_RruleTests::main();
-}
