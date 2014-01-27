@@ -104,13 +104,13 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Cost centre', // _('Cost centre')
                 'hidden'     => TRUE,
-                'type'  => 'record',
+                'type'       => 'record',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'config' => array(
                     'appName'     => 'Sales',
                     'modelName'   => 'CostCenter',
-                    'idProperty'  => 'id'
-                )
+                    'idProperty'  => 'id',
+                ),
             ),
             'warranty' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),

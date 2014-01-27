@@ -761,7 +761,6 @@ class Tinebase_ModelConfiguration {
                         $this->_filterModel[$fieldKey]['options']['filtergroup'] = $fieldDef['config']['appName'] . '_Model_' . $fieldDef['config']['modelName'] . 'Filter';
                         $this->_filterModel[$fieldKey]['options']['controller']  = $fieldDef['config']['appName'] . '_Controller_' . $fieldDef['config']['modelName'];
                     }
-                    
                 }
             }
             

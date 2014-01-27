@@ -271,6 +271,14 @@ Tine.Tinebase.ApplicationStarter = {
             return null;
         }
         
+        // check right on foreign app
+        if (fieldconfig && (fieldconfig.type == 'record' || fieldconfig.type == 'records')) {
+            var opt = fieldconfig.config;
+            if (opt && (! Tine.Tinebase.common.hasRight('run', opt.appName))) {
+                return null;
+            }
+        }
+        
         var fieldTypeKey = (fieldconfig && fieldconfig.type) ? fieldconfig.type : (filterconfig && filterconfig.type) ? filterconfig.type : 'default',
             label = (filterconfig && filterconfig.hasOwnProperty('label')) ? filterconfig.label : (fieldconfig && fieldconfig.hasOwnProperty('label')) ? fieldconfig.label : null,
             globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation')));
