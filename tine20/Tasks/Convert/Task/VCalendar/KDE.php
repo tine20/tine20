@@ -19,8 +19,8 @@
 class Tasks_Convert_Task_VCalendar_KDE extends Tasks_Convert_Task_VCalendar_Abstract
 {
     // Mozilla/5.0 (X11; Linux i686) KHTML/4.7.3 (like Gecko) Konqueror/4.7
-    const HEADER_MATCH = '/Konqueror\/(?P<version>.*)/';
-        
+    const HEADER_MATCH = '/(?J)((Konqueror\/(?P<version>.*))|(akonadi_davgroupware_resource_[0-9]*\/(?P<version>([0-9,\.])*)))/';
+    
     protected $_supportedFields = array(
         'seq',
         'dtstart',

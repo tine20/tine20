@@ -48,6 +48,13 @@ class Zend_Mail_Protocol_Imap
     protected $_tagCount = 0;
 
     /**
+     * a logger
+     * 
+     * @var Zend_Log
+     */
+    protected $_logger = null;
+    
+    /**
      * Public constructor
      *
      * @param  string   $host  hostname of IP address of IMAP server, if given connect() is called
@@ -91,6 +98,7 @@ class Zend_Mail_Protocol_Imap
 
         $errno  =  0;
         $errstr = '';
+        
         $this->_socket = @fsockopen($host, $port, $errno, $errstr, self::TIMEOUT_CONNECTION);
         if (!$this->_socket) {
             /**
@@ -320,6 +328,9 @@ class Zend_Mail_Protocol_Imap
             // last to chars are still needed for response code
             $tokens = array(substr($tokens, 0, 2));
         }
+        
+        $this->_log(__METHOD__ . '::' . __LINE__ . ' IMAP response: ' . print_r($tokens, true));
+        
         // last line has response code
         if ($tokens[0] == 'OK') {
             return $lines ? $lines : true;
@@ -328,7 +339,25 @@ class Zend_Mail_Protocol_Imap
         }
         return null;
     }
-
+    
+    /**
+     * log something to the logger
+     * 
+     * @param string $logMessage
+     */
+    protected function _log($logMessage)
+    {
+        if ($this->_logger === null) {
+            return;
+        }
+        
+        try {
+             $this->_logger->debug($logMessage);
+        } catch (Zend_Log_Exception $zle) {
+            // the logger stream might have been closed already
+        }
+    }
+    
     /**
      * send a request
      *
@@ -349,6 +378,8 @@ class Zend_Mail_Protocol_Imap
 
         foreach ($tokens as $token) {
             if (is_array($token)) {
+                $this->_log(__METHOD__ . '::' . __LINE__ . ' IMAP request: ' . $line . ' ' . $token[0]);
+                
                 if (@fputs($this->_socket, $line . ' ' . $token[0] . "\r\n") === false) {
                     /**
                      * @see Zend_Mail_Protocol_Exception
@@ -368,7 +399,8 @@ class Zend_Mail_Protocol_Imap
                 $line .= ' ' . $token;
             }
         }
-
+        
+        $this->_log(__METHOD__ . '::' . __LINE__ . ' IMAP request: ' . $line);
         if (@fputs($this->_socket, $line . "\r\n") === false) {
             /**
              * @see Zend_Mail_Protocol_Exception
@@ -932,4 +964,13 @@ class Zend_Mail_Protocol_Imap
         return array();
     }
 
+    /**
+     * set logger
+     * 
+     * @param Zend_Log $logger
+     */
+    public function setLogger($logger)
+    {
+        $this->_logger = $logger;
+    }
 }
