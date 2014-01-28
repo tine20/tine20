@@ -80,7 +80,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
     protected function _getCostCenter()
     {
         $this->_costCenterNumber = $this->_costCenterNumber ? $this->_costCenterNumber : Tinebase_Record_Abstract::generateUID();
-        
+
         $cc = new Sales_Model_CostCenter(array(
             'id'      => Tinebase_Record_Abstract::generateUID(),
             'number'  => $this->_costCenterNumber,
