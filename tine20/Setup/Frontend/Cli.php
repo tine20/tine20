@@ -42,9 +42,10 @@ class Setup_Frontend_Cli
      * handle request (call -ApplicationName-_Cli.-MethodName- or -ApplicationName-_Cli.getHelp)
      *
      * @param Zend_Console_Getopt $_opts
+     * @param boolean $exitAfterHandle
      * @return void
      */
-    public function handle(Zend_Console_Getopt $_opts)
+    public function handle(Zend_Console_Getopt $_opts, $exitAfterHandle = true)
     {
         Setup_Core::set(Setup_Core::USER, 'setupuser');
         
@@ -71,7 +72,9 @@ class Setup_Frontend_Cli
             $this->_createAdminUser($_opts);
         }
         
-        exit($result);
+        if ($exitAfterHandle) {
+            exit($result);
+        }
     }
     
     /**
@@ -386,8 +389,7 @@ class Setup_Frontend_Cli
             $errors[] = 'Missing argument: configvalue';
         }
         $configKey = (string)$options['configkey'];
-        $configValue = self::parseConfigValue($options['configvalue']);
-        
+        $configValue = (is_json($options['configvalue'])) ? Zend_Json::decode($options['configvalue']) : self::parseConfigValue($options['configvalue']);
         $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
         
         if (empty($errors)) {
