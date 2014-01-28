@@ -49,7 +49,7 @@ class Sales_Model_CostCenter extends Tinebase_Record_Abstract
             'number' => array(
                 'label' => 'Number', //_('Number')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-                'type'  => 'integer',
+                'type'  => 'string',
                 'duplicateCheckGroup' => 'number',
                 
             ),
