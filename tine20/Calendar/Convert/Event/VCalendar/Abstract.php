@@ -377,27 +377,48 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $this->setMethod($vcalendar->METHOD);
         }
         
-        // find the main event - the main event has no RECURRENCE-ID
-        $baseVevent = null;
-        foreach ($vcalendar->VEVENT as $vevent) {
-            if (! isset($vevent->{'RECURRENCE-ID'})) {
-                
-                $this->_convertVevent($vevent, $event, $options);
-                $baseVevent = $vevent;
-                break;
+        $baseVevent = $this->_findMainEvent($vcalendar);
+        
+        if (! $baseVevent) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' No main VEVENT found');
+            
+            if (! $_record && count($vcalendar->VEVENT) > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Convert recur exception without existing event using first VEVENT');
+                $this->_convertVevent($vcalendar->VEVENT[0], $event, $options);
             }
+        } else {
+            $this->_convertVevent($baseVevent, $event, $options);
         }
         
         // TODO only do this for events with rrule?
         // if (! empty($event->rrule)) {
         $this->_parseEventExceptions($event, $vcalendar, $baseVevent, $options);
-
+        
         $event->isValid(true);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($event->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Event: ' . print_r($event->toArray(), true));
         
         return $event;
+    }
+    
+    /**
+     * find the main event - the main event has no RECURRENCE-ID
+     * 
+     * @param \Sabre\VObject\Component\VCalendar $vcalendar
+     * @return \Sabre\VObject\Component\VCalendar | null
+     */
+    protected function _findMainEvent(\Sabre\VObject\Component\VCalendar $vcalendar)
+    {
+        foreach ($vcalendar->VEVENT as $vevent) {
+            if (! isset($vevent->{'RECURRENCE-ID'})) {
+                return $vevent;
+            }
+        }
+        
+        return null;
     }
     
     /**
