@@ -141,6 +141,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
+        if ($_filter === null) {
+            $_filter = new Tinebase_Model_PreferenceFilter();
+        }
+        
         // make sure account is set in filter
         $userId = Tinebase_Core::getUser()->getId();
         if (! $_filter->isFilterSet('account')) {
@@ -593,7 +597,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         // create prefs that don't exist in the db
         foreach ($_data as $id => $prefData) {
-            if (preg_match('/^default/', $id) && (isset($prefData['name']) || array_key_exists('name', $prefData)) && (string)$prefData['value'] != Tinebase_Model_Preference::DEFAULT_VALUE) {
+            if (preg_match('/^default/', $id)
+                && (isset($prefData['name']) || array_key_exists('name', $prefData))
+                && ($prefData['type'] == Tinebase_Model_Preference::TYPE_FORCED || (string)$prefData['value'] != Tinebase_Model_Preference::DEFAULT_VALUE)
+            ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Create admin pref: ' . $prefData['name'] . ' = ' . $prefData['value']);
                 $newPref = $this->getApplicationPreferenceDefaults($prefData['name']);
