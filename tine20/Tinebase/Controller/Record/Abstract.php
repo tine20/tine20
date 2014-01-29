@@ -1754,7 +1754,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $recordClassName = $_fieldConfig['recordClassName'];
             $filterClassName = $_fieldConfig['filterClassName'];
             $existing = new Tinebase_Record_RecordSet($recordClassName);
-    
+            
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' ' . print_r($_record->{$_property}, TRUE));
             
@@ -1770,17 +1770,29 @@ abstract class Tinebase_Controller_Record_Abstract
                     }
                     $_record->{$_property} = $rs;
                 }
+                
+                $idProperty = $_record->{$_property}->getFirstRecord()->getIdProperty();
+                
                 // legacy end
+                $oldFilter = new $filterClassName(array(array('field' => $idProperty, 'operator' => 'in', 'value' => $_record->{$_property}->getId())));
+                $oldRecords = $controller->search($oldFilter);
                 
                 foreach ($_record->{$_property} as $record) {
                     $record->{$_fieldConfig['refIdField']} = $_oldRecord->getId();
-                    // update record if ID exists and has a length of 40
-                    if ($record->id && strlen($record->id) == 40) {
+                    // update record if ID exists and has a length of 40 (it has a length of 10 if it is a timestamp)
+                    if ($record->getId() && strlen($record->getId()) == 40) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'Updating record ' . $record->getId());
                         }
-                        $updatedRecord = $controller->update($record);
-                        $existing->addRecord($updatedRecord);
+                        
+                        // do not try to update if the record hasn't changed
+                        $oldRecord = $oldRecords->getById($record->getId());
+                        
+                        if ($oldRecord->diff($record)->diff) {
+                            $existing->addRecord($controller->update($record));
+                        } else {
+                            $existing->addRecord($record);
+                        }
                         // create if ID does not exist or has not a length of 40
                     } else {
                         $record->id = NULL;
