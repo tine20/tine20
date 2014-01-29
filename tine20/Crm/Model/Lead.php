@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -184,9 +184,19 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      *
      * @param   array $_data the json decoded values
      * @throws  UnexpectedValueException
+     * 
+     * @todo move to converter
      */
     protected function _setFromJson(array &$_data)
     {
+        // TODO move this to a better place (maybe the converter) and check why the client is able to send empty date regardless of validation
+        if (empty($_data['start'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                . ' Sanitize empty start date. This should not happen as the client needs to validate the property.');
+            $_data['start'] = Tinebase_DateTime::now()->toString();
+        }
+        
+        // TODO should be removed as we already have generic relation handling
         if (isset($_data['relations'])) {
             foreach ((array)$_data['relations'] as $key => $relation) {
                 if ((! isset($relation['type']) || empty($relation['type'])) && isset($relation['related_record']) && isset($relation['related_record']['n_fileas'])) {
@@ -267,7 +277,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                 }
             }
         }
-    }            
+    }
 
     /**
      * use probability / end date to determine lead status

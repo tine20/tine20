@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -26,18 +26,6 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     protected $_instance;
     
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -543,5 +531,19 @@ class Crm_JsonTest extends Crm_AbstractTest
                     $this->fail('Invalid modification: ' . print_r($modification->toArray(), TRUE));
             }
         }
+    }
+
+    /**
+     * test saving lead with empty start date
+     * 
+     * @see 0009602: CRM should cope with empty start of leads
+     */
+    public function testEmptyStart()
+    {
+        $leadArray = $this->_getLead()->toArray();
+        $leadArray['start'] = null;
+        $newLead = $this->_instance->saveLead($leadArray);
+        
+        $this->assertContains(Tinebase_DateTime::now()->format('Y-m-d'), $newLead['start'], 'start should be set to now if missing');
     }
 }
