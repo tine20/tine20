@@ -16,6 +16,6 @@
  * @package     Setup
  * @subpackage  Exception
  */
-class Setup_Exception extends Exception
+class Setup_Exception extends Tinebase_Exception
 {
 }

@@ -265,16 +265,26 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             failure: function(exception) {
                 longLoadMask.hide();
                 
+                var exception = Ext.util.JSON.decode(exception.responseText).data;
+                
                 switch (exception.code) {
                     //Dependency Exception
                     case 501:
                         Ext.MessageBox.show({
                             title: this.app.i18n._('Dependency Violation'), 
-                            msg: data.msg,
+                            msg: exception.message,
                             buttons: Ext.Msg.OK,
                             icon: Ext.MessageBox.WARNING
                         });
                         this.store.load();
+                        break;
+                    case 901:
+                        Ext.MessageBox.show({
+                            title: this.app.i18n._('CLI Required'), 
+                            msg: this.app.i18n._(exception.message),
+                            buttons: Ext.Msg.OK,
+                            icon: Ext.MessageBox.ERROR
+                        });
                         break;
                     default:
                         Tine.Tinebase.ExceptionHandler.handleRequestException(exception);

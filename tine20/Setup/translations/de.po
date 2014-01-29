@@ -742,3 +742,9 @@ msgstr "Konfigurationsdatei nicht schreibbar"
 #: js/ConfigManagerPanel.js:516
 msgid "Download config file"
 msgstr "Konfigurationsdatei herunterladen"
+
+msgid "CLI Required"
+msgstr "Kommandozeile erforderlich"
+
+msgid "This update could be run from cli only!"
+msgstr "Dieses Update kann nur von der Kommandozeile aus durchgeführt werden!"

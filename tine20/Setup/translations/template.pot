@@ -735,3 +735,9 @@ msgstr ""
 #: js/ConfigManagerPanel.js:516
 msgid "Download config file"
 msgstr ""
+
+msgid "CLI Required"
+msgstr ""
+
+msgid "This update could be run from cli only!"
+msgstr ""

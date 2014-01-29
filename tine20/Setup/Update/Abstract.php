@@ -252,7 +252,7 @@ class Setup_Update_Abstract
             } while (! $userFound);
             
         } else {
-            throw new Tinebase_Exception('This update could be run from cli only!');
+            throw new Setup_Exception_PromptUser();
         }
         
         return $userAccount;
