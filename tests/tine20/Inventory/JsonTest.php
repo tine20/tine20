@@ -175,6 +175,33 @@ class Inventory_JsonTest extends Inventory_TestCase
         $this->assertEquals($filter, $searchResult['filter']);
     }
     
+
+    /**
+     * test InventoryItem - CostCenter filter
+     * @see: 0009588: InventoryItem-CostCenter filter fails without rights on Sales-App
+     *       https://forge.tine20.org/mantisbt/view.php?id=9588
+     */
+    public function testCostCenterFilter()
+    {
+        $cc = Sales_Controller_CostCenter::getInstance()->create(new Sales_Model_CostCenter(
+            array('remark' => 'test123qwe', 'number' => 123)
+        ));
+        
+        $inventoryItem = $this->_getInventoryItem();
+        $inventoryItem->costcentre = $cc->getId();
+        
+        $this->_json->saveInventoryItem($inventoryItem->toArray());
+    
+        $inventoryItem = $this->_getInventoryItem();
+        $this->_json->saveInventoryItem($inventoryItem->toArray());
+        
+        $filter = Zend_Json::decode('[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"costcentre","operator":"AND","value":[{"field":":id","operator":"equals","value":"'.$cc->getId().'"}],"id":"ext-record-2"}],"id":"ext-comp-1135","label":"test"}]}]');
+        
+        $result = $this->_json->searchInventoryItems($filter, array());
+    
+        $this->assertEquals(1, $result['totalcount']);
+    }
+    
     /**
     * get custom field config record
     *

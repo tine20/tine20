@@ -655,7 +655,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * @param bool                              $_resolveDisplayContainers
      * @param Calendar_Model_Event|array        $_events
      */
-    public static function resolveAttendee($_eventAttendee, $_resolveDisplayContainers = TRUE, $_events = NULL) {
+    public static function resolveAttendee($_eventAttendee, $_resolveDisplayContainers = TRUE, $_events = NULL)
+    {
+        if (empty($_eventAttendee)) {
+            return;
+        }
+        
         $eventAttendee = $_eventAttendee instanceof Tinebase_Record_RecordSet ? array($_eventAttendee) : $_eventAttendee;
         $events = $_events instanceof Tinebase_Record_Abstract ? array($_events) : $_events;
         

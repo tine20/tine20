@@ -177,16 +177,21 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
     /**
      * get controller
      * 
-     * @return Tinebase_Controller_Record_Abstract|NULL
+     * @return Tinebase_Controller_Record_Abstract|null
      */
     protected function _getController()
     {
-        if ($this->_controller === NULL) {
-            if (! isset($this->_options['modelName'])) {
-                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' No modelName defined in filter options, can not resolve record.');
-                return NULL;
+        if ($this->_controller === null) {
+            if (isset($this->_options['controller'])) {
+                $cname = $this->_options['controller'];
+                $this->_controller = $cname::getInstance();
+            } elseif (isset($this->_options['modelName'])) {
+                $this->_controller = Tinebase_Core::getApplicationInstance($this->_options['modelName']);
+            } else {
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
+                    . ' No modelName or controller defined in filter options, can not resolve record.');
+                return null;
             }
-            $this->_controller = Tinebase_Core::getApplicationInstance($this->_options['modelName']);
         }
         
         return $this->_controller;

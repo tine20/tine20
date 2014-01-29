@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -359,10 +359,6 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $updatedEvent = $this->_converter->toTine20Model($vcalendarStream, clone $event);
     
-        //var_dump($event->exdate->toArray());
-        #var_dump($updatedEvent->exdate[3]->attendee->toArray());
-        #var_dump($event->dtstart->format('hm'));
-    
         $this->assertTrue(! empty($updatedEvent->exdate[3]->attendee[0]->status_authkey));
         $this->assertEquals($event->exdate[3]->attendee[0]->status_authkey, $updatedEvent->exdate[3]->attendee[0]->status_authkey);
     
@@ -616,5 +612,21 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals('133st5tjius426l9n1k1sil5rk@google.com', $event->uid);
         $this->assertEquals('Test-Termin aus Google an Tine20', $event->summary);
         $this->assertEquals('REQUEST', $this->_converter->getMethod());
+    }
+
+    /**
+     * testConvertExdateRequest
+     * 
+     * @see 0009598: imip invitation mails show js error (in Felamimail)
+     */
+    public function testConvertExdateRequest()
+    {
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/request_exdate.ics', 'r');
+        
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        
+        $event = $this->_converter->toTine20Model($vcalendarStream);
+        
+        $this->assertEquals('meeting Philipp / Lars', $event->summary, print_r($event->toArray(), true));
     }
 }
