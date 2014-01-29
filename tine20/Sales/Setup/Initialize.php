@@ -77,4 +77,47 @@ class Sales_Setup_Initialize extends Setup_Initialize
             ))
         ));
     }
+    
+    /**
+     * init key fields
+     */
+    protected function _initializeKeyFields()
+    {
+        // create type config
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
+    
+        $tc = array(
+            'name'    => Sales_Config::INVOICE_TYPE,
+            'records' => array(
+                array('id' => 'INVOICE',  'value' => 'invoice',   'system' => true), // _('invoice')
+                array('id' => 'REVERSAL', 'value' => 'reversal',  'system' => true), // _('reversal')
+                array('id' => 'CREDIT',   'value' => 'credit',    'system' => true) // _('credit')
+            ),
+        );
+    
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sales_Config::INVOICE_TYPE,
+            'value'             => json_encode($tc),
+        )));
+    
+        // create cleared state keyfields
+        $tc = array(
+            'name'    => Sales_Config::INVOICE_CLEARED,
+            'records' => array(
+                array('id' => 'TO_CLEAR',  'value' => 'to clear',   'system' => true), // _('to clear')
+                array('id' => 'CLEARED', 'value' => 'cleared',  'system' => true), // _('cleared')
+            ),
+        );
+    
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sales_Config::INVOICE_CLEARED,
+            'value'             => json_encode($tc),
+        )));
+    }
 }
