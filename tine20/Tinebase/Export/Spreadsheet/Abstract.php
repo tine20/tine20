@@ -19,6 +19,51 @@
 abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abstract
 {
     /**
+     * group by this field
+     *
+     * @var string
+     */
+    protected $_groupBy = NULL;
+    
+    /**
+     * config for the groupBy field
+     * 
+     * @var Zend_Config
+     */
+    protected $_groupByFieldConfig = NULL;
+    
+    /**
+     * type of the field
+     * 
+     * @var string
+     */
+    protected $_groupByFieldType = NULL;
+    
+    /**
+     * count of columns
+     * 
+     * @var integer
+     */
+    protected $_columnCount = NULL;
+    
+    /**
+     * the constructor
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Controller_Record_Interface $_controller (optional)
+     * @param array $_additionalOptions (optional) additional options
+     */
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    {
+        parent::__construct($_filter, $_controller, $_additionalOptions);
+    
+        if ($this->_config->grouping) {
+            $this->_groupBy = (string) $this->_config->grouping->by;
+            $this->_sortInfo = array('sort' => $this->_groupBy);
+        }
+    }
+    
+    /**
      * get export document object
      * 
      * @return Object the generated document

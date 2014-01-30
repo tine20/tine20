@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>adb_by_company_xls</name>
+    <type>export</type>
+    <plugin>Addressbook_Export_Xls</plugin>
+    <description>xls contact by company export definition</description>
+    <header>0</header>
+    <headers>
+        <header>{date}</header>
+        <header>{user}</header>
+    </headers>
+    <grouping>
+        <by>org_name</by>
+        <header>1</header>
+        <groupheader>
+            <fontcolor>ffffff</fontcolor>
+            <fontsize>13</fontsize>
+            <backgroundcolor>666694</backgroundcolor>
+        </groupheader>
+    </grouping>
+    <columns>
+        <column>
+            <identifier>n_given</identifier>
+            <header>First Name</header>
+            <width>13</width>
+        </column>
+        <column>
+            <identifier>n_middle</identifier>
+            <header>Middle Name</header>
+            <width>16</width>
+        </column>
+        <column>
+            <identifier>n_family</identifier>
+            <header>Last Name</header>
+            <width>20</width>
+        </column>
+        <column>
+            <identifier>org_name</identifier>
+            <header>Company</header>
+        </column>
+        <column>
+            <identifier>adr_one_countryname</identifier>
+            <header>Country</header>
+            <width>6</width>
+        </column>
+        <column>
+            <identifier>adr_one_locality</identifier>
+            <header>City</header>
+            <width>32</width>
+        </column>
+            <column>
+            <identifier>adr_one_postalcode</identifier>
+            <header>Postal Code</header>
+            <width>11</width>
+        </column>
+        <column>
+            <identifier>adr_one_street</identifier>
+            <header>Street</header>
+            <width>16</width>
+        </column>
+        <column>
+            <identifier>email</identifier>
+            <header>E-Mail</header>
+            <width>40</width>
+        </column>
+        <column>
+            <identifier>url</identifier>
+            <header>Web</header>
+            <width>22</width>
+        </column>
+        <column>
+            <identifier>tel_cell</identifier>
+            <header>Mobile</header>
+            <width>22</width>
+        </column>
+        <column>
+            <identifier>tel_fax</identifier>
+            <header>Fax</header>
+            <width>22</width>
+        </column>
+        <column>
+            <identifier>tel_work</identifier>
+            <header>Phone</header>
+            <width>22</width>
+        </column>
+    </columns>
+</config>

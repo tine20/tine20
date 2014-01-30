@@ -42,7 +42,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
      * @var string
      */
     protected $_format = 'xls';
-    
+
     /**
      * generate export
      * 
@@ -56,7 +56,28 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
         $this->_addHeader();
         $this->_exportRecords();
         
+        $this->_setColumnWidths();
+        
         return $this->getDocument();
+    }
+    
+    /**
+     * sets the colunm widths by config column->width
+     */
+    protected function _setColumnWidths()
+    {
+        $index = 0;
+        foreach($this->_config->columns->column as $field) {
+            if ($this->_groupBy !== NULL && $this->_groupBy == $field->identifier) {
+                continue;
+            }
+            
+            if (isset($field->width)) {
+                $this->_excelObject->getActiveSheet()->getColumnDimensionByColumn($index)->setWidth((string) $field->width);
+            }
+            
+            $index++;
+        }
     }
     
     /**
@@ -64,11 +85,35 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
      */
     protected function _addHeader()
     {
+        $patterns = array(
+            '/\{date\}/',
+            '/\{user\}/',
+        );
+        
+        $replacements = array(
+            Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale),
+            Tinebase_Core::getUser()->accountDisplayName,
+        );
+        
+        $this->_currentRowIndex = 1;
+        
+        $columnId = 0;
+        
+        if ($this->_config->headers) {
+            foreach($this->_config->headers->header as $headerCell) {
+                // replace data
+                $value = preg_replace($patterns, $replacements, $headerCell);
+                
+                $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow(0, $this->_currentRowIndex, $value);
+                
+                $this->_currentRowIndex++;
+            }
+        
+            $this->_currentRowIndex++;
+        }
+        
         if (isset($this->_config->header) && $this->_config->header) {
-            $this->_currentRowIndex = 1;
             $this->_addHead();
-        } else {
-            $this->_currentRowIndex = 2;
         }
     }
     
@@ -218,9 +263,75 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
     protected function _addHead()
     {
         $columnId = 0;
+        
         foreach($this->_config->columns->column as $field) {
-            $headerValue = ($field->header) ? $field->header : $field->identifier;
+            if ($this->_groupBy !== NULL && $this->_groupBy == $field->identifier) {
+                continue;
+            }
+            $headerValue = ($field->header) ? $this->_translate->translate($field->header) : $field->identifier;
             $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $headerValue);
+        }
+        
+        $this->_currentRowIndex++;
+    }
+    
+    /**
+     * adds a header for each group
+     * 
+     * @param Tinebase_Record_Interface $record
+     */
+    protected function _addGroupHeader($group)
+    {
+        // find out fieldconfig, if not found already
+        if (! $this->_groupByFieldConfig) {
+            $this->_columnCount = 0;
+            foreach ($this->_config->columns->column as $field) {
+                if ($field->identifier == $this->_groupBy) {
+                    $this->_groupByFieldConfig = $field;
+                    $this->_groupByFieldType = (isset($field->type)) ? $field->type : 'string';
+                }
+                
+                $this->_columnCount++;
+            }
+        } else {
+            $this->_currentRowIndex++;
+            $this->_currentRowIndex++;
+        }
+        
+        $fontColor       = 'b79511';
+        $backgroundColor = '008bcf';
+        $fontSize        = 16;
+        
+        if ($this->_config->grouping->groupheader) {#
+            $gh = $this->_config->grouping->groupheader;
+            
+            $fontColor       = $gh->fontcolor ? (string) $gh->fontcolor : $fontColor;
+            $backgroundColor = $gh->backgroundcolor ? (string) $gh->backgroundcolor : $backgroundColor;
+            $fontSize        = $gh->fontsize ? (int) $gh->fontsize : $fontSize;
+        }
+        
+        $cell = $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow(0, $this->_currentRowIndex, $group, TRUE);
+        
+        $styleArray = array(
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => $fontColor),
+                'size'  => $fontSize,
+            ),
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => $backgroundColor)
+            )
+        );
+        
+        $this->_excelObject->getActiveSheet()->getStyle($cell->getCoordinate())->applyFromArray($styleArray);
+        
+        $this->_excelObject->getActiveSheet()->mergeCellsByColumnAndRow(0, $this->_currentRowIndex, ($this->_columnCount - 2), $this->_currentRowIndex);
+        
+        $this->_currentRowIndex++;
+        
+        if ($this->_config->grouping->header) {
+            $this->_addHead();
         }
         
         $this->_currentRowIndex++;
@@ -237,15 +348,26 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
     {
         $this->_resolveRecords($_records);
         
+        $lastGroup = NULL;
+        $woString = $this->_translate->_('Without company assigned');
+        
         // add record rows
         $i = 0;
         foreach ($_records as $record) {
+            if ($this->_groupBy !== NULL && $lastGroup !== $record->{$this->_groupBy} && (! (empty($record->{$this->_groupBy}) && $record->{$this->_groupBy} == $woString))) {
+                $lastGroup = empty($record->{$this->_groupBy}) ? $woString : $record->{$this->_groupBy};
+                $this->_addGroupHeader($lastGroup);
+            }
             
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             
             $columnId = 0;
             
             foreach ($this->_config->columns->column as $field) {
+                // don't show group by field
+                if ($this->_groupBy !== NULL && $field->identifier == $this->_groupBy) {
+                    continue;
+                }
                 
                 // get type and value for cell
                 $cellType = (isset($field->type)) ? $field->type : 'string';
@@ -269,5 +391,21 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
             $this->_excelObject->setActiveSheetIndex(0);
             $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow(5, 2, count($_records));
         }
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Export_Abstract::_exportRecords()
+     */
+    protected function _exportRecords()
+    {
+        parent::_exportRecords();
+        
+        $sheet = $this->_excelObject->getActiveSheet();
+        
+        for ($i = 0; $i < $this->_columnCount; $i++) {
+            $sheet->getColumnDimension($i)->setAutoSize(TRUE);
+        }
+        
     }
 }
