@@ -1788,7 +1788,7 @@ abstract class Tinebase_Controller_Record_Abstract
                         // do not try to update if the record hasn't changed
                         $oldRecord = $oldRecords->getById($record->getId());
                         
-                        if ($oldRecord->diff($record)->diff) {
+                        if (! empty($oldRecord->diff($record)->diff)) {
                             $existing->addRecord($controller->update($record));
                         } else {
                             $existing->addRecord($record);

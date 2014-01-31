@@ -1,97 +1,109 @@
 <?php
-
 /**
- * Tine 2.0
+ * Zend Framework
  *
- * @package     Tinebase
- * @subpackage  Auth
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Antonio Carlos da Silva <antonio-carlos.silva@serpro.gov.br>
- * @author      Mario Cesar Kolling <mario.kolling@serpro.gov.br>
- * @copyright   Copyright (c) 2009-2013 Serpro (http://www.serpro.gov.br)
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
- * @todo        parse authorityInfoAccess, caissuer and ocsp
- * @todo        parse authorityKeyIdentifier
- * @todo        phpdoc of all methods
- * 
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @category   Zend
+ * @package    Zend_Auth
+ * @subpackage Zend_Auth_Adapter
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @author     Antonio Carlos da Silva <antonio-carlos.silva@serpro.gov.br>
+ * @author     Mario Cesar Kolling <mario.kolling@serpro.gov.br>
+ * @copyright  Copyright (c) 2009-2013 Serpro (http://www.serpro.gov.br)
+ * @copyright  Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-class Tinebase_Auth_ModSsl_Certificate_X509
+/**
+ * class to handle X509 certificates
+ *
+ * @category   Zend
+ * @package    Zend_Auth
+ * @subpackage Zend_Auth_Adapter
+ * @todo       parse authorityInfoAccess, caissuer and ocsp
+ * @todo       parse authorityKeyIdentifier
+ * @todo       phpdoc of all methods
+ */
+class Zend_Auth_Adapter_ModSsl_Certificate_X509 extends Zend_Auth_Adapter_ModSsl_Certificate_Abstract
 {
     protected $certificate;
     protected $casfile;
     protected $crlspath;
-    protected $serialNumber = null;
-    protected $version = null;
-    protected $subject = null;
-    protected $cn = null;
-    protected $issuer = null;
-    protected $issuerCn = null;
-    protected $hash = null;
-    protected $validFrom = null;
-    protected $validTo = null;
-    protected $canSign = false;
-    protected $canEncrypt = false;
-    protected $email = null;
-    protected $ca = false;
+    protected $validFrom    = null;
+    protected $validTo      = null;
+    protected $canSign      = false;
+    protected $canEncrypt   = false;
+    protected $email        = null;
+    protected $ca           = false;
     protected $authorityKeyIdentifier = null;
-    protected $crlDistributionPoints = null;
-    protected $authorityInfoAccess = null;
-    protected $status =  array();
+    protected $crlDistributionPoints  = null;
+    protected $authorityInfoAccess    = null;
+    protected $status       = array(
+                                  'isValid' => false,
+                                  'errors'  => array()
+                              );
     
-    public function __construct($certificate)
+    protected $_parsedCertificate     = null;
+    
+    /**
+     * 
+     * @param string $certificate
+     */
+    public function __construct(array $options = array(), $certificate)
     {
-        $config = Tinebase_Config::getInstance()->get('modssl');
-        $this->status = array('isValid' => true,'errors' => array());
-        $this->casfile = $config->casfile;
-        $this->crlspath = $config->crlspath;
-        $this->certificate = $certificate;
-        $c = openssl_x509_parse($certificate);
+        parent::__construct($options, $certificate);
         
-        // define certificate properties
-        $this->serialNumber = $c['serialNumber'];
-        $this->version = $c['version'];
-        $this->subject = $c['subject'];
-        $this->cn = $c['subject']['CN'];
-        $this->issuer = $c['issuer'];
-        $this->issuerCn = $c['issuer']['CN'];
-        $this->hash = $c['hash'];
-        $this->validFrom = new Tinebase_DateTime($c['validFrom_time_t']);
-        $this->validTo = new Tinebase_DateTime($c['validTo_time_t']);
-        $this->_parsePurpose($c['purposes']);
-        $this->_parseExtensions($c['extensions']);
+        $this->casfile  = isset($this->_options['casfile'])  && strtolower($this->_options['casfile'])  !== 'skip' ? $this->_options['casfile']  : null;
+        $this->crlspath = isset($this->_options['crlspath']) && strtolower($this->_options['crlspath']) !== 'skip' ? $this->_options['crlspath'] : null;
         
-        if(strtolower($this->casfile) != 'skip') {
-            $this->_validityCheck(); // skip validation, we trust the server's result
-        }
+        $this->_parsedCertificate = openssl_x509_parse($this->_certificate['SSL_CLIENT_CERT']);
         
-        if(strtolower($this->crlspath) != 'skip') {
-            $this->_testRevoked(); // skip test,
-        }
+        $this->_parseExtensions($this->_parsedCertificate['extensions']);
     }
     
+    /**
+     * parse certificate extensions
+     * 
+     * @param array $extensions
+     */
     protected function _parseExtensions($extensions)
     {
         foreach ($extensions as $extension => $value) {
             $matches = array();
+            
             switch ($extension) {
                 case 'subjectAltName':
                     if (preg_match('/email:(\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b)/i', $value, $matches)) {
                         $this->email = $matches[1];
                     }
+                    
                     break;
+                    
                 case 'basicConstraints' :
                     if (preg_match('/\bCA:(FALSE|TRUE)\b/', $value, $matches)) {
                         $this->ca = $matches[1] == 'TRUE' ? TRUE : FALSE;
                     }
+                    
                     break;
+                    
                 case 'crlDistributionPoints' :
                     $lines = explode(chr(0x0A), trim($value));
+                    
                     foreach ($lines as &$line) {
                         preg_match('/URI:/', $line, $matches);
                         $line = preg_replace('/URI:/', '', $line);
                     }
+                    
                     $this->crlDistributionPoints = $lines;
+                    
                     break;
                 
 //                case 'authorityKeyIdentifier' :
@@ -111,25 +123,37 @@ class Tinebase_Auth_ModSsl_Certificate_X509
         }
     }
     
+    /**
+     * parse certificate purpose
+     * 
+     * @param array $purposes
+     */
     protected function _parsePurpose($purposes)
     {
         foreach ($purposes as $purpose) {
             switch ($purpose[2]) {
                 case 'smimesign' :
-                    $this->canSign = $purpose[0] == 1 ? true : false;
+                    $this->canSign    = $purpose[0] == 1 ? true : false;
+                    
                     break;
+                    
                 case 'smimeencrypt' :
                     $this->canEncrypt = $purpose[0] == 1 ? true : false;
+                    
                     break;
             }
         }
     }
     
+    /**
+     * check certificate validity
+     */
     protected function _validityCheck() 
     {
-        if(!is_file($this->casfile)) {
+        if (!is_file($this->casfile)) {
             $this->status['errors'][] = 'Invalid Certificate .(CA-01)';  //'CAs file not found.';
             $this->status['isValid'] = false;
+            
             return;
         }
         
@@ -137,24 +161,13 @@ class Tinebase_Auth_ModSsl_Certificate_X509
         $certTempFile = self::generateTempFilename($temporary_files, Tinebase_Core::getTempDir());
         self::writeTo($certTempFile,$this->certificate);
         
-        // Get serialnumber  by comand line ...
-        $out = array();
-        $w = exec('openssl x509 -inform PEM -in ' . $certTempFile . ' -noout -serial',$out);
-        $aux = explode('serial=',$out[0]);
-        
-        if(isset($aux[1]))  {
-            $this->serialNumber = $aux[1];
-        } else {
-            $this->serialNumber = null;
-        }
-    
         $out = array();
         // certificate verify ...
         $w = exec('openssl verify -CAfile '.$this->casfile.' '.$certTempFile,$out);
         self::removeTempFiles($temporary_files);
         $aux = explode(' ',$w);
-        if(isset($aux[1])) {
-            if($aux[1] != 'OK') {
+        if (isset($aux[1])) {
+            if ($aux[1] != 'OK') {
                 foreach($out as $item) {
                     $aux = explode(':',$item);
                     if(isset($aux[1])) {
@@ -172,18 +185,17 @@ class Tinebase_Auth_ModSsl_Certificate_X509
     }
 
     /**
-     *
-     * @return type 
+     * check if certificate is revoked
      */
     protected function _testRevoked()
     {
-        if(!is_dir($this->crlspath)) {
+        if (!is_dir($this->crlspath)) {
             $this->status['errors'][] = 'Couldn\'t verify if certificate was revoked.(CD-02)';  // CRL path not found.';
             $this->status['isValid'] = false;
             return;
         }
         
-        if(!isset($this->crlDistributionPoints[0])) {
+        if (!isset($this->crlDistributionPoints[0])) {
             // Haven't found crl at the certificate
             $this->status['errors'][] = 'Couldn\'t verify if certificate was revoked.(CD-03)';  // Crl file not found;
             $this->status['isValid'] = false;
@@ -195,14 +207,14 @@ class Tinebase_Auth_ModSsl_Certificate_X509
         $out = array();
         $w = exec('openssl crl -in ' . $this->crlspath . '/' . $aux[count($aux)-1] . ' -inform DER -noout -text',$out);
 
-        if(strpos($out[5],'        Next Update: ') === false) {
+        if (strpos($out[5],'        Next Update: ') === false) {
             $this->status['errors'][] = 'Couldn\'t verify if certificate was revoked.(CD-04)';  // Invalid crl file found.';
             $this->status['isValid'] = false;
             return;
         } else {
             // - verify expired crl...
             $a1 = explode(' Update: ',$out[5]);
-            if(time() >= date_timestamp_get(date_create($a1[1]))) {
+            if (time() >= date_timestamp_get(date_create($a1[1]))) {
                 $this->status['errors'][] = 'Couldn\'t verify if certificate was revoked.(CD-05)';   // Invalid crl file found.';
                 $this->status['isValid'] = false;
                 return;
@@ -211,7 +223,7 @@ class Tinebase_Auth_ModSsl_Certificate_X509
 
         $aux = array_search('    Serial Number: ' . $this->serialNumber, $out);
         
-        if($aux) {
+        if ($aux) {
             // cert revoked...
             $this->status['isValid'] = false;
             $a1 = explode('Date: ',$out[$aux+1]);
@@ -298,64 +310,99 @@ class Tinebase_Auth_ModSsl_Certificate_X509
     
     public function getSerialNumber()
     {
-        return $this->serialNumber;
+        return $this->_parsedCertificate['serialNumber'];
     }
-
+    
     public function getVersion()
     {
-        return $this->version;
+        return $this->_parsedCertificate['version'];
     }
 
     public function getSubject()
     {
-        return $this->subject;
+        return $this->_parsedCertificate['subject'];
     }
 
     public function getCn()
     {
-        return $this->cn;
+        return $this->_parsedCertificate['subject']['CN'];
     }
 
     public function getIssuer()
     {
-        return $this->issuer;
+        return $this->_parsedCertificate['issuer'];
     }
 
     public function getIssuerCn()
     {
-        return $this->issuerCn;
+        return $this->_parsedCertificate['issuer']['CN'];
     }
 
     public function getHash()
     {
-        return $this->hash;
+        return $this->_parsedCertificate['hash'];
     }
 
     public function getValidFrom()
     {
+        if (!isset($this->validFrom)) {
+            $this->validFrom = new \DateTime('@' . $this->_parsedCertificate['validFrom_time_t'], new \DateTimeZone('utc'));
+        }
+        
         return $this->validFrom;
     }
 
     public function getValidTo()
     {
+        if (!isset($this->validTo)) {
+            $this->validTo = new \DateTime('@' . $this->_parsedCertificate['validTo_time_t'], new \DateTimeZone('utc'));
+        }
+        
         return $this->validTo;
     }
       
     public function isCanSign()
     {
+        $this->_parsePurpose($this->_parsedCertificate['purposes']);
+        
         return $this->canSign;
     }
 
     public function isCanEncrypt()
     {
+        $this->_parsePurpose($this->_parsedCertificate['purposes']);
+        
         return $this->canEncrypt;
     }
 
     public function getEmail()
     {
+        if (!isset($this->email)) {
+            if (isset($this->_parsedCertificate['subject']['emailAddress'])) {
+                $this->email = $this->_parsedCertificate['subject']['emailAddress'];
+            } else {
+                $this->_parseExtensions($this->_parsedCertificate['extensions']);
+            }
+        }
+        
+        
         return $this->email;
     }
 
+    public function getUserName()
+    {
+        if (!isset($this->username)) {
+            if ($this->_options['tryUsernameSplit']) {
+                $parts = explode('@' , $this->getEmail(), 2);
+                $this->username = $parts[0];
+            } else {
+                $this->username = $this->getEmail();
+            }
+        }
+        
+        return $this->username;
+    }
+    
     public function isCA()
     {
         return $this->ca;
@@ -363,6 +410,19 @@ class Tinebase_Auth_ModSsl_Certificate_X509
 
     public function isValid()
     {
+        $this->status['isValid'] = isset($this->_certificate['SSL_CLIENT_VERIFY']) && 
+                                       $this->_certificate['SSL_CLIENT_VERIFY'] === 'SUCCESS';
+        
+        // skip validation if not set, we trust the server's result
+        if ($this->casfile) {
+            $this->_validityCheck();
+        }
+        
+        // skip test if not set
+        if ($this->crlspath) {
+            $this->_testRevoked(); 
+        }
+        
         return $this->status['isValid'];
     }
 
@@ -388,7 +448,6 @@ class Tinebase_Auth_ModSsl_Certificate_X509
 
     public static function generateTempFilename(&$tab_arqs, $path)
     {
-
         $list = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
         $N = $list[rand(0,count($list)-1)].date('U').$list[rand(0,count($list)-1)].RAND(12345,9999999999).$list[rand(0,count($list)-1)].$list[rand(0,count($list)-1)].RAND(12345,9999999999).'.tmp';
         $aux = $path.'/'.$N;
@@ -398,8 +457,8 @@ class Tinebase_Auth_ModSsl_Certificate_X509
 
     private static function removeTempFiles($tab_arqs)
     {
-        foreach($tab_arqs as $file ) {
-            if(file_exists($file)) {
+        foreach ($tab_arqs as $file) {
+            if (file_exists($file)) {
                 unlink($file);
             }
         }
