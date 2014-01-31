@@ -220,7 +220,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         allowBlank: false
                     }], [{
                         columnWidth: 1,
-                        allowBlank: true,
                         editDialog: this,
                         xtype: 'tinerelationpickercombo',
                         allowBlank: true,
@@ -241,6 +240,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             ref: '../../../../../addressPicker',
                             columnWidth: 1/2,
                             disabled: true,
+                            allowBlank: true,
                             listeners: {
                                 scope: this,
                                 select: this.onAddressLoad
@@ -261,7 +261,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 name: 'end_date',
                                 fieldLabel: this.app.i18n._('End Date'),
                                 columnWidth: 1/6
-                            }], [{
+                            }, {
                                 columnWidth: 2/6,
                                 name: 'interval',
                                 fieldLabel: this.app.i18n._('Billing Interval'),
