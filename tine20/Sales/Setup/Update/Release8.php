@@ -245,9 +245,13 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         }
         
         // remove deprecated sales contract fields
-        $this->_backend->dropCol('sales_contracts', 'status');
-        $this->_backend->dropCol('sales_contracts', 'cleared_in');
-        $this->_backend->dropCol('sales_contracts', 'cleared');
+        foreach (array('status', 'cleared_in', 'cleared') as $colToDrop) {
+            try {
+                $this->_backend->dropCol('sales_contracts', $colToDrop);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Exception::log($zdse);
+            }
+        }
         
         // add new sales contract fields
         $fields = array('<field>
@@ -333,9 +337,13 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 <default>0</default>
             </field>');
         
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             $declaration = new Setup_Backend_Schema_Field_Xml($field);
-            $this->_backend->addCol('sales_divisions', $declaration);
+            try {
+                $this->_backend->addCol('sales_divisions', $declaration);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Exception::log($zdse);
+            }
         }
         $this->setTableVersion('sales_divisions', 2);
     }
