@@ -44,12 +44,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     public function testEmployee()
     {
         $date = new Tinebase_DateTime();
-        $date->subYear(1);
-        $date->setDate($date->format('Y'), 2, 1);
-        
+        $date->subMonth(5);
         $firstDate = substr($date->toString(), 0, 10);
-        $startDate = clone $date;
-        
+
         $costCenter1 = $this->_getCostCenter($date);
         $savedEmployee = $this->_saveEmployee($costCenter1);
 
@@ -94,66 +91,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $freeTimes = $this->_json->getFeastAndFreeDays($savedEmployee['id'], $date2->format('Y'));
         
         $this->assertEquals($savedEmployee['id'], $freeTimes['results']['contracts'][0]['employee_id']);
-        
-        // 0009592: Adding a new cost center to a employee fails
-        // https://forge.tine20.org/mantisbt/view.php?id=9592
-        
-        $accountInstance = HumanResources_Controller_Account::getInstance();
-        $accountInstance->createMissingAccounts((int) $startDate->format('Y'));
-        
-        $accountFilter = new HumanResources_Model_AccountFilter(array());
-        
-        $accountFilter->addFilter(new Tinebase_Model_Filter_Text(
-            array('field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id'])
-        ));
-        $myAccount = $accountInstance->search($accountFilter)->getFirstRecord();
-        
-        $firstDayDate = clone $startDate;
-        $firstDayDate->addDay(3);
-        
-        $vacation = new HumanResources_Model_FreeTime(array(
-            'status'        => 'ACCEPTED',
-            'employee_id'   => $savedEmployee['id'],
-            'account_id'    => $myAccount->getId(),
-            'type'          => 'vacation',
-            'freedays'      => array(
-                array('date' => $firstDayDate, 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-                array('date' => $firstDayDate->addDay(1), 'duration' => 1),
-            )
-        ));
-        
-        $vacation = HumanResources_Controller_FreeTime::getInstance()->create($vacation);
-        
-        $employee = $this->_json->getEmployee($savedEmployee['id']);
-        
-        
-        $date->addMonth(2);
-        $costCenter3 = $this->_getCostCenter($date);
-        
-        $employee['costcenters'][] = $costCenter3->toArray();
-        
-        $employee = $this->_json->saveEmployee($employee);
-        
-        $this->assertEquals(18, count($employee['vacation'][0]));
-        $this->assertEquals(3, count($employee['costcenters']));
     }
     
     /**
@@ -162,10 +99,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      * @param HumanResources_Model_CostCenter $costCenter
      * @return array
      */
-    protected function _saveEmployee($costCenter = null, $firstDate = NULL)
+    protected function _saveEmployee($costCenter = null)
     {
         $e = $this->_getEmployee();
-        $e->contracts = array($this->_getContract($firstDate)->toArray());
+        $e->contracts = array($this->_getContract()->toArray());
         if ($costCenter) {
             $e->costcenters = array($costCenter->toArray());
         }
