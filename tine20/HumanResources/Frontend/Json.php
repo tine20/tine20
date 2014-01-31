@@ -210,6 +210,13 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         // auto set dates of the first contract to dates of the employee, if none are given
         if (! empty($recordData['contracts'])) {
+            
+            for ($i = 0; $i < count($recordData['contracts']); $i++) {
+                if (is_array($recordData['contracts'][$i]['feast_calendar_id'])) {
+                    $recordData['contracts'][$i]['feast_calendar_id'] = $recordData['contracts'][$i]['feast_calendar_id']['id'];
+                }
+            }
+            
             if (! empty($recordData['employment_begin']) && empty($recordData['contracts'][0]['start_date'])) {
                 $recordData['contracts'][0]['start_date'] = $recordData['employment_begin'];
             }
