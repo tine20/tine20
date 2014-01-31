@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -631,5 +631,19 @@ class Crm_JsonTest extends Crm_AbstractTest
         $lead = $this->testCreateLeadWithAttachment();
         $this->_instance->deleteLeads(array($lead['id']));
         $this->assertFalse($this->_fsController->fileExists($this->_objects['paths'][0]));
+    }
+
+    /**
+     * test saving lead with empty start date
+     * 
+     * @see 0009602: CRM should cope with empty start of leads
+     */
+    public function testEmptyStart()
+    {
+        $leadArray = $this->_getLead()->toArray();
+        $leadArray['start'] = null;
+        $newLead = $this->_instance->saveLead($leadArray);
+        
+        $this->assertContains(Tinebase_DateTime::now()->format('Y-m-d'), $newLead['start'], 'start should be set to now if missing');
     }
 }

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -25,15 +25,10 @@ class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth
      */
     public function __construct(array $options = array(), $username = null, $password = null)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($options, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($options, true));
         
-        $this->setOptions($options[0]);
-        if ($username !== null) {
-            $this->setIdentity($username);
-        }
-        if ($password !== null) {
-            $this->setCredential($password);
-        }
+        parent::__construct($options, $username, $password);
     }
     
     /**
@@ -44,8 +39,7 @@ class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth
      */
     public function setIdentity($_identity)
     {
-        parent::setUsername($_identity);
-        return $this;
+        return parent::setUsername($_identity);
     }
     
     /**
@@ -56,7 +50,6 @@ class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth
      */
     public function setCredential($_credential)
     {
-        parent::setPassword($_credential);
-        return $this;
+        return parent::setPassword($_credential);
     }    
 }

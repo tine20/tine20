@@ -605,7 +605,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $registryData =  array(
             // ModSsl
-            'modSsl'           => Tinebase_Auth_ModSsl::hasModSsl(),
+            'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'timeZone'         => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE),
             'locale'           => array(

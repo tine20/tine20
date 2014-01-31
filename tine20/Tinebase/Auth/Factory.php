@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -43,13 +43,15 @@ class Tinebase_Auth_Factory
                 break;
                 
             case Tinebase_Auth::IMAP:
-                $options = array(Tinebase_Auth::getBackendConfiguration());
-                $instance = new Tinebase_Auth_Imap($options);
+                $instance = new Tinebase_Auth_Imap(
+                    Tinebase_Auth::getBackendConfiguration()
+                );
                 break;
             
             case Tinebase_Auth::MODSSL:
-                // We don't have options!
-                $instance = new Tinebase_Auth_ModSsl();
+                $instance = new Tinebase_Auth_ModSsl(
+                    Tinebase_Auth::getBackendConfiguration()
+                );
                 break;
                 
             default:

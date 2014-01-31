@@ -511,8 +511,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
                     
                     if (isset($component->{'VALARM'}) && !$this->_container->isPersonalOf(Tinebase_Core::getUser())) {
                         // prevent duplicate alarms
-                        $component->{'X-MOZ-LASTACK'} = new Sabre\VObject\Property\DateTime('X-MOZ-LASTACK');
-                        $component->{'X-MOZ-LASTACK'}->setDateTime(Tinebase_DateTime::now()->addYear(100), Sabre\VObject\Property\DateTime::UTC);
+                        $component->add('X-MOZ-LASTACK', Tinebase_DateTime::now()->addYear(100)->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
                     }
                 }
             }

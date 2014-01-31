@@ -32,6 +32,15 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     protected $_useUid;
     
     /**
+     * activate logging in IMAP protocal class?
+     * 
+     * NOTE: should be disabled by default as credentials might be logged 
+     * 
+     * @var boolean
+     */
+    protected $_logImapRequestsAndResponses = false;
+    
+    /**
      * create instance with parameters
      * Supported parameters are
      *   - user username
@@ -51,6 +60,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $this->_useUid = true;
         
         $this->_protocol = new Felamimail_Protocol_Imap();
+        
+        if ($this->_logImapRequestsAndResponses && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            $this->_protocol->setLogger(Tinebase_Core::getLogger());
+        }
         
         if(!isset($params->port)) {
             $params->port = null;
@@ -79,10 +92,6 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     public function connectAndLogin($_params)
     {
-        // be careful, only activate this if you don't mind that pws are logged
-        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-        //    . ' LOGIN params: ' . print_r($_params, TRUE));
-        
         $timeStartConnect = microtime(true);
         try {
             $this->_protocol->connect($_params->host, $_params->port, $_params->ssl);
@@ -98,7 +107,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             if ($imapConfig->backend === 'cyrus' && $imapConfig->cyrus['useProxyAuth']) {
                 $params = array(
                     'authzid'   => $_params->user,
-                    'authcid'   =>  $imapConfig->cyrus['admin'],
+                    'authcid'   => $imapConfig->cyrus['admin'],
                     'password'  => $imapConfig->cyrus['password'],
                 );
                 $loginResult = $this->_protocol->saslAuthenticate($params);

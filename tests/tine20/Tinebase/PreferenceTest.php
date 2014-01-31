@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -24,19 +24,7 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
      * @var Tinebase_Preference
      */
     protected $_instance;
-
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_PreferenceTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
+    
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -48,7 +36,7 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         $this->_instance = Tinebase_Core::getPreference();
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
-
+    
     /**
      * Tears down the fixture
      * This method is called after a test is executed.
@@ -244,6 +232,30 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         
         $defaultPref = $this->_instance->get($defaultPref->getId());
         $this->assertEquals($defaultValue, $defaultPref->value, 'defaultpref value overwritten: ' . print_r($defaultPref->toArray(), TRUE));
+    }
+    
+    /**
+     * testSetForcedDefaultPref
+     * 
+     * @see 0009606: preferences: forcing current default value is not working
+     */
+    public function testSetForcedDefaultPref()
+    {
+        $defaultPref = $this->_instance->getApplicationPreferenceDefaults(Tinebase_Preference::TIMEZONE);
+        $this->_instance->saveAdminPreferences(array(
+            $defaultPref->getId() => array(
+                'type'  => Tinebase_Model_Preference::TYPE_FORCED,
+                'value' => 0,
+                'name'  => Tinebase_Preference::TIMEZONE
+            )
+        ));
+        
+        $result = $this->_instance->search();
+        $pref = $result->filter('name', Tinebase_Preference::TIMEZONE)->getFirstRecord();
+        
+        $this->assertTrue($pref !== null);
+        $this->assertEquals(Tinebase_Model_Preference::TYPE_FORCED, $pref->type);
+        $this->assertEquals(0, $pref->value);
     }
     
     /******************** protected helper funcs ************************/
