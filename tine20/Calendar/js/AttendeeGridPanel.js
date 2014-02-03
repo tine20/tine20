@@ -391,7 +391,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
             
             // select name cell
-            this.getSelectionModel().select(row, 3);
+            if (Ext.isFunction(this.getSelectionModel().select)) {
+                this.getSelectionModel().select(row, 3);
+            } else {
+                // west panel attendee filter grid
+                this.getSelectionModel().selectRow(row);
+            }
             
             Tine.log.debug('onContextMenu - attender:');
             Tine.log.debug(attender);
