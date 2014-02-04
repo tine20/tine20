@@ -815,6 +815,7 @@ composer::exec { 'tine20-composer-run':
   cmd     => 'install',
   cwd     => '/usr/local/share/tine20.git/tine20/',
   dev     => true,
+  prefer_source => true
 }
  
 # phing install
