@@ -161,6 +161,5 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
         $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
         
         $this->assertTrue($container instanceof Tinebase_Model_Container);
-        
     }
 }

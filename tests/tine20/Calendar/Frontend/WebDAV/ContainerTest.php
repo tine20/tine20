@@ -294,6 +294,18 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test Calendar_Frontend_WebDAV_Container::getShares
+     */
+    public function testGetShares()
+    {
+        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        $shares = $container->getShares();
+        
+        $this->assertEquals(3, count($shares));
+    }
+    
+    /**
      * return vcalendar as string and replace organizers email address with emailaddess of current user
      * 
      * @param string $_filename  file to open

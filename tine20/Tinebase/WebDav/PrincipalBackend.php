@@ -20,22 +20,49 @@ use Sabre\DAVACL;
  */
 class Tinebase_WebDav_PrincipalBackend implements DAVACL\PrincipalBackend\BackendInterface
 {
+    const PREFIX_USERS  = 'principals/users';
+    const PREFIX_GROUPS = 'principals/groups';
+    
     /**
      * (non-PHPdoc)
      * @see Sabre\DAVACL\IPrincipalBackend::getPrincipalsByPrefix()
+     * @todo currently we return the current user and his groups only // we should return ALL users/groups here
      */
     public function getPrincipalsByPrefix($prefixPath) 
     {
-        $principal = array(
-            'uri'               => 'principals/users/' . Tinebase_Core::getUser()->contact_id,
-            '{DAV:}displayname' => Tinebase_Core::getUser()->accountDisplayName
-        );
+        $principals = array();
         
-        if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            $principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
+        switch ($prefixPath) {
+            case self::PREFIX_GROUPS:
+                $groups = Tinebase_Group::getInstance()->getMultiple(Tinebase_Core::getUser()->getGroupMemberships());
+                
+                foreach ($groups as $group) {
+                    if (empty($group->list_id)) {
+                        continue;
+                    }
+                    $principals[] = array(
+                        'uri'               => self::PREFIX_GROUPS . '/' . $group->list_id,
+                        '{DAV:}displayname' => $group->name
+                    );
+                }
+                
+                
+                break;
+                
+            case self::PREFIX_USERS:
+                $principal = array(
+                    'uri'               => self::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id,
+                    '{DAV:}displayname' => Tinebase_Core::getUser()->accountDisplayName
+                );
+                
+                if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+                    $principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
+                }
+                
+                $principals[] = $principal;
+                
+                break;
         }
-        
-        $principals = array($principal);
         
         return $principals;
     }
@@ -43,16 +70,34 @@ class Tinebase_WebDav_PrincipalBackend implements DAVACL\PrincipalBackend\Backen
     /**
      * (non-PHPdoc)
      * @see Sabre\DAVACL\IPrincipalBackend::getPrincipalByPath()
+     * @todo implement search for users and groups
      */
     public function getPrincipalByPath($path) 
     {
-        $principal = array(
-            'uri'               => 'principals/users/' . Tinebase_Core::getUser()->contact_id,
-            '{DAV:}displayname' => Tinebase_Core::getUser()->accountDisplayName
-        );
+        $principal = null;
         
-        if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            $principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
+        list($prefix, $name) = \Sabre\DAV\URLUtil::splitPath($path);
+        
+        switch ($prefix) {
+            case self::PREFIX_GROUPS:
+                $principal = array(
+                    'uri'               => self::PREFIX_GROUPS . '/' . $name,
+                    '{DAV:}displayname' => 'Tine 2.0 group ' . $name
+                );
+                
+                break;
+                
+            case self::PREFIX_USERS:
+                $principal = array(
+                    'uri'               => self::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id,
+                    '{DAV:}displayname' => Tinebase_Core::getUser()->accountDisplayName
+                );
+                
+                if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+                    $principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
+                }
+                
+                break;
         }
         
         return $principal;
@@ -136,25 +181,30 @@ class Tinebase_WebDav_PrincipalBackend implements DAVACL\PrincipalBackend\Backen
         
         $principalUris = array();
         
-        if (!empty($searchProperties['{http://sabredav.org/ns}email-address'])) {
-            $filter = new Addressbook_Model_ContactFilter(array(
-                array(
-                    'field'     => 'email_query',
-                    'operator'  => 'equals',
-                    'value'     => $searchProperties['{http://sabredav.org/ns}email-address']
-                ),
-                array(
-                    'field'     => 'type',
-                    'operator'  => 'equals',
-                    'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
-                )
-            ));
-            
-            $result = Addressbook_Controller_Contact::getInstance()->search($filter, null, false, true);
-            
-            if (count($result) > 0) {
-                $principalUris[] = 'principals/users/' . $result[0];
-            }
+        switch ($prefixPath) {
+            case self::PREFIX_USERS:
+                if (!empty($searchProperties['{http://sabredav.org/ns}email-address'])) {
+                    $filter = new Addressbook_Model_ContactFilter(array(
+                        array(
+                            'field'     => 'email_query',
+                            'operator'  => 'equals',
+                            'value'     => $searchProperties['{http://sabredav.org/ns}email-address']
+                        ),
+                        array(
+                            'field'     => 'type',
+                            'operator'  => 'equals',
+                            'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
+                        )
+                    ));
+                    
+                    $result = Addressbook_Controller_Contact::getInstance()->search($filter, null, false, true);
+                    
+                    if (count($result) > 0) {
+                        $principalUris[] = 'principals/users/' . $result[0];
+                    }
+                }
+                
+                break;
         }
         
         return $principalUris;
