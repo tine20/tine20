@@ -234,26 +234,39 @@
     public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates = NULL)
     {
         try {
-            // find organizer account
-            if ($_event->organizer && $_event->resolveOrganizer()->account_id) {
-                $organizer = Tinebase_User::getInstance()->getFullUserById($_event->resolveOrganizer()->account_id);
-            } else {
-                // use creator as organizer
-                $organizer = Tinebase_User::getInstance()->getFullUserById($_event->created_by);
+            $organizer = $_event->resolveOrganizer();
+            $organizerAccountId = $organizer->account_id;
+            $attendee = $_attender->getResolvedUser();
+            $attendeeAccountId = $_attender->getUserAccountId();
+            
+            $prefUserId = $attendeeAccountId ? $attendeeAccountId :
+                          ($organizerAccountId ? $organizerAccountId : 
+                          ($_event->created_by));
+            
+            try {
+                $prefUser = Tinebase_User::getInstance()->getFullUserById($prefUserId);
+            } catch (Exception $e) {
+                $prefUser = Tinebase_Core::getUser();
+                $prefUserId = $prefUser->getId();
             }
             
             // get prefered language, timezone and notification level
-            $prefUser = $_attender->getUserAccountId();
-            $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUser ? $prefUser : $organizer->getId()));
-            $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUser ? $prefUser : $organizer->getId());
+            $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $prefUserId));
+            $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $prefUserId);
             $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
+            $sendLevel        = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $prefUserId);
+            $sendOnOwnActions = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUserId);
             
-            // check if user wants this notification
-            $sendLevel          = $prefUser ? Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $prefUser) : 100;
-            $sendOnOwnActions   = $prefUser ? Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUser) : 0;
+            // external (non account) notification
+            if (!$attendeeAccountId) {
+                // external organizer needs status updates
+                $sendLevel = $organizer && $_attender->getEmail() == $organizer->getPreferedEmailAddress() ? 40 : 30;
+                $sendOnOwnActions = false;
+            }
             
-            // NOTE: organizer gets mails unless she set notificationlevel to NONE
-            if (($prefUser == $_updater->getId() && ! $sendOnOwnActions) || ($sendLevel < $_notificationLevel && ($prefUser != $organizer->getId() || $sendLevel == self::NOTIFICATION_LEVEL_NONE))) {
+            // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
+            // NOTE prefUser is organzier for external notifications
+            if (($attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions) || ($sendLevel < $_notificationLevel && ($attendeeAccountId != $organizerAccountId || $sendLevel == self::NOTIFICATION_LEVEL_NONE))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Preferred notification level not reached -> skipping notification for {$_attender->getEmail()}");
                 return;
             }
@@ -280,11 +293,9 @@
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
             
-            // NOTE: this is a contact as we only support users and groupmembers
-            $contact = $_attender->getResolvedUser();
-            $sender = $_action == 'alarm' ? $organizer : $_updater;
+            $sender = $_action == 'alarm' ? $prefUser : $_updater;
         
-            Tinebase_Notification::getInstance()->send($sender, array($contact), $messageSubject, $messageBody, $calendarPart, $attachments);
+            Tinebase_Notification::getInstance()->send($sender, array($attendee), $messageSubject, $messageBody, $calendarPart, $attachments);
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " exception: " . $e);
             return;
