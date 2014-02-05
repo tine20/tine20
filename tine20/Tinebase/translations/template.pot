@@ -2955,4 +2955,12 @@ msgstr ""
 msgid "Without company assigned"
 msgstr ""
 
+msgid "Dear"
+msgstr ""
+
+msgid "Dear Mister"
+msgstr ""
+
+msgid "Dear Miss"
+msgstr ""
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>adb_default_doc</name>
+    <type>letter</type>
+    <plugin>Addressbook_Export_Doc</plugin>
+    <template>addressbook_contact_letter.docx</template>
+    <description>default doc letter definition</description>
+    <properties>
+        <prop>org_name</prop>
+        <prop>adr_one_locality</prop>
+        <prop>adr_one_street</prop>
+        <prop>adr_one_postalcode</prop>
+        <prop>n_given</prop>
+        <prop>n_family</prop>
+    </properties>
+</config>

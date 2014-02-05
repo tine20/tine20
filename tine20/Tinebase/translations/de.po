@@ -2965,6 +2965,14 @@ msgid ""
 "container as the default addressbook for internal contacts!"
 msgstr "Es ist nicht erlaubt diesen Ordner zu löschen. Bitte definieren sie zuvor einen anderen Ordner für interne Kontakte!"
 
-
 msgid "Without company assigned"
 msgstr "One Firma"
+
+msgid "Dear"
+msgstr "Guten Tag"
+
+msgid "Dear Mister"
+msgstr "Sehr geehrter Herr"
+
+msgid "Dear Miss"
+msgstr "Sehr geehrte Frau"

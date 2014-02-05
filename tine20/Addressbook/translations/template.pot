@@ -692,3 +692,6 @@ msgstr ""
 #: Controller/Contact.php:330
 msgid "Uploaded new contact image."
 msgstr ""
+
+msgid "Export as DOC"
+msgstr ""

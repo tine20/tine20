@@ -360,6 +360,16 @@ html, body {
     background-image:url(../../images/oxygen/32x32/mimetypes/application-vnd.ms-excel.png) !important;
 }
 
+.tinebase-action-export-doc {
+    background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-word.png) !important;
+}
+.x-btn-medium .tinebase-action-export-doc {
+    background-image:url(../../images/oxygen/22x22/mimetypes/application-vnd.ms-word.png) !important;
+}
+.x-btn-large .tinebase-action-export-doc {
+    background-image:url(../../images/oxygen/32x32/mimetypes/application-vnd.ms-word.png) !important;
+}
+
 
 .tinebase-action-export-ods {
     background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.spreadsheet.png) !important;

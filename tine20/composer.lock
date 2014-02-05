@@ -168,6 +168,42 @@
             "time": "2013-08-30 08:04:33"
         },
         {
+            "name": "phpword/phpword",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://bitbucket.org/kkula/phpword.git",
+                "reference": "4ba9cb7f65618ec6990ecefa5edc6a992db04429"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://bitbucket.org/kkula/phpword/get/4ba9cb7f65618ec6990ecefa5edc6a992db04429.zip",
+                "reference": "4ba9cb7f65618ec6990ecefa5edc6a992db04429",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PHPWord": "Library"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GNU"
+            ],
+            "description": "PHPWord is a library written in PHP that create word documents.",
+            "homepage": "http://phpword.codeplex.com",
+            "keywords": [
+                "doc",
+                "docx",
+                "word"
+            ],
+            "time": "2012-12-25 21:55:12"
+        },
+        {
             "name": "sabre/dav",
             "version": "1.8.7",
             "source": {
@@ -3169,9 +3205,10 @@
         }
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "phpword/phpword": 20,
+        "metaways/opendocument": 20
+    },
     "platform": [
 
     ],

@@ -71,13 +71,14 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'ods':
                 $result = $export->generate();
                 break;
-
+            case 'csv':
+            case 'xls':
+            case 'doc':
+            case 'docx':
+                $result = $export->generate($_filter);
+                break;
             default:
-                if (in_array($format, array('csv', 'xls'))) {
-                    $result = $export->generate($_filter);
-                } else {
-                    throw new Tinebase_Exception_UnexpectedValue('Format ' . $format . ' not supported.');
-                }
+                throw new Tinebase_Exception_UnexpectedValue('Format ' . $format . ' not supported.');
         }
 
         // write headers
@@ -95,6 +96,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 echo $pdfOutput;
                 break;
             case 'xls':
+            case 'doc':
                 // redirect output to client browser
                 $export->write($result);
                 break;

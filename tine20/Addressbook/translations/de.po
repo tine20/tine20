@@ -699,3 +699,7 @@ msgstr "Neuer Kontakt"
 #: Controller/Contact.php:330
 msgid "Uploaded new contact image."
 msgstr "Ein neues Kontaktbild wurde hochgeladen."
+
+
+msgid "Export as DOC"
+msgstr "Als DOC exportieren"
