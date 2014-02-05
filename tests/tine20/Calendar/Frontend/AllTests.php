@@ -30,6 +30,7 @@ class Calendar_Frontend_AllTests
         $suite->addTest(Calendar_Frontend_WebDAV_AllTests::suite());
         $suite->addTestSuite('Calendar_Frontend_CalDAVTest');
         $suite->addTestSuite('Calendar_Frontend_iMIPTest');
+        $suite->addTestSuite('Calendar_Frontend_CalDAV_AllTests');
         return $suite;
     }
 }
