@@ -286,7 +286,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         )));
         $event->attendee->addRecord($this->_createAttender($nonAccountAttender->getId()));
         
+        self::flushMailer();
         $persistentEvent = $this->_eventController->create($event);
+        
+        // invitaion should be send to internal and external attendee
+        $this->_assertMail('pwulf,externer@example.org', 'invitation');
         
         // add alarm
         $persistentEvent->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
@@ -294,32 +298,19 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 'minutes_before' => 30
             ), TRUE)
         ));
-        $updatedEvent = $this->_eventController->update($persistentEvent);
         
         self::flushMailer();
-
+        $updatedEvent = $this->_eventController->update($persistentEvent);
+        
+        // don't send alarm change to external attendee
+        $this->_assertMail('externer@example.org');
+        
+        self::flushMailer();
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         $updatedEvent = $this->_eventController->update($persistentEvent);
         
-        // make sure messages are sent if queue is activated
-        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue();
-        }
-        
-        // check mailer messages
-        $foundNonAccountMessage = FALSE;
-        $foundPWulfMessage = FALSE;
-        foreach(self::getMailer()->getMessages() as $message) {
-            if (in_array($nonAccountEmail, $message->getRecipients())) {
-                $foundNonAccountMessage = TRUE;
-            }
-            if (in_array($this->_getPersona('pwulf')->accountEmailAddress, $message->getRecipients())) {
-                $foundPWulfMessage = TRUE;
-            }
-        }
-        
-        $this->assertTrue($foundNonAccountMessage, 'notification has not been sent to non-account');
-        $this->assertTrue($foundPWulfMessage, 'notfication for pwulf not found');
+        $this->_assertMail('externer@example.org');
+        $this->_assertMail('pwulf', 'declined');
     }
     
     /**
@@ -1076,7 +1067,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         foreach (explode(',', $_personas) as $personaName) {
             $mailsForPersona = array();
-            $personaEmail = $this->_getPersona(trim($personaName))->accountEmailAddress;
+            $personaEmail = strstr($personaName, '@') ? 
+                $personaName : 
+                $this->_getPersona(trim($personaName))->accountEmailAddress;
             
             foreach ($messages as $message) {
                 if (array_value(0, $message->getRecipients()) == $personaEmail) {
