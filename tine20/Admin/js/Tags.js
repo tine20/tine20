@@ -155,12 +155,12 @@ Tine.Admin.Tags.Main = {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
-                    }), {xtype: 'tbspacer', width: 10},
+                    }),
                     Ext.apply(new Ext.Button(this.actions.editTag), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
-                    }), {xtype: 'tbspacer', width: 10},
+                    }),
                     Ext.apply(new Ext.Button(this.actions.deleteTag), {
                         scale: 'medium',
                         rowspan: 2,

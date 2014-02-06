@@ -153,7 +153,6 @@ Tine.Admin.Groups.Main = {
         this.groupsToolbar = new Ext.Toolbar({
             id: 'AdminGroupsToolbar',
             split: false,
-            //height: 26,
             items: [{
                 xtype: 'buttongroup',
                 columns: 5,
@@ -162,12 +161,12 @@ Tine.Admin.Groups.Main = {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
-                    }), {xtype: 'tbspacer', width: 10},
+                    }),
                     Ext.apply(new Ext.Button(this.actions.editGroup), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
-                    }), {xtype: 'tbspacer', width: 10},
+                    }),
                     Ext.apply(new Ext.Button(this.actions.deleteGroup), {
                         scale: 'medium',
                         rowspan: 2,
