@@ -80,7 +80,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.actionResetPassword
         ]);
         
-        this.supr().initActions.call(this);
+        Tine.Admin.user.GridPanel.superclass.initActions.call(this);
     },
     
     /**

@@ -152,29 +152,28 @@ Tine.Admin.Roles.Main = {
         this.rolesToolbar = new Ext.Toolbar({
             id: 'AdminRolesToolbar',
             split: false,
-            //height: 26,
             items: [{
                 // create buttongroup to be consistent
                 xtype: 'buttongroup',
-                columns: 5, 
                 items: [
                     Ext.apply(new Ext.Button(this.actions.addRole), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
-                    }), {xtype: 'tbspacer', width: 10},
+                    }),
                     Ext.apply(new Ext.Button(this.actions.editRole), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
-                    }), {xtype: 'tbspacer', width: 10},
+                    }),
                     Ext.apply(new Ext.Button(this.actions.deleteRole), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
-                    }), {xtype: 'tbspacer', width: 10}
+                    })
                 ]
-            }, '->', 
+            } ,
+            '->', 
                 this.translation.gettext('Search:'), 
                 ' ',
                 RolesQuickSearchField
