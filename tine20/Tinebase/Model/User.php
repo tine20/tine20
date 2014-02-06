@@ -332,6 +332,8 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * @param int|string|Tinebase_Model_User $_accountId the accountid to convert
      * @return int
      * @throws Tinebase_Exception_NotFound
+     * 
+     * TODO replace with TRA::convertId
      */
     static public function convertUserIdToInt($_accountId)
     {

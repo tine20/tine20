@@ -9,6 +9,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        refactor that: remove code duplication, remove Zend_Db_Table_Abstract usage, use standard record controller/backend functions
+ *              -> make use of Tinebase_Backend_Sql_Grants
  * @todo        move (or replace from) functions to backend
  * @todo        switch containers to hash ids
  */
@@ -596,6 +597,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public static function addGrantsSql($_select, $_accountId, $_grant, $_aclTableName = 'container_acl')
     {
+        $accountId = Tinebase_Record_Abstract::convertId($_accountId);
         $db = $_select->getAdapter();
         
         $grants = is_array($_grant) ? $_grant : array($_grant);
@@ -606,14 +608,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
 
         // @todo add groupmembers via join
-        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         $quotedActId   = $db->quoteIdentifier("{$_aclTableName}.account_id");
         $quotedActType = $db->quoteIdentifier("{$_aclTableName}.account_type");
         
         $accountSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         $accountSelect
-            ->orWhere("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $_accountId)
+            ->orWhere("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $accountId)
             ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), empty($groupMemberships) ? ' ' : $groupMemberships);
         
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
@@ -1201,7 +1203,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * set all grant for given container
+     * set all grants for given container
      *
      * @param   int|Tinebase_Model_Container $_containerId
      * @param   Tinebase_Record_RecordSet $_grants
