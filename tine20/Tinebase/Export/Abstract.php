@@ -223,10 +223,23 @@ abstract class Tinebase_Export_Abstract
                 'getRelations' => $this->_getRelations,
             ),
         ));
+        
         $result = $iterator->iterate();
+        
+        $this->_onAfterExportRecords($result);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Exported ' . $result['totalcount'] . ' records.');
+    }
+    
+    /**
+     * template method, gets called after _exportRecords
+     * 
+     * @param array $result
+     */
+    protected function _onAfterExportRecords($result)
+    {
+        
     }
     
     /**
@@ -304,14 +317,14 @@ abstract class Tinebase_Export_Abstract
      */
     protected function _getExportConfig($_additionalOptions = array())
     {
-        if (array_key_exists('definitionFilename', $_additionalOptions)) {
+        if ((isset($_additionalOptions['definitionFilename']) || array_key_exists('definitionFilename', $_additionalOptions))) {
             // get definition from file
             $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
                 $_additionalOptions['definitionFilename'],
                 Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
             );
             
-        } else if (array_key_exists('definitionId', $_additionalOptions)) {
+        } else if ((isset($_additionalOptions['definitionId']) || array_key_exists('definitionId', $_additionalOptions))) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_additionalOptions['definitionId']);
             
         } else {

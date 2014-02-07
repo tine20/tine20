@@ -227,6 +227,19 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
     }
     
     /**
+     * (non-PHPdoc)
+     * @see Tinebase_Export_Abstract::_onAfterExportRecords()
+     */
+    protected function _onAfterExportRecords($result)
+    {
+        // save number of records (only if we have more than 1 sheets / records are on the second sheet by default)
+        if ($this->_excelObject->getSheetCount() > 1) {
+            $this->_excelObject->setActiveSheetIndex(0);
+            $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow(5, 2, $result['totalcount']);
+        }
+    }
+    
+    /**
      * add body rows
      *
      * @param Tinebase_Record_RecordSet $records
@@ -262,12 +275,6 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
             
             $i++;
             $this->_currentRowIndex++;
-        }
-        
-        // save number of records (only if we have more than 1 sheets / records are on the second sheet by default)
-        if ($this->_excelObject->getSheetCount() > 1) {
-            $this->_excelObject->setActiveSheetIndex(0);
-            $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow(5, 2, count($_records));
         }
     }
 }
