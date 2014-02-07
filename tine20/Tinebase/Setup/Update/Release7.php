@@ -458,4 +458,16 @@ class Tinebase_Setup_Update_Release7 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '7.7');
     }
+
+    /**
+     * update to 7.8
+     *
+     * @see 0009644: remove user registration
+     */
+    public function update_7()
+    {
+        $this->dropTable('registrations');
+        $this->dropTable('registration_invitation');
+        $this->setApplicationVersion('Tinebase', '7.8');
+    }
 }
