@@ -866,7 +866,7 @@ textarea.tinebase-editmultipledialog-noneedit {
     }
     
 .tinebase-editmultipledialog-clearer {
-    background: transparent url(../../styles/images/tine20/form/clear-trigger.gif) -16px top no-repeat;
+    background: transparent url("../../themes/tine20/resources/images/tine20/form/clear-trigger.gif") -16px top no-repeat;
     border-bottom:1px solid #7eadd9; 
     height:18px;
     width:18px;
