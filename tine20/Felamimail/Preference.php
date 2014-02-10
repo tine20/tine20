@@ -111,8 +111,8 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                 'description'   => $translate->_('How often should Felamimail check for new Emails (in minutes).'),
             ),
             self::USEINADB  => array(
-                'label'         => $translate->_('Use in Addressbook'),
-                'description'   => $translate->_('Compose Emails from the Addressbook with Felamimail.'),
+                'label'         => $translate->_('Use for mailto links'),
+                'description'   => $translate->_('Use Felamimail in mailto links, otherwise use the default desktop client.'),
             ),
             self::AUTOATTACHNOTE  => array(
                 'label'         => $translate->_('Use for NOTES'),
