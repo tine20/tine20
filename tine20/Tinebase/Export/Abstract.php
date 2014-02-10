@@ -223,10 +223,23 @@ abstract class Tinebase_Export_Abstract
                 'getRelations' => $this->_getRelations,
             ),
         ));
+        
         $result = $iterator->iterate();
+        
+        $this->_onAfterExportRecords($result);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Exported ' . $result['totalcount'] . ' records.');
+    }
+    
+    /**
+     * template method, gets called after _exportRecords
+     * 
+     * @param array $result
+     */
+    protected function _onAfterExportRecords($result)
+    {
+        
     }
     
     /**

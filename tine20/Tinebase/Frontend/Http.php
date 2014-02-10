@@ -629,48 +629,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         return gmdate("D, d M Y H:i:s", $timeStamp) . " GMT";
     }
-    
-    /**
-     * activate user account
-     *
-     * @param     string $id
-     * 
-     */
-    public function activateUser( $id ) 
-    {
-        // update registration table and get username / account values
-        $account = Tinebase_User_Registration::getInstance()->activateUser( $id );
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' activated account for ' . $account['accountLoginName']);
-        
-        $view = new Zend_View();
-        $view->title="Tine 2.0 User Activation";
-        $view->username = $account['accountLoginName'];
-        $view->loginUrl = $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
-
-        $view->setScriptPath('Tinebase/views');
-        
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('activate.php');
-    
-    }
-    
-    /**
-     * show captcha
-     *
-     * @todo    add to user registration process
-     */
-    public function showCaptcha () 
-    {
-        $captcha = Tinebase_User_Registration::getInstance()->generateCaptcha();
-        
-        //Tell the browser what kind of file is come in
-        header("Content-Type: image/jpeg");
-
-        //Output the newly created image in jpeg format
-        ImageJpeg($captcha);
-        
-    }
 
     /**
      * receives file uploads and stores it in the file_uploads db
