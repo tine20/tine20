@@ -904,7 +904,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $groupMembersTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
         $roleMembersTable       = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
-        $userRegistrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
@@ -928,7 +927,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $where  = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('login_name') . ' = ?', $user->accountLoginName),
             );
-            $userRegistrationsTable->delete($where);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
