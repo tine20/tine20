@@ -392,7 +392,6 @@ Tine.Tinebase.ApplicationStarter = {
                         
                         if (f) {
                             Tine.widgets.grid.FilterRegistry.register(appName, modelName, f);
-                            filterModel.push(f);
                         }
                     }, this);
                     
