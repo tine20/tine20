@@ -118,6 +118,16 @@ abstract class Tinebase_Model_Filter_Abstract
     }
     
     /**
+     * returns the id of the filter
+     * 
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+    
+    /**
      * returns operators of this filter model
      * @return array
      */
