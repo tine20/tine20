@@ -20,7 +20,7 @@ class SimpleFAQ_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeFavorites()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
 
         $commonValues = array(
             'account_id'        => NULL,
@@ -28,7 +28,7 @@ class SimpleFAQ_Setup_Initialize extends Setup_Initialize
             'model'             => 'SimpleFAQ_Model_FaqFilter',
         );
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => SimpleFAQ_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All FAQs of my FAQ Lists", // _("All FAQs of my FAQ Lists")
             'filters'           => array(
@@ -36,7 +36,7 @@ class SimpleFAQ_Setup_Initialize extends Setup_Initialize
             )
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Last modified by me", // _("Last modified by me")
             'description'       => "All FAQs that I have last modified", // _("All FAQs that I have last modified")
             'filters'           => array(array(

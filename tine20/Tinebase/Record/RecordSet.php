@@ -112,7 +112,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function addRecord(Tinebase_Record_Interface $_record, $_index = NULL)
     {
         if (! $_record instanceof $this->_recordClass) {
-            throw new Tinebase_Exception_Record_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
+            throw new Tinebase_Exception_Record_NotAllowed('Attempt to add/set record of wrong record class ('
+                . get_class($_record) . ') Should be ' . $this->_recordClass);
         }
         $this->_listOfRecords[] = $_record;
         end($this->_listOfRecords);

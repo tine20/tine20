@@ -21,7 +21,7 @@ class Calendar_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeFavorites()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -29,7 +29,7 @@ class Calendar_Setup_Initialize extends Setup_Initialize
             'model'             => 'Calendar_Model_EventFilter',
         );
         
-        $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $myEventsPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => Calendar_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All events I attend", // _("All events I attend")
             'filters'           => array(
@@ -43,7 +43,7 @@ class Calendar_Setup_Initialize extends Setup_Initialize
             )
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Awaiting response", //_("Awaiting response")
             'description'       => "Events I have not yet responded to", // _("Events I have not yet responded to")
             'filters'           => array(
@@ -59,7 +59,7 @@ class Calendar_Setup_Initialize extends Setup_Initialize
             )
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Declined events", //_("Declined events")
             'description'       => "Events I have declined", // _("Events I have declined")
             'filters'           => array(
@@ -73,7 +73,7 @@ class Calendar_Setup_Initialize extends Setup_Initialize
             )
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "I'm organizer", //_("I'm organizer")
             'description'       => "Events I'm the organizer of", // _("Events I'm the organizer of")
             'filters'           => array(

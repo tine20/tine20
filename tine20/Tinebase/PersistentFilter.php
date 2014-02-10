@@ -6,7 +6,7 @@
  * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,11 +15,9 @@
  * @package     Tinebase
  * @subpackage  PersistentFilter
  * 
- * @todo rework account_id to container_id to let Persistent_Filters be organised
- *       in standard container / grants way. This depends on container class to cope
- *       with multiple models per app which is not yet implementet (2010-05-05)
+ * @todo remove account_id and only use grants to manage shared / personal filters
  */
-class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
+class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
 {
     /**
      * application name
@@ -64,6 +62,13 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
     protected $_modelName = 'Tinebase_Model_PersistentFilter';
     
     /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_grantsModel = 'Tinebase_Model_PersistentFilterGrant';
+    
+    /**
      * @var Tinebase_PersistentFilter
      */
     private static $_instance = NULL;
@@ -73,8 +78,13 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
-        $this->_backend         = new Tinebase_PersistentFilter_Backend_Sql();
+    private function __construct()
+    {
+        $this->_backend = new Tinebase_PersistentFilter_Backend_Sql();
+        $this->_grantsBackend = new Tinebase_Backend_Sql_Grants(array(
+            'modelName' => $this->_grantsModel,
+            'tableName' => 'filter_acl'
+        ));
     }
 
     /**
@@ -119,13 +129,16 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      * @param  string $_returnDefaultId only return id of default identified by given name
      * @return array|string filterId => translated name
      */
-    public static function getPreferenceValues($_appName, $_accountId = NULL, $_returnDefaultId = NULL)
+    public static function getPreferenceValues($_appName, $_accountId = null, $_returnDefaultId = null)
     {
         $i18n = Tinebase_Translation::getTranslation($_appName);
         $pfilters = self::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(
             array('field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName($_appName)->getId()),
             array('field' => 'account_id',     'operator' => 'equals', 'value'  => $_accountId ? $_accountId : Tinebase_Core::getUser()->getId()),
         )));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Got ' . count($pfilters) . ' persistent filters');
         
         if (! $_returnDefaultId) {
             $result = array();
@@ -141,33 +154,33 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
             return $result;
         } else {
             $filter = $pfilters->filter('name', $_returnDefaultId)->getFirstRecord();
-            return $filter ? $filter->getId() : NULL;
+            return $filter ? $filter->getId() : null;
         }
     }
     
     /**
      * add one record
      *
-     * @param   Tinebase_Record_Interface $_record
+     * @param   Tinebase_Record_Interface $record
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $record)
     {
         // check first if we already have a filter with this name for this account/application in the db
-        $this->_sanitizeAccountId($_record);
+        $this->_sanitizeAccountId($record);
         
         $existing = $this->search(new Tinebase_Model_PersistentFilterFilter(array(
-            'account_id'        => $_record->account_id,
-            'application_id'    => $_record->application_id,
-            'name'              => $_record->name,
+            'account_id'        => $record->account_id,
+            'application_id'    => $record->application_id,
+            'name'              => $record->name,
         )));
         
         if (count($existing) > 0) {
-            $_record->setId($existing->getFirstRecord()->getId());
-            $result = $this->update($_record);
+            $record->setId($existing->getFirstRecord()->getId());
+            $result = $this->update($record);
         } else {
-            $result = parent::create($_record);
+            $result = parent::create($record);
         }
         
         return $result;
@@ -176,21 +189,21 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
     /**
      * inspect update of one record (before update)
      *
-     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
      */
-    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    protected function _inspectBeforeUpdate($record, $_oldRecord)
     {
-        $this->_checkManageRightForCurrentUser($_record, true);
-        $modelName = explode('_', $_record->model);
+        $this->_checkManageRightForCurrentUser($record, true);
+        $modelName = explode('_', $record->model);
         $translate = Tinebase_Translation::getTranslation($modelName[0]);
         // check if filter was shipped.
         if ($_oldRecord->created_by == NULL && $_oldRecord->account_id == NULL) {
             // if shipped, check if values have changed
-            if (($_record->account_id !== NULL) || $translate->_($_oldRecord->name) != $_record->name || $translate->_($_oldRecord->description) != $_record->description) {
+            if (($record->account_id !== NULL) || $translate->_($_oldRecord->name) != $record->name || $translate->_($_oldRecord->description) != $record->description) {
                 // if values have changed, set created_by to current user, so record is not shipped anymore
-                $_record->created_by = Tinebase_Core::getUser()->getId();
+                $record->created_by = Tinebase_Core::getUser()->getId();
             }
         }
     }
@@ -198,49 +211,86 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
     /**
      * set account_id to currentAccount if user has no MANAGE_SHARED_<recordName>_FAVORITES right
      * 
-     * @param  Tinebase_Record_Interface $_record
+     * @param  Tinebase_Record_Interface $record
      * @return void
      */
-    protected function _sanitizeAccountId($_record)
+    protected function _sanitizeAccountId($record)
     {
-        if (! $_record->account_id || $_record->account_id !== Tinebase_Core::getUser()->getId()) {
-            if (! $this->_checkManageRightForCurrentUser($_record, false)) {
-                $_record->account_id = Tinebase_Core::getUser()->getId();
+        if (! $record->account_id || ! $this->_belongsToCurrentUser($record)) {
+            if (! $this->_checkManageRightForCurrentUser($record, false)) {
+                $record->account_id = Tinebase_Core::getUser()->getId();
             }
         }
     }
     
     /**
+     * add default grants
+     * 
+     * @param   Tinebase_Record_Interface $record
+     * @param   $boolean $addDuringSetup -> let admin group have all rights instead of user
+     */
+    protected function _setDefaultGrants($record, $addDuringSetup = false)
+    {
+        parent::_setDefaultGrants($record, $addDuringSetup);
+        
+        if (    ! $record->isPersonal()
+             && ! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, false) 
+             && in_array(Tinebase_Model_Grants::GRANT_READ, call_user_func($this->_grantsModel . '::getAllGrants'))
+        ) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Set read grant for anyone');
+            
+            $record->grants->addRecord(new Tinebase_Model_PersistentFilterGrant(array(
+                'account_id'       => 0,
+                'account_type'     => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                'record_id'        => $record->getId(),
+                Tinebase_Model_Grants::GRANT_READ   => true,
+            )));
+        }
+    }
+    
+    /**
+     * checks if filter belongs to current user
+     * 
+     * @param Tinebase_Record_Interface $record
+     * @return boolean
+     */
+    protected function _belongsToCurrentUser($record)
+    {
+        return (is_object(Tinebase_Core::getUser()) && $record->account_id === Tinebase_Core::getUser()->getId());
+    }
+    
+    /**
      * checks if the current user has the manage shared favorites right for the model of the record
-     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $record
      * @throws Tinebase_Exception_AccessDenied
      * @return boolean
      */
-    protected function _checkManageRightForCurrentUser($_record, $_throwException = false)
+    protected function _checkManageRightForCurrentUser($record, $_throwException = false)
     {
-        if ($_record->account_id === Tinebase_Core::getUser()->getId()) {
+        if ($this->_belongsToCurrentUser($record)) {
             // you always have the right to manage your own filters
             return;
         }
         
         $existing = $this->search(new Tinebase_Model_PersistentFilterFilter(array(
-            'account_id'        => $_record->account_id,
-            'application_id'    => $_record->application_id,
-            'name'              => $_record->name,
+            'account_id'        => $record->account_id,
+            'application_id'    => $record->application_id,
+            'name'              => $record->name,
         )));
         
         if ($existing->count() > 0) {
             $rec = $existing->getFirstRecord();
         } else {
-            $rec = $_record;
+            $rec = $record;
         }
 
         // if we are owner of persistent filter we don't need to check right
-        if ($_record->account_id == Tinebase_Core::getUser()->getId()) {
+        if ($record->account_id == Tinebase_Core::getUser()->getId()) {
             return TRUE;
         }
         
-        $right = Tinebase_Core::getUser()->hasRight($_record->application_id, $this->_getManageSharedRight($rec));
+        $right = Tinebase_Core::getUser()->hasRight($record->application_id, $this->_getManageSharedRight($rec));
         if (! $right && $_throwException) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to manage shared favorites!'); 
         }
@@ -250,12 +300,12 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
     
     /**
      * returns the name of the manage shared right for the record given
-     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $record
      * @return string
      */
-    protected function _getManageSharedRight($_record)
+    protected function _getManageSharedRight($record)
     {
-        $split = explode('_Model_', str_replace('Filter', '', $_record->model));
+        $split = explode('_Model_', str_replace('Filter', '', $record->model));
         $rightClass = $split[0] . '_Acl_Rights';
         $rightConstant = 'MANAGE_SHARED_' . strtoupper($split[1]) . '_FAVORITES';
         
@@ -268,24 +318,32 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      * @param array $_ids
      * @return array of ids to actually delete
      */
-    protected function _inspectDelete(array $_ids) {
-        
+    protected function _inspectDelete(array $_ids) 
+    {
         $recordsToDelete = $this->search(new Tinebase_Model_PersistentFilterFilter(array(array(
-            'field' => 'id', 'operator' => 'in', 'value' => $_ids
+            'field' => 'id', 'operator' => 'in', 'value' => (array)$_ids
         ))));
-
+        
+        if (count($recordsToDelete) === 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' No records found.');
+            return array();
+        }
+        
+        foreach ($recordsToDelete as $record) {
+            $this->_checkGrant($record, 'delete');
+            
+            // check if filter is from another user
+            if ($record->account_id !== null && $record->account_id !== Tinebase_Core::getUser()->accountId) {
+                throw new Tinebase_Exception_AccessDenied('You are not allowed to delete other users\' favorites!');
+            }
+        }
+        
         if (! Tinebase_Core::getUser()->hasRight($recordsToDelete->getFirstRecord()->application_id, $this->_getManageSharedRight($recordsToDelete->getFirstRecord()))) {
             foreach ($recordsToDelete as $record) {
                 if ($record->account_id === null) {
                     throw new Tinebase_Exception_AccessDenied('You are not allowed to manage shared favorites!');
                 }
-            }
-        }
-        
-        // check if filter is from another user
-        foreach ($recordsToDelete as $record) {
-            if ($record->account_id !== null && $record->account_id !== Tinebase_Core::getUser()->accountId) {
-                throw new Tinebase_Exception_AccessDenied('You are not allowed to delete other users\' favorites!');
             }
         }
         

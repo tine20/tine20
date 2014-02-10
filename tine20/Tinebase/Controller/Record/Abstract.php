@@ -930,6 +930,9 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _setRelatedData($updatedRecord, $record, $returnUpdatedRelatedData = FALSE)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Update record: ' . print_r($record->toArray(), true));
+        
         if ($record->has('relations') && isset($record->relations) && is_array($record->relations)) {
             $type = $this->_getBackendType();
             Tinebase_Relations::getInstance()->setRelations($this->_modelName, $type, $updatedRecord->getId(), $record->relations);

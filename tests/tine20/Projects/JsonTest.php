@@ -232,6 +232,7 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
         $favoriteId = Tinebase_PersistentFilter::getInstance()->getPreferenceValues('Projects', NULL, 'All my projects');
         $favorite = Tinebase_PersistentFilter::getInstance()->getFilterById($favoriteId);
         
+        $this->assertTrue($favorite instanceof Tinebase_Model_Filter_FilterGroup);
         $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
         $this->assertEquals(array(
             array(
@@ -259,8 +260,12 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
     {
         $favoriteId = Tinebase_PersistentFilter::getInstance()->getPreferenceValues('Projects', NULL, 'All my projects');
         $favorite = Tinebase_PersistentFilter::getInstance()->get($favoriteId);
+        
+        $this->assertTrue($favorite->filters instanceof Tinebase_Model_Filter_FilterGroup);
+        
         $favorite->name = 'testfilter';
         unset($favorite->id);
+        
         // add filter with id and label
         $favorite->filters->addFilter(new Tinebase_Model_Filter_Text(array(
             'field'     => 'title',

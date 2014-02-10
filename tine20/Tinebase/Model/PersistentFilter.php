@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -18,7 +18,7 @@
 class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract 
 {
     /**
-     * key in $_validators/$_properties array for the filed which 
+     * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
      * @var string
@@ -42,11 +42,12 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'application_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true), // if this is null, this is a shared filter
         'model'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'filters'               => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'presence'=>'required'),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'grants'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -95,7 +96,6 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
      * users timezone and converts them to UTC
      *
      * @param  string $_data json encoded data
-     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
     public function setFromJsonInUsersTimezone($_data)
     {
@@ -141,5 +141,15 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
         }
         
         return $filter;
+    }
+
+    /**
+     * returns true if this is a personal filter
+     * 
+     * @return boolean
+     */
+    public function isPersonal()
+    {
+        return ! empty($this->account_id);
     }
 }

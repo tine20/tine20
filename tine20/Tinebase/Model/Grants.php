@@ -151,20 +151,17 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             $user = Tinebase_Core::getUser();
         }
         
-        // @todo switch to TRACE
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Grant ' . print_r($this->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Check grant ' . $grant . ' for user ' . $user->getId() . ' in ' . print_r($this->toArray(), true));
         
         if (! is_object($user)) {
-            // @todo switch to TRACE
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' No user object');
             return false;
         }
         
         if (! in_array($grant, $this->getAllGrants()) || ! isset($this->{$grant}) || ! $this->{$grant}) {
-            // @todo switch to TRACE
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Grant not defined or not set');
             return false;
         }
@@ -172,20 +169,44 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         switch ($this->account_type) {
             case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                 if (! in_array($user->getId(), Tinebase_Group::getInstance()->getGroupMembers($this->account_id))) {
-                    // @todo switch to TRACE
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                         . ' Current user not member of group ' . $this->account_id);
                     return false;
                 }
                 break;
             case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                 if ($user->getId() !== $this->account_id) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                         . ' Grant not available for current user (account_id of grant: ' . $this->account_id . ')');
                     return false;
                 }
         }
         
         return true;
+    }
+
+    /**
+     * fills record with all grants and adds account id
+     */
+    public function sanitizeAccountIdAndFillWithAllGrants()
+    {
+        if ($this->account_id == 0) {
+            if ($this->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+                $this->account_id = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
+            } elseif ($this->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && is_object(Tinebase_Core::getUser())) {
+                $this->account_id = Tinebase_Core::getUser()->getId();
+            } else {
+                throw new Tinebase_Exception_InvalidArgument('wrong account type or no user object found');
+            }
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Set all available grants for ' . $this->account_type . ' with id ' . $this->account_id);
+        
+        foreach ($this->getAllGrants() as $grant) {
+            $this->$grant = true;
+        }
+        
+        return $this;
     }
 }

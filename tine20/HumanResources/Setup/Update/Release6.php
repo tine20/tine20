@@ -318,7 +318,7 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
         
         // create persistenfilters
         
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -326,7 +326,7 @@ class HumanResources_Setup_Update_Release6 extends Setup_Update_Abstract
             'model'             => 'HumanResources_Model_EmployeeFilter',
         );
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Currently employed", // _("Currently employed")
             'description'       => "Employees which are currently employed", // _("Employees which are currently employed")
             'filters'           => array(array('field' => 'is_employed', 'operator' => 'equals', 'value' => 1)),

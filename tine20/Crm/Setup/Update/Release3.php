@@ -30,9 +30,9 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_1()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
-        $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
+        $myEventsPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array(
             'name'              => Crm_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All leads I have read grants for", // _("All leads I have read grants for")
             'account_id'        => NULL,
@@ -49,7 +49,7 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_2()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         $defaultFavorite = $pfe->getByProperty(Crm_Preference::DEFAULTPERSISTENTFILTER_NAME, 'name');
         $defaultFavorite->bypassFilters = TRUE;
         
@@ -68,7 +68,7 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_3()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -76,7 +76,7 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
             'model'             => 'Crm_Model_LeadFilter',
         );
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Last modified by me",
             'description'       => "All leads that I have last modified",
             'filters'           => array(array(
@@ -86,7 +86,7 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
             )),
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My leads",
             'description'       => "All leads that I am responsible for",
             'filters'           => array(array(
@@ -100,7 +100,7 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
             )),
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Leads with overdue tasks",
             'description'       => "Leads with overdue tasks",
             'filters'           => array(array(

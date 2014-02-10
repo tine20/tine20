@@ -135,8 +135,8 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
         }
         
         // add persistentfilter all employees
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
-        $pfe->create(new Tinebase_Model_PersistentFilter(array(
+        $pfe = Tinebase_PersistentFilter::getInstance();
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array(
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('HumanResources')->getId(),
             'model'             => 'HumanResources_Model_EmployeeFilter',

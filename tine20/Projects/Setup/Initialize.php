@@ -64,7 +64,7 @@ class Projects_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeFavorites()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -74,7 +74,7 @@ class Projects_Setup_Initialize extends Setup_Initialize
         
         $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => Projects_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All my open projects", // _("All my open projects")
             'filters'           => array(
@@ -95,7 +95,7 @@ class Projects_Setup_Initialize extends Setup_Initialize
             )
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My projects that I'm responsible for",           // _("My projects that I'm responsible for")
             'description'       => "All my open projects that I am responsible for", // _("All my open projects that I am responsible for")
             'filters'           => array(
@@ -116,7 +116,7 @@ class Projects_Setup_Initialize extends Setup_Initialize
             )
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My waiting projects",          // _("My waiting projects")
             'description'       => "My projects that are on hold", // _("My projects that are on hold")
             'filters'           => array(

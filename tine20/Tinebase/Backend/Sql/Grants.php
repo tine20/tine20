@@ -37,8 +37,7 @@ class Tinebase_Backend_Sql_Grants extends Tinebase_Backend_Sql
 
         $grantsData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        // @todo switch to TRACE
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' grantsData: ' . print_r($grantsData, true));
 
         foreach ($grantsData as $grantData) {
@@ -57,8 +56,7 @@ class Tinebase_Backend_Sql_Grants extends Tinebase_Backend_Sql
             $record->grants->addRecord($recordGrant);
         }
         
-        // @todo switch to TRACE
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Records with grants: ' . print_r($records->toArray(), true));
     }
     

@@ -21,7 +21,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeFavorites()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -29,13 +29,13 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             'model'             => 'HumanResources_Model_EmployeeFilter',
         );
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Currently employed employees", // _("Currently employed employees")
             'description'       => "Employees which are currently employed", // _("Employees which are currently employed")
             'filters'           => array(array('field' => 'is_employed', 'operator' => 'equals', 'value' => 1)),
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "All employees", // _("All employees")
             'description'       => "All available employees", // _("All available employees")
             'filters'           => array(),
@@ -48,7 +48,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             'model'             => 'HumanResources_Model_AccountFilter',
         );
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "All accounts", // _("All accounts")
             'description'       => "All available accounts", // _("All available accounts")
             'filters'           => array(),

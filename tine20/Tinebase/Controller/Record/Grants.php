@@ -7,6 +7,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
+ * @todo add caching? we could use the record seq for this.
  */
 abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Record_Abstract
 {
@@ -46,25 +48,22 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             return $hasGrant;
         }
         
-        $recordForGrantsCheck = $oldRecord ? $oldRecord : $record;
+        // always get current record grants
+        $currentRecord = $this->_backend->get($record->getId());
+        $this->_getGrants($currentRecord);
         
-        if (empty($recordForGrantsCheck->grants)) {
-            $this->_getGrants($recordForGrantsCheck);
-        }
-        
-        // @todo switch to TRACE
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Checked record (incl. grants): ' . print_r($recordForGrantsCheck->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Checked record (incl. grants): ' . print_r($currentRecord->toArray(), true));
         
         switch ($action) {
             case 'get':
-                $hasGrant = $this->hasGrant($recordForGrantsCheck, Tinebase_Model_Grants::GRANT_READ);
+                $hasGrant = $this->hasGrant($currentRecord, Tinebase_Model_Grants::GRANT_READ);
                 break;
             case 'update':
-                $hasGrant = $this->hasGrant($recordForGrantsCheck, Tinebase_Model_Grants::GRANT_EDIT);
+                $hasGrant = $this->hasGrant($currentRecord, Tinebase_Model_Grants::GRANT_EDIT);
                 break;
             case 'delete':
-                $hasGrant = $this->hasGrant($recordForGrantsCheck, Tinebase_Model_Grants::GRANT_DELETE);
+                $hasGrant = $this->hasGrant($currentRecord, Tinebase_Model_Grants::GRANT_DELETE);
                 break;
         }
         
@@ -111,7 +110,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
     protected function _setRelatedData($updatedRecord, $record, $returnUpdatedRelatedData = false)
     {
         $updatedRecord->grants = $record->grants;
-        $this->_setGrants($updatedRecord);
+        $this->setGrants($updatedRecord);
         
         return parent::_setRelatedData($updatedRecord, $record, $returnUpdatedRelatedData);
     }
@@ -125,7 +124,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * 
      * @todo improve algorithm: only update/insert/delete changed grants
      */
-    protected function _setGrants($record, $addDuringSetup = false)
+    public function setGrants($record, $addDuringSetup = false)
     {
         $recordId = $record->getId();
         
@@ -133,17 +132,15 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             throw new Timetracker_Exception_UnexpectedValue('record id required to set grants');
         }
         
-        // @todo always add default grants? we should add a check for "valid" grants: one "edit" grant should always exist.
-        if (empty($record->grants)) {
-            $this->_addDefaultGrants($record, $addDuringSetup);
+        if (! $this->_validateGrants($record)) {
+            $this->_setDefaultGrants($record, $addDuringSetup);
         }
         
         try {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Setting grants for record ' . $recordId);
             
-            // @todo switch to TRACE
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Grants: ' . print_r($record->grants->toArray(), true));
             
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -161,9 +158,6 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
-            // @todo add caching?
-            //$this->_clearCache();
-            
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -172,6 +166,30 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         
         return $record->grants;
     }
+    
+    /**
+     * check for "valid" grants: one "edit" / admin? grant should always exist.
+     * 
+     * -> returns false if no edit grants were found
+     * 
+     * @param Tinebase_Record_Interface $record
+     * @return boolean
+     */
+    protected function _validateGrants($record)
+    {
+        if (empty($record->grants)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Record has no grants.');
+            return false;
+        }
+        
+        $editGrants = $record->grants->filter(Tinebase_Model_Grants::GRANT_EDIT, true);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Number of edit grants: ' . count($editGrants));
+        
+        return (count($editGrants) > 0);
+    }
 
     /**
      * add default grants
@@ -179,48 +197,18 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * @param   Tinebase_Record_Interface $record
      * @param   $boolean $addDuringSetup -> let admin group have all rights instead of user
      */
-    protected function _addDefaultGrants($record, $addDuringSetup = false)
+    protected function _setDefaultGrants($record, $addDuringSetup = false)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Setting default grants ...');
+        
         $record->grants = new Tinebase_Record_RecordSet($this->_grantsModel);
-        $availableGrants = call_user_func($this->_grantsModel . '::getAllGrants');
-        
-        if ($addDuringSetup) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Set all available grants for filter ' . $record->name . ' for admin group');
-            
-            $allGrants = array(
-                'account_id'       => Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(),
-                'account_type'     => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
-            );
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Set all available grants for filter ' . $record->name . '  for current user');
-            
-            $allGrants = array(
-                'account_id'       => Tinebase_Core::getUser()->getId(),
-                'account_type'     => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            );
-        }
-        $allGrants['record_id'] = $record->getId();
-        foreach ($availableGrants as $grant) {
-            $allGrants[$grant] = true;
-        }
-        $record->grants->addRecord(new Tinebase_Model_PersistentFilterGrant($allGrants));
-        
-        if (    $record->account_id === null 
-            && ! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, false) 
-             && in_array(Tinebase_Model_Grants::GRANT_READ, $availableGrants)
-        ) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Set read grant for anyone');
-            
-            $record->grants->addRecord(new Tinebase_Model_PersistentFilterGrant, array(
-                'account_id'       => 0,
-                'account_type'     => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                'record_id'        => $record->getId(),
-                Tinebase_Model_Grants::GRANT_READ   => true,
-            ));
-        }
+        $grant = new $this->_grantsModel(array(
+            'account_type' => $addDuringSetup ? Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'record_id'    => $record->getId(),
+        ));
+        $grant->sanitizeAccountIdAndFillWithAllGrants();
+        $record->grants->addRecord($grant);
     }
     
     /**
@@ -237,7 +225,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
     {
         $createdRecord = $this->_backend->create($record);
         $createdRecord->grants = $record->grants;
-        $this->_setGrants($createdRecord, /* addDuringSetup = */ true);
+        $this->setGrants($createdRecord, /* addDuringSetup = */ true);
         return $createdRecord;
     }
     
@@ -265,8 +253,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
     {
         $recordset = ($records instanceof Tinebase_Record_Abstract) ? new Tinebase_Record_RecordSet($this->_modelName, array($records)) : $records;
         
-        // @todo switch to TRACE
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Get grants for ' . count($recordset). ' records.');
         
         $this->_grantsBackend->getGrantsForRecords($recordset);

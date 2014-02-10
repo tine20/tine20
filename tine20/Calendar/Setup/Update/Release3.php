@@ -157,9 +157,9 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_3()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
-        $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
+        $myEventsPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array(
             'name'              => Calendar_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All events I attend", // _("All events I attend")
             'account_id'        => NULL,
@@ -181,7 +181,7 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_4()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         $defaultFavorite = $pfe->getByProperty(Calendar_Preference::DEFAULTPERSISTENTFILTER_NAME, 'name');
         $defaultFavorite->bypassFilters = TRUE;
         
@@ -287,9 +287,9 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_7()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array(
             'name'              => "Awaiting response",
             'description'       => "Events I have not yet responded to",
             'account_id'        => NULL,
@@ -308,7 +308,7 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
             )
         )));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array(
             'name'              => "Declined events",
             'description'       => "Events I have declined",
             'account_id'        => NULL,
@@ -325,7 +325,7 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
             )
         )));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array(
             'name'              => "I'm organizer",
             'description'       => "Events I'm the organizer of",
             'account_id'        => NULL,
