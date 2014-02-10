@@ -52,7 +52,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
         'billed_in'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_cleared'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'is_cleared_combined'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'cleared_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // custom fields array
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),    
     // modlog information
@@ -78,8 +77,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
      * @var array list of datetime fields
      */    
     protected $_datetimeFields = array(
-        'cleared_time',
-    // modlog
         'creation_time',
         'last_modified_time',
         'deleted_time',
