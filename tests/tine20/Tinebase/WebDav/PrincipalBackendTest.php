@@ -68,12 +68,14 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
      */
     public function testGetPrincipalByGroupPath()
     {
-        $principal = $this->_backend->getPrincipalByPath(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/' . Tinebase_Core::getUser()->accountPrimaryGroup);
+        $list = Tinebase_Group::getInstance()->getGroupById(Tinebase_Core::getUser()->accountPrimaryGroup);
+        
+        $principal = $this->_backend->getPrincipalByPath(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/' . $list->list_id);
         
         //var_dump($principal);
         
-        $this->assertEquals(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/' . Tinebase_Core::getUser()->accountPrimaryGroup, $principal['uri']);
-        $this->assertEquals('Tine 2.0 group ' . Tinebase_Core::getUser()->accountPrimaryGroup, $principal['{DAV:}displayname']);
+        $this->assertEquals(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/' . $list->list_id, $principal['uri']);
+        $this->assertEquals($list->name . ' (Group)', $principal['{DAV:}displayname']);
     }
     
     public function testGetPrincipalByUserPath()

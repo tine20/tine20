@@ -64,8 +64,8 @@ class Tinebase_WebDav_Root extends DAV\SimpleCollection
             new DAV\SimpleCollection('tasks',                          $caldavTasksChildren),
             new DAV\SimpleCollection('webdav',                         $webdavChildren),
             new DAV\SimpleCollection('principals', array(
-                new DAVACL\PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), Tinebase_WebDav_PrincipalBackend::PREFIX_USERS),
-                new DAVACL\PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS)
+                new Tinebase_WebDav_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), Tinebase_WebDav_PrincipalBackend::PREFIX_USERS),
+                new Tinebase_WebDav_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS)
             )),
             // main entry point for ownCloud 
             new DAV\SimpleCollection('remote.php',                     $ownCloudChildren)
