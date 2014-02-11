@@ -67,7 +67,7 @@ class Phone_Model_Call extends Tinebase_Record_Abstract
                 )
              ),
             'phone_id'              => array(
-                'label'      => NULL,//'Phone', // _('Phone')
+                'label'      => NULL,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
                 'type'       => 'record',
                 'config' => array(

@@ -349,7 +349,6 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'duration'       => 480,
                     'description'    => static::$_de ? 'DemoData eigenes Zeitkonto' : 'DemoData own timeaccount',
                     'is_cleared'     => (($ta->status == 'billed') ? true : false),
-                    'cleared_time'   => (($ta->status == 'billed') ? $startDate : NULL)
                  ));
             } else {
                 
@@ -364,7 +363,6 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'duration'       => 240,
                     'description'    => static::$_de ? ('DemoData auf KST ' . $cc->number) : ('DemoData on costcenter ' . $cc->number),
                     'is_cleared'     => (($ta->status == 'billed') ? true : false),
-                    'cleared_time'   => (($ta->status == 'billed') ? $startDate : NULL)
                 ));
                 
                 $sd = clone $startDate;
@@ -380,7 +378,6 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'duration'       => 240,
                     'description'    => static::$_de ? ('DemoData auf KST ' . $cc->number) : ('DemoData on costcenter ' . $cc->number),
                     'is_cleared'     => (($ta->status == 'billed') ? true : false),
-                    'cleared_time'   => (($ta->status == 'billed') ? $startDate : NULL)
                 ));
             }
         

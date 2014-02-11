@@ -39,7 +39,7 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
         $record = $userPhones->getFirstRecord();
         if ($record) {
             $filter = $this->createFilter(
-                array('field' => 'phone_id', 'operator' => 'AND', 'value' => array(
+                array('id' => 'defaultAdded', 'field' => 'phone_id', 'operator' => 'AND', 'value' => array(
                     array('field' => ':id', 'operator' => 'equals', 'value' => $record->getId())
                 ))
             );
@@ -49,6 +49,23 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
         
         $filter->setIsImplicit(TRUE);
         return $filter;
+    }
+    
+    /**
+     * returns array with the filter settings of this filter group
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        foreach ($this->_filterObjects as $index => $filter) {
+            if ($filter->getId() == 'defaultAdded') {
+                unset($this->_filterObjects[$index]);
+            }
+        }
+        
+        return parent::toArray($_valueToJson);
     }
     
     /**
@@ -62,7 +79,6 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
     {
         if (! $this->_isResolved) {
             $phoneIdFilter = $this->_findFilter('phone_id');
-            
             // set user phone ids as filter
             $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
                 array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
@@ -76,11 +92,13 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
             } else {
                 $phoneId = $phoneIdFilter->getValue();
                 $phoneId = $phoneId[0]['value'];
+
                 if (! in_array($phoneId, $userPhoneIds)) {
                     $this->removeFilter('phone_id');
                     $this->addFilter($this->_getDefaultPhoneFilter($userPhones));
                 }
             }
+            
             $this->_isResolved = TRUE;
         }
     }

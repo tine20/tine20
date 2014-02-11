@@ -11,12 +11,11 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Group
  */
-class Phone_JsonTest extends PHPUnit_Framework_TestCase
+class Phone_JsonTest extends TestCase
 {
     /**
      * Backend
@@ -57,7 +56,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_json = new Phone_Frontend_Json();
         $this->_adminUser = Tinebase_Core::getUser();
@@ -96,8 +95,23 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             'redirect_event' => 'none'
         ));
         
+        $this->_objects['phone2'] = new Voipmanager_Model_Snom_Phone(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+            'macaddress'     => "1a34567890cd",
+            'description'    => 'jsmith phone',
+            'location_id'    => $this->_objects['location']->getId(),
+            'template_id'    => $this->_objects['template']->getId(),
+            'current_model'  => 'snom320',
+            'redirect_event' => 'none'
+        ));
+        
         $this->_objects['phonesetting'] = new Voipmanager_Model_Snom_PhoneSettings(array(
             'phone_id'     => $this->_objects['phone']->getId(),
+            'web_language' => 'English'
+        ));
+        
+        $this->_objects['phonesetting2'] = new Voipmanager_Model_Snom_PhoneSettings(array(
+            'phone_id'     => $this->_objects['phone2']->getId(),
             'web_language' => 'English'
         ));
         
@@ -106,11 +120,21 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             'account_type' => 'user'
         );
         
+        $this->_objects['phoneOwner2'] = array(
+            'account_id' => $this->_personas['jsmith']->getId(),
+            'account_type' => 'user'
+        );
+        
         $rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', array(
             $this->_objects['phoneOwner']
         ));
         
+        $rights2 = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', array(
+            $this->_objects['phoneOwner2']
+        ));
+        
         $this->_objects['phone']->rights = $rights;
+        $this->_objects['phone2']->rights = $rights2;
         
         $this->_objects['context'] = new Voipmanager_Model_Asterisk_Context(array(
             'id'                => Tinebase_Record_Abstract::generateUID(),
@@ -123,10 +147,23 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             'context_id'        => $this->_objects['context']->getId()
         ));
         
+        $this->_objects['sippeer2'] = new Voipmanager_Model_Asterisk_SipPeer(array(
+            'id'                => Tinebase_Record_Abstract::generateUID(),
+            'context_id'        => $this->_objects['context']->getId()
+        ));
+        
         $this->_objects['line'] = new Voipmanager_Model_Snom_Line(array(
             'id'                => Tinebase_Record_Abstract::generateUID(),
             'snomphone_id'      => $this->_objects['phone']->getId(),
             'asteriskline_id'   => $this->_objects['sippeer']->getId(),
+            'linenumber'        => 1,
+            'lineactive'        => 1
+        ));
+        
+        $this->_objects['line2'] = new Voipmanager_Model_Snom_Line(array(
+            'id'                => Tinebase_Record_Abstract::generateUID(),
+            'snomphone_id'      => $this->_objects['phone2']->getId(),
+            'asteriskline_id'   => $this->_objects['sippeer2']->getId(),
             'linenumber'        => 1,
             'lineactive'        => 1
         ));
@@ -148,12 +185,23 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $snomLocationBackend->create($this->_objects['location']);
         $snomSettingBackend->create($this->_objects['setting']);
         $snomTemplateBackend->create($this->_objects['template']);
+        
         $phoneBackend->create($this->_objects['phone']);
+        $phoneBackend->create($this->_objects['phone2']);
+        
         $phoneBackend->setPhoneRights($this->_objects['phone']);
+        $phoneBackend->setPhoneRights($this->_objects['phone2']);
+        
         $asteriskContextBackend->create($this->_objects['context']);
+        
         $asteriskSipPeerBackend->create($this->_objects['sippeer']);
+        $asteriskSipPeerBackend->create($this->_objects['sippeer2']);
+        
         $snomLineBackend->create($this->_objects['line']);
+        $snomLineBackend->create($this->_objects['line2']);
+        
         $snomPhoneSettingBackend->create($this->_objects['phonesetting']);
+        $snomPhoneSettingBackend->create($this->_objects['phonesetting2']);
         
         /******************** call history *************************/
 
@@ -177,6 +225,24 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             'destination'           => '050364354',
         ));
         
+        $this->_objects['call3'] = new Phone_Model_Call(array(
+            'id'                    => 'phpunitcallhistoryid3',
+            'line_id'               => $this->_objects['line2']->getId(),
+            'phone_id'              => $this->_objects['phone2']->getId(),
+            'direction'             => Phone_Model_Call::TYPE_INCOMING,
+            'source'                => '78',
+            'destination'           => '050998877',
+        ));
+        
+        $this->_objects['call4'] = new Phone_Model_Call(array(
+            'id'                    => 'phpunitcallhistoryid4',
+            'line_id'               => $this->_objects['line2']->getId(),
+            'phone_id'              => $this->_objects['phone2']->getId(),
+            'direction'             => Phone_Model_Call::TYPE_INCOMING,
+            'source'                => '78',
+            'destination'           => '05036998877',
+        ));
+        
         $this->_objects['paging'] = array(
             'start' => 0,
             'limit' => 50,
@@ -196,9 +262,19 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'phone_id', 'operator' => 'AND', 'value' => array(array('field' => ':id', 'operator' => 'equals', 'value' => $this->_objects['phone']->getId())))
         );
         
+        $this->_objects['filter4'] = array(
+            array('field' => 'phone_id', 'operator' => 'AND', 'value' => array(array('field' => ':id', 'operator' => 'equals', 'value' => $this->_objects['phone2']->getId())))
+        );
+        
+        $this->_objects['filter5'] = array(
+            array('field' => 'query', 'operator' => 'contains', 'value' => '998877')
+        );
+        
         // create calls
-        $call = $phoneController->callStarted($this->_objects['call1']);
-        $call = $phoneController->callStarted($this->_objects['call2']);
+        $phoneController->callStarted($this->_objects['call1']);
+        $phoneController->callStarted($this->_objects['call2']);
+        $phoneController->callStarted($this->_objects['call3']);
+        $phoneController->callStarted($this->_objects['call4']);
         
         
     }
@@ -211,7 +287,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
         
         if ($this->_adminUser != Tinebase_Core::getUser()) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_adminUser);
@@ -225,7 +301,7 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
     {
         // search calls
         $result = $this->_json->searchCalls($this->_objects['filter1'], $this->_objects['paging']);
-        $this->assertGreaterThan(1, $result['totalcount']);
+        $this->assertEquals(2, $result['totalcount']);
         
         // search query -> '050'
         $result = $this->_json->searchCalls($this->_objects['filter2'], $this->_objects['paging']);
@@ -239,6 +315,19 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         // search for phone_id
         $result = $this->_json->searchCalls($this->_objects['filter3'], $this->_objects['paging']);
         $this->assertGreaterThan(1, $result['totalcount'], 'phone_id filter not working');
+        
+        $result = $this->_json->searchCalls($this->_objects['filter4'], $this->_objects['paging']);
+        $this->assertEquals(2, $result['totalcount'], 'calls of another user must not be found!');
+        
+        $this->assertEquals($this->_objects['phone']->getId(), $result['results'][0]['phone_id']['id']);
+        $this->assertEquals($this->_objects['phone']->getId(), $result['results'][1]['phone_id']['id']);
+        
+        $this->assertEmpty($result['filter'], 'Filter must be empty, the other users phone id filter should has been removed.');
+        
+        $result = $this->_json->searchCalls($this->_objects['filter5'], $this->_objects['paging']);
+        
+        $this->assertEquals(0, $result['totalcount'], 'calls of another user must not be found!');
+        $this->assertEquals('998877', $result['filter'][0]['value'], 'the filter should stay!');
     }
 
     /**
