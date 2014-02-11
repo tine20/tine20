@@ -34,32 +34,37 @@ class Tinebase_WebDav_PrincipalBackend implements DAVACL\PrincipalBackend\Backen
         
         switch ($prefixPath) {
             case self::PREFIX_GROUPS:
-                $groups = Tinebase_Group::getInstance()->getMultiple(Tinebase_Core::getUser()->getGroupMemberships());
+                $filter = new Addressbook_Model_ListFilter(array(
+                    array(
+                        'field'     => 'type',
+                        'operator'  => 'equals',
+                        'value'     => Addressbook_Model_List::LISTTYPE_GROUP
+                    )
+                ));
                 
-                foreach ($groups as $group) {
-                    if (empty($group->list_id)) {
-                        continue;
-                    }
-                    $principals[] = array(
-                        'uri'               => self::PREFIX_GROUPS . '/' . $group->list_id,
-                        '{DAV:}displayname' => $group->name
-                    );
+                $lists = Addressbook_Controller_List::getInstance()->search($filter);
+                
+                foreach ($lists as $list) {
+                    $principals[] = $this->_listToPrincipal($list);
                 }
-                
                 
                 break;
                 
             case self::PREFIX_USERS:
-                $principal = array(
-                    'uri'               => self::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id,
-                    '{DAV:}displayname' => Tinebase_Core::getUser()->accountDisplayName
-                );
+                $filter = new Addressbook_Model_ContactFilter(array(
+                    array(
+                        'field'     => 'type',
+                        'operator'  => 'equals',
+                        'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
+                    )
+                ));
                 
-                if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-                    $principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
+                $contacts = Addressbook_Controller_Contact::getInstance()->search($filter);
+                
+                foreach ($contacts as $contact) {
+                    $principals[] = $this->_contactToPrincipal($contact);
                 }
                 
-                $principals[] = $principal;
                 
                 break;
         }
@@ -70,32 +75,60 @@ class Tinebase_WebDav_PrincipalBackend implements DAVACL\PrincipalBackend\Backen
     /**
      * (non-PHPdoc)
      * @see Sabre\DAVACL\IPrincipalBackend::getPrincipalByPath()
-     * @todo implement search for users and groups
+     * @todo resolve real $path
      */
     public function getPrincipalByPath($path) 
     {
         $principal = null;
         
-        list($prefix, $name) = \Sabre\DAV\URLUtil::splitPath($path);
+        list($prefix, $id) = \Sabre\DAV\URLUtil::splitPath($path);
         
         switch ($prefix) {
             case self::PREFIX_GROUPS:
-                $principal = array(
-                    'uri'               => self::PREFIX_GROUPS . '/' . $name,
-                    '{DAV:}displayname' => 'Tine 2.0 group ' . $name
-                );
+                $filter = new Addressbook_Model_ListFilter(array(
+                    array(
+                        'field'     => 'type',
+                        'operator'  => 'equals',
+                        'value'     => Addressbook_Model_List::LISTTYPE_GROUP
+                    ),
+                    array(
+                        'field'     => 'id',
+                        'operator'  => 'equals',
+                        'value'     => $id
+                    ),
+                ));
+                
+                $list = Addressbook_Controller_List::getInstance()->search($filter)->getFirstRecord();
+                
+                if (!$list) {
+                    return null;
+                }
+                
+                $principal = $this->_listToPrincipal($list);
                 
                 break;
                 
             case self::PREFIX_USERS:
-                $principal = array(
-                    'uri'               => self::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id,
-                    '{DAV:}displayname' => Tinebase_Core::getUser()->accountDisplayName
-                );
+                $filter = new Addressbook_Model_ContactFilter(array(
+                    array(
+                        'field'     => 'type',
+                        'operator'  => 'equals',
+                        'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
+                    ),
+                    array(
+                        'field'     => 'id',
+                        'operator'  => 'equals',
+                        'value'     => $id
+                    ),
+                ));
                 
-                if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-                    $principal['{http://sabredav.org/ns}email-address'] = Tinebase_Core::getUser()->accountEmailAddress;
+                $contact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
+                
+                if (!$contact) {
+                    return null;
                 }
+                
+                $principal = $this->_contactToPrincipal($contact);
                 
                 break;
         }
@@ -111,6 +144,33 @@ class Tinebase_WebDav_PrincipalBackend implements DAVACL\PrincipalBackend\Backen
     {
         $result = array();
         
+        list($path, $listId) = Sabre\DAV\URLUtil::splitPath($principal);
+        
+        if ($path == self::PREFIX_GROUPS) {
+            $filter = new Addressbook_Model_ListFilter(array(
+                array(
+                    'field'     => 'type',
+                    'operator'  => 'equals',
+                    'value'     => Addressbook_Model_List::LISTTYPE_GROUP
+                ),
+                array(
+                    'field'     => 'id',
+                    'operator'  => 'equals',
+                    'value'     => $listId
+                ),
+            ));
+            
+            $list = Addressbook_Controller_List::getInstance()->search($filter)->getFirstRecord();
+            
+            if (!$list) {
+                return array();
+            }
+            
+            foreach ($list->members as $member) {
+                $result[] = self::PREFIX_USERS . '/' . $member;
+            }
+        }
+        
         return $result;
     }
     
@@ -122,15 +182,17 @@ class Tinebase_WebDav_PrincipalBackend implements DAVACL\PrincipalBackend\Backen
     {
         $result = array();
         
-        list(, $contactId) = Sabre\DAV\URLUtil::splitPath($principal);
+        list($path, $contactId) = Sabre\DAV\URLUtil::splitPath($principal);
         
-        $user = Tinebase_User::getInstance()->getUserByProperty('contactId', $contactId);
-        
-        $groupIds = Tinebase_Group::getInstance()->getGroupMemberships($user);
-        $groups   = Tinebase_Group::getInstance()->getMultiple($groupIds);
-        
-        foreach ($groups as $group) {
-            $result[] = 'principals/groups/' . $group->list_id;
+        if ($path == self::PREFIX_USERS) {
+            $user = Tinebase_User::getInstance()->getUserByProperty('contactId', $contactId);
+            
+            $groupIds = Tinebase_Group::getInstance()->getGroupMemberships($user);
+            $groups   = Tinebase_Group::getInstance()->getMultiple($groupIds);
+            
+            foreach ($groups as $group) {
+                $result[] = self::PREFIX_GROUPS . '/' . $group->list_id;
+            }
         }
         
         return $result;
@@ -182,31 +244,115 @@ class Tinebase_WebDav_PrincipalBackend implements DAVACL\PrincipalBackend\Backen
         $principalUris = array();
         
         switch ($prefixPath) {
+            case self::PREFIX_GROUPS:
+                $filter = new Addressbook_Model_ListFilter(array(
+                    array(
+                        'field'     => 'type',
+                        'operator'  => 'equals',
+                        'value'     => Addressbook_Model_List::LISTTYPE_GROUP
+                    )
+                ));
+                
+                if (!empty($searchProperties['{http://calendarserver.org/ns/}search-token'])) {
+                    $filter->addFilter($filter->createFilter(array(
+                        'field'     => 'query',
+                        'operator'  => 'contains',
+                        'value'     => $searchProperties['{http://calendarserver.org/ns/}search-token']
+                    )));
+                }
+                
+                $result = Addressbook_Controller_List::getInstance()->search($filter, null, false, true);
+                
+                foreach ($result as $listId) {
+                    $principalUris[] = $prefixPath . '/' . $listId;
+                }
+                
+                break;
+                
             case self::PREFIX_USERS:
+                $filter = new Addressbook_Model_ContactFilter(array(
+                    array(
+                        'field'     => 'type',
+                        'operator'  => 'equals',
+                        'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
+                    )
+                ));
+                
+                if (!empty($searchProperties['{http://calendarserver.org/ns/}search-token'])) {
+                    $filter->addFilter($filter->createFilter(array(
+                        'field'     => 'query',
+                        'operator'  => 'contains',
+                        'value'     => $searchProperties['{http://calendarserver.org/ns/}search-token']
+                    )));
+                }
+                
                 if (!empty($searchProperties['{http://sabredav.org/ns}email-address'])) {
-                    $filter = new Addressbook_Model_ContactFilter(array(
-                        array(
-                            'field'     => 'email_query',
-                            'operator'  => 'equals',
-                            'value'     => $searchProperties['{http://sabredav.org/ns}email-address']
-                        ),
-                        array(
-                            'field'     => 'type',
-                            'operator'  => 'equals',
-                            'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
-                        )
-                    ));
-                    
-                    $result = Addressbook_Controller_Contact::getInstance()->search($filter, null, false, true);
-                    
-                    if (count($result) > 0) {
-                        $principalUris[] = 'principals/users/' . $result[0];
-                    }
+                    $filter->addFilter($filter->createFilter(array(
+                        'field'     => 'email_query',
+                        'operator'  => 'equals',
+                        'value'     => $searchProperties['{http://sabredav.org/ns}email-address']
+                    )));
+                }
+                
+                $result = Addressbook_Controller_Contact::getInstance()->search($filter, null, false, true);
+                
+                foreach ($result as $contactId) {
+                    $principalUris[] = $prefixPath . '/' . $contactId;
                 }
                 
                 break;
         }
         
         return $principalUris;
+    }
+    
+    /**
+     * convert contact model to principal array
+     * 
+     * @param Addressbook_Model_Contact $contact
+     * @return array
+     */
+    protected function _contactToPrincipal(Addressbook_Model_Contact $contact)
+    {
+        $principal = array(
+            'uri'                     => self::PREFIX_USERS . '/' . $contact->getId(),
+            '{DAV:}displayname'       => $contact->n_fileas,
+            '{DAV:}alternate-URI-set' => array('urn:uuid:' . $contact->getId()),
+            
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => 'INDIVIDUAL',
+            
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'users',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => $contact->n_given,
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => $contact->n_family
+        );
+        
+        if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+            $principal['{http://sabredav.org/ns}email-address'] = $contact->email;
+        }
+        
+        return $principal;
+    }
+    
+    /**
+     * convert list model to principal array
+     * 
+     * @param Addressbook_Model_List $list
+     * @return array
+     */
+    protected function _listToPrincipal(Addressbook_Model_List $list)
+    {
+        $principal = array(
+            'uri'                     => self::PREFIX_GROUPS . '/' . $list->getId(),
+            '{DAV:}displayname'       => $list->name . ' (Group)',
+            '{DAV:}alternate-URI-set' => array('urn:uuid:' . $list->getId()),
+            
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => 'GROUP',
+            
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'groups',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => 'Group',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => $list->name,
+        );
+        
+        return $principal;
     }
 }
