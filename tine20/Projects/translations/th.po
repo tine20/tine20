@@ -1,11 +1,12 @@
 # 
 # Translators:
+# jaruwan <luca.ingianni@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-13 13:48+0000\n"
-"Last-Translator: lkneschke <l.kneschke@metaways.de>\n"
+"PO-Revision-Date: 2014-02-11 09:10+0000\n"
+"Last-Translator: jaruwan <luca.ingianni@gmail.com>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,11 +28,11 @@ msgstr ""
 #: Controller.php:79
 #, python-format
 msgid "%s's personal Projects"
-msgstr ""
+msgstr "จำนวน %s ของโครงการส่วนบุคคล"
 
 #: Config.php:38
 msgid "Project Status Available"
-msgstr ""
+msgstr "สถานะของโครงการ ว่าง"
 
 #: Config.php:40
 msgid ""
@@ -52,55 +53,55 @@ msgstr ""
 
 #: Setup/setup.xml:4 js/Projects.js:24
 msgid "Projects"
-msgstr ""
+msgstr "โครงการ"
 
 #: Setup/Initialize.php:34
 msgid "On hold"
-msgstr ""
+msgstr "กำลังดำเนินการอยู่"
 
 #: Setup/Initialize.php:35
 msgid "Completed"
-msgstr ""
+msgstr "เสร็จสิ้นแล้ว"
 
 #: Setup/Initialize.php:36
 msgid "Cancelled"
-msgstr ""
+msgstr "ยกเลิกแล้ว"
 
 #: Setup/Initialize.php:37
 msgid "In process"
-msgstr ""
+msgstr "มีความคืบหน้า"
 
 #: Setup/Initialize.php:50
 msgid "Coworker"
-msgstr ""
+msgstr "ผู้ร่วมงาน"
 
 #: Setup/Initialize.php:51
 msgid "Responsible"
-msgstr ""
+msgstr "รับผิดชอบ"
 
 #: Setup/Initialize.php:79
 msgid "All my open projects"
-msgstr ""
+msgstr "โครงการที่ยังว่างอยู่ของฉันทั้งหมด"
 
 #: Setup/Initialize.php:99
 msgid "My projects that I'm responsible for"
-msgstr ""
+msgstr "โครงการที่ฉันรับผิดชอบอยู่"
 
 #: Setup/Initialize.php:100
 msgid "All my open projects that I am responsible for"
-msgstr ""
+msgstr "โครงการที่ยังว่างอยู่ของฉันทั้งหมด ที่ฉันรับผิดชอบอยู่นั้น"
 
 #: Setup/Initialize.php:120
 msgid "My waiting projects"
-msgstr ""
+msgstr "โครงการของฉันที่กำลังรอ"
 
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
-msgstr ""
+msgstr "โครงการของฉันที่กำลังดำเนินการอยู่"
 
 #: Preference.php:24
 msgid "All my projects"
-msgstr ""
+msgstr "โครงการทั้งหมดของฉัน"
 
 #: Preference.php:60
 msgid "Default Favorite"
@@ -112,7 +113,7 @@ msgstr ""
 
 #: js/AddToProjectPanel.js:34
 msgid "Please choose the Project to add the contacts to"
-msgstr ""
+msgstr "กรุณาเลือกโครงการเพื่อเพิ่มการติดต่อ"
 
 #: js/AddToProjectPanel.js:38
 msgid "Please select the attenders' role"
@@ -120,86 +121,86 @@ msgstr ""
 
 #: js/AddToProjectPanel.js:79
 msgid "Select Project"
-msgstr ""
+msgstr "เลือกโครงการ"
 
 #: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
 msgid "Role"
-msgstr ""
+msgstr "หน้าที่"
 
 #: js/AddToProjectPanel.js:82
 msgid "Select Role"
-msgstr ""
+msgstr "เลือก หน้าที่"
 
 #: js/AddToProjectPanel.js:102
 msgid "Adding {0} Participants to project"
-msgstr ""
+msgstr "กำลังเพิ่มผู้เข้าร่วม {0} คน ในโครงการ"
 
 #: js/ProjectGridPanel.js:75
 msgid "Search FAQ"
-msgstr ""
+msgstr "ค้นหาคำถามที่ถามบ่อย"
 
 #: js/ProjectGridPanel.js:118
 msgid "Tags"
-msgstr ""
+msgstr "ป้ายกำกับ"
 
 #: js/ProjectGridPanel.js:121 js/Model.js:76 js/ProjectEditDialog.js:138
 msgid "Number"
-msgstr ""
+msgstr "ลำดับ"
 
 #: js/ProjectGridPanel.js:128 js/Model.js:75 js/ProjectEditDialog.js:133
 msgid "Title"
-msgstr ""
+msgstr "คำนำหน้าชื่อ"
 
 #: js/ProjectGridPanel.js:134 js/Model.js:79 js/ProjectEditDialog.js:144
 msgid "Status"
-msgstr ""
+msgstr "สถานะ"
 
 #: js/Model.js:35 js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121
 msgid "Project"
 msgid_plural "Projects"
-msgstr[0] ""
+msgstr[0] "โครงการ"
 
 #: js/Model.js:39
 msgid "Project list"
 msgid_plural "Project lists"
-msgstr[0] ""
+msgstr[0] "รายชื่อโครงการ"
 
 #: js/Model.js:42
 msgid "Project lists"
-msgstr ""
+msgstr "รายชื่อโครงการ"
 
 #: js/Model.js:74
 msgid "Quick Search"
-msgstr ""
+msgstr "ค้นหาอย่างรวดเร็ว"
 
 #: js/Model.js:77 js/ProjectEditDialog.js:174
 msgid "Description"
-msgstr ""
+msgstr "การอธิบาย"
 
 #: js/Model.js:88
 msgid "Last Modified Time"
-msgstr ""
+msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
 
 #: js/Model.js:89
 msgid "Last Modified By"
-msgstr ""
+msgstr "ปรับปรุงครั้งล่าสุด โดย"
 
 #: js/Model.js:90
 msgid "Creation Time"
-msgstr ""
+msgstr "เวลาที่สร้างขึ้น"
 
 #: js/Model.js:91
 msgid "Created By"
-msgstr ""
+msgstr "สร้าง โดย"
 
 #: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
 msgid "Attendee"
-msgstr ""
+msgstr "ผู้เข้าร่วม"
 
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
-msgstr ""
+msgstr "หน้าที่ผู้เข้าร่วม"
 
 #: js/ProjectEditDialog.js:188
 msgid "Enter description"
-msgstr ""
+msgstr "ใส่ คำอธิบาย"

@@ -1,12 +1,13 @@
 # 
 # Translators:
+# bzittema <b_zittema@hotmail.com>, 2014
 # mrhypefm <p_zittema@hotmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 17:04+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-01-16 11:20+0000\n"
+"Last-Translator: bzittema <b_zittema@hotmail.com>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,7 +36,7 @@ msgstr "controleer of update gedeelde adresboek favorieten"
 
 #: Frontend/CardDAV/AllContacts.php:41
 msgid "All Contacts"
-msgstr ""
+msgstr "Alle contacten"
 
 #: Controller.php:105
 #, python-format

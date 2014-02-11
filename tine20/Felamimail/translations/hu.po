@@ -249,65 +249,65 @@ msgstr "Aktív szabadság üzenet"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Email fiók \"{0}\" rendelkezik aktív szabadság üzenettel."
 
-#: js/Felamimail.js:554
+#: js/Felamimail.js:558
 msgid "New mails"
 msgstr "Új levelek"
 
-#: js/Felamimail.js:555
+#: js/Felamimail.js:559
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "{0} új üzeneted van a {1} mappában ({2})."
 
-#: js/Felamimail.js:675
+#: js/Felamimail.js:679
 msgid "IMAP Credentials for {0}"
 msgstr "{0} IMAP belépési adatai"
 
-#: js/Felamimail.js:678
+#: js/Felamimail.js:682
 msgid "Credentials"
 msgstr "Belépési adatok"
 
-#: js/Felamimail.js:831 js/Felamimail.js:864
+#: js/Felamimail.js:835 js/Felamimail.js:868
 msgid "IMAP Error"
 msgstr "IMAP hiba"
 
-#: js/Felamimail.js:832
+#: js/Felamimail.js:836
 msgid "No connection to IMAP server."
 msgstr "Nincs kapcsolat az IMAP szerverrel."
 
-#: js/Felamimail.js:848
+#: js/Felamimail.js:852
 msgid "IMAP Credentials Error"
 msgstr "IMAP belépési adatok hibásak"
 
-#: js/Felamimail.js:849
+#: js/Felamimail.js:853
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Az email belépési adataid rosszak. Lépj kapcsolatba a rendszergazdával."
 
-#: js/Felamimail.js:865
+#: js/Felamimail.js:869
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "Az egyik mappádat egy másik kliens törölte vagy átnevezte. Kérlek frissítsd a mappa listát."
 
-#: js/Felamimail.js:894
+#: js/Felamimail.js:898
 msgid "SMTP Error"
 msgstr "SMTP hiba"
 
-#: js/Felamimail.js:895
+#: js/Felamimail.js:899
 msgid "No connection to SMTP server."
 msgstr "Nincs kapcsolat az SMTP szerverrel."
 
-#: js/Felamimail.js:903
+#: js/Felamimail.js:907
 msgid "Sieve Error"
 msgstr "Sieve hiba"
 
-#: js/Felamimail.js:904
+#: js/Felamimail.js:908
 msgid "No connection to Sieve server."
 msgstr "Nincs kapcsolat a Sieve szerverrel."
 
-#: js/Felamimail.js:912
+#: js/Felamimail.js:916
 msgid "Save Sieve Script Error"
 msgstr "Sieve script hiba mentése"
 
-#: js/Felamimail.js:913
+#: js/Felamimail.js:917
 msgid "Could not save script on Sieve server."
 msgstr "Nem menthető  script a Sieve szerveren."
 

@@ -2,13 +2,13 @@
 # Translators:
 # Björn Balazs <transifex@lazs.de>, 2013
 # kaystrobach <info@kay-strobach.de>, 2012
-# pschuele <p.schuele@metaways.de>, 2013
+# pschuele <p.schuele@metaways.de>, 2013-2014
 # pschuele <p.schuele@metaways.de>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 16:20+0000\n"
+"PO-Revision-Date: 2014-02-11 20:45+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -218,10 +218,10 @@ msgstr[0] "Vertrag"
 msgstr[1] "Verträge"
 
 #: js/Models.js:121
-msgid "All Contracts"
-msgid_plural "contracts lists"
-msgstr[0] "Alle Verträge"
-msgstr[1] "Vertragslisten"
+msgid "Contracts"
+msgid_plural "Contracts"
+msgstr[0] "Vertrag"
+msgstr[1] "Verträge"
 
 #: js/Models.js:148
 msgid "Contract name"

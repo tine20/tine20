@@ -28,10 +28,6 @@ msgstr ""
 msgid "Line"
 msgstr "Vonal"
 
-#: Model/Call.php:70 Model/MyPhone.php:32 js/DialerPanel.js:53
-msgid "Phone"
-msgstr "Telefonok"
-
 #: Model/Call.php:80
 msgid "Caller Id"
 msgstr "Hívó azonosító"
@@ -67,6 +63,10 @@ msgstr "Forrás"
 #: Model/Call.php:120
 msgid "Destination"
 msgstr "Cél"
+
+#: Model/MyPhone.php:32 js/DialerPanel.js:53
+msgid "Phone"
+msgstr "Telefonok"
 
 #: Model/MyPhone.php:33 js/CallGridPanel.js:167
 msgid "Phones"

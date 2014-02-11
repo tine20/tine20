@@ -29,10 +29,6 @@ msgstr "Các cuộc gọi"
 msgid "Line"
 msgstr "Đường dây"
 
-#: Model/Call.php:70 Model/MyPhone.php:32 js/DialerPanel.js:53
-msgid "Phone"
-msgstr "one:Điện thoại\nother:Điện thoại"
-
 #: Model/Call.php:80
 msgid "Caller Id"
 msgstr "Mã người gọi"
@@ -68,6 +64,10 @@ msgstr "Nguồn"
 #: Model/Call.php:120
 msgid "Destination"
 msgstr "Đích đến"
+
+#: Model/MyPhone.php:32 js/DialerPanel.js:53
+msgid "Phone"
+msgstr "one:Điện thoại\nother:Điện thoại"
 
 #: Model/MyPhone.php:33 js/CallGridPanel.js:167
 msgid "Phones"

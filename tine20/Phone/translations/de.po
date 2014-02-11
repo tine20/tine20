@@ -29,10 +29,6 @@ msgstr "Anrufe"
 msgid "Line"
 msgstr "Leitung"
 
-#: Model/Call.php:70 Model/MyPhone.php:32 js/DialerPanel.js:53
-msgid "Phone"
-msgstr "Telefone"
-
 #: Model/Call.php:80
 msgid "Caller Id"
 msgstr "Eigene Rufnummer"
@@ -68,6 +64,10 @@ msgstr "Quelle"
 #: Model/Call.php:120
 msgid "Destination"
 msgstr "Gesprächspartner"
+
+#: Model/MyPhone.php:32 js/DialerPanel.js:53
+msgid "Phone"
+msgstr "Telefone"
 
 #: Model/MyPhone.php:33 js/CallGridPanel.js:167
 msgid "Phones"

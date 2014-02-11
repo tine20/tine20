@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-01-15 13:51+0000\n"
+"PO-Revision-Date: 2014-02-11 20:38+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Vietnamese (Viet Nam) (http://www.transifex.com/projects/p/tine20/language/vi_VN/)\n"
 "MIME-Version: 1.0\n"
@@ -111,11 +111,11 @@ msgstr ""
 msgid "Private Information"
 msgstr ""
 
-#: Preference/Abstract.php:507
+#: Preference/Abstract.php:511
 msgid "default"
 msgstr "mặc định"
 
-#: Frontend/Http.php:396 js/ExceptionHandler.js:160
+#: Frontend/Http.php:396 js/ExceptionHandler.js:168
 msgid "Authorisation Required"
 msgstr "Yêu cầu chứng thực"
 
@@ -409,43 +409,43 @@ msgid ""
 " sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Setup/setup.xml:3209
+#: Setup/setup.xml:3111
 msgid "note"
 msgstr "ghi chép"
 
-#: Setup/setup.xml:3214
+#: Setup/setup.xml:3116
 msgid "default note type"
 msgstr "loại ghi chép mặc đ"
 
-#: Setup/setup.xml:3240
+#: Setup/setup.xml:3142
 msgid "telephone"
 msgstr "điện thoại"
 
-#: Setup/setup.xml:3245
+#: Setup/setup.xml:3147
 msgid "telephone call"
 msgstr "cuộc gọi điện thoại"
 
-#: Setup/setup.xml:3271
+#: Setup/setup.xml:3173
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3276
+#: Setup/setup.xml:3178
 msgid "email contact"
 msgstr "liên hệ email"
 
-#: Setup/setup.xml:3302
+#: Setup/setup.xml:3204
 msgid "created"
 msgstr "đã tạo"
 
-#: Setup/setup.xml:3307
+#: Setup/setup.xml:3209
 msgid "record created"
 msgstr "biểu ghi đã được tạo"
 
-#: Setup/setup.xml:3333
+#: Setup/setup.xml:3235
 msgid "changed"
 msgstr "đã đổi"
 
-#: Setup/setup.xml:3338
+#: Setup/setup.xml:3240
 msgid "record changed"
 msgstr "biểu ghi đã thay đổi"
 
@@ -804,7 +804,7 @@ msgid "Logging you in..."
 msgstr "Bạn đang đăng nhập ..."
 
 #: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:659
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:672
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -820,7 +820,7 @@ msgstr "Đăng nhập thành công. Đang tải {0}..."
 msgid "Please wait!"
 msgstr "Xin hãy đợi"
 
-#: js/LoginPanel.js:482 js/ExceptionHandler.js:225
+#: js/LoginPanel.js:482 js/ExceptionHandler.js:233
 msgid "Connection lost, please check your network!"
 msgstr "Mất kết nối, xin hãy kiểm tra mạng của bạn!"
 
@@ -840,13 +840,13 @@ msgstr "Đăng nhập thất bại"
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:634
 msgid "Errors"
 msgstr "Lỗi"
 
 #: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:634
 msgid "Please fix the errors noted."
 msgstr "Xin hãy sửa lại các lỗi đã được ghi chú."
 
@@ -969,7 +969,7 @@ msgstr "Cài đặt Tine 2.0 như là ứng dụng web trên trình duyệt củ
 
 #: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:656
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:669
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr "Xác nhận"
@@ -992,107 +992,107 @@ msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "one: việc cần làm\nother: việc cần làm"
 
-#: js/ExceptionHandler.js:161
+#: js/ExceptionHandler.js:169
 msgid "Your session timed out. You need to login again."
 msgstr "Phiên làm việc quá thời gian. Bạn cần đăng nhập lại."
 
-#: js/ExceptionHandler.js:176
+#: js/ExceptionHandler.js:184
 msgid "Insufficient Rights"
 msgstr "Thiếu quyền"
 
-#: js/ExceptionHandler.js:177
+#: js/ExceptionHandler.js:185
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Rất tiếc, bạn không được phép thực hiện hành động này."
 
-#: js/ExceptionHandler.js:185
+#: js/ExceptionHandler.js:193
 msgid "Not Found"
 msgstr "Không thấy"
 
-#: js/ExceptionHandler.js:186
+#: js/ExceptionHandler.js:194
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr "Rất tiếc, yêu cầu của bạn không được hoàn thành vì không tìm thây dữ liệu. Điều này phần lớn là do ai đó đã xóa dữ liệu. Xin hãy làm mới màn hình hiện tại của bạn."
 
-#: js/ExceptionHandler.js:194
+#: js/ExceptionHandler.js:202
 msgid "Concurrent Updates"
 msgstr "Cập nhật đồng thời"
 
-#: js/ExceptionHandler.js:195
+#: js/ExceptionHandler.js:203
 msgid ""
 "Someone else saved this record while you where editing the data. You need to"
 " reload and make your changes again."
 msgstr "Ai đó đã lưu biểu ghi này trong khi bạn sửa dữ liệu. Bạn cần nạp lại và thực hiện thay đổi lại lần nữa."
 
-#: js/ExceptionHandler.js:203
+#: js/ExceptionHandler.js:211
 msgid "Service Unavailable"
 msgstr "Dịch vụ không sẵn sàng"
 
-#: js/ExceptionHandler.js:204
+#: js/ExceptionHandler.js:212
 msgid ""
 "The server is currently unable to handle the request due to a temporary "
 "overloading, maintenance or misconfiguration of the server. Please try again"
 " or contact your administrator."
 msgstr "Máy chủ đang không thể đáp ứng yêu cầu của bạn vì tạm thời quá tải, ở chế độ duy trì hoặc bị cấu hình sai. Xin hãy thử lại hoặc liên hệ với quản trị hệ thống."
 
-#: js/ExceptionHandler.js:210
+#: js/ExceptionHandler.js:218
 msgid "Server Message:"
 msgstr "Lời nhắn máy chủ:"
 
-#: js/ExceptionHandler.js:212
+#: js/ExceptionHandler.js:220
 msgid "Invalid Data"
 msgstr "Dữ liệu không hợp lệ"
 
-#: js/ExceptionHandler.js:213
+#: js/ExceptionHandler.js:221
 msgid "Your input data is not valid. Please provide valid data."
 msgstr "Dữ liệu nhập vào của bạn không hợp lệ. Xin hãy cung cấp dữ liệu chính xác."
 
-#: js/ExceptionHandler.js:231
+#: js/ExceptionHandler.js:239
 msgid "Timeout"
 msgstr "Quá thời gian"
 
-#: js/ExceptionHandler.js:232
+#: js/ExceptionHandler.js:240
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr "Rất tiếc, việc truy cập của bạn đã vượt quá thời gian quy định. Xin hãy nạp lại từ trình duyệt của bạn và thử lại, hoặc liên hệ với quản trị hệ thống."
 
-#: js/ExceptionHandler.js:240
+#: js/ExceptionHandler.js:248
 msgid "No Response"
 msgstr "Không trả lời"
 
-#: js/ExceptionHandler.js:241
+#: js/ExceptionHandler.js:249
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
 msgstr "Rất tiếc, máy chủ không trả lời bất kỳ dữ liệu nào. Xin hãy nạp lại trình duyệt, thử lại hoặc liên hệ với quản trị hệ thống."
 
-#: js/ExceptionHandler.js:248
+#: js/ExceptionHandler.js:256
 msgid "Out of Resources"
 msgstr "Hết tài nguyên"
 
-#: js/ExceptionHandler.js:249
+#: js/ExceptionHandler.js:257
 msgid ""
 "Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
 "your administrator."
 msgstr "Rất tiếc, máy chủ đã hết bộ nhớ. Xin liên hệ với quản trị hệ thống."
 
-#: js/ExceptionHandler.js:265
+#: js/ExceptionHandler.js:273
 msgid "No Role Memberships"
 msgstr "Không có vai trò thành viên"
 
-#: js/ExceptionHandler.js:266
+#: js/ExceptionHandler.js:274
 msgid ""
 "Your user account has no role memberships. Please contact your "
 "administrator."
 msgstr "Tài khoản người dùng của bạn không có vai trò thành viên. Xin liên hệ với quản trị hệ thống."
 
-#: js/ExceptionHandler.js:273
+#: js/ExceptionHandler.js:281
 msgid "Method Not Found / Insufficent Permissions"
 msgstr ""
 
-#: js/ExceptionHandler.js:274
+#: js/ExceptionHandler.js:282
 msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
@@ -2280,34 +2280,34 @@ msgstr "Xuất dữ liệu định nghĩa"
 msgid "Select Export Definition ..."
 msgstr "Chọn các định nghĩa để xuất dữ liệu...."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:318
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:441
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:331
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:454
 msgid "Delete value from all selected records"
 msgstr "Xóa giá trị từ tất cả biểu ghi được chọn."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:424
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:437
 msgid "Undo change for all selected records"
 msgstr "Hủy bỏ thay đổi với mọi biểu ghi được chọn."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:499
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:512
 msgid "Edit {0} {1}"
 msgstr "Sửa {0} {1}"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:558
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:571
 msgid "Different Values"
 msgstr "Giá trị khác"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:559
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:572
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr "Trường này đã có giá trị khác. Sửa trường này sẽ ghi đè giá trị cũ."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:656
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:669
 msgid "Do you really want to change these {0} records?"
 msgstr "Bạn có muốn thay đổi các biểu ghi {0} này?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:659
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:672
 msgid "Applying changes"
 msgstr "Thực hiện thay đổi"
 
@@ -2762,36 +2762,6 @@ msgstr "Nội dung thụt vào"
 msgid "Remove Formatting"
 msgstr "Xóa định dạng"
 
-#: js/UserRegistration.js:37
-msgid "Registration Wizard"
-msgstr "Đồ thuật đăng ký"
-
-#: js/UserRegistration.js:90
-msgid "Given name"
-msgstr "Tên gọi"
-
-#: js/UserRegistration.js:101
-msgid "Family name"
-msgstr "Tên họ"
-
-#: js/UserRegistration.js:112
-msgid "Login name"
-msgstr "Tên đăng nhập"
-
-#: js/UserRegistration.js:125
-msgid "Emailaddress"
-msgstr "Địa chỉ Email"
-
-#: js/UserRegistration.js:171
-msgid "Congratulations!"
-msgstr "Chúc mừng!"
-
-#: js/UserRegistration.js:171
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr "Bạn đã nhập mọi thông tin cần thiết. Nếu bạn nhấn nút Kết thúc, chúng tôi sẽ gửi cho bạn email đăng ký."
-
 #: js/ux/PopupWindowManager.js:175
 msgid ""
 "The window you want to work with is backgrounded. Your browser doesn't "
@@ -2926,7 +2896,7 @@ msgstr ""
 msgid "%s's personal container"
 msgstr "Bộ chứa cá nhân của %s"
 
-#: Container.php:1527
+#: Container.php:1530
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"

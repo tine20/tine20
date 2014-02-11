@@ -251,65 +251,65 @@ msgstr "Message d'absence actuel"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "L'alerte absence est activée sur le compte messagerie \"{0}\"."
 
-#: js/Felamimail.js:554
+#: js/Felamimail.js:558
 msgid "New mails"
 msgstr "Nouveaux messages"
 
-#: js/Felamimail.js:555
+#: js/Felamimail.js:559
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Vous avez {0} nouveau(x) message(s) dans le dossier {1} ({2})."
 
-#: js/Felamimail.js:675
+#: js/Felamimail.js:679
 msgid "IMAP Credentials for {0}"
 msgstr "Authentification IMAP de {0}"
 
-#: js/Felamimail.js:678
+#: js/Felamimail.js:682
 msgid "Credentials"
 msgstr "Identifiants"
 
-#: js/Felamimail.js:831 js/Felamimail.js:864
+#: js/Felamimail.js:835 js/Felamimail.js:868
 msgid "IMAP Error"
 msgstr "Erreur IMAP"
 
-#: js/Felamimail.js:832
+#: js/Felamimail.js:836
 msgid "No connection to IMAP server."
 msgstr "Pas de connexion au serveur IMAP."
 
-#: js/Felamimail.js:848
+#: js/Felamimail.js:852
 msgid "IMAP Credentials Error"
 msgstr "Erreur dans les identifiants IMAP"
 
-#: js/Felamimail.js:849
+#: js/Felamimail.js:853
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Vos identifiants sont invalides. Merci de contacter votre administrateur."
 
-#: js/Felamimail.js:865
+#: js/Felamimail.js:869
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "La structure des dossiers a été modifiée par un autre programme et doit être mise à jour."
 
-#: js/Felamimail.js:894
+#: js/Felamimail.js:898
 msgid "SMTP Error"
 msgstr "Erreur SMTP"
 
-#: js/Felamimail.js:895
+#: js/Felamimail.js:899
 msgid "No connection to SMTP server."
 msgstr "Pas de connexion au serveur SMTP."
 
-#: js/Felamimail.js:903
+#: js/Felamimail.js:907
 msgid "Sieve Error"
 msgstr "Erreur Sieve"
 
-#: js/Felamimail.js:904
+#: js/Felamimail.js:908
 msgid "No connection to Sieve server."
 msgstr "Pas de connexion au serveur Sieve."
 
-#: js/Felamimail.js:912
+#: js/Felamimail.js:916
 msgid "Save Sieve Script Error"
 msgstr "Enregistrer les erreurs de script Sieve"
 
-#: js/Felamimail.js:913
+#: js/Felamimail.js:917
 msgid "Could not save script on Sieve server."
 msgstr "Impossible d'enregistrer le script Sieve"
 

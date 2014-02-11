@@ -1,12 +1,13 @@
 # 
 # Translators:
+# bzittema <b_zittema@hotmail.com>, 2014
 # BJ <bertjan.meinders@bjsoft.nl>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-01-16 11:33+0000\n"
+"Last-Translator: bzittema <b_zittema@hotmail.com>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -104,11 +105,11 @@ msgstr[1] "FAQs"
 
 #: js/SimpleFAQ.js:26
 msgid "Find Question"
-msgstr ""
+msgstr "Vind vraag"
 
 #: js/SimpleFAQ.js:35
 msgid "Search question"
-msgstr ""
+msgstr "Zoek vraag"
 
 #: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:118
 #: js/FaqGridDetailsPanel.js:157
@@ -151,7 +152,7 @@ msgstr "FAQ Overzichten"
 
 #: js/Model.js:74
 msgid "Quick Search"
-msgstr ""
+msgstr "Snel zoeken"
 
 #: js/FaqEditDialog.js:112
 msgid "Enter a question..."
@@ -163,7 +164,7 @@ msgstr "Geen een antwoord..."
 
 #: js/SearchCombo.js:8
 msgid "Search FAQ"
-msgstr ""
+msgstr "Zoek FAQ"
 
 #: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
 msgid "FAQ Infos"

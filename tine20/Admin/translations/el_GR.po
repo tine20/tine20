@@ -212,19 +212,19 @@ msgid "Computer Name"
 msgstr ""
 
 #: js/SambaMachineGrid.js:57 js/SambaMachineGrid.js:89 js/Tags.js:228
-#: js/Roles.js:241 js/GroupEditDialog.js:129 js/Groups.js:238
+#: js/Roles.js:240 js/GroupEditDialog.js:129 js/Groups.js:237
 #: js/TagEditDialog.js:226 js/RoleEditDialog.js:294 js/user/GridPanel.js:93
 msgid "Description"
 msgstr ""
 
-#: js/SambaMachineGrid.js:76 js/Roles.js:239 js/Groups.js:236
+#: js/SambaMachineGrid.js:76 js/Roles.js:238 js/Groups.js:235
 #: js/container/GridPanel.js:65 js/user/GridPanel.js:171
 #: js/customfield/EditDialog.js:283 js/customfield/GridPanel.js:65
 msgid "ID"
 msgstr ""
 
-#: js/SambaMachineGrid.js:83 js/Tags.js:227 js/Roles.js:240
-#: js/Applications.js:282 js/Groups.js:237 js/AccessLog.js:128
+#: js/SambaMachineGrid.js:83 js/Tags.js:227 js/Roles.js:239
+#: js/Applications.js:282 js/Groups.js:236 js/AccessLog.js:128
 #: js/container/EditDialog.js:124 js/user/EditDialog.js:285
 #: js/user/EditDialog.js:321 js/customfield/EditDialog.js:596
 #: js/customfield/GridPanel.js:67
@@ -256,7 +256,7 @@ msgstr ""
 msgid "Delete Tag"
 msgstr ""
 
-#: js/Tags.js:171 js/Roles.js:178 js/Applications.js:187 js/Groups.js:178
+#: js/Tags.js:171 js/Roles.js:177 js/Applications.js:187 js/Groups.js:177
 msgid "Search:"
 msgstr ""
 
@@ -305,11 +305,11 @@ msgstr ""
 msgid "Delete Role"
 msgstr ""
 
-#: js/Roles.js:228
+#: js/Roles.js:227
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr ""
 
-#: js/Roles.js:229 js/Roles.js:283
+#: js/Roles.js:228 js/Roles.js:282
 msgid "No roles to display"
 msgstr ""
 
@@ -460,11 +460,11 @@ msgstr ""
 msgid "Delete Group"
 msgstr ""
 
-#: js/Groups.js:225
+#: js/Groups.js:224
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr ""
 
-#: js/Groups.js:226 js/Groups.js:280
+#: js/Groups.js:225 js/Groups.js:279
 msgid "No groups to display"
 msgstr ""
 
