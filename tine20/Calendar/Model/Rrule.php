@@ -268,6 +268,44 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     }
     
     /**
+     * normalizes rrule by setting missing clauses. This is needed as some rrule computations
+     * need all clauses and have no access to the event itself.
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    public function normalize(Calendar_Model_Event $event) {
+        switch ($this->freq) {
+            case self::FREQ_WEEKLY:
+                if (! $this->wkst ) {
+                    $this->wkst = self::getWeekStart();
+                }
+            
+                if (! $this->byday) {
+                    $this->byday = array_search($event->dtstart->format('w'), self::$WEEKDAY_DIGIT_MAP);
+                }
+                break;
+            
+            case self::FREQ_MONTHLY:
+                if (! $this->byday && ! $this->bymonthday) {
+                    $this->bymonthday = $event->dtstart->format('j');
+                }
+                break;
+                
+            case self::FREQ_YEARLY:
+                if (! $this->byday && ! $this->bymonthday) {
+                    $this->bymonthday = $event->dtstart->format('j');
+                }
+                if (! $this->bymonth) {
+                    $this->bymonth = $event->dtstart->format('n');
+                }
+                break;
+            default:
+                // do nothing
+                break;
+        }
+    }
+    
+    /**
      * get human readable version of this rrule
      * 
      * @param  Zend_Translate   $translation
@@ -622,8 +660,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 }
                 
                 if (! $rrule->wkst) {
-                    // @TODO if organizer has an account get its locales wkst
-                    $rrule->wkst = self::WDAY_MONDAY;
+                    $rrule->wkst = self::getWeekStart();
                 }
                 $weekDays = array_keys(self::$WEEKDAY_DIGIT_MAP);
                 array_splice($weekDays, 0, 0, array_splice($weekDays, array_search($rrule->wkst, $weekDays)));
@@ -1129,5 +1166,18 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $_dateInUTC->add($_diff);
         $_dateInUTC->subHour($_dateInUTC->get('I') ? 1 : 0);
         $_dateInUTC->setTimezone('UTC');
+    }
+    
+    /**
+     * returns weekstart in iCal day format
+     * 
+     * @param  string $locale
+     * @return string
+     */
+    public static function getWeekStart($locale = NULL) {
+        $locale = $locale ?: Tinebase_Core::getLocale();
+        
+        $weekInfo = Zend_Locale::getTranslationList('week', $locale);
+        return array_value($weekInfo['firstDay'], array_flip(self::$WEEKDAY_MAP));
     }
 }

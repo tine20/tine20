@@ -47,6 +47,37 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $persistentEvent = $this->_controller->create($event);
     }
     
+    /**
+     * imcomplete rrule clauses should be filled in automatically
+     */
+    public function testIncompleteRrule()
+    {
+        $event = $this->_getRecurEvent();
+        
+        $event->rrule = 'FREQ=WEEKLY';
+        $persistentEvent = $this->_controller->create(clone $event);
+        $this->assertEquals(Calendar_Model_Rrule::getWeekStart(), $persistentEvent->rrule->wkst, 'wkst not normalized');
+        $this->assertEquals('TH', $persistentEvent->rrule->byday, 'byday not normalized');
+        
+        $rrule = Calendar_Model_Rrule::getRruleFromString('FREQ=MONTHLY');
+        $rrule->normalize($event);
+        $this->assertEquals(20, $rrule->bymonthday, 'bymonthday not normalized');
+        
+        $rrule = Calendar_Model_Rrule::getRruleFromString('FREQ=MONTHLY;BYDAY=1TH');
+        $rrule->normalize($event);
+        $this->assertEquals(NULL, $rrule->bymonthday, 'bymonthday must not be added');
+        
+        $rrule = Calendar_Model_Rrule::getRruleFromString('FREQ=YEARLY');
+        $rrule->normalize($event);
+        $this->assertEquals(5, $rrule->bymonth, 'bymonth not normalized');
+        $this->assertEquals(20, $rrule->bymonthday, 'bymonthday not normalized');
+        
+        $rrule = Calendar_Model_Rrule::getRruleFromString('FREQ=YEARLY;BYDAY=1TH');
+        $rrule->normalize($event);
+        $this->assertEquals(5, $rrule->bymonth, 'bymonth not normalized');
+        $this->assertEquals(NULL, $rrule->bymonthday, 'bymonthday must not be added');
+    }
+    
     public function testFirstInstanceException()
     {
         $from = new Tinebase_DateTime('2011-04-18 00:00:00');

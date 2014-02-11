@@ -59,4 +59,39 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('cal_attendee', 5);
         $this->setApplicationVersion('Calendar', '8.1');
     }
+    
+    /**
+     * update to 8.2
+     * - normalize all rrules
+     */
+    public function update_1()
+    {
+        // find all events with rrule
+        $eventIds = $this->_db->query(
+                "SELECT " . $this->_db->quoteIdentifier('id') .
+                " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
+                " WHERE " . $this->_db->quoteIdentifier("rrule") . " IS NOT NULL"
+        )->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        // NOTE: we need a generic sql BE to circumvent calendar specific acl issues
+        $eventBE = new Tinebase_Backend_Sql(array(
+                'modelName'    => 'Calendar_Model_Event',
+                'tableName'    => 'cal_events',
+                'modlogActive' => false
+        ));
+        
+        foreach ($eventIds as $eventId) {
+            $event = $eventBE->get($eventId['id']);
+            $oldRruleString = (string) $event->rrule;
+            $rrule = Calendar_Model_Rrule::getRruleFromString($oldRruleString);
+            $rrule->normalize($event);
+            
+            if ($oldRruleString != (string) $rrule) {
+                $event->rrule = (string) $rrule;
+                $eventBE->update($event);
+            }
+        }
+        
+        $this->setApplicationVersion('Calendar', '8.2');
+    }
 }
