@@ -27,7 +27,7 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         {modelName: 'CostCenter', requiredRight: 'manage_costcenters', singularContainerMode: true},
         {modelName: 'Customer', requiredRight: 'manage_customers', singularContainerMode: true},
         {modelName: 'Division', requiredRight: null, singularContainerMode: true},
-        {modelName: 'Invoice', requiredRight: 'manage_divisions', singularContainerMode: true}
+        {modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true}
     ]
 });
 
