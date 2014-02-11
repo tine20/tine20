@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-01-15 13:51+0000\n"
+"PO-Revision-Date: 2014-02-11 20:38+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
@@ -118,11 +118,11 @@ msgstr ""
 msgid "Private Information"
 msgstr ""
 
-#: Preference/Abstract.php:507
+#: Preference/Abstract.php:511
 msgid "default"
 msgstr "zadana vrijednost"
 
-#: Frontend/Http.php:396 js/ExceptionHandler.js:160
+#: Frontend/Http.php:396 js/ExceptionHandler.js:168
 msgid "Authorisation Required"
 msgstr "Potrebna je autorizacija"
 
@@ -416,43 +416,43 @@ msgid ""
 " sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Setup/setup.xml:3209
+#: Setup/setup.xml:3111
 msgid "note"
 msgstr "bilješka"
 
-#: Setup/setup.xml:3214
+#: Setup/setup.xml:3116
 msgid "default note type"
 msgstr "standardni tip bilješke"
 
-#: Setup/setup.xml:3240
+#: Setup/setup.xml:3142
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3245
+#: Setup/setup.xml:3147
 msgid "telephone call"
 msgstr "telefonski poziv"
 
-#: Setup/setup.xml:3271
+#: Setup/setup.xml:3173
 msgid "email"
 msgstr "e-mail"
 
-#: Setup/setup.xml:3276
+#: Setup/setup.xml:3178
 msgid "email contact"
 msgstr "e-mail kontakt"
 
-#: Setup/setup.xml:3302
+#: Setup/setup.xml:3204
 msgid "created"
 msgstr "kreirano"
 
-#: Setup/setup.xml:3307
+#: Setup/setup.xml:3209
 msgid "record created"
 msgstr "kreirani zapis"
 
-#: Setup/setup.xml:3333
+#: Setup/setup.xml:3235
 msgid "changed"
 msgstr "izmijenjen"
 
-#: Setup/setup.xml:3338
+#: Setup/setup.xml:3240
 msgid "record changed"
 msgstr "izmijenjeni zapis"
 
@@ -819,7 +819,7 @@ msgid "Logging you in..."
 msgstr "Prijava u tijeku..."
 
 #: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:659
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:672
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -835,7 +835,7 @@ msgstr "Prijava uspješna. Učitavanje {0}..."
 msgid "Please wait!"
 msgstr "Molimo pričekajte!"
 
-#: js/LoginPanel.js:482 js/ExceptionHandler.js:225
+#: js/LoginPanel.js:482 js/ExceptionHandler.js:233
 msgid "Connection lost, please check your network!"
 msgstr "Veza je izgubljena, molimo Vas da provjerite mrežu!"
 
@@ -855,13 +855,13 @@ msgstr "Prijava neuspješna"
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:634
 msgid "Errors"
 msgstr "Greške"
 
 #: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:634
 msgid "Please fix the errors noted."
 msgstr "Molimo Vas da ispravite navedene pogreške."
 
@@ -984,7 +984,7 @@ msgstr "Instaliraj CPM 2.0 kao web aplikaciju"
 
 #: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:656
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:669
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr "Potvrdi"
@@ -1011,107 +1011,107 @@ msgstr[0] "popis zadataka"
 msgstr[1] "popisa zadataka"
 msgstr[2] "popisa zadataka"
 
-#: js/ExceptionHandler.js:161
+#: js/ExceptionHandler.js:169
 msgid "Your session timed out. You need to login again."
 msgstr "Vaša sesija je istekla. Molimo Vas da se ponovno prijavite."
 
-#: js/ExceptionHandler.js:176
+#: js/ExceptionHandler.js:184
 msgid "Insufficient Rights"
 msgstr "Nedovoljna prava"
 
-#: js/ExceptionHandler.js:177
+#: js/ExceptionHandler.js:185
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Nije Vam dozvoljeno izvršenje ove akcije"
 
-#: js/ExceptionHandler.js:185
+#: js/ExceptionHandler.js:193
 msgid "Not Found"
 msgstr "Nije pronađeno"
 
-#: js/ExceptionHandler.js:186
+#: js/ExceptionHandler.js:194
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr "Nažalost, Vaš zahtjev se ne može izvršiti jer potrebni podaci nisu pronađeni. Molimo Vas da osvježite trenutni pregled."
 
-#: js/ExceptionHandler.js:194
+#: js/ExceptionHandler.js:202
 msgid "Concurrent Updates"
 msgstr "Simultano ažuriranje"
 
-#: js/ExceptionHandler.js:195
+#: js/ExceptionHandler.js:203
 msgid ""
 "Someone else saved this record while you where editing the data. You need to"
 " reload and make your changes again."
 msgstr "U međuvremenu je netko spremio ovaj zapis dok ste uređivali podatke. Morate ponovno učitati stranicu i unijeti izmjene."
 
-#: js/ExceptionHandler.js:203
+#: js/ExceptionHandler.js:211
 msgid "Service Unavailable"
 msgstr "Servis nije dostupan"
 
-#: js/ExceptionHandler.js:204
+#: js/ExceptionHandler.js:212
 msgid ""
 "The server is currently unable to handle the request due to a temporary "
 "overloading, maintenance or misconfiguration of the server. Please try again"
 " or contact your administrator."
 msgstr "Server trenutno nije u mogućnosti procesirati zahtjev zbog trenutne preopterećenosti, održavanja ili neispravne konfiguracije. Molimo pokušajte ponovo ili kontaktirajte svog administratora."
 
-#: js/ExceptionHandler.js:210
+#: js/ExceptionHandler.js:218
 msgid "Server Message:"
 msgstr "Poruka Servera:"
 
-#: js/ExceptionHandler.js:212
+#: js/ExceptionHandler.js:220
 msgid "Invalid Data"
 msgstr "Pogrešan Podatak"
 
-#: js/ExceptionHandler.js:213
+#: js/ExceptionHandler.js:221
 msgid "Your input data is not valid. Please provide valid data."
 msgstr "Podatak koji unosite nije dobar. Molimo unesite ispravan podatak."
 
-#: js/ExceptionHandler.js:231
+#: js/ExceptionHandler.js:239
 msgid "Timeout"
 msgstr "Vremensko ograničenje"
 
-#: js/ExceptionHandler.js:232
+#: js/ExceptionHandler.js:240
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr "Nažalost, tijekom obrade zahtjeva je došlo do prekida veze. Učitajte vaš preglednik, pokušajte ponovo ili kontaktirajte svog administratora."
 
-#: js/ExceptionHandler.js:240
+#: js/ExceptionHandler.js:248
 msgid "No Response"
 msgstr "Nema odgovora"
 
-#: js/ExceptionHandler.js:241
+#: js/ExceptionHandler.js:249
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
 msgstr "Nažalost, server nije vratio nikakve podatke. Učitajte vaš preglednik, pokušajte ponovo ili kontaktirajte svog administratora."
 
-#: js/ExceptionHandler.js:248
+#: js/ExceptionHandler.js:256
 msgid "Out of Resources"
 msgstr "Nedostatak resursa"
 
-#: js/ExceptionHandler.js:249
+#: js/ExceptionHandler.js:257
 msgid ""
 "Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
 "your administrator."
 msgstr "Nažalost, memorija Servera je skoro iskorištena. Molimo kontaktirajte svog administraora."
 
-#: js/ExceptionHandler.js:265
+#: js/ExceptionHandler.js:273
 msgid "No Role Memberships"
 msgstr "Nije pripadnik niti jedne role"
 
-#: js/ExceptionHandler.js:266
+#: js/ExceptionHandler.js:274
 msgid ""
 "Your user account has no role memberships. Please contact your "
 "administrator."
 msgstr "Vaš korisnički račun nema potrebnu ulogu. Molimo Vas da kontaktirate svog administratora."
 
-#: js/ExceptionHandler.js:273
+#: js/ExceptionHandler.js:281
 msgid "Method Not Found / Insufficent Permissions"
 msgstr ""
 
-#: js/ExceptionHandler.js:274
+#: js/ExceptionHandler.js:282
 msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
@@ -2325,34 +2325,34 @@ msgstr "Definicija izvoza"
 msgid "Select Export Definition ..."
 msgstr "Odaberite definiciju izvoza..."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:318
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:441
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:331
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:454
 msgid "Delete value from all selected records"
 msgstr "Izbrišite vrijednos sa svih odabranih zapisa"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:424
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:437
 msgid "Undo change for all selected records"
 msgstr "Poništi izmjene za sve odabrane zapise."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:499
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:512
 msgid "Edit {0} {1}"
 msgstr "Uredi {0} {1}"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:558
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:571
 msgid "Different Values"
 msgstr "Različite Vrijednosti"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:559
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:572
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr "Ovo polje ima različite vrijednosti. Uređivanjem ovog polja ćete prebrisati stare vrijednosti."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:656
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:669
 msgid "Do you really want to change these {0} records?"
 msgstr "Zaista želite promijeniti ove {0} zapise?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:659
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:672
 msgid "Applying changes"
 msgstr "Primjenjujem promjene"
 
@@ -2809,36 +2809,6 @@ msgstr "Uvuci tekst"
 msgid "Remove Formatting"
 msgstr "Ukloni formatiranje"
 
-#: js/UserRegistration.js:37
-msgid "Registration Wizard"
-msgstr "Čarobnjak za prijavu"
-
-#: js/UserRegistration.js:90
-msgid "Given name"
-msgstr "Ime"
-
-#: js/UserRegistration.js:101
-msgid "Family name"
-msgstr "Prezime"
-
-#: js/UserRegistration.js:112
-msgid "Login name"
-msgstr "Korisničko ime"
-
-#: js/UserRegistration.js:125
-msgid "Emailaddress"
-msgstr "E-mail adresa"
-
-#: js/UserRegistration.js:171
-msgid "Congratulations!"
-msgstr "Čestitke!"
-
-#: js/UserRegistration.js:171
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr "Unijeli ste sve potrebne informacije. Klikom na Završi poslat ćemo Vam registracijski e-mail."
-
 #: js/ux/PopupWindowManager.js:175
 msgid ""
 "The window you want to work with is backgrounded. Your browser doesn't "
@@ -2983,7 +2953,7 @@ msgstr ""
 msgid "%s's personal container"
 msgstr "%s osobni kontejner"
 
-#: Container.php:1527
+#: Container.php:1530
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"

@@ -28,10 +28,6 @@ msgstr ""
 msgid "Line"
 msgstr "Linha"
 
-#: Model/Call.php:70 Model/MyPhone.php:32 js/DialerPanel.js:53
-msgid "Phone"
-msgstr "Telefones"
-
 #: Model/Call.php:80
 msgid "Caller Id"
 msgstr "Id do Chamador"
@@ -67,6 +63,10 @@ msgstr "Fonte"
 #: Model/Call.php:120
 msgid "Destination"
 msgstr "Destino"
+
+#: Model/MyPhone.php:32 js/DialerPanel.js:53
+msgid "Phone"
+msgstr "Telefones"
 
 #: Model/MyPhone.php:33 js/CallGridPanel.js:167
 msgid "Phones"

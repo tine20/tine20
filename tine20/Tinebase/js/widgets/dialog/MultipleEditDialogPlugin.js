@@ -229,7 +229,17 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 this.createMultiButton(ff);
             }
             
-            var startValue = this.interRecord.get(ff.name);
+            var match = ff.name.match(/customfield_(.*)/);
+            if (match && match.length == 2) {
+                var cf = this.interRecord.get('customfields');
+                if (cf && cf.hasOwnProperty(match[1])) {
+                    var startValue = cf[match[1]];
+                } else {
+                    var startValue = '';
+                }
+            } else {
+                var startValue = this.interRecord.get(ff.name);
+            }
             
             if (ff.isXType('addressbookcontactpicker') && ff.useAccountRecord) {
                 ff.startRecord = startValue ? startValue : null;
@@ -245,6 +255,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             } else if (Ext.isObject(startValue)) {
                 startValue = startValue[ff.recordClass.getMeta('idProperty')];
                 ff.startRecord = new ff.recordClass(startValue);
+            } else if (ff.isXType('checkbox')) {
+                var startValue = (startValue == 1) ? true : false;
+                ff.setValue(startValue);
             }
             ff.startingValue = (startValue == undefined || startValue == null) ? '' : startValue;
             

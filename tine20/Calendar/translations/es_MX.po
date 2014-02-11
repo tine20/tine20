@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-01-15 13:51+0000\n"
+"PO-Revision-Date: 2014-02-11 20:39+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Spanish (Mexico) (http://www.transifex.com/projects/p/tine20/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
@@ -66,7 +66,7 @@ msgstr ""
 msgid "End"
 msgstr ""
 
-#: Model/Event.php:345 js/GridView.js:127 js/EventDetailsPanel.js:262
+#: Model/Event.php:345 js/GridView.js:127 js/EventDetailsPanel.js:266
 msgid "Blocking"
 msgstr ""
 
@@ -79,13 +79,13 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:272
+#: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:276
 #: js/Model.js:206 js/EventEditDialog.js:132 js/ResourcesGridPanel.js:54
 msgid "Location"
 msgstr ""
 
 #: Model/Event.php:349 js/GridView.js:154 js/PerspectiveCombo.js:127
-#: js/EventDetailsPanel.js:276 js/Model.js:226 js/EventEditDialog.js:308
+#: js/EventDetailsPanel.js:280 js/Model.js:226 js/EventEditDialog.js:308
 msgid "Organizer"
 msgstr ""
 
@@ -128,93 +128,93 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: Model/Rrule.php:286
+#: Model/Rrule.php:324
 #, python-format
 msgid "Every %s day"
 msgstr ""
 
-#: Model/Rrule.php:287 js/RrulePanel.js:79
+#: Model/Rrule.php:325 js/RrulePanel.js:79
 msgid "Daily"
 msgstr ""
 
-#: Model/Rrule.php:292
+#: Model/Rrule.php:330
 #, python-format
 msgid "Every %s week on "
 msgstr ""
 
-#: Model/Rrule.php:293
+#: Model/Rrule.php:331
 msgid "Weekly on "
 msgstr ""
 
-#: Model/Rrule.php:300
+#: Model/Rrule.php:338
 msgid " and "
 msgstr ""
 
-#: Model/Rrule.php:312
+#: Model/Rrule.php:350
 msgid "Every %1$s month on the %2$s %3$s"
 msgstr ""
 
-#: Model/Rrule.php:313
+#: Model/Rrule.php:351
 msgid "Monthly every %1$s %2$s"
 msgstr ""
 
-#: Model/Rrule.php:319
+#: Model/Rrule.php:357
 msgid "Every %1$s month on the %2$s"
 msgstr ""
 
-#: Model/Rrule.php:320
+#: Model/Rrule.php:358
 msgid "Monthly on the %1$s"
 msgstr ""
 
-#: Model/Rrule.php:329
+#: Model/Rrule.php:367
 msgid "Yearly every %1$s %2$s of %3$s"
 msgstr ""
 
-#: Model/Rrule.php:331
+#: Model/Rrule.php:369
 msgid "Yearly on the %1$s of %2$s"
 msgstr ""
 
-#: Model/Rrule.php:371
+#: Model/Rrule.php:409
 msgid "second to last"
 msgstr ""
 
-#: Model/Rrule.php:374 js/RrulePanel.js:543 js/RrulePanel.js:724
+#: Model/Rrule.php:412 js/RrulePanel.js:543 js/RrulePanel.js:724
 msgid "last"
 msgstr ""
 
-#: Model/Rrule.php:380 js/RrulePanel.js:539 js/RrulePanel.js:720
+#: Model/Rrule.php:418 js/RrulePanel.js:539 js/RrulePanel.js:720
 msgid "first"
 msgstr ""
 
-#: Model/Rrule.php:383 js/RrulePanel.js:540 js/RrulePanel.js:721
+#: Model/Rrule.php:421 js/RrulePanel.js:540 js/RrulePanel.js:721
 msgid "second"
 msgstr ""
 
-#: Model/Rrule.php:386 js/RrulePanel.js:541 js/RrulePanel.js:722
+#: Model/Rrule.php:424 js/RrulePanel.js:541 js/RrulePanel.js:722
 msgid "third"
 msgstr ""
 
-#: Model/Rrule.php:389 js/RrulePanel.js:542 js/RrulePanel.js:723
+#: Model/Rrule.php:427 js/RrulePanel.js:542 js/RrulePanel.js:723
 msgid "fourth"
 msgstr ""
 
-#: Model/Rrule.php:392
+#: Model/Rrule.php:430
 msgid "fifth"
 msgstr ""
 
-#: Model/Rrule.php:397
+#: Model/Rrule.php:435
 msgid "st"
 msgstr ""
 
-#: Model/Rrule.php:400
+#: Model/Rrule.php:438
 msgid "nd"
 msgstr ""
 
-#: Model/Rrule.php:403
+#: Model/Rrule.php:441
 msgid "rd"
 msgstr ""
 
-#: Model/Rrule.php:406
+#: Model/Rrule.php:444
 msgid "th"
 msgstr ""
 
@@ -284,7 +284,7 @@ msgid "Declined"
 msgstr ""
 
 #: Setup/Update/Release5.php:94 Setup/Initialize.php:115 js/GridView.js:135
-#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:206
+#: js/EventDetailsPanel.js:271 js/EventEditDialog.js:206
 msgid "Tentative"
 msgstr ""
 
@@ -320,7 +320,7 @@ msgstr ""
 msgid "All my events"
 msgstr ""
 
-#: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:252
+#: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:256
 #: js/ContactEventsGridPanel.js:119 js/EventEditDialog.js:138
 msgid "Start Time"
 msgstr ""
@@ -416,7 +416,7 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: js/GridView.js:115 js/EventDetailsPanel.js:257 js/EventEditDialog.js:152
+#: js/GridView.js:115 js/EventDetailsPanel.js:261 js/EventEditDialog.js:152
 msgid "End Time"
 msgstr ""
 
@@ -760,25 +760,29 @@ msgstr ""
 msgid "This event is additionally displayed in your personal calendar {0}"
 msgstr ""
 
-#: js/EventDetailsPanel.js:28 js/AttendeeGridPanel.js:575
-#: js/AttendeeGridPanel.js:593 js/AttendeeGridPanel.js:610
-#: js/AttendeeGridPanel.js:622 js/Model.js:390
+#: js/EventDetailsPanel.js:28 js/AttendeeGridPanel.js:580
+#: js/AttendeeGridPanel.js:598 js/AttendeeGridPanel.js:615
+#: js/AttendeeGridPanel.js:627 js/Model.js:390
 msgid "No Information"
 msgstr ""
 
-#: js/EventDetailsPanel.js:65
+#: js/EventDetailsPanel.js:66
+msgid "Unknown date"
+msgstr ""
+
+#: js/EventDetailsPanel.js:69
 msgid "{0} {1} o'clock"
 msgstr ""
 
-#: js/EventDetailsPanel.js:89 js/EventUI.js:242
+#: js/EventDetailsPanel.js:93 js/EventUI.js:242
 msgid "recurring event"
 msgstr ""
 
-#: js/EventDetailsPanel.js:91 js/EventUI.js:247
+#: js/EventDetailsPanel.js:95 js/EventUI.js:247
 msgid "recurring event exception"
 msgstr ""
 
-#: js/EventDetailsPanel.js:294 js/AttendeeFilterModel.js:35
+#: js/EventDetailsPanel.js:298 js/AttendeeFilterModel.js:35
 #: js/AttendeeGridPanel.js:89 js/WestPanel.js:90 js/Model.js:374
 msgid "Attendee"
 msgstr ""
@@ -845,19 +849,19 @@ msgstr[1] ""
 msgid "Member of group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:400
+#: js/AttendeeGridPanel.js:405
 msgid "Remove Attender"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:413
+#: js/AttendeeGridPanel.js:418
 msgid "Compose email"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:580
+#: js/AttendeeGridPanel.js:585
 msgid "(as a group member)"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:671
+#: js/AttendeeGridPanel.js:676
 msgid "External Attendee"
 msgstr ""
 
@@ -941,7 +945,7 @@ msgstr ""
 msgid "Start date is not valid"
 msgstr ""
 
-#: js/EventEditDialog.js:546
+#: js/EventEditDialog.js:547
 msgid "Errors"
 msgstr ""
 
@@ -1037,42 +1041,42 @@ msgstr ""
 msgid "Event details"
 msgstr ""
 
-#: Controller/EventNotifications.php:314
+#: Controller/EventNotifications.php:325
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:317
+#: Controller/EventNotifications.php:328
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:321
+#: Controller/EventNotifications.php:332
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr ""
 
-#: Controller/EventNotifications.php:329
+#: Controller/EventNotifications.php:340
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:336
+#: Controller/EventNotifications.php:347
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr ""
 
-#: Controller/EventNotifications.php:347
+#: Controller/EventNotifications.php:358
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:351
+#: Controller/EventNotifications.php:362
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:355
+#: Controller/EventNotifications.php:366
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:359
+#: Controller/EventNotifications.php:370
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:363
+#: Controller/EventNotifications.php:374
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-01-15 13:51+0000\n"
+"PO-Revision-Date: 2014-02-11 20:39+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -115,11 +115,11 @@ msgstr "Informations bancaires"
 msgid "Private Information"
 msgstr "Informations privées"
 
-#: Preference/Abstract.php:507
+#: Preference/Abstract.php:511
 msgid "default"
 msgstr "défaut"
 
-#: Frontend/Http.php:396 js/ExceptionHandler.js:160
+#: Frontend/Http.php:396 js/ExceptionHandler.js:168
 msgid "Authorisation Required"
 msgstr "Authentification requise"
 
@@ -413,43 +413,43 @@ msgid ""
 " sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Setup/setup.xml:3209
+#: Setup/setup.xml:3111
 msgid "note"
 msgstr "Information"
 
-#: Setup/setup.xml:3214
+#: Setup/setup.xml:3116
 msgid "default note type"
 msgstr "type de note (défaut)"
 
-#: Setup/setup.xml:3240
+#: Setup/setup.xml:3142
 msgid "telephone"
 msgstr "téléphone"
 
-#: Setup/setup.xml:3245
+#: Setup/setup.xml:3147
 msgid "telephone call"
 msgstr "appel téléphonique"
 
-#: Setup/setup.xml:3271
+#: Setup/setup.xml:3173
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3276
+#: Setup/setup.xml:3178
 msgid "email contact"
 msgstr "contact email"
 
-#: Setup/setup.xml:3302
+#: Setup/setup.xml:3204
 msgid "created"
 msgstr "créé"
 
-#: Setup/setup.xml:3307
+#: Setup/setup.xml:3209
 msgid "record created"
 msgstr "enregistrement créé"
 
-#: Setup/setup.xml:3333
+#: Setup/setup.xml:3235
 msgid "changed"
 msgstr "mis à jour"
 
-#: Setup/setup.xml:3338
+#: Setup/setup.xml:3240
 msgid "record changed"
 msgstr "enregistrement mis à jour"
 
@@ -812,7 +812,7 @@ msgid "Logging you in..."
 msgstr "Connexion..."
 
 #: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:659
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:672
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -828,7 +828,7 @@ msgstr "Connexion réussie. Chargement de {0}..."
 msgid "Please wait!"
 msgstr "Veuillez patienter!"
 
-#: js/LoginPanel.js:482 js/ExceptionHandler.js:225
+#: js/LoginPanel.js:482 js/ExceptionHandler.js:233
 msgid "Connection lost, please check your network!"
 msgstr "Connexion perdue, vérifiez la connexion réseau!"
 
@@ -848,13 +848,13 @@ msgstr "Erreur de connexion"
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:634
 msgid "Errors"
 msgstr "Erreurs"
 
 #: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:634
 msgid "Please fix the errors noted."
 msgstr "Veuillez corriger les erreurs."
 
@@ -977,7 +977,7 @@ msgstr "Installer Tine20 comme web app"
 
 #: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:656
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:669
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr "Confirmer"
@@ -1002,107 +1002,107 @@ msgid_plural "to do lists"
 msgstr[0] "liste \"à faire\""
 msgstr[1] "listes \"à faire\""
 
-#: js/ExceptionHandler.js:161
+#: js/ExceptionHandler.js:169
 msgid "Your session timed out. You need to login again."
 msgstr "Votre session a expiré, veuillez vous reconnecter."
 
-#: js/ExceptionHandler.js:176
+#: js/ExceptionHandler.js:184
 msgid "Insufficient Rights"
 msgstr "Droits inssufisants"
 
-#: js/ExceptionHandler.js:177
+#: js/ExceptionHandler.js:185
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Désolé, vous n'êtes pas autorisé à effectuer cette action"
 
-#: js/ExceptionHandler.js:185
+#: js/ExceptionHandler.js:193
 msgid "Not Found"
 msgstr "Non trouvé"
 
-#: js/ExceptionHandler.js:186
+#: js/ExceptionHandler.js:194
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr "Désolé, votre requête ne peux aboutir car l'information est introuvable. La plupart du temps, c'est que quelqu'un a déjà effacé l'information. Veuillez rafraîchir votre affichage."
 
-#: js/ExceptionHandler.js:194
+#: js/ExceptionHandler.js:202
 msgid "Concurrent Updates"
 msgstr "Mises à jour simultanées"
 
-#: js/ExceptionHandler.js:195
+#: js/ExceptionHandler.js:203
 msgid ""
 "Someone else saved this record while you where editing the data. You need to"
 " reload and make your changes again."
 msgstr "Un autre utilisateur a sauvegardé cet enregistrement pendant votre modification. Vous devez le recharger et ressaisir vos modifications."
 
-#: js/ExceptionHandler.js:203
+#: js/ExceptionHandler.js:211
 msgid "Service Unavailable"
 msgstr "Service inaccessible"
 
-#: js/ExceptionHandler.js:204
+#: js/ExceptionHandler.js:212
 msgid ""
 "The server is currently unable to handle the request due to a temporary "
 "overloading, maintenance or misconfiguration of the server. Please try again"
 " or contact your administrator."
 msgstr "Le serveur ne peut satisfaire votre demande à cause d'une surcharge temporaire ou d'une maintenance. Réessayer et en cas de problème récurrent, contacter votre adminsitrateur."
 
-#: js/ExceptionHandler.js:210
+#: js/ExceptionHandler.js:218
 msgid "Server Message:"
 msgstr "Message serveur :"
 
-#: js/ExceptionHandler.js:212
+#: js/ExceptionHandler.js:220
 msgid "Invalid Data"
 msgstr "Données invalides"
 
-#: js/ExceptionHandler.js:213
+#: js/ExceptionHandler.js:221
 msgid "Your input data is not valid. Please provide valid data."
 msgstr "Données invalide. Veuillez corriger"
 
-#: js/ExceptionHandler.js:231
+#: js/ExceptionHandler.js:239
 msgid "Timeout"
 msgstr "Délai expiré"
 
-#: js/ExceptionHandler.js:232
+#: js/ExceptionHandler.js:240
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr "Désolé, le délai de votre requête a expiré. Veuillez relancer votre navigateur et essayer de nouveau, ou contactez votre administrateur."
 
-#: js/ExceptionHandler.js:240
+#: js/ExceptionHandler.js:248
 msgid "No Response"
 msgstr "Pas de réponse"
 
-#: js/ExceptionHandler.js:241
+#: js/ExceptionHandler.js:249
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
 msgstr "Désolé, le serveur n'a retourné aucune donnée. Veuillez relancer votre navigateur et essayer de nouveau, ou contactez votre administrateur."
 
-#: js/ExceptionHandler.js:248
+#: js/ExceptionHandler.js:256
 msgid "Out of Resources"
 msgstr "Manque de ressources"
 
-#: js/ExceptionHandler.js:249
+#: js/ExceptionHandler.js:257
 msgid ""
 "Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
 "your administrator."
 msgstr "Désolé, le serveur à rencontré un problème de ressources. Veuillez contacter votre administrateur"
 
-#: js/ExceptionHandler.js:265
+#: js/ExceptionHandler.js:273
 msgid "No Role Memberships"
 msgstr "Aucune appartenance à un rôle"
 
-#: js/ExceptionHandler.js:266
+#: js/ExceptionHandler.js:274
 msgid ""
 "Your user account has no role memberships. Please contact your "
 "administrator."
 msgstr "Votre compte utilisateur ne possède aucun rôle. Veuillez contacter votre administrateur."
 
-#: js/ExceptionHandler.js:273
+#: js/ExceptionHandler.js:281
 msgid "Method Not Found / Insufficent Permissions"
 msgstr "Méthode introuvable, ou permissions insuffisantes"
 
-#: js/ExceptionHandler.js:274
+#: js/ExceptionHandler.js:282
 msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
@@ -2303,34 +2303,34 @@ msgstr "Définition de l'exportation"
 msgid "Select Export Definition ..."
 msgstr "Choisissez la définition de l'exportation"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:318
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:441
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:331
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:454
 msgid "Delete value from all selected records"
 msgstr "Supprimer les valeurs des enregistrements sélectionnés"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:424
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:437
 msgid "Undo change for all selected records"
 msgstr "Annuler les changements"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:499
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:512
 msgid "Edit {0} {1}"
 msgstr "Modifier {0} {1}"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:558
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:571
 msgid "Different Values"
 msgstr "Valeurs différentes"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:559
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:572
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr "Ce champ a des valeurs différentes : le modifier écrasera les anciennes valeurs."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:656
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:669
 msgid "Do you really want to change these {0} records?"
 msgstr "Etes vous sûr de modificer ces {0} enregistrements ?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:659
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:672
 msgid "Applying changes"
 msgstr "Application des modifications"
 
@@ -2786,36 +2786,6 @@ msgstr "Indenter le texte"
 msgid "Remove Formatting"
 msgstr "Supprimer la mise en forme"
 
-#: js/UserRegistration.js:37
-msgid "Registration Wizard"
-msgstr "Assistant d'enregistement"
-
-#: js/UserRegistration.js:90
-msgid "Given name"
-msgstr "Prénom"
-
-#: js/UserRegistration.js:101
-msgid "Family name"
-msgstr "Nom"
-
-#: js/UserRegistration.js:112
-msgid "Login name"
-msgstr "Login"
-
-#: js/UserRegistration.js:125
-msgid "Emailaddress"
-msgstr "Adresse email"
-
-#: js/UserRegistration.js:171
-msgid "Congratulations!"
-msgstr "Félicitations!"
-
-#: js/UserRegistration.js:171
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr "Vous avez entré toutes les informations nécessaires. Si vous cliquez sur le bouton Fin vous recevrez l'email d'enregistrement."
-
 #: js/ux/PopupWindowManager.js:175
 msgid ""
 "The window you want to work with is backgrounded. Your browser doesn't "
@@ -2955,7 +2925,7 @@ msgstr "Exception ({0})"
 msgid "%s's personal container"
 msgstr "Dossier personnel de %s"
 
-#: Container.php:1527
+#: Container.php:1530
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"

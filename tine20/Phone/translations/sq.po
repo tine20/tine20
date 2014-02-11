@@ -29,10 +29,6 @@ msgstr "Thirrje"
 msgid "Line"
 msgstr "Linja"
 
-#: Model/Call.php:70 Model/MyPhone.php:32 js/DialerPanel.js:53
-msgid "Phone"
-msgstr "Telefon"
-
 #: Model/Call.php:80
 msgid "Caller Id"
 msgstr "ID e thirrësit"
@@ -68,6 +64,10 @@ msgstr "Burim"
 #: Model/Call.php:120
 msgid "Destination"
 msgstr "Destinacioni"
+
+#: Model/MyPhone.php:32 js/DialerPanel.js:53
+msgid "Phone"
+msgstr "Telefon"
 
 #: Model/MyPhone.php:33 js/CallGridPanel.js:167
 msgid "Phones"

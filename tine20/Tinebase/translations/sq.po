@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-01-15 13:51+0000\n"
+"PO-Revision-Date: 2014-02-11 20:39+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
 "MIME-Version: 1.0\n"
@@ -114,11 +114,11 @@ msgstr "Informacioni Bankar"
 msgid "Private Information"
 msgstr "Informacion Privat"
 
-#: Preference/Abstract.php:507
+#: Preference/Abstract.php:511
 msgid "default"
 msgstr "e paracaktuar"
 
-#: Frontend/Http.php:396 js/ExceptionHandler.js:160
+#: Frontend/Http.php:396 js/ExceptionHandler.js:168
 msgid "Authorisation Required"
 msgstr "Kërkohet autorizim"
 
@@ -412,43 +412,43 @@ msgid ""
 " sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Setup/setup.xml:3209
+#: Setup/setup.xml:3111
 msgid "note"
 msgstr "shënim"
 
-#: Setup/setup.xml:3214
+#: Setup/setup.xml:3116
 msgid "default note type"
 msgstr "tipi i paracaktuar i shënimit"
 
-#: Setup/setup.xml:3240
+#: Setup/setup.xml:3142
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3245
+#: Setup/setup.xml:3147
 msgid "telephone call"
 msgstr "thirrje telefonike"
 
-#: Setup/setup.xml:3271
+#: Setup/setup.xml:3173
 msgid "email"
 msgstr "e-postë"
 
-#: Setup/setup.xml:3276
+#: Setup/setup.xml:3178
 msgid "email contact"
 msgstr "kontak e-poste"
 
-#: Setup/setup.xml:3302
+#: Setup/setup.xml:3204
 msgid "created"
 msgstr "krijuar"
 
-#: Setup/setup.xml:3307
+#: Setup/setup.xml:3209
 msgid "record created"
 msgstr "e dhëna u krijua"
 
-#: Setup/setup.xml:3333
+#: Setup/setup.xml:3235
 msgid "changed"
 msgstr "ndyshuar"
 
-#: Setup/setup.xml:3338
+#: Setup/setup.xml:3240
 msgid "record changed"
 msgstr "e dhëna u ndryshua"
 
@@ -811,7 +811,7 @@ msgid "Logging you in..."
 msgstr "Duke ju futur brënda..."
 
 #: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:659
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:672
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -827,7 +827,7 @@ msgstr "Hyrja e suksesshme, Duke ngarkuar {0}..."
 msgid "Please wait!"
 msgstr "Ju lutem prisni!"
 
-#: js/LoginPanel.js:482 js/ExceptionHandler.js:225
+#: js/LoginPanel.js:482 js/ExceptionHandler.js:233
 msgid "Connection lost, please check your network!"
 msgstr "Lidhja humbi, kontrolloni rrjetin tuaj"
 
@@ -847,13 +847,13 @@ msgstr "Hyrje e dështuar"
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:634
 msgid "Errors"
 msgstr "Gabime"
 
 #: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:621
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:634
 msgid "Please fix the errors noted."
 msgstr "Ju lutem rregulloni gabimet e vëna në dukje"
 
@@ -976,7 +976,7 @@ msgstr "Instalo Tine dy si aplikacion në shfletuesin tuaj"
 
 #: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:656
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:669
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr "Konfirmo"
@@ -1001,107 +1001,107 @@ msgid_plural "to do lists"
 msgstr[0] "Lista Për Të Bërë"
 msgstr[1] "Listat Për Të Bërë"
 
-#: js/ExceptionHandler.js:161
+#: js/ExceptionHandler.js:169
 msgid "Your session timed out. You need to login again."
 msgstr "Seksioni juaj Humbi Kohën . Ju duhet të hyni përsëri"
 
-#: js/ExceptionHandler.js:176
+#: js/ExceptionHandler.js:184
 msgid "Insufficient Rights"
 msgstr "Të drejta të pamjaftueshme"
 
-#: js/ExceptionHandler.js:177
+#: js/ExceptionHandler.js:185
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Na falni, ju nuk jeni të lejuar të kryeni këtë veprim"
 
-#: js/ExceptionHandler.js:185
+#: js/ExceptionHandler.js:193
 msgid "Not Found"
 msgstr "Nuk u gjet"
 
-#: js/ExceptionHandler.js:186
+#: js/ExceptionHandler.js:194
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr "Na falni . kërkesa juaj nuk mund të përfundonte pasi të dhënat e kërkuara nuk u gjendën. Në shumëraste kjo do të thotë qe dikush i ka fshirë të dhënat tashmë. Ju lutem rifreskoni pamjen tuaj aktuale"
 
-#: js/ExceptionHandler.js:194
+#: js/ExceptionHandler.js:202
 msgid "Concurrent Updates"
 msgstr "Përditësime të njëkohshme"
 
-#: js/ExceptionHandler.js:195
+#: js/ExceptionHandler.js:203
 msgid ""
 "Someone else saved this record while you where editing the data. You need to"
 " reload and make your changes again."
 msgstr "Dikush tjetër ruajti këtë të dhënë gjatë kohs që ju po modifikonit. Ju duhet ta ringarkoni dhetë bëni ndryshimet tuaja përsëri"
 
-#: js/ExceptionHandler.js:203
+#: js/ExceptionHandler.js:211
 msgid "Service Unavailable"
 msgstr "Shërbim i padisponueshëm"
 
-#: js/ExceptionHandler.js:204
+#: js/ExceptionHandler.js:212
 msgid ""
 "The server is currently unable to handle the request due to a temporary "
 "overloading, maintenance or misconfiguration of the server. Please try again"
 " or contact your administrator."
 msgstr "Serveri e ka të pamundur të trajtojë kërkesen për arsye të një mbingakimi të përkohshëm, mirmbajtje,ose keqkonfigurimi. Ju lutemi porvojeni përsëri ose kontaktoni administratorin tuaj"
 
-#: js/ExceptionHandler.js:210
+#: js/ExceptionHandler.js:218
 msgid "Server Message:"
 msgstr "Mesazh Serveri:"
 
-#: js/ExceptionHandler.js:212
+#: js/ExceptionHandler.js:220
 msgid "Invalid Data"
 msgstr "Të dhëna të gabuara"
 
-#: js/ExceptionHandler.js:213
+#: js/ExceptionHandler.js:221
 msgid "Your input data is not valid. Please provide valid data."
 msgstr "Të dhënat tuaja hyrëse jo të vlefshme. Ju lutem jipni të dhëna të vlefshme"
 
-#: js/ExceptionHandler.js:231
+#: js/ExceptionHandler.js:239
 msgid "Timeout"
 msgstr "Humbje-kohe"
 
-#: js/ExceptionHandler.js:232
+#: js/ExceptionHandler.js:240
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr "Na falni ka patur hubje-kohe gjatë përpunimit të kërkesës suaj. Ju lutem ringarkoni shfletuesin tuaj,provoni përsëri, ose kontaktoni me administratorin"
 
-#: js/ExceptionHandler.js:240
+#: js/ExceptionHandler.js:248
 msgid "No Response"
 msgstr "Nuk ka Përgjigje"
 
-#: js/ExceptionHandler.js:241
+#: js/ExceptionHandler.js:249
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
 msgstr "Na falni, Serveri nuk kthehu ndonjë të dhene.Ju lutem ringarkoni shfletuesin tuaj,provoni përsëri, ose kontaktoni me administratorin"
 
-#: js/ExceptionHandler.js:248
+#: js/ExceptionHandler.js:256
 msgid "Out of Resources"
 msgstr "Në mungesë të burimeve"
 
-#: js/ExceptionHandler.js:249
+#: js/ExceptionHandler.js:257
 msgid ""
 "Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
 "your administrator."
 msgstr "Na Falni, Serveri deklaroi nje gjëndje \"memory exhausted\" Kontaktoni administraotin!"
 
-#: js/ExceptionHandler.js:265
+#: js/ExceptionHandler.js:273
 msgid "No Role Memberships"
 msgstr "Nuk ka role antarësish"
 
-#: js/ExceptionHandler.js:266
+#: js/ExceptionHandler.js:274
 msgid ""
 "Your user account has no role memberships. Please contact your "
 "administrator."
 msgstr "Llogaria juaj nuk ka role antarësish. Ju lutemi kontaktoni me administratorin"
 
-#: js/ExceptionHandler.js:273
+#: js/ExceptionHandler.js:281
 msgid "Method Not Found / Insufficent Permissions"
 msgstr "Metoda nuk u gjet / Të drejta të pamjaftueshme"
 
-#: js/ExceptionHandler.js:274
+#: js/ExceptionHandler.js:282
 msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
@@ -2302,34 +2302,34 @@ msgstr "Përcaktimii eksportit"
 msgid "Select Export Definition ..."
 msgstr "Zgjidh përcaktimin e eksportit"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:318
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:441
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:331
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:454
 msgid "Delete value from all selected records"
 msgstr "Fshij vlerë nga të gjithë të dhënat e zgjedhura"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:424
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:437
 msgid "Undo change for all selected records"
 msgstr "Zhbëj ndyshimin për të gjithë të dhënat e zgjedhura "
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:499
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:512
 msgid "Edit {0} {1}"
 msgstr "Modifiko {0} {1}"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:558
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:571
 msgid "Different Values"
 msgstr "Vlera të ndryshme"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:559
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:572
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr "Fusha ka vlera të ndryshme. Modifikimi i kësaj fushë do ti mbivenosej vlerave të vjetra"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:656
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:669
 msgid "Do you really want to change these {0} records?"
 msgstr "Doni vërtetë të ndyshoni këto {0} të dhëna?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:659
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:672
 msgid "Applying changes"
 msgstr "Duke kryer ndryshimet"
 
@@ -2785,36 +2785,6 @@ msgstr "Tekst Indent"
 msgid "Remove Formatting"
 msgstr "Hiqni formatimin"
 
-#: js/UserRegistration.js:37
-msgid "Registration Wizard"
-msgstr "Proçedura e regjistrimit "
-
-#: js/UserRegistration.js:90
-msgid "Given name"
-msgstr "Emri"
-
-#: js/UserRegistration.js:101
-msgid "Family name"
-msgstr "Mbiemri"
-
-#: js/UserRegistration.js:112
-msgid "Login name"
-msgstr "Emri i Hyrjes"
-
-#: js/UserRegistration.js:125
-msgid "Emailaddress"
-msgstr "Adresa E-Postës"
-
-#: js/UserRegistration.js:171
-msgid "Congratulations!"
-msgstr "Urime!"
-
-#: js/UserRegistration.js:171
-msgid ""
-"You have entered all needed information. If you press the Finish button we "
-"will send you the registration email."
-msgstr "Ju keni vendosur të gjithë informacinine duhur. Nëse shtypni butonin Finish ne do ju dërgojme E-Post e regjistrimit"
-
 #: js/ux/PopupWindowManager.js:175
 msgid ""
 "The window you want to work with is backgrounded. Your browser doesn't "
@@ -2954,7 +2924,7 @@ msgstr "Përjashtim ({0})"
 msgid "%s's personal container"
 msgstr "Kontenieri personal i %s"
 
-#: Container.php:1527
+#: Container.php:1530
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"

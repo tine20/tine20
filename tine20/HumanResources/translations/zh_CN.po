@@ -327,12 +327,12 @@ msgid "Cost Centers"
 msgstr ""
 
 #: Model/Employee.php:256 Setup/Initialize.php:74 js/FreeTimeGridPanel.js:75
-#: js/FreeTimeGridPanel.js:278
+#: js/FreeTimeGridPanel.js:276
 msgid "Vacation"
 msgstr ""
 
 #: Model/Employee.php:269 Setup/Initialize.php:73 js/FreeTimeGridPanel.js:71
-#: js/FreeTimeGridPanel.js:276 js/AccountEditDialog.js:121
+#: js/FreeTimeGridPanel.js:274 js/AccountEditDialog.js:121
 msgid "Sickness"
 msgstr ""
 
@@ -594,11 +594,11 @@ msgid ""
 "or view-options."
 msgstr ""
 
-#: js/FreeTimeGridPanel.js:134
+#: js/FreeTimeGridPanel.js:132
 msgid "Could not book as vacation"
 msgstr ""
 
-#: js/FreeTimeGridPanel.js:135
+#: js/FreeTimeGridPanel.js:133
 msgid ""
 "The unexcused sickness days could not be booked as vacation. There are not "
 "enough days left!"
