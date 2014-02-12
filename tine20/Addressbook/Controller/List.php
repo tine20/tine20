@@ -136,7 +136,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
-        $this->_removeHiddenListMembers($result);
+        
+        if ($_onlyIds !== true) {
+            $this->_removeHiddenListMembers($result);
+        }
+        
         return $result;
     }
     
