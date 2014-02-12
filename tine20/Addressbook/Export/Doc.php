@@ -40,11 +40,15 @@ class Addressbook_Export_Doc extends Tinebase_Export_Richtext_Doc {
         $this->_docTemplate->setValue('date', Tinebase_DateTime::now()->format('Y-m-d'));
         $this->_docTemplate->setValue('account_n_given', $user->accountFirstName);
         $this->_docTemplate->setValue('account_n_family', $user->accountLastName);
-        
     }
     
     public function processIteration($_records)
     {
+        $record = $_records->getFirstRecord();
+        
+        $converter = Tinebase_Convert_Factory::factory($record);
+        $resolved = $converter->fromTine20Model($record);
+        
         $this->_docTemplate->setValue('salutation_letter', $this->_getSalutation($resolved));
         $this->_docTemplate->setValue('salutation_resolved', $this->_getShortSalutation($resolved));
         

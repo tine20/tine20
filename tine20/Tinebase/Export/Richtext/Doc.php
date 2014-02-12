@@ -96,8 +96,9 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
         
         foreach ($this->_config->properties->prop as $prop) {
             $property = (string) $prop;
-            // @TODO: remove the utf8_decode here when PHPWord_Template does not convert to utf8 anymore
-            $this->_docTemplate->setValue($property, (isset($resolved[$property]) ? utf8_decode($resolved[$property]) : ''));
+            // @TODO: remove the utf8_decode here when PHPWord_Template does not convert to utf8 anymore.
+            //        the htmlspecialchars shouldn't be required, this should have been done by the PHPWord Library
+            $this->_docTemplate->setValue($property, (isset($resolved[$property]) ? utf8_decode(htmlspecialchars($resolved[$property])) : ''));
         }
     }
     
