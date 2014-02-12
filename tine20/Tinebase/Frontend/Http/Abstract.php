@@ -97,6 +97,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 break;
             case 'xls':
             case 'doc':
+            case 'docx':
                 // redirect output to client browser
                 $export->write($result);
                 break;
