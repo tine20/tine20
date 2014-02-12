@@ -493,7 +493,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $i=0;
         
         $now = Tinebase_DateTime::now();
-        $data = array('account_id' => Tinebase_Core::getUser()->getId(), 'cleared_time' => $now,  'is_cleared' => true, 'timeaccount_id' => $this->_objects['timeaccount']->getId(), 'description' => 'test', 'duration' => 1, 'title' => 'test');
+        $data = array('account_id' => Tinebase_Core::getUser()->getId(), 'is_cleared' => true, 'timeaccount_id' => $this->_objects['timeaccount']->getId(), 'description' => 'test', 'duration' => 1, 'title' => 'test');
         
         while ($i<10) {
             $data['start_date'] = $now->addHour(1);

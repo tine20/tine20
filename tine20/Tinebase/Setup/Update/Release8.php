@@ -41,4 +41,22 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('timemachine_modlog', '3');
         $this->setApplicationVersion('Tinebase', '8.1');
     }
+
+    /**
+     * update to 8.2
+     * 
+     * @see 0009644: remove user registration
+     */
+    public function update_1()
+    {
+        if ($this->_backend->tableExists('registrations')) {
+            $this->dropTable('registrations');
+        }
+        
+        if ($this->_backend->tableExists('registration_invitation')) {
+            $this->dropTable('registration_invitation');
+        }
+        
+        $this->setApplicationVersion('Tinebase', '8.2');
+    }
 }

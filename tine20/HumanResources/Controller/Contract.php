@@ -76,7 +76,9 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             $_record->feast_calendar_id = $_record->feast_calendar_id['id'];
         }
         
-        $diff = $_record->diff($_oldRecord, array('created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'notes', 'end_date'))->diff;
+        $diff = $_record->diff($_oldRecord, array(
+            'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'notes', 'end_date', 'seq', 'tags'
+        ))->diff;
 
         if (! empty($diff)) {
             if ($this->getFreeTimes($_record)->filter('type', 'vacation')->count() > 0) {

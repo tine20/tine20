@@ -431,11 +431,14 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
      */
     protected function _parseEventExceptions(Calendar_Model_Event $event, \Sabre\VObject\Component\VCalendar $vcalendar, $baseVevent = null, $options = array())
     {
-        $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate->filter('is_deleted', false) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        if (! $event->exdate instanceof Tinebase_Record_RecordSet) {
+            $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        }
+        $recurExceptions =  $event->exdate->filter('is_deleted', false);
         
         foreach ($vcalendar->VEVENT as $vevent) {
             if (isset($vevent->{'RECURRENCE-ID'}) && $event->uid == $vevent->UID) {
-                $recurException = $this->_getRecurException($oldExdates, $vevent);
+                $recurException = $this->_getRecurException($recurExceptions, $vevent);
                 
                 // initialize attendee with attendee from base events for new exceptions
                 // this way we can keep attendee extra values like groupmember type
@@ -458,10 +461,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 
                 $this->_convertVevent($vevent, $recurException, $options);
                 
-                if (! $event->exdate instanceof Tinebase_Record_RecordSet) {
-                    $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+                if (! $recurException->getId()) {
+                    $event->exdate->addRecord($recurException);
                 }
-                $event->exdate->addRecord($recurException);
             }
         }
     }
@@ -631,8 +633,6 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         foreach ($oldExdates as $id => $oldExdate) {
             if ($exDateString == substr((string) $oldExdate->recurid, -19)) {
-                unset($oldExdates[$id]);
-                
                 return $oldExdate;
             }
         }

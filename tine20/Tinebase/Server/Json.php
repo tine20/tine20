@@ -207,7 +207,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             
             // add json apis which require no auth
             $classes['Tinebase_Frontend_Json'] = 'Tinebase';
-            $classes['Tinebase_Frontend_Json_UserRegistration'] = 'Tinebase_UserRegistration';
             
             // register additional Json apis only available for authorised users
             if (Zend_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
@@ -294,7 +293,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $classes = array();
         
         $classes['Tinebase_Frontend_Json'] = 'Tinebase';
-        $classes['Tinebase_Frontend_Json_UserRegistration'] = 'Tinebase_UserRegistration';
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
@@ -336,7 +334,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             'Tinebase.setLocale'
         );
         // check json key for all methods but some exceptions
-        if ( !(in_array($method, $anonymnousMethods) || preg_match('/Tinebase_UserRegistration/', $method))  
+        if ( !(in_array($method, $anonymnousMethods))
                 && $jsonKey != Tinebase_Core::get('jsonKey')) {
         
             if (! Tinebase_Core::isRegistered(Tinebase_Core::USER)) {

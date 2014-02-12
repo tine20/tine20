@@ -212,53 +212,198 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     }
 
     /**
+     * 
+     * @param Addressbook_Model_Contact $organizer
+     * @param Integer $state
+     * @param integer $index
+     * @return array
+     */
+    protected function _generateTasks($organizer, $state, $index)
+    {
+        if ($state == 0) {
+            $status = 'IN-PROCESS';
+        } elseif ($state > 0) {
+            $status = 'NEEDS-ACTION';
+        } else {
+            $status = 'COMPLETED';
+        }
+        
+        $tasks = array();
+        
+        $tasks[] = array(
+            'percent' => ($state == 0) ? 90 : (($state < 0) ? 100 : 0),
+            'due' => $this->_nextMonday,
+            'summary' => 'Alpha Test',
+            'organizer' => $organizer
+        );
+        $tasks[] = array(
+            'percent' => ($state == 0) ? 70 : (($state < 0) ? 100 : 0),
+            'due' => $this->_nextThursday, 
+            'summary' => 'Beta Test',
+            'organizer' => $organizer
+        );
+        $tasks[] = array(
+            'percent' => ($state == 0) ? 90 : (($state < 0) ? 100 : 0),
+            'due' => $this->_nextTuesday, 
+            'summary' => 'Release Test',
+            'organizer' => $organizer ,
+            'priority' => 'HIGH'
+        );
+        $tasks[] = array(
+            'percent' => ($state == 0) ? 80 : (($state < 0) ? 100 : 0),
+            'due' => $this->_nextFriday, 
+            'summary' => 'Pre- Production Tests',
+            'organizer' => $organizer,
+            'priority' => 'URGENT'
+        );
+        $tasks[] = array(
+            'percent' => ($state == 0) ? 50 : (($state < 0) ? 100 : 0),
+            'due' => $this->_nextFriday, 
+            'summary' => 'Erstellung Schulungsunterlagen',
+            'organizer' => $organizer,
+            'priority' => 'LOW'
+        );
+        $tasks[] = array(
+            'percent' => ($state == 0) ? 10 : (($state < 0) ? 100 : 0),
+            'due' => $this->_nextWednesday, 
+            'summary' => 'Newsletter',
+            'organizer' => $organizer,
+            'priority' => 'HIGH'
+        );
+        $tasks[] = array(
+            'percent' => ($state == 0) ? 20 : (($state < 0) ? 100 : 0),
+            'due' => $this->_nextMonday, 
+            'summary' => 'Projektierung',
+            'organizer' => $organizer,
+            'priority' => 'LOW'
+        );
+        
+        for ($i = 0; $i < (count($tasks) - 1); $i++) {
+            $tasks[$i]['status'] = $status;
+        }
+        
+        return $tasks;
+    }
+    
+    /**
      * creates shared leads
      */
     protected function _createSharedLeads()
     {
-        $this->_createSharedContainer(static::$_de ? 'Gemeinsame Leads' : 'Shared Leads');
-        $wed2weeksago = clone $this->_lastWednesday;
-        $wed2weeksago->subWeek(1);
+        $contacts = Addressbook_Controller_Contact::getInstance()->getAll();
+        $addresses = $contacts->filter('type', 'contact');
+        $users = $contacts->filter('type', 'user');
         
-        $this->_createLead(array(
-            'lead_name'     => 'Relaunch Reseller Platform',
-            'status'        => 'ACCEPTED',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'container_id'  => $this->_sharedContainer->getId(),
-            'start'         => Tinebase_DateTime::now()->subMonth(2),
-            'responsible'   => $this->_personas['pwulf'],
-            'tasks' => array(
-                array('percent' => 100, 'due' => $wed2weeksago, 'summary' => 'Alpha Test', 
-                      'organizer' => $this->_personas['jsmith']
-                ),
-                array('percent' => 100, 'due' => $this->_lastMonday, 'summary' => 'Beta Test', 
-                      'organizer' => $this->_personas['jsmith']
-                ),
-                array('percent' => 100, 'due' => $this->_lastFriday, 'summary' => 'Release Test', 
-                      'organizer' => $this->_personas['jsmith'], 'priority' => 'HIGH'
-                ),
-                array('percent' => 70,  'due' => $this->_nextFriday, 'summary' => 'Pre- Production Tests', 
-                      'organizer' => $this->_personas['jsmith'], 'priority' => 'URGENT'
-                ),
-                array('percent' => 70,  'due' => $this->_nextFriday, 'summary' => 'Erstellung Schulungsunterlagen', 
-                      'organizer' => $this->_personas['rwright'], 'priority' => 'LOW'
-                ),
-                array('percent' => 0,   'due' => $this->_nextFriday, 'summary' => 'Reseller Newsletter', 
-                      'organizer' => $this->_personas['sclever'], 'priority' => 'HIGH'
-                ),
-                array('percent' => 70,  'due' => $this->_friday2week, 'summary' => 'Projekt Nachbesprechung', 
-                      'organizer' => $this->_personas['pwulf'], 'priority' => 'LOW'
-                ),
-            ),
-            'contacts' => array(
-                array('user' =>    'pwulf',     'type' => 'RESPONSIBLE'),
-                array('user' =>    'jsmith',    'type' => 'RESPONSIBLE'),
-                array('user' =>    'rwright',   'type' => 'RESPONSIBLE'),
-                array('user' =>    'sclever',   'type' => 'RESPONSIBLE'),
-                array('contact' => 'Risa Amin', 'type' => 'CUSTOMER')
-            )
-        ));
+        unset($contacts);
+        
+        $userids = $users->getId();
+        
+        // remove admin user
+        $users->removeRecord($users->getById(Tinebase_Core::getUser()->contact_id));
+        $userCount = $users->count();
+        
+        $lastOrgName = NULL;
+        $lead = NULL;
+        
+        $startDate = Tinebase_DateTime::now()->subWeek(6);
+        // first day is a monday
+        while($startDate->format('w') != 1) {
+            $startDate->subDay(1);
+        }
+        
+        $this->_createSharedContainer(static::$_de ? 'Gemeinsame Leads' : 'Shared Leads');
+        
+        $controller = Crm_Controller_Lead::getInstance();
+        $controller->sendNotifications(0);
+        
+        $orgNames = array_unique($addresses->org_name);
+        shuffle($orgNames);
+        
+        $i = 0;
+        $userIndex = -1;
+        $state = -1;
+        $stateIndex = 0;
+        
+        foreach($orgNames as $orgName) {
+            if (empty($orgName)) {
+                continue;
+            }
+            
+            $orgAddresses = $addresses->filter('org_name', $orgName);
+            
+            if ($orgAddresses->count() < 2) {
+                continue;
+            }
+            
+            $userIndex++;
+            
+            while (! $user = $users->getById($userids[$userIndex])) {
+                $userIndex++;
+                if ($userIndex >= ($userCount - 1)) {
+                    $userIndex = 0;
+                }
+                
+            }
+            
+            if ($i%2 == 0) {
+                // create more running leads
+                if (($state == 0) && ($stateIndex < 5)) {
+                    $stateIndex++;
+                } else {
+                    $stateIndex = 0;
+                    $startDate->addWeek(1);
+                }
+            }
+            
+            // date is the startdate of the lead, always monday, we want friday in a week
+            $due = clone $startDate;
+            $due->addWeek(1)->addDay(4);
+            
+            $this->_getDays($due);
+            $now = new Tinebase_DateTime();
+            
+            if ($startDate < $now && $due > $now) {
+                $state = 0;
+            } elseif ($startDate > $now) {
+                $state = 1;
+            } else {
+                $state = -1;
+            }
+            
+            $lead = $controller->create(new Crm_Model_Lead(array(
+                'lead_name'     => $orgName,
+                'leadstate_id'  => ($state > 0) ? 5 : 1,
+                'leadtype_id'   => 1,
+                'leadsource_id' => 1,
+                'container_id'  => $this->_sharedContainer->getId(),
+                'start'         => $startDate,
+                'end'           => ($state < 1) ? $due : NULL,
+                'end_scheduled' => ($state < 1) ? $due : NULL,
+                'probability'   => ($state > 0) ? 50 + ($userIndex*10) : 100,
+                'turnover'      => (($i+2)^5)*1000
+            ))
+            );
+            
+            $relations = array();
+            
+            foreach($orgAddresses as $address) {
+                $relations[] = $this->_getRelationArray($lead, $address, 'sibling', 'CUSTOMER');
+            }
+            
+            $relations[] = $this->_getRelationArray($lead, $user, 'sibling', 'RESPONSIBLE');
+            
+            $tasks = $this->_generateTasks($user, $state, $i);
+            
+            foreach($tasks as $taskArray) {
+                $task = $this->_getTask($taskArray);
+                $relations[] = $this->_getRelationArray($lead, $task);
+            }
+
+            $lead->relations = $relations;
+            $controller->update($lead);
+            
+            $i++;
+        }
     }
 
     /**

@@ -154,6 +154,20 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $this->assertEquals(18, count($employee['vacation'][0]));
         $this->assertEquals(3, count($employee['costcenters']));
+        
+        // 0009666: setting contract end_date fails
+        // https://forge.tine20.org/mantisbt/view.php?id=9666
+        
+        $date = new Tinebase_DateTime($employee['contracts'][1]['end_date']);
+        $date->addYear(1);
+        
+        $employee['contracts'][1]['end_date'] = $date;
+        
+        $employee = $this->_json->saveEmployee($employee);
+        
+        $employee['contracts'][1]['end_date'] = $date->addMonth(1);
+        
+        $employee = $this->_json->saveEmployee($employee);
     }
     
     /**

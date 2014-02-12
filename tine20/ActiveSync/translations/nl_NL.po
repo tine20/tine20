@@ -1,12 +1,13 @@
 # 
 # Translators:
 # BJ <bertjan.meinders@bjsoft.nl>, 2012
+# skippy8472 <skippy8472@hotmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 13:09+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-01-19 21:34+0000\n"
+"Last-Translator: skippy8472 <skippy8472@hotmail.com>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -101,7 +102,7 @@ msgstr "Selecteer een apparaat"
 
 #: js/Application.js:57
 msgid "No ActiveSync Device registered"
-msgstr "Geen ActiveSync apparaat geristreerd"
+msgstr "Geen ActiveSync apparaat geregistreerd"
 
 #: js/Application.js:65
 msgid "Set as {0} Filter"

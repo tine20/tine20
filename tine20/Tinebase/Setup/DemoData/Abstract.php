@@ -416,10 +416,16 @@ abstract class Tinebase_Setup_DemoData_Abstract
      */
     protected static $_en = false;
 
-    protected function _getDays()
+    /**
+     * 
+     * @param Tinebase_DateTime $now
+     */
+    protected function _getDays(Tinebase_DateTime $now = NULL)
     {
         // find out where we are
-        $now = new Tinebase_DateTime();
+        if (! $now) {
+            $now = new Tinebase_DateTime();
+        }
         $weekday = $now->format('w');
 
         $subdaysLastMonday = 6 + $weekday;    // Monday last Week
@@ -457,8 +463,12 @@ abstract class Tinebase_Setup_DemoData_Abstract
         
         $this->_nextMonday = clone $this->_monday;
         $this->_nextMonday->addWeek(1);
+        $this->_nextTuesday = clone $this->_tuesday;
+        $this->_nextTuesday->addWeek(1);
         $this->_nextWednesday = clone $this->_wednesday;
         $this->_nextWednesday->addWeek(1);
+        $this->_nextThursday = clone $this->_thursday;
+        $this->_nextThursday->addWeek(1);
         $this->_nextFriday = clone $this->_friday;
         $this->_nextFriday->addWeek(1);
         

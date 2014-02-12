@@ -251,65 +251,65 @@ msgstr "Aktywna wiadomość o nieobecności"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Konto pocztowe \"{0}\" ma włączone powiadamianie o nieobecności."
 
-#: js/Felamimail.js:554
+#: js/Felamimail.js:558
 msgid "New mails"
 msgstr "Nowe wiadomości"
 
-#: js/Felamimail.js:555
+#: js/Felamimail.js:559
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Masz {0} nową/e wiadomość/i w folderze {1} ({2})."
 
-#: js/Felamimail.js:675
+#: js/Felamimail.js:679
 msgid "IMAP Credentials for {0}"
 msgstr "Dane dostępowe IMAP dla {0}"
 
-#: js/Felamimail.js:678
+#: js/Felamimail.js:682
 msgid "Credentials"
 msgstr "Dane dostępowe"
 
-#: js/Felamimail.js:831 js/Felamimail.js:864
+#: js/Felamimail.js:835 js/Felamimail.js:868
 msgid "IMAP Error"
 msgstr "Błąd IMAP"
 
-#: js/Felamimail.js:832
+#: js/Felamimail.js:836
 msgid "No connection to IMAP server."
 msgstr "Brak połączenia z serwerem IMAP."
 
-#: js/Felamimail.js:848
+#: js/Felamimail.js:852
 msgid "IMAP Credentials Error"
 msgstr "Błędne dane logowania do serwera IMAP"
 
-#: js/Felamimail.js:849
+#: js/Felamimail.js:853
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Nieprawidłowe dane dostępowe do konta email. Proszę skontaktuj się ze swoim administratorem."
 
-#: js/Felamimail.js:865
+#: js/Felamimail.js:869
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "Jeden z Twoich folderów został usunięty albo inny klient zmienił jego nazwę. Zaktualizuj proszę listę katalogów dla tego konta."
 
-#: js/Felamimail.js:894
+#: js/Felamimail.js:898
 msgid "SMTP Error"
 msgstr "Błąd SMTP"
 
-#: js/Felamimail.js:895
+#: js/Felamimail.js:899
 msgid "No connection to SMTP server."
 msgstr "Brak połączenia z serwerem SMTP."
 
-#: js/Felamimail.js:903
+#: js/Felamimail.js:907
 msgid "Sieve Error"
 msgstr "Błąd filtrowania"
 
-#: js/Felamimail.js:904
+#: js/Felamimail.js:908
 msgid "No connection to Sieve server."
 msgstr "Brak połączenia z serwerem filtrów."
 
-#: js/Felamimail.js:912
+#: js/Felamimail.js:916
 msgid "Save Sieve Script Error"
 msgstr "Zapisz błąd skryptu filtrującego"
 
-#: js/Felamimail.js:913
+#: js/Felamimail.js:917
 msgid "Could not save script on Sieve server."
 msgstr "Zapisanie skryptu na serwerze filtrującym było niemożliwe."
 

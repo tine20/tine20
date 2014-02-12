@@ -2,7 +2,7 @@
 <application>
     <name>Timetracker</name>
     <!-- gettext('Timetracker') -->   
-    <version>8.0</version>
+    <version>8.1</version>
     <order>60</order>
     <status>enabled</status>
     <depends>
@@ -165,7 +165,7 @@
         </table>
         <table>
             <name>timetracker_timesheet</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -200,10 +200,6 @@
                     <name>is_cleared</name>
                     <type>boolean</type>
                     <default>false</default>
-                </field>
-                <field>
-                    <name>cleared_time</name>
-                    <type>datetime</type>
                 </field>
                 <field>
                     <name>start_date</name>

@@ -1,11 +1,12 @@
 # 
 # Translators:
+# jaruwan <luca.ingianni@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-13 13:48+0000\n"
-"Last-Translator: lkneschke <l.kneschke@metaways.de>\n"
+"PO-Revision-Date: 2014-02-11 09:25+0000\n"
+"Last-Translator: jaruwan <luca.ingianni@gmail.com>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,11 +19,11 @@ msgstr ""
 
 #: Acl/Rights.php:96
 msgid "manage shared task lists"
-msgstr ""
+msgstr "จัดการรายการหน้าที่ที่ใช้ร่วมกัน"
 
 #: Acl/Rights.php:97
 msgid "Create new shared tasks lists"
-msgstr ""
+msgstr "สร้างรายการหน้าที่ที่ใช้ร่วมกันใหม่"
 
 #: Acl/Rights.php:100
 msgid "manage shared tasks favorites"
@@ -35,45 +36,45 @@ msgstr ""
 #: Controller.php:102
 #, python-format
 msgid "%s's personal tasks"
-msgstr ""
+msgstr "จำนวน %s ของหน้าที่ส่วนบุคคล"
 
 #: Model/Task.php:206
 msgid "Due"
-msgstr ""
+msgstr "กำหนด"
 
 #: Model/Task.php:207 js/TaskEditDialog.js:200
 msgid "Organizer"
-msgstr ""
+msgstr "ผู้ดำเนินงาน"
 
 #: Model/Task.php:208
 msgid "Description"
-msgstr ""
+msgstr "การอธิบาย"
 
 #: Model/Task.php:209 js/TaskGridPanel.js:119 js/TaskEditDialog.js:192
 msgid "Priority"
-msgstr ""
+msgstr "ลำดับความสำคัญ"
 
 #: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
 #: js/Models.js:110 js/Models.js:168
 msgid "Status"
 msgid_plural "Status"
-msgstr[0] ""
+msgstr[0] "สถานะ"
 
 #: Model/Task.php:211 js/TaskGridPanel.js:135
 msgid "Percent"
-msgstr ""
+msgstr "เปอร์เซนต์"
 
 #: Model/Task.php:218 js/TaskGridPanel.js:90
 msgid "Lead"
-msgstr ""
+msgstr "ดำเนินการ"
 
 #: Model/Task.php:224
 msgid "Telephone"
-msgstr ""
+msgstr "โทรศัพท์"
 
 #: Model/Task.php:225
 msgid "Email"
-msgstr ""
+msgstr "อีเมล"
 
 #: Config.php:38
 msgid "Tasks status available"
@@ -97,36 +98,36 @@ msgstr ""
 
 #: Setup/Update/Release5.php:74 Setup/Initialize.php:34
 msgid "No response"
-msgstr ""
+msgstr "ไม่มีการตอบรับ"
 
 #: Setup/Update/Release5.php:75 Setup/Initialize.php:35
 #: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230
 msgid "Completed"
-msgstr ""
+msgstr "เสร็จสิ้นแล้ว"
 
 #: Setup/Update/Release5.php:76 Setup/Initialize.php:36
 msgid "Cancelled"
-msgstr ""
+msgstr "ยกเลิกแล้ว"
 
 #: Setup/Update/Release5.php:77 Setup/Initialize.php:37
 msgid "In process"
-msgstr ""
+msgstr "มีความคืบหน้า"
 
 #: Setup/Update/Release5.php:167 Setup/Initialize.php:50
 msgid "low"
-msgstr ""
+msgstr "ต่ำ"
 
 #: Setup/Update/Release5.php:168 Setup/Initialize.php:51
 msgid "normal"
-msgstr ""
+msgstr "ธรรมดา"
 
 #: Setup/Update/Release5.php:169 Setup/Initialize.php:52
 msgid "high"
-msgstr ""
+msgstr "สูง"
 
 #: Setup/Update/Release5.php:170 Setup/Initialize.php:53
 msgid "urgent"
-msgstr ""
+msgstr "ด่วน"
 
 #: Setup/Update/Release3.php:65 Setup/Initialize.php:81
 msgid "All tasks of my taskslists"
@@ -162,7 +163,7 @@ msgstr ""
 
 #: Preference.php:24
 msgid "All my tasks"
-msgstr ""
+msgstr "หน้าที่ทั้งหมดของฉัน"
 
 #: Preference.php:66
 msgid "Default Favorite"
@@ -182,7 +183,7 @@ msgstr ""
 
 #: js/Tasks.js:39
 msgid "New Task"
-msgstr ""
+msgstr "หน้าที่ใหม่"
 
 #: js/TaskGridPanel.js:54
 msgid "Do you really want to delete the selected task?"
@@ -191,27 +192,27 @@ msgstr[0] ""
 
 #: js/TaskGridPanel.js:87
 msgid "Tags"
-msgstr ""
+msgstr "ป้ายกำกับ"
 
 #: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:107
 msgid "Summary"
-msgstr ""
+msgstr "ข้อสรุป"
 
 #: js/TaskGridPanel.js:101
 msgid "Add a task..."
-msgstr ""
+msgstr "เพิ่มหน้าที่"
 
 #: js/TaskGridPanel.js:105 js/Models.js:108
 msgid "Due Date"
-msgstr ""
+msgstr "วันครบกำหนด"
 
 #: js/TaskGridPanel.js:164 js/Models.js:122
 msgid "Creation Time"
-msgstr ""
+msgstr "เวลาที่สร้างขึ้น"
 
 #: js/TaskGridPanel.js:178 js/Models.js:118
 msgid "Responsible"
-msgstr ""
+msgstr "รับผิดชอบ"
 
 #: js/TaskEditDialog.js:136
 msgid "You have to supply a due date, because an alarm ist set!"
@@ -219,41 +220,41 @@ msgstr ""
 
 #: js/TaskEditDialog.js:188
 msgid "Due date"
-msgstr ""
+msgstr "วันครบกำหนด"
 
 #: js/TaskEditDialog.js:201
 msgid "Add Responsible ..."
-msgstr ""
+msgstr "เพิ่มความรับผิดชอบ"
 
 #: js/TaskEditDialog.js:208
 msgid "Notes"
-msgstr ""
+msgstr "บันทึก"
 
 #: js/TaskEditDialog.js:209
 msgid "Enter description..."
-msgstr ""
+msgstr "ใส่ คำอธิบาย"
 
 #: js/TaskEditDialog.js:215
 msgid "Percentage"
-msgstr ""
+msgstr "อัตราส่วนร้อยละ"
 
 #: js/Models.js:66
 msgid "Task"
 msgid_plural "Tasks"
-msgstr[0] ""
+msgstr[0] "หน้าที่"
 
 #: js/Models.js:66
 msgid "Tasks"
-msgstr ""
+msgstr "หน้าที่"
 
 #: js/Models.js:70
 msgid "to do list"
 msgid_plural "to do lists"
-msgstr[0] ""
+msgstr[0] "รายการที่ต้องทำ"
 
 #: js/Models.js:70
 msgid "to do lists"
-msgstr ""
+msgstr "รายการที่ต้องทำ"
 
 #: js/Models.js:105
 msgid "Quick Search"

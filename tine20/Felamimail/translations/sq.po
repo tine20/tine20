@@ -248,65 +248,65 @@ msgstr "Mesazh Aktiv Pushimesh "
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Llogaria e E-Postës  \"{0}\" ka një mesazh aktiv pushimesh"
 
-#: js/Felamimail.js:554
+#: js/Felamimail.js:558
 msgid "New mails"
 msgstr "Posta të reja"
 
-#: js/Felamimail.js:555
+#: js/Felamimail.js:559
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Ju keni {0} postë të re në dosjen {1} ({2})."
 
-#: js/Felamimail.js:675
+#: js/Felamimail.js:679
 msgid "IMAP Credentials for {0}"
 msgstr "kredencialet IMAP për {0}"
 
-#: js/Felamimail.js:678
+#: js/Felamimail.js:682
 msgid "Credentials"
 msgstr "Kredencialet"
 
-#: js/Felamimail.js:831 js/Felamimail.js:864
+#: js/Felamimail.js:835 js/Felamimail.js:868
 msgid "IMAP Error"
 msgstr "Gabim IMAP"
 
-#: js/Felamimail.js:832
+#: js/Felamimail.js:836
 msgid "No connection to IMAP server."
 msgstr "Nuk ka lidhje tek serveri IMAP"
 
-#: js/Felamimail.js:848
+#: js/Felamimail.js:852
 msgid "IMAP Credentials Error"
 msgstr "Gabim kredencialesh IMAP"
 
-#: js/Felamimail.js:849
+#: js/Felamimail.js:853
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Kredencialet tuaja të E-Postës janë gabim. Ju lutem kontaktoni administratorin tuaj"
 
-#: js/Felamimail.js:865
+#: js/Felamimail.js:869
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "Një nga dosjet tuaja është fshirë ose riemëruar nga një klient tjetër. Ju lutem përditësonilistën e dosjeve për këtë llogari"
 
-#: js/Felamimail.js:894
+#: js/Felamimail.js:898
 msgid "SMTP Error"
 msgstr "Gabim SMTP"
 
-#: js/Felamimail.js:895
+#: js/Felamimail.js:899
 msgid "No connection to SMTP server."
 msgstr "Nuk ka lidhje tek serveri SMTP"
 
-#: js/Felamimail.js:903
+#: js/Felamimail.js:907
 msgid "Sieve Error"
 msgstr "Gabim Sieve"
 
-#: js/Felamimail.js:904
+#: js/Felamimail.js:908
 msgid "No connection to Sieve server."
 msgstr "Nuk ka lidhje tek servieri Sieve"
 
-#: js/Felamimail.js:912
+#: js/Felamimail.js:916
 msgid "Save Sieve Script Error"
 msgstr "Ruaj gabimin e dorëshkrimit të Sieve "
 
-#: js/Felamimail.js:913
+#: js/Felamimail.js:917
 msgid "Could not save script on Sieve server."
 msgstr "Nuk mund të ruhej dorëshkrimi në serverin e Sieve"
 

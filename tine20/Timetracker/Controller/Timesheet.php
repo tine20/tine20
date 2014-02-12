@@ -105,8 +105,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     {
         $filter = new Timetracker_Model_TimesheetFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $timeaccountId)));
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'cleared_time', 'operator' => 'before', 'value' => $endDate)));
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'cleared_time', 'operator' => 'after', 'value' => $startDate)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $endDate)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'after', 'value' => $startDate)));
         $filter->addFilter(new Tinebase_Model_Filter_Bool(array('field' => 'is_cleared', 'operator' => 'equals', 'value' => true)));
         
         $timesheets = $this->search($filter);

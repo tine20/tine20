@@ -39,9 +39,29 @@ class Phone_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     
     /**
      * models to work on
-     * 
      * @var array
      */
     protected $_models = array();
+
+    /**
+     * the constructor
+     *
+     */
+    private function __construct()
+    {
+    }
     
+    /**
+     * the singleton pattern
+     *
+     * @return Timetracker_Setup_DemoData
+     */
+    public static function getInstance()
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new self();
+        }
+    
+        return self::$_instance;
+    }
 }

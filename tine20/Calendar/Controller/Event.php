@@ -1407,6 +1407,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         $_record->setRruleUntil();
         
+        if ($_record->rrule instanceof Calendar_Model_Rrule) {
+            $_record->rrule->normalize($_record);
+        }
+        
         if ($_record->isRecurException() && $_record->rrule !== NULL) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Removing invalid rrule from recur exception: ' . $_record->rrule);
