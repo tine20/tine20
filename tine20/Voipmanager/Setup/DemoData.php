@@ -116,7 +116,7 @@ class Voipmanager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'ringing'      => $i,
                 'direction'    => ($i%2) ? 'in' : 'out',
                 'source'       => '+49123456789',
-                'destination'  => '+44567890123',
+                'destination'  => '+44' . $i . $i . $i . $i,
             );
             Phone_Controller_Call::getInstance()->create(new Phone_Model_Call($call));
             

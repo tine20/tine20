@@ -24,7 +24,7 @@ class Phone_Backend_Snom_Call extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_tableName = 'phone_callhistory';
-    
+
     /**
      * Model name
      *
