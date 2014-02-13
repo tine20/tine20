@@ -1525,7 +1525,7 @@ msgid "The account is not saved already!"
 msgstr "Tài khoản vẫn chưa được lưu lại."
 
 #: js/AccountEditDialog.js:96
-msgid "Please save yout account before syncing!"
+msgid "Please save your account before syncing!"
 msgstr "Hãy lưu tài khoản của bạn trước khi đồng bộ!"
 
 #: js/AccountEditDialog.js:109
@@ -1559,7 +1559,7 @@ msgid "Password"
 msgstr "Mật khẩu"
 
 #: js/AccountEditDialog.js:297
-msgid "Passwort Repeat"
+msgid "Password Repeat"
 msgstr "Nhắc lại mật khẩu"
 
 #: js/AccountEditDialog.js:303

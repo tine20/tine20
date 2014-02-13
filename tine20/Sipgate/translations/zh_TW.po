@@ -1524,7 +1524,7 @@ msgid "The account is not saved already!"
 msgstr ""
 
 #: js/AccountEditDialog.js:96
-msgid "Please save yout account before syncing!"
+msgid "Please save your account before syncing!"
 msgstr ""
 
 #: js/AccountEditDialog.js:109
@@ -1558,7 +1558,7 @@ msgid "Password"
 msgstr ""
 
 #: js/AccountEditDialog.js:297
-msgid "Passwort Repeat"
+msgid "Password Repeat"
 msgstr ""
 
 #: js/AccountEditDialog.js:303
