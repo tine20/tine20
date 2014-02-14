@@ -421,7 +421,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function checkPasswordPolicy($password, Tinebase_Model_FullUser $user)
     {
-        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_POLICY_ACTIVE, FALSE)) {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_POLICY_ACTIVE, false)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' No password policy enabled');
             return;
@@ -431,7 +431,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $policy = array(
             Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => '/[^\x00-\x7F]/',
-            Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => NULL,
+            Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => null,
             Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS         => '/[\W]*/',
             Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS    => '/[^A-Z]*/',
             Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS      => '/[\w]*/',
@@ -441,14 +441,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         foreach ($policy as $key => $regex) {
             $test = $this->_testPolicy($password, $key, $regex);
-            if ($test !== TRUE) {
+            if ($test !== true) {
                 $failedTests[$key] = $test;
             }
         }
         
         if (! empty($failedTests)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' ' . print_r($failedTests, TRUE));
+                . ' ' . print_r($failedTests, true));
             
             $policyException = new Tinebase_Exception_PasswordPolicyViolation('Password failed to match the following policy requirements: ' 
                 . implode('|', array_keys($failedTests)));
@@ -464,35 +464,50 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param string $regex
      * @return mixed
      */
-    protected function _testPolicy($password, $configKey, $regex = NULL)
+    protected function _testPolicy($password, $configKey, $regex = null)
     {
-        $result = TRUE;
+        $result = true;
         
-        if ($configKey === Tinebase_Config::PASSWORD_POLICY_ONLYASCII && Tinebase_Config::getInstance()->get($configKey, 0) && $regex !== NULL) {
-            $nonAsciiFound = preg_match($regex, $password, $matches);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' ' . print_r($matches, TRUE));
-            
-            $result = ($nonAsciiFound) ? array('expected' => 0, 'got' => count($matches)) : TRUE;
-        } else if ($configKey === Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Testing if password is part of username "' . $regex . '"');
-            if (! empty($password)) {
-                $result = ! preg_match('/' . preg_quote($password) . '/i', $regex);
-            }
-        } else {
-            // check min length restriction
-            $minLength = Tinebase_Config::getInstance()->get($configKey, 0);
-            if ($minLength > 0) {
-                $reduced = ($regex) ? preg_replace($regex, '', $password) : $password;
-                $charCount = strlen(utf8_decode($reduced));
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Found ' . $charCount . '/' . $minLength . ' chars for ' . $configKey /*. ': ' . $reduced */);
-                
-                if ($charCount < $minLength) {
-                    $result = array('expected' => $minLength, 'got' => $charCount);
+        switch ($configKey) {
+            case Tinebase_Config::PASSWORD_POLICY_ONLYASCII:
+                if (Tinebase_Config::getInstance()->get($configKey, 0) && $regex !== null) {
+                    $nonAsciiFound = preg_match($regex, $password, $matches);
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' ' . print_r($matches, true));
+                    
+                    $result = ($nonAsciiFound) ? array('expected' => 0, 'got' => count($matches)) : true;
                 }
-            }
+                
+                break;
+                
+            case Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME:
+                if (Tinebase_Config::getInstance()->get($configKey, 0)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Testing if password is part of username "' . $regex . '"');
+                    
+                    if (! empty($password)) {
+                        $result = ! preg_match('/' . preg_quote($password) . '/i', $regex);
+                    }
+                }
+                
+                break;
+                
+            default:
+                // check min length restriction
+                $minLength = Tinebase_Config::getInstance()->get($configKey, 0);
+                if ($minLength > 0) {
+                    $reduced = ($regex) ? preg_replace($regex, '', $password) : $password;
+                    $charCount = strlen(utf8_decode($reduced));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Found ' . $charCount . '/' . $minLength . ' chars for ' . $configKey /*. ': ' . $reduced */);
+                    
+                    if ($charCount < $minLength) {
+                        $result = array('expected' => $minLength, 'got' => $charCount);
+                    }
+                }
+                
+                break;
         }
         
         return $result;

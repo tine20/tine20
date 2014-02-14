@@ -248,4 +248,15 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         $this->_assertPolicy('sclever123', '', TRUE); // valid
         $this->_assertPolicy('', '', TRUE); // valid
     }
+    
+    /**
+     * testPasswordPolicyUsernameNotSet
+     */
+    public function testPasswordPolicyUsernameNotSet()
+    {
+        $this->_setPwPolicies(array(
+            Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME => false
+        ));
+        $this->_assertPolicy('sclever', '', true);
+    }
 }
