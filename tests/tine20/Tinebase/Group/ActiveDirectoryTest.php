@@ -95,7 +95,7 @@ class Tinebase_Group_ActiveDirectoryTest extends PHPUnit_Framework_TestCase
     {
         switch ((string) $filter) {
             case 'objectClass=domain':
-                return $this->_getZendLdapCollectionStub(array('objectsid' => array($this->domainSid)));
+                return $this->_getZendLdapCollectionStub(array('objectsid' => array($this->domainSid), 'distinguishedname' => array('DC=tine20,DC=org')));
                 
                 break;
                 
