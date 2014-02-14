@@ -555,7 +555,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         $this->_validationErrors = array();
         
         foreach ($inputFilter->getMessages() as $fieldName => $errorMessage) {
-            //print_r($inputFilter->getMessages());
             $this->_validationErrors[] = array(
                 'id'  => $fieldName,
                 'msg' => $errorMessage
@@ -563,9 +562,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
         
         if ($_throwExceptionOnInvalidData) {
-            $e = new Tinebase_Exception_Record_Validation('some fields ' . implode(',', array_keys($inputFilter->getMessages())) . ' have invalid content');
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" .
-                print_r($this->_validationErrors,true). $e);
+            $e = new Tinebase_Exception_Record_Validation('Some fields ' . implode(',', array_keys($inputFilter->getMessages()))
+                . ' have invalid content');
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " "
+                . $e->getMessage()
+                . print_r($this->_validationErrors, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Record: ' . print_r($this->toArray(), true));
+            
             throw $e;
         }
         
@@ -580,7 +585,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function applyFilter()
     {
         $this->isValid(true);
-        
     }
     
     /**

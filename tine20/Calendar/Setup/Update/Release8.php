@@ -88,7 +88,13 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
             
             if ($oldRruleString != (string) $rrule) {
                 $event->rrule = (string) $rrule;
-                $eventBE->update($event);
+                try {
+                    $eventBE->update($event);
+                } catch (Tinebase_Exception_Record_Validation $terv) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Could not normalize rrule for invalid event record: ' . print_r($event->toArray(), true));
+                    Tinebase_Exception::log($terv);
+                }
             }
         }
         
