@@ -40,6 +40,8 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     removedVacationDays: null,
     removedSicknessDays: null,
     
+    localSicknessDays: null,
+    localVacationDays: null,
     /**
      * set type before to diff vacation/sickness
      * @type 
@@ -80,6 +82,8 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         
         this.removedSicknessDays = {};
         this.removedVacationDays = {};
+        this.localSicknessDays   = null;
+        this.localVacationDays   = null;
         
         this.i18nEmptyText = this.i18nEmptyText || String.format(this.app.i18n._("There could not be found any {0}. Please try to change your filter-criteria or view-options."), this.i18nRecordsName);        
         
@@ -116,7 +120,6 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             },
             scope: this
         });
-        
     },
     
     /**
@@ -205,23 +208,19 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         var localVacationDays = {}, localSicknessDays = {};
         
         this.editDialog.vacationGridPanel.store.each(function(record) {
-            if (record.id && record.id.length == 13) {
                 var accountId = Ext.isObject(record.get('account_id')) ? record.get('account_id').id : record.get('account_id');
                 if (! localVacationDays.hasOwnProperty(accountId)) {
                     localVacationDays[accountId] = [];
                 }
                 localVacationDays[accountId] = localVacationDays[accountId].concat(record.data.freedays ? record.data.freedays : []);
-            }
         }, this);
         
         this.editDialog.sicknessGridPanel.store.each(function(record) {
-            if (record.id && record.id.length == 13) {
                 var accountId = Ext.isObject(record.get('account_id')) ? record.get('account_id').id : record.get('account_id');
                 if (! localSicknessDays.hasOwnProperty(accountId)) {
                     localSicknessDays[accountId] = [];
                 }
                 localSicknessDays[accountId] = localSicknessDays[accountId].concat(record.data.freedays ? record.data.freedays : []);
-            }
         });
         
         var additionalConfig = {
