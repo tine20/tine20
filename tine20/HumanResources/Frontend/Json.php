@@ -432,7 +432,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $first = TRUE;
         
-        $remainingVacation = 0;
+        $allVacation = 0;
         $feastDays = array();
         
         $contracts->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
@@ -448,7 +448,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $first = FALSE;
             }
             
-            $remainingVacation += $cController->calculateVacationDays($contract, $minDate, $maxDate);
+            $allVacation += $cController->calculateVacationDays($contract, $minDate, $maxDate);
             // find out weekdays to disable
             if (is_object($json)) {
                 foreach($json->days as $index => $hours) {
@@ -468,6 +468,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // search feast days
             $feastDays = array_merge($cController->getFeastDays($contract, $startDay, $stopDay), $feastDays);
         }
+        
+        $remainingVacation = $allVacation;
         
         // set time to 0
         foreach($feastDays as &$feastDay) {
@@ -545,9 +547,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
             $account->extra_free_times = HumanResources_Controller_ExtraFreeTime::getInstance()->search($filter);
             $extraFreeTimes = $aController->calculateExtraFreeTimes($account, $acceptedVacationDays);
+            $allVacation = $allVacation + $extraFreeTimes['remaining'];
             $remainingVacation = $remainingVacation + $extraFreeTimes['remaining'];
-        } else {
-            $extraFreeTimes = NULL;
         }
         
         // find all sickness days of the period
@@ -574,6 +575,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'sicknessDays'      => $sicknessDays->toArray(),
                 'excludeDates'      => $excludeDates,
                 'ownFreeDays'       => $ownFreeDays,
+                'allVacation'       => $allVacation,
                 'feastDays'         => $feastDays,
                 'contracts'         => $contracts->toArray(),
                 'employee'          => $employee->toArray(),
