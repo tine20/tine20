@@ -182,17 +182,24 @@ class Tinebase_WebDav_PrincipalBackend implements DAVACL\PrincipalBackend\Backen
     {
         $result = array();
         
-        list($path, $contactId) = Sabre\DAV\URLUtil::splitPath($principal);
+        list($prefix, $contactId) = \Sabre\DAV\URLUtil::splitPath($principal);
         
-        if ($path == self::PREFIX_USERS) {
-            $user = Tinebase_User::getInstance()->getUserByProperty('contactId', $contactId);
-            
-            $groupIds = Tinebase_Group::getInstance()->getGroupMemberships($user);
-            $groups   = Tinebase_Group::getInstance()->getMultiple($groupIds);
-            
-            foreach ($groups as $group) {
-                $result[] = self::PREFIX_GROUPS . '/' . $group->list_id;
-            }
+        switch ($prefix) {
+            case self::PREFIX_GROUPS:
+                // @TODO implement?
+                break;
+        
+            case self::PREFIX_USERS:
+                $user = Tinebase_User::getInstance()->getUserByProperty('contactId', $contactId);
+                
+                $groupIds = Tinebase_Group::getInstance()->getGroupMemberships($user);
+                $groups   = Tinebase_Group::getInstance()->getMultiple($groupIds);
+                
+                foreach ($groups as $group) {
+                    $result[] = self::PREFIX_GROUPS . '/' . $group->list_id;
+                }
+        
+                break;
         }
         
         return $result;
