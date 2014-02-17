@@ -203,6 +203,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         Tine.log.debug('Loaded feast and freedays:');
         var rr = result.results;
         Tine.log.debug(rr);
+        Tine.log.debug(result);
         
         this.disabledDates = [];
         //  days not to work on by contract
@@ -218,8 +219,8 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             }, this);
         }, this);
 
-        this.setVacationDates(this.editDialog.localVacationDays, rr.vacationDays, this.editDialog.removedVacationDays);
-        this.setSicknessDates(this.editDialog.localSicknessDays, rr.sicknessDays, this.editDialog.removedSicknessDays);
+        this.setVacationDates(this.editDialog.localVacationDays);
+        this.setSicknessDates(this.editDialog.localSicknessDays);
         this.setFeastDates(rr.feastDays);
         
         this.setDisabledDates(this.disabledDates);
@@ -248,12 +249,8 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         
         if (this.accountPickerActive) {
             var substractDays = this.editDialog.getDaysToSubstract();
-            
-            if (! freetime && onInit) {
-                substractDays = substractDays + freetime.get('days_count');
-            }
 
-            this.editDialog.getForm().findField('remaining_vacation_days').setValue(rr.remainingVacation - substractDays);
+            this.editDialog.getForm().findField('remaining_vacation_days').setValue(rr.allVacation - substractDays);
         }
         
         this.updateCellClasses();
@@ -333,28 +330,35 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      */
     getTimestampsFromDays: function(localDays, remoteDays, locallyRemovedDays) {
         
+        var offset = new Date().getTimezoneOffset() * 60 * 1000;
+        
         var dates = [];
         Ext.iterate(localDays, function(accountId, localdates) { 
             for (var index = 0; index < localdates.length; index++) {
                 var newdate = new Date(localdates[index].date.replace(/-/g,'/') + ' AM');
-                dates.push(newdate.getTime());
+                newdate.setHours(0);
+                dates.push((newdate.getTime()));
             }
         });
         
         // find out removed dates
         var remove = [];
-        Ext.iterate(locallyRemovedDays, function(accountId, removeDays) {
-            for (var index = 0; index < removeDays.length; index++) {
-                remove.push(removeDays[index].date.split(' ')[0]);
-            }
-        }, this);
+        if (locallyRemovedDays) {
+            Ext.iterate(locallyRemovedDays, function(accountId, removeDays) {
+                for (var index = 0; index < removeDays.length; index++) {
+                    remove.push(removeDays[index].date.split(' ')[0]);
+                }
+            }, this);
+        }
         
         // do not mark day as taken, if it is deleted already in the grid
-        for (var index = 0; index < remoteDays.length; index++) {
-            var day = remoteDays[index].date.split(' ')[0];
-            if (remove.indexOf(day) == -1) {
-                var newdate = new Date(remoteDays[index].date.replace(/-/g,'/') + ' AM');
-                dates.push(newdate.getTime());
+        if (remoteDays) {
+            for (var index = 0; index < remoteDays.length; index++) {
+                var day = remoteDays[index].date.split(' ')[0];
+                if (remove.indexOf(day) == -1) {
+                    var newdate = new Date(remoteDays[index].date.replace(/-/g,'/') + ' AM');
+                    dates.push(newdate.getTime() + offset);
+                }
             }
         }
         
