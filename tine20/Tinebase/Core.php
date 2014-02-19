@@ -977,7 +977,6 @@ class Tinebase_Core
                 foreach (array('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY', 'PDO::MYSQL_ATTR_INIT_COMMAND') as $pdoConstant) {
                     if (! defined($pdoConstant)) {
                         throw new Tinebase_Exception_Backend_Database($pdoConstant . ' is not defined. Please check PDO extension.');
-            
                     }
                 }
                 
@@ -1078,7 +1077,8 @@ class Tinebase_Core
      *      array(
      *         'queryProfiles' => TRUE,
      *         'queryProfilesDetails' => TRUE,
-     *         //'profilerFilterElapsedSecs' => 1,
+     *         'user' => 'loginname',             // only profile this user 
+     *         'profilerFilterElapsedSecs' => 1,  // only show queries whose elapsed time is equal or greater than this
      *      )
      *    ),
      * 
@@ -1090,20 +1090,24 @@ class Tinebase_Core
         }
         
         $config = self::getConfig()->profiler;
-
+        
+        if ($config->user && is_object(self::getUser()) && $config->user !== self::getUser()->accountLoginName) {
+            return;
+        }
+        
         $profiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
-
+        
         if (! empty($config->profilerFilterElapsedSecs)) {
             $profiler->setFilterElapsedSecs($config->profilerFilterElapsedSecs);
         }
-
+        
         $data = array(
             'totalNumQueries' => $profiler->getTotalNumQueries(),
             'totalElapsedSec' => $profiler->getTotalElapsedSecs(),
             'longestTime'        => 0,
             'longestQuery'       => ''
         );
-
+        
         if ($config && (bool) $config->queryProfiles) {
             $queryProfiles = $profiler->getQueryProfiles();
             if (is_array($queryProfiles)) {
@@ -1123,7 +1127,7 @@ class Tinebase_Core
                 }
             }
         }
-
+        
         self::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($data, true));
     }
 
