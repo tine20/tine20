@@ -353,7 +353,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $task = $this->_getTask();
         
         $taskJson = new Tasks_Frontend_Json();
-        $taskData = $task->toArray();
+        $taskData = $this->_getTask()->toArray();
         $taskData['relations'] = array(
             array(
                 'type'  => 'TASK',
@@ -366,7 +366,6 @@ class Crm_JsonTest extends Crm_AbstractTest
                 'related_record' => $leadData
             ),
         );
-        
         $taskData = $taskJson->saveTask($taskData);
         $taskData['description'] = 1;
         $taskData = $taskJson->saveTask($taskData);
@@ -383,94 +382,6 @@ class Crm_JsonTest extends Crm_AbstractTest
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
             $this->assertEquals('concurrency conflict!', $ttecc->getMessage());
         }
-    }
-    
-    /**
-     * @see #8840: relations config - constraints from the other side
-     *      - validate in backend
-     *      
-     *      https://forge.tine20.org/mantisbt/view.php?id=8840
-     */
-    public function testConstraintsOtherSide()
-    {
-        $leadData1 = $this->_instance->saveLead($this->_getLead(FALSE, FALSE)->toArray());
-        $task = $this->_getTask();
-        
-        $taskJson = new Tasks_Frontend_Json();
-        $taskData = $task->toArray();
-        $taskData['relations'] = array(
-            array(
-                'type'  => 'TASK',
-                'own_model' => 'Tasks_Model_Task',
-                'own_backend' => 'Sql',
-                'own_degree' => 'sibling',
-                'related_model' => 'Crm_Model_Lead',
-                'related_backend' => 'Sql',
-                'related_id' => $leadData1['id'],
-                'related_record' => $leadData1
-            ),
-        );
-        
-        $taskData = $taskJson->saveTask($taskData);
-        
-        $leadData2 = $this->_instance->saveLead($this->_getLead(FALSE, FALSE)->toArray());
-        $taskData['relations'][] = array(
-            'type'  => 'TASK',
-            'own_model' => 'Tasks_Model_Task',
-            'own_backend' => 'Sql',
-            'own_degree' => 'sibling',
-            'related_model' => 'Crm_Model_Lead',
-            'related_backend' => 'Sql',
-            'related_id' => $leadData2['id'],
-            'related_record' => $leadData2
-        );
-        
-        $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
-        $taskJson->saveTask($taskData);
-    }
-    
-    public function testOtherRecordConstraintsConfig()
-    {
-        $leadData1 = $this->_instance->saveLead($this->_getLead(FALSE, FALSE)->toArray());
-        $task = $this->_getTask();
-        
-        $taskJson = new Tasks_Frontend_Json();
-        $leadJson = new Crm_Frontend_Json();
-        
-        $taskData = $task->toArray();
-        $taskData['relations'] = array(
-            array(
-                'type'  => 'TASK',
-                'own_model' => 'Tasks_Model_Task',
-                'own_backend' => 'Sql',
-                'own_degree' => 'sibling',
-                'related_model' => 'Crm_Model_Lead',
-                'related_backend' => 'Sql',
-                'related_id' => $leadData1['id'],
-                'related_record' => $leadData1
-            ),
-        );
-        
-        $taskData = $taskJson->saveTask($taskData);
-        
-        $leadData2 = $this->_instance->saveLead($this->_getLead(FALSE, FALSE)->toArray());
-        
-        $leadData2['relations'] = array(
-            array(
-                'type'  => 'TASK',
-                'own_model' => 'Crm_Model_Lead',
-                'own_backend' => 'Sql',
-                'own_degree' => 'sibling',
-                'related_model' => 'Tasks_Model_Task',
-                'related_backend' => 'Sql',
-                'related_id' => $taskData['id'],
-                'related_record' => $taskData
-            )
-        );
-        
-        $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
-        
-        $leadJson->saveLead($leadData2);
     }
     
     /**
@@ -544,35 +455,16 @@ class Crm_JsonTest extends Crm_AbstractTest
     /**
      * get lead
      * 
-     * @param boolean $addCf
-     * @param boolean $addTags
      * @return Crm_Model_Lead
      */
-    protected function _getLead($addCf = TRUE, $addTags = TRUE)
+    protected function _getLead()
     {
-        if ($addCf) {
-            $cfc = Tinebase_CustomFieldTest::getCustomField(array(
-                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
-                'model'          => 'Crm_Model_Lead',
-                'name'           => 'crmcf',
-            ));
-            
-            $cfs = array(
-                'crmcf' => '1234'
-            );
-            
-            Tinebase_CustomField::getInstance()->addCustomField($cfc);
-        } else {
-            $cfs = array();
-        }
-        
-        if ($addTags) {
-            $tags = array(
-                array('name' => 'lead tag', 'type' => Tinebase_Model_Tag::TYPE_SHARED)
-            );
-        } else {
-            $tags = array();
-        }
+        $cfc = Tinebase_CustomFieldTest::getCustomField(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
+            'model'          => 'Crm_Model_Lead',
+            'name'           => 'crmcf',
+        ));
+        Tinebase_CustomField::getInstance()->addCustomField($cfc);
         
         return new Crm_Model_Lead(array(
             'lead_name'     => 'PHPUnit',
@@ -586,8 +478,12 @@ class Crm_JsonTest extends Crm_AbstractTest
             'turnover'      => 0,
             'probability'   => 70,
             'end_scheduled' => NULL,
-            'tags'          => $tags,
-            'customfields'  => $cfs
+            'tags'          => array(
+                array('name' => 'lead tag', 'type' => Tinebase_Model_Tag::TYPE_SHARED)
+            ),
+            'customfields'  => array(
+                'crmcf' => '1234'
+            ),
         ));
     }
     
