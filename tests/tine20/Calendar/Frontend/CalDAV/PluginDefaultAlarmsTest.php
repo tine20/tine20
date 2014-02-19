@@ -12,7 +12,7 @@
 /**
  * Test helper
  */
-require_once 'vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
+require_once __DIR__ . '/../../../../../tine20/vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
 
 /**
  * Test class for Tinebase_WebDav_Plugin_OwnCloud
