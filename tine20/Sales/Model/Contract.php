@@ -100,6 +100,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
      * @see Tinebase_Record_Abstract
      */
     protected static $_relatableConfig = array(
+        // a contract may have one responsible and one customer but many partners
         array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
             array('type' => 'RESPONSIBLE', 'degree' => 'sibling', 'text' => 'Responsible', 'max' => '1:0'), // _('Responsible')
             array('type' => 'CUSTOMER', 'degree' => 'sibling', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')

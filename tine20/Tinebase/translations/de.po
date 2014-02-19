@@ -1789,13 +1789,13 @@ msgstr "Kind"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:255
 msgid ""
-"The maximum number of {0} with the type {1} is reached. Please change the "
+"The maximum number of {0} with the type \"{1}\" is reached. Please change the "
 "type of this relation"
-msgstr "Die maximale Anzahl von {0} mit Typ {1} wurde erreicht. Bitte ändern Sie den Typ der Verknüpfung."
+msgstr "Die maximale Anzahl an {0}n mit dem Typ \"{1}\" wurde erreicht. Bitte ändern Sie den Typ der Verknüpfung."
 
 #: js/widgets/relation/GenericPickerGridPanel.js:264
 msgid ""
-"The maximum number of {0}s with the type {1} is reached at the {2} you "
+"The maximum number of {0}s with the type \"{1}\" is reached at the {2} you "
 "added. Please change the type of this relation or edit the {2}"
 msgstr "Die maximale Anzahl von {0} mit Typ {1} wurde bei {2} erreicht. Bitte ändern Sie den Typ der Verknüpfung oder editieren sie den {2}"
 
@@ -2943,3 +2943,15 @@ msgstr "Monat falsch angegeben!"
 
 msgid "or"
 msgstr "oder"
+
+msgid "from"
+msgstr "von"
+
+msgid "to"
+msgstr "an"
+
+msgid "You tried to create a relation which is forbidden by the constraints config of one of the models."
+msgstr "Sie haben versucht, eine Verknüpfung zu aktualisieren, wodurch Verknüpfungen entstanden sind, die nicht erlaubt sind."
+
+msgid "Invalid Relations"
+msgstr "Fehlerhafte Verknüpfung"
