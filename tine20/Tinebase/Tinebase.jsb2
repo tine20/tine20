@@ -342,6 +342,10 @@
           "path": "js/data/"
         },
         {
+          "text": "Clipboard.js",
+          "path": "js/data/"
+        },
+        {
           "text": "RecentsManager.js",
           "path": "js/"
         },

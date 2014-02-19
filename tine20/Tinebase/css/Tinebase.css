@@ -18,6 +18,36 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/list-add.png) !important;
 }
 
+.action_cut {
+    background-image:url(../../images/oxygen/16x16/actions/edit-cut.png) !important;
+}
+.x-btn-medium .action_cut {
+    background-image:url(../../images/oxygen/22x22/actions/edit-cut.png) !important;
+}
+.x-btn-large .action_cut {
+    background-image:url(../../images/oxygen/32x32/actions/edit-cut.png) !important;
+}
+
+.action_cut_break {
+    background-image:url(../../images/oxygen/16x16/actions/edit-cut-break.png) !important;
+}
+.x-btn-medium .action_cut_break {
+    background-image:url(../../images/oxygen/22x22/actions/edit-cut-break.png) !important;
+}
+.x-btn-large .action_cut_break {
+    background-image:url(../../images/oxygen/32x32/actions/edit-cut-break.png) !important;
+}
+
+.action_paste {
+    background-image:url(../../images/oxygen/16x16/actions/edit-paste.png) !important;
+}
+.x-btn-medium .action_paste {
+    background-image:url(../../images/oxygen/22x22/actions/edit-paste.png) !important;
+}
+.x-btn-large .action_paste {
+    background-image:url(../../images/oxygen/32x32/actions/edit-paste.png) !important;
+}
+
 .action_remove {
     background-image:url(../../images/oxygen/16x16/actions/list-remove.png) !important;
 }
