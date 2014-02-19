@@ -98,10 +98,10 @@ Tine.widgets.dialog.ExceptionHandlerDialog = Ext.extend(Ext.FormPanel, {
         this.app = Tine.Tinebase.appMgr.get(this.exception.appName);
         this.message = this.app.i18n._hidden(this.exception.message);
         
-        this.callbackOnOk = this.callbackOnOk ? this.callbackOnOk : this.callback ? this.callback : this.onClose;
-        this.callbackOnCancel = this.callbackOnCancel ? this.callbackOnCancel : this.callback ? this.callback : this.onClose;
-        this.callbackOnCancelScope = this.callbackOnCancelScope ? this.callbackOnCancelScope : this.callbackScope ? this.callbackScope : this;
-        this.callbackOnOkScope = this.callbackOnOkScope ? this.callbackOnOkScope : this.callbackScope ? this.callbackScope : this;
+        this.callbackOnOk = this.callbackOnOk ? this.callbackOnOk : (this.callback ? this.callback : this.onClose);
+        this.callbackOnCancel = this.callbackOnCancel ? this.callbackOnCancel : (this.callback ? this.callback : this.onClose);
+        this.callbackOnCancelScope = this.callbackOnCancelScope ? this.callbackOnCancelScope : (this.callbackScope ? this.callbackScope : this);
+        this.callbackOnOkScope = this.callbackOnOkScope ? this.callbackOnOkScope : (this.callbackScope ? this.callbackScope : this);
         
         this.initActions();
         this.initButtons();
