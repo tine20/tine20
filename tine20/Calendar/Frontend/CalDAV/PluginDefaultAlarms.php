@@ -7,6 +7,15 @@
  * 
  * see: http://tools.ietf.org/html/draft-daboo-valarm-extensions-04
  *
+ * NOTE: At the moment we disable all default alarms as iCal shows alarms
+ *       for events having no alarm. Acknowliging this alarms may lead to problems.
+ *       
+ * NOTE: iCal Montain Lion & Mavericks sets default alarms for the whole account, 
+ *       but respects when we set default alarms per calendar. 
+ *       
+ *       So in future we might disable default alarms for shared cals and
+ *       use the default alarms configured for each personal cal.
+ *       
  * @package    Sabre
  * @subpackage CalDAV
  * @copyright  Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -96,9 +105,11 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Sabre\DAV\ServerPlug
                 unset($requestedProperties[array_search($property, $requestedProperties)]);
                 
                 $valarm = $vcalendar->create('VALARM');
-                $valarm->add('ACTION',  'AUDIO');
-                $valarm->add('ATTACH',  'Basso', array('VALUE' => 'URI'));
-                $valarm->add('TRIGGER', '-PT15H');
+//                 $valarm->add('ACTION',  'AUDIO');
+//                 $valarm->add('ATTACH',  'Basso', array('VALUE' => 'URI'));
+//                 $valarm->add('TRIGGER', '-PT15H');
+                $valarm->add('ACTION',  'NONE');
+                $valarm->add('TRIGGER', '19760401T005545Z', array('VALUE' => 'DATE-TIME'));
                 $valarm->add('UID',     '17DC9682-230E-47D6-A035-EEAB602B1229');
                 
                 // Taking out \r to not screw up the xml output
@@ -123,9 +134,11 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Sabre\DAV\ServerPlug
                 unset($requestedProperties[array_search($property, $requestedProperties)]);
                 
                 $valarm = $vcalendar->create('VALARM');
-                $valarm->add('ACTION',  'AUDIO');
-                $valarm->add('ATTACH',  'Basso', array('VALUE' => 'URI'));
-                $valarm->add('TRIGGER', '-PT15H');
+//                 $valarm->add('ACTION',  'AUDIO');
+//                 $valarm->add('ATTACH',  'Basso', array('VALUE' => 'URI'));
+//                 $valarm->add('TRIGGER', '-PT15H');
+                $valarm->add('ACTION',  'NONE');
+                $valarm->add('TRIGGER', '19760401T005545Z', array('VALUE' => 'DATE-TIME'));
                 $valarm->add('UID',     '27DC9682-230E-47D6-A035-EEAB602B1229');
                 
                 // Taking out \r to not screw up the xml output
