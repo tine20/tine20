@@ -25,12 +25,30 @@ msgstr ""
 msgid "Generic System Exception"
 msgstr ""
 
+#: Exception/MonthFormat.php:26
+msgid "Wrong month format!"
+msgstr ""
+
+#: Exception/MonthFormat.php:31
+msgid "The month must have the format YYYY-MM!"
+msgstr ""
+
 #: Exception/Record/SystemContainer.php:22
 msgid "System Container"
 msgstr ""
 
 #: Exception/Record/SystemContainer.php:28
 msgid "This is a system container which could not be deleted!"
+msgstr ""
+
+#: Exception/InvalidRelationConstraints.php:26
+msgid "Invalid Relations"
+msgstr ""
+
+#: Exception/InvalidRelationConstraints.php:36
+msgid ""
+"You tried to create a relation which is forbidden by the constraints config "
+"of one of the models."
 msgstr ""
 
 #: Acl/Rights.php:147
@@ -539,7 +557,7 @@ msgstr ""
 msgid "modified"
 msgstr ""
 
-#: Export/Spreadsheet/Ods.php:276
+#: Export/Spreadsheet/Ods.php:358
 msgid "Data"
 msgstr ""
 
@@ -805,7 +823,7 @@ msgid "Logging you in..."
 msgstr ""
 
 #: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:683
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:693
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -841,13 +859,13 @@ msgstr ""
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:655
 msgid "Errors"
 msgstr ""
 
 #: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:655
 msgid "Please fix the errors noted."
 msgstr ""
 
@@ -908,8 +926,8 @@ msgid "Your password has been changed."
 msgstr ""
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:947
-#: js/widgets/relation/GenericPickerGridPanel.js:960
+#: js/widgets/relation/GenericPickerGridPanel.js:916
+#: js/widgets/relation/GenericPickerGridPanel.js:929
 #: js/widgets/dialog/ImportDialog.js:654
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:294
@@ -968,9 +986,9 @@ msgstr ""
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
-#: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1761
+#: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1773
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:680
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:690
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr ""
@@ -1090,11 +1108,11 @@ msgid ""
 "Your user account has no role memberships. Please contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:281
+#: js/ExceptionHandler.js:289
 msgid "Method Not Found / Insufficent Permissions"
 msgstr ""
 
-#: js/ExceptionHandler.js:282
+#: js/ExceptionHandler.js:290
 msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
@@ -1535,7 +1553,7 @@ msgstr ""
 msgid "Resume upload"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:241 js/widgets/grid/GridPanel.js:548
+#: js/widgets/grid/FileUploadGrid.js:241 js/widgets/grid/GridPanel.js:559
 #: js/widgets/tree/ContextMenu.js:35
 msgid "Add {0}"
 msgstr ""
@@ -1639,92 +1657,92 @@ msgid ""
 "view-options or change the module you search in."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:312 js/widgets/grid/GridPanel.js:522
-#: js/widgets/grid/GridPanel.js:523 js/widgets/grid/GridPanel.js:524
+#: js/widgets/grid/GridPanel.js:312 js/widgets/grid/GridPanel.js:533
+#: js/widgets/grid/GridPanel.js:534 js/widgets/grid/GridPanel.js:535
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:537 js/widgets/dialog/EditDialog.js:599
+#: js/widgets/grid/GridPanel.js:548 js/widgets/dialog/EditDialog.js:599
 msgid "Copy {0}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:556
+#: js/widgets/grid/GridPanel.js:567
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:586
+#: js/widgets/grid/GridPanel.js:597
 #: js/widgets/dialog/DuplicateMergeDialog.js:220
 msgid "Merge {0}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:622 js/widgets/grid/GridPanel.js:623
-#: js/widgets/grid/GridPanel.js:625 js/widgets/tree/ContextMenu.js:52
+#: js/widgets/grid/GridPanel.js:633 js/widgets/grid/GridPanel.js:634
+#: js/widgets/grid/GridPanel.js:636 js/widgets/tree/ContextMenu.js:52
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1038
+#: js/widgets/grid/GridPanel.js:1050
 msgid "No data to display"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1060
+#: js/widgets/grid/GridPanel.js:1072
 msgid "Displaying records {0} - {1} of {2}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1061
+#: js/widgets/grid/GridPanel.js:1073
 msgid "No {0} to display"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1303
+#: js/widgets/grid/GridPanel.js:1315
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1322
+#: js/widgets/grid/GridPanel.js:1334
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1370
+#: js/widgets/grid/GridPanel.js:1382
 #: js/widgets/relation/GenericPickerGridPanel.js:461
 #: js/widgets/dialog/AttachmentsGridPanel.js:104
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1371
+#: js/widgets/grid/GridPanel.js:1383
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
 #: js/widgets/ActivitiesPanel.js:492
 msgid "Created By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1372
+#: js/widgets/grid/GridPanel.js:1384
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1373
+#: js/widgets/grid/GridPanel.js:1385
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1735
+#: js/widgets/grid/GridPanel.js:1747
 msgid "Not Allowed"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1736
+#: js/widgets/grid/GridPanel.js:1748
 msgid "You are not allowed to delete all pages at once"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1759
+#: js/widgets/grid/GridPanel.js:1771
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1804 js/widgets/dialog/EditDialog.js:829
+#: js/widgets/grid/GridPanel.js:1816 js/widgets/dialog/EditDialog.js:829
 msgid "Deleting {0}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1804
+#: js/widgets/grid/GridPanel.js:1816
 msgid " ... This may take a long time!"
 msgstr ""
 
@@ -1771,15 +1789,15 @@ msgstr ""
 msgid "Child"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:263
+#: js/widgets/relation/GenericPickerGridPanel.js:265
 msgid ""
-"The maximum number of {0} with the type {1} is reached. Please change the "
-"type of this relation"
+"The maximum number of {0} with the type \"{1}\" is reached. Please change "
+"the type of this relation"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:272
+#: js/widgets/relation/GenericPickerGridPanel.js:270
 msgid ""
-"The maximum number of {0}s with the type {1} is reached at the {2} you "
+"The maximum number of {0}s with the type \"{1}\" is reached at the {2} you "
 "added. Please change the type of this relation or edit the {2}"
 msgstr ""
 
@@ -1805,13 +1823,13 @@ msgstr ""
 msgid "Dependency"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:948
+#: js/widgets/relation/GenericPickerGridPanel.js:917
 msgid ""
 "The record you tried to link is already linked. Please edit the existing "
 "link."
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:961
+#: js/widgets/relation/GenericPickerGridPanel.js:930
 #: js/widgets/form/RecordPickerComboBox.js:295
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr ""
@@ -2291,33 +2309,33 @@ msgid "Select Export Definition ..."
 msgstr ""
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:341
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:465
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:475
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:448
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:458
 msgid "Undo change for all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:523
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:533
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:582
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:592
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:583
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:593
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:680
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:690
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:683
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:693
 msgid "Applying changes"
 msgstr ""
 
@@ -2916,13 +2934,4 @@ msgstr ""
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
-msgstr ""
-
-msgid "or"
-msgstr ""
-
-msgid "The month must have the format YYYY-MM!"
-msgstr ""
-
-msgid "Wrong month format!"
 msgstr ""
