@@ -66,77 +66,17 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                     . ' This method is deprecated and will be removed. Please use Tinebase_ModelFactory with Tinebase_ModelConfiguration!');
-        $ret = array();
         
         if (property_exists($this, '_relatableModels') && is_array($this->_relatableModels)) {
-            // iterates relatable models of this app
-            foreach ($this->_relatableModels as $model) {
-                
-                $ownModel = explode('_Model_', $model);
-                
-                if (! class_exists($model) || $ownModel[0] != $this->_applicationName) {
-                    continue;
-                }
-                $cItems = $model::getRelatableConfig();
-                
-                $ownModel = $ownModel[1];
-                
-                if (is_array($cItems)) {
-                    foreach($cItems as $cItem) {
-                        
-                        if (! (isset($cItem['config']) || array_key_exists('config', $cItem))) {
-                            continue;
-                        }
-                        
-                        // own side
-                        $ownConfigItem = $cItem;
-                        $ownConfigItem['ownModel'] = $ownModel;
-                        $ownConfigItem['ownApp'] = $this->_applicationName;
-                        
-                        $foreignConfigItem = array(
-                            'reverted'     => true,
-                            'ownApp'       => $cItem['relatedApp'],
-                            'ownModel'     => $cItem['relatedModel'], 
-                            'relatedModel' => $ownModel,
-                            'relatedApp'   => $this->_applicationName,
-                            'default'      => (isset($cItem['default']) || array_key_exists('default', $cItem)) ? $cItem['default'] : NULL
-                        );
-                        
-                        // KeyfieldConfigs
-                        if ((isset($cItem['keyfieldConfig']) || array_key_exists('keyfieldConfig', $cItem))) {
-                            $foreignConfigItem['keyfieldConfig'] = $cItem['keyfieldConfig'];
-                            if ($cItem['keyfieldConfig']['from']){
-                                $foreignConfigItem['keyfieldConfig']['from'] = $cItem['keyfieldConfig']['from'] == 'foreign' ? 'own' : 'foreign';
-                            }
-                        }
-                        
-                        $j=0;
-                        foreach ($cItem['config'] as $conf) {
-                            $max = explode(':',$conf['max']);
-                            $ownConfigItem['config'][$j]['max'] = $max[0];
-                            
-                            $foreignConfigItem['config'][$j] = $conf;
-                            $foreignConfigItem['config'][$j]['max'] = $max[1];
-                            if ($conf['degree'] == 'sibling') {
-                                $foreignConfigItem['config'][$j]['degree'] = $conf['degree'];
-                            } else {
-                                $foreignConfigItem['config'][$j]['degree'] = $conf['degree'] == 'parent' ? 'child' : 'parent';
-                            }
-                            $j++;
-                        }
-                        
-                        $ret[] = $ownConfigItem;
-                        $ret[] = $foreignConfigItem;
-                    }
-                }
-            }
+            return Tinebase_Relations::getConstraintsConfigs($this->_relatableModels);
+        } else {
+            return array();
         }
-        
-        return $ret;
     }
     
     /**
      * returns model configurations for application starter
+     * 
      * @return array
      */
     public function getModelsConfiguration()
@@ -153,15 +93,16 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     }
     
     /**
-     * returns the default model
-     * @return NULL
+     * returns the default model or null if it does not exist
+     * 
+     * @return string
      */
     public function getDefaultModel()
     {
-        if ($this->_defaultModel) {
+        if (is_string($this->_defaultModel)) {
             return $this->_defaultModel;
         }
-        if ($this->_configuredModels) {
+        if ($this->_configuredModels && is_array($this->_configuredModels) && count($this->_configuredModels) > 0) {
             return $this->_configuredModels[0];
         }
         return NULL;
