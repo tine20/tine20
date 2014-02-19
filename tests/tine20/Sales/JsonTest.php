@@ -95,45 +95,47 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateMultipleWithRelations()
     {
-        $contract1 = $this->_getContract();
-        $contract2 = $this->_getContract();
+        $contract1 = $this->_getContract('contract 1');
+        $contract2 = $this->_getContract('contract 2');
         $contract1 = Sales_Controller_Contract::getInstance()->create($contract1);
         $contract2 = Sales_Controller_Contract::getInstance()->create($contract2);
         
+        // peter, bob, laura, lisa
         list($contact1, $contact2, $contact3, $contact4) = $this->_createContacts();
         
         // add contact2 as customer relation to contract2
-        $this->_setContractRelations($contract2, array($contact2));
+        $this->_setContractRelations($contract2, array($contact2), 'CUSTOMER');
 
         $ids = array($contract1->id, $contract2->id);
 
-        $json = new Tinebase_Frontend_Json();
+        $tbJson = new Tinebase_Frontend_Json();
         // add Responsible contact1 to both contracts
-        $response = $json->updateMultipleRecords('Sales', 'Contract',
-            array(array('name' => '%CUSTOMER-Addressbook_Model_Contact', 'value' => $contact1->getId())),
+        $response = $tbJson->updateMultipleRecords('Sales', 'Contract',
+            array(array('name' => '%RESPONSIBLE-Addressbook_Model_Contact', 'value' => $contact1->getId())),
             array(array('field' => 'id', 'operator' => 'in', 'value' => $ids))
         );
 
-        $this->assertEquals(count($response['results']), 2);
+        $this->assertEquals(2, count($response['results']));
         
         $contract1re = $this->_instance->getContract($contract1->getId());
         $contract2re = $this->_instance->getContract($contract2->getId());
 
-        $this->assertEquals(count($contract1re['relations']), 1);
-        $this->assertEquals(count($contract2re['relations']), 2);
+        // only one CUSTOMER relation is allowed, contract2 still has related contact2
+        $this->assertEquals(1, count($contract1re['relations']), 'contract1 relations count failed: ' . print_r($contract1re, true));
+        $this->assertEquals(2, count($contract2re['relations']), 'contract2 relations count failed: ' . print_r($contract2re, true));
 
-        $this->assertEquals($contract1re['relations'][0]['related_id'], $contact1->getId());
+        $this->assertEquals($contact1->getId(), $contract1re['relations'][0]['related_id']);
         
-        if($contract2re['relations'][1]['related_id'] == $contact1->getId()) {
-            $this->assertEquals($contract2re['relations'][1]['related_id'], $contact1->getId());
-            $this->assertEquals($contract2re['relations'][0]['related_id'], $contact2->getId());
+        if ($contract2re['relations'][1]['related_id'] == $contact1->getId()) {
+            $this->assertEquals($contact1->getId(), $contract2re['relations'][1]['related_id']);
+            $this->assertEquals($contact2->getId(), $contract2re['relations'][0]['related_id']);
         } else {
-            $this->assertEquals($contract2re['relations'][1]['related_id'], $contact2->getId());
-            $this->assertEquals($contract2re['relations'][0]['related_id'], $contact1->getId());
+            $this->assertEquals($contact2->getId(), $contract2re['relations'][1]['related_id']);
+            $this->assertEquals($contact1->getId(), $contract2re['relations'][0]['related_id']);
         }
         
-        // update customer to contact3 and add responsible contact4
-        $response = $json->updateMultipleRecords('Sales', 'Contract',
+        // update customer to contact3 and add responsible to contact4, so contract1 and 2 will have 2 relations
+        $response = $tbJson->updateMultipleRecords('Sales', 'Contract',
             array(
                 array('name' => '%CUSTOMER-Addressbook_Model_Contact', 'value' => $contact3->getId()),
                 array('name' => '%RESPONSIBLE-Addressbook_Model_Contact', 'value' => $contact4->getId())
@@ -145,22 +147,31 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $contract1re = $this->_instance->getContract($contract1->getId());
         $contract2re = $this->_instance->getContract($contract2->getId());
         
-        $this->assertEquals(count($contract1re['relations']), 2);
-        $this->assertEquals(count($contract2re['relations']), 3);
+        $this->assertEquals(2, count($contract1re['relations']));
+        $this->assertEquals(2, count($contract2re['relations']));
         
         // remove customer
-        $response = $json->updateMultipleRecords('Sales', 'Contract',
+        $response = $tbJson->updateMultipleRecords('Sales', 'Contract',
             array(array('name' => '%CUSTOMER-Addressbook_Model_Contact', 'value' => '')),
             array(array('field' => 'id', 'operator' => 'in', 'value' => $ids))
         );
         
-        $this->assertEquals(count($response['results']), 2);
+        $this->assertEquals(2, count($response['results']));
         
         $contract1res = $this->_instance->getContract($contract1->getId());
         $contract2res = $this->_instance->getContract($contract2->getId());
+
+        $this->assertEquals(1, count($contract1res['relations']));
+        $this->assertEquals(1, count($contract2res['relations']));
+        // TODO: make this from other side work
+        // add type RESPONSIBLE from the other side, so each contract gets 2 responsibles, but only one is allowed
+//         $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
         
-        $this->assertEquals(count($contract1res['relations']), 1);
-        $this->assertEquals(count($contract2res['relations']), 2);
+//         $response = $tbJson->updateMultipleRecords('Addressbook', 'Contact',
+//             array(array('name' => '%RESPONSIBLE-Sales_Model_Contract', 'value' => $contract1->getId())),
+//             array(array('field' => 'id', 'operator' => 'in', 'value' => array($contact1->getId(), $contact2->getId())))
+//         );
+        
     }
     
     /**
@@ -204,8 +215,9 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @param array|Sales_Model_Contract $contract
      * @param array $contacts
+     * @param string $type
      */
-    protected function _setContractRelations($contract, $contacts)
+    protected function _setContractRelations($contract, $contacts, $type = 'PARTNER')
     {
         $relationData = array();
         foreach ($contacts as $contact) {
@@ -215,7 +227,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
                 'related_model' => 'Addressbook_Model_Contact',
                 'related_backend' => 'Sql',
                 'related_id' => $contact->getId(),
-                'type' => 'PARTNER'
+                'type' => $type
             );
         }
         $contractId = ($contract instanceof Sales_Model_Contract) ? $contract->getId() : $contract['id'];
@@ -383,11 +395,11 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return Sales_Model_Contract
      */
-    protected function _getContract()
+    protected function _getContract($title = 'phpunit contract', $desc = 'blabla')
     {
         return new Sales_Model_Contract(array(
-            'title'         => 'phpunit contract',
-            'description'   => 'blabla',
+            'title'         => $title,
+            'description'   => $desc,
         ), TRUE);
     }
 
@@ -532,6 +544,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $ccs['totalcount']);
         $this->assertEquals(1, $ccs['results'][0]['is_deleted']);
     }
+
     
     /**
      * tests crud methods of division
@@ -564,5 +577,94 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
         
         $d = $this->_instance->getDivision($d['id']);
+    }
+        
+    /**
+     * @see https://forge.tine20.org/mantisbt/view.php?id=8840
+     */
+    public function testRelationConstraintsOwnSide()
+    {
+        $contract = Sales_Controller_Contract::getInstance()->create($this->_getContract());
+    
+        list($contact1, $contact2, $contact3, $contact4) = $this->_createContacts();
+        
+        $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
+        
+        $this->_setContractRelations($contract, array($contact1, $contact2), 'CUSTOMER');
+    }
+    
+    /**
+     * @see https://forge.tine20.org/mantisbt/view.php?id=8840
+     */
+    public function testRelationConstraintsOtherSide()
+    {
+        $contract = Sales_Controller_Contract::getInstance()->create($this->_getContract());
+        
+        list($contact1, $contact2, $contact3, $contact4) = $this->_createContacts(4);
+        
+        $this->_setContractRelations($contract, array($contact1), 'RESPONSIBLE');
+        
+        Addressbook_Controller_Contact::getInstance()->update($contact1);
+        $contact1 = Addressbook_Controller_Contact::getInstance()->get($contact1->getId(), NULL, TRUE);
+        $this->assertEquals(1, count($contact1->relations));
+        
+        // a partner may be added
+        $relation = new Tinebase_Model_Relation(array(
+            'own_degree' => 'sibling',
+            'own_model'  => 'Addressbook_Model_Contact',
+            'own_backend' => 'Sql',
+            'own_id' => $contact2->getId(),
+            'related_degree' => 'sibling',
+            'related_model' => 'Sales_Model_Contract',
+            'related_backend' => 'Sql',
+            'related_id' => $contract->getId(),
+            'type' => 'PARTNER'
+        ));
+        
+        $contact2->relations = array($relation);
+    
+        $contact2 = Addressbook_Controller_Contact::getInstance()->update($contact2);
+        $contact2 = Addressbook_Controller_Contact::getInstance()->get($contact2->getId(), NULL, TRUE);
+        $this->assertEquals(1, count($contact2->relations));
+        
+        // a second partner may be added also
+        $relation = new Tinebase_Model_Relation(array(
+            'own_degree' => 'sibling',
+            'own_model'  => 'Addressbook_Model_Contact',
+            'own_backend' => 'Sql',
+            'own_id' => $contact3->getId(),
+            'related_degree' => 'sibling',
+            'related_model' => 'Sales_Model_Contract',
+            'related_backend' => 'Sql',
+            'related_id' => $contract->getId(),
+            'type' => 'PARTNER'
+        ));
+        
+        $contact3->relations = array($relation);
+        Addressbook_Controller_Contact::getInstance()->update($contact3);
+        $contact3 = Addressbook_Controller_Contact::getInstance()->get($contact3->getId(), NULL, TRUE);
+        $this->assertEquals(1, count($contact3->relations));
+        
+        $contract = Sales_Controller_Contract::getInstance()->get($contract->getId(), NULL, TRUE);
+        $this->assertEquals(3, count($contract->relations));
+
+        // but a second responsible must not be added
+        $relation = new Tinebase_Model_Relation(array(
+            'own_degree' => 'sibling',
+            'own_model'  => 'Addressbook_Model_Contact',
+            'own_backend' => 'Sql',
+            'own_id' => $contact4->getId(),
+            'related_degree' => 'sibling',
+            'related_model' => 'Sales_Model_Contract',
+            'related_backend' => 'Sql',
+            'related_id' => $contract->getId(),
+            'type' => 'RESPONSIBLE'
+        ));
+        
+        $contact4->relations = array($relation);
+        
+        $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
+
+        $contact4 = Addressbook_Controller_Contact::getInstance()->update($contact4);
     }
 }
