@@ -353,13 +353,13 @@ class Tinebase_Relation_RelationTest extends TestCase
             'own_degree'     => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'  => 'Addressbook_Model_Contact',
             'related_record' => $sclever->toArray(),
-            'type'           => 'PARTNER',
+            'type'           => 'CUSTOMER',
         );
         $contract2Json['relations'][] = array(
             'own_degree'     => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'  => 'Addressbook_Model_Contact',
             'related_record' => $pwulf->toArray(),
-            'type'           => 'PARTNER',
+            'type'           => 'CUSTOMER',
         );
         $contract2Json = $json->saveContract($contract2Json);
         
@@ -379,35 +379,6 @@ class Tinebase_Relation_RelationTest extends TestCase
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
         Tinebase_Relations::getInstance()->transferRelations($sclever->getId(), $pwulf->getId(), 'Addressbook_Model_Contract');
-    }
-    
-    /**
-     * tests if constraints config is called properly
-     * 
-     * @see #8840: relations config - constraints from the other side
-     *      - validate in backend
-     *      
-     *      https://forge.tine20.org/mantisbt/view.php?id=8840
-     */
-    public function testGetConstraintsConfigs() {
-        $result = Tinebase_Relations::getConstraintsConfigs('Sales_Model_Contract');
-        $this->assertEquals(10, count($result));
-        
-        foreach($result as $item) {
-            if ($item['ownRecordClassName'] == 'Sales_Model_Contract' && $item['relatedRecordClassName'] == 'Timetracker_Model_Timeaccount') {
-                $this->assertEquals('Contract', $item['ownModel']);
-                $this->assertEquals('Timeaccount', $item['relatedModel']);
-                $this->assertEquals('', $item['defaultType']);
-                $this->assertEquals('TIME_ACCOUNT', $item['config'][0]['type']);
-                $this->assertSame(0, $item['config'][0]['max']);
-            } elseif ($item['ownRecordClassName'] == 'Timetracker_Model_Timeaccount' && $item['relatedRecordClassName'] == 'Sales_Model_Contract') {
-                $this->assertEquals('Contract', $item['relatedModel']);
-                $this->assertEquals('Timeaccount', $item['ownModel']);
-                $this->assertEquals('TIME_ACCOUNT', $item['config'][0]['type']);
-                $this->assertEquals(TRUE, $item['reverted']);
-                $this->assertSame(1, $item['config'][0]['max']);
-            }
-        }
     }
 }
 
