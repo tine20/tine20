@@ -93,7 +93,7 @@ Tine.Sipgate.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             Ext.Msg.show({
                title:   this.app.i18n._('The account is not saved already!'),
-               msg:     this.app.i18n._('Please save yout account before syncing!'),
+               msg:     this.app.i18n._('Please save your account before syncing!'),
                icon:    Ext.MessageBox.INFO,
                buttons: Ext.Msg.OK
             });
@@ -294,7 +294,7 @@ Tine.Sipgate.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             name: 'password',
                             inputType:'password'
                         }, {
-                            fieldLabel: this.app.i18n._('Passwort Repeat'),
+                            fieldLabel: this.app.i18n._('Password Repeat'),
                             name: 'password_repeat',
                             inputType:'password'
                         }], [{ 

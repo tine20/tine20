@@ -652,7 +652,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 value: 'SSHA'
             }, commonComboConfig), 
             Ext.applyIf({
-                name: 'accounts_' + type + '_useRfc2307bis',
+                name: 'accounts_' + type + (type === 'Ldap') ? '_useRfc2307bis' : '_useRfc2307',
                 fieldLabel: (type === 'Ldap') ? this.app.i18n._('Use Rfc 2307 bis') : this.app.i18n._('Maintain RFC 2307 attributes'),
                 store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
                 value: '0'

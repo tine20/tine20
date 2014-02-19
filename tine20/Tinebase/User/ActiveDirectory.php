@@ -35,8 +35,12 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         'accountExpires'            => 'accountexpires',
         'accountPrimaryGroup'       => 'primarygroupid',
         'accountEmailAddress'       => 'mail',
-        'accountHomeDirectory'      => 'homedirectory',
-        #'accountLoginShell'         => 'loginshell',
+            
+        'profilePath'               => 'profilepath',
+        'logonScript'               => 'scriptpath',
+        'homeDrive'                 => 'homedrive',
+        'homePath'                  => 'homedirectory',
+        
         #'accountStatus'             => 'shadowinactive'
     );
 
@@ -94,14 +98,14 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         if(empty($_options['groupFilter'])) {
             $_options['groupFilter']        = 'objectclass=group';
         }
-
+        
         parent::__construct($_options);
         
         if ($this->_options['useRfc2307']) {
-            $this->_requiredObjectClass[] = 'posixaccount';
-            $this->_requiredObjectClass[] = 'shadowaccount';
+            $this->_requiredObjectClass[] = 'posixAccount';
+            $this->_requiredObjectClass[] = 'shadowAccount';
             
-            $this->_rowNameMapping['accountHomeDirectory'] = 'homedirectory';
+            $this->_rowNameMapping['accountHomeDirectory'] = 'unixhomedirectory';
             $this->_rowNameMapping['accountLoginShell']    = 'loginshell';
         }
         
@@ -114,6 +118,10 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         
         $this->_domainSidBinary = $this->_domainConfig['objectsid'][0];
         $this->_domainSidPlain  = Tinebase_Ldap::decodeSid($this->_domainConfig['objectsid'][0]);
+        
+        $domanNameParts    = array();
+        Zend_Ldap_Dn::explodeDn($this->_domainConfig['distinguishedname'][0], $fooBar, $domanNameParts);
+        $this->_domainName = implode('.', $domanNameParts);
     }
     
     /**
@@ -136,10 +144,6 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         
         $ldapData['objectclass'] = $this->_requiredObjectClass;
 
-        if ($this->_options['useRfc2307']) {
-            $ldapData['uidnumber'] = $this->_generateUidNumber();
-        }
-        
         foreach ($this->_ldapPlugins as $plugin) {
             $plugin->inspectAddUser($_user, $ldapData);
         }
@@ -150,13 +154,16 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  ldapData: ' . print_r($ldapData, true));
 
         $this->_ldap->add($dn, $ldapData);
+                
+        $userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute));
+        $userId = $this->_decodeAccountId($userId[$this->_userUUIDAttribute][0]);
+        
+        // add user to primary group and set primary group
+        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend($_user->accountPrimaryGroup, $userId);
         
         // set primary goup id
-        $this->_ldap->update($dn, array('primarygroupid' => $primaryGroupId));
+        $this->_ldap->updateProperty($dn, array('primarygroupid' => $primaryGroupId));
         
-        $userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute));
-
-        $userId = $this->_decodeAccountId($userId[$this->_userUUIDAttribute][0]);
 
         $user = $this->getUserByPropertyFromSyncBackend('accountId', $userId, 'Tinebase_Model_FullUser');
 
@@ -320,6 +327,8 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             return;
         }
         
+        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend($_account->accountPrimaryGroup, $_account->getId());
+        
         $ldapEntry = $this->_getLdapEntry('accountId', $_account);
 
         $ldapData = $this->_user2ldap($_account, $ldapEntry);
@@ -434,7 +443,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             }
         }
 
-        $accountArray['accountStatus'] = ($_userData['useraccountcontrol'][0] && self::ACCOUNTDISABLE) ? 'disabled' : 'enabled';
+        $accountArray['accountStatus'] = (isset($_userData['useraccountcontrol']) && ($_userData['useraccountcontrol'][0] & self::ACCOUNTDISABLE)) ? 'disabled' : 'enabled';
         if ($accountArray['accountExpires'] instanceof Tinebase_DateTime && Tinebase_DateTime::now()->compare($accountArray['accountExpires']) == -1) {
             $accountArray['accountStatus'] = 'disabled';
         }
@@ -460,8 +469,10 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         } else {
             $accountObject = new $_accountClass($accountArray, TRUE);
         }
-
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' password age ' . print_r($accountObject->toArray(), true));
+        
+        if ($accountObject instanceof Tinebase_Model_FullUser) {
+            $accountObject->sambaSAM = new Tinebase_Model_SAMUser($accountArray);
+        }
         
         return $accountObject;
     }
@@ -475,7 +486,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
     protected function _user2ldap(Tinebase_Model_FullUser $_user, array $_ldapEntry = array())
     {
         $ldapData = array(
-            'useraccountcontrol' => isset($_ldapEntry['useraccountcontrol']) ? $_ldapEntry['useraccountcontrol'] : self::NORMAL_ACCOUNT
+            'useraccountcontrol' => isset($_ldapEntry['useraccountcontrol']) ? $_ldapEntry['useraccountcontrol'][0] : self::NORMAL_ACCOUNT
         );
         
         foreach ($_user as $key => $value) {
@@ -510,6 +521,9 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                     
                 case 'accountPrimaryGroup':
                     $ldapData[$ldapProperty] = Tinebase_Group::getInstance()->resolveUUIdToGIdNumber($value);
+                    if ($this->_options['useRfc2307']) {
+                        $ldapData['gidNumber'] = Tinebase_Group::getInstance()->resolveGidNumber($value);
+                    }
                     break;
                     
                 default:
@@ -519,12 +533,26 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         }
         
         $ldapData['name'] = $ldapData['cn'];
+        $ldapData['userPrincipalName'] =  $_user->accountLoginName . '@' . $this->_domainName;
         
         if ($this->_options['useRfc2307']) {
             // homedir is an required attribute
-            if (empty($ldapData['homedirectory'])) {
-                $ldapData['homedirectory'] = '/dev/null';
+            if (empty($ldapData['unixhomedirectory'])) {
+                $ldapData['unixhomedirectory'] = '/dev/null';
             }
+            
+            $ldapData['uidnumber'] = $this->_generateUidNumber();
+            $ldapData['gidnumber'] = Tinebase_Group::getInstance()->resolveGidNumber($_user->accountPrimaryGroup);
+            
+            $ldapData['msSFU30NisDomain'] = array_value(0, explode('.', $this->_domainName));
+        }
+        
+        if (isset($_user->sambaSAM) && $_user->sambaSAM instanceof Tinebase_Model_SAMUser) {
+            $ldapData['profilepath']   = $_user->sambaSAM->profilePath;
+            $ldapData['scriptpath']    = $_user->sambaSAM->logonScript;
+            $ldapData['homedrive']     = $_user->sambaSAM->homeDrive;
+            $ldapData['homedirectory'] = $_user->sambaSAM->homePath;
+            
         }
         
         $ldapData['objectclass'] = isset($_ldapEntry['objectclass']) ? $_ldapEntry['objectclass'] : array();

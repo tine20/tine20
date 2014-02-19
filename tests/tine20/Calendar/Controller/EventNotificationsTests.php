@@ -979,6 +979,33 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     }
     
     /**
+     * put an exception event created by "remind" option of alarm in iCal
+     */
+    public function testPutEventExceptionAlarmReminder()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
+    
+        // create recurring event
+        self::flushMailer();
+        $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../Import/files/apple_ical_remind_part1.ics');
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->_testCalendar, "$id.ics", $vcalendar);
+    
+        $messages = self::getMessages();
+        $this->assertEquals(1, count($messages), 'one invitation should be send to sclever');
+        $this->_assertMail('sclever', 'invitation');
+    
+        // create alarm reminder/snooze exception
+        Calendar_Controller_EventNotificationsTests::flushMailer();
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../Import/files/apple_ical_remind_part2.ics', 'r');
+        $event->put($vcalendarStream);
+    
+        // assert no reschedule mail
+        $messages = Calendar_Controller_EventNotificationsTests::getMessages();
+        $this->assertEquals(0, count($messages), 'no reschedule mails should be send for implicit exception');
+    }
+    
+    /**
      * get test alarm emails
      * 
      * @param boolean $deleteThem

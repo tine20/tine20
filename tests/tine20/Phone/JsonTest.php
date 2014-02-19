@@ -95,6 +95,16 @@ class Phone_JsonTest extends TestCase
             'redirect_event' => 'none'
         ));
         
+        $this->_objects['phone1'] = new Voipmanager_Model_Snom_Phone(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+            'macaddress'     => "a234567890cd",
+            'description'    => 'second user phone',
+            'location_id'    => $this->_objects['location']->getId(),
+            'template_id'    => $this->_objects['template']->getId(),
+            'current_model'  => 'snom320',
+            'redirect_event' => 'none'
+        ));
+        
         $this->_objects['phone2'] = new Voipmanager_Model_Snom_Phone(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
             'macaddress'     => "1a34567890cd",
@@ -107,6 +117,11 @@ class Phone_JsonTest extends TestCase
         
         $this->_objects['phonesetting'] = new Voipmanager_Model_Snom_PhoneSettings(array(
             'phone_id'     => $this->_objects['phone']->getId(),
+            'web_language' => 'English'
+        ));
+        
+        $this->_objects['phonesetting1'] = new Voipmanager_Model_Snom_PhoneSettings(array(
+            'phone_id'     => $this->_objects['phone1']->getId(),
             'web_language' => 'English'
         ));
         
@@ -129,11 +144,16 @@ class Phone_JsonTest extends TestCase
             $this->_objects['phoneOwner']
         ));
         
+        $rights1 = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', array(
+            $this->_objects['phoneOwner']
+        ));
+        
         $rights2 = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', array(
             $this->_objects['phoneOwner2']
         ));
         
         $this->_objects['phone']->rights = $rights;
+        $this->_objects['phone1']->rights = $rights1;
         $this->_objects['phone2']->rights = $rights2;
         
         $this->_objects['context'] = new Voipmanager_Model_Asterisk_Context(array(
@@ -146,7 +166,10 @@ class Phone_JsonTest extends TestCase
             'id'                => Tinebase_Record_Abstract::generateUID(),
             'context_id'        => $this->_objects['context']->getId()
         ));
-        
+        $this->_objects['sippeer1'] = new Voipmanager_Model_Asterisk_SipPeer(array(
+            'id'                => Tinebase_Record_Abstract::generateUID(),
+            'context_id'        => $this->_objects['context']->getId()
+        ));
         $this->_objects['sippeer2'] = new Voipmanager_Model_Asterisk_SipPeer(array(
             'id'                => Tinebase_Record_Abstract::generateUID(),
             'context_id'        => $this->_objects['context']->getId()
@@ -156,6 +179,13 @@ class Phone_JsonTest extends TestCase
             'id'                => Tinebase_Record_Abstract::generateUID(),
             'snomphone_id'      => $this->_objects['phone']->getId(),
             'asteriskline_id'   => $this->_objects['sippeer']->getId(),
+            'linenumber'        => 1,
+            'lineactive'        => 1
+        ));
+        $this->_objects['line1'] = new Voipmanager_Model_Snom_Line(array(
+            'id'                => Tinebase_Record_Abstract::generateUID(),
+            'snomphone_id'      => $this->_objects['phone1']->getId(),
+            'asteriskline_id'   => $this->_objects['sippeer1']->getId(),
             'linenumber'        => 1,
             'lineactive'        => 1
         ));
@@ -187,20 +217,25 @@ class Phone_JsonTest extends TestCase
         $snomTemplateBackend->create($this->_objects['template']);
         
         $phoneBackend->create($this->_objects['phone']);
+        $phoneBackend->create($this->_objects['phone1']);
         $phoneBackend->create($this->_objects['phone2']);
         
         $phoneBackend->setPhoneRights($this->_objects['phone']);
+        $phoneBackend->setPhoneRights($this->_objects['phone1']);
         $phoneBackend->setPhoneRights($this->_objects['phone2']);
         
         $asteriskContextBackend->create($this->_objects['context']);
         
         $asteriskSipPeerBackend->create($this->_objects['sippeer']);
+        $asteriskSipPeerBackend->create($this->_objects['sippeer1']);
         $asteriskSipPeerBackend->create($this->_objects['sippeer2']);
         
         $snomLineBackend->create($this->_objects['line']);
+        $snomLineBackend->create($this->_objects['line1']);
         $snomLineBackend->create($this->_objects['line2']);
         
         $snomPhoneSettingBackend->create($this->_objects['phonesetting']);
+        $snomPhoneSettingBackend->create($this->_objects['phonesetting1']);
         $snomPhoneSettingBackend->create($this->_objects['phonesetting2']);
         
         /******************** call history *************************/
@@ -222,6 +257,15 @@ class Phone_JsonTest extends TestCase
             'phone_id'              => $this->_objects['phone']->getId(),
             'direction'             => Phone_Model_Call::TYPE_INCOMING,
             'source'                => '26',
+            'destination'           => '050364354',
+        ));
+        
+        $this->_objects['call2a'] = new Phone_Model_Call(array(
+            'id'                    => 'phpunitcallhistoryid2a',
+            'line_id'               => $this->_objects['line1']->getId(),
+            'phone_id'              => $this->_objects['phone1']->getId(),
+            'direction'             => Phone_Model_Call::TYPE_INCOMING,
+            'source'                => '27',
             'destination'           => '050364354',
         ));
         
@@ -257,6 +301,15 @@ class Phone_JsonTest extends TestCase
         $this->_objects['filter2'] = array(
             array('field' => 'query', 'operator' => 'contains', 'value' => '05036')
         );
+        
+        $this->_objects['filter2a'] = array(
+            array('field' => 'query', 'operator' => 'contains', 'value' => '05036'),
+            array('field' => 'phone_id', 'operator' => 'AND', 'value' => array(array('field' => ':id', 'operator' => 'equals', 'value' => $this->_objects['phone1']->getId())))
+        );
+
+        $this->_objects['filter2b'] = array(
+            array('field' => 'destination', 'operator' => 'contains', 'value' => '05036')
+        );
 
         $this->_objects['filter3'] = array(
             array('field' => 'phone_id', 'operator' => 'AND', 'value' => array(array('field' => ':id', 'operator' => 'equals', 'value' => $this->_objects['phone']->getId())))
@@ -273,6 +326,7 @@ class Phone_JsonTest extends TestCase
         // create calls
         $phoneController->callStarted($this->_objects['call1']);
         $phoneController->callStarted($this->_objects['call2']);
+        $phoneController->callStarted($this->_objects['call2a']);
         $phoneController->callStarted($this->_objects['call3']);
         $phoneController->callStarted($this->_objects['call4']);
         
@@ -299,13 +353,15 @@ class Phone_JsonTest extends TestCase
      */
     public function testGetCalls()
     {
-        // search calls
+        // search calls without phone_id filter -> the calls of all phones of the user are returned
         $result = $this->_json->searchCalls($this->_objects['filter1'], $this->_objects['paging']);
-        $this->assertEquals(2, $result['totalcount']);
+        $this->assertEquals(3, $result['totalcount']);
         
-        // search query -> '050'
+        // search query -> '05036' -> the user has made 2 calls, another made one call, 2 is correct than
         $result = $this->_json->searchCalls($this->_objects['filter2'], $this->_objects['paging']);
-        $this->assertGreaterThanOrEqual(1, $result['totalcount'], 'query filter not working');
+        $this->assertEquals(2, $result['totalcount'], 'query filter not working');
+        $result = $this->_json->searchCalls($this->_objects['filter2b'], $this->_objects['paging']);
+        $this->assertEquals(2, $result['totalcount'], 'destination filter not working');
         
         $call2 = $result['results'][0];
         
@@ -317,13 +373,13 @@ class Phone_JsonTest extends TestCase
         $this->assertGreaterThan(1, $result['totalcount'], 'phone_id filter not working');
         
         $result = $this->_json->searchCalls($this->_objects['filter4'], $this->_objects['paging']);
-        $this->assertEquals(2, $result['totalcount'], 'calls of another user must not be found!');
+        // the user searches for a phone not belonging to him, so no results will be returned
+        $this->assertEquals(0, $result['totalcount'], 'calls of another user must not be found!');
         
-        $this->assertEquals($this->_objects['phone']->getId(), $result['results'][0]['phone_id']['id']);
-        $this->assertEquals($this->_objects['phone']->getId(), $result['results'][1]['phone_id']['id']);
-        
-        $this->assertEmpty($result['filter'], 'Filter must be empty, the other users phone id filter should has been removed.');
-        
+        $result = $this->_json->searchCalls($this->_objects['filter2a'], $this->_objects['paging']);
+        $this->assertEquals($this->_objects['phone1']->getId(), $result['results'][0]['phone_id']['id']);
+        $this->assertEquals(1, $result['totalcount'], 'the user made one call with this phone!');
+        $this->assertEquals($this->_objects['phone1']->getId(), $result['results'][0]['phone_id']['id']);
         $result = $this->_json->searchCalls($this->_objects['filter5'], $this->_objects['paging']);
         
         $this->assertEquals(0, $result['totalcount'], 'calls of another user must not be found!');
@@ -418,7 +474,7 @@ class Phone_JsonTest extends TestCase
         
         $this->assertGreaterThan(0, count($data['Phones']), 'more than 1 phone expected');
         $this->assertGreaterThan(0, count($data['Phones'][0]['lines']), 'no lines attached');
-        $this->assertEquals('user phone', $data['Phones'][0]['description'], 'no description');
+        $this->assertStringEndsWith('user phone', $data['Phones'][0]['description'], 'no description');
     }
     
     // we need some mocks for asterisk backends...

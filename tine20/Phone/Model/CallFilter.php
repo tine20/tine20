@@ -36,36 +36,18 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected function _getDefaultPhoneFilter($userPhones)
     {
-        $record = $userPhones->getFirstRecord();
-        if ($record) {
+        if ($userPhones->count()) {
             $filter = $this->createFilter(
                 array('id' => 'defaultAdded', 'field' => 'phone_id', 'operator' => 'AND', 'value' => array(
-                    array('field' => ':id', 'operator' => 'equals', 'value' => $record->getId())
+                    array('field' => ':id', 'operator' => 'in', 'value' => $userPhones->getId())
                 ))
             );
         } else {
-            $filter = new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'equals', 'value' => 'notexists'));
+            $filter = new Tinebase_Model_Filter_Text(array('id' => 'defaultAdded', 'field' => 'id', 'operator' => 'equals', 'value' => 'notexists'));
         }
         
-        $filter->setIsImplicit(TRUE);
+
         return $filter;
-    }
-    
-    /**
-     * returns array with the filter settings of this filter group
-     *
-     * @param  bool $_valueToJson resolve value for json api?
-     * @return array
-     */
-    public function toArray($_valueToJson = false)
-    {
-        foreach ($this->_filterObjects as $index => $filter) {
-            if ($filter->getId() == 'defaultAdded') {
-                unset($this->_filterObjects[$index]);
-            }
-        }
-        
-        return parent::toArray($_valueToJson);
     }
     
     /**
@@ -77,7 +59,7 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
      */
     public function appendFilterSql($_select, $_backend)
     {
-        if (! $this->_isResolved) {
+        if ($this->getId() == 'OuterFilter') {
             $phoneIdFilter = $this->_findFilter('phone_id');
             // set user phone ids as filter
             $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
@@ -85,21 +67,21 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
             ));
             
             $userPhones = Phone_Controller_MyPhone::getInstance()->search($filter);
-            $userPhoneIds = $userPhones->getArrayOfIds();
+            $userPhoneIds = $userPhones->getId();
 
             if ($phoneIdFilter === NULL) {
                 $this->addFilter($this->_getDefaultPhoneFilter($userPhones));
             } else {
                 $phoneId = $phoneIdFilter->getValue();
                 $phoneId = $phoneId[0]['value'];
-
+                
                 if (! in_array($phoneId, $userPhoneIds)) {
                     $this->removeFilter('phone_id');
-                    $this->addFilter($this->_getDefaultPhoneFilter($userPhones));
+                    $this->addFilter(new Tinebase_Model_Filter_Text(
+                        array('id' => 'defaultAdded', 'field' => 'id', 'operator' => 'equals', 'value' => 'notexists')
+                    ));
                 }
             }
-            
-            $this->_isResolved = TRUE;
         }
     }
 }

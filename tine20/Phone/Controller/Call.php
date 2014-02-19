@@ -53,4 +53,56 @@ class Phone_Controller_Call extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }
+    
+    /**
+     * get list of records
+     *
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param boolean $_getRelations
+     * @param boolean $_onlyIds
+     * @param string $_action for right/acl check
+     * @return Tinebase_Record_RecordSet|array
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    {
+        $_filter->setId('OuterFilter');
+    
+        return parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
+    }
+// TODO: make this work and remove setting totalcount in fe
+//     /**
+//      * Gets total count of search with $_filter
+//      *
+//      * @param Tinebase_Model_Filter_FilterGroup $_filter
+//      * @param string $_action for right/acl check
+//      * @return int
+//      */
+//     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+//     {
+//         $_filter->setId('OuterFilter');
+        
+//         return count($this->search($_filter, NULL, FALSE, TRUE));
+//     }
+    
+    /**
+     * Gets the phone id filter for the first record in the given recordset
+     *
+     * @param Tinebase_Record_RecordSet $userPhones
+     * @return Tinebase_Model_Filter_Abstract
+     */
+    protected function _getDefaultPhoneFilter($userPhones)
+    {
+        if ($userPhones->count()) {
+            $filter = new Phone_Model_CallFilter(
+                array('id' => 'defaultAdded', 'field' => 'phone_id', 'operator' => 'AND', 'value' => array(
+                    array('field' => ':id', 'operator' => 'in', 'value' => $userPhones->getId())
+                ))
+            );
+        } else {
+            $filter = new Tinebase_Model_Filter_Text(array('id' => 'defaultAdded', 'field' => 'id', 'operator' => 'equals', 'value' => 'notexists'));
+        }
+    
+        return $filter;
+    }
 }

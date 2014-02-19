@@ -229,7 +229,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 this.createMultiButton(ff);
             }
             
-            var match = ff.name.match(/customfield_(.*)/);
+            var match = ff.hasOwnProperty('name') ? ff.name.match(/customfield_(.*)/) : null;
             if (match && match.length == 2) {
                 var cf = this.interRecord.get('customfields');
                 if (cf && cf.hasOwnProperty(match[1])) {
