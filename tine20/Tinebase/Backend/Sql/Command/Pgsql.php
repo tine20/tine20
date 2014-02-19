@@ -45,29 +45,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
         // before 9.0
         return new Zend_Db_Expr("array_to_string(ARRAY(SELECT DISTINCT unnest(array_agg($quotedField))),',')");
     }
-    
-    /**
-     * returns concatenation expression
-     *
-     * @param array $values
-     */
-    public function getConcat($values)
-    {
-        $str = '';
-        $i   = 1;
-        $vc  = count($values);
-        
-        foreach($values as $value) {
-            $str .= $value;
-            if ($i < $vc) {
-                $str .= ' || ';
-            }
-            $i++;
-        }
-        
-        return new Zend_Db_Expr($str);
-    }
-    
+
     /**
      * @param string $field
      * @param mixed $returnIfTrue
