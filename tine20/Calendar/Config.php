@@ -37,6 +37,20 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const ATTENDEE_ROLES = 'attendeeRoles';
     
     /**
+     * MAX_JSON_DEFAULT_FILTER_PERIOD_FROM
+     * 
+     * @var string
+     */
+    const MAX_JSON_DEFAULT_FILTER_PERIOD_FROM = 'maxjsondefaultfilterperiodfrom';
+    
+    /**
+     * MAX_JSON_DEFAULT_FILTER_PERIOD_UNTIL
+     * 
+     * @var string
+     */
+    const MAX_JSON_DEFAULT_FILTER_PERIOD_UNTIL = 'maxjsondefaultfilterperioduntil';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -70,6 +84,28 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'options'               => array('recordModel' => 'Calendar_Model_AttendeeRole'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'REQ'
+        ),
+        self::MAX_JSON_DEFAULT_FILTER_PERIOD_FROM => array(
+        //_('Default filter period (from) for events fetched via JSON API')
+            'label'                 => 'Default filter period (from) for events fetched via JSON API',
+        //_('For how long in the past (in months) the events should be fetched.')
+            'description'           => 'For how long in the past (in months) the events should be fetched.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => 0,
+        ),
+        self::MAX_JSON_DEFAULT_FILTER_PERIOD_UNTIL => array(
+        //_('Default filter period (until) for events fetched via JSON API')
+            'label'                 => 'Default filter period (until) for events fetched via JSON API',
+        //_('For how long in the future (in months) the events should be fetched.')
+            'description'           => 'For how long in the future (in months) the events should be fetched.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => 1,
         ),
     );
     

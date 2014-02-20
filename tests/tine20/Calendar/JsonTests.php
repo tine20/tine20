@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -285,7 +285,28 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals(2, count($returnedFilter), 'Two filters shoud have been returned!');
         $this->assertTrue($returnedFilter[1]['field'] == 'period' || $returnedFilter[0]['field'] == 'period', 'One returned filter shoud be a period filter');
     }
-
+    
+    /**
+     * add period filter if none is given / configure from+until
+     * 
+     * @see 0009688: allow to configure default period filter in json frontend
+     */
+    public function testSearchEventsWithOutPeriodFilterConfiguredFromAndUntil()
+    {
+        Calendar_Config::getInstance()->set(Calendar_Config::MAX_JSON_DEFAULT_FILTER_PERIOD_FROM, 12);
+        
+        $filter = array(array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()));
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        
+        $now = Tinebase_DateTime::now()->setTime(0,0,0);
+        foreach ($searchResultData['filter'] as $filter) {
+            if ($filter['field'] === 'period') {
+                $this->assertEquals($now->getClone()->subYear(1)->toString(), $filter['value']['from']);
+                $this->assertEquals($now->getClone()->addMonth(1)->toString(), $filter['value']['until']);
+            }
+        }
+    }
+    
     /**
      * testSearchEvents with organizer = me filter
      * 
