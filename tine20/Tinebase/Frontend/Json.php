@@ -588,6 +588,23 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
+        $registryData = $this->_getAnonymousRegistryData();
+        
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+            $userRegistryData = $this->_getUserRegistryData();
+            $registryData += $userRegistryData;
+        }
+        
+        return $registryData;
+    }
+    
+    /**
+     * get anonymous registry
+     * 
+     * @return array
+     */
+    protected function _getAnonymousRegistryData()
+    {
         $locale = Tinebase_Core::get('locale');
         $tbFrontendHttp = new Tinebase_Frontend_Http();
 
@@ -604,7 +621,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $numberString = Zend_Locale_Format::toFloat(1234.56);
         
         $registryData =  array(
-            // ModSsl
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'timeZone'         => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE),
@@ -630,44 +646,58 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'maxPostSize'       => convertToBytes(ini_get('post_max_size')),
             'thousandSeparator' => $numberString[1],
             'decimalSeparator'  => $numberString[5],
-            'filesystemAvailable' => Setup_Controller::getInstance()->isFilesystemAvailable()
+            'filesystemAvailable' => Setup_Controller::getInstance()->isFilesystemAvailable(),
         );
         
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            $user = Tinebase_Core::getUser();
-            $userContactArray = array();
-            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                try {
-                    $userContactArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray();
-                } catch (Addressbook_Exception_NotFound $aenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' User not found in Addressbook: ' . $user->accountDisplayName);
-                }
-            }
-
-            try {
-                $persistentFilters = Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters();
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . " Failed to fetch persistent filters. Exception: \n". $tenf);
-                $persistentFilters = array();
-            }
-            
-            $registryData += array(
-                'currentAccount'    => $user->toArray(),
-                'userContact'       => $userContactArray,
-                'accountBackend'    => Tinebase_User::getConfiguredBackend(),
-                'jsonKey'           => Tinebase_Core::get('jsonKey'),
-                'userApplications'  => $user->getApplications()->toArray(),
-                'NoteTypes'         => $this->getNoteTypes(),
-                'stateInfo'         => Tinebase_State::getInstance()->loadStateInfo(),
-                'mustchangepw'      => $user->mustChangePassword(),
-                'confirmLogout'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
-                'persistentFilters' => $persistentFilters,
-            );
-        }
-
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Anonymous registry: ' . print_r($registryData, TRUE));
+        
         return $registryData;
+    }
+    
+    /**
+     * get user registry
+     * 
+     * @return array
+     */
+    protected function _getUserRegistryData()
+    {
+        $user = Tinebase_Core::getUser();
+        $userContactArray = array();
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+            try {
+                $userContactArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray();
+            } catch (Addressbook_Exception_NotFound $aenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' User not found in Addressbook: ' . $user->accountDisplayName);
+            }
+        }
+        
+        try {
+            $persistentFilters = Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . " Failed to fetch persistent filters. Exception: \n". $tenf);
+            $persistentFilters = array();
+        }
+        
+        $userRegistryData = array(
+            'currentAccount'    => $user->toArray(),
+            'userContact'       => $userContactArray,
+            'accountBackend'    => Tinebase_User::getConfiguredBackend(),
+            'jsonKey'           => Tinebase_Core::get('jsonKey'),
+            'userApplications'  => $user->getApplications()->toArray(),
+            'NoteTypes'         => $this->getNoteTypes(),
+            'stateInfo'         => Tinebase_State::getInstance()->loadStateInfo(),
+            'mustchangepw'      => $user->mustChangePassword(),
+            'confirmLogout'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
+            'persistentFilters' => $persistentFilters,
+        );
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' User registry: ' . print_r($userRegistryData, TRUE));
+        
+        return $userRegistryData;
     }
 
     /**
@@ -683,7 +713,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (Tinebase_Core::getUser()) {
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
             $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
-            $genericRelatableModels = array();
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+               . ' User applications to fetch registry for: ' . print_r($userApplications->name, TRUE));
+            
+            if (! in_array('Tinebase', $userApplications->name)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' User has no permissions to run Tinebase.');
+                $this->logout();
+                throw new Tinebase_Exception_AccessDenied('User has no permissions to run Tinebase');
+            }
             
             foreach ($userApplications as $application) {
                 $jsonAppName = $application->name . '_Frontend_Json';
@@ -700,8 +738,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                             : $applicationJson->getRegistryData();
                     
                     } catch (Exception $e) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Disabling ' . $application->name . ': ' . $e);
-                        Tinebase_Application::getInstance()->setApplicationState(array($application->getId()), Tinebase_Application::DISABLED);
+                        Tinebase_Exception::log($e);
+                        if (! in_array($application->name, array('Tinebase', 'Addressbook', 'Admin'))) {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Disabling ' . $application->name . ': ' . $e);
+                            Tinebase_Application::getInstance()->setApplicationState(array($application->getId()), Tinebase_Application::DISABLED);
+                        }
                         unset($registryData[$application->name]);
                         continue;
                     }
@@ -743,17 +784,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
-            
-            $registryData['Tinebase']['genericRelatableModels'] = $genericRelatableModels;
-            
-            if (! (isset($registryData['Tinebase']) || array_key_exists('Tinebase', $registryData))) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' User has no permissions to run Tinebase or unable to get Tinebase preferences. Aborting ...');
-                $this->logout();
-            }
-            
         } else {
             $registryData['Tinebase'] = $this->getRegistryData();
         }
+        
         return $registryData;
     }
 
