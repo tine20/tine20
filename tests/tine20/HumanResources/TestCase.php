@@ -255,17 +255,16 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
         if (is_array($date)) {
             $allDay = TRUE;
             if (count($date) == 1) {
-                $dtstart = $date[0]->setTime(0,0,0);
+                $dtstart = $date[0]->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
                 $dtend   = clone $dtstart;
-                $dtend   = $dtend->addDay(1)->subSecond(1);
             } else {
-                $dtstart = $date[0]->setTime(0,0,0);
+                $dtstart = $date[0]->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
                 $dtend   = clone $dtstart;
-                $dtend   = $dtend->addDay(count($date))->subSecond(1);
+                $dtend   = $dtend->addDay(count($date))->subHour(5);
             }
         } else {
             $allDay = FALSE;
-            $dtstart = $date->setTime(6,0,0);
+            $dtstart = $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(6,0,0);
             $dtend   = clone $dtstart;
             $dtend->addMinute(15);
         }

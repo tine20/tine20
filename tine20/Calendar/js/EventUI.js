@@ -73,7 +73,9 @@ Tine.Calendar.EventUI.prototype = {
             el.setOpacity(0.5, 0);
             el.setStyle({'background-color': '#aaa', 'border-color': '#888'});
             Ext.DomHelper.applyStyles(el.dom.firstChild, {'background-color': '#888'});
-            Ext.DomHelper.applyStyles(el.dom.firstChild.firstChild, {'background-color': '#888'});
+            if (el.dom.firstChild.hasOwnProperty('firstChild')) {
+                Ext.DomHelper.applyStyles(el.dom.firstChild.firstChild, {'background-color': '#888'});
+            }
         });
     },
     

@@ -1397,13 +1397,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         if ($_record->is_all_day_event) {
-            // harmonize dtend of all day events
-            if (! $_record->dtend) { //if no DTEND is given
+            // harmonize datetimes of all day events
+            $_record->setTimezone($_record->originator_tz);
+            if (! $_record->dtend) {
                 $_record->dtend = clone $_record->dtstart;
                 $_record->dtend->setTime(23,59,59);
             }
-            $_record->dtend->addSecond($_record->dtend->get('s') == 0 ? 59 : 0);
-            $_record->dtend->subMinute($_record->dtend->get('i') == 0 ? 1 : 0);
+            $_record->dtstart->setTime(0,0,0);
+            $_record->dtend->setTime(23,59,59);
+            $_record->setTimezone('UTC');
         }
         $_record->setRruleUntil();
         
