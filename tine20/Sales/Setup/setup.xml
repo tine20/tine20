@@ -271,7 +271,7 @@
         </table>
         <table>
             <name>sales_cost_centers</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>

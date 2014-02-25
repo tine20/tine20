@@ -850,4 +850,16 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Sales', '8.6');
     }
+    
+    /**
+     * update to 8.4
+     * 
+     * drop number index of cost center table
+     */
+    public function update_4()
+    {
+        $this->_backend->dropIndex('sales_cost_centers', 'number');
+        $this->setTableVersion('sales_cost_centers', 3);
+        $this->setApplicationVersion('Sales', '8.5');
+    }
 }

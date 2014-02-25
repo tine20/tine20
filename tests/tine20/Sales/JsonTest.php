@@ -531,7 +531,8 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->_instance->deleteCostCenters($cc['id']);
         
-        $ccs = $this->_instance->searchCostCenters(array(array('field' => 'number', 'operator' => 'equals', 'value' => $number - 5000)), array());
+        $be = new Sales_Backend_CostCenter();
+        $cc = $be->get($ccs['results'][0]['id'], TRUE);
         
         $this->assertEquals(0, $ccs['totalcount']);
         
