@@ -81,9 +81,6 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['initialContainer']->name, $result);
     }
     
-    /**
-     * assert that name of folder is container name
-     */
     public function testGetOwner()
     {
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
@@ -93,9 +90,6 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('principals/users/' . Tinebase_Core::getUser()->contact_id, $result);
     }
     
-    /**
-     * assert that name of folder is container name
-     */
     public function testGetACL()
     {
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
@@ -107,9 +101,6 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(6, count($result));
     }
     
-    /**
-     * assert that name of folder is container name
-     */
     public function testGetIdAsName()
     {
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer'], true);
@@ -303,6 +294,23 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $shares = $container->getShares();
         
         $this->assertEquals(3, count($shares));
+    }
+    
+    /**
+     * test Calendar_Frontend_WebDAV_Container::getShares for container user has no admin grant for
+     */
+    public function testGetSharesWithoutRights()
+    {
+        $jmcblack = array_value('jmcblack', Zend_Registry::get('personas'));
+        $jmcblacksCalId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $jmcblack->getId());
+        $jmcblacksCal = Tinebase_Container::getInstance()->get($jmcblacksCalId);
+        
+        $container = new Calendar_Frontend_WebDAV_Container($jmcblacksCal);
+    
+        $shares = $container->getShares();
+    
+        $this->assertEquals(1, count($shares));
+        $this->assertTrue((bool)$shares[0]['readOnly']);
     }
     
     /**

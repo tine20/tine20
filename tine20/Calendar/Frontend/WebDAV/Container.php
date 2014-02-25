@@ -262,7 +262,14 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     {
         $result = array();
         
-        foreach (Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container) as $grant) {
+        try {
+            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
+        } catch (Tinebase_Exception_AccessDenied $e) {
+            // user has no right/grant to see all grants of this container
+            $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+            $grants->addRecord(Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $this->_container));
+        }
+        foreach ($grants as $grant) {
             
             switch ($grant->account_type) {
                 case 'anyone':
