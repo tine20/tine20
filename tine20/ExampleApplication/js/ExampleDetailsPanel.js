@@ -9,13 +9,13 @@
 Ext.ns('Tine.ExampleApplication');
 
 /**
- * @class     Tine.ExampleApplication.ExampleRecordDetailsPanel
+ * @class     Tine.ExampleApplication.ExampleDetailsPanel
  * @namespace ExampleApplication
  * @extends   Tine.widgets.grid.DetailsPanel
  * @author    Alexander Stintzing <a.stintzing@metaways.de>
  */
 
-Tine.ExampleApplication.ExampleRecordDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
+Tine.ExampleApplication.ExampleDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
     app: null,
     
@@ -30,7 +30,7 @@ Tine.ExampleApplication.ExampleRecordDetailsPanel = Ext.extend(Tine.widgets.grid
             count: 0
         }, 0);
         
-        Tine.ExampleApplication.ExampleRecordDetailsPanel.superclass.initComponent.call(this);
+        Tine.ExampleApplication.ExampleDetailsPanel.superclass.initComponent.call(this);
     },
     
     /**

@@ -11,13 +11,13 @@
 Ext.namespace('Tine.ExampleApplication');
 
 /**
- * ExampleRecord grid panel
+ * Example grid panel
  * 
  * @namespace   Tine.ExampleApplication
- * @class       Tine.ExampleApplication.ExampleRecordGridPanel
+ * @class       Tine.ExampleApplication.ExampleGridPanel
  * @extends     Tine.widgets.grid.GridPanel
  * 
- * <p>ExampleRecord Grid Panel</p>
+ * <p>Example Grid Panel</p>
  * <p><pre>
  * </pre></p>
  * 
@@ -26,20 +26,25 @@ Ext.namespace('Tine.ExampleApplication');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.ExampleApplication.ExampleRecordGridPanel
+ * Create a new Tine.ExampleApplication.ExampleGridPanel
  */
-Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
-
+Tine.ExampleApplication.ExampleGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+    /**
+     * record class
+     * @cfg {Tine.Example.Model.Task} recordClass
+     */
+    recordClass: Tine.Example.Model.Example,
+    
     initComponent: function() {
         this.initDetailsPanel();
-        Tine.ExampleApplication.ExampleRecordGridPanel.superclass.initComponent.call(this);
+        Tine.ExampleApplication.ExampleGridPanel.superclass.initComponent.call(this);
     },
     
     /**
      * @private
      */
     initDetailsPanel: function() {
-        this.detailsPanel = new Tine.ExampleApplication.ExampleRecordDetailsPanel({
+        this.detailsPanel = new Tine.ExampleApplication.ExampleDetailsPanel({
             grid : this,
             app: this.app
         });

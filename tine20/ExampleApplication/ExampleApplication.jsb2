@@ -1,7 +1,7 @@
 {
   "projectName": "Tine 2.0 - ExampleApplication",
   "deployDir": "ExampleApplication",
-  "licenseText": "Tine 2.0 - ExampleApplication \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "licenseText": "Tine 2.0 - ExampleApplication \nCopyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
   "resources": [
     
   ],
@@ -12,15 +12,23 @@
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "ExampleRecordEditDialog.js",
+          "text": "Models.js",
+          "path": "js/"
+        },      
+        {
+          "text": "Example.js",
           "path": "js/"
         },
         {
-          "text": "ExampleRecordDetailsPanel.js",
+          "text": "ExampleGridPanel.js",
+          "path": "js/"
+        },            
+        {
+          "text": "ExampleEditDialog.js",
           "path": "js/"
         },
         {
-          "text": "ExampleRecordGridPanel.js",
+          "text": "ExampleDetailsPanel.js",
           "path": "js/"
         }
       ]

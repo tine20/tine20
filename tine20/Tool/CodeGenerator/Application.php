@@ -42,25 +42,25 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
     );
 
     /**
-     * 
+     *
      * @var application root directory
      */
     protected $_applicationFolder = null;
 
     /**
-     * 
+     *
      * @var name of application applied to every class
      */
     protected $_applicationName = null;
 
     /**
-     * 
-     * @var reference folder for finding templates 
+     *
+     * @var reference folder for finding templates
      */
     protected $_rootFolder = null;
     
     /**
-     * 
+     *
      * @var absolute path for templates
      */
     protected $_templateFolder = null;
@@ -76,9 +76,11 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
             'Frontend/Cli.php' => 'Frontend/Cli.php',
             'Frontend/Http.php' => 'Frontend/Http.php',
             'Frontend/Json.php' => 'Frontend/Json.php',
-            'js/ExampleRecordDetailsPanel.js' => "js/{$applicationName}RecordDetailsPanel.js",
-            'js/ExampleRecordEditDialog.js' => "js/{$applicationName}RecordEditDialog.js",
-            'js/ExampleRecordGridPanel.js' => "js/{$applicationName}RecordGridPanel.js",
+            'js/Example.js' => "js/{$applicationName}.js",
+            'js/Models.js' => "js/Models.js",
+            'js/ExampleDetailsPanel.js' => "js/{$applicationName}DetailsPanel.js",
+            'js/ExampleEditDialog.js' => "js/{$applicationName}EditDialog.js",
+            'js/ExampleGridPanel.js' => "js/{$applicationName}GridPanel.js",
             'Model/ExampleRecord.php' => "Model/{$applicationName}Record.php",
             'Model/ExampleRecordFilter.php' => "Model/{$applicationName}RecordFilter.php",
             'Model/Status.php' => "Model/Status.php",
@@ -93,10 +95,6 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
         );
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see Tool_CodeGenerator_Interface::build()
-     */
     public function build(array $args)
     {
         try {
@@ -126,11 +124,20 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
      */
     protected function _createFolders()
     {
+        if (file_exists($this->_applicationFolder)) {
+            throw new Exception($this->_applicationFolder . ' already exists! Remove it and run application generator again!');            
+        }
+                    
         mkdir($this->_fsOsSintax($this->_applicationFolder));
 
         foreach ($this->_folders as $folder)
         {
-            mkdir($this->_fsOsSintax($this->_applicationFolder . self::DS . $folder));
+            $subFolder = $this->_applicationFolder . self::DS . $folder;
+            if (file_exists($subFolder)) {
+                throw new Exception($subFolder . ' already exists! Remove it and run application generator again!');
+            }
+            
+            mkdir($this->_fsOsSintax($subFolder));
         }
     }
 
@@ -183,6 +190,7 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
         $content = str_replace('ExampleApplication', $this->_applicationName, $content);
         $content = str_replace('ExampleRecord', $this->_applicationName . 'Record', $content);
         $content = str_replace('EXAMPLERECORD', strtoupper($this->_applicationName) . 'RECORD', $content);
+        $content = str_replace('Example', $this->_applicationName, $content);
         $chainFilter = new Zend_Filter();
         $chainFilter->addFilter(new Zend_Filter_Word_CamelCaseToUnderscore())
                     ->addFilter(new Zend_Filter_StringToLower());
@@ -200,5 +208,5 @@ class Tool_CodeGenerator_Application implements Tool_CodeGenerator_Interface
     protected function _fsOsSintax($path)
     {
         return str_replace('/', self::DS, $path);
-    }  
+    }    
 }

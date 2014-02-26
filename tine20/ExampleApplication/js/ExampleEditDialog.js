@@ -9,10 +9,10 @@ Ext.ns('Tine.ExampleApplication');
 
 /**
  * @namespace   Tine.ExampleApplication
- * @class       Tine.ExampleApplication.ExampleRecordEditDialog
+ * @class       Tine.ExampleApplication.ExampleEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
  * 
- * <p>ExampleRecord Compose Dialog</p>
+ * <p>Example Compose Dialog</p>
  * <p></p>
  * 
  *  @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -21,15 +21,15 @@ Ext.ns('Tine.ExampleApplication');
  * 
  * @param       {Object} config
  * @constructor
- * Create a new Tine.ExampleApplication.ExampleRecordEditDialog
+ * Create a new Tine.ExampleApplication.ExampleEditDialog
  */
-Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.ExampleApplication.ExampleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * @private
      */
     appName: 'ExampleApplication',
-    modelName: 'ExampleRecord',
+    modelName: 'Example',
     
     windowHeight: 470,
     windowWidth: 800,
@@ -50,7 +50,7 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
             activeTab: 0,
             border: false,
             items:[{
-                title: this.app.i18n._('ExampleRecord'),
+                title: this.app.i18n._('Example'),
                 autoScroll: true,
                 border: false,
                 frame: true,
