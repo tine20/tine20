@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -420,6 +420,7 @@ dGVzdAo=&#13;
      * reply email test
      * 
      * @see 0007512: SmartReply with HTML message fails
+     * @see 0009390: linebreaks missing when replying or forwarding mail
      */
     public function testReplyEmail()
     {
@@ -440,8 +441,8 @@ dGVzdAo=&#13;
         $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $message->subject);
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
         $this->assertContains('Sebastian
-The attached list notes all of the packages that were added or removed
-from the tree, for the week ending 2009-04-12 23h59 UTC.', $completeMessage->body, 'reply body has not been appended correctly');
+The attached list notes all of the packages that were added or removed<br />from the tree, for the week ending 2009-04-12 23h59 UTC.<br />', $completeMessage->body,
+            'reply body has not been appended correctly');
     }
     
     /**

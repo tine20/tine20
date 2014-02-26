@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Mail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -118,7 +118,7 @@ class Tinebase_Mail extends Zend_Mail
      * appends old body to mime part
      * 
      * @param Zend_Mime_Part $mp
-     * @param string $replyBody
+     * @param string $replyBody plain/text reply body
      * @return Zend_Mime_Part
      */
     protected static function _appendReplyBody(Zend_Mime_Part $mp, $replyBody)
@@ -129,6 +129,12 @@ class Tinebase_Mail extends Zend_Mail
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " mp content: " . $decodedContent);
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " reply body: " . $replyBody);
+        }
+        
+        if ($type === Zend_Mime::TYPE_HTML && /* checks if $replyBody does not contains tags */ $replyBody === strip_tags($replyBody)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Converting plain/text reply body to HTML");
+            $replyBody = self::convertFromTextToHTML($replyBody);
         }
         
         if ($type === Zend_Mime::TYPE_HTML && preg_match('/(<\/body>[\s\r\n]*<\/html>)/i', $decodedContent, $matches)) {
@@ -526,5 +532,57 @@ class Tinebase_Mail extends Zend_Mail
         }
 
         return $addresses;
+    }
+
+    /**
+     * convert text to html
+     * - replace quotes ('>  ') with blockquotes 
+     * - does htmlspecialchars()
+     * - converts linebreaks to <br />
+     * 
+     * @param string $text
+     * @param string $blockquoteClass
+     * @return string
+     */
+    public static function convertFromTextToHTML($text, $blockquoteClass = null)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Input: ' . $text);
+        
+        $lines = preg_split('/\r\n|\n|\r/', $text);
+        $result = array();
+        $indention = 0;
+        foreach ($lines as $line) {
+            // get indention level and remove quotes
+            if (preg_match('/^>[> ]*/', $line, $matches)) {
+                $indentionLevel = substr_count($matches[0], '>');
+                $line = str_replace($matches[0], '', $line);
+            } else {
+                $indentionLevel = 0;
+            }
+            
+            // convert html special chars
+            $line = htmlspecialchars($line, ENT_COMPAT, 'UTF-8');
+            
+            // set blockquote tags for current indentionLevel
+            while ($indention < $indentionLevel) {
+                $class = $blockquoteClass ? 'class="' . $blockquoteClass . '"' : '';
+                $line = '<blockquote ' . $class . '>' . $line;
+                $indention++;
+            }
+            while ($indention > $indentionLevel) {
+                $line = '</blockquote>' . $line;
+                $indention--;
+            }
+            
+            $result[] = $line;
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Line: ' . $line);
+        }
+        
+        $result = implode('<br />', $result);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Result: ' . $result);
+        
+        return $result;
     }
 }

@@ -606,7 +606,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         if (file_exists($otherFilesDir)) {
             foreach (new DirectoryIterator($otherFilesDir) as $item) {
                 $filename = $item->getFileName();
-                if ($item->isFile() && $filename !== 'README') {
+                if ($item->isFile() && preg_match('/eml$/i', $filename)) {
                     $fileName = 'other/' . $filename;
                     echo "\nchecking message: " . $fileName . "\n";
                     $cachedMessage = $this->messageTestHelper($fileName, $filename);

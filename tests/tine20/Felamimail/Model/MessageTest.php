@@ -96,7 +96,7 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
             "> jojo\n" .
             "jojo\n" ;
         
-        $result = Felamimail_Message::convertFromTextToHTML($plaintextMessage);
+        $result = Tinebase_Mail::convertFromTextToHTML($plaintextMessage, 'felamimail-body-blockquote');
         
         $this->assertEquals('blabla<br /><blockquote class="felamimail-body-blockquote">lalülüüla<br /><br />'
             . '<blockquote class="felamimail-body-blockquote"><blockquote class="felamimail-body-blockquote">lala<br />'
