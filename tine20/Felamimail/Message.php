@@ -160,63 +160,13 @@ class Felamimail_Message extends Zend_Mail_Message
         }
         
         if ($_from == Zend_Mime::TYPE_TEXT && $_to == Zend_Mime::TYPE_HTML) {
-            $text = self::convertFromTextToHTML($_text);
+            $text = Tinebase_Mail::convertFromTextToHTML($_text, 'felamimail-body-blockquote');
             $text = self::addHtmlMarkup($text);
         } else {
             $text = self::convertFromHTMLToText($_text);
         }
         
         return $text;
-    }
-    
-    /**
-     * convert text to html
-     * - replace quotes ('>  ') with blockquotes 
-     * - does htmlspecialchars()
-     * - converts linebreaks to <br />
-     * 
-     * @param string $_text
-     * @return string
-     */
-    public static function convertFromTextToHTML($_text)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Input: ' . $_text);
-        
-        $lines = preg_split('/\r\n|\n|\r/', $_text);
-        $result = array();
-        $indention = 0;
-        foreach ($lines as $line) {
-            // get indention level and remove quotes
-            if (preg_match('/^>[> ]*/', $line, $matches)) {
-                $indentionLevel = substr_count($matches[0], '>');
-                $line = str_replace($matches[0], '', $line);
-            } else {
-                $indentionLevel = 0;
-            }
-            
-            // convert html special chars
-            $line = htmlspecialchars($line, ENT_COMPAT, 'UTF-8');
-            
-            // set blockquote tags for current indentionLevel
-            while ($indention < $indentionLevel) {
-                $line = '<blockquote class="felamimail-body-blockquote">' . $line;
-                $indention++;
-            }
-            while ($indention > $indentionLevel) {
-                $line = '</blockquote>' . $line;
-                $indention--;
-            }
-            
-            $result[] = $line;
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Line: ' . $line);
-        }
-        
-        $result = implode('<br />', $result);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Result: ' . $result);
-        
-        return $result;
     }
     
     /**

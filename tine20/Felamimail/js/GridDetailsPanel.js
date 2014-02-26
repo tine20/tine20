@@ -312,7 +312,7 @@ Ext.ns('Tine.Felamimail');
                             // sometimes the height is negative, fix this here
                             height = 500;
                         }
-                            
+                        
                         body = '<textarea ' +
                             'style="width: ' + width + 'px; height: ' + height + 'px; " ' +
                             'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +

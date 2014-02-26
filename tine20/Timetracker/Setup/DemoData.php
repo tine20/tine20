@@ -21,7 +21,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * required apps
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'HumanResources', 'Sales');
+    protected static $_requiredApplications = array('Admin', 'Sales');
     
     /**
      * holds the instance of the singleton
@@ -159,11 +159,12 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
         $this->_ccController  = Sales_Controller_CostCenter::getInstance();
         $this->_taController  = Timetracker_Controller_Timeaccount::getInstance();
+        $this->_taController->sendNotifications(FALSE);
         $this->_tsController  = Timetracker_Controller_Timesheet::getInstance();
+        $this->_tsController->sendNotifications(FALSE);
         $this->_tsController->doContainerACLChecks(false);
         $this->_empController = HumanResources_Controller_Employee::getInstance();
         $this->_contractController    = Sales_Controller_Contract::getInstance();
-        
         $contracts = $this->_contractController->getAll();
         $developmentString = self::$_de ? 'Entwicklung' : 'Development';
         
@@ -236,6 +237,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 
                 if (($costcenter->remark == 'Marketing') || ($costcenter->remark == $developmentString)) {
                     $contract = $costcenter->remark == 'Marketing' ? $this->_contractsMarketing->getByIndex(rand(0, ($this->_contractsMarketing->count() -1))) : $this->_contractsDevelopment->getByIndex(rand(0, ($this->_contractsDevelopment->count() -1)));
+                    
                     $ta->budget = $costcenter->remark == 'Marketing' ? 100 : NULL;
                     $ta->relations = array(
                         array(

@@ -57,7 +57,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     private function __construct()
     {
-
+        $this->_controller = Calendar_Controller_Event::getInstance();
+        $this->_controller->sendNotifications(false);
     }
 
     /**
@@ -98,7 +99,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _onCreate() {
 
         $this->_getDays();
-        $this->_controller = Calendar_Controller_Event::getInstance();
         foreach($this->_personas as $loginName => $persona) {
             $this->_calendars[$loginName] = Tinebase_Container::getInstance()->getContainerById(Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $persona->getId()));
 

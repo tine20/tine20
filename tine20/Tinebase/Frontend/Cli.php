@@ -608,56 +608,41 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
         }
         
-        $this->_sortApplicationsByRequirements();
-        
-        // push Admin again
-        $otherArgs = $_opts->getRemainingArgs();
-        if (in_array('skipAdmin', $otherArgs)) {
-            unset($this->_applicationsToWorkOn['Admin']);
+        foreach($this->_applicationsToWorkOn as $app => $cfg) {
+            $this->_createDemoDataRecursive($app, $cfg, $_opts);
         }
-
-        // call cli of each app
-        foreach ($this->_applicationsToWorkOn as $app => $requiredApps) {
-            $className = $app . '_Frontend_Cli';
-            if (class_exists($className)) {
-                echo 'Creating DemoData in application "' . $app . '"...' . PHP_EOL;
-                $class = new $className();
-                $class->createDemoData($_opts, FALSE);
-            } else {
-                echo 'Could not found ' . $className . ', so DemoData for application "' . $app . '" could not be created!';
+    }
+    
+    /**
+     * creates demo data and calls itself if there are required apps
+     * 
+     * @param string $app
+     * @param array $cfg
+     * @param Zend_Console_Getopt $opts
+     */
+    protected function _createDemoDataRecursive($app, $cfg, $opts)
+    {
+        if (isset($cfg['required']) && is_array($cfg['required'])) {
+            foreach($cfg['required'] as $requiredApp) {
+                $this->_createDemoDataRecursive($requiredApp, $this->_applicationsToWorkOn[$requiredApp], $opts);
             }
         }
-    }
-    
-    /**
-     * sort applications by requirement
-     * 
-     * @param array $a
-     * @param array $b
-     */
-    protected function _sortApplicationsByRequirements()
-    {
-        uasort($this->_applicationsToWorkOn, array($this, '_sortApplicationsByRequirementSF'));
-        $this->_applicationsToWorkOn = array_reverse($this->_applicationsToWorkOn);
-    }
-    
-    /**
-     * sort function by requirement
-     * 
-     * @param array $a
-     * @param array $b
-     */
-    protected function _sortApplicationsByRequirementSF($a, $b)
-    {
-        if (in_array($b['appName'], $a['required']) && (in_array($a['appName'], $b['required']))) {
-            die('Circular dependencies detected! Terminating.' . PHP_EOL);
-        } else if (in_array($b['appName'], $a['required'])) {
-            return -1;
-        } else if (in_array($a['appName'], $b['required'])) {
-            return 1;
-        }
         
-        return 0;
+        $className = $app . '_Frontend_Cli';
+        
+        $classNameDD = $app . '_Setup_DemoData';
+        
+        if (class_exists($className)) {
+            if (! $classNameDD::hasBeenRun()) {
+                echo 'Creating DemoData in application "' . $app . '"...' . PHP_EOL;
+                $class = new $className();
+                $class->createDemoData($opts, FALSE);
+            } else {
+                echo 'DemoData for ' . $app . ' has been run already, skipping...' . PHP_EOL;
+            }
+        } else {
+            echo 'Could not found ' . $className . ', so DemoData for application "' . $app . '" could not be created!';
+        }
     }
     
     /**

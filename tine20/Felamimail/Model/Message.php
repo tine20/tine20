@@ -277,7 +277,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                                      $translate->_('Received on')  . ' ' . $this->received . "\n" .
                                      $translate->_('Was read by:') . ' ' . $from->from .  ' <' . $from->email .'> ' .
                                      $translate->_('on') . ' ' . (date('Y-m-d H:i:s'));
-            $message->body         = Felamimail_Message::convertFromTextToHTML($message->body);
+            $message->body         = Tinebase_Mail::convertFromTextToHTML($message->body, 'felamimail-body-blockquote');
             Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
         }
     }

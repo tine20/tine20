@@ -200,8 +200,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _getCompleteMessageContent(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, $_partId = NULL)
     {
         $mimeType = ($_account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $_account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
-        ? Zend_Mime::TYPE_HTML
-        : Zend_Mime::TYPE_TEXT;
+            ? Zend_Mime::TYPE_HTML
+            : Zend_Mime::TYPE_TEXT;
         
         $headers     = $this->getMessageHeaders($_message, $_partId, true);
         $body        = $this->getMessageBody($_message, $_partId, $mimeType, $_account, true);
@@ -616,7 +616,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 if ($_message->text_partid && $bodyCharCountAfter < $bodyCharCountBefore / 10) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' Purify may have removed (more than 9/10) too many chars, using alternative text message part.');
-                    return $this->_getAndDecodeMessageBody($_message, $_message->text_partid , Zend_Mime::TYPE_TEXT, $_account);
+                    $result = $this->_getAndDecodeMessageBody($_message, $_message->text_partid , Zend_Mime::TYPE_TEXT, $_account);
+                    return Felamimail_Message::convertContentType(Zend_Mime::TYPE_TEXT, Zend_Mime::TYPE_HTML, $result);
                 }
             }
             

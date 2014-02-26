@@ -358,7 +358,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
         } else if ($_record instanceof Felamimail_Model_Sieve_Vacation) {
             if (! $_record->mime) {
-                $_record->reason = Felamimail_Message::convertFromTextToHTML($_record->reason);
+                $_record->reason = Tinebase_Mail::convertFromTextToHTML($_record->reason, 'felamimail-body-blockquote');
             }
         }
         
@@ -555,7 +555,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $record->setFromJsonInUsersTimezone($vacationData);
         
         $message = Felamimail_Controller_Sieve::getInstance()->getVacationMessage($record);
-        $htmlMessage = Felamimail_Message::convertFromTextToHTML($message);
+        $htmlMessage = Tinebase_Mail::convertFromTextToHTML($message, 'felamimail-body-blockquote');
         
         return array(
             'message' => $htmlMessage
