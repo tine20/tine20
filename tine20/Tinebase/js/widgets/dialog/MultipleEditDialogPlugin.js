@@ -111,6 +111,14 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         }
         
         this.editDialog = ed;
+        
+        // disable clearer of relation picker combos, otherwise the clearer will be shown before initializing
+        if (this.editDialog.relationPickers) {
+            Ext.each(this.editDialog.relationPickers, function(ff) {
+                ff.combo.blurOnSelect = true;
+                ff.combo.disableClearer = true;
+            });
+        }
     },
     
     /**
@@ -196,6 +204,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 ff.emptyOnZero = true;
                 ff.startEvents = ['focus', 'spin'];
                 ff.triggerEvents = ['spin', 'blur'];
+            } else if (ff.isXType('tinerelationpickercombo')) {
+                // leave as it is, otherwise tinerecordpickercombobox would match
             } else if (ff.isXType('tinerecordpickercombobox')) {
                 ff.startEvents = ['focus', 'expand'];
                 ff.triggerEvents = ['select', 'blur'];
@@ -347,6 +357,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     onMultiButton: function() {
         Tine.log.debug('Multibutton called.');
         // scope: formField
+        
         if (this.multiButton.hasClass('undo')) {
             Tine.log.debug('Resetting value to "' + this.startingValue + '".');
             if (this.startRecord) {
