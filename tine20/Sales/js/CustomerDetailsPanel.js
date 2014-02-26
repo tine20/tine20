@@ -163,6 +163,9 @@ Tine.Sales.CustomerDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                  * encode
                  */
                 encode: function(value, type, prefix) {
+                    if (! value) {
+                        return '';
+                    }
                     type = type ? type : 'text';
                     switch (type) {
                         case 'text':
