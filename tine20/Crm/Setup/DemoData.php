@@ -41,7 +41,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * required apps
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'Addressbook');
+    protected static $_requiredApplications = array('Admin', 'Addressbook', 'Sales', 'HumanResources');
         
     /**
      * private containers
@@ -72,7 +72,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     public static function getInstance()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Crm_Setup_DemoData;
+            self::$_instance = new self();
         }
 
         return self::$_instance;
@@ -86,11 +86,12 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     public static function hasBeenRun()
     {
-        $c = Sales_Controller_Contract::getInstance();
-        $f = new Sales_Model_ContractFilter(array(
+        $c = Crm_Controller_Lead::getInstance();
+        $f = new Crm_Model_LeadFilter(array(
             array('field' => 'lead_name', 'operator' => 'equals', 'value' => 'Relaunch Reseller Platform')
         ));
-        return ($c->search($f)->count() > 0) ? true : false;
+        
+        return ($c->search($f)->count() > 0);
     }
     
     /**
@@ -124,6 +125,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
         $controller = Crm_Controller_Lead::getInstance();
         $controller->sendNotifications(0);
+        
         $defaults = array(
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
@@ -138,6 +140,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         if ($tasks) {
             foreach($tasks as $taskArray) {
+                
                 $task = $this->_getTask($taskArray);
                 $relations[] = $this->_getRelationArray($lead, $task);
             }
@@ -305,7 +308,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $lastOrgName = NULL;
         $lead = NULL;
         
-        $startDate = Tinebase_DateTime::now()->subWeek(6);
+        $startDate = Tinebase_DateTime::now()->subWeek(10);
         // first day is a monday
         while($startDate->format('w') != 1) {
             $startDate->subDay(1);
@@ -373,12 +376,12 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $lead = $controller->create(new Crm_Model_Lead(array(
                 'lead_name'     => $orgName,
                 'leadstate_id'  => ($state > 0) ? 5 : 1,
-                'leadtype_id'   => 1,
-                'leadsource_id' => 1,
+                'leadtype_id'   => rand(1, 3),
+                'leadsource_id' => rand(1, 4),
                 'container_id'  => $this->_sharedContainer->getId(),
                 'start'         => $startDate,
-                'end'           => ($state < 1) ? $due : NULL,
-                'end_scheduled' => ($state < 1) ? $due : NULL,
+                'end'           => ($state < 0) ? $due : NULL,
+                'end_scheduled' => $due,
                 'probability'   => ($state > 0) ? 50 + ($userIndex*10) : 100,
                 'turnover'      => (($i+2)^5)*1000
             ))
@@ -411,54 +414,6 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createLeadsForPwulf()
     {
-        $this->_createLead(array(
-            'lead_name'     => static::$_de ? 'Ballett Magazin - Veröffentlichung' : 'Ballet Magazine - Publishing',
-            'leadstate_id' => 2,
-            'container_id'  => $this->_containers['pwulf']->getId(),
-            'start'         => Tinebase_DateTime::now()->subMonth(2),
-            'responsible'   => $this->_personas['pwulf'],
-            'tasks' => array(
-                array('percent' => 100, 'due' => $this->_lastWednesday, 'summary' => 'Zusammenfassung schreiben', 
-                      'organizer' => $this->_personas['pwulf']
-                ),
-                array('percent' => 100, 'due' => $this->_lastThursday, 'summary' => 'Ausarbeitung Angebot', 
-                      'organizer' => $this->_personas['pwulf']
-                ),
-                array('percent' => 100, 'due' => $this->_lastFriday, 'summary' => 'Ausarbeitung Roadmap', 
-                      'organizer' => $this->_personas['pwulf'], 'priority' => 'HIGH'
-                ),
-                array('percent' => 70,  'due' => $this->_nextFriday, 'summary' => 'Kunden Rücksprache', 
-                      'organizer' => $this->_personas['pwulf'], 'priority' => 'URGENT'
-                )
-            ),
-            'contacts' => array(
-                array('user' =>    'pwulf',     'type' => 'RESPONSIBLE'),
-                array('contact' => 'Risa Amin', 'type' => 'CUSTOMER')
-            )
-        ));
-        
-        $this->_createLead(array(
-            'lead_name'     => static::$_de ? 'Tier und Haus - Abowerbung' : 'Pet and House - Subscription advertising',
-            'leadstate_id' => 3,
-            'container_id'  => $this->_containers['pwulf']->getId(),
-            'start'         => Tinebase_DateTime::now()->subMonth(2),
-            'responsible'   => $this->_personas['pwulf'],
-            'tasks' => array(
-                array('percent' => 70,  'due' => $this->_nextFriday, 'summary' => 'Prüfung Angebot', 
-                  'organizer' => $this->_personas['pwulf'], 'priority' => 'LOW'
-                ),
-                array('percent' => 0,   'due' => $this->_nextFriday, 'summary' => 'Besprechung Team', 
-                  'organizer' => $this->_personas['pwulf'], 'priority' => 'NORMAL'
-                ),
-                array('percent' => 70,  'due' => $this->_nextFriday, 'summary' => 'Qualitätskontrolle', 
-                  'organizer' => $this->_personas['pwulf'], 'priority' => 'LOW'
-                ),
-            ),
-            'contacts' => array(
-                array('user' =>    'pwulf',     'type' => 'RESPONSIBLE'),
-                array('contact' => 'Carolynn Hinsdale', 'type' => 'CUSTOMER')
-            )
-        ));
     }
     
     /**
@@ -473,7 +428,6 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createLeadsForRwright()
     {
-
     }
 
     /**
@@ -481,7 +435,6 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createLeadsForSclever()
     {
-
     }
 
     /**

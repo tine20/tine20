@@ -82,6 +82,8 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     private function __construct()
     {
         $this->_controller = Addressbook_Controller_Contact::getInstance();
+        $this->_controller->sendNotifications(FALSE);
+        $this->_controller->setGeoDataForContacts(FALSE);
     }
 
     /**
@@ -92,7 +94,7 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     public static function getInstance()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Addressbook_Setup_DemoData;
+            self::$_instance = new self();
         }
 
         return self::$_instance;

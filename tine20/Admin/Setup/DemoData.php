@@ -75,6 +75,14 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     );
 
     /**
+     * tag names to create shared tags from
+     * 
+     * @var array
+     */
+    protected $_tagNames = array('customers', 'partners', 'europe', 'internet', 'china', 'fair', 'commercial', 'pre sales',
+        'newsletter', 'public', 'suppliers', 'traders', 'employees', 'waits for action', 'friends', 'internal', 'international');
+    
+    /**
      * the singleton pattern
      *
      * @return Admin_Setup_DemoData
@@ -234,14 +242,16 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createSharedTags()
     {
-        for ($i = 0; $i < 105; $i++) {
-            $sharedTag = new Tinebase_Model_Tag(array(
+        $appList = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->toArray();
+        $adminJson = new Admin_Frontend_Json();
+        
+        foreach($this->_tagNames as $tagName) {
+            $savedSharedTag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
                 'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-                'name'  => 'tag::shared #' . $i,
-                'description' => 'this is a shared tag',
+                'name'  => $tagName,
+                'description' => 'this is the shared tag ' . $tagName,
                 'color' => '#' . $this->_generateRandomColor(),
-            ));
-            $savedSharedTag = Tinebase_Tags::getInstance()->createTag($sharedTag);
+            )));
     
             $right = new Tinebase_Model_TagRight(array(
                 'tag_id'        => $savedSharedTag->getId(),
@@ -259,7 +269,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * 
      * @return string
      */
-    protected function _generateRandomColor ()
+    protected function _generateRandomColor()
     {
         mt_srand((double)microtime()*1000000);
         $color = '';
