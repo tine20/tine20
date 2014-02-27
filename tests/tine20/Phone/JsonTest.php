@@ -298,7 +298,8 @@ class Phone_JsonTest extends TestCase
         );
 
         $this->_objects['filter2'] = array(
-            array('field' => 'query', 'operator' => 'contains', 'value' => '05036')
+            array('field' => 'query', 'operator' => 'contains', 'value' => '05036'),
+            array('field' => 'phone_id', 'operator' => 'AND', 'value' => array(array('field' => ':id', 'operator' => 'equals', 'value' => $this->_objects['phone1']->getId())))
         );
         
         $this->_objects['filter2a'] = array(
@@ -352,20 +353,17 @@ class Phone_JsonTest extends TestCase
      */
     public function testGetCalls()
     {
-        // search calls without phone_id filter -> the calls of all phones of the user are returned
+        // search calls without phone_id filter -> at least one call will be returned
         $result = $this->_json->searchCalls($this->_objects['filter1'], $this->_objects['paging']);
-        $this->assertEquals(3, $result['totalcount']);
+        $this->assertGreaterThanOrEqual(1, $result['totalcount']);
+        $this->assertLessThanOrEqual(2, $result['totalcount']);
         
-        // search query -> '05036' -> the user has made 2 calls, another made one call, 2 is correct than
+        // search query -> '05036' -> the user has made 2 calls each with another phone, another made one call, 1 is correct then
         $result = $this->_json->searchCalls($this->_objects['filter2'], $this->_objects['paging']);
-        $this->assertEquals(2, $result['totalcount'], 'query filter not working');
+        $this->assertEquals(1, $result['totalcount'], 'query filter not working');
+        
         $result = $this->_json->searchCalls($this->_objects['filter2b'], $this->_objects['paging']);
-        $this->assertEquals(2, $result['totalcount'], 'destination filter not working');
-        
-        $call2 = $result['results'][0];
-        
-        $this->assertEquals($this->_objects['call2']->destination, $call2['destination'], 'destination mismatch: ' . print_r($this->_objects['call2']->toArray(), true));
-        $this->assertEquals($this->_objects['call2']->getId(), $call2['id']);
+        $this->assertEquals(1, $result['totalcount'], 'destination filter not working');
         
         // search for phone_id
         $result = $this->_json->searchCalls($this->_objects['filter3'], $this->_objects['paging']);
