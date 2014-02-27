@@ -805,7 +805,7 @@ msgid "Logging you in..."
 msgstr ""
 
 #: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:672
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:683
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -841,13 +841,13 @@ msgstr ""
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:634
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
 msgid "Errors"
 msgstr ""
 
 #: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
 #: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:634
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
 msgid "Please fix the errors noted."
 msgstr ""
 
@@ -970,7 +970,7 @@ msgstr ""
 
 #: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1755
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:669
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:680
 #: js/widgets/persistentfilter/PickerPanel.js:325
 msgid "Confirm"
 msgstr ""
@@ -2294,34 +2294,34 @@ msgstr ""
 msgid "Select Export Definition ..."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:331
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:454
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:341
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:465
 msgid "Delete value from all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:437
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:448
 msgid "Undo change for all selected records"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:512
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:523
 msgid "Edit {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:571
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:582
 msgid "Different Values"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:572
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:583
 msgid ""
 "This field has different values. Editing this field will overwrite the old "
 "values."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:669
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:680
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:672
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:683
 msgid "Applying changes"
 msgstr ""
 
