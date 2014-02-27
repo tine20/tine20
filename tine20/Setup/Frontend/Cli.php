@@ -70,6 +70,8 @@ class Setup_Frontend_Cli
             $this->_setConfig($_opts);
         } elseif(isset($_opts->create_admin)) {
             $this->_createAdminUser($_opts);
+        } elseif(isset($_opts->getconfig)) {
+            $this->_getConfig($_opts);
         }
         
         if ($exitAfterHandle) {
@@ -395,6 +397,32 @@ class Setup_Frontend_Cli
         if (empty($errors)) {
            Setup_Controller::getInstance()->setConfigOption($configKey, $configValue, $applicationName);
            echo "OK - Updated configuration option $configKey for application $applicationName\n";
+        } else {
+            echo "ERRORS - The following errors occured: \n";
+            foreach ($errors as $error) {
+                echo "- " . $error . "\n";
+            }
+        }
+    }
+    
+    /**
+     * get config
+     *
+     */
+    protected function _getConfig(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        $errors = array();
+        if (empty($options['configkey'])) {
+            $errors[] = 'Missing argument: configkey';
+        }
+        $configKey = (string)$options['configkey'];
+        $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
+        
+        if (empty($errors)) {
+            $value = Tinebase_Config_Abstract::factory($applicationName)->get($configKey);
+            $value = is_string($value) ? $value : Zend_Json::encode($value);
+            echo $value . " \n";
         } else {
             echo "ERRORS - The following errors occured: \n";
             foreach ($errors as $error) {

@@ -36,6 +36,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                            setup.php --setconfig -- configkey=sample1 configvalue=value11
                            setup.php --setconfig -- configkey=sample2 configvalue=arrayKey1:Value1,arrayKey2:value2
                           ',
+                'getconfig'                 => 'Get Config value for a specify the key \' -- configKey="your_key"\'',
                 'check_requirements'        => 'Check if all requirements are met to install and run tine20',
                 'create_admin'              => 'Create new admin user (or reactivate if already exists)',
                 'install-s'                 => 'Install applications [All] or comma separated list;'
@@ -70,7 +71,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->egw14import) && 
             empty($opts->check_requirements) && 
             empty($opts->create_admin) && 
-            empty($opts->setconfig))) 
+            empty($opts->setconfig) && 
+            empty($opts->getconfig))) 
         {
             echo $opts->getUsageMessage();
             exit;
