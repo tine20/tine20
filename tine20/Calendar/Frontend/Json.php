@@ -157,10 +157,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // add period filter per default to prevent endless search
         if (! $periodFilter) {
-            $now = Tinebase_DateTime::now()->setTime(0,0,0);
-            $inAmonth = clone $now;
-            $inAmonth->addMonth(1);
-            $periodFilter = new Calendar_Model_PeriodFilter(array('field' => 'period', 'operator' => 'within', 'value' => array("from" => $now, "until" => $inAmonth)));
+            $periodFilter = $this->_getDefaultPeriodFilter();
             // periodFilter will be added to fixed filter when using fixed calendars
             if (! $useFixedCalendars) {
                 $filter->addFilter($periodFilter);
@@ -191,6 +188,26 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'totalcount'    => count($result),
             'filter'        => $clientFilter->toArray(TRUE),
         );
+    }
+    
+    /**
+     * get default period filter
+     * 
+     * @return Calendar_Model_PeriodFilter
+     */
+    protected function _getDefaultPeriodFilter()
+    {
+        $now = Tinebase_DateTime::now()->setTime(0,0,0);
+        
+        $from = $now->getClone()->subMonth(Calendar_Config::getInstance()->get(Calendar_Config::MAX_JSON_DEFAULT_FILTER_PERIOD_FROM, 0));
+        $until = $now->getClone()->addMonth(Calendar_Config::getInstance()->get(Calendar_Config::MAX_JSON_DEFAULT_FILTER_PERIOD_UNTIL, 1));
+        $periodFilter = new Calendar_Model_PeriodFilter(array(
+            'field' => 'period',
+            'operator' => 'within',
+            'value' => array("from" => $from, "until" => $until)
+        ));
+        
+        return $periodFilter;
     }
     
     /**

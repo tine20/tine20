@@ -35,8 +35,21 @@ class Setup_CliTest extends PHPUnit_Framework_TestCase
      */
     public function testSetConfig()
     {
-        $this->_cliHelper(array('--setconfig','--','configkey=allowedJsonOrigins', 'configvalue='.'["foo","bar"]'));
+        $output = $this->_cliHelper('setconfig', array('--setconfig','--','configkey=allowedJsonOrigins', 'configvalue='.'["foo","bar"]'));
+        $this->assertContains('OK - Updated configuration option allowedJsonOrigins for application Tinebase', $output);
         $result = Tinebase_Config_Abstract::factory('Tinebase')->get('allowedJsonOrigins');
+        $this->assertEquals("foo", $result[0]);
+        $this->assertEquals("bar", $result[1]);
+    }
+    
+    /**
+     * Test GetConfig
+     */
+    public function testGetConfig()
+    {
+        $this->testSetConfig();
+        $result = $this->_cliHelper('getconfig', array('--getconfig','--','configkey=allowedJsonOrigins'));
+        $result = Zend_Json::decode($result);
         $this->assertEquals("foo", $result[0]);
         $this->assertEquals("bar", $result[1]);
     }
@@ -46,13 +59,13 @@ class Setup_CliTest extends PHPUnit_Framework_TestCase
      * 
      * @param array $_params
      */
-    protected function _cliHelper($_params)
+    protected function _cliHelper($command, $_params)
     {
-        $opts = new Zend_Console_Getopt(array('setconfig=s' => 'setconfig'));
+        $opts = new Zend_Console_Getopt(array($command => $command));
         $opts->setArguments($_params);
         ob_start();
         $this->_cli->handle($opts, false);
         $out = ob_get_clean();
-        $this->assertContains('OK - Updated configuration option allowedJsonOrigins for application Tinebase', $out);
+        return $out;
     }
 }
