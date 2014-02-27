@@ -35,11 +35,6 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     protected static $_mailer = NULL;
     
-    /**
-     * @var Tinebase_Model_Container
-     *
-    protected $_testCalendar;*/
-    
    /**
     * email test class
     *
@@ -989,7 +984,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         self::flushMailer();
         $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../Import/files/apple_ical_remind_part1.ics');
         $id = Tinebase_Record_Abstract::generateUID();
-        $event = Calendar_Frontend_WebDAV_Event::create($this->_testCalendar, "$id.ics", $vcalendar);
+        $event = Calendar_Frontend_WebDAV_Event::create($this->_getTestCalendar(), "$id.ics", $vcalendar);
     
         $messages = self::getMessages();
         $this->assertEquals(1, count($messages), 'one invitation should be send to sclever');
