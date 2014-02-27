@@ -23,9 +23,8 @@ Tine.HumanResources.Model.WorkingTime = Tine.Tinebase.data.Record.create(Tine.Hu
     // ngettext('Working Time', 'Working Times', n);
     recordName: 'Working Time',
     recordsName: 'Working Times',
-    // ngettext('Working Times', 'Working Times', n);
-    containerName: 'Working Times',
-    containersName: 'Working Times',
+    containerName: null,
+    containersName: null,
     getTitle: function() {
         return this.get('title') ? this.get('title') : false;
     }
