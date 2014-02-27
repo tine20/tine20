@@ -166,9 +166,6 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         $json = new Sales_Frontend_Json();
         $retVal = $json->saveCustomer($customerData);
         
-//         $retVal = $json->getCustomer($retVal['id']);
-
-        
         $this->assertEquals(4294967296, $retVal["number"]);
         $this->assertEquals("Worldwide Electronics International", $retVal["name"]);
         $this->assertEquals("http://wwei.cn", $retVal["url"]);
@@ -180,49 +177,8 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hans Friedrich', $retVal['cpintern_id']['n_given']);
         $this->assertEquals('Ochs', $retVal['cpintern_id']['n_family']);
 
-        // TODO: where are these?
-//         $this->assertEquals('no prefix 1', $retVal['adr_prefix1']);
-//         $this->assertEquals('no prefix 2', $retVal['adr_prefix2']);
-//         $this->assertEquals('Mao st. 2000', $retVal['adr_street']);
-//         $this->assertEquals('1', $retVal['adr_postalcode']);
-//         $this->assertEquals('Shanghai', $retVal['adr_locality']);
-//         $this->assertEquals('Shanghai', $retVal['adr_region']);
-//         $this->assertEquals('China', $retVal['adr_countryname']);
-//         $this->assertEquals('7777777', $retVal['adr_pobox']);
-        
-//         $this->assertEquals('', $retVal['']);
-//         $this->assertEquals('', $retVal['']);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
-//         $this->assertEquals(, $retVal[]);
+        // @see: 0009378: create a test for resolving dependent records recursively
+        $this->assertEquals('Sales_Model_Contract', $retVal['billing'][0]['relations'][0]['related_model']);
+        $this->assertEquals('Testing', $retVal['billing'][0]['relations'][0]['related_record']['title']);
     }
 }
