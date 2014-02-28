@@ -297,7 +297,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     {
         Calendar_Config::getInstance()->set(Calendar_Config::MAX_JSON_DEFAULT_FILTER_PERIOD_FROM, 12);
         
-        $filter = array(array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()));
+        $filter = array(array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()));
         $searchResultData = $this->_uit->searchEvents($filter, array());
         
         $now = Tinebase_DateTime::now()->setTime(0,0,0);
