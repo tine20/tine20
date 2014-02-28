@@ -48,9 +48,35 @@ class Sales_InvoiceTestCase extends TestCase
      */
     protected function setUp()
     {
+        Sales_Controller_Contract::getInstance()->deleteByFilter(new Sales_Model_ContractFilter(array()));
+        
         parent::setUp();
         $this->_createFixtures();
         $this->_testFixtures();
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see TestCase::tearDown()
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $this->_removeFixtures();
+    }
+    
+    protected function _removeFixtures()
+    {
+        if ($this->_customerRecords) {
+            Sales_Controller_Customer::getInstance()->delete($this->_customerRecords->getId());
+        }
+        
+        if ($this->_addressRecords) {
+            Addressbook_Controller_Contact::getInstance()->delete($this->_addressRecords->getId());
+        }
+        if ($this->_contractRecords) {
+            Sales_Controller_Contract::getInstance()->delete($this->_contractRecords->getId());
+        }
     }
     
     protected function _createFixtures()
@@ -196,12 +222,10 @@ class Sales_InvoiceTestCase extends TestCase
             $cc = new Sales_Model_CostCenter(
                 array('remark' => $title, 'number' => $id)
             );
-    
             $this->_costcenterRecords->addRecord($costcenterController->create($cc));
-    
             $id++;
         }
-        
+
         // contracts
         $contractController = Sales_Controller_Contract::getInstance();
         $container = $contractController->getSharedContractsContainer();

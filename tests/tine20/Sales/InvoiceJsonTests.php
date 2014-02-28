@@ -26,9 +26,13 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
+    /**
+     * test CRUD
+     * 
+     * @todo implement
+     */
     public function testCRUD()
     {
-        $json = new Sales_Frontend_Json();
-        
+        $this->markTestIncomplete('TODO: implement this test');
     }
 }

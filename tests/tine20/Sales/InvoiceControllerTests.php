@@ -41,7 +41,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $date->addMonth(1);
             $i++;
         }
-
+        
         $this->assertEquals(2, count($result['failures']));
         if (strstr($result['failures'][0], 'no customer')) {
             $this->assertTrue(strstr($result['failures'][0], 'no customer') !== FALSE);
