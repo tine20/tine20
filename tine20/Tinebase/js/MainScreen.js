@@ -93,6 +93,9 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
                 border: false,
                 layout: 'card',
                 activeItem: 0,
+                defaults: {
+                    hideMode: 'offsets'
+                },
                 items: []
             }, {
                 cls: 'tine-mainscreen-centerpanel-west',
