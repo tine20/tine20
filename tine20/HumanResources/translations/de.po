@@ -710,12 +710,6 @@ msgstr "Arbeitstage nach Urlaub und Krankheit"
 msgid "Hours to work after vacation and sickness"
 msgstr "Zu leistende Stunden nach Urlaub und Krankheit"
 
-#: js/Models.js:26
-msgid "Working Times"
-msgid_plural "Working Times"
-msgstr[0] "Arbeitszeitmodelle"
-msgstr[1] "Arbeitszeitmodelle"
-
 #: js/Models.js:59
 msgid "Quick Search"
 msgstr "Schnellsuche"

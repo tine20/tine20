@@ -62,9 +62,73 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
     
     /**
      * update to 8.2
-     * - normalize all rrules
+     * 
      */
     public function update_1()
+    {
+        $eventBE = new Tinebase_Backend_Sql(array(
+                'modelName'    => 'Calendar_Model_Event',
+                'tableName'    => 'cal_events',
+                'modlogActive' => false
+        ));
+        // find all events without organizer
+        $eventIds = $this->_db->query(
+                "SELECT " . $this->_db->quoteIdentifier('id') .
+                " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
+                " WHERE " . $this->_db->quoteIdentifier("organizer") . " IS NULL OR " .
+                            $this->_db->quoteIdentifier("organizer") . " = ''"
+        )->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        foreach ($eventIds as $eventId) {
+
+            $event = $eventBE->get($eventId['id']);
+            $event->organizer = (string) Tinebase_User::getInstance()->getFullUserById($event->created_by)->contact_id;
+            
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $eventId),
+            );
+            
+            try {
+                $this->_db->update(SQL_TABLE_PREFIX . "cal_events", $event->toArray(), $where);
+            } catch (Tinebase_Exception_Record_Validation $terv) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Could not fix invalid event record: ' . print_r($event->toArray(), true));
+                Tinebase_Exception::log($terv);
+            }
+        }
+        
+        // find all events CONFIDENTIAL class
+        $eventIds = $this->_db->query(
+                "SELECT " . $this->_db->quoteIdentifier('id') .
+                " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
+                " WHERE " . $this->_db->quoteIdentifier("class") . " = 'CONFIDENTIAL'"
+        )->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        foreach ($eventIds as $eventId) {
+            $event = $eventBE->get($eventId['id']);
+            $class = Calendar_Model_Event::CLASS_PRIVATE;
+            $event->class = (string) $class;
+            
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $eventId),
+            );
+            
+            try {
+                $this->_db->update(SQL_TABLE_PREFIX . "cal_events", $event->toArray(), $where);
+            } catch (Tinebase_Exception_Record_Validation $terv) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Could not fix invalid event record: ' . print_r($event->toArray(), true));
+                Tinebase_Exception::log($terv);
+            }
+        }
+         $this->setApplicationVersion('Calendar', '8.2');
+    }
+    
+    /**
+     * update to 8.3
+     * - normalize all rrules
+     */
+    public function update_2()
     {
         // find all events with rrule
         $eventIds = $this->_db->query(
@@ -98,6 +162,6 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
             }
         }
         
-        $this->setApplicationVersion('Calendar', '8.2');
+        $this->setApplicationVersion('Calendar', '8.3');
     }
 }

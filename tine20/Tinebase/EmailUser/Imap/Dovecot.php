@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Fronk
  * 
  * 
@@ -348,8 +348,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
      */
     protected function _recordToRawData(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $_newUserProperties)
     {
-        $rawData = array(
-        );
+        $rawData = array();
         
         if (isset($_newUserProperties->imapUser)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->imapUser->toArray(), true));
@@ -393,9 +392,14 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
         }
         
         $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
-        $rawData[$this->_propertyMapping['emailUsername']] = $this->_appendDomain($_user->accountLoginName);
         
-        list($localPart, $domain) = explode('@', $rawData[$this->_propertyMapping['emailUsername']], 2);
+        if ($this->_config['domain'] !== null) {
+            $emailUsername = $this->_appendDomain($_user->accountLoginName);
+        } else {
+            $emailUsername = $_newUserProperties->accountEmailAddress;
+        }
+        
+        list($localPart, $domain) = explode('@', $emailUsername, 2);
         $rawData['domain'] = $domain;
         
         // replace home wildcards when storing to db
@@ -406,9 +410,11 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
         $replace = array(
             $localPart,
             $domain,
-            $rawData[$this->_propertyMapping['emailUsername']]
+            $emailUsername
         );
+
         $rawData[$this->_propertyMapping['emailHome']] = str_replace($search, $replace, $this->_config['emailHome']);
+        $rawData[$this->_propertyMapping['emailUsername']] = $emailUsername;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, true));
         

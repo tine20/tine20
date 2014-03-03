@@ -698,12 +698,6 @@ msgstr ""
 msgid "Hours to work after vacation and sickness"
 msgstr ""
 
-#: js/Models.js:26
-msgid "Working Times"
-msgid_plural "Working Times"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/Models.js:59
 msgid "Quick Search"
 msgstr ""
