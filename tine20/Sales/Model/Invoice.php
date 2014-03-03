@@ -47,21 +47,27 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
         'modelName'         => 'Invoice',
         
         'filterModel' => array(
-            'contract'          => array(
-                'filter' => 'Sales_Model_InvoiceContractFilter',
+            'contract' => array(
+                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
                 'label' => 'Contract', // _('Contract')
                 'options' => array(
-                    'related_model'     => 'Sales_Model_Contract',
-                    'filtergroup'       => 'Sales_Model_ContractFilter'
+                    'controller' => 'Sales_Controller_Contract',
+                    'filtergroup' => 'Sales_Model_ContractFilter',
+                    'own_filtergroup' => 'Sales_Model_InvoiceFilter',
+                    'own_controller' => 'Sales_Controller_Invoice',
+                    'related_model' => 'Sales_Model_Contract',
                 ),
                 'jsConfig' => array('filtertype' => 'sales.invoicecontract')
             ),
-            'customer'          => array(
-                'filter' => 'Sales_Model_InvoiceCustomerFilter',
+            'customer' => array(
+                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
                 'label' => 'Customer', // _('Customer')
                 'options' => array(
-                    'related_model'     => 'Sales_Model_Customer',
-                    'filtergroup'       => 'Sales_Model_CustomerFilter'
+                    'controller' => 'Sales_Controller_Customer',
+                    'filtergroup' => 'Sales_Model_CustomerFilter',
+                    'own_filtergroup' => 'Sales_Model_InvoiceFilter',
+                    'own_controller' => 'Sales_Controller_Invoice',
+                    'related_model' => 'Sales_Model_Customer',
                 ),
                 'jsConfig' => array('filtertype' => 'sales.invoicecustomer')
             ),

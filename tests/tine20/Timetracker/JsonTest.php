@@ -1010,4 +1010,25 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         
         $this->assertEquals($bday->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->toString(), $contactJson['bday']);
     }
+    
+    /**
+     * test and filter
+     * @see: 0009730: Fix & use Explicit_Related_Record Filter in all applications
+     */
+    public function testTimeaccountFailureFilter()
+    {
+        $req = Zend_Json::decode('{"params":{"filter":
+            [{"condition":"OR","filters":[{"condition":"AND","filters":
+            [{"field":"start_date","operator":"within","value":"weekLast","id":"ext-record-1"},{"field":"account_id","operator":"AND","value":
+            [{"field":"query","operator":"contains","value":"43518","id":"ext-record-
+            95"}],"id":"ext-record-2"}],"id":"ext-comp-1074","label":"Stundenzettel"}]}],"paging":
+            {"sort":"start_date","dir":"ASC","start":0,"limit":50}}'
+        );
+    
+        $feTa = new Timetracker_Frontend_Json();
+    
+        $result = $feTa->searchTimesheets($req['params']['filter'], $req['params']['paging']);
+    
+        $this->assertArrayHasKey('results', $result);
+    }
 }
