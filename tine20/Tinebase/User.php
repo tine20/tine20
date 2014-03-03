@@ -561,8 +561,8 @@ class Tinebase_User
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' start synchronizing users');
         
         $users = Tinebase_User::getInstance()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
-
-        foreach($users as $user) {
+        
+        foreach ($users as $user) {
             try {
                 $user = self::syncUser($user, $options);
             } catch (Tinebase_Exception_NotFound $ten) {
@@ -570,9 +570,11 @@ class Tinebase_User
                     . $ten->getMessage());
             }
         }
-
+        
+        // @todo this should be improved: only the cache of synced users + group memberships should be cleaned
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' finished synchronizing users');
+            . ' Finished synchronizing users. Clearing cache after user sync ...');
+        Tinebase_Core::getCache()->clean();
     }
 
     /**
