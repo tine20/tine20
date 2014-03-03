@@ -102,6 +102,12 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
      */
     onRender : function(ct, position) {
         Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
+        
+        // load grants
+        if (this.window.record) {
+            var grants = this.window.record.get('grants') || [];
+            this.getGrantsStore().loadData({results: grants});
+        }
 
         // generalized keybord map for edit dlgs
         new Ext.KeyMap(this.el, [{
@@ -116,7 +122,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
      * is called on save
      */
     onSave : function() {
-        if (!this.window.record) {
+        if (! this.window.record) {
             this.window.record = this.getNewEmptyRecord();
         }
         var record = this.window.record,
@@ -124,7 +130,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
             // if any field has changed of a shipped record, use translation
             shippedChanged = ((shipped && this.inputTitle.getValue() != this.app.i18n._(this.window.record.get('name'))) ||
                               (shipped && this.inputDescription.getValue() != this.app.i18n._(this.window.record.get('description'))) ||
-                              (this.hasRight() && ! this.inputCheck.getValue()));
+                              ((this.hasRight() || this.hasEditGrant()) && ! this.inputCheck.getValue()));
         
         if (this.inputTitle.isValid()) {
             if (! shipped || shippedChanged) {
@@ -143,12 +149,20 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         }
         
         record.set('account_id', Tine.Tinebase.registry.get('currentAccount').accountId);
-
-        // Favorite Checkbox
-        if (this.hasRight()) {
+        
+        if (this.hasRight() || this.hasEditGrant()) {
+            // Favorite Checkbox
             if (this.inputCheck.getValue()) {
                 record.set('account_id', null);
             }
+            
+            // set grants
+            this.window.record.set('grants', '');
+            var grants = [];
+            this.grantsStore.each(function(record){
+                grants.push(record.data);
+            });
+            this.window.record.set('grants', grants);
         }
         this.window.fireEvent('update');
         this.purgeListeners();
@@ -170,7 +184,6 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
      * @return {Object}
      */
     getFormItems : function() {
-        
         var record = this.window.record,
             shipped = record && record.isShipped(),
             title = (shipped) ? this.app.i18n._(record.get('name')) : record ? record.get('name') : '',
@@ -197,9 +210,21 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         this.inputCheck = new Ext.form.Checkbox({
             checked: (record) ? record.isShared() : false,
             hideLabel: true,
-            boxLabel: _('Shared Favorite (visible by all users)')
+            boxLabel: _('Shared Favorite (visible by all users)'),
+            disabled: ! this.hasRight(),
+            listeners: {
+                'check': function(checkbox, value) {
+                    Tine.log.debug('Tine.widgets.persistentfilter.EditPersistentFilterPanel::inputCheck.check -> ' + value);
+                    if (value) {
+                        this.getGrantsGrid().enable();
+                    } else {
+                        this.getGrantsGrid().disable();
+                    }
+                },
+                scope: this
+            }
         });
-
+        
         var items = [
             {
                 region : 'center',
@@ -211,11 +236,12 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
             this.inputTitle, 
             this.inputDescription
         ];
-
-        if (this.hasRight()) {
+        
+        if (this.hasRight() || this.hasEditGrant()) {
             items.push(this.inputCheck);
+            items.push(this.getGrantsGrid());
         }
-
+        
         return {
             border : false,
             frame : true,
@@ -225,10 +251,95 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
     },
     
     /**
+     * get grants grid
+     * 
+     * @return Tine.widgets.account.PickerGridPanel
+     */
+    getGrantsGrid: function() {
+        if (! this.grantsGrid) {
+            var columns = [
+                new Ext.ux.grid.CheckColumn({
+                    header: this.app.i18n._('Read'),
+                    dataIndex: 'readGrant',
+                    tooltip: _('The grant to see and use this filter'),
+                    width: 55
+                }),
+                new Ext.ux.grid.CheckColumn({
+                    header: this.app.i18n._('Edit'),
+                    tooltip: _('The grant to edit this filter'),
+                    dataIndex: 'editGrant',
+                    width: 55
+                }),
+                new Ext.ux.grid.CheckColumn({
+                    header: this.app.i18n._('Delete'),
+                    tooltip: _('The grant to delete this filter'),
+                    dataIndex: 'deleteGrant',
+                    width: 55
+                })
+            ];
+            
+            this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
+                selectType: 'both',
+                title:  this.app.i18n._('Permissions'),
+                store: this.getGrantsStore(),
+                hasAccountPrefix: true,
+                configColumns: columns,
+                //selectAnyone: true,
+                selectTypeDefault: 'group',
+                height : 250,
+                // TODO improve layout: use border layout, move this panel to center to allow dynamic resizing
+                //width: 'auto',
+                //height : '100%',
+                //height : 'auto',
+                disabled: ! this.window.record || ! this.window.record.isShared(),
+                recordClass: Tine.Tinebase.Model.Grant
+            });
+        }
+        return this.grantsGrid;
+    },
+    
+    /**
+     * get grants store
+     * 
+     * @return Ext.data.JsonStore
+     */
+    getGrantsStore: function() {
+        if (! this.grantsStore) {
+            this.grantsStore = new Ext.data.JsonStore({
+                root: 'results',
+                totalProperty: 'totalcount',
+                // use account_id here because that simplifies the adding of new records with the search comboboxes
+                id: 'account_id',
+                fields: Tine.Tinebase.Model.Grant
+            });
+        }
+        return this.grantsStore;
+    },
+    
+    /**
      * checks the managed_shared_<this.modelName>_right
      * @return {}
      */
     hasRight: function() {
-        return Tine.Tinebase.common.hasRight('manage_shared_' + this.window.modelName.toLowerCase() + '_favorites', this.window.app.name);
+        var right = Tine.Tinebase.common.hasRight('manage_shared_' + this.window.modelName.toLowerCase() + '_favorites', this.window.app.name);
+        return right;
+    },
+    
+    /**
+     * check if user has grant on record 
+     * 
+     * @param {Record} record
+     * @param {String} requiredGrant
+     * @return {Boolean}
+     * 
+     * TODO move this to generic Record
+     */
+    hasEditGrant: function() {
+        var record = this.window.record,
+            accountGrants = record ? (record.account_grants || record.data.account_grants) : false,
+            result = (accountGrants && accountGrants['editGrant'] == true);
+            
+        Tine.log.debug('hasEditGrant() -> ' + result);
+        return result;
     }
 });

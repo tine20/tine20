@@ -1254,7 +1254,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     'account_id'    => $recordGrants['account_id'],
                     'account_type'  => $recordGrants['account_type'],
                 );
-                if(empty($data['id'])) {
+                if (empty($data['id'])) {
                     $data['id'] = $recordGrants->generateUID();
                 }
                 

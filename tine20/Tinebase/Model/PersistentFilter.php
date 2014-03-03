@@ -48,6 +48,7 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'grants'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_grants'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),

@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: PersistentFilter.php:138
+#: PersistentFilter.php:151
 msgid "- The last filter I used -"
 msgstr ""
 
@@ -82,34 +82,34 @@ msgid "run right description"
 msgstr ""
 
 #: ModelConfiguration.php:41 ModelConfiguration.php:50
-#: ModelConfiguration.php:82 ModelConfiguration.php:91
+#: ModelConfiguration.php:80 ModelConfiguration.php:89
 msgid "Record Name"
 msgid_plural "Records Name"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ModelConfiguration.php:155 ModelConfiguration.php:243
+#: ModelConfiguration.php:153 ModelConfiguration.php:239
 msgid "Group"
 msgstr ""
 
-#: ModelConfiguration.php:200
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:182
+#: ModelConfiguration.php:196
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:195
 msgid "Title"
 msgstr ""
 
-#: ModelConfiguration.php:204
+#: ModelConfiguration.php:200
 msgid "New Car"
 msgstr ""
 
-#: ModelConfiguration.php:367 ModelConfiguration.php:370
+#: ModelConfiguration.php:348 ModelConfiguration.php:351
 msgid "Banking Information"
 msgstr ""
 
-#: ModelConfiguration.php:371
+#: ModelConfiguration.php:352
 msgid "Private Information"
 msgstr ""
 
-#: Preference/Abstract.php:517
+#: Preference/Abstract.php:511
 msgid "default"
 msgstr ""
 
@@ -407,43 +407,43 @@ msgid ""
 "sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Setup/setup.xml:3111
+#: Setup/setup.xml:3190
 msgid "note"
 msgstr ""
 
-#: Setup/setup.xml:3116
+#: Setup/setup.xml:3195
 msgid "default note type"
 msgstr ""
 
-#: Setup/setup.xml:3142
+#: Setup/setup.xml:3221
 msgid "telephone"
 msgstr ""
 
-#: Setup/setup.xml:3147
+#: Setup/setup.xml:3226
 msgid "telephone call"
 msgstr ""
 
-#: Setup/setup.xml:3173
+#: Setup/setup.xml:3252
 msgid "email"
 msgstr ""
 
-#: Setup/setup.xml:3178
+#: Setup/setup.xml:3257
 msgid "email contact"
 msgstr ""
 
-#: Setup/setup.xml:3204
+#: Setup/setup.xml:3283
 msgid "created"
 msgstr ""
 
-#: Setup/setup.xml:3209
+#: Setup/setup.xml:3288
 msgid "record created"
 msgstr ""
 
-#: Setup/setup.xml:3235
+#: Setup/setup.xml:3314
 msgid "changed"
 msgstr ""
 
-#: Setup/setup.xml:3240
+#: Setup/setup.xml:3319
 msgid "record changed"
 msgstr ""
 
@@ -544,7 +544,7 @@ msgid "Data"
 msgstr ""
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
-#: js/widgets/tags/TagsPanel.js:426
+#: js/widgets/tags/TagsPanel.js:434
 msgid "Tags"
 msgstr ""
 
@@ -570,7 +570,9 @@ msgstr ""
 msgid "Please Wait"
 msgstr ""
 
-#: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
+#: js/AdminPanel.js:156
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:262
+#: js/widgets/container/GrantsGrid.js:43
 msgid "Read"
 msgstr ""
 
@@ -578,7 +580,9 @@ msgstr ""
 msgid "The field is readable part of the profile"
 msgstr ""
 
-#: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:47
+#: js/AdminPanel.js:161
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:268
+#: js/widgets/container/GrantsGrid.js:47
 msgid "Edit"
 msgstr ""
 
@@ -600,7 +604,7 @@ msgstr ""
 
 #: js/AboutDialog.js:61 js/CreditsScreen.js:53 js/LicenseScreen.js:51
 #: js/PasswordChangeDialog.js:66 js/widgets/EditRecord.js:157
-#: js/widgets/tags/TagsMassAttachAction.js:84
+#: js/widgets/tags/TagsMassAttachAction.js:108
 #: js/widgets/dialog/MultiOptionsDialog.js:102
 #: js/widgets/dialog/ExceptionHandlerDialog.js:194
 #: js/widgets/dialog/AddToRecordPanel.js:111
@@ -650,8 +654,8 @@ msgid "Usage:&#160;"
 msgstr ""
 
 #: js/common.js:255 js/common.js:260 js/widgets/tags/TagToggleBox.js:112
-#: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagsPanel.js:137
-#: js/widgets/tags/TagCombo.js:134 js/widgets/tags/TagCombo.js:139
+#: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagsPanel.js:142
+#: js/widgets/tags/TagCombo.js:143 js/widgets/tags/TagCombo.js:148
 msgid "personal"
 msgstr ""
 
@@ -806,9 +810,9 @@ msgstr ""
 
 #: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:683
-#: js/widgets/persistentfilter/PickerPanel.js:327
-#: js/widgets/persistentfilter/PickerPanel.js:365
-#: js/widgets/persistentfilter/PickerPanel.js:417
+#: js/widgets/persistentfilter/PickerPanel.js:328
+#: js/widgets/persistentfilter/PickerPanel.js:366
+#: js/widgets/persistentfilter/PickerPanel.js:421
 #: js/widgets/container/GrantsDialog.js:95
 msgid "Please wait"
 msgstr ""
@@ -877,7 +881,7 @@ msgstr ""
 
 #: js/PasswordChangeDialog.js:60 js/widgets/EditRecord.js:178
 #: js/widgets/tags/TagToggleBox.js:59
-#: js/widgets/tags/TagsMassAttachAction.js:105
+#: js/widgets/tags/TagsMassAttachAction.js:102
 #: js/widgets/dialog/DuplicateMergeDialog.js:79
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/ExceptionHandlerDialog.js:186
@@ -908,8 +912,8 @@ msgid "Your password has been changed."
 msgstr ""
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:947
-#: js/widgets/relation/GenericPickerGridPanel.js:960
+#: js/widgets/relation/GenericPickerGridPanel.js:939
+#: js/widgets/relation/GenericPickerGridPanel.js:952
 #: js/widgets/dialog/ImportDialog.js:654
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:294
@@ -971,7 +975,7 @@ msgstr ""
 #: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1761
 #: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:680
-#: js/widgets/persistentfilter/PickerPanel.js:325
+#: js/widgets/persistentfilter/PickerPanel.js:326
 msgid "Confirm"
 msgstr ""
 
@@ -1145,142 +1149,138 @@ msgstr ""
 msgid "Detaching Tags"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:114
+#: js/widgets/tags/TagsPanel.js:119
 msgid "Add a new personal tag"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:117
+#: js/widgets/tags/TagsPanel.js:122
 msgid "Add New Personal Tag"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:118
+#: js/widgets/tags/TagsPanel.js:123
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:118
+#: js/widgets/tags/TagsPanel.js:123
 msgid "Enter tag name:"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:159
+#: js/widgets/tags/TagsPanel.js:164
 msgid "No Tags to display"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:182
+#: js/widgets/tags/TagsPanel.js:187
 msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/tags/TagsPanel.js:192
+#: js/widgets/tags/TagsPanel.js:197
 msgid "Edit tag"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:197 js/widgets/tags/TagsPanel.js:202
+#: js/widgets/tags/TagsPanel.js:202 js/widgets/tags/TagsPanel.js:207
 msgid "Rename Tag"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:202
+#: js/widgets/tags/TagsPanel.js:207
 msgid "Please enter a new name:"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:211
+#: js/widgets/tags/TagsPanel.js:216
 msgid "Edit Description"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:216
+#: js/widgets/tags/TagsPanel.js:221
 msgid "Description for tag"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:216
+#: js/widgets/tags/TagsPanel.js:221
 msgid "Please enter new description:"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:225
+#: js/widgets/tags/TagsPanel.js:230
 msgid "Change Color"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:254
+#: js/widgets/tags/TagsPanel.js:259
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/tags/TagsPanel.js:267
+#: js/widgets/tags/TagsPanel.js:272
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/tags/TagsPanel.js:268
+#: js/widgets/tags/TagsPanel.js:273
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/tags/TagsPanel.js:272
+#: js/widgets/tags/TagsPanel.js:277
 msgid "Please wait a moment..."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:272
+#: js/widgets/tags/TagsPanel.js:277
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/tags/TagsPanel.js:288 js/widgets/tags/TagsPanel.js:380
-#: js/widgets/tags/TagsPanel.js:413 js/widgets/dialog/EditDialog.js:839
+#: js/widgets/tags/TagsPanel.js:293 js/widgets/tags/TagsPanel.js:388
+#: js/widgets/tags/TagsPanel.js:421 js/widgets/dialog/EditDialog.js:839
 msgid "Failed"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:288
+#: js/widgets/tags/TagsPanel.js:293
 msgid "Could not delete Tag(s)."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:332 js/widgets/tags/TagsPanel.js:394
+#: js/widgets/tags/TagsPanel.js:337 js/widgets/tags/TagsPanel.js:402
 msgid "Notice"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:333 js/widgets/tags/TagsPanel.js:395
+#: js/widgets/tags/TagsPanel.js:338 js/widgets/tags/TagsPanel.js:403
 msgid "The minimum tag length is three."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:380
+#: js/widgets/tags/TagsPanel.js:388
 msgid "Could not create tag."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:413
+#: js/widgets/tags/TagsPanel.js:421
 msgid "Could not update tag."
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:509
-#: js/widgets/relation/GenericPickerGridPanel.js:457
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:191
+#: js/widgets/tags/TagsPanel.js:517
+#: js/widgets/relation/GenericPickerGridPanel.js:449
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:204
 #: js/ExceptionDialog.js:162
 msgid "Description"
 msgstr ""
 
-#: js/widgets/tags/TagsPanel.js:513
+#: js/widgets/tags/TagsPanel.js:521
 #: js/widgets/container/PropertiesDialog.js:113
 msgid "Color"
 msgstr ""
 
 #: js/widgets/tags/TagsMassAttachAction.js:18
-msgid "Add Tag"
+msgid "Add Tags"
 msgstr ""
 
-#: js/widgets/tags/TagsMassAttachAction.js:76
-msgid "Attach the following tag to all selected items:"
+#: js/widgets/tags/TagsMassAttachAction.js:94
+msgid "Select Tags"
 msgstr ""
 
-#: js/widgets/tags/TagsMassAttachAction.js:98
-msgid "Select Tag"
-msgstr ""
-
-#: js/widgets/tags/TagsMassAttachAction.js:128
+#: js/widgets/tags/TagsMassAttachAction.js:135
 msgid "Attaching Tag"
 msgstr ""
 
-#: js/widgets/tags/TagFilter.js:30 js/Models.js:141
+#: js/widgets/tags/TagFilter.js:30 js/Models.js:142
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] ""
@@ -1507,7 +1507,7 @@ msgid_plural "Your view is limited by {0} criterias:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:475
+#: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:476
 msgid "File"
 msgid_plural "Files"
 msgstr[0] ""
@@ -1556,35 +1556,35 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:92 js/widgets/grid/FilterToolbar.js:595
+#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:588
 msgid "Show"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:178
+#: js/widgets/grid/FilterToolbar.js:171
 msgid "add new filter"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:184
+#: js/widgets/grid/FilterToolbar.js:177
 msgid "reset all filters"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:190
+#: js/widgets/grid/FilterToolbar.js:183
 msgid "start search"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:198
+#: js/widgets/grid/FilterToolbar.js:191
 msgid "save as favorite"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:205
+#: js/widgets/grid/FilterToolbar.js:198
 msgid "Load a favorite"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:370
+#: js/widgets/grid/FilterToolbar.js:363
 msgid "select a field"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:408
+#: js/widgets/grid/FilterToolbar.js:401
 msgid "Delete this filter"
 msgstr ""
 
@@ -1599,12 +1599,12 @@ msgstr ""
 #: js/widgets/grid/LinkGridPanel.js:103
 #: js/widgets/dialog/AttachmentsGridPanel.js:86
 #: js/widgets/account/PickerGridPanel.js:267
-#: js/widgets/container/PropertiesDialog.js:107 js/Models.js:428
+#: js/widgets/container/PropertiesDialog.js:107 js/Models.js:429
 msgid "Name"
 msgstr ""
 
 #: js/widgets/grid/LinkGridPanel.js:105
-#: js/widgets/relation/GenericPickerGridPanel.js:460
+#: js/widgets/relation/GenericPickerGridPanel.js:452
 #: js/widgets/ActivitiesPanel.js:489 js/widgets/ActivitiesPanel.js:626
 msgid "Type"
 msgstr ""
@@ -1687,7 +1687,7 @@ msgid "Add to..."
 msgstr ""
 
 #: js/widgets/grid/GridPanel.js:1370
-#: js/widgets/relation/GenericPickerGridPanel.js:461
+#: js/widgets/relation/GenericPickerGridPanel.js:453
 #: js/widgets/dialog/AttachmentsGridPanel.js:104
 msgid "Creation Time"
 msgstr ""
@@ -1741,7 +1741,7 @@ msgid "Related to"
 msgstr ""
 
 #: js/widgets/relation/FilterModel.js:32
-#: js/widgets/relation/GenericPickerGridPanel.js:133 js/Models.js:400
+#: js/widgets/relation/GenericPickerGridPanel.js:133 js/Models.js:401
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] ""
@@ -1771,47 +1771,47 @@ msgstr ""
 msgid "Child"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:263
+#: js/widgets/relation/GenericPickerGridPanel.js:255
 msgid ""
 "The maximum number of {0} with the type {1} is reached. Please change the "
 "type of this relation"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:272
+#: js/widgets/relation/GenericPickerGridPanel.js:264
 msgid ""
 "The maximum number of {0}s with the type {1} is reached at the {2} you "
 "added. Please change the type of this relation or edit the {2}"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:299
+#: js/widgets/relation/GenericPickerGridPanel.js:291
 msgid "No Dialog"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:300
+#: js/widgets/relation/GenericPickerGridPanel.js:292
 msgid ""
 "The Record can't be opened. There doesn't exist any dialog for editing this "
 "Record!"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:456
+#: js/widgets/relation/GenericPickerGridPanel.js:448
 msgid "Record"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:458
+#: js/widgets/relation/GenericPickerGridPanel.js:450
 msgid "Remark"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:459
+#: js/widgets/relation/GenericPickerGridPanel.js:451
 msgid "Dependency"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:948
+#: js/widgets/relation/GenericPickerGridPanel.js:940
 msgid ""
 "The record you tried to link is already linked. Please edit the existing "
 "link."
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:961
+#: js/widgets/relation/GenericPickerGridPanel.js:953
 #: js/widgets/form/RecordPickerComboBox.js:295
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr ""
@@ -2272,7 +2272,7 @@ msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
 msgstr ""
 
 #: js/widgets/dialog/ExportDialog.js:48 js/widgets/container/GrantsGrid.js:51
-#: js/Models.js:336
+#: js/Models.js:337
 msgid "Export"
 msgid_plural "Export"
 msgstr[0] ""
@@ -2458,44 +2458,44 @@ msgstr ""
 msgid "My favorites"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:297
+#: js/widgets/persistentfilter/PickerPanel.js:299
 msgid "Delete Favorite"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:302
+#: js/widgets/persistentfilter/PickerPanel.js:304
 #: js/widgets/persistentfilter/PickerPanel.js:397
 msgid "Edit Favorite"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:307
+#: js/widgets/persistentfilter/PickerPanel.js:309
 msgid "Overwrite Favorite"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:325
+#: js/widgets/persistentfilter/PickerPanel.js:326
 msgid "Do you really want to delete the favorite \"{0}\"?"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:327
+#: js/widgets/persistentfilter/PickerPanel.js:328
 msgid "Deleting Favorite \"{0}\""
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:363
+#: js/widgets/persistentfilter/PickerPanel.js:364
 msgid "Overwrite?"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:363
+#: js/widgets/persistentfilter/PickerPanel.js:364
 msgid "Do you want to overwrite the favorite \"{0}\"?"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:365
+#: js/widgets/persistentfilter/PickerPanel.js:366
 msgid "Overwriting Favorite \"{0}\""
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:386
+#: js/widgets/persistentfilter/PickerPanel.js:387
 msgid "Could not save Favorite"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:386
+#: js/widgets/persistentfilter/PickerPanel.js:387
 msgid "Your current view does not support favorites"
 msgstr ""
 
@@ -2503,20 +2503,41 @@ msgstr ""
 msgid "Create Favorite"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:417
+#: js/widgets/persistentfilter/PickerPanel.js:421
 msgid "Saving Favorite \"{0}\""
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:593
+#: js/widgets/persistentfilter/PickerPanel.js:621
 msgid "(shared)"
 msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:134
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:140
 msgid "Favorite not saved"
 msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:200
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:213
 msgid "Shared Favorite (visible by all users)"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:264
+msgid "The grant to see and use this filter"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:269
+msgid "The grant to edit this filter"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:274
+#: js/widgets/container/GrantsGrid.js:49
+msgid "Delete"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:275
+msgid "The grant to delete this filter"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:283
+msgid "Permissions"
 msgstr ""
 
 #: js/widgets/CountryCombo.js:34
@@ -2638,10 +2659,6 @@ msgstr ""
 msgid "The grant to edit records in this container"
 msgstr ""
 
-#: js/widgets/container/GrantsGrid.js:49
-msgid "Delete"
-msgstr ""
-
 #: js/widgets/container/GrantsGrid.js:50
 msgid "The grant to delete records in this container"
 msgstr ""
@@ -2757,7 +2774,7 @@ msgstr ""
 msgid "Please restart your browser now!"
 msgstr ""
 
-#: js/MainScreen.js:205
+#: js/MainScreen.js:200
 msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
@@ -2861,37 +2878,37 @@ msgstr ""
 msgid "Show Original Image"
 msgstr ""
 
-#: js/Models.js:272
+#: js/Models.js:273
 msgid "Alarm"
 msgid_plural "Alarms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:310
+#: js/Models.js:311
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:373
+#: js/Models.js:374
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:421
+#: js/Models.js:422
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:447
+#: js/Models.js:448
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:447
+#: js/Models.js:448
 msgid "Configs"
 msgstr ""
 
@@ -2907,12 +2924,12 @@ msgstr ""
 msgid "Exception ({0})"
 msgstr ""
 
-#: Container.php:682
+#: Container.php:684
 #, python-format
 msgid "%s's personal container"
 msgstr ""
 
-#: Container.php:1530
+#: Container.php:1532
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"

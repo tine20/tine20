@@ -190,18 +190,18 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
      * inspect update of one record (before update)
      *
      * @param   Tinebase_Record_Interface $record      the update record
-     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @param   Tinebase_Record_Interface $oldRecord   the current persistent record
      * @return  void
      */
-    protected function _inspectBeforeUpdate($record, $_oldRecord)
+    protected function _inspectBeforeUpdate($record, $oldRecord)
     {
-        $this->_checkManageRightForCurrentUser($record, true);
+        $this->_checkManageRightForCurrentUser($record, /* $_throwException = */ true, $oldRecord);
         $modelName = explode('_', $record->model);
         $translate = Tinebase_Translation::getTranslation($modelName[0]);
         // check if filter was shipped.
-        if ($_oldRecord->created_by == NULL && $_oldRecord->account_id == NULL) {
+        if ($oldRecord->created_by == NULL && $oldRecord->account_id == NULL) {
             // if shipped, check if values have changed
-            if (($record->account_id !== NULL) || $translate->_($_oldRecord->name) != $record->name || $translate->_($_oldRecord->description) != $record->description) {
+            if (($record->account_id !== NULL) || $translate->_($oldRecord->name) != $record->name || $translate->_($oldRecord->description) != $record->description) {
                 // if values have changed, set created_by to current user, so record is not shipped anymore
                 $record->created_by = Tinebase_Core::getUser()->getId();
             }
@@ -263,14 +263,21 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
     /**
      * checks if the current user has the manage shared favorites right for the model of the record
      * @param Tinebase_Record_Interface $record
+     * @param boolean $_throwException
+     * @param Tinebase_Record_Interface $oldRecord   the current persistent record
      * @throws Tinebase_Exception_AccessDenied
      * @return boolean
      */
-    protected function _checkManageRightForCurrentUser($record, $_throwException = false)
+    protected function _checkManageRightForCurrentUser($record, $_throwException = false, $oldRecord = null)
     {
         if ($this->_belongsToCurrentUser($record)) {
             // you always have the right to manage your own filters
-            return;
+            return true;
+        }
+        
+        if ($oldRecord && $oldRecord->account_id === $record->account_id && $this->_checkGrant($record, 'update')) {
+            // edit grant is sufficient to change record if account id does not change
+            return true;
         }
         
         $existing = $this->search(new Tinebase_Model_PersistentFilterFilter(array(
@@ -283,11 +290,6 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
             $rec = $existing->getFirstRecord();
         } else {
             $rec = $record;
-        }
-
-        // if we are owner of persistent filter we don't need to check right
-        if ($record->account_id == Tinebase_Core::getUser()->getId()) {
-            return TRUE;
         }
         
         $right = Tinebase_Core::getUser()->hasRight($record->application_id, $this->_getManageSharedRight($rec));

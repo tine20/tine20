@@ -22,16 +22,20 @@ class Tinebase_Backend_Sql_Grants extends Tinebase_Backend_Sql
      * 
      * @param Tinebase_Record_RecordSet $records
      */
-    public function getGrantsForRecords($records)
+    public function getGrantsForRecords(Tinebase_Record_RecordSet $records)
     {
-        if (empty($records)) {
+        $recordIds = $records->getArrayOfIds();
+        if (empty($recordIds)) {
             return;
         }
         
-        $select = $this->_getAclSelectByRecordIds($records->getId())
+        $select = $this->_getAclSelectByRecordIds($recordIds)
             ->group(array('record_id', 'account_type', 'account_id'));
         
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' ' . $select);
         
         $stmt = $this->_db->query($select);
 

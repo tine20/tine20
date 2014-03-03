@@ -2,15 +2,12 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
+ * Test class for Tinebase_Frontend_Json_PersistentFilter
+ * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- */
-
-/**
- * Test class for Tinebase_Frontend_Json_PersistentFilter
  * 
- * @todo test search -> filter resolving not yet implemented -> do we need this? -> filters need to cope with resolved values!
  */
 class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
 {
@@ -57,6 +54,10 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         
         $this->_assertSavedFilterData($exampleFilterData, $savedFilterData);
         $this->assertTrue(! empty($savedFilterData['grants']));
+        $this->assertTrue(! empty($savedFilterData['account_grants']));
+        foreach (array('readGrant', 'editGrant', 'deleteGrant') as $grant) {
+            $this->assertTrue($savedFilterData['account_grants'][$grant]);
+        }
         
         return $savedFilterData;
     }

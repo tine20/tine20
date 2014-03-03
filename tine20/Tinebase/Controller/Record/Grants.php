@@ -27,6 +27,26 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
     protected $_grantsModel;
     
     /**
+     * get list of records
+     *
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param boolean $_getRelations
+     * @param boolean $_onlyIds
+     * @param string $_action for right/acl check
+     * @return Tinebase_Record_RecordSet|array
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    {
+        $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
+        
+        // @todo allow to configure if grants are needed
+        $this->_getGrants($result);
+        
+        return $result;
+    }
+    
+    /**
      * check grant for action (CRUD)
      *
      * @param Tinebase_Record_Interface $record
@@ -183,6 +203,10 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             return false;
         }
         
+        if (is_array($record->grants)) {
+            $record->grants = new Tinebase_Record_RecordSet($this->_grantsModel, $record->grants);
+        }
+        
         $editGrants = $record->grants->filter(Tinebase_Model_Grants::GRANT_EDIT, true);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
@@ -257,5 +281,43 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             . ' Get grants for ' . count($recordset). ' records.');
         
         $this->_grantsBackend->getGrantsForRecords($recordset);
+    }
+
+    /**
+     * get grants for account
+     * 
+     * @param Tinebase_Model_User $user
+     * @param Tinebase_Record_Abstract $record
+     * @return Tinebase_Model_Grants
+     * 
+     * @todo force refetch from db or add user param to _getGrants()?
+     */
+    public function getGrantsOfAccount($user, $record)
+    {
+        if (empty($record->grants)) {
+            $this->_getGrants($record);
+        }
+        
+        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($user);
+        $accountGrants = new $this->_grantsModel(array(
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'   => $user->getId(),
+            'record_id'    => $record->getId(),
+        ));
+        foreach ($record->grants as $grantRecord) {
+            foreach (call_user_func($this->_grantsModel . '::getAllGrants') as $grant) {
+                if ($grantRecord->{$grant} &&
+                    (
+                        $grantRecord->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE ||
+                        $grantRecord->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP && in_array($grantRecord->account_id, $groupMemberships) ||
+                        $grantRecord->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && $user->getId() === $grantRecord->account_id 
+                    )
+                ) {
+                    $accountGrants->{$grant} = true;
+                }
+            }
+        }
+        
+        return $accountGrants;
     }
 }
