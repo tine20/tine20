@@ -78,24 +78,29 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     },
     
     summaryRenderer: function(summary) {
+        if (! this.record) {
+            // no record, no summary
+            return '';
+        }
+        
         var myAttenderRecord = this.record.getMyAttenderRecord(),
             ret = Tine.Tinebase.common.tagsRenderer(this.record.get('tags')),
             status = null,
             recur = null;
-            
+        
         ret += Ext.util.Format.htmlEncode(summary);
         
-        if(myAttenderRecord) {
+        if (myAttenderRecord) {
             status = Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', myAttenderRecord.get('status'));
         }
-           
-        if(this.record.isRecurBase() || this.record.isRecurInstance()) {
+        
+        if (this.record.isRecurBase() || this.record.isRecurInstance()) {
             recur = '<img class="cal-recurring" unselectable="on" src="' + Ext.BLANK_IMAGE_URL + '">' + this.app.i18n._('recurring event');
         } else if (this.record.isRecurException()) {
             recur = '<img class="cal-recurring exception" unselectable="on" src="' + Ext.BLANK_IMAGE_URL + '">' + this.app.i18n._('recurring event exception');
-        }   
-
-        if(status || recur) {
+        }
+        
+        if (status || recur) {
             ret += '&nbsp;&nbsp;&nbsp;(&nbsp;';
             if(status) ret += status;
             if(status && recur) ret += '&nbsp;&nbsp;';
@@ -104,7 +109,6 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         }
         
         return ret;
-                   
     },
     
     /**
