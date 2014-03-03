@@ -250,9 +250,32 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         this.calPanel.view.relayEvents(view, ['changeView', 'changePeriod', 'addEvent', 'updateEvent', 'click', 'dblclick', 'contextmenu', 'keydown']);
         this.calPanel.view.getSelectionModel().relayEvents(view.getSelectionModel(), 'selectionchange');
         view.getSelectionModel().on('selectionchange', this.onSelectionChange.createDelegate(this, [view]));
-//        view.on('changePeriod', function() {}, this);
+        
+        view.onScroll = view.onScroll.createSequence(this.onScroll, this, view);
         
         return view;
+    },
+    
+    /**
+     * is called on scroll of a grid, scrolls the other grids
+     * 
+     * @param {Object} activeView
+     */
+    onScroll: function(activeView) {
+        
+        if (! activeView) {
+            return;
+        }
+        
+        var scrollTop = activeView.target.scrollTop;
+        
+        Tine.log.debug('Caught scroll top of ' + scrollTop);
+        
+        this.attendeeViews.each(function(view) {
+            if (activeView.id != view.id) {
+                view.scroller.dom.scrollTop = scrollTop;
+            }
+        }, this);
     },
     
     getActiveView: function() {
