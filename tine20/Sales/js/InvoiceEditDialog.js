@@ -139,6 +139,18 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 form.findField(ar[index]).setReadOnly(1);
             }
         }
+        
+        this.onAddressLoad();
+    },
+    
+    /**
+     * loads the address to the plaintext field
+     */
+    onAddressLoad: function(combo, record) {
+        var ba = record ? record : new Tine.Sales.Model.Address(this.record.get('address_id'));
+        if (ba) {
+            this.form.findField('fixed_address').setValue(Tine.Sales.renderAddress(ba));
+        }
     },
     
     /**
@@ -332,7 +344,11 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 name: 'address_id',
                                 ref: '../../../../../../../addressPicker',
                                 columnWidth: 1,
-                                disabled: true
+                                disabled: true,
+                                listeners: {
+                                    scope: this,
+                                    select: this.onAddressLoad.createDelegate(this)
+                                }
                             })
                         ], [{
                             columnWidth: 1,
