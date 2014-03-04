@@ -209,6 +209,8 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     Tinebase_User::getInstance()->setPassword($user, $testconfig->password);
                 } catch (Zend_Exception $e) {
                     Tinebase_User::getInstance()->setPassword($user, static::$_defaultPassword);
+                    $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
+                    Tinebase_User::getInstance()->updateUser($user);
                 }
             }
             
