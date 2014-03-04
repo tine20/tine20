@@ -74,6 +74,11 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * containerProperty (all contracts in one container) exists, so overwrite creating selector here
+     */
+    initContainerSelector: Ext.emptyFn,
+    
+    /**
      * extra validation for the number field, calls parent
      * @return {Boolean}
      */
