@@ -40,11 +40,13 @@ class Sales_Model_Address extends Tinebase_Record_Abstract
         'containerProperty' => NULL,
         'createModule'    => FALSE,
         'isDependent'     => TRUE,
-        'titleProperty'   => 'street',
+        'titleProperty'   => 'fulltext',
         'appName'         => 'Sales',
         'modelName'       => 'Address',
         'resolveRelated'  => TRUE,
         'defaultFilter'   => 'query',
+        'resolveVFGlobally' => TRUE,
+        
         'fields'          => array(
             'customer_id'       => array(
                 'label'      => 'Customer',    // _('Customer')
@@ -99,6 +101,14 @@ class Sales_Model_Address extends Tinebase_Record_Abstract
                 'label' => NULL,
                 'default' => 'postal',
                 'queryFilter' => TRUE
+            ),
+            
+            'fulltext' => array(
+                'config' => array(
+                    'duplicateOmit' => TRUE,
+                    'label'   => NULL
+                ),
+                'type' => 'virtual',
             ),
         )
     );

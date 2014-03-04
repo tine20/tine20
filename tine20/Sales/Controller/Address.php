@@ -50,4 +50,51 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }
+    
+    /**
+     * resolves all virtual fields for the address
+     *
+     * @param array $address
+     * @return array with property => value
+     */
+    public function resolveVirtualFields($address)
+    {
+        $ft = '';
+        
+        $i18n = Tinebase_Translation::getTranslation($this->_applicationName)->getAdapter();
+        
+        $ft .= $address['postbox'] ? $address['postbox'] : $address['street'];
+        $ft .= ', ';
+        $ft .= $address['postalcode'];
+        $ft .= ' ';
+        $ft .= $address['locality'];
+        $ft .= ' (';
+        $ft .= $i18n->_($address['type']);
+        
+        if ($address['type'] == 'billing') {
+            $ft .= ' - ' . $address['custom1'];
+        }
+        
+        $ft .= ')';
+        
+        $address['fulltext'] = $ft;
+        
+        return $address;
+    }
+    
+    /**
+     * @todo make this better, faster
+     *
+     * @param array $resultSet
+     *
+     * @return array
+     */
+    public function resolveMultipleVirtualFields($resultSet)
+    {
+        foreach($resultSet as &$result) {
+            $result = $this->resolveVirtualFields($result);
+        }
+    
+        return $resultSet;
+    }
 }

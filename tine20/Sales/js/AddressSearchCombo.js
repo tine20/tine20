@@ -56,7 +56,7 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
                     '</table>',
                 '</div></tpl>',
                 {
-                    encode: Tine.Sales.renderAddressAsLine
+                    encode: function(values) { return Ext.util.Format.htmlEncode(values.fulltext) }
                 }
             );
         }
