@@ -541,7 +541,10 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                 $ldapData['unixhomedirectory'] = '/dev/null';
             }
             
-            $ldapData['uidnumber'] = $this->_generateUidNumber();
+            // set uidNumber only when not set in AD already
+            if (empty($_ldapEntry['uidnumber'])) {
+                $ldapData['uidnumber'] = $this->_generateUidNumber();
+            }
             $ldapData['gidnumber'] = Tinebase_Group::getInstance()->resolveGidNumber($_user->accountPrimaryGroup);
             
             $ldapData['msSFU30NisDomain'] = array_value(0, explode('.', $this->_domainName));
