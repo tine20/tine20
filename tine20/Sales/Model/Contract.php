@@ -59,6 +59,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'titleProperty'     => 'title',
         'appName'           => 'Sales',
         'modelName'         => 'Contract',
+        
         'filterModel' => array(
             'customer' => array(
                 'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
@@ -161,6 +162,18 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             'end_date' => array(
                 'type' => 'date',
                 'label'      => 'End Date',    // _('End Date')
+            ),
+            'customer' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'relation',
+                    'label' => 'Customer',    // _('Customer')
+                    'config' => array(
+                        'appName'   => 'Sales',
+                        'modelName' => 'Customer',
+                        'type' => 'CUSTOMER'
+                    )
+                )
             ),
         )
     );

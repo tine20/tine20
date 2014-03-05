@@ -105,7 +105,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchContracts($filter, $paging)
     {
-        return $this->_search($filter, $paging, Sales_Controller_Contract::getInstance(), 'Sales_Model_ContractFilter');
+        return $this->_search($filter, $paging, Sales_Controller_Contract::getInstance(), 'Sales_Model_ContractFilter', /* $_getRelations */ TRUE);
     }
 
     /**
