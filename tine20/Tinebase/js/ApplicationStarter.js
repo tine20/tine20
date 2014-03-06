@@ -191,7 +191,9 @@ Tine.Tinebase.ApplicationStarter = {
         switch (type) {
             case 'string':
             case 'text':
+                break;
             case 'user':
+                filter.valueType = 'user';
                 break;
             case 'boolean': 
                 filter.valueType = 'bool'
@@ -316,6 +318,7 @@ Tine.Tinebase.ApplicationStarter = {
                 }
             }
         }
+
         return filter;
     },
     
