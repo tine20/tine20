@@ -114,6 +114,25 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         $this->assertTrue(file_exists($result));
         
         $xmlBody = $odsExportClass->getDocument()->asXML();
+
+        $doc = $odsExportClass->getDocument()->getBody();
+        
+        // the first line must not be empty
+        foreach($odsExportClass->getDocument()->getBody()->getTables() as $table) {
+            
+            $body = $table->getBody();
+            $namespaces = $body->getNamespaces(true);
+            
+            foreach($body->xpath('//table:table') as $tbl) {
+                $cells = $tbl->xpath('//table:table-cell');
+                foreach($cells as $cell) {
+                    $xpath = $cell->xpath('//text:p');
+                    $this->assertEquals('Date', (string) $xpath[0]);
+                    $this->assertEquals('Description', (string) $xpath[1]);
+                }
+            }
+        }
+        
         $this->assertEquals(1, preg_match("/0.5/", $xmlBody), 'no duration');
         $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $xmlBody), 'no description');
         $this->assertEquals(1, preg_match("/Description/", $xmlBody), 'no headline');
