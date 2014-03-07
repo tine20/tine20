@@ -349,9 +349,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             // resolve virtual relation record from relations property
             if (! $multiple && isset($field['type']) && $field['type'] == 'relation') {
                 $fc = $field['config'];
-                foreach($resultSet['relations'] as $relation) {
-                    if (($relation['type'] == $fc['type']) && ($relation['related_model'] == ($fc['appName'] . '_Model_' . $fc['modelName']))) {
-                        $resultSet[$field['key']] = $relation['related_record'];
+                if (isset($resultSet['relations']) && (is_array($resultSet['relations']))) {
+                    foreach($resultSet['relations'] as $relation) {
+                        if (($relation['type'] == $fc['type']) && ($relation['related_model'] == ($fc['appName'] . '_Model_' . $fc['modelName']))) {
+                            $resultSet[$field['key']] = $relation['related_record'];
+                        }
                     }
                 }
             // resolve virtual field by function
