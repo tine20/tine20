@@ -91,8 +91,8 @@ class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
             }
         } elseif ($this->_operator == 'equals') {
             $split = explode('-', $this->_value);
-            if (!((strlen($this->_value) == 7) && ((int) $split[0] > 2010) && ((int) $split[1] > 0) && ((int) $split[1] < 13))) {
-                throw new Tinebase_Exception_InvalidArgument('The month must have the format YYYY-MM!');
+            if (!((strlen($this->_value) == 7) && ((int) $split[0] > 1900) && ((int) $split[1] > 0) && ((int) $split[1] < 13))) {
+                throw new Tinebase_Exception_MonthFormat();
             }
             
             $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " = (?)", $this->_value));
