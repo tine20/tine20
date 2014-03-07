@@ -130,6 +130,7 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
         $postalAddressRecord = $addressController->search($filter)->getFirstRecord();
         
         if ($postalAddressRecord) {
+            $customer['postal_id'] = $postalAddressRecord->toArray();
             foreach($postalAddressRecord as $field => $value) {
                 $customer[('adr_' . $field)] = $value;
             }

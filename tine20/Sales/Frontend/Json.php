@@ -116,7 +116,11 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getContract($id)
     {
-        return $this->_get($id, Sales_Controller_Contract::getInstance());
+        $contract = $this->_get($id, Sales_Controller_Contract::getInstance());
+        if (! empty($contract['billing_address_id'])) {
+            $contract['billing_address_id'] = Sales_Controller_Address::getInstance()->resolveVirtualFields($contract['billing_address_id']);
+        }
+        return $contract;
     }
 
     /**
@@ -293,7 +297,16 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchCustomers($filter, $paging)
     {
-        return $this->_search($filter, $paging, Sales_Controller_Customer::getInstance(), 'Sales_Model_CustomerFilter');
+        $result = $this->_search($filter, $paging, Sales_Controller_Customer::getInstance(), 'Sales_Model_CustomerFilter');
+        
+        for ($i = 0; $i < $result['totalcount']; $i++) {
+            $result['results'][$i]['postal_id'] = Sales_Controller_Address::getInstance()->resolveVirtualFields($result['results'][$i]['postal_id']);
+            if (! empty($result['results'][$i]['billing'])) {
+                $result['results'][$i]['billing'] = Sales_Controller_Address::getInstance()->resolveMultipleVirtualFields($result['results'][$i]['billing']);
+            }
+        }
+        
+        return $result;
     }
     
     /**

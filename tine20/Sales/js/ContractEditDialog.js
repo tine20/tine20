@@ -92,8 +92,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-<<<<<<< HEAD
-=======
      * executed after record got updated from proxy
      * 
      * @private
@@ -126,10 +124,9 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 
                 if (ba && ba.hasOwnProperty('locality')) {
                     var record = new Tine.Sales.Model.Address(ba);
-                    this.onAddressLoad(null, record, null);
-                } else {
-                    this.setAddressPickerFilter();
                 }
+             
+                this.setAddressPickerFilter();
             }
         }
     },
@@ -161,19 +158,25 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         this.addressPicker.lastQuery = null;
-        
         this.setAddressPickerFilter();
+        this.loadAddress(record);
     },
     
     /**
->>>>>>> create invoice module
+     * loads the first billing address or the postal 
+     * address into the addresspicker on loading a customer
      * 
-     * @param {Tine.widgets.relation.PickerCombo} combo
-     * @param {Tine.Sales.Model.Address} record
-     * @param {number} index
+     * @param {Tine.Sales.Model.Customer} record
      */
-    onAddressLoad: function(combo, record, index) {
-        this.getForm().findField('show_city').setValue(record.get('postalcode') + ' ' + record.get('locality'));
+    loadAddress: function(record) {
+        var billingAddresses = record.get('billing');
+        if (Ext.isArray(billingAddresses) && billingAddresses.length > 0) {
+            var address = new Tine.Sales.Model.Address(billingAddresses[0]);
+        } else {
+            var address = new Tine.Sales.Model.Address(record.get('postal_id'));
+        }
+        
+        this.addressPicker.setValue(address.data);
     },
     
     /**
@@ -243,19 +246,10 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Billing Address'),
                             name: 'billing_address_id',
                             ref: '../../../../../addressPicker',
-                            columnWidth: 1/2,
+                            columnWidth: 1,
                             disabled: true,
-                            allowBlank: true,
-                            listeners: {
-                                scope: this,
-                                select: this.onAddressLoad
-                            }
-                        }), {
-                            fieldLabel: this.app.i18n._('Billing Address Locality'),
-                            columnWidth: 1/2,
-                            name: 'show_city',
-                            readOnly: true
-                        }], [{
+                            allowBlank: true
+                        })], [{
                                 xtype: 'datefield',
                                 name: 'start_date',
                                 columnWidth: 1/6,

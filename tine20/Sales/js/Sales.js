@@ -96,7 +96,7 @@ Tine.Sales.addToClipboard = function(record, companyName) {
 
 Tine.Sales.renderAddressAsLine = function(values) {
     var ret = '';
-    
+    var app = Tine.Tinebase.appMgr.get('Sales');
     if (values.customer_id) {
         ret += '<b>' + Ext.util.Format.htmlEncode(values.customer_id.name) + '</b> - ';
     }
@@ -107,7 +107,12 @@ Tine.Sales.renderAddressAsLine = function(values) {
     ret += ' ';
     ret += Ext.util.Format.htmlEncode(values.locality);
     ret += ' (';
-    ret += Ext.util.Format.htmlEncode(values.type);
+    ret += app.i18n._(values.type)
+    
+    if (values.type == 'billing') {
+        ret += ' - ' + Ext.util.Format.htmlEncode(values.custom1);
+    }
+    
     ret += ')';
     
     return ret;

@@ -167,6 +167,13 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             ),
             
             // the postal address
+            'postal_id' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'duplicateOmit' => TRUE,
+                    'label'      => NULL,
+                )
+            ),
             
             'adr_prefix1' => array(
                 'config' => array(

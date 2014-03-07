@@ -62,16 +62,17 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $ft = '';
         
         $i18n = Tinebase_Translation::getTranslation($this->_applicationName)->getAdapter();
+        $type = isset($address['type']) ? $address['type'] : 'postal';
         
-        $ft .= $address['postbox'] ? $address['postbox'] : $address['street'];
+        $ft .= isset($address['postbox']) ? $address['postbox'] : (isset($address['street']) ? $address['street'] : '');
         $ft .= ', ';
-        $ft .= $address['postalcode'];
+        $ft .= isset($address['postalcode']) ? $address['postalcode'] : '';
         $ft .= ' ';
-        $ft .= $address['locality'];
+        $ft .= isset($address['locality']) ? $address['locality'] : '';
         $ft .= ' (';
-        $ft .= $i18n->_($address['type']);
+        $ft .= $i18n->_($type);
         
-        if ($address['type'] == 'billing') {
+        if ($type == 'billing') {
             $ft .= ' - ' . $address['custom1'];
         }
         
