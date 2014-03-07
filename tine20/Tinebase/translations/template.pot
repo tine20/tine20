@@ -2917,3 +2917,12 @@ msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
 msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "The month must have the format YYYY-MM!"
+msgstr ""
+
+msgid "Wrong month format!"
+msgstr ""
