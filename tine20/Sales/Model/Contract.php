@@ -84,6 +84,30 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'related_model' => 'Sales_Model_CostCenter',
                 ),
                 'jsConfig' => array('filtertype' => 'sales.contractcostcenter')
+            ),
+            'contact_internal' => array(
+                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
+                'label' => 'Contact Person (internal)', // _('Contact Person (internal)')
+                'options' => array(
+                    'controller' => 'Addressbook_Controller_Contact',
+                    'filtergroup' => 'Addressbook_Model_ContactFilter',
+                    'own_filtergroup' => 'Sales_Model_ContractFilter',
+                    'own_controller' => 'Sales_Controller_Contract',
+                    'related_model' => 'Addressbook_Model_Contact',
+                ),
+                'jsConfig' => array('filtertype' => 'sales.contract-contact-internal')
+            ),
+            'contact_external' => array(
+                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
+                'label' => 'Contact Person (external)', // _('Contact Person (external)')
+                'options' => array(
+                    'controller' => 'Addressbook_Controller_Contact',
+                    'filtergroup' => 'Addressbook_Model_ContactFilter',
+                    'own_filtergroup' => 'Sales_Model_ContractFilter',
+                    'own_controller' => 'Sales_Controller_Contract',
+                    'related_model' => 'Addressbook_Model_Contact',
+                ),
+                'jsConfig' => array('filtertype' => 'sales.contract-contact-external')
             )
         ),
         
@@ -172,6 +196,30 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                         'appName'   => 'Sales',
                         'modelName' => 'Customer',
                         'type' => 'CUSTOMER'
+                    )
+                )
+            ),
+            'contact_external' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'relation',
+                    'label' => 'Contact Person (external)',    // _('Contact Person (external)')
+                    'config' => array(
+                        'appName'   => 'Addressbook',
+                        'modelName' => 'Contact',
+                        'type' => 'CUSTOMER' // yes, it's the same name of type, but another model than the field before
+                    )
+                )
+            ),
+            'contact_internal' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'relation',
+                    'label' => 'Contact Person (internal)',    // _('Contact Person (internal)')
+                    'config' => array(
+                        'appName'   => 'Addressbook',
+                        'modelName' => 'Contact',
+                        'type' => 'RESPONSIBLE'
                     )
                 )
             ),

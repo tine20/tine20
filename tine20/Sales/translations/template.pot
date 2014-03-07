@@ -666,3 +666,12 @@ msgstr ""
 #: Controller/NumberableAbstract.php:39
 msgid "The number you have tried to set is already in use!"
 msgstr ""
+
+msgid "without external contact person"
+msgstr ""
+
+msgid "without internal contact person"
+msgstr ""
+
+msgid "without customer"
+msgstr ""

@@ -1031,4 +1031,84 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     
         $this->assertArrayHasKey('results', $result);
     }
+    
+    /**
+     * here we search for all timeaccounts, which are related to an contract with a special
+     * internal contact assigned
+     * 
+     * @see: 0009752: create contract - internal/external contact person filter
+     */
+    public function testTimeaccountContractInternalContactFilter()
+    {
+        $this->_getTimeaccount(array('title' => 'to find'), true);
+        
+        $taController = Timetracker_Controller_Timeaccount::getInstance();
+        $taToFind = $taController->get($this->_lastCreatedRecord['id']);
+        
+        $this->_getTimeaccount(array('title' => 'not to find'), true);
+        
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Green')));
+        
+        $contractController = Sales_Controller_Contract::getInstance();
+        
+        $contract = new Sales_Model_Contract(array('title' => 'xtestunit', 'description' => 'nothing'));
+        $contract = $contractController->create($contract);
+        
+        $contract->relations = array(new Tinebase_Model_Relation(array(
+                'own_backend' => 'Sql',
+                'own_id' => $contract->getId(),
+                'own_model' => 'Sales_Model_Contract',
+                'own_degree' => 'sibling',
+                'remark' => 'PHP UNITTEST',
+                'related_model' => 'Addressbook_Model_Contact',
+                'related_backend' => 'Sql',
+                'related_id' => $contact->getId(),
+                'type' => 'RESPONSIBLE'
+        ))); 
+        
+        $contract = $contractController->update($contract);
+        
+        $taToFind->relations = array(
+            new Tinebase_Model_Relation(array(
+                'own_backend' => 'Sql',
+                'own_degree' => 'sibling',
+                'own_id' => $taToFind->getId(),
+                'own_model' => 'Timetracker_Model_Timeaccount',
+                'remark' => 'PHP UNITTEST',
+                'related_model' => 'Sales_Model_Contract',
+                'related_backend' => 'Sql',
+                'related_id' => $contract->getId(),
+                'type' => 'CONTRACT'
+            ))
+        );
+        
+        
+        $taToFind = $taController->update($taToFind);
+        
+        // build request with direct id
+        $req = Zend_Json::decode('{"params":{"filter":[{"condition":"OR","filters":[{"condition":"AND","filters":
+            [{"field":"contract","operator":"AND","value":[{"field":"contact_external","operator":"AND","value":
+                [{"field":":id","operator":"equals","value":"' . $contact->getId() . '"}],"id":"ext-record-266"},
+                 {"field":":id","operator":"AND"}],"id":"ext-record-181"}],"id":"ext-comp-1350","label":"Zeitkonten"}]}],
+            "paging":{"sort":"creation_time","dir":"DESC","start":0,"limit":50}}}');
+        
+        $filter = $req['params']['filter'];
+        $paging = $req['params']['paging'];
+        
+        $result = $this->_json->searchTimeaccounts($filter, $paging);
+        
+        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals($taToFind->getId(), $result['results'][0]['id']);
+        
+        // build request with query=Green
+        $req = Zend_Json::decode('{"jsonrpc":"2.0","method":"Timetracker.searchTimeaccounts","params":{"filter":[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"contract","operator":"AND","value":[{"field":"foreignRecord","operator":"AND","value":{"appName":"Addressbook","modelName":"Contact","linkType":"relation","filters":[{"field":"query","operator":"contains","value":"Green","id":"ext-record-546"}]},"id":"ext-record-480"},{"field":":id","operator":"AND"}],"id":"ext-record-181"}],"id":"ext-comp-1350","label":"Zeitkonten"}]}],"paging":{"sort":"creation_time","dir":"DESC","start":0,"limit":50}},"id":62}');
+        
+        $filter = $req['params']['filter'];
+        $paging = $req['params']['paging'];
+        
+        $result = $this->_json->searchTimeaccounts($filter, $paging);
+        
+        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals($taToFind->getId(), $result['results'][0]['id']);
+    }
 }

@@ -592,3 +592,12 @@ msgstr "Abrechnungszeitraum Beginn"
 
 msgid "Interval Ends"
 msgstr "Abrechnungszeitraum Ende"
+
+msgid "without external contact person"
+msgstr "ohne externe Kontaktperson"
+
+msgid "without internal contact person"
+msgstr "ohne interne Kontaktperson"
+
+msgid "without customer"
+msgstr "ohne Kunde"
