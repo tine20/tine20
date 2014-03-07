@@ -133,7 +133,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             exception = response.data;
         }
         
-        if (Tine.Tinebase.ExceptionHandlerRegistry.has(exception.appName)) {
+        if (exception.appName != 'Tinebase' && Tine.Tinebase.ExceptionHandlerRegistry.has(exception.appName)) {
             // the registered function must return true to don't work on this generically
             if (Tine.Tinebase.ExceptionHandlerRegistry.get(exception.appName)(exception, callback, callbackScope, callbackOnOk, callbackOnOkScope) === true) {
                 return;
@@ -272,6 +272,14 @@ Tine.Tinebase.ExceptionHandler = function() {
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('No Role Memberships'), 
                     msg: _('Your user account has no role memberships. Please contact your administrator.')
+                }));
+                break;
+                
+            // Tinebase_Exception_InvalidRelationConstraints
+            case 913: 
+                Ext.MessageBox.show(Ext.apply(defaults, {
+                    title: _(exception.title),
+                    msg: _(exception.message)
                 }));
                 break;
                 
