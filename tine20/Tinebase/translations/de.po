@@ -2934,3 +2934,9 @@ msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
 msgstr "Es ist nicht erlaubt diesen Ordner zu löschen. Bitte definieren sie zuvor einen anderen Ordner für interne Kontakte!"
+
+msgid "The month must have the format YYYY-MM!"
+msgstr "Der Monat muss im Format JJJJ-MM angegeben werden!"
+
+msgid "Wrong month format!"
+msgstr "Monat falsch angegeben!"
