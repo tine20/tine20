@@ -571,10 +571,10 @@ msgid "Billing Point"
 msgstr "Zeitpunkt der Rechnungslegung"
 
 msgid "begin"
-msgstr "Anfang der Periode"
+msgstr "Anfang des Intervalls"
 
 msgid "end"
-msgstr "Ende der Periode"
+msgstr "Ende des Intervalls"
 
 
 msgid "not yet cleared"
