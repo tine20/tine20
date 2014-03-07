@@ -135,6 +135,11 @@ class Phone_JsonTest extends TestCase
             'account_type' => 'user'
         );
         
+        $this->_objects['phoneOwner2'] = array(
+            'account_id' => $this->_personas['jsmith']->getId(),
+            'account_type' => 'user'
+        );
+        
         $rights = new Tinebase_Record_RecordSet('Voipmanager_Model_Snom_PhoneRight', array(
             $this->_objects['phoneOwner']
         ));
