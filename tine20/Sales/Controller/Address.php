@@ -59,10 +59,17 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
      */
     public function resolveVirtualFields($address)
     {
+        if (! isset($address['type'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Invalid address for resolving: ' . print_r($address, true));
+            
+            return $address;
+        }
+        
         $ft = '';
         
         $i18n = Tinebase_Translation::getTranslation($this->_applicationName)->getAdapter();
-        $type = isset($address['type']) ? $address['type'] : 'postal';
+        $type = $address['type'];
         
         $ft .= isset($address['postbox']) ? $address['postbox'] : (isset($address['street']) ? $address['street'] : '');
         $ft .= ', ';
@@ -92,10 +99,10 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
      */
     public function resolveMultipleVirtualFields($resultSet)
     {
-        foreach($resultSet as &$result) {
+        foreach ($resultSet as &$result) {
             $result = $this->resolveVirtualFields($result);
         }
-    
+        
         return $resultSet;
     }
 }
