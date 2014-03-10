@@ -85,6 +85,22 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
     protected $_fields = NULL;
     
     /**
+     * the constructor
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Controller_Record_Interface $_controller (optional)
+     * @param array $_additionalOptions (optional) additional options
+     */
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    {
+        parent::__construct($_filter, $_controller, $_additionalOptions);
+        
+        if (isset($_additionalOptions['toStdout'])) {
+            $this->_toStdout = $_additionalOptions['toStdout'];
+        }
+    }
+    
+    /**
      * The php build in fputcsv function is buggy, so we need an own one :-(
      *
      * @param resource $filePointer
@@ -127,7 +143,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
         
         $this->_exportRecords();
         
-        if (!$this->_toStdout) {
+        if (! $this->_toStdout) {
             fclose($this->_filehandle);
         }
         
@@ -232,7 +248,11 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract implements Tinebase_R
                 } else if ($fieldName == 'container_id') {
                     $csvArray[] = $this->_getContainer($record, 'id');
                 } else if (in_array($fieldName, $this->_getCustomFieldNames())) {
-                    $csvArray[] = $record->customfields[$fieldName];
+                    if (is_array($record->customfields) && (isset($record->customfields[$fieldName]) || array_key_exists($fieldName, $record->customfields))) {
+                        $csvArray[] = $record->customfields[$fieldName];
+                    } else {
+                        $csvArray[] = '';
+                    }
                 } else {
                     $csvArray[] = $record->{$fieldName};
                 }
