@@ -106,7 +106,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
             'name' => 'Worldwide Electronics International',
             'cpextern_id' => $contact1->getId(),
             'cpintern_id' => $contact2->getId(),
-            'number'      => 4294967296,
+            'number'      => 4294967,
             
             'iban'        => 'CN09234098324098234598',
             'bic'         => '0239580429570923432444',
@@ -166,7 +166,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         $json = new Sales_Frontend_Json();
         $retVal = $json->saveCustomer($customerData);
         
-        $this->assertEquals(4294967296, $retVal["number"]);
+        $this->assertEquals(4294967, $retVal["number"]);
         $this->assertEquals("Worldwide Electronics International", $retVal["name"]);
         $this->assertEquals("http://wwei.cn", $retVal["url"]);
         $this->assertEquals(NULL, $retVal['description']);
@@ -180,5 +180,16 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         // @see: 0009378: create a test for resolving dependent records recursively
         $this->assertEquals('Sales_Model_Contract', $retVal['billing'][0]['relations'][0]['related_model']);
         $this->assertEquals('Testing', $retVal['billing'][0]['relations'][0]['related_record']['title']);
+        
+        // test billing and delivery addresses get resolved
+        $this->assertTrue(is_array($retVal['delivery']));
+        $this->assertEquals(1, count($retVal['delivery']));
+        $this->assertEquals('Peking', $retVal['delivery'][0]['locality']);
+        $this->assertEquals('China', $retVal['delivery'][0]['countryname']);
+        
+        $this->assertTrue(is_array($retVal['billing']));
+        $this->assertEquals(1, count($retVal['billing']));
+        $this->assertEquals('Shenzen', $retVal['billing'][0]['locality']);
+        $this->assertEquals('China', $retVal['billing'][0]['countryname']);
     }
 }

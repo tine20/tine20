@@ -91,7 +91,7 @@ class Sales_InvoiceTestCase extends TestCase
         $csvFile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20'  . DIRECTORY_SEPARATOR . 'Addressbook' . DIRECTORY_SEPARATOR . 'Setup' . DIRECTORY_SEPARATOR . 'DemoData' . DIRECTORY_SEPARATOR . 'out1000.csv';
         
         if (! file_exists($csvFile)) {
-            die('File does not exist: ' . $csvFile . PHP_EOL);
+            throw new Tinebase_Exception_NotFound('File does not exist: ' . $csvFile);
         }
         $fhcsv = fopen($csvFile, 'r');
         
