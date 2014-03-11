@@ -81,6 +81,7 @@ class Sales_InvoiceTestCase extends TestCase
     
     protected function _createFixtures()
     {
+        // set reference date to the 1st january of last year
         $this->_referenceDate = Tinebase_DateTime::now();
         $this->_referenceDate->setTimezone('UTC');
         $this->_referenceDate->subYear(1);

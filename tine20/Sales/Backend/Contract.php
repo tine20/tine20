@@ -47,6 +47,7 @@ class Sales_Backend_Contract extends Tinebase_Backend_Sql_Abstract
     protected $_modlogActive = TRUE;
 
     /**
+     * returns all ids of contracts by interval. last_autobill doesn't get respected here.
      *
      * @param Tinebase_DateTime $date
      * @return array

@@ -232,23 +232,29 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
         $contracts = $this->search($filter, NULL, /* get relations = */ TRUE);
         
         foreach($contracts as $contract) {
+            // contract has been terminated and last bill has been created already
             if ($contract->end_date && $contract->last_autobill > $contract->end_date) {
                 $contracts->removeRecord($contract);
                 continue;
             }
             
-            $lastBilled = $contract->last_autobill === NULL ? NULL : clone $contract->last_autobill;
-        
+            // is null, if this is the first time to bill the contract
+            $lastBilled = ($contract->last_autobill === NULL) ? NULL : clone $contract->last_autobill;
+            
+            // if the contract has been billed already, add the interval
             if ($lastBilled) {
                 $nextBill = $lastBilled->addMonth($contract->interval);
             } else {
+                // it hasn't been billed already, so take the start_date of the contract as date
                 $nextBill = clone $contract->start_date;
                 
+                // add the interval to the date if the billing point is at the end of the period
                 if ($contract->billing_point == 'end') {
                     $nextBill->addMonth($contract->interval);
                 }
             }
             
+            // assure creating the last bill bill if a contract has bee terminated
             if (($contract->end_date !== NULL) && $nextBill->isLater($contract->end_date)) {
                 $nextBill = clone $contract->end_date;
             }

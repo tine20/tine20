@@ -118,9 +118,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             if ($startDate === NULL) {
                 $startDate = clone $contract->start_date;
             } else {
-                if ($contract->billing_point == 'end') {
-                    
-                } else {
+                if ($contract->billing_point != 'end') {
                     $startDate->addMonth($contract->interval);
                 }
             }
