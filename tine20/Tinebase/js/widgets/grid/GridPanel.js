@@ -1619,12 +1619,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 fixedFields: fixedFields,
                 additionalConfig: Ext.encode(additionalConfig),
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
+                recordId: record.getId(),
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'record,listeners,fixedFields,copyRecord,plugins,additionalConfig')
+            }, 'record,recordId,listeners,fixedFields,copyRecord,plugins,additionalConfig')
         );
         return true;
     },

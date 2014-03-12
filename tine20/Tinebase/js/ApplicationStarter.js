@@ -501,7 +501,7 @@ Tine.Tinebase.ApplicationStarter = {
                         });
                         if (! Ext.isFunction(Tine[appName][editDialogName].openWindow)) {
                             Tine[appName][editDialogName].openWindow  = function (cfg) {
-                                var id = (cfg.record && cfg.record.id) ? cfg.record.id : 0;
+                                var id = cfg.recordId ? cfg.recordId : ( (cfg.record && cfg.record.id) ? cfg.record.id : 0 );
                                 var window = Tine.WindowFactory.getWindow({
                                     width: edp.windowWidth ? edp.windowWidth : 600,
                                     height: edp.windowHeight ? edp.windowHeight : 230,
