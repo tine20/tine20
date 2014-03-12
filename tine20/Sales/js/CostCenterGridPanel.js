@@ -31,9 +31,6 @@ Ext.namespace('Tine.Sales');
  * Create a new Tine.Sales.CostCenterGridPanel
  */
 Tine.Sales.CostCenterGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
-    // model generics
-    recordClass: Tine.Sales.Model.CostCenter,
-    
     // grid specific
     defaultSortInfo: {field: 'remark', dir: 'ASC'},
     gridConfig: {
@@ -43,6 +40,7 @@ Tine.Sales.CostCenterGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     multipleEdit: true,
     
     initComponent: function() {
+        this.recordClass = Tine.Sales.Model.CostCenter;
         this.recordProxy = Tine.Sales.costcenterBackend;
         this.gridConfig.columns = this.getColumns();
         Tine.Sales.CostCenterGridPanel.superclass.initComponent.call(this);

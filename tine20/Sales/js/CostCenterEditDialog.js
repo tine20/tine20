@@ -4,11 +4,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
-<<<<<<< HEAD
  * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
-=======
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
->>>>>>> 0009214: Allow to edit costcenters
  *
  */
  
@@ -27,11 +23,7 @@ Ext.namespace('Tine.Sales');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
-<<<<<<< HEAD
  * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
-=======
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
->>>>>>> 0009214: Allow to edit costcenters
  * 
  * @param       {Object} config
  * @constructor
@@ -47,11 +39,14 @@ Tine.Sales.CostCenterEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     windowNamePrefix: 'CostCenterEditWindow_',
     appName: 'Sales',
-    recordClass: Tine.Sales.Model.CostCenter,
-    recordProxy: Tine.Sales.costcenterBackend,
+
     tbarItems: [],
     
     initComponent: function() {
+        
+        this.recordClass = Tine.Sales.Model.CostCenter;
+        this.recordProxy = Tine.Sales.costcenterBackend;
+        
         Tine.Sales.CostCenterEditDialog.superclass.initComponent.call(this);
     },
     /**
