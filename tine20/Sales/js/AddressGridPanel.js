@@ -72,8 +72,11 @@ Tine.Sales.AddressGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.store.on('add', this.updateTitle, this);
         this.store.on('remove', this.updateTitle, this);
-        
-        this.updateTitle(((this.editDialog.record.data.hasOwnProperty(this.editDialogRecordProperty) && this.editDialog.record.data[this.editDialogRecordProperty]) ? this.editDialog.record.data[this.editDialogRecordProperty].length : 0));
+
+        // update count of tab
+        (function() {
+            this.updateTitle(((this.editDialog.record.data.hasOwnProperty(this.editDialogRecordProperty) && this.editDialog.record.data[this.editDialogRecordProperty]) ? this.editDialog.record.data[this.editDialogRecordProperty].length : 0));
+        }).defer(100, this);
     },
     
     /**

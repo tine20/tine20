@@ -177,6 +177,8 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hans Friedrich', $retVal['cpintern_id']['n_given']);
         $this->assertEquals('Ochs', $retVal['cpintern_id']['n_family']);
 
+        $this->assertArrayHasKey('fulltext', $retVal['billing'][0]);
+        
         // @see: 0009378: create a test for resolving dependent records recursively
         $this->assertEquals('Sales_Model_Contract', $retVal['billing'][0]['relations'][0]['related_model']);
         $this->assertEquals('Testing', $retVal['billing'][0]['relations'][0]['related_record']['title']);
