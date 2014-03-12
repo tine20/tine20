@@ -4,7 +4,7 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -114,21 +114,22 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         $this->assertTrue(file_exists($result));
         
         $xmlBody = $odsExportClass->getDocument()->asXML();
-
+        
         $doc = $odsExportClass->getDocument()->getBody();
         
+        $i18n = Tinebase_Translation::getTranslation('Timetracker');
+        
         // the first line must not be empty
-        foreach($odsExportClass->getDocument()->getBody()->getTables() as $table) {
-            
+        foreach ($odsExportClass->getDocument()->getBody()->getTables() as $table) {
             $body = $table->getBody();
             $namespaces = $body->getNamespaces(true);
             
-            foreach($body->xpath('//table:table') as $tbl) {
+            foreach ($body->xpath('//table:table') as $tbl) {
                 $cells = $tbl->xpath('//table:table-cell');
-                foreach($cells as $cell) {
+                foreach ($cells as $cell) {
                     $xpath = $cell->xpath('//text:p');
-                    $this->assertEquals('Date', (string) $xpath[0]);
-                    $this->assertEquals('Description', (string) $xpath[1]);
+                    $this->assertEquals($i18n->_('Date'), (string) $xpath[0]);
+                    $this->assertEquals($i18n->_('Description'), (string) $xpath[1]);
                 }
             }
         }
@@ -137,7 +138,6 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $xmlBody), 'no description');
         
         // test translation of headers
-        $i18n = Tinebase_Translation::getTranslation('Timetracker');
         $i18nValue = $i18n->_('Description');
         $match = preg_match("/".$i18nValue."/", $xmlBody);
         $this->assertEquals(1, $match, 'no headline');
