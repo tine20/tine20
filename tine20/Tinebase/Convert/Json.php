@@ -311,7 +311,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             if ($foreignRecords->count() > 0) {
                 foreach ($_records as $record) {
                     $filtered = $foreignRecords->filter($config['refIdField'], $record->getId())->toArray();
-                    $filtered = $this->_resolveAfterToArray($filtered, $foreignRecordModelConfiguration);
+                    $filtered = $this->_resolveAfterToArray($filtered, $foreignRecordModelConfiguration, TRUE);
                     $record->{$fieldKey} = $filtered;
                 }
                 
