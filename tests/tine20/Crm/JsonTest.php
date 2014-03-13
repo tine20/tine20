@@ -172,8 +172,23 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertEquals($getLead['description'], $searchLeads['results'][0]['description']);
         $this->assertEquals(200, $searchLeads['results'][0]['turnover'], 'turnover has not been calculated using product prices');
         $this->assertEquals($searchLeads['results'][0]['turnover']*$getLead['probability']/100, $searchLeads['results'][0]['probableTurnover']);
-        $this->assertTrue(count($searchLeads['results'][0]['relations']) == 3, 'did not get all relations');
-
+        // now we need 2 relations here (frontend search shall return relations with related_model Addressbook_Model_Contact or Sales_Model_Product
+        $this->assertEquals(2, count($searchLeads['results'][0]['relations']), 'did not get all relations');
+        
+        foreach($getLead['relations'] as $rel) {
+            if ($rel['type'] == 'TASK') {
+                $relatedTask = $rel['related_record'];
+            }
+        }
+        
+        $this->assertEquals($this->_getTask()->summary, $relatedTask['summary'], 'task summary does not match');
+        $defaultTaskContainerId = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTTASKLIST);
+        $this->assertEquals($defaultTaskContainerId, $relatedTask['container_id']);
+        $this->assertTrue(isset($relatedTask['alarms']) && count($relatedTask['alarms']) === 1, 'alarm missing in related task: ' . print_r($relatedTask, TRUE));
+        
+        $relatedTaskId = $relatedTask['id'];
+        $relatedTask = NULL;
+        
         // get related records and check relations
         foreach ($searchLeads['results'][0]['relations'] as $relation) {
             switch ($relation['type']) {
@@ -193,11 +208,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertTrue(isset($relatedContact), 'contact not found');
         $this->assertEquals($this->_getContact()->n_fn, $relatedContact['n_fn'], 'contact name does not match');
         
-        $this->assertTrue(isset($relatedTask), 'task not found');
-        $this->assertEquals($this->_getTask()->summary, $relatedTask['summary'], 'task summary does not match');
-        $defaultTaskContainerId = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTTASKLIST);
-        $this->assertEquals($defaultTaskContainerId, $relatedTask['container_id']);
-        $this->assertTrue(isset($relatedTask['alarms']) && count($relatedTask['alarms']) === 1, 'alarm missing in related task: ' . print_r($relatedTask, TRUE));
+        $this->assertFalse(is_array($relatedTask), 'task must not be found');
         
         $this->assertTrue(isset($relatedProduct), 'product not found');
         $this->assertEquals($this->_getProduct()->name, $relatedProduct['name'], 'product name does not match');
@@ -213,7 +224,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         // check if linked task got removed as well
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        Tasks_Controller_Task::getInstance()->get($relatedTask['id']);
+        Tasks_Controller_Task::getInstance()->get($relatedTaskId);
     }
     
     /**
