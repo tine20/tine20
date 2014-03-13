@@ -1231,7 +1231,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Deleting ' . count($records) . ' records ...');
+            . ' Deleting ' . count($records) . ' of ' . $this->_modelName . ' records ...');
 
         try {
             $db = $this->_backend->getAdapter();
