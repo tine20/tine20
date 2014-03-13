@@ -231,7 +231,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param string|array                        $_paging json encoded / array
      * @param Tinebase_Controller_SearchInterface $_controller the record controller
      * @param string                              $_filterModel the class name of the filter model to use
-     * @param bool                                $_getRelations
+     * @param bool|array                          $_getRelations
      * @param string                              $_totalCountMethod
      * @return array
      */
