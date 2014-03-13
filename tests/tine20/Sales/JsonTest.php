@@ -499,8 +499,6 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAllCostCenterMethods()
     {
-        $this->markTestSkipped('0009550: fix Sales_JsonTest.testAllCostCenterMethods');
-        
         $remark = Tinebase_Record_Abstract::generateUID(10);
         $number = Tinebase_DateTime::now()->getTimestamp();
         
@@ -544,7 +542,6 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $ccs['totalcount']);
         $this->assertEquals(1, $ccs['results'][0]['is_deleted']);
     }
-
     
     /**
      * tests crud methods of division
@@ -578,6 +575,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         
         $d = $this->_instance->getDivision($d['id']);
     }
+<<<<<<< HEAD
         
     /**
      * @see https://forge.tine20.org/mantisbt/view.php?id=8840
@@ -667,4 +665,6 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
 
         $contact4 = Addressbook_Controller_Contact::getInstance()->update($contact4);
     }
+=======
+>>>>>>> pu/2013.10-longrun
 }

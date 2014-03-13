@@ -129,7 +129,8 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     /**
      * adds "start_date", "end_date" to contract and removes "status", "cleared", "cleared_in"
      */
-    protected function _updateContractsFields() {
+    protected function _updateContractsFields()
+    {
         if (php_sapi_name() == 'cli') {
             echo 'The Users\' locale you use here will be used to translate the fields "status", "cleared", "cleared_in":';
         }
@@ -229,7 +230,6 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 $controller->update($contr, FALSE);
             }
         } catch (Setup_Exception_PromptUser $e) {
-            
         }
         
         // remove deprecated sales contract fields
@@ -282,6 +282,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
             $this->setTableVersion('sales_contracts', 7);
         }
     }
+    
     /**
      * adds modlog to sales-divisions
      */
