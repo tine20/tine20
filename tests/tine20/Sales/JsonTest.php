@@ -575,8 +575,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         
         $d = $this->_instance->getDivision($d['id']);
     }
-<<<<<<< HEAD
-        
+    
     /**
      * @see https://forge.tine20.org/mantisbt/view.php?id=8840
      */
@@ -665,6 +664,4 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
 
         $contact4 = Addressbook_Controller_Contact::getInstance()->update($contact4);
     }
-=======
->>>>>>> pu/2013.10-longrun
 }
