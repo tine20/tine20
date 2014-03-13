@@ -161,7 +161,7 @@ class Tinebase_Relation_RelationTest extends TestCase
      */
     public function testGetRelationsWithRelatedModel()
     {
-        $relations = $this->_object->getMultipleRelations($this->_crmId['model'], $this->_crmId['backend'], array($this->_crmId['id']), NULL, array(), FALSE, 'Addressbook_Model_Contact');
+        $relations = $this->_object->getMultipleRelations($this->_crmId['model'], $this->_crmId['backend'], array($this->_crmId['id']), NULL, array(), FALSE, array('Addressbook_Model_Contact'));
         $this->assertEquals(1, count($relations));
         $fr = $relations[0];
         $this->assertEquals(1, $fr->count());
