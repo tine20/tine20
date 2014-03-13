@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Calendar_ICalTests
  */
-class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Calendar_TestCase
+class Calendar_Export_ICalTest extends Calendar_TestCase
 {
     public function setUp()
     {
@@ -35,6 +35,7 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
             'priority'      => 1,
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2015-12-30 13:00:00'
         ));
+        parent::setUp();
     }
     
     public function testExport()
@@ -179,5 +180,27 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
 
         // assert organizer
         $this->assertEquals(1, preg_match("/TRIGGER:-PT15M\r\n/", $ics), 'TRIGGER missing/broken');
+    }
+    
+    /**
+     * test ical cli export
+     * 
+     */
+    public function testCliExport()
+    {
+        $eventData = $this->_getEvent(TRUE)->toArray();
+        $this->_uit = new Calendar_Frontend_Json();
+        $persistentEventData = $this->_uit->saveEvent($eventData);
+        
+        $this->_testNeedsTransaction();
+        $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.exportICS ' .
+            $this->_testCalendar->getId() ;
+        
+        $cmd = TestServer::assembleCliCommand($cmd, TRUE);
+        exec($cmd, $output);
+        $result = implode(',', $output);
+        
+        $failMessage = print_r($output, TRUE);
+        $this->assertEquals(1, preg_match("/SUMMARY:{$eventData['summary']}/", $result), 'DESCRIPTION not correct');
     }
 }

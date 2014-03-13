@@ -35,11 +35,10 @@ class Tinebase_Model_Filter_ExplicitRelatedRecord extends Tinebase_Model_Filter_
      */
     protected function _getOwnIds($_modelName)
     {
-        
-        if(! $this->_options['own_filtergroup']) {
+        if (! $this->_options['own_filtergroup']) {
             throw new Tinebase_Exception_InvalidArgument('own filter group has to be defined!');
         }
-        if(! $this->_options['own_controller']) {
+        if (! $this->_options['own_controller']) {
             throw new Tinebase_Exception_InvalidArgument('own controller has to be defined!');
         }
 
@@ -47,7 +46,7 @@ class Tinebase_Model_Filter_ExplicitRelatedRecord extends Tinebase_Model_Filter_
         $filtergroup = $this->_options['own_filtergroup'];
         $controller = $this->_options['own_controller'];
 
-        if(!($this->_value[0]['value'])) {
+        if (!($this->_value[0]['value'])) {
             $relationFilter = new Tinebase_Model_RelationFilter(array(
                 array('field' => 'own_model',     'operator' => 'equals', 'value' => $_modelName),
                 array('field' => 'related_model', 'operator' => 'equals', 'value' => $this->_options['related_model']),
@@ -72,20 +71,11 @@ class Tinebase_Model_Filter_ExplicitRelatedRecord extends Tinebase_Model_Filter_
     public function toArray($_valueToJson = false)
     {
         $ret = parent::toArray($_valueToJson);
-        if(! empty($this->_value[0]['value'])) {
-            $found = false;
-            foreach($ret['value'] as &$filter) {
-                if($filter['field'] == ':id' && $filter['operator'] == 'equals' && is_string($filter['value']) && strlen($filter['value']) == 40) {
-                    $filter['value'] = $this->_controller->get($filter['value'])->toArray();
-                    $found = true;
-                }
-            }
-            if(!$found) {
-                $ret['value'][] = array(
-                    'field' => ':id',
-                    'operator' => 'equals',
-                    'value' => $this->_controller->get($this->_value[0]['value'])->toArray()
-                );
+        foreach($ret['value'] as &$filter) {
+            if ($filter['field'] == ':id' && $filter['operator'] == 'equals' && is_string($filter['value']) && strlen($filter['value']) == 40) {
+                $fr = Sales_Controller_Customer::getInstance()->get($filter['value']);
+                $fr->relations = null;
+                $filter['value'] = $fr->toArray();
             }
         }
         return $ret;

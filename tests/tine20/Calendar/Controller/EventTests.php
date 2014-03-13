@@ -66,8 +66,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event = $this->_getEvent();
         $event->is_all_day_event = true;
         $event->dtend = null;
-        $persistentEvent = $this->_controller->create($event);
         
+        $persistentEvent = $this->_controller->create($event);
+        $persistentEvent->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $this->assertEquals('2009-04-06 23:59:59', $persistentEvent->dtend->toString());
     }
     

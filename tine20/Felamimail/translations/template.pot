@@ -1071,3 +1071,9 @@ msgstr ""
 #: Controller/Sieve.php:338
 msgid "Out of Office reply from %1$s"
 msgstr ""
+
+msgid "To (Email CC)"
+msgstr ""
+
+msgid "To (Email BCC)"
+msgstr ""

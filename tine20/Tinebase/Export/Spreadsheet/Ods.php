@@ -231,10 +231,10 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
      */
     protected function _addHead()
     {
-        $row = $this->_activeTable->appendRow();
-        
         // add header (replace placeholders)
         if (isset($this->_config->headers)) {
+            
+            $row = $this->_activeTable->appendRow();
             
             $patterns = array(
                 '/\{date\}/', 
@@ -256,8 +256,6 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
                 }
             }
         }
-        
-        $row = $this->_activeTable->appendRow();
         
         // add table headline
         $row = $this->_activeTable->appendRow();

@@ -483,6 +483,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.perspectiveCombo.loadPerspective();
         // disable container selection combo if user has no right to edit
         this.containerSelect.setDisabled.defer(20, this.containerSelect, [(! this.record.get('editGrant'))]);
+        
+        // disable time selectors if this is a whole day event
+        if (this.record.get('is_all_day_event')) {
+            this.onAllDayChange(null, true);
+        }
     },
     
     onRecordUpdate: function() {

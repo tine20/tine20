@@ -29,17 +29,17 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_isResolved = FALSE;
     
     /**
-     * Gets the phone id filter for the first record in the given recordset
+     * Gets the phone id filter for the first record in the given array
      * 
-     * @param Tinebase_Record_RecordSet $userPhones
+     * @param array $userPhoneIds
      * @return Tinebase_Model_Filter_Abstract
      */
-    protected function _getDefaultPhoneFilter($userPhones)
+    protected function _getDefaultPhoneFilter($userPhoneIds)
     {
-        if ($userPhones->count()) {
+        if (! empty($userPhoneIds)) {
             $filter = $this->createFilter(
                 array('id' => 'defaultAdded', 'field' => 'phone_id', 'operator' => 'AND', 'value' => array(
-                    array('field' => ':id', 'operator' => 'in', 'value' => $userPhones->getId())
+                    array('field' => ':id', 'operator' => 'equals', 'value' => $userPhoneIds[0])
                 ))
             );
         } else {
@@ -66,11 +66,10 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
                 array('field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
             ));
             
-            $userPhones = Phone_Controller_MyPhone::getInstance()->search($filter);
-            $userPhoneIds = $userPhones->getId();
+            $userPhoneIds = Phone_Controller_MyPhone::getInstance()->search($filter)->getId();
 
             if ($phoneIdFilter === NULL) {
-                $this->addFilter($this->_getDefaultPhoneFilter($userPhones));
+                $this->addFilter($this->_getDefaultPhoneFilter($userPhoneIds));
             } else {
                 $phoneId = $phoneIdFilter->getValue();
                 $phoneId = $phoneId[0]['value'];

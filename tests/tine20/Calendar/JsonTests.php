@@ -1431,4 +1431,30 @@ class Calendar_JsonTests extends Calendar_TestCase
             $this->assertEquals('text/plain', $attachment['contenttype'], print_r($attachment, TRUE));
         }
     }
+    
+    /**
+     * checks if manipulated dtend and dtstart gets set to the correct values on creating or updating an event
+     * 
+     * @see 0009696: time is not grayed out for all-day events
+     */
+    public function testWholedayEventTimes()
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->is_all_day_event = TRUE;
+        
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        $event->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        
+        $this->assertEquals('00:00:00', $event->dtstart->format('H:i:s'));
+        $this->assertEquals('23:59:59', $event->dtend->format('H:i:s'));
+        
+        $event->dtstart = Tinebase_DateTime::now();
+        $event->dtend   = Tinebase_DateTime::now()->addHour(1);
+        
+        $event = Calendar_Controller_Event::getInstance()->update($event);
+        $event->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        
+        $this->assertEquals('00:00:00', $event->dtstart->format('H:i:s'));
+        $this->assertEquals('23:59:59', $event->dtend->format('H:i:s'));
+    }
 }

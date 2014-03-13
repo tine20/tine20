@@ -85,18 +85,19 @@ abstract class Calendar_TestCase extends TestCase
         
         Calendar_Controller_Event::getInstance()->sendNotifications(false);
         
-        if (! $this->_transactionId && $this->_testCalendar !== NULL) {
-            $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
-                array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
-            )), new Tinebase_Model_Pagination(array()));
-            
-            // delete alarms
-            Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord('Calendar_Model_Event', $events->getArrayOfIds());
-            
-            foreach ($events as $event) {
-                $this->_backend->delete($event->getId());
+        if (! $this->_transactionId  && $this->_testCalendar !== NULL) {
+            if ($this->_backend != NULL) {
+                $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
+                    array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
+                )), new Tinebase_Model_Pagination(array()));
+                
+                // delete alarms
+                Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord('Calendar_Model_Event', $events->getArrayOfIds());
+                
+                foreach ($events as $event) {
+                    $this->_backend->delete($event->getId());
+                }
             }
-            
             foreach ($this->_testCalendars as $cal) {
                 Tinebase_Container::getInstance()->deleteContainer($cal, true);
             }
