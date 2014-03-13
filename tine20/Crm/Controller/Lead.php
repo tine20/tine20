@@ -88,8 +88,10 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
                 $this->_modelName, 
                 $this->_backend->getType(), 
                 $leads->getId(), 
-                NULL, 
-                array('CUSTOMER', 'PARTNER', 'TASK', 'RESPONSIBLE', 'PRODUCT')
+                NULL,
+                array('CUSTOMER', 'PARTNER', 'TASK', 'RESPONSIBLE', 'PRODUCT'),
+                FALSE,
+                $_getRelations
             ));
         }
         
