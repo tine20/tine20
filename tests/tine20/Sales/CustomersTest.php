@@ -197,5 +197,24 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($retVal['billing']));
         $this->assertEquals('Shenzen', $retVal['billing'][0]['locality']);
         $this->assertEquals('China', $retVal['billing'][0]['countryname']);
+        
+        // delete record (set deleted=1) of customer and assigned addresses
+        $json->deleteCustomers(array($retVal['id']));
+        
+        $customerBackend = new Sales_Backend_Customer();
+        $deletedCustomer = $customerBackend->get($retVal['id'], TRUE);
+        $this->assertEquals(1, $deletedCustomer->is_deleted);
+        
+        $addressBackend = new Sales_Backend_Address();
+        $deletedAddresses = $addressBackend->getMultipleByProperty($retVal['id'], 'customer_id', TRUE);
+
+        $this->assertEquals(3, $deletedAddresses->count());
+        
+        foreach($deletedAddresses as $address) {
+            $this->assertEquals(1, $address->is_deleted);
+        }
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        
+        $json->getCustomer($retVal['id']);
     }
 }

@@ -19,6 +19,14 @@
 class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * delete or just set is_delete=1 if record is going to be deleted
+     * - legacy code -> remove that when all backends/applications are using the history logging
+     *
+     * @var boolean
+     */
+    protected $_purgeRecords = FALSE;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 

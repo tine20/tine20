@@ -36,7 +36,7 @@ class Sales_Model_Address extends Tinebase_Record_Abstract
         'hasCustomFields' => FALSE,
         'hasNotes'        => FALSE,
         'hasTags'         => FALSE,
-        'modlogActive'    => FALSE,
+        'modlogActive'    => TRUE,
         'containerProperty' => NULL,
         'createModule'    => FALSE,
         'isDependent'     => TRUE,

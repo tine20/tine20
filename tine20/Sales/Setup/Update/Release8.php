@@ -652,6 +652,66 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     }
     
     /**
+     * adds modlog to addresses to prevent data loss
+     */
+    protected function _addModlogToAddresses()
+    {
+        $fields = array('<field>
+                    <name>start_date</name>
+                    <type>datetime</type>
+                </field>','
+                <field>
+                    <name>end_date</name>
+                    <type>datetime</type>
+                </field>','
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>','
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>','
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>','
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>','
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>','
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>','
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>','
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>');
+    
+        foreach($fields as $field) {
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->addCol('sales_addresses', $declaration);
+        }
+    
+        $this->setTableVersion('sales_addresses', 2);
+    }
+    
+    /**
      * adds "start_date", "end_date" to contract and removes "status", "cleared", "cleared_in"
      */
     protected function _updateContractsFields()
@@ -866,5 +926,16 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'));
 
         $this->setApplicationVersion('Sales', '8.7');
+    }
+    
+    /**
+     * update to 8.8
+     * 
+     *  - add modlog to addresses
+     */
+    public function update_7()
+    {
+        $this->_addModlogToAddresses();
+        $this->setApplicationVersion('Sales', '8.8');
     }
 }

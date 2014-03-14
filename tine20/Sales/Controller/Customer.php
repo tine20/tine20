@@ -18,7 +18,14 @@
  */
 class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
 {
-
+    /**
+     * delete or just set is_delete=1 if record is going to be deleted
+     * - legacy code -> remove that when all backends/applications are using the history logging
+     *
+     * @var boolean
+     */
+    protected $_purgeRecords = FALSE;
+    
     /**
      * duplicate check fields / if this is NULL -> no duplicate check
      *
@@ -110,8 +117,8 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'in', 'value' => $_ids)));
         
         $addressController = Sales_Controller_Address::getInstance();
-        $addressController->deleteByFilter($filter);
-        
+        $addressController->delete($addressController->search($filter, NULL, FALSE, TRUE));
+
         return $_ids;
     }
     

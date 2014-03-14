@@ -44,7 +44,7 @@ class Sales_Backend_Address extends Tinebase_Backend_Sql_Abstract
      *
      * @var boolean
      */
-    protected $_modlogActive = FALSE;
+    protected $_modlogActive = TRUE;
     
     /**
      * returns the max address count for the specified type, the customers identified by $parentIds have
