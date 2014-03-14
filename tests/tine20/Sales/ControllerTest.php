@@ -163,4 +163,27 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
             $numberBackend->update($number);
         }
     }
+    
+    /**
+     * tests resolving the fulltext property of the address
+     */
+    public function testResolveVirtualFields()
+    {
+        $address = array(
+            'prefix1' => 'Meister',
+            'prefix2' => 'Eder',
+            'street' => 'Brunnengässla 4',
+            'postalcode' => '80331',
+            'locality' => 'Munich',
+            'region' => 'Bavaria',
+            'countryname' => 'DE',
+            'custom1' => 'de-234',
+            'type' => 'billing',
+        );
+        
+        $i18nTypeString = Tinebase_Translation::getTranslation('Sales')->_('billing');
+        
+        $result = Sales_Controller_Address::getInstance()->resolveVirtualFields($address);
+        $this->assertEquals($result['fulltext'], "Meister Eder, Brunnengässla 4, 80331 Munich ($i18nTypeString - de-234)");
+    }
 }

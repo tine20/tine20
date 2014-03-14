@@ -71,12 +71,17 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $i18n = Tinebase_Translation::getTranslation($this->_applicationName)->getAdapter();
         $type = $address['type'];
         
-        $ft .= isset($address['postbox']) ? $address['postbox'] : (isset($address['street']) ? $address['street'] : '');
-        $ft .= ', ';
-        $ft .= isset($address['postalcode']) ? $address['postalcode'] : '';
-        $ft .= ' ';
-        $ft .= isset($address['locality']) ? $address['locality'] : '';
+        $ft .= !empty($address['prefix1']) ? $address['prefix1'] : '';
+        $ft .= !empty($address['prefix1']) && !empty($address['prefix2']) ? ' ' : '';
+        $ft .= !empty($address['prefix2']) ? $address['prefix2'] : '';
+        $ft .= !empty($address['prefix1']) || !empty($address['prefix2']) ? ', ' : '';
+        
+        $ft .= !empty($address['postbox']) ? $address['postbox'] : (!empty($address['street']) ? $address['street'] : '');
+        $ft .= !empty($address['postbox']) || !empty($address['street']) ? ', ' : '';
+        $ft .= !empty($address['postalcode']) ? $address['postalcode'] . ' ' : '';
+        $ft .= !empty($address['locality']) ? $address['locality'] : '';
         $ft .= ' (';
+        
         $ft .= $i18n->_($type);
         
         if ($type == 'billing') {
