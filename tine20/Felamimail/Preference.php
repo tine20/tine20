@@ -54,6 +54,12 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     const CONFIRM_DELETE = 'confirmDelete';
     
     /**
+     * eml file on forwarded messages
+     *
+     */
+    const EML_FORWARD= 'emlForward';
+
+    /**
      * default filter name
      */
     const DEFAULTPERSISTENTFILTER_NAME = 'All inboxes'; //  _("All inboxes")
@@ -87,6 +93,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::USEINADB,
             self::AUTOATTACHNOTE,
             self::CONFIRM_DELETE,
+            self::EML_FORWARD,
         );
             
         return $allPrefs;
@@ -121,6 +128,10 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::CONFIRM_DELETE  => array(
                 'label'         => $translate->_('Confirm Delete'),
                 'description'   => $translate->_('Show confirmation dialog when deleting mails.'),
+            ),
+            self::EML_FORWARD=> array(
+                'label'         => $translate->_('.eml file Attachment in forwarded mails'),
+                'description'   => $translate->_('Attach an .eml file to a forwarded mail. Otherwise all attachments separate'),
             ),
         );
         
@@ -168,6 +179,13 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                     </options>';
                 break;
             case self::CONFIRM_DELETE:
+                $preference->value      = 1;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
+            case self::EML_FORWARD:
                 $preference->value      = 1;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
