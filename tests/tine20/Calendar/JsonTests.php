@@ -1451,4 +1451,18 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals('00:00:00', $event->dtstart->format('H:i:s'));
         $this->assertEquals('23:59:59', $event->dtend->format('H:i:s'));
     }
+    
+     /**
+     * testAttendeeChangeQuantityToInvalid
+     * 
+     * @see 9630: sanitize attender quantity
+     */
+    public function testAttendeeChangeQuantityToInvalid()
+    {
+        $eventData = $this->testCreateEvent();
+        $currentAttendee = $eventData['attendee'];
+        $eventData['attendee'][1]['quantity'] = '';
+        $event = $this->_uit->saveEvent($eventData);
+        $this->assertEquals(1, $event['attendee'][1]['quantity'], 'The invalid quantity should be saved as 1');
+    }
 }
