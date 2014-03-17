@@ -114,7 +114,7 @@ Tine.Sales.InvoiceDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                     '<div class="bordercorner_4"></div>',
                     '<div class="preview-panel-declaration">' + this.app.i18n._('Billing Address') + '</div>',
                     '<div>',
-                        '{[this.encode(values, "fixed_address")]}<br/>',
+                        '{[this.encode(values, "address")]}<br/>',
                     '</div>',
                 '</div>',
             
@@ -138,8 +138,15 @@ Tine.Sales.InvoiceDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                  */
                 encode: function(value, key) {
                     switch (key) {
-                        case 'fixed_address':
-                            return Ext.util.Format.nl2br(value.fixed_address);
+                        case 'address':
+                            if (value.fixed_address) {
+                                return Ext.util.Format.nl2br(value.fixed_address);
+                            } else if (value.address_id) {
+                                var address = new Tine.Sales.Model.Address(value.address_id);
+                                return Ext.util.Format.nl2br(Tine.Sales.renderAddress(address));
+                            } else {
+                                return '';
+                            }
                         case 'contract':
                         case 'customer':
                             var renderer = Tine.widgets.grid.RendererManager.get('Sales', 'Invoice', key);
