@@ -112,4 +112,21 @@ class HumanResources_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_account', '3');
         $this->setApplicationVersion('HumanResources', '8.5');
     }
+    
+    /**
+     * resize description field
+     */
+    public function update_5()
+    {
+        $field = '<field>
+            <name>description</name>
+            <type>clob</type>
+        </field>';
+    
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('humanresources_account', $declaration);
+    
+        $this->setTableVersion('humanresources_account', '4');
+        $this->setApplicationVersion('HumanResources', '8.6');
+    }
 }
