@@ -319,7 +319,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         try {
             $_imap->expunge(Felamimail_Model_Folder::encodeFolderName($_folder->globalname));
         } catch (Zend_Mail_Storage_Exception $zmse) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing no longer existing folder ' . $_folder->globalname . ' from cache. ' .$zmse->getMessage() );
+            Tinebase_Exception::log($zmse);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Removing no longer existing folder ' . $_folder->globalname . ' from cache. ' .$zmse->getMessage() );
             Felamimail_Controller_Cache_Folder::getInstance()->delete($_folder->getId());
             throw new Felamimail_Exception_IMAPFolderNotFound('Folder not found: ' . $_folder->globalname);
         }
