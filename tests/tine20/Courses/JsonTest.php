@@ -366,11 +366,14 @@ class Courses_JsonTest extends TestCase
         $this->assertEquals('/bin/false', $newUser->accountLoginShell);
         
         $newUserMemberships = Tinebase_Group::getInstance()->getGroupMemberships($newUser);
-        $this->assertEquals(3, count($newUserMemberships), 'new user should have 3 group memberships');
+        
+        $this->assertEquals(4, count($newUserMemberships), 'new user should have 4 group memberships');
         $this->assertTrue(in_array(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $newUserMemberships),
             'could not find default group in memberships: ' . print_r($newUserMemberships, TRUE));
         $this->assertTrue(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_ON]->getId(), $newUserMemberships),
             $id . ' not member of the internet group ' . print_r($newUserMemberships, TRUE));
+        $this->assertTrue(in_array($this->_configGroups[Courses_Config::STUDENTS_GROUP]->getId(), $newUserMemberships),
+            $id . ' not member of the students group ' . print_r($newUserMemberships, TRUE));
     }
     
     /**
