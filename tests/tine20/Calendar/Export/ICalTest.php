@@ -203,4 +203,19 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
         $failMessage = print_r($output, TRUE);
         $this->assertEquals(1, preg_match("/SUMMARY:{$eventData['summary']}/", $result), 'DESCRIPTION not correct');
     }
+    
+    /**
+     * test ical cli export with a empty Calendar
+     * 
+     */
+    public function testCliExportEmptyCalendar()
+    {
+        $cli = new Calendar_Frontend_Cli();
+        try {
+            $cli->exportICS(new Zend_Console_Getopt('abp:', array($this->_testCalendar->getId())));
+            $this->fail('Expected tinbase exception.');
+        } catch (Tinebase_Exception $e){
+            $this->assertTrue(true);
+        }
+    }
 }

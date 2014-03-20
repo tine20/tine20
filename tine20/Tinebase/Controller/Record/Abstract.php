@@ -1252,7 +1252,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Deleting ' . count($records) . ' records ...');
+            . ' Deleting ' . count($records) . ' of ' . $this->_modelName . ' records ...');
 
         try {
             $db = $this->_backend->getAdapter();
@@ -1744,6 +1744,10 @@ abstract class Tinebase_Controller_Record_Abstract
                 $_record->{$_property} = $rs;
             }
             // legacy end
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating ' . $_record->{$_property}->count() . ' dependent records on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+            }
             
             foreach ($_record->{$_property} as $record) {
                 $record->{$_fieldConfig['refIdField']} = $_createdRecord->getId();
@@ -1802,14 +1806,14 @@ abstract class Tinebase_Controller_Record_Abstract
                     $record->{$_fieldConfig['refIdField']} = $_oldRecord->getId();
                     // update record if ID exists and has a length of 40 (it has a length of 10 if it is a timestamp)
                     if ($record->getId() && strlen($record->getId()) == 40) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'Updating record ' . $record->getId());
-                        }
                         
                         // do not try to update if the record hasn't changed
                         $oldRecord = $oldRecords->getById($record->getId());
                         
                         if (! empty($oldRecord->diff($record)->diff)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Updating dependent record with id = "' . $record->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+                            }
                             $existing->addRecord($controller->update($record));
                         } else {
                             $existing->addRecord($record);
@@ -1817,7 +1821,11 @@ abstract class Tinebase_Controller_Record_Abstract
                         // create if ID does not exist or has not a length of 40
                     } else {
                         $record->id = NULL;
-                        $existing->addRecord($controller->create($record));
+                        $crc = $controller->create($record);
+                        $existing->addRecord($crc);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating dependent record with id = "' . $crc->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+                        }
                     }
                 }
             }
@@ -1827,8 +1835,13 @@ abstract class Tinebase_Controller_Record_Abstract
             $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $existing->getId()));
     
             $deleteContracts = $controller->search($filter);
-    
-            $controller->delete($deleteContracts->id);
+            
+            if ($deleteContracts->count()) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Deleting dependent records with id = "' . $deleteContracts->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+                }
+                $controller->delete($deleteContracts->id);
+            }
             $_record->{$_property} = $existing->toArray();
         }
     }

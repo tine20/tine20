@@ -72,6 +72,9 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         ));
         $result = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'get');
+        if ($result->count() == 0) {
+            throw new Tinebase_Exception('this calendar does not contain any records.');
+        }
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory("generic");
         $result = $converter->fromTine20RecordSet($result);
         print $result->serialize();

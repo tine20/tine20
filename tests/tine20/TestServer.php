@@ -73,7 +73,9 @@ class TestServer
         // set max execution time
         Tinebase_Core::setExecutionLifeTime(1200);
 
-        Zend_Registry::set('locale', new Zend_Locale($config->locale));
+        if ($config->locale) {
+            Tinebase_Core::setupUserLocale($config->locale);
+        }
         
         // this is needed for session handling in unittests (deactivate Zend_Session::writeClose and others)
         Zend_Session::$_unitTestEnabled = TRUE;

@@ -50,7 +50,15 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         var grants = timeaccount ? timeaccount.get('account_grants') : (this.record.get('timeaccount_id') ? this.record.get('timeaccount_id').account_grants : {});
         
         if (grants) {
-            this.getForm().findField('account_id').setDisabled(! (grants.bookAllGrant || grants.adminGrant || manageRight));
+            var setDisabled = ! (grants.bookAllGrant || grants.adminGrant || manageRight);
+            var accountField = this.getForm().findField('account_id');
+            accountField.setDisabled(setDisabled);
+            // set account id to the current user, if he doesn't have the right to edit other users timesheets
+            if (setDisabled) {
+                if (this.copyRecord && (this.record.get('account_id') != Tine.Tinebase.registry.get('currentAccount').accountId)) {
+                    accountField.setValue(Tine.Tinebase.registry.get('currentAccount'));
+                }
+            }
             notBillable = ! (grants.manageBillableGrant || grants.adminGrant || manageRight);
             notClearable = ! (grants.adminGrant || manageRight);
             this.getForm().findField('billed_in').setDisabled(! (grants.adminGrant || manageRight));

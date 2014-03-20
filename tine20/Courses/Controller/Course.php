@@ -526,6 +526,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         // add to default group and manage access group for user
         $this->_groupController->addGroupMember(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $newMember->getId());
         $this->_manageAccessGroups(array($newMember->getId()), $course);
+        $this->_addToStudentGroup(array($newMember->getId()));
         
         return $newMember;
     }

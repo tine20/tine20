@@ -228,7 +228,7 @@ class Tinebase_Translation
     {
         $locale = ($_locale !== NULL) ? $_locale : Tinebase_Core::get('locale');
         
-        $cacheId = (string)$locale . $_applicationName;
+        $cacheId = (string) $locale . $_applicationName;
         
         // get translation from internal class member?
         if ((isset(self::$_applicationTranslations[$cacheId]) || array_key_exists($cacheId, self::$_applicationTranslations))) {

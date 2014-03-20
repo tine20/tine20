@@ -226,6 +226,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             }
         }
         
+        if (empty($_data['quantity'])) {
+            $_data['quantity'] = 1;
+        }
+        
         parent::setFromArray($_data);
     }
     
