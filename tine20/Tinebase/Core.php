@@ -585,6 +585,17 @@ class Tinebase_Core
                 $writer = ($_defaultWriter === NULL) ? new Zend_Log_Writer_Null() : $_defaultWriter;
                 $logger->addWriter($writer);
             }
+
+            // For saving log into syslog too, create a key syslog into logger (value does not matter)
+            if ((bool) $config->logger->syslog){
+                $writer = new Zend_Log_Writer_Syslog(array(
+                        'application'   => 'Tine 2.0'
+                ));
+                $prio = ($config->logger->priority) ? (int) $config->logger->priority : 3;
+                $filter = new Zend_Log_Filter_Priority($prio);
+                $writer->addFilter($filter);
+                $logger->addWriter($writer);
+            }
         } else {
             $writer = new Zend_Log_Writer_Syslog(array(
                 'application'   => 'Tine 2.0'
