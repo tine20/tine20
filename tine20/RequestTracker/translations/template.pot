@@ -13,80 +13,103 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/StatusCombo.js:25
-msgid "New"
-msgstr ""
-
-#: js/StatusCombo.js:26
-msgid "Open"
-msgstr ""
-
-#: js/StatusCombo.js:27
-msgid "Stalled"
-msgstr ""
-
-#: js/StatusCombo.js:28
-msgid "Waiting"
-msgstr ""
-
-#: js/StatusCombo.js:29
-msgid "Pending"
-msgstr ""
-
-#: js/StatusCombo.js:30
-msgid "Resolved"
-msgstr ""
-
-#: js/StatusCombo.js:31
-msgid "Rejected"
-msgstr ""
-
-#: js/StatusCombo.js:32
-msgid "Deleted"
-msgstr ""
-
-#: js/StatusCombo.js:50 js/TicketGridPanel.js:90
-msgid "Status"
-msgstr ""
-
-#: js/TreePanel.js:23
-msgid "All Queues"
-msgstr ""
-
-#: js/Model.js:41 js/TicketGridPanel.js:36
+#: js/RequestTracker-FAT-debug.js:59 js/RequestTracker-FAT-debug.js:283
+#: js/Model.js:41 js/TicketGridPanel.js:36 js/RequestTracker-FAT.js:6
 msgid "Ticket"
 msgid_plural "Tickets"
 msgstr[0] ""
 msgstr[1] ""
 
+#: js/RequestTracker-FAT-debug.js:91 js/TreePanel.js:23
+#: js/RequestTracker-FAT.js:6
+msgid "All Queues"
+msgstr ""
+
+#: js/RequestTracker-FAT-debug.js:187 js/StatusCombo.js:25
+#: js/RequestTracker-FAT.js:6
+msgid "New"
+msgstr ""
+
+#: js/RequestTracker-FAT-debug.js:188 js/StatusCombo.js:26
+#: js/RequestTracker-FAT.js:6
+msgid "Open"
+msgstr ""
+
+#: js/RequestTracker-FAT-debug.js:189 js/StatusCombo.js:27
+#: js/RequestTracker-FAT.js:6
+msgid "Stalled"
+msgstr ""
+
+#: js/RequestTracker-FAT-debug.js:190 js/StatusCombo.js:28
+#: js/RequestTracker-FAT.js:6
+msgid "Waiting"
+msgstr ""
+
+#: js/RequestTracker-FAT-debug.js:191 js/StatusCombo.js:29
+#: js/RequestTracker-FAT.js:6
+msgid "Pending"
+msgstr ""
+
+#: js/RequestTracker-FAT-debug.js:192 js/StatusCombo.js:30
+#: js/RequestTracker-FAT.js:6
+msgid "Resolved"
+msgstr ""
+
+#: js/RequestTracker-FAT-debug.js:193 js/StatusCombo.js:31
+#: js/RequestTracker-FAT.js:6
+msgid "Rejected"
+msgstr ""
+
+#: js/RequestTracker-FAT-debug.js:194 js/StatusCombo.js:32
+#: js/RequestTracker-FAT.js:6
+msgid "Deleted"
+msgstr ""
+
+#: js/RequestTracker-FAT-debug.js:212 js/RequestTracker-FAT-debug.js:336
+#: js/StatusCombo.js:50 js/TicketGridPanel.js:90 js/RequestTracker-FAT.js:6
+msgid "Status"
+msgstr ""
+
+#: js/RequestTracker-FAT-debug.js:284 js/RequestTracker-FAT-debug.js:309
 #: js/TicketGridPanel.js:37 js/TicketGridPanel.js:63
+#: js/RequestTracker-FAT.js:6
 msgid "Ticket ID"
 msgstr ""
 
+#: js/RequestTracker-FAT-debug.js:285 js/RequestTracker-FAT-debug.js:312
 #: js/TicketGridPanel.js:38 js/TicketGridPanel.js:66
+#: js/RequestTracker-FAT.js:6
 msgid "Queue"
 msgstr ""
 
+#: js/RequestTracker-FAT-debug.js:286 js/RequestTracker-FAT-debug.js:318
 #: js/TicketGridPanel.js:39 js/TicketGridPanel.js:72
+#: js/RequestTracker-FAT.js:6
 msgid "Subject"
 msgstr ""
 
+#: js/RequestTracker-FAT-debug.js:287 js/RequestTracker-FAT-debug.js:324
 #: js/TicketGridPanel.js:40 js/TicketGridPanel.js:78
+#: js/RequestTracker-FAT.js:6
 msgid "Requestors"
 msgstr ""
 
+#: js/RequestTracker-FAT-debug.js:288 js/RequestTracker-FAT-debug.js:330
 #: js/TicketGridPanel.js:41 js/TicketGridPanel.js:84
+#: js/RequestTracker-FAT.js:6
 msgid "Owner"
 msgstr ""
 
-#: js/TicketGridPanel.js:43
+#: js/RequestTracker-FAT-debug.js:290 js/TicketGridPanel.js:43
 msgid "Description"
 msgstr ""
 
-#: js/TicketGridPanel.js:96
+#: js/RequestTracker-FAT-debug.js:342 js/TicketGridPanel.js:96
+#: js/RequestTracker-FAT.js:6
 msgid "Final Priority"
 msgstr ""
 
-#: js/TicketGridPanel.js:102
+#: js/RequestTracker-FAT-debug.js:348 js/TicketGridPanel.js:102
+#: js/RequestTracker-FAT.js:6
 msgid "Due"
 msgstr ""

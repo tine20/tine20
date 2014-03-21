@@ -35,12 +35,14 @@ msgid "example record lists"
 msgstr ""
 
 #: Model/ExampleRecord.php:60 js/ExampleRecordEditDialog.js:70
-#: js/ExampleRecordDetailsPanel.js:74
+#: js/ExampleRecordDetailsPanel.js:74 js/ExampleApplication-FAT-debug.js:75
+#: js/ExampleApplication-FAT-debug.js:192 js/ExampleApplication-FAT.js:6
 msgid "Name"
 msgstr ""
 
 #: Model/ExampleRecord.php:64 js/ExampleRecordEditDialog.js:76
-#: js/ExampleRecordDetailsPanel.js:78
+#: js/ExampleRecordDetailsPanel.js:78 js/ExampleApplication-FAT-debug.js:81
+#: js/ExampleApplication-FAT-debug.js:196 js/ExampleApplication-FAT.js:6
 msgid "Status"
 msgstr ""
 
@@ -78,10 +80,12 @@ msgstr ""
 msgid "The default container for new records"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:53
+#: js/ExampleRecordEditDialog.js:53 js/ExampleApplication-FAT-debug.js:58
+#: js/ExampleApplication-FAT.js:6
 msgid "ExampleRecord"
 msgstr ""
 
-#: js/ExampleRecordDetailsPanel.js:56
+#: js/ExampleRecordDetailsPanel.js:56 js/ExampleApplication-FAT-debug.js:174
+#: js/ExampleApplication-FAT.js:6
 msgid "Total Example Records"
 msgstr ""
