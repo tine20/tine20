@@ -49,9 +49,11 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'modlogActive'      => TRUE,
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
+        
         'containerProperty' => 'container_id',
         'containerName'    => 'Contracts',
         'containersName'    => 'Contracts',
+        'containerUsesFilter' => FALSE,
         
         'titleProperty'     => 'title',
         'appName'           => 'Sales',
