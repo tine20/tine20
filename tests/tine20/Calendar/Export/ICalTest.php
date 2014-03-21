@@ -212,7 +212,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
     {
         $cli = new Calendar_Frontend_Cli();
         try {
-            $cli->exportICS(new Zend_Console_Getopt('abp:', array($this->_testCalendar->getId())));
+            $cli->exportICS(new Zend_Console_Getopt('abp:', array($this->_getTestCalendar()->getId())));
             $this->fail('Expected tinbase exception.');
         } catch (Tinebase_Exception $e){
             $this->assertTrue(true);
