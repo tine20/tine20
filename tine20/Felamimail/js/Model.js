@@ -694,6 +694,7 @@ Tine.Felamimail.Model.Rule = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mode
     },
     { name: 'action_type' },
     { name: 'action_argument' },
+    { name: 'conjunction' },
     { name: 'enabled', type: 'boolean'},
     { name: 'conditions' },
     { name: 'account_id' }
@@ -724,6 +725,7 @@ Tine.Felamimail.Model.Rule.getDefaultData = function() {
             comperator: 'contains',
             key: ''
         }],
+        conjunction: 'allof',
         action_type: 'fileinto',
         action_argument: ''
     };

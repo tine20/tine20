@@ -44,6 +44,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     loadRecord: true,
     tbarItems: [],
     evalGrants: false,
+    conjunctionCombo: null,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -97,6 +98,8 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         this.window.setTitle(title);
         
         this.getForm().loadRecord(this.record);
+        
+        this.onConjunctionChange();
         
         this.loadMask.hide();
     },
@@ -211,6 +214,14 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     /**
+     * sets the conjunction operator of the filtertoolbar to show the correct text for anyof or allof
+     */
+    onConjunctionChange: function() {
+        this.conditionsPanel.conjunctionOperator = this.conjunctionCombo.getValue() == 'anyof' ? 'or' : 'and';
+        this.conditionsPanel.onFilterRowsChange();
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -243,6 +254,24 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             }
         });
         
+        this.conjunctionCombo = new Ext.form.ComboBox({
+            hideLabel  : false,
+            width: 250,
+            fieldLabel : '<span class="felamimail-sieverule-conjunction">' + this.app.i18n._('Apply filter if') + '</span>',
+            labelSeparator: '',
+            name       : 'conjunction',
+            store      : [
+                ['allof', this.app.i18n._('all conditions met')],
+                ['anyof', this.app.i18n._('any condition mets')]
+            ],
+            value      : 'allof',
+            listeners: {
+                scope: this,
+                change: this.onConjunctionChange,
+                select: this.onConjunctionChange
+            }
+        });
+        
         this.idPrefix = Ext.id();
         
         return [{
@@ -251,12 +280,20 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             autoScroll: true,
             items: [
             {
-                title: this.app.i18n._('If all of the following conditions are met:'),
                 region: 'north',
                 border: false,
                 autoScroll: true,
-                items: [
-                    this.conditionsPanel
+                items: [{
+                    layout: 'form',
+                    labelWidth: 200,
+                    frame: true,
+                    region: 'center',
+                    autoScroll: true,
+                    border: false,
+                    items: [
+                        this.conjunctionCombo
+                    ]
+                }, this.conditionsPanel
                 ],
                 xtype: 'panel',
                 listeners: {
@@ -264,7 +301,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     afterlayout: function(ct, layout) {
                         ct.suspendEvents();
                         if (this.conditionsPanel.getHeight() < 170) {
-                            ct.setHeight(this.conditionsPanel.getHeight() + 30);
+                            ct.setHeight(this.conditionsPanel.getHeight() + 35);
                         }
                         ct.ownerCt.layout.layout();
                         ct.resumeEvents();
