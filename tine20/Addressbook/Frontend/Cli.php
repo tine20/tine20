@@ -3,8 +3,8 @@
  * Tine 2.0
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -62,25 +62,33 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
-     * quick hack to export csv's
+     * export contacts csv to STDOUT
+     * 
+     * NOTE: exports contacts in container id 1 by default. id needs to be changed in the code.
      *
      * @param Zend_Console_Getopt $_opts
+     * 
+     * @todo allow to pass container id (and maybe more filter options) as param
      */
     public function export($_opts)
     {
         $containerId = 1;
         
         $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'singleContainer'),
-            array('field' => 'container',     'operator' => 'equals',   'value' => $containerId     ),
+            array('field' => 'container_id',     'operator' => 'equals',   'value' => $containerId     )
         ));
 
-        $csvExporter = new Addressbook_Export_Csv();
+        $csvExporter = new Addressbook_Export_Csv($filter, null, array('toStdout' => true));
         
-        $csvExporter->generate($filter, TRUE);
+        $csvExporter->generate();
     }
     
-    public function sampledata($_opts/*$_file*/)
+    /**
+     * create sample data
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function sampledata($_opts)
     {
         echo 'importing data ...';
         include '/var/www/tine20/Addressbook/sampledata.php';

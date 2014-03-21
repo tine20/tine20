@@ -42,7 +42,8 @@ msgid "Create or update shared timesheet favorites"
 msgstr ""
 
 #: Model/Timeaccount.php:43 Model/Timeaccount.php:47
-#: js/TimeaccountEditDialog.js:125
+#: js/TimeaccountEditDialog.js:125 js/Timetracker-FAT-debug.js:990
+#: js/Timetracker-FAT.js:6
 msgid "Cost Center"
 msgstr ""
 
@@ -51,17 +52,20 @@ msgid "Timetracker"
 msgstr ""
 
 #: Setup/setup.xml:81 js/TimeaccountEditDialog.js:90
-#: js/TimeAccountBilledFilterModel.js:47
+#: js/Timetracker-FAT-debug.js:632 js/Timetracker-FAT-debug.js:963
+#: js/TimeAccountBilledFilterModel.js:47 js/Timetracker-FAT.js:6
 msgid "not yet billed"
 msgstr ""
 
 #: Setup/setup.xml:82 js/TimeaccountEditDialog.js:91
-#: js/TimeAccountBilledFilterModel.js:48
+#: js/Timetracker-FAT-debug.js:633 js/Timetracker-FAT-debug.js:964
+#: js/TimeAccountBilledFilterModel.js:48 js/Timetracker-FAT.js:6
 msgid "to bill"
 msgstr ""
 
 #: Setup/setup.xml:83 js/TimeaccountEditDialog.js:92
-#: js/TimeAccountBilledFilterModel.js:49
+#: js/Timetracker-FAT-debug.js:634 js/Timetracker-FAT-debug.js:965
+#: js/TimeAccountBilledFilterModel.js:49 js/Timetracker-FAT.js:6
 msgid "billed"
 msgstr ""
 
@@ -109,56 +113,71 @@ msgstr ""
 msgid "default"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:62
+#: js/TimeaccountEditDialog.js:62 js/Timetracker-FAT-debug.js:935
+#: js/Timetracker-FAT.js:6
 msgid "Unit"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:66
+#: js/TimeaccountEditDialog.js:66 js/Timetracker-FAT-debug.js:939
+#: js/Timetracker-FAT.js:6
 msgid "Unit Price"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:97
+#: js/TimeaccountEditDialog.js:71 js/Timetracker-FAT-debug.js:795
+#: js/Timetracker-FAT-debug.js:944 js/Timetracker-FAT.js:6
+#: js/TimeaccountGridPanel.js:97
 msgid "Budget"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:119
-#: js/Models.js:178
+#: js/TimeaccountEditDialog.js:74 js/Timetracker-FAT-debug.js:264
+#: js/Timetracker-FAT-debug.js:812 js/Timetracker-FAT-debug.js:947
+#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:119 js/Models.js:178
 msgid "Status"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:124 js/Models.js:156
+#: js/TimeaccountEditDialog.js:80 js/Timetracker-FAT-debug.js:242
+#: js/Timetracker-FAT-debug.js:574 js/Timetracker-FAT-debug.js:817
+#: js/Timetracker-FAT-debug.js:953 js/TimeAccountStatusFilterModel.js:46
+#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:124 js/Models.js:156
 msgid "closed"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
+#: js/TimeaccountEditDialog.js:80 js/Timetracker-FAT-debug.js:574
+#: js/Timetracker-FAT-debug.js:816 js/Timetracker-FAT-debug.js:953
+#: js/TimeAccountStatusFilterModel.js:46 js/Timetracker-FAT.js:6
 #: js/TimeaccountGridPanel.js:123
 msgid "open"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:91
-#: js/Models.js:177
+#: js/TimeaccountEditDialog.js:82 js/Timetracker-FAT-debug.js:263
+#: js/Timetracker-FAT-debug.js:789 js/Timetracker-FAT-debug.js:955
+#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:91 js/Models.js:177
 msgid "Billed"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:100
+#: js/TimeaccountEditDialog.js:100 js/Timetracker-FAT-debug.js:969
 msgid "not cleared yet..."
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:101 js/TimesheetEditDialog.js:213
+#: js/TimeaccountEditDialog.js:101 js/TimesheetEditDialog.js:221
+#: js/Timetracker-FAT-debug.js:970 js/Timetracker-FAT-debug.js:1806
+#: js/Timetracker-FAT.js:6
 msgid "Cleared In"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:109
-#: js/Models.js:184
+#: js/TimeaccountEditDialog.js:105 js/Timetracker-FAT-debug.js:269
+#: js/Timetracker-FAT-debug.js:807 js/Timetracker-FAT-debug.js:974
+#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:109 js/Models.js:184
 msgid "Booking deadline"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:113
+#: js/TimeaccountEditDialog.js:113 js/Timetracker-FAT-debug.js:982
+#: js/Timetracker-FAT.js:6
 msgid "none"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:114
+#: js/TimeaccountEditDialog.js:114 js/Timetracker-FAT-debug.js:983
+#: js/Timetracker-FAT.js:6
 msgid "last week"
 msgstr ""
 
@@ -171,282 +190,357 @@ msgstr ""
 msgid "Responsible person"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:151
+#: js/TimeaccountEditDialog.js:151 js/Timetracker-FAT-debug.js:1003
+#: js/Timetracker-FAT.js:6
 msgid "Timesheets are billable"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:169 js/TimesheetEditDialog.js:147
-#: js/Models.js:147
+#: js/TimeaccountEditDialog.js:169 js/TimesheetEditDialog.js:155
+#: js/Timetracker-FAT-debug.js:234 js/Timetracker-FAT-debug.js:1018
+#: js/Timetracker-FAT-debug.js:1740 js/Timetracker-FAT.js:6 js/Models.js:147
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:81
-#: js/Models.js:174
+#: js/TimeaccountEditDialog.js:185 js/Timetracker-FAT-debug.js:260
+#: js/Timetracker-FAT-debug.js:779 js/Timetracker-FAT-debug.js:1034
+#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:81 js/Models.js:174
 msgid "Number"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:86
-#: js/Models.js:175
+#: js/TimeaccountEditDialog.js:190 js/Timetracker-FAT-debug.js:261
+#: js/Timetracker-FAT-debug.js:784 js/Timetracker-FAT-debug.js:1039
+#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:86 js/Models.js:175
 msgid "Title"
 msgstr ""
 
 #: js/TimeaccountEditDialog.js:195 js/TimeaccountEditDialog.js:214
-#: js/TimesheetEditDialog.js:178 js/TimesheetGridPanel.js:86
-#: js/TimesheetGridPanel.js:234 js/Models.js:93 js/Models.js:176
+#: js/TimesheetEditDialog.js:186 js/Timetracker-FAT-debug.js:183
+#: js/Timetracker-FAT-debug.js:262 js/Timetracker-FAT-debug.js:1044
+#: js/Timetracker-FAT-debug.js:1063 js/Timetracker-FAT-debug.js:1285
+#: js/Timetracker-FAT-debug.js:1433 js/Timetracker-FAT-debug.js:1771
+#: js/TimesheetGridPanel.js:86 js/TimesheetGridPanel.js:234
+#: js/Timetracker-FAT.js:6 js/Models.js:93 js/Models.js:176
 msgid "Description"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:228
+#: js/TimeaccountEditDialog.js:228 js/Timetracker-FAT-debug.js:1077
 msgid "Enter description"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:244
+#: js/TimeaccountEditDialog.js:244 js/Timetracker-FAT-debug.js:1093
+#: js/Timetracker-FAT.js:6
 msgid "Access"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:267
+#: js/TimeaccountEditDialog.js:267 js/Timetracker-FAT-debug.js:1116
+#: js/Timetracker-FAT.js:6
 msgid "Book Own"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:269
+#: js/TimeaccountEditDialog.js:269 js/Timetracker-FAT-debug.js:1118
+#: js/Timetracker-FAT.js:6
 msgid "The grant to add Timesheets to this Timeaccount"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:273
+#: js/TimeaccountEditDialog.js:273 js/Timetracker-FAT-debug.js:1122
+#: js/Timetracker-FAT.js:6
 msgid "View All"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:274
+#: js/TimeaccountEditDialog.js:274 js/Timetracker-FAT-debug.js:1123
+#: js/Timetracker-FAT.js:6
 msgid "The grant to view Timesheets of other users"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:279
+#: js/TimeaccountEditDialog.js:279 js/Timetracker-FAT-debug.js:1128
+#: js/Timetracker-FAT.js:6
 msgid "Book All"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:280
+#: js/TimeaccountEditDialog.js:280 js/Timetracker-FAT-debug.js:1129
+#: js/Timetracker-FAT.js:6
 msgid "The grant to add Timesheets for other users"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:285
+#: js/TimeaccountEditDialog.js:285 js/Timetracker-FAT-debug.js:1134
+#: js/Timetracker-FAT.js:6
 msgid "Manage Clearing"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:286
+#: js/TimeaccountEditDialog.js:286 js/Timetracker-FAT-debug.js:1135
+#: js/Timetracker-FAT.js:6
 msgid "The grant to manage clearing of Timesheets"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:146
+#: js/TimeaccountEditDialog.js:291 js/Timetracker-FAT-debug.js:839
+#: js/Timetracker-FAT-debug.js:1140 js/Timetracker-FAT.js:6
+#: js/TimeaccountGridPanel.js:146
 msgid "Export"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:292
+#: js/TimeaccountEditDialog.js:292 js/Timetracker-FAT-debug.js:1141
+#: js/Timetracker-FAT.js:6
 msgid "The grant to export Timesheets of Timeaccount"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:297
+#: js/TimeaccountEditDialog.js:297 js/Timetracker-FAT-debug.js:1146
+#: js/Timetracker-FAT.js:6
 msgid "Manage All"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:298
+#: js/TimeaccountEditDialog.js:298 js/Timetracker-FAT-debug.js:1147
+#: js/Timetracker-FAT.js:6
 msgid "Includes all other grants"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:306
+#: js/TimeaccountEditDialog.js:306 js/Timetracker-FAT-debug.js:1155
+#: js/Timetracker-FAT.js:6
 msgid "Permissions"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:130 js/Models.js:50
+#: js/TimesheetEditDialog.js:138 js/Timetracker-FAT-debug.js:141
+#: js/Timetracker-FAT-debug.js:1723 js/Timetracker-FAT.js:6 js/Models.js:50
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/TimesheetEditDialog.js:148
+#: js/TimesheetEditDialog.js:156 js/Timetracker-FAT-debug.js:1741
+#: js/Timetracker-FAT.js:6
 msgid "Select Time Account..."
 msgstr ""
 
-#: js/TimesheetEditDialog.js:162 js/TimesheetGridPanel.js:94
+#: js/TimesheetEditDialog.js:170 js/Timetracker-FAT-debug.js:1293
+#: js/Timetracker-FAT-debug.js:1755 js/TimesheetGridPanel.js:94
+#: js/Timetracker-FAT.js:6
 msgid "Duration"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:167 js/TimesheetGridPanel.js:78 js/Models.js:92
+#: js/TimesheetEditDialog.js:175 js/Timetracker-FAT-debug.js:182
+#: js/Timetracker-FAT-debug.js:1277 js/Timetracker-FAT-debug.js:1760
+#: js/TimesheetGridPanel.js:78 js/Timetracker-FAT.js:6 js/Models.js:92
 msgid "Date"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:172
+#: js/TimesheetEditDialog.js:180 js/Timetracker-FAT-debug.js:1765
+#: js/Timetracker-FAT.js:6
 msgid "Start"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:173
+#: js/TimesheetEditDialog.js:181 js/Timetracker-FAT-debug.js:1766
+#: js/Timetracker-FAT.js:6
 msgid "not set"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:179
+#: js/TimesheetEditDialog.js:187 js/Timetracker-FAT-debug.js:1772
+#: js/Timetracker-FAT.js:6
 msgid "Enter description..."
 msgstr ""
 
-#: js/TimesheetEditDialog.js:192 js/TimesheetGridPanel.js:92 js/Models.js:91
+#: js/TimesheetEditDialog.js:200 js/Timetracker-FAT-debug.js:181
+#: js/Timetracker-FAT-debug.js:1291 js/Timetracker-FAT-debug.js:1785
+#: js/TimesheetGridPanel.js:92 js/Timetracker-FAT.js:6 js/Models.js:91
 msgid "Account"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:197 js/TimesheetGridPanel.js:87
-#: js/TimesheetGridPanel.js:375 js/Models.js:94
+#: js/TimesheetEditDialog.js:205 js/Timetracker-FAT-debug.js:184
+#: js/Timetracker-FAT-debug.js:1286 js/Timetracker-FAT-debug.js:1574
+#: js/Timetracker-FAT-debug.js:1790 js/TimesheetGridPanel.js:87
+#: js/TimesheetGridPanel.js:375 js/Timetracker-FAT.js:6 js/Models.js:94
 msgid "Billable"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:203 js/TimesheetGridPanel.js:89
-#: js/TimesheetGridPanel.js:380 js/Models.js:95
+#: js/TimesheetEditDialog.js:211 js/Timetracker-FAT-debug.js:185
+#: js/Timetracker-FAT-debug.js:1288 js/Timetracker-FAT-debug.js:1579
+#: js/Timetracker-FAT-debug.js:1796 js/TimesheetGridPanel.js:89
+#: js/TimesheetGridPanel.js:380 js/Timetracker-FAT.js:6 js/Models.js:95
 msgid "Cleared"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:263
+#: js/TimesheetEditDialog.js:271 js/Timetracker-FAT-debug.js:1854
+#: js/Timetracker-FAT.js:6
 msgid "Failed"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:264
+#: js/TimesheetEditDialog.js:272 js/Timetracker-FAT-debug.js:1855
+#: js/Timetracker-FAT.js:6
 msgid "Could not save {0}."
 msgstr ""
 
-#: js/TimesheetEditDialog.js:265
+#: js/TimesheetEditDialog.js:273 js/Timetracker-FAT-debug.js:1856
+#: js/Timetracker-FAT.js:6
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr ""
 
 #: js/DurationSpinner.js:69 js/DurationSpinner.js:79
+#: js/Timetracker-FAT-debug.js:74 js/Timetracker-FAT-debug.js:84
+#: js/Timetracker-FAT.js:6
 msgid "Not a valid time"
 msgstr ""
 
-#: js/TimeaccountPickerCombo.js:46
+#: js/TimeaccountPickerCombo.js:46 js/Timetracker-FAT-debug.js:434
+#: js/Timetracker-FAT.js:6
 msgid "Show closed"
 msgstr ""
 
-#: js/Timetracker.js:25
+#: js/Timetracker.js:25 js/Timetracker-FAT-debug.js:319
+#: js/Timetracker-FAT.js:6
 msgid "New Timesheet"
 msgstr ""
 
-#: js/TimeAccountStatusFilterModel.js:24
+#: js/Timetracker-FAT-debug.js:145 js/Models.js:54
+msgid "timesheets list"
+msgid_plural "timesheets lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Timetracker-FAT-debug.js:180 js/Timetracker-FAT-debug.js:259
+#: js/Timetracker-FAT.js:6
+msgid "Quick search"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:186 js/Timetracker-FAT-debug.js:265
+#: js/Timetracker-FAT.js:6 js/Models.js:96 js/Models.js:180
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:187 js/Timetracker-FAT-debug.js:266
+#: js/Timetracker-FAT.js:6 js/Models.js:97 js/Models.js:181
+msgid "Last Modified By"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:188 js/Timetracker-FAT-debug.js:267
+#: js/Timetracker-FAT.js:6 js/Models.js:98 js/Models.js:182
+msgid "Creation Time"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:189 js/Timetracker-FAT-debug.js:268
+#: js/Timetracker-FAT.js:6 js/Models.js:99 js/Models.js:183
+msgid "Created By"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:238 js/Models.js:152
+msgid "timeaccount list"
+msgid_plural "timeaccount lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Timetracker-FAT-debug.js:552 js/TimeAccountStatusFilterModel.js:24
+#: js/Timetracker-FAT.js:6
 msgid "Time Account - Status"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:78
+#: js/Timetracker-FAT-debug.js:609 js/TimeAccountBilledFilterModel.js:24
+#: js/Timetracker-FAT.js:6
+msgid "Time Account - Billed"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:676 js/Timetracker-FAT.js:6
+#: js/TimeAccountContractFilterModel.js:30
+msgid "Contract"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:678 js/Timetracker-FAT.js:6
+#: js/TimeAccountContractFilterModel.js:32
+msgid "without contract"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:776 js/Timetracker-FAT-debug.js:1275
+#: js/TimesheetGridPanel.js:76 js/Timetracker-FAT.js:6
+#: js/TimeaccountGridPanel.js:78
 msgid "Tags"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:80
-msgid "Start time"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:82
-msgid "Time Account (Number - Title)"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:84
-msgid "Time Account closed"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:91 js/TimesheetGridPanel.js:385
+#: js/Timetracker-FAT-debug.js:801 js/Timetracker-FAT-debug.js:1290
+#: js/Timetracker-FAT-debug.js:1584 js/TimesheetGridPanel.js:91
+#: js/TimesheetGridPanel.js:385 js/Timetracker-FAT.js:6
 #: js/TimeaccountGridPanel.js:103
 msgid "Cleared in"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:147
-msgid "timeframe"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:171
-msgid "summary"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:174
-msgid "Total Timesheets"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:175
-msgid "Billable Timesheets"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:176
-msgid "Total Time"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:177
-msgid "Time of Billable Timesheets"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:248
-msgid "Detail"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:301
-msgid "Export Timesheets"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:155
+#: js/Timetracker-FAT-debug.js:848 js/Timetracker-FAT-debug.js:1509
+#: js/TimesheetGridPanel.js:310 js/Timetracker-FAT.js:6
+#: js/TimeaccountGridPanel.js:155
 msgid "Export as ODS"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:162
+#: js/Timetracker-FAT-debug.js:855 js/Timetracker-FAT-debug.js:1516
+#: js/TimesheetGridPanel.js:317 js/Timetracker-FAT.js:6
+#: js/TimeaccountGridPanel.js:162
 msgid "Export as CSV"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:324
+#: js/Timetracker-FAT-debug.js:1279 js/TimesheetGridPanel.js:80
+#: js/Timetracker-FAT.js:6
+msgid "Start time"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:1281 js/TimesheetGridPanel.js:82
+#: js/Timetracker-FAT.js:6
+msgid "Time Account (Number - Title)"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:1283 js/TimesheetGridPanel.js:84
+#: js/Timetracker-FAT.js:6
+msgid "Time Account closed"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:1346 js/TimesheetGridPanel.js:147
+msgid "timeframe"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:1370 js/TimesheetGridPanel.js:171
+msgid "summary"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:1373 js/TimesheetGridPanel.js:174
+#: js/Timetracker-FAT.js:6
+msgid "Total Timesheets"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:1374 js/TimesheetGridPanel.js:175
+#: js/Timetracker-FAT.js:6
+msgid "Billable Timesheets"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:1375 js/TimesheetGridPanel.js:176
+#: js/Timetracker-FAT.js:6
+msgid "Total Time"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:1376 js/TimesheetGridPanel.js:177
+#: js/Timetracker-FAT.js:6
+msgid "Time of Billable Timesheets"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:1447 js/TimesheetGridPanel.js:248
+msgid "Detail"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:1500 js/TimesheetGridPanel.js:301
+#: js/Timetracker-FAT.js:6
+msgid "Export Timesheets"
+msgstr ""
+
+#: js/Timetracker-FAT-debug.js:1523 js/TimesheetGridPanel.js:324
+#: js/Timetracker-FAT.js:6
 msgid "Export as ..."
 msgstr ""
 
-#: js/TimesheetGridPanel.js:367
+#: js/Timetracker-FAT-debug.js:1566 js/TimesheetGridPanel.js:367
 msgid "Mass Update"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:373
+#: js/Timetracker-FAT-debug.js:1572 js/TimesheetGridPanel.js:373
 msgid "Update field:"
-msgstr ""
-
-#: js/TimeAccountBilledFilterModel.js:24
-msgid "Time Account - Billed"
 msgstr ""
 
 #: js/DurationSlider.js:94
 msgid "{0}"
 msgstr ""
 
-#: js/TimeAccountContractFilterModel.js:30
-msgid "Contract"
-msgstr ""
-
-#: js/TimeAccountContractFilterModel.js:32
-msgid "without contract"
-msgstr ""
-
-#: js/Models.js:54
-msgid "timesheets list"
-msgid_plural "timesheets lists"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/Models.js:90 js/Models.js:173
 msgid "Quick Search"
 msgstr ""
-
-#: js/Models.js:96 js/Models.js:180
-msgid "Last Modified Time"
-msgstr ""
-
-#: js/Models.js:97 js/Models.js:181
-msgid "Last Modified By"
-msgstr ""
-
-#: js/Models.js:98 js/Models.js:182
-msgid "Creation Time"
-msgstr ""
-
-#: js/Models.js:99 js/Models.js:183
-msgid "Created By"
-msgstr ""
-
-#: js/Models.js:152
-msgid "timeaccount list"
-msgid_plural "timeaccount lists"
-msgstr[0] ""
-msgstr[1] ""

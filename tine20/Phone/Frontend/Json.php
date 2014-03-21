@@ -72,8 +72,8 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchCalls($filter, $paging)
     {
         $result = $this->_search($filter, $paging, Phone_Controller_Call::getInstance(), 'Phone_Model_CallFilter');
-        $result['totalcount'] = $this->_search($filter, NULL, Phone_Controller_Call::getInstance(), 'Phone_Model_CallFilter');
-        $result['totalcount'] = count($result['results']);
+        $countResult = Phone_Controller_Call::getInstance()->search($this->_decodeFilter($filter, 'Phone_Model_CallFilter'), NULL, FALSE, TRUE);
+        $result['totalcount'] = count($countResult);
         return $result;
     }
     
