@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  */
-abstract class Tinebase_Backend_Abstract implements Tinebase_Backend_Interface
+abstract class Tinebase_Backend_Abstract extends Tinebase_Pluggable_Abstract implements Tinebase_Backend_Interface
 {
     /**
      * backend type constant

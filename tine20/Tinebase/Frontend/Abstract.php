@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  Application
  */
-abstract class Tinebase_Frontend_Abstract implements Tinebase_Frontend_Interface
+abstract class Tinebase_Frontend_Abstract extends Tinebase_Pluggable_Abstract implements Tinebase_Frontend_Interface
 {
     /**
      * Application name

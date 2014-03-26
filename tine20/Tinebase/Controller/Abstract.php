@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Controller
  */
-abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Interface
+abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract implements Tinebase_Controller_Interface
 {
     /**
      * default settings
