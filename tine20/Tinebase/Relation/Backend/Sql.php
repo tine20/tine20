@@ -189,10 +189,10 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  string       $_degree        only return relations of given degree
      * @param  array        $_type          only return relations of given type
      * @param  boolean      $_returnAll     gets all relations (default: only get not deleted/broken relations)
-     * @param  string       $_relatedModel  only return relations having this related model
+     * @param  array        $_relatedModels  only return relations having this related model
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
-    public function getAllRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_returnAll = false, $_relatedModel = NULL)
+    public function getAllRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_returnAll = false, $_relatedModels = NULL)
     {
         $_id = $_id ? (array)$_id : array('');
         $where = array(
@@ -201,8 +201,8 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') .' IN (?)' , $_id),
         );
         
-        if ($_relatedModel) {
-            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('related_model') .' = ?', $_relatedModel);
+        if (is_array($_relatedModels) && ! empty($_relatedModels)) {
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('related_model') .' IN (?)', $_relatedModels);
         }
         
         if (!$_returnAll) {

@@ -172,7 +172,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param string|array                        $_paging json encoded / array
      * @param Tinebase_Controller_SearchInterface $_controller the record controller
      * @param string                              $_filterModel the class name of the filter model to use
-     * @param bool                                $_getRelations
+     * @param bool|array                          $_getRelations
      * @param string                              $_totalCountMethod
      * @return array
      */
@@ -266,9 +266,15 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                     if ($record->has($property) && $record->{$property}) {
                         $recordSet = new Tinebase_Record_RecordSet($rcn);
                         foreach ($record->{$property} as $recordArray) {
-                            $srecord = new $rcn(array(), true);
-                            $srecord->setFromJsonInUsersTimezone($recordArray);
-                            $recordSet->addRecord($srecord);
+                            if (is_array($recordArray)) {
+                                $srecord = new $rcn(array(), true);
+                                $srecord->setFromJsonInUsersTimezone($recordArray);
+                                $recordSet->addRecord($srecord);
+                            } else {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                                    . ' Record array expected, got: ' . $recordArray);
+                                throw new Tinebase_Exception_InvalidArgument('Record array expected');
+                            }
                         }
                         $record->{$property} = $recordSet;
                     }

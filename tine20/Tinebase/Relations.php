@@ -327,16 +327,16 @@ class Tinebase_Relations
      * @param  string       $_degree        only return relations of given degree
      * @param  array        $_type          only return relations of given type
      * @param  bool         $_ignoreACL     get relations without checking permissions
-     * @param  string       $_relatedModel  only return relations having this related model
+     * @param  array        $_relatedModels only return relations having this related models
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
-    public function getRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE, $_relatedModel = NULL)
+    public function getRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE, $_relatedModels = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  model: '$_model' backend: '$_backend' " 
             // . 'ids: ' . print_r((array)$_id, true)
         );
-    
-        $result = $this->_backend->getAllRelations($_model, $_backend, $_id, $_degree, $_type, FALSE, $_relatedModel);
+        
+        $result = $this->_backend->getAllRelations($_model, $_backend, $_id, $_degree, $_type, FALSE, $_relatedModels);
         $this->resolveAppRecords($result, $_ignoreACL);
         
         return $result;
@@ -351,10 +351,10 @@ class Tinebase_Relations
      * @param  string $_degree        only return relations of given degree
      * @param  array  $_type          only return relations of given type
      * @param  bool   $_ignoreACL     get relations without checking permissions
-     * @param  string $_relatedModel  only return relations having this related model
+     * @param  array  $_relatedModels only return relations having this related model
      * @return array  key from $_ids => Tinebase_Record_RecordSet of Tinebase_Model_Relation
      */
-    public function getMultipleRelations($_model, $_backend, $_ids, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE, $_relatedModel = NULL)
+    public function getMultipleRelations($_model, $_backend, $_ids, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE, $_relatedModels = NULL)
     {
         // prepare a record set for each given id
         $result = array();
@@ -363,7 +363,7 @@ class Tinebase_Relations
         }
         
         // fetch all relations in a single set
-        $relations = $this->getRelations($_model, $_backend, $_ids, $_degree, $_type, $_ignoreACL, $_relatedModel);
+        $relations = $this->getRelations($_model, $_backend, $_ids, $_degree, $_type, $_ignoreACL, $_relatedModels);
         
         // sort relations into corrensponding sets
         foreach ($relations as $relation) {

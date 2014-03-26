@@ -269,7 +269,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $values = array_keys($setEndDate);
         if (! empty($values)) {
             $sql = 'UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_contracts') . ' SET ' .
-                $db->quoteIdentifier('start_date') . ' = ' . $db->quoteIdentifier('creation_time') . ', '.
+                $db->quoteIdentifier('start_date') . ' = ' . $db->quoteIdentifier('last_modified_time') . ', '.
                 $db->quoteIdentifier('end_date') . ' = ' . $db->quoteIdentifier('last_modified_time') .
                 ' WHERE ' . $db->quoteIdentifier('id') . $db->quoteInto(' IN (?)', $values);
             

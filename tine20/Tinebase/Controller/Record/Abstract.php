@@ -178,7 +178,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
-     * @param boolean $_getRelations
+     * @param boolean|array $_getRelations
      * @param boolean $_onlyIds
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
@@ -193,7 +193,11 @@ abstract class Tinebase_Controller_Record_Abstract
 
         if (! $_onlyIds) {
             if ($_getRelations) {
-                $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_getBackendType(), $result->getId()));
+                // if getRelations is true, all relations should be fetched
+                if ($_getRelations === TRUE) {
+                    $_getRelations = NULL;
+                }
+                $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_getBackendType(), $result->getId(), NULL, array(), FALSE, $_getRelations));
             }
             if ($this->resolveCustomfields()) {
                 Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
