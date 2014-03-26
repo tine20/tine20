@@ -7,7 +7,7 @@ use Sabre\DAV;
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -669,7 +669,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test flags (add + clear + deleted)
-     * 
      */
     public function testAddAndClearFlags()
     {
@@ -698,7 +697,26 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json->addFlags(array($message['id']), Zend_Mail_Storage::FLAG_DELETED);
         $this->_json->getMessage($message['id']);
     }
-
+    
+    /**
+     * testMarkFolderRead
+     * 
+     * @see 0009812: mark folder as read does not work with pgsql
+     */
+    public function testMarkFolderRead()
+    {
+        $inboxBefore = $this->_getFolder('INBOX');
+        $filter = array(array(
+            'field' => 'folder_id', 'operator' => 'equals', 'value' => $inboxBefore->getId()
+        ), array(
+            'field' => 'flags', 'operator' => 'notin', 'value' => array(Zend_Mail_Storage::FLAG_SEEN)
+        ));
+        $this->_json->addFlags($filter, Zend_Mail_Storage::FLAG_SEEN);
+        
+        $inboxAfter = $this->_getFolder('INBOX');
+        $this->assertEquals(0, $inboxAfter->cache_unreadcount);
+    }
+    
     /**
      * test delete from trash
      */
