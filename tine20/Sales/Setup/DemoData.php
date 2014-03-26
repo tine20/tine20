@@ -212,8 +212,11 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $customer['credit_term'] = 30;
             $customer['currency'] = 'EUR';
             $customer['currency_trans_rate'] = 1;
-            
-            $customerRecords->addRecord($customerController->create(new Sales_Model_Customer($customer)));
+            try {
+                $customerRecords->addRecord($customerController->create(new Sales_Model_Customer($customer)));
+            } catch (Tinebase_Exception_Duplicate $e) {
+                echo 'Skipping creating customer ' . $customer['name'] . ' - exists already.' . PHP_EOL;
+            }
         }
         
         $pagination = new Tinebase_Model_Pagination(array('limit' => 16, 'sort' => 'id', 'dir' => 'DESC'));
@@ -256,6 +259,14 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ));
             
             $addressController->create($address);
+        }
+        
+        if ($this->_createFullData) {
+            $i=0;
+            while ($i < 200) {
+                $customerController->create(new Sales_Model_Customer(array('name' => Tinebase_Record_Abstract::generateUID())));
+                $i++;
+            }
         }
     }
     

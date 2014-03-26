@@ -272,6 +272,24 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * try to get a customer
+     */
+    public function testSearchCustomers()
+    {
+        $customerController = Sales_Controller_Customer::getInstance();
+        $i = 0;
+        
+        while ($i < 104) {
+            $customerController->create(new Sales_Model_Customer(array('name' => Tinebase_Record_Abstract::generateUID())));
+            $i++;
+        }
+        $result = $this->_instance->searchCustomers(array(), array('limit' => 50));
+        
+        $this->assertEquals(50, count($result['results']));
+        $this->assertEquals(104, $result['totalcount']);
+    }
+    
+    /**
      * test product json api
      *
      * @todo generalize this
