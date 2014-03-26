@@ -61,6 +61,13 @@ class Tinebase_ModelConfiguration {
     protected $_containerProperty = NULL;
     
     /**
+     * set this to false, if no filter and grid column should be created
+     * 
+     * @var boolean
+     */
+    protected $_containerUsesFilter = TRUE;
+    
+    /**
      * The property of the title, if any
      *
      * @var string
@@ -652,7 +659,7 @@ class Tinebase_ModelConfiguration {
 
         if ($this->_containerProperty) {
             $this->_fields[$this->_containerProperty] = array(
-                'label'            => $this->_containerName,
+                'label'            => $this->_containerUsesFilter ? $this->_containerName : NULL,
                 'shy'              => true,
                 'type'             => 'container',
                 'validators'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),

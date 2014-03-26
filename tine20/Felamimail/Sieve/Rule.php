@@ -40,6 +40,13 @@ class Felamimail_Sieve_Rule
     protected $_action = NULL;
     
     /**
+     * how to conjunct the filters
+     * 
+     * @var string
+     */
+    protected $_conjunction = 'allof';
+    
+    /**
      * status of rule (enabled or disabled)
      * 
      * @var boolean
@@ -160,6 +167,29 @@ class Felamimail_Sieve_Rule
     }
     
     /**
+     * returns the current conjunction
+     * 
+     * @return string
+     */
+    public function getSieveConjunction()
+    {
+        return $this->_conjunction;
+    }
+    
+    /**
+     * sets the current sieve conjunction
+     * 
+     * @param string $conjunction
+     * @return Felamimail_Sieve_Rule
+     */
+    public function setSieveConjunction($conjunction)
+    {
+        $this->_conjunction = $conjunction;
+        
+        return $this;
+    }
+    
+    /**
      * return the rule Sieve code
      * 
      * @return string
@@ -167,7 +197,7 @@ class Felamimail_Sieve_Rule
     public function __toString() 
     {
         $rule = sprintf("%s (%s) {\r\n%s\r\n}\r\n",
-            'allof',
+            $this->getSieveConjunction(),
             $this->_getSieveConditions(),
             $this->_getSieveAction()
         );
@@ -193,6 +223,7 @@ class Felamimail_Sieve_Rule
             'conditions'            => $conditions,
             'action_type'           => $action['type'],
             'action_argument'       => $action['argument'],
+            'conjunction'           => $this->_conjunction,
             'enabled'               => (integer) $this->_enabled,
             'id'                    => $this->_id,
         );

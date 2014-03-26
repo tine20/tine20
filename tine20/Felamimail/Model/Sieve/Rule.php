@@ -48,6 +48,7 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'action_type'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'action_argument'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'conjunction'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'allof'),
         'conditions'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
         'enabled'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     );
@@ -71,7 +72,8 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
     {
         $fsr = new Felamimail_Sieve_Rule();
         $fsr->setEnabled($this->enabled)
-            ->setId($this->id);
+            ->setId($this->id)
+            ->setSieveConjunction($this->conjunction);
 
         $fsra = new Felamimail_Sieve_Rule_Action();
         $fsra->setType($this->action_type)

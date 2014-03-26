@@ -98,6 +98,13 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     isActive: true,
     
+    /**
+     * does any of all of the filters match (or/and)
+     * 
+     * @type String
+     */
+    conjunctionOperator: 'and',
+    
     header: false,
     border: false,
     monitorResize: true,
@@ -429,7 +436,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             var tr = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
             
             if (tr) {
-                tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = _('and');
+                tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = '<span style="width: 25px; display: inline-block">' + _(this.conjunctionOperator) + '<span>';
             }
             
             if (filter.id == lastId) {

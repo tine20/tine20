@@ -2940,3 +2940,6 @@ msgstr "Der Monat muss im Format JJJJ-MM angegeben werden!"
 
 msgid "Wrong month format!"
 msgstr "Monat falsch angegeben!"
+
+msgid "or"
+msgstr "oder"

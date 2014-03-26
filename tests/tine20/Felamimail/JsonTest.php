@@ -1195,6 +1195,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'id'            => 1,
             'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
             'action_argument' => $this->_testFolderName,
+            'conjunction'  => 'allof',
             'conditions'    => array(array(
                 'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
                 'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
@@ -1206,6 +1207,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'id'            => 2,
             'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
             'action_argument' => $this->_testFolderName,
+            'conjunction'  => 'allof',
             'conditions'    => array(array(
                 'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
                 'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
@@ -1217,6 +1219,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'id'            => 3,
             'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
             'action_argument' => $this->_testFolderName,
+            'conjunction'  => 'allof',
             'conditions'    => array(array(
                 'test'          => Felamimail_Sieve_Rule_Condition::TEST_HEADER,
                 'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_REGEX,
@@ -1237,6 +1240,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'id'            => 1,
             'action_type'   => Felamimail_Sieve_Rule_Action::REDIRECT, 
             'action_argument' => $this->_account->email,
+            'conjunction'     => 'allof',
             'conditions'    => array(array(
                 'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
                 'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,

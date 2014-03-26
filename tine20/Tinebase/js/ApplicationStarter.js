@@ -106,11 +106,15 @@ Tine.Tinebase.ApplicationStarter = {
         if (config && field) {
             switch (config.type) {
                 case 'record':
-                    gridRenderer = function(value, row, record) {
-                        var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
-                        var titleProperty = foreignRecordClass.getMeta('titleProperty');
-                        return record.get(field) ? Ext.util.Format.htmlEncode(record.get(field)[titleProperty]) : '';
-                    };
+                    if (Tine.Tinebase.common.hasRight('view', config.config.appName, config.config.modelName.toLowerCase())) {
+                        gridRenderer = function(value, row, record) {
+                            var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
+                            var titleProperty = foreignRecordClass.getMeta('titleProperty');
+                            return record.get(field) ? Ext.util.Format.htmlEncode(record.get(field)[titleProperty]) : '';
+                        };
+                    } else {
+                        gridRenderer = null;
+                    }
                     break;
                 case 'integer':
                     if (config.hasOwnProperty('specialType')) {
@@ -276,7 +280,8 @@ Tine.Tinebase.ApplicationStarter = {
         // check right on foreign app
         if (fieldconfig && (fieldconfig.type == 'record' || fieldconfig.type == 'records')) {
             var opt = fieldconfig.config;
-            if (opt && (! Tine.Tinebase.common.hasRight('run', opt.appName))) {
+            
+            if (opt && (! Tine.Tinebase.common.hasRight('view', opt.appName, opt.modelName.toLowerCase()))) {
                 return null;
             }
         }
@@ -430,7 +435,7 @@ Tine.Tinebase.ApplicationStarter = {
                     if (Ext.isArray(modelConfig.defaultData)) {
                         modelConfig.defaultData = {};
                     }
-                            
+                    
                     // overwrite function
                     Tine[appName].Model[modelName].getDefaultData = function() {
                         if (! dd) {

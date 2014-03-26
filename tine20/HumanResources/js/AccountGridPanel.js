@@ -57,6 +57,7 @@ Tine.HumanResources.AccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         var req = Ext.Ajax.request({
             url : 'index.php',
+            timeout: 60000*5,
             params : { method : 'HumanResources.bookRemaining', ids: ids},
             success : function(_result, _request) {
                 this.onAfterBookRemaining(Ext.decode(_result.responseText));
@@ -70,7 +71,8 @@ Tine.HumanResources.AccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     /**
      * is called if booking remaining was successfull
-     * @param {} response
+     * 
+     * @param {Object} response
      */
     onAfterBookRemaining: function(response) {
         Ext.MessageBox.show({

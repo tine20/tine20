@@ -97,7 +97,7 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test enabled rule
+     * test enabled rule, also test correct parsing of anyof conjunction
      */
     public function testEnabledRule()
     {
@@ -117,13 +117,14 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
         $rule->setEnabled(true)
             ->setId(12)
             ->setAction($action)
+            ->setSieveConjunction('anyof')
             ->addCondition($condition);
         
         $script->addRule($rule);
         
         $sieveScript = $script->getSieve();
         #echo $sieveScript;
-        $this->assertContains('if allof (address :contains "From" "info@example.com")', $sieveScript);
+        $this->assertContains('if anyof (address :contains "From" "info@example.com")', $sieveScript);
         $this->assertContains('fileinto "INBOX/UNITTEST";', $sieveScript);
         $this->assertContains('Felamimail_Sieve_Rule', $sieveScript);
     }

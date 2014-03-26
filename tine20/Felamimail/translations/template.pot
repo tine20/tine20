@@ -1397,3 +1397,12 @@ msgstr ""
 #: Controller/Sieve.php:338
 msgid "Out of Office reply from %1$s"
 msgstr ""
+
+msgid "Apply filter if"
+msgstr ""
+
+msgid "any condition mets"
+msgstr ""
+
+msgid "all conditions met"
+msgstr ""
