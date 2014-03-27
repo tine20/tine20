@@ -251,7 +251,9 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         this.calPanel.view.getSelectionModel().relayEvents(view.getSelectionModel(), 'selectionchange');
         view.getSelectionModel().on('selectionchange', this.onSelectionChange.createDelegate(this, [view]));
         
-        view.onScroll = view.onScroll.createSequence(this.onScroll, this, view);
+        if (view.onScroll) {
+            view.onScroll = view.onScroll.createSequence(this.onScroll, this, view);
+        }
         
         return view;
     },
