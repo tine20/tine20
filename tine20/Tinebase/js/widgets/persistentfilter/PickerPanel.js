@@ -431,7 +431,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @return {Boolean}
      */
     hasRight: function(filter) {
-        if(filter && filter.created_by == this.currentUser.accountId) {
+        if (filter && filter.created_by == this.currentUser.accountId) {
             return true;
         }
         return (Tine.Tinebase.common.hasRight('manage_shared_' + this.contentType.toLowerCase() + '_favorites', this.app.name))
