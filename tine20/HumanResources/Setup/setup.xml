@@ -671,11 +671,7 @@
         </table>
         <table>
             <name>humanresources_account</name>
-<<<<<<< HEAD
-            <version>3</version>
-=======
             <version>4</version>
->>>>>>> pu/2013.10-longrun
             <declaration>
                 <field>
                     <name>id</name>
@@ -691,11 +687,7 @@
                 </field>
                 <field>
                     <name>description</name>
-<<<<<<< HEAD
-                    <type>text</type>
-=======
                     <type>clob</type>
->>>>>>> pu/2013.10-longrun
                 </field>
                 <field>
                     <name>year</name>
