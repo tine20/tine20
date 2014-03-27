@@ -1436,7 +1436,7 @@ class Setup_Controller
      * @return void
      * @throws Tinebase_Exception_Backend_Database
      */
-    protected function _installApplication($_xml, $_options = null)
+    protected function _installApplication(SimpleXMLElement $_xml, $_options = null)
     {
         if ($this->_backend === NULL) {
             throw new Tinebase_Exception_Backend_Database('Need configured and working database backend for install.');
