@@ -171,7 +171,6 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
 //             array(array('name' => '%RESPONSIBLE-Sales_Model_Contract', 'value' => $contract1->getId())),
 //             array(array('field' => 'id', 'operator' => 'in', 'value' => array($contact1->getId(), $contact2->getId())))
 //         );
-        
     }
     
     /**

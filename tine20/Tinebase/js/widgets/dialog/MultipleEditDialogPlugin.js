@@ -360,14 +360,21 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         
         if (this.multiButton.hasClass('undo')) {
             Tine.log.debug('Resetting value to "' + this.startingValue + '".');
+            
             if (this.startRecord) {
+                
                 this.store.removeAll();
-                this.setValue(this.startRecord);
-                this.value = this.startingValue;
+                this.reset();
+                
+                if (this.multi) {
+                    this.setValue('');
+                } else {
+                    this.setValue(this.startRecord);
+                    this.value = this.startingValue;
+                }
             } else {
                 this.setValue(this.startingValue);
             }
-            this.clearInvalid();
             
             if (this.isXType('extuxclearabledatefield') && this.multi) {
                 var startLeft = this.startLeft ? this.startLeft : 0;
@@ -384,6 +391,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 startLeft -= 17;
                 var parent = this.el.parent().select('.tinebase-editmultipledialog-clearer');
                 parent.setStyle('left', startLeft + 'px');
+            }
+            if (this.store) {
+                this.store.removeAll();
             }
             this.setValue('');
             if (this.multi) {
@@ -709,6 +719,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                                 this.editDialog.onCancel();
                             }
                         },
+                        failure : function(exception) {
+                            Tine.Tinebase.ExceptionHandler.handleRequestException(exception, this.onUpdateFailure, this);
+                        },
                         scope: this
                     });
                 }
@@ -717,6 +730,16 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             this.editDialog.onCancel();
         }
         return false;
+    },
+    
+    /**
+     * 
+     * @param {} btn
+     * @param {} dialog
+     */
+    onUpdateFailure: function(btn, dialog) {
+        this.form.clear();
+        this.onRecordLoad();
     },
     
     /**

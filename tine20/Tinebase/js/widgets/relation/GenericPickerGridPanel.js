@@ -4,7 +4,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 Ext.ns('Tine.widgets.relation');
@@ -246,28 +246,28 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @return {String}
      */
     getViewRowClass: function(record, index, rowParams, store) {
+        var relatedModel = record.get('related_model').split('_Model_');
+            relatedModel = Tine[relatedModel[0]].Model[relatedModel[1]];
+        
+        var ownModel = record.get('own_model').split('_Model_');
+            ownModel = Tine[ownModel[0]].Model[ownModel[1]];
+            
         if (this.invalidRowRecords && this.invalidRowRecords.indexOf(record.id) !== -1) {
-            
-            var model = record.get('related_model').split('_Model_');
-            model = Tine[model[0]].Model[model[1]];
-            
             rowParams.body = '<div style="height: 19px; margin-top: -19px" ext:qtip="' +
-                String.format(_('The maximum number of {0} with the type {1} is reached. Please change the type of this relation'), model.getRecordsName(), this.grid.typeRenderer(record.get('type'), null, record))
+                String.format(_("The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"), ownModel.getRecordsName(), this.grid.typeRenderer(record.get('type'), null, record))
                 + '"></div>';
             return 'tine-editorgrid-row-invalid';
         } else if (this.invalidRelatedRecords && this.invalidRelatedRecords.indexOf(record.id) !== -1) {
-            
-            var model = record.get('own_model').split('_Model_');
-            model = Tine[model[0]].Model[model[1]];
-            
             rowParams.body = '<div style="height: 19px; margin-top: -19px" ext:qtip="' +
-                String.format(_('The maximum number of {0}s with the type {1} is reached at the {2} you added. Please change the type of this relation or edit the {2}'), model.getRecordsName(), this.grid.typeRenderer(record.get('type'), null, record), model.getRecordName())
+                String.format(_("The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"), ownModel.getRecordsName(), this.grid.typeRenderer(record.get('type'), null, record), relatedModel.getRecordName())
                 + '"></div>';
             return 'tine-editorgrid-row-invalid';
         }
+        
         rowParams.body='';
         return '';
     },
+    
     /**
      * calls the editdialog for the model
      */
@@ -739,7 +739,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 related_model: relatedPhpModel,
                 type: type,
                 own_degree: 'sibling'
-            }, relconf)), record.id);
+            }, relconf)), Ext.id());
             
             var mySideValid = true;
             
@@ -838,7 +838,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var invalid = false;
         
         Ext.each(constrainsConfig, function(conf) {
-            
+        
             if (conf.hasOwnProperty('max') && conf.max > 0 && (conf.type == relationRecord.get('type'))) {
                 var rr = record.get('relations'),
                     count = 0;
@@ -856,7 +856,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                     if (! this.view.invalidRelatedRecords) {
                         this.view.invalidRelatedRecords = [];
                     }
-                    this.view.invalidRelatedRecords.push(relationRecord.get('related_id'));
+                    
+                    this.view.invalidRelatedRecords.push(relationRecord.id);
 
                     invalid = true;
                 }
@@ -941,12 +942,13 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {Object} o
      */
     onValidateRowEdit: function(o) {
-        if(o.field === 'type') {
+        if (o.field === 'type') {
             
             var index = -1;
             
             this.store.remove(o.record.getId());
             this.removeFromInvalidRelatedRecords(o.record);
+            this.removeFromInvalidRowRecords(o.record);
             
             var model = o.record.get('related_model').split('_Model_');
             var app = model[0];
@@ -957,8 +959,6 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             if (this.constrainsConfig[app + model]) {
                 this.checkLocalConstraints(app, model, o.record, o.value, o.originalValue);
             }
-            
-            this.removeFromInvalidRelatedRecords(o.record);
             
             // check constrains from other side
             this.validateRelatedConstrainsConfig(o.record.get('related_record'), o.record, true);

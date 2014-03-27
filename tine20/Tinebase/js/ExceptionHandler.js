@@ -276,7 +276,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                 break;
                 
             // Tinebase_Exception_InvalidRelationConstraints
-            case 913: 
+            case 912: 
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _(exception.title),
                     msg: _(exception.message)

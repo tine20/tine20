@@ -1055,13 +1055,13 @@ abstract class Tinebase_Controller_Record_Abstract
             'remark' => isset($constraintsConfig['defaultRemark']) ? $constraintsConfig['defaultRemark'] : ' '
         );
         
-        if (empty($value)) { // delete relations in iterator
-            if (! $this->_removeRelations) {
-                $this->_removeRelations = array($rel);
-            } else {
-                $this->_removeRelations[] = $rel;
-            }
-        } else { // create relations in iterator
+        if (! $this->_removeRelations) {
+            $this->_removeRelations = array($rel);
+        } else {
+            $this->_removeRelations[] = $rel;
+        }
+        
+        if (! empty($value)) { // delete relations in iterator
             $rel['related_id'] = $value;
             if (! $this->_newRelations) {
                 $this->_newRelations = array($rel);
@@ -1069,7 +1069,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $this->_newRelations[] = $rel;
             }
         }
-    
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' New relations: ' . print_r($this->_newRelations, true)
                . ' Remove relations: ' . print_r($this->_removeRelations, true));
@@ -1144,26 +1144,31 @@ abstract class Tinebase_Controller_Record_Abstract
             $currentRecord->relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
         }
         
+        $be = new Tinebase_Relation_Backend_Sql();
+
         // handle relations to remove
         if($this->_removeRelations) {
             if($currentRecord->relations->count()) {
                 foreach($this->_removeRelations as $remRelation) {
-                    $removeRelations = $currentRecord->relations->filter('type', $remRelation['type']);
-                    $removeRelations = $removeRelations->filter('related_model', $remRelation['related_model']);
-                    $removeRelations = $removeRelations->filter('own_degree', $remRelation['own_degree']);
+                    $removeRelations = $currentRecord->relations
+                        ->filter('type', $remRelation['type'])
+                        ->filter('related_model', $remRelation['related_model']);
+                    
                     $currentRecord->relations->removeRecords($removeRelations);
                 }
             }
         }
-        
+
         // handle new relations
         if($this->_newRelations) {
             $removeRelations = NULL;
             foreach($this->_newRelations as $newRelation) {
-                $removeRelations = $currentRecord->relations->filter('type', $newRelation['type']);
-                $removeRelations = $removeRelations->filter('related_model', $newRelation['related_model']);
-                $removeRelations = $removeRelations->filter('own_degree', $newRelation['own_degree']);
+                $removeRelations = $currentRecord->relations
+                    ->filter('type', $newRelation['type'])
+                    ->filter('related_model', $newRelation['related_model']);
+                
                 $already = $removeRelations->filter('related_id', $newRelation['related_id']);
+                
                 if($already->count() > 0) {
                     $removeRelations = NULL;
                 } else {
@@ -1177,6 +1182,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
         }
+        
         return $currentRecord->relations->toArray();
     }
     
@@ -1199,7 +1205,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
             $data = array_merge($oldRecordArray, $_data);
             
-            if($this->_newRelations || $this->_removeRelations) {
+            if ($this->_newRelations || $this->_removeRelations) {
                 $data['relations'] = $this->_iterateRelations($currentRecord);
             }
             try {
