@@ -678,29 +678,31 @@ class Zend_Mail_Protocol_Imap
 
         $result = array();
         while (!$this->readLine($tokens, $tag)) {
-            
-            $nsNames = array('personal', 'other', 'shared');
-            $index = 0;
-            
-            foreach ($tokens as $token) {
-                if (is_array($token)) {
-                    $result[$nsNames[$index]] = array(
-                        'name' => preg_replace('/"/', '', $token[0][0]), 
-                        'delimiter' => preg_replace('/"/', '', $token[0][1]),
-                    );
-                } else if ($token == 'NIL') {
-                    $result[$nsNames[$index]] = array('name' => 'NIL');
-                } else {
-                    continue;
+
+            if ((is_array($tokens)) && ($tokens[0] == 'NAMESPACE')){
+                $nsNames = array('personal', 'other', 'shared');
+                $index = 0;
+
+                foreach ($tokens as $token) {
+                    if (is_array($token)) {
+                        $result[$nsNames[$index]] = array(
+                            'name' => preg_replace('/"/', '', $token[0][0]),
+                            'delimiter' => preg_replace('/"/', '', $token[0][1]),
+                        );
+                    } else if ($token == 'NIL') {
+                        $result[$nsNames[$index]] = array('name' => 'NIL');
+                    } else {
+                        continue;
+                    }
+                    $index++;
                 }
-                $index++;
             }
         }
 
         if ($tokens[0] != 'OK') {
             return false;
         }
-        
+
         return $result;
     }
     
