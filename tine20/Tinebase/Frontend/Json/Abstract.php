@@ -262,8 +262,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             
             if ($recordsFields) {
                 foreach (array_keys($recordsFields) as $property) {
+
                     $rcn = $recordsFields[$property]['config']['recordClassName'];
-                    if ($record->has($property) && $record->{$property}) {
+                    if ($record->has($property) && $record->{$property} && is_array($record->{$property})) {
                         $recordSet = new Tinebase_Record_RecordSet($rcn);
                         foreach ($record->{$property} as $recordArray) {
                             if (is_array($recordArray)) {
@@ -275,8 +276,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                                     . ' Record array expected, got: ' . $recordArray);
                                 throw new Tinebase_Exception_InvalidArgument('Record array expected');
                             }
+
+                            $record->{$property} = $recordSet;
+
                         }
-                        $record->{$property} = $recordSet;
                     }
                 }
             }
