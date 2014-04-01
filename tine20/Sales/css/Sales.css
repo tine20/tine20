@@ -43,6 +43,7 @@
     background-image:url("../../images/oxygen/16x16/actions/view-process-users.png") !important;
 }
 
+<<<<<<< HEAD
 .action_reversal {
     background-image:url("../../images/oxygen/22x22/actions/document-revert.png") !important;
 }
@@ -74,4 +75,8 @@
     font-family: verdana;
     font-size: 10px;
     color: #404040;
+}
+
+.SalesOrderConfirmation {
+    background-image:url("../../images/oxygen/16x16/apps/kwrite.png") !important;
 }

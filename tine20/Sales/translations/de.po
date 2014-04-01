@@ -600,3 +600,8 @@ msgstr "ohne interne Kontaktperson"
 
 msgid "without customer"
 msgstr "ohne Kunde"
+
+msgid "Order Confirmation"
+msgid_plural "Order Confirmations"
+msgstr[0] "Auftragsbestätigung"
+msgstr[1] "Auftragsbestätigungen"

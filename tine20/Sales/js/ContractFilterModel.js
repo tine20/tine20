@@ -35,3 +35,4 @@ Tine.Sales.ContractFilterModel = Ext.extend(Tine.widgets.grid.ForeignRecordFilte
 });
 
 Tine.widgets.grid.FilterToolbar.FILTERS['sales.invoicecontract']  = Tine.Sales.ContractFilterModel;
+Tine.widgets.grid.FilterToolbar.FILTERS['sales.orderconfirmation-contract']  = Tine.Sales.ContractFilterModel;

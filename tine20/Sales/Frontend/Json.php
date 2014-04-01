@@ -31,6 +31,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Frontend_Json_Abstract
      */
     protected $_relatableModels = array(
+        'Sales_Model_OrderConfirmation',
         'Sales_Model_Contract',
         'Sales_Model_CostCenter',
         'Sales_Model_Customer',
@@ -50,7 +51,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'CostCenter',
         'Customer',
         'Address',
-        'Invoice'
+        'Invoice',
+        'OrderConfirmation',
     );
     
    /**
@@ -285,9 +287,9 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, Sales_Controller_Division::getInstance(), 'Sales_Model_DivisionFilter');
     }
-    
+
     // customer methods
-    
+
     /**
      * Search for records matching given arguments
      *
@@ -321,19 +323,19 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_get($id, Sales_Controller_Customer::getInstance());
     }
-    
+
     /**
      * creates/updates a record
      *
      * @param  array $recordData
      * @param  boolean $duplicateCheck
-     * 
+     *
      * @return array created/updated record
      */
     public function saveCustomer($recordData, $duplicateCheck = TRUE)
     {
         $postalAddress = array();
-
+    
         foreach($recordData as $field => $value) {
             if (strpos($field, 'adr_') !== FALSE && ! empty($value)) {
                 $postalAddress[substr($field, 4)] = $value;
@@ -391,6 +393,55 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_delete($ids, Sales_Controller_Customer::getInstance());
     }
     
+    /*************************** order confirmation functions *****************************/
+    
+    /**
+     * Search for records matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchOrderConfirmations($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Sales_Controller_OrderConfirmation::getInstance(), 'Sales_Model_OrderConfirmationFilter', array('Sales_model_Contract'));
+    }
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getOrderConfirmation($id)
+    {
+        return $this->_get($id, Sales_Controller_OrderConfirmation::getInstance());
+    }
+    
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @param  boolean $duplicateCheck
+     *
+     * @return array created/updated record
+     */
+    public function saveOrderConfirmation($recordData, $duplicateCheck)
+    {
+        return $this->_save($recordData, Sales_Controller_OrderConfirmation::getInstance(), 'OrderConfirmation');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array $ids
+     * @return string
+     */
+    public function deleteOrderConfirmations($ids)
+    {
+        return $this->_delete($ids, Sales_Controller_OrderConfirmation::getInstance());
+    }
+    
     // customer address method - addresses are dependent records, so we need a search method, no more (relation picker combo)
     
     /**
@@ -405,9 +456,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_search($filter, $paging, Sales_Controller_Address::getInstance(), 'Sales_Model_AddressFilter');
     }
     
-    
     // invoice methods
-    
     /**
      * Search for records matching given arguments
      *

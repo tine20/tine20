@@ -675,3 +675,8 @@ msgstr ""
 
 msgid "without customer"
 msgstr ""
+
+msgid "Order Confirmation"
+msgid_plural "Order Confirmations"
+msgstr[0] ""
+msgstr[1] ""

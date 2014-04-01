@@ -70,4 +70,34 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         Sales_Controller_Invoice::getInstance()->createAutoInvoices($date);
     }
+    
+    /**
+     * transfers all contracts starting with AB- to orderconfirmation
+     */
+    public function transferContractsToOrderConfirmation()
+    {
+        $contractController = Sales_Controller_Contract::getInstance();
+        $ocController = Sales_Controller_OrderConfirmation::getInstance();
+        $rel = Tinebase_Relations::getInstance();
+        
+        $filter = new Sales_Model_ContractFilter(array(array('field' => 'number', 'operator' => 'startswith', 'value' => 'AB-')), 'AND');
+        $contracts = $contractController->search($filter);
+        
+        foreach($contracts as $contract) {
+            $oc = $ocController->create(new Sales_Model_OrderConfirmation(array(
+                'number' => $contract->number,
+                'title'  => $contract->title,
+                'description' => '',
+            )));
+            
+            $rel->setRelations('Sales_Model_OrderConfirmation', 'Sql', $oc->getId(), array(array(
+                'own_degree' => 'sibling',
+                'related_degree' => 'sibling',
+                'related_model' => 'Sales_Model_Contract',
+                'related_backend' => 'Sql',
+                'related_id' => $contract->getId(),
+                'type' => 'CONTRACT'
+            )));
+        }
+    }
 }
