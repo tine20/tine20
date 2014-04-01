@@ -1844,13 +1844,13 @@ abstract class Tinebase_Controller_Record_Abstract
             $filter->addFilter(new Tinebase_Model_Filter_Text($_fieldConfig['refIdField'], 'equals', $_record->getId()));
             $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $existing->getId()));
     
-            $deleteContracts = $controller->search($filter);
+            $deleteIds = $controller->search($filter, NULL, FALSE, TRUE);
             
-            if ($deleteContracts->count()) {
+            if (! empty($deleteIds)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Deleting dependent records with id = "' . print_r($deleteContracts->getId(), 1) . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
                 }
-                $controller->delete($deleteContracts->id);
+                $controller->delete($deleteIds);
             }
             $_record->{$_property} = $existing->toArray();
         }
