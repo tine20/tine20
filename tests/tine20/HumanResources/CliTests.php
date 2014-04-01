@@ -66,7 +66,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $this->assertEquals('techniker', $susan->health_insurance, print_r($susan->toArray(), TRUE));
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $this->assertEquals($sclever->getId(), $susan->account_id, print_r($susan->toArray(), TRUE));
-        $this->assertEquals('1973-12-11 23:00:00', $susan->bday->__toString(), print_r($susan->toArray(), TRUE));
+        $this->assertEquals('1973-12-12 00:00:00', $susan->bday->__toString(), print_r($susan->toArray(), TRUE));
         
         $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
         $this->assertEquals(1, $susan->contracts->count(), 'no contracts found');

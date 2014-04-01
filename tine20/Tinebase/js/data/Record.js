@@ -137,8 +137,12 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      * @return {String}
      */
     getTitle: function() {
-        var s = this.titleProperty ? this.titleProperty.split('.') : [null];
-        return (s.length > 0 && this.get(s[0]) && this.get(s[0])[s[1]]) ? this.get(s[0])[s[1]] : s[0] ? this.get(this.titleProperty) : '';
+        if (Tine.Tinebase.data.TitleRendererManager.has(this.appName, this.modelName)) {
+            return Tine.Tinebase.data.TitleRendererManager.get(this.appName, this.modelName)(this);
+        } else {
+            var s = this.titleProperty ? this.titleProperty.split('.') : [null];
+            return (s.length > 0 && this.get(s[0]) && this.get(s[0])[s[1]]) ? this.get(s[0])[s[1]] : s[0] ? this.get(this.titleProperty) : '';
+        }
     },
     /**
      * returns the id of the record
