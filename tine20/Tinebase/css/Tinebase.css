@@ -865,7 +865,7 @@ span:hover.tinebase-showheaders-link {
     
 .tinebase-editmultipledialog-noneedit, 
 input.tinebase-editmultipledialog-noneedit, 
-textarea.tinebase-editmultipledialog-noneedit {
+textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     background-color: #f4f1d3;
     background-image:none!important;
     }
