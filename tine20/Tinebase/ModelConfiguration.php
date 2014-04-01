@@ -151,6 +151,15 @@ class Tinebase_ModelConfiguration {
     protected $_multipleEditRequiredRight = NULL;
 
     /**
+     * if this is set to true, this model will be added to the global add splitbutton
+     *
+     * @todo add this to a "frontend configuration"
+     * 
+     * @var boolen
+     */
+    protected $_splitButton = FALSE;
+    
+    /**
      * Group name of this model (will create a parent node in the modulepanel with this name)
      * add translation information in comments like: // _('Group')
      *
@@ -200,7 +209,7 @@ class Tinebase_ModelConfiguration {
      *       Add translation information in comments like: // _('Title')
      *       @type: String, @default: NULL
      *
-     * - default: The default Value of the field.
+     * - default: The default value of the field.
      *       Add translation information in comments like: // _('New Car')
      *       @type: as defined (see DEFAULT MAPPING), @default: NULL
      *
@@ -460,12 +469,19 @@ class Tinebase_ModelConfiguration {
     protected $_readOnlyFields = array();
 
     /**
-     * holds the date and datetime fields
+     * holds the datetime fields
      *
      * @var array
     */
     protected $_datetimeFields = array();
 
+    /**
+     * holds the date fields (maybe we use Tinebase_Date sometimes)
+     * 
+     * @var array
+     */
+    protected $_dateFields = array();
+    
     /**
      * holds the alarm datetime fields
      *
@@ -531,7 +547,7 @@ class Tinebase_ModelConfiguration {
      * @var array
     */
     protected $_modelProperties = array(
-        '_identifier', '_timeFields', '_datetimeFields', '_alarmDateTimeField', '_validators', '_modlogOmitFields',
+        '_identifier', '_timeFields', '_dateFields', '_datetimeFields', '_alarmDateTimeField', '_validators', '_modlogOmitFields',
         '_application', '_readOnlyFields', '_filters'
     );
 
@@ -545,7 +561,7 @@ class Tinebase_ModelConfiguration {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent',
-        'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty'
+        'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton'
     );
 
     /**
@@ -809,11 +825,16 @@ class Tinebase_ModelConfiguration {
             } else {
                 $fieldDef['validators'] = $this->_validators[$fieldKey] = array(Zend_Filter_Input::ALLOW_EMPTY => true);
             }
-
+            
             // set input filters, append defined if any or use defaults from _inputFilterDefaultMapping 
             if ((isset($fieldDef['inputFilters']) || array_key_exists('inputFilters', $fieldDef))) {
-                foreach ($fieldDef['inputFilters'] as $if => $val) { 
-                    $this->_filters[$fieldKey][] = $if ? new $if($val) : new $val();
+                foreach ($fieldDef['inputFilters'] as $if => $val) {
+                    if (is_array($val)) {
+                        $reflect  = new ReflectionClass($if);
+                        $this->_filters[$fieldKey][] = $reflect->newInstanceArgs($val);
+                    } else {
+                        $this->_filters[$fieldKey][] = $if ? new $if($val) : new $val();
+                    }
                 }
             } else if ((isset($this->_inputFilterDefaultMapping[$fieldDef['type']]) || array_key_exists($fieldDef['type'], $this->_inputFilterDefaultMapping))) {
                 foreach ($this->_inputFilterDefaultMapping[$fieldDef['type']] as $if => $val) {
@@ -827,6 +848,7 @@ class Tinebase_ModelConfiguration {
             }
             
             $this->_populateProperties($fieldKey, $fieldDef);
+            
         }
         
         // set some default filters
@@ -855,6 +877,9 @@ class Tinebase_ModelConfiguration {
             case 'container':
                 break;
             case 'date':
+                // add to datetime fields
+                $this->_dateFields[] = $fieldKey;
+                break;
             case 'datetime':
                 // add to alarm fields
                 if ((isset($fieldDef['alarm']) || array_key_exists('alarm', $fieldDef))) {

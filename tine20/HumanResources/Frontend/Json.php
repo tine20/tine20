@@ -580,8 +580,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'feastDays'         => $feastDays,
                 'contracts'         => $contracts->toArray(),
                 'employee'          => $employee->toArray(),
-                'firstDay'          => $firstDay->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)),
-                'lastDay'           => $stopDay->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)),
+                'firstDay'          => $firstDay,
+                'lastDay'           => $stopDay,
              )
         );
     }
