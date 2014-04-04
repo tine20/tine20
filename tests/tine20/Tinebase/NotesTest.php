@@ -197,6 +197,23 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try to search for deleted notes
+     */
+    public function testDoNotGetDeletedNotes()
+    {
+        $filter = new Tinebase_Model_NoteFilter(array(array(
+            'field' => 'query',
+            'operator' => 'contains',
+            'value' => 'phpunit'
+        )));
+        $notes = $this->_instance->searchNotes($filter, new Tinebase_Model_Pagination());
+        $notesCount = $this->_instance->searchNotesCount($filter);
+        
+        $this->assertEquals(0, $notes->count());
+        $this->assertEquals(0, $notesCount);
+    }
+    
+    /**
      * try to delete a note type
      *
      */
