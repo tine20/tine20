@@ -1209,7 +1209,26 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function getTitle()
     {
         $c = static::getConfiguration();
-        return $this->{($c ? $c->titleProperty : 'title')};
+        
+        // TODO: fallback, remove if all models use modelconfiguration
+        if (! $c) {
+            return $this->title;
+        }
+        
+        // use vsprintf formatting if it is an array
+        if (is_array($c->titleProperty)) {
+            if (! is_array($c->titleProperty[1])) {
+                $propertyValues = array($this->{$c->titleProperty[1]});
+            } else {
+                $propertyValues = array();
+                foreach($c->titleProperty[1] as $property) {
+                    $propertyValues[] = $this->{$property};
+                }
+            }
+            return vsprintf($c->titleProperty[0], $propertyValues);
+        } else {
+            return $this->{$c->titleProperty};
+        }
     }
     
     /**
@@ -1219,5 +1238,23 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public static function getResolveForeignIdFields()
     {
         return static::$_resolveForeignIdFields;
+    }
+    
+    /**
+     * returns all textfields having labels for the autocomplete field function
+     * 
+     * @return array
+     */
+    public static function getAutocompleteFields()
+    {
+        $keys = array();
+        
+        foreach (self::getConfiguration()->getFields() as $key => $fieldDef) {
+            if ($fieldDef['type'] == 'string' || $fieldDef['type'] == 'text') {
+                $keys[] = $key;
+            }
+        }
+        
+        return $keys;
     }
 }
