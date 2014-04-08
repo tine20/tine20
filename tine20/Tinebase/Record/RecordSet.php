@@ -544,7 +544,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param string $_value
      * @return Tinebase_Record_RecordSet
      */
-    public function filter($_field, $_value, $_valueIsRegExp = FALSE)
+    public function filter($_field, $_value = NULL, $_valueIsRegExp = FALSE)
     {
         $matchingRecords = $this->_getMatchingRecords($_field, $_value, $_valueIsRegExp);
         
@@ -570,30 +570,35 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * filter recordset and return matching records
      *
-     * @param string $_field
+     * @param string|function $_field
      * @param string $_value
+     * @param boolean $_valueIsRegExp
      * @return array
      * 
      * @todo reactivate indices (@see 0007558: reactivate indices in Tinebase_Record_RecordSet)
      */
     protected function _getMatchingRecords($_field, $_value, $_valueIsRegExp = FALSE)
     {
-        // NOTE: indices may lead to wrong results if a record is changed after build of indices
-        if (FALSE && (isset($this->_indices[$_field]) || array_key_exists($_field, $this->_indices))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Filtering with indices, expecting fast results ;-)');
-            $valueMap = $this->_indices[$_field];
+        if (is_callable($_field)) {
+            $matchingRecords = array_filter($this->_listOfRecords, $_field);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Filtering field '$_field' of '{$this->_recordClass}' without indices, expecting slow results");
-            $valueMap = $this->$_field;
+            // NOTE: indices may lead to wrong results if a record is changed after build of indices
+            if (FALSE && (isset($this->_indices[$_field]) || array_key_exists($_field, $this->_indices))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Filtering with indices, expecting fast results ;-)');
+                $valueMap = $this->_indices[$_field];
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Filtering field '$_field' of '{$this->_recordClass}' without indices, expecting slow results");
+                $valueMap = $this->$_field;
+            }
+            
+            if ($_valueIsRegExp) {
+                $matchingMap = preg_grep($_value,  $valueMap);
+            } else {
+                $matchingMap = array_flip((array)array_keys($valueMap, $_value));
+            }
+            
+            $matchingRecords = array_intersect_key($this->_listOfRecords, $matchingMap);
         }
-        
-        if ($_valueIsRegExp) {
-            $matchingMap = preg_grep($_value,  $valueMap);
-        } else {
-            $matchingMap = array_flip((array)array_keys($valueMap, $_value));
-        }
-        
-        $matchingRecords = array_intersect_key($this->_listOfRecords, $matchingMap);
         return $matchingRecords;
     }
     

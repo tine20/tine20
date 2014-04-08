@@ -1241,10 +1241,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $recurid = $_alarm->getOption('recurid');
                 $instanceStart = $recurid ? new Tinebase_DateTime(substr($recurid, -19)) : clone $_record->dtstart;
                 $eventLength = $_record->dtstart->diff($_record->dtend);
-        
-                // make sure we hit the next instance
+                
                 $instanceStart->setTimezone($_record->originator_tz);
-                $from = $instanceStart->add($eventLength)->addMinute(1);
+                $from = $instanceStart->add($eventLength);
                 $from->setTimezone('UTC');
             }
             
@@ -1280,7 +1279,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $_alarm->setOption('minutes_before', $minutesBefore);
         $_alarm->alarm_time = $eventStart->subMinute($minutesBefore);
         
-        // don't repeat same alarm @see bug #7430
         if ($_record->rrule && $_alarm->sent_status == Tinebase_Model_Alarm::STATUS_PENDING && $_alarm->alarm_time < $_alarm->sent_time) {
             $this->adoptAlarmTime($_record, $_alarm, 'instance');
         }
