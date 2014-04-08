@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-10-30 07:30+0000\n"
-"Last-Translator: Gurney <inscription@arrakeen.net>\n"
+"PO-Revision-Date: 2014-03-21 11:59+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -47,14 +47,20 @@ msgstr "Créer ou mettre à jour les favoris de prospects partagés"
 msgid "%s's personal leads"
 msgstr "Prospects personnels de %s"
 
-#: Controller.php:162 Model/Lead.php:120 js/LeadGridDetailsPanel.js:45
-#: js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
-#: js/LeadGridPanel.js:122 Controller/Lead.php:186
+#: Controller.php:162 Model/Lead.php:120 js/Crm-FAT.js:6
+#: js/LeadGridDetailsPanel.js:45 js/Crm-FAT-debug.js:981
+#: js/Crm-FAT-debug.js:1143 js/Crm-FAT-debug.js:1586 js/Crm-FAT-debug.js:3271
+#: js/Crm-FAT-debug.js:3466 js/Crm-FAT-debug.js:3506 js/Contact.js:161
+#: js/Contact.js:356 js/Contact.js:396 js/LeadGridPanel.js:122
+#: Controller/Lead.php:186
 msgid "Customer"
 msgstr "Client"
 
-#: Controller.php:163 js/LeadGridDetailsPanel.js:45 js/Contact.js:181
-#: js/Contact.js:357 js/Contact.js:400 js/LeadGridPanel.js:121
+#: Controller.php:163 js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:45
+#: js/Crm-FAT-debug.js:980 js/Crm-FAT-debug.js:1143 js/Crm-FAT-debug.js:1569
+#: js/Crm-FAT-debug.js:3291 js/Crm-FAT-debug.js:3467 js/Crm-FAT-debug.js:3510
+#: js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
+#: js/LeadGridPanel.js:121
 msgid "Partner"
 msgstr "Partenaire"
 
@@ -102,7 +108,9 @@ msgstr "Téléphone"
 msgid "Website"
 msgstr "Site web"
 
-#: Model/Lead.php:119 js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
+#: Model/Lead.php:119 js/Crm-FAT.js:6 js/Crm-FAT-debug.js:979
+#: js/Crm-FAT-debug.js:3281 js/Crm-FAT-debug.js:3465 js/Crm-FAT-debug.js:3502
+#: js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
 #: js/LeadGridPanel.js:120
 msgid "Responsible"
 msgstr "Responsable"
@@ -175,37 +183,44 @@ msgstr "Le favoris par défaut qui est charge au lancement du GRC"
 msgid "Lead Data"
 msgstr "Données du prospect"
 
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadStateFilterModel.js:32
-#: js/LeadEditDialog.js:343 js/LeadGridPanel.js:123
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/Crm-FAT.js:6
+#: js/LeadStateFilterModel.js:32 js/LeadEditDialog.js:343
+#: js/Crm-FAT-debug.js:982 js/Crm-FAT-debug.js:1997 js/Crm-FAT-debug.js:2406
+#: js/Crm-FAT-debug.js:2711 js/LeadGridPanel.js:123
 msgid "Leadstate"
 msgstr "État du prospect"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:454
-#: js/LeadEditDialog.js:362
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/Crm-FAT.js:6
+#: js/LeadGridDetailsPanel.js:454 js/LeadEditDialog.js:362
+#: js/Crm-FAT-debug.js:1553 js/Crm-FAT-debug.js:2016 js/Crm-FAT-debug.js:2420
 msgid "Leadtype"
 msgstr "Type du prospect"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:459
-#: js/LeadEditDialog.js:369
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/Crm-FAT.js:6
+#: js/LeadGridDetailsPanel.js:459 js/LeadEditDialog.js:369
+#: js/Crm-FAT-debug.js:1558 js/Crm-FAT-debug.js:2023 js/Crm-FAT-debug.js:2413
 msgid "Leadsource"
 msgstr "Origine du prospect"
 
-#: Export/Pdf.php:87 js/Model.js:109 js/LeadGridPanel.js:125
-#: Controller/Lead.php:193
+#: Export/Pdf.php:87 js/Crm-FAT.js:6 js/Model.js:109 js/Crm-FAT-debug.js:394
+#: js/Crm-FAT-debug.js:984 js/LeadGridPanel.js:125 Controller/Lead.php:193
 msgid "Turnover"
 msgstr "Rotation"
 
-#: Export/Pdf.php:90 js/Model.js:108 js/LeadEditDialog.js:222
+#: Export/Pdf.php:90 js/Crm-FAT.js:6 js/Model.js:108 js/LeadEditDialog.js:222
+#: js/Crm-FAT-debug.js:393 js/Crm-FAT-debug.js:983 js/Crm-FAT-debug.js:1879
 #: js/LeadGridPanel.js:124 Controller/Lead.php:194
 msgid "Probability"
 msgstr "Probabilité"
 
-#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:444 js/LeadEditDialog.js:401
+#: Export/Pdf.php:93 js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:444
+#: js/LeadEditDialog.js:401 js/Crm-FAT-debug.js:1543 js/Crm-FAT-debug.js:2055
 #: Controller/Lead.php:190
 msgid "Start"
 msgstr "Début"
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:192
+#: Export/Pdf.php:96 js/Crm-FAT.js:6 js/LeadEditDialog.js:229
+#: js/Crm-FAT-debug.js:1886 Controller/Lead.php:192
 msgid "End"
 msgstr "Fin"
 
@@ -217,23 +232,25 @@ msgstr "Fin planifiée"
 msgid "Contacts"
 msgstr "Contacts"
 
-#: Export/Pdf.php:211 js/Contact.js:231
+#: Export/Pdf.php:211 js/Crm-FAT-debug.js:3341 js/Contact.js:231
 msgid "Address"
 msgstr "Adresse"
 
-#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:245
+#: Export/Pdf.php:232 js/Crm-FAT.js:6 js/Task.js:83 js/LeadEditDialog.js:245
+#: js/Crm-FAT-debug.js:1902 js/Crm-FAT-debug.js:3845
 msgid "Tasks"
 msgstr "Tâches"
 
-#: Export/Pdf.php:252 js/Task.js:176
+#: Export/Pdf.php:252 js/Task.js:176 js/Crm-FAT-debug.js:3938
 msgid "Due Date"
 msgstr "Date prévue"
 
-#: Export/Pdf.php:259 js/Task.js:189
+#: Export/Pdf.php:259 js/Task.js:189 js/Crm-FAT-debug.js:3951
 msgid "Priority"
 msgstr "Priorité"
 
-#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:256
+#: Export/Pdf.php:274 js/Crm-FAT.js:6 js/Product.js:85
+#: js/LeadEditDialog.js:256 js/Crm-FAT-debug.js:1913 js/Crm-FAT-debug.js:3602
 msgid "Products"
 msgstr "Produits"
 
@@ -253,174 +270,279 @@ msgstr "haute"
 msgid "urgent"
 msgstr "urgent"
 
-#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
-#: js/LeadGridDetailsPanel.js:227
+#: js/AdminPanel.js:122 js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:194
+#: js/LeadGridDetailsPanel.js:227 js/Crm-FAT-debug.js:1292
+#: js/Crm-FAT-debug.js:1325 js/Crm-FAT-debug.js:2371
 msgid "Leadstates"
 msgstr "États des prospects"
 
-#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
+#: js/AdminPanel.js:126 js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:216
+#: js/Crm-FAT-debug.js:1314 js/Crm-FAT-debug.js:2375
 msgid "Leadtypes"
 msgstr "Types des prospects"
 
-#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
+#: js/AdminPanel.js:130 js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:205
+#: js/Crm-FAT-debug.js:1303 js/Crm-FAT-debug.js:2379
 msgid "Leadsources"
 msgstr "Origines des prospects"
 
-#: js/AdminPanel.js:138
+#: js/AdminPanel.js:138 js/Crm-FAT.js:6 js/Crm-FAT-debug.js:2387
 msgid "Defaults"
 msgstr "Valeurs par défaut"
 
-#: js/LeadType.js:29
-msgid "Lead Type"
-msgid_plural "Lead Types"
-msgstr[0] "Type de prospect"
-msgstr[1] "Types de prospect"
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:389
+msgid "Quick search"
+msgstr ""
 
-#: js/LeadType.js:134
-msgid "Add a Leadtype..."
-msgstr "Ajouter un type de prospect"
+#: js/Crm-FAT.js:6 js/Model.js:106 js/Crm-FAT-debug.js:391
+#: js/Crm-FAT-debug.js:978 js/LeadGridPanel.js:119
+msgid "Lead name"
+msgstr "Nom du prospect"
 
-#: js/AddToLeadPanel.js:31
-msgid "Please choose the Lead to add the contacts to"
-msgstr "Choisissez le prospect lié aux contacts"
+#: js/Crm-FAT.js:6 js/Model.js:111 js/Crm-FAT-debug.js:396
+msgid "Last Modified Time"
+msgstr "Dernière modification"
 
-#: js/AddToLeadPanel.js:36
-msgid "Please select the attenders' role"
-msgstr "Choisissez le rôle du participant"
+#: js/Crm-FAT.js:6 js/Model.js:112 js/Crm-FAT-debug.js:397
+msgid "Last Modified By"
+msgstr "Modifié par"
 
-#: js/AddToLeadPanel.js:73 js/Model.js:50 js/LeadEditDialog.js:274
+#: js/Crm-FAT.js:6 js/Model.js:113 js/Crm-FAT-debug.js:398
+msgid "Creation Time"
+msgstr "Date de création"
+
+#: js/Crm-FAT.js:6 js/Model.js:114 js/Crm-FAT-debug.js:399
+msgid "Created By"
+msgstr "Créé par"
+
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:615 js/LinkGridPanel.js:34
+msgid "Add new {0}"
+msgstr "Ajouter un nouveau {0}"
+
+#: js/Crm-FAT.js:6 js/Product.js:185 js/Crm-FAT-debug.js:637
+#: js/Crm-FAT-debug.js:3702 js/LinkGridPanel.js:56
+msgid "Unlink {0}"
+msgstr "Délier {0}"
+
+#: js/Crm-FAT.js:6 js/Product.js:186 js/Crm-FAT-debug.js:638
+#: js/Crm-FAT-debug.js:3703 js/LinkGridPanel.js:57
+msgid "Unlink selected {0}"
+msgstr "Délier les {0} sélectionnés"
+
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:653 js/LinkGridPanel.js:72
+msgid "Edit {0}"
+msgstr "Éditer le {0}"
+
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:654 js/LinkGridPanel.js:73
+msgid "Edit selected {0}"
+msgstr "Éditer le {0} sélectionné"
+
+#: js/Crm-FAT.js:6 js/LeadGridContactFilter.js:47 js/Crm-FAT-debug.js:823
+msgid "Contact"
+msgstr "Contacte"
+
+#: js/Crm-FAT.js:6 js/LeadGridContactFilter.js:54 js/Crm-FAT-debug.js:830
+msgid "CRM Role"
+msgstr "Rôle CRM"
+
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:976 js/LeadGridPanel.js:117
+msgid "Lead id"
+msgstr "Identifiant du prospect"
+
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:977 js/LeadGridPanel.js:118
+msgid "Tags"
+msgstr "Marqueurs"
+
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:985 js/LeadGridPanel.js:126
+msgid "Probable Turnover"
+msgstr "Rotation probable"
+
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:1027 js/LeadGridPanel.js:168
+msgid "Export Lead"
+msgstr "Exporter le prospect"
+
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:1036 js/LeadGridPanel.js:177
+msgid "Export as PDF"
+msgstr "Exporter en PDF"
+
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:1043 js/LeadGridPanel.js:184
+msgid "Export as CSV"
+msgstr "Exporter en CSV"
+
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:1050 js/LeadGridPanel.js:191
+msgid "Export as ODS"
+msgstr "Exporter en ODS"
+
+#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:1057 js/LeadGridPanel.js:198
+msgid "Export as XLS"
+msgstr "Exporter en XLS"
+
+#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:48 js/Crm-FAT-debug.js:1146
+#: js/Crm-FAT-debug.js:3355 js/Contact.js:245
+msgid "Phone"
+msgstr "Téléphone"
+
+#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:51 js/Crm-FAT-debug.js:1149
+msgid "Mobile"
+msgstr "Portable"
+
+#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:54 js/Crm-FAT-debug.js:1152
+msgid "Fax"
+msgstr "Fax"
+
+#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:57 js/Crm-FAT-debug.js:1155
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:60 js/Crm-FAT-debug.js:1158
+msgid "Web"
+msgstr "Web"
+
+#: js/Crm-FAT.js:6 js/Task.js:218 js/LeadGridDetailsPanel.js:439
+#: js/Crm-FAT-debug.js:1538 js/Crm-FAT-debug.js:3980
+msgid "Status"
+msgstr "Statut"
+
+#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:449 js/LeadEditDialog.js:407
+#: js/Crm-FAT-debug.js:1548 js/Crm-FAT-debug.js:2061
+msgid "Estimated end"
+msgstr "Fin estimée"
+
+#: js/Crm-FAT.js:6 js/LeadEditDialog.js:246 js/Crm-FAT-debug.js:1903
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr "Vous n'avez pas les droits pour lancer l'application Tâches, ou  celle-ci n'est pas activée."
+
+#: js/Crm-FAT.js:6 js/LeadEditDialog.js:257 js/Crm-FAT-debug.js:1914
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr "Vous n'avez pas les droits pour lancer l'application Ventes, ou celle-ci n'est pas activée."
+
+#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:73 js/Model.js:50
+#: js/LeadEditDialog.js:274 js/Crm-FAT-debug.js:335 js/Crm-FAT-debug.js:1928
+#: js/Crm-FAT-debug.js:2222
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "Prospect"
 msgstr[1] "Prospects"
 
-#: js/AddToLeadPanel.js:74
+#: js/Crm-FAT.js:6 js/LeadEditDialog.js:301 js/Crm-FAT-debug.js:1955
+msgid "Enter short name"
+msgstr "Veuillez saisir le nom court"
+
+#: js/Crm-FAT.js:6 js/LeadEditDialog.js:385 js/Crm-FAT-debug.js:2039
+msgid "Expected turnover"
+msgstr "Rotation attendue"
+
+#: js/Crm-FAT.js:6 js/Product.js:139 js/LeadEditDialog.js:439
+#: js/Crm-FAT-debug.js:2093 js/Crm-FAT-debug.js:3656
+msgid "Description"
+msgstr "Description"
+
+#: js/Crm-FAT.js:6 js/LeadEditDialog.js:453 js/Crm-FAT-debug.js:2107
+msgid "Enter description"
+msgstr "Veuillez saisir une description"
+
+#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:31 js/Crm-FAT-debug.js:2180
+msgid "Please choose the Lead to add the contacts to"
+msgstr "Choisissez le prospect lié aux contacts"
+
+#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:36 js/Crm-FAT-debug.js:2185
+msgid "Please select the attenders' role"
+msgstr "Choisissez le rôle du participant"
+
+#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:74 js/Crm-FAT-debug.js:2223
 msgid "Select Lead"
 msgstr "Choisissez un prospect"
 
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:188
+#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:78 js/Crm-FAT-debug.js:2227
+#: js/Crm-FAT-debug.js:3362 js/Contact.js:252 Controller/Lead.php:188
 msgid "Role"
 msgstr "Rôle"
 
-#: js/AddToLeadPanel.js:79
+#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:79 js/Crm-FAT-debug.js:2228
 msgid "Select Role"
 msgstr "Choisissez un rôle"
 
-#: js/AddToLeadPanel.js:93
+#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:93 js/Crm-FAT-debug.js:2242
 msgid "Adding {0} contacts to lead"
 msgstr "Ajout de {0} contacts au prospect"
 
-#: js/Task.js:109
+#: js/LeadType.js:29 js/Crm-FAT-debug.js:3001
+msgid "Lead Type"
+msgid_plural "Lead Types"
+msgstr[0] "Type de prospect"
+msgstr[1] "Types de prospect"
+
+#: js/LeadType.js:134 js/Crm-FAT-debug.js:3106
+msgid "Add a Leadtype..."
+msgstr "Ajouter un type de prospect"
+
+#: js/Task.js:109 js/Crm-FAT-debug.js:3871
 msgid "No Tasks to display"
 msgstr "Pas de tĉhe à afficher"
 
-#: js/Task.js:168
+#: js/Task.js:168 js/Crm-FAT-debug.js:3930
 msgid "Summary"
 msgstr "Résumé"
 
-#: js/Task.js:172
+#: js/Task.js:172 js/Crm-FAT-debug.js:3934
 msgid "Add a task..."
 msgstr "Ajouter un tâche"
 
-#: js/Task.js:205
+#: js/Task.js:205 js/Crm-FAT-debug.js:3967
 msgid "Percent"
 msgstr "Pourcent"
 
-#: js/Task.js:218 js/LeadGridDetailsPanel.js:439
-msgid "Status"
-msgstr "Statut"
-
-#: js/LeadState.js:32
+#: js/LeadState.js:32 js/Crm-FAT-debug.js:2515
 msgid "Lead State"
 msgid_plural "Lead States"
 msgstr[0] "État du prospect"
 msgstr[1] "États des prospects"
 
-#: js/LeadState.js:166
+#: js/LeadState.js:166 js/Crm-FAT-debug.js:2649
 msgid "Add a Leadstate..."
 msgstr "Ajouter un état de prospect"
 
-#: js/LeadGridContactFilter.js:47
-msgid "Contact"
-msgstr "Contacte"
-
-#: js/LeadGridContactFilter.js:54
-msgid "CRM Role"
-msgstr "Rôle CRM"
-
-#: js/LeadStateFilterModel.js:37
+#: js/LeadStateFilterModel.js:37 js/Crm-FAT-debug.js:2716
 msgid "Show closed"
 msgstr "Aficher fermés"
 
-#: js/Product.js:134
+#: js/Product.js:134 js/Crm-FAT-debug.js:3651
 msgid "Product"
 msgstr "Produit"
 
-#: js/Product.js:139 js/LeadEditDialog.js:439
-msgid "Description"
-msgstr "Description"
-
-#: js/Product.js:146
+#: js/Product.js:146 js/Crm-FAT-debug.js:3663
 msgid "Price"
 msgstr "Prix"
 
-#: js/Product.js:158
+#: js/Product.js:158 js/Crm-FAT-debug.js:3675
 msgid "Quantity"
 msgstr "Quantité"
 
-#: js/Product.js:185 js/LinkGridPanel.js:56
-msgid "Unlink {0}"
-msgstr "Délier {0}"
-
-#: js/Product.js:186 js/LinkGridPanel.js:57
-msgid "Unlink selected {0}"
-msgstr "Délier les {0} sélectionnés"
-
-#: js/Product.js:216
+#: js/Product.js:216 js/Crm-FAT-debug.js:3733
 msgid "Search for Products to add ..."
 msgstr "Recherche de produits à ajouter"
 
-#: js/LeadGridDetailsPanel.js:48 js/Contact.js:245
-msgid "Phone"
-msgstr "Téléphone"
-
-#: js/LeadGridDetailsPanel.js:51
-msgid "Mobile"
-msgstr "Portable"
-
-#: js/LeadGridDetailsPanel.js:54
-msgid "Fax"
-msgstr "Fax"
-
-#: js/LeadGridDetailsPanel.js:57
-msgid "E-Mail"
-msgstr "E-Mail"
-
-#: js/LeadGridDetailsPanel.js:60
-msgid "Web"
-msgstr "Web"
-
-#: js/LeadGridDetailsPanel.js:449 js/LeadEditDialog.js:407
-msgid "Estimated end"
-msgstr "Fin estimée"
-
-#: js/LeadSource.js:29
+#: js/LeadSource.js:29 js/Crm-FAT-debug.js:2861
 msgid "Lead Source"
 msgid_plural "Lead Sources"
 msgstr[0] "Origine de prospect"
 msgstr[1] "Origines des prospects"
 
-#: js/LeadSource.js:136
+#: js/LeadSource.js:136 js/Crm-FAT-debug.js:2968
 msgid "Add a Leadsource..."
 msgstr "Ajouter une origine de prospect"
 
-#: js/Model.js:54
+#: js/Model.js:54 js/Crm-FAT-debug.js:339
 msgid "lead list"
 msgid_plural "lead lists"
 msgstr[0] "liste de prospects"
 msgstr[1] "listes de prospects"
 
-#: js/Model.js:54
+#: js/Model.js:54 js/Crm-FAT-debug.js:339
 msgid "lead lists"
 msgstr "listes de prospects"
 
@@ -428,141 +550,53 @@ msgstr "listes de prospects"
 msgid "Quick Search"
 msgstr "Recherche rapide"
 
-#: js/Model.js:106 js/LeadGridPanel.js:119
-msgid "Lead name"
-msgstr "Nom du prospect"
-
-#: js/Model.js:111
-msgid "Last Modified Time"
-msgstr "Dernière modification"
-
-#: js/Model.js:112
-msgid "Last Modified By"
-msgstr "Modifié par"
-
-#: js/Model.js:113
-msgid "Creation Time"
-msgstr "Date de création"
-
-#: js/Model.js:114
-msgid "Created By"
-msgstr "Créé par"
-
-#: js/Model.js:153
+#: js/Model.js:153 js/Crm-FAT-debug.js:438
 msgid "Settings"
 msgid_plural "Settings"
 msgstr[0] "Paramètre"
 msgstr[1] "Paramètres"
 
-#: js/Model.js:156
+#: js/Model.js:156 js/Crm-FAT-debug.js:442
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "liste d'enregistrements"
 msgstr[1] "listes d'enregistrements"
 
-#: js/LeadEditDialog.js:246
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
-msgstr "Vous n'avez pas les droits pour lancer l'application Tâches, ou  celle-ci n'est pas activée."
+#: js/Crm-FAT-debug.js:481 js/Crm.js:24
+msgid "New Lead"
+msgstr "Nouveau prospect"
 
-#: js/LeadEditDialog.js:257
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
-msgstr "Vous n'avez pas les droits pour lancer l'application Ventes, ou celle-ci n'est pas activée."
-
-#: js/LeadEditDialog.js:301
-msgid "Enter short name"
-msgstr "Veuillez saisir le nom court"
-
-#: js/LeadEditDialog.js:385
-msgid "Expected turnover"
-msgstr "Rotation attendue"
-
-#: js/LeadEditDialog.js:453
-msgid "Enter description"
-msgstr "Veuillez saisir une description"
-
-#: js/Contact.js:162
+#: js/Crm-FAT-debug.js:3272 js/Contact.js:162
 msgid "Change type to Customer"
 msgstr "Modifier en client"
 
-#: js/Contact.js:172
+#: js/Crm-FAT-debug.js:3282 js/Contact.js:172
 msgid "Change type to Responsible"
 msgstr "Modifier en responsable"
 
-#: js/Contact.js:182
+#: js/Crm-FAT-debug.js:3292 js/Contact.js:182
 msgid "Change type to Partner"
 msgstr "Modifier en partenaire"
 
-#: js/Contact.js:193
+#: js/Crm-FAT-debug.js:3303 js/Contact.js:193
 msgid "Change contact type"
 msgstr "Modifier le type de contacte"
 
-#: js/Contact.js:205
+#: js/Crm-FAT-debug.js:3315 js/Contact.js:205
 msgid "Search for Contacts to add ..."
 msgstr "Recherche de contacte à ajouter..."
 
-#: js/Contact.js:222
+#: js/Crm-FAT-debug.js:3332 js/Contact.js:222
 msgid "Name"
 msgstr "Nom"
 
-#: js/Contact.js:242
+#: js/Crm-FAT-debug.js:3352 js/Contact.js:242
 msgid "Data"
 msgstr "Données"
 
-#: js/Contact.js:246
+#: js/Crm-FAT-debug.js:3356 js/Contact.js:246
 msgid "Cellphone"
 msgstr "Téléphone (portable)"
-
-#: js/LinkGridPanel.js:34
-msgid "Add new {0}"
-msgstr "Ajouter un nouveau {0}"
-
-#: js/LinkGridPanel.js:72
-msgid "Edit {0}"
-msgstr "Éditer le {0}"
-
-#: js/LinkGridPanel.js:73
-msgid "Edit selected {0}"
-msgstr "Éditer le {0} sélectionné"
-
-#: js/LeadGridPanel.js:117
-msgid "Lead id"
-msgstr "Identifiant du prospect"
-
-#: js/LeadGridPanel.js:118
-msgid "Tags"
-msgstr "Marqueurs"
-
-#: js/LeadGridPanel.js:126
-msgid "Probable Turnover"
-msgstr "Rotation probable"
-
-#: js/LeadGridPanel.js:168
-msgid "Export Lead"
-msgstr "Exporter le prospect"
-
-#: js/LeadGridPanel.js:177
-msgid "Export as PDF"
-msgstr "Exporter en PDF"
-
-#: js/LeadGridPanel.js:184
-msgid "Export as CSV"
-msgstr "Exporter en CSV"
-
-#: js/LeadGridPanel.js:191
-msgid "Export as ODS"
-msgstr "Exporter en ODS"
-
-#: js/LeadGridPanel.js:198
-msgid "Export as XLS"
-msgstr "Exporter en XLS"
-
-#: js/Crm.js:24
-msgid "New Lead"
-msgstr "Nouveau prospect"
 
 #: Controller/Lead.php:187
 msgid "State"

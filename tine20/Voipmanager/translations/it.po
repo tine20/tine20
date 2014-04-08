@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 17:05+0000\n"
+"PO-Revision-Date: 2014-03-21 12:02+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -17,27 +17,41 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: js/Snom/SettingEditDialog.js:91 js/Snom/PhoneEditDialog.js:384
-#: js/Snom/TemplateEditDialog.js:68
+#: js/Snom/TemplateEditDialog.js:68 js/Voipmanager-FAT-debug.js:2156
+#: js/Voipmanager-FAT-debug.js:2824 js/Voipmanager-FAT-debug.js:3910
+#: js/Voipmanager-FAT.js:6
 msgid "Settings"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:111 js/Snom/SettingEditDialog.js:183
 #: js/Snom/SoftwareEditDialog.js:60 js/Snom/SoftwareGridPanel.js:49
 #: js/Snom/PhoneEditDialog.js:450 js/Snom/SettingGridPanel.js:49
-#: js/Snom/TemplateGridPanel.js:49 js/Asterisk/SipPeerGridPanel.js:49
+#: js/Snom/TemplateGridPanel.js:49 js/Voipmanager-FAT-debug.js:1845
+#: js/Voipmanager-FAT-debug.js:1932 js/Voipmanager-FAT-debug.js:2040
+#: js/Voipmanager-FAT-debug.js:2890 js/Voipmanager-FAT-debug.js:3709
+#: js/Voipmanager-FAT-debug.js:3930 js/Voipmanager-FAT-debug.js:4002
+#: js/Voipmanager-FAT-debug.js:4222 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:49
 msgid "name"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:120 js/Snom/SoftwareEditDialog.js:66
 #: js/Snom/SoftwareGridPanel.js:55 js/Snom/TemplateEditDialog.js:48
 #: js/Snom/LocationEditDialog.js:48 js/Snom/TemplateGridPanel.js:55
-#: js/Snom/LocationGridPanel.js:127 js/Asterisk/ContextEditDialog.js:48
+#: js/Snom/LocationGridPanel.js:127 js/Voipmanager-FAT-debug.js:1851
+#: js/Voipmanager-FAT-debug.js:1938 js/Voipmanager-FAT-debug.js:2046
+#: js/Voipmanager-FAT-debug.js:2136 js/Voipmanager-FAT-debug.js:3169
+#: js/Voipmanager-FAT-debug.js:3259 js/Voipmanager-FAT-debug.js:3939
+#: js/Voipmanager-FAT-debug.js:4807 js/Voipmanager-FAT-debug.js:4879
+#: js/Voipmanager-FAT.js:6 js/Asterisk/ContextEditDialog.js:48
 #: js/Asterisk/ContextGridPanel.js:58
 msgid "Description"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:124 js/Snom/PhoneEditDialog.js:402
-#: js/Snom/SettingGridPanel.js:61
+#: js/Snom/SettingGridPanel.js:61 js/Voipmanager-FAT-debug.js:2842
+#: js/Voipmanager-FAT-debug.js:3721 js/Voipmanager-FAT-debug.js:3943
+#: js/Voipmanager-FAT.js:6
 msgid "web_language"
 msgstr ""
 
@@ -54,37 +68,65 @@ msgstr ""
 #: js/Snom/PhoneEditDialog.js:499 js/Snom/PhoneEditDialog.js:508
 #: js/Snom/PhoneEditDialog.js:517 js/Snom/PhoneEditDialog.js:526
 #: js/Snom/PhoneEditDialog.js:535 js/Snom/PhoneEditDialog.js:544
+#: js/Voipmanager-FAT-debug.js:2846 js/Voipmanager-FAT-debug.js:2864
+#: js/Voipmanager-FAT-debug.js:2888 js/Voipmanager-FAT-debug.js:2900
+#: js/Voipmanager-FAT-debug.js:2911 js/Voipmanager-FAT-debug.js:2921
+#: js/Voipmanager-FAT-debug.js:2930 js/Voipmanager-FAT-debug.js:2939
+#: js/Voipmanager-FAT-debug.js:2948 js/Voipmanager-FAT-debug.js:2957
+#: js/Voipmanager-FAT-debug.js:2966 js/Voipmanager-FAT-debug.js:2975
+#: js/Voipmanager-FAT-debug.js:3950 js/Voipmanager-FAT-debug.js:3972
+#: js/Voipmanager-FAT-debug.js:4000 js/Voipmanager-FAT-debug.js:4016
+#: js/Voipmanager-FAT-debug.js:4031 js/Voipmanager-FAT-debug.js:4045
+#: js/Voipmanager-FAT-debug.js:4058 js/Voipmanager-FAT-debug.js:4071
+#: js/Voipmanager-FAT-debug.js:4084 js/Voipmanager-FAT-debug.js:4097
+#: js/Voipmanager-FAT-debug.js:4110 js/Voipmanager-FAT-debug.js:4123
+#: js/Voipmanager-FAT.js:6
 msgid "- factory default -"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:146 js/Snom/PhoneEditDialog.js:420
-#: js/Snom/SettingGridPanel.js:68 js/Asterisk/SipPeerGridPanel.js:144
+#: js/Snom/SettingGridPanel.js:68 js/Voipmanager-FAT-debug.js:2860
+#: js/Voipmanager-FAT-debug.js:3728 js/Voipmanager-FAT-debug.js:3965
+#: js/Voipmanager-FAT-debug.js:4317 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:144
 msgid "language"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:174 js/Snom/PhoneEditDialog.js:444
-#: js/Snom/SettingGridPanel.js:75
+#: js/Snom/SettingGridPanel.js:75 js/Voipmanager-FAT-debug.js:2884
+#: js/Voipmanager-FAT-debug.js:3735 js/Voipmanager-FAT-debug.js:3993
+#: js/Voipmanager-FAT.js:6
 msgid "display_method"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:182 js/Snom/PhoneEditDialog.js:449
+#: js/Voipmanager-FAT-debug.js:2889 js/Voipmanager-FAT-debug.js:4001
+#: js/Voipmanager-FAT.js:6
 msgid "whole url"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:184 js/Snom/PhoneEditDialog.js:451
+#: js/Voipmanager-FAT-debug.js:2891 js/Voipmanager-FAT-debug.js:4003
+#: js/Voipmanager-FAT.js:6
 msgid "number"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:185 js/Snom/PhoneEditDialog.js:452
+#: js/Voipmanager-FAT-debug.js:2892 js/Voipmanager-FAT-debug.js:4004
+#: js/Voipmanager-FAT.js:6
 msgid "name + number"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:186 js/Snom/PhoneEditDialog.js:453
+#: js/Voipmanager-FAT-debug.js:2893 js/Voipmanager-FAT-debug.js:4005
+#: js/Voipmanager-FAT.js:6
 msgid "number + name"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:190 js/Snom/PhoneEditDialog.js:456
-#: js/Snom/SettingGridPanel.js:145
+#: js/Snom/SettingGridPanel.js:145 js/Voipmanager-FAT-debug.js:2896
+#: js/Voipmanager-FAT-debug.js:3798 js/Voipmanager-FAT-debug.js:4009
+#: js/Voipmanager-FAT.js:6
 msgid "call_waiting"
 msgstr ""
 
@@ -96,16 +138,29 @@ msgstr ""
 #: js/Snom/PhoneEditDialog.js:518 js/Snom/PhoneEditDialog.js:527
 #: js/Snom/PhoneEditDialog.js:536 js/Snom/PhoneEditDialog.js:545
 #: js/Snom/LocationEditDialog.js:162 js/Snom/LocationEditDialog.js:183
+#: js/Voipmanager-FAT-debug.js:2901 js/Voipmanager-FAT-debug.js:2940
+#: js/Voipmanager-FAT-debug.js:2949 js/Voipmanager-FAT-debug.js:2958
+#: js/Voipmanager-FAT-debug.js:2967 js/Voipmanager-FAT-debug.js:2976
+#: js/Voipmanager-FAT-debug.js:3373 js/Voipmanager-FAT-debug.js:3394
+#: js/Voipmanager-FAT-debug.js:4017 js/Voipmanager-FAT-debug.js:4072
+#: js/Voipmanager-FAT-debug.js:4085 js/Voipmanager-FAT-debug.js:4098
+#: js/Voipmanager-FAT-debug.js:4111 js/Voipmanager-FAT-debug.js:4124
+#: js/Voipmanager-FAT-debug.js:4692 js/Voipmanager-FAT-debug.js:4703
+#: js/Voipmanager-FAT-debug.js:5246 js/Voipmanager-FAT.js:6
 #: js/Asterisk/SipPeerEditDialog.js:160 js/Asterisk/SipPeerEditDialog.js:171
 #: js/Asterisk/VoicemailEditDialog.js:112
 msgid "on"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:199 js/Snom/PhoneEditDialog.js:462
+#: js/Voipmanager-FAT-debug.js:2902 js/Voipmanager-FAT-debug.js:4018
+#: js/Voipmanager-FAT.js:6
 msgid "visual"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:200 js/Snom/PhoneEditDialog.js:463
+#: js/Voipmanager-FAT-debug.js:2903 js/Voipmanager-FAT-debug.js:4019
+#: js/Voipmanager-FAT.js:6
 msgid "ringer"
 msgstr ""
 
@@ -117,76 +172,115 @@ msgstr ""
 #: js/Snom/PhoneEditDialog.js:519 js/Snom/PhoneEditDialog.js:528
 #: js/Snom/PhoneEditDialog.js:537 js/Snom/PhoneEditDialog.js:546
 #: js/Snom/LocationEditDialog.js:163 js/Snom/LocationEditDialog.js:184
+#: js/Voipmanager-FAT-debug.js:2904 js/Voipmanager-FAT-debug.js:2941
+#: js/Voipmanager-FAT-debug.js:2950 js/Voipmanager-FAT-debug.js:2959
+#: js/Voipmanager-FAT-debug.js:2968 js/Voipmanager-FAT-debug.js:2977
+#: js/Voipmanager-FAT-debug.js:3374 js/Voipmanager-FAT-debug.js:3395
+#: js/Voipmanager-FAT-debug.js:4020 js/Voipmanager-FAT-debug.js:4073
+#: js/Voipmanager-FAT-debug.js:4086 js/Voipmanager-FAT-debug.js:4099
+#: js/Voipmanager-FAT-debug.js:4112 js/Voipmanager-FAT-debug.js:4125
+#: js/Voipmanager-FAT-debug.js:4692 js/Voipmanager-FAT-debug.js:4703
+#: js/Voipmanager-FAT-debug.js:5247 js/Voipmanager-FAT.js:6
 #: js/Asterisk/SipPeerEditDialog.js:160 js/Asterisk/SipPeerEditDialog.js:171
 #: js/Asterisk/VoicemailEditDialog.js:113
 msgid "off"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:205 js/Snom/PhoneEditDialog.js:467
-#: js/Snom/SettingGridPanel.js:82
+#: js/Snom/SettingGridPanel.js:82 js/Voipmanager-FAT-debug.js:2907
+#: js/Voipmanager-FAT-debug.js:3742 js/Voipmanager-FAT-debug.js:4024
+#: js/Voipmanager-FAT.js:6
 msgid "mwi_notification"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:213 js/Snom/PhoneEditDialog.js:472
+#: js/Voipmanager-FAT-debug.js:2912 js/Voipmanager-FAT-debug.js:4032
+#: js/Voipmanager-FAT.js:6
 msgid "silent"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:214 js/Snom/PhoneEditDialog.js:473
+#: js/Voipmanager-FAT-debug.js:2913 js/Voipmanager-FAT-debug.js:4033
+#: js/Voipmanager-FAT.js:6
 msgid "beep"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:215 js/Snom/PhoneEditDialog.js:474
+#: js/Voipmanager-FAT-debug.js:2914 js/Voipmanager-FAT-debug.js:4034
+#: js/Voipmanager-FAT.js:6
 msgid "reminder"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:219 js/Snom/PhoneEditDialog.js:477
-#: js/Snom/SettingGridPanel.js:89
+#: js/Snom/SettingGridPanel.js:89 js/Voipmanager-FAT-debug.js:2917
+#: js/Voipmanager-FAT-debug.js:3749 js/Voipmanager-FAT-debug.js:4038
+#: js/Voipmanager-FAT.js:6
 msgid "mwi_dialtone"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:227 js/Snom/PhoneEditDialog.js:482
+#: js/Voipmanager-FAT-debug.js:2922 js/Voipmanager-FAT-debug.js:4046
+#: js/Voipmanager-FAT.js:6
 msgid "normal"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:228 js/Snom/PhoneEditDialog.js:483
+#: js/Voipmanager-FAT-debug.js:2923 js/Voipmanager-FAT-debug.js:4047
+#: js/Voipmanager-FAT.js:6
 msgid "stutter"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:232 js/Snom/PhoneEditDialog.js:486
-#: js/Snom/SettingGridPanel.js:96
+#: js/Snom/SettingGridPanel.js:96 js/Voipmanager-FAT-debug.js:2926
+#: js/Voipmanager-FAT-debug.js:3756 js/Voipmanager-FAT-debug.js:4051
+#: js/Voipmanager-FAT.js:6
 msgid "headset_device"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:240 js/Snom/PhoneEditDialog.js:491
+#: js/Voipmanager-FAT-debug.js:2931 js/Voipmanager-FAT-debug.js:4059
+#: js/Voipmanager-FAT.js:6
 msgid "none"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:241 js/Snom/PhoneEditDialog.js:492
+#: js/Voipmanager-FAT-debug.js:2932 js/Voipmanager-FAT-debug.js:4060
+#: js/Voipmanager-FAT.js:6
 msgid "headset_rj"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:245 js/Snom/PhoneEditDialog.js:495
-#: js/Snom/SettingGridPanel.js:103
+#: js/Snom/SettingGridPanel.js:103 js/Voipmanager-FAT-debug.js:2935
+#: js/Voipmanager-FAT-debug.js:3763 js/Voipmanager-FAT-debug.js:4064
+#: js/Voipmanager-FAT.js:6
 msgid "message_led_other"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:258 js/Snom/PhoneEditDialog.js:504
-#: js/Snom/SettingGridPanel.js:110
+#: js/Snom/SettingGridPanel.js:110 js/Voipmanager-FAT-debug.js:2944
+#: js/Voipmanager-FAT-debug.js:3770 js/Voipmanager-FAT-debug.js:4077
+#: js/Voipmanager-FAT.js:6
 msgid "global_missed_counter"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:271 js/Snom/PhoneEditDialog.js:513
-#: js/Snom/SettingGridPanel.js:124
+#: js/Snom/SettingGridPanel.js:124 js/Voipmanager-FAT-debug.js:2953
+#: js/Voipmanager-FAT-debug.js:3777 js/Voipmanager-FAT-debug.js:4090
+#: js/Voipmanager-FAT.js:6
 msgid "scroll_outgoing"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:284 js/Snom/PhoneEditDialog.js:522
-#: js/Snom/SettingGridPanel.js:131
+#: js/Snom/SettingGridPanel.js:131 js/Voipmanager-FAT-debug.js:2962
+#: js/Voipmanager-FAT-debug.js:3784 js/Voipmanager-FAT-debug.js:4103
+#: js/Voipmanager-FAT.js:6
 msgid "show_local_line"
 msgstr ""
 
 #: js/Snom/SettingEditDialog.js:297 js/Snom/PhoneEditDialog.js:531
-#: js/Snom/SettingGridPanel.js:138
+#: js/Snom/SettingGridPanel.js:138 js/Voipmanager-FAT-debug.js:2971
+#: js/Voipmanager-FAT-debug.js:3791 js/Voipmanager-FAT-debug.js:4116
+#: js/Voipmanager-FAT.js:6
 msgid "show_call_status"
 msgstr ""
 
@@ -195,94 +289,121 @@ msgstr ""
 msgid "Pickup indication"
 msgstr ""
 
-#: js/Snom/PhoneGridPanel.js:34
+#: js/Snom/PhoneGridPanel.js:34 js/Voipmanager-FAT-debug.js:2241
+#: js/Voipmanager-FAT.js:6
 msgid "reset phones HTTP authentication"
 msgstr ""
 
-#: js/Snom/PhoneGridPanel.js:41
+#: js/Snom/PhoneGridPanel.js:41 js/Voipmanager-FAT-debug.js:2248
+#: js/Voipmanager-FAT.js:6
 msgid "Open phones web gui"
 msgstr ""
 
 #: js/Snom/PhoneGridPanel.js:60 js/Snom/SettingGridPanel.js:42
+#: js/Voipmanager-FAT-debug.js:2283 js/Voipmanager-FAT-debug.js:3702
+#: js/Voipmanager-FAT-debug.js:4215 js/Voipmanager-FAT.js:6
 #: js/Asterisk/SipPeerGridPanel.js:42
 msgid "Id"
 msgstr ""
 
-#: js/Snom/PhoneGridPanel.js:67
+#: js/Snom/PhoneGridPanel.js:67 js/Voipmanager-FAT-debug.js:2290
+#: js/Voipmanager-FAT.js:6
 msgid "MAC address"
 msgstr ""
 
 #: js/Snom/PhoneGridPanel.js:73 js/Snom/SettingGridPanel.js:55
+#: js/Voipmanager-FAT-debug.js:2296 js/Voipmanager-FAT-debug.js:3715
+#: js/Voipmanager-FAT.js:6
 msgid "description"
 msgstr ""
 
-#: js/Snom/PhoneGridPanel.js:78 js/Voipmanager.js:113 js/Models.js:133
+#: js/Snom/PhoneGridPanel.js:78 js/Voipmanager-FAT-debug.js:134
+#: js/Voipmanager-FAT-debug.js:735 js/Voipmanager-FAT-debug.js:2301
+#: js/Voipmanager-FAT.js:6 js/Voipmanager.js:113 js/Models.js:133
 msgid "Location"
 msgid_plural "Locations"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Snom/PhoneGridPanel.js:87 js/Models.js:174
+#: js/Snom/PhoneGridPanel.js:87 js/Voipmanager-FAT-debug.js:171
+#: js/Voipmanager-FAT-debug.js:2310 js/Voipmanager-FAT.js:6 js/Models.js:174
 msgid "Template"
 msgid_plural "Templates"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Snom/PhoneGridPanel.js:96
+#: js/Snom/PhoneGridPanel.js:96 js/Voipmanager-FAT-debug.js:2319
+#: js/Voipmanager-FAT.js:6
 msgid "IP Address"
 msgstr ""
 
-#: js/Snom/PhoneGridPanel.js:102 js/Voipmanager.js:154 js/Models.js:216
+#: js/Snom/PhoneGridPanel.js:102 js/Voipmanager-FAT-debug.js:209
+#: js/Voipmanager-FAT-debug.js:776 js/Voipmanager-FAT-debug.js:2325
+#: js/Voipmanager-FAT.js:6 js/Voipmanager.js:154 js/Models.js:216
 msgid "Software"
 msgid_plural "Softwares"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Snom/PhoneGridPanel.js:108
+#: js/Snom/PhoneGridPanel.js:108 js/Voipmanager-FAT-debug.js:2331
+#: js/Voipmanager-FAT.js:6
 msgid "current model"
 msgstr ""
 
-#: js/Snom/PhoneGridPanel.js:115
+#: js/Snom/PhoneGridPanel.js:115 js/Voipmanager-FAT-debug.js:2338
+#: js/Voipmanager-FAT.js:6
 msgid "redirect event"
 msgstr ""
 
-#: js/Snom/PhoneGridPanel.js:122
+#: js/Snom/PhoneGridPanel.js:122 js/Voipmanager-FAT-debug.js:2345
+#: js/Voipmanager-FAT.js:6
 msgid "redirect number"
 msgstr ""
 
-#: js/Snom/PhoneGridPanel.js:129
+#: js/Snom/PhoneGridPanel.js:129 js/Voipmanager-FAT-debug.js:2352
+#: js/Voipmanager-FAT.js:6
 msgid "redirect time"
 msgstr ""
 
-#: js/Snom/PhoneGridPanel.js:136
+#: js/Snom/PhoneGridPanel.js:136 js/Voipmanager-FAT-debug.js:2359
+#: js/Voipmanager-FAT.js:6
 msgid "settings loaded at"
 msgstr ""
 
-#: js/Snom/PhoneGridPanel.js:144
+#: js/Snom/PhoneGridPanel.js:144 js/Voipmanager-FAT-debug.js:2367
+#: js/Voipmanager-FAT.js:6
 msgid "last modified"
 msgstr ""
 
-#: js/Snom/LineGridPanel.js:256 js/Models.js:294
+#: js/Snom/LineGridPanel.js:256 js/Voipmanager-FAT-debug.js:283
+#: js/Voipmanager-FAT-debug.js:1758 js/Voipmanager-FAT.js:6 js/Models.js:294
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Snom/LineGridPanel.js:257
+#: js/Snom/LineGridPanel.js:257 js/Voipmanager-FAT-debug.js:1759
+#: js/Voipmanager-FAT.js:6
 msgid "Idle Text"
 msgstr ""
 
 #: js/Snom/SoftwareGridPanel.js:42 js/Snom/TemplateGridPanel.js:42
-#: js/Snom/LocationGridPanel.js:114 js/Asterisk/VoicemailGridPanel.js:42
-#: js/Asterisk/ContextGridPanel.js:42 js/Asterisk/MeetmeGridPanel.js:42
+#: js/Snom/LocationGridPanel.js:114 js/Voipmanager-FAT-debug.js:1838
+#: js/Voipmanager-FAT-debug.js:2033 js/Voipmanager-FAT-debug.js:3156
+#: js/Voipmanager-FAT-debug.js:4791 js/Voipmanager-FAT-debug.js:4969
+#: js/Voipmanager-FAT-debug.js:5409 js/Voipmanager-FAT.js:6
+#: js/Asterisk/VoicemailGridPanel.js:42 js/Asterisk/ContextGridPanel.js:42
+#: js/Asterisk/MeetmeGridPanel.js:42
 msgid "id"
 msgstr ""
 
-#: js/Snom/PhoneEditDialog.js:222
+#: js/Snom/PhoneEditDialog.js:222 js/Voipmanager-FAT-debug.js:2662
+#: js/Voipmanager-FAT.js:6
 msgid "Lines"
 msgstr ""
 
-#: js/Snom/PhoneEditDialog.js:260 js/Models.js:80
+#: js/Snom/PhoneEditDialog.js:260 js/Voipmanager-FAT-debug.js:83
+#: js/Voipmanager-FAT-debug.js:2700 js/Voipmanager-FAT.js:6 js/Models.js:80
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] ""
@@ -290,137 +411,181 @@ msgstr[1] ""
 
 #: js/Snom/PhoneEditDialog.js:275 js/Snom/TemplateEditDialog.js:41
 #: js/Snom/LocationEditDialog.js:41 js/Snom/LocationGridPanel.js:121
+#: js/Voipmanager-FAT-debug.js:2129 js/Voipmanager-FAT-debug.js:2715
+#: js/Voipmanager-FAT-debug.js:3163 js/Voipmanager-FAT-debug.js:3252
+#: js/Voipmanager-FAT-debug.js:4196 js/Voipmanager-FAT-debug.js:4599
+#: js/Voipmanager-FAT-debug.js:4798 js/Voipmanager-FAT-debug.js:4871
+#: js/Voipmanager-FAT-debug.js:5202 js/Voipmanager-FAT.js:6
 #: js/Asterisk/SipPeerEditDialog.js:67 js/Asterisk/VoicemailEditDialog.js:68
 #: js/Asterisk/ContextEditDialog.js:40 js/Asterisk/ContextGridPanel.js:49
 #: js/Models.js:482
 msgid "Name"
 msgstr ""
 
-#: js/Snom/PhoneEditDialog.js:279
+#: js/Snom/PhoneEditDialog.js:279 js/Voipmanager-FAT-debug.js:2719
+#: js/Voipmanager-FAT.js:6
 msgid "Phone Model"
 msgstr ""
 
-#: js/Snom/PhoneEditDialog.js:291
+#: js/Snom/PhoneEditDialog.js:291 js/Voipmanager-FAT-debug.js:2731
+#: js/Voipmanager-FAT.js:6
 msgid "MAC Address"
 msgstr ""
 
-#: js/Snom/PhoneEditDialog.js:327
+#: js/Snom/PhoneEditDialog.js:327 js/Voipmanager-FAT-debug.js:2767
+#: js/Voipmanager-FAT.js:6
 msgid "infos"
 msgstr ""
 
-#: js/Snom/PhoneEditDialog.js:342
+#: js/Snom/PhoneEditDialog.js:342 js/Voipmanager-FAT-debug.js:2782
+#: js/Voipmanager-FAT.js:6
 msgid "Current IP Address"
 msgstr ""
 
-#: js/Snom/PhoneEditDialog.js:349
+#: js/Snom/PhoneEditDialog.js:349 js/Voipmanager-FAT-debug.js:2789
+#: js/Voipmanager-FAT.js:6
 msgid "Firmware last checked at"
 msgstr ""
 
-#: js/Snom/PhoneEditDialog.js:357
+#: js/Snom/PhoneEditDialog.js:357 js/Voipmanager-FAT-debug.js:2797
+#: js/Voipmanager-FAT.js:6
 msgid "Current Software Version"
 msgstr ""
 
-#: js/Snom/PhoneEditDialog.js:364
+#: js/Snom/PhoneEditDialog.js:364 js/Voipmanager-FAT-debug.js:2804
+#: js/Voipmanager-FAT.js:6
 msgid "Settings Loaded at"
 msgstr ""
 
-#: js/Snom/PhoneEditDialog.js:560
+#: js/Snom/PhoneEditDialog.js:560 js/Voipmanager-FAT-debug.js:2991
+#: js/Voipmanager-FAT.js:6
 msgid "Users"
 msgstr ""
 
-#: js/Snom/TemplateEditDialog.js:55
+#: js/Snom/TemplateEditDialog.js:55 js/Voipmanager-FAT-debug.js:2143
+#: js/Voipmanager-FAT.js:6
 msgid "Software Version"
 msgstr ""
 
-#: js/Snom/TemplateEditDialog.js:80 js/Voipmanager.js:133
+#: js/Snom/TemplateEditDialog.js:80 js/Voipmanager-FAT-debug.js:755
+#: js/Voipmanager-FAT-debug.js:2168 js/Voipmanager-FAT.js:6
+#: js/Voipmanager.js:133
 msgid "Keylayout"
 msgstr ""
 
 #: js/Snom/LocationEditDialog.js:54 js/Snom/LocationGridPanel.js:72
+#: js/Voipmanager-FAT-debug.js:3114 js/Voipmanager-FAT-debug.js:3265
+#: js/Voipmanager-FAT.js:6
 msgid "Registrar"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:61
+#: js/Snom/LocationEditDialog.js:61 js/Voipmanager-FAT-debug.js:3272
+#: js/Voipmanager-FAT.js:6
 msgid "Base Download URL"
 msgstr ""
 
 #: js/Snom/LocationEditDialog.js:76 js/Snom/LocationGridPanel.js:65
+#: js/Voipmanager-FAT-debug.js:3107 js/Voipmanager-FAT-debug.js:3287
+#: js/Voipmanager-FAT.js:6
 msgid "Update Policy"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:97
+#: js/Snom/LocationEditDialog.js:97 js/Voipmanager-FAT-debug.js:3308
+#: js/Voipmanager-FAT.js:6
 msgid "Firmware Interval"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:115
+#: js/Snom/LocationEditDialog.js:115 js/Voipmanager-FAT-debug.js:3326
+#: js/Voipmanager-FAT.js:6
 msgid "tone_scheme"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:152
+#: js/Snom/LocationEditDialog.js:152 js/Voipmanager-FAT-debug.js:3363
+#: js/Voipmanager-FAT.js:6
 msgid "date_us_format"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:173
+#: js/Snom/LocationEditDialog.js:173 js/Voipmanager-FAT-debug.js:3384
+#: js/Voipmanager-FAT.js:6
 msgid "time_24_format"
 msgstr ""
 
 #: js/Snom/LocationEditDialog.js:193 js/Snom/LocationGridPanel.js:86
+#: js/Voipmanager-FAT-debug.js:3128 js/Voipmanager-FAT-debug.js:3404
+#: js/Voipmanager-FAT.js:6
 msgid "NTP Server"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:210
+#: js/Snom/LocationEditDialog.js:210 js/Voipmanager-FAT-debug.js:3421
+#: js/Voipmanager-FAT.js:6
 msgid "NTP Server Address"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:223
+#: js/Snom/LocationEditDialog.js:223 js/Voipmanager-FAT-debug.js:3434
+#: js/Voipmanager-FAT.js:6
 msgid "NTP Refresh"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:230
+#: js/Snom/LocationEditDialog.js:230 js/Voipmanager-FAT-debug.js:3441
+#: js/Voipmanager-FAT.js:6
 msgid "Timezone"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:255
+#: js/Snom/LocationEditDialog.js:255 js/Voipmanager-FAT-debug.js:3466
+#: js/Voipmanager-FAT.js:6
 msgid "Enable admin mode"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:267
+#: js/Snom/LocationEditDialog.js:267 js/Voipmanager-FAT-debug.js:3478
+#: js/Voipmanager-FAT.js:6
 msgid "Admin Mode Password"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:277
+#: js/Snom/LocationEditDialog.js:277 js/Voipmanager-FAT-debug.js:3488
+#: js/Voipmanager-FAT.js:6
 msgid "Enable webserver"
 msgstr ""
 
 #: js/Snom/LocationEditDialog.js:304 js/Snom/LocationGridPanel.js:93
+#: js/Voipmanager-FAT-debug.js:3135 js/Voipmanager-FAT-debug.js:3515
+#: js/Voipmanager-FAT.js:6
 msgid "Webserver Type"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:351
+#: js/Snom/LocationEditDialog.js:351 js/Voipmanager-FAT-debug.js:3562
+#: js/Voipmanager-FAT.js:6
 msgid "HTTP Port"
 msgstr ""
 
 #: js/Snom/LocationEditDialog.js:365 js/Snom/LocationGridPanel.js:100
+#: js/Voipmanager-FAT-debug.js:3142 js/Voipmanager-FAT-debug.js:3576
+#: js/Voipmanager-FAT.js:6
 msgid "HTTPS Port"
 msgstr ""
 
 #: js/Snom/LocationEditDialog.js:386 js/Snom/LocationGridPanel.js:107
+#: js/Voipmanager-FAT-debug.js:3149 js/Voipmanager-FAT-debug.js:3597
+#: js/Voipmanager-FAT.js:6
 msgid "HTTP User"
 msgstr ""
 
-#: js/Snom/LocationEditDialog.js:398
+#: js/Snom/LocationEditDialog.js:398 js/Voipmanager-FAT-debug.js:3609
+#: js/Voipmanager-FAT.js:6
 msgid "HTTP Password"
 msgstr ""
 
-#: js/Snom/TemplateGridPanel.js:61
+#: js/Snom/TemplateGridPanel.js:61 js/Voipmanager-FAT-debug.js:2052
+#: js/Voipmanager-FAT.js:6
 msgid "Keylayout Id"
 msgstr ""
 
-#: js/Snom/TemplateGridPanel.js:68
+#: js/Snom/TemplateGridPanel.js:68 js/Voipmanager-FAT-debug.js:2059
+#: js/Voipmanager-FAT.js:6
 msgid "Settings Id"
 msgstr ""
 
-#: js/Snom/TemplateGridPanel.js:75
+#: js/Snom/TemplateGridPanel.js:75 js/Voipmanager-FAT-debug.js:2066
+#: js/Voipmanager-FAT.js:6
 msgid "Software Id"
 msgstr ""
 
@@ -430,496 +595,630 @@ msgstr ""
 msgid "Quick Search"
 msgstr ""
 
-#: js/Snom/LocationGridPanel.js:58
+#: js/Snom/LocationGridPanel.js:58 js/Voipmanager-FAT-debug.js:3100
+#: js/Voipmanager-FAT.js:6
 msgid "FW Interval"
 msgstr ""
 
-#: js/Snom/LocationGridPanel.js:79
+#: js/Snom/LocationGridPanel.js:79 js/Voipmanager-FAT-debug.js:3121
+#: js/Voipmanager-FAT.js:6
 msgid "Admin Mode"
 msgstr ""
 
-#: js/CallForwardPanel.js:84
-msgid "Forward immediately"
-msgstr ""
-
-#: js/CallForwardPanel.js:94 js/CallForwardPanel.js:137
-#: js/CallForwardPanel.js:179
-msgid "Mode"
-msgstr ""
-
-#: js/CallForwardPanel.js:118 js/CallForwardPanel.js:160
-#: js/CallForwardPanel.js:203
-msgid "Number"
-msgstr ""
-
-#: js/CallForwardPanel.js:127
-msgid "Forward busy"
-msgstr ""
-
-#: js/CallForwardPanel.js:169
-msgid "Forward delayed"
-msgstr ""
-
-#: js/CallForwardPanel.js:212
-msgid "Delay time"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:49
-msgid "Call Forwards"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:60 js/Asterisk/VoicemailEditDialog.js:41
-msgid "General"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:75 js/Asterisk/VoicemailEditDialog.js:55
-#: js/Voipmanager.js:50 js/Models.js:500
-msgid "Context"
-msgid_plural "Contexts"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Asterisk/SipPeerEditDialog.js:88
-msgid "Type"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:97
-msgid "friend"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:98
-msgid "user"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:99
-msgid "peer"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:103
-msgid "Secret"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:110
-msgid "Callerid"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:117 js/Asterisk/VoicemailEditDialog.js:47
-msgid "Mailbox"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:124
-msgid "Callgroup"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:131
-msgid "Pickup group"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:138
-msgid "Accountcode"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:145
-msgid "Language"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:152
-msgid "NAT"
-msgstr ""
-
-#: js/Asterisk/SipPeerEditDialog.js:163
-msgid "Qualify"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:49 js/Asterisk/SipPeerGridPanel.js:151
-msgid "mailbox"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:55 js/Asterisk/SipPeerGridPanel.js:89
-msgid "context"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:61
-msgid "fullname"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:67 js/Asterisk/VoicemailEditDialog.js:83
-msgid "email"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:73 js/Asterisk/VoicemailEditDialog.js:89
-msgid "pager"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:79 js/Asterisk/VoicemailEditDialog.js:119
-msgid "tz"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:86 js/Asterisk/VoicemailEditDialog.js:146
-msgid "attach"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:93 js/Asterisk/VoicemailEditDialog.js:150
-msgid "saycid"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:100
-#: js/Asterisk/VoicemailEditDialog.js:125
-msgid "dialout"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:107
-#: js/Asterisk/VoicemailEditDialog.js:131
-msgid "callback"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:114
-#: js/Asterisk/VoicemailEditDialog.js:154
-msgid "review"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:121
-#: js/Asterisk/VoicemailEditDialog.js:158
-msgid "operator"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:128
-#: js/Asterisk/VoicemailEditDialog.js:162
-msgid "envelope"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:135
-#: js/Asterisk/VoicemailEditDialog.js:137
-msgid "sayduration"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:142
-#: js/Asterisk/VoicemailEditDialog.js:141
-msgid "saydurationm"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:149
-#: js/Asterisk/VoicemailEditDialog.js:166
-msgid "sendvoicemail"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:156
-#: js/Asterisk/VoicemailEditDialog.js:170
-msgid "delete"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:163
-#: js/Asterisk/VoicemailEditDialog.js:174
-msgid "nextaftercmd"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:170
-#: js/Asterisk/VoicemailEditDialog.js:178
-msgid "forcename"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:177
-#: js/Asterisk/VoicemailEditDialog.js:182
-msgid "forcegreetings"
-msgstr ""
-
-#: js/Asterisk/VoicemailGridPanel.js:184
-#: js/Asterisk/VoicemailEditDialog.js:186
-msgid "hidefromdir"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:55
-msgid "account code"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:62
-msgid "ama flags"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:69
-msgid "call group"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:76
-msgid "caller id"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:82
-msgid "can reinvite"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:95
-msgid "default ip"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:102
-msgid "dtmf mode"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:109
-msgid "from user"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:116
-msgid "from domain"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:123
-msgid "full contact"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:130
-msgid "host"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:137
-msgid "insecure"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:157
-msgid "md5 secret"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:164
-msgid "nat"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:171
-msgid "deny"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:178
-msgid "permit"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:185
-msgid "mask"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:192
-msgid "pickup group"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:198
-msgid "port"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:205
-msgid "qualify"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:212
-msgid "restrict cid"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:219
-msgid "rtp timeout"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:226
-msgid "rtp hold timeout"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:233
-msgid "secret"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:240
-msgid "type"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:246
-msgid "defaultuser"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:253
-msgid "disallow"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:260
-msgid "allow"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:267
-msgid "music on hold"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:274
-msgid "reg seconds"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:281
-msgid "ip address"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:288
-msgid "reg exten"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:295
-msgid "can call forward"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:302
-msgid "set var"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:309
-msgid "notify ringing"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:316
-msgid "use client code"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:323
-msgid "auth user"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:330
-msgid "call limit"
-msgstr ""
-
-#: js/Asterisk/SipPeerGridPanel.js:337
-msgid "busy level"
-msgstr ""
-
-#: js/Asterisk/VoicemailEditDialog.js:75
-msgid "Password"
-msgstr ""
-
-#: js/Asterisk/VoicemailEditDialog.js:95
-msgid "Additional"
-msgstr ""
-
-#: js/Asterisk/MeetmeGridPanel.js:49 js/Asterisk/MeetmeEditDialog.js:40
-msgid "confno"
-msgstr ""
-
-#: js/Asterisk/MeetmeGridPanel.js:58 js/Asterisk/MeetmeEditDialog.js:48
-msgid "pin"
-msgstr ""
-
-#: js/Asterisk/MeetmeGridPanel.js:67 js/Asterisk/MeetmeEditDialog.js:56
-msgid "adminpin"
-msgstr ""
-
-#: js/Voipmanager.js:22
-msgid "Asterisk"
-msgstr ""
-
-#: js/Voipmanager.js:29 js/Models.js:458
-msgid "SipPeer"
-msgid_plural "SipPeers"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Voipmanager.js:39
-msgid "Dialplan"
-msgstr ""
-
-#: js/Voipmanager.js:60 js/Models.js:560
-msgid "Voicemail"
-msgid_plural "Voicemails"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Voipmanager.js:70 js/Models.js:598
-msgid "Meetme"
-msgid_plural "Meetmes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Voipmanager.js:80
-msgid "Queues"
-msgstr ""
-
-#: js/Voipmanager.js:96
-msgid "Snom"
-msgstr ""
-
-#: js/Voipmanager.js:103
-msgid "Phones"
-msgstr ""
-
-#: js/Voipmanager.js:123
-msgid "Templates"
-msgstr ""
-
-#: js/Voipmanager.js:144 js/Models.js:357
-msgid "Setting"
-msgid_plural "Settings"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:84
+#: js/Voipmanager-FAT-debug.js:87 js/Models.js:84
 msgid "phones list"
 msgid_plural "phones lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:137
+#: js/Voipmanager-FAT-debug.js:138 js/Models.js:137
 msgid "locations list"
 msgid_plural "locations lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:178
+#: js/Voipmanager-FAT-debug.js:175 js/Models.js:178
 msgid "templates list"
 msgid_plural "templates lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:220
+#: js/Voipmanager-FAT-debug.js:213 js/Models.js:220
 msgid "softwares list"
 msgid_plural "softwares lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:253
+#: js/Voipmanager-FAT-debug.js:242 js/Models.js:253
 msgid "SoftwareImage"
 msgid_plural "SoftwareImages"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:257
+#: js/Voipmanager-FAT-debug.js:246 js/Models.js:257
 msgid "softwareImages list"
 msgid_plural "softwareImages lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:298
+#: js/Voipmanager-FAT-debug.js:287 js/Models.js:298
 msgid "lines list"
 msgid_plural "lines lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:361
+#: js/Voipmanager-FAT-debug.js:340 js/Voipmanager-FAT-debug.js:766
+#: js/Voipmanager-FAT.js:6 js/Voipmanager.js:144 js/Models.js:357
+msgid "Setting"
+msgid_plural "Settings"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Voipmanager-FAT-debug.js:344 js/Models.js:361
 msgid "setting list"
 msgid_plural "settings lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:462
+#: js/Voipmanager-FAT-debug.js:435 js/Voipmanager-FAT-debug.js:651
+#: js/Voipmanager-FAT.js:6 js/Voipmanager.js:29 js/Models.js:458
+msgid "SipPeer"
+msgid_plural "SipPeers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Voipmanager-FAT-debug.js:439 js/Models.js:462
 msgid "sipPeers list"
 msgid_plural "sipPeers lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:504
+#: js/Voipmanager-FAT-debug.js:469 js/Voipmanager-FAT-debug.js:672
+#: js/Voipmanager-FAT-debug.js:4607 js/Voipmanager-FAT-debug.js:5189
+#: js/Voipmanager-FAT.js:6 js/Asterisk/SipPeerEditDialog.js:75
+#: js/Asterisk/VoicemailEditDialog.js:55 js/Voipmanager.js:50 js/Models.js:500
+msgid "Context"
+msgid_plural "Contexts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Voipmanager-FAT-debug.js:473 js/Models.js:504
 msgid "contexts list"
 msgid_plural "contexts lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:564
+#: js/Voipmanager-FAT-debug.js:525 js/Voipmanager-FAT-debug.js:682
+#: js/Voipmanager-FAT.js:6 js/Voipmanager.js:60 js/Models.js:560
+msgid "Voicemail"
+msgid_plural "Voicemails"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Voipmanager-FAT-debug.js:529 js/Models.js:564
 msgid "voicemails list"
 msgid_plural "voicemails lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:602
+#: js/Voipmanager-FAT-debug.js:557 js/Voipmanager-FAT-debug.js:692
+#: js/Voipmanager-FAT.js:6 js/Voipmanager.js:70 js/Models.js:598
+msgid "Meetme"
+msgid_plural "Meetmes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Voipmanager-FAT-debug.js:561 js/Models.js:602
 msgid "meetmes list"
 msgid_plural "meetmes lists"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/Voipmanager-FAT-debug.js:644 js/Voipmanager-FAT.js:6
+#: js/Voipmanager.js:22
+msgid "Asterisk"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:661 js/Voipmanager-FAT.js:6
+#: js/Voipmanager.js:39
+msgid "Dialplan"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:702 js/Voipmanager-FAT.js:6
+#: js/Voipmanager.js:80
+msgid "Queues"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:718 js/Voipmanager-FAT.js:6
+#: js/Voipmanager.js:96
+msgid "Snom"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:725 js/Voipmanager-FAT.js:6
+#: js/Voipmanager.js:103
+msgid "Phones"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:745 js/Voipmanager-FAT.js:6
+#: js/Voipmanager.js:123
+msgid "Templates"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:1336 js/CallForwardPanel.js:84
+#: js/Voipmanager-FAT.js:6
+msgid "Forward immediately"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:1346 js/Voipmanager-FAT-debug.js:1389
+#: js/Voipmanager-FAT-debug.js:1431 js/CallForwardPanel.js:94
+#: js/CallForwardPanel.js:137 js/CallForwardPanel.js:179
+#: js/Voipmanager-FAT.js:6
+msgid "Mode"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:1370 js/Voipmanager-FAT-debug.js:1412
+#: js/Voipmanager-FAT-debug.js:1455 js/CallForwardPanel.js:118
+#: js/CallForwardPanel.js:160 js/CallForwardPanel.js:203
+#: js/Voipmanager-FAT.js:6
+msgid "Number"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:1379 js/CallForwardPanel.js:127
+#: js/Voipmanager-FAT.js:6
+msgid "Forward busy"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:1421 js/CallForwardPanel.js:169
+#: js/Voipmanager-FAT.js:6
+msgid "Forward delayed"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:1464 js/CallForwardPanel.js:212
+#: js/Voipmanager-FAT.js:6
+msgid "Delay time"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:1820 js/Voipmanager-FAT-debug.js:2015
+#: js/Voipmanager-FAT-debug.js:2265 js/Voipmanager-FAT-debug.js:3082
+#: js/Voipmanager-FAT-debug.js:3684 js/Voipmanager-FAT-debug.js:4195
+#: js/Voipmanager-FAT-debug.js:4773 js/Voipmanager-FAT-debug.js:4951
+#: js/Voipmanager-FAT-debug.js:5391 js/Voipmanager-FAT.js:6
+msgid "Quick search"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:3175 js/Voipmanager-FAT.js:6
+msgid "Filter Registrar"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:3182 js/Voipmanager-FAT.js:6
+msgid "CP Dialoginfo"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:3189 js/Voipmanager-FAT.js:6
+msgid "Pickup Indic."
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4228 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:55
+msgid "account code"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4235 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:62
+msgid "ama flags"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4242 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:69
+msgid "call group"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4249 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:76
+msgid "caller id"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4255 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:82
+msgid "can reinvite"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4262 js/Voipmanager-FAT-debug.js:4982
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:55
+#: js/Asterisk/SipPeerGridPanel.js:89
+msgid "context"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4268 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:95
+msgid "default ip"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4275 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:102
+msgid "dtmf mode"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4282 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:109
+msgid "from user"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4289 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:116
+msgid "from domain"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4296 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:123
+msgid "full contact"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4303 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:130
+msgid "host"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4310 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:137
+msgid "insecure"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4324 js/Voipmanager-FAT-debug.js:4976
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:49
+#: js/Asterisk/SipPeerGridPanel.js:151
+msgid "mailbox"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4330 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:157
+msgid "md5 secret"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4337 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:164
+msgid "nat"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4344 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:171
+msgid "deny"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4351 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:178
+msgid "permit"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4358 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:185
+msgid "mask"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4365 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:192
+msgid "pickup group"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4371 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:198
+msgid "port"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4378 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:205
+msgid "qualify"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4385 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:212
+msgid "restrict cid"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4392 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:219
+msgid "rtp timeout"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4399 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:226
+msgid "rtp hold timeout"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4406 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:233
+msgid "secret"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4413 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:240
+msgid "type"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4419 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:246
+msgid "defaultuser"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4426 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:253
+msgid "disallow"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4433 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:260
+msgid "allow"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4440 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:267
+msgid "music on hold"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4447 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:274
+msgid "reg seconds"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4454 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:281
+msgid "ip address"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4461 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:288
+msgid "reg exten"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4468 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:295
+msgid "can call forward"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4475 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:302
+msgid "set var"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4482 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:309
+msgid "notify ringing"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4489 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:316
+msgid "use client code"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4496 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:323
+msgid "auth user"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4503 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:330
+msgid "call limit"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4510 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerGridPanel.js:337
+msgid "busy level"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4581 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:49
+msgid "Call Forwards"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4592 js/Voipmanager-FAT-debug.js:5175
+#: js/Voipmanager-FAT.js:6 js/Asterisk/SipPeerEditDialog.js:60
+#: js/Asterisk/VoicemailEditDialog.js:41
+msgid "General"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4620 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:88
+msgid "Type"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4629 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:97
+msgid "friend"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4630 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:98
+msgid "user"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4631 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:99
+msgid "peer"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4635 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:103
+msgid "Secret"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4642 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:110
+msgid "Callerid"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4649 js/Voipmanager-FAT-debug.js:5181
+#: js/Voipmanager-FAT.js:6 js/Asterisk/SipPeerEditDialog.js:117
+#: js/Asterisk/VoicemailEditDialog.js:47
+msgid "Mailbox"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4656 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:124
+msgid "Callgroup"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4663 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:131
+msgid "Pickup group"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4670 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:138
+msgid "Accountcode"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4677 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:145
+msgid "Language"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4684 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:152
+msgid "NAT"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4695 js/Voipmanager-FAT.js:6
+#: js/Asterisk/SipPeerEditDialog.js:163
+msgid "Qualify"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4988 js/Voipmanager-FAT.js:6
+#: js/Asterisk/VoicemailGridPanel.js:61
+msgid "fullname"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:4994 js/Voipmanager-FAT-debug.js:5217
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:67
+#: js/Asterisk/VoicemailEditDialog.js:83
+msgid "email"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5000 js/Voipmanager-FAT-debug.js:5223
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:73
+#: js/Asterisk/VoicemailEditDialog.js:89
+msgid "pager"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5006 js/Voipmanager-FAT-debug.js:5253
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:79
+#: js/Asterisk/VoicemailEditDialog.js:119
+msgid "tz"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5013 js/Voipmanager-FAT-debug.js:5280
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:86
+#: js/Asterisk/VoicemailEditDialog.js:146
+msgid "attach"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5020 js/Voipmanager-FAT-debug.js:5284
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:93
+#: js/Asterisk/VoicemailEditDialog.js:150
+msgid "saycid"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5027 js/Voipmanager-FAT-debug.js:5259
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:100
+#: js/Asterisk/VoicemailEditDialog.js:125
+msgid "dialout"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5034 js/Voipmanager-FAT-debug.js:5265
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:107
+#: js/Asterisk/VoicemailEditDialog.js:131
+msgid "callback"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5041 js/Voipmanager-FAT-debug.js:5288
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:114
+#: js/Asterisk/VoicemailEditDialog.js:154
+msgid "review"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5048 js/Voipmanager-FAT-debug.js:5292
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:121
+#: js/Asterisk/VoicemailEditDialog.js:158
+msgid "operator"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5055 js/Voipmanager-FAT-debug.js:5296
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:128
+#: js/Asterisk/VoicemailEditDialog.js:162
+msgid "envelope"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5062 js/Voipmanager-FAT-debug.js:5271
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:135
+#: js/Asterisk/VoicemailEditDialog.js:137
+msgid "sayduration"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5069 js/Voipmanager-FAT-debug.js:5275
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:142
+#: js/Asterisk/VoicemailEditDialog.js:141
+msgid "saydurationm"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5076 js/Voipmanager-FAT-debug.js:5300
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:149
+#: js/Asterisk/VoicemailEditDialog.js:166
+msgid "sendvoicemail"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5083 js/Voipmanager-FAT-debug.js:5304
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:156
+#: js/Asterisk/VoicemailEditDialog.js:170
+msgid "delete"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5090 js/Voipmanager-FAT-debug.js:5308
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:163
+#: js/Asterisk/VoicemailEditDialog.js:174
+msgid "nextaftercmd"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5097 js/Voipmanager-FAT-debug.js:5312
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:170
+#: js/Asterisk/VoicemailEditDialog.js:178
+msgid "forcename"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5104 js/Voipmanager-FAT-debug.js:5316
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:177
+#: js/Asterisk/VoicemailEditDialog.js:182
+msgid "forcegreetings"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5111 js/Voipmanager-FAT-debug.js:5320
+#: js/Voipmanager-FAT.js:6 js/Asterisk/VoicemailGridPanel.js:184
+#: js/Asterisk/VoicemailEditDialog.js:186
+msgid "hidefromdir"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5209 js/Voipmanager-FAT.js:6
+#: js/Asterisk/VoicemailEditDialog.js:75
+msgid "Password"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5229 js/Voipmanager-FAT.js:6
+#: js/Asterisk/VoicemailEditDialog.js:95
+msgid "Additional"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5416 js/Voipmanager-FAT-debug.js:5498
+#: js/Voipmanager-FAT.js:6 js/Asterisk/MeetmeGridPanel.js:49
+#: js/Asterisk/MeetmeEditDialog.js:40
+msgid "confno"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5425 js/Voipmanager-FAT-debug.js:5506
+#: js/Voipmanager-FAT.js:6 js/Asterisk/MeetmeGridPanel.js:58
+#: js/Asterisk/MeetmeEditDialog.js:48
+msgid "pin"
+msgstr ""
+
+#: js/Voipmanager-FAT-debug.js:5434 js/Voipmanager-FAT-debug.js:5514
+#: js/Voipmanager-FAT.js:6 js/Asterisk/MeetmeGridPanel.js:67
+#: js/Asterisk/MeetmeEditDialog.js:56
+msgid "adminpin"
+msgstr ""

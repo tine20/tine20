@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"PO-Revision-Date: 2014-03-21 12:00+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -24,51 +24,57 @@ msgstr ""
 msgid "Calls"
 msgstr ""
 
-#: Model/Call.php:60 js/DialerPanel.js:76
+#: Model/Call.php:60 js/Phone-FAT.js:6 js/DialerPanel.js:76
+#: js/Phone-FAT-debug.js:588
 msgid "Line"
 msgstr "Linha"
 
-#: Model/Call.php:80
+#: Model/Call.php:80 js/Phone-FAT.js:6 js/Phone-FAT-debug.js:1005
 msgid "Caller Id"
 msgstr "Id do Chamador"
 
-#: Model/Call.php:86
+#: Model/Call.php:86 js/Phone-FAT.js:6 js/Phone-FAT-debug.js:1007
 msgid "Start"
 msgstr "Início"
 
-#: Model/Call.php:91
+#: Model/Call.php:91 js/Phone-FAT.js:6 js/Phone-FAT-debug.js:1008
 msgid "Connected"
 msgstr "Conectado"
 
-#: Model/Call.php:95
+#: Model/Call.php:95 js/Phone-FAT.js:6 js/Phone-FAT-debug.js:1009
 msgid "Disconnected"
 msgstr "Desconectado"
 
-#: Model/Call.php:100
+#: Model/Call.php:100 js/Phone-FAT.js:6 js/Phone-FAT-debug.js:1010
 msgid "Duration"
 msgstr "Duração"
 
-#: Model/Call.php:106
+#: Model/Call.php:106 js/Phone-FAT.js:6 js/Phone-FAT-debug.js:1011
 msgid "Ringing"
 msgstr "Tocando"
 
-#: Model/Call.php:112
+#: Model/Call.php:112 js/Phone-FAT.js:6 js/Phone-FAT-debug.js:1003
 msgid "Direction"
 msgstr "Direção"
 
-#: Model/Call.php:115
+#: Model/Call.php:115 js/Phone-FAT.js:6 js/Phone-FAT-debug.js:1004
 msgid "Source"
 msgstr "Fonte"
 
-#: Model/Call.php:120
+#: Model/Call.php:120 js/Phone-FAT.js:6 js/Phone-FAT-debug.js:1006
 msgid "Destination"
 msgstr "Destino"
 
-#: Model/MyPhone.php:32 js/DialerPanel.js:53
+#: Model/MyPhone.php:32 js/Phone-FAT.js:6 js/DialerPanel.js:53
+#: js/Phone-FAT-debug.js:74 js/Phone-FAT-debug.js:359
+#: js/Phone-FAT-debug.js:565
 msgid "Phone"
-msgstr "Telefones"
+msgid_plural "Phones"
+msgstr[0] ""
+msgstr[1] ""
 
-#: Model/MyPhone.php:33 js/CallGridPanel.js:167
+#: Model/MyPhone.php:33 js/Phone-FAT.js:6 js/Phone-FAT-debug.js:370
+#: js/CallGridPanel.js:167
 msgid "Phones"
 msgstr "Telefones"
 
@@ -116,37 +122,101 @@ msgstr ""
 msgid "Incoming and outgoing calls of last month"
 msgstr ""
 
-#: js/DialerPanel.js:85
-msgid "Number"
-msgstr "Número"
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:128
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Chamar contato"
 
-#: js/DialerPanel.js:94
-msgid "Cancel"
-msgstr "Canelar"
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:264
+#: js/AddressbookGridPanelHook.js:191
+msgid "Work"
+msgstr "Operar"
 
-#: js/DialerPanel.js:104
-msgid "Dial"
-msgstr "Discar"
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:273
+#: js/AddressbookGridPanelHook.js:200
+msgid "Home"
+msgstr "Início"
 
-#: js/DialerPanel.js:124
-msgid "Error"
-msgstr "Erro"
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:282
+#: js/AddressbookGridPanelHook.js:209
+msgid "Cell"
+msgstr "Celular"
 
-#: js/DialerPanel.js:125
-msgid "Not possible to dial."
-msgstr "Não é possível discar."
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:291
+#: js/AddressbookGridPanelHook.js:218
+msgid "Cell private"
+msgstr "Celular particular"
 
-#: js/CallGridPanel.js:54
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:329 js/Phone-FAT-debug.js:790
+#: js/Phone-FAT-debug.js:791 js/CallGridPanel.js:54
 msgid "Edit phone settings"
 msgstr "Ediar configuração do telefone"
 
-#: js/CallGridPanel.js:68
+#: js/Phone-FAT.js:6 js/DialerPanel.js:85 js/Phone-FAT-debug.js:597
+msgid "Number"
+msgstr "Número"
+
+#: js/Phone-FAT.js:6 js/DialerPanel.js:94 js/Phone-FAT-debug.js:606
+msgid "Cancel"
+msgstr "Canelar"
+
+#: js/Phone-FAT.js:6 js/DialerPanel.js:104 js/Phone-FAT-debug.js:616
+msgid "Dial"
+msgstr "Discar"
+
+#: js/Phone-FAT.js:6 js/DialerPanel.js:124 js/Phone-FAT-debug.js:636
+msgid "Error"
+msgstr "Erro"
+
+#: js/Phone-FAT.js:6 js/DialerPanel.js:125 js/Phone-FAT-debug.js:637
+msgid "Not possible to dial."
+msgstr "Não é possível discar."
+
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:780 js/CallGridPanel.js:68
 msgid "Dial number"
 msgstr "Discar número"
 
-#: js/CallGridPanel.js:69
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:781 js/CallGridPanel.js:69
 msgid "Initiate a new outgoing call"
 msgstr "Iniciar uma nova chamada"
+
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:842 js/Phone.js:100
+msgid "Incoming call"
+msgstr "Recebendo chamada"
+
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:846 js/Phone.js:104
+msgid "Outgoing call"
+msgstr "Chamando"
+
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:854 js/Phone.js:112
+msgid "unknown number"
+msgstr "número desconhecido"
+
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:891
+msgid "Search:"
+msgstr ""
+
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:992
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr ""
+
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:993 js/Phone-FAT-debug.js:1036
+msgid "No calls to display"
+msgstr ""
+
+#: js/Phone-FAT.js:6 js/Phone-FAT-debug.js:1012
+msgid "Call ID"
+msgstr ""
+
+#: js/Phone-FAT-debug.js:78
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Phone-FAT-debug.js:976
+msgid "Source or Destination"
+msgstr ""
 
 #: js/CallGridPanel.js:216
 msgid "No phone selected"
@@ -155,35 +225,3 @@ msgstr ""
 #: js/CallGridPanel.js:217
 msgid "Please select the desired phone in the tree!"
 msgstr ""
-
-#: js/Phone.js:100
-msgid "Incoming call"
-msgstr "Recebendo chamada"
-
-#: js/Phone.js:104
-msgid "Outgoing call"
-msgstr "Chamando"
-
-#: js/Phone.js:112
-msgid "unknown number"
-msgstr "número desconhecido"
-
-#: js/AddressbookGridPanelHook.js:35
-msgid "Call contact"
-msgstr "Chamar contato"
-
-#: js/AddressbookGridPanelHook.js:191
-msgid "Work"
-msgstr "Operar"
-
-#: js/AddressbookGridPanelHook.js:200
-msgid "Home"
-msgstr "Início"
-
-#: js/AddressbookGridPanelHook.js:209
-msgid "Cell"
-msgstr "Celular"
-
-#: js/AddressbookGridPanelHook.js:218
-msgid "Cell private"
-msgstr "Celular particular"

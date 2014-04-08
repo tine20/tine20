@@ -1,11 +1,12 @@
 # 
 # Translators:
+# jaruwan <luca.ingianni@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-11-20 13:09+0000\n"
-"Last-Translator: lkneschke <l.kneschke@metaways.de>\n"
+"PO-Revision-Date: 2014-02-17 18:25+0000\n"
+"Last-Translator: jaruwan <luca.ingianni@gmail.com>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,15 +19,15 @@ msgstr ""
 
 #: Config.php:52
 msgid "Default policy for new devices"
-msgstr ""
+msgstr "นโยบายหลักสำหรับอุปกรณ์ใหม่"
 
 #: Config.php:54
 msgid "Enter the id of the policy to apply to newly created devices."
-msgstr ""
+msgstr "ใส่รหัสของนโยบายเพื่อใช้สำหรับอุปกรณ์ที่เพิ่งสร้างขึ้น"
 
 #: Config.php:62
 msgid "Disable Access Log"
-msgstr ""
+msgstr "ไม่สามารถบันทึกการใช้งาน"
 
 #: Config.php:64
 msgid "Disable ActiveSync Access Log creation."
@@ -34,89 +35,90 @@ msgstr ""
 
 #: Config.php:73
 msgid "Filter timeslot for emails"
-msgstr ""
+msgstr "ตัวกรองช่วงเวลาสำหรับอีเมล"
 
 #: Config.php:75
 msgid "For how long in the past the emails should be synchronized."
-msgstr ""
+msgstr "ระยะเวลานานแค่ไหนในอดีตที่อีเมลควรจะได้รับการอัพเดท"
 
 #: Config.php:96
 msgid "Filter timeslot for events"
-msgstr ""
+msgstr "ตัวกรองช่วงเวลาสำหรับเหตุการณ์ต่าง ๆ"
 
 #: Config.php:98
 msgid "For how long in the past the events should be synchronized."
-msgstr ""
+msgstr "ระยะเวลานานแค่ไหนในอดีที่เหตุการณ์ควรจะได้รับการอัพเดท"
 
 #: Setup/setup.xml:546 Setup/Update/Release6.php:290
 msgid "Default Policy"
-msgstr ""
+msgstr "นโยบายหลัก"
 
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
-msgstr ""
+msgstr "นโยบายหลักได้ถูกคัดลอกแล้วระหว่างการติดตั้ง"
 
 #: Preference.php:75
 msgid "Default Addressbook"
-msgstr ""
+msgstr "สมุดรายชื่อหลัก"
 
 #: Preference.php:76
 msgid "The default addressbook to create new contacts in."
-msgstr ""
+msgstr "สมุดรายชื่อหลักที่จะสร้างการติดต่อใหม่เข้าไป"
 
 #: Preference.php:79
 msgid "Default Calendar"
-msgstr ""
+msgstr "ปฏิทินหลัก"
 
 #: Preference.php:80
 msgid "The default calendar to create new events in."
-msgstr ""
+msgstr "ปฏิทินหลักที่จะสร้างเหตุการณ์ใหม่เข้าไป"
 
 #: Preference.php:83
 msgid "Default Task List"
-msgstr ""
+msgstr "รายชื่อหน้าที่หลัก"
 
 #: Preference.php:84
 msgid "The default task list to create new tasks in."
-msgstr ""
+msgstr "รายชื่อหน้าที่หลักเพื่อสร้างหน้าที่ใหม่เข้า"
 
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] ""
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr ""
-
-#: js/Application.js:27
+#: js/ActiveSync-FAT-debug.js:32 js/Application.js:27 js/ActiveSync-FAT.js:6
 msgid "Active Sync"
 msgstr ""
 
-#: js/Application.js:43
+#: js/ActiveSync-FAT-debug.js:48 js/Application.js:43 js/ActiveSync-FAT.js:6
 msgid "Select a Device"
-msgstr ""
+msgstr "เลือกอุปกรณ์"
 
-#: js/Application.js:57
+#: js/ActiveSync-FAT-debug.js:62 js/Application.js:57 js/ActiveSync-FAT.js:6
 msgid "No ActiveSync Device registered"
 msgstr ""
 
-#: js/Application.js:65
+#: js/ActiveSync-FAT-debug.js:70 js/Application.js:65 js/ActiveSync-FAT.js:6
 msgid "Set as {0} Filter"
-msgstr ""
+msgstr "ตั้งเป็นตัวกรอง {0}"
 
-#: js/Application.js:90
+#: js/ActiveSync-FAT-debug.js:95 js/Application.js:90 js/ActiveSync-FAT.js:6
 msgid "Resetted Sync Filter"
 msgstr ""
 
-#: js/Application.js:91 js/Application.js:103
+#: js/ActiveSync-FAT-debug.js:96 js/ActiveSync-FAT-debug.js:108
+#: js/Application.js:91 js/Application.js:103 js/ActiveSync-FAT.js:6
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr ""
+msgstr "ตัวกรอง {0} สำหรับอุปกรณ์ \"{1}\" ตอนนี้เป็น \"{2}\""
 
-#: js/Application.js:94
+#: js/ActiveSync-FAT-debug.js:99 js/Application.js:94 js/ActiveSync-FAT.js:6
 msgid "resetted"
 msgstr ""
 
-#: js/Application.js:102
+#: js/ActiveSync-FAT-debug.js:107 js/Application.js:102 js/ActiveSync-FAT.js:6
 msgid "Set Sync Filter"
 msgstr ""
+
+#: js/ActiveSync-FAT-debug.js:158 js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "อุปกรณ์"
+
+#: js/ActiveSync-FAT-debug.js:158 js/Model.js:42
+msgid "Devices"
+msgstr "อุปกรณ์"

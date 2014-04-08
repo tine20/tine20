@@ -1,11 +1,12 @@
 # 
 # Translators:
+# jfortuna <jfortuna@antel.com.uy>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-03-21 15:05+0000\n"
+"Last-Translator: jfortuna <jfortuna@antel.com.uy>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/tine20/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,61 +19,62 @@ msgstr ""
 
 #: Acl/Rights.php:99
 msgid "Add new user"
-msgstr ""
+msgstr "Agregar nuevo usuario"
 
 #: Acl/Rights.php:100
 msgid "Add new user as member to a course"
-msgstr ""
+msgstr "Agregar nuevo usuario como miembro de un curso"
 
 #: Acl/Rights.php:103
 msgid "Add existing user"
-msgstr ""
+msgstr "Agregar usuario existente"
 
 #: Acl/Rights.php:104
 msgid "Add existing user as member to a course"
-msgstr ""
+msgstr "Agregar usuario existente como miembro de un curso"
 
-#: Config.php:82 js/CourseEditDialog.js:230 js/Models.js:74
+#: Config.php:82 js/CourseEditDialog.js:230 js/Courses-FAT-debug.js:77
+#: js/Courses-FAT-debug.js:650 js/Courses-FAT.js:6 js/Models.js:74
 msgid "Internet Access"
 msgstr "Acceso a Internet"
 
 #: Config.php:84
 msgid "Internet access options."
-msgstr ""
+msgstr "Opciones de acceso a Internet"
 
 #: Config.php:91 Config.php:93
 msgid "Internet Access Group (ON)"
-msgstr ""
+msgstr "Grupo de acceso a Internet (ENCENDIDO)"
 
 #: Config.php:99 Config.php:101
 msgid "Internet Access Group (FILTERED)"
-msgstr ""
+msgstr "Grupo de acceso a Grupo (FILTRADO)"
 
 #: Config.php:107 Config.php:109
 msgid "Students Group"
-msgstr ""
+msgstr "Grupo de Estudiantes"
 
 #: Config.php:115 Config.php:117
 msgid "Students Import Definition"
-msgstr ""
+msgstr "Definición de inportación de Estudiantes"
 
 #: Config.php:123
 msgid "Students login name prefix"
-msgstr ""
+msgstr "Prefijo del usuario de estudiante"
 
 #: Config.php:130
 msgid "Student username schema"
-msgstr ""
+msgstr "Esquema del usuario del estudiante"
 
 #: Config.php:132
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
-msgstr ""
+msgstr "Esquema del usuario del estudiante (0= solo apellido (10 caracteres), 1= apellido +2 caracteres apra el nombre."
 
 #: Config.php:139 Config.php:141
 msgid "Samba user settings"
-msgstr ""
+msgstr "Configuracion de usuarios Samba"
 
 #: Setup/setup.xml:4
 msgid "Courses"
@@ -81,121 +83,128 @@ msgstr "Cursos"
 #: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
 #: Preference.php:60
 msgid "All courses"
-msgstr ""
+msgstr "Todos los cursos"
 
 #: Setup/Initialize.php:66
 msgid "On"
-msgstr ""
+msgstr "Encendido"
 
 #: Setup/Initialize.php:67
 msgid "Off"
-msgstr ""
+msgstr "Apagado"
 
 #: Setup/Initialize.php:68
 msgid "Filtered"
-msgstr ""
+msgstr "Filtrado"
 
 #: Preference.php:61
 msgid "The default favorite which is loaded on Classes startup"
-msgstr ""
+msgstr "Favorito por defecto que se carga al iniciar las clases"
 
-#: js/CourseEditDialog.js:33
+#: js/CourseEditDialog.js:33 js/Courses-FAT-debug.js:456 js/Courses-FAT.js:6
 msgid "Import course members"
 msgstr "Importar integrantes del curso"
 
-#: js/CourseEditDialog.js:42
+#: js/CourseEditDialog.js:42 js/Courses-FAT-debug.js:465 js/Courses-FAT.js:6
 msgid "Add new member"
-msgstr ""
+msgstr "Agregar nuevo miembro"
 
-#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
+#: js/CourseEditDialog.js:190 js/Courses-FAT-debug.js:46
+#: js/Courses-FAT-debug.js:610 js/Courses-FAT.js:6 js/Models.js:43
+#: Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Curso"
 msgstr[1] "Cursos"
 
-#: js/CourseEditDialog.js:206
+#: js/CourseEditDialog.js:206 js/Courses-FAT-debug.js:626 js/Courses-FAT.js:6
 msgid "Course Name"
 msgstr "Nombre del Curso"
 
-#: js/CourseEditDialog.js:213
+#: js/CourseEditDialog.js:213 js/Courses-FAT-debug.js:633 js/Courses-FAT.js:6
 msgid "Course / School Type"
 msgstr "Curso / Tipo de Escuela"
 
-#: js/CourseEditDialog.js:224
+#: js/CourseEditDialog.js:224 js/Courses-FAT-debug.js:644 js/Courses-FAT.js:6
 msgid "Description"
 msgstr "Descripción"
 
-#: js/CourseEditDialog.js:240
+#: js/CourseEditDialog.js:240 js/Courses-FAT-debug.js:660
 msgid "Fileserver Access"
 msgstr "Acceso al Servidor de Archivos"
 
-#: js/CourseEditDialog.js:272
+#: js/CourseEditDialog.js:272 js/Courses-FAT-debug.js:692 js/Courses-FAT.js:6
 msgid "Members"
 msgstr "Integrantes"
 
-#: js/CourseEditDialog.js:299
+#: js/CourseEditDialog.js:299 js/Courses-FAT-debug.js:719 js/Courses-FAT.js:6
 msgid "Login"
 msgstr "Ingreso"
 
-#: js/CourseEditDialog.js:303
+#: js/CourseEditDialog.js:303 js/Courses-FAT-debug.js:723 js/Courses-FAT.js:6
 msgid "unknown"
-msgstr ""
+msgstr "Desconocido"
 
-#: js/CourseEditDialog.js:308
+#: js/CourseEditDialog.js:308 js/Courses-FAT-debug.js:728 js/Courses-FAT.js:6
 msgid "Reset Password"
 msgstr "Reiniciar Contraseña"
 
-#: js/AddMemberDialog.js:63
+#: js/AddMemberDialog.js:63 js/Courses-FAT-debug.js:350 js/Courses-FAT.js:6
 msgid "First Name"
-msgstr ""
+msgstr "Nombre"
 
-#: js/AddMemberDialog.js:67
+#: js/AddMemberDialog.js:67 js/Courses-FAT-debug.js:354 js/Courses-FAT.js:6
 msgid "Last Name"
-msgstr ""
+msgstr "Apellidos"
 
-#: js/AddMemberDialog.js:86
+#: js/AddMemberDialog.js:86 js/Courses-FAT-debug.js:373 js/Courses-FAT.js:6
 msgid "Add new member to course"
-msgstr ""
+msgstr "Agregar nuevo usuario como miembro de un curso"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:118 js/Courses-FAT-debug.js:405 js/Courses-FAT.js:6
 msgid "Errors"
-msgstr ""
+msgstr "Errores"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:118 js/Courses-FAT-debug.js:405 js/Courses-FAT.js:6
 msgid "Please fix the errors noted."
-msgstr ""
+msgstr "Por favor arregle los errores señalados."
 
-#: js/CourseGridPanel.js:44 js/Models.js:72
+#: js/CourseGridPanel.js:44 js/Courses-FAT-debug.js:75
+#: js/Courses-FAT-debug.js:229 js/Courses-FAT.js:6 js/Models.js:72
 msgid "Name"
 msgstr "Nombre"
 
-#: js/CourseGridPanel.js:50
+#: js/CourseGridPanel.js:50 js/Courses-FAT-debug.js:235 js/Courses-FAT.js:6
 msgid "Type"
 msgstr "Tipo"
 
-#: js/CourseGridPanel.js:95
+#: js/CourseGridPanel.js:95 js/Courses-FAT-debug.js:280 js/Courses-FAT.js:6
 msgid "Failed"
 msgstr "Falló"
 
-#: js/CourseGridPanel.js:96
+#: js/CourseGridPanel.js:96 js/Courses-FAT-debug.js:281 js/Courses-FAT.js:6
 msgid "Some error occured while trying to update the courses."
 msgstr "Algún error ocurrió mientras intentaba actualizar los cursos."
 
-#: js/Models.js:47
+#: js/Courses-FAT-debug.js:50 js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "listado de registro"
 msgstr[1] "listado de registros"
 
-#: js/Models.js:71
-msgid "Quick Search"
-msgstr ""
+#: js/Courses-FAT-debug.js:74 js/Courses-FAT.js:6
+msgid "Quick search"
+msgstr "Búsqueda Rápida"
 
-#: js/Models.js:109
+#: js/Courses-FAT-debug.js:112 js/Models.js:109
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Tipo de Curso"
 msgstr[1] "Tipo de Cursos"
+
+#: js/Models.js:71
+msgid "Quick Search"
+msgstr "Búsqueda Rápida"
 
 #: Controller/Course.php:256 Controller/Course.php:300
 msgid "Teacher"
@@ -207,4 +216,4 @@ msgstr "Cuenta de Profesor"
 
 #: Controller/Course.php:317
 msgid "My course"
-msgstr ""
+msgstr "Mi curso"

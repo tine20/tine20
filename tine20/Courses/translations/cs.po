@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"PO-Revision-Date: 2014-03-21 11:59+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Czech (http://www.transifex.com/projects/p/tine20/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,8 @@ msgstr ""
 msgid "Add existing user as member to a course"
 msgstr ""
 
-#: Config.php:82 js/CourseEditDialog.js:230 js/Models.js:74
+#: Config.php:82 js/CourseEditDialog.js:230 js/Courses-FAT-debug.js:77
+#: js/Courses-FAT-debug.js:650 js/Courses-FAT.js:6 js/Models.js:74
 msgid "Internet Access"
 msgstr "Přístup k Internetu"
 
@@ -99,106 +100,113 @@ msgstr ""
 msgid "The default favorite which is loaded on Classes startup"
 msgstr ""
 
-#: js/CourseEditDialog.js:33
+#: js/CourseEditDialog.js:33 js/Courses-FAT-debug.js:456 js/Courses-FAT.js:6
 msgid "Import course members"
 msgstr "Importovat členy kurzu"
 
-#: js/CourseEditDialog.js:42
+#: js/CourseEditDialog.js:42 js/Courses-FAT-debug.js:465 js/Courses-FAT.js:6
 msgid "Add new member"
 msgstr ""
 
-#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
+#: js/CourseEditDialog.js:190 js/Courses-FAT-debug.js:46
+#: js/Courses-FAT-debug.js:610 js/Courses-FAT.js:6 js/Models.js:43
+#: Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurz"
 msgstr[1] "Kurzy"
 msgstr[2] "Kurzů"
 
-#: js/CourseEditDialog.js:206
+#: js/CourseEditDialog.js:206 js/Courses-FAT-debug.js:626 js/Courses-FAT.js:6
 msgid "Course Name"
 msgstr "Název kurzu"
 
-#: js/CourseEditDialog.js:213
+#: js/CourseEditDialog.js:213 js/Courses-FAT-debug.js:633 js/Courses-FAT.js:6
 msgid "Course / School Type"
 msgstr "Typ kurzu / školení"
 
-#: js/CourseEditDialog.js:224
+#: js/CourseEditDialog.js:224 js/Courses-FAT-debug.js:644 js/Courses-FAT.js:6
 msgid "Description"
 msgstr "Popis"
 
-#: js/CourseEditDialog.js:240
+#: js/CourseEditDialog.js:240 js/Courses-FAT-debug.js:660
 msgid "Fileserver Access"
 msgstr "Přístup k souborovému serveru"
 
-#: js/CourseEditDialog.js:272
+#: js/CourseEditDialog.js:272 js/Courses-FAT-debug.js:692 js/Courses-FAT.js:6
 msgid "Members"
 msgstr "Členové"
 
-#: js/CourseEditDialog.js:299
+#: js/CourseEditDialog.js:299 js/Courses-FAT-debug.js:719 js/Courses-FAT.js:6
 msgid "Login"
 msgstr "Přihlášení"
 
-#: js/CourseEditDialog.js:303
+#: js/CourseEditDialog.js:303 js/Courses-FAT-debug.js:723 js/Courses-FAT.js:6
 msgid "unknown"
 msgstr ""
 
-#: js/CourseEditDialog.js:308
+#: js/CourseEditDialog.js:308 js/Courses-FAT-debug.js:728 js/Courses-FAT.js:6
 msgid "Reset Password"
 msgstr "Resetovat heslo"
 
-#: js/AddMemberDialog.js:63
+#: js/AddMemberDialog.js:63 js/Courses-FAT-debug.js:350 js/Courses-FAT.js:6
 msgid "First Name"
 msgstr ""
 
-#: js/AddMemberDialog.js:67
+#: js/AddMemberDialog.js:67 js/Courses-FAT-debug.js:354 js/Courses-FAT.js:6
 msgid "Last Name"
 msgstr ""
 
-#: js/AddMemberDialog.js:86
+#: js/AddMemberDialog.js:86 js/Courses-FAT-debug.js:373 js/Courses-FAT.js:6
 msgid "Add new member to course"
 msgstr ""
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:118 js/Courses-FAT-debug.js:405 js/Courses-FAT.js:6
 msgid "Errors"
 msgstr ""
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:118 js/Courses-FAT-debug.js:405 js/Courses-FAT.js:6
 msgid "Please fix the errors noted."
 msgstr ""
 
-#: js/CourseGridPanel.js:44 js/Models.js:72
+#: js/CourseGridPanel.js:44 js/Courses-FAT-debug.js:75
+#: js/Courses-FAT-debug.js:229 js/Courses-FAT.js:6 js/Models.js:72
 msgid "Name"
 msgstr "Název"
 
-#: js/CourseGridPanel.js:50
+#: js/CourseGridPanel.js:50 js/Courses-FAT-debug.js:235 js/Courses-FAT.js:6
 msgid "Type"
 msgstr "Typ"
 
-#: js/CourseGridPanel.js:95
+#: js/CourseGridPanel.js:95 js/Courses-FAT-debug.js:280 js/Courses-FAT.js:6
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/CourseGridPanel.js:96
+#: js/CourseGridPanel.js:96 js/Courses-FAT-debug.js:281 js/Courses-FAT.js:6
 msgid "Some error occured while trying to update the courses."
 msgstr "Při aktualizaci kurzů došlo k chybě."
 
-#: js/Models.js:47
+#: js/Courses-FAT-debug.js:50 js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "seznam záznamů"
 msgstr[1] "seznamy záznamů"
 msgstr[2] "seznamů záznamů"
 
-#: js/Models.js:71
-msgid "Quick Search"
+#: js/Courses-FAT-debug.js:74 js/Courses-FAT.js:6
+msgid "Quick search"
 msgstr ""
 
-#: js/Models.js:109
+#: js/Courses-FAT-debug.js:112 js/Models.js:109
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Typ kurzu"
 msgstr[1] "Typy kurzů"
 msgstr[2] "Typů kurzů"
+
+#: js/Models.js:71
+msgid "Quick Search"
+msgstr ""
 
 #: Controller/Course.php:256 Controller/Course.php:300
 msgid "Teacher"

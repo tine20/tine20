@@ -17,11 +17,11 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/AuthenticationPanel.js:127
+#: js/AuthenticationPanel.js:127 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1746
 msgid "Delete all existing users and groups"
 msgstr "Xóa mọi người dùng và nhóm người dùng"
 
-#: js/AuthenticationPanel.js:127
+#: js/AuthenticationPanel.js:127 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1746
 msgid ""
 "Switching from SQL to LDAP will delete all existing User Accounts, Groups "
 "and Roles. Do you really want to switch the accounts storage backend to LDAP"
@@ -29,9 +29,12 @@ msgid ""
 msgstr "Chuyển từ SQL sang LDAP sẽ xóa mọi người dùng, nhóm, và vai trò hiện tại. Bạn có thật sự muốn chuyển chế độ lưu trữ tài khoản sang LDAP?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
-#: js/EmailPanel.js:146 js/ConfigManagerPanel.js:147
-#: js/ConfigManagerPanel.js:159 js/ConfigManagerPanel.js:171
-#: js/ConfigManagerPanel.js:183
+#: js/Setup-FAT.js:6 js/EmailPanel.js:146 js/Setup-FAT-debug.js:1223
+#: js/Setup-FAT-debug.js:1235 js/Setup-FAT-debug.js:1247
+#: js/Setup-FAT-debug.js:1259 js/Setup-FAT-debug.js:1823
+#: js/Setup-FAT-debug.js:1836 js/Setup-FAT-debug.js:2487
+#: js/ConfigManagerPanel.js:147 js/ConfigManagerPanel.js:159
+#: js/ConfigManagerPanel.js:171 js/ConfigManagerPanel.js:183
 msgid "Backend"
 msgstr "Nền tảng"
 
@@ -39,27 +42,28 @@ msgstr "Nền tảng"
 msgid "TLS client certificate"
 msgstr ""
 
-#: js/AuthenticationPanel.js:233
+#: js/AuthenticationPanel.js:233 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1852
 msgid "Initial Admin User"
 msgstr "Người Quản trị chính"
 
-#: js/AuthenticationPanel.js:246
+#: js/AuthenticationPanel.js:246 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1865
 msgid "Initial admin login name"
 msgstr "Tên đăng nhập Quản trị chính"
 
-#: js/AuthenticationPanel.js:251
+#: js/AuthenticationPanel.js:251 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1870
 msgid "Initial admin Password"
 msgstr "Mật khẩu Quản trị chính"
 
-#: js/AuthenticationPanel.js:255
+#: js/AuthenticationPanel.js:255 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1874
 msgid "Password confirmation"
 msgstr "Xác nhận mật khẩu"
 
-#: js/AuthenticationPanel.js:263
+#: js/AuthenticationPanel.js:263 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1882
 msgid "Authentication provider"
 msgstr "Nguồn xác thực"
 
 #: js/AuthenticationPanel.js:284 js/AuthenticationPanel.js:403
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1903 js/Setup-FAT-debug.js:2010
 msgid "Try to split username"
 msgstr "Thử tách tên đăng nhập"
 
@@ -70,7 +74,13 @@ msgstr "Thử tách tên đăng nhập"
 #: js/AuthenticationPanel.js:532 js/AuthenticationPanel.js:553
 #: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:596
 #: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:657
-#: js/AuthenticationPanel.js:688 js/EmailPanel.js:207 js/EmailPanel.js:267
+#: js/AuthenticationPanel.js:688 js/Setup-FAT.js:6 js/EmailPanel.js:207
+#: js/EmailPanel.js:267 js/Setup-FAT-debug.js:1904 js/Setup-FAT-debug.js:1948
+#: js/Setup-FAT-debug.js:2097 js/Setup-FAT-debug.js:2135
+#: js/Setup-FAT-debug.js:2166 js/Setup-FAT-debug.js:2191
+#: js/Setup-FAT-debug.js:2197 js/Setup-FAT-debug.js:2203
+#: js/Setup-FAT-debug.js:2224 js/Setup-FAT-debug.js:2245
+#: js/Setup-FAT-debug.js:2251 js/Setup-FAT-debug.js:2548
 msgid "Yes"
 msgstr "Có"
 
@@ -81,28 +91,46 @@ msgstr "Có"
 #: js/AuthenticationPanel.js:532 js/AuthenticationPanel.js:553
 #: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:596
 #: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:657
-#: js/AuthenticationPanel.js:688 js/EmailPanel.js:207 js/EmailPanel.js:267
+#: js/AuthenticationPanel.js:688 js/Setup-FAT.js:6 js/EmailPanel.js:207
+#: js/EmailPanel.js:267 js/Setup-FAT-debug.js:1904 js/Setup-FAT-debug.js:1948
+#: js/Setup-FAT-debug.js:2097 js/Setup-FAT-debug.js:2135
+#: js/Setup-FAT-debug.js:2166 js/Setup-FAT-debug.js:2191
+#: js/Setup-FAT-debug.js:2197 js/Setup-FAT-debug.js:2203
+#: js/Setup-FAT-debug.js:2224 js/Setup-FAT-debug.js:2245
+#: js/Setup-FAT-debug.js:2251 js/Setup-FAT-debug.js:2548
 msgid "No"
 msgstr "Không"
 
 #: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:347
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1909 js/Setup-FAT-debug.js:1960
+#: js/Setup-FAT-debug.js:2024
 msgid "Account canonical form"
 msgstr "Form đăng nhập duy nhất"
 
 #: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:353
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1915 js/Setup-FAT-debug.js:1966
+#: js/Setup-FAT-debug.js:2028
 msgid "Account domain name "
 msgstr "Tên domain"
 
 #: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:356
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1918 js/Setup-FAT-debug.js:1969
+#: js/Setup-FAT-debug.js:2033
 msgid "Account domain short name"
 msgstr "Tên ngắn của domain"
 
 #: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:584
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1932 js/Setup-FAT-debug.js:2085
 msgid "Host"
 msgstr "Host"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:372
-#: js/EmailPanel.js:195 js/EmailPanel.js:296 js/EmailPanel.js:400
+#: js/Setup-FAT.js:6 js/EmailPanel.js:195 js/EmailPanel.js:296
+#: js/EmailPanel.js:400 js/Setup-FAT-debug.js:1310 js/Setup-FAT-debug.js:1397
+#: js/Setup-FAT-debug.js:1417 js/Setup-FAT-debug.js:1458
+#: js/Setup-FAT-debug.js:1517 js/Setup-FAT-debug.js:1936
+#: js/Setup-FAT-debug.js:1985 js/Setup-FAT-debug.js:2536
+#: js/Setup-FAT-debug.js:2631 js/Setup-FAT-debug.js:2735
 #: js/ConfigManagerPanel.js:234 js/ConfigManagerPanel.js:321
 #: js/ConfigManagerPanel.js:341 js/ConfigManagerPanel.js:382
 #: js/ConfigManagerPanel.js:441
@@ -110,16 +138,20 @@ msgid "Port"
 msgstr "Cổng"
 
 #: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:587
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1939 js/Setup-FAT-debug.js:2088
 msgid "Login name"
 msgstr "Tên đăng nhập"
 
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:590
-#: js/EmailPanel.js:190 js/ConfigManagerPanel.js:214
-#: js/ConfigManagerPanel.js:245
+#: js/Setup-FAT.js:6 js/EmailPanel.js:190 js/Setup-FAT-debug.js:1290
+#: js/Setup-FAT-debug.js:1321 js/Setup-FAT-debug.js:1942
+#: js/Setup-FAT-debug.js:2091 js/Setup-FAT-debug.js:2531
+#: js/ConfigManagerPanel.js:214 js/ConfigManagerPanel.js:245
 msgid "Password"
 msgstr "Mật khẩu"
 
 #: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:595
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1947 js/Setup-FAT-debug.js:2096
 msgid "Bind requires DN"
 msgstr "Bind requires DN"
 
@@ -127,42 +159,57 @@ msgstr "Bind requires DN"
 msgid "Start TLS"
 msgstr ""
 
-#: js/AuthenticationPanel.js:340
+#: js/AuthenticationPanel.js:340 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1953
 msgid "Base DN"
 msgstr "Base DN"
 
-#: js/AuthenticationPanel.js:343
+#: js/AuthenticationPanel.js:343 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1956
 msgid "Search filter"
 msgstr "Bộ lọc tìm kiếm"
 
-#: js/AuthenticationPanel.js:369 js/EmailPanel.js:182 js/EmailPanel.js:292
-#: js/EmailPanel.js:396 js/ConfigManagerPanel.js:229
-#: js/ConfigManagerPanel.js:317 js/ConfigManagerPanel.js:337
-#: js/ConfigManagerPanel.js:378 js/ConfigManagerPanel.js:437
+#: js/AuthenticationPanel.js:369 js/Setup-FAT.js:6 js/EmailPanel.js:182
+#: js/EmailPanel.js:292 js/EmailPanel.js:396 js/Setup-FAT-debug.js:1305
+#: js/Setup-FAT-debug.js:1393 js/Setup-FAT-debug.js:1413
+#: js/Setup-FAT-debug.js:1454 js/Setup-FAT-debug.js:1513
+#: js/Setup-FAT-debug.js:1982 js/Setup-FAT-debug.js:2523
+#: js/Setup-FAT-debug.js:2627 js/Setup-FAT-debug.js:2731
+#: js/ConfigManagerPanel.js:229 js/ConfigManagerPanel.js:317
+#: js/ConfigManagerPanel.js:337 js/ConfigManagerPanel.js:378
+#: js/ConfigManagerPanel.js:437
 msgid "Hostname"
 msgstr "Hostname"
 
-#: js/AuthenticationPanel.js:376 js/EmailPanel.js:199 js/EmailPanel.js:300
-#: js/EmailPanel.js:404
+#: js/AuthenticationPanel.js:376 js/Setup-FAT.js:6 js/EmailPanel.js:199
+#: js/EmailPanel.js:300 js/EmailPanel.js:404 js/Setup-FAT-debug.js:1989
+#: js/Setup-FAT-debug.js:2540 js/Setup-FAT-debug.js:2635
+#: js/Setup-FAT-debug.js:2739
 msgid "Secure Connection"
 msgstr "Kết nối bảo mật"
 
-#: js/AuthenticationPanel.js:378 js/EmailPanel.js:202 js/EmailPanel.js:303
-#: js/EmailPanel.js:309 js/EmailPanel.js:407
+#: js/AuthenticationPanel.js:378 js/Setup-FAT.js:6 js/EmailPanel.js:202
+#: js/EmailPanel.js:303 js/EmailPanel.js:309 js/EmailPanel.js:407
+#: js/Setup-FAT-debug.js:1991 js/Setup-FAT-debug.js:2543
+#: js/Setup-FAT-debug.js:2638 js/Setup-FAT-debug.js:2644
+#: js/Setup-FAT-debug.js:2742
 msgid "None"
 msgstr "Không"
 
-#: js/AuthenticationPanel.js:378 js/EmailPanel.js:202 js/EmailPanel.js:303
-#: js/EmailPanel.js:407
+#: js/AuthenticationPanel.js:378 js/Setup-FAT.js:6 js/EmailPanel.js:202
+#: js/EmailPanel.js:303 js/EmailPanel.js:407 js/Setup-FAT-debug.js:1991
+#: js/Setup-FAT-debug.js:2543 js/Setup-FAT-debug.js:2638
+#: js/Setup-FAT-debug.js:2742
 msgid "TLS"
 msgstr "TLS"
 
-#: js/AuthenticationPanel.js:378 js/EmailPanel.js:202 js/EmailPanel.js:303
-#: js/EmailPanel.js:407
+#: js/AuthenticationPanel.js:378 js/Setup-FAT.js:6 js/EmailPanel.js:202
+#: js/EmailPanel.js:303 js/EmailPanel.js:407 js/Setup-FAT-debug.js:1991
+#: js/Setup-FAT-debug.js:2543 js/Setup-FAT-debug.js:2638
+#: js/Setup-FAT-debug.js:2742
 msgid "SSL"
 msgstr "SSL"
 
-#: js/AuthenticationPanel.js:383 js/EmailPanel.js:212
+#: js/AuthenticationPanel.js:383 js/Setup-FAT.js:6 js/EmailPanel.js:212
+#: js/Setup-FAT-debug.js:1996 js/Setup-FAT-debug.js:2553
 msgid "Append domain to login name"
 msgstr "Ghép domain vào tên đăng nhập"
 
@@ -178,15 +225,17 @@ msgstr ""
 msgid "CRL directory"
 msgstr ""
 
-#: js/AuthenticationPanel.js:422
+#: js/AuthenticationPanel.js:422 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2045
 msgid "Accounts storage"
 msgstr "Lưu trữ tài khoản"
 
 #: js/AuthenticationPanel.js:444 js/AuthenticationPanel.js:680
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2067 js/Setup-FAT-debug.js:2158
 msgid "Default user group name"
 msgstr "Tên nhóm nguwowfi dùng mặc định"
 
 #: js/AuthenticationPanel.js:447 js/AuthenticationPanel.js:683
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2071 js/Setup-FAT-debug.js:2161
 msgid "Default admin group name"
 msgstr "Tên nhóm quản trị mặc định"
 
@@ -198,59 +247,59 @@ msgstr "Màn hình đăng nhập"
 msgid "Reuse last username logged"
 msgstr ""
 
-#: js/AuthenticationPanel.js:483
+#: js/AuthenticationPanel.js:483 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2175
 msgid "Password Settings"
 msgstr "Thiết lập mật khẩu"
 
-#: js/AuthenticationPanel.js:498
+#: js/AuthenticationPanel.js:498 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2190
 msgid "User can change password"
 msgstr "Người dùng có thể đổi mật khẩu"
 
-#: js/AuthenticationPanel.js:504
+#: js/AuthenticationPanel.js:504 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2196
 msgid "Enable password policy"
 msgstr "Bật chính sách mật khẩu"
 
-#: js/AuthenticationPanel.js:510
+#: js/AuthenticationPanel.js:510 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2202
 msgid "Only ASCII"
 msgstr "Chỉ ASCII"
 
-#: js/AuthenticationPanel.js:515
+#: js/AuthenticationPanel.js:515 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2207
 msgid "Minimum length"
 msgstr "Độ dài tối thiểu"
 
-#: js/AuthenticationPanel.js:518
+#: js/AuthenticationPanel.js:518 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2210
 msgid "Minimum word chars"
 msgstr "Ký tự chữ cái tối tiểu"
 
-#: js/AuthenticationPanel.js:521
+#: js/AuthenticationPanel.js:521 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2213
 msgid "Minimum uppercase chars"
 msgstr "Ký tự in hoa tối thiểu"
 
-#: js/AuthenticationPanel.js:524
+#: js/AuthenticationPanel.js:524 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2216
 msgid "Minimum special chars"
 msgstr "Ký tự đặc biệt tối thiểu"
 
-#: js/AuthenticationPanel.js:527
+#: js/AuthenticationPanel.js:527 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2219
 msgid "Minimum numbers"
 msgstr "Số tối thiểu"
 
-#: js/AuthenticationPanel.js:531
+#: js/AuthenticationPanel.js:531 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2223
 msgid "Forbid part of username in password"
 msgstr "Cấm sử dụng 1 phần tên đăng nhập trong mật khẩu"
 
-#: js/AuthenticationPanel.js:540
+#: js/AuthenticationPanel.js:540 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2232
 msgid "Redirect Settings"
 msgstr "Thiết lập chuyển hướng"
 
-#: js/AuthenticationPanel.js:548
+#: js/AuthenticationPanel.js:548 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2240
 msgid "Redirect Url (redirect to login screen if empty)"
 msgstr "URL chuyển hướng (chuyển hướng tới màn hình đăng nhập rỗng)"
 
-#: js/AuthenticationPanel.js:552
+#: js/AuthenticationPanel.js:552 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2244
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr "Luôn chuyển hướng (Nếu không, chỉ chuyển hướng sau khi thoát)"
 
-#: js/AuthenticationPanel.js:558
+#: js/AuthenticationPanel.js:558 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2250
 msgid "Redirect to referring site, if exists"
 msgstr "Chuyển hướng tới trang trước đó, nếu có"
 
@@ -298,35 +347,35 @@ msgstr ""
 msgid "plain"
 msgstr ""
 
-#: js/AuthenticationPanel.js:624
+#: js/AuthenticationPanel.js:624 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2102
 msgid "User DN"
 msgstr "User DN"
 
-#: js/AuthenticationPanel.js:627
+#: js/AuthenticationPanel.js:627 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2105
 msgid "User Filter"
 msgstr "User Filter"
 
-#: js/AuthenticationPanel.js:631
+#: js/AuthenticationPanel.js:631 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2109
 msgid "User Search Scope"
 msgstr "User Search Scope"
 
-#: js/AuthenticationPanel.js:637
+#: js/AuthenticationPanel.js:637 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2115
 msgid "Groups DN"
 msgstr "Groups DN"
 
-#: js/AuthenticationPanel.js:640
+#: js/AuthenticationPanel.js:640 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2118
 msgid "Group Filter"
 msgstr "Lọc nhóm"
 
-#: js/AuthenticationPanel.js:644
+#: js/AuthenticationPanel.js:644 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2122
 msgid "Group Search Scope"
 msgstr "Phạm vi tìm nhóm"
 
-#: js/AuthenticationPanel.js:650
+#: js/AuthenticationPanel.js:650 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2128
 msgid "Password encoding"
 msgstr "Mã hóa mật khaaru"
 
-#: js/AuthenticationPanel.js:656
+#: js/AuthenticationPanel.js:656 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2134
 msgid "Use Rfc 2307 bis"
 msgstr "Sử dụng Rfc 2307 bis"
 
@@ -334,423 +383,432 @@ msgstr "Sử dụng Rfc 2307 bis"
 msgid "Maintain RFC 2307 attributes"
 msgstr ""
 
-#: js/AuthenticationPanel.js:662
+#: js/AuthenticationPanel.js:662 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2140
 msgid "Min User Id"
 msgstr "Độ dài người dùng ngắn nhất"
 
-#: js/AuthenticationPanel.js:665
+#: js/AuthenticationPanel.js:665 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2143
 msgid "Max User Id"
 msgstr "Độ dài người dùng dài nhất"
 
-#: js/AuthenticationPanel.js:668
+#: js/AuthenticationPanel.js:668 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2146
 msgid "Min Group Id"
 msgstr "Độ dài nhóm người dùng ngắn nhất"
 
-#: js/AuthenticationPanel.js:671
+#: js/AuthenticationPanel.js:671 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2149
 msgid "Max Group Id"
 msgstr "Độ dài nhóm người dùng dài nhất"
 
-#: js/AuthenticationPanel.js:674
+#: js/AuthenticationPanel.js:674 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2152
 msgid "Group UUID Attribute name"
 msgstr "Tên thuộc tính UUID nhóm"
 
-#: js/AuthenticationPanel.js:677
+#: js/AuthenticationPanel.js:677 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2155
 msgid "User UUID Attribute name"
 msgstr "Tên thuộc tính UUID người dùng"
 
-#: js/AuthenticationPanel.js:687
+#: js/AuthenticationPanel.js:687 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2165
 msgid "Readonly access"
 msgstr "Truy cập chỉ đọc"
 
-#: js/AuthenticationPanel.js:701
+#: js/AuthenticationPanel.js:701 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2264
 msgid "Save config and install"
 msgstr "Lưu cấu hình và cài đặt"
 
-#: js/AuthenticationPanel.js:703 js/ConfigManagerPanel.js:499
+#: js/AuthenticationPanel.js:703 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1575
+#: js/Setup-FAT-debug.js:2266 js/ConfigManagerPanel.js:499
 msgid "Save config"
 msgstr "Lưu cấu hình"
 
-#: js/AuthenticationPanel.js:728
+#: js/AuthenticationPanel.js:728 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2291
 msgid "Passwords don't match"
 msgstr "Mật khẩu không trùng nhau"
 
 #: js/AuthenticationPanel.js:738 js/AuthenticationPanel.js:745
 #: js/AuthenticationPanel.js:749 js/AuthenticationPanel.js:761
-#: js/AuthenticationPanel.js:772
+#: js/AuthenticationPanel.js:772 js/Setup-FAT.js:6 js/Setup-FAT-debug.js:2301
+#: js/Setup-FAT-debug.js:2308 js/Setup-FAT-debug.js:2312
+#: js/Setup-FAT-debug.js:2324 js/Setup-FAT-debug.js:2335
 msgid "Should not be empty"
 msgstr "Không thể rỗng"
 
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "Tôi đã đọc thỏa thuận về giấy phép sử dụng và chấp nhận nó."
-
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Thỏa thuận giấy phép sử dụng"
-
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "Tôi đã đọc chính sách riêng tư và chấp nhận nó"
-
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Thỏa thuận chính sách"
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Điều khoản sử dụng"
-
-#: js/Setup.js:53
+#: js/Setup-FAT.js:6 js/Setup.js:53 js/Setup-FAT-debug.js:150
 msgid "Terms and Conditions"
 msgstr "Điều khỏa sử dụng"
 
-#: js/Setup.js:58
+#: js/Setup-FAT.js:6 js/Setup.js:58 js/Setup-FAT-debug.js:155
 msgid "Setup Checks"
 msgstr "Kiểm tra cài đặt"
 
-#: js/Setup.js:64
+#: js/Setup-FAT.js:6 js/Setup.js:64 js/Setup-FAT-debug.js:161
 msgid "Config Manager"
 msgstr "Quản lý cấu hình"
 
-#: js/Setup.js:70
+#: js/Setup-FAT.js:6 js/Setup.js:70 js/Setup-FAT-debug.js:167
 msgid "Authentication/Accounts"
 msgstr "Xác thực/ Tài khoản"
 
-#: js/Setup.js:76
+#: js/Setup-FAT.js:6 js/Setup.js:76 js/Setup-FAT-debug.js:173
 msgid "Email"
 msgstr "Email"
 
-#: js/Setup.js:82
+#: js/Setup-FAT.js:6 js/Setup.js:82 js/Setup-FAT-debug.js:179
 msgid "Application Manager"
 msgstr "Quản lý ứng dụng"
 
-#: js/Setup.js:185
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "one: Ứng dụng\nother: Ứng dụng"
+#: js/Setup-FAT.js:6 js/TermsPanel.js:30 js/Setup-FAT-debug.js:441
+msgid "I have read the license agreement and accept it"
+msgstr "Tôi đã đọc thỏa thuận về giấy phép sử dụng và chấp nhận nó."
 
-#: js/ApplicationGridPanel.js:63
+#: js/Setup-FAT.js:6 js/TermsPanel.js:37 js/Setup-FAT-debug.js:448
+msgid "License Agreement"
+msgstr "Thỏa thuận giấy phép sử dụng"
+
+#: js/Setup-FAT.js:6 js/TermsPanel.js:56 js/Setup-FAT-debug.js:467
+msgid "I have read the privacy agreement and accept it"
+msgstr "Tôi đã đọc chính sách riêng tư và chấp nhận nó"
+
+#: js/Setup-FAT.js:6 js/TermsPanel.js:63 js/Setup-FAT-debug.js:474
+msgid "Privacy Agreement"
+msgstr "Thỏa thuận chính sách"
+
+#: js/Setup-FAT.js:6 js/TermsPanel.js:80 js/Setup-FAT-debug.js:491
+msgid "Accept Terms and Conditions"
+msgstr "Điều khoản sử dụng"
+
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:63 js/Setup-FAT-debug.js:604
 msgid "Name"
 msgstr "Tên"
 
-#: js/ApplicationGridPanel.js:64
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:64 js/Setup-FAT-debug.js:605
 msgid "Enabled"
 msgstr "Đã mở"
 
-#: js/ApplicationGridPanel.js:65
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:65 js/Setup-FAT-debug.js:606
 msgid "Order"
 msgstr "Sắp xếp"
 
-#: js/ApplicationGridPanel.js:66
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:66 js/Setup-FAT-debug.js:607
 msgid "Installed Version"
 msgstr "Phiên bản đã cài"
 
-#: js/ApplicationGridPanel.js:67
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:67 js/Setup-FAT-debug.js:608
 msgid "Available Version"
 msgstr "Phiên bản sẵn sàng"
 
-#: js/ApplicationGridPanel.js:68
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:68 js/Setup-FAT-debug.js:609
 msgid "Status"
 msgstr "Trạng thái"
 
-#: js/ApplicationGridPanel.js:69
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:69 js/Setup-FAT-debug.js:610
 msgid "Depends on"
 msgstr "Phụ thuộc vào"
 
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+#: js/Setup-FAT-debug.js:619 js/Setup-FAT-debug.js:1039
 msgid "Install application"
 msgstr "Cài đặt ứng dụng"
 
-#: js/ApplicationGridPanel.js:87
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:87 js/Setup-FAT-debug.js:628
 msgid "Uninstall application"
 msgstr "Gỡ ứng dụng"
 
-#: js/ApplicationGridPanel.js:96
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:96 js/Setup-FAT-debug.js:637
 msgid "Update application"
 msgstr "Cập nhật ứng dụng"
 
-#: js/ApplicationGridPanel.js:105
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:105 js/Setup-FAT-debug.js:646
 msgid "Go to {0} login"
 msgstr "Tới đăng nhập {0}"
 
-#: js/ApplicationGridPanel.js:180
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:180 js/Setup-FAT-debug.js:716
 msgid "uninstall"
 msgstr "gỡ bỏ"
 
-#: js/ApplicationGridPanel.js:180
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:180 js/Setup-FAT-debug.js:716
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Bạn có muốn gỡ bỏ ứng dụng?"
 
-#: js/ApplicationGridPanel.js:240
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:240 js/Setup-FAT-debug.js:776
 msgid "This may take a while"
 msgstr "Có thể bạn phải đợi lâu"
 
-#: js/ApplicationGridPanel.js:272
+#: js/Setup-FAT.js:6 js/ApplicationGridPanel.js:272 js/Setup-FAT-debug.js:808
 msgid "Dependency Violation"
 msgstr "Xung đột các thành phần "
 
-#: js/EmailPanel.js:150
-msgid "Standard IMAP"
-msgstr "Standard IMAP"
+#: js/Setup-FAT.js:6 js/EnvCheckGridPanel.js:89 js/Setup-FAT-debug.js:924
+msgid "Performing Environment Checks..."
+msgstr "Đang thực hiện kiểm tra môi trường ..."
 
-#: js/EmailPanel.js:160
-msgid "Standard SMTP"
-msgstr "Standard SMTP"
+#: js/Setup-FAT.js:6 js/EnvCheckGridPanel.js:160 js/Setup-FAT-debug.js:995
+msgid "Check"
+msgstr "Kiểm tra"
 
-#: js/EmailPanel.js:174
-msgid "Imap"
-msgstr "Imap"
+#: js/Setup-FAT.js:6 js/EnvCheckGridPanel.js:161 js/Setup-FAT-debug.js:996
+msgid "Result"
+msgstr "Kết quả"
 
-#: js/EmailPanel.js:186 js/ConfigManagerPanel.js:205
+#: js/Setup-FAT.js:6 js/EnvCheckGridPanel.js:162 js/Setup-FAT-debug.js:997
+msgid "Error"
+msgstr "Lỗi"
+
+#: js/Setup-FAT.js:6 js/EnvCheckGridPanel.js:180 js/Setup-FAT-debug.js:1015
+msgid "Run setup tests"
+msgstr "Chạy kiếm tra cài đặt"
+
+#: js/Setup-FAT.js:6 js/EnvCheckGridPanel.js:189 js/Setup-FAT-debug.js:1024
+msgid "Ignore setup tests"
+msgstr "Bỏ qua kiểm tra cài đặt"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1225 js/Setup-FAT-debug.js:1237
+#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
+msgid "File"
+msgstr "File"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1274 js/ConfigManagerPanel.js:198
+msgid "Setup Authentication"
+msgstr "Cài đặt xác thực"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:186 js/Setup-FAT-debug.js:1281
+#: js/Setup-FAT-debug.js:2527 js/ConfigManagerPanel.js:205
 msgid "Username"
 msgstr "Tên đăng nhập"
 
-#: js/EmailPanel.js:206
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1295 js/Setup-FAT-debug.js:1313
+#: js/ConfigManagerPanel.js:219 js/ConfigManagerPanel.js:237
+msgid "Database"
+msgstr "Cơ sở dữ liệu"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1317 js/ConfigManagerPanel.js:241
+msgid "User"
+msgstr "Người dùng"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1325 js/ConfigManagerPanel.js:249
+msgid "Prefix"
+msgstr "Tiền tố"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1329 js/ConfigManagerPanel.js:253
+msgid "Logging"
+msgstr "Ghi lỗi"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1339 js/ConfigManagerPanel.js:263
+msgid "Filename"
+msgstr "Tên file"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1342 js/ConfigManagerPanel.js:266
+msgid "Priority"
+msgstr "Độ quan trọng"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1346 js/ConfigManagerPanel.js:270
+msgid "Caching"
+msgstr "Đệm"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1357 js/Setup-FAT-debug.js:1474
+#: js/ConfigManagerPanel.js:281 js/ConfigManagerPanel.js:398
+msgid "Lifetime (seconds)"
+msgstr "Lifetime (seconds)"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1380 js/Setup-FAT-debug.js:1499
+#: js/ConfigManagerPanel.js:304 js/ConfigManagerPanel.js:423
+msgid "Path"
+msgstr "Đường dẫn"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1425 js/ConfigManagerPanel.js:349
+msgid "Queue"
+msgstr "Hàng đợi"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1466 js/ConfigManagerPanel.js:390
+msgid "Session"
+msgstr "Session"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1525 js/ConfigManagerPanel.js:449
+msgid "Temporary files"
+msgstr "Temporary files"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1533 js/ConfigManagerPanel.js:457
+msgid "Temporary Files Path"
+msgstr "Temporary Files Path"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1538 js/ConfigManagerPanel.js:462
+msgid "Filestore directory"
+msgstr "Filestore directory"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1546 js/ConfigManagerPanel.js:470
+msgid "Filestore Path"
+msgstr "Filestore Path"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1551 js/ConfigManagerPanel.js:475
+msgid "Addressbook Map panel"
+msgstr "Addressbook Map panel"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1559 js/ConfigManagerPanel.js:483
+msgid "Map panel"
+msgstr "Map panel"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1561 js/ConfigManagerPanel.js:485
+msgid "disabled"
+msgstr "tắt"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1561 js/ConfigManagerPanel.js:485
+msgid "enabled"
+msgstr "mở"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1573 js/ConfigManagerPanel.js:497
+msgid "Config file is not writable"
+msgstr "File cấu hình không thể lưu lại"
+
+#: js/Setup-FAT.js:6 js/Setup-FAT-debug.js:1592 js/ConfigManagerPanel.js:516
+msgid "Download config file"
+msgstr "Download file cấu hình"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:150 js/Setup-FAT-debug.js:2491
+msgid "Standard IMAP"
+msgstr "Standard IMAP"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:160 js/Setup-FAT-debug.js:2501
+msgid "Standard SMTP"
+msgstr "Standard SMTP"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:174 js/Setup-FAT-debug.js:2515
+msgid "Imap"
+msgstr "Imap"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:206 js/Setup-FAT-debug.js:2547
 msgid "Use system account"
 msgstr "Sử dụng tài khoản hệ thống"
 
-#: js/EmailPanel.js:258
+#: js/Setup-FAT.js:6 js/EmailPanel.js:258 js/Setup-FAT-debug.js:2599
 msgid "Cyrus Admin"
 msgstr "Cyrus Admin"
 
-#: js/EmailPanel.js:261
+#: js/Setup-FAT.js:6 js/EmailPanel.js:261 js/Setup-FAT-debug.js:2602
 msgid "Cyrus Admin Password"
 msgstr "Cyrus Admin Password"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:284 js/Setup-FAT-debug.js:2619
+msgid "Smtp"
+msgstr "Smtp"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:306 js/Setup-FAT-debug.js:2641
+msgid "Authentication"
+msgstr "Authentication"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:309 js/Setup-FAT-debug.js:2644
+msgid "Login"
+msgstr "Đăng nhập"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:309 js/Setup-FAT-debug.js:2644
+msgid "Plain"
+msgstr "Thuần text"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:313 js/Setup-FAT-debug.js:2648
+msgid "Primary Domain"
+msgstr "Domain chính"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:317 js/Setup-FAT-debug.js:2652
+msgid "Secondary Domains (comma separated)"
+msgstr "Domain phụ (cách nhau bằng dấu phẩy)"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:321 js/Setup-FAT-debug.js:2656
+msgid "Notifications service address"
+msgstr "Địa chỉ thông báo dịch vụ"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:325 js/Setup-FAT-debug.js:2660
+msgid "Notification Username"
+msgstr "Người dùng thông báo"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:329 js/Setup-FAT-debug.js:2664
+msgid "Notification Password"
+msgstr "Mật khẩu thông báo"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:334 js/Setup-FAT-debug.js:2669
+msgid "Notifications local client (hostname or IP address)"
+msgstr "Notifications local client (hostname or IP address)"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:390 js/Setup-FAT-debug.js:2725
+msgid "SIEVE"
+msgstr "SIEVE"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:431 js/Setup-FAT-debug.js:2766
+msgid "MySql Hostname"
+msgstr "MySql Hostname"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:434 js/Setup-FAT-debug.js:2769
+msgid "MySql Database"
+msgstr "MySql Database"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:437 js/Setup-FAT-debug.js:2772
+msgid "MySql User"
+msgstr "MySql User"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:440 js/Setup-FAT-debug.js:2775
+msgid "MySql Password"
+msgstr "MySql Password"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:444 js/Setup-FAT-debug.js:2779
+msgid "MySql Port"
+msgstr "MySql Port"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:460 js/Setup-FAT-debug.js:2795
+msgid "User or UID"
+msgstr "User or UID"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:463 js/Setup-FAT-debug.js:2798
+msgid "Group or GID"
+msgstr "Group or GID"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:466 js/Setup-FAT-debug.js:2801
+msgid "Home Template"
+msgstr "Home Template"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:468 js/Setup-FAT-debug.js:2803
+msgid "Password Scheme"
+msgstr "Password Scheme"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:479 js/Setup-FAT-debug.js:2814
+msgid "PLAIN-MD5"
+msgstr "PLAIN-MD5"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:480 js/Setup-FAT-debug.js:2815
+msgid "MD5-CRYPT"
+msgstr "MD5-CRYPT"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:481 js/Setup-FAT-debug.js:2816
+msgid "SHA1"
+msgstr "SHA1"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:482 js/Setup-FAT-debug.js:2817
+msgid "SHA256"
+msgstr "SHA256"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:483 js/Setup-FAT-debug.js:2818
+msgid "SSHA256"
+msgstr "SSHA256"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:484 js/Setup-FAT-debug.js:2819
+msgid "SHA512"
+msgstr "SHA512"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:485 js/Setup-FAT-debug.js:2820
+msgid "SSHA512"
+msgstr "SSHA512"
+
+#: js/Setup-FAT.js:6 js/EmailPanel.js:486 js/Setup-FAT-debug.js:2821
+msgid "PLAIN"
+msgstr "PLAIN"
+
+#: js/Setup.js:185 js/Setup-FAT-debug.js:282
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "one: Ứng dụng\nother: Ứng dụng"
 
 #: js/EmailPanel.js:266
 msgid "Use proxy auth"
 msgstr ""
 
-#: js/EmailPanel.js:284
-msgid "Smtp"
-msgstr "Smtp"
-
-#: js/EmailPanel.js:306
-msgid "Authentication"
-msgstr "Authentication"
-
-#: js/EmailPanel.js:309
-msgid "Login"
-msgstr "Đăng nhập"
-
-#: js/EmailPanel.js:309
-msgid "Plain"
-msgstr "Thuần text"
-
-#: js/EmailPanel.js:313
-msgid "Primary Domain"
-msgstr "Domain chính"
-
-#: js/EmailPanel.js:317
-msgid "Secondary Domains (comma separated)"
-msgstr "Domain phụ (cách nhau bằng dấu phẩy)"
-
-#: js/EmailPanel.js:321
-msgid "Notifications service address"
-msgstr "Địa chỉ thông báo dịch vụ"
-
-#: js/EmailPanel.js:325
-msgid "Notification Username"
-msgstr "Người dùng thông báo"
-
-#: js/EmailPanel.js:329
-msgid "Notification Password"
-msgstr "Mật khẩu thông báo"
-
-#: js/EmailPanel.js:334
-msgid "Notifications local client (hostname or IP address)"
-msgstr "Notifications local client (hostname or IP address)"
-
-#: js/EmailPanel.js:390
-msgid "SIEVE"
-msgstr "SIEVE"
-
-#: js/EmailPanel.js:431
-msgid "MySql Hostname"
-msgstr "MySql Hostname"
-
-#: js/EmailPanel.js:434
-msgid "MySql Database"
-msgstr "MySql Database"
-
-#: js/EmailPanel.js:437
-msgid "MySql User"
-msgstr "MySql User"
-
-#: js/EmailPanel.js:440
-msgid "MySql Password"
-msgstr "MySql Password"
-
-#: js/EmailPanel.js:444
-msgid "MySql Port"
-msgstr "MySql Port"
-
-#: js/EmailPanel.js:460
-msgid "User or UID"
-msgstr "User or UID"
-
-#: js/EmailPanel.js:463
-msgid "Group or GID"
-msgstr "Group or GID"
-
-#: js/EmailPanel.js:466
-msgid "Home Template"
-msgstr "Home Template"
-
-#: js/EmailPanel.js:468
-msgid "Password Scheme"
-msgstr "Password Scheme"
-
-#: js/EmailPanel.js:479
-msgid "PLAIN-MD5"
-msgstr "PLAIN-MD5"
-
-#: js/EmailPanel.js:480
-msgid "MD5-CRYPT"
-msgstr "MD5-CRYPT"
-
-#: js/EmailPanel.js:481
-msgid "SHA1"
-msgstr "SHA1"
-
-#: js/EmailPanel.js:482
-msgid "SHA256"
-msgstr "SHA256"
-
-#: js/EmailPanel.js:483
-msgid "SSHA256"
-msgstr "SSHA256"
-
-#: js/EmailPanel.js:484
-msgid "SHA512"
-msgstr "SHA512"
-
-#: js/EmailPanel.js:485
-msgid "SSHA512"
-msgstr "SSHA512"
-
-#: js/EmailPanel.js:486
-msgid "PLAIN"
-msgstr "PLAIN"
-
-#: js/EnvCheckGridPanel.js:89
-msgid "Performing Environment Checks..."
-msgstr "Đang thực hiện kiểm tra môi trường ..."
-
-#: js/EnvCheckGridPanel.js:130
+#: js/EnvCheckGridPanel.js:130 js/Setup-FAT-debug.js:965
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."
 msgstr "Không có gì được tìm thấy {0}. Xin thay đổi điều kiện tìm kiếm của bạn, tùy chọn xem hoặc {1} bạn tìm kiếm trong đó."
-
-#: js/EnvCheckGridPanel.js:160
-msgid "Check"
-msgstr "Kiểm tra"
-
-#: js/EnvCheckGridPanel.js:161
-msgid "Result"
-msgstr "Kết quả"
-
-#: js/EnvCheckGridPanel.js:162
-msgid "Error"
-msgstr "Lỗi"
-
-#: js/EnvCheckGridPanel.js:180
-msgid "Run setup tests"
-msgstr "Chạy kiếm tra cài đặt"
-
-#: js/EnvCheckGridPanel.js:189
-msgid "Ignore setup tests"
-msgstr "Bỏ qua kiểm tra cài đặt"
-
-#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
-msgid "File"
-msgstr "File"
-
-#: js/ConfigManagerPanel.js:198
-msgid "Setup Authentication"
-msgstr "Cài đặt xác thực"
-
-#: js/ConfigManagerPanel.js:219 js/ConfigManagerPanel.js:237
-msgid "Database"
-msgstr "Cơ sở dữ liệu"
-
-#: js/ConfigManagerPanel.js:241
-msgid "User"
-msgstr "Người dùng"
-
-#: js/ConfigManagerPanel.js:249
-msgid "Prefix"
-msgstr "Tiền tố"
-
-#: js/ConfigManagerPanel.js:253
-msgid "Logging"
-msgstr "Ghi lỗi"
-
-#: js/ConfigManagerPanel.js:263
-msgid "Filename"
-msgstr "Tên file"
-
-#: js/ConfigManagerPanel.js:266
-msgid "Priority"
-msgstr "Độ quan trọng"
-
-#: js/ConfigManagerPanel.js:270
-msgid "Caching"
-msgstr "Đệm"
-
-#: js/ConfigManagerPanel.js:281 js/ConfigManagerPanel.js:398
-msgid "Lifetime (seconds)"
-msgstr "Lifetime (seconds)"
-
-#: js/ConfigManagerPanel.js:304 js/ConfigManagerPanel.js:423
-msgid "Path"
-msgstr "Đường dẫn"
-
-#: js/ConfigManagerPanel.js:349
-msgid "Queue"
-msgstr "Hàng đợi"
-
-#: js/ConfigManagerPanel.js:390
-msgid "Session"
-msgstr "Session"
-
-#: js/ConfigManagerPanel.js:449
-msgid "Temporary files"
-msgstr "Temporary files"
-
-#: js/ConfigManagerPanel.js:457
-msgid "Temporary Files Path"
-msgstr "Temporary Files Path"
-
-#: js/ConfigManagerPanel.js:462
-msgid "Filestore directory"
-msgstr "Filestore directory"
-
-#: js/ConfigManagerPanel.js:470
-msgid "Filestore Path"
-msgstr "Filestore Path"
-
-#: js/ConfigManagerPanel.js:475
-msgid "Addressbook Map panel"
-msgstr "Addressbook Map panel"
-
-#: js/ConfigManagerPanel.js:483
-msgid "Map panel"
-msgstr "Map panel"
-
-#: js/ConfigManagerPanel.js:485
-msgid "disabled"
-msgstr "tắt"
-
-#: js/ConfigManagerPanel.js:485
-msgid "enabled"
-msgstr "mở"
-
-#: js/ConfigManagerPanel.js:497
-msgid "Config file is not writable"
-msgstr "File cấu hình không thể lưu lại"
-
-#: js/ConfigManagerPanel.js:516
-msgid "Download config file"
-msgstr "Download file cấu hình"

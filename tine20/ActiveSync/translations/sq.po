@@ -81,44 +81,45 @@ msgstr "Lista e paracaktuar detyrave"
 msgid "The default task list to create new tasks in."
 msgstr "Lista e paracaktuar e detyrave ku do të krijohen detyra të reja"
 
-#: js/Model.js:42
+#: js/ActiveSync-FAT-debug.js:32 js/Application.js:27 js/ActiveSync-FAT.js:6
+msgid "Active Sync"
+msgstr "Sinkornizim aktiv"
+
+#: js/ActiveSync-FAT-debug.js:48 js/Application.js:43 js/ActiveSync-FAT.js:6
+msgid "Select a Device"
+msgstr "Zgjidhni një Pajisje"
+
+#: js/ActiveSync-FAT-debug.js:62 js/Application.js:57 js/ActiveSync-FAT.js:6
+msgid "No ActiveSync Device registered"
+msgstr "Nuk ka pajisje të sinkronizimit aktiv të regjistuara"
+
+#: js/ActiveSync-FAT-debug.js:70 js/Application.js:65 js/ActiveSync-FAT.js:6
+msgid "Set as {0} Filter"
+msgstr "Vendosni {0} si Filtër"
+
+#: js/ActiveSync-FAT-debug.js:95 js/Application.js:90 js/ActiveSync-FAT.js:6
+msgid "Resetted Sync Filter"
+msgstr "Filtra sinkron të rivendosur"
+
+#: js/ActiveSync-FAT-debug.js:96 js/ActiveSync-FAT-debug.js:108
+#: js/Application.js:91 js/Application.js:103 js/ActiveSync-FAT.js:6
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "Filtri {0} për pajisjen \"{1}\" është tani \"{2}\""
+
+#: js/ActiveSync-FAT-debug.js:99 js/Application.js:94 js/ActiveSync-FAT.js:6
+msgid "resetted"
+msgstr "rivendosur"
+
+#: js/ActiveSync-FAT-debug.js:107 js/Application.js:102 js/ActiveSync-FAT.js:6
+msgid "Set Sync Filter"
+msgstr "Vendsoni Filtrin e Sinkronizimit"
+
+#: js/ActiveSync-FAT-debug.js:158 js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] "Pajisja"
 msgstr[1] "Pajisje"
 
-#: js/Model.js:42
+#: js/ActiveSync-FAT-debug.js:158 js/Model.js:42
 msgid "Devices"
 msgstr "Pajisje"
-
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Sinkornizim aktiv"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Zgjidhni një Pajisje"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Nuk ka pajisje të sinkronizimit aktiv të regjistuara"
-
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr "Vendosni {0} si Filtër"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Filtra sinkron të rivendosur"
-
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "Filtri {0} për pajisjen \"{1}\" është tani \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "rivendosur"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Vendsoni Filtrin e Sinkronizimit"

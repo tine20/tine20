@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"PO-Revision-Date: 2014-03-21 12:00+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -51,7 +51,8 @@ msgid ""
 "syncronisation."
 msgstr "Rola uczestnika projektu: Możliwa. Zauważ proszę, że dodatkowe role uczestnika projektu mogą wpływać w innych projektach na eksport albo synchronizację."
 
-#: Setup/setup.xml:4 js/Projects.js:24
+#: Setup/setup.xml:4 js/Projects-FAT-debug.js:187 js/Projects-FAT.js:5
+#: js/Projects.js:24
 msgid "Projects"
 msgstr "Projekty"
 
@@ -111,27 +112,34 @@ msgstr "Domyślne ulubione"
 msgid "The default favorite which is loaded on Projects startup"
 msgstr "Domyślny ulubiony, ładowany podczas uruchamiania projektów"
 
-#: js/AddToProjectPanel.js:34
+#: js/AddToProjectPanel.js:34 js/Projects-FAT-debug.js:893
+#: js/Projects-FAT.js:5
 msgid "Please choose the Project to add the contacts to"
 msgstr "Proszę wybrać projekt, do którego należy dodać kontakty"
 
-#: js/AddToProjectPanel.js:38
+#: js/AddToProjectPanel.js:38 js/Projects-FAT-debug.js:897
+#: js/Projects-FAT.js:5
 msgid "Please select the attenders' role"
 msgstr "Proszę wybrać rolę uczestnika"
 
-#: js/AddToProjectPanel.js:79
+#: js/AddToProjectPanel.js:79 js/Projects-FAT-debug.js:938
+#: js/Projects-FAT.js:5
 msgid "Select Project"
 msgstr "Wybierz projekt"
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
+#: js/AddToProjectPanel.js:81 js/Projects-FAT-debug.js:613
+#: js/Projects-FAT-debug.js:940 js/Projects-FAT.js:5
+#: js/ProjectEditDialog.js:81
 msgid "Role"
 msgstr "Rola"
 
-#: js/AddToProjectPanel.js:82
+#: js/AddToProjectPanel.js:82 js/Projects-FAT-debug.js:941
+#: js/Projects-FAT.js:5
 msgid "Select Role"
 msgstr "Wybierz rolę"
 
-#: js/AddToProjectPanel.js:102
+#: js/AddToProjectPanel.js:102 js/Projects-FAT-debug.js:961
+#: js/Projects-FAT.js:5
 msgid "Adding {0} Participants to project"
 msgstr "Dodawanie {0} uczestników do projektu"
 
@@ -139,72 +147,90 @@ msgstr "Dodawanie {0} uczestników do projektu"
 msgid "Search FAQ"
 msgstr ""
 
-#: js/ProjectGridPanel.js:118
+#: js/ProjectGridPanel.js:118 js/Projects-FAT-debug.js:318
+#: js/Projects-FAT.js:5
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: js/ProjectGridPanel.js:121 js/Model.js:76 js/ProjectEditDialog.js:138
+#: js/ProjectGridPanel.js:121 js/Projects-FAT-debug.js:137
+#: js/Projects-FAT-debug.js:321 js/Projects-FAT-debug.js:667
+#: js/Projects-FAT.js:5 js/Model.js:76 js/ProjectEditDialog.js:138
 msgid "Number"
 msgstr "Ilość"
 
-#: js/ProjectGridPanel.js:128 js/Model.js:75 js/ProjectEditDialog.js:133
+#: js/ProjectGridPanel.js:128 js/Projects-FAT-debug.js:136
+#: js/Projects-FAT-debug.js:328 js/Projects-FAT-debug.js:662
+#: js/Projects-FAT.js:5 js/Model.js:75 js/ProjectEditDialog.js:133
 msgid "Title"
 msgstr "Tytuł"
 
-#: js/ProjectGridPanel.js:134 js/Model.js:79 js/ProjectEditDialog.js:144
+#: js/ProjectGridPanel.js:134 js/Projects-FAT-debug.js:140
+#: js/Projects-FAT-debug.js:334 js/Projects-FAT-debug.js:673
+#: js/Projects-FAT.js:5 js/Model.js:79 js/ProjectEditDialog.js:144
 msgid "Status"
 msgstr "Status"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121
+#: js/Projects-FAT-debug.js:42 js/Projects-FAT-debug.js:612
+#: js/Projects-FAT.js:5 js/ProjectAttendeeFilter.js:38
+#: js/ProjectEditDialog.js:80
+msgid "Attendee"
+msgstr "Uczestnik"
+
+#: js/Projects-FAT-debug.js:53 js/Projects-FAT.js:5
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Rola uczestnika"
+
+#: js/Projects-FAT-debug.js:96 js/Projects-FAT-debug.js:637
+#: js/Projects-FAT-debug.js:650 js/Projects-FAT.js:5 js/Model.js:35
+#: js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekt"
 msgstr[1] "projekty"
 msgstr[2] "projekty"
 
-#: js/Model.js:39
+#: js/Projects-FAT-debug.js:100 js/Model.js:39
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Lista projektów"
 msgstr[1] "listy projektów"
 msgstr[2] "listy projektów"
 
-#: js/Model.js:42
+#: js/Projects-FAT-debug.js:103 js/Model.js:42
 msgid "Project lists"
 msgstr "Listy projektów"
+
+#: js/Projects-FAT-debug.js:135 js/Projects-FAT.js:5
+msgid "Quick search"
+msgstr ""
+
+#: js/Projects-FAT-debug.js:138 js/Projects-FAT-debug.js:703
+#: js/Projects-FAT.js:5 js/Model.js:77 js/ProjectEditDialog.js:174
+msgid "Description"
+msgstr "Opis"
+
+#: js/Projects-FAT-debug.js:149 js/Projects-FAT.js:5 js/Model.js:88
+msgid "Last Modified Time"
+msgstr "Czas ostatniej zmiany"
+
+#: js/Projects-FAT-debug.js:150 js/Projects-FAT.js:5 js/Model.js:89
+msgid "Last Modified By"
+msgstr "Ostatnio zmienione przez"
+
+#: js/Projects-FAT-debug.js:151 js/Projects-FAT.js:5 js/Model.js:90
+msgid "Creation Time"
+msgstr "Czas utworzenia"
+
+#: js/Projects-FAT-debug.js:152 js/Projects-FAT.js:5 js/Model.js:91
+msgid "Created By"
+msgstr "Utworzone przez"
+
+#: js/Projects-FAT-debug.js:717 js/Projects-FAT.js:5
+#: js/ProjectEditDialog.js:188
+msgid "Enter description"
+msgstr "Wprowadź opis"
 
 #: js/Model.js:74
 msgid "Quick Search"
 msgstr ""
-
-#: js/Model.js:77 js/ProjectEditDialog.js:174
-msgid "Description"
-msgstr "Opis"
-
-#: js/Model.js:88
-msgid "Last Modified Time"
-msgstr "Czas ostatniej zmiany"
-
-#: js/Model.js:89
-msgid "Last Modified By"
-msgstr "Ostatnio zmienione przez"
-
-#: js/Model.js:90
-msgid "Creation Time"
-msgstr "Czas utworzenia"
-
-#: js/Model.js:91
-msgid "Created By"
-msgstr "Utworzone przez"
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
-msgid "Attendee"
-msgstr "Uczestnik"
-
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Rola uczestnika"
-
-#: js/ProjectEditDialog.js:188
-msgid "Enter description"
-msgstr "Wprowadź opis"

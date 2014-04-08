@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-02-11 20:39+0000\n"
+"PO-Revision-Date: 2014-03-21 11:59+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
@@ -51,12 +51,12 @@ msgstr "%s's persoonlijke agenda"
 msgid "unknown"
 msgstr ""
 
-#: Model/Attender.php:434
+#: Model/Attender.php:438
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr ""
 
-#: Model/Attender.php:437
+#: Model/Attender.php:441
 msgid "The email address has been shortened: "
 msgstr "Het email adres is ingekort:"
 
@@ -68,7 +68,7 @@ msgstr "Begin"
 msgid "End"
 msgstr "Einde"
 
-#: Model/Event.php:345 js/GridView.js:127 js/EventDetailsPanel.js:266
+#: Model/Event.php:345 js/GridView.js:127 js/EventDetailsPanel.js:270
 msgid "Blocking"
 msgstr "Blokkerend"
 
@@ -81,13 +81,13 @@ msgstr "Klassificatie"
 msgid "Description"
 msgstr "Beschrijving"
 
-#: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:276
+#: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:280
 #: js/Model.js:206 js/EventEditDialog.js:132 js/ResourcesGridPanel.js:54
 msgid "Location"
 msgstr "Locatie"
 
 #: Model/Event.php:349 js/GridView.js:154 js/PerspectiveCombo.js:127
-#: js/EventDetailsPanel.js:280 js/Model.js:226 js/EventEditDialog.js:308
+#: js/EventDetailsPanel.js:284 js/Model.js:226 js/EventEditDialog.js:308
 msgid "Organizer"
 msgstr "Organisator"
 
@@ -220,44 +220,60 @@ msgstr "e"
 msgid "th"
 msgstr "e"
 
-#: Config.php:52
+#: Config.php:66
 msgid "Fixed Calendars"
 msgstr "Vaste kalenders"
 
-#: Config.php:54
+#: Config.php:68
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
 msgstr "Kalenders altijd geselecteerd ongeacht alle filterparameters. Een geldige use case zou kunnen zijn om de weergave van een bepaalde vakantie kalender dwingen."
 
-#: Config.php:62
+#: Config.php:76
 msgid "Attendee Status Available"
 msgstr "Status van genodigde aanwezig"
 
-#: Config.php:64
+#: Config.php:78
 msgid ""
 "Possible event attendee status. Please note that additional attendee status "
 "might impact other calendar systems on export or syncronisation."
 msgstr ""
 
-#: Config.php:72
+#: Config.php:86
 msgid "Attendee Roles Available"
 msgstr ""
 
-#: Config.php:74
+#: Config.php:88
 msgid ""
 "Possible event attendee roles. Please note that additional attendee roles "
 "might impact other calendar systems on export or syncronisation."
 msgstr ""
 
-#: Config.php:82
+#: Config.php:96
 msgid "Filter timeslot for CalDAV events"
 msgstr ""
 
-#: Config.php:84
+#: Config.php:98
 msgid ""
 "For how long in the past (in months) the events should be synchronized."
 msgstr "Hoever terug in het verleden (in maanden) moeten de evenementen gesynchroniseerd worden."
+
+#: Config.php:107
+msgid "Default filter period (from) for events fetched via JSON API"
+msgstr ""
+
+#: Config.php:109
+msgid "For how long in the past (in months) the events should be fetched."
+msgstr ""
+
+#: Config.php:118
+msgid "Default filter period (until) for events fetched via JSON API"
+msgstr ""
+
+#: Config.php:120
+msgid "For how long in the future (in months) the events should be fetched."
+msgstr ""
 
 #: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:70
 msgid "Calendar"
@@ -286,7 +302,7 @@ msgid "Declined"
 msgstr "Afgewezen"
 
 #: Setup/Update/Release5.php:94 Setup/Initialize.php:115 js/GridView.js:135
-#: js/EventDetailsPanel.js:271 js/EventEditDialog.js:206
+#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:206
 msgid "Tentative"
 msgstr "Onder voorbehoud"
 
@@ -322,7 +338,7 @@ msgstr "Evenement waar ik de organisator van ben"
 msgid "All my events"
 msgstr "Al mijn evenementen"
 
-#: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:256
+#: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:260
 #: js/ContactEventsGridPanel.js:119 js/EventEditDialog.js:138
 msgid "Start Time"
 msgstr "Begin tijd"
@@ -418,7 +434,7 @@ msgstr "Prive"
 msgid "Tags"
 msgstr "Tags"
 
-#: js/GridView.js:115 js/EventDetailsPanel.js:261 js/EventEditDialog.js:152
+#: js/GridView.js:115 js/EventDetailsPanel.js:265 js/EventEditDialog.js:152
 msgid "End Time"
 msgstr "Eind tijd"
 
@@ -776,15 +792,15 @@ msgstr ""
 msgid "{0} {1} o'clock"
 msgstr "{0} {1} uur"
 
-#: js/EventDetailsPanel.js:93 js/EventUI.js:242
+#: js/EventDetailsPanel.js:98 js/EventUI.js:244
 msgid "recurring event"
 msgstr "Terugkerend evenement"
 
-#: js/EventDetailsPanel.js:95 js/EventUI.js:247
+#: js/EventDetailsPanel.js:100 js/EventUI.js:249
 msgid "recurring event exception"
 msgstr "uitzondering op terugkerend evenement"
 
-#: js/EventDetailsPanel.js:298 js/AttendeeFilterModel.js:35
+#: js/EventDetailsPanel.js:302 js/AttendeeFilterModel.js:35
 #: js/AttendeeGridPanel.js:89 js/WestPanel.js:90 js/Model.js:374
 msgid "Attendee"
 msgstr "Genodigde"
@@ -935,19 +951,19 @@ msgstr "Opgeslagen in"
 msgid "Enter description"
 msgstr "Voer omschrijving in"
 
-#: js/EventEditDialog.js:510
+#: js/EventEditDialog.js:515
 msgid "End date is not valid"
 msgstr "Eind datum is niet mogelijk"
 
-#: js/EventEditDialog.js:513
+#: js/EventEditDialog.js:518
 msgid "End date must be after start date"
 msgstr "Eind datum moet na begin datum vallen"
 
-#: js/EventEditDialog.js:526
+#: js/EventEditDialog.js:531
 msgid "Start date is not valid"
 msgstr "Begin datum is niet mogelijk"
 
-#: js/EventEditDialog.js:547
+#: js/EventEditDialog.js:552
 msgid "Errors"
 msgstr "Fouten"
 
@@ -971,15 +987,15 @@ msgstr "Samenvatting te lang"
 msgid "Summary too Short"
 msgstr "Samenvatting te kort"
 
-#: js/EventUI.js:235
+#: js/EventUI.js:237
 msgid "private classification"
 msgstr "privé klassificatie"
 
-#: js/EventUI.js:256
+#: js/EventUI.js:258
 msgid "has alarm"
 msgstr "heeft alarm"
 
-#: js/EventUI.js:263
+#: js/EventUI.js:265
 msgid "has attachments"
 msgstr "heeft bijlagen"
 

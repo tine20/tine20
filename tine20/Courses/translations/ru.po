@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"PO-Revision-Date: 2014-03-21 11:59+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,8 @@ msgstr "Добавить существующего пользователя"
 msgid "Add existing user as member to a course"
 msgstr "Добавить существующего пользователя как участника курса"
 
-#: Config.php:82 js/CourseEditDialog.js:230 js/Models.js:74
+#: Config.php:82 js/CourseEditDialog.js:230 js/Courses-FAT-debug.js:77
+#: js/Courses-FAT-debug.js:650 js/Courses-FAT.js:6 js/Models.js:74
 msgid "Internet Access"
 msgstr "Доступ в интернет"
 
@@ -101,106 +102,113 @@ msgstr "Отфильтровано"
 msgid "The default favorite which is loaded on Classes startup"
 msgstr "Будет загружено по-умолчанию при загрузке Классов"
 
-#: js/CourseEditDialog.js:33
+#: js/CourseEditDialog.js:33 js/Courses-FAT-debug.js:456 js/Courses-FAT.js:6
 msgid "Import course members"
 msgstr "Импорт членов курса"
 
-#: js/CourseEditDialog.js:42
+#: js/CourseEditDialog.js:42 js/Courses-FAT-debug.js:465 js/Courses-FAT.js:6
 msgid "Add new member"
 msgstr "Добавить нового участника"
 
-#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
+#: js/CourseEditDialog.js:190 js/Courses-FAT-debug.js:46
+#: js/Courses-FAT-debug.js:610 js/Courses-FAT.js:6 js/Models.js:43
+#: Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Курс"
 msgstr[1] "Курса"
 msgstr[2] "Курсов"
 
-#: js/CourseEditDialog.js:206
+#: js/CourseEditDialog.js:206 js/Courses-FAT-debug.js:626 js/Courses-FAT.js:6
 msgid "Course Name"
 msgstr "Название курса"
 
-#: js/CourseEditDialog.js:213
+#: js/CourseEditDialog.js:213 js/Courses-FAT-debug.js:633 js/Courses-FAT.js:6
 msgid "Course / School Type"
 msgstr "Тип курсов/школы"
 
-#: js/CourseEditDialog.js:224
+#: js/CourseEditDialog.js:224 js/Courses-FAT-debug.js:644 js/Courses-FAT.js:6
 msgid "Description"
 msgstr "Описание"
 
-#: js/CourseEditDialog.js:240
+#: js/CourseEditDialog.js:240 js/Courses-FAT-debug.js:660
 msgid "Fileserver Access"
 msgstr "Доступ к файловому серверу"
 
-#: js/CourseEditDialog.js:272
+#: js/CourseEditDialog.js:272 js/Courses-FAT-debug.js:692 js/Courses-FAT.js:6
 msgid "Members"
 msgstr "Члены"
 
-#: js/CourseEditDialog.js:299
+#: js/CourseEditDialog.js:299 js/Courses-FAT-debug.js:719 js/Courses-FAT.js:6
 msgid "Login"
 msgstr "Вход"
 
-#: js/CourseEditDialog.js:303
+#: js/CourseEditDialog.js:303 js/Courses-FAT-debug.js:723 js/Courses-FAT.js:6
 msgid "unknown"
 msgstr "неизвестный"
 
-#: js/CourseEditDialog.js:308
+#: js/CourseEditDialog.js:308 js/Courses-FAT-debug.js:728 js/Courses-FAT.js:6
 msgid "Reset Password"
 msgstr "Сброс пароля"
 
-#: js/AddMemberDialog.js:63
+#: js/AddMemberDialog.js:63 js/Courses-FAT-debug.js:350 js/Courses-FAT.js:6
 msgid "First Name"
 msgstr "Имя"
 
-#: js/AddMemberDialog.js:67
+#: js/AddMemberDialog.js:67 js/Courses-FAT-debug.js:354 js/Courses-FAT.js:6
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/AddMemberDialog.js:86
+#: js/AddMemberDialog.js:86 js/Courses-FAT-debug.js:373 js/Courses-FAT.js:6
 msgid "Add new member to course"
 msgstr "Добавить нового участника курса"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:118 js/Courses-FAT-debug.js:405 js/Courses-FAT.js:6
 msgid "Errors"
 msgstr "Ошибка"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:118 js/Courses-FAT-debug.js:405 js/Courses-FAT.js:6
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, исправьте ошибки"
 
-#: js/CourseGridPanel.js:44 js/Models.js:72
+#: js/CourseGridPanel.js:44 js/Courses-FAT-debug.js:75
+#: js/Courses-FAT-debug.js:229 js/Courses-FAT.js:6 js/Models.js:72
 msgid "Name"
 msgstr "Имя"
 
-#: js/CourseGridPanel.js:50
+#: js/CourseGridPanel.js:50 js/Courses-FAT-debug.js:235 js/Courses-FAT.js:6
 msgid "Type"
 msgstr "Тип"
 
-#: js/CourseGridPanel.js:95
+#: js/CourseGridPanel.js:95 js/Courses-FAT-debug.js:280 js/Courses-FAT.js:6
 msgid "Failed"
 msgstr "Сбой"
 
-#: js/CourseGridPanel.js:96
+#: js/CourseGridPanel.js:96 js/Courses-FAT-debug.js:281 js/Courses-FAT.js:6
 msgid "Some error occured while trying to update the courses."
 msgstr "Произошла ошибка при попытке обновить курсы."
 
-#: js/Models.js:47
+#: js/Courses-FAT-debug.js:50 js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "список записей"
 msgstr[1] "списка записей"
 msgstr[2] "списков записей"
 
-#: js/Models.js:71
-msgid "Quick Search"
+#: js/Courses-FAT-debug.js:74 js/Courses-FAT.js:6
+msgid "Quick search"
 msgstr ""
 
-#: js/Models.js:109
+#: js/Courses-FAT-debug.js:112 js/Models.js:109
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Тип курсов"
 msgstr[1] "Типа курсов"
 msgstr[2] "Типов курсов"
+
+#: js/Models.js:71
+msgid "Quick Search"
+msgstr ""
 
 #: Controller/Course.php:256 Controller/Course.php:300
 msgid "Teacher"
