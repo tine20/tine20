@@ -23,7 +23,7 @@ class Tinebase_Pluggable_ConcreteTest extends PHPUnit_Framework_TestCase
 {
     protected $frontend = NULL;
     protected $controller = NULL;
-    protected $backend = NULL;        
+    protected $backend = NULL;
     
     /**
      * Sets up the fixture, for example
@@ -47,7 +47,7 @@ class Tinebase_Pluggable_ConcreteTest extends PHPUnit_Framework_TestCase
     /**
      * Verifies if plugin is callable from layers
      */
-    protected function testCallPluginMethod()
+    public function testCallPluginMethod()
     {
         $expected = 'dummyPluginReturn';
         
@@ -57,17 +57,6 @@ class Tinebase_Pluggable_ConcreteTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($expected, $frontendReturn);
         $this->assertEquals($expected, $controllerReturn);
-        $this->assertEquals($expected, $backendReturn);        
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-    
+        $this->assertEquals($expected, $backendReturn);
     }
 }
