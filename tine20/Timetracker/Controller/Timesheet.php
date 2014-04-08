@@ -35,7 +35,15 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         
         // use modlog and don't completely delete records
         $this->_purgeRecords = FALSE;
-    }    
+    }
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone()
+    {
+    }
     
     /**
      * field grants for specific timesheet fields

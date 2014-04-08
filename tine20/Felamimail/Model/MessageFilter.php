@@ -212,8 +212,11 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         }
         
         if ($_filterData['field'] == 'flags') {
+            $havingColumn = ($db instanceof Zend_Db_Adapter_Pdo_Pgsql)
+                ? Tinebase_Backend_Sql_Command::factory($db)->getAggregate('felamimail_cache_msg_flag.flag')
+                : 'flags';
             if ($_filterData['operator'] == 'equals' || $_filterData['operator'] == 'contains') {
-                $_select->having($db->quoteInto('flags LIKE ?', $value));
+                $_select->having($db->quoteInto($havingColumn . ' LIKE ?', $value));
             } else if ($_filterData['operator'] == 'in' || $_filterData['operator'] == 'notin') {
                 if (empty($value)) {
                     $whereString = 'flags IS NULL';
@@ -230,9 +233,9 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                         $whereString = '(' . $whereString . ') OR flags IS NULL';
                     }
                 }
-                $_select->having($whereString);
+                $_select->having(str_replace('flags', $havingColumn, $whereString));
             } else {
-                $_select->having($db->quoteInto('flags NOT LIKE ? OR flags IS NULL', $value));
+                $_select->having($db->quoteInto($havingColumn . ' NOT LIKE ? OR ' . $havingColumn . ' IS NULL', $value));
             }
         } else {
             $_select->where(

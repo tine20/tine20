@@ -70,7 +70,9 @@ class Tinebase_ModelConfiguration {
     /**
      * The property of the title, if any
      *
-     * @var string
+     * if an array is given, the second item is the array of arguments for vsprintf, the first the format string
+     *
+     * @var string/array
      */
     protected $_titleProperty = 'title';
     

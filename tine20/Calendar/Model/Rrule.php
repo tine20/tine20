@@ -548,6 +548,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     public static function computeNextOccurrence($_event, $_exceptions, $_from, $_which = 1)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' $from = ' . $_from->toString());
+        
         if ($_which === 0 || ($_event->dtstart >= $_from && $_event->dtend > $_from)) {
             return $_event;
         }
@@ -603,6 +606,10 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $recurSet->merge(self::computeRecurrenceSet($_event, $exceptions, $from, $until));
             $attempts++;
             
+            // NOTE: computeRecurrenceSet also returns events during $from in some cases, but we need 
+            // to events later than $from.
+            $recurSet = $recurSet->filter(function($event) use ($from) {return $event->dtstart >= $from;});
+            
             if (count($recurSet) >= abs($_which)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " found next occurrence after $attempts attempt(s)");
@@ -620,7 +627,10 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         }
         
         $recurSet->sort('dtstart', $_which > 0 ? 'ASC' : 'DESC');
-        return $recurSet[abs($_which)-1];
+        $nextOccurrence = $recurSet[abs($_which)-1];
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' $nextOccurrence->dtstart = ' . $nextOccurrence->dtstart->toString());
+        return $nextOccurrence;
     }
     
     /**

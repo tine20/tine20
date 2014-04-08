@@ -32,6 +32,14 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
     }
     
     /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone()
+    {
+    }
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Timetracker_Controller_Timeaccount

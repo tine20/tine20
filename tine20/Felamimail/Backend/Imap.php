@@ -427,8 +427,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $useUid = ($_useUid === null) ? $this->_useUid : (bool) $_useUid;
         $summary = $this->_protocol->fetch(array('UID', 'FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE', 'BODYSTRUCTURE'), $from, $to, $useUid);
         
+        // sometimes ctype_digit($from) is false even if we got a single message, maybe mailserver dependend
+        $singleMessage = ($to === null && ctype_digit($from) || isset($summary['UID']));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' to: ' . print_r($to, true) . ' from: ' . print_r($from, true) . ' ctype_digit(from): ' . (int) ctype_digit($from));
+        
         // fetch returns a different structure when fetching one or multiple messages
-        if ($to === null && ctype_digit($from)) {
+        if ($singleMessage) {
             $summary = array(
                 $from => $summary
             );
@@ -436,7 +441,12 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         $messages = array();
         
-        foreach($summary as $id => $data) {
+        foreach ($summary as $id => $data) {
+            if (! isset($data['RFC822.HEADER'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Message data invalid: ' . print_r($data, true) . print_r($summary, true)); 
+                continue;
+            }
             $header = $this->_fixHeader($data['RFC822.HEADER'], $id, $spaces);
             Zend_Mime_Decode::splitMessage($header, $header, $null);
             
@@ -447,12 +457,11 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                 $flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
             }
     
-            if($this->_useUid === true) {
+            if ($this->_useUid === true) {
                 $key = $data['UID'];
             } else {
                 $key = $id;
             }
-            
             
             $messages[$key] = array(
                 'header'    => $header,
@@ -464,8 +473,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             );
         }
         
-        if ($to === null && ctype_digit($from)) {
-            // only one message requested
+        if ($singleMessage) {
             return $messages[$from];
         } else {
             // multiple messages requested

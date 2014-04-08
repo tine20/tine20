@@ -1197,8 +1197,14 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 }
                 
                 if (! $checkDiff || count($diff1) > 0 || count($diff2) > 0) {
-                    $this->_backend->setFlags(array($cachedMessage->getId()), $newFlags, $folder->getId());
-                    $updateCount++;
+                    try {
+                        $this->_backend->setFlags(array($cachedMessage->getId()), $newFlags, $folder->getId());
+                        $updateCount++;
+                    } catch (Zend_Db_Statement_Exception $zdse) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                            . ' Could not update flags, maybe message was deleted or is not in the cache yet.');
+                        Tinebase_Exception::log($zdse);
+                    }
                 }
             }
         }
