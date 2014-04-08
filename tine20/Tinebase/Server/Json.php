@@ -233,8 +233,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             
             $server = self::_getServer($classes);
             
-            // handle response
-            return $server->handle($request);
+            $response = $server->handle($request);
+            if ($response->isError()) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Got response error: '
+                    . print_r($response->getError()->toArray(), true));
+            }
+            return $response;
             
         } catch (Exception $exception) {
             return $this->_handleException($request, $exception);
