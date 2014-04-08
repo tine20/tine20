@@ -35,14 +35,14 @@ abstract class Tinebase_Pluggable_Abstract
      * Attaches a plugin
      * Path for classes must be into include_path
      * 
-     * @param string $method            
-     * @param string $namespace            
+     * @param string $method
+     * @param string $namespace
      */
-    public static function attachPlugin ($method, $namespace)
+    public static function attachPlugin($method, $namespace)
     {
         self::$_plugins[$method] = $namespace;
         Zend_Loader_Autoloader::getInstance()->registerNamespace(
-                current(explode('_', $namespace)));
+            current(explode('_', $namespace)));
     }
 
     /**
@@ -50,16 +50,16 @@ abstract class Tinebase_Pluggable_Abstract
      * $methods must contain:
      * '[method]' => '[Complete_Name_Of_Class]'
      *
-     * @param array $methods            
-     * @param string $namespace            
+     * @param array $methods
+     * @param string $namespace
      */
-    public static function attachPlugins (array $methods, $namespace)
+    public static function attachPlugins(array $methods, $namespace)
     {
         foreach ($methods as $method => $class) {
             self::$_plugins[$method] = $class;
         }
         Zend_Loader_Autoloader::getInstance()->registerNamespace(
-                current(explode('_', $namespace)));
+            current(explode('_', $namespace)));
     }
 
     /**
@@ -69,18 +69,18 @@ abstract class Tinebase_Pluggable_Abstract
      * @param string $method            
      * @param array $args            
      */
-    public function __call ($method, array $args)
+    public function __call($method, array $args)
     {
         if (isset(self::$_plugins[$method])) {
             $class = self::$_plugins[$method];
-            $plugin = new $plugin();
+            $plugin = new $class();
             return call_user_func_array(array(
-                    $plugin,
-                    $method
+                $plugin,
+                $method
             ), $args);
         } else {
             throw new Tinebase_Exception(
-                    'Plugin ' . $method . ' was not found in haystack');
+                'Plugin ' . $method . ' was not found in haystack');
         }
     }
 }

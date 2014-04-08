@@ -15,4 +15,12 @@
   */
 class Tinebase_Pluggable_DummyController extends Tinebase_Controller_Abstract
 {
+    
+    /**
+     * Instance of Controller Object.
+     */
+    public static function getInstance()
+    {
+        return null;
+    }
 }

@@ -13,6 +13,19 @@
 /**
  * Mock for Backend
  */
-class Tinebase_Pluggable_DummyBackend extends Tinebase_Backend_Abstract
+class Tinebase_Pluggable_DummyBackend extends Tinebase_Backend_Sql
 {
+    /**
+     * Table name without prefix
+     *
+     * @var string
+     */
+    protected $_tableName = 'alarm';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Tinebase_Model_Alarm';
 }
