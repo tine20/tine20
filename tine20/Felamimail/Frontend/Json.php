@@ -528,19 +528,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getVacationMessageTemplates()
     {
-        try {
-            $nodes = Tinebase_FileSystem::getInstance()->getNodesByContainer(Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID});
-            $result = $this->_multipleRecordsToJson($nodes);
-        } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' Could not get vacation template files: ' . $e);
-            $result = array();
-        }
-        
-        return array(
-            'totalcount' => count($result),
-            'results'    => $result,
-        );
+        return $this->getTemplates(Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID});
     }
     
     /**
