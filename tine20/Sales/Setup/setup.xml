@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>8.9</version>
+    <version>8.10</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -119,6 +119,7 @@
                     <name>last_autobill</name>
                     <type>datetime</type>
                     <notnull>false</notnull>
+                    <default>null</default>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -766,6 +767,67 @@
                     <primary>true</primary>
                     <field>
                         <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>sales_product_agg</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>product_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>contract_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>quantity</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>1</default>
+                </field>
+                <field>
+                    <name>interval</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>1</default>
+                </field>
+                <field>
+                    <name>last_autobill</name>
+                    <type>datetime</type>
+                    <notnull>false</notnull>
+                    <default>null</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>product_id</name>
+                    <field>
+                        <name>product_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>contract_id</name>
+                    <field>
+                        <name>contract_id</name>
                     </field>
                 </index>
             </declaration>

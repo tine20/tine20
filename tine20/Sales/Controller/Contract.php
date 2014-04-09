@@ -210,7 +210,9 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
     /**
      * returns all billable contracts for the specified date. If a invoice has 
      * been created for the interval already, the contract will not be returned.
-     * relations are returned
+     * the products will also be checked.
+     * 
+     * relations and products will be returned
      * 
      * @param Tinebase_DateTime $date
      * @return Tinebase_Record_RecordSet
@@ -231,41 +233,137 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
 
         $contracts = $this->search($filter, NULL, /* get relations = */ TRUE);
         
-        foreach($contracts as $contract) {
+        if ($contracts->count() == 0) {
+            return $contracts;
+        }
+        
+        $productAggregateController = Sales_Controller_ProductAggregate::getInstance();
+        $filter = new Sales_Model_ProductAggregateFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'in', 'value' => $contracts->getId())));
+        $allProducts = $productAggregateController->search($filter);
+         
+        foreach($contracts as &$contract) {
+            $products = $allProducts->filter('contract_id', $contract->getId());
+            
+            // if there aren't any products, and the interval of the contract is 0, don't handle contract
+            if ($products->count() == 0 && $contract->interval == 0) {
+                $contracts->removeRecord($contract);
+                continue;
+            }
+            
             // contract has been terminated and last bill has been created already
             if ($contract->end_date && $contract->last_autobill > $contract->end_date) {
                 $contracts->removeRecord($contract);
                 continue;
             }
             
-            // is null, if this is the first time to bill the contract
-            $lastBilled = ($contract->last_autobill === NULL) ? NULL : clone $contract->last_autobill;
+            $nextBill = $this->getNextBill($contract);
             
-            // if the contract has been billed already, add the interval
-            if ($lastBilled) {
-                $nextBill = $lastBilled->addMonth($contract->interval);
-            } else {
-                // it hasn't been billed already, so take the start_date of the contract as date
-                $nextBill = clone $contract->start_date;
-                
-                // add the interval to the date if the billing point is at the end of the period
-                if ($contract->billing_point == 'end') {
-                    $nextBill->addMonth($contract->interval);
+            if ($nextBill->isLater($dateBig)) {
+                // don't handle, if contract don't have to be billed and there aren't any products
+                if ($products->count() == 0) {
+                    $contracts->removeRecord($contract);
+                    continue;
+                } else {
+                    $billIt = FALSE;
+                    // otherwise iterate products
+                    foreach($products as $product) {
+                        // is null, if this is the first time to bill the contract
+                        $lastBilled = ($product->last_autobill === NULL) ? NULL : clone $product->last_autobill;
+                        
+                        // if the contract has been billed already, add the interval
+                        if ($lastBilled) {
+                            $nextBill = $lastBilled->addMonth($product->interval);
+                        } else {
+                            // it hasn't been billed already, so take the start_date of the contract as date
+                            $nextBill = clone $contract->start_date;
+                        }
+                        
+                        // assure creating the last bill bill if a contract has bee terminated
+                        if (($contract->end_date !== NULL) && $nextBill->isLater($contract->end_date)) {
+                            $nextBill = clone $contract->end_date;
+                        }
+                        
+                        $nextBill->setTime(0,0,0);
+                        // there is a product to bill, so stop to iterate
+                        if ($nextBill->isLater($dateBig)) {
+                            $billIt = TRUE;
+                            break;
+                        }
+                        
+                    }
+                    
+                    if (! $billIt) {
+                        $contracts->removeRecord($contract);
+                        continue;
+                    }
                 }
             }
             
-            // assure creating the last bill bill if a contract has bee terminated
-            if (($contract->end_date !== NULL) && $nextBill->isLater($contract->end_date)) {
-                $nextBill = clone $contract->end_date;
-            }
-            
-            $nextBill->setTime(0,0,0);
-            
-            if ($nextBill->isLater($dateBig)) {
-                $contracts->removeRecord($contract);
-            }
+            $contract->products = $products->count() ? $products->toArray() : NULL;
         }
         
         return $contracts;
+    }
+    /**
+     * 
+     * @param unknown $contract
+     * @return unknown
+     */
+    public function getNextBill($contract)
+    {
+        // is null, if this is the first time to bill the contract
+        $lastBilled = ($contract->last_autobill === NULL) ? NULL : clone $contract->last_autobill;
+        
+        // if the contract has been billed already, add the interval
+        if ($lastBilled) {
+            $nextBill = $lastBilled->addMonth($contract->interval);
+        } else {
+            // it hasn't been billed already, so take the start_date of the contract as date
+            $nextBill = clone $contract->start_date;
+        
+            // add the interval to the date if the billing point is at the end of the period
+            if ($contract->billing_point == 'end') {
+                $nextBill->addMonth($contract->interval);
+            }
+        }
+        
+        // assure creating the last bill if a contract has been terminated
+        if (($contract->end_date !== NULL) && $nextBill->isLater($contract->end_date)) {
+            $nextBill = clone $contract->end_date;
+        }
+        
+        $nextBill->setTime(0,0,0);
+        
+        return $nextBill;
+    }
+    /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        $config = $_record::getConfiguration()->recordsFields;
+        foreach (array_keys($config) as $property) {
+            $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
+        }
+    }
+    
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        $config = $_record::getConfiguration()->recordsFields;
+        foreach (array_keys($config) as $p) {
+            $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
+        }
     }
 }

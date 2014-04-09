@@ -62,14 +62,20 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $cc1 = $this->_costcenterRecords->filter('remark', 'unittest1')->getFirstRecord();
         $cc2 = $this->_costcenterRecords->filter('remark', 'unittest2')->getFirstRecord();
         $cc3 = $this->_costcenterRecords->filter('remark', 'unittest3')->getFirstRecord();
+        $cc4 = $this->_costcenterRecords->filter('remark', 'unittest4')->getFirstRecord();
         
         $customer1Invoices = $all->filter('costcenter_id', $cc1->getId())->sort('start_date');
         $customer2Invoices = $all->filter('costcenter_id', $cc2->getId())->sort('start_date');
         $customer3Invoices = $all->filter('costcenter_id', $cc3->getId())->sort('start_date');
+        $customer4Invoices = $all->filter('costcenter_id', $cc4->getId())->sort('start_date');
         
         $this->assertEquals(13, $customer1Invoices->count());
         $this->assertEquals(2, $customer2Invoices->count());
-        $this->assertEquals(4, $customer3Invoices->count());
+        
+        // there are timesheets in 2 intervals, so no empty invoice shoud be generated
+        $this->assertEquals(2, $customer3Invoices->count());
+        
+        $this->assertEquals(5, $customer4Invoices->count());
         
         $year = $this->_referenceDate->format('Y');
         
@@ -101,8 +107,39 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals($year . '-05-01 00:00:00', $c2IsArray[1]->toString());
         $this->assertEquals($year . '-07-31 23:59:59', $c2IeArray[1]->toString());
         
-        $c2IsArray = $customer2Invoices->start_date;
-        $c2IeArray = $customer2Invoices->end_date;
+        // test correct timesheet handling of customer 3
+        $c3IsArray = $customer3Invoices->start_date;
+        $c3IeArray = $customer3Invoices->end_date;
+        
+        $this->assertEquals($year . '-04-01 00:00:00', $c3IsArray[0]->toString());
+        $this->assertEquals($year . '-06-30 23:59:59', $c3IeArray[0]->toString());
+        
+        $this->assertEquals($year . '-07-01 00:00:00', $c3IsArray[1]->toString());
+        $this->assertEquals($year . '-09-30 23:59:59', $c3IeArray[1]->toString());
+        
+        // test customer 4 having products only
+        $c4IsArray = $customer4Invoices->start_date;
+        $c4IeArray = $customer4Invoices->end_date;
+        
+        // should contain billeachquarter & billhalfyearly
+        $this->assertEquals($year . '-01-01 00:00:00', $c4IsArray[0]->toString());
+        $this->assertEquals($year . '-06-30 23:59:59', $c4IeArray[0]->toString());
+        
+        // should contain billeachquarter
+        $this->assertEquals($year . '-04-01 00:00:00', $c4IsArray[1]->toString());
+        $this->assertEquals($year . '-06-30 23:59:59', $c4IeArray[1]->toString());
+        
+        // should contain billeachquarter & billhalfyearly
+        $this->assertEquals($year . '-07-01 00:00:00', $c4IsArray[2]->toString());
+        $this->assertEquals($year . '-12-31 23:59:59', $c4IeArray[2]->toString());
+        
+        // should contain billeachquarter
+        $this->assertEquals($year . '-10-01 00:00:00', $c4IsArray[3]->toString());
+        $this->assertEquals($year . '-12-31 23:59:59', $c4IeArray[3]->toString());
+        
+        // should contain billeachquarter & billhalfyearly
+        $this->assertEquals($year + 1 . '-01-01 00:00:00', $c4IsArray[4]->toString());
+        $this->assertEquals($year + 1 . '-06-30 23:59:59', $c4IeArray[4]->toString());
     }
     
     public function testGetBillableContracts()
@@ -113,10 +150,10 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $c = Sales_Controller_Contract::getInstance();
         $result = $c->getBillableContracts($date);
-        $this->assertEquals(4, $result->count());
+        $this->assertEquals(5, $result->count());
         
         // 1.5.2013
         $date->addMonth(1);
-        $this->assertEquals(4, $result->count());
+        $this->assertEquals(5, $result->count());
     }
 }

@@ -56,7 +56,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'containersName'    => 'Contracts',
         'containerUsesFilter' => FALSE,
         
-        'titleProperty'     => 'title',
+        'titleProperty'     => 'title',//array('%s - %s', array('number', 'title')),
         'appName'           => 'Sales',
         'modelName'         => 'Contract',
         
@@ -222,6 +222,18 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                         'type' => 'RESPONSIBLE'
                     )
                 )
+            ),
+            'products' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Products', // _('Products')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName'     => 'Sales',
+                    'modelName'   => 'ProductAggregate',
+                    'refIdField'  => 'contract_id',
+//                     'paging'      => array('sort' => 'name', 'dir' => 'ASC'),
+                    'dependentRecords' => TRUE
+                ),
             ),
         )
     );

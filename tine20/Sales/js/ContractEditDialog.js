@@ -197,6 +197,14 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * NOTE: when this method gets called, all initalisation is done.
      */
     getFormItems: function() {
+        
+        this.productGridPanel = new Tine.Sales.ProductAggregateGridPanel({
+            app: this.app,
+            editDialog: this,
+            title: this.app.i18n._('Products'),
+            editDialogRecordProperty: 'products'
+        });
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -356,7 +364,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         })
                     ]
                 }]
-            }, new Tine.widgets.activities.ActivitiesTabPanel({
+            }, this.productGridPanel, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')

@@ -519,7 +519,7 @@ msgid "No cost center assigned"
 msgstr "Keine Kostenstelle zugeordnet"
 
 msgid "Billing Interval"
-msgstr "Abrechnungsintervall in Monaten"
+msgstr "Mtl. Abrechnungsintervall (variabel)"
 
 msgid "Billing Address Locality"
 msgstr "Rechnungsanschrift Ort"
@@ -605,3 +605,12 @@ msgid "Order Confirmation"
 msgid_plural "Order Confirmations"
 msgstr[0] "Auftragsbestätigung"
 msgstr[1] "Auftragsbestätigungen"
+
+msgid "Interval"
+msgstr "Intervall"
+
+msgid "Quantity"
+msgstr "Anzahl"
+
+msgid "Invoice Item"
+msgstr "Rechnungsposten"

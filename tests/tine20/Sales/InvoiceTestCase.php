@@ -104,7 +104,7 @@ class Sales_InvoiceTestCase extends TestCase
         $addresses = array();
         
         while ($row = fgetcsv($fhcsv)) {
-            if ($i >= 15) {
+            if ($i >= 20) {
                 break;
             }
             
@@ -165,6 +165,11 @@ class Sales_InvoiceTestCase extends TestCase
                 'name' => 'Customer3',
                 'url' => 'www.customer3.de',
                 'discount' => 10
+            ),
+            array(
+                'name' => 'Customer4',
+                'url' => 'www.customer4.de',
+                'discount' => 0
             )
         );
         
@@ -215,7 +220,7 @@ class Sales_InvoiceTestCase extends TestCase
         $costcenterController = Sales_Controller_CostCenter::getInstance();
         
         $this->_costcenterRecords = new Tinebase_Record_RecordSet('Sales_Model_CostCenter');
-        $ccs = array('unittest1', 'unittest2', 'unittest3');
+        $ccs = array('unittest1', 'unittest2', 'unittest3', 'unittest4');
         
         $id = 1;
         
@@ -233,10 +238,47 @@ class Sales_InvoiceTestCase extends TestCase
         $cid = $container->getId();
         
         $i = 0;
-        
+        $this->_customerRecords->sort('name', 'ASC');
         $customer1 = $this->_customerRecords->filter('name', 'Customer1')->getFirstRecord();
         $customer2 = $this->_customerRecords->filter('name', 'Customer2')->getFirstRecord();
         $customer3 = $this->_customerRecords->filter('name', 'Customer3')->getFirstRecord();
+        $customer4 = $this->_customerRecords->filter('name', 'Customer4')->getFirstRecord();
+        
+        // timeaccounts
+        $this->_timeaccounts = new Tinebase_Record_RecordSet('Timetracker_Model_Timeaccount');
+        $taController = Timetracker_Controller_Timeaccount::getInstance();
+        foreach($this->_customerRecords as $customer) {
+            $this->_timeaccounts->addRecord($taController->create(new Timetracker_Model_Timeaccount(array(
+                'title'         => 'TA-for-' . $customer->name,
+                'description'   => 'blabla',
+                'is_open'       => 1,
+                'status'        => $customer->name == 'Customer4' ? 'billed' : 'to bill',
+                'budget' => $customer->name == 'Customer3' ? null : 100
+            ), TRUE)));
+        }
+        
+        $customer3Timeaccount = $this->_timeaccounts->filter('title', 'TA-for-Customer3')->getFirstRecord();
+        
+        $tsDate = clone $this->_referenceDate;
+        $tsDate->addMonth(4);
+        
+        $timesheetController = Timetracker_Controller_Timesheet::getInstance();
+        
+        $timesheet = new Timetracker_Model_Timesheet(array(
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id' => $customer3Timeaccount->getId(),
+            'start_date' => $tsDate,
+            'duration' => 30,
+            'description' => 'ts from ' . (string) $tsDate,
+        ));
+        
+        $timesheetController->create($timesheet);
+        
+        $timesheet->id = NULL;
+        $timesheet->start_date = $tsDate->addMonth(4);
+        $timesheet->description = 'ts from ' . (string) $tsDate;
+        
+        $timesheetController->create($timesheet);
         
         $this->_contractRecords = new Tinebase_Record_RecordSet('Sales_Model_Contract');
         // 1.1.20xx
@@ -244,6 +286,31 @@ class Sales_InvoiceTestCase extends TestCase
         $endDate   = clone $startDate;
         // 1.8.20xx
         $endDate->addMonth(7);
+        
+        $productArray = array(
+            array(
+                'name' => 'billhalfyearly',
+                'description' => 'bill this 2 times a year',
+                'price' => '102',
+            ),
+            array(
+                'name' => 'billeachquarter',
+                'description' => 'bill this each quarter',
+                'price' => '102',
+            ),
+        );
+        
+        $default = array(
+            'manufacturer' => 'Unittest',
+            'category' => 'Tine'
+        );
+        
+        $productController = Sales_Controller_Product::getInstance();
+        $products = new Tinebase_Record_RecordSet('Sales_Model_Product');
+        
+        foreach($productArray as $product) {
+            $products->addRecord($productController->create(new Sales_Model_Product(array_merge($product, $default))));
+        }
         
         $contractData = array(
             // 13 invoices should be created from 1.1.2013 - 1.1.2014
@@ -282,6 +349,23 @@ class Sales_InvoiceTestCase extends TestCase
                 'interval' => 3,
                 'start_date' => $startDate,
                 'end_date' => NULL,
+            ),
+            // 4 invoices should be created on 1.4.2013, 1.7.2013, 1.10.2013 and 1.1.2014
+            array(
+                'number'       => 4,
+                'title'        => Tinebase_Record_Abstract::generateUID(),
+                'description'  => '4 unittest products',
+                'container_id' => $cid,
+                'billing_point' => 'begin',
+                'billing_address_id' => $this->_addressRecords->filter('customer_id', $customer4->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
+                // this has an interval of 1 month, but there will be 2 products (6,3 months), so we need 5 invoices (4 in the first year, 1 for the beginning of the second year)
+                'interval' => 1,
+                'start_date' => $startDate,
+                'end_date' => NULL,
+                'products' => array(
+                    array('quantity' => 1, 'interval' => 6, 'product_id' => $products->filter('name', 'billhalfyearly')->getFirstRecord()->getId()),
+                    array('quantity' => 1, 'interval' => 3, 'product_id' => $products->filter('name', 'billeachquarter')->getFirstRecord()->getId()),
+                )
             )
         );
         
@@ -289,7 +373,7 @@ class Sales_InvoiceTestCase extends TestCase
         foreach($contractData as $cd) {
             $costcenter = $this->_costcenterRecords->getByIndex($i);
             $customer   = $this->_customerRecords->getByIndex($i);
-            
+            $timeaccount = $this->_timeaccounts->getByIndex($i);
             $i++;
             $contract = new Sales_Model_Contract($cd);
             $contract->relations = array(
@@ -312,6 +396,16 @@ class Sales_InvoiceTestCase extends TestCase
                     'related_backend'        => Tasks_Backend_Factory::SQL,
                     'related_id'             => $customer->getId(),
                     'type'                   => 'CUSTOMER'
+                ),
+                array(
+                    'own_model'              => 'Sales_Model_Contract',
+                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_id'                 => NULL,
+                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_model'          => 'Timetracker_Model_Timeaccount',
+                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_id'             => $timeaccount->getId(),
+                    'type'                   => 'TIME_ACCOUNT'
                 )
             );
             
@@ -374,9 +468,9 @@ class Sales_InvoiceTestCase extends TestCase
     
     protected function _testFixtures()
     {
-        $this->assertEquals(3, $this->_customerRecords->count());
-        $this->assertEquals(9, $this->_addressRecords->count());
-        $this->assertEquals(6, $this->_contractRecords->count());
-        $this->assertEquals(15, $this->_contactRecords->count());
+        $this->assertEquals(4, $this->_customerRecords->count());
+        $this->assertEquals(12, $this->_addressRecords->count());
+        $this->assertEquals(7, $this->_contractRecords->count());
+        $this->assertEquals(20, $this->_contactRecords->count());
     }
 }

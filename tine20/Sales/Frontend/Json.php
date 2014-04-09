@@ -36,7 +36,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Sales_Model_CostCenter',
         'Sales_Model_Customer',
         'Sales_Model_Address',
-        'Sales_Model_Invoice'
+        'Sales_Model_Invoice',
+        'Sales_Model_ProductAggregate'
     );
 
     /**
@@ -53,6 +54,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Address',
         'Invoice',
         'OrderConfirmation',
+        'ProductAggregate'
     );
     
    /**
@@ -122,6 +124,17 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (! empty($contract['billing_address_id'])) {
             $contract['billing_address_id'] = Sales_Controller_Address::getInstance()->resolveVirtualFields($contract['billing_address_id']);
         }
+        // TODO: resolve this in controller
+        if (! empty($contract['products']) && is_array($contract['products'])) {
+            $cc = Sales_Controller_Product::getInstance()->search(new Sales_Model_ProductFilter(array()));
+            for ($i = 0; $i < count($contract['products']); $i++) {
+                $costCenter = $cc->filter('id', $contract['products'][$i]['product_id'])->getFirstRecord();
+                if ($costCenter) {
+                    $contract['products'][$i]['product_id'] = $costCenter->toArray();
+                }
+            }
+        }
+        
         return $contract;
     }
 
@@ -477,7 +490,22 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getInvoice($id)
     {
-        return $this->_get($id, Sales_Controller_Invoice::getInstance());
+        $invoice =  $this->_get($id, Sales_Controller_Invoice::getInstance());
+        $json = new Tinebase_Convert_Json();
+        $resolvedProducts = new Tinebase_Record_RecordSet('Sales_Model_Product');
+        $productController = Sales_Controller_Product::getInstance();
+        
+        foreach($invoice['relations'] as &$relation) {
+            if ($relation['related_model'] == "Sales_Model_ProductAggregate") {
+                if (! $product = $resolvedProducts->getById($relation['related_record']['product_id'])) {
+                    $product = $productController->get($relation['related_record']['product_id']);
+                    $resolvedProducts->addRecord($product);
+                }
+                $relation['related_record']['product_id'] = $json->fromTine20Model($product);
+            }
+        }
+        
+        return $invoice;
     }
     
     /**

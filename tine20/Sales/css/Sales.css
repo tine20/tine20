@@ -9,7 +9,7 @@
  */
  
  
-.SalesIconCls, .x-tree-node-icon.SalesProduct, .x-tree-node-icon.SalesContract, .SalesContract, .SalesProduct {
+.SalesIconCls, .x-tree-node-icon.SalesContract, .SalesContract {
     background-image:url(../../images/oxygen/16x16/apps/kcalc.png) !important;
 }
 .x-btn-medium .SalesIconCls {
@@ -19,8 +19,8 @@
     background-image:url(../../images/oxygen/32x32/apps/kcalc.png) !important;
 }
 
-.SalesDivision {
-    background-image:url("../../images/oxygen/16x16/actions/view-process-users.png") !important;
+.x-tree-node-icon.SalesProduct, .SalesProduct, .x-tree-node-icon.SalesProductAggregate, .SalesProductAggregate {
+    background-image:url(../../images/oxygen/16x16/apps/ark.png) !important;
 }
 
 .SalesCostCenter {
@@ -43,7 +43,6 @@
     background-image:url("../../images/oxygen/16x16/actions/view-process-users.png") !important;
 }
 
-<<<<<<< HEAD
 .action_reversal {
     background-image:url("../../images/oxygen/22x22/actions/document-revert.png") !important;
 }

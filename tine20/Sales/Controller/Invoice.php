@@ -68,44 +68,42 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     {
         $contractController = Sales_Controller_Contract::getInstance();
         $contractsToBill = $contractController->getBillableContracts($date);
+        $timesheetController = Timetracker_Controller_Timesheet::getInstance();
+        $productAggregateController = Sales_Controller_ProductAggregate::getInstance();
         
         $failures = array();
         $created = new Tinebase_Record_RecordSet('Sales_Model_Invoice');
         $customer = $costcenter = NULL;
         
+        // this holds all relations for the invoice
+        $relations = array();
+        $relationDefaults = array(
+            'own_model'              => 'Sales_Model_Invoice',
+            'own_backend'            => Tasks_Backend_Factory::SQL,
+            'own_id'                 => NULL,
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'type'                   => 'INVOICE_ITEM'
+        );
+        $billVolatileModels = array(
+            'WebAccounting_Model_StoragePath',
+            'WebAccounting_Model_BackupPath',
+            'WebAccounting_Model_CertificateDomain',
+            'WebAccounting_Model_Dreg',
+            'WebAccounting_Model_MailAccount',
+            'WebAccounting_Model_IPNet'
+        );
+        
         foreach($contractsToBill as $contract) {
+            
+            $relations = array();
+            
             $customer = NULL;
             $addressId = $contract->billing_address_id;
             
             if (! $addressId) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                     $failure = 'Could not create auto invoice for contract "' . $contract->title . '", because no billing address could be found!';
-                    $failures[] = $failure;
-                    Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
-                }
-                continue;
-            }
-            
-            foreach($contract->relations as $relation) {
-                if ($relation->type == 'CUSTOMER' && $relation->related_model == 'Sales_Model_Customer') {
-                    $customer = $relation->related_record;
-                } elseif ($relation->type == 'LEAD_COST_CENTER' && $relation->related_model == 'Sales_Model_CostCenter') {
-                    $costcenter = $relation->related_record;
-                }
-            }
-            
-            if (! $customer) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    $failure = 'Could not create auto invoice for contract "' . $contract->title . '", because no customer could be found!';
-                    $failures[] = $failure;
-                    Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
-                }
-                continue;
-            }
-            
-            if (! $costcenter) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    $failure = 'Could not create auto invoice for contract "' . $contract->title . '", because no costcenter could be found!';
                     $failures[] = $failure;
                     Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
                 }
@@ -131,6 +129,143 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $endDate->subSecond(1);
             }
             
+            $billVolatile       = array();
+            $billProducts       = array();
+            $billTimeaccounts   = array();
+            $updateTimeaccounts = array();
+            
+            foreach($contract->relations as $relation) {
+                if ($relation->type == 'CUSTOMER' && $relation->related_model == 'Sales_Model_Customer') {
+                    $customer = $relation->related_record;
+                    
+                } elseif ($relation->type == 'LEAD_COST_CENTER' && $relation->related_model == 'Sales_Model_CostCenter') {
+                    $costcenter = $relation->related_record;
+                    
+                } elseif ($relation->related_model == 'Timetracker_Model_Timeaccount') {
+                    // if this has a budget and status is "to clear", bill it
+                    if (intval($relation->related_record->budget) > 0 && $relation->related_record->status == 'to bill') {
+                        $billTimeaccounts[]   = $relation->related_id;
+                        
+                        $relations[] = array_merge(array(
+                            'related_model'  => 'Timetracker_Model_Timeaccount',
+                            'related_id'     => $relation->related_id,
+                            'related_record' => $relation->related_record->toArray(),
+                        ), $relationDefaults);
+                        
+                    } elseif (intval($relation->related_record->budget) == 0) {
+                        // if this is not budgeted, show for timesheets in this period
+                        $filter = new Timetracker_Model_TimesheetFilter(array(
+                            array('field' => 'start_date', 'operator' => 'before', 'value' => $endDate),
+                            array('field' => 'start_date', 'operator' => 'after', 'value' => $startDate)
+                            
+                        ));
+                        
+                        $filter->addFilter(new Tinebase_Model_Filter_Text(
+                            array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $relation->related_id)
+                        ));
+                        
+                        $timesheets = $timesheetController->search($filter);
+                        
+                        $updateTimeaccounts[] = $relation->related_id;
+                        
+                        if ($timesheets->count() > 0)  {
+                            $billTimeaccounts[] = $relation->related_id;
+                            
+                            $relations[] = array_merge(array(
+                                'related_model'          => 'Timetracker_Model_Timeaccount',
+                                'related_id'             => $relation->related_record->getId(),
+                                'related_record'         => $relation->related_record->toArray(),
+                            ), $relationDefaults);
+                        }
+                    }
+                } elseif (in_array($relation->related_model, $billVolatileModels)) {
+                    $billVolatile[] = array($relation->related_model, $relation->related_id);
+                    $relations[] = array_merge(array(
+                        'related_model'          => $relation->related_model,
+                        'related_id'             => $relation->related_record->getId(),
+                        'related_record'         => $relation->related_record->toArray(),
+                    ), $relationDefaults);
+                }
+            }
+            
+            if (! $customer) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    $failure = 'Could not create auto invoice for contract "' . $contract->title . '", because no customer could be found!';
+                    $failures[] = $failure;
+                    Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
+                }
+                continue;
+            }
+            
+            if (! $costcenter) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    $failure = 'Could not create auto invoice for contract "' . $contract->title . '", because no costcenter could be found!';
+                    $failures[] = $failure;
+                    Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
+                }
+                continue;
+            }
+            
+            $earliestStartDate = clone $startDate;
+            $latestEndDate     = clone $endDate;
+            
+            if ($contract->products && is_array($contract->products) && ! empty($contract->products)) {
+                // find out max interval of any billable
+                if (empty($billVolatile) && empty($billTimeaccounts)) {
+                    $earliestStartDate = $latestEndDate = NULL;
+                }
+                
+                foreach($contract->products as $productAggregate) {
+                    $prodStartDate = $productAggregate['last_autobill'] ? new Tinebase_DateTime($productAggregate['last_autobill']) : NULL;
+                    
+                    if ($prodStartDate === NULL) {
+                        $prodStartDate = clone $contract->start_date;
+                    }
+                    
+                    $prodEndDate = clone $prodStartDate;
+                    $prodEndDate->addMonth($productAggregate['interval'])->subSecond(1);
+                    
+                    if ($contract->end_date !== NULL && $prodEndDate->isLater($contract->end_date)) {
+                        $prodEndDate = clone $contract->end_date;
+                        $prodEndDate->subSecond(1);
+                    }
+                    
+                    if ($prodStartDate <= $date && $prodEndDate >= $date) {
+                        $paRecord = new Sales_Model_ProductAggregate($productAggregate, TRUE);
+
+                        if ($earliestStartDate == NULL || $earliestStartDate > $prodStartDate) {
+                            $earliestStartDate = $prodStartDate;
+                        }
+                        
+                        if ($latestEndDate == NULL || $latestEndDate < $prodEndDate) {
+                            $latestEndDate = $prodEndDate;
+                        }
+                        
+                        $relations[] = array_merge(array(
+                            'related_model'          => 'Sales_Model_ProductAggregate',
+                            'related_id'             => $paRecord->getId(),
+                            'related_record'         => $paRecord->toArray(),
+                        ), $relationDefaults);
+                        
+                        $billProducts[] = $paRecord;
+                    }
+                }
+            }
+            
+            // skip invoice if there aren't any efforts
+            if (empty($billVolatile) && empty($billProducts) && empty($billTimeaccounts)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . 'No efforts for the contract with the id "' . $contract->getId() . '" could have been found.', Zend_Log::INFO);
+                }
+                
+                // but update last billed date if there are timeaccounts to bill but having no timesheets
+                if (! empty($updateTimeaccounts)) {
+                    $contractController->updateLastBilledDate($contract);
+                }
+                
+                continue;
+            }
+            // prepare invoice
             $invoice = new Sales_Model_Invoice(array(
                 'is_auto'       => TRUE,
                 'description'   => $date->toString() . ' ' . $contract->title,
@@ -139,38 +274,49 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 'credit_term'   => $customer['credit_term'],
                 'customer_id'   => $customer['id'],
                 'costcenter_id' => $costcenter->getId(),
-                'start_date'    => $startDate,
-                'end_date'      => $endDate,
+                'start_date'    => $earliestStartDate,
+                'end_date'      => $latestEndDate,
             ));
             
-            $invoice->relations = array(
-                array(
-                    'own_model'              => 'Sales_Model_Invoice',
-                    'own_backend'            => Tasks_Backend_Factory::SQL,
-                    'own_id'                 => NULL,
-                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => 'Sales_Model_Contract',
-                    'related_backend'        => Tasks_Backend_Factory::SQL,
-                    'related_id'             => $contract->getId(),
-                    'related_record'         => $contract->toArray(),
-                    'type'                   => 'CONTRACT'
-                ),
-                array(
-                    'own_model'              => 'Sales_Model_Invoice',
-                    'own_backend'            => Tasks_Backend_Factory::SQL,
-                    'own_id'                 => NULL,
-                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => 'Sales_Model_Customer',
-                    'related_backend'        => Tasks_Backend_Factory::SQL,
-                    'related_id'             => $customer['id'],
-                    'related_record'         => $customer,
-                    'type'                   => 'CUSTOMER'
-                )
+            // add relations
+            $relations[] = array(
+                'own_model'              => 'Sales_Model_Invoice',
+                'own_backend'            => Tasks_Backend_Factory::SQL,
+                'own_id'                 => NULL,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => 'Sales_Model_Contract',
+                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_id'             => $contract->getId(),
+                'related_record'         => $contract->toArray(),
+                'type'                   => 'CONTRACT',
             );
             
-            // create
+            $relations[] = array(
+                'own_model'              => 'Sales_Model_Invoice',
+                'own_backend'            => Tasks_Backend_Factory::SQL,
+                'own_id'                 => NULL,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => 'Sales_Model_Customer',
+                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_id'             => $customer['id'],
+                'related_record'         => $customer,
+                'type'                   => 'CUSTOMER'
+            );
+            
+            $invoice->relations = $relations;
+            
+            // create invoice
             $created->addRecord($this->create($invoice));
-            $contractController->updateLastBilledDate($contract);
+            
+            // update global last autobill date (for timeaccounts and volatile efforts) only if there are any
+            if (! (empty($billTimeaccounts) && empty($billVolatile))) {
+                $contractController->updateLastBilledDate($contract);
+            }
+            
+            // update last autobill info of the product
+            foreach($billProducts as $productAggregate) {
+                $productAggregateController->updateLastBilledDate($productAggregate, $contract);
+            }
         }
         
         $result = array(

@@ -625,6 +625,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
             <name>last_autobill</name>
             <type>datetime</type>
             <notnull>false</notnull>
+            <default>null</default>
         </field>','
         <field>
             <name>interval</name>
@@ -939,6 +940,11 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setApplicationVersion('Sales', '8.8');
     }
     
+    /**
+     * update to 8.9
+     * 
+     *  - add order confirmation module
+     */
     public function update_8()
     {
         $tableDefinition = '<table>
@@ -1019,6 +1025,17 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->_backend->createTable($table);
         
         $this->setApplicationVersion('Sales', '8.9');
+    }
         
+    /**
+     * update to 8.9
+     * 
+     *  - add products to contracts
+     */
+    public function update_9()
+    {
+        $this->_createProductAggregateTable();
+        
+        $this->setApplicationVersion('Sales', '8.10');
     }
 }

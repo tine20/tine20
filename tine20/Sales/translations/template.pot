@@ -680,3 +680,13 @@ msgid "Order Confirmation"
 msgid_plural "Order Confirmations"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Interval"
+msgstr ""
+
+msgid "Quantity"
+msgstr ""
+
+msgid "Invoice Item"
+msgstr ""
+

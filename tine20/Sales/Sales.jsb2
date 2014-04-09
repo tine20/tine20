@@ -138,6 +138,10 @@
         {
           "text": "ContractCustomerFilterModel.js",
           "path": "js/"
+        },
+        {
+          "text": "ProductAggregateGridPanel.js",
+          "path": "js/"
         }
       ]
     },
