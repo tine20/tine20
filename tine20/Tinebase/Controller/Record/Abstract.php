@@ -1407,7 +1407,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
         }
-        if ($_record->has('attachments')) {
+        if ($_record->has('attachments') && Setup_Controller::getInstance()->isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->deleteRecordAttachments($_record);
         }
     }
