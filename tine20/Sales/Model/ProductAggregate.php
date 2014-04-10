@@ -89,4 +89,14 @@ class Sales_Model_ProductAggregate extends Tinebase_Record_Abstract
             ),
         )
     );
+
+    /**
+     * @see Tinebase_Record_Abstract
+     */
+    protected static $_relatableConfig = array(
+        array('relatedApp' => 'Sales', 'relatedModel' => 'Invoice', 'config' => array(
+            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
+        ), 'defaultType' => 'INVOICE_ITEM'
+        ),
+    );
 }

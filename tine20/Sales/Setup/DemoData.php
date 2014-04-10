@@ -261,7 +261,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $addressController->create($address);
         }
         
-        if ($this->_createFullData) {
+        if (static::$_createFullData) {
             $i=0;
             while ($i < 200) {
                 $customerController->create(new Sales_Model_Customer(array('name' => Tinebase_Record_Abstract::generateUID())));

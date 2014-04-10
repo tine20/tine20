@@ -286,7 +286,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_instance->searchCustomers(array(), array('limit' => 50));
         
         $this->assertEquals(50, count($result['results']));
-        $this->assertEquals(104, $result['totalcount']);
+        $this->assertGreaterThanOrEqual(104, $result['totalcount']);
     }
     
     /**

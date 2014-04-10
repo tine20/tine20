@@ -190,11 +190,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             array('type' => 'REVERSAL', 'degree' => 'sibling', 'text' => 'Reversal Invoice', 'max' => '1:1'), // _('Reversal Invoice')
             ), 'defaultType' => 'REVERSAL'
         ),
-        array('relatedApp' => 'Timetracker', 'relatedModel' => 'Timesheet', 'config' => array(
-            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '1:0'), // _('Invoice Item')
-            ), 'defaultType' => 'INVOICE_ITEM'
-        ),
-        array('relatedApp' => 'Sales', 'relatedModel' => 'ProductAggregate', 'config' => array(
+        array('relatedApp' => 'Timetracker', 'relatedModel' => 'Timeaccount', 'config' => array(
             array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '1:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
