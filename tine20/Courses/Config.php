@@ -130,7 +130,7 @@ class Courses_Config extends Tinebase_Config_Abstract
         //_('Student username schema')
             'label'                 => 'Student username schema',
         //_('Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname')
-            'description'           => 'Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname',
+            'description'           => 'Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname, 3 = 1-x chars of firstname . lastname',
             'type'                  => 'int',
             'default'               => 1,
             'clientRegistryInclude' => FALSE,
