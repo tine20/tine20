@@ -1038,4 +1038,74 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Sales', '8.10');
     }
+    
+    /**
+     * creates the aggregate table for contract->products
+     */
+    protected function _createProductAggregateTable()
+    {
+        $table = '<table>
+            <name>sales_product_agg</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>product_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>contract_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>quantity</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>1</default>
+                </field>
+                <field>
+                    <name>interval</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>1</default>
+                </field>
+                <field>
+                    <name>last_autobill</name>
+                    <type>datetime</type>
+                    <notnull>false</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>product_id</name>
+                    <field>
+                        <name>product_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>contract_id</name>
+                    <field>
+                        <name>contract_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>';
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $table);
+        $this->_backend->createTable($table);
+    }
 }
