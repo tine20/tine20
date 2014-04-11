@@ -74,6 +74,13 @@ class Courses_Config extends Tinebase_Config_Abstract
     const STUDENT_LOGINNAME_PREFIX = 'student_loginname_prefix';
     
     /**
+    * default department
+    *
+    * @var string
+    */
+    const DEFAULT_DEPARTMENT = 'default_department';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -145,6 +152,16 @@ class Courses_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::DEFAULT_DEPARTMENT => array(
+                                   //_('Default department')
+            'label'                 => 'Default department',
+                                   //_('The default department for new Courses')
+            'description'           => 'The default department for new Courses',
+            'type'                  => 'string',
+            'class'                 => 'Tinebase_Config_Struct',
+            'default'               => '',
+            'clientRegistryInclude' => TRUE,
         ),
         
     );

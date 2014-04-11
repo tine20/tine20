@@ -48,9 +48,20 @@ class Courses_JsonTest extends TestCase
     protected $_schemaConfig;
     
     /**
+     * The default department
+     * @var string
+     */
+    protected $_defaultDepartmentConfig;
+    
+    /**
      * @var Boolean
      */
     protected $_schemaConfigChanged = FALSE;
+    
+     /**
+     * @var Boolean
+     */
+    protected $_defaultDepartmentConfigChanged = FALSE;
     
     /**
      * Sets up the fixture.
@@ -86,6 +97,7 @@ class Courses_JsonTest extends TestCase
         )));
         
         $this->_schemaConfig = Courses_Config::getInstance()->get(Courses_Config::STUDENTS_USERNAME_SCHEMA);
+        $this->_defaultDepartmentConfig = Courses_Config::getInstance()->get(Courses_Config::DEFAULT_DEPARTMENT);
     }
 
     /**
@@ -101,6 +113,9 @@ class Courses_JsonTest extends TestCase
             Courses_Config::getInstance()->set(Courses_Config::STUDENTS_USERNAME_SCHEMA, $this->_schemaConfig);
         }
         
+        if ($this->_defaultDepartmentConfigChanged) {
+            Courses_Config::getInstance()->set(Courses_Config::DEFAULT_DEPARTMENT, $this->_defaultDepartmentConfig);
+        }
         parent::tearDown();
     }
     
@@ -461,6 +476,17 @@ class Courses_JsonTest extends TestCase
         
         $newUser = Tinebase_User::getInstance()->getFullUserById($id);
         $this->assertEquals('j.hot', $newUser->accountLoginName);
+    }
+    
+    /**
+     * Test if the default department is returned
+     */
+    public function testDefaultDepartment()
+    {
+        $this->_defaultDepartmentConfigChanged = true;
+        Courses_Config::getInstance()->set(Courses_Config::DEFAULT_DEPARTMENT, $this->_department->name);
+        $result = $this->_json->getRegistryData();
+        $this->assertEquals($this->_department->id, $result['defaultType']['value']);
     }
     
     /************ protected helper funcs *************/

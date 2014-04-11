@@ -216,8 +216,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                            fields: Tine.Courses.Model.CourseType,
                            proxy:  Tine.Courses.courseTypeBackend,
                            reader: Tine.Courses.courseTypeBackend.getReader(),
-                           remoteSort: true,
-                           sortInfo: {field: 'name', dir: 'ASC'}
+                           sortInfo: {field: 'name', direction: 'ASC'}
                         })
                     }, {
                         name: 'description',
