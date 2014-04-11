@@ -116,13 +116,13 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      */
     protected static $_relatableConfig = array(
         array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
-            array('type' => 'RESPONSIBLE', 'degree' => 'parent', 'text' => 'Responsible', 'max' => '1:0'), // _('Responsible')
-            array('type' => 'CUSTOMER', 'degree' => 'parent', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')
+            array('type' => 'RESPONSIBLE', 'degree' => 'parent', 'text' => 'Responsible', 'max' => '0:0'), // _('Responsible')
+            array('type' => 'CUSTOMER', 'degree' => 'parent', 'text' => 'Customer', 'max' => '0:0'),  // _('Customer')
             ),
             'default' => array('type' => 'CUSTOMER', 'own_degree' => 'parent')
         ),
         array('relatedApp' => 'Tasks', 'relatedModel' => 'Task', 'config' => array(
-            array('type' => 'TASK', 'degree' => 'sibling', 'text' => 'Task', 'max' => '1:0'), // _('Task')
+            array('type' => 'TASK', 'degree' => 'sibling', 'text' => 'Task', 'max' => '0:1'), // _('Task')
             ),
         )
     );
