@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-02-11 20:39+0000\n"
+"PO-Revision-Date: 2014-03-21 11:59+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -48,51 +48,51 @@ msgstr "%s ของปฏิทินส่วนตัว"
 
 #: Model/Attender.php:156
 msgid "unknown"
-msgstr ""
+msgstr "ไม่รู้จัก"
 
-#: Model/Attender.php:434
+#: Model/Attender.php:438
 msgid ""
 "This contact has been automatically added by the system as an event attender"
-msgstr ""
+msgstr "ระบบได้เพิ่มการติดต่อนี้เข้าไปในเหตุการณ์ของผู้ร่วมอย่างอัตโนมัติ"
 
-#: Model/Attender.php:437
+#: Model/Attender.php:441
 msgid "The email address has been shortened: "
-msgstr ""
+msgstr "ที่อยู่อีเมลได้ถูกย่อลง"
 
 #: Model/Event.php:343
 msgid "Start"
-msgstr ""
+msgstr "เริ่มต้น"
 
 #: Model/Event.php:344 js/RrulePanel.js:321
 msgid "End"
 msgstr "สิ้นสุด"
 
-#: Model/Event.php:345 js/GridView.js:127 js/EventDetailsPanel.js:266
+#: Model/Event.php:345 js/GridView.js:127 js/EventDetailsPanel.js:270
 msgid "Blocking"
-msgstr ""
+msgstr "การจัดกลุ่มระเบียน"
 
 #: Model/Event.php:346
 msgid "Classification"
-msgstr ""
+msgstr "การแยกประเภท"
 
 #: Model/Event.php:347 js/GridView.js:161 js/ResourceEditDialog.js:84
 #: js/Model.js:207 js/EventEditDialog.js:264
 msgid "Description"
 msgstr "การอธิบาย"
 
-#: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:276
+#: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:280
 #: js/Model.js:206 js/EventEditDialog.js:132 js/ResourcesGridPanel.js:54
 msgid "Location"
 msgstr "สถานที่"
 
 #: Model/Event.php:349 js/GridView.js:154 js/PerspectiveCombo.js:127
-#: js/EventDetailsPanel.js:280 js/Model.js:226 js/EventEditDialog.js:308
+#: js/EventDetailsPanel.js:284 js/Model.js:226 js/EventEditDialog.js:308
 msgid "Organizer"
 msgstr "ผู้นัดหมาย"
 
 #: Model/Event.php:350
 msgid "Priority"
-msgstr ""
+msgstr "ลำดับความสำคัญ"
 
 #: Model/Event.php:351 js/GridView.js:173 js/AddToEventPanel.js:88
 #: js/AttendeeGridPanel.js:213 js/ContactEventsGridPanel.js:126
@@ -103,36 +103,36 @@ msgstr "สถานะ"
 #: Model/Event.php:352 js/GridView.js:143 js/Model.js:205
 #: js/ContactEventsGridPanel.js:113 js/EventEditDialog.js:87
 msgid "Summary"
-msgstr ""
+msgstr "ข้อสรุป"
 
 #: Model/Event.php:353
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #: Model/Event.php:354
 msgid "Recurrance rule"
-msgstr ""
+msgstr "กฎเกี่ยวกับการซ้ำซ้อน"
 
 #: Model/Event.php:355
 msgid "Is all day event"
-msgstr ""
+msgstr "คือเหตุการณ์ทั้งวัน"
 
 #: Model/Event.php:356
 msgid "Organizer timezone"
-msgstr ""
+msgstr "โซนเวลาของผู้นัดหมาย"
 
 #: Model/Event.php:381
 msgid "No"
-msgstr ""
+msgstr "ไม่ใช่"
 
 #: Model/Event.php:381
 msgid "Yes"
-msgstr ""
+msgstr "ใช่"
 
 #: Model/Rrule.php:324
 #, python-format
 msgid "Every %s day"
-msgstr ""
+msgstr "ทุกๆ %s วัน"
 
 #: Model/Rrule.php:325 js/RrulePanel.js:79
 msgid "Daily"
@@ -141,11 +141,11 @@ msgstr "ทุกวัน"
 #: Model/Rrule.php:330
 #, python-format
 msgid "Every %s week on "
-msgstr ""
+msgstr "ทุกๆ %s สัปดาห์ วัน"
 
 #: Model/Rrule.php:331
 msgid "Weekly on "
-msgstr ""
+msgstr "ทุกสัปดาห์ วัน"
 
 #: Model/Rrule.php:338
 msgid " and "
@@ -153,55 +153,55 @@ msgstr "และ"
 
 #: Model/Rrule.php:350
 msgid "Every %1$s month on the %2$s %3$s"
-msgstr ""
+msgstr "ทุก ๆ %1$s เดือน วัน %2$s %3$s"
 
 #: Model/Rrule.php:351
 msgid "Monthly every %1$s %2$s"
-msgstr ""
+msgstr "รายเดือน ทุก ๆ %1$s %2$s"
 
 #: Model/Rrule.php:357
 msgid "Every %1$s month on the %2$s"
-msgstr ""
+msgstr "ทุก ๆ %1$s เดือน วัน %2$s"
 
 #: Model/Rrule.php:358
 msgid "Monthly on the %1$s"
-msgstr ""
+msgstr "ทุกเดือน วันที่ %1$s"
 
 #: Model/Rrule.php:367
 msgid "Yearly every %1$s %2$s of %3$s"
-msgstr ""
+msgstr "รายปี ทุก ๆ %1$s %2$s ของ %3$s"
 
 #: Model/Rrule.php:369
 msgid "Yearly on the %1$s of %2$s"
-msgstr ""
+msgstr "ทุกปี วันที่ %1$s ของ %2$s"
 
 #: Model/Rrule.php:409
 msgid "second to last"
-msgstr ""
+msgstr "ที่สองถึงสุดท้าย"
 
 #: Model/Rrule.php:412 js/RrulePanel.js:543 js/RrulePanel.js:724
 msgid "last"
-msgstr ""
+msgstr "ลำดับสุดท้าย"
 
 #: Model/Rrule.php:418 js/RrulePanel.js:539 js/RrulePanel.js:720
 msgid "first"
-msgstr ""
+msgstr "ลำดับที่หนึ่ง"
 
 #: Model/Rrule.php:421 js/RrulePanel.js:540 js/RrulePanel.js:721
 msgid "second"
-msgstr ""
+msgstr "ลำดับที่สอง"
 
 #: Model/Rrule.php:424 js/RrulePanel.js:541 js/RrulePanel.js:722
 msgid "third"
-msgstr ""
+msgstr "ลำดับที่สาม"
 
 #: Model/Rrule.php:427 js/RrulePanel.js:542 js/RrulePanel.js:723
 msgid "fourth"
-msgstr ""
+msgstr "ลำดับที่สี่"
 
 #: Model/Rrule.php:430
 msgid "fifth"
-msgstr ""
+msgstr "ที่ห้า"
 
 #: Model/Rrule.php:435
 msgid "st"
@@ -219,43 +219,59 @@ msgstr ""
 msgid "th"
 msgstr ""
 
-#: Config.php:52
+#: Config.php:66
 msgid "Fixed Calendars"
-msgstr ""
+msgstr "ปฏิทินหลัก"
 
-#: Config.php:54
+#: Config.php:68
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
 msgstr ""
 
-#: Config.php:62
+#: Config.php:76
 msgid "Attendee Status Available"
 msgstr "สถานะผู้เข้าร่วม ว่าง"
 
-#: Config.php:64
+#: Config.php:78
 msgid ""
 "Possible event attendee status. Please note that additional attendee status "
 "might impact other calendar systems on export or syncronisation."
 msgstr ""
 
-#: Config.php:72
+#: Config.php:86
 msgid "Attendee Roles Available"
-msgstr ""
+msgstr "หน้าที่ของผู้เข้าร่วม ว่าง"
 
-#: Config.php:74
+#: Config.php:88
 msgid ""
 "Possible event attendee roles. Please note that additional attendee roles "
 "might impact other calendar systems on export or syncronisation."
 msgstr ""
 
-#: Config.php:82
+#: Config.php:96
 msgid "Filter timeslot for CalDAV events"
-msgstr ""
+msgstr "ตัวกรองช่วงเวลาสำหรับเหตุการณ์ CalDAV"
 
-#: Config.php:84
+#: Config.php:98
 msgid ""
 "For how long in the past (in months) the events should be synchronized."
+msgstr "ระยะเวลานานแค่ไหนในอดีต (เป็นเดือน) ที่เหตุการณ์ควรจะได้รับการอัพเดท"
+
+#: Config.php:107
+msgid "Default filter period (from) for events fetched via JSON API"
+msgstr ""
+
+#: Config.php:109
+msgid "For how long in the past (in months) the events should be fetched."
+msgstr ""
+
+#: Config.php:118
+msgid "Default filter period (until) for events fetched via JSON API"
+msgstr ""
+
+#: Config.php:120
+msgid "For how long in the future (in months) the events should be fetched."
 msgstr ""
 
 #: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:70
@@ -265,77 +281,77 @@ msgstr[0] "ปฏิทิน"
 
 #: Setup/Update/Release5.php:77 Setup/Initialize.php:98
 msgid "Required"
-msgstr ""
+msgstr "ได้ต้องการ"
 
 #: Setup/Update/Release5.php:78 Setup/Initialize.php:99
 msgid "Optional"
-msgstr ""
+msgstr "ตามแต่จะเลือก"
 
 #: Setup/Update/Release5.php:91 Setup/Initialize.php:112
 msgid "No response"
-msgstr ""
+msgstr "ไม่มีการตอบรับ"
 
 #: Setup/Update/Release5.php:92 Setup/Initialize.php:113
 msgid "Accepted"
-msgstr ""
+msgstr "ได้ยอมรับแล้ว"
 
 #: Setup/Update/Release5.php:93 Setup/Initialize.php:114
 msgid "Declined"
-msgstr ""
+msgstr "ได้ปฏิเสธแล้ว"
 
 #: Setup/Update/Release5.php:94 Setup/Initialize.php:115 js/GridView.js:135
-#: js/EventDetailsPanel.js:271 js/EventEditDialog.js:206
+#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:206
 msgid "Tentative"
-msgstr ""
+msgstr "เบื้องต้น"
 
 #: Setup/Update/Release3.php:164 Setup/Initialize.php:34
 msgid "All events I attend"
-msgstr ""
+msgstr "ทุกเหตุการณ์ที่ฉันเข้าร่วม"
 
 #: Setup/Initialize.php:47
 msgid "Awaiting response"
-msgstr ""
+msgstr "กำลังรอการตอบรับ"
 
 #: Setup/Initialize.php:48
 msgid "Events I have not yet responded to"
-msgstr ""
+msgstr "เหตุการณ์ที่ฉันยังไม่ได้ตอบรับ"
 
 #: Setup/Initialize.php:63
 msgid "Declined events"
-msgstr ""
+msgstr "เหตุการณ์ที่ได้ปฏิเสธไป"
 
 #: Setup/Initialize.php:64
 msgid "Events I have declined"
-msgstr ""
+msgstr "เหตุการณ์ที่ฉันได้ปฏิเสธไป"
 
 #: Setup/Initialize.php:77
 msgid "I'm organizer"
-msgstr ""
+msgstr "ฉันเป็นผู้นัดหมาย"
 
 #: Setup/Initialize.php:78
 msgid "Events I'm the organizer of"
-msgstr ""
+msgstr "เหตุการณ์ที่ฉันเป็นผู้นัดหมาย"
 
 #: Preference.php:31
 msgid "All my events"
-msgstr ""
+msgstr "เหตุการณ์ทั้งหมดของฉัน"
 
-#: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:256
+#: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:260
 #: js/ContactEventsGridPanel.js:119 js/EventEditDialog.js:138
 msgid "Start Time"
 msgstr "เวลาที่เริ่ม"
 
 #: Preference.php:92
 msgid "Position on the left time axis, day and week view should start with"
-msgstr ""
+msgstr "เนื่องด้วยตำแหน่งบนเส้นเวลาที่เหลือ การดูแบบวันและแบบสัปดาห์ควรเริ่มต้นด้วย"
 
 #: Preference.php:95
 msgid "Default Calendar"
-msgstr ""
+msgstr "ปฏิทินหลัก"
 
 #: Preference.php:96
 msgid "The default calendar for invitations and new events"
-msgstr ""
+msgstr "ปฏิทินหลักสำหรับคำเชิญและเหตุการณ์ใหม่"
 
 #: Preference.php:99
 msgid "Default Favorite"
@@ -347,50 +363,50 @@ msgstr ""
 
 #: Preference.php:103
 msgid "Get Notification Emails"
-msgstr ""
+msgstr "ได้อีเมลแจ้งเตือน"
 
 #: Preference.php:104
 msgid ""
 "The level of actions you want to be notified about. Please note that "
 "organizers will get notifications for all updates including attendee answers"
 " unless this preference is set to \"Never\""
-msgstr ""
+msgstr "ระดับของการกระทำที่คุณต้องการรับทราบ พึงระลึกว่าผู้ทำการนัดหมายจะได้รับการแจ้งเตือนเกี่ยวกับทุก ๆ อัพเดท รวมถึงทุก ๆ คำตอบของผู้เข้า นอกเสียจากว่าจะมีตั้งค่าเป็น \"ไม่เลย\""
 
 #: Preference.php:107
 msgid "Send Notifications Emails of own Actions"
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนของการกระทำของตัวเอง"
 
 #: Preference.php:108
 msgid "Get notifications emails for actions you did yourself"
-msgstr ""
+msgstr "ได้อีเมลแจ้งเตือนสำหรับสิ่งที่คุณได้ทำด้วยตัวคุณเอง"
 
 #: Preference.php:111
 msgid "Enable Standard Alarm"
-msgstr ""
+msgstr "ตั้งการเตือนมาตรฐานได้"
 
 #: Preference.php:112
 msgid "New events get a standard alarm as defined below"
-msgstr ""
+msgstr "เหตุการณ์ใหม่ ๆ จะได้รับการเตือนที่ตั้งเป็นมาตรฐานได้ดังที่กำหนดไว้เบื้องล่างนี้"
 
 #: Preference.php:115
 msgid "Standard Alarm Time"
-msgstr ""
+msgstr "เวลาเตือนมาตรฐาน"
 
 #: Preference.php:116
 msgid "Minutes before the event starts"
-msgstr ""
+msgstr "จำนวนนาทีก่อนเหตุการณ์จะเริ่ม"
 
 #: Preference.php:169
 msgid "Never"
-msgstr ""
+msgstr "ไม่เลย"
 
 #: Preference.php:169
 msgid "On invitation and cancellation only"
-msgstr ""
+msgstr "เฉพาะเรื่องคำเชิญและการยกเลิกเท่านั้น"
 
 #: Preference.php:169
 msgid "On time changes"
-msgstr ""
+msgstr "ตามการเปลี่ยนแปลงตามกำหนดการ"
 
 #: Preference.php:169
 msgid "On all updates but attendee responses"
@@ -398,7 +414,7 @@ msgstr ""
 
 #: Preference.php:169
 msgid "On attendee responses too"
-msgstr ""
+msgstr "ตามที่ผู้เข้าร่วมตอบรับด้วย"
 
 #: js/Calendar.js:29 js/MonthView.js:83 js/DaysView.js:90
 msgid "New Event"
@@ -406,7 +422,7 @@ msgstr "เหตุการณ์ใหม่"
 
 #: js/AdminPanel.js:45
 msgid "Manage Resources"
-msgstr ""
+msgstr "จัดการ แหล่งที่มา"
 
 #: js/GridView.js:94 js/EventEditDialog.js:220
 msgid "Private"
@@ -416,7 +432,7 @@ msgstr "ส่วนตัว"
 msgid "Tags"
 msgstr "ป้ายกำกับ"
 
-#: js/GridView.js:115 js/EventDetailsPanel.js:261 js/EventEditDialog.js:152
+#: js/GridView.js:115 js/EventDetailsPanel.js:265 js/EventEditDialog.js:152
 msgid "End Time"
 msgstr "เวลาที่สิ้นสุด"
 
@@ -444,7 +460,7 @@ msgstr "ใส่ คำอธิบาย"
 
 #: js/ResourceEditDialog.js:117
 msgid "Grants"
-msgstr ""
+msgstr "อนุญาต"
 
 #: js/PerspectiveCombo.js:84 js/EventEditDialog.js:190
 msgid "non-blocking"
@@ -452,7 +468,7 @@ msgstr "ไม่ได้บล็อค"
 
 #: js/PerspectiveCombo.js:110
 msgid "Displayed in"
-msgstr ""
+msgstr "ได้แสดงใน"
 
 #: js/AddToEventPanel.js:35
 msgid "Please choose the Event to add the contacts to"
@@ -476,11 +492,11 @@ msgstr "กำลังเพิ่มผู้เข้าร่วม {0} ค�
 
 #: js/RrulePanel.js:28
 msgid "Recurrances"
-msgstr ""
+msgstr "ความซ้ำซ้อน"
 
 #: js/RrulePanel.js:36
 msgid "No recurring rule defined"
-msgstr ""
+msgstr "ไม่ได้มีกฎเกี่ยวกับการซ้ำซ้อนระบุไว้"
 
 #: js/RrulePanel.js:72
 msgid "None"
@@ -500,7 +516,7 @@ msgstr "ทุกปี"
 
 #: js/RrulePanel.js:178
 msgid "Exceptions of reccuring events can't have recurrences themselves."
-msgstr ""
+msgstr "ข้อยกเว้นเกี่ยวกับเหตุการณ์ที่ซ้ำซ้อนไม่สามารถมีสิ่งที่ซ้ำซ้อนอยู่ในตัวมันเองได้"
 
 #: js/RrulePanel.js:240
 msgid "at"
@@ -524,16 +540,16 @@ msgstr "ทุกๆ {0} วัน"
 
 #: js/RrulePanel.js:444
 msgid "Every {0}. Week at"
-msgstr ""
+msgstr "ทุกๆ {0} สัปดาห์ เมื่อ"
 
 #: js/RrulePanel.js:514
 msgid "Every {0}. Month"
-msgstr ""
+msgstr "ทุกๆ {0} เดือน"
 
 #: js/RrulePanel.js:520 js/RrulePanel.js:569 js/RrulePanel.js:701
 #: js/RrulePanel.js:751
 msgid "at the"
-msgstr ""
+msgstr "เมื่อ"
 
 #: js/RrulePanel.js:694
 msgid "Every {0}. Year"
@@ -549,11 +565,11 @@ msgstr "กำลังตรวจสอบข้อมูลปฏิทิน
 
 #: js/iMIPDetailsPanel.js:95
 msgid "Reply to Recurring Event"
-msgstr ""
+msgstr "ตอบสนองต่อเหตุการณ์ซ้ำซ้อน"
 
 #: js/iMIPDetailsPanel.js:96
 msgid "You are responding to an recurring event. What would you like to do?"
-msgstr ""
+msgstr "คุณกำลังตอบสนองต่อเหตุการณ์ที่ซ้ำซ้อน คุณจะทำอะไร?"
 
 #: js/iMIPDetailsPanel.js:100
 msgid "Respond to whole series"
@@ -637,7 +653,7 @@ msgstr "ตั้งค่าการตอบสนองของฉัน"
 
 #: js/MainScreenCenterPanel.js:537
 msgid "Copy {0}"
-msgstr ""
+msgstr "คัดลอก {0}"
 
 #: js/MainScreenCenterPanel.js:553
 msgid "Updating event in the past"
@@ -691,7 +707,7 @@ msgstr "กรุณาเปลี่ยนที่ทำการเลือ
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
-msgstr ""
+msgstr "สิ่งที่คุณเลือกมีเหตุการณ์ที่ซ้ำซ้อนกันอยู่ เหตุการณ์ที่ซ้ำซ้อนกันจะต้องลบออกทีละรายการ\n "
 
 #: js/MainScreenCenterPanel.js:839
 msgid "Delete Event"
@@ -749,15 +765,15 @@ msgstr "ยกเลิกการกระทำนี้"
 #: js/calendarRenderer.js:30
 msgid ""
 "This event is originally stored in a calendar you don't have access to."
-msgstr ""
+msgstr "เหตุการณ์นี้ได้รับการบันทึกแรกเริ่มในปฏิทินที่คุณไม่สามารถเข้าไปดูได้"
 
 #: js/calendarRenderer.js:31
 msgid "This event is originally stored in {0}"
-msgstr ""
+msgstr "เหตุการณ์นี้ได้รับการบันทึกแรกเริ่มใน {0}"
 
 #: js/calendarRenderer.js:33
 msgid "This event is additionally displayed in your personal calendar {0}"
-msgstr ""
+msgstr "เหตุการณ์นี้จะเพิ่มเข้าไปอัตโนมัติในปฏิทิน {0} ส่วนตัวของคุณ"
 
 #: js/EventDetailsPanel.js:28 js/AttendeeGridPanel.js:580
 #: js/AttendeeGridPanel.js:598 js/AttendeeGridPanel.js:615
@@ -767,28 +783,28 @@ msgstr "ไม่มีข้อมูล"
 
 #: js/EventDetailsPanel.js:66
 msgid "Unknown date"
-msgstr ""
+msgstr "ไม่ระบุวัน"
 
 #: js/EventDetailsPanel.js:69
 msgid "{0} {1} o'clock"
-msgstr ""
+msgstr "{0} {1} นาฬิกา"
 
-#: js/EventDetailsPanel.js:93 js/EventUI.js:242
+#: js/EventDetailsPanel.js:98 js/EventUI.js:244
 msgid "recurring event"
-msgstr ""
+msgstr "เหตุการณ์ซ้ำซ้อน"
 
-#: js/EventDetailsPanel.js:95 js/EventUI.js:247
+#: js/EventDetailsPanel.js:100 js/EventUI.js:249
 msgid "recurring event exception"
-msgstr ""
+msgstr "ข้อยกเว้นเมื่อเหตุการณ์ซ้ำซ้อน"
 
-#: js/EventDetailsPanel.js:298 js/AttendeeFilterModel.js:35
+#: js/EventDetailsPanel.js:302 js/AttendeeFilterModel.js:35
 #: js/AttendeeGridPanel.js:89 js/WestPanel.js:90 js/Model.js:374
 msgid "Attendee"
 msgstr "ผู้เข้าร่วม"
 
 #: js/CalDAVContainerPropertiesHookField.js:35
 msgid "CalDAV URL"
-msgstr ""
+msgstr "CalDAV URL"
 
 #: js/MonthView.js:88 js/WestPanel.js:55
 msgid "WK"
@@ -808,19 +824,19 @@ msgstr "สัปดาห์ที่ {0}"
 
 #: js/AttendeeFilterGrid.js:28
 msgid "Add attendee"
-msgstr ""
+msgstr "เพิ่มผู้เข้าร่วม"
 
 #: js/AttendeeFilterGrid.js:47
 msgid "Sort Attendee"
-msgstr ""
+msgstr "แยกประเภทผู้เข้าร่วม"
 
 #: js/AttendeeFilterGrid.js:60
 msgid "Check to filter for this attendee"
-msgstr ""
+msgstr "ทำสัญลักษณ์เพื่อกรองให้ผู้เข้าร่วมคนนี้"
 
 #: js/AttendeeGridPanel.js:26
 msgid "Click here to invite another attender..."
-msgstr ""
+msgstr "คลิ๊กที่นี่เพื่อเชิญผู้เข้าร่วมท่านอื่น..."
 
 #: js/AttendeeGridPanel.js:153
 msgid "This is the calendar where the attender has saved this event in"
@@ -849,7 +865,7 @@ msgstr "สมาชิกของกลุ่ม"
 
 #: js/AttendeeGridPanel.js:405
 msgid "Remove Attender"
-msgstr ""
+msgstr "เอาผู้เข้าร่วมออก"
 
 #: js/AttendeeGridPanel.js:418
 msgid "Compose email"
@@ -861,11 +877,11 @@ msgstr "(ในฐานะสมาชิกกลุ่ม)"
 
 #: js/AttendeeGridPanel.js:676
 msgid "External Attendee"
-msgstr ""
+msgstr "ผู้เข้าร่วมจากภายนอก"
 
 #: js/WestPanel.js:32
 msgid "Mini Calendar"
-msgstr ""
+msgstr "ปฏิทินย่อ"
 
 #: js/Model.js:66 js/Model.js:378 js/SearchCombo.js:79
 msgid "Event"
@@ -882,7 +898,7 @@ msgstr "ปฏิทิน"
 
 #: js/Model.js:204
 msgid "Quick Search"
-msgstr ""
+msgstr "ค้นหาอย่างรวดเร็ว"
 
 #: js/Model.js:211
 msgid "Attendee Status"
@@ -890,7 +906,7 @@ msgstr "สถานะผู้เข้าร่วม"
 
 #: js/Model.js:220
 msgid "Attendee Role"
-msgstr ""
+msgstr "หน้าที่ผู้เข้าร่วม"
 
 #: js/Model.js:236
 msgid "Event (as attendee)"
@@ -915,71 +931,71 @@ msgstr "แหล่งที่มา"
 
 #: js/EventEditDialog.js:103
 msgid "View"
-msgstr ""
+msgstr "ดู"
 
 #: js/EventEditDialog.js:119
 msgid "Details"
-msgstr ""
+msgstr "รายละเอียด"
 
 #: js/EventEditDialog.js:168
 msgid "Saved in"
-msgstr ""
+msgstr "ได้บันทึกใน"
 
 #: js/EventEditDialog.js:278
 msgid "Enter description"
 msgstr "ใส่ คำอธิบาย"
 
-#: js/EventEditDialog.js:510
+#: js/EventEditDialog.js:515
 msgid "End date is not valid"
 msgstr "วันที่สิ้นสุดไม่ถูกต้อง"
 
-#: js/EventEditDialog.js:513
+#: js/EventEditDialog.js:518
 msgid "End date must be after start date"
 msgstr "วันที่สิ้นสุดต้องตามหลังวันที่เริ่มต้น"
 
-#: js/EventEditDialog.js:526
+#: js/EventEditDialog.js:531
 msgid "Start date is not valid"
 msgstr "วันที่เริ่มต้นไม่ถูกต้อง"
 
-#: js/EventEditDialog.js:547
+#: js/EventEditDialog.js:552
 msgid "Errors"
-msgstr ""
+msgstr "ข้อผิดพลาด"
 
 #: js/DaysView.js:95
 msgid "{0}, the {1}. of {2}"
-msgstr ""
+msgstr "{0}, ที่ {1} จาก {2}"
 
 #: js/DaysView.js:676
 msgid "The summary must not be longer than 255 characters."
-msgstr ""
+msgstr "ข้อสรุปต้องไม่มากไปกว่า 255 ตัวอักษร"
 
 #: js/DaysView.js:678
 msgid "The summary must have at least 1 character."
-msgstr ""
+msgstr "ข้อสรุปต้องมีอย่างน้อยที่สุด 1 ตัวอักษร"
 
 #: js/DaysView.js:715
 msgid "Summary too Long"
-msgstr ""
+msgstr "ข้อสรุปยาวเกินไป"
 
 #: js/DaysView.js:725
 msgid "Summary too Short"
-msgstr ""
+msgstr "ข้อสรุปสั้นเกินไป"
 
-#: js/EventUI.js:235
+#: js/EventUI.js:237
 msgid "private classification"
 msgstr "การแยกประเภทส่วนบุคคล"
 
-#: js/EventUI.js:256
+#: js/EventUI.js:258
 msgid "has alarm"
 msgstr "มีการแจ้งเตือน"
 
-#: js/EventUI.js:263
+#: js/EventUI.js:265
 msgid "has attachments"
-msgstr ""
+msgstr "มีสิ่งที่แนบมาด้วย"
 
 #: js/CalendarSelectWidget.js:124
 msgid "Originally"
-msgstr ""
+msgstr "โดยเริ่มแรก"
 
 #: js/SearchCombo.js:70
 msgid "no events found"
@@ -995,47 +1011,47 @@ msgstr "ค้นหาเหตุการณ์"
 
 #: views/eventNotification.php:12
 msgid "Updates"
-msgstr ""
+msgstr "อัพเดท"
 
 #: views/eventNotification.php:21
 msgid "This is an event series exception."
-msgstr ""
+msgstr "นี่คือข้อยกเว้นหนึ่งของอนุกรมเหตุการณ์"
 
 #: views/eventNotification.php:25
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr ""
+msgstr "%1$s ได้เปลี่ยนจาก \"%2$s\" เป็น \"%3$s\""
 
 #: views/eventNotification.php:32
 msgid "%1$s has been invited"
-msgstr ""
+msgstr "%1$s ได้รับเชิญ"
 
 #: views/eventNotification.php:37
 msgid "%1$s has been removed"
-msgstr ""
+msgstr "%1$s ได้เอาออก"
 
 #: views/eventNotification.php:44
 msgid "%1$s accepted invitation"
-msgstr ""
+msgstr "%1$s ได้ยอมรับคำเชิญ"
 
 #: views/eventNotification.php:48
 msgid "%1$s declined invitation"
-msgstr ""
+msgstr "%1$s ได้ปฏิเสธคำเชิญ"
 
 #: views/eventNotification.php:52
 msgid "Tentative response from %1$s"
-msgstr ""
+msgstr "การตอบรับที่ยังไม่แน่นอนจาก %1$s "
 
 #: views/eventNotification.php:56
 msgid "No response from %1$s"
-msgstr ""
+msgstr "ไม่มีการตอบรับจาก %1$s"
 
 #: views/eventNotification.php:59
 msgid "\"%2$s\" response from %1$s"
-msgstr ""
+msgstr "\"%2$s\" ตอบรับจาก %1$s"
 
 #: views/eventNotification.php:68
 msgid "Event details"
-msgstr ""
+msgstr "รายละเอียดของเหตุการณ์"
 
 #: Controller/EventNotifications.php:325
 msgid "Alarm for event \"%1$s\" at %2$s"
@@ -1043,7 +1059,7 @@ msgstr "แจ้งเตือน เหตุการณ์ \"%1$s\" เม�
 
 #: Controller/EventNotifications.php:328
 msgid "Event invitation \"%1$s\" at %2$s"
-msgstr ""
+msgstr "คำเชิญเข้าร่วมเหตุการณ์ \"%1$s\" เมื่อ %2$s"
 
 #: Controller/EventNotifications.php:332
 msgid "Event \"%1$s\" at %2$s has been canceled"
@@ -1051,7 +1067,7 @@ msgstr "เหตุการณ์ \"%1$s\" เมื่อ %2$s ได้ถ�
 
 #: Controller/EventNotifications.php:340
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
-msgstr ""
+msgstr "เหตุการณ์ \"%1$s\" ได้เปลี่ยนจาก %2$s ไปเป็น %3$s"
 
 #: Controller/EventNotifications.php:347
 msgid "Event \"%1$s\" at %2$s has been updated"
@@ -1059,20 +1075,20 @@ msgstr "เหตุการณ์ \"%1$s\" เมื่อ %2$s ได้ถ�
 
 #: Controller/EventNotifications.php:358
 msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "%1$s ได้ยอมรับเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
 #: Controller/EventNotifications.php:362
 msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "%1$s ได้ปฏิเสธเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
 #: Controller/EventNotifications.php:366
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "การตอบรับที่ยังไม่แน่นอนจาก %1$s สำหรับเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
 #: Controller/EventNotifications.php:370
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr ""
+msgstr "ไม่มีการตอบรับจาก %1$s สำหรับเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
 #: Controller/EventNotifications.php:374
 msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr ""
+msgstr "มีการเปลี่ยนแปลงเกี่ยวกับผู้เข้าร่วมสำหรับเหตุการณ์ \"%1$s\" เมื่อ %2$s"

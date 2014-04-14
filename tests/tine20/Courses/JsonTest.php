@@ -41,7 +41,28 @@ class Courses_JsonTest extends TestCase
      * @var Tinebase_Model_Department
      */
     protected $_department = NULL;
-
+    
+    /**
+     * Student name pattern config
+     */
+    protected $_schemaConfig;
+    
+    /**
+     * The default department
+     * @var string
+     */
+    protected $_defaultDepartmentConfig;
+    
+    /**
+     * @var Boolean
+     */
+    protected $_schemaConfigChanged = FALSE;
+    
+     /**
+     * @var Boolean
+     */
+    protected $_defaultDepartmentConfigChanged = FALSE;
+    
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -74,6 +95,9 @@ class Courses_JsonTest extends TestCase
             'logonscript_postfix_member' => '.cmd',
             'baseprofilepath' => '\\\\jo\\profiles\\',
         )));
+        
+        $this->_schemaConfig = Courses_Config::getInstance()->get(Courses_Config::STUDENTS_USERNAME_SCHEMA);
+        $this->_defaultDepartmentConfig = Courses_Config::getInstance()->get(Courses_Config::DEFAULT_DEPARTMENT);
     }
 
     /**
@@ -85,7 +109,13 @@ class Courses_JsonTest extends TestCase
     protected function tearDown()
     {
         $this->_groupIdsToDelete = $this->_groupsToDelete->getArrayOfIds();
+        if ($this->_schemaConfigChanged) {
+            Courses_Config::getInstance()->set(Courses_Config::STUDENTS_USERNAME_SCHEMA, $this->_schemaConfig);
+        }
         
+        if ($this->_defaultDepartmentConfigChanged) {
+            Courses_Config::getInstance()->set(Courses_Config::DEFAULT_DEPARTMENT, $this->_defaultDepartmentConfig);
+        }
         parent::tearDown();
     }
     
@@ -415,6 +445,48 @@ class Courses_JsonTest extends TestCase
             Tinebase_Core::getPreference('Courses')->getValueForUser(Courses_Preference::DEFAULTPERSISTENTFILTER, $teacher->getId())
         );
         $this->assertEquals(array(array('field' => 'name', 'operator' => 'equals', 'value' => $course['name'])), $filter->toArray());
+    }
+    
+    /**
+     * Test students loginname with schema 3
+     */
+    public function testStudentNameSchema3()
+    {
+        $this->_schemaConfigChanged = true;
+        Courses_Config::getInstance()->set(Courses_Config::STUDENTS_USERNAME_SCHEMA, 3);
+        
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
+        
+        $result = $this->_json->addNewMember(array(
+            'accountFirstName' => 'jams',
+            'accountLastName'  => 'hot',
+        ), $courseData);
+        
+        $this->assertEquals(2, count($result['results']));
+        
+        $id = NULL;
+        foreach ($result['results'] as $result) {
+            if ($result['name'] === 'hot, jams') {
+                $id = $result['id'];
+            }
+        }
+        $this->assertTrue($id !== NULL);
+        
+        $newUser = Tinebase_User::getInstance()->getFullUserById($id);
+        $this->assertEquals('j.hot', $newUser->accountLoginName);
+    }
+    
+    /**
+     * Test if the default department is returned
+     */
+    public function testDefaultDepartment()
+    {
+        $this->_defaultDepartmentConfigChanged = true;
+        Courses_Config::getInstance()->set(Courses_Config::DEFAULT_DEPARTMENT, $this->_department->name);
+        $result = $this->_json->getRegistryData();
+        $this->assertEquals($this->_department->id, $result['defaultType']['value']);
     }
     
     /************ protected helper funcs *************/

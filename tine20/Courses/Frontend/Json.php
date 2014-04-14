@@ -142,10 +142,19 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
+        $config = Courses_Config::getInstance();
         $courseTypes = Tinebase_Department::getInstance()->search(new Tinebase_Model_DepartmentFilter());
         
-        $defaultType = count($courseTypes) > 0 ? $courseTypes[0]->getId() : '';
-        
+        if (isset($config->default_department)) {
+            for ($i = 0; $i <= count($courseTypes); $i ++) {
+                if ($courseTypes[$i]->name == $config->default_department) {
+                    $defaultType = $courseTypes[$i]->getId();
+                    break;
+                }
+            }
+        } else {
+            $defaultType = count($courseTypes) > 0 ? $courseTypes[0]->getId() : '';
+        }
         $result = array(
             'defaultType' => array(
                 'value' => $defaultType,

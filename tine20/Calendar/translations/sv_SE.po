@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-02-11 20:39+0000\n"
+"PO-Revision-Date: 2014-03-21 11:59+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
@@ -52,12 +52,12 @@ msgstr "%s's personliga kalender"
 msgid "unknown"
 msgstr "okänd"
 
-#: Model/Attender.php:434
+#: Model/Attender.php:438
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "Denna kontakt har automatiskt lagts till av systemet som en händelse deltagare"
 
-#: Model/Attender.php:437
+#: Model/Attender.php:441
 msgid "The email address has been shortened: "
 msgstr ""
 
@@ -69,7 +69,7 @@ msgstr "Start"
 msgid "End"
 msgstr "Slut"
 
-#: Model/Event.php:345 js/GridView.js:127 js/EventDetailsPanel.js:266
+#: Model/Event.php:345 js/GridView.js:127 js/EventDetailsPanel.js:270
 msgid "Blocking"
 msgstr "blockerande"
 
@@ -82,13 +82,13 @@ msgstr "Klassificering"
 msgid "Description"
 msgstr "Beskrivning"
 
-#: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:276
+#: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:280
 #: js/Model.js:206 js/EventEditDialog.js:132 js/ResourcesGridPanel.js:54
 msgid "Location"
 msgstr "Plats"
 
 #: Model/Event.php:349 js/GridView.js:154 js/PerspectiveCombo.js:127
-#: js/EventDetailsPanel.js:280 js/Model.js:226 js/EventEditDialog.js:308
+#: js/EventDetailsPanel.js:284 js/Model.js:226 js/EventEditDialog.js:308
 msgid "Organizer"
 msgstr "Organiserare"
 
@@ -221,43 +221,59 @@ msgstr ""
 msgid "th"
 msgstr ""
 
-#: Config.php:52
+#: Config.php:66
 msgid "Fixed Calendars"
 msgstr "Korrigerade kalendrar"
 
-#: Config.php:54
+#: Config.php:68
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
 msgstr "Kalendrar alltid utvalda oavsett av alla filter parametrar. En godkännd användning kan vara att tvinga visning av en viss helgdag kalender."
 
-#: Config.php:62
+#: Config.php:76
 msgid "Attendee Status Available"
 msgstr "Deltagarstatus tillgänglig"
 
-#: Config.php:64
+#: Config.php:78
 msgid ""
 "Possible event attendee status. Please note that additional attendee status "
 "might impact other calendar systems on export or syncronisation."
 msgstr "Möjlig deltagarstatus vid händelse. Var vänlig notera att ytterliggare deltagar status kan påverka andra kalendersystem vid export eller synkronisering."
 
-#: Config.php:72
+#: Config.php:86
 msgid "Attendee Roles Available"
 msgstr "Tillgängliga deltagarroller"
 
-#: Config.php:74
+#: Config.php:88
 msgid ""
 "Possible event attendee roles. Please note that additional attendee roles "
 "might impact other calendar systems on export or syncronisation."
 msgstr "Möjlig deltagarroll vid händelse. Var vänlig notera att ytterliggare deltagar roller kan påverka andra kalendersystem vid export eller synkronisering."
 
-#: Config.php:82
+#: Config.php:96
 msgid "Filter timeslot for CalDAV events"
 msgstr ""
 
-#: Config.php:84
+#: Config.php:98
 msgid ""
 "For how long in the past (in months) the events should be synchronized."
+msgstr ""
+
+#: Config.php:107
+msgid "Default filter period (from) for events fetched via JSON API"
+msgstr ""
+
+#: Config.php:109
+msgid "For how long in the past (in months) the events should be fetched."
+msgstr ""
+
+#: Config.php:118
+msgid "Default filter period (until) for events fetched via JSON API"
+msgstr ""
+
+#: Config.php:120
+msgid "For how long in the future (in months) the events should be fetched."
 msgstr ""
 
 #: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:70
@@ -287,7 +303,7 @@ msgid "Declined"
 msgstr "Nekat"
 
 #: Setup/Update/Release5.php:94 Setup/Initialize.php:115 js/GridView.js:135
-#: js/EventDetailsPanel.js:271 js/EventEditDialog.js:206
+#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:206
 msgid "Tentative"
 msgstr "Preliminärt"
 
@@ -323,7 +339,7 @@ msgstr "Händelser Jag är arrangör för."
 msgid "All my events"
 msgstr "Alla mina event"
 
-#: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:256
+#: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:260
 #: js/ContactEventsGridPanel.js:119 js/EventEditDialog.js:138
 msgid "Start Time"
 msgstr "Starttid"
@@ -419,7 +435,7 @@ msgstr "Privat"
 msgid "Tags"
 msgstr "Taggar"
 
-#: js/GridView.js:115 js/EventDetailsPanel.js:261 js/EventEditDialog.js:152
+#: js/GridView.js:115 js/EventDetailsPanel.js:265 js/EventEditDialog.js:152
 msgid "End Time"
 msgstr "Sluttid"
 
@@ -777,15 +793,15 @@ msgstr ""
 msgid "{0} {1} o'clock"
 msgstr "Klockan {0} {1}"
 
-#: js/EventDetailsPanel.js:93 js/EventUI.js:242
+#: js/EventDetailsPanel.js:98 js/EventUI.js:244
 msgid "recurring event"
 msgstr "återkommande händelse"
 
-#: js/EventDetailsPanel.js:95 js/EventUI.js:247
+#: js/EventDetailsPanel.js:100 js/EventUI.js:249
 msgid "recurring event exception"
 msgstr "återkommande händelse undantag"
 
-#: js/EventDetailsPanel.js:298 js/AttendeeFilterModel.js:35
+#: js/EventDetailsPanel.js:302 js/AttendeeFilterModel.js:35
 #: js/AttendeeGridPanel.js:89 js/WestPanel.js:90 js/Model.js:374
 msgid "Attendee"
 msgstr "Deltagare"
@@ -936,19 +952,19 @@ msgstr "Sparad i"
 msgid "Enter description"
 msgstr "Beskrivning"
 
-#: js/EventEditDialog.js:510
+#: js/EventEditDialog.js:515
 msgid "End date is not valid"
 msgstr "Slutdatum är ogiltigt"
 
-#: js/EventEditDialog.js:513
+#: js/EventEditDialog.js:518
 msgid "End date must be after start date"
 msgstr "Slutdatum måste vara efter startdatum"
 
-#: js/EventEditDialog.js:526
+#: js/EventEditDialog.js:531
 msgid "Start date is not valid"
 msgstr "Startdatum är ogiligt"
 
-#: js/EventEditDialog.js:547
+#: js/EventEditDialog.js:552
 msgid "Errors"
 msgstr "Fel"
 
@@ -972,15 +988,15 @@ msgstr "Sammanfattningen är för lång"
 msgid "Summary too Short"
 msgstr "Sammanfattningen är för kort"
 
-#: js/EventUI.js:235
+#: js/EventUI.js:237
 msgid "private classification"
 msgstr "privat klassificering"
 
-#: js/EventUI.js:256
+#: js/EventUI.js:258
 msgid "has alarm"
 msgstr "har larm"
 
-#: js/EventUI.js:263
+#: js/EventUI.js:265
 msgid "has attachments"
 msgstr ""
 

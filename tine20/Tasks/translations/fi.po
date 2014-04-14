@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"PO-Revision-Date: 2014-03-21 12:02+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,8 @@ msgstr "%s's henkilökohtaisia tehtäviä"
 msgid "Due"
 msgstr "Määräpäivä"
 
-#: Model/Task.php:207 js/TaskEditDialog.js:200
+#: Model/Task.php:207 js/Tasks-FAT.js:6 js/TaskEditDialog.js:200
+#: js/Tasks-FAT-debug.js:686
 msgid "Organizer"
 msgstr "Järjestäjä"
 
@@ -51,22 +52,28 @@ msgstr "Järjestäjä"
 msgid "Description"
 msgstr "Kuvaus"
 
-#: Model/Task.php:209 js/TaskGridPanel.js:119 js/TaskEditDialog.js:192
+#: Model/Task.php:209 js/Tasks-FAT.js:6 js/TaskGridPanel.js:119
+#: js/TaskEditDialog.js:192 js/Tasks-FAT-debug.js:364
+#: js/Tasks-FAT-debug.js:678
 msgid "Priority"
 msgstr "Tärkeys"
 
-#: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
-#: js/Models.js:110 js/Models.js:168
+#: Model/Task.php:210 js/Tasks-FAT.js:6 js/TaskGridPanel.js:148
+#: js/TaskEditDialog.js:222 js/Tasks-FAT-debug.js:113
+#: js/Tasks-FAT-debug.js:171 js/Tasks-FAT-debug.js:393
+#: js/Tasks-FAT-debug.js:708 js/Models.js:110 js/Models.js:168
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Tila"
 msgstr[1] "Tilat"
 
-#: Model/Task.php:211 js/TaskGridPanel.js:135
+#: Model/Task.php:211 js/Tasks-FAT.js:6 js/TaskGridPanel.js:135
+#: js/Tasks-FAT-debug.js:380
 msgid "Percent"
 msgstr "Prosenttia"
 
-#: Model/Task.php:218 js/TaskGridPanel.js:90
+#: Model/Task.php:218 js/Tasks-FAT.js:6 js/TaskGridPanel.js:90
+#: js/Tasks-FAT-debug.js:339
 msgid "Lead"
 msgstr "Vainu"
 
@@ -102,8 +109,9 @@ msgstr "Mahdolliset prioriteetit, joita tehtävälle voi antaa. Huomaathan, ett�
 msgid "No response"
 msgstr "Ei vastausta"
 
-#: Setup/Update/Release5.php:75 Setup/Initialize.php:35
-#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230
+#: Setup/Update/Release5.php:75 Setup/Initialize.php:35 js/Tasks-FAT.js:6
+#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230 js/Tasks-FAT-debug.js:416
+#: js/Tasks-FAT-debug.js:715
 msgid "Completed"
 msgstr "Valmis"
 
@@ -183,99 +191,108 @@ msgstr "Oletus tehtävälista"
 msgid "The default task list to create new tasks in."
 msgstr "Lista, johon uudet tehtävät luodaan oletusarvoisesti."
 
-#: js/Tasks.js:39
+#: js/Tasks.js:39 js/Tasks-FAT-debug.js:197
 msgid "New Task"
 msgstr "Uusi tehtävä"
 
-#: js/TaskGridPanel.js:54
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:108
+msgid "Quick search"
+msgstr ""
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:97 js/TaskEditDialog.js:181
+#: js/Tasks-FAT-debug.js:110 js/Tasks-FAT-debug.js:342
+#: js/Tasks-FAT-debug.js:667 js/Models.js:107
+msgid "Summary"
+msgstr "Yhteeneveto"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:105 js/Tasks-FAT-debug.js:111
+#: js/Tasks-FAT-debug.js:350 js/Models.js:108
+msgid "Due Date"
+msgstr "Määräpäivä"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:178 js/Tasks-FAT-debug.js:121
+#: js/Tasks-FAT-debug.js:423 js/Models.js:118
+msgid "Responsible"
+msgstr "Vastuuhenkilö"
+
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:123 js/Models.js:120
+msgid "Last Modified Time"
+msgstr "Muokattu viimeksi"
+
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:124 js/Models.js:121
+msgid "Last Modified By"
+msgstr "Muokannut viimeksi"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:164 js/Tasks-FAT-debug.js:125
+#: js/Tasks-FAT-debug.js:409 js/Models.js:122
+msgid "Creation Time"
+msgstr "Luontiaika"
+
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:126 js/Models.js:123
+msgid "Created By"
+msgstr "Luonut"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:87 js/Tasks-FAT-debug.js:338
+msgid "Tags"
+msgstr "Tagit"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:101 js/Tasks-FAT-debug.js:346
+msgid "Add a task..."
+msgstr "Lisää tehtävä..."
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:136 js/Tasks-FAT-debug.js:625
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Määritä määräpäivä koska hälytys on asetettu!"
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:188 js/Tasks-FAT-debug.js:674
+msgid "Due date"
+msgstr "Määräpäivä"
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:201 js/Tasks-FAT-debug.js:687
+msgid "Add Responsible ..."
+msgstr "Lisää vastuuhenkilö ..."
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:208 js/Tasks-FAT-debug.js:694
+msgid "Notes"
+msgstr "Huomautukset"
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:209 js/Tasks-FAT-debug.js:695
+msgid "Enter description..."
+msgstr "Lisää kuvaus...."
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:215 js/Tasks-FAT-debug.js:701
+msgid "Percentage"
+msgstr "Prosenttia"
+
+#: js/TaskGridPanel.js:54 js/Tasks-FAT-debug.js:282
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Haluatko poistaa valitun tehtävän?"
 msgstr[1] "Haluatko poistaa valitut tehtävät?"
 
-#: js/TaskGridPanel.js:87
-msgid "Tags"
-msgstr "Tagit"
-
-#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:107
-msgid "Summary"
-msgstr "Yhteeneveto"
-
-#: js/TaskGridPanel.js:101
-msgid "Add a task..."
-msgstr "Lisää tehtävä..."
-
-#: js/TaskGridPanel.js:105 js/Models.js:108
-msgid "Due Date"
-msgstr "Määräpäivä"
-
-#: js/TaskGridPanel.js:164 js/Models.js:122
-msgid "Creation Time"
-msgstr "Luontiaika"
-
-#: js/TaskGridPanel.js:178 js/Models.js:118
-msgid "Responsible"
-msgstr "Vastuuhenkilö"
-
-#: js/TaskEditDialog.js:136
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Määritä määräpäivä koska hälytys on asetettu!"
-
-#: js/TaskEditDialog.js:188
-msgid "Due date"
-msgstr "Määräpäivä"
-
-#: js/TaskEditDialog.js:201
-msgid "Add Responsible ..."
-msgstr "Lisää vastuuhenkilö ..."
-
-#: js/TaskEditDialog.js:208
-msgid "Notes"
-msgstr "Huomautukset"
-
-#: js/TaskEditDialog.js:209
-msgid "Enter description..."
-msgstr "Lisää kuvaus...."
-
-#: js/TaskEditDialog.js:215
-msgid "Percentage"
-msgstr "Prosenttia"
-
-#: js/Models.js:66
+#: js/Tasks-FAT-debug.js:69 js/Models.js:66
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Tehtävä"
 msgstr[1] "Tehtävät"
 
-#: js/Models.js:66
+#: js/Tasks-FAT-debug.js:69 js/Models.js:66
 msgid "Tasks"
 msgstr "Tehtävät"
 
-#: js/Models.js:70
+#: js/Tasks-FAT-debug.js:73 js/Models.js:70
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "tehtävälista"
 msgstr[1] "tehtävälistat"
 
-#: js/Models.js:70
+#: js/Tasks-FAT-debug.js:73 js/Models.js:70
 msgid "to do lists"
 msgstr "tehtävälista"
 
 #: js/Models.js:105
 msgid "Quick Search"
 msgstr ""
-
-#: js/Models.js:120
-msgid "Last Modified Time"
-msgstr "Muokattu viimeksi"
-
-#: js/Models.js:121
-msgid "Last Modified By"
-msgstr "Muokannut viimeksi"
-
-#: js/Models.js:123
-msgid "Created By"
-msgstr "Luonut"
 
 #: Controller/Task.php:202
 msgid "Notification for Task "

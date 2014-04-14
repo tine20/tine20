@@ -17,25 +17,6 @@
 class Crm_Setup_Initialize extends Setup_Initialize
 {
     /**
-     * Override method because this app requires special rights
-     * @see tine20/Setup/Setup_Initialize#_createInitialRights($_application)
-     * 
-     * @todo make hard coded role name ('user role') configurable
-     */
-    protected function _createInitialRights(Tinebase_Model_Application $_application)
-    {
-        parent::_createInitialRights($_application);
-
-        $roles = Tinebase_Acl_Roles::getInstance();
-        $userRole = $roles->getRoleByName('user role');
-        $roles->addSingleRight(
-            $userRole->getId(), 
-            $_application->getId(), 
-            Crm_Acl_Rights::MANAGE_LEADS
-        );
-    }
-    
-    /**
      * init favorites
      */
     protected function _initializeFavorites()

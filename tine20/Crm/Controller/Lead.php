@@ -276,32 +276,6 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * check if user has the right to manage leads
-     * 
-     * @param string $_action {get|create|update|delete}
-     * @return void
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    protected function _checkRight($_action)
-    {
-        if (! $this->_doRightChecks) {
-            return;
-        }
-        
-        switch ($_action) {
-            case 'create':
-            case 'update':
-            case 'delete':
-                if (! Tinebase_Core::getUser()->hasRight('Crm', Crm_Acl_Rights::MANAGE_LEADS)) {
-                    throw new Tinebase_Exception_AccessDenied("You don't have the right to manage leads!");
-                }
-                break;
-            default;
-               break;
-        }
-    }
-    
-    /**
      * inspect creation of one record
      * 
      * @param   Tinebase_Record_Interface $_record

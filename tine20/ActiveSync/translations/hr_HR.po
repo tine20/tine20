@@ -81,45 +81,46 @@ msgstr "Zadana lista zadataka."
 msgid "The default task list to create new tasks in."
 msgstr "Zadana lista zadataka za kreiranje novih zadataka."
 
-#: js/Model.js:42
+#: js/ActiveSync-FAT-debug.js:32 js/Application.js:27 js/ActiveSync-FAT.js:6
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/ActiveSync-FAT-debug.js:48 js/Application.js:43 js/ActiveSync-FAT.js:6
+msgid "Select a Device"
+msgstr "Odaberite uređaj"
+
+#: js/ActiveSync-FAT-debug.js:62 js/Application.js:57 js/ActiveSync-FAT.js:6
+msgid "No ActiveSync Device registered"
+msgstr "Nema registriranog ActiveSync uređaja"
+
+#: js/ActiveSync-FAT-debug.js:70 js/Application.js:65 js/ActiveSync-FAT.js:6
+msgid "Set as {0} Filter"
+msgstr "Postavi kao {0} filter"
+
+#: js/ActiveSync-FAT-debug.js:95 js/Application.js:90 js/ActiveSync-FAT.js:6
+msgid "Resetted Sync Filter"
+msgstr "Resetirani Sync filter"
+
+#: js/ActiveSync-FAT-debug.js:96 js/ActiveSync-FAT-debug.js:108
+#: js/Application.js:91 js/Application.js:103 js/ActiveSync-FAT.js:6
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} filter za uređaj \"{1}\" je sada \"{2}\""
+
+#: js/ActiveSync-FAT-debug.js:99 js/Application.js:94 js/ActiveSync-FAT.js:6
+msgid "resetted"
+msgstr "resetirano"
+
+#: js/ActiveSync-FAT-debug.js:107 js/Application.js:102 js/ActiveSync-FAT.js:6
+msgid "Set Sync Filter"
+msgstr "Postavi Sync filter"
+
+#: js/ActiveSync-FAT-debug.js:158 js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] "Uređaj"
 msgstr[1] "Uređaja"
 msgstr[2] "Uređaja"
 
-#: js/Model.js:42
+#: js/ActiveSync-FAT-debug.js:158 js/Model.js:42
 msgid "Devices"
 msgstr "Uređaji"
-
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Odaberite uređaj"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Nema registriranog ActiveSync uređaja"
-
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr "Postavi kao {0} filter"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Resetirani Sync filter"
-
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} filter za uređaj \"{1}\" je sada \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "resetirano"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Postavi Sync filter"

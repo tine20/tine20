@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"PO-Revision-Date: 2014-03-21 12:02+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
@@ -42,7 +42,8 @@ msgstr "%s osobni zadaci"
 msgid "Due"
 msgstr "Obaveza"
 
-#: Model/Task.php:207 js/TaskEditDialog.js:200
+#: Model/Task.php:207 js/Tasks-FAT.js:6 js/TaskEditDialog.js:200
+#: js/Tasks-FAT-debug.js:686
 msgid "Organizer"
 msgstr "Organizator"
 
@@ -50,23 +51,29 @@ msgstr "Organizator"
 msgid "Description"
 msgstr "Opis"
 
-#: Model/Task.php:209 js/TaskGridPanel.js:119 js/TaskEditDialog.js:192
+#: Model/Task.php:209 js/Tasks-FAT.js:6 js/TaskGridPanel.js:119
+#: js/TaskEditDialog.js:192 js/Tasks-FAT-debug.js:364
+#: js/Tasks-FAT-debug.js:678
 msgid "Priority"
 msgstr "Prioritet"
 
-#: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
-#: js/Models.js:110 js/Models.js:168
+#: Model/Task.php:210 js/Tasks-FAT.js:6 js/TaskGridPanel.js:148
+#: js/TaskEditDialog.js:222 js/Tasks-FAT-debug.js:113
+#: js/Tasks-FAT-debug.js:171 js/Tasks-FAT-debug.js:393
+#: js/Tasks-FAT-debug.js:708 js/Models.js:110 js/Models.js:168
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Status"
 msgstr[1] "Statusa"
 msgstr[2] "Statusa"
 
-#: Model/Task.php:211 js/TaskGridPanel.js:135
+#: Model/Task.php:211 js/Tasks-FAT.js:6 js/TaskGridPanel.js:135
+#: js/Tasks-FAT-debug.js:380
 msgid "Percent"
 msgstr "Postotak"
 
-#: Model/Task.php:218 js/TaskGridPanel.js:90
+#: Model/Task.php:218 js/Tasks-FAT.js:6 js/TaskGridPanel.js:90
+#: js/Tasks-FAT-debug.js:339
 msgid "Lead"
 msgstr "Vodeći"
 
@@ -102,8 +109,9 @@ msgstr "Mogući prioriteti zadataka. Napomena kako bi dodatni prioriteti mogli u
 msgid "No response"
 msgstr "Nema odgovora"
 
-#: Setup/Update/Release5.php:75 Setup/Initialize.php:35
-#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230
+#: Setup/Update/Release5.php:75 Setup/Initialize.php:35 js/Tasks-FAT.js:6
+#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230 js/Tasks-FAT-debug.js:416
+#: js/Tasks-FAT-debug.js:715
 msgid "Completed"
 msgstr "Završeno"
 
@@ -183,102 +191,111 @@ msgstr "Zadana lista zadataka"
 msgid "The default task list to create new tasks in."
 msgstr "Zadana lista zadataka za kreiranje novih."
 
-#: js/Tasks.js:39
+#: js/Tasks.js:39 js/Tasks-FAT-debug.js:197
 msgid "New Task"
 msgstr "Novi zadatak"
 
-#: js/TaskGridPanel.js:54
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:108
+msgid "Quick search"
+msgstr ""
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:97 js/TaskEditDialog.js:181
+#: js/Tasks-FAT-debug.js:110 js/Tasks-FAT-debug.js:342
+#: js/Tasks-FAT-debug.js:667 js/Models.js:107
+msgid "Summary"
+msgstr "Sumarno"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:105 js/Tasks-FAT-debug.js:111
+#: js/Tasks-FAT-debug.js:350 js/Models.js:108
+msgid "Due Date"
+msgstr "Rok izvršenja"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:178 js/Tasks-FAT-debug.js:121
+#: js/Tasks-FAT-debug.js:423 js/Models.js:118
+msgid "Responsible"
+msgstr "Zadužen"
+
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:123 js/Models.js:120
+msgid "Last Modified Time"
+msgstr "Vrijeme zadnje izmjene"
+
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:124 js/Models.js:121
+msgid "Last Modified By"
+msgstr "Zadnji izmijenio"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:164 js/Tasks-FAT-debug.js:125
+#: js/Tasks-FAT-debug.js:409 js/Models.js:122
+msgid "Creation Time"
+msgstr "Vrijeme kreiranja"
+
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:126 js/Models.js:123
+msgid "Created By"
+msgstr "Kreirao"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:87 js/Tasks-FAT-debug.js:338
+msgid "Tags"
+msgstr "Oznake"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:101 js/Tasks-FAT-debug.js:346
+msgid "Add a task..."
+msgstr "Dodaj zadatak.."
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:136 js/Tasks-FAT-debug.js:625
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Potrebno je navesti rok izvršenja radi postavljenog alarma."
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:188 js/Tasks-FAT-debug.js:674
+msgid "Due date"
+msgstr "Rok izvršenja"
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:201 js/Tasks-FAT-debug.js:687
+msgid "Add Responsible ..."
+msgstr "Dodaj zaduženog.."
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:208 js/Tasks-FAT-debug.js:694
+msgid "Notes"
+msgstr "Bilješke"
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:209 js/Tasks-FAT-debug.js:695
+msgid "Enter description..."
+msgstr "Unesite opis.."
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:215 js/Tasks-FAT-debug.js:701
+msgid "Percentage"
+msgstr "Postotak"
+
+#: js/TaskGridPanel.js:54 js/Tasks-FAT-debug.js:282
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Želite li obrisati odabrani zadatak?"
 msgstr[1] "Želite li obrisati odabrane zadatke?"
 msgstr[2] "Želite li obrisati odabrane zadatke?"
 
-#: js/TaskGridPanel.js:87
-msgid "Tags"
-msgstr "Oznake"
-
-#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:107
-msgid "Summary"
-msgstr "Sumarno"
-
-#: js/TaskGridPanel.js:101
-msgid "Add a task..."
-msgstr "Dodaj zadatak.."
-
-#: js/TaskGridPanel.js:105 js/Models.js:108
-msgid "Due Date"
-msgstr "Rok izvršenja"
-
-#: js/TaskGridPanel.js:164 js/Models.js:122
-msgid "Creation Time"
-msgstr "Vrijeme kreiranja"
-
-#: js/TaskGridPanel.js:178 js/Models.js:118
-msgid "Responsible"
-msgstr "Zadužen"
-
-#: js/TaskEditDialog.js:136
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Potrebno je navesti rok izvršenja radi postavljenog alarma."
-
-#: js/TaskEditDialog.js:188
-msgid "Due date"
-msgstr "Rok izvršenja"
-
-#: js/TaskEditDialog.js:201
-msgid "Add Responsible ..."
-msgstr "Dodaj zaduženog.."
-
-#: js/TaskEditDialog.js:208
-msgid "Notes"
-msgstr "Bilješke"
-
-#: js/TaskEditDialog.js:209
-msgid "Enter description..."
-msgstr "Unesite opis.."
-
-#: js/TaskEditDialog.js:215
-msgid "Percentage"
-msgstr "Postotak"
-
-#: js/Models.js:66
+#: js/Tasks-FAT-debug.js:69 js/Models.js:66
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Zadatak"
 msgstr[1] "Zadatka"
 msgstr[2] "Zadataka"
 
-#: js/Models.js:66
+#: js/Tasks-FAT-debug.js:69 js/Models.js:66
 msgid "Tasks"
 msgstr "Zadaci"
 
-#: js/Models.js:70
+#: js/Tasks-FAT-debug.js:73 js/Models.js:70
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "Lista zaduženja"
 msgstr[1] "Liste zaduženja"
 msgstr[2] "Listi zaduženja"
 
-#: js/Models.js:70
+#: js/Tasks-FAT-debug.js:73 js/Models.js:70
 msgid "to do lists"
 msgstr "Liste zaduženja"
 
 #: js/Models.js:105
 msgid "Quick Search"
 msgstr ""
-
-#: js/Models.js:120
-msgid "Last Modified Time"
-msgstr "Vrijeme zadnje izmjene"
-
-#: js/Models.js:121
-msgid "Last Modified By"
-msgstr "Zadnji izmijenio"
-
-#: js/Models.js:123
-msgid "Created By"
-msgstr "Kreirao"
 
 #: Controller/Task.php:202
 msgid "Notification for Task "

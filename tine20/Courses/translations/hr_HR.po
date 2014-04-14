@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:55+0000\n"
+"PO-Revision-Date: 2014-03-21 11:59+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,8 @@ msgstr "Dodaj postojećeg korisnika"
 msgid "Add existing user as member to a course"
 msgstr "Dodaj postojećeg korisnika kao člana tečaja"
 
-#: Config.php:82 js/CourseEditDialog.js:230 js/Models.js:74
+#: Config.php:82 js/CourseEditDialog.js:230 js/Courses-FAT-debug.js:77
+#: js/Courses-FAT-debug.js:650 js/Courses-FAT.js:6 js/Models.js:74
 msgid "Internet Access"
 msgstr "Pristup Internetu"
 
@@ -100,106 +101,113 @@ msgstr "Filtriran"
 msgid "The default favorite which is loaded on Classes startup"
 msgstr "Zadani favorit koji se pokreče za nastavu "
 
-#: js/CourseEditDialog.js:33
+#: js/CourseEditDialog.js:33 js/Courses-FAT-debug.js:456 js/Courses-FAT.js:6
 msgid "Import course members"
 msgstr "Uvoz članova tečaja"
 
-#: js/CourseEditDialog.js:42
+#: js/CourseEditDialog.js:42 js/Courses-FAT-debug.js:465 js/Courses-FAT.js:6
 msgid "Add new member"
 msgstr "Dodaj novog člana"
 
-#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
+#: js/CourseEditDialog.js:190 js/Courses-FAT-debug.js:46
+#: js/Courses-FAT-debug.js:610 js/Courses-FAT.js:6 js/Models.js:43
+#: Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Tečaj"
 msgstr[1] "Tečajevi"
 msgstr[2] "Tečajeva"
 
-#: js/CourseEditDialog.js:206
+#: js/CourseEditDialog.js:206 js/Courses-FAT-debug.js:626 js/Courses-FAT.js:6
 msgid "Course Name"
 msgstr "Ime tečaja"
 
-#: js/CourseEditDialog.js:213
+#: js/CourseEditDialog.js:213 js/Courses-FAT-debug.js:633 js/Courses-FAT.js:6
 msgid "Course / School Type"
 msgstr "Tečaj / tip škole"
 
-#: js/CourseEditDialog.js:224
+#: js/CourseEditDialog.js:224 js/Courses-FAT-debug.js:644 js/Courses-FAT.js:6
 msgid "Description"
 msgstr "Opis"
 
-#: js/CourseEditDialog.js:240
+#: js/CourseEditDialog.js:240 js/Courses-FAT-debug.js:660
 msgid "Fileserver Access"
 msgstr "Pristup datotekama na serveru"
 
-#: js/CourseEditDialog.js:272
+#: js/CourseEditDialog.js:272 js/Courses-FAT-debug.js:692 js/Courses-FAT.js:6
 msgid "Members"
 msgstr "Članovi"
 
-#: js/CourseEditDialog.js:299
+#: js/CourseEditDialog.js:299 js/Courses-FAT-debug.js:719 js/Courses-FAT.js:6
 msgid "Login"
 msgstr "Prijava"
 
-#: js/CourseEditDialog.js:303
+#: js/CourseEditDialog.js:303 js/Courses-FAT-debug.js:723 js/Courses-FAT.js:6
 msgid "unknown"
 msgstr "nepoznat"
 
-#: js/CourseEditDialog.js:308
+#: js/CourseEditDialog.js:308 js/Courses-FAT-debug.js:728 js/Courses-FAT.js:6
 msgid "Reset Password"
 msgstr "Resetirati lozinku"
 
-#: js/AddMemberDialog.js:63
+#: js/AddMemberDialog.js:63 js/Courses-FAT-debug.js:350 js/Courses-FAT.js:6
 msgid "First Name"
 msgstr "Ime"
 
-#: js/AddMemberDialog.js:67
+#: js/AddMemberDialog.js:67 js/Courses-FAT-debug.js:354 js/Courses-FAT.js:6
 msgid "Last Name"
 msgstr "Prezime"
 
-#: js/AddMemberDialog.js:86
+#: js/AddMemberDialog.js:86 js/Courses-FAT-debug.js:373 js/Courses-FAT.js:6
 msgid "Add new member to course"
 msgstr "Dodaj novog člana tečaja"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:118 js/Courses-FAT-debug.js:405 js/Courses-FAT.js:6
 msgid "Errors"
 msgstr "Greške"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:118 js/Courses-FAT-debug.js:405 js/Courses-FAT.js:6
 msgid "Please fix the errors noted."
 msgstr "Molimo popraviti uočene pogreške."
 
-#: js/CourseGridPanel.js:44 js/Models.js:72
+#: js/CourseGridPanel.js:44 js/Courses-FAT-debug.js:75
+#: js/Courses-FAT-debug.js:229 js/Courses-FAT.js:6 js/Models.js:72
 msgid "Name"
 msgstr "Ime"
 
-#: js/CourseGridPanel.js:50
+#: js/CourseGridPanel.js:50 js/Courses-FAT-debug.js:235 js/Courses-FAT.js:6
 msgid "Type"
 msgstr "Vrsta"
 
-#: js/CourseGridPanel.js:95
+#: js/CourseGridPanel.js:95 js/Courses-FAT-debug.js:280 js/Courses-FAT.js:6
 msgid "Failed"
 msgstr "Neuspjelo"
 
-#: js/CourseGridPanel.js:96
+#: js/CourseGridPanel.js:96 js/Courses-FAT-debug.js:281 js/Courses-FAT.js:6
 msgid "Some error occured while trying to update the courses."
 msgstr "Pojavila se pogreška pri pokušaju ažuriranja tečajeva."
 
-#: js/Models.js:47
+#: js/Courses-FAT-debug.js:50 js/Models.js:47
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "lista zapisa"
 msgstr[1] "liste zapisa"
 msgstr[2] "liste zapisa"
 
-#: js/Models.js:71
-msgid "Quick Search"
+#: js/Courses-FAT-debug.js:74 js/Courses-FAT.js:6
+msgid "Quick search"
 msgstr ""
 
-#: js/Models.js:109
+#: js/Courses-FAT-debug.js:112 js/Models.js:109
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Vrsta tečaja"
 msgstr[1] "Vrste tečajeva"
 msgstr[2] "Vrste tečajeva"
+
+#: js/Models.js:71
+msgid "Quick Search"
+msgstr ""
 
 #: Controller/Course.php:256 Controller/Course.php:300
 msgid "Teacher"

@@ -344,11 +344,12 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     public function generateUserName($_account, $_schema = 1)
     {
         if (! empty($_account->accountFirstName) && $_schema > 0) {
-            $userName = ($_schema === 1) ? $this->_generateUserWithSchema1($_account) : $this->_generateUserWithSchema2($_account);
-        } else {
-            $userName = strtolower(replaceSpecialChars(substr($_account->accountLastName, 0, 10)));
+            if (method_exists($this, '_generateUserWithSchema' . $_schema)) {
+                $userName = call_user_func_array(array($this, '_generateUserWithSchema' . $_schema), array($_account));
+            } else {
+                $userName = strtolower(replaceSpecialChars(substr($_account->accountLastName, 0, 10)));
+            }
         }
-        
         $userName = $this->_addSuffixToUsernameIfExists($userName);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
@@ -380,6 +381,27 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         for ($i=0; $i < strlen($_account->accountFirstName); $i++) {
         
             $userName = strtolower(replaceSpecialChars(substr($_account->accountFirstName, 0, $i+1) . $_account->accountLastName));
+            if (! $this->userNameExists($userName)) {
+                $result = $userName;
+                break;
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * schema 3 = 1-x chars of firstname . lastname
+     * 
+     * @param Tinebase_Model_FullUser $_account
+     * @return string
+     */
+    protected function _generateUserWithSchema3($_account)
+    {
+        $result = $_account->accountLastName;
+        for ($i=0; $i < strlen($_account->accountFirstName); $i++) {
+        
+            $userName = strtolower(replaceSpecialChars(substr($_account->accountFirstName, 0, $i+1) . '.' . $_account->accountLastName));
             if (! $this->userNameExists($userName)) {
                 $result = $userName;
                 break;

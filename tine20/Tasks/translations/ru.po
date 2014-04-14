@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-18 18:01+0000\n"
-"Last-Translator: Aleksdem <aleksdem@aleksdem.com>\n"
+"PO-Revision-Date: 2014-03-21 12:02+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,7 +45,8 @@ msgstr "%s личные задания"
 msgid "Due"
 msgstr "Fälligkeit"
 
-#: Model/Task.php:207 js/TaskEditDialog.js:200
+#: Model/Task.php:207 js/Tasks-FAT.js:6 js/TaskEditDialog.js:200
+#: js/Tasks-FAT-debug.js:686
 msgid "Organizer"
 msgstr "Организатор"
 
@@ -53,23 +54,29 @@ msgstr "Организатор"
 msgid "Description"
 msgstr "Описание"
 
-#: Model/Task.php:209 js/TaskGridPanel.js:119 js/TaskEditDialog.js:192
+#: Model/Task.php:209 js/Tasks-FAT.js:6 js/TaskGridPanel.js:119
+#: js/TaskEditDialog.js:192 js/Tasks-FAT-debug.js:364
+#: js/Tasks-FAT-debug.js:678
 msgid "Priority"
 msgstr "Приоритет"
 
-#: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
-#: js/Models.js:110 js/Models.js:168
+#: Model/Task.php:210 js/Tasks-FAT.js:6 js/TaskGridPanel.js:148
+#: js/TaskEditDialog.js:222 js/Tasks-FAT-debug.js:113
+#: js/Tasks-FAT-debug.js:171 js/Tasks-FAT-debug.js:393
+#: js/Tasks-FAT-debug.js:708 js/Models.js:110 js/Models.js:168
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Состояние"
 msgstr[1] "Состояния"
 msgstr[2] "Состояния"
 
-#: Model/Task.php:211 js/TaskGridPanel.js:135
+#: Model/Task.php:211 js/Tasks-FAT.js:6 js/TaskGridPanel.js:135
+#: js/Tasks-FAT-debug.js:380
 msgid "Percent"
 msgstr "Процент"
 
-#: Model/Task.php:218 js/TaskGridPanel.js:90
+#: Model/Task.php:218 js/Tasks-FAT.js:6 js/TaskGridPanel.js:90
+#: js/Tasks-FAT-debug.js:339
 msgid "Lead"
 msgstr "Предложение"
 
@@ -105,8 +112,9 @@ msgstr "Возможные приоритеты задач. Обратите в�
 msgid "No response"
 msgstr "Нет ответа"
 
-#: Setup/Update/Release5.php:75 Setup/Initialize.php:35
-#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230
+#: Setup/Update/Release5.php:75 Setup/Initialize.php:35 js/Tasks-FAT.js:6
+#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230 js/Tasks-FAT-debug.js:416
+#: js/Tasks-FAT-debug.js:715
 msgid "Completed"
 msgstr "Закончено"
 
@@ -186,102 +194,111 @@ msgstr "Список задач по умолчанию"
 msgid "The default task list to create new tasks in."
 msgstr "Список задач для создания новых задач по умолчанию"
 
-#: js/Tasks.js:39
+#: js/Tasks.js:39 js/Tasks-FAT-debug.js:197
 msgid "New Task"
 msgstr "Новая задача"
 
-#: js/TaskGridPanel.js:54
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:108
+msgid "Quick search"
+msgstr ""
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:97 js/TaskEditDialog.js:181
+#: js/Tasks-FAT-debug.js:110 js/Tasks-FAT-debug.js:342
+#: js/Tasks-FAT-debug.js:667 js/Models.js:107
+msgid "Summary"
+msgstr "Сводка"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:105 js/Tasks-FAT-debug.js:111
+#: js/Tasks-FAT-debug.js:350 js/Models.js:108
+msgid "Due Date"
+msgstr "Дата завершения"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:178 js/Tasks-FAT-debug.js:121
+#: js/Tasks-FAT-debug.js:423 js/Models.js:118
+msgid "Responsible"
+msgstr "Ответственный"
+
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:123 js/Models.js:120
+msgid "Last Modified Time"
+msgstr "Время последнего изменения"
+
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:124 js/Models.js:121
+msgid "Last Modified By"
+msgstr "Последнее изменение"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:164 js/Tasks-FAT-debug.js:125
+#: js/Tasks-FAT-debug.js:409 js/Models.js:122
+msgid "Creation Time"
+msgstr "Время создания"
+
+#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:126 js/Models.js:123
+msgid "Created By"
+msgstr "Создана"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:87 js/Tasks-FAT-debug.js:338
+msgid "Tags"
+msgstr "Теги"
+
+#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:101 js/Tasks-FAT-debug.js:346
+msgid "Add a task..."
+msgstr "Добавить задание..."
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:136 js/Tasks-FAT-debug.js:625
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Вы должны поставить дату для оповещения!"
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:188 js/Tasks-FAT-debug.js:674
+msgid "Due date"
+msgstr "Дата завершения"
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:201 js/Tasks-FAT-debug.js:687
+msgid "Add Responsible ..."
+msgstr "Добавить Ответственных ..."
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:208 js/Tasks-FAT-debug.js:694
+msgid "Notes"
+msgstr "Примечания"
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:209 js/Tasks-FAT-debug.js:695
+msgid "Enter description..."
+msgstr "Введите описание..."
+
+#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:215 js/Tasks-FAT-debug.js:701
+msgid "Percentage"
+msgstr "Процентное отношение"
+
+#: js/TaskGridPanel.js:54 js/Tasks-FAT-debug.js:282
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Вы действительно хотите удалить выбранное задание"
 msgstr[1] "Вы действительно хотите удалить выбранные задания"
 msgstr[2] "Вы действительно хотите удалить выбранных заданий"
 
-#: js/TaskGridPanel.js:87
-msgid "Tags"
-msgstr "Теги"
-
-#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:107
-msgid "Summary"
-msgstr "Сводка"
-
-#: js/TaskGridPanel.js:101
-msgid "Add a task..."
-msgstr "Добавить задание..."
-
-#: js/TaskGridPanel.js:105 js/Models.js:108
-msgid "Due Date"
-msgstr "Дата завершения"
-
-#: js/TaskGridPanel.js:164 js/Models.js:122
-msgid "Creation Time"
-msgstr "Время создания"
-
-#: js/TaskGridPanel.js:178 js/Models.js:118
-msgid "Responsible"
-msgstr "Ответственный"
-
-#: js/TaskEditDialog.js:136
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Вы должны поставить дату для оповещения!"
-
-#: js/TaskEditDialog.js:188
-msgid "Due date"
-msgstr "Дата завершения"
-
-#: js/TaskEditDialog.js:201
-msgid "Add Responsible ..."
-msgstr "Добавить Ответственных ..."
-
-#: js/TaskEditDialog.js:208
-msgid "Notes"
-msgstr "Примечания"
-
-#: js/TaskEditDialog.js:209
-msgid "Enter description..."
-msgstr "Введите описание..."
-
-#: js/TaskEditDialog.js:215
-msgid "Percentage"
-msgstr "Процентное отношение"
-
-#: js/Models.js:66
+#: js/Tasks-FAT-debug.js:69 js/Models.js:66
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Задание"
 msgstr[1] "Задания"
 msgstr[2] "Заданий"
 
-#: js/Models.js:66
+#: js/Tasks-FAT-debug.js:69 js/Models.js:66
 msgid "Tasks"
 msgstr "Задания"
 
-#: js/Models.js:70
+#: js/Tasks-FAT-debug.js:73 js/Models.js:70
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "список работ"
 msgstr[1] "списка работ"
 msgstr[2] "списков работ"
 
-#: js/Models.js:70
+#: js/Tasks-FAT-debug.js:73 js/Models.js:70
 msgid "to do lists"
 msgstr "списки работ"
 
 #: js/Models.js:105
 msgid "Quick Search"
 msgstr "Быстрый поиск"
-
-#: js/Models.js:120
-msgid "Last Modified Time"
-msgstr "Время последнего изменения"
-
-#: js/Models.js:121
-msgid "Last Modified By"
-msgstr "Последнее изменение"
-
-#: js/Models.js:123
-msgid "Created By"
-msgstr "Создана"
 
 #: Controller/Task.php:202
 msgid "Notification for Task "

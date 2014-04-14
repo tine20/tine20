@@ -27,12 +27,6 @@
  */
 class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
-   /**
-     * the right to manage leads
-     * @staticvar string
-     */
-    const MANAGE_LEADS = 'manage_leads';
-    
     /**
      * the right to manage shared lead favorites
      * 
@@ -90,7 +84,6 @@ class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array ( 
-            self::MANAGE_LEADS,
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS,
             self::MANAGE_SHARED_LEAD_FAVORITES,
         );
@@ -109,10 +102,6 @@ class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $translate = Tinebase_Translation::getTranslation('Crm');
         
         $rightDescriptions = array(
-            self::MANAGE_LEADS  => array(
-                'text'          => $translate->_('manage leads'),
-                'description'   => $translate->_('add, edit and delete leads'),
-            ),
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS => array(
                 'text'          => $translate->_('manage shared lead folders'),
                 'description'   => $translate->_('Create new shared lead folders'),

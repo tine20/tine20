@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2013-09-11 15:56+0000\n"
+"PO-Revision-Date: 2014-03-21 12:02+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -92,7 +92,9 @@ msgstr ""
 msgid "Possible connection type of services"
 msgstr ""
 
-#: Config.php:68 js/AccountGridPanel.js:98 js/AccountEditDialog.js:262
+#: Config.php:68 js/AccountGridPanel.js:98 js/Sipgate-FAT-debug.js:1198
+#: js/Sipgate-FAT-debug.js:1816 js/Sipgate-FAT.js:6
+#: js/AccountEditDialog.js:262
 msgid "Account Type"
 msgstr ""
 
@@ -1148,102 +1150,124 @@ msgid ""
 "Germany)"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:64 js/Models.js:332
+#: js/ConnectionGridPanel.js:64 js/Sipgate-FAT-debug.js:905
+#: js/Sipgate-FAT-debug.js:1996 js/Sipgate-FAT.js:6 js/Models.js:332
 msgid "TOS"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:72 js/Models.js:107 js/Models.js:325
+#: js/ConnectionGridPanel.js:72 js/Sipgate-FAT-debug.js:673
+#: js/Sipgate-FAT-debug.js:898 js/Sipgate-FAT-debug.js:2004
+#: js/Sipgate-FAT.js:6 js/Models.js:107 js/Models.js:325
 msgid "Status"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:80
+#: js/ConnectionGridPanel.js:80 js/Sipgate-FAT-debug.js:2012
+#: js/Sipgate-FAT.js:6
 msgid "Remote Number"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:86
+#: js/ConnectionGridPanel.js:86 js/Sipgate-FAT-debug.js:2018
+#: js/Sipgate-FAT.js:6
 msgid "Local Number"
 msgstr ""
 
 #: js/ConnectionGridPanel.js:92 js/LineFilterModel.js:32
+#: js/Sipgate-FAT-debug.js:1281 js/Sipgate-FAT-debug.js:2024
+#: js/Sipgate-FAT.js:6
 msgid "Line"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:99
+#: js/ConnectionGridPanel.js:99 js/Sipgate-FAT-debug.js:2031
+#: js/Sipgate-FAT.js:6
 msgid "Call started"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:106
+#: js/ConnectionGridPanel.js:106 js/Sipgate-FAT-debug.js:2038
+#: js/Sipgate-FAT.js:6
 msgid "Contact"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:178
+#: js/ConnectionGridPanel.js:178 js/Sipgate-FAT-debug.js:2110
+#: js/Sipgate-FAT.js:6
 msgid "Save number"
 msgstr ""
 
-#: js/ConnectionGridPanel.js:179
+#: js/ConnectionGridPanel.js:179 js/Sipgate-FAT-debug.js:2111
+#: js/Sipgate-FAT.js:6
 msgid "Adds this number to the Addressbook"
 msgstr ""
 
 #: js/ConnectionGridPanel.js:186 js/LineGridPanel.js:163
-#: js/AccountGridPanel.js:124
+#: js/AccountGridPanel.js:124 js/Sipgate-FAT-debug.js:1224
+#: js/Sipgate-FAT-debug.js:1467 js/Sipgate-FAT-debug.js:2118
+#: js/Sipgate-FAT.js:6
 msgid "Dial number"
 msgstr ""
 
 #: js/ConnectionGridPanel.js:187 js/LineGridPanel.js:164
-#: js/AccountGridPanel.js:125
+#: js/AccountGridPanel.js:125 js/Sipgate-FAT-debug.js:1225
+#: js/Sipgate-FAT-debug.js:1468 js/Sipgate-FAT-debug.js:2119
+#: js/Sipgate-FAT.js:6
 msgid "Initiates a new outgoing call"
 msgstr ""
 
 #: js/ConnectionGridPanel.js:196 js/LineGridPanel.js:203
+#: js/Sipgate-FAT-debug.js:1507 js/Sipgate-FAT-debug.js:2128
+#: js/Sipgate-FAT.js:6
 msgid "Add Account"
 msgstr ""
 
-#: js/SmsEditDialog.js:67
+#: js/SmsEditDialog.js:67 js/Sipgate-FAT-debug.js:322 js/Sipgate-FAT.js:6
 msgid "Send"
 msgstr ""
 
 #: js/SmsEditDialog.js:74 js/SearchAddressDialog.js:63
-#: js/DialNumberDialog.js:89 js/CallStateWindow.js:106
+#: js/DialNumberDialog.js:89 js/Sipgate-FAT-debug.js:111
+#: js/Sipgate-FAT-debug.js:329 js/Sipgate-FAT-debug.js:2735
+#: js/Sipgate-FAT-debug.js:2979 js/Sipgate-FAT.js:6 js/CallStateWindow.js:106
 msgid "Cancel"
 msgstr ""
 
 #: js/SmsEditDialog.js:81 js/SearchAddressDialog.js:71
+#: js/Sipgate-FAT-debug.js:336 js/Sipgate-FAT-debug.js:2743
+#: js/Sipgate-FAT.js:6
 msgid "Close"
 msgstr ""
 
-#: js/SmsEditDialog.js:112
+#: js/SmsEditDialog.js:112 js/Sipgate-FAT-debug.js:367 js/Sipgate-FAT.js:6
 msgid "Loading contact..."
 msgstr ""
 
-#: js/SmsEditDialog.js:113
+#: js/SmsEditDialog.js:113 js/Sipgate-FAT-debug.js:368 js/Sipgate-FAT.js:6
 msgid "Sending message..."
 msgstr ""
 
-#: js/SmsEditDialog.js:250
+#: js/SmsEditDialog.js:250 js/Sipgate-FAT-debug.js:505 js/Sipgate-FAT.js:6
 msgid "Recipient"
 msgstr ""
 
-#: js/SmsEditDialog.js:259
+#: js/SmsEditDialog.js:259 js/Sipgate-FAT-debug.js:514 js/Sipgate-FAT.js:6
 msgid "Recipient's phone number"
 msgstr ""
 
-#: js/SmsEditDialog.js:263
+#: js/SmsEditDialog.js:263 js/Sipgate-FAT-debug.js:518 js/Sipgate-FAT.js:6
 msgid "please choose the recipient's phone number..."
 msgstr ""
 
-#: js/SmsEditDialog.js:267
+#: js/SmsEditDialog.js:267 js/Sipgate-FAT-debug.js:522 js/Sipgate-FAT.js:6
 msgid "Your phone number"
 msgstr ""
 
-#: js/SmsEditDialog.js:270
+#: js/SmsEditDialog.js:270 js/Sipgate-FAT-debug.js:525 js/Sipgate-FAT.js:6
 msgid "please choose your phone number..."
 msgstr ""
 
-#: js/SmsEditDialog.js:276 js/SmsEditDialog.js:293
+#: js/SmsEditDialog.js:276 js/SmsEditDialog.js:293 js/Sipgate-FAT-debug.js:531
+#: js/Sipgate-FAT.js:6
 msgid "The message"
 msgstr ""
 
-#: js/SmsEditDialog.js:279
+#: js/SmsEditDialog.js:279 js/Sipgate-FAT-debug.js:534 js/Sipgate-FAT.js:6
 msgid "enter the text..."
 msgstr ""
 
@@ -1255,364 +1279,430 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: js/SmsEditDialog.js:316
+#: js/SmsEditDialog.js:316 js/Sipgate-FAT-debug.js:557 js/Sipgate-FAT.js:6
 msgid "Send message to \"{0}\""
 msgstr ""
 
-#: js/SmsEditDialog.js:316
+#: js/SmsEditDialog.js:316 js/Sipgate-FAT-debug.js:557 js/Sipgate-FAT.js:6
 msgid "Send message"
 msgstr ""
 
-#: js/SearchAddressDialog.js:55
+#: js/SearchAddressDialog.js:55 js/Sipgate-FAT-debug.js:2727
+#: js/Sipgate-FAT.js:6
 msgid "Add Number"
 msgstr ""
 
 #: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
+#: js/Sipgate-FAT-debug.js:2804 js/Sipgate-FAT-debug.js:2826
+#: js/Sipgate-FAT.js:6
 msgid "Phone"
 msgstr ""
 
 #: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
+#: js/Sipgate-FAT-debug.js:2805 js/Sipgate-FAT-debug.js:2827
+#: js/Sipgate-FAT.js:6
 msgid "Mobile"
 msgstr ""
 
 #: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
-#: js/AccountGridPanel.js:55
+#: js/AccountGridPanel.js:55 js/Sipgate-FAT-debug.js:1155
+#: js/Sipgate-FAT-debug.js:2806 js/Sipgate-FAT-debug.js:2828
+#: js/Sipgate-FAT.js:6
 msgid "Fax"
 msgstr ""
 
 #: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
+#: js/Sipgate-FAT-debug.js:2807 js/Sipgate-FAT-debug.js:2829
+#: js/Sipgate-FAT.js:6
 msgid "Car phone"
 msgstr ""
 
 #: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
+#: js/Sipgate-FAT-debug.js:2808 js/Sipgate-FAT-debug.js:2830
+#: js/Sipgate-FAT.js:6
 msgid "Pager"
 msgstr ""
 
 #: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
+#: js/Sipgate-FAT-debug.js:2809 js/Sipgate-FAT-debug.js:2831
+#: js/Sipgate-FAT.js:6
 msgid "Phone (private)"
 msgstr ""
 
 #: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
+#: js/Sipgate-FAT-debug.js:2810 js/Sipgate-FAT-debug.js:2832
+#: js/Sipgate-FAT.js:6
 msgid "Fax (private)"
 msgstr ""
 
 #: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
+#: js/Sipgate-FAT-debug.js:2811 js/Sipgate-FAT-debug.js:2833
+#: js/Sipgate-FAT.js:6
 msgid "Mobile (private)"
 msgstr ""
 
-#: js/SearchAddressDialog.js:144
+#: js/SearchAddressDialog.js:144 js/Sipgate-FAT-debug.js:2816
+#: js/Sipgate-FAT.js:6
 msgid "-- create new --"
 msgstr ""
 
-#: js/SearchAddressDialog.js:145
+#: js/SearchAddressDialog.js:145 js/Sipgate-FAT-debug.js:2817
+#: js/Sipgate-FAT.js:6
 msgid "Select existing contact or create a new one"
 msgstr ""
 
-#: js/SearchAddressDialog.js:180
+#: js/SearchAddressDialog.js:180 js/Sipgate-FAT-debug.js:2852
+#: js/Sipgate-FAT.js:6
 msgid "Choose Device"
 msgstr ""
 
-#: js/SearchAddressDialog.js:211
+#: js/SearchAddressDialog.js:211 js/Sipgate-FAT-debug.js:2883
+#: js/Sipgate-FAT.js:6
 msgid "Add number {0} to the addressbook"
 msgstr ""
 
 #: js/LineGridPanel.js:65 js/AssignLinesGrid.js:100 js/AccountGridPanel.js:89
-#: js/AccountEditDialog.js:279
+#: js/Sipgate-FAT-debug.js:1189 js/Sipgate-FAT-debug.js:1369
+#: js/Sipgate-FAT-debug.js:1833 js/Sipgate-FAT-debug.js:2625
+#: js/Sipgate-FAT.js:6 js/AccountEditDialog.js:279
 msgid "Type"
 msgstr ""
 
-#: js/LineGridPanel.js:73 js/AccountFilterModel.js:38
+#: js/LineGridPanel.js:73 js/Sipgate-FAT-debug.js:1092
+#: js/Sipgate-FAT-debug.js:1377 js/Sipgate-FAT.js:6
+#: js/AccountFilterModel.js:38
 msgid "Account"
 msgstr ""
 
-#: js/LineGridPanel.js:81
+#: js/LineGridPanel.js:81 js/Sipgate-FAT-debug.js:1385 js/Sipgate-FAT.js:6
 msgid "User"
 msgstr ""
 
 #: js/LineGridPanel.js:88 js/AssignLinesGrid.js:101 js/AccountGridPanel.js:115
+#: js/Sipgate-FAT-debug.js:1215 js/Sipgate-FAT-debug.js:1392
+#: js/Sipgate-FAT-debug.js:2626 js/Sipgate-FAT.js:6
 msgid "Uri Alias"
 msgstr ""
 
-#: js/LineGridPanel.js:94
+#: js/LineGridPanel.js:94 js/Sipgate-FAT-debug.js:1398 js/Sipgate-FAT.js:6
 msgid "SIP Uri"
 msgstr ""
 
 #: js/LineGridPanel.js:100 js/AssignLinesGrid.js:104
+#: js/Sipgate-FAT-debug.js:1404 js/Sipgate-FAT-debug.js:2629
+#: js/Sipgate-FAT.js:6
 msgid "Incoming"
 msgstr ""
 
 #: js/LineGridPanel.js:108 js/AssignLinesGrid.js:103
+#: js/Sipgate-FAT-debug.js:1412 js/Sipgate-FAT-debug.js:2628
+#: js/Sipgate-FAT.js:6
 msgid "Outgoing"
 msgstr ""
 
-#: js/LineGridPanel.js:114
+#: js/LineGridPanel.js:114 js/Sipgate-FAT-debug.js:1418 js/Sipgate-FAT.js:6
 msgid "Created"
 msgstr ""
 
 #: js/LineGridPanel.js:170 js/LineGridPanel.js:171
+#: js/Sipgate-FAT-debug.js:1474 js/Sipgate-FAT-debug.js:1475
+#: js/Sipgate-FAT.js:6
 msgid "Synchronize Line"
 msgstr ""
 
-#: js/LineGridPanel.js:172 js/AccountEditDialog.js:68
+#: js/LineGridPanel.js:172 js/Sipgate-FAT-debug.js:1476
+#: js/Sipgate-FAT-debug.js:1623 js/Sipgate-FAT.js:6 js/AccountEditDialog.js:68
 msgid "Synchronize Lines"
 msgstr ""
 
-#: js/LineGridPanel.js:174
+#: js/LineGridPanel.js:174 js/Sipgate-FAT-debug.js:1478 js/Sipgate-FAT.js:6
 msgid "Synchronizes the selected line(s)"
 msgstr ""
 
-#: js/LineGridPanel.js:229
+#: js/LineGridPanel.js:229 js/Sipgate-FAT-debug.js:1533 js/Sipgate-FAT.js:6
 msgid "Synchronizing..."
 msgstr ""
 
-#: js/AssignLinesGrid.js:57
+#: js/AssignLinesGrid.js:57 js/Sipgate-FAT-debug.js:2582 js/Sipgate-FAT.js:6
 msgid "Assign Lines"
 msgstr ""
 
-#: js/AssignLinesGrid.js:99
+#: js/AssignLinesGrid.js:99 js/Sipgate-FAT-debug.js:2624 js/Sipgate-FAT.js:6
 msgid "Id"
 msgstr ""
 
-#: js/AssignLinesGrid.js:102
+#: js/AssignLinesGrid.js:102 js/Sipgate-FAT-debug.js:2627 js/Sipgate-FAT.js:6
 msgid "Sip Uri"
 msgstr ""
 
-#: js/AssignLinesGrid.js:107
+#: js/AssignLinesGrid.js:107 js/Sipgate-FAT-debug.js:2632 js/Sipgate-FAT.js:6
 msgid "Assigned User"
 msgstr ""
 
-#: js/AccountGridPanel.js:54
+#: js/AccountGridPanel.js:54 js/Sipgate-FAT-debug.js:1154 js/Sipgate-FAT.js:6
 msgid "Telephone"
 msgstr ""
 
-#: js/AccountGridPanel.js:107 js/AccountEditDialog.js:286
+#: js/AccountGridPanel.js:107 js/Sipgate-FAT-debug.js:1207
+#: js/Sipgate-FAT-debug.js:1840 js/Sipgate-FAT.js:6
+#: js/AccountEditDialog.js:286
 msgid "Mobile Number"
 msgstr ""
 
-#: js/DialNumberDialog.js:97
+#: js/DialNumberDialog.js:97 js/Sipgate-FAT-debug.js:2987 js/Sipgate-FAT.js:6
 msgid "Ok"
 msgstr ""
 
-#: js/DialNumberDialog.js:161
+#: js/DialNumberDialog.js:161 js/Sipgate-FAT-debug.js:3051 js/Sipgate-FAT.js:6
 msgid "Select Line"
 msgstr ""
 
-#: js/DialNumberDialog.js:166
+#: js/DialNumberDialog.js:166 js/Sipgate-FAT-debug.js:3056 js/Sipgate-FAT.js:6
 msgid "Number to call"
 msgstr ""
 
-#: js/DialNumberDialog.js:171
+#: js/DialNumberDialog.js:171 js/Sipgate-FAT-debug.js:3061 js/Sipgate-FAT.js:6
 msgid "Please use a valid telephone number!"
 msgstr ""
 
-#: js/DialNumberDialog.js:211
+#: js/DialNumberDialog.js:211 js/Sipgate-FAT-debug.js:3101 js/Sipgate-FAT.js:6
 msgid "Dial Number {0}"
 msgstr ""
 
-#: js/ExceptionHandler.js:18
+#: js/Sipgate-FAT-debug.js:143 js/Sipgate-FAT.js:6 js/CallStateWindow.js:138
+msgid "The call can't be observed anymore. Lost SessionID."
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:147 js/Sipgate-FAT.js:6 js/CallStateWindow.js:142
+msgid "The call can't be observed anymore due to an unknown error."
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:156 js/Sipgate-FAT.js:6 js/CallStateWindow.js:151
+msgid "Please pick up your phone to get connected to {0}."
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:160 js/Sipgate-FAT.js:6 js/CallStateWindow.js:155
+msgid "Connecting to {0}."
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:167 js/Sipgate-FAT.js:6 js/CallStateWindow.js:162
+msgid "Connected to {0}."
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:172 js/Sipgate-FAT.js:6 js/CallStateWindow.js:167
+msgid "call 1 busy"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:179 js/Sipgate-FAT.js:6 js/CallStateWindow.js:174
+msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:185 js/Sipgate-FAT.js:6 js/CallStateWindow.js:180
+msgid "hungup before other called"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:188 js/Sipgate-FAT.js:6 js/CallStateWindow.js:183
+msgid "hungup"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:226 js/Sipgate-FAT.js:6 js/CallStateWindow.js:221
+msgid "Initializing call to {0}"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:249 js/Sipgate-FAT.js:6 js/CallStateWindow.js:244
+msgid "Connecting to: "
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:663 js/Sipgate-FAT-debug.js:713
+#: js/Sipgate-FAT-debug.js:894 js/Sipgate-FAT.js:6
+msgid "Quick search"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:664 js/Sipgate-FAT.js:6 js/Models.js:98
+msgid "Created By"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:666 js/Sipgate-FAT.js:6 js/Models.js:100
+msgid "Account-Type"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:715 js/Sipgate-FAT.js:6 js/Models.js:146
+msgid "Assigned to"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:873 js/Models.js:303
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Sipgate-FAT-debug.js:1003 js/Sipgate-FAT.js:6 js/ExceptionHandler.js:18
 msgid ""
 "A general backend error occurred. If this is a permanent error, please "
 "contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:26
+#: js/Sipgate-FAT-debug.js:1011 js/Sipgate-FAT.js:6 js/ExceptionHandler.js:26
 msgid ""
 "The application could not connect to the sipgate server. If this is a "
 "permanent error, please contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:34
+#: js/Sipgate-FAT-debug.js:1019 js/Sipgate-FAT.js:6 js/ExceptionHandler.js:34
 msgid ""
 "The authentication data provided are not valid. Please configure or contact "
 "your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:42
+#: js/Sipgate-FAT-debug.js:1027 js/Sipgate-FAT.js:6 js/ExceptionHandler.js:42
 msgid ""
 "The saved credentials and config data could not be resolved properly. Please"
 " reconfigure or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:50
+#: js/Sipgate-FAT-debug.js:1035 js/Sipgate-FAT.js:6 js/ExceptionHandler.js:50
 msgid ""
 "There are missing parameters to connect to sipgate. Please reconfigure or "
 "contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:60
+#: js/Sipgate-FAT-debug.js:1045 js/Sipgate-FAT.js:6 js/ExceptionHandler.js:60
 msgid ""
 "The account you've configured is already in use. Please contact your "
 "administrator or activate the account again if it's yours."
 msgstr ""
 
-#: js/CallStateWindow.js:138
-msgid "The call can't be observed anymore. Lost SessionID."
-msgstr ""
-
-#: js/CallStateWindow.js:142
-msgid "The call can't be observed anymore due to an unknown error."
-msgstr ""
-
-#: js/CallStateWindow.js:151
-msgid "Please pick up your phone to get connected to {0}."
-msgstr ""
-
-#: js/CallStateWindow.js:155
-msgid "Connecting to {0}."
-msgstr ""
-
-#: js/CallStateWindow.js:162
-msgid "Connected to {0}."
-msgstr ""
-
-#: js/CallStateWindow.js:167
-msgid "call 1 busy"
-msgstr ""
-
-#: js/CallStateWindow.js:174
-msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
-msgstr ""
-
-#: js/CallStateWindow.js:180
-msgid "hungup before other called"
-msgstr ""
-
-#: js/CallStateWindow.js:183
-msgid "hungup"
-msgstr ""
-
-#: js/CallStateWindow.js:221
-msgid "Initializing call to {0}"
-msgstr ""
-
-#: js/CallStateWindow.js:244
-msgid "Connecting to: "
-msgstr ""
-
-#: js/AccountEditDialog.js:43
+#: js/Sipgate-FAT-debug.js:1598 js/Sipgate-FAT.js:6 js/AccountEditDialog.js:43
 msgid "Validating account..."
 msgstr ""
 
-#: js/AccountEditDialog.js:44
+#: js/Sipgate-FAT-debug.js:1599 js/Sipgate-FAT.js:6 js/AccountEditDialog.js:44
 msgid "Synchronizing lines..."
 msgstr ""
 
-#: js/AccountEditDialog.js:60
+#: js/Sipgate-FAT-debug.js:1615 js/Sipgate-FAT.js:6 js/AccountEditDialog.js:60
 msgid "Save Account"
 msgstr ""
 
-#: js/AccountEditDialog.js:62
+#: js/Sipgate-FAT-debug.js:1617 js/Sipgate-FAT.js:6 js/AccountEditDialog.js:62
 msgid "Saves the account (without closing window)"
 msgstr ""
 
-#: js/AccountEditDialog.js:70
+#: js/Sipgate-FAT-debug.js:1625 js/Sipgate-FAT.js:6 js/AccountEditDialog.js:70
 msgid ""
 "Synchronizes the selected account (creates or updates the associated lines)"
 msgstr ""
 
-#: js/AccountEditDialog.js:76
+#: js/Sipgate-FAT-debug.js:1631 js/Sipgate-FAT.js:6 js/AccountEditDialog.js:76
 msgid "Validate Account"
 msgstr ""
 
-#: js/AccountEditDialog.js:78
+#: js/Sipgate-FAT-debug.js:1633 js/Sipgate-FAT.js:6 js/AccountEditDialog.js:78
 msgid ""
 "Validates the selected account (creates or updates the associated lines)"
 msgstr ""
 
-#: js/AccountEditDialog.js:95
+#: js/Sipgate-FAT-debug.js:1650 js/Sipgate-FAT.js:6 js/AccountEditDialog.js:95
 msgid "The account is not saved already!"
 msgstr ""
 
-#: js/AccountEditDialog.js:96
-msgid "Please save your account before syncing!"
+#: js/Sipgate-FAT-debug.js:1651 js/Sipgate-FAT.js:6
+msgid "Please save yout account before syncing!"
 msgstr ""
 
+#: js/Sipgate-FAT-debug.js:1664 js/Sipgate-FAT.js:6
 #: js/AccountEditDialog.js:109
 msgid "The lines have been synced sucessfully!"
 msgstr ""
 
+#: js/Sipgate-FAT-debug.js:1665 js/Sipgate-FAT.js:6
 #: js/AccountEditDialog.js:110
 msgid ""
 "The account has now {0} lines. Go on assigning user accounts to the new "
 "lines in the next tab."
 msgstr ""
 
-#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:341
+#: js/Sipgate-FAT-debug.js:1683 js/Sipgate-FAT-debug.js:1895
+#: js/Sipgate-FAT.js:6 js/AccountEditDialog.js:128 js/AccountEditDialog.js:341
 msgid "Errors"
 msgstr ""
 
+#: js/Sipgate-FAT-debug.js:1812 js/Sipgate-FAT.js:6
 #: js/AccountEditDialog.js:258
 msgid "Description"
 msgstr ""
 
+#: js/Sipgate-FAT-debug.js:1843 js/Sipgate-FAT.js:6
 #: js/AccountEditDialog.js:289
 msgid "Sipgate Username"
 msgstr ""
 
+#: js/Sipgate-FAT-debug.js:1845 js/Sipgate-FAT.js:6
 #: js/AccountEditDialog.js:291
 msgid "Hidden due to security reasons."
 msgstr ""
 
+#: js/Sipgate-FAT-debug.js:1847 js/Sipgate-FAT.js:6
 #: js/AccountEditDialog.js:293
 msgid "Password"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:1851 js/Sipgate-FAT.js:6
+msgid "Passwort Repeat"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:1857 js/Sipgate-FAT.js:6
+#: js/AccountEditDialog.js:303
+msgid "Is Validated"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:1895 js/Sipgate-FAT.js:6
+#: js/AccountEditDialog.js:341
+msgid "Please validate the account settings before saving!"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:2218 js/Sipgate-FAT.js:6
+#: js/AddressbookGridPanelHook.js:38
+msgid "Call contact"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:2241 js/Sipgate-FAT.js:6
+#: js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:2440 js/Sipgate-FAT.js:6
+#: js/AddressbookGridPanelHook.js:260
+msgid "Work"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:2450 js/Sipgate-FAT.js:6
+#: js/AddressbookGridPanelHook.js:270
+msgid "Home"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:2460 js/Sipgate-FAT-debug.js:2505
+#: js/Sipgate-FAT.js:6 js/AddressbookGridPanelHook.js:280
+#: js/AddressbookGridPanelHook.js:325
+msgid "Cell"
+msgstr ""
+
+#: js/Sipgate-FAT-debug.js:2470 js/Sipgate-FAT-debug.js:2515
+#: js/Sipgate-FAT.js:6 js/AddressbookGridPanelHook.js:290
+#: js/AddressbookGridPanelHook.js:335
+msgid "Cell private"
+msgstr ""
+
+#: js/AccountEditDialog.js:96
+msgid "Please save your account before syncing!"
 msgstr ""
 
 #: js/AccountEditDialog.js:297
 msgid "Password Repeat"
 msgstr ""
 
-#: js/AccountEditDialog.js:303
-msgid "Is Validated"
-msgstr ""
-
-#: js/AccountEditDialog.js:341
-msgid "Please validate the account settings before saving!"
-msgstr ""
-
 #: js/Models.js:97 js/Models.js:144 js/Models.js:321
 msgid "Quick Search"
-msgstr ""
-
-#: js/Models.js:98
-msgid "Created By"
-msgstr ""
-
-#: js/Models.js:100
-msgid "Account-Type"
-msgstr ""
-
-#: js/Models.js:146
-msgid "Assigned to"
-msgstr ""
-
-#: js/Models.js:303
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/AddressbookGridPanelHook.js:38
-msgid "Call contact"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:61
-msgid "Compose SMS"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:260
-msgid "Work"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:270
-msgid "Home"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:280 js/AddressbookGridPanelHook.js:325
-msgid "Cell"
-msgstr ""
-
-#: js/AddressbookGridPanelHook.js:290 js/AddressbookGridPanelHook.js:335
-msgid "Cell private"
 msgstr ""
 
 #: Controller/Connection.php:242

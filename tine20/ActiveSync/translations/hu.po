@@ -81,44 +81,45 @@ msgstr "Alapértelmezett Feladat Lista"
 msgid "The default task list to create new tasks in."
 msgstr "Alapértelmezett Feladat Lista új feladatok létrehozására."
 
-#: js/Model.js:42
+#: js/ActiveSync-FAT-debug.js:32 js/Application.js:27 js/ActiveSync-FAT.js:6
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/ActiveSync-FAT-debug.js:48 js/Application.js:43 js/ActiveSync-FAT.js:6
+msgid "Select a Device"
+msgstr "Válassz egy eszközt"
+
+#: js/ActiveSync-FAT-debug.js:62 js/Application.js:57 js/ActiveSync-FAT.js:6
+msgid "No ActiveSync Device registered"
+msgstr "Nincs regisztrált ActiveSync eszköz"
+
+#: js/ActiveSync-FAT-debug.js:70 js/Application.js:65 js/ActiveSync-FAT.js:6
+msgid "Set as {0} Filter"
+msgstr "Beállítás {0} szűrőként"
+
+#: js/ActiveSync-FAT-debug.js:95 js/Application.js:90 js/ActiveSync-FAT.js:6
+msgid "Resetted Sync Filter"
+msgstr "Újraállított Sync szűrő"
+
+#: js/ActiveSync-FAT-debug.js:96 js/ActiveSync-FAT-debug.js:108
+#: js/Application.js:91 js/Application.js:103 js/ActiveSync-FAT.js:6
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "\"{1}\" eszköz {0} szűrője most \"{2}\""
+
+#: js/ActiveSync-FAT-debug.js:99 js/Application.js:94 js/ActiveSync-FAT.js:6
+msgid "resetted"
+msgstr "újraállított"
+
+#: js/ActiveSync-FAT-debug.js:107 js/Application.js:102 js/ActiveSync-FAT.js:6
+msgid "Set Sync Filter"
+msgstr "Sync szűrő beállítása"
+
+#: js/ActiveSync-FAT-debug.js:158 js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] "Eszköz"
 msgstr[1] "Eszközök"
 
-#: js/Model.js:42
+#: js/ActiveSync-FAT-debug.js:158 js/Model.js:42
 msgid "Devices"
 msgstr "Eszközök"
-
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Válassz egy eszközt"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Nincs regisztrált ActiveSync eszköz"
-
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr "Beállítás {0} szűrőként"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Újraállított Sync szűrő"
-
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "\"{1}\" eszköz {0} szűrője most \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "újraállított"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Sync szűrő beállítása"

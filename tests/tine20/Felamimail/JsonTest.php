@@ -171,6 +171,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Tearing down ...');
+        
         if (count($this->_createdFolders) > 0) {
             foreach ($this->_createdFolders as $folderName) {
                 //echo "delete $folderName\n";
@@ -320,31 +323,56 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_createdFolders[] = $this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub';
         $this->_createdFolders[] = $this->_testFolderName . $this->_account->delimiter . 'test';
         
-        // update cache and check if folder is found
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Update cache and check if folder is found');
+        
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
         $testfolder = $result[0];
-        //print_r($testfolder);
         $this->assertGreaterThan(0, count($result));
         $this->assertEquals($this->_testFolderName . $this->_account->delimiter . 'test', $testfolder['globalname']);
         $this->assertEquals(TRUE, (bool)$testfolder['has_children'], 'should have children');
         
-        // delete subfolder directly on imap server
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Delete subfolder directly on imap server');
+        
         $this->_imap->removeFolder($this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub');
         array_shift($this->_createdFolders);
         
-        // check if has_children got updated and folder is removed from cache
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Check if has_children got updated and folder is removed from cache');
+        
         $this->_json->updateFolderCache($this->_account->getId(), '');
         $testfolder = $this->_getFolder($this->_testFolderName . $this->_account->delimiter . 'test');
         $this->assertEquals(FALSE, (bool)$testfolder['has_children'], 'should have no children');
-        $this->setExpectedException('Tinebase_Exception_NotFound');
-        $testfoldersub = $this->_getFolder($this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub');
 
+        return $testfolder;
+    }
+    
+    /**
+     * testUpdateFolderCacheOfNonexistantFolder
+     * 
+     * @see 0009800: unselectable folder with subfolders disappears
+     */
+    public function testUpdateFolderCacheOfNonexistantFolder()
+    {
+        $testfolder = $this->testUpdateFolderCache();
+        
+        try {
+            $folderName = $this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub';
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Trying to fetch deleted folder ' . $folderName);
+            
+            $testfoldersub = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $folderName);
+            $this->fail('Tinebase_Exception_NotFound expected when looking for folder ' . $folderName);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+        }
+        
         $this->_imap->removeFolder($this->_testFolderName . $this->_account->delimiter . 'test');
         array_shift($this->_createdFolders);
         
         // try to update message cache of nonexistant folder
-        $this->setExpectedException('Felamimail_Exception_IMAPFolderNotFound');
         $removedTestfolder = $this->_json->updateMessageCache($testfolder['id'], 1);
+        $this->assertEquals(0, $removedTestfolder['is_selectable'], 'Folder should not be selectable');
         
         // update cache and check if folder is deleted
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);

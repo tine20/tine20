@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-01-19 16:31+0000\n"
-"Last-Translator: jaruwan <luca.ingianni@gmail.com>\n"
+"PO-Revision-Date: 2014-03-21 11:59+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,47 +44,47 @@ msgstr "จำนวน %s ของสมุดรายชื่อส่ว�
 
 #: Import/definitions/adb_outlook_import_csv.xml:13
 msgid "Contact CSV import from Outlook address book"
-msgstr ""
+msgstr "นำเข้ารายชื่อติดต่อ CSV จากสมุดรายชื่อของโปรแกรม Outlook"
 
 #: Import/definitions/adb_google_import_csv.xml:12
 msgid "Contact import from Google address book"
-msgstr ""
+msgstr "รายชื่อติดต่อนำเข้ามาจากสมุดรายชื่อของกูเกิล"
 
 #: Import/definitions/adb_tine_import_csv.xml:11
 msgid "Contact CSV import"
-msgstr ""
+msgstr "นำเข้ารายชื่อติดต่อ CSV"
 
 #: Import/definitions/adb_tine_import_csv.xml:18
 msgid "Import list (###CURRENTDATE###)"
-msgstr ""
+msgstr "นำเข้ารายชื่อ  (###วันปัจจุบัน###)"
 
 #: Import/definitions/adb_tine_import_csv.xml:20
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
-msgstr ""
+msgstr "รายชื่อติดต่อถูกนำเข้าเมื่อ ###วันปัจจุบัน### ณ ###เวลาปัจจุบัน### โดย ###ชื่อเต็มของผู้ใช้###"
 
 #: Import/definitions/adb_mac_import_csv.xml:17
 msgid "Contact CSV import from mac address book"
-msgstr ""
+msgstr "นำเข้ารายชื่อติดต่อ CSV จากสมุดรายชื่อของแมค"
 
 #: Import/definitions/adb_import_vcard.xml:14
 msgid "Contact VCARD import"
-msgstr ""
+msgstr "นำเข้ารายชื่อติดต่อ VCARD"
 
 #: Import/definitions/adb_outlook2007_de_import_csv.xml:14
 msgid "CSV Outlook 2007 German"
-msgstr ""
+msgstr "CSV Outlook 2007 ภาษาเยอรมัน"
 
 #: Config.php:45
 msgid "Contact duplicate check fields"
-msgstr ""
+msgstr "การติดต่อซ้ำซ้อน ตรวจสอบที่กล่อง"
 
 #: Config.php:47
 msgid ""
 "These fields are checked when a new contact is created. If a record with the"
 " same data in the fields is found, a duplicate exception is thrown."
-msgstr ""
+msgstr "กล่องเหล่านี้จะถูกทำเครื่องหมาย เมื่อมีการสร้างการติดต่อใหม่ขึ้น หากมีการตรวจสอบว่ามีข้อมูลที่ซ้ำซ้อนกันอยู่ ข้อยกเว้นที่ซ้ำซ้อนจะได้รับการเพิกเฉย"
 
 #: Config.php:59
 msgid "Contact salutations available"
@@ -117,15 +117,19 @@ msgid "Ms"
 msgstr "นาง"
 
 #: Setup/Update/Release5.php:196 Setup/Initialize.php:65 js/ContactGrid.js:115
-#: js/ContactGridDetailsPanel.js:131 js/ContactEditDialog.js:128
-#: js/ContactEditDialog.js:434 js/ContactEditDialog.js:456 js/Model.js:27
-#: js/Model.js:142
+#: js/ContactGridDetailsPanel.js:131 js/Addressbook-FAT.js:6
+#: js/ContactEditDialog.js:128 js/ContactEditDialog.js:434
+#: js/ContactEditDialog.js:456 js/Addressbook-FAT-debug.js:98
+#: js/Addressbook-FAT-debug.js:212 js/Addressbook-FAT-debug.js:478
+#: js/Addressbook-FAT-debug.js:756 js/Addressbook-FAT-debug.js:1175
+#: js/Addressbook-FAT-debug.js:1464 js/Addressbook-FAT-debug.js:1482
+#: js/Model.js:27 js/Model.js:142
 msgid "Company"
 msgstr "บริษัท"
 
 #: Setup/Update/Release3.php:37 Setup/Initialize.php:135
 msgid "All contacts I have read grants for"
-msgstr ""
+msgstr "การติดต่อทั้งหมดที่ฉันได้อ่านแล้วอนุญาตสำหรับ"
 
 #: Setup/Initialize.php:140
 msgid "My company"
@@ -183,7 +187,8 @@ msgstr "องค์กร / หน่วย"
 msgid "Business Address"
 msgstr "ที่อยู่ธุรกิจ"
 
-#: Export/Pdf.php:52 js/ContactGrid.js:130
+#: Export/Pdf.php:52 js/ContactGrid.js:130 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:771
 msgid "Email"
 msgstr "อีเมล"
 
@@ -215,7 +220,9 @@ msgstr "ที่อยู่ของไฟล์หรือเวบไซด
 msgid "Role"
 msgstr "หน้าที่"
 
-#: Export/Pdf.php:76 js/ContactGrid.js:119 js/ContactEditDialog.js:146
+#: Export/Pdf.php:76 js/ContactGrid.js:119 js/Addressbook-FAT.js:6
+#: js/ContactEditDialog.js:146 js/Addressbook-FAT-debug.js:104
+#: js/Addressbook-FAT-debug.js:760 js/Addressbook-FAT-debug.js:1212
 #: js/Model.js:33
 msgid "Room"
 msgstr "ห้อง"
@@ -232,9 +239,12 @@ msgstr "โทรศัพท์ของผู้ช่วย"
 msgid "Private Contact Data"
 msgstr "ข้อมูลการติดต่อส่วนบุคคล"
 
-#: Export/Pdf.php:88 js/ContactEditDialog.js:299 js/Model.js:43
-#: js/Model.js:156 js/Model.js:157 js/Model.js:158 js/Model.js:159
-#: js/Model.js:160
+#: Export/Pdf.php:88 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:299
+#: js/Addressbook-FAT-debug.js:114 js/Addressbook-FAT-debug.js:226
+#: js/Addressbook-FAT-debug.js:227 js/Addressbook-FAT-debug.js:228
+#: js/Addressbook-FAT-debug.js:229 js/Addressbook-FAT-debug.js:230
+#: js/Addressbook-FAT-debug.js:1329 js/Model.js:43 js/Model.js:156
+#: js/Model.js:157 js/Model.js:158 js/Model.js:159 js/Model.js:160
 msgid "Private Address"
 msgstr "ที่อยู่ส่วนบุคคล"
 
@@ -256,197 +266,269 @@ msgstr ""
 
 #: Export/Pdf.php:108
 msgid "URL Home"
-msgstr ""
+msgstr " URL บ้าน"
 
 #: Export/Pdf.php:112
 msgid "Other Data"
 msgstr "ข้อมูลอื่น"
 
-#: Export/Pdf.php:114 js/ContactGrid.js:145 js/ContactEditDialog.js:173
-#: js/Model.js:26 js/Model.js:150
+#: Export/Pdf.php:114 js/ContactGrid.js:145 js/Addressbook-FAT.js:6
+#: js/ContactEditDialog.js:173 js/Addressbook-FAT-debug.js:97
+#: js/Addressbook-FAT-debug.js:220 js/Addressbook-FAT-debug.js:786
+#: js/Addressbook-FAT-debug.js:1200 js/Model.js:26 js/Model.js:150
 msgid "Birthday"
 msgstr "วันเกิด"
 
-#: Export/Pdf.php:117 js/ContactGrid.js:117 js/ContactEditDialog.js:167
-#: js/Model.js:30 js/Model.js:145
+#: Export/Pdf.php:117 js/ContactGrid.js:117 js/Addressbook-FAT.js:6
+#: js/ContactEditDialog.js:167 js/Addressbook-FAT-debug.js:101
+#: js/Addressbook-FAT-debug.js:215 js/Addressbook-FAT-debug.js:758
+#: js/Addressbook-FAT-debug.js:1194 js/Model.js:30 js/Model.js:145
 msgid "Job Title"
 msgstr "ตำแหน่งงาน"
 
-#: js/ContactGrid.js:101 js/Model.js:161
+#: js/ContactGrid.js:101 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:231 js/Addressbook-FAT-debug.js:749
+#: js/Model.js:161
 msgid "Type"
 msgstr "ประเภท"
 
-#: js/ContactGrid.js:102
+#: js/ContactGrid.js:102 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:750
 msgid "Tags"
 msgstr "ป้ายกำกับ"
 
-#: js/ContactGrid.js:103 js/ContactEditDialog.js:91 js/Model.js:29
+#: js/ContactGrid.js:103 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:91
+#: js/Addressbook-FAT-debug.js:100 js/Addressbook-FAT-debug.js:751
+#: js/Addressbook-FAT-debug.js:1130 js/Model.js:29
 msgid "Salutation"
 msgstr "คำขึ้นต้น"
 
-#: js/ContactGrid.js:111 js/ContactEditDialog.js:122
-#: js/ContactEditDialog.js:434 js/ContactEditDialog.js:456 js/Model.js:19
-#: js/Model.js:141
+#: js/ContactGrid.js:111 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:122
+#: js/ContactEditDialog.js:434 js/ContactEditDialog.js:456
+#: js/Addressbook-FAT-debug.js:90 js/Addressbook-FAT-debug.js:211
+#: js/Addressbook-FAT-debug.js:752 js/Addressbook-FAT-debug.js:1166
+#: js/Addressbook-FAT-debug.js:1464 js/Addressbook-FAT-debug.js:1482
+#: js/Model.js:19 js/Model.js:141
 msgid "Last Name"
 msgstr "นามสกุล"
 
-#: js/ContactGrid.js:112 js/ContactEditDialog.js:112 js/Model.js:20
-#: js/Model.js:140
+#: js/ContactGrid.js:112 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:112
+#: js/Addressbook-FAT-debug.js:91 js/Addressbook-FAT-debug.js:210
+#: js/Addressbook-FAT-debug.js:753 js/Addressbook-FAT-debug.js:1156
+#: js/Model.js:20 js/Model.js:140
 msgid "First Name"
 msgstr "ชื่อตัว"
 
-#: js/ContactGrid.js:113
+#: js/ContactGrid.js:113 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:754
 msgid "Full Name"
 msgstr "ชื่อเต็ม"
 
-#: js/ContactGrid.js:114 js/ContactEditDialog.js:162 js/Model.js:24
+#: js/ContactGrid.js:114 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:162
+#: js/Addressbook-FAT-debug.js:95 js/Addressbook-FAT-debug.js:755
+#: js/Addressbook-FAT-debug.js:1189 js/Model.js:24
 msgid "Display Name"
 msgstr "ชื่อที่ใช้"
 
-#: js/ContactGrid.js:116 js/ContactEditDialog.js:133 js/Model.js:28
-#: js/Model.js:143
+#: js/ContactGrid.js:116 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:133
+#: js/Addressbook-FAT-debug.js:99 js/Addressbook-FAT-debug.js:213
+#: js/Addressbook-FAT-debug.js:757 js/Addressbook-FAT-debug.js:1180
+#: js/Model.js:28 js/Model.js:143
 msgid "Unit"
 msgstr "หน่วย/ แผนก"
 
-#: js/ContactGrid.js:118 js/ContactEditDialog.js:142 js/Model.js:31
-#: js/Model.js:149
+#: js/ContactGrid.js:118 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:142
+#: js/Addressbook-FAT-debug.js:102 js/Addressbook-FAT-debug.js:216
+#: js/Addressbook-FAT-debug.js:759 js/Addressbook-FAT-debug.js:1208
+#: js/Model.js:31 js/Model.js:149
 msgid "Job Role"
 msgstr "หน้าที่งาน"
 
-#: js/ContactGrid.js:120 js/ContactEditDialog.js:273
-#: js/ContactEditDialog.js:302 js/Model.js:151 js/Model.js:156
+#: js/ContactGrid.js:120 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:273
+#: js/ContactEditDialog.js:302 js/Addressbook-FAT-debug.js:221
+#: js/Addressbook-FAT-debug.js:226 js/Addressbook-FAT-debug.js:761
+#: js/Addressbook-FAT-debug.js:1303 js/Addressbook-FAT-debug.js:1332
+#: js/Model.js:151 js/Model.js:156
 msgid "Street"
 msgstr "ถนน"
 
-#: js/ContactGrid.js:121 js/ContactEditDialog.js:289
-#: js/ContactEditDialog.js:318 js/Model.js:154 js/Model.js:159
+#: js/ContactGrid.js:121 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:289
+#: js/ContactEditDialog.js:318 js/Addressbook-FAT-debug.js:224
+#: js/Addressbook-FAT-debug.js:229 js/Addressbook-FAT-debug.js:762
+#: js/Addressbook-FAT-debug.js:1319 js/Addressbook-FAT-debug.js:1348
+#: js/Model.js:154 js/Model.js:159
 msgid "City"
 msgstr "เมือง"
 
-#: js/ContactGrid.js:122 js/ContactEditDialog.js:281
-#: js/ContactEditDialog.js:310 js/Model.js:152 js/Model.js:157
+#: js/ContactGrid.js:122 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:281
+#: js/ContactEditDialog.js:310 js/Addressbook-FAT-debug.js:222
+#: js/Addressbook-FAT-debug.js:227 js/Addressbook-FAT-debug.js:763
+#: js/Addressbook-FAT-debug.js:1311 js/Addressbook-FAT-debug.js:1340
+#: js/Model.js:152 js/Model.js:157
 msgid "Region"
 msgstr "เขต"
 
-#: js/ContactGrid.js:123
+#: js/ContactGrid.js:123 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:764
 msgid "Postalcode"
 msgstr "รหัสไปรษณีย์"
 
-#: js/ContactGrid.js:124 js/ContactEditDialog.js:294
-#: js/ContactEditDialog.js:323 js/Model.js:155 js/Model.js:160
+#: js/ContactGrid.js:124 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:294
+#: js/ContactEditDialog.js:323 js/Addressbook-FAT-debug.js:225
+#: js/Addressbook-FAT-debug.js:230 js/Addressbook-FAT-debug.js:765
+#: js/Addressbook-FAT-debug.js:1324 js/Addressbook-FAT-debug.js:1353
+#: js/Model.js:155 js/Model.js:160
 msgid "Country"
 msgstr "ประเทศ"
 
-#: js/ContactGrid.js:125
+#: js/ContactGrid.js:125 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:766
 msgid "Street (private)"
 msgstr "ถนน (ส่วนตัว)"
 
-#: js/ContactGrid.js:126
+#: js/ContactGrid.js:126 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:767
 msgid "City (private)"
 msgstr "จังหวัด (ส่วนตัว)"
 
-#: js/ContactGrid.js:127
+#: js/ContactGrid.js:127 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:768
 msgid "Region (private)"
 msgstr "เขต (ส่วนตัว)"
 
-#: js/ContactGrid.js:128
+#: js/ContactGrid.js:128 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:769
 msgid "Postalcode (private)"
 msgstr "รหัสไปรษณีย์ (ส่วนตัว)"
 
-#: js/ContactGrid.js:129
+#: js/ContactGrid.js:129 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:770
 msgid "Country (private)"
 msgstr "ประเทศ (ส่วนตัว)"
 
 #: js/ContactGrid.js:131 js/ContactGridDetailsPanel.js:139
-#: js/ContactGridDetailsPanel.js:163 js/ContactEditDialog.js:186
-#: js/Model.js:51 js/Model.js:144
+#: js/ContactGridDetailsPanel.js:163 js/Addressbook-FAT.js:6
+#: js/ContactEditDialog.js:186 js/Addressbook-FAT-debug.js:122
+#: js/Addressbook-FAT-debug.js:214 js/Addressbook-FAT-debug.js:486
+#: js/Addressbook-FAT-debug.js:510 js/Addressbook-FAT-debug.js:772
+#: js/Addressbook-FAT-debug.js:1224 js/Model.js:51 js/Model.js:144
 msgid "Phone"
 msgstr "โทรศัพท์"
 
 #: js/ContactGrid.js:132 js/ContactGridDetailsPanel.js:140
-#: js/ContactGridDetailsPanel.js:164 js/ContactEditDialog.js:191
+#: js/ContactGridDetailsPanel.js:164 js/Addressbook-FAT.js:6
+#: js/ContactEditDialog.js:191 js/Addressbook-FAT-debug.js:123
+#: js/Addressbook-FAT-debug.js:487 js/Addressbook-FAT-debug.js:511
+#: js/Addressbook-FAT-debug.js:773 js/Addressbook-FAT-debug.js:1229
 #: js/Model.js:52
 msgid "Mobile"
 msgstr "โทรศัพท์เคลื่อนที่"
 
 #: js/ContactGrid.js:133 js/ContactGridDetailsPanel.js:141
-#: js/ContactGridDetailsPanel.js:165 js/ContactEditDialog.js:196
+#: js/ContactGridDetailsPanel.js:165 js/Addressbook-FAT.js:6
+#: js/ContactEditDialog.js:196 js/Addressbook-FAT-debug.js:124
+#: js/Addressbook-FAT-debug.js:488 js/Addressbook-FAT-debug.js:512
+#: js/Addressbook-FAT-debug.js:774 js/Addressbook-FAT-debug.js:1234
 #: js/Model.js:53
 msgid "Fax"
 msgstr "โทรสาร"
 
-#: js/ContactGrid.js:134
+#: js/ContactGrid.js:134 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:775
 msgid "Car phone"
 msgstr "โทรศัพท์ในรถ"
 
-#: js/ContactGrid.js:135
+#: js/ContactGrid.js:135 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:776
 msgid "Pager"
 msgstr "เพจเจอร์"
 
-#: js/ContactGrid.js:136 js/ContactEditDialog.js:201 js/Model.js:57
+#: js/ContactGrid.js:136 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:201
+#: js/Addressbook-FAT-debug.js:128 js/Addressbook-FAT-debug.js:777
+#: js/Addressbook-FAT-debug.js:1239 js/Model.js:57
 msgid "Phone (private)"
 msgstr "โทรศัพท์ (ส่วนตัว)"
 
-#: js/ContactGrid.js:137 js/ContactEditDialog.js:211 js/Model.js:58
+#: js/ContactGrid.js:137 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:211
+#: js/Addressbook-FAT-debug.js:129 js/Addressbook-FAT-debug.js:778
+#: js/Addressbook-FAT-debug.js:1249 js/Model.js:58
 msgid "Fax (private)"
 msgstr "โทรสาร (ส่วนตัว)"
 
-#: js/ContactGrid.js:138 js/ContactEditDialog.js:206 js/Model.js:59
+#: js/ContactGrid.js:138 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:206
+#: js/Addressbook-FAT-debug.js:130 js/Addressbook-FAT-debug.js:779
+#: js/Addressbook-FAT-debug.js:1244 js/Model.js:59
 msgid "Mobile (private)"
 msgstr "โทรศัพท์เคลื่อนที่ (ส่วนตัว)"
 
-#: js/ContactGrid.js:139
+#: js/ContactGrid.js:139 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:780
 msgid "Email (private)"
 msgstr " อีเมล (ส่วนตัว)"
 
 #: js/ContactGrid.js:140 js/ContactGridDetailsPanel.js:144
-#: js/ContactGridDetailsPanel.js:168 js/ContactEditDialog.js:229
+#: js/ContactGridDetailsPanel.js:168 js/Addressbook-FAT.js:6
+#: js/ContactEditDialog.js:229 js/Addressbook-FAT-debug.js:135
+#: js/Addressbook-FAT-debug.js:491 js/Addressbook-FAT-debug.js:515
+#: js/Addressbook-FAT-debug.js:781 js/Addressbook-FAT-debug.js:1267
 #: js/Model.js:64
 msgid "Web"
 msgstr "เวบไซด์"
 
-#: js/ContactGrid.js:141
+#: js/ContactGrid.js:141 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:782
 msgid "URL (private)"
 msgstr "รหัสสืบค้นข้อมูลทางอินเตอร์เนต (ส่วนตัว)"
 
-#: js/ContactGrid.js:142
+#: js/ContactGrid.js:142 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:783
 msgid "Note"
 msgstr "บันทึก"
 
-#: js/ContactGrid.js:143
+#: js/ContactGrid.js:143 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:784
 msgid "Timezone"
 msgstr "เส้นแบ่งเวลา"
 
-#: js/ContactGrid.js:144
+#: js/ContactGrid.js:144 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:785
 msgid "Geo"
 msgstr "ภูมิศาสตร์"
 
 #: js/ContactGrid.js:155 js/ContactGrid.js:156 js/ContactGrid.js:157
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:796
+#: js/Addressbook-FAT-debug.js:797 js/Addressbook-FAT-debug.js:798
 msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] "ส่งออก {0}"
 
-#: js/ContactGrid.js:166
+#: js/ContactGrid.js:166 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:807
 msgid "Export as PDF"
 msgstr "ส่งออก เป็นไฟล์ pdf"
 
-#: js/ContactGrid.js:173
+#: js/ContactGrid.js:173 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:814
 msgid "Export as CSV"
 msgstr "ส่งออก เป็นไฟล์ CSV"
 
-#: js/ContactGrid.js:180
+#: js/ContactGrid.js:180 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:821
 msgid "Export as ODS"
 msgstr "ส่งออก เป็นไฟล์ ODS"
 
-#: js/ContactGrid.js:187
+#: js/ContactGrid.js:187 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:828
 msgid "Export as XLS"
-msgstr ""
+msgstr "ส่งออก เป็นไฟล์ XLS"
 
-#: js/ContactGrid.js:194
+#: js/ContactGrid.js:194 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:835
 msgid "Export as ..."
 msgstr "ส่งออก เป็น ..."
 
-#: js/ContactGrid.js:206
+#: js/ContactGrid.js:206 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:847
 msgid "Import contacts"
 msgstr "นำเข้า การติดต่อ"
 
@@ -454,240 +536,295 @@ msgstr "นำเข้า การติดต่อ"
 msgid "Contact of a user account"
 msgstr "การติดต่อของ บัญชี ผู้ใช้"
 
-#: js/ContactGrid.js:295 js/ContactFilterModel.js:35 js/Model.js:95
-#: js/Model.js:134
+#: js/ContactGrid.js:295 js/Addressbook-FAT.js:6 js/ContactFilterModel.js:35
+#: js/Addressbook-FAT-debug.js:165 js/Addressbook-FAT-debug.js:204
+#: js/Addressbook-FAT-debug.js:990 js/Model.js:95 js/Model.js:134
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "การติดต่อ"
 
-#: js/ContactGridDetailsPanel.js:62 js/Model.js:95
+#: js/ContactGridDetailsPanel.js:62 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:165 js/Addressbook-FAT-debug.js:409
+#: js/Model.js:95
 msgid "Contacts"
-msgstr ""
+msgstr "การติดต่อ"
 
-#: js/ContactGridDetailsPanel.js:65
+#: js/ContactGridDetailsPanel.js:65 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:412
 msgid "Select contact"
 msgstr "เลือก การติดต่อ"
 
 #: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
-#: js/ContactEditDialog.js:216 js/Model.js:62 js/Model.js:147
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:216
+#: js/Addressbook-FAT-debug.js:133 js/Addressbook-FAT-debug.js:218
+#: js/Addressbook-FAT-debug.js:489 js/Addressbook-FAT-debug.js:513
+#: js/Addressbook-FAT-debug.js:1254 js/Model.js:62 js/Model.js:147
 msgid "E-Mail"
 msgstr "อีเมล"
 
-#: js/ContactGridDetailsPanel.js:155
+#: js/ContactGridDetailsPanel.js:155 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:502
 msgid "Private"
 msgstr "ส่วนตัว"
 
-#: js/ContactGridDetailsPanel.js:178
+#: js/ContactGridDetailsPanel.js:178 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:525
 msgid "Info"
 msgstr "ข้อมูล"
 
-#: js/ContactGridDetailsPanel.js:214
+#: js/ContactGridDetailsPanel.js:214 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:561
 msgid "Insecure link"
 msgstr "การเชื่อมโยงที่ไม่ปลอดภัย"
 
-#: js/ContactGridDetailsPanel.js:214
+#: js/ContactGridDetailsPanel.js:214 js/Addressbook-FAT.js:6
+#: js/Addressbook-FAT-debug.js:561
 msgid "Please review this link in edit dialog."
 msgstr "กรุณาตรวจสอบการเชื่อมโยงนี้ในกล่องแก้ไข"
 
-#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
-msgid "Map"
-msgstr "แผนที่"
-
-#: js/ContactEditDialog.js:79
-msgid "Personal Information"
-msgstr "ข้อมุลส่วนบุคคล"
-
-#: js/ContactEditDialog.js:107 js/Model.js:22
-msgid "Title"
-msgstr "คำนำหน้าชื่อ"
-
-#: js/ContactEditDialog.js:117 js/Model.js:21
-msgid "Middle Name"
-msgstr "ชื่อกลาง"
-
-#: js/ContactEditDialog.js:138 js/Model.js:23
-msgid "Suffix"
-msgstr "คำลงท้ายชื่อ"
-
-#: js/ContactEditDialog.js:181
-msgid "Contact Information"
-msgstr "ข้อมูลที่ใช้ในการติดต่อ"
-
-#: js/ContactEditDialog.js:222 js/Model.js:63
-msgid "E-Mail (private)"
-msgstr " อีเมล (ส่วนตัว)"
-
-#: js/ContactEditDialog.js:270 js/Model.js:34 js/Model.js:151 js/Model.js:152
-#: js/Model.js:153 js/Model.js:154 js/Model.js:155
-msgid "Company Address"
-msgstr "ที่อยู่ของบริษัท"
-
-#: js/ContactEditDialog.js:277 js/ContactEditDialog.js:306
-msgid "Street 2"
-msgstr "ถนน 2"
-
-#: js/ContactEditDialog.js:285 js/ContactEditDialog.js:314 js/Model.js:153
-#: js/Model.js:158
-msgid "Postal Code"
-msgstr "รหัสไปรษณีย์"
-
-#: js/ContactEditDialog.js:344 js/Model.js:68 js/Model.js:146
-msgid "Description"
-msgstr "การอธิบาย"
-
-#: js/ContactEditDialog.js:358
-msgid "Enter description"
-msgstr "ใส่ คำอธิบาย"
-
-#: js/ContactEditDialog.js:402
-msgid "Export as pdf"
-msgstr "ส่งออก เป็นไฟล์ pdf"
-
-#: js/ContactEditDialog.js:410 js/ContactEditDialog.js:499
-msgid "Parse address"
-msgstr "วิเคราะห์ ที่อยู่"
-
-#: js/ContactEditDialog.js:434 js/ContactEditDialog.js:456
-msgid "Either {0} or {1} must be given"
-msgstr "ต้องใส่ {0} หรือไม่ก็ {1} "
-
-#: js/ContactEditDialog.js:491
-msgid "Paste address"
-msgstr "ใส่ ที่อยู่"
-
-#: js/ContactEditDialog.js:491
-msgid "Please paste an address that should be parsed:"
-msgstr "กรุณาใส่ที่อยู่ที่ควรจะต้องวิเคราะห์"
-
-#: js/ContactEditDialog.js:527
-msgid "End token mode"
-msgstr "จบโหมดสัญลักษณ์"
-
-#: js/MapPanel.js:58
-msgid "Company address"
-msgstr "ที่อยู่ของบริษัท"
-
-#: js/MapPanel.js:65
-msgid "Private address"
-msgstr "ที่อยู่ส่วนบุคคล"
-
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:42
 #: js/ListMemberFilterModel.js:37
 msgid "Member of List"
 msgstr "สมาชิกของรายชื่อ"
 
-#: js/CardDAVContainerPropertiesHookField.js:35
-msgid "CardDAV URL"
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:204 js/Model.js:134
+msgid "User Account"
+msgstr "บัญชีผู้ใช้"
+
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:207
+msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:19
-msgid "Name"
-msgstr "ชื่อ"
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:344
+#: js/Addressbook-FAT-debug.js:139 js/Addressbook-FAT-debug.js:217
+#: js/Addressbook-FAT-debug.js:1374 js/Model.js:68 js/Model.js:146
+msgid "Description"
+msgstr "การอธิบาย"
 
-#: js/Model.js:34
-msgid "Street (Company Address)"
-msgstr "ถนน (ที่อยู่ของบริษัท)"
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:270
+#: js/Addressbook-FAT-debug.js:105 js/Addressbook-FAT-debug.js:221
+#: js/Addressbook-FAT-debug.js:222 js/Addressbook-FAT-debug.js:223
+#: js/Addressbook-FAT-debug.js:224 js/Addressbook-FAT-debug.js:225
+#: js/Addressbook-FAT-debug.js:1300 js/Model.js:34 js/Model.js:151
+#: js/Model.js:152 js/Model.js:153 js/Model.js:154 js/Model.js:155
+msgid "Company Address"
+msgstr "ที่อยู่ของบริษัท"
 
-#: js/Model.js:35
-msgid "Street 2 (Company Address)"
-msgstr "ถนน 2 (ที่อยู่ของบริษัท)"
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:285
+#: js/ContactEditDialog.js:314 js/Addressbook-FAT-debug.js:223
+#: js/Addressbook-FAT-debug.js:228 js/Addressbook-FAT-debug.js:1315
+#: js/Addressbook-FAT-debug.js:1344 js/Model.js:153 js/Model.js:158
+msgid "Postal Code"
+msgstr "รหัสไปรษณีย์"
 
-#: js/Model.js:36
-msgid "City (Company Address)"
-msgstr "จังหวัด  (ที่อยู่ของบริษัท)"
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:232 js/Model.js:162
+msgid "Last Modified Time"
+msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
 
-#: js/Model.js:37
-msgid "Region (Company Address)"
-msgstr "เขต  (ที่อยู่ของบริษัท)"
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:233 js/Model.js:163
+msgid "Last Modified By"
+msgstr "ปรับปรุงครั้งล่าสุด โดย"
 
-#: js/Model.js:38
-msgid "Postal Code (Company Address)"
-msgstr "รหัสไปรษณีย์  (ที่อยู่ของบริษัท)"
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:234 js/Model.js:164
+msgid "Creation Time"
+msgstr "เวลาที่สร้างขึ้น"
 
-#: js/Model.js:39
-msgid "Country (Company Address)"
-msgstr "ประเทศ  (ที่อยู่ของบริษัท)"
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:235 js/Model.js:165
+msgid "Created By"
+msgstr "สร้าง โดย"
 
-#: js/Model.js:43
-msgid "Street (Private Address)"
-msgstr "ถนน (ที่อยู่ส่วนบุคคล)"
-
-#: js/Model.js:44
-msgid "Street 2 (Private Address)"
-msgstr "ถนน 2 (ที่อยู่ส่วนบุคคล)"
-
-#: js/Model.js:45
-msgid "City (Private Address)"
-msgstr "จังหวัด  (ที่อยู่ส่วนบุคคล)"
-
-#: js/Model.js:46
-msgid "Region (Private Address)"
-msgstr "เขต  (ที่อยู่ส่วนบุคคล)"
-
-#: js/Model.js:47
-msgid "Postal Code (Private Address)"
-msgstr "รหัสไปรษณีย์  (ที่อยู่ส่วนบุคคล)"
-
-#: js/Model.js:48
-msgid "Country (Private Address)"
-msgstr "ประเทศ  (ที่อยู่ส่วนบุคคล)"
-
-#: js/Model.js:51
-msgid "Company Communication"
-msgstr "การติดต่อสื่อสารของบริษัท"
-
-#: js/Model.js:57
-msgid "Private Communication"
-msgstr "การติดต่อสื่อสารส่วนบุคคล"
-
-#: js/Model.js:65
-msgid "Web (private)"
-msgstr "เวบไซด์  (ส่วนตัว)"
-
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:169
+#: js/Addressbook-FAT-debug.js:276 js/Addressbook-FAT-debug.js:312
 #: js/Model.js:99 js/Model.js:206 js/Addressbook.js:32
 msgid "Addressbook"
 msgid_plural "Addressbooks"
 msgstr[0] "สมุดรายชื่อ"
 
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:936
+msgid "Internal Contact"
+msgstr ""
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:41
+#: js/ContactEditDialog.js:50 js/Addressbook-FAT-debug.js:1074
+#: js/Addressbook-FAT-debug.js:1083 js/Addressbook-FAT-debug.js:1831
+#: js/MapPanel.js:40
+msgid "Map"
+msgstr "แผนที่"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:79
+#: js/Addressbook-FAT-debug.js:1109
+msgid "Personal Information"
+msgstr "ข้อมุลส่วนบุคคล"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:107
+#: js/Addressbook-FAT-debug.js:93 js/Addressbook-FAT-debug.js:1148
+#: js/Model.js:22
+msgid "Title"
+msgstr "คำนำหน้าชื่อ"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:117
+#: js/Addressbook-FAT-debug.js:92 js/Addressbook-FAT-debug.js:1161
+#: js/Model.js:21
+msgid "Middle Name"
+msgstr "ชื่อกลาง"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:181
+#: js/Addressbook-FAT-debug.js:1219
+msgid "Contact Information"
+msgstr "ข้อมูลที่ใช้ในการติดต่อ"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:222
+#: js/Addressbook-FAT-debug.js:134 js/Addressbook-FAT-debug.js:1260
+#: js/Model.js:63
+msgid "E-Mail (private)"
+msgstr " อีเมล (ส่วนตัว)"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:277
+#: js/ContactEditDialog.js:306 js/Addressbook-FAT-debug.js:1307
+#: js/Addressbook-FAT-debug.js:1336
+msgid "Street 2"
+msgstr "ถนน 2"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:358
+#: js/Addressbook-FAT-debug.js:1388
+msgid "Enter description"
+msgstr "ใส่ คำอธิบาย"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:402
+#: js/Addressbook-FAT-debug.js:1432
+msgid "Export as pdf"
+msgstr "ส่งออก เป็นไฟล์ pdf"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:410
+#: js/ContactEditDialog.js:499 js/Addressbook-FAT-debug.js:1440
+#: js/Addressbook-FAT-debug.js:1525
+msgid "Parse address"
+msgstr "วิเคราะห์ ที่อยู่"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:434
+#: js/ContactEditDialog.js:456 js/Addressbook-FAT-debug.js:1464
+#: js/Addressbook-FAT-debug.js:1482
+msgid "Either {0} or {1} must be given"
+msgstr "ต้องใส่ {0} หรือไม่ก็ {1} "
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:491
+#: js/Addressbook-FAT-debug.js:1517
+msgid "Paste address"
+msgstr "ใส่ ที่อยู่"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:491
+#: js/Addressbook-FAT-debug.js:1517
+msgid "Please paste an address that should be parsed:"
+msgstr "กรุณาใส่ที่อยู่ที่ควรจะต้องวิเคราะห์"
+
+#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:527
+#: js/Addressbook-FAT-debug.js:1553
+msgid "End token mode"
+msgstr "จบโหมดสัญลักษณ์"
+
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:1849 js/MapPanel.js:58
+msgid "Company address"
+msgstr "ที่อยู่ของบริษัท"
+
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:1856 js/MapPanel.js:65
+msgid "Private address"
+msgstr "ที่อยู่ส่วนบุคคล"
+
+#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:1977
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
+msgstr "CalDAV URL"
+
+#: js/ContactEditDialog.js:138 js/Addressbook-FAT-debug.js:94
+#: js/Addressbook-FAT-debug.js:1204 js/Model.js:23
+msgid "Suffix"
+msgstr "คำลงท้ายชื่อ"
+
+#: js/Addressbook-FAT-debug.js:90 js/Model.js:19
+msgid "Name"
+msgstr "ชื่อ"
+
+#: js/Addressbook-FAT-debug.js:105 js/Model.js:34
+msgid "Street (Company Address)"
+msgstr "ถนน (ที่อยู่ของบริษัท)"
+
+#: js/Addressbook-FAT-debug.js:106 js/Model.js:35
+msgid "Street 2 (Company Address)"
+msgstr "ถนน 2 (ที่อยู่ของบริษัท)"
+
+#: js/Addressbook-FAT-debug.js:107 js/Model.js:36
+msgid "City (Company Address)"
+msgstr "จังหวัด  (ที่อยู่ของบริษัท)"
+
+#: js/Addressbook-FAT-debug.js:108 js/Model.js:37
+msgid "Region (Company Address)"
+msgstr "เขต  (ที่อยู่ของบริษัท)"
+
+#: js/Addressbook-FAT-debug.js:109 js/Model.js:38
+msgid "Postal Code (Company Address)"
+msgstr "รหัสไปรษณีย์  (ที่อยู่ของบริษัท)"
+
+#: js/Addressbook-FAT-debug.js:110 js/Model.js:39
+msgid "Country (Company Address)"
+msgstr "ประเทศ  (ที่อยู่ของบริษัท)"
+
+#: js/Addressbook-FAT-debug.js:114 js/Model.js:43
+msgid "Street (Private Address)"
+msgstr "ถนน (ที่อยู่ส่วนบุคคล)"
+
+#: js/Addressbook-FAT-debug.js:115 js/Model.js:44
+msgid "Street 2 (Private Address)"
+msgstr "ถนน 2 (ที่อยู่ส่วนบุคคล)"
+
+#: js/Addressbook-FAT-debug.js:116 js/Model.js:45
+msgid "City (Private Address)"
+msgstr "จังหวัด  (ที่อยู่ส่วนบุคคล)"
+
+#: js/Addressbook-FAT-debug.js:117 js/Model.js:46
+msgid "Region (Private Address)"
+msgstr "เขต  (ที่อยู่ส่วนบุคคล)"
+
+#: js/Addressbook-FAT-debug.js:118 js/Model.js:47
+msgid "Postal Code (Private Address)"
+msgstr "รหัสไปรษณีย์  (ที่อยู่ส่วนบุคคล)"
+
+#: js/Addressbook-FAT-debug.js:119 js/Model.js:48
+msgid "Country (Private Address)"
+msgstr "ประเทศ  (ที่อยู่ส่วนบุคคล)"
+
+#: js/Addressbook-FAT-debug.js:122 js/Model.js:51
+msgid "Company Communication"
+msgstr "การติดต่อสื่อสารของบริษัท"
+
+#: js/Addressbook-FAT-debug.js:128 js/Model.js:57
+msgid "Private Communication"
+msgstr "การติดต่อสื่อสารส่วนบุคคล"
+
+#: js/Addressbook-FAT-debug.js:136 js/Model.js:65
+msgid "Web (private)"
+msgstr "เวบไซด์  (ส่วนตัว)"
+
+#: js/Addressbook-FAT-debug.js:169 js/Addressbook-FAT-debug.js:276
 #: js/Model.js:99 js/Model.js:206
 msgid "Addressbooks"
 msgstr "สมุดที่อยู่"
 
-#: js/Model.js:134
-msgid "User Account"
-msgstr "บัญชีผู้ใช้"
-
-#: js/Model.js:137
-msgid "Quick Search"
-msgstr "ค้นหาอย่างรวดเร็ว"
-
-#: js/Model.js:162
-msgid "Last Modified Time"
-msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
-
-#: js/Model.js:163
-msgid "Last Modified By"
-msgstr "ปรับปรุงครั้งล่าสุด โดย"
-
-#: js/Model.js:164
-msgid "Creation Time"
-msgstr "เวลาที่สร้างขึ้น"
-
-#: js/Model.js:165
-msgid "Created By"
-msgstr "สร้าง โดย"
-
-#: js/Model.js:202
+#: js/Addressbook-FAT-debug.js:272 js/Model.js:202
 msgid "List"
 msgid_plural "Lists"
 msgstr[0] "รายชื่อ"
 
-#: js/Model.js:202
+#: js/Addressbook-FAT-debug.js:272 js/Model.js:202
 msgid "Lists"
 msgstr "รายชื่อ"
 
-#: js/Addressbook.js:22
+#: js/Addressbook-FAT-debug.js:302 js/Addressbook.js:22
 msgid "New Contact"
-msgstr ""
+msgstr "การติดต่อใหม่"
+
+#: js/Model.js:137
+msgid "Quick Search"
+msgstr "ค้นหาอย่างรวดเร็ว"
 
 #: Controller/Contact.php:330
 msgid "Uploaded new contact image."

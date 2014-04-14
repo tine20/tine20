@@ -253,7 +253,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $counter = $imap->examineFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .  ' ' . print_r($counter, TRUE));
-            
+        
         // check validity
         $folder->cache_uidvalidity = $folder->imap_uidvalidity;
         $folder->imap_uidvalidity  = $counter['uidvalidity'];
@@ -482,7 +482,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         if (count($cachedFolderIds) > count($_imapFolderIds)) {
             // remove folders from cache
             $idsToRemove = array_diff($cachedFolderIds, $_imapFolderIds);
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing ' . count($idsToRemove) . ' folders from cache.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Removing ' . count($idsToRemove) . ' folders from cache.');
             $this->delete($idsToRemove);
         }
     }

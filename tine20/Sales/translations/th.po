@@ -1,10 +1,11 @@
 # 
 # Translators:
+# jaruwan <luca.ingianni@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-02-11 20:39+0000\n"
+"PO-Revision-Date: 2014-03-21 12:01+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -18,11 +19,11 @@ msgstr ""
 
 #: Acl/Rights.php:103
 msgid "manage products"
-msgstr ""
+msgstr "จัดการสินค้า"
 
 #: Acl/Rights.php:104
 msgid "add, edit and delete products"
-msgstr ""
+msgstr "เพิ่ม แก้ไข และลบสินค้า"
 
 #: Controller.php:83 Controller.php:103
 msgid "You do not have admin rights on Sales"
@@ -30,11 +31,11 @@ msgstr ""
 
 #: Model/Contract.php:109
 msgid "Responsible"
-msgstr ""
+msgstr "รับผิดชอบ"
 
 #: Model/Contract.php:110
 msgid "Customer"
-msgstr ""
+msgstr "ลูกค้า"
 
 #: Model/Contract.php:111
 msgid "Partner"
@@ -42,39 +43,40 @@ msgstr ""
 
 #: Model/Contract.php:123 js/ContractEditDialog.js:174
 msgid "Lead Cost Center"
-msgstr ""
+msgstr "ศูนย์ต้นทุนนำ"
 
 #: Model/Contract.php:127
 msgid "Time Account"
-msgstr ""
+msgstr "บัญชีเวลา"
 
 #: Config.php:51
 msgid "Contract Number Creation"
-msgstr ""
+msgstr "การสร้างหมายเลขสัญญา"
 
 #: Config.php:53
 msgid "Should the contract number be set manually or be auto-created?"
-msgstr ""
+msgstr "หมายเลขสัญญาควรจะมีการสร้างโดยอัตโนมัติหรือใส่หมายเลขเอง?"
 
 #: Config.php:56
 msgid "automatically"
-msgstr ""
+msgstr "โดยอัตโนมัติ"
 
 #: Config.php:57
 msgid "manually"
-msgstr ""
+msgstr "ด้วยมือ"
 
 #: Config.php:64
 msgid "Contract Number Validation"
-msgstr ""
+msgstr "ความถูกต้องของหมายเลขสัญญา"
 
 #: Config.php:66
 msgid "The Number can be validated as text or number."
 msgstr ""
 
-#: Config.php:69 js/Models.js:208 js/ContractEditDialog.js:138
+#: Config.php:69 js/Sales-FAT-debug.js:205 js/Sales-FAT-debug.js:934
+#: js/Sales-FAT.js:6 js/Models.js:208 js/ContractEditDialog.js:138
 msgid "Number"
-msgstr ""
+msgstr "หมายเลข"
 
 #: Config.php:70
 msgid "Text"
@@ -100,175 +102,202 @@ msgstr ""
 
 #: Setup/Update/Release5.php:63 Setup/Initialize.php:34
 msgid "My Products"
-msgstr ""
+msgstr "สินค้าของฉัน"
 
 #: Setup/Update/Release5.php:64 Setup/Initialize.php:35
 msgid "Products created by myself"
-msgstr ""
+msgstr "สินค้าที่สร้างขึ้นโดยฉันเอง"
 
 #: Setup/Update/Release5.php:84 Setup/Initialize.php:51
 msgid "My Contracts"
-msgstr ""
+msgstr "สัญญาของฉัน"
 
 #: Setup/Update/Release5.php:85 Setup/Initialize.php:52
 msgid "Contracts created by myself"
-msgstr ""
+msgstr "สัญญาที่สร้างขึ้นโดยฉันเอง"
 
-#: js/AdminPanel.js:61
+#: js/AdminPanel.js:61 js/Sales-FAT-debug.js:403 js/Sales-FAT.js:6
 msgid "Cancel"
-msgstr ""
+msgstr "ยกเลิก"
 
-#: js/AdminPanel.js:69
+#: js/AdminPanel.js:69 js/Sales-FAT-debug.js:411 js/Sales-FAT.js:6
 msgid "OK"
-msgstr ""
+msgstr "ตกลง"
 
-#: js/AdminPanel.js:90
+#: js/AdminPanel.js:90 js/Sales-FAT-debug.js:432 js/Sales-FAT.js:6
 msgid "Loading..."
-msgstr ""
+msgstr "กำลังโหลด..."
 
 #: js/ContractGridPanel.js:62 js/ProductGridPanel.js:97
+#: js/Sales-FAT-debug.js:1164 js/Sales-FAT.js:6
 msgid "Tags"
-msgstr ""
+msgstr "ป้ายกำกับ"
 
-#: js/ContractGridPanel.js:70
+#: js/ContractGridPanel.js:70 js/Sales-FAT-debug.js:765 js/Sales-FAT.js:6
 msgid "Contract number"
-msgstr ""
+msgstr "หมายเลขสัญญา"
 
-#: js/ContractGridPanel.js:76 js/Models.js:245 js/ContractEditDialog.js:145
+#: js/ContractGridPanel.js:76 js/Sales-FAT-debug.js:242
+#: js/Sales-FAT-debug.js:771 js/Sales-FAT-debug.js:941 js/Sales-FAT.js:6
+#: js/Models.js:245 js/ContractEditDialog.js:145
 msgid "Title"
-msgstr ""
+msgstr "คำนำหน้าชื่อ"
 
-#: js/ContractGridPanel.js:82 js/Models.js:151 js/ContractEditDialog.js:189
+#: js/ContractGridPanel.js:82 js/Sales-FAT-debug.js:152
+#: js/Sales-FAT-debug.js:777 js/Sales-FAT-debug.js:974 js/Sales-FAT.js:6
+#: js/Models.js:151 js/ContractEditDialog.js:189
 msgid "Status"
-msgstr ""
+msgstr "สถานะ"
 
-#: js/ContractGridPanel.js:89 js/Models.js:158 js/ContractEditDialog.js:196
+#: js/ContractGridPanel.js:89 js/Sales-FAT-debug.js:159
+#: js/Sales-FAT-debug.js:784 js/Sales-FAT-debug.js:981 js/Sales-FAT.js:6
+#: js/Models.js:158 js/ContractEditDialog.js:196
 msgid "Cleared"
-msgstr ""
+msgstr "เคลียร์แล้ว"
 
-#: js/ContractGridPanel.js:96 js/Models.js:164 js/ContractEditDialog.js:200
+#: js/ContractGridPanel.js:96 js/Sales-FAT-debug.js:165
+#: js/Sales-FAT-debug.js:791 js/Sales-FAT-debug.js:985 js/Sales-FAT.js:6
+#: js/Models.js:164 js/ContractEditDialog.js:200
 msgid "Cleared in"
 msgstr ""
 
 #: js/ProductEditDialog.js:93 js/ProductGridPanel.js:98
+#: js/Sales-FAT-debug.js:1165 js/Sales-FAT-debug.js:1276 js/Sales-FAT.js:6
 msgid "Name"
-msgstr ""
+msgstr "ชื่อ"
 
 #: js/ProductEditDialog.js:99 js/ProductGridPanel.js:102
+#: js/Sales-FAT-debug.js:1169 js/Sales-FAT-debug.js:1282 js/Sales-FAT.js:6
 msgid "Price"
-msgstr ""
+msgstr "ราคา"
 
 #: js/ProductEditDialog.js:106 js/ProductGridPanel.js:99
+#: js/Sales-FAT-debug.js:1166 js/Sales-FAT-debug.js:1289 js/Sales-FAT.js:6
 msgid "Manufacturer"
-msgstr ""
+msgstr "ผู้ผลิต"
 
 #: js/ProductEditDialog.js:110 js/ProductGridPanel.js:100
+#: js/Sales-FAT-debug.js:1167 js/Sales-FAT-debug.js:1293 js/Sales-FAT.js:6
 msgid "Category"
-msgstr ""
+msgstr "ประเภท"
 
 #: js/ProductEditDialog.js:114 js/ProductGridPanel.js:101
-#: js/ContractEditDialog.js:206
+#: js/Sales-FAT-debug.js:991 js/Sales-FAT-debug.js:1168
+#: js/Sales-FAT-debug.js:1297 js/Sales-FAT.js:6 js/ContractEditDialog.js:206
 msgid "Description"
-msgstr ""
+msgstr "การอธิบาย"
 
-#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:207
+#: js/ProductEditDialog.js:115 js/Sales-FAT-debug.js:992
+#: js/Sales-FAT-debug.js:1298 js/Sales-FAT.js:6 js/ContractEditDialog.js:207
 msgid "Enter description..."
-msgstr ""
+msgstr "ใส่ คำอธิบาย"
 
-#: js/ContractCostCenterFilterModel.js:30
-msgid "Cost Center"
-msgstr ""
-
-#: js/ContractCostCenterFilterModel.js:32
-msgid "without CostCenter"
-msgstr ""
-
-#: js/Models.js:41
+#: js/Sales-FAT-debug.js:44 js/Models.js:41
 msgid "Product"
 msgid_plural "Products"
-msgstr[0] ""
+msgstr[0] "สินค้า"
 
-#: js/Models.js:44 js/Models.js:234
+#: js/Sales-FAT-debug.js:48 js/Sales-FAT-debug.js:231 js/Models.js:44
+#: js/Models.js:234
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] ""
+msgstr[0] "บันทึกรายชื่อ"
 
-#: js/Models.js:78 js/Models.js:147 js/Models.js:207 js/Models.js:244
-msgid "Quick Search"
+#: js/Sales-FAT-debug.js:82 js/Sales-FAT-debug.js:148
+#: js/Sales-FAT-debug.js:204 js/Sales-FAT-debug.js:241 js/Sales-FAT.js:6
+msgid "Quick search"
 msgstr ""
 
-#: js/Models.js:79
+#: js/Sales-FAT-debug.js:83 js/Sales-FAT.js:6 js/Models.js:79
 msgid "Product name"
-msgstr ""
+msgstr "ชื่อสินค้า"
 
+#: js/Sales-FAT-debug.js:85 js/Sales-FAT-debug.js:150 js/Sales-FAT.js:6
 #: js/Models.js:81 js/Models.js:149
 msgid "Creator"
-msgstr ""
+msgstr "ผู้สร้าง"
 
-#: js/Models.js:117
+#: js/Sales-FAT-debug.js:118 js/Models.js:117
 msgid "Contract"
 msgid_plural "Contracts"
+msgstr[0] "สัญญา"
+
+#: js/Sales-FAT-debug.js:122
+msgid "All Contracts"
+msgid_plural "contracts lists"
 msgstr[0] ""
 
-#: js/Models.js:121
-msgid "Contracts"
-msgid_plural "Contracts"
-msgstr[0] ""
-
-#: js/Models.js:148
+#: js/Sales-FAT-debug.js:149 js/Sales-FAT.js:6 js/Models.js:148
 msgid "Contract name"
-msgstr ""
+msgstr "ชื่อสัญญา"
 
-#: js/Models.js:167
-msgid "Last Modified Time"
-msgstr ""
-
-#: js/Models.js:168
-msgid "Last Modified By"
-msgstr ""
-
-#: js/Models.js:169
-msgid "Creation Time"
-msgstr ""
-
-#: js/Models.js:170
-msgid "Created By"
-msgstr ""
-
-#: js/Models.js:194
+#: js/Sales-FAT-debug.js:191 js/Models.js:194
 msgid "CostCenter"
 msgid_plural "CostCenters"
-msgstr[0] ""
+msgstr[0] "ศูนย์ต้นทุน"
 
-#: js/Models.js:197
+#: js/Sales-FAT-debug.js:194 js/Models.js:197
 msgid "All CostCenters"
 msgid_plural "All CostCenters"
-msgstr[0] ""
+msgstr[0] "ศูนย์ต้นทุนทั้งหมด"
 
-#: js/Models.js:209
+#: js/Sales-FAT-debug.js:206 js/Sales-FAT.js:6 js/Models.js:209
 msgid "Remark"
 msgstr ""
 
-#: js/Models.js:231
+#: js/Sales-FAT-debug.js:228 js/Models.js:231
 msgid "Division"
 msgid_plural "Divisions"
 msgstr[0] ""
 
-#: js/ContractEditDialog.js:96
+#: js/Sales-FAT-debug.js:894 js/Sales-FAT.js:6 js/ContractEditDialog.js:96
 msgid "Please use a decimal number here!"
 msgstr ""
 
-#: js/ContractEditDialog.js:151
+#: js/Sales-FAT-debug.js:947 js/Sales-FAT.js:6 js/ContractEditDialog.js:151
 msgid "Contract Contact"
 msgstr ""
 
-#: js/ContractEditDialog.js:163
+#: js/Sales-FAT-debug.js:959 js/Sales-FAT.js:6 js/ContractEditDialog.js:163
 msgid "Account Manager"
-msgstr ""
+msgstr "ผู้จัดการบัญชี"
 
-#: js/ContractEditDialog.js:183
+#: js/Sales-FAT-debug.js:968 js/ContractEditDialog.js:183
 msgid "Company"
-msgstr ""
+msgstr "บริษัท"
+
+#: js/ContractCostCenterFilterModel.js:30
+msgid "Cost Center"
+msgstr "ศูนย์ต้นทุน"
+
+#: js/ContractCostCenterFilterModel.js:32
+msgid "without CostCenter"
+msgstr "ปราศจากศูนย์ต้นทุน"
+
+#: js/Models.js:78 js/Models.js:147 js/Models.js:207 js/Models.js:244
+msgid "Quick Search"
+msgstr "ค้นหาอย่างรวดเร็ว"
+
+#: js/Models.js:121
+msgid "Contracts"
+msgid_plural "Contracts"
+msgstr[0] "สัญญา"
+
+#: js/Models.js:167
+msgid "Last Modified Time"
+msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
+
+#: js/Models.js:168
+msgid "Last Modified By"
+msgstr "ปรับปรุงครั้งล่าสุด โดย"
+
+#: js/Models.js:169
+msgid "Creation Time"
+msgstr "เวลาที่สร้างขึ้น"
+
+#: js/Models.js:170
+msgid "Created By"
+msgstr "สร้าง โดย"
 
 #: Controller/Contract.php:83
 msgid "The number you have tried to set is already in use!"
