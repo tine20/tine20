@@ -163,14 +163,6 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, count($contract1res['relations']));
         $this->assertEquals(1, count($contract2res['relations']));
-        // TODO: make this from other side work
-        // add type RESPONSIBLE from the other side, so each contract gets 2 responsibles, but only one is allowed
-//         $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
-        
-//         $response = $tbJson->updateMultipleRecords('Addressbook', 'Contact',
-//             array(array('name' => '%RESPONSIBLE-Sales_Model_Contract', 'value' => $contract1->getId())),
-//             array(array('field' => 'id', 'operator' => 'in', 'value' => array($contact1->getId(), $contact2->getId())))
-//         );
     }
     
     /**
