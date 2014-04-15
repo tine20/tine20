@@ -191,12 +191,11 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
     public function sanitizeAccountIdAndFillWithAllGrants()
     {
         if ($this->account_id == 0) {
-            if ($this->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
-                $this->account_id = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
-            } elseif ($this->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && is_object(Tinebase_Core::getUser())) {
+            if ($this->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && is_object(Tinebase_Core::getUser())) {
                 $this->account_id = Tinebase_Core::getUser()->getId();
             } else {
-                throw new Tinebase_Exception_InvalidArgument('wrong account type or no user object found');
+                $this->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP;
+                $this->account_id = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
             }
         }
         
