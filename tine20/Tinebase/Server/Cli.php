@@ -31,11 +31,26 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
     /**
      * return anonymous methods
      * 
+     * @param string $method
      * @return array
      */
-    public static function getAnonymousMethods()
+    public static function getAnonymousMethods($method = null)
     {
-        return self::$_anonymousMethods;
+        $result = self::$_anonymousMethods;
+        
+        // check if application cli frontend defines its own anonymous methods
+        if ($method && strpos($method, '.') !== false) {
+            list($application, $cliMethod) = explode('.', $method);
+            $class = $application . '_Frontend_Cli';
+            if (@class_exists($class)) {
+                $object = new $class;
+                if (method_exists($object, 'getAnonymousMethods')) {
+                    $result = array_merge($result, call_user_func($class . '::getAnonymousMethods' ));
+                }
+            }
+        }
+        
+        return $result;
     }
     
     /**
@@ -73,7 +88,7 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
         $tinebaseServer = new Tinebase_Frontend_Cli();
         
         $opts = Tinebase_Core::get('opts');
-        if (! in_array($method, self::getAnonymousMethods())) {
+        if (! in_array($method, self::getAnonymousMethods($method))) {
             $tinebaseServer->authenticate($opts->username, $opts->password);
         }
         $result = $tinebaseServer->handle($opts);

@@ -24,11 +24,11 @@ try {
         'help|h'                => 'Display this help Message',
         'verbose|v'             => 'Output messages',
         'config|c=s'            => 'Path to config.inc.php file',
-        'dry|d'                 => "Dry run - don't change anything",    
+        'dry|d'                 => "Dry run - don't change anything",
         'info|i'                => 'Get usage description of method',
     
-        'method=s'              => 'Method to call [required]',              
-        'username=s'            => 'Username [required]',              
+        'method=s'              => 'Method to call [required]',
+        'username=s'            => 'Username [required]',
         'password=s'            => 'Password',
         'passwordfile=s'        => 'Name of file that contains password',
     ));
@@ -51,7 +51,7 @@ if ($opts->config) {
 }
 
 // get username / password if not already set
-if (! in_array($opts->method, Tinebase_Server_Cli::getAnonymousMethods())) {
+if (! in_array($opts->method, Tinebase_Server_Cli::getAnonymousMethods($opts->method))) {
     if (empty($opts->username)) {
         $opts->username = Tinebase_Server_Cli::promptInput('username');
     }
