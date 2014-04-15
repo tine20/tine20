@@ -99,8 +99,6 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         
         this.getForm().loadRecord(this.record);
         
-        this.onConjunctionChange();
-        
         this.loadMask.hide();
     },
     
@@ -166,6 +164,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             };
             result.push(condition);
         }
+        
         return result;
     },
     
@@ -183,6 +182,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             field;
             
         for (i = 0; i < conditions.length; i++) {
+            
             field = conditions[i].header;
             switch (field) {
                 case 'size':
@@ -192,6 +192,9 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 case 'to':
                 case 'subject':
                     operator = conditions[i].comperator;
+                    break;
+                case 'cc':
+                    field = 'cc'
                     break;
                 default:
                     if (field == 'From') {
@@ -261,8 +264,8 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             labelSeparator: '',
             name       : 'conjunction',
             store      : [
-                ['allof', this.app.i18n._('all conditions met')],
-                ['anyof', this.app.i18n._('any condition mets')]
+                ['allof', this.app.i18n._('all conditions match')],
+                ['anyof', this.app.i18n._('any condition matches')]
             ],
             value      : 'allof',
             listeners: {
