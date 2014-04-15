@@ -777,9 +777,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         )));
         
         $filter->addFilter(new Tinebase_Model_Filter_Text(array(
-                'field'     => 'displaycontainer_id',
-                'operator'  => 'isnull',
-                'value'     => null
+            'field'     => 'displaycontainer_id',
+            'operator'  => 'isnull',
+            'value'     => null
         )));
         
         $danglingAttendee = $this->_attendeeBackend->search($filter);
@@ -788,14 +788,21 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $danglingContacts = Addressbook_Controller_Contact::getInstance()->getMultiple($danglingContactIds, TRUE);
         $danglingResourceAttendee = $danglingAttendee->filter('user_type', Calendar_Model_Attender::USERTYPE_RESOURCE);
         $danglingResourceIds =  array_unique($danglingResourceAttendee->user_id);
+        Calendar_Controller_Resource::getInstance()->doContainerACLChecks(false);
         $danglingResources = Calendar_Controller_Resource::getInstance()->getMultiple($danglingResourceIds, TRUE);
         
-        // repair contacts
-        foreach($danglingContactIds as $danglingContactId) {
-            // get account_id
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Processing ' . count($danglingContactIds) . ' dangling contact ids...');
+        
+        foreach ($danglingContactIds as $danglingContactId) {
             $danglingContact = $danglingContacts->getById($danglingContactId);
             if ($danglingContact && $danglingContact->account_id) {
-                // get display calendar
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Get default display container for account ' . $danglingContact->account_id);
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                    . ' ' . print_r($danglingContact->toArray(), true));
+                
                 $displayCalId = Calendar_Controller_Event::getDefaultDisplayContainerId($danglingContact->account_id);
                 if ($displayCalId) {
                     // finaly repair attendee records
@@ -806,8 +813,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        // repair resources
-        foreach($danglingResourceIds as $danglingResourceId) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Processing ' . count($danglingResourceIds) . ' dangling resource ids...');
+        
+        foreach ($danglingResourceIds as $danglingResourceId) {
             $resource = $danglingResources->getById($danglingResourceId);
             if ($resource && $resource->container_id) {
                 $displayCalId = $resource->container_id;

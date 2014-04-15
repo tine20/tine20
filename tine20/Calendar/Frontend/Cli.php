@@ -41,6 +41,16 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     );
     
     /**
+     * return anonymous methods
+     * 
+     * @return array
+     */
+    public static function getAnonymousMethods()
+    {
+        return array('Calendar.repairDanglingDisplaycontainerEvents');
+    }
+    
+    /**
      * import events
      *
      * @param Zend_Console_Getopt $_opts
