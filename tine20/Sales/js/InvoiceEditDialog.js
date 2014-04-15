@@ -316,7 +316,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             },
                             editDialog: this,
                             xtype: 'tinerelationpickercombo',
-                            allowBlank: true,
+                            allowBlank: false,
                             app: 'Sales',
                             recordClass: Tine.Sales.Model.Contract,
                             relationType: 'CONTRACT',
@@ -329,7 +329,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             columnWidth: 1,
                             editDialog: this,
                             xtype: 'tinerelationpickercombo',
-                            allowBlank: true,
+                            allowBlank: false,
                             app: 'Sales',
                             recordClass: Tine.Sales.Model.Customer,
                             relationType: 'CUSTOMER',
@@ -345,6 +345,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 ref: '../../../../../../../addressPicker',
                                 columnWidth: 1,
                                 disabled: true,
+                                allowBlank: false,
                                 listeners: {
                                     scope: this,
                                     select: this.onAddressLoad.createDelegate(this)
