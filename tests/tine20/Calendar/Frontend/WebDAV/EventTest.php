@@ -420,6 +420,27 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     }
     
     /**
+     * test deleting attachment from existing event
+     */
+    public function testDeleteAttachment()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+        
+        $event = $this->createEventWithAttachment(2);
+        
+        // remove agenda.html
+        $clone = clone $event;
+        $attachments = $clone->getRecord()->attachments;
+        $attachments->removeRecord($attachments->filter('name', 'agenda.html')->getFirstRecord());
+        $event->put($clone->get());
+        
+        // assert agenda2.html exists
+        $record = $event->getRecord();
+        $this->assertEquals(1, $record->attachments->count());
+        $this->assertEquals('agenda2.html', $record->attachments->getFirstRecord()->name);
+    }
+    
+    /**
      * test updating existing event
      */
     public function testPutEventFromGenericClient()
@@ -830,5 +851,30 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         )));
         $this->assertNotNull($currentUser, 'currentUser not found in attendee');
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $currentUser->status, print_r($currentUser->toArray(), true));
+    }
+    
+    /**
+     * create event with attachment
+     *
+     * @return multitype:Ambigous <Calendar_Frontend_WebDAV_Event, Calendar_Frontend_WebDAV_Event> Ambigous <Tinebase_Model_Tree_Node, Tinebase_Record_Interface, Tinebase_Record_Abstract, NULL, unknown>
+     */
+    public function createEventWithAttachment($count=1)
+    {
+        $event = $this->testCreateEventWithInternalOrganizer();
+        
+        for ($i=1; $i<=$count; $i++) {
+            $suffix = $i>1 ? $i : '';
+            
+            $agenda = fopen("php://temp", 'r+');
+            fputs($agenda, "HELLO WORLD$suffix");
+            rewind($agenda);
+        
+            $attachmentController = Tinebase_FileSystem_RecordAttachments::getInstance();
+            $attachmentNode = $attachmentController->addRecordAttachment($event->getRecord(), "agenda{$suffix}.html", $agenda);
+        }
+    
+        $event = new Calendar_Frontend_WebDAV_Event($event->getContainer(), $event->getRecord()->getId());
+    
+        return $event;
     }
 }

@@ -71,18 +71,26 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' requestUri:' . $this->_request->getRequestUri());
         
+        self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            // NOTE inputstream can not be rewinded
-            $debugStream = fopen('php://temp','r+');
-            stream_copy_to_stream($this->_body, $debugStream);
-            rewind($debugStream);
-            $this->_body = $debugStream;
+            $contentType = self::$_server->httpRequest->getHeader('Content-Type');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType);
             
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV request\n" . stream_get_contents($this->_body));
-            rewind($this->_body);
+            if (preg_match('/^text/', $contentType)) {
+                // NOTE inputstream can not be rewinded
+                $debugStream = fopen('php://temp','r+');
+                stream_copy_to_stream($this->_body, $debugStream);
+                rewind($debugStream);
+                $this->_body = $debugStream;
+                
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV request\n" . stream_get_contents($this->_body));
+                rewind($this->_body);
+            } else {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV request\n -- BINARY DATA --");
+            }
         }
         
-        self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
         self::$_server->httpRequest->setBody($this->_body);
         
         // compute base uri
@@ -120,6 +128,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         self::$_server->addPlugin(new \Sabre\CalDAV\SharingPlugin());
         self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginAutoSchedule());
         self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginDefaultAlarms());
+        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginManagedAttachments());
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_Inverse());
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_OwnCloud());
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_PrincipalSearch());

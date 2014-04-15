@@ -299,6 +299,22 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             }
         }
         
+        $baseUrl = Tinebase_Core::getHostname() . "/webdav/Calendar/records/Calendar_Model_Event/{$event->getId()}/";
+        
+        if ($event->attachments instanceof Tinebase_Record_RecordSet) {
+            foreach ($event->attachments as $attachment) {
+                $attach = $vcalendar->createProperty('ATTACH', "{$baseUrl}{$attachment->name}", array(
+                    'MANAGED-ID' => $attachment->hash,
+                    'FMTTYPE'    => $attachment->contenttype,
+                    'SIZE'       => $attachment->size,
+                    'FILENAME'   => $attachment->name
+                ), 'TEXT');
+                
+                $vevent->add($attach);
+            }
+            
+        }
+        
         $vcalendar->add($vevent);
     }
     
@@ -486,6 +502,16 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             }
         }
     }
+    
+    /**
+     * template method
+     * 
+     * implement if client has support for sending attachments
+     * 
+     * @param Calendar_Model_Event          $event
+     * @param Tinebase_Record_RecordSet     $attachments
+     */
+    protected function _manageAttachmentsFromClient($event, $attachments) {}
     
     /**
      * convert VCALENDAR to Tinebase_Record_RecordSet of Calendar_Model_Event
@@ -721,6 +747,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vevent ' . $vevent->serialize());
         
         $newAttendees = array();
+        $attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         
         foreach ($vevent->children() as $property) {
@@ -924,6 +951,29 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     }
                     break;
                     
+                case 'ATTACH':
+                    $name = $property['FILENAME'];
+                    
+                    $managedId = $property['MANAGED-ID'];
+                    if ($managedId) {
+                        $attachment = $event->attachments->filter('hash', $property['MANAGED-ID'])->getFirstRecord();
+                        
+                        // client reuses managed id to add attachment
+                        if (! $attachment) {
+//                             @TODO: implement
+//                             Tinebase_FileSystem_RecordAttachments::getInstance()
+//                                 ->addRecordAttachment($event, $name, $attachment);
+                        }
+                        
+                        $attachments->addRecord($attachment);
+                    }
+                    
+                    // base64
+                    else {
+                        // @TODO: implement (check if add / update / update is needed)
+                    }
+                    break;
+                    
                 case 'X-MOZ-LASTACK':
                     $lastAck = $this->_convertToTinebaseDateTime($property);
                     break;
@@ -961,6 +1011,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         if (empty($event->class)) {
             $event->class = Calendar_Model_Event::CLASS_PUBLIC;
         }
+        
+        $this->_manageAttachmentsFromClient($event, $attachments);
         
         if (empty($event->dtend)) {
             // TODO find out duration (see TRIGGER DURATION)

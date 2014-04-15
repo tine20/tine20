@@ -579,6 +579,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     protected function _toiTIP($_event)
     {
         if ($_event instanceof Tinebase_Record_RecordSet) {
+            Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($_event);
             foreach ($_event as $idx => $event) {
                 try {
                     $_event[$idx] = $this->_toiTIP($event);
@@ -591,12 +592,15 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
             
             return $_event;
+        } else if ($_event->is_deleted == 0) {
+            Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($_event);
         }
         
         // get exdates
         if ($_event->getId() && $_event->rrule) {
             $_event->exdate = $this->_eventController->getRecurExceptions($_event, TRUE, $this->getEventFilter());
             $this->getAlarms($_event);
+            Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($_event->exdate->filter('is_deleted', 0));
             
             foreach ($_event->exdate as $exdate) {
                 $this->_toiTIP($exdate);

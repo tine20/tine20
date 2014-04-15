@@ -1197,7 +1197,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      * copy tempfile data to file path
      * 
      * @param  mixed   $tempFile
-         Tinebase_Model_Tree_Node     with property tempfile or stream
+         Tinebase_Model_Tree_Node     with property hash, tempfile or stream
          Tinebase_Model_Tempfile      tempfile
          string                       with tempFile id
          array                        with [id] => tempFile id (this is odd IMHO)
@@ -1222,7 +1222,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         }
         
         else if ($tempFile instanceof Tinebase_Model_Tree_Node) {
-            if (is_resource($tempFile->stream)) {
+            if (isset($tempFile->hash)) {
+                $hashFile = $this->_basePath . '/' . substr($tempFile->hash, 0, 3) . '/' . substr($tempFile->hash, 3);
+                $tempStream = fopen($hashFile, 'r');
+            } else if (is_resource($tempFile->stream)) {
                 $tempStream = $tempFile->stream;
             } else {
                 return $this->copyTempfile($tempFile->tempFile, $path);

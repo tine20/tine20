@@ -69,6 +69,38 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     }
     
     /**
+     * add attachment to event
+     * 
+     * @param string $name
+     * @param string $contentType
+     * @param stream $attachment
+     * @return string  id of attachment
+     */
+    public function addAttachment($rid, $name, $contentType, $attachment)
+    {
+        $record = $this->getRecord();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . 
+                " add attachment $name ($contentType) to event {$record->getId()}");
+        }
+        
+        $node = new Tinebase_Model_Tree_Node(array(
+            'name'         => $name,
+            'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
+            'contenttype'  => $contentType,
+            'stream'       => $attachment,
+        ), true);
+        
+        $record->attachments->addRecord($node);
+        
+        $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($record);
+        $newAttachmentNode = $this->_event->attachments->filter('name', $name)->getFirstRecord();
+        
+        return $newAttachmentNode->object_id;
+    }
+    
+    /**
      * this function creates a Calendar_Model_Event and stores it in the database
      * 
      * @todo the header handling does not belong here. It should be moved to the DAV_Server class when supported
@@ -402,13 +434,23 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
         
+        $this->update($event);
+        
+        return $this->getETag();
+    }
+    
+    /**
+     * update this node with given event
+     * 
+     * @param Calendar_Model_Event $event
+     */
+    public function update(Calendar_Model_Event $event)
+    {
         try {
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
             throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
         }
-        
-        return $this->getETag();
     }
     
     /**
@@ -476,6 +518,16 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         }
 
         return $this->_event;
+    }
+    
+    /**
+     * returns container of this event
+     *
+     * @return Tinebase_Model_Container
+     */
+    public function getContainer()
+    {
+        return $this->_container;
     }
     
     /**
