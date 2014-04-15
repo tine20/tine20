@@ -614,3 +614,9 @@ msgstr "Anzahl"
 
 msgid "Invoice Item"
 msgstr "Rechnungsposten"
+
+
+msgid "Costcenter"
+msgid_plural "Costcenters"
+msgstr[0] "Kostenstelle"
+msgstr[1] "Kostenstellen"

@@ -690,3 +690,7 @@ msgstr ""
 msgid "Invoice Item"
 msgstr ""
 
+msgid "Costcenter"
+msgid_plural "Costcenters"
+msgstr[0] ""
+msgstr[1] ""
