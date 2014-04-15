@@ -120,11 +120,11 @@ msgid "How often should Felamimail check for new Emails (in minutes)."
 msgstr ""
 
 #: Preference.php:114
-msgid "Use for mailto links"
+msgid "Use in Addressbook"
 msgstr ""
 
 #: Preference.php:115
-msgid "Use Felamimail in mailto links, otherwise use the default desktop client."
+msgid "Compose Emails from the Addressbook with Felamimail."
 msgstr ""
 
 #: Preference.php:118
