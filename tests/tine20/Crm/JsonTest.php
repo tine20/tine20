@@ -576,7 +576,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/Filemanager/files/test.txt');
         
         $lead = $this->_getLead()->toArray();
-        $lead['attachments'] = array(array('tempFile' => array('id' => $tempFile->getId())));
+        $lead['attachments'] = array(array('tempFile' => $tempFile->toArray()));
         
         $savedLead = $this->_instance->saveLead($lead);
         // add path to files to remove
