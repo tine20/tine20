@@ -130,9 +130,12 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      */
     public function getApplicationPreferenceDefaults($_preferenceName, $_accountId = NULL, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Get default value for ' . $_preferenceName . ' of account id '. $_accountId);
+        
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
-        switch($_preferenceName) {
+        switch ($_preferenceName) {
             case self::DAYSVIEW_STARTTIME:
                 $doc = new DomDocument('1.0');
                 $options = $doc->createElement('options');
