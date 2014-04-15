@@ -42,7 +42,7 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
         'recurid',
         'is_all_day_event',
         #'rrule_until',
-        'originator_tz'
+        'originator_tz',
     );
     
     /**
@@ -66,5 +66,16 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
         }
         
         return $newAttendee;
+    }
+    
+    /**
+     * iCal supports manged attachments
+     *
+     * @param Calendar_Model_Event          $event
+     * @param Tinebase_Record_RecordSet     $attachments
+     */
+    protected function _manageAttachmentsFromClient($event, $attachments)
+    {
+        $event->attachments = $attachments;
     }
 }
