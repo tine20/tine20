@@ -16,8 +16,22 @@
  * @package     Sales
  * @subpackage  Controller
  */
-class Sales_Controller_OrderConfirmation extends Tinebase_Controller_Record_Abstract
+class Sales_Controller_OrderConfirmation extends Sales_Controller_NumberableAbstract
 {
+    /**
+     * the number gets prefixed zeros until this amount of chars is reached
+     *
+     * @var integer
+     */
+    protected $_numberZerofill = 6;
+    
+    /**
+     * the prefix for the invoice
+     *
+     * @var string
+     */
+    protected $_numberPrefix = 'AB-';
+    
     /**
      * check for container ACLs
      *
@@ -44,6 +58,32 @@ class Sales_Controller_OrderConfirmation extends Tinebase_Controller_Record_Abst
      */
     private function __clone()
     {
+    }
+    
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        if ($_record->number != $_oldRecord->number) {
+            $this->_setNextNumber($_record);
+        }
+    }
+    
+    
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        $this->_setNextNumber($_record);
     }
     
     /**

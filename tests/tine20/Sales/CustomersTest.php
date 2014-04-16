@@ -217,4 +217,28 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         
         $json->getCustomer($retVal['id']);
     }
+    
+    /**
+     * checks if the number is always set to the correct value
+     */
+    public function testNumberable()
+    {
+        $controller = Sales_Controller_Customer::getInstance();
+    
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto1')));
+    
+        $this->assertEquals(1, $record->number);
+    
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto2')));
+    
+        $this->assertEquals(2, $record->number);
+    
+        // set number to 4, should return the formatted number
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'manu1', 'number' => 4)));
+        $this->assertEquals(4, $record->number);
+    
+        // the next number should be a number after the manual number
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto3')));
+        $this->assertEquals(5, $record->number);
+    }
 }

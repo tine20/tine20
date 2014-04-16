@@ -183,6 +183,5 @@ abstract class Sales_Controller_NumberableAbstract extends Tinebase_Controller_R
         $record->{$this->_numberProperty} = ($this->_numberPrefix ? $this->_numberPrefix : '') . ($this->_numberZerofill 
             ? str_pad((string) $record->{$this->_numberProperty}, $this->_numberZerofill, '0', STR_PAD_LEFT) 
             : $record->{$this->_numberProperty});
-        
     }
 }

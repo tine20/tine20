@@ -103,19 +103,19 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $contract1 = Sales_Controller_Contract::getInstance()->create($contract1);
         $contract2 = Sales_Controller_Contract::getInstance()->create($contract2);
         
-        // peter, bob, laura, lisa
+        // bob, laura, lisa, ...
         list($contact1, $contact2, $contact3, $contact4) = $this->_createContacts();
         
         // add contact2 as customer relation to contract2
         $this->_setContractRelations($contract2, array($contact2), 'CUSTOMER');
 
-        $ids = array($contract1->id, $contract2->id);
+        $contract1and2Ids = array($contract1->id, $contract2->id);
 
         $tbJson = new Tinebase_Frontend_Json();
         // add Responsible contact1 to both contracts
         $response = $tbJson->updateMultipleRecords('Sales', 'Contract',
             array(array('name' => '%RESPONSIBLE-Addressbook_Model_Contact', 'value' => $contact1->getId())),
-            array(array('field' => 'id', 'operator' => 'in', 'value' => $ids))
+            array(array('field' => 'id', 'operator' => 'in', 'value' => $contract1and2Ids))
         );
 
         $this->assertEquals(2, count($response['results']));
@@ -143,7 +143,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
                 array('name' => '%CUSTOMER-Addressbook_Model_Contact', 'value' => $contact3->getId()),
                 array('name' => '%RESPONSIBLE-Addressbook_Model_Contact', 'value' => $contact4->getId())
                 ),
-            array(array('field' => 'id', 'operator' => 'in', 'value' => $ids))
+            array(array('field' => 'id', 'operator' => 'in', 'value' => $contract1and2Ids))
         );
         $this->assertEquals(count($response['results']), 2);
         
@@ -156,7 +156,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         // remove customer
         $response = $tbJson->updateMultipleRecords('Sales', 'Contract',
             array(array('name' => '%CUSTOMER-Addressbook_Model_Contact', 'value' => '')),
-            array(array('field' => 'id', 'operator' => 'in', 'value' => $ids))
+            array(array('field' => 'id', 'operator' => 'in', 'value' => $contract1and2Ids))
         );
         
         $this->assertEquals(2, count($response['results']));

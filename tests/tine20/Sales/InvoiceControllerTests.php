@@ -140,6 +140,18 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         // should contain billeachquarter & billhalfyearly
         $this->assertEquals($year + 1 . '-01-01 00:00:00', $c4IsArray[4]->toString());
         $this->assertEquals($year + 1 . '-06-30 23:59:59', $c4IeArray[4]->toString());
+        
+        $invoice = $customer1Invoices->getFirstRecord();
+        $invoice->cleared = 'CLEARED';
+        $invoice = $c->update($invoice);
+        
+        $this->assertEquals("R-000001", $invoice->number);
+        
+        $invoice = $customer2Invoices->getFirstRecord();
+        $invoice->cleared = 'CLEARED';
+        $invoice = $c->update($invoice);
+        
+        $this->assertEquals("R-000002", $invoice->number);
     }
     
     public function testGetBillableContracts()
