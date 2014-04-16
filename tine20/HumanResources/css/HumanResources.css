@@ -31,6 +31,10 @@
     background-image:url(../../images/oxygen/32x32/apps/ksudoku.png) !important;
 }
 
+.action_create_accounts {
+    background-image:url(../../images/oxygen/22x22/actions/games-solve.png) !important;
+}
+
 .applyContactData {
         height:14px!important;
         width: 14px!important;
