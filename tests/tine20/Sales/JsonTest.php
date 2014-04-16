@@ -163,7 +163,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         
         $contract1res = $this->_instance->getContract($contract1->getId());
         $contract2res = $this->_instance->getContract($contract2->getId());
-
+        
         $this->assertEquals(1, count($contract1res['relations']));
         $this->assertEquals(1, count($contract2res['relations']));
     }
