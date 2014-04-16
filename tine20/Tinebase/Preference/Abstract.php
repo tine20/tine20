@@ -284,16 +284,22 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     public function getValueForUser($_preferenceName, $_accountId, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Get value for ' . $_preferenceName . ' of account id '. $_accountId . ' / ' . $_accountType);
+        
         $queryResult = $this->_getPrefs($_preferenceName, $_accountId, $_accountType);
-
-        if (!$queryResult) {
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' ' . print_r($queryResult, true));
+        
+        if (! $queryResult) {
             $pref = $this->getApplicationPreferenceDefaults($_preferenceName, $_accountId, $_accountType);
         } else {
             $pref = $this->_getMatchingPreference($this->_rawDataToRecordSet($queryResult));
         }
-
+        
         $result = $pref->value;
-
+        
         return $result;
     }
 
@@ -669,7 +675,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
 
         // add options and perhaps value from default preference
-        if ($result->type !== Tinebase_Model_Preference::TYPE_DEFAULT) {
+        if ($result->type !== Tinebase_Model_Preference::TYPE_DEFAULT && is_object(Tinebase_Core::getUser())) {
             $defaultPref = $this->_getDefaultPreference($result->name, $_preferences);
             $result->options = $defaultPref->options;
         }
@@ -810,6 +816,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param Tinebase_Model_Preference $_preference
      * @param string|Tinebase_Model_User $_accountId
      * @param string $_appName
+     * @param string $_optionName
      */
     protected function _getDefaultContainerPreferenceDefaults(Tinebase_Model_Preference $_preference, $_accountId, $_appName = NULL, $_optionName = self::DEFAULTCONTAINER_OPTIONS)
     {

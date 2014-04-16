@@ -64,13 +64,18 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     /**
      * get temp file description from db
      *
-     * @param string $_fileId
+     * @param mixed $_fileId
      * @return Tinebase_Model_TempFile
      */
     public function getTempFile($_fileId)
     {
+        $fileId = is_array($_fileId) ? $_fileId['id'] : $_fileId;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Fetching temp file with id " . print_r($fileId, true));
+        
         $select = $this->_getSelect('*');
-        $select->where($this->_db->quoteIdentifier('id') . ' = ?', $_fileId)
+        $select->where($this->_db->quoteIdentifier('id') . ' = ?', $fileId)
                ->where($this->_db->quoteIdentifier('session_id') . ' = ?', $this->_getSessionId());
 
         $stmt = $this->_db->query($select);
@@ -78,7 +83,8 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         $stmt->closeCursor();
         
         if (!$queryResult) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Could not fetch row with id $_fileId from temp_files table.");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Could not fetch row with id $fileId from temp_files table.");
             return NULL;
         }
 

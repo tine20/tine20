@@ -132,7 +132,8 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
             $this->minutes_before = self::OPTION_CUSTOM;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' result: ' . $this->minutes_before);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Result: ' . $this->minutes_before);
     }
     
     /**
