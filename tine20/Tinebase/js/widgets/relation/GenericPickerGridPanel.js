@@ -87,9 +87,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     keyFieldConfigs: null,
     /**
      * constrains config
-     * @type {Object} constrainsConfig
+     * @type {Object} constraintsConfig
      */
-    constrainsConfig: null,
+    constraintsConfig: null,
     /* config */
     frame: true,
     border: true,
@@ -141,7 +141,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         this.contextMenuItems = [this.actionEditInNewWindow];
         // preparing keyfield and constrains configs
         this.keyFieldConfigs = {};
-        this.constrainsConfig = {};
+        this.constraintsConfig = {};
         
         Ext.each(this.app.getRegistry().get('relatableModels'), function(rel) {
             if (rel.ownModel == this.ownRecordClass.getMeta('modelName')) {
@@ -153,7 +153,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                     }
                 }
                 if (rel.config) {
-                    this.constrainsConfig[rel.relatedApp + rel.relatedModel] = rel.config;
+                    this.constraintsConfig[rel.relatedApp + rel.relatedModel] = rel.config;
                 }
             }
         }, this);
@@ -478,8 +478,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         switch (o.field) {
             case 'type':
                 var editor = null;
-                if (this.constrainsConfig[app+model]) {
-                    editor = this.getTypeEditor(this.constrainsConfig[app+model], this.app);
+                if (this.constraintsConfig[app+model]) {
+                    editor = this.getTypeEditor(this.constraintsConfig[app+model], this.app);
                 } else if (this.keyFieldConfigs[app+model]) {
                     editor = new Tine.Tinebase.widgets.keyfield.ComboBox({
                         app: app,
@@ -523,7 +523,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             displayField: 'value',
             valueField: 'id',
             mode: 'local',
-            constrainsConfig: config,
+            constraintsConfig: config,
             listeners: {
                 scope: this,
                 select: this.onTypeChange
@@ -660,8 +660,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var f = rec.get('related_model').split('_Model_').join('');
 
         var renderer = Ext.util.Format.htmlEncode;
-        if (this.constrainsConfig[f]) {
-            Ext.each(this.constrainsConfig[f], function(c){
+        if (this.constraintsConfig[f]) {
+            Ext.each(this.constraintsConfig[f], function(c){
                 if(c.type == value) value = this.app.i18n._hidden(c.text);
             }, this);
         } else if(this.keyFieldConfigs[o]) {
@@ -696,8 +696,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             return;
         }
         
-        if (Ext.isArray(this.constrainsConfig[this.activeModel])) {
-            var relconf = {type: this.constrainsConfig[this.activeModel][0]['type']};
+        if (Ext.isArray(this.constraintsConfig[this.activeModel])) {
+            var relconf = {type: this.constraintsConfig[this.activeModel][0]['type']};
         } else {
             var relconf = {};
         }
@@ -729,9 +729,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             var app = rc.getMeta('appName'), model = rc.getMeta('modelName'), f = app + model;
             var type = '';
             
-            if (this.constrainsConfig[f] && this.constrainsConfig[f].length) {
+            if (this.constraintsConfig[f] && this.constraintsConfig[f].length) {
                 // per default the first defined type is used
-                var type = this.constrainsConfig[f][0].type;
+                var type = this.constraintsConfig[f][0].type;
             }
             
             var rc = this.getActiveSearchCombo().recordClass,
@@ -751,10 +751,10 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             
             var mySideValid = true;
             
-            if (this.constrainsConfig[f]) {
-                if (this.constrainsConfig[f].length) {
+            if (this.constraintsConfig[f]) {
+                if (this.constraintsConfig[f].length) {
                     // per default the first defined type is used
-                    var type = this.constrainsConfig[f][0].type;
+                    var type = this.constraintsConfig[f][0].type;
                 }
                 // validate constrains config from own side
                 mySideValid = this.checkLocalConstraints(appName, model, relationRecord, type);
@@ -835,17 +835,17 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     /**
      * validates the constrains of the related record after fetching relations
      * 
-     * @param {Object} constrainsConfig
+     * @param {Object} constraintsConfig
      * @param {Tine.Tinebase.Model.Relation} relationRecord
      * @param {String} relatedAppName
      * @param {String} relatedModelName
      * @param {Tine.Tinebase.data.Record} record
      */
-    onValidateRelatedConstrainsConfig: function(constrainsConfig, relationRecord, relatedAppName, relatedModelName, record) {
+    onValidateRelatedConstrainsConfig: function(constraintsConfig, relationRecord, relatedAppName, relatedModelName, record) {
         
         var invalid = false;
         
-        Ext.each(constrainsConfig, function(conf) {
+        Ext.each(constraintsConfig, function(conf) {
         
             if (conf.hasOwnProperty('max') && conf.max > 0 && (conf.type == relationRecord.get('type'))) {
                 var rr = record.get('relations'),
@@ -964,7 +964,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             model = model[1];
             
             // check constrains from own_record side
-            if (this.constrainsConfig[app + model]) {
+            if (this.constraintsConfig[app + model]) {
                 this.checkLocalConstraints(app, model, o.record, o.value, o.originalValue);
             }
             
@@ -996,7 +996,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var retVal = true;
         
         this.view.invalidRowRecords.remove(checkRecord.get('id'));
-        Ext.each(this.constrainsConfig[app + model], function(conf) {
+        Ext.each(this.constraintsConfig[app + model], function(conf) {
             // check new value
             if (conf.max && conf.max > 0 && (conf.type == type)) {
                 var resNew = this.store.queryBy(function(record, id) {
@@ -1040,24 +1040,27 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     checkOldValidations: function(app, model, checkRecord, type) {
         // check old value if given
-        var configs = this.constrainsConfig[app + model];
+        var configs = this.constraintsConfig[app + model];
         
-        for (var index = 0; index < configs.length; index++) {
-            var conf = configs[index];
-            if (conf.hasOwnProperty('max') && conf.max > 0 && (conf.type == type)) {
-                var resOld = this.store.queryBy(function(record, id) {
-                    if ((type == record.get('type')) && (record.get('related_model') == (app + '_Model_' + model))) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }, this);
-                
-                if ((resOld.getCount() - 1) <= conf.max) {
-                    resOld.each(function(item) {
-                        this.view.invalidRowRecords.remove(item.id);
+        if (configs) {
+            for (var index = 0; index < configs.length; index++) {
+                var conf = configs[index];
+                if (conf.hasOwnProperty('max') && conf.max > 0 && (conf.type == type)) {
+                    var resOld = this.store.queryBy(function(record, id) {
+                        if ((type == record.get('type')) && (record.get('related_model') == (app + '_Model_' + model))) {
+                            return true;
+                        } else {
+                            return false;
+                        }
                     }, this);
+                    
+                    if (this.view.hasOwnProperty('invalidRowRecords') && Ext.isArray(this.view.invalidRowRecords)) {
+                        if ((resOld.getCount() - 1) <= conf.max) {
+                            resOld.each(function(item) {
+                                this.view.invalidRowRecords.remove(item.id);
+                            }, this);
+                        }
+                    }
                 }
             }
         }
