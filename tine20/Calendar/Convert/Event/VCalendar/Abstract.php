@@ -207,6 +207,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         }
         
         // categories
+        if (!isset($event->tags)) {
+            $event->tags = Tinebase_Tags::getInstance()->getTagsOfRecord($event);
+        }
         if(isset($event->tags) && count($event->tags) > 0) {
             $vevent->add('CATEGORIES', (array) $event->tags->name);
         }
@@ -979,7 +982,12 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                     
                 case 'CATEGORIES':
-                    $event->tags = Tinebase_Model_Tag::resolveTagNameToTag($property->getParts(), 'Calendar');
+                    $tags = Tinebase_Model_Tag::resolveTagNameToTag($property->getParts(), 'Calendar');
+                    if (! isset($event->tags)) {
+                        $event->tags = $tags;
+                    } else {
+                        $event->tags->merge($tags);
+                    }
                     break;
                     
                 case 'X-MOZ-LASTACK':

@@ -120,7 +120,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     break;
                     
                 case 'CATEGORIES':
-                    $data['tags'] = Tinebase_Model_Tag::resolveTagNameToTag($property->getParts(), 'Addressbook');
+                    $tags = Tinebase_Model_Tag::resolveTagNameToTag($property->getParts(), 'Addressbook');
+                    if (! isset($data['tags'])) {
+                        $data['tags'] = $tags;
+                    } else {
+                        $data['tags']->merge($tags);
+                    }
                     break;
                     
                 case 'EMAIL':
