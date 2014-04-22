@@ -879,6 +879,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             'visibility'     => Tinebase_Model_Group::VISIBILITY_HIDDEN
         ));
         $hiddenGroup = Admin_Controller_Group::getInstance()->create($hiddenGroup);
+        $this->_groupIdsToDelete[] = $hiddenGroup->getId();
         
         $filter = array(array(
             'field'    => 'attender',

@@ -88,15 +88,11 @@ class Tinebase_WebDav_PrincipalBackendTest extends PHPUnit_Framework_TestCase
     
     public function testSearchPrincipals()
     {
-        $uris = $this->_backend->searchPrincipals('principals/users/', array('{http://sabredav.org/ns}email-address' => Tinebase_Core::getUser()->accountEmailAddress));
+        $uris = $this->_backend->searchPrincipals('principals/users/', array(
+            '{http://sabredav.org/ns}email-address' => Tinebase_Core::getUser()->accountEmailAddress
+        ));
         
-        //var_dump($uris);
-        
-        $this->assertEquals(1, count($uris));
+        $this->assertEquals(1, count($uris), 'could not find user by email address ' . Tinebase_Core::getUser()->accountEmailAddress);
         $this->assertContains('principals/users/' . Tinebase_Core::getUser()->contact_id, $uris);
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_WebDav_PrincipalBackendTest::main') {
-    Tinebase_WebDav_PrincipalBackendTest::main();
 }

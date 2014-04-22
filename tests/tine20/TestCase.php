@@ -156,4 +156,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_EDIT
         )->getFirstRecord();
     }
+
+    /**
+     * get test mail domain
+     * 
+     * @return string
+     */
+    protected function _getMailDomain()
+    {
+        $testconfig = Zend_Registry::get('testConfig');
+        return ($testconfig && isset($testconfig->maildomain)) ? $testconfig->maildomain : 'tine20.org';
+    }
 }

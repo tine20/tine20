@@ -171,6 +171,10 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
                 $group   = Tinebase_Group::getInstance()->getGroupByName('Users');
                 $groupId = $group->getId();
+                
+                // TODO think about fetching this from IMAP config
+                $testconfig = Zend_Registry::get('testConfig');
+                $emailDomain = ($testconfig && isset($testconfig->maildomain)) ? $testconfig->maildomain : 'tine20.org';
 
                 $user = new Tinebase_Model_FullUser(array(
                     'accountLoginName'      => $login,
@@ -179,8 +183,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'accountLastName'       => $last,
                     'accountFirstName'      => $given,
                     'accountFullName'       => $fullName,
-                    //'accountEmailAddress'   => $login . '@tine-publications.co.uk',
-                    'accountEmailAddress'   => $login . '@tine20.org'
+                    'accountEmailAddress'   => $login . '@' . $emailDomain,
                 ));
 
                 if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
@@ -205,7 +208,6 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
                 // give additional testusers the same password as the primary test account
                 try {
-                    $testconfig = Zend_Registry::get('testConfig');
                     Tinebase_User::getInstance()->setPassword($user, $testconfig->password);
                 } catch (Zend_Exception $e) {
                     Tinebase_User::getInstance()->setPassword($user, static::$_defaultPassword);
