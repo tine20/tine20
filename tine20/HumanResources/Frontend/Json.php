@@ -614,4 +614,21 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $data[$ci::VACATION_EXPIRES] = $ci->get($ci::VACATION_EXPIRES);
         return $data;
     }
+    
+    /**
+     * 
+     * @param integer $year
+     */
+    public function createMissingAccounts($year = NULL)
+    {
+        $year = intval($year);
+        
+        if ($year < 2006 || $year >= 2106 || ! is_int($year)) {
+            throw new HumanResources_Exception_NeedsYear();
+        }
+        
+        $results = HumanResources_Controller_Account::getInstance()->createMissingAccounts($year);
+        
+        return array('success' => TRUE, 'year' => $year, 'totalcount' => $results->count(), 'results' => $results->toArray());
+    }
 }

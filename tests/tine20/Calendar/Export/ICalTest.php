@@ -4,15 +4,10 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Calendar_ICalTests
@@ -129,18 +124,22 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
         $this->assertEquals(2, preg_match_all('/BEGIN:VEVENT\r\n/', $ics, $matches), 'There should be exactly 2 VEVENT compontents');
     }
     
+    /**
+     * testExportOrganizer
+     */
     public function testExportOrganizer()
     {
         $this->_testEvent->organizer = array_value('pwulf', Zend_Registry::get('personas'))->contact_id;
         
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($this->_testEvent);
-//        echo $ics;
-
-        // assert organizer
-        $this->assertEquals(1, preg_match("/ORGANIZER;CN=\"Wulf, Paul\":mailto:pwulf@tine20.org\r\n/", $ics), 'ORGANIZER missing/broken');
+        
+        $this->assertEquals(1, preg_match("/ORGANIZER;CN=\"Wulf, Paul\":mailto:pwulf@" . $this->_getMailDomain() . "\r\n/", $ics), 'ORGANIZER missing/broken');
     }
     
+    /**
+     * testExportAttendee
+     */
     public function testExportAttendee()
     {
         $this->_testEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
@@ -154,10 +153,8 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
         
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($this->_testEvent);
-//        echo $ics;
-
-        // assert organizer
-        $this->assertEquals(1, preg_match("/ATTENDEE;CN=\"Wulf, Paul\";CUTYPE=INDIVIDUAL;EMAIL=pwulf@tine20.org;PARTSTAT=\r\n ACCEPTED;ROLE=REQ-PARTICIPANT;RSVP=FALSE:mailto:pwulf@tine20.org\r\n/", $ics), 'ATTENDEE missing/broken');
+        
+        $this->assertContains("ATTENDEE;CN=\"Wulf, Paul\";CUTYPE=INDIVIDUAL;EMAIL=pwulf@" . $this->_getMailDomain(), (string) $ics, 'ATTENDEE missing/broken');
     }
     
     public function testExportAlarm()

@@ -9,11 +9,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Calendar_Controller_EventNotifications
  * 
  * @package     Calendar
@@ -994,8 +989,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     
         // create alarm reminder/snooze exception
         Calendar_Controller_EventNotificationsTests::flushMailer();
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../Import/files/apple_ical_remind_part2.ics', 'r');
-        $event->put($vcalendarStream);
+        $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../Import/files/apple_ical_remind_part2.ics');
+        $event->put($vcalendar);
     
         // assert no reschedule mail
         $messages = Calendar_Controller_EventNotificationsTests::getMessages();
@@ -1124,6 +1119,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         foreach (explode(',', $_personas) as $personaName) {
             $mailsForPersona = array();
+            $otherRecipients = array();
             $personaEmail = strstr($personaName, '@') ? 
                 $personaName : 
                 $this->_getPersona(trim($personaName))->accountEmailAddress;
@@ -1131,13 +1127,15 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             foreach ($messages as $message) {
                 if (array_value(0, $message->getRecipients()) == $personaEmail) {
                     array_push($mailsForPersona, $message);
+                } else {
+                    array_push($otherRecipients, $message->getRecipients());
                 }
             }
             
             if (! $_assertString) {
                 $this->assertEquals(0, count($mailsForPersona), 'No mail should be send for '. $personaName);
             } else {
-                $this->assertEquals(1, count($mailsForPersona), 'One mail should be send for '. $personaName);
+                $this->assertEquals(1, count($mailsForPersona), 'One mail should be send for '. $personaName . ' other recipients: ' . print_r($otherRecipients, true));
                 $this->assertEquals('UTF-8', $mailsForPersona[0]->getCharset());
                 
                 switch ($_location) {

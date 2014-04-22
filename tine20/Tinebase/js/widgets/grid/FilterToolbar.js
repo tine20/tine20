@@ -78,6 +78,13 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     showSearchButton: true,
     
+    /**
+     * define if the filters should be sorted by the "sort" field.
+     * 
+     * @type {Boolean}
+     */
+    customFilterSorting: false,
+    
     filterFieldWidth: 240,
     filterValueWidth: 200,
     
@@ -656,10 +663,13 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         // init filter selection
         this.fieldStore = new Ext.data.JsonStore({
-            fields: ['field', 'label'],
+            fields: this.customFilterSorting ? ['field', 'label', 'sort'] : ['field', 'label'],
             data: filtersFields,
             remoteSort: false,
-            sortInfo: {
+            sortInfo: this.customFilterSorting ? {
+                field: 'sort',
+                direction: 'ASC'
+            } : {
                 field: 'label',
                 direction: 'ASC'
             }

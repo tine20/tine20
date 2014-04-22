@@ -117,8 +117,8 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     protected static $_relatableConfig = array(
         // a lead may have one responsible and/or one customer
         array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
-            array('type' => 'RESPONSIBLE', 'degree' => 'parent', 'text' => 'Responsible', 'max' => '1:0'), // _('Responsible')
-            array('type' => 'CUSTOMER', 'degree' => 'parent', 'text' => 'Customer', 'max' => '1:0'),  // _('Customer')
+            array('type' => 'RESPONSIBLE', 'degree' => 'parent', 'text' => 'Responsible', 'max' => '0:0'), // _('Responsible')
+            array('type' => 'CUSTOMER', 'degree' => 'parent', 'text' => 'Customer', 'max' => '0:0'),  // _('Customer')
             ),
             'default' => array('type' => 'CUSTOMER', 'own_degree' => 'parent')
         ),

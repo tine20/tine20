@@ -54,6 +54,12 @@ class Calendar_Export_Ical
         
     }
     
+    /**
+     * eventToIcal
+     * 
+     * @param Tinebase_Record_RecordSet|Calendar_Model_Event $_event
+     * @return qCal_Component_Vcalendar
+     */
     public function eventToIcal($_event)
     {
         if ($_event instanceof Tinebase_Record_RecordSet) {

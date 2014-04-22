@@ -34,11 +34,64 @@ Tine.HumanResources.AccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             allowMultiple: true,
             handler: this.bookRemaining.createDelegate(this)
         });
+        
         this.contextMenuItems = [this.actions_bookVacation];
         
         Tine.HumanResources.AccountGridPanel.superclass.initComponent.call(this);
         this.action_addInNewWindow.hide();
         this.action_deleteRecord.hide();
+    },
+    
+    createMissingAccounts: function() {
+        Ext.Msg.prompt(this.app.i18n._('Year'), this.app.i18n._('Please enter the year you want to create accounts for:'), function(btn, year) {
+            if (btn == 'ok') {
+                Ext.Ajax.request({
+                    url : 'index.php',
+                    timeout: 60000*5,
+                    params : { method : 'HumanResources.createMissingAccounts', year: year},
+                    success : function(_result, _request) {
+                        this.onAccountCreateSuccess(Ext.decode(_result.responseText));
+                    },
+                    failure : function(exception) {
+                        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                    },
+                    scope: this
+                });
+            }
+        }, this);
+    },
+    
+    onAccountCreateSuccess: function(data) {
+        Ext.MessageBox.show({
+            buttons: Ext.Msg.OK,
+            icon: Ext.MessageBox.INFO,
+            title: this.app.i18n._('Accounts has been created'), 
+            msg: String.format(this.app.i18n._('{0} accounts for the year {1} has been created successfully!'), data.totalcount, data.year)
+        });
+    },
+    
+    /**
+     * returns additional toobar items
+     * 
+     * @return {Array} of Ext.Action
+     */
+    getActionToolbarItems: function() {
+        this.actions_createAccounts = new Ext.Action({
+            text: this.app.i18n._('Create new accounts'),
+            iconCls: 'action_create_accounts',
+            allowMultiple: true,
+            handler: this.createMissingAccounts.createDelegate(this)
+        });
+        
+        var button = Ext.apply(new Ext.Button(this.actions_createAccounts), {
+            scale: 'medium',
+            rowspan: 2,
+            iconAlign: 'top'
+        });
+        
+        var additionalActions = [this.actions_exportIPAggregate];
+        this.actionUpdater.addActions(additionalActions);
+        return [button];
     },
     
     /**

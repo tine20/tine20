@@ -44,6 +44,7 @@ Tine.HumanResources.handleRequestException = function(exception, callback, callb
         case 914: // HumanResources_Exception_NoAccount
         case 915: // HumanResources_Exception_ContractOverlap
         case 916: // HumanResources_Exception_ContractDates
+        case 917: // HumanResources_Exception_NeedsYear
             Ext.MessageBox.show(defaults);
             break;
         // return false will the generic exceptionhandler handle the caught exception

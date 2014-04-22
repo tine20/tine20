@@ -219,7 +219,15 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {Number} count
      */
     updateTitle: function(count) {
-        count = Ext.isNumber(count) ? count : this.store.getCount();
+        if (! Ext.isNumber(count)) {
+            count = 0;
+            this.store.each(function(record){
+                if (this.ignoreRelatedModels.indexOf(record.get('related_model')) == -1) {
+                    count++;
+                }
+            }, this);
+        }
+        
         this.setTitle(this.i18nTitle + ' (' + count + ')');
     },
     
@@ -1128,12 +1136,11 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var interceptor = ticketFn();
         var relations = record.get('relations');
         if (relations && relations.length > 0) {
-            this.updateTitle(relations.length);
             var relationRecords = [];
             
             Ext.each(relations, function(relation) {
-                if(this.ignoreRelatedModels) {
-                    if(relation.hasOwnProperty('related_model') && this.ignoreRelatedModels.indexOf(relation.related_model) == -1) {
+                if (this.ignoreRelatedModels) {
+                    if (relation.hasOwnProperty('related_model') && this.ignoreRelatedModels.indexOf(relation.related_model) == -1) {
                         relationRecords.push(new Tine.Tinebase.Model.Relation(relation, relation.id));
                     }
                 } else {
@@ -1144,7 +1151,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             
             // sort by creation time
             this.store.sort('creation_time', 'DESC');
-            
+            this.updateTitle();
         } else {
             this.updateTitle(0);
         }

@@ -60,7 +60,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
             'start_date'        => array(
                 'label'      => 'Start Date',    // _('Start Date')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'type'       => 'date',
+                'type'       => 'datetime',
                 'sortable'   => FALSE,
                  'default'    => 'now',
                  'showInDetailsPanel' => TRUE
@@ -69,7 +69,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'label'   => 'End Date',    // _('End Date')
-                'type'    => 'date',
+                'type'    => 'datetime',
                 'sortable'   => FALSE,
                 'showInDetailsPanel' => TRUE
             ),

@@ -36,6 +36,8 @@ Tine.Felamimail.sieve.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterT
     showSearchButton: false,
     filterFieldWidth: 160,
     
+    customFilterSorting: true,
+    
     // unused fn
     onFiltertrigger: Ext.emptyFn,
     
@@ -66,16 +68,15 @@ Tine.Felamimail.sieve.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterT
  */
 Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel = function(app) {
     return [
-        {label: app.i18n._('From (Email)'),     field: 'from',     operators: ['contains', 'regex'], emptyText: 'test@example.org'},
-        {label: app.i18n._('From (Email and Name)'), field: 'fromheader',     operators: ['contains', 'regex'], emptyText: 'name or email'},
-        {label: app.i18n._('To (Email)'),       field: 'to',       operators: ['contains', 'regex'], emptyText: 'test@example.org'},
-        {label: app.i18n._('To (Email CC)'),    field: 'cc',       operators: ['contains', 'regex'], emptyText: 'test@example.org'},
-        {label: app.i18n._('To (Email BCC)'),   field: 'bcc',       operators: ['contains', 'regex'], emptyText: 'test@example.org'},
-        {label: app.i18n._('Subject'),          field: 'subject',  operators: ['contains', 'regex'], emptyText: app.i18n._('Subject')},
-        {label: app.i18n._('Size'),             field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'},
-        {label: app.i18n._('Header contains'),  field: 'header',   operators: ['freeform'], defaultOperator: 'freeform', 
+        {sort: 10, label: app.i18n._('From (Email)'),     field: 'from',     operators: ['contains', 'regex'], emptyText: 'test@example.org'},
+        {sort: 20, label: app.i18n._('From (Email and Name)'), field: 'fromheader',     operators: ['contains', 'regex'], emptyText: 'name or email'},
+        {sort: 30, label: app.i18n._('To (Email)'),       field: 'to',       operators: ['contains', 'regex'], emptyText: 'test@example.org'},
+        {sort: 40, label: app.i18n._('To (Email CC)'),    field: 'cc',       operators: ['contains', 'regex'], emptyText: 'test@example.org'},
+        {sort: 50, label: app.i18n._('Subject'),          field: 'subject',  operators: ['contains', 'regex'], emptyText: app.i18n._('Subject')},
+        {sort: 60, label: app.i18n._('Size'),             field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'},
+        {sort: 70, label: app.i18n._('Header contains'),  field: 'header',   operators: ['freeform'], defaultOperator: 'freeform', 
             emptyTextOperator: app.i18n._('Header name'), emptyText: app.i18n._('Header value')},
-        {label: app.i18n._('Header regex'),     field: 'headerregex',   operators: ['freeform'], defaultOperator: 'freeform',
+        {sort: 80, label: app.i18n._('Header regex'),     field: 'headerregex',   operators: ['freeform'], defaultOperator: 'freeform',
             emptyTextOperator: app.i18n._('Header name'), emptyText: app.i18n._('Header value')}
     ];
 };

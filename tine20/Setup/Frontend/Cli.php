@@ -412,15 +412,19 @@ class Setup_Frontend_Cli
     protected function _getConfig(Zend_Console_Getopt $_opts)
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
+        $config = Tinebase_Config_Abstract::factory($applicationName);
+        
         $errors = array();
         if (empty($options['configkey'])) {
             $errors[] = 'Missing argument: configkey';
+            $errors[] = 'Available config settings:';
+            $errors[] = print_r($config::getProperties(), true);
         }
         $configKey = (string)$options['configkey'];
-        $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
         
         if (empty($errors)) {
-            $value = Tinebase_Config_Abstract::factory($applicationName)->get($configKey);
+            $value = $config->get($configKey);
             $value = is_string($value) ? $value : Zend_Json::encode($value);
             echo $value . " \n";
         } else {

@@ -733,6 +733,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
                 '/unittest@tine20.org/',
                 '/unittest@ti\n ne20.org/',
                 '/pwulf\n @tine20.org/',
+                '/sclever@tine20.org/',
             ), 
             array(
                 $unittestUserEmail,
@@ -741,6 +742,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
                 $unittestUserEmail,
                 $unittestUserEmail,
                 array_value('pwulf', Zend_Registry::get('personas'))->accountEmailAddress,
+                array_value('sclever', Zend_Registry::get('personas'))->accountEmailAddress,
             ), 
             $vcalendar
         );

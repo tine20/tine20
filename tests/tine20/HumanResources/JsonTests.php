@@ -780,4 +780,37 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             
             $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
     }
+    
+    /**
+     * test contract dates on update dependent
+     * must not throw the HumanResources_Exception_ContractNotEditable exception
+     */
+    
+    public function testContractDates()
+    {
+        $employmentBegin = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $employmentEnd   = clone $employmentBegin;
+        $employmentEnd->setDate(2014, 1, 30);
+        
+        $employee = $this->_getEmployee('unittest');
+        $employee->employment_begin = $employmentBegin;
+        $employee->employment_end = $employmentEnd;
+        
+        $contract1 = $this->_getContract();
+        $contract1->start_date = $employmentBegin;
+        $contract1->end_date = $employmentEnd;
+        $contract1->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
+        $contract1->vacation_days = 25;
+        
+        $recordData = $employee->toArray();
+        $recordData['contracts'] = array($contract1->toArray());
+        $recordData = $this->_json->saveEmployee($recordData);
+        
+        $recordData['bday'] = '2014-04-01 00:00:00';
+        
+        // no exception may be thrown
+        $recordData = $this->_json->saveEmployee($recordData);
+        
+        $this->assertEquals('2014-04-01 00:00:00', $recordData['bday']);
+    }
 }

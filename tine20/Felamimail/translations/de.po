@@ -1408,3 +1408,15 @@ msgstr "Konnte Nachricht nicht senden."
 #: Controller/Sieve.php:338
 msgid "Out of Office reply from %1$s"
 msgstr "Abwesenheitsnotiz von %1$s"
+
+msgid "To (Email CC)"
+msgstr "An (E-Mail CC)"
+
+msgid "Apply filter if"
+msgstr "Wende Filter an, wenn"
+
+msgid "any condition mets"
+msgstr "mindestens eine Bedingung erfüllt ist"
+
+msgid "all conditions met"
+msgstr "alle Bedingungen erfüllt sind"

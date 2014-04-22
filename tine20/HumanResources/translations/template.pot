@@ -910,5 +910,26 @@ msgstr ""
 msgid "Sun."
 msgstr ""
 
+msgid "Create new accounts"
+msgstr ""
+
+msgid "Accounts has been created"
+msgstr ""
+
+msgid "{0} accounts for the year {1} has been created successfully!"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Please enter the year you want to create accounts for:"
+msgstr ""
+
+msgid "No or no valid year given"
+msgstr ""
+
+msgid "Please use a valid year!"
+msgstr ""
+
 msgid "Miscellaneous"
 msgstr ""

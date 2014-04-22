@@ -19,6 +19,11 @@ Tine.Tinebase.RecentsManager.prototype = {
      */
     domain: 'all',
     
+    /**
+     * @cfg {Integer} maximum number of recents
+     */
+    maxRecents: 10,
+    
     addRecentRecord: function (record) {
         var id = record.getId(),
             recents = this.getRecentRecords(record.constructor, this.domain),
@@ -36,7 +41,7 @@ Tine.Tinebase.RecentsManager.prototype = {
         recents.push(record);
         
         recents.sort(function(a, b) {return a.dtSelect > b.dtSelect});
-        recents.slice(0, 10);
+        recents.slice(0, this.maxRecents);
         
         this.saveRecentRecords(recents, record.constructor, this.domain);
     },
