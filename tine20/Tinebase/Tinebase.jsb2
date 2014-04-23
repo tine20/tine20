@@ -550,6 +550,11 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "GroupingGridPlugin.js",
+          "path": "js/ux/grid/"
+        },
+        
+        {
           "text": "OwnRecordFilter.js",
           "path": "js/widgets/grid/"
         },
