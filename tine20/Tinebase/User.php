@@ -640,8 +640,8 @@ class Tinebase_User
         $adminEmailAddress  = ((isset($_options['adminEmailAddress']) || array_key_exists('adminEmailAddress', $_options))) ? $_options['adminEmailAddress'] : NULL;
 
         // get admin & user groups
-        $userBackend   = Tinebase_User::factory(Tinebase_User::SQL);
-        $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
+        $userBackend   = Tinebase_User::getInstance();
+        $groupsBackend = Tinebase_Group::getInstance();
         
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
         $userGroup  = $groupsBackend->getDefaultGroup();
@@ -683,6 +683,5 @@ class Tinebase_User
         // add the admin account to all groups
         Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
         Tinebase_Group::getInstance()->addGroupMember($userGroup, $user);
-        
     }
 }
