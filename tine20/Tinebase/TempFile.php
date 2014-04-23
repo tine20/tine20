@@ -103,7 +103,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     {
         $sessionId = Tinebase_Core::get(Tinebase_Core::SESSIONID);
         if (empty($sessionId)) {
-            $sessionId = 'no_session_id';
+            $sessionId = 'nosessionid';
         }
         
         return $sessionId;

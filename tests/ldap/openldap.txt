@@ -30,12 +30,10 @@ this does not work :/
 $ ldapadd -D cn=admin,dc=nodomain -wpassword -f nodomain.ldif
 
 reset all users/groups
---------
+-----------
 
-$ ldapdelete -D cn=admin,dc=nodomain -wpassword "cn=Administrators,ou=groups,dc=nodomain"
-$ ldapdelete -D cn=admin,dc=nodomain -wpassword "cn=Users,ou=groups,dc=nodomain"
-$ ldapdelete -D cn=admin,dc=nodomain -wpassword "uid=unittest,ou=users,dc=nodomain"
-$ ldapdelete -D cn=admin,dc=nodomain -wpassword "ou=users,dc=nodomain"
-$ ldapdelete -D cn=admin,dc=nodomain -wpassword "ou=groups,dc=nodomain"
+ldapsearch -D "cn=admin,dc=nodomain" -wpassword -b "ou=users,dc=nodomain" | grep "dn: " | grep -v "dn: ou" > users.list
+sed -i -e "s/dn: //" users.list
+ldapdelete -D "cn=admin,dc=nodomain" -wpassword -f users.list 
 
-// more users/groups to delete?
+# replace ou=users,dc=nodomain with ou=groups,dc=nodomain and repeat
