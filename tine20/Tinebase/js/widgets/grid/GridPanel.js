@@ -428,7 +428,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         header: this.app.i18n._(fieldConfig.label),
                         hidden: fieldConfig.hasOwnProperty('shy') ? fieldConfig.shy : false,    // defaults to false
                         sortable: (fieldConfig.hasOwnProperty('sortable') && fieldConfig.sortable == false) ? false : true // defaults to true
+                    };
+                    
+                    if (fieldConfig.hasOwnProperty('summaryType')) {
+                        config.summaryType = fieldConfig.summaryType;
                     }
+                    
                     var renderer = Tine.widgets.grid.RendererManager.get(this.app.name, this.recordClass.getMeta('modelName'), key);
                     if (renderer) {
                         config.renderer = renderer;
@@ -1082,23 +1087,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }, this);
         }
 
-        // init view
-        var view =  new Ext.grid.GridView({
-            getRowClass: this.getViewRowClass,
-            autoFill: true,
-            forceFit:true,
-            ignoreAdd: true,
-            emptyText: this.i18nEmptyText,
-            onLoad: Ext.grid.GridView.prototype.onLoad.createInterceptor(function() {
-                if (this.grid.getView().isPagingRefresh) {
-                    this.grid.getView().isPagingRefresh = false;
-                    return true;
-                }
-
-                return false;
-            }, this)
-        });
-
         // which grid to use?
         var Grid = this.gridConfig.quickaddMandatory ? Ext.ux.grid.QuickaddGridPanel : (this.gridConfig.gridType || Ext.grid.GridPanel);
 
@@ -1118,7 +1106,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             border: false,
             store: this.store,
             sm: this.selectionModel,
-            view: view
+            view: this.createView()
         }));
 
         // init various grid / sm listeners
@@ -1132,6 +1120,32 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     },
 
+    /**
+     * creates and returns the view for the grid
+     * 
+     * @return {Ext.grid.GridView}
+     */
+    createView: function() {
+        // init view
+        var view =  new Ext.grid.GridView({
+            getRowClass: this.getViewRowClass,
+            autoFill: true,
+            forceFit:true,
+            ignoreAdd: true,
+            emptyText: this.i18nEmptyText,
+            onLoad: Ext.grid.GridView.prototype.onLoad.createInterceptor(function() {
+                if (this.grid.getView().isPagingRefresh) {
+                    this.grid.getView().isPagingRefresh = false;
+                    return true;
+                }
+
+                return false;
+            }, this)
+        });
+        
+        return view;
+    },
+    
     /**
      * executed after outer panel rendering process
      */
