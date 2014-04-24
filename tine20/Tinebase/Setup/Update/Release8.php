@@ -187,9 +187,14 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
                 $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
                 $accountId = $filter->account_id;
             } else {
-                // shared filter -> admin group gets all grants
-                $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP;
-                $accountId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
+                // shared filter -> anyone or admin group (if ANYONE_ACCOUNT_DISABLED) gets all grants
+                if (Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
+                    $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP;
+                    $accountId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
+                } else {
+                    $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
+                    $accountId = 0;
+                }
             }
             $grant = new Tinebase_Model_PersistentFilterGrant(array(
                 'account_type' => $accountType,
