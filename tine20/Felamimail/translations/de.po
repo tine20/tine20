@@ -1364,10 +1364,6 @@ msgstr "Lesebestätigung"
 msgid "Activate this toggle button to receive a reading confirmation."
 msgstr "Aktivieren Sie diesen Knopf um eine Lesebestätigung zu erhalten."
 
-#: js/sieve/RuleConditionsPanel.js:72
-msgid "To (Email CC)"
-msgstr ""
-
 #: js/sieve/RuleConditionsPanel.js:73
 msgid "To (Email BCC)"
 msgstr ""
