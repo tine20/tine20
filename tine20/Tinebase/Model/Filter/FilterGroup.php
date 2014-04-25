@@ -211,7 +211,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         if ($this->_configuredModel) {
             $m = $this->_configuredModel;
             $filterConfig = $m::getConfiguration()->getFilterModel();
-            
+
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
                 . ' Filter config: ' . print_r($filterConfig, TRUE));
             
@@ -347,7 +347,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 
         $appName = str_replace('_', '', $_linkInfo['appName']);
         
-        if (! Tinebase_Application::getInstance()->isInstalled($appName) || ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
+        if (! Tinebase_Application::getInstance()->isInstalled($appName) || (is_object(Tinebase_Core::getUser()) && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN))) {
             throw new Tinebase_Exception_AccessDenied('No right to access application');
         }
         
