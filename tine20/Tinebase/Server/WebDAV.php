@@ -102,6 +102,17 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         $aclPlugin = new \Sabre\DAVACL\Plugin();
         $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
         $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS);
+        
+        $aclPlugin->principalSearchPropertySet = array(
+            '{DAV:}displayname'                                                   => 'Display name',
+            '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address'               => 'Email address',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set'  => 'Email addresses',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'         => 'First name',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'          => 'Last name',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-address-set' => 'Calendar user address set',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-type' => 'Calendar user type'
+        );
+        
         self::$_server->addPlugin($aclPlugin);
         
         self::$_server->addPlugin(new \Sabre\CardDAV\Plugin());

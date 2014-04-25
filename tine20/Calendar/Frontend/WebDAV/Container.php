@@ -269,6 +269,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
             $grants->addRecord(Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $this->_container));
         }
+        
         foreach ($grants as $grant) {
             
             switch ($grant->account_type) {
@@ -278,7 +279,11 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     break;
                 
                 case 'group':
-                    $list       = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
+                    try {
+                        $list       = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        continue;
+                    }
                      
                     $href       = '/principals/groups/' . $list->list_id;
                     $commonName = $list->name;
@@ -286,7 +291,11 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     break;
                     
                 case 'user':
-                    $contact    = Tinebase_User::getInstance()->getUserById($grant->account_id);
+                    try {
+                        $contact    = Tinebase_User::getInstance()->getUserById($grant->account_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        continue;
+                    }
                      
                     $href       = '/principals/users/' . $contact->contact_id;
                     $commonName = $contact->accountDisplayName;

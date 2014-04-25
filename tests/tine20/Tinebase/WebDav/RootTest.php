@@ -5,14 +5,9 @@
  * @package     Tinebase
  * @subpackage  WebDav
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_WebDav_Root
@@ -20,17 +15,19 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
  * @package     Tinebase
  * @subpackage  WebDav
  */
-class Tinebase_WebDav_RootTest extends PHPUnit_Framework_TestCase
+class Tinebase_WebDav_RootTest extends TestCase
 {
+    /**
+     * Tree
+     *
+     * @var Sabre\DAV\ObjectTree
+     */
+    protected $_webdavTree;
+    
     /**
      * @var array test objects
      */
     protected $objects = array();
-    
-    /**
-     * @var Tinebase_WebDav_Root
-     */
-    protected $_rootNode;
     
     /**
      * Runs the test methods of this class.
@@ -45,32 +42,11 @@ class Tinebase_WebDav_RootTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        $this->_rootNode = new Tinebase_WebDav_Root();
-    }
-    
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-    }
-    
-    /**
      * test getChildren method
      */
     public function testGetChildren()
     {
-        $children = $this->_rootNode->getChildren();
+        $children = $this->_getWebDAVTree()->getNodeForPath(null)->getChildren();
         
         $this->assertEquals(6, count($children));
     }
@@ -80,11 +56,11 @@ class Tinebase_WebDav_RootTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLastModified()
     {
-        $remoteWebDav = $this->_rootNode->getChild('remote.php')->getChild('webdav');
+        $remoteWebDav = $this->_getWebDAVTree()->getNodeForPath('/remote.php/webdav');
         
         $this->assertNotEmpty($remoteWebDav->getLastModified());
         
-        $personal = $remoteWebDav->getChild('personal');
+        $personal = $remoteWebDav->getChild(Tinebase_Core::getUser()->accountDisplayName);
         
         $this->assertNotEmpty($personal->getLastModified());
         
@@ -100,15 +76,11 @@ class Tinebase_WebDav_RootTest extends PHPUnit_Framework_TestCase
      */
     public function testGetETag()
     {
-        $remoteWebDav = $this->_rootNode->getChild('remote.php')->getChild('webdav');
+        $remoteWebDav = $this->_getWebDAVTree()->getNodeForPath('/remote.php/webdav');
         $properties = $remoteWebDav->getProperties(array('{DAV:}getetag'));
         $this->assertArrayHasKey('{DAV:}getetag', $properties);
         
-        $personal = $remoteWebDav->getChild('personal');
-        $properties = $personal->getProperties(array('{DAV:}getetag'));
-        $this->assertArrayHasKey('{DAV:}getetag', $properties);
-        
-        $currentUser = $personal->getChild(Tinebase_Core::getUser()->accountLoginName);
+        $currentUser = $remoteWebDav->getChild(Tinebase_Core::getUser()->accountDisplayName);
         $properties = $currentUser->getProperties(array('{DAV:}getetag'));
         $this->assertArrayHasKey('{DAV:}getetag', $properties);
         
@@ -116,5 +88,18 @@ class Tinebase_WebDav_RootTest extends PHPUnit_Framework_TestCase
             $properties = $child->getProperties(array('{DAV:}getetag'));
             $this->assertArrayHasKey('{DAV:}getetag', $properties);
         }
+    }
+    
+    /**
+     * 
+     * @return \Sabre\DAV\ObjectTree
+     */
+    protected function _getWebDAVTree()
+    {
+        if (! $this->_webdavTree instanceof \Sabre\DAV\ObjectTree) {
+            $this->_webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        }
+        
+        return $this->_webdavTree;
     }
 }

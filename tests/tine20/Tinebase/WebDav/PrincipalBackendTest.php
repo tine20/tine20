@@ -97,7 +97,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         $this->assertGreaterThanOrEqual(1, count($groupMemberships));
     }
     
-    public function testSearchPrincipals()
+    public function testSearchPrincipalsByEMail()
     {
         $uris = $this->_backend->searchPrincipals(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, array(
             '{http://sabredav.org/ns}email-address' => Tinebase_Core::getUser()->accountEmailAddress)
@@ -105,5 +105,65 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         
         $this->assertEquals(1, count($uris), 'could not find user by email address ' . Tinebase_Core::getUser()->accountEmailAddress);
         $this->assertContains('principals/users/' . Tinebase_Core::getUser()->contact_id, $uris);
+    }
+    
+    public function testSearchPrincipalsByFirstName()
+    {
+        $uris = $this->_backend->searchPrincipals(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, array(
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => Tinebase_Core::getUser()->accountFirstName)
+        );
+        
+        $this->assertEquals(1, count($uris), 'could not find user by email address ' . Tinebase_Core::getUser()->accountEmailAddress);
+        $this->assertContains('principals/users/' . Tinebase_Core::getUser()->contact_id, $uris);
+    }
+    
+    public function testSearchPrincipalsByLastName()
+    {
+        $uris = $this->_backend->searchPrincipals(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, array(
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name' => Tinebase_Core::getUser()->accountLastName)
+        );
+        
+        $this->assertEquals(1, count($uris), 'could not find user by email address ' . Tinebase_Core::getUser()->accountEmailAddress);
+        $this->assertContains('principals/users/' . Tinebase_Core::getUser()->contact_id, $uris);
+    }
+    
+    public function testGetPrincipalByProxyWritePath()
+    {
+        $principal = $this->_backend->getPrincipalByPath(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id . '/calendar-proxy-write');
+        
+        //var_dump($principal);
+        
+        $this->assertEquals(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id . '/calendar-proxy-write', $principal['uri']);
+    }
+    
+    public function testGetMemberSetUser()
+    {
+        $groupMemberships = $this->_backend->getGroupMemberSet(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id);
+        
+        //var_dump($groupMemberships);
+        
+        $this->assertEquals(0, count($groupMemberships));
+    }
+    
+    public function testGetMemberSetGroup()
+    {
+        $list = Tinebase_Group::getInstance()->getGroupById(Tinebase_Core::getUser()->accountPrimaryGroup);
+        
+        $groupMemberships = $this->_backend->getGroupMemberSet(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/' . $list->list_id);
+        
+        //var_dump($groupMemberships);
+        
+        $this->assertGreaterThanOrEqual(1, count($groupMemberships));
+    }
+
+    public function testGetMemberSetProxyRead()
+    {
+        $this->markTestIncomplete('needs access to other accounts calendar');
+        
+        $groupMemberships = $this->_backend->getGroupMemberSet(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id . '/calendar-proxy-read');
+        
+        //var_dump($groupMemberships);
+        
+        $this->assertGreaterThanOrEqual(1, count($groupMemberships));
     }
 }

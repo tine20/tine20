@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2012-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Frontend
  */
-abstract class Tinebase_Frontend_WebDAV_Abstract extends Tinebase_WebDav_Collection_Abstract
+abstract class Tinebase_Frontend_WebDAV_Abstract extends Tinebase_WebDav_Collection_AbstractContainerTree
 {
     /**
      * Creates a new subdirectory
@@ -28,8 +28,8 @@ abstract class Tinebase_Frontend_WebDAV_Abstract extends Tinebase_WebDav_Collect
     public function createDirectory($name) 
     {
         $container = parent::createDirectory($name);
-                
-        $path = '/' . $this->_application->getId() . '/folders/' . $container->type . '/';
+        
+        $path = '/' . $this->_getApplication()->getId() . '/folders/' . $container->type . '/';
         
         if ($container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
             $path .= Tinebase_Core::getUser()->accountId . '/';

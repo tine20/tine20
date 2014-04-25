@@ -5,13 +5,12 @@
  * @package     Felamimail
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * class to handle WebDAV tree
+ * class to handle container tree
  *
  * @package     Felamimail
  * @subpackage  Frontend
@@ -19,16 +18,16 @@
 class Felamimail_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
 {
     /**
-     * application name
-     * 
+     * app has personal folders
+     *
      * @var string
      */
-    protected $_applicationName = 'Felamimail';
+    protected $_hasPersonalFolders = false;
     
     /**
-    * app has personal folders
-    *
-    * @var string
-    */
-    protected $_hasPersonalFolders = FALSE;
+     * app has records folder
+     *
+     * @var string
+     */
+    protected $_hasRecordFolder = false;
 }
