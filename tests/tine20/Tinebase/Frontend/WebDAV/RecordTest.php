@@ -13,6 +13,13 @@
  */
 class Tinebase_Frontend_WebDAV_RecordTest extends TestCase
 {
+     /**
+      * Tree
+      *
+      * @var Sabre\DAV\ObjectTree
+      */
+    protected $_webdavTree;
+    
     /**
      * testDownloadAttachment
      */
@@ -34,9 +41,21 @@ class Tinebase_Frontend_WebDAV_RecordTest extends TestCase
         $this->assertTrue(isset($savedEvent->attachments) && count($savedEvent->attachments) === 1);
         
         // try to fetch attachment of event
-        $recordCollection = new Tinebase_Frontend_WebDAV_Record('Calendar/records/Calendar_Model_Event/' . $savedEvent->getId());
-        $file = $recordCollection->getChild($tempFile->name);
-        $this->assertEquals('text/plain', $file->getContentType());
-        $this->assertEquals(17, $file->getSize());
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Calendar/records/Calendar_Model_Event/' . $savedEvent->getId() . '/' . $tempFile->name);
+        $this->assertEquals('text/plain', $node->getContentType());
+        $this->assertEquals(17, $node->getSize());
+    }
+    
+    /**
+     * 
+     * @return \Sabre\DAV\ObjectTree
+     */
+    protected function _getWebDAVTree()
+    {
+        if (! $this->_webdavTree instanceof \Sabre\DAV\ObjectTree) {
+            $this->_webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        }
+        
+        return $this->_webdavTree;
     }
 }

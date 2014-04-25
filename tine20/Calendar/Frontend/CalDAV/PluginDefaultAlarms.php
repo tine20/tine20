@@ -84,7 +84,7 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Sabre\DAV\ServerPlug
      */
     public function beforeGetProperties($path, \Sabre\DAV\INode $node, &$requestedProperties, &$returnedProperties) 
     {
-        if ($node instanceof \Sabre\CalDAV\ICalendar || $node instanceof Calendar_Frontend_CalDAV) {
+        if ($node instanceof \Sabre\CalDAV\ICalendar || $node instanceof Calendar_Frontend_WebDAV) {
             $vcalendar = new \Sabre\VObject\Component\VCalendar();
             
             $property = '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-datetime';
