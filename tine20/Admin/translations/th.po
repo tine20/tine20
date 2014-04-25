@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-02-17 19:09+0000\n"
+"PO-Revision-Date: 2014-03-30 17:22+0000\n"
 "Last-Translator: jaruwan <luca.ingianni@gmail.com>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -153,97 +153,77 @@ msgstr ""
 msgid "Default IMAP user settings"
 msgstr ""
 
-#: js/AdminPanel.js:46 js/Admin-FAT-debug.js:359 js/Admin-FAT.js:6
+#: js/AdminPanel.js:46
 msgid "Default Addressbook for new contacts and groups"
 msgstr "สมุดรายชื่อหลักสำหรับการติดต่อและกลุ่มใหม่"
 
-#: js/Admin.js:23 js/Admin-FAT-debug.js:28 js/Admin-FAT-debug.js:1010
-#: js/Admin-FAT-debug.js:3165 js/AccessLog.js:102 js/user/Users.js:72
-#: js/Admin-FAT.js:6
+#: js/Admin.js:23 js/AccessLog.js:102 js/user/Users.js:72
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "ผู้ใช้"
 
-#: js/Admin.js:36 js/Admin-FAT-debug.js:41 js/Admin-FAT-debug.js:480
-#: js/Admin-FAT.js:6 js/Models.js:87
+#: js/Admin.js:36 js/Models.js:87
 msgid "Groups"
 msgstr "กลุ่ม"
 
-#: js/Admin.js:49 js/Admin-FAT-debug.js:54 js/Admin-FAT.js:6
+#: js/Admin.js:49
 msgid "Roles"
 msgstr "หน้าที่"
 
-#: js/Admin.js:61 js/Admin-FAT-debug.js:66 js/Admin-FAT.js:6
+#: js/Admin.js:61
 msgid "Computers"
 msgstr "คอมพิวเตอร์"
 
-#: js/Admin.js:74 js/Admin-FAT-debug.js:79 js/Admin-FAT-debug.js:521
-#: js/Admin-FAT.js:6 js/Models.js:127
+#: js/Admin.js:74 js/Models.js:127
 msgid "Applications"
 msgstr "การประยุกต์ใช้"
 
-#: js/Admin.js:87 js/Admin-FAT-debug.js:92 js/Admin-FAT-debug.js:444
-#: js/Admin-FAT-debug.js:3163 js/AccessLog.js:100 js/Admin-FAT.js:6
-#: js/Models.js:51
+#: js/Admin.js:87 js/AccessLog.js:100 js/Models.js:51
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] "บันทึกการใช้งาน"
 
-#: js/Admin.js:100 js/Admin-FAT-debug.js:105 js/Admin-FAT.js:6
+#: js/Admin.js:100
 msgid "Shared Tags"
 msgstr "ป้ายกำกับที่ใช้ร่วมกัน"
 
-#: js/Admin.js:113 js/Admin-FAT-debug.js:118 js/Admin-FAT.js:6
+#: js/Admin.js:113
 msgid "Containers"
 msgstr "ที่จัดเก็บ"
 
-#: js/Admin.js:125 js/Admin-FAT-debug.js:130 js/Admin-FAT.js:6
+#: js/Admin.js:125
 msgid "Customfields"
 msgstr ""
 
-#: js/Admin.js:137 js/Admin-FAT-debug.js:142 js/Admin-FAT.js:6
+#: js/Admin.js:137
 msgid "Server Information"
 msgstr ""
 
-#: js/Admin.js:173 js/Admin-FAT-debug.js:177 js/Admin-FAT.js:6
+#: js/Admin.js:173
 msgid "Admin"
 msgstr "ผู้ดูแลระบบ"
 
-#: js/Admin.js:257 js/Admin-FAT-debug.js:259 js/Admin-FAT.js:6
+#: js/Admin.js:257
 msgid "Refresh"
 msgstr ""
 
-#: js/SambaMachineGrid.js:56 js/Admin-FAT-debug.js:3358
-#: js/Admin-FAT-debug.js:3437 js/SambaMachineEditDialog.js:42
+#: js/SambaMachineGrid.js:56 js/SambaMachineEditDialog.js:42
 msgid "Computer Name"
 msgstr "ชื่อของคอมพิวเตอร์"
 
 #: js/SambaMachineGrid.js:57 js/SambaMachineGrid.js:89 js/Tags.js:228
-#: js/Admin-FAT-debug.js:1219 js/Admin-FAT-debug.js:2691
-#: js/Admin-FAT-debug.js:2923 js/Admin-FAT-debug.js:3359
-#: js/Admin-FAT-debug.js:3389 js/Admin-FAT-debug.js:3683
-#: js/Admin-FAT-debug.js:4016 js/Admin-FAT-debug.js:4351
-#: js/Admin-FAT-debug.js:4759 js/Roles.js:240 js/GroupEditDialog.js:129
-#: js/Groups.js:237 js/TagEditDialog.js:226 js/RoleEditDialog.js:294
-#: js/user/GridPanel.js:93
+#: js/Roles.js:240 js/GroupEditDialog.js:129 js/Groups.js:237
+#: js/TagEditDialog.js:226 js/RoleEditDialog.js:294 js/user/GridPanel.js:93
 msgid "Description"
 msgstr "การอธิบาย"
 
-#: js/SambaMachineGrid.js:76 js/Admin-FAT-debug.js:1295
-#: js/Admin-FAT-debug.js:2689 js/Admin-FAT-debug.js:3376
-#: js/Admin-FAT-debug.js:4349 js/Admin-FAT-debug.js:5282
-#: js/Admin-FAT-debug.js:5667 js/Admin-FAT-debug.js:6154 js/Roles.js:238
-#: js/Groups.js:235 js/container/GridPanel.js:65 js/user/GridPanel.js:171
+#: js/SambaMachineGrid.js:76 js/Roles.js:238 js/Groups.js:235
+#: js/container/GridPanel.js:65 js/user/GridPanel.js:171
 #: js/customfield/EditDialog.js:283 js/customfield/GridPanel.js:65
 msgid "ID"
 msgstr "รหัส"
 
-#: js/SambaMachineGrid.js:83 js/Tags.js:227 js/Admin-FAT-debug.js:805
-#: js/Admin-FAT-debug.js:1703 js/Admin-FAT-debug.js:1739
-#: js/Admin-FAT-debug.js:2690 js/Admin-FAT-debug.js:3189
-#: js/Admin-FAT-debug.js:3383 js/Admin-FAT-debug.js:3682
-#: js/Admin-FAT-debug.js:4350 js/Admin-FAT-debug.js:5133
-#: js/Admin-FAT-debug.js:5980 js/Admin-FAT-debug.js:6156 js/Roles.js:239
+#: js/SambaMachineGrid.js:83 js/Tags.js:227 js/Roles.js:239
 #: js/Applications.js:282 js/Groups.js:236 js/AccessLog.js:128
 #: js/container/EditDialog.js:124 js/user/EditDialog.js:285
 #: js/user/EditDialog.js:321 js/customfield/EditDialog.js:596
@@ -251,912 +231,846 @@ msgstr "รหัส"
 msgid "Name"
 msgstr "ชื่อ"
 
-#: js/Tags.js:64 js/Admin-FAT-debug.js:2507 js/Admin-FAT-debug.js:3521
-#: js/Admin-FAT-debug.js:4159 js/Admin-FAT-debug.js:6215 js/Roles.js:47
-#: js/Groups.js:52 js/customfield/GridPanel.js:128
+#: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
+#: js/customfield/GridPanel.js:128
 msgid "Confirm"
 msgstr "ยืนยัน"
 
-#: js/Tags.js:64 js/Admin-FAT-debug.js:3521
+#: js/Tags.js:64
 msgid "Do you really want to delete the selected tags?"
 msgstr "คุณแน่ใจว่าคุณต้องการลบป้ายกำกับที่เลือก?"
 
-#: js/Tags.js:82 js/Admin-FAT-debug.js:3539
+#: js/Tags.js:82
 msgid "Deleting tag(s)..."
 msgstr "กำลังลบ ป้ายกำกับ(s)..."
 
-#: js/Tags.js:99 js/Admin-FAT-debug.js:3554
+#: js/Tags.js:99
 msgid "Add Tag"
 msgstr "เพิ่มป้ายกำกับ"
 
-#: js/Tags.js:107 js/Admin-FAT-debug.js:3562
+#: js/Tags.js:107
 msgid "Edit Tag"
 msgstr "แก้ไขป้ายกำกับ"
 
-#: js/Tags.js:115 js/Admin-FAT-debug.js:3570
+#: js/Tags.js:115
 msgid "Delete Tag"
 msgstr "ลบป้ายกำกับ"
 
-#: js/Tags.js:171 js/Admin-FAT-debug.js:710 js/Admin-FAT-debug.js:2631
-#: js/Admin-FAT-debug.js:3626 js/Admin-FAT-debug.js:4288 js/Roles.js:177
-#: js/Applications.js:187 js/Groups.js:177
+#: js/Tags.js:171 js/Roles.js:177 js/Applications.js:187 js/Groups.js:177
 msgid "Search:"
 msgstr "ค้นหา:"
 
-#: js/Tags.js:213 js/Admin-FAT-debug.js:3668
+#: js/Tags.js:213
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "กำกังแสดงป้ายกำกับ {0} - {1} จาก {2}"
 
-#: js/Tags.js:214 js/Tags.js:270 js/Admin-FAT-debug.js:3669
-#: js/Admin-FAT-debug.js:3725
+#: js/Tags.js:214 js/Tags.js:270
 msgid "No tags to display"
 msgstr "ไม่มีป้ายกำกับใด ๆ ให้แสดง"
 
-#: js/Tags.js:224 js/Admin-FAT-debug.js:3679 js/Admin-FAT-debug.js:4022
-#: js/Admin-FAT-debug.js:5180 js/TagEditDialog.js:232
-#: js/container/EditDialog.js:171
+#: js/Tags.js:224 js/TagEditDialog.js:232 js/container/EditDialog.js:171
 msgid "Color"
 msgstr "สี"
 
-#: js/Tags.js:225 js/Admin-FAT-debug.js:3680
+#: js/Tags.js:225
 msgid "Usage:&#160;"
 msgstr "การใช้:&#160;"
 
-#: js/Admin-FAT-debug.js:480 js/Admin-FAT-debug.js:3016
-#: js/Admin-FAT-debug.js:6009 js/GroupEditDialog.js:222
-#: js/customfield/EditDialog.js:625 js/Models.js:87
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "กลุ่ม"
-
-#: js/Admin-FAT-debug.js:521 js/Admin-FAT-debug.js:4894
-#: js/Admin-FAT-debug.js:5145 js/Admin-FAT-debug.js:5284
-#: js/Admin-FAT-debug.js:5771 js/Admin-FAT-debug.js:5913
-#: js/Admin-FAT-debug.js:6158 js/container/EditDialog.js:136
-#: js/container/GridPanel.js:67 js/ApplicationFilter.js:33
-#: js/customfield/EditDialog.js:387 js/customfield/EditDialog.js:529
-#: js/customfield/GridPanel.js:69 js/Models.js:127
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "การประยุกต์ใช้"
-
-#: js/Admin-FAT-debug.js:568 js/Applications.js:45
-msgid "{0} Settings"
-msgstr "ค่าติดตั้ง {0}"
-
-#: js/Admin-FAT-debug.js:608 js/Applications.js:85
-msgid "Enable Application"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:615 js/Applications.js:92
-msgid "Disable Application"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:622 js/Applications.js:99
-msgid "Settings"
-msgstr "ค่าติดตั้ง"
-
-#: js/Admin-FAT-debug.js:671 js/Applications.js:148
-msgid "enable application"
-msgstr "อนุญาตการประยุกต์ใช้"
-
-#: js/Admin-FAT-debug.js:672 js/Applications.js:149
-msgid "disable application"
-msgstr "ไม่อนุญาตการประยุกต์ใช้"
-
-#: js/Admin-FAT-debug.js:673 js/Applications.js:150
-msgid "settings"
-msgstr "ค่าติดตั้ง"
-
-#: js/Admin-FAT-debug.js:753 js/Admin-FAT-debug.js:2295 js/Applications.js:230
-#: js/user/EditDialog.js:885
-msgid "disabled"
-msgstr "ปิดใช้งานแล้ว"
-
-#: js/Admin-FAT-debug.js:756 js/Admin-FAT-debug.js:2294 js/Applications.js:233
-#: js/user/EditDialog.js:884
-msgid "enabled"
-msgstr "เปิดใช้งานแล้ว"
-
-#: js/Admin-FAT-debug.js:760 js/Applications.js:237
-msgid "unknown status ({0})"
-msgstr "ไม่ทราบสถานะ ({0})"
-
-#: js/Admin-FAT-debug.js:794 js/Applications.js:271
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "แสดงการใช้ {0} - {1} จาก {2}"
-
-#: js/Admin-FAT-debug.js:795 js/Applications.js:272
-msgid "No applications to display"
-msgstr "ไม่มีการใช้ใด ๆ ให้แสดง"
-
-#: js/Admin-FAT-debug.js:804 js/Admin-FAT-debug.js:6014 js/Applications.js:281
-#: js/customfield/EditDialog.js:630
-msgid "Order"
-msgstr "คำสั่ง"
-
-#: js/Admin-FAT-debug.js:806 js/Admin-FAT-debug.js:1296
-#: js/Admin-FAT-debug.js:2287 js/Applications.js:283 js/user/EditDialog.js:876
-#: js/user/GridPanel.js:172
-msgid "Status"
-msgstr "สถานะ"
-
-#: js/Admin-FAT-debug.js:807 js/Applications.js:284
-msgid "Version"
-msgstr "ภาค"
-
-#: js/Admin-FAT-debug.js:1010 js/user/Users.js:72
-msgid "Users"
-msgstr "ผู้ใช้"
-
-#: js/Admin-FAT-debug.js:1058 js/user/Users.js:120
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "ผู้ใช้ Samba"
-
-#: js/Admin-FAT-debug.js:1084 js/user/Users.js:146
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "ผู้ใช้อีเมล"
-
-#: js/Admin-FAT-debug.js:1176 js/user/GridPanel.js:50
-msgid "Enable Account"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1186 js/user/GridPanel.js:60
-msgid "Disable Account"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1196 js/user/GridPanel.js:70
-msgid "Reset Password"
-msgstr "ตั้งรหัสผ่านใหม่"
-
-#: js/Admin-FAT-debug.js:1297 js/user/GridPanel.js:173
-msgid "Display name"
-msgstr "ชื่อที่ใช้"
-
-#: js/Admin-FAT-debug.js:1298 js/Admin-FAT-debug.js:2223
-#: js/Admin-FAT-debug.js:2265 js/user/EditDialog.js:807
-#: js/user/EditDialog.js:852 js/user/GridPanel.js:174
-msgid "Login name"
-msgstr "ชื่อที่เข้าใช้"
-
-#: js/Admin-FAT-debug.js:1299 js/Admin-FAT-debug.js:2218
-#: js/user/EditDialog.js:801 js/user/GridPanel.js:175
-msgid "Last name"
-msgstr "นามสกุล"
-
-#: js/Admin-FAT-debug.js:1300 js/Admin-FAT-debug.js:2208
-#: js/user/EditDialog.js:790 js/user/GridPanel.js:176
-msgid "First name"
-msgstr "ชื่อตัว"
-
-#: js/Admin-FAT-debug.js:1301 js/Admin-FAT-debug.js:2258
-#: js/user/EditDialog.js:844 js/user/GridPanel.js:177
-msgid "Email"
-msgstr "อีเมล"
-
-#: js/Admin-FAT-debug.js:1302 js/Admin-FAT-debug.js:2264
-#: js/user/EditDialog.js:851 js/user/GridPanel.js:178
-msgid "OpenID"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1303 js/Admin-FAT-debug.js:2379
-#: js/user/EditDialog.js:984 js/user/GridPanel.js:179
-msgid "Last login at"
-msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด เมื่อ"
-
-#: js/Admin-FAT-debug.js:1304 js/Admin-FAT-debug.js:2383
-#: js/user/EditDialog.js:988 js/user/GridPanel.js:180
-msgid "Last login from"
-msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด จาก"
-
-#: js/Admin-FAT-debug.js:1305 js/user/GridPanel.js:181
-msgid "Password changed"
-msgstr "รหัสผ่านได้เปลี่ยนแล้ว"
-
-#: js/Admin-FAT-debug.js:1306 js/Admin-FAT-debug.js:2327
-#: js/user/EditDialog.js:917 js/user/GridPanel.js:182
-msgid "Expires"
-msgstr "หมดอายุ"
-
-#: js/Admin-FAT-debug.js:1364 js/user/GridPanel.js:240
-msgid "Set new password"
-msgstr "ตั้งรหัสผ่านใหม่"
-
-#: js/Admin-FAT-debug.js:1364 js/user/GridPanel.js:240
-msgid "Please enter the new password:"
-msgstr "กรุณาใส่รหัสผ่านใหม่:"
-
-#: js/Admin-FAT-debug.js:1605 js/user/EditDialog.js:187
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1652 js/Admin-FAT-debug.js:1655
-#: js/Admin-FAT-debug.js:2148 js/user/EditDialog.js:234
-#: js/user/EditDialog.js:237 js/user/EditDialog.js:730
-msgid "Passwords do not match!"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1658 js/user/EditDialog.js:240
-msgid "Passwords match!"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1704 js/Admin-FAT-debug.js:2270
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:858
-msgid "Primary group"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1781 js/user/EditDialog.js:363
-msgid "Unix"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1795 js/user/EditDialog.js:377
-msgid "Home Directory"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1799 js/user/EditDialog.js:381
-msgid "Login Shell"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1805 js/user/EditDialog.js:387
-msgid "Windows"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1819 js/user/EditDialog.js:401
-msgid "Home Drive"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1824 js/user/EditDialog.js:406
-msgid "Logon Time"
-msgstr "เวลาเข้าใช้"
-
-#: js/Admin-FAT-debug.js:1826 js/Admin-FAT-debug.js:2381
-#: js/Admin-FAT-debug.js:2385 js/user/EditDialog.js:408
-#: js/user/EditDialog.js:986 js/user/EditDialog.js:990
-msgid "never logged in"
-msgstr "ไม่เคยได้เข้าใช้"
-
-#: js/Admin-FAT-debug.js:1829 js/user/EditDialog.js:411
-msgid "Home Path"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1834 js/user/EditDialog.js:416
-msgid "Logoff Time"
-msgstr "เวลาเลิกใช้"
-
-#: js/Admin-FAT-debug.js:1836 js/user/EditDialog.js:418
-msgid "never logged off"
-msgstr "ไม่เคยเลิกใช้"
-
-#: js/Admin-FAT-debug.js:1839 js/user/EditDialog.js:421
-msgid "Profile Path"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1844 js/user/EditDialog.js:426
-msgid "Password Last Set"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1846 js/Admin-FAT-debug.js:2329
-#: js/Admin-FAT-debug.js:2389 js/user/EditDialog.js:428
-#: js/user/EditDialog.js:920 js/user/EditDialog.js:994
-msgid "never"
-msgstr "ไม่เลย"
-
-#: js/Admin-FAT-debug.js:1849 js/user/EditDialog.js:431
-msgid "Logon Script"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1854 js/user/EditDialog.js:436
-msgid "Password Can Change"
-msgstr "รหัสผ่านสามารถเปลี่ยน"
-
-#: js/Admin-FAT-debug.js:1856 js/Admin-FAT-debug.js:1861
-#: js/Admin-FAT-debug.js:1866 js/user/EditDialog.js:438
-#: js/user/EditDialog.js:443 js/user/EditDialog.js:448
-msgid "not set"
-msgstr "ยังไม่ได้กำหนด"
-
-#: js/Admin-FAT-debug.js:1859 js/user/EditDialog.js:441
-msgid "Password Must Change"
-msgstr "รหัสผ่านต้องเปลี่ยน"
-
-#: js/Admin-FAT-debug.js:1864 js/user/EditDialog.js:446
-msgid "Kick Off Time"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1884 js/user/EditDialog.js:466
-msgid "IMAP Quota (MB)"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1903 js/Admin-FAT-debug.js:1941
-#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
-msgid "Quota"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1904 js/Admin-FAT-debug.js:1942
-#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
-msgid "no quota set"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1914 js/user/EditDialog.js:496
-msgid "Current Mailbox size"
-msgstr "ขนาดของกล่องจดหมายตอนนี้"
-
-#: js/Admin-FAT-debug.js:1922 js/user/EditDialog.js:504
-msgid "Sieve Quota (MB)"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1952 js/user/EditDialog.js:534
-msgid "Current Sieve size"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1961 js/Admin-FAT-debug.js:2364
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:969
-msgid "Information"
-msgstr "ข้อมูล"
-
-#: js/Admin-FAT-debug.js:1975 js/user/EditDialog.js:557
-msgid "Last Login"
-msgstr "ลงบันทึกเข้าครั้งล่าสุด"
-
-#: js/Admin-FAT-debug.js:2033 js/user/EditDialog.js:615
-msgid "Domain not allowed"
-msgstr "โดเมนไม่ได้รับอนุญาต"
-
-#: js/Admin-FAT-debug.js:2034 js/user/EditDialog.js:616
-msgid ""
-"The domain {0} of the alias {1} you tried to add is neither configured as "
-"primary domain nor set as a secondary domain in the setup."
-msgstr ""
-
-#: js/Admin-FAT-debug.js:2043 js/user/EditDialog.js:625
-msgid "Email Alias"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:2049 js/user/EditDialog.js:631
-msgid "Add an alias address..."
-msgstr ""
-
-#: js/Admin-FAT-debug.js:2067 js/user/EditDialog.js:649
-msgid "Forwarding to self"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:2068 js/user/EditDialog.js:650
-msgid ""
-"You are not allowed to set a forward email address that is identical to the "
-"users primary email or one of his aliases."
-msgstr ""
-
-#: js/Admin-FAT-debug.js:2077 js/user/EditDialog.js:659
-msgid "Email Forward"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:2083 js/user/EditDialog.js:665
-msgid "Add a forward address..."
-msgstr ""
-
-#: js/Admin-FAT-debug.js:2096 js/user/EditDialog.js:678
-msgid "Forward Only"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:2115 js/user/EditDialog.js:697
-msgid "Password confirmation"
-msgstr "การยืนยันรหัสผ่าน"
-
-#: js/Admin-FAT-debug.js:2132 js/user/EditDialog.js:714
-msgid "Repeat password"
-msgstr "ใส่รหัสผ่านอีกครั้ง"
-
-#: js/Admin-FAT-debug.js:2151 js/Admin-FAT-debug.js:5855
-#: js/user/EditDialog.js:733 js/customfield/EditDialog.js:471
-msgid "Cancel"
-msgstr "ยกเลิก"
-
-#: js/Admin-FAT-debug.js:2158 js/user/EditDialog.js:740
-msgid "Ok"
-msgstr "ตกลง"
-
-#: js/Admin-FAT-debug.js:2193 js/user/EditDialog.js:775
-msgid "Account"
-msgstr "บัญชี"
-
-#: js/Admin-FAT-debug.js:2228 js/user/EditDialog.js:813
-msgid "Password"
-msgstr "รหัสผ่าน"
-
-#: js/Admin-FAT-debug.js:2296 js/user/EditDialog.js:886
-msgid "expired"
-msgstr "หมดอายุแล้ว"
-
-#: js/Admin-FAT-debug.js:2297 js/user/EditDialog.js:887
-msgid "blocked"
-msgstr "ถูกล็อก"
-
-#: js/Admin-FAT-debug.js:2304 js/user/EditDialog.js:894
-msgid "Invalid Status"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:2305 js/user/EditDialog.js:895
-msgid ""
-"Blocked status is only valid if the user tried to login with a wrong "
-"password to often. It is not possible to set this status here."
-msgstr "สถานะ ถูกล็อก จะใช้ต่อเมื่อผู้ใช้พยายามลงชื่อเข้าใช้ด้วยรหัสผ่านที่ผิดบ่อย ๆ ณ ที่นี่ไม่สามารถตั้งค่าสถานะนี้ได้"
-
-#: js/Admin-FAT-debug.js:2332 js/Admin-FAT-debug.js:2931
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:923
-msgid "Visibility"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:2338 js/Admin-FAT-debug.js:2937
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:930
-msgid "Display in addressbook"
-msgstr "แสดงในสมุดรายชื่อ"
-
-#: js/Admin-FAT-debug.js:2338 js/Admin-FAT-debug.js:2937
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:930
-msgid "Hide from addressbook"
-msgstr "ซ่อนจากสมุดรายชื่อ"
-
-#: js/Admin-FAT-debug.js:2352 js/Admin-FAT-debug.js:2953
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:944
-msgid "Saved in Addressbook"
-msgstr "บันทึกแล้วในสมุดรายชื่อ"
-
-#: js/Admin-FAT-debug.js:2381 js/Admin-FAT-debug.js:2385
-#: js/user/EditDialog.js:986 js/user/EditDialog.js:990
-msgid "don't know"
-msgstr "ไม่ทราบ"
-
-#: js/Admin-FAT-debug.js:2387 js/user/EditDialog.js:992
-msgid "Password set"
-msgstr "ตั้งรหัสผ่าน"
-
-#: js/Admin-FAT-debug.js:2394 js/user/EditDialog.js:999
-msgid "User groups"
-msgstr "กลุ่มผู้ใช้"
-
-#: js/Admin-FAT-debug.js:2400 js/user/EditDialog.js:1005
-msgid "User roles"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:2406 js/user/EditDialog.js:1011
-msgid "Fileserver"
-msgstr "ตัวจัดเก็บไฟล์"
-
-#: js/Admin-FAT-debug.js:2412 js/user/EditDialog.js:1017
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/Admin-FAT-debug.js:2421 js/user/EditDialog.js:1026
-msgid "SMTP"
-msgstr "SMTP"
-
-#: js/Admin-FAT-debug.js:2507 js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "คุณแน่ใจว่าต้องการลบกลุ่มที่เลือกไว้นี้?"
-
-#: js/Admin-FAT-debug.js:2524 js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "กำลังลบ กลุ่ม"
-
-#: js/Admin-FAT-debug.js:2529 js/Admin-FAT-debug.js:2867
-#: js/Admin-FAT-debug.js:3873 js/Admin-FAT-debug.js:4181
-#: js/Admin-FAT-debug.js:4573 js/Admin-FAT-debug.js:4601 js/Roles.js:69
-#: js/GroupEditDialog.js:73 js/Groups.js:74 js/TagEditDialog.js:83
-#: js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "คุณแน่ใจว่าต้องการลบหน้าที่ที่เลือกไว้นี้?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "กำลังลบ หน้าที่(s)..."
+
+#: js/Roles.js:69 js/GroupEditDialog.js:73 js/Groups.js:74
+#: js/TagEditDialog.js:83 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
 msgid "Failed"
 msgstr "ได้ล้มเหลว"
 
-#: js/Admin-FAT-debug.js:2529 js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "มีข้อผิดพลาดบางอย่างเกิดขึ้น ขณะที่พยายามลบกลุ่ม"
+#: js/Roles.js:69 js/RoleEditDialog.js:136
+msgid "Some error occurred while trying to delete the role."
+msgstr "มีข้อผิดพลาดบางอย่างเกิดขึ้น ขณะที่พยายามลบหน้าที่"
 
-#: js/Admin-FAT-debug.js:2559 js/Groups.js:106
-msgid "Add Group"
-msgstr "เพิ่มกลุ่ม"
+#: js/Roles.js:104
+msgid "Add Role"
+msgstr "เพิ่มหน้าที่"
 
-#: js/Admin-FAT-debug.js:2567 js/Groups.js:114
-msgid "Edit Group"
-msgstr "แก้ไขกลุ่ม"
+#: js/Roles.js:112
+msgid "Edit Role"
+msgstr "แก้ไขหน้าที่"
 
-#: js/Admin-FAT-debug.js:2575 js/Groups.js:122
-msgid "Delete Group"
-msgstr "ลบกลุ่ม"
+#: js/Roles.js:120
+msgid "Delete Role"
+msgstr "ลบหน้าที่"
 
-#: js/Admin-FAT-debug.js:2678 js/Groups.js:224
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "กำลังแสดงกลุ่ม {0} - {1} จาก {2}"
+#: js/Roles.js:227
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "กำลังแสดงหน้าที่ {0} - {1} จาก {2}"
 
-#: js/Admin-FAT-debug.js:2679 js/Admin-FAT-debug.js:2733 js/Groups.js:225
-#: js/Groups.js:279
-msgid "No groups to display"
-msgstr "ไม่มีกลุ่มใด ๆ ให้แสดง"
+#: js/Roles.js:228 js/Roles.js:282
+msgid "No roles to display"
+msgstr "ไม่มีหน้าที่ใด ๆ ให้แสดง"
 
-#: js/Admin-FAT-debug.js:2832 js/Admin-FAT-debug.js:3828
-#: js/Admin-FAT-debug.js:4535 js/GroupEditDialog.js:38 js/TagEditDialog.js:38
-#: js/RoleEditDialog.js:70
+#: js/GroupEditDialog.js:38 js/TagEditDialog.js:38 js/RoleEditDialog.js:70
 msgid "Please wait"
 msgstr "กรุณารอ"
 
-#: js/Admin-FAT-debug.js:2832 js/Admin-FAT-debug.js:4535
 #: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
 msgid "Updating Memberships"
 msgstr "กำลังปรับปรุงการเป็นสมาชิก"
 
-#: js/Admin-FAT-debug.js:2867 js/GroupEditDialog.js:73
+#: js/GroupEditDialog.js:73
 msgid "Could not save group."
 msgstr "ไม่สามารถจัดเก็บกลุ่มได้"
 
-#: js/Admin-FAT-debug.js:2872 js/Admin-FAT-debug.js:3878
-#: js/Admin-FAT-debug.js:4580 js/Admin-FAT-debug.js:5521
-#: js/Admin-FAT-debug.js:5816 js/GroupEditDialog.js:78 js/TagEditDialog.js:88
-#: js/RoleEditDialog.js:115 js/customfield/EditDialog.js:137
-#: js/customfield/EditDialog.js:432
+#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
+#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
 msgid "Errors"
 msgstr "ข้อผิดพลาด"
 
-#: js/Admin-FAT-debug.js:2872 js/Admin-FAT-debug.js:3878
-#: js/Admin-FAT-debug.js:4580 js/GroupEditDialog.js:78 js/TagEditDialog.js:88
-#: js/RoleEditDialog.js:115
+#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
 msgid "Please fix the errors noted."
 msgstr "กรุณาแก้ไขข้อผิดพลาดที่ได้บันทึกไว้"
 
-#: js/Admin-FAT-debug.js:2915 js/GroupEditDialog.js:121
+#: js/GroupEditDialog.js:121
 msgid "Group Name"
 msgstr "ชื่อกลุ่ม"
 
-#: js/Admin-FAT-debug.js:2964 js/GroupEditDialog.js:170
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:923
+msgid "Visibility"
+msgstr ""
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:930
+msgid "Display in addressbook"
+msgstr "แสดงในสมุดรายชื่อ"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:930
+msgid "Hide from addressbook"
+msgstr "ซ่อนจากสมุดรายชื่อ"
+
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:944
+msgid "Saved in Addressbook"
+msgstr "บันทึกแล้วในสมุดรายชื่อ"
+
+#: js/GroupEditDialog.js:170
 msgid "Group Members"
 msgstr "สมาชิกของกลุ่ม"
 
-#: js/Admin-FAT-debug.js:3016 js/Admin-FAT-debug.js:4080
-#: js/Admin-FAT-debug.js:4826 js/GroupEditDialog.js:222
-#: js/TagEditDialog.js:290 js/RoleEditDialog.js:361
+#: js/GroupEditDialog.js:222 js/TagEditDialog.js:290 js/RoleEditDialog.js:361
 msgid "Transferring {0}..."
 msgstr "กำลังโอนย้าย {0}..."
 
-#: js/Admin-FAT-debug.js:3021 js/Admin-FAT-debug.js:3032
+#: js/GroupEditDialog.js:222 js/customfield/EditDialog.js:625 js/Models.js:87
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "กลุ่ม"
+
 #: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
 msgid "Add new group"
 msgstr "เพิ่มกลุ่มใหม่"
 
-#: js/Admin-FAT-debug.js:3034 js/GroupEditDialog.js:240
+#: js/GroupEditDialog.js:240
 msgid "Edit Group \"{0}\""
 msgstr "แก้ไขกลุ่ม \"{0}\""
 
-#: js/Admin-FAT-debug.js:3164 js/Admin-FAT-debug.js:3190 js/AccessLog.js:101
-#: js/AccessLog.js:129
+#: js/Applications.js:45
+msgid "{0} Settings"
+msgstr "ค่าติดตั้ง {0}"
+
+#: js/Applications.js:85
+msgid "Enable Application"
+msgstr ""
+
+#: js/Applications.js:92
+msgid "Disable Application"
+msgstr ""
+
+#: js/Applications.js:99
+msgid "Settings"
+msgstr "ค่าติดตั้ง"
+
+#: js/Applications.js:148
+msgid "enable application"
+msgstr "อนุญาตการประยุกต์ใช้"
+
+#: js/Applications.js:149
+msgid "disable application"
+msgstr "ไม่อนุญาตการประยุกต์ใช้"
+
+#: js/Applications.js:150
+msgid "settings"
+msgstr "ค่าติดตั้ง"
+
+#: js/Applications.js:230 js/user/EditDialog.js:885
+msgid "disabled"
+msgstr "ปิดใช้งานแล้ว"
+
+#: js/Applications.js:233 js/user/EditDialog.js:884
+msgid "enabled"
+msgstr "เปิดใช้งานแล้ว"
+
+#: js/Applications.js:237
+msgid "unknown status ({0})"
+msgstr "ไม่ทราบสถานะ ({0})"
+
+#: js/Applications.js:271
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "แสดงการใช้ {0} - {1} จาก {2}"
+
+#: js/Applications.js:272
+msgid "No applications to display"
+msgstr "ไม่มีการใช้ใด ๆ ให้แสดง"
+
+#: js/Applications.js:281 js/customfield/EditDialog.js:630
+msgid "Order"
+msgstr "คำสั่ง"
+
+#: js/Applications.js:283 js/user/EditDialog.js:876 js/user/GridPanel.js:172
+msgid "Status"
+msgstr "สถานะ"
+
+#: js/Applications.js:284
+msgid "Version"
+msgstr "ภาค"
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "คุณแน่ใจว่าต้องการลบกลุ่มที่เลือกไว้นี้?"
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "กำลังลบ กลุ่ม"
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "มีข้อผิดพลาดบางอย่างเกิดขึ้น ขณะที่พยายามลบกลุ่ม"
+
+#: js/Groups.js:106
+msgid "Add Group"
+msgstr "เพิ่มกลุ่ม"
+
+#: js/Groups.js:114
+msgid "Edit Group"
+msgstr "แก้ไขกลุ่ม"
+
+#: js/Groups.js:122
+msgid "Delete Group"
+msgstr "ลบกลุ่ม"
+
+#: js/Groups.js:224
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "กำลังแสดงกลุ่ม {0} - {1} จาก {2}"
+
+#: js/Groups.js:225 js/Groups.js:279
+msgid "No groups to display"
+msgstr "ไม่มีกลุ่มใด ๆ ให้แสดง"
+
+#: js/AccessLog.js:101 js/AccessLog.js:129
 msgid "IP Address"
 msgstr "หมายเลขไอพี"
 
-#: js/Admin-FAT-debug.js:3166 js/Admin-FAT-debug.js:3191 js/AccessLog.js:103
-#: js/AccessLog.js:130
+#: js/AccessLog.js:103 js/AccessLog.js:130
 msgid "Login Time"
 msgstr "เวลาเข้าใช้"
 
-#: js/Admin-FAT-debug.js:3167 js/Admin-FAT-debug.js:3192 js/AccessLog.js:104
-#: js/AccessLog.js:131
+#: js/AccessLog.js:104 js/AccessLog.js:131
 msgid "Logout Time"
 msgstr "เวลาเลิกใช้"
 
-#: js/Admin-FAT-debug.js:3168 js/Admin-FAT-debug.js:3194 js/AccessLog.js:105
-#: js/AccessLog.js:133
+#: js/AccessLog.js:105 js/AccessLog.js:133
 msgid "Client Type"
 msgstr "ประเภทลูกค้า"
 
-#: js/Admin-FAT-debug.js:3187 js/AccessLog.js:126
+#: js/AccessLog.js:126
 msgid "Session ID"
 msgstr "รหัสเซสชัน"
 
-#: js/Admin-FAT-debug.js:3188 js/AccessLog.js:127
+#: js/AccessLog.js:127
 msgid "Login Name"
 msgstr "ชื่อที่เข้าใช้"
 
-#: js/Admin-FAT-debug.js:3193 js/AccessLog.js:132
+#: js/AccessLog.js:132
 msgid "Result"
 msgstr "ผลลัพธ์"
 
-#: js/Admin-FAT-debug.js:3214 js/AccessLog.js:153
+#: js/AccessLog.js:153
 msgid "user blocked"
 msgstr "ผู้ใช้ถูกล็อก"
 
-#: js/Admin-FAT-debug.js:3218 js/AccessLog.js:157
+#: js/AccessLog.js:157
 msgid "password expired"
 msgstr "รหัสผ่านหมดอายุแล้ว"
 
-#: js/Admin-FAT-debug.js:3222 js/AccessLog.js:161
+#: js/AccessLog.js:161
 msgid "user disabled"
 msgstr "ผู้ใช้ปิดใช้งานแล้ว"
 
-#: js/Admin-FAT-debug.js:3226 js/AccessLog.js:165
+#: js/AccessLog.js:165
 msgid "invalid password"
 msgstr "รหัสผ่านไม่ถูกต้อง"
 
-#: js/Admin-FAT-debug.js:3230 js/AccessLog.js:169
+#: js/AccessLog.js:169
 msgid "ambiguous username"
 msgstr "ชื่อผู้ใช้คลุมเครือ"
 
-#: js/Admin-FAT-debug.js:3234 js/AccessLog.js:173
+#: js/AccessLog.js:173
 msgid "user not found"
 msgstr "ผู้ใช้ไม่พบ"
 
-#: js/Admin-FAT-debug.js:3238 js/AccessLog.js:177
+#: js/AccessLog.js:177
 msgid "failure"
 msgstr "ความล้มเหลว"
 
-#: js/Admin-FAT-debug.js:3242 js/AccessLog.js:181
+#: js/AccessLog.js:181
 msgid "success"
 msgstr "ความสำเร็จ"
 
-#: js/Admin-FAT-debug.js:3287 js/SambaMachineModel.js:39
+#: js/TagEditDialog.js:38
+msgid "Updating Tag"
+msgstr "กำลังปรับปรุงป้ายกำกับ"
+
+#: js/TagEditDialog.js:83
+msgid "Could not save tag."
+msgstr "ไม่สามารถจัดเก็บป้ายกำกับได้"
+
+#: js/TagEditDialog.js:169
+msgid "Allowed Contexts"
+msgstr ""
+
+#: js/TagEditDialog.js:175
+msgid "Context"
+msgstr ""
+
+#: js/TagEditDialog.js:188
+msgid "Account Rights"
+msgstr ""
+
+#: js/TagEditDialog.js:197
+msgid "View"
+msgstr "ดู"
+
+#: js/TagEditDialog.js:202
+msgid "Use"
+msgstr "ใช้"
+
+#: js/TagEditDialog.js:219
+msgid "Tag Name"
+msgstr "ชื่อป้ายกำกับ"
+
+#: js/TagEditDialog.js:290
+msgid "Tag"
+msgstr "ป้ายกำกับ"
+
+#: js/TagEditDialog.js:300
+msgid "Add New Tag"
+msgstr "เพิ่มป้ายกำกับใหม่"
+
+#: js/TagEditDialog.js:302
+msgid "Edit Tag \"{0}\""
+msgstr "แก้ไขป้ายกำกับ \"{0}\""
+
+#: js/RoleEditDialog.js:108
+msgid "Could not save role."
+msgstr "ไม่สามารถจัดเก็บหน้าที่ได้"
+
+#: js/RoleEditDialog.js:128
+msgid "Deleting role..."
+msgstr "กำลังลบ หน้าที่..."
+
+#: js/RoleEditDialog.js:160
+msgid "Rights"
+msgstr "สิทธิ์"
+
+#: js/RoleEditDialog.js:262
+msgid "Members"
+msgstr "สมาชิก"
+
+#: js/RoleEditDialog.js:286
+msgid "Role Name"
+msgstr "ชื่อหน้าที่"
+
+#: js/RoleEditDialog.js:361
+msgid "Role"
+msgstr "หน้าที่"
+
+#: js/RoleEditDialog.js:371
+msgid "Add New Role"
+msgstr "เพิ่มหน้าที่ใหม่"
+
+#: js/RoleEditDialog.js:373
+msgid "Edit Role \"{0}\""
+msgstr "แก้ไขหน้าที่ \"{0}\""
+
+#: js/SambaMachineModel.js:39
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "คอมพิวเตอร์"
 
-#: js/Admin-FAT-debug.js:3828 js/TagEditDialog.js:38
-msgid "Updating Tag"
-msgstr "กำลังปรับปรุงป้ายกำกับ"
+#: js/container/EditDialog.js:136 js/container/GridPanel.js:67
+#: js/ApplicationFilter.js:33 js/customfield/EditDialog.js:387
+#: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:69
+#: js/Models.js:127
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "การประยุกต์ใช้"
 
-#: js/Admin-FAT-debug.js:3873 js/TagEditDialog.js:83
-msgid "Could not save tag."
-msgstr "ไม่สามารถจัดเก็บป้ายกำกับได้"
+#: js/container/EditDialog.js:149 js/customfield/EditDialog.js:550
+#: js/customfield/GridPanel.js:70
+msgid "Model"
+msgstr "รุ่น"
 
-#: js/Admin-FAT-debug.js:3959 js/TagEditDialog.js:169
-msgid "Allowed Contexts"
-msgstr ""
+#: js/container/EditDialog.js:156 js/container/GridPanel.js:68
+#: js/container/GridPanel.js:99 js/customfield/EditDialog.js:584
+#: js/customfield/GridPanel.js:68
+msgid "Type"
+msgstr "ประเภท"
 
-#: js/Admin-FAT-debug.js:3965 js/TagEditDialog.js:175
-msgid "Context"
-msgstr ""
+#: js/container/EditDialog.js:157
+msgid "personal"
+msgstr "ส่วนตัว"
 
-#: js/Admin-FAT-debug.js:3978 js/TagEditDialog.js:188
-msgid "Account Rights"
-msgstr ""
+#: js/container/EditDialog.js:157
+msgid "shared"
+msgstr "ใช้ร่วมกัน"
 
-#: js/Admin-FAT-debug.js:3987 js/TagEditDialog.js:197
-msgid "View"
-msgstr "ดู"
+#: js/container/EditDialog.js:176
+msgid "Note for Owner"
+msgstr "บันทึกสำหรับเจ้าของ"
 
-#: js/Admin-FAT-debug.js:3992 js/TagEditDialog.js:202
-msgid "Use"
-msgstr "ใช้"
-
-#: js/Admin-FAT-debug.js:4009 js/TagEditDialog.js:219
-msgid "Tag Name"
-msgstr "ชื่อป้ายกำกับ"
-
-#: js/Admin-FAT-debug.js:4080 js/TagEditDialog.js:290
-msgid "Tag"
-msgstr "ป้ายกำกับ"
-
-#: js/Admin-FAT-debug.js:4090 js/TagEditDialog.js:300
-msgid "Add New Tag"
-msgstr "เพิ่มป้ายกำกับใหม่"
-
-#: js/Admin-FAT-debug.js:4092 js/TagEditDialog.js:302
-msgid "Edit Tag \"{0}\""
-msgstr "แก้ไขป้ายกำกับ \"{0}\""
-
-#: js/Admin-FAT-debug.js:4159 js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "คุณแน่ใจว่าต้องการลบหน้าที่ที่เลือกไว้นี้?"
-
-#: js/Admin-FAT-debug.js:4176 js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "กำลังลบ หน้าที่(s)..."
-
-#: js/Admin-FAT-debug.js:4181 js/Admin-FAT-debug.js:4601 js/Roles.js:69
-#: js/RoleEditDialog.js:136
-msgid "Some error occurred while trying to delete the role."
-msgstr "มีข้อผิดพลาดบางอย่างเกิดขึ้น ขณะที่พยายามลบหน้าที่"
-
-#: js/Admin-FAT-debug.js:4214 js/Roles.js:104
-msgid "Add Role"
-msgstr "เพิ่มหน้าที่"
-
-#: js/Admin-FAT-debug.js:4222 js/Roles.js:112
-msgid "Edit Role"
-msgstr "แก้ไขหน้าที่"
-
-#: js/Admin-FAT-debug.js:4230 js/Roles.js:120
-msgid "Delete Role"
-msgstr "ลบหน้าที่"
-
-#: js/Admin-FAT-debug.js:4338 js/Roles.js:227
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "กำลังแสดงหน้าที่ {0} - {1} จาก {2}"
-
-#: js/Admin-FAT-debug.js:4339 js/Admin-FAT-debug.js:4393 js/Roles.js:228
-#: js/Roles.js:282
-msgid "No roles to display"
-msgstr "ไม่มีหน้าที่ใด ๆ ให้แสดง"
-
-#: js/Admin-FAT-debug.js:4573 js/RoleEditDialog.js:108
-msgid "Could not save role."
-msgstr "ไม่สามารถจัดเก็บหน้าที่ได้"
-
-#: js/Admin-FAT-debug.js:4593 js/RoleEditDialog.js:128
-msgid "Deleting role..."
-msgstr "กำลังลบ หน้าที่..."
-
-#: js/Admin-FAT-debug.js:4625 js/RoleEditDialog.js:160
-msgid "Rights"
-msgstr "สิทธิ์"
-
-#: js/Admin-FAT-debug.js:4727 js/RoleEditDialog.js:262
-msgid "Members"
-msgstr "สมาชิก"
-
-#: js/Admin-FAT-debug.js:4751 js/RoleEditDialog.js:286
-msgid "Role Name"
-msgstr "ชื่อหน้าที่"
-
-#: js/Admin-FAT-debug.js:4826 js/RoleEditDialog.js:361
-msgid "Role"
-msgstr "หน้าที่"
-
-#: js/Admin-FAT-debug.js:4836 js/RoleEditDialog.js:371
-msgid "Add New Role"
-msgstr "เพิ่มหน้าที่ใหม่"
-
-#: js/Admin-FAT-debug.js:4838 js/RoleEditDialog.js:373
-msgid "Edit Role \"{0}\""
-msgstr "แก้ไขหน้าที่ \"{0}\""
-
-#: js/Admin-FAT-debug.js:4983 js/Admin-FAT-debug.js:5315
 #: js/container/Container.js:46 js/container/GridPanel.js:98
 msgid "Container"
 msgid_plural "Containers"
 msgstr[0] "ที่จัดเก็บ"
 
-#: js/Admin-FAT-debug.js:5158 js/Admin-FAT-debug.js:5934
-#: js/Admin-FAT-debug.js:6159 js/container/EditDialog.js:149
-#: js/customfield/EditDialog.js:550 js/customfield/GridPanel.js:70
-msgid "Model"
-msgstr "รุ่น"
-
-#: js/Admin-FAT-debug.js:5165 js/Admin-FAT-debug.js:5285
-#: js/Admin-FAT-debug.js:5316 js/Admin-FAT-debug.js:5968
-#: js/Admin-FAT-debug.js:6157 js/container/EditDialog.js:156
-#: js/container/GridPanel.js:68 js/container/GridPanel.js:99
-#: js/customfield/EditDialog.js:584 js/customfield/GridPanel.js:68
-msgid "Type"
-msgstr "ประเภท"
-
-#: js/Admin-FAT-debug.js:5166 js/container/EditDialog.js:157
-msgid "personal"
-msgstr "ส่วนตัว"
-
-#: js/Admin-FAT-debug.js:5166 js/container/EditDialog.js:157
-msgid "shared"
-msgstr "ใช้ร่วมกัน"
-
-#: js/Admin-FAT-debug.js:5185 js/container/EditDialog.js:176
-msgid "Note for Owner"
-msgstr "บันทึกสำหรับเจ้าของ"
-
-#: js/Admin-FAT-debug.js:5283 js/container/GridPanel.js:66
+#: js/container/GridPanel.js:66
 msgid "Container Name"
 msgstr "ชื่อที่จัดเก็บ"
 
-#: js/Admin-FAT-debug.js:5372 js/Admin-FAT-debug.js:6199
+#: js/user/EditDialog.js:187
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+#: js/user/EditDialog.js:234 js/user/EditDialog.js:237
+#: js/user/EditDialog.js:730
+msgid "Passwords do not match!"
+msgstr "รหัสผ่านไม่ตรง"
+
+#: js/user/EditDialog.js:240
+msgid "Passwords match!"
+msgstr "รหัสผ่านตรง!"
+
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:858
+msgid "Primary group"
+msgstr "กลุ่มหลัก"
+
+#: js/user/EditDialog.js:363
+msgid "Unix"
+msgstr "ยูนิกซ์"
+
+#: js/user/EditDialog.js:377
+msgid "Home Directory"
+msgstr ""
+
+#: js/user/EditDialog.js:381
+msgid "Login Shell"
+msgstr ""
+
+#: js/user/EditDialog.js:387
+msgid "Windows"
+msgstr ""
+
+#: js/user/EditDialog.js:401
+msgid "Home Drive"
+msgstr ""
+
+#: js/user/EditDialog.js:406
+msgid "Logon Time"
+msgstr "เวลาเข้าใช้"
+
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:986
+#: js/user/EditDialog.js:990
+msgid "never logged in"
+msgstr "ไม่เคยได้เข้าใช้"
+
+#: js/user/EditDialog.js:411
+msgid "Home Path"
+msgstr ""
+
+#: js/user/EditDialog.js:416
+msgid "Logoff Time"
+msgstr "เวลาเลิกใช้"
+
+#: js/user/EditDialog.js:418
+msgid "never logged off"
+msgstr "ไม่เคยเลิกใช้"
+
+#: js/user/EditDialog.js:421
+msgid "Profile Path"
+msgstr ""
+
+#: js/user/EditDialog.js:426
+msgid "Password Last Set"
+msgstr ""
+
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:920
+#: js/user/EditDialog.js:994
+msgid "never"
+msgstr "ไม่เลย"
+
+#: js/user/EditDialog.js:431
+msgid "Logon Script"
+msgstr ""
+
+#: js/user/EditDialog.js:436
+msgid "Password Can Change"
+msgstr "รหัสผ่านสามารถเปลี่ยน"
+
+#: js/user/EditDialog.js:438 js/user/EditDialog.js:443
+#: js/user/EditDialog.js:448
+msgid "not set"
+msgstr "ยังไม่ได้กำหนด"
+
+#: js/user/EditDialog.js:441
+msgid "Password Must Change"
+msgstr "รหัสผ่านต้องเปลี่ยน"
+
+#: js/user/EditDialog.js:446
+msgid "Kick Off Time"
+msgstr ""
+
+#: js/user/EditDialog.js:466
+msgid "IMAP Quota (MB)"
+msgstr ""
+
+#: js/user/EditDialog.js:485 js/user/EditDialog.js:523
+msgid "Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:486 js/user/EditDialog.js:524
+msgid "no quota set"
+msgstr ""
+
+#: js/user/EditDialog.js:496
+msgid "Current Mailbox size"
+msgstr "ขนาดของกล่องจดหมายตอนนี้"
+
+#: js/user/EditDialog.js:504
+msgid "Sieve Quota (MB)"
+msgstr ""
+
+#: js/user/EditDialog.js:534
+msgid "Current Sieve size"
+msgstr ""
+
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:969
+msgid "Information"
+msgstr "ข้อมูล"
+
+#: js/user/EditDialog.js:557
+msgid "Last Login"
+msgstr "ลงบันทึกเข้าครั้งล่าสุด"
+
+#: js/user/EditDialog.js:615
+msgid "Domain not allowed"
+msgstr "โดเมนไม่ได้รับอนุญาต"
+
+#: js/user/EditDialog.js:616
+msgid ""
+"The domain {0} of the alias {1} you tried to add is neither configured as "
+"primary domain nor set as a secondary domain in the setup."
+msgstr ""
+
+#: js/user/EditDialog.js:625
+msgid "Email Alias"
+msgstr ""
+
+#: js/user/EditDialog.js:631
+msgid "Add an alias address..."
+msgstr ""
+
+#: js/user/EditDialog.js:649
+msgid "Forwarding to self"
+msgstr ""
+
+#: js/user/EditDialog.js:650
+msgid ""
+"You are not allowed to set a forward email address that is identical to the "
+"users primary email or one of his aliases."
+msgstr ""
+
+#: js/user/EditDialog.js:659
+msgid "Email Forward"
+msgstr "ส่งต่ออีเมล"
+
+#: js/user/EditDialog.js:665
+msgid "Add a forward address..."
+msgstr ""
+
+#: js/user/EditDialog.js:678
+msgid "Forward Only"
+msgstr "ส่งต่อเท่านั้น"
+
+#: js/user/EditDialog.js:697
+msgid "Password confirmation"
+msgstr "การยืนยันรหัสผ่าน"
+
+#: js/user/EditDialog.js:714
+msgid "Repeat password"
+msgstr "ใส่รหัสผ่านอีกครั้ง"
+
+#: js/user/EditDialog.js:733 js/customfield/EditDialog.js:471
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: js/user/EditDialog.js:740
+msgid "Ok"
+msgstr "ตกลง"
+
+#: js/user/EditDialog.js:775
+msgid "Account"
+msgstr "บัญชี"
+
+#: js/user/EditDialog.js:790 js/user/GridPanel.js:176
+msgid "First name"
+msgstr "ชื่อตัว"
+
+#: js/user/EditDialog.js:801 js/user/GridPanel.js:175
+msgid "Last name"
+msgstr "นามสกุล"
+
+#: js/user/EditDialog.js:807 js/user/EditDialog.js:852
+#: js/user/GridPanel.js:174
+msgid "Login name"
+msgstr "ชื่อที่เข้าใช้"
+
+#: js/user/EditDialog.js:813
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+#: js/user/EditDialog.js:844 js/user/GridPanel.js:177
+msgid "Email"
+msgstr "อีเมล"
+
+#: js/user/EditDialog.js:851 js/user/GridPanel.js:178
+msgid "OpenID"
+msgstr ""
+
+#: js/user/EditDialog.js:886
+msgid "expired"
+msgstr "หมดอายุแล้ว"
+
+#: js/user/EditDialog.js:887
+msgid "blocked"
+msgstr "ถูกล็อก"
+
+#: js/user/EditDialog.js:894
+msgid "Invalid Status"
+msgstr ""
+
+#: js/user/EditDialog.js:895
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr "สถานะ ถูกล็อก จะใช้ต่อเมื่อผู้ใช้พยายามลงชื่อเข้าใช้ด้วยรหัสผ่านที่ผิดบ่อย ๆ ณ ที่นี่ไม่สามารถตั้งค่าสถานะนี้ได้"
+
+#: js/user/EditDialog.js:917 js/user/GridPanel.js:182
+msgid "Expires"
+msgstr "หมดอายุ"
+
+#: js/user/EditDialog.js:984 js/user/GridPanel.js:179
+msgid "Last login at"
+msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด เมื่อ"
+
+#: js/user/EditDialog.js:986 js/user/EditDialog.js:990
+msgid "don't know"
+msgstr "ไม่ทราบ"
+
+#: js/user/EditDialog.js:988 js/user/GridPanel.js:180
+msgid "Last login from"
+msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด จาก"
+
+#: js/user/EditDialog.js:992
+msgid "Password set"
+msgstr "ตั้งรหัสผ่าน"
+
+#: js/user/EditDialog.js:999
+msgid "User groups"
+msgstr "กลุ่มผู้ใช้"
+
+#: js/user/EditDialog.js:1005
+msgid "User roles"
+msgstr ""
+
+#: js/user/EditDialog.js:1011
+msgid "Fileserver"
+msgstr "ตัวจัดเก็บไฟล์"
+
+#: js/user/EditDialog.js:1017
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:1026
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/user/GridPanel.js:50
+msgid "Enable Account"
+msgstr ""
+
+#: js/user/GridPanel.js:60
+msgid "Disable Account"
+msgstr ""
+
+#: js/user/GridPanel.js:70
+msgid "Reset Password"
+msgstr "ตั้งรหัสผ่านใหม่"
+
+#: js/user/GridPanel.js:173
+msgid "Display name"
+msgstr "ชื่อที่ใช้"
+
+#: js/user/GridPanel.js:181
+msgid "Password changed"
+msgstr "รหัสผ่านได้เปลี่ยนแล้ว"
+
+#: js/user/GridPanel.js:240
+msgid "Set new password"
+msgstr "ตั้งรหัสผ่านใหม่"
+
+#: js/user/GridPanel.js:240
+msgid "Please enter the new password:"
+msgstr "กรุณาใส่รหัสผ่านใหม่:"
+
+#: js/user/Users.js:72
+msgid "Users"
+msgstr "ผู้ใช้"
+
+#: js/user/Users.js:120
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "ผู้ใช้ Samba"
+
+#: js/user/Users.js:146
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "ผู้ใช้อีเมล"
+
 #: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:110
 msgid "Customfield"
 msgid_plural "Customfields"
 msgstr[0] ""
 
-#: js/Admin-FAT-debug.js:5521 js/customfield/EditDialog.js:137
+#: js/customfield/EditDialog.js:137
 msgid "Please configure store for this field type"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:5628 js/customfield/EditDialog.js:244
+#: js/customfield/EditDialog.js:244
 msgid "Default"
 msgstr "ค่าหลัก"
 
-#: js/Admin-FAT-debug.js:5672 js/customfield/EditDialog.js:288
+#: js/customfield/EditDialog.js:288
 msgid "Add a New ID..."
 msgstr "เพิ่มรหัสใหม่..."
 
-#: js/Admin-FAT-debug.js:5676 js/customfield/EditDialog.js:292
+#: js/customfield/EditDialog.js:292
 msgid "Value"
 msgstr "ค่า"
 
-#: js/Admin-FAT-debug.js:5681 js/customfield/EditDialog.js:297
+#: js/customfield/EditDialog.js:297
 msgid "Add a New Value..."
 msgstr "เพิ่มค่าใหม่..."
 
-#: js/Admin-FAT-debug.js:5691 js/Admin-FAT-debug.js:5697
 #: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
 msgid "Error"
 msgstr "ผิดพลาด"
 
-#: js/Admin-FAT-debug.js:5691 js/customfield/EditDialog.js:307
+#: js/customfield/EditDialog.js:307
 msgid "ID already exists"
 msgstr "รหัสนี้มีแล้ว"
 
-#: js/Admin-FAT-debug.js:5697 js/customfield/EditDialog.js:313
+#: js/customfield/EditDialog.js:313
 msgid "Value already exists"
 msgstr "ค่านี้มีแล้ว"
 
-#: js/Admin-FAT-debug.js:5791 js/customfield/EditDialog.js:407
+#: js/customfield/EditDialog.js:407
 msgid "Record Class"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:5816 js/customfield/EditDialog.js:432
+#: js/customfield/EditDialog.js:432
 msgid "Given record class not found"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:5849 js/customfield/EditDialog.js:465
+#: js/customfield/EditDialog.js:465
 msgid "OK"
 msgstr "ตกลง"
 
-#: js/Admin-FAT-debug.js:5888 js/customfield/EditDialog.js:504
+#: js/customfield/EditDialog.js:504
 msgid "Configure store"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:5945 js/customfield/EditDialog.js:561
+#: js/customfield/EditDialog.js:561
 msgid "Custom field definition"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:5956 js/customfield/EditDialog.js:572
+#: js/customfield/EditDialog.js:572
 msgid "Text"
-msgstr ""
+msgstr "ข้อความ"
 
-#: js/Admin-FAT-debug.js:5957 js/customfield/EditDialog.js:573
+#: js/customfield/EditDialog.js:573
 msgid "Number"
 msgstr "ลำดับ"
 
-#: js/Admin-FAT-debug.js:5958 js/customfield/EditDialog.js:574
+#: js/customfield/EditDialog.js:574
 msgid "Date"
 msgstr "วันที่"
 
-#: js/Admin-FAT-debug.js:5959 js/customfield/EditDialog.js:575
+#: js/customfield/EditDialog.js:575
 msgid "DateTime"
 msgstr "วันเวลา"
 
-#: js/Admin-FAT-debug.js:5960 js/customfield/EditDialog.js:576
+#: js/customfield/EditDialog.js:576
 msgid "Time"
 msgstr "เวลา"
 
-#: js/Admin-FAT-debug.js:5961 js/customfield/EditDialog.js:577
+#: js/customfield/EditDialog.js:577
 msgid "Boolean"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:5962 js/customfield/EditDialog.js:578
+#: js/customfield/EditDialog.js:578
 msgid "Search Combo"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:5963 js/customfield/EditDialog.js:579
+#: js/customfield/EditDialog.js:579
 msgid "Key Field"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:5964 js/customfield/EditDialog.js:580
+#: js/customfield/EditDialog.js:580
 msgid "Record"
-msgstr ""
+msgstr "บันทึก"
 
-#: js/Admin-FAT-debug.js:5986 js/Admin-FAT-debug.js:6155
 #: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:66
 msgid "Label"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:5992 js/customfield/EditDialog.js:608
+#: js/customfield/EditDialog.js:608
 msgid "Length"
 msgstr "ความยาว"
 
-#: js/Admin-FAT-debug.js:5997 js/customfield/EditDialog.js:613
+#: js/customfield/EditDialog.js:613
 msgid "Required"
 msgstr "ได้ต้องการ"
 
-#: js/Admin-FAT-debug.js:6004 js/customfield/EditDialog.js:620
+#: js/customfield/EditDialog.js:620
 msgid "Custom field additional properties"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:6037 js/customfield/EditDialog.js:653
+#: js/customfield/EditDialog.js:653
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
 
-#: js/Admin-FAT-debug.js:6215 js/customfield/GridPanel.js:128
+#: js/customfield/GridPanel.js:128
 msgid "Restart application to apply new customfields?"
 msgstr ""
 

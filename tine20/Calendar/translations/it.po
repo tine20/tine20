@@ -398,23 +398,23 @@ msgstr "Orario Avviso Standard"
 msgid "Minutes before the event starts"
 msgstr "Minuti prima dell'inizio dell'evento"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "Never"
 msgstr "Mai"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On invitation and cancellation only"
 msgstr "Su invito e recesso unicamente"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On time changes"
 msgstr "Nei cambiamenti di orario"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On all updates but attendee responses"
 msgstr "Su tutti gli aggiornamenti ma le risposte dei partecipanti"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On attendee responses too"
 msgstr "Troppe risposte dai partecipanti"
 

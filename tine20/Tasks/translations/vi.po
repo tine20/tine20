@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 12:02+0000\n"
+"PO-Revision-Date: 2014-04-25 12:48+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -42,8 +42,7 @@ msgstr "Việc cá nhân của %s"
 msgid "Due"
 msgstr "Hạn"
 
-#: Model/Task.php:207 js/Tasks-FAT.js:6 js/TaskEditDialog.js:200
-#: js/Tasks-FAT-debug.js:686
+#: Model/Task.php:207 js/TaskEditDialog.js:200
 msgid "Organizer"
 msgstr "Người tổ chức"
 
@@ -51,27 +50,21 @@ msgstr "Người tổ chức"
 msgid "Description"
 msgstr "Mô tả"
 
-#: Model/Task.php:209 js/Tasks-FAT.js:6 js/TaskGridPanel.js:119
-#: js/TaskEditDialog.js:192 js/Tasks-FAT-debug.js:364
-#: js/Tasks-FAT-debug.js:678
+#: Model/Task.php:209 js/TaskGridPanel.js:119 js/TaskEditDialog.js:192
 msgid "Priority"
 msgstr "Độ quan trọng"
 
-#: Model/Task.php:210 js/Tasks-FAT.js:6 js/TaskGridPanel.js:148
-#: js/TaskEditDialog.js:222 js/Tasks-FAT-debug.js:113
-#: js/Tasks-FAT-debug.js:171 js/Tasks-FAT-debug.js:393
-#: js/Tasks-FAT-debug.js:708 js/Models.js:110 js/Models.js:168
+#: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
+#: js/Models.js:110 js/Models.js:168
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "one: Trạng thái\nother: Trạng thái"
 
-#: Model/Task.php:211 js/Tasks-FAT.js:6 js/TaskGridPanel.js:135
-#: js/Tasks-FAT-debug.js:380
+#: Model/Task.php:211 js/TaskGridPanel.js:135
 msgid "Percent"
 msgstr "Phần trăm"
 
-#: Model/Task.php:218 js/Tasks-FAT.js:6 js/TaskGridPanel.js:90
-#: js/Tasks-FAT-debug.js:339
+#: Model/Task.php:218 js/TaskGridPanel.js:90
 msgid "Lead"
 msgstr "Chủ trì"
 
@@ -107,9 +100,8 @@ msgstr "Độ quan trọng có thể. Xin nhớ rằng độ quan trọng khác 
 msgid "No response"
 msgstr "Không trả lời"
 
-#: Setup/Update/Release5.php:75 Setup/Initialize.php:35 js/Tasks-FAT.js:6
-#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230 js/Tasks-FAT-debug.js:416
-#: js/Tasks-FAT-debug.js:715
+#: Setup/Update/Release5.php:75 Setup/Initialize.php:35
+#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230
 msgid "Completed"
 msgstr "Hoàn thành"
 
@@ -189,105 +181,96 @@ msgstr "Danh sách việc mặc định"
 msgid "The default task list to create new tasks in."
 msgstr "Danh sách việc mặc định sẽ cần tạo việc mới trong đó"
 
-#: js/Tasks.js:39 js/Tasks-FAT-debug.js:197
+#: js/Tasks.js:39
 msgid "New Task"
 msgstr "Tạo việc mới"
 
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:108
-msgid "Quick search"
-msgstr ""
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:97 js/TaskEditDialog.js:181
-#: js/Tasks-FAT-debug.js:110 js/Tasks-FAT-debug.js:342
-#: js/Tasks-FAT-debug.js:667 js/Models.js:107
-msgid "Summary"
-msgstr "Tóm tắt"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:105 js/Tasks-FAT-debug.js:111
-#: js/Tasks-FAT-debug.js:350 js/Models.js:108
-msgid "Due Date"
-msgstr "Ngày đến hạn"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:178 js/Tasks-FAT-debug.js:121
-#: js/Tasks-FAT-debug.js:423 js/Models.js:118
-msgid "Responsible"
-msgstr "Có thể trả lời"
-
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:123 js/Models.js:120
-msgid "Last Modified Time"
-msgstr "Thời gian sửa"
-
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:124 js/Models.js:121
-msgid "Last Modified By"
-msgstr "Sửa lần cuối bởi"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:164 js/Tasks-FAT-debug.js:125
-#: js/Tasks-FAT-debug.js:409 js/Models.js:122
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:126 js/Models.js:123
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:87 js/Tasks-FAT-debug.js:338
-msgid "Tags"
-msgstr "Thẻ"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:101 js/Tasks-FAT-debug.js:346
-msgid "Add a task..."
-msgstr "Thêm 1 việc"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:136 js/Tasks-FAT-debug.js:625
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Bạn phải cung cấp ngày đến hạn, bởi vì bộ nhắc đã được chọn"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:188 js/Tasks-FAT-debug.js:674
-msgid "Due date"
-msgstr "Ngày đến hạn"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:201 js/Tasks-FAT-debug.js:687
-msgid "Add Responsible ..."
-msgstr "Thêm trả lời..."
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:208 js/Tasks-FAT-debug.js:694
-msgid "Notes"
-msgstr "Ghi chú"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:209 js/Tasks-FAT-debug.js:695
-msgid "Enter description..."
-msgstr "Nhập mô tả..."
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:215 js/Tasks-FAT-debug.js:701
-msgid "Percentage"
-msgstr "Phần trăm"
-
-#: js/TaskGridPanel.js:54 js/Tasks-FAT-debug.js:282
+#: js/TaskGridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "one: Bạn có muốn xóa công việc đã chọn?\nother: Bạn có muốn xóa những công việc đã chọn?"
 
-#: js/Tasks-FAT-debug.js:69 js/Models.js:66
+#: js/TaskGridPanel.js:87
+msgid "Tags"
+msgstr "Thẻ"
+
+#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:107
+msgid "Summary"
+msgstr "Tóm tắt"
+
+#: js/TaskGridPanel.js:101
+msgid "Add a task..."
+msgstr "Thêm 1 việc"
+
+#: js/TaskGridPanel.js:105 js/Models.js:108
+msgid "Due Date"
+msgstr "Ngày đến hạn"
+
+#: js/TaskGridPanel.js:164 js/Models.js:122
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/TaskGridPanel.js:178 js/Models.js:118
+msgid "Responsible"
+msgstr "Có thể trả lời"
+
+#: js/TaskEditDialog.js:136
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Bạn phải cung cấp ngày đến hạn, bởi vì bộ nhắc đã được chọn"
+
+#: js/TaskEditDialog.js:188
+msgid "Due date"
+msgstr "Ngày đến hạn"
+
+#: js/TaskEditDialog.js:201
+msgid "Add Responsible ..."
+msgstr "Thêm trả lời..."
+
+#: js/TaskEditDialog.js:208
+msgid "Notes"
+msgstr "Ghi chú"
+
+#: js/TaskEditDialog.js:209
+msgid "Enter description..."
+msgstr "Nhập mô tả..."
+
+#: js/TaskEditDialog.js:215
+msgid "Percentage"
+msgstr "Phần trăm"
+
+#: js/Models.js:66
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "one: Công việc\nothers: Công việc"
 
-#: js/Tasks-FAT-debug.js:69 js/Models.js:66
+#: js/Models.js:66
 msgid "Tasks"
 msgstr "Công việc"
 
-#: js/Tasks-FAT-debug.js:73 js/Models.js:70
+#: js/Models.js:70
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "one: danh sách cần làm\nother: danh sách cần làm"
 
-#: js/Tasks-FAT-debug.js:73 js/Models.js:70
+#: js/Models.js:70
 msgid "to do lists"
 msgstr "Danh sách cần làm"
 
 #: js/Models.js:105
 msgid "Quick Search"
 msgstr "Tìm nhanh"
+
+#: js/Models.js:120
+msgid "Last Modified Time"
+msgstr "Thời gian sửa"
+
+#: js/Models.js:121
+msgid "Last Modified By"
+msgstr "Sửa lần cuối bởi"
+
+#: js/Models.js:123
+msgid "Created By"
+msgstr "Tạo bởi"
 
 #: Controller/Task.php:202
 msgid "Notification for Task "

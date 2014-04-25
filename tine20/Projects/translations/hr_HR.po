@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 12:00+0000\n"
+"PO-Revision-Date: 2014-04-25 12:47+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
@@ -52,8 +52,7 @@ msgid ""
 "syncronisation."
 msgstr "Moguće uloge sudionika projekta. Napomena da dodatne uloge sudionika projekta mogu utjecati na ostale projekte prilikom izvoza ili sinkronizacije."
 
-#: Setup/setup.xml:4 js/Projects-FAT-debug.js:187 js/Projects-FAT.js:5
-#: js/Projects.js:24
+#: Setup/setup.xml:4 js/Projects.js:24
 msgid "Projects"
 msgstr "Projekti"
 
@@ -113,34 +112,27 @@ msgstr "Zadani favorit"
 msgid "The default favorite which is loaded on Projects startup"
 msgstr "Zadani favorit prilikom pokretanja Projekata"
 
-#: js/AddToProjectPanel.js:34 js/Projects-FAT-debug.js:893
-#: js/Projects-FAT.js:5
+#: js/AddToProjectPanel.js:34
 msgid "Please choose the Project to add the contacts to"
 msgstr "Odaberite projekt kojem će se dodati kontakti"
 
-#: js/AddToProjectPanel.js:38 js/Projects-FAT-debug.js:897
-#: js/Projects-FAT.js:5
+#: js/AddToProjectPanel.js:38
 msgid "Please select the attenders' role"
 msgstr "Odaberite uloge sudionika"
 
-#: js/AddToProjectPanel.js:79 js/Projects-FAT-debug.js:938
-#: js/Projects-FAT.js:5
+#: js/AddToProjectPanel.js:79
 msgid "Select Project"
 msgstr "Odaberite projekt"
 
-#: js/AddToProjectPanel.js:81 js/Projects-FAT-debug.js:613
-#: js/Projects-FAT-debug.js:940 js/Projects-FAT.js:5
-#: js/ProjectEditDialog.js:81
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
 msgid "Role"
 msgstr "Uloga"
 
-#: js/AddToProjectPanel.js:82 js/Projects-FAT-debug.js:941
-#: js/Projects-FAT.js:5
+#: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "Odaberite ulogu"
 
-#: js/AddToProjectPanel.js:102 js/Projects-FAT-debug.js:961
-#: js/Projects-FAT.js:5
+#: js/AddToProjectPanel.js:102
 msgid "Adding {0} Participants to project"
 msgstr "Dodavanje {0} sudionika projekta"
 
@@ -148,90 +140,72 @@ msgstr "Dodavanje {0} sudionika projekta"
 msgid "Search FAQ"
 msgstr ""
 
-#: js/ProjectGridPanel.js:118 js/Projects-FAT-debug.js:318
-#: js/Projects-FAT.js:5
+#: js/ProjectGridPanel.js:118
 msgid "Tags"
 msgstr "Oznake"
 
-#: js/ProjectGridPanel.js:121 js/Projects-FAT-debug.js:137
-#: js/Projects-FAT-debug.js:321 js/Projects-FAT-debug.js:667
-#: js/Projects-FAT.js:5 js/Model.js:76 js/ProjectEditDialog.js:138
+#: js/ProjectGridPanel.js:121 js/Model.js:76 js/ProjectEditDialog.js:138
 msgid "Number"
 msgstr "Broj"
 
-#: js/ProjectGridPanel.js:128 js/Projects-FAT-debug.js:136
-#: js/Projects-FAT-debug.js:328 js/Projects-FAT-debug.js:662
-#: js/Projects-FAT.js:5 js/Model.js:75 js/ProjectEditDialog.js:133
+#: js/ProjectGridPanel.js:128 js/Model.js:75 js/ProjectEditDialog.js:133
 msgid "Title"
 msgstr "Naslov"
 
-#: js/ProjectGridPanel.js:134 js/Projects-FAT-debug.js:140
-#: js/Projects-FAT-debug.js:334 js/Projects-FAT-debug.js:673
-#: js/Projects-FAT.js:5 js/Model.js:79 js/ProjectEditDialog.js:144
+#: js/ProjectGridPanel.js:134 js/Model.js:79 js/ProjectEditDialog.js:144
 msgid "Status"
 msgstr "Status"
 
-#: js/Projects-FAT-debug.js:42 js/Projects-FAT-debug.js:612
-#: js/Projects-FAT.js:5 js/ProjectAttendeeFilter.js:38
-#: js/ProjectEditDialog.js:80
-msgid "Attendee"
-msgstr "Sudionik"
-
-#: js/Projects-FAT-debug.js:53 js/Projects-FAT.js:5
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Uloga sudionika"
-
-#: js/Projects-FAT-debug.js:96 js/Projects-FAT-debug.js:637
-#: js/Projects-FAT-debug.js:650 js/Projects-FAT.js:5 js/Model.js:35
-#: js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121
+#: js/Model.js:35 js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekt"
 msgstr[1] "Projekta"
 msgstr[2] "Projekta"
 
-#: js/Projects-FAT-debug.js:100 js/Model.js:39
+#: js/Model.js:39
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Lista projekta"
 msgstr[1] "Liste projekta"
 msgstr[2] "Listi projekta"
 
-#: js/Projects-FAT-debug.js:103 js/Model.js:42
+#: js/Model.js:42
 msgid "Project lists"
 msgstr "Liste projekta"
-
-#: js/Projects-FAT-debug.js:135 js/Projects-FAT.js:5
-msgid "Quick search"
-msgstr ""
-
-#: js/Projects-FAT-debug.js:138 js/Projects-FAT-debug.js:703
-#: js/Projects-FAT.js:5 js/Model.js:77 js/ProjectEditDialog.js:174
-msgid "Description"
-msgstr "Opis"
-
-#: js/Projects-FAT-debug.js:149 js/Projects-FAT.js:5 js/Model.js:88
-msgid "Last Modified Time"
-msgstr "Vrijeme zadnje izmjene"
-
-#: js/Projects-FAT-debug.js:150 js/Projects-FAT.js:5 js/Model.js:89
-msgid "Last Modified By"
-msgstr "Zadnji izmijenio"
-
-#: js/Projects-FAT-debug.js:151 js/Projects-FAT.js:5 js/Model.js:90
-msgid "Creation Time"
-msgstr "Vrijeme kreiranja"
-
-#: js/Projects-FAT-debug.js:152 js/Projects-FAT.js:5 js/Model.js:91
-msgid "Created By"
-msgstr "Kreirao"
-
-#: js/Projects-FAT-debug.js:717 js/Projects-FAT.js:5
-#: js/ProjectEditDialog.js:188
-msgid "Enter description"
-msgstr "Unesi opis"
 
 #: js/Model.js:74
 msgid "Quick Search"
 msgstr ""
+
+#: js/Model.js:77 js/ProjectEditDialog.js:174
+msgid "Description"
+msgstr "Opis"
+
+#: js/Model.js:88
+msgid "Last Modified Time"
+msgstr "Vrijeme zadnje izmjene"
+
+#: js/Model.js:89
+msgid "Last Modified By"
+msgstr "Zadnji izmijenio"
+
+#: js/Model.js:90
+msgid "Creation Time"
+msgstr "Vrijeme kreiranja"
+
+#: js/Model.js:91
+msgid "Created By"
+msgstr "Kreirao"
+
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
+msgid "Attendee"
+msgstr "Sudionik"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Uloga sudionika"
+
+#: js/ProjectEditDialog.js:188
+msgid "Enter description"
+msgstr "Unesi opis"

@@ -400,23 +400,23 @@ msgstr "Standardna vrijeme alarma"
 msgid "Minutes before the event starts"
 msgstr "Minuta prije nego događaj započne"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "Never"
 msgstr "Nikada"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On invitation and cancellation only"
 msgstr "Samo kod pozivanja i otkazivanja"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On time changes"
 msgstr "Na promjeni vrijemena"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On all updates but attendee responses"
 msgstr "Na svim promjenama, ali odgovora sudionika"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On attendee responses too"
 msgstr "Na sudionik odgovora isto"
 

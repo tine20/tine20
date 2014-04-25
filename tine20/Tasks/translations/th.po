@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 12:02+0000\n"
+"PO-Revision-Date: 2014-04-25 12:48+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -42,8 +42,7 @@ msgstr "จำนวน %s ของหน้าที่ส่วนบุค�
 msgid "Due"
 msgstr "กำหนด"
 
-#: Model/Task.php:207 js/Tasks-FAT.js:6 js/TaskEditDialog.js:200
-#: js/Tasks-FAT-debug.js:686
+#: Model/Task.php:207 js/TaskEditDialog.js:200
 msgid "Organizer"
 msgstr "ผู้ดำเนินงาน"
 
@@ -51,27 +50,21 @@ msgstr "ผู้ดำเนินงาน"
 msgid "Description"
 msgstr "การอธิบาย"
 
-#: Model/Task.php:209 js/Tasks-FAT.js:6 js/TaskGridPanel.js:119
-#: js/TaskEditDialog.js:192 js/Tasks-FAT-debug.js:364
-#: js/Tasks-FAT-debug.js:678
+#: Model/Task.php:209 js/TaskGridPanel.js:119 js/TaskEditDialog.js:192
 msgid "Priority"
 msgstr "ลำดับความสำคัญ"
 
-#: Model/Task.php:210 js/Tasks-FAT.js:6 js/TaskGridPanel.js:148
-#: js/TaskEditDialog.js:222 js/Tasks-FAT-debug.js:113
-#: js/Tasks-FAT-debug.js:171 js/Tasks-FAT-debug.js:393
-#: js/Tasks-FAT-debug.js:708 js/Models.js:110 js/Models.js:168
+#: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
+#: js/Models.js:110 js/Models.js:168
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "สถานะ"
 
-#: Model/Task.php:211 js/Tasks-FAT.js:6 js/TaskGridPanel.js:135
-#: js/Tasks-FAT-debug.js:380
+#: Model/Task.php:211 js/TaskGridPanel.js:135
 msgid "Percent"
 msgstr "เปอร์เซนต์"
 
-#: Model/Task.php:218 js/Tasks-FAT.js:6 js/TaskGridPanel.js:90
-#: js/Tasks-FAT-debug.js:339
+#: Model/Task.php:218 js/TaskGridPanel.js:90
 msgid "Lead"
 msgstr "ดำเนินการ"
 
@@ -107,9 +100,8 @@ msgstr ""
 msgid "No response"
 msgstr "ไม่มีการตอบรับ"
 
-#: Setup/Update/Release5.php:75 Setup/Initialize.php:35 js/Tasks-FAT.js:6
-#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230 js/Tasks-FAT-debug.js:416
-#: js/Tasks-FAT-debug.js:715
+#: Setup/Update/Release5.php:75 Setup/Initialize.php:35
+#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230
 msgid "Completed"
 msgstr "เสร็จสิ้นแล้ว"
 
@@ -189,105 +181,96 @@ msgstr "รายชื่อหน้าที่หลัก"
 msgid "The default task list to create new tasks in."
 msgstr "รายชื่อหน้าที่หลักเพื่อสร้างหน้าที่ใหม่เข้า"
 
-#: js/Tasks.js:39 js/Tasks-FAT-debug.js:197
+#: js/Tasks.js:39
 msgid "New Task"
 msgstr "หน้าที่ใหม่"
 
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:108
-msgid "Quick search"
-msgstr ""
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:97 js/TaskEditDialog.js:181
-#: js/Tasks-FAT-debug.js:110 js/Tasks-FAT-debug.js:342
-#: js/Tasks-FAT-debug.js:667 js/Models.js:107
-msgid "Summary"
-msgstr "ข้อสรุป"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:105 js/Tasks-FAT-debug.js:111
-#: js/Tasks-FAT-debug.js:350 js/Models.js:108
-msgid "Due Date"
-msgstr "วันครบกำหนด"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:178 js/Tasks-FAT-debug.js:121
-#: js/Tasks-FAT-debug.js:423 js/Models.js:118
-msgid "Responsible"
-msgstr "รับผิดชอบ"
-
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:123 js/Models.js:120
-msgid "Last Modified Time"
-msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
-
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:124 js/Models.js:121
-msgid "Last Modified By"
-msgstr "ปรับปรุงครั้งล่าสุด โดย"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:164 js/Tasks-FAT-debug.js:125
-#: js/Tasks-FAT-debug.js:409 js/Models.js:122
-msgid "Creation Time"
-msgstr "เวลาที่สร้างขึ้น"
-
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:126 js/Models.js:123
-msgid "Created By"
-msgstr "สร้าง โดย"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:87 js/Tasks-FAT-debug.js:338
-msgid "Tags"
-msgstr "ป้ายกำกับ"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:101 js/Tasks-FAT-debug.js:346
-msgid "Add a task..."
-msgstr "เพิ่มหน้าที่"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:136 js/Tasks-FAT-debug.js:625
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "คุณจำเป็นต้องกำหนดวันที่ เนื่องจากการเตือนได้ระบุไว้แล้ว"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:188 js/Tasks-FAT-debug.js:674
-msgid "Due date"
-msgstr "วันครบกำหนด"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:201 js/Tasks-FAT-debug.js:687
-msgid "Add Responsible ..."
-msgstr "เพิ่มความรับผิดชอบ"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:208 js/Tasks-FAT-debug.js:694
-msgid "Notes"
-msgstr "บันทึก"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:209 js/Tasks-FAT-debug.js:695
-msgid "Enter description..."
-msgstr "ใส่ คำอธิบาย"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:215 js/Tasks-FAT-debug.js:701
-msgid "Percentage"
-msgstr "อัตราส่วนร้อยละ"
-
-#: js/TaskGridPanel.js:54 js/Tasks-FAT-debug.js:282
+#: js/TaskGridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "คุณแน่ใจว่าคุณต้องการลบหน้าที่ที่เลือก?"
 
-#: js/Tasks-FAT-debug.js:69 js/Models.js:66
+#: js/TaskGridPanel.js:87
+msgid "Tags"
+msgstr "ป้ายกำกับ"
+
+#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:107
+msgid "Summary"
+msgstr "ข้อสรุป"
+
+#: js/TaskGridPanel.js:101
+msgid "Add a task..."
+msgstr "เพิ่มหน้าที่"
+
+#: js/TaskGridPanel.js:105 js/Models.js:108
+msgid "Due Date"
+msgstr "วันครบกำหนด"
+
+#: js/TaskGridPanel.js:164 js/Models.js:122
+msgid "Creation Time"
+msgstr "เวลาที่สร้างขึ้น"
+
+#: js/TaskGridPanel.js:178 js/Models.js:118
+msgid "Responsible"
+msgstr "รับผิดชอบ"
+
+#: js/TaskEditDialog.js:136
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "คุณจำเป็นต้องกำหนดวันที่ เนื่องจากการเตือนได้ระบุไว้แล้ว"
+
+#: js/TaskEditDialog.js:188
+msgid "Due date"
+msgstr "วันครบกำหนด"
+
+#: js/TaskEditDialog.js:201
+msgid "Add Responsible ..."
+msgstr "เพิ่มความรับผิดชอบ"
+
+#: js/TaskEditDialog.js:208
+msgid "Notes"
+msgstr "บันทึก"
+
+#: js/TaskEditDialog.js:209
+msgid "Enter description..."
+msgstr "ใส่ คำอธิบาย"
+
+#: js/TaskEditDialog.js:215
+msgid "Percentage"
+msgstr "อัตราส่วนร้อยละ"
+
+#: js/Models.js:66
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "หน้าที่"
 
-#: js/Tasks-FAT-debug.js:69 js/Models.js:66
+#: js/Models.js:66
 msgid "Tasks"
 msgstr "หน้าที่"
 
-#: js/Tasks-FAT-debug.js:73 js/Models.js:70
+#: js/Models.js:70
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "รายการที่ต้องทำ"
 
-#: js/Tasks-FAT-debug.js:73 js/Models.js:70
+#: js/Models.js:70
 msgid "to do lists"
 msgstr "รายการที่ต้องทำ"
 
 #: js/Models.js:105
 msgid "Quick Search"
 msgstr "ค้นหาอย่างรวดเร็ว"
+
+#: js/Models.js:120
+msgid "Last Modified Time"
+msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
+
+#: js/Models.js:121
+msgid "Last Modified By"
+msgstr "ปรับปรุงครั้งล่าสุด โดย"
+
+#: js/Models.js:123
+msgid "Created By"
+msgstr "สร้าง โดย"
 
 #: Controller/Task.php:202
 msgid "Notification for Task "

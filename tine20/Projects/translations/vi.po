@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 12:00+0000\n"
+"PO-Revision-Date: 2014-04-25 12:47+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -51,8 +51,7 @@ msgid ""
 "syncronisation."
 msgstr "Vai trò người tham gia có thể. Xin nhớ rằng vai trò người tham gia dự án thêm vào có thể liên quan tới hệ thống dự án khác khi xuất hoặc đồng bộ dữ liệu"
 
-#: Setup/setup.xml:4 js/Projects-FAT-debug.js:187 js/Projects-FAT.js:5
-#: js/Projects.js:24
+#: Setup/setup.xml:4 js/Projects.js:24
 msgid "Projects"
 msgstr "Dự án"
 
@@ -112,34 +111,27 @@ msgstr "Lỗi tắt mặc định"
 msgid "The default favorite which is loaded on Projects startup"
 msgstr "Lối tắt mặc định sẽ được nạp khi dự án khởi động"
 
-#: js/AddToProjectPanel.js:34 js/Projects-FAT-debug.js:893
-#: js/Projects-FAT.js:5
+#: js/AddToProjectPanel.js:34
 msgid "Please choose the Project to add the contacts to"
 msgstr "Xin chọn dự án để thêm liên hệ vào"
 
-#: js/AddToProjectPanel.js:38 js/Projects-FAT-debug.js:897
-#: js/Projects-FAT.js:5
+#: js/AddToProjectPanel.js:38
 msgid "Please select the attenders' role"
 msgstr "Chọn vai trò người tham gia"
 
-#: js/AddToProjectPanel.js:79 js/Projects-FAT-debug.js:938
-#: js/Projects-FAT.js:5
+#: js/AddToProjectPanel.js:79
 msgid "Select Project"
 msgstr "Chọn dự án"
 
-#: js/AddToProjectPanel.js:81 js/Projects-FAT-debug.js:613
-#: js/Projects-FAT-debug.js:940 js/Projects-FAT.js:5
-#: js/ProjectEditDialog.js:81
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
 msgid "Role"
 msgstr "Vai trò"
 
-#: js/AddToProjectPanel.js:82 js/Projects-FAT-debug.js:941
-#: js/Projects-FAT.js:5
+#: js/AddToProjectPanel.js:82
 msgid "Select Role"
 msgstr "Chọn vai trò"
 
-#: js/AddToProjectPanel.js:102 js/Projects-FAT-debug.js:961
-#: js/Projects-FAT.js:5
+#: js/AddToProjectPanel.js:102
 msgid "Adding {0} Participants to project"
 msgstr "Thêm {0} người tham gia vào dự án"
 
@@ -147,86 +139,68 @@ msgstr "Thêm {0} người tham gia vào dự án"
 msgid "Search FAQ"
 msgstr "Tìm FAQ"
 
-#: js/ProjectGridPanel.js:118 js/Projects-FAT-debug.js:318
-#: js/Projects-FAT.js:5
+#: js/ProjectGridPanel.js:118
 msgid "Tags"
 msgstr "Thẻ"
 
-#: js/ProjectGridPanel.js:121 js/Projects-FAT-debug.js:137
-#: js/Projects-FAT-debug.js:321 js/Projects-FAT-debug.js:667
-#: js/Projects-FAT.js:5 js/Model.js:76 js/ProjectEditDialog.js:138
+#: js/ProjectGridPanel.js:121 js/Model.js:76 js/ProjectEditDialog.js:138
 msgid "Number"
 msgstr "Số"
 
-#: js/ProjectGridPanel.js:128 js/Projects-FAT-debug.js:136
-#: js/Projects-FAT-debug.js:328 js/Projects-FAT-debug.js:662
-#: js/Projects-FAT.js:5 js/Model.js:75 js/ProjectEditDialog.js:133
+#: js/ProjectGridPanel.js:128 js/Model.js:75 js/ProjectEditDialog.js:133
 msgid "Title"
 msgstr "Tiêu đề"
 
-#: js/ProjectGridPanel.js:134 js/Projects-FAT-debug.js:140
-#: js/Projects-FAT-debug.js:334 js/Projects-FAT-debug.js:673
-#: js/Projects-FAT.js:5 js/Model.js:79 js/ProjectEditDialog.js:144
+#: js/ProjectGridPanel.js:134 js/Model.js:79 js/ProjectEditDialog.js:144
 msgid "Status"
 msgstr "Trạng thái"
 
-#: js/Projects-FAT-debug.js:42 js/Projects-FAT-debug.js:612
-#: js/Projects-FAT.js:5 js/ProjectAttendeeFilter.js:38
-#: js/ProjectEditDialog.js:80
-msgid "Attendee"
-msgstr "Người tham gia"
-
-#: js/Projects-FAT-debug.js:53 js/Projects-FAT.js:5
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Quyền người tham gia"
-
-#: js/Projects-FAT-debug.js:96 js/Projects-FAT-debug.js:637
-#: js/Projects-FAT-debug.js:650 js/Projects-FAT.js:5 js/Model.js:35
-#: js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121
+#: js/Model.js:35 js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "one: Dự án\nother: Dự án"
 
-#: js/Projects-FAT-debug.js:100 js/Model.js:39
+#: js/Model.js:39
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "one: Danh sách dự án\nother: Danh sách dự án"
 
-#: js/Projects-FAT-debug.js:103 js/Model.js:42
+#: js/Model.js:42
 msgid "Project lists"
 msgstr "Danh sách dự án"
-
-#: js/Projects-FAT-debug.js:135 js/Projects-FAT.js:5
-msgid "Quick search"
-msgstr ""
-
-#: js/Projects-FAT-debug.js:138 js/Projects-FAT-debug.js:703
-#: js/Projects-FAT.js:5 js/Model.js:77 js/ProjectEditDialog.js:174
-msgid "Description"
-msgstr "Mô tả"
-
-#: js/Projects-FAT-debug.js:149 js/Projects-FAT.js:5 js/Model.js:88
-msgid "Last Modified Time"
-msgstr "Lần sửa cuối"
-
-#: js/Projects-FAT-debug.js:150 js/Projects-FAT.js:5 js/Model.js:89
-msgid "Last Modified By"
-msgstr "Sửa lần cuối bởi"
-
-#: js/Projects-FAT-debug.js:151 js/Projects-FAT.js:5 js/Model.js:90
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/Projects-FAT-debug.js:152 js/Projects-FAT.js:5 js/Model.js:91
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/Projects-FAT-debug.js:717 js/Projects-FAT.js:5
-#: js/ProjectEditDialog.js:188
-msgid "Enter description"
-msgstr "Nhập mô tả"
 
 #: js/Model.js:74
 msgid "Quick Search"
 msgstr "Tìm nhanh"
+
+#: js/Model.js:77 js/ProjectEditDialog.js:174
+msgid "Description"
+msgstr "Mô tả"
+
+#: js/Model.js:88
+msgid "Last Modified Time"
+msgstr "Lần sửa cuối"
+
+#: js/Model.js:89
+msgid "Last Modified By"
+msgstr "Sửa lần cuối bởi"
+
+#: js/Model.js:90
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/Model.js:91
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
+msgid "Attendee"
+msgstr "Người tham gia"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Quyền người tham gia"
+
+#: js/ProjectEditDialog.js:188
+msgid "Enter description"
+msgstr "Nhập mô tả"

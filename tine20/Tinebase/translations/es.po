@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 11:59+0000\n"
+"PO-Revision-Date: 2014-04-25 12:47+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/tine20/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -88,39 +88,38 @@ msgid "run right description"
 msgstr "descripcion de atribuciones de ejecutar"
 
 #: ModelConfiguration.php:41 ModelConfiguration.php:50
-#: ModelConfiguration.php:73 ModelConfiguration.php:82
+#: ModelConfiguration.php:82 ModelConfiguration.php:91
 msgid "Record Name"
 msgid_plural "Records Name"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ModelConfiguration.php:146 ModelConfiguration.php:232
+#: ModelConfiguration.php:155 ModelConfiguration.php:243
 msgid "Group"
 msgstr ""
 
-#: ModelConfiguration.php:189 js/Tinebase-FAT-debug.js:43103
+#: ModelConfiguration.php:200
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:182
 msgid "Title"
 msgstr "Título"
 
-#: ModelConfiguration.php:193
+#: ModelConfiguration.php:204
 msgid "New Car"
 msgstr ""
 
-#: ModelConfiguration.php:341 ModelConfiguration.php:344
+#: ModelConfiguration.php:367 ModelConfiguration.php:370
 msgid "Banking Information"
 msgstr ""
 
-#: ModelConfiguration.php:345
+#: ModelConfiguration.php:371
 msgid "Private Information"
 msgstr ""
 
-#: Preference/Abstract.php:511
+#: Preference/Abstract.php:517
 msgid "default"
 msgstr "Por defecto"
 
-#: Frontend/Http.php:396 js/Tinebase-FAT-debug.js:16211
-#: js/ExceptionHandler.js:168
+#: Frontend/Http.php:396 js/ExceptionHandler.js:168
 msgid "Authorisation Required"
 msgstr "Autorización Necesaria"
 
@@ -128,13 +127,11 @@ msgstr "Autorización Necesaria"
 msgid "Your session is not valid. You need to login again."
 msgstr "Su sesión no es válida. Necesita volver a ingresar."
 
-#: Frontend/Http.php:422 js/Tinebase-FAT-debug.js:16428
-#: js/ExceptionDialog.js:62
+#: Frontend/Http.php:422 js/ExceptionDialog.js:62
 msgid "Abnormal End"
 msgstr "Terminación Anormal"
 
-#: Frontend/Http.php:423 js/Tinebase-FAT-debug.js:16500
-#: js/ExceptionDialog.js:154
+#: Frontend/Http.php:423 js/ExceptionDialog.js:154
 msgid "An error occurred, the program ended abnormal."
 msgstr "Ocurrió un error, el programa terminó de forma anormal."
 
@@ -148,7 +145,6 @@ msgstr "Cambiar campos:"
 
 #: User/Abstract.php:319 User/Abstract.php:320 User/Abstract.php:321
 #: User/Abstract.php:322 User/Abstract.php:323 User/Abstract.php:324
-#: js/Tinebase-FAT-debug.js:5209 js/Tinebase-FAT.js:34
 #: js/ux/ConnectionStatus.js:58 Group/Abstract.php:191
 msgid "unknown"
 msgstr "Desconocido"
@@ -505,8 +501,7 @@ msgstr "Zona Horaria"
 msgid "The timezone in which dates are shown in Tine 2.0."
 msgstr "La zona horaria en la cual las fechas se muestran está en Tine 2.0."
 
-#: Preference.php:146 js/Tinebase-FAT-debug.js:18421
-#: js/widgets/LangChooser.js:35
+#: Preference.php:146 js/widgets/LangChooser.js:35
 msgid "Language"
 msgstr "Idioma"
 
@@ -554,8 +549,8 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
-#: Export/Pdf.php:216 js/Tinebase-FAT-debug.js:38524
-#: js/widgets/tags/TagsPanel.js:57 js/widgets/tags/TagsPanel.js:426
+#: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
+#: js/widgets/tags/TagsPanel.js:426
 msgid "Tags"
 msgstr "Etiquetas"
 
@@ -567,85 +562,51 @@ msgstr "Creado por"
 msgid "Activities"
 msgstr "Actividades"
 
-#: js/AdminPanel.js:75 js/Tinebase-FAT-debug.js:45264
+#: js/AdminPanel.js:75
 msgid "Profile Information"
 msgstr "Información de Perfil"
 
-#: js/AdminPanel.js:79 js/Tinebase-FAT-debug.js:18984
-#: js/Tinebase-FAT-debug.js:19676 js/Tinebase-FAT-debug.js:45268
-#: js/widgets/EditRecord.js:168 js/widgets/dialog/EditDialog.js:384
+#: js/AdminPanel.js:79 js/widgets/EditRecord.js:168
+#: js/widgets/dialog/EditDialog.js:384
 msgid "Apply"
 msgstr "Aplicar"
 
-#: js/AdminPanel.js:94 js/Tinebase-FAT-debug.js:18454
-#: js/Tinebase-FAT-debug.js:45283 js/widgets/TimezoneChooser.js:77
+#: js/AdminPanel.js:94 js/widgets/TimezoneChooser.js:77
 #: js/widgets/LangChooser.js:68
 msgid "Please Wait"
 msgstr "Por Favor Espere"
 
-#: js/AdminPanel.js:156 js/Tinebase-FAT-debug.js:37022
-#: js/Tinebase-FAT-debug.js:45345 js/widgets/container/GrantsGrid.js:43
+#: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
 msgid "Read"
 msgstr "Leído"
 
-#: js/AdminPanel.js:157 js/Tinebase-FAT-debug.js:45346
+#: js/AdminPanel.js:157
 msgid "The field is readable part of the profile"
 msgstr ""
 
-#: js/AdminPanel.js:161 js/Tinebase-FAT-debug.js:37026
-#: js/Tinebase-FAT-debug.js:45350 js/widgets/container/GrantsGrid.js:47
+#: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:47
 msgid "Edit"
 msgstr "Editar"
 
-#: js/AdminPanel.js:162 js/Tinebase-FAT-debug.js:45351
+#: js/AdminPanel.js:162
 msgid "The field is editable part of the profile"
 msgstr ""
 
-#: js/AdminPanel.js:175 js/Tinebase-FAT-debug.js:24680
-#: js/Tinebase-FAT-debug.js:45364
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:203
+#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:203
 msgid "Field Name"
 msgstr "Nombre de campo"
 
-#: js/Tinebase-FAT-debug.js:4591 js/Tinebase-FAT-debug.js:41313
-#: js/widgets/form/RecordPickerManager.js:48
-#: js/widgets/form/RecordPickerComboBox.js:119
-msgid "Searching..."
-msgstr "Buscando..."
+#: js/AboutDialog.js:41 js/MainMenu.js:118
+msgid "About {0}"
+msgstr "Acerca de {0}"
 
-#: js/Tinebase-FAT-debug.js:4724 js/Tinebase-FAT-debug.js:10299
-#: js/Tinebase-FAT-debug.js:16466 js/Tinebase-FAT-debug.js:18994
-#: js/Tinebase-FAT-debug.js:19685 js/Tinebase-FAT-debug.js:21803
-#: js/Tinebase-FAT-debug.js:22218 js/Tinebase-FAT-debug.js:24098
-#: js/Tinebase-FAT-debug.js:24368 js/Tinebase-FAT-debug.js:36873
-#: js/Tinebase-FAT-debug.js:39213 js/Tinebase-FAT-debug.js:39464
-#: js/Tinebase-FAT-debug.js:40780 js/Tinebase-FAT-debug.js:43030
-#: js/Tinebase-FAT-debug.js:43207 js/Tinebase-FAT.js:41
-#: js/PasswordChangeDialog.js:60 js/widgets/EditRecord.js:178
-#: js/widgets/tags/TagToggleBox.js:59
-#: js/widgets/tags/TagsMassAttachAction.js:105
-#: js/widgets/dialog/DuplicateMergeDialog.js:79
-#: js/widgets/dialog/MultiOptionsDialog.js:109
-#: js/widgets/dialog/ExceptionHandlerDialog.js:186
-#: js/widgets/dialog/AddToRecordPanel.js:103
-#: js/widgets/dialog/PreferencesDialog.js:117
-#: js/widgets/dialog/EditDialog.js:393 js/widgets/dialog/WizardPanel.js:187
-#: js/widgets/ActivitiesPanel.js:332
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
-#: js/widgets/container/ContainerSelect.js:481 js/ExceptionDialog.js:109
-#: js/ExceptionDialog.js:119 js/ux/form/LayerCombo.js:193
-msgid "Cancel"
-msgstr "Cancelar"
+#: js/AboutDialog.js:56 js/MainMenu.js:166
+msgid "Learn more about {0}"
+msgstr ""
 
-#: js/Tinebase-FAT-debug.js:4732 js/Tinebase-FAT-debug.js:10292
-#: js/Tinebase-FAT-debug.js:18973 js/Tinebase-FAT-debug.js:19665
-#: js/Tinebase-FAT-debug.js:22210 js/Tinebase-FAT-debug.js:24091
-#: js/Tinebase-FAT-debug.js:36882 js/Tinebase-FAT-debug.js:39470
-#: js/Tinebase-FAT-debug.js:40335 js/Tinebase-FAT-debug.js:40396
-#: js/Tinebase-FAT-debug.js:40788 js/Tinebase-FAT-debug.js:43213
-#: js/Tinebase-FAT-debug.js:43330 js/AboutDialog.js:61 js/CreditsScreen.js:53
-#: js/LicenseScreen.js:51 js/Tinebase-FAT.js:41 js/PasswordChangeDialog.js:66
-#: js/widgets/EditRecord.js:157 js/widgets/tags/TagsMassAttachAction.js:84
+#: js/AboutDialog.js:61 js/CreditsScreen.js:53 js/LicenseScreen.js:51
+#: js/PasswordChangeDialog.js:66 js/widgets/EditRecord.js:157
+#: js/widgets/tags/TagsMassAttachAction.js:84
 #: js/widgets/dialog/MultiOptionsDialog.js:102
 #: js/widgets/dialog/ExceptionHandlerDialog.js:194
 #: js/widgets/dialog/AddToRecordPanel.js:111
@@ -655,2363 +616,91 @@ msgstr "Cancelar"
 msgid "Ok"
 msgstr "Aceptar"
 
-#: js/Tinebase-FAT-debug.js:5207 js/Tinebase-FAT.js:34
-#: js/ux/ConnectionStatus.js:56
-msgid "online"
-msgstr "En línea"
-
-#: js/Tinebase-FAT-debug.js:5208 js/Tinebase-FAT.js:34
-#: js/ux/ConnectionStatus.js:57
-msgid "offline"
-msgstr "Desconectado"
-
-#: js/Tinebase-FAT-debug.js:5795 js/Tinebase-FAT.js:34 js/ux/Percentage.js:193
-msgid "(paused)"
-msgstr "(pausado)"
-
-#: js/Tinebase-FAT-debug.js:6033 js/Tinebase-FAT-debug.js:41069
-#: js/Tinebase-FAT.js:34
-msgid "Quick search"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:6621 js/ux/PopupWindowManager.js:175
-msgid ""
-"The window you want to work with is backgrounded. Your browser doesn't "
-"support to foreground the window for you, so you need to use your operating "
-"systems window switching features. Please send complaints to your browser "
-"vendor!"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:7199 js/ux/SearchField.js:44
-msgid "enter searchfilter"
-msgstr "escribir filtro de búsqueda"
-
-#: js/Tinebase-FAT-debug.js:7807 js/Tinebase-FAT.js:41
-#: js/ux/grid/PagingToolbar.js:57
-msgid "{0} selected"
-msgstr "{0} seleccionados"
-
-#: js/Tinebase-FAT-debug.js:7808 js/Tinebase-FAT.js:41
-#: js/ux/grid/PagingToolbar.js:58
-msgid "Unselect all"
-msgstr "Deseleccionar Todo"
-
-#: js/Tinebase-FAT-debug.js:7809 js/Tinebase-FAT.js:41
-#: js/ux/grid/PagingToolbar.js:59
-msgid "Select all pages ({0} records)"
-msgstr "Seleccionar todas las páginas ({0} registros)"
-
-#: js/Tinebase-FAT-debug.js:7810 js/Tinebase-FAT.js:41
-#: js/ux/grid/PagingToolbar.js:60
-msgid "Toggle selection"
-msgstr "Cambiar seleccion"
-
-#: js/Tinebase-FAT-debug.js:10769 js/ux/form/RecordsComboBox.js:26
-msgid "Software Version"
-msgstr "Versión del Software"
-
-#: js/Tinebase-FAT-debug.js:11263 js/Tinebase-FAT.js:41
-#: js/ux/form/ImageField.js:76
-msgid "Loading"
-msgstr "Cargando"
-
-#: js/Tinebase-FAT-debug.js:11266 js/Tinebase-FAT.js:41
-#: js/ux/form/ImageField.js:78
-msgid "Click to edit"
-msgstr "Click para editar"
-
-#: js/Tinebase-FAT-debug.js:11315 js/Tinebase-FAT.js:41
-#: js/ux/form/ImageField.js:168
-msgid "Not An Image"
-msgstr "No es una imagen"
-
-#: js/Tinebase-FAT-debug.js:11315 js/Tinebase-FAT.js:41
-#: js/ux/form/ImageField.js:168
-msgid "Please select an image file (gif/png/jpeg)"
-msgstr "Seleccione un arhcivo de imágen (gif/png/jpg)"
-
-#: js/Tinebase-FAT-debug.js:11353 js/Tinebase-FAT-debug.js:30262
-#: js/Tinebase-FAT.js:41 js/widgets/grid/FileUploadGrid.js:114
-#: js/ux/form/ImageField.js:211
-msgid "Upload Failed"
-msgstr "Carga Fallida"
-
-#: js/Tinebase-FAT-debug.js:11353 js/Tinebase-FAT.js:41
-#: js/ux/form/ImageField.js:211
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "No se pudo cargar una imagen. Por favor notifique a su Administrador"
-
-#: js/Tinebase-FAT-debug.js:11365 js/Tinebase-FAT.js:41
-#: js/ux/form/ImageField.js:224
-msgid "Change Image"
-msgstr "Cambiar Imagen"
-
-#: js/Tinebase-FAT-debug.js:11374 js/Tinebase-FAT-debug.js:11392
-#: js/Tinebase-FAT.js:41 js/ux/form/ImageField.js:232
-#: js/ux/form/ImageField.js:250
-msgid "Crop Image"
-msgstr "Recortar Imagen"
-
-#: js/Tinebase-FAT-debug.js:11398 js/Tinebase-FAT.js:41
-#: js/ux/form/ImageField.js:256
-msgid "Delete Image"
-msgstr "Borrar Imagen"
-
-#: js/Tinebase-FAT-debug.js:11407 js/Tinebase-FAT.js:41
-#: js/ux/form/ImageField.js:265
-msgid "Show Original Image"
-msgstr "Mostrar Imagen Original"
-
-#: js/Tinebase-FAT-debug.js:11469 js/Tinebase-FAT.js:41
-#: js/ux/form/ImageField.js:146
-msgid "Image Failed"
-msgstr "Falló Imagen"
-
-#: js/Tinebase-FAT-debug.js:11469 js/Tinebase-FAT.js:41
-#: js/ux/form/ImageField.js:146
-msgid "Could not load image. Please notify your Administrator"
-msgstr "No se pudo cargar la imagen. Por favor notifique a su Administrador"
-
-#: js/Tinebase-FAT-debug.js:13016 js/Tinebase-FAT-debug.js:36521
-#: js/widgets/container/ContainerSelect.js:129
-#: js/ux/form/ComboBoxRecentsPlugin.js:43
-msgid "choose other {0}..."
-msgstr "escoja otro {0}..."
-
-#: js/Tinebase-FAT-debug.js:15085 js/data/Record.js:199
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Tarea"
-msgstr[1] "Tareas"
-
-#: js/Tinebase-FAT-debug.js:15089 js/data/Record.js:203
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "lista por hacer"
-msgstr[1] "to do lists"
-
-#: js/Tinebase-FAT-debug.js:16212 js/ExceptionHandler.js:169
-msgid "Your session timed out. You need to login again."
-msgstr "Su sesión ha expirado. Necesita ingresar otra vez"
-
-#: js/Tinebase-FAT-debug.js:16227 js/ExceptionHandler.js:184
-msgid "Insufficient Rights"
-msgstr "Atribuciones Insuficientes"
-
-#: js/Tinebase-FAT-debug.js:16228 js/ExceptionHandler.js:185
-msgid "Sorry, you are not permitted to perform this action"
-msgstr "Lo sentimos, no tiene permitido realizar esta acción"
-
-#: js/Tinebase-FAT-debug.js:16236 js/ExceptionHandler.js:193
-msgid "Not Found"
-msgstr "No Encontrado"
-
-#: js/Tinebase-FAT-debug.js:16237 js/ExceptionHandler.js:194
-msgid ""
-"Sorry, your request could not be completed because the required data could "
-"not be found. In most cases this means that someone already deleted the "
-"data. Please refresh your current view."
-msgstr "Lo sentimos, su petición no pude completarse debido a que los datos no se pudieron encontrar. En la mayoría de los casos esto significa que alguien ya borró esta información. Por favor actualice la vista actual."
-
-#: js/Tinebase-FAT-debug.js:16245 js/ExceptionHandler.js:202
-msgid "Concurrent Updates"
-msgstr "Actualizaciones Concurrentes"
-
-#: js/Tinebase-FAT-debug.js:16246 js/ExceptionHandler.js:203
-msgid ""
-"Someone else saved this record while you where editing the data. You need to"
-" reload and make your changes again."
-msgstr "Alguien guardó este registro mientras usted editaba los datos. Necesitará volver a cagar los datos y realizar los cambios otra vez."
-
-#: js/Tinebase-FAT-debug.js:16254 js/ExceptionHandler.js:211
-msgid "Service Unavailable"
-msgstr "Servicio no disponible"
-
-#: js/Tinebase-FAT-debug.js:16255 js/ExceptionHandler.js:212
-msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading, maintenance or misconfiguration of the server. Please try again"
-" or contact your administrator."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:16261 js/ExceptionHandler.js:218
-msgid "Server Message:"
-msgstr "Mensaje del Servidor:"
-
-#: js/Tinebase-FAT-debug.js:16263 js/ExceptionHandler.js:220
-msgid "Invalid Data"
-msgstr "Datos invalidos"
-
-#: js/Tinebase-FAT-debug.js:16264 js/ExceptionHandler.js:221
-msgid "Your input data is not valid. Please provide valid data."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:16276 js/Tinebase-FAT-debug.js:45125
-#: js/LoginPanel.js:482 js/ExceptionHandler.js:233
-msgid "Connection lost, please check your network!"
-msgstr "Conexión perdida, por favor revise su configuración de red"
-
-#: js/Tinebase-FAT-debug.js:16282 js/ExceptionHandler.js:239
-msgid "Timeout"
-msgstr "Demasiada Espera"
-
-#: js/Tinebase-FAT-debug.js:16283 js/ExceptionHandler.js:240
-msgid ""
-"Sorry, some timeout occured while processing your request. Please reload "
-"your browser, try again or contact your administrator."
-msgstr "Lo sentimos, su petición sobrepasó el tiempo de espera. Por favor reinicie su navegador, intente otra vez o contacte a su administrador."
-
-#: js/Tinebase-FAT-debug.js:16291 js/ExceptionHandler.js:248
-msgid "No Response"
-msgstr "No hay respuesta"
-
-#: js/Tinebase-FAT-debug.js:16292 js/ExceptionHandler.js:249
-msgid ""
-"Sorry, the Server did not respond any data. Please reload your browser, try "
-"again or contact your administrator."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:16299 js/ExceptionHandler.js:256
-msgid "Out of Resources"
-msgstr "Sin recursos"
-
-#: js/Tinebase-FAT-debug.js:16300 js/ExceptionHandler.js:257
-msgid ""
-"Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
-"your administrator."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:16316 js/ExceptionHandler.js:273
-msgid "No Role Memberships"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:16317 js/ExceptionHandler.js:274
-msgid ""
-"Your user account has no role memberships. Please contact your "
-"administrator."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:16473 js/ExceptionDialog.js:103
-#: js/ExceptionDialog.js:126
-msgid "Send Report"
-msgstr "Enviar Reporte"
-
-#: js/Tinebase-FAT-debug.js:16501 js/ExceptionDialog.js:155
-msgid "The last action you made was potentially not performed correctly."
-msgstr "La última acción que realizó no fue concretada de forma correcta."
-
-#: js/Tinebase-FAT-debug.js:16502 js/ExceptionDialog.js:156
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
-msgstr "Por favor ayude a mejorar este programa y notifique al distribuidor. Incluya una descripción de lo que estaba haciendo cuando el error ocurrió."
-
-#: js/Tinebase-FAT-debug.js:16508 js/Tinebase-FAT-debug.js:32074
-#: js/Tinebase-FAT-debug.js:38958 js/Tinebase-FAT-debug.js:43112
-#: js/widgets/tags/TagsPanel.js:509
-#: js/widgets/relation/GenericPickerGridPanel.js:449
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:191
-#: js/ExceptionDialog.js:162
-msgid "Description"
-msgstr "Descripción"
-
-#: js/Tinebase-FAT-debug.js:16516 js/ExceptionDialog.js:170
-msgid "Send Contact Information"
-msgstr "Enviar Información de Contacto"
-
-#: js/Tinebase-FAT-debug.js:16533 js/ExceptionDialog.js:187
-msgid "Details:"
-msgstr "Detalles:"
-
-#: js/Tinebase-FAT-debug.js:16557 js/ExceptionDialog.js:211
-msgid "Sending report..."
-msgstr "Enviando reporte..."
-
-#: js/Tinebase-FAT-debug.js:16557 js/ExceptionDialog.js:211
-msgid "Please wait a moment"
-msgstr "Por favor espere"
-
-#: js/Tinebase-FAT-debug.js:16606 js/ExceptionDialog.js:260
-msgid "Transmission Completed"
-msgstr "Envío Completo"
-
-#: js/Tinebase-FAT-debug.js:16607 js/ExceptionDialog.js:261
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "Su reporte ha sido enviado. Gracias por su contribución"
-
-#: js/Tinebase-FAT-debug.js:16607 js/ExceptionDialog.js:261
-msgid "Please restart your browser now!"
-msgstr "Por favor reinicie su navegador ahora"
-
-#: js/Tinebase-FAT-debug.js:16799 js/Container.js:123
-msgid "All {0}"
-msgstr "Todos {0}"
-
-#: js/Tinebase-FAT-debug.js:16800 js/Container.js:124
-msgid "Shared {0}"
-msgstr "Compartido {0}"
-
-#: js/Tinebase-FAT-debug.js:16801 js/Container.js:125
-msgid "Other Users {0}"
-msgstr "Otros Usuarios {0}"
-
-#: js/Tinebase-FAT-debug.js:16806 js/Container.js:130
-msgid "My {0}"
-msgstr "Mi {0}"
-
-#: js/Tinebase-FAT-debug.js:17043 js/common.js:235
-msgid "Usage:&#160;"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:17063 js/Tinebase-FAT-debug.js:17068
-#: js/Tinebase-FAT-debug.js:38600 js/Tinebase-FAT-debug.js:39132
-#: js/Tinebase-FAT-debug.js:39137 js/Tinebase-FAT-debug.js:39266
-#: js/Tinebase-FAT-debug.js:39271 js/common.js:255 js/common.js:260
-#: js/widgets/tags/TagToggleBox.js:112 js/widgets/tags/TagToggleBox.js:117
-#: js/widgets/tags/TagsPanel.js:137 js/widgets/tags/TagCombo.js:134
-#: js/widgets/tags/TagCombo.js:139
-msgid "personal"
-msgstr "personal"
-
-#: js/Tinebase-FAT-debug.js:17081 js/Tinebase-FAT-debug.js:17119
-#: js/common.js:273 js/common.js:311
-msgid "No Information"
-msgstr "Sin Información"
-
-#: js/Tinebase-FAT-debug.js:17168 js/common.js:360
-msgid "{0} minute"
-msgid_plural "{0} minutes"
-msgstr[0] "{0} minuto"
-msgstr[1] "{0} minutos"
-
-#: js/Tinebase-FAT-debug.js:17169 js/common.js:361
-msgid "{0} hour"
-msgid_plural "{0} hours"
-msgstr[0] "{0} hora"
-msgstr[1] "{0} horas"
-
-#: js/Tinebase-FAT-debug.js:17170 js/common.js:362
-msgid "{0} workday"
-msgid_plural "{0} workdays"
-msgstr[0] "{0} día hábil"
-msgstr[1] "{0} días hábiles"
-
-#: js/Tinebase-FAT-debug.js:17197 js/common.js:389
-msgid "{0} second"
-msgid_plural "{0} seconds"
-msgstr[0] "{0} segundos"
-msgstr[1] "{0} segundos"
-
-#: js/Tinebase-FAT-debug.js:17665 js/Tinebase-FAT-debug.js:39358
-#: js/widgets/tags/TagFilter.js:30 js/Models.js:141
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Etiqueta"
-msgstr[1] "Etiquetas"
-
-#: js/Tinebase-FAT-debug.js:17796 js/Models.js:272
-msgid "Alarm"
-msgid_plural "Alarms"
-msgstr[0] "Alarma"
-msgstr[1] "Alarmas"
-
-#: js/Tinebase-FAT-debug.js:17835 js/Models.js:310
-msgid "Import"
-msgid_plural "Imports"
-msgstr[0] "Importar"
-msgstr[1] "Importar"
-
-#: js/Tinebase-FAT-debug.js:17862 js/Tinebase-FAT-debug.js:23869
-#: js/Tinebase-FAT-debug.js:37030 js/widgets/dialog/ExportDialog.js:48
-#: js/widgets/container/GrantsGrid.js:51 js/Models.js:336
-msgid "Export"
-msgid_plural "Export"
-msgstr[0] "Exportar"
-msgstr[1] "Exportar"
-
-#: js/Tinebase-FAT-debug.js:17900 js/Models.js:373
-msgid "Credentials"
-msgid_plural "Credentials"
-msgstr[0] "Credencial"
-msgstr[1] "Credenciales"
-
-#: js/Tinebase-FAT-debug.js:17928 js/Tinebase-FAT-debug.js:31798
-#: js/Tinebase-FAT-debug.js:35956 js/widgets/relation/FilterModel.js:32
-#: js/widgets/relation/GenericPickerGridPanel.js:133 js/Models.js:400
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] "Relación"
-msgstr[1] "Relaciones"
-
-#: js/Tinebase-FAT-debug.js:17950 js/Models.js:421
-msgid "Department"
-msgid_plural "Departments"
-msgstr[0] "Departamento"
-msgstr[1] "Departamentos"
-
-#: js/Tinebase-FAT-debug.js:17958 js/Tinebase-FAT-debug.js:31044
-#: js/Tinebase-FAT-debug.js:36324 js/Tinebase-FAT-debug.js:38060
-#: js/widgets/grid/LinkGridPanel.js:103
-#: js/widgets/dialog/AttachmentsGridPanel.js:86
-#: js/widgets/account/PickerGridPanel.js:267
-#: js/widgets/container/PropertiesDialog.js:107 js/Models.js:428
-msgid "Name"
-msgstr "Nombre"
-
-#: js/Tinebase-FAT-debug.js:17977 js/Models.js:447
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] "Configuración"
-msgstr[1] "Configuraciones"
-
-#: js/Tinebase-FAT-debug.js:17977 js/Models.js:447
-msgid "Configs"
-msgstr "Configuraciones"
-
-#: js/Tinebase-FAT-debug.js:18454 js/widgets/LangChooser.js:68
-msgid "setting new language..."
-msgstr "estableciendo un nuevo idioma..."
-
-#: js/Tinebase-FAT-debug.js:18947 js/Tinebase-FAT-debug.js:19727
-#: js/Tinebase-FAT-debug.js:19755 js/widgets/EditRecord.js:131
-#: js/widgets/dialog/EditDialog.js:442 js/widgets/dialog/EditDialog.js:470
-msgid "Saved in"
-msgstr "Guardado en"
-
-#: js/Tinebase-FAT-debug.js:19004 js/Tinebase-FAT-debug.js:19694
-#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:402
-msgid "delete"
-msgstr "borrar"
-
-#: js/Tinebase-FAT-debug.js:19145 js/Tinebase-FAT-debug.js:19154
-#: js/widgets/VersionCheck.js:50 js/widgets/VersionCheck.js:59
-msgid "New version of Tine 2.0 available"
-msgstr "Una nueva versión de Tine 2.0 está disponible"
-
-#: js/Tinebase-FAT-debug.js:19146 js/Tinebase-FAT-debug.js:19155
-#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Versión \"{0}\" de Tine 2.0 está disponible."
-
-#: js/Tinebase-FAT-debug.js:19147 js/widgets/VersionCheck.js:52
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "¡Una actualización crítica debe ser instalada lo antes posible!"
-
-#: js/Tinebase-FAT-debug.js:19156 js/widgets/VersionCheck.js:61
-msgid "Please consider updating!"
-msgstr "Por favor considere una actualización!"
-
-#: js/Tinebase-FAT-debug.js:19200 js/widgets/dialog/AlarmPanel.js:34
-msgid "Alarms"
-msgstr "Alarmas"
-
-#: js/Tinebase-FAT-debug.js:19203 js/widgets/dialog/AlarmPanel.js:37
-msgid "0 minutes before"
-msgstr "0 minutos antes"
-
-#: js/Tinebase-FAT-debug.js:19204 js/widgets/dialog/AlarmPanel.js:38
-msgid "5 minutes before"
-msgstr "5 minutos antes"
-
-#: js/Tinebase-FAT-debug.js:19205 js/widgets/dialog/AlarmPanel.js:39
-msgid "15 minutes before"
-msgstr "15 minutos antes"
-
-#: js/Tinebase-FAT-debug.js:19206 js/widgets/dialog/AlarmPanel.js:40
-msgid "30 minutes before"
-msgstr "30 minutos antes"
-
-#: js/Tinebase-FAT-debug.js:19207 js/widgets/dialog/AlarmPanel.js:41
-msgid "1 hour before"
-msgstr "1 hora antes"
-
-#: js/Tinebase-FAT-debug.js:19208 js/widgets/dialog/AlarmPanel.js:42
-msgid "2 hours before"
-msgstr "2 hora antes"
-
-#: js/Tinebase-FAT-debug.js:19209 js/widgets/dialog/AlarmPanel.js:43
-msgid "12 hours before"
-msgstr "12 horas antes"
-
-#: js/Tinebase-FAT-debug.js:19210 js/widgets/dialog/AlarmPanel.js:44
-msgid "1 day before"
-msgstr "1 día antes"
-
-#: js/Tinebase-FAT-debug.js:19211 js/widgets/dialog/AlarmPanel.js:45
-msgid "2 days before"
-msgstr "2 días antes"
-
-#: js/Tinebase-FAT-debug.js:19212 js/widgets/dialog/AlarmPanel.js:46
-msgid "Custom Datetime"
-msgstr "Personalizar Fecha y Hora"
-
-#: js/Tinebase-FAT-debug.js:19224 js/widgets/dialog/AlarmPanel.js:58
-msgid "Alarm Time"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:19336 js/widgets/dialog/AlarmPanel.js:170
-msgid "{0} minutes before"
-msgstr "{0} minutos antes"
-
-#: js/Tinebase-FAT-debug.js:19851 js/Tinebase-FAT-debug.js:32964
-#: js/widgets/grid/GridPanel.js:532 js/widgets/dialog/EditDialog.js:599
-msgid "Copy {0}"
-msgstr "Copiar {0}"
-
-#: js/Tinebase-FAT-debug.js:19854 js/widgets/dialog/EditDialog.js:602
-msgid "Add New {0}"
-msgstr "Agregar Nuevo {0}"
-
-#: js/Tinebase-FAT-debug.js:19856 js/widgets/dialog/EditDialog.js:604
-msgid "Edit {0} \"{1}\""
-msgstr "Editar {0} \"{1}\""
-
-#: js/Tinebase-FAT-debug.js:19920 js/widgets/dialog/EditDialog.js:674
-msgid "Transferring {0}..."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:20035 js/Tinebase-FAT-debug.js:20768
-#: js/Tinebase-FAT-debug.js:22083 js/Tinebase-FAT-debug.js:22346
-#: js/Tinebase-FAT-debug.js:22375 js/Tinebase-FAT-debug.js:23971
-#: js/Tinebase-FAT-debug.js:45142 js/LoginPanel.js:508
-#: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/PreferencesDialog.js:248
-#: js/widgets/dialog/PreferencesDialog.js:277
-#: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
-msgid "Errors"
-msgstr "Errores"
-
-#: js/Tinebase-FAT-debug.js:20055 js/Tinebase-FAT-debug.js:20768
-#: js/Tinebase-FAT-debug.js:22083 js/Tinebase-FAT-debug.js:23971
-#: js/Tinebase-FAT-debug.js:45142 js/LoginPanel.js:508
-#: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
-msgid "Please fix the errors noted."
-msgstr "Por favor arregle los errores señalados."
-
-#: js/Tinebase-FAT-debug.js:20062 js/Tinebase-FAT-debug.js:20779
-#: js/Tinebase-FAT-debug.js:34111 js/Tinebase-FAT-debug.js:34790
-#: js/Tinebase-FAT-debug.js:42693 js/Tinebase-FAT-debug.js:44393
-#: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1756
-#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:680
-#: js/widgets/persistentfilter/PickerPanel.js:325
-msgid "Confirm"
-msgstr "Confirmar"
-
-#: js/Tinebase-FAT-debug.js:20062 js/widgets/dialog/EditDialog.js:827
-msgid "Do you really want to delete this {0}?"
-msgstr "¿Realmente desea eliminar esto {0}?"
-
-#: js/Tinebase-FAT-debug.js:20064 js/Tinebase-FAT-debug.js:34144
-#: js/widgets/grid/GridPanel.js:1799 js/widgets/dialog/EditDialog.js:829
-msgid "Deleting {0}"
-msgstr "Eliminando {0}"
-
-#: js/Tinebase-FAT-debug.js:20074 js/Tinebase-FAT-debug.js:38751
-#: js/Tinebase-FAT-debug.js:38846 js/Tinebase-FAT-debug.js:38879
-#: js/widgets/tags/TagsPanel.js:288 js/widgets/tags/TagsPanel.js:380
-#: js/widgets/tags/TagsPanel.js:413 js/widgets/dialog/EditDialog.js:839
-msgid "Failed"
-msgstr "Fallido"
-
-#: js/Tinebase-FAT-debug.js:20074 js/widgets/dialog/EditDialog.js:839
-msgid "Could not delete {0}."
-msgstr "No se pudo eliminar {0}."
-
-#: js/Tinebase-FAT-debug.js:20126 js/widgets/dialog/EditDialog.js:894
-msgid "Resolve Duplicate {0} Suspicion"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:20458 js/Tinebase-FAT-debug.js:20573
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:341
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:465
-msgid "Delete value from all selected records"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:20556
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:448
-msgid "Undo change for all selected records"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:20629
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:523
-msgid "Edit {0} {1}"
-msgstr "Editar {0} {1}"
-
-#: js/Tinebase-FAT-debug.js:20682
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:582
-msgid "Different Values"
-msgstr "Valores Diferentes"
-
-#: js/Tinebase-FAT-debug.js:20683
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:583
-msgid ""
-"This field has different values. Editing this field will overwrite the old "
-"values."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:20779
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:680
-msgid "Do you really want to change these {0} records?"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:20782 js/Tinebase-FAT-debug.js:34635
-#: js/Tinebase-FAT-debug.js:37216 js/Tinebase-FAT-debug.js:42695
-#: js/Tinebase-FAT-debug.js:42733 js/Tinebase-FAT-debug.js:42783
-#: js/Tinebase-FAT-debug.js:45104 js/LoginPanel.js:460
-#: js/widgets/tree/ContextMenu.js:191
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:683
-#: js/widgets/persistentfilter/PickerPanel.js:327
-#: js/widgets/persistentfilter/PickerPanel.js:365
-#: js/widgets/persistentfilter/PickerPanel.js:417
-#: js/widgets/container/GrantsDialog.js:95
-msgid "Please wait"
-msgstr "Por favor espere"
-
-#: js/Tinebase-FAT-debug.js:20782
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:683
-msgid "Applying changes"
-msgstr "Aplicar cambios"
-
-#: js/Tinebase-FAT-debug.js:21091 js/Tinebase-FAT-debug.js:24376
-#: js/Tinebase-FAT-debug.js:43023 js/widgets/dialog/DuplicateMergeDialog.js:87
-#: js/widgets/dialog/MultipleEditResultSummary.js:86
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:69
-msgid "OK"
-msgstr "OK"
-
-#: js/Tinebase-FAT-debug.js:21151
-#: js/widgets/dialog/MultipleEditResultSummary.js:146
-msgid "You edited {0} {1}."
-msgstr "Tu has editado {0} {1}."
-
-#: js/Tinebase-FAT-debug.js:21154
-#: js/widgets/dialog/MultipleEditResultSummary.js:149
-msgid "{0} {1} have been updated properly."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:21154
-#: js/widgets/dialog/MultipleEditResultSummary.js:149
-msgid "{0} {1} has been updated properly."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:21157
-#: js/widgets/dialog/MultipleEditResultSummary.js:152
-msgid ""
-"{0} {1} have invalid data after updating. These {1} have not been changed."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:21157
-#: js/widgets/dialog/MultipleEditResultSummary.js:152
-msgid ""
-"{0} {1} has invalid data after updating. This {1} has not been changed."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:21197 js/Tinebase-FAT-debug.js:23669
-#: js/widgets/dialog/ImportDialog.js:653
-#: js/widgets/dialog/MultipleEditResultSummary.js:192
-msgid "Index"
-msgstr "Indice"
-
-#: js/Tinebase-FAT-debug.js:21201 js/Tinebase-FAT-debug.js:23670
-#: js/Tinebase-FAT-debug.js:32314 js/Tinebase-FAT-debug.js:32327
-#: js/Tinebase-FAT-debug.js:41481 js/Tinebase-FAT-debug.js:43247
-#: js/Tinebase-FAT-debug.js:43257 js/PasswordChangeDialog.js:100
-#: js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:939
-#: js/widgets/relation/GenericPickerGridPanel.js:952
-#: js/widgets/dialog/ImportDialog.js:654
-#: js/widgets/dialog/MultipleEditResultSummary.js:196
-#: js/widgets/form/RecordPickerComboBox.js:294
-msgid "Failure"
-msgstr "Falló"
-
-#: js/Tinebase-FAT-debug.js:21218 js/Tinebase-FAT-debug.js:23640
-#: js/widgets/dialog/ImportDialog.js:624
-#: js/widgets/dialog/MultipleEditResultSummary.js:213
-msgid "Summary"
-msgstr "Resumen"
-
-#: js/Tinebase-FAT-debug.js:21789 js/widgets/dialog/WizardPanel.js:173
-msgid "Back"
-msgstr "Anterior"
-
-#: js/Tinebase-FAT-debug.js:21796 js/widgets/dialog/WizardPanel.js:180
-msgid "Next"
-msgstr "Siguiente"
-
-#: js/Tinebase-FAT-debug.js:21810 js/widgets/dialog/WizardPanel.js:194
-msgid "Finish"
-msgstr "Finalizar"
-
-#: js/Tinebase-FAT-debug.js:21885 js/widgets/dialog/AdminPanel.js:59
-msgid "Change settings for application {0}"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:21933 js/widgets/dialog/AdminPanel.js:107
-msgid "Defaults"
-msgstr "Por defecto"
-
-#: js/Tinebase-FAT-debug.js:22018 js/Tinebase-FAT-debug.js:44844
-#: js/LoginPanel.js:93 js/widgets/dialog/CredentialsDialog.js:61
-msgid "Username"
-msgstr "Usuario"
-
-#: js/Tinebase-FAT-debug.js:22022 js/Tinebase-FAT-debug.js:44861
-#: js/LoginPanel.js:111 js/widgets/dialog/CredentialsDialog.js:65
-msgid "Password"
-msgstr "Contraseña"
-
-#: js/Tinebase-FAT-debug.js:22041 js/widgets/dialog/CredentialsDialog.js:84
-msgid "Please enter your credentials"
-msgstr "Ingrese sus credenciales"
-
-#: js/Tinebase-FAT-debug.js:22226 js/widgets/dialog/PreferencesDialog.js:125
-msgid "Admin Mode"
-msgstr "Modo Administrador"
-
-#: js/Tinebase-FAT-debug.js:22261 js/widgets/dialog/PreferencesDialog.js:163
-msgid "Applications"
-msgstr "Aplicaciones"
-
-#: js/Tinebase-FAT-debug.js:22290 js/widgets/dialog/PreferencesDialog.js:192
-msgid "Edit Preferences"
-msgstr "Editar Preferencias"
-
-#: js/Tinebase-FAT-debug.js:22291 js/widgets/dialog/PreferencesDialog.js:193
-msgid "Loading ..."
-msgstr "Cargando ..."
-
-#: js/Tinebase-FAT-debug.js:22346 js/Tinebase-FAT-debug.js:41801
-#: js/widgets/dialog/PreferencesDialog.js:248
-#: js/widgets/form/ConfigPanel.js:134
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr "Por favor corrija los campos marcados en rojo antes de guardar las preferencias"
-
-#: js/Tinebase-FAT-debug.js:22375 js/widgets/dialog/PreferencesDialog.js:277
-msgid "Saving of preferences failed."
-msgstr "Las preferencias no fueron guardadas."
-
-#: js/Tinebase-FAT-debug.js:22681 js/widgets/dialog/PreferencesTreePanel.js:67
-msgid "General Preferences"
-msgstr "Preferencias Generales"
-
-#: js/Tinebase-FAT-debug.js:22701 js/widgets/dialog/PreferencesTreePanel.js:87
-msgid "My Profile"
-msgstr "Mi Perfil"
-
-#: js/Tinebase-FAT-debug.js:22808 js/Tinebase-FAT-debug.js:44304
-#: js/MainMenu.js:137 js/widgets/dialog/PreferencesPanel.js:36
-msgid "Preferences"
-msgstr "Preferencias"
-
-#: js/Tinebase-FAT-debug.js:22957 js/widgets/dialog/PreferencesPanel.js:185
-msgid "There are no preferences for this application."
-msgstr "No hay preferencias para esta aplicación."
-
-#: js/Tinebase-FAT-debug.js:23239 js/widgets/dialog/ImportDialog.js:223
-msgid "Choose File and Format"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23248 js/widgets/dialog/ImportDialog.js:232
-msgid "Choose Import File"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23252 js/widgets/dialog/ImportDialog.js:236
-msgid ""
-"Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23256 js/widgets/dialog/ImportDialog.js:240
-msgid "Select file containing your {0}"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23264 js/Tinebase-FAT-debug.js:23269
-#: js/widgets/dialog/ImportDialog.js:248 js/widgets/dialog/ImportDialog.js:253
-msgid "What should the file you upload look like?"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23272 js/widgets/dialog/ImportDialog.js:256
-msgid ""
-"Tine 2.0 does not understand all kind of files you might want to upload. You"
-" will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23275 js/widgets/dialog/ImportDialog.js:259
-msgid ""
-"Following you find a list of all supported import formats and a sample file,"
-" how Tine 2.0 expects your file to look like."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23278 js/widgets/dialog/ImportDialog.js:262
-msgid "Please select the import format of the file you want to upload"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23299 js/Tinebase-FAT-debug.js:23331
-#: js/widgets/dialog/ImportDialog.js:283 js/widgets/dialog/ImportDialog.js:315
-msgid "Download example file"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23302 js/widgets/dialog/ImportDialog.js:286
-msgid "Import description"
-msgstr "Importar descripción"
-
-#: js/Tinebase-FAT-debug.js:23352 js/widgets/dialog/ImportDialog.js:336
-msgid "Set Import Options"
-msgstr "Ajustar opciones de importación"
-
-#: js/Tinebase-FAT-debug.js:23360 js/widgets/dialog/ImportDialog.js:344
-msgid "Select {0} to add you {1} to:"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23412 js/widgets/dialog/ImportDialog.js:396
-msgid "Checking Import"
-msgstr "Comprobando importación"
-
-#: js/Tinebase-FAT-debug.js:23441 js/widgets/dialog/ImportDialog.js:425
-msgid "Resolve Conflicts"
-msgstr "Resolver Conflictos"
-
-#: js/Tinebase-FAT-debug.js:23450 js/widgets/dialog/ImportDialog.js:434
-msgid "There are {0} {1} that might already exist."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23457 js/widgets/dialog/ImportDialog.js:441
-msgid "Conflict"
-msgstr "Conflicto"
-
-#: js/Tinebase-FAT-debug.js:23458 js/widgets/dialog/ImportDialog.js:442
-msgid "First Conflict"
-msgstr "Primer Conflicto"
-
-#: js/Tinebase-FAT-debug.js:23459 js/widgets/dialog/ImportDialog.js:443
-msgid "Previous Conflict"
-msgstr "Conflicto anterior"
-
-#: js/Tinebase-FAT-debug.js:23460 js/widgets/dialog/ImportDialog.js:444
-msgid "Next Conflict"
-msgstr "Conflicto siguiente"
-
-#: js/Tinebase-FAT-debug.js:23461 js/widgets/dialog/ImportDialog.js:445
-msgid "Last Conflict"
-msgstr "Último Conflicto"
-
-#: js/Tinebase-FAT-debug.js:23467 js/widgets/dialog/ImportDialog.js:451
-msgid "Conflict is resolved"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23472 js/widgets/dialog/ImportDialog.js:456
-msgid "Resolve all conflicts"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23566 js/widgets/dialog/ImportDialog.js:550
-msgid "Processing Conflict Data"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23591 js/Tinebase-FAT-debug.js:23611
-#: js/widgets/dialog/ImportDialog.js:575 js/widgets/dialog/ImportDialog.js:595
-msgid "No conflict to resolve"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23610 js/widgets/dialog/ImportDialog.js:594
-msgid "(This is record {0} in your import file)"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23635 js/widgets/dialog/ImportDialog.js:619
-msgid "No Detail Informations"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23685 js/widgets/dialog/ImportDialog.js:669
-msgid "Importing {0}"
-msgstr "Importando {0}"
-
-#: js/Tinebase-FAT-debug.js:23716 js/widgets/dialog/ImportDialog.js:700
-msgid "{0} records had failures and where discarded."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23758 js/widgets/dialog/ImportDialog.js:742
-msgid "In total we found {0} records in your import file."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23761 js/widgets/dialog/ImportDialog.js:745
-msgid "{0} of them will be added as new records into: \"{1}\"."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23768 js/widgets/dialog/ImportDialog.js:752
-msgid "{0} of them where identified as duplicates."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23771 js/widgets/dialog/ImportDialog.js:755
-msgid ""
-"From the identified duplicates {0} will be merged into the existing records."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23775 js/widgets/dialog/ImportDialog.js:759
-msgid "From the identified duplicates {0} will be discarded."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23791 js/widgets/dialog/ImportDialog.js:775
-msgid "All records will be tagged with: \"{0}\" so you can find them easily."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23802 js/widgets/dialog/ImportDialog.js:786
-msgid "{0} records have failures and will be discarded."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:23905 js/widgets/dialog/ExportDialog.js:84
-msgid "Export {0} {1}"
-msgstr "Exportar {0} {1}"
-
-#: js/Tinebase-FAT-debug.js:23932 js/widgets/dialog/ExportDialog.js:111
-msgid "Export definition"
-msgstr "Exportar definición"
-
-#: js/Tinebase-FAT-debug.js:23941 js/widgets/dialog/ExportDialog.js:120
-msgid "Select Export Definition ..."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24017 js/Tinebase-FAT-debug.js:24070
-#: js/Tinebase-FAT-debug.js:24185 js/widgets/dialog/MultiOptionsDialog.js:28
-#: js/widgets/dialog/MultiOptionsDialog.js:81
-#: js/widgets/dialog/FileListDialog.js:28
-msgid "What would you like to do?"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24021 js/Tinebase-FAT-debug.js:24130
-#: js/Tinebase-FAT-debug.js:24189 js/widgets/dialog/MultiOptionsDialog.js:32
-#: js/widgets/dialog/MultiOptionsDialog.js:141
-#: js/widgets/dialog/FileListDialog.js:32
-msgid "You need to select an option!"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24248 js/widgets/dialog/FileListDialog.js:93
-msgid "No"
-msgstr "No"
-
-#: js/Tinebase-FAT-debug.js:24256 js/widgets/dialog/FileListDialog.js:102
-msgid "Yes"
-msgstr "Si"
-
-#: js/Tinebase-FAT-debug.js:24423
-#: js/widgets/dialog/DuplicateMergeDialog.js:134
-msgid "Merging Records..."
-msgstr "Fusionando registros"
-
-#: js/Tinebase-FAT-debug.js:24462
-#: js/widgets/dialog/DuplicateMergeDialog.js:173
-msgid "Merge Failed"
-msgstr "Falló la fusión"
-
-#: js/Tinebase-FAT-debug.js:24462
-#: js/widgets/dialog/DuplicateMergeDialog.js:173
-msgid "The merge succeeded, but the duplicate {0} could not be deleted."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24501
-#: js/widgets/dialog/DuplicateMergeDialog.js:212
-msgid "Merge {0}, prefer First"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24502
-#: js/widgets/dialog/DuplicateMergeDialog.js:213
-msgid "Merge {0}, prefer Second"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24509 js/Tinebase-FAT-debug.js:33013
-#: js/widgets/grid/GridPanel.js:581
-#: js/widgets/dialog/DuplicateMergeDialog.js:220
-msgid "Merge {0}"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24512
-#: js/widgets/dialog/DuplicateMergeDialog.js:223
-msgid "First {0}"
-msgstr "Primero {0}"
-
-#: js/Tinebase-FAT-debug.js:24513
-#: js/widgets/dialog/DuplicateMergeDialog.js:224
-msgid "Second {0}"
-msgstr "Segundo {0}"
-
-#: js/Tinebase-FAT-debug.js:24514
-#: js/widgets/dialog/DuplicateMergeDialog.js:225
-msgid "Final {0}"
-msgstr "Último {0}"
-
-#: js/Tinebase-FAT-debug.js:24582
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:41
-msgid "The record you try to add might already exist."
-msgstr "El registro que intenta agregar ya existe"
-
-#: js/Tinebase-FAT-debug.js:24673
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:196
-msgid "Field Group"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24687
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:210
-msgid "My Value"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24695
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:218
-msgid "Existing Value"
-msgstr "Valor existente"
-
-#: js/Tinebase-FAT-debug.js:24703
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:226
-msgid "Final Value"
-msgstr "Valor final"
-
-#: js/Tinebase-FAT-debug.js:24720
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:243
-msgid "Action:"
-msgstr "Acción:"
-
-#: js/Tinebase-FAT-debug.js:24736
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:259
-msgid "Merge, keeping existing details"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24737
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:260
-msgid "Merge, keeping my details"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24738
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:261
-msgid "Keep existing record and discard mine"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:24739
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:262
-msgid "Keep both records"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:25100 js/widgets/grid/RendererManager.js:54
-msgid "has notes"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:25103 js/widgets/grid/RendererManager.js:57
-msgid "has relations"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:25629 js/widgets/grid/FilterModel.js:224
-msgid "contains"
-msgstr "contiene"
-
-#: js/Tinebase-FAT-debug.js:25630 js/widgets/grid/FilterModel.js:225
-msgid "reg. exp."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:25631 js/Tinebase-FAT-debug.js:38243
-#: js/Tinebase-FAT-debug.js:38247 js/widgets/grid/FilterModel.js:226
-#: js/widgets/container/FilterModel.js:160
-#: js/widgets/container/FilterModel.js:164
-msgid "is equal to"
-msgstr "es igual a"
-
-#: js/Tinebase-FAT-debug.js:25632 js/widgets/grid/FilterModel.js:228
-msgid "is greater than"
-msgstr "es mayor que"
-
-#: js/Tinebase-FAT-debug.js:25633 js/widgets/grid/FilterModel.js:229
-msgid "is less than"
-msgstr "es menor que"
-
-#: js/Tinebase-FAT-debug.js:25634 js/widgets/grid/FilterModel.js:230
-msgid "is not"
-msgstr "no es"
-
-#: js/Tinebase-FAT-debug.js:25635 js/widgets/grid/FilterModel.js:231
-msgid "one of"
-msgstr "uno de"
-
-#: js/Tinebase-FAT-debug.js:25636 js/widgets/grid/FilterModel.js:232
-msgid "none of"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:25637 js/widgets/grid/FilterModel.js:233
-msgid "is before"
-msgstr "es antes de"
-
-#: js/Tinebase-FAT-debug.js:25638 js/widgets/grid/FilterModel.js:234
-msgid "is after"
-msgstr "es después"
-
-#: js/Tinebase-FAT-debug.js:25639 js/widgets/grid/FilterModel.js:235
-msgid "is within"
-msgstr "es enmedio de"
-
-#: js/Tinebase-FAT-debug.js:25640 js/widgets/grid/FilterModel.js:236
-msgid "is in week no."
-msgstr "está en la semana número."
-
-#: js/Tinebase-FAT-debug.js:25641 js/widgets/grid/FilterModel.js:237
-msgid "starts with"
-msgstr "comienza con"
-
-#: js/Tinebase-FAT-debug.js:25642 js/widgets/grid/FilterModel.js:238
-msgid "ends with"
-msgstr "termina on"
-
-#: js/Tinebase-FAT-debug.js:25643 js/widgets/grid/FilterModel.js:239
-msgid "defined by"
-msgstr "definido por"
-
-#: js/Tinebase-FAT-debug.js:25689 js/Tinebase-FAT-debug.js:29648
-#: js/Tinebase-FAT-debug.js:36011 js/widgets/grid/FilterModel.js:285
-#: js/widgets/grid/ForeignRecordFilter.js:406
-#: js/widgets/relation/FilterModel.js:92
-msgid "select a operator"
-msgstr "seleccione un operador"
-
-#: js/Tinebase-FAT-debug.js:25813 js/widgets/grid/FilterModel.js:409
-msgid "Search Account ..."
-msgstr "Buscar Cuenta ..."
-
-#: js/Tinebase-FAT-debug.js:25923 js/widgets/grid/FilterModel.js:180
-msgid "today"
-msgstr "hoy"
-
-#: js/Tinebase-FAT-debug.js:25924 js/widgets/grid/FilterModel.js:181
-msgid "yesterday"
-msgstr "ayer"
-
-#: js/Tinebase-FAT-debug.js:25925 js/widgets/grid/FilterModel.js:182
-msgid "this week"
-msgstr "esta semana"
-
-#: js/Tinebase-FAT-debug.js:25926 js/widgets/grid/FilterModel.js:183
-msgid "last week"
-msgstr "la semana pasada"
-
-#: js/Tinebase-FAT-debug.js:25927 js/widgets/grid/FilterModel.js:184
-msgid "the week before last"
-msgstr "la semana ante pasada"
-
-#: js/Tinebase-FAT-debug.js:25928 js/widgets/grid/FilterModel.js:185
-#: js/widgets/grid/MonthFilter.js:121
-msgid "this month"
-msgstr "este mes"
-
-#: js/Tinebase-FAT-debug.js:25929 js/widgets/grid/FilterModel.js:186
-#: js/widgets/grid/MonthFilter.js:122
-msgid "last month"
-msgstr "el último mes"
-
-#: js/Tinebase-FAT-debug.js:25930 js/widgets/grid/FilterModel.js:190
-#: js/widgets/grid/MonthFilter.js:123
-msgid "this quarter"
-msgstr "este cuarto"
-
-#: js/Tinebase-FAT-debug.js:25931 js/widgets/grid/FilterModel.js:191
-#: js/widgets/grid/MonthFilter.js:124
-msgid "last quarter"
-msgstr "el último cuarto"
-
-#: js/Tinebase-FAT-debug.js:25932 js/widgets/grid/FilterModel.js:192
-#: js/widgets/grid/MonthFilter.js:125
-msgid "this year"
-msgstr "este año"
-
-#: js/Tinebase-FAT-debug.js:25933 js/widgets/grid/FilterModel.js:193
-#: js/widgets/grid/MonthFilter.js:126
-msgid "last year"
-msgstr "el año pasado"
-
-#: js/Tinebase-FAT-debug.js:25937 js/widgets/grid/FilterModel.js:204
-msgid "tomorrow"
-msgstr "mañana"
-
-#: js/Tinebase-FAT-debug.js:25938 js/widgets/grid/FilterModel.js:205
-msgid "next week"
-msgstr "la próxima semana"
-
-#: js/Tinebase-FAT-debug.js:25939 js/widgets/grid/FilterModel.js:206
-msgid "next month"
-msgstr "el próximo mes"
-
-#: js/Tinebase-FAT-debug.js:25940 js/widgets/grid/FilterModel.js:207
-msgid "next quarter"
-msgstr "el próximo cuarto"
-
-#: js/Tinebase-FAT-debug.js:25941 js/widgets/grid/FilterModel.js:208
-msgid "next year"
-msgstr "el próximo año"
-
-#: js/Tinebase-FAT-debug.js:26462 js/Tinebase-FAT-debug.js:26948
-#: js/widgets/grid/FilterToolbar.js:85 js/widgets/grid/FilterToolbar.js:581
-msgid "Show"
-msgstr "Mostrar"
-
-#: js/Tinebase-FAT-debug.js:26541 js/widgets/grid/FilterToolbar.js:164
-msgid "add new filter"
-msgstr "agregar un nuevo filtro"
-
-#: js/Tinebase-FAT-debug.js:26547 js/widgets/grid/FilterToolbar.js:170
-msgid "reset all filters"
-msgstr "resetear todos los filtros"
-
-#: js/Tinebase-FAT-debug.js:26553 js/widgets/grid/FilterToolbar.js:176
-msgid "start search"
-msgstr "comenzar la búsqueda"
-
-#: js/Tinebase-FAT-debug.js:26561 js/widgets/grid/FilterToolbar.js:184
-msgid "save as favorite"
-msgstr "guardar como favorito"
-
-#: js/Tinebase-FAT-debug.js:26568 js/widgets/grid/FilterToolbar.js:191
-msgid "Load a favorite"
-msgstr "Cargar un favorito"
-
-#: js/Tinebase-FAT-debug.js:26735 js/widgets/grid/FilterToolbar.js:356
-msgid "select a field"
-msgstr "seleccione un campo"
-
-#: js/Tinebase-FAT-debug.js:26773 js/widgets/grid/FilterToolbar.js:394
-msgid "Delete this filter"
-msgstr "Eliminar este filtro"
-
-#: js/Tinebase-FAT-debug.js:26805 js/widgets/grid/FilterToolbar.js:432
-msgid "and"
-msgstr "y"
-
-#: js/Tinebase-FAT-debug.js:27445 js/Tinebase-FAT-debug.js:27462
-#: js/widgets/grid/FilterStructureTreePanel.js:35
-#: js/widgets/grid/FilterStructureTreePanel.js:52
-msgid "Show records that match to one of the following filters"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:27447 js/Tinebase-FAT-debug.js:27461
-#: js/widgets/grid/FilterStructureTreePanel.js:37
-#: js/widgets/grid/FilterStructureTreePanel.js:51
-msgid "or alternatively"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:27465
-#: js/widgets/grid/FilterStructureTreePanel.js:55
-msgid "Add alternative filter"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:27471
-#: js/widgets/grid/FilterStructureTreePanel.js:61
-msgid "Remove Filter"
-msgstr "Eliminar Filtro"
-
-#: js/Tinebase-FAT-debug.js:27726 js/widgets/grid/FilterPanel.js:78
-msgid "Attention: There are more filters active!"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:27822 js/Tinebase-FAT-debug.js:28141
-#: js/widgets/grid/FilterPanel.js:511
-msgid "Criteria {0}"
-msgstr "Criterio {0}"
-
-#: js/Tinebase-FAT-debug.js:27913 js/Tinebase-FAT-debug.js:28831
-#: js/widgets/grid/FilterPanel.js:261
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
-msgid "show details"
-msgstr "mostrar detalles"
-
-#: js/Tinebase-FAT-debug.js:27914 js/Tinebase-FAT-debug.js:28832
-#: js/widgets/grid/FilterPanel.js:262
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
-msgid "Always show advanced filters"
-msgstr "Siempre mostrar filtros avanzados"
-
-#: js/Tinebase-FAT-debug.js:28516 js/Tinebase-FAT-debug.js:30840
-#: js/Tinebase-FAT-debug.js:31378 js/Tinebase-FAT-debug.js:38350
-#: js/widgets/grid/PickerGridPanel.js:260 js/widgets/grid/PickerFilter.js:310
-#: js/widgets/grid/FilterModelMultiSelect.js:214
-#: js/widgets/container/FilterModel.js:267
-msgid "Selected  {0}"
-msgstr "Seleccionados {0}"
-
-#: js/Tinebase-FAT-debug.js:29018
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Tinebase-FAT-debug.js:29314 js/widgets/grid/ForeignRecordFilter.js:61
-msgid "Edit definition"
-msgstr "Editar definición"
-
-#: js/Tinebase-FAT-debug.js:29324 js/widgets/grid/ForeignRecordFilter.js:71
-msgid "Start definition"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:29364 js/widgets/grid/ForeignRecordFilter.js:111
-msgid "Related to"
-msgstr "Relacionado a"
-
-#: js/Tinebase-FAT-debug.js:30019 js/widgets/grid/QuickaddGridPanel.js:91
-msgid "Remove"
-msgstr "Eliminar"
-
-#: js/Tinebase-FAT-debug.js:30263 js/widgets/grid/FileUploadGrid.js:115
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:30327
-msgid "Remove file"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:30335 js/Tinebase-FAT-debug.js:34560
-#: js/widgets/grid/FileUploadGrid.js:187 js/widgets/tree/ContextMenu.js:116
-msgid "Pause upload"
-msgstr "Pausar cargar"
-
-#: js/Tinebase-FAT-debug.js:30344 js/Tinebase-FAT-debug.js:34544
-#: js/widgets/grid/FileUploadGrid.js:195 js/widgets/tree/ContextMenu.js:100
-msgid "Resume upload"
-msgstr "Reanudar carga"
-
-#: js/Tinebase-FAT-debug.js:30391
-msgid "Add file"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:30433 js/widgets/grid/FileUploadGrid.js:283
-msgid "name"
-msgstr "nombre"
-
-#: js/Tinebase-FAT-debug.js:30440 js/widgets/grid/FileUploadGrid.js:290
-msgid "size"
-msgstr "tamaño"
-
-#: js/Tinebase-FAT-debug.js:30447 js/widgets/grid/FileUploadGrid.js:297
-msgid "type"
-msgstr "tipo"
-
-#: js/Tinebase-FAT-debug.js:30747 js/widgets/grid/PickerGridPanel.js:162
-msgid "Remove record"
-msgstr "Eliminar registro"
-
-#: js/Tinebase-FAT-debug.js:30881 js/widgets/grid/PickerGridPanel.js:304
-msgid "Search for records ..."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:31046 js/Tinebase-FAT-debug.js:32077
-#: js/Tinebase-FAT-debug.js:40938 js/Tinebase-FAT-debug.js:41075
-#: js/widgets/grid/LinkGridPanel.js:105
-#: js/widgets/relation/GenericPickerGridPanel.js:452
-#: js/widgets/ActivitiesPanel.js:489 js/widgets/ActivitiesPanel.js:626
-msgid "Type"
-msgstr "Tipo"
-
-#: js/Tinebase-FAT-debug.js:31791
-#: js/widgets/relation/GenericPickerGridPanel.js:126
-msgid "Edit record"
-msgstr "Editar registro"
-
-#: js/Tinebase-FAT-debug.js:31827
-#: js/widgets/relation/GenericPickerGridPanel.js:162
-msgid "Sibling"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:31828
-#: js/widgets/relation/GenericPickerGridPanel.js:163
-msgid "Parent"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:31829
-#: js/widgets/relation/GenericPickerGridPanel.js:164
-msgid "Child"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:31858
-msgid "Relations failure"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:31858
-msgid "There are invalid relations. Please check before saving."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:31899
-#: js/widgets/relation/GenericPickerGridPanel.js:255
-msgid ""
-"The maximum number of {0} with the type {1} is reached. Please change the "
-"type of this relation"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:32073
-#: js/widgets/relation/GenericPickerGridPanel.js:448
-msgid "Record"
-msgstr "Registro"
-
-#: js/Tinebase-FAT-debug.js:32075
-#: js/widgets/relation/GenericPickerGridPanel.js:450
-msgid "Remark"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:32076
-#: js/widgets/relation/GenericPickerGridPanel.js:451
-msgid "Dependency"
-msgstr "Dependencia"
-
-#: js/Tinebase-FAT-debug.js:32078 js/Tinebase-FAT-debug.js:33712
-#: js/widgets/grid/GridPanel.js:1365
-#: js/widgets/relation/GenericPickerGridPanel.js:453
-#: js/widgets/dialog/AttachmentsGridPanel.js:104
-msgid "Creation Time"
-msgstr "Fecha de Creación"
-
-#: js/Tinebase-FAT-debug.js:32315
-#: js/widgets/relation/GenericPickerGridPanel.js:940
-msgid ""
-"The record you tried to link is already linked. Please edit the existing "
-"link."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:32328 js/Tinebase-FAT-debug.js:41482
-#: js/widgets/relation/GenericPickerGridPanel.js:953
-#: js/widgets/form/RecordPickerComboBox.js:295
-msgid "You tried to link a record with itself. This is not allowed!"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:32781 js/widgets/grid/GridPanel.js:309
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria,"
-" view-options or the {1} you search in."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:32783 js/Tinebase-FAT-debug.js:32949
-#: js/Tinebase-FAT-debug.js:32950 js/Tinebase-FAT-debug.js:32951
-#: js/widgets/grid/GridPanel.js:312 js/widgets/grid/GridPanel.js:517
-#: js/widgets/grid/GridPanel.js:518 js/widgets/grid/GridPanel.js:519
-msgid "Edit {0}"
-msgid_plural "Edit {0}"
-msgstr[0] "Editar {0}"
-msgstr[1] "Editar {0}"
-
-#: js/Tinebase-FAT-debug.js:32975 js/Tinebase-FAT-debug.js:34479
-#: js/widgets/grid/FileUploadGrid.js:241 js/widgets/grid/GridPanel.js:543
-#: js/widgets/tree/ContextMenu.js:35
-msgid "Add {0}"
-msgstr "Agregar {0}"
-
-#: js/Tinebase-FAT-debug.js:32983 js/widgets/grid/GridPanel.js:551
-msgid "Print Page"
-msgstr "Imprimir Página"
-
-#: js/Tinebase-FAT-debug.js:33044 js/Tinebase-FAT-debug.js:33045
-#: js/Tinebase-FAT-debug.js:33047 js/Tinebase-FAT-debug.js:34496
-#: js/widgets/grid/GridPanel.js:617 js/widgets/grid/GridPanel.js:618
-#: js/widgets/grid/GridPanel.js:620 js/widgets/tree/ContextMenu.js:52
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "Borrar {0}"
-msgstr[1] "Borrar {0}"
-
-#: js/Tinebase-FAT-debug.js:33410 js/widgets/grid/GridPanel.js:1055
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Mostrando registros {0} - {1} de {2}"
-
-#: js/Tinebase-FAT-debug.js:33411 js/widgets/grid/GridPanel.js:1056
-msgid "No {0} to display"
-msgstr "No hay {0} para mostrar"
-
-#: js/Tinebase-FAT-debug.js:33649 js/widgets/grid/GridPanel.js:1298
-msgid "New..."
-msgstr "Nuevo..."
-
-#: js/Tinebase-FAT-debug.js:33668 js/widgets/grid/GridPanel.js:1317
-msgid "Add to..."
-msgstr "Añadir a..."
-
-#: js/Tinebase-FAT-debug.js:33713 js/Tinebase-FAT-debug.js:40941
-#: js/widgets/grid/GridPanel.js:1366
-#: js/widgets/dialog/AttachmentsGridPanel.js:106
-#: js/widgets/ActivitiesPanel.js:492
-msgid "Created By"
-msgstr "Creada Por"
-
-#: js/Tinebase-FAT-debug.js:33714 js/widgets/grid/GridPanel.js:1367
-msgid "Last Modified Time"
-msgstr "Fecha última modificación"
-
-#: js/Tinebase-FAT-debug.js:33715 js/widgets/grid/GridPanel.js:1368
-msgid "Last Modified By"
-msgstr "Última modificación por"
-
-#: js/Tinebase-FAT-debug.js:34085 js/widgets/grid/GridPanel.js:1730
-msgid "Not Allowed"
-msgstr "No permitido"
-
-#: js/Tinebase-FAT-debug.js:34086 js/widgets/grid/GridPanel.js:1731
-msgid "You are not allowed to delete all pages at once"
-msgstr "Ud. no tiene autorización para eliminar todas las páginas de una sola vez"
-
-#: js/Tinebase-FAT-debug.js:34109 js/widgets/grid/GridPanel.js:1754
-msgid "Do you really want to delete the selected record ({0})?"
-msgid_plural "Do you really want to delete the selected records ({0})?"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Tinebase-FAT-debug.js:34144 js/widgets/grid/GridPanel.js:1799
-msgid " ... This may take a long time!"
-msgstr " ... Esto podría tomar un tiempo largo"
-
-#: js/Tinebase-FAT-debug.js:34487 js/Tinebase-FAT-debug.js:34709
-#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:265
-msgid "Rename {0}"
-msgstr "Renombrar {0}"
-
-#: js/Tinebase-FAT-debug.js:34505 js/widgets/tree/ContextMenu.js:61
-msgid "Manage {0} Permissions"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:34513 js/widgets/tree/ContextMenu.js:69
-msgid "{0} Properties"
-msgstr "{0} Propiedades"
-
-#: js/Tinebase-FAT-debug.js:34522 js/widgets/tree/ContextMenu.js:78
-msgid "Set {0} color"
-msgstr "Ajustar color a {0} "
-
-#: js/Tinebase-FAT-debug.js:34536 js/widgets/tree/ContextMenu.js:92
-msgid "Reload {0}"
-msgstr "Recargar {0}"
-
-#: js/Tinebase-FAT-debug.js:34553 js/widgets/tree/ContextMenu.js:109
-msgid "Edit Properties"
-msgstr "Editar Propiedades"
-
-#: js/Tinebase-FAT-debug.js:34568 js/widgets/tree/ContextMenu.js:124
-#: js/widgets/dialog/AttachmentsGridPanel.js:131
-msgid "Download"
-msgstr "Descargar"
-
-#: js/Tinebase-FAT-debug.js:34629 js/widgets/tree/ContextMenu.js:185
-msgid "New {0}"
-msgstr "Nuevo {0}"
-
-#: js/Tinebase-FAT-debug.js:34629 js/widgets/tree/ContextMenu.js:185
-msgid "Please enter the name of the new {0}:"
-msgstr "Por favor ingrese el nombre del nuevo {0}:"
-
-#: js/Tinebase-FAT-debug.js:34632 js/widgets/tree/ContextMenu.js:188
-msgid "No {0} added"
-msgstr "No {0} agregado"
-
-#: js/Tinebase-FAT-debug.js:34632 js/Tinebase-FAT-debug.js:34716
-#: js/widgets/tree/ContextMenu.js:188 js/widgets/tree/ContextMenu.js:272
-msgid "You have to supply a {0} name!"
-msgstr "¡Ud. debe ingresar {0} nombre!"
-
-#: js/Tinebase-FAT-debug.js:34635 js/widgets/tree/ContextMenu.js:191
-msgid "Creating {0}..."
-msgstr "Creando {0}..."
-
-#: js/Tinebase-FAT-debug.js:34710 js/widgets/tree/ContextMenu.js:266
-msgid "Please enter the new name of the {0}:"
-msgstr "Por favor ingrese el nuevo nombre de {0}:"
-
-#: js/Tinebase-FAT-debug.js:34716 js/widgets/tree/ContextMenu.js:272
-msgid "Not renamed {0}"
-msgstr "No ha sido renombrado {0}"
-
-#: js/Tinebase-FAT-debug.js:34790 js/widgets/tree/ContextMenu.js:346
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "¿Realmente desea agregar el {0} \"{1}\"?"
-
-#: js/Tinebase-FAT-debug.js:34901 js/widgets/tree/ContextMenu.js:457
-msgid "Manage Permissions for {0} \"{1}\""
-msgstr "Manejar los Permisos para {0} \"{1}\""
-
-#: js/Tinebase-FAT-debug.js:34925 js/widgets/tree/ContextMenu.js:481
-msgid "Properties for {0} \"{1}\""
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:35823
-#: js/widgets/customfields/EditDialogPlugin.js:155
-msgid "General"
-msgstr "General"
-
-#: js/Tinebase-FAT-debug.js:35835
-#: js/widgets/customfields/EditDialogPlugin.js:167
-msgid "Custom Fields"
-msgstr "Campos Personalizados"
-
-#: js/Tinebase-FAT-debug.js:35995 js/widgets/relation/FilterModel.js:76
-msgid "Defined by ..."
-msgstr "definido por ..."
-
-#: js/Tinebase-FAT-debug.js:36038 js/widgets/relation/FilterModel.js:119
-msgid "Define ..."
-msgstr "Definir ..."
-
-#: js/Tinebase-FAT-debug.js:36215 js/widgets/account/PickerGridPanel.js:158
-msgid "Search User"
-msgstr "Buscar Usuario"
-
-#: js/Tinebase-FAT-debug.js:36221 js/widgets/account/PickerGridPanel.js:164
-msgid "Search Group"
-msgstr "Buscar Grupo"
-
-#: js/Tinebase-FAT-debug.js:36227 js/widgets/account/PickerGridPanel.js:170
-msgid "Add Anyone"
-msgstr "Agregar a Cualquiera"
-
-#: js/Tinebase-FAT-debug.js:36270 js/widgets/account/PickerGridPanel.js:213
-msgid "Anyone"
-msgstr "Cualquiera"
-
-#: js/Tinebase-FAT-debug.js:36286 js/widgets/account/PickerGridPanel.js:229
-msgid "Search for users ..."
-msgstr "Buscar por usuarios..."
-
-#: js/Tinebase-FAT-debug.js:36308 js/widgets/account/PickerGridPanel.js:251
-msgid "Search for groups ..."
-msgstr "Buscar por grupos..."
-
-#: js/Tinebase-FAT-debug.js:36524 js/widgets/container/ContainerSelect.js:132
-msgid "Select a {0}"
-msgstr "Seleccionar {0}"
-
-#: js/Tinebase-FAT-debug.js:36544 js/widgets/container/ContainerSelect.js:152
-msgid "Recently used {0}:"
-msgstr "Recientemente usado {0}:"
-
-#: js/Tinebase-FAT-debug.js:36870 js/widgets/container/ContainerSelect.js:478
-msgid "please select a {0}"
-msgstr "por favor seleccione un(a) {0}"
-
-#: js/Tinebase-FAT-debug.js:37023 js/widgets/container/GrantsGrid.js:44
-msgid "The grant to read records of this container"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:37024 js/Tinebase-FAT-debug.js:40639
-#: js/Tinebase-FAT-debug.js:40651 js/widgets/ActivitiesPanel.js:168
-#: js/widgets/ActivitiesPanel.js:181 js/widgets/container/GrantsGrid.js:45
-msgid "Add"
-msgstr "Agregar"
-
-#: js/Tinebase-FAT-debug.js:37025 js/widgets/container/GrantsGrid.js:46
-msgid "The grant to add records to this container"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:37027 js/widgets/container/GrantsGrid.js:48
-msgid "The grant to edit records in this container"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:37028 js/widgets/container/GrantsGrid.js:49
-msgid "Delete"
-msgstr "Borrar"
-
-#: js/Tinebase-FAT-debug.js:37029 js/widgets/container/GrantsGrid.js:50
-msgid "The grant to delete records in this container"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:37031 js/widgets/container/GrantsGrid.js:52
-msgid "The grant to export records from this container"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:37032 js/widgets/container/GrantsGrid.js:53
-msgid "Sync"
-msgstr "Sincronicar"
-
-#: js/Tinebase-FAT-debug.js:37033 js/widgets/container/GrantsGrid.js:54
-msgid "The grant to synchronise records with this container"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:37034 js/widgets/container/GrantsGrid.js:55
-msgid "Admin"
-msgstr "Admin"
-
-#: js/Tinebase-FAT-debug.js:37035 js/widgets/container/GrantsGrid.js:56
-msgid "The grant to administrate this container"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:37037 js/widgets/container/GrantsGrid.js:58
-msgid "Free Busy"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:37038 js/widgets/container/GrantsGrid.js:59
-msgid "The grant to access free busy information of events in this calendar"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:37039 js/widgets/container/GrantsGrid.js:60
-msgid "Private"
-msgstr "Privado"
-
-#: js/Tinebase-FAT-debug.js:37040 js/widgets/container/GrantsGrid.js:61
-msgid "The grant to access records marked as private in this container"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:37173 js/widgets/container/GrantsDialog.js:52
-msgid "Folder"
-msgstr "Carpeta"
-
-#: js/Tinebase-FAT-debug.js:37216 js/widgets/container/GrantsDialog.js:95
-msgid "Updating Grants"
-msgstr "Actualizando Permisos"
-
-#: js/Tinebase-FAT-debug.js:37246 js/widgets/container/GrantsDialog.js:125
-msgid "Error"
-msgstr "Error"
-
-#: js/Tinebase-FAT-debug.js:37247 js/widgets/container/GrantsDialog.js:126
-msgid "You are not allowed to remove all admins for this container!"
-msgstr "Ud. no tiene permisos para eliminar todos los administradores para este contenedor!"
-
-#: js/Tinebase-FAT-debug.js:37417 js/widgets/container/TreePanel.js:142
-msgid "container"
-msgid_plural "containers"
-msgstr[0] "contenedor"
-msgstr[1] "contenedores"
-
-#: js/Tinebase-FAT-debug.js:37821 js/widgets/container/TreePanel.js:546
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr "No esta autorizado a seleccionar {0} '{1}':"
-
-#: js/Tinebase-FAT-debug.js:37822 js/widgets/container/TreePanel.js:547
-msgid "{0} grant is required for desired action"
-msgstr "{0} autorización requerida para la acción requerida"
-
-#: js/Tinebase-FAT-debug.js:37823 js/widgets/container/TreePanel.js:548
-msgid "Insufficient Grants"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:38043 js/widgets/container/PropertiesDialog.js:90
-msgid "Properties"
-msgstr "Propiedades"
-
-#: js/Tinebase-FAT-debug.js:38066 js/Tinebase-FAT-debug.js:38962
-#: js/widgets/tags/TagsPanel.js:513
-#: js/widgets/container/PropertiesDialog.js:113
-msgid "Color"
-msgstr "Color"
-
-#: js/Tinebase-FAT-debug.js:38072 js/widgets/container/PropertiesDialog.js:119
-msgid "My Grants"
-msgstr "Mis Subvenciones"
-
-#: js/Tinebase-FAT-debug.js:38243 js/widgets/container/FilterModel.js:160
-msgid "is personal of"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:38577 js/widgets/tags/TagsPanel.js:114
-msgid "Add a new personal tag"
-msgstr "Agregar una nueva etiqueta personal"
-
-#: js/Tinebase-FAT-debug.js:38580 js/widgets/tags/TagsPanel.js:117
-msgid "Add New Personal Tag"
-msgstr "Agregar una nueva Etiqueta Personal"
-
-#: js/Tinebase-FAT-debug.js:38581 js/widgets/tags/TagsPanel.js:118
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "Por favor considere: Ud. crea una etiqueta personal. ¡Solamente Ud. la podrá ver!"
-
-#: js/Tinebase-FAT-debug.js:38581 js/widgets/tags/TagsPanel.js:118
-msgid "Enter tag name:"
-msgstr "Ingrese el nombre de la etiqueta:"
-
-#: js/Tinebase-FAT-debug.js:38622 js/widgets/tags/TagsPanel.js:159
-msgid "No Tags to display"
-msgstr "No hay Etiquetas para mostrar"
-
-#: js/Tinebase-FAT-debug.js:38645 js/widgets/tags/TagsPanel.js:182
-msgid "Detach tag"
-msgid_plural "Detach tags"
-msgstr[0] "Quitar etiqueta"
-msgstr[1] "Quitar etiquetas"
-
-#: js/Tinebase-FAT-debug.js:38655 js/widgets/tags/TagsPanel.js:192
-msgid "Edit tag"
-msgstr "Editar etiquetas"
-
-#: js/Tinebase-FAT-debug.js:38660 js/Tinebase-FAT-debug.js:38665
-#: js/widgets/tags/TagsPanel.js:197 js/widgets/tags/TagsPanel.js:202
-msgid "Rename Tag"
-msgstr "Renombrar Etiquetas"
-
-#: js/Tinebase-FAT-debug.js:38665 js/widgets/tags/TagsPanel.js:202
-msgid "Please enter a new name:"
-msgstr "Por favor ingrese un nuevo nombre:"
-
-#: js/Tinebase-FAT-debug.js:38674 js/widgets/tags/TagsPanel.js:211
-msgid "Edit Description"
-msgstr "Editar Descripción"
-
-#: js/Tinebase-FAT-debug.js:38679 js/widgets/tags/TagsPanel.js:216
-msgid "Description for tag"
-msgstr "Descripción de la etiqueta"
-
-#: js/Tinebase-FAT-debug.js:38679 js/widgets/tags/TagsPanel.js:216
-msgid "Please enter new description:"
-msgstr "Por favor ingrese una nueva descripción:"
-
-#: js/Tinebase-FAT-debug.js:38688 js/widgets/tags/TagsPanel.js:225
-msgid "Change Color"
-msgstr "Cambiar Color"
-
-#: js/Tinebase-FAT-debug.js:38717 js/widgets/tags/TagsPanel.js:254
-msgid "Delete Tag"
-msgid_plural "Delete Tags"
-msgstr[0] "Eliminar Etiqueta"
-msgstr[1] "Eliminar Etiquetas"
-
-#: js/Tinebase-FAT-debug.js:38730 js/widgets/tags/TagsPanel.js:267
-msgid "Realy Delete Selected Tag?"
-msgid_plural "Realy Delete Selected Tags?"
-msgstr[0] "¿Realmente Eliminar la Etiqueta Seleccionada?"
-msgstr[1] "¿Realmente Eliminar las Etiquetas Seleccionadas?"
-
-#: js/Tinebase-FAT-debug.js:38731 js/widgets/tags/TagsPanel.js:268
-msgid "the selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "la etiqueta seleccionada será eliminada y desaparecerá de todas las entradas"
-msgstr[1] "las etiquetas seleccionadas serán eliminadas y desaparecerán de todas las entradas"
-
-#: js/Tinebase-FAT-debug.js:38735 js/widgets/tags/TagsPanel.js:272
-msgid "Please wait a moment..."
-msgstr "Por favor espere un momento..."
-
-#: js/Tinebase-FAT-debug.js:38735 js/widgets/tags/TagsPanel.js:272
-msgid "Deleting Tag"
-msgid_plural "Deleting Tags"
-msgstr[0] "Eliminando Etiqueta"
-msgstr[1] "Eliminando Etiquetas"
-
-#: js/Tinebase-FAT-debug.js:38751 js/widgets/tags/TagsPanel.js:288
-msgid "Could not delete Tag(s)."
-msgstr "No se pudo eliminar la(s) Etiqueta(s)"
-
-#: js/Tinebase-FAT-debug.js:38795 js/Tinebase-FAT-debug.js:38860
-#: js/widgets/tags/TagsPanel.js:332 js/widgets/tags/TagsPanel.js:394
-msgid "Notice"
-msgstr "Aviso"
-
-#: js/Tinebase-FAT-debug.js:38796 js/Tinebase-FAT-debug.js:38861
-#: js/widgets/tags/TagsPanel.js:333 js/widgets/tags/TagsPanel.js:395
-msgid "The minimum tag length is three."
-msgstr "El mínimo largo de la etiqueta es tres."
-
-#: js/Tinebase-FAT-debug.js:38846 js/widgets/tags/TagsPanel.js:380
-msgid "Could not create tag."
-msgstr "No se pudo crear la etiqueta."
-
-#: js/Tinebase-FAT-debug.js:38879 js/widgets/tags/TagsPanel.js:413
-msgid "Could not update tag."
-msgstr "No se pudo actualizar la etiqueta."
-
-#: js/Tinebase-FAT-debug.js:39035 js/widgets/tags/TagCombo.js:46
-msgid "tag name"
-msgstr "nombre de etiqueta"
-
-#: js/Tinebase-FAT-debug.js:39206 js/widgets/tags/TagToggleBox.js:52
-msgid "Detach Tags"
-msgstr "Quitar etiquetas"
-
-#: js/Tinebase-FAT-debug.js:39206 js/widgets/tags/TagToggleBox.js:52
-msgid "Attach Tags"
-msgstr "Añadir Etiquetas"
-
-#: js/Tinebase-FAT-debug.js:39294 js/widgets/tags/TagToggleBox.js:140
-msgid "No Tags to detach found in the selected records"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:39295 js/widgets/tags/TagToggleBox.js:141
-msgid "Please Wait..."
-msgstr "Por Favor Espere..."
-
-#: js/Tinebase-FAT-debug.js:39306 js/widgets/tags/TagToggleBox.js:152
-msgid "Detaching Tags"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:39380
-msgid "Add Tags"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:39456
-msgid "Select Tags"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:39497 js/widgets/tags/TagsMassAttachAction.js:128
-msgid "Attaching Tag"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:39545 js/widgets/tags/TagsMassDetachAction.js:18
-msgid "Detach tag(s)"
-msgstr "Quitar etiqueta(s)"
-
-#: js/Tinebase-FAT-debug.js:39611 js/widgets/tags/TagsMassDetachAction.js:84
-msgid "Select Tag(s) to detach"
-msgstr "Seleccionar Etiqueta(s) para quitar"
-
-#: js/Tinebase-FAT-debug.js:39952 js/widgets/mainscreen/WestPanel.js:302
-msgid "containers"
-msgstr "contenedores"
-
-#: js/Tinebase-FAT-debug.js:39979 js/widgets/mainscreen/WestPanel.js:329
-msgid "Favorites"
-msgstr "Favoritos"
-
-#: js/Tinebase-FAT-debug.js:39994
-msgid "Modules"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:40005 js/widgets/MainScreen.js:264
-msgid "Save current view as favorite"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:40319 js/LicenseScreen.js:35
-msgid "License"
-msgstr "Licencia"
-
-#: js/Tinebase-FAT-debug.js:40379 js/CreditsScreen.js:36
-msgid "Credits"
-msgstr "Créditos"
-
-#: js/Tinebase-FAT-debug.js:40439 js/widgets/CountryCombo.js:34
-msgid "Select a country..."
-msgstr "Seleccionar un país..."
-
-#: js/Tinebase-FAT-debug.js:40624 js/widgets/ActivitiesPanel.js:153
-msgid "Add a Note..."
-msgstr "Agregar una Nota..."
-
-#: js/Tinebase-FAT-debug.js:40639 js/Tinebase-FAT-debug.js:40940
-#: js/widgets/ActivitiesPanel.js:168 js/widgets/ActivitiesPanel.js:491
-msgid "Note"
-msgstr "Nota"
-
-#: js/Tinebase-FAT-debug.js:40652 js/Tinebase-FAT-debug.js:40862
-#: js/widgets/ActivitiesPanel.js:182 js/widgets/ActivitiesPanel.js:413
-msgid "Add new note"
-msgstr "Agregar nueva nota"
-
-#: js/Tinebase-FAT-debug.js:40683 js/widgets/ActivitiesPanel.js:209
-#: js/widgets/ActivitiesPanel.js:228
-msgid "Notes"
-msgstr "Notas"
-
-#: js/Tinebase-FAT-debug.js:40759 js/widgets/ActivitiesPanel.js:311
-msgid "Enter new note:"
-msgstr "Escriba nueva nota:"
-
-#: js/Tinebase-FAT-debug.js:40796 js/Tinebase-FAT-debug.js:40861
-#: js/widgets/ActivitiesPanel.js:356 js/widgets/ActivitiesPanel.js:412
-msgid "Add Note"
-msgstr "Agregar Nota"
-
-#: js/Tinebase-FAT-debug.js:40848 js/widgets/ActivitiesPanel.js:399
-msgid "Add a {0} Note"
-msgstr "Agregar una {0} Nota"
-
-#: js/Tinebase-FAT-debug.js:40942 js/widgets/ActivitiesPanel.js:493
-msgid "Timestamp"
-msgstr "Timbre de Hora"
-
-#: js/Tinebase-FAT-debug.js:40956 js/widgets/ActivitiesPanel.js:507
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr "Mostrando registros históricos {0} - {1} de {2}"
-
-#: js/Tinebase-FAT-debug.js:40957 js/widgets/ActivitiesPanel.js:508
-msgid "No history to display"
-msgstr "No hay historial para mostrar"
-
-#: js/Tinebase-FAT-debug.js:41057 js/widgets/ActivitiesPanel.js:608
-msgid "History"
-msgstr "Historial"
-
-#: js/Tinebase-FAT-debug.js:41070 js/Tinebase-FAT-debug.js:41071
-#: js/widgets/ActivitiesPanel.js:621 js/widgets/ActivitiesPanel.js:622
-msgid "Time"
-msgstr "Hora"
-
-#: js/Tinebase-FAT-debug.js:41073 js/widgets/ActivitiesPanel.js:624
-msgid "User"
-msgstr "Usuario"
-
-#: js/Tinebase-FAT-debug.js:41595 js/widgets/relation/PickerCombo.js:93
-msgid ""
-"The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
-"once!"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:41780 js/widgets/form/ConfigPanel.js:113
-msgid "Configuration Problem"
-msgstr "Problema de Configuración"
-
-#: js/Tinebase-FAT-debug.js:41801 js/widgets/form/ConfigPanel.js:134
-msgid "Invalid configuration"
-msgstr "Configuración inválida"
-
-#: js/Tinebase-FAT-debug.js:41825 js/widgets/form/ConfigPanel.js:158
-msgid "Transferring Configuration..."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:41921 js/widgets/form/ConfigPanel.js:254
-msgid "Save config"
-msgstr "Guardar la configuración"
-
-#: js/Tinebase-FAT-debug.js:41931 js/widgets/form/ConfigPanel.js:264
-msgid "Reload config"
-msgstr "Recargar la configuración"
-
-#: js/Tinebase-FAT-debug.js:42105 js/widgets/form/FileUploadButton.js:65
-msgid "Wrong File Type"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:42105 js/widgets/form/FileUploadButton.js:65
-msgid "Please select a file with one of the following extensions:"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:42494
-#: js/widgets/persistentfilter/PickerPanel.js:121
-msgid "My favorites"
-msgstr "Mis favoritos"
-
-#: js/Tinebase-FAT-debug.js:42665
-#: js/widgets/persistentfilter/PickerPanel.js:297
-msgid "Delete Favorite"
-msgstr "Borrar Favorito"
-
-#: js/Tinebase-FAT-debug.js:42670 js/Tinebase-FAT-debug.js:42765
-#: js/widgets/persistentfilter/PickerPanel.js:302
-#: js/widgets/persistentfilter/PickerPanel.js:397
-msgid "Edit Favorite"
-msgstr "Editar Favorito"
-
-#: js/Tinebase-FAT-debug.js:42675
-#: js/widgets/persistentfilter/PickerPanel.js:307
-msgid "Overwrite Favorite"
-msgstr "Sobreescribir Favorito"
-
-#: js/Tinebase-FAT-debug.js:42693
-#: js/widgets/persistentfilter/PickerPanel.js:325
-msgid "Do you really want to delete the favorite \"{0}\"?"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:42695
-#: js/widgets/persistentfilter/PickerPanel.js:327
-msgid "Deleting Favorite \"{0}\""
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:42731
-#: js/widgets/persistentfilter/PickerPanel.js:363
-msgid "Overwrite?"
-msgstr "Sobreescribir?"
-
-#: js/Tinebase-FAT-debug.js:42731
-#: js/widgets/persistentfilter/PickerPanel.js:363
-msgid "Do you want to overwrite the favorite \"{0}\"?"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:42733
-#: js/widgets/persistentfilter/PickerPanel.js:365
-msgid "Overwriting Favorite \"{0}\""
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:42754
-#: js/widgets/persistentfilter/PickerPanel.js:386
-msgid "Could not save Favorite"
-msgstr "No se pudo guardar el Favorito"
-
-#: js/Tinebase-FAT-debug.js:42754
-#: js/widgets/persistentfilter/PickerPanel.js:386
-msgid "Your current view does not support favorites"
-msgstr "La vista actual no admite favoritos"
-
-#: js/Tinebase-FAT-debug.js:42763
-#: js/widgets/persistentfilter/PickerPanel.js:395
-msgid "Create Favorite"
-msgstr "Crear Favorito"
-
-#: js/Tinebase-FAT-debug.js:42783
-#: js/widgets/persistentfilter/PickerPanel.js:417
-msgid "Saving Favorite \"{0}\""
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:42946
-#: js/widgets/persistentfilter/PickerPanel.js:593
-msgid "(shared)"
-msgstr "(compartido)"
-
-#: js/Tinebase-FAT-debug.js:43065 js/Tinebase-FAT-debug.js:43069
-msgid "Favorite not Saved"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:43065
-msgid ""
-"You have to supply a shorter name! Names of favorite can only be up to 40 "
-"characters long."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:43069
-msgid "You have to supply a name for the favorite!"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:43121
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:200
-msgid "Shared Favorite (visible by all users)"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:43179 js/PasswordChangeDialog.js:32
-msgid "Change Password For \"{0}\""
-msgstr "Cambiar Contraseña Para \"{0}\""
-
-#: js/Tinebase-FAT-debug.js:43195 js/PasswordChangeDialog.js:48
-msgid "Old Password"
-msgstr "Contraseña Antigua"
-
-#: js/Tinebase-FAT-debug.js:43199 js/PasswordChangeDialog.js:52
-msgid "New Password"
-msgstr "Contraseña Nueva"
-
-#: js/Tinebase-FAT-debug.js:43203 js/PasswordChangeDialog.js:56
-msgid "Repeat new Password"
-msgstr "Repetir Nueva Contraseña"
-
-#: js/Tinebase-FAT-debug.js:43222 js/PasswordChangeDialog.js:75
-msgid "Please Wait!"
-msgstr "¡Por favor espere!"
-
-#: js/Tinebase-FAT-debug.js:43223 js/PasswordChangeDialog.js:76
-msgid "changing password..."
-msgstr "cambiando contraseña..."
-
-#: js/Tinebase-FAT-debug.js:43234 js/PasswordChangeDialog.js:87
-msgid "Success"
-msgstr "Exitoso"
-
-#: js/Tinebase-FAT-debug.js:43235 js/PasswordChangeDialog.js:88
-msgid "Your password has been changed."
-msgstr "Su contraseña ha sido cambiada."
-
-#: js/Tinebase-FAT-debug.js:43258 js/PasswordChangeDialog.js:111
-msgid "The new passwords mismatch, please correct them."
-msgstr "Las contraseñas nuevas son distintas, por favor verifíquelas"
-
-#: js/Tinebase-FAT-debug.js:43311 js/Tinebase-FAT-debug.js:44292
-#: js/AboutDialog.js:41 js/MainMenu.js:118
-msgid "About {0}"
-msgstr "Acerca de {0}"
-
-#: js/Tinebase-FAT-debug.js:43340 js/AboutDialog.js:71
+#: js/AboutDialog.js:71
 msgid "Released under different"
 msgstr ""
 
-#: js/Tinebase-FAT-debug.js:43341 js/AboutDialog.js:72
+#: js/AboutDialog.js:72
 msgid "Open Source Licenses"
 msgstr ""
 
-#: js/Tinebase-FAT-debug.js:43348 js/AboutDialog.js:79
+#: js/AboutDialog.js:79
 msgid "with the help of our"
 msgstr ""
 
-#: js/Tinebase-FAT-debug.js:43349 js/AboutDialog.js:80
+#: js/AboutDialog.js:80
 msgid "Contributors"
 msgstr ""
 
-#: js/Tinebase-FAT-debug.js:43568 js/AppManager.js:208
-msgid "Missing Applications"
-msgstr "Apliaciones faltantes"
-
-#: js/Tinebase-FAT-debug.js:43569 js/AppManager.js:209
-msgid ""
-"There are no applications enabled for you. Please contact your "
-"administrator."
-msgstr "No hay aplicaciones habilitadas para usted. Por favor contacte a su administrador."
-
-#: js/Tinebase-FAT-debug.js:44242 js/MainMenu.js:66
-msgid "User: {0}"
-msgstr "Usuario: {0}"
-
-#: js/Tinebase-FAT-debug.js:44298 js/MainMenu.js:131
-msgid "Debug Console (Ctrl + F11)"
-msgstr "Consola de Depuración (Ctrl + F11)"
-
-#: js/Tinebase-FAT-debug.js:44311 js/MainMenu.js:144
-msgid "Edit Profile"
-msgstr "Editar Perfil"
-
-#: js/Tinebase-FAT-debug.js:44318 js/MainMenu.js:151
-msgid "Change password"
-msgstr "Cambiar Contraseña"
-
-#: js/Tinebase-FAT-debug.js:44325 js/MainMenu.js:158
-msgid "Logout"
-msgstr "Salir"
-
-#: js/Tinebase-FAT-debug.js:44326 js/MainMenu.js:159
-msgid "Logout from {0}"
-msgstr "Salir de {0}"
-
-#: js/Tinebase-FAT-debug.js:44333 js/MainMenu.js:176
-msgid "Allow desktop notifications"
-msgstr "Permitir notificaciones en el escritorio"
-
-#: js/Tinebase-FAT-debug.js:44334 js/MainMenu.js:177
-msgid "Request permissions for webkit desktop notifications."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:44344 js/MainMenu.js:187
-msgid "Install web app"
-msgstr "Instalar web app"
-
-#: js/Tinebase-FAT-debug.js:44345 js/MainMenu.js:188
-msgid "Install Tine 2.0 as web app in your browser."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:44393 js/MainMenu.js:243
-msgid "Are you sure you want to logout?"
-msgstr "¿Está seguro que desea salir?"
-
-#: js/Tinebase-FAT-debug.js:44407 js/MainMenu.js:257
-msgid "Logging you out..."
-msgstr "Saliendo del sistema..."
-
-#: js/Tinebase-FAT-debug.js:44407 js/Tinebase-FAT-debug.js:45117
-#: js/LoginPanel.js:474 js/MainMenu.js:257
-msgid "Please wait!"
-msgstr "¡Por favor espere!"
-
-#: js/Tinebase-FAT-debug.js:44645 js/MainScreen.js:205
-msgid "Your password expired. Please enter a new user password:"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:44834 js/Tinebase-FAT-debug.js:44872
-#: js/LoginPanel.js:83 js/LoginPanel.js:159
-msgid "Login"
-msgstr "Ingresar"
-
-#: js/Tinebase-FAT-debug.js:44891
-msgid "Tine 2.0 is made for you"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:44893
-msgid ""
-"Tine 2.0 wants to make business collaboration easier and more enjoyable - "
-"for your needs! So you are warmly welcome to discuss with us, bring in ideas"
-" and get help."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:44899
-msgid "Tine 2.0 Homepage"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:44900
-msgid "Tine 2.0 Forum"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:44904 js/LoginPanel.js:230
-msgid "Translations"
-msgstr "Traducciones"
-
-#: js/Tinebase-FAT-debug.js:44906
-msgid ""
-"If you miss a language, or your language is not supported completely, you "
-"can help our translation teams at transifex."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:44909
-msgid "Tine 2.0 Translation Portal"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:44954 js/LoginPanel.js:308
-msgid "about {0} minutes"
-msgstr "alrededor de {0} minutos"
-
-#: js/Tinebase-FAT-debug.js:44959 js/Tinebase-FAT-debug.js:45184
-#: js/LoginPanel.js:313 js/LoginPanel.js:551
-msgid "Tine 2.0 needs your help"
-msgstr "Tine 2.0 necesita tu ayuda"
-
-#: js/Tinebase-FAT-debug.js:44961 js/Tinebase-FAT-debug.js:45186
-#: js/LoginPanel.js:315 js/LoginPanel.js:553
-msgid ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
-msgstr "Necesitamos constantemente sus comentarios para hacer del próximo lanzamiento de Tine 2.0 un programa mucho mejor para usted. Ayúdenos a nosotros y usted participando:"
-
-#: js/Tinebase-FAT-debug.js:44967 js/LoginPanel.js:321
-msgid "participate!"
-msgstr "¡participar!"
-
-#: js/Tinebase-FAT-debug.js:44989 js/LoginPanel.js:343
-msgid "Languages"
-msgstr "Idiomas"
-
-#: js/Tinebase-FAT-debug.js:44990 js/LoginPanel.js:344
-msgid "Duration"
-msgstr "Duración"
-
-#: js/Tinebase-FAT-debug.js:45031 js/LoginPanel.js:385
-msgid "Browser incompatible"
-msgstr "Navegador incompatible"
-
-#: js/Tinebase-FAT-debug.js:45033 js/LoginPanel.js:387
-msgid "Your browser is not supported by Tine 2.0."
-msgstr "Tu navegador no es soportado por Tine 2.0."
-
-#: js/Tinebase-FAT-debug.js:45038 js/LoginPanel.js:392
-msgid "Browser incompatible?"
-msgstr "¿Navegador incompatible?"
-
-#: js/Tinebase-FAT-debug.js:45040 js/LoginPanel.js:394
-msgid ""
-"You are using an unrecognized browser. This could result in unexpected "
-"behaviour."
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:45046 js/LoginPanel.js:400
-msgid "You might try one of these browsers:"
-msgstr "Se sugiere utilizar uno de estos navegadores:"
-
-#: js/Tinebase-FAT-debug.js:45104 js/LoginPanel.js:460
-msgid "Logging you in..."
-msgstr "Accediendo..."
-
-#: js/Tinebase-FAT-debug.js:45117 js/LoginPanel.js:474
-msgid "Login successful. Loading {0}..."
-msgstr "Ingreso exitoso. Cargando {0}..."
-
-#: js/Tinebase-FAT-debug.js:45129 js/LoginPanel.js:489
-msgid "Login failure"
-msgstr "Fallo al ingresar"
-
-#: js/Tinebase-FAT-debug.js:45130 js/LoginPanel.js:487
-msgid "Your username and/or your password are wrong!!!"
-msgstr "¡Su contraseña o nombre de usuarios son incorrectos!"
-
-#: js/Tinebase-FAT-debug.js:45157 js/LoginPanel.js:523
-msgid "Please enter your login data"
-msgstr "Por favor ingrese sus datos de ingreso."
-
-#: js/Tinebase-FAT-debug.js:45466 js/Tinebase-FAT-debug.js:45467
-#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
-msgid "Outdent Text"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:45468 js/Tinebase-FAT-debug.js:45469
-#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
-msgid "Indent Text"
-msgstr ""
-
-#: js/Tinebase-FAT-debug.js:45470 js/Tinebase-FAT-debug.js:45471
-#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
-msgid "Remove Formatting"
-msgstr "Eliminar Formato"
-
-#: js/Tinebase-FAT-debug.js:46075 js/tineInit.js:605
+#: js/tineInit.js:605
 msgid ""
 "Fatal Error: Client self-update failed, please contact your administrator "
 "and/or restart/reload your browser."
 msgstr "Error Fatal: La actualización por parte del cliente falló, por favor contacte a su administrador y/o reinicie/recargue su navegador."
 
-#: js/AboutDialog.js:56 js/MainMenu.js:166
-msgid "Learn more about {0}"
+#: js/AppManager.js:208
+msgid "Missing Applications"
+msgstr "Apliaciones faltantes"
+
+#: js/AppManager.js:209
+msgid ""
+"There are no applications enabled for you. Please contact your "
+"administrator."
+msgstr "No hay aplicaciones habilitadas para usted. Por favor contacte a su administrador."
+
+#: js/CreditsScreen.js:36
+msgid "Credits"
+msgstr "Créditos"
+
+#: js/common.js:235
+msgid "Usage:&#160;"
 msgstr ""
+
+#: js/common.js:255 js/common.js:260 js/widgets/tags/TagToggleBox.js:112
+#: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagsPanel.js:137
+#: js/widgets/tags/TagCombo.js:134 js/widgets/tags/TagCombo.js:139
+msgid "personal"
+msgstr "personal"
+
+#: js/common.js:273 js/common.js:311
+msgid "No Information"
+msgstr "Sin Información"
+
+#: js/common.js:360
+msgid "{0} minute"
+msgid_plural "{0} minutes"
+msgstr[0] "{0} minuto"
+msgstr[1] "{0} minutos"
+
+#: js/common.js:361
+msgid "{0} hour"
+msgid_plural "{0} hours"
+msgstr[0] "{0} hora"
+msgstr[1] "{0} horas"
+
+#: js/common.js:362
+msgid "{0} workday"
+msgid_plural "{0} workdays"
+msgstr[0] "{0} día hábil"
+msgstr[1] "{0} días hábiles"
+
+#: js/common.js:389
+msgid "{0} second"
+msgid_plural "{0} seconds"
+msgstr[0] "{0} segundos"
+msgstr[1] "{0} segundos"
+
+#: js/LoginPanel.js:83 js/LoginPanel.js:159
+msgid "Login"
+msgstr "Ingresar"
+
+#: js/LoginPanel.js:93 js/widgets/dialog/CredentialsDialog.js:61
+msgid "Username"
+msgstr "Usuario"
+
+#: js/LoginPanel.js:111 js/widgets/dialog/CredentialsDialog.js:65
+msgid "Password"
+msgstr "Contraseña"
 
 #: js/LoginPanel.js:128
 msgid "Certificate detected. Please, press Login button to proceed."
@@ -3040,6 +729,10 @@ msgstr ""
 msgid "{0} Forum"
 msgstr ""
 
+#: js/LoginPanel.js:230
+msgid "Translations"
+msgstr "Traducciones"
+
 #: js/LoginPanel.js:232
 msgid "Translation state of {0}: {1}%."
 msgstr ""
@@ -3066,12 +759,343 @@ msgstr ""
 msgid "online open source groupware and crm"
 msgstr ""
 
+#: js/LoginPanel.js:308
+msgid "about {0} minutes"
+msgstr "alrededor de {0} minutos"
+
+#: js/LoginPanel.js:313 js/LoginPanel.js:551
+msgid "Tine 2.0 needs your help"
+msgstr "Tine 2.0 necesita tu ayuda"
+
+#: js/LoginPanel.js:315 js/LoginPanel.js:553
+msgid ""
+"We regularly need your feedback to make the next Tine 2.0 releases fit your "
+"needs even better. Help us and yourself by participating:"
+msgstr "Necesitamos constantemente sus comentarios para hacer del próximo lanzamiento de Tine 2.0 un programa mucho mejor para usted. Ayúdenos a nosotros y usted participando:"
+
+#: js/LoginPanel.js:321
+msgid "participate!"
+msgstr "¡participar!"
+
+#: js/LoginPanel.js:343
+msgid "Languages"
+msgstr "Idiomas"
+
+#: js/LoginPanel.js:344
+msgid "Duration"
+msgstr "Duración"
+
+#: js/LoginPanel.js:385
+msgid "Browser incompatible"
+msgstr "Navegador incompatible"
+
+#: js/LoginPanel.js:387
+msgid "Your browser is not supported by Tine 2.0."
+msgstr "Tu navegador no es soportado por Tine 2.0."
+
+#: js/LoginPanel.js:392
+msgid "Browser incompatible?"
+msgstr "¿Navegador incompatible?"
+
+#: js/LoginPanel.js:394
+msgid ""
+"You are using an unrecognized browser. This could result in unexpected "
+"behaviour."
+msgstr ""
+
+#: js/LoginPanel.js:400
+msgid "You might try one of these browsers:"
+msgstr "Se sugiere utilizar uno de estos navegadores:"
+
+#: js/LoginPanel.js:460
+msgid "Logging you in..."
+msgstr "Accediendo..."
+
+#: js/LoginPanel.js:460 js/widgets/tree/ContextMenu.js:191
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:683
+#: js/widgets/persistentfilter/PickerPanel.js:327
+#: js/widgets/persistentfilter/PickerPanel.js:365
+#: js/widgets/persistentfilter/PickerPanel.js:417
+#: js/widgets/container/GrantsDialog.js:95
+msgid "Please wait"
+msgstr "Por favor espere"
+
+#: js/LoginPanel.js:474
+msgid "Login successful. Loading {0}..."
+msgstr "Ingreso exitoso. Cargando {0}..."
+
+#: js/LoginPanel.js:474 js/MainMenu.js:257
+msgid "Please wait!"
+msgstr "¡Por favor espere!"
+
+#: js/LoginPanel.js:482 js/ExceptionHandler.js:233
+msgid "Connection lost, please check your network!"
+msgstr "Conexión perdida, por favor revise su configuración de red"
+
 #: js/LoginPanel.js:486
 msgid "There was an error verifying your certificate!!!"
 msgstr ""
 
+#: js/LoginPanel.js:487
+msgid "Your username and/or your password are wrong!!!"
+msgstr "¡Su contraseña o nombre de usuarios son incorrectos!"
+
+#: js/LoginPanel.js:489
+msgid "Login failure"
+msgstr "Fallo al ingresar"
+
+#: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
+#: js/widgets/dialog/PreferencesDialog.js:248
+#: js/widgets/dialog/PreferencesDialog.js:277
+#: js/widgets/dialog/EditDialog.js:798 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
+msgid "Errors"
+msgstr "Errores"
+
+#: js/LoginPanel.js:508 js/widgets/dialog/CredentialsDialog.js:126
+#: js/widgets/dialog/EditDialog.js:820 js/widgets/dialog/ExportDialog.js:150
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:645
+msgid "Please fix the errors noted."
+msgstr "Por favor arregle los errores señalados."
+
+#: js/LoginPanel.js:523
+msgid "Please enter your login data"
+msgstr "Por favor ingrese sus datos de ingreso."
+
+#: js/LicenseScreen.js:35
+msgid "License"
+msgstr "Licencia"
+
+#: js/PasswordChangeDialog.js:32
+msgid "Change Password For \"{0}\""
+msgstr "Cambiar Contraseña Para \"{0}\""
+
+#: js/PasswordChangeDialog.js:48
+msgid "Old Password"
+msgstr "Contraseña Antigua"
+
+#: js/PasswordChangeDialog.js:52
+msgid "New Password"
+msgstr "Contraseña Nueva"
+
+#: js/PasswordChangeDialog.js:56
+msgid "Repeat new Password"
+msgstr "Repetir Nueva Contraseña"
+
+#: js/PasswordChangeDialog.js:60 js/widgets/EditRecord.js:178
+#: js/widgets/tags/TagToggleBox.js:59
+#: js/widgets/tags/TagsMassAttachAction.js:105
+#: js/widgets/dialog/DuplicateMergeDialog.js:79
+#: js/widgets/dialog/MultiOptionsDialog.js:109
+#: js/widgets/dialog/ExceptionHandlerDialog.js:186
+#: js/widgets/dialog/AddToRecordPanel.js:103
+#: js/widgets/dialog/PreferencesDialog.js:117
+#: js/widgets/dialog/EditDialog.js:393 js/widgets/dialog/WizardPanel.js:187
+#: js/widgets/ActivitiesPanel.js:332
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
+#: js/widgets/container/ContainerSelect.js:481 js/ExceptionDialog.js:109
+#: js/ExceptionDialog.js:119 js/ux/form/LayerCombo.js:193
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: js/PasswordChangeDialog.js:75
+msgid "Please Wait!"
+msgstr "¡Por favor espere!"
+
+#: js/PasswordChangeDialog.js:76
+msgid "changing password..."
+msgstr "cambiando contraseña..."
+
+#: js/PasswordChangeDialog.js:87
+msgid "Success"
+msgstr "Exitoso"
+
+#: js/PasswordChangeDialog.js:88
+msgid "Your password has been changed."
+msgstr "Su contraseña ha sido cambiada."
+
+#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
+#: js/widgets/relation/GenericPickerGridPanel.js:947
+#: js/widgets/relation/GenericPickerGridPanel.js:960
+#: js/widgets/dialog/ImportDialog.js:654
+#: js/widgets/dialog/MultipleEditResultSummary.js:196
+#: js/widgets/form/RecordPickerComboBox.js:294
+msgid "Failure"
+msgstr "Falló"
+
+#: js/PasswordChangeDialog.js:111
+msgid "The new passwords mismatch, please correct them."
+msgstr "Las contraseñas nuevas son distintas, por favor verifíquelas"
+
+#: js/MainMenu.js:66
+msgid "User: {0}"
+msgstr "Usuario: {0}"
+
 #: js/MainMenu.js:124
 msgid "Help"
+msgstr ""
+
+#: js/MainMenu.js:131
+msgid "Debug Console (Ctrl + F11)"
+msgstr "Consola de Depuración (Ctrl + F11)"
+
+#: js/MainMenu.js:137 js/widgets/dialog/PreferencesPanel.js:36
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: js/MainMenu.js:144
+msgid "Edit Profile"
+msgstr "Editar Perfil"
+
+#: js/MainMenu.js:151
+msgid "Change password"
+msgstr "Cambiar Contraseña"
+
+#: js/MainMenu.js:158
+msgid "Logout"
+msgstr "Salir"
+
+#: js/MainMenu.js:159
+msgid "Logout from {0}"
+msgstr "Salir de {0}"
+
+#: js/MainMenu.js:176
+msgid "Allow desktop notifications"
+msgstr "Permitir notificaciones en el escritorio"
+
+#: js/MainMenu.js:177
+msgid "Request permissions for webkit desktop notifications."
+msgstr ""
+
+#: js/MainMenu.js:187
+msgid "Install web app"
+msgstr "Instalar web app"
+
+#: js/MainMenu.js:188
+msgid "Install Tine 2.0 as web app in your browser."
+msgstr ""
+
+#: js/MainMenu.js:243 js/widgets/grid/GridPanel.js:1761
+#: js/widgets/tree/ContextMenu.js:346 js/widgets/dialog/EditDialog.js:827
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:680
+#: js/widgets/persistentfilter/PickerPanel.js:325
+msgid "Confirm"
+msgstr "Confirmar"
+
+#: js/MainMenu.js:243
+msgid "Are you sure you want to logout?"
+msgstr "¿Está seguro que desea salir?"
+
+#: js/MainMenu.js:257
+msgid "Logging you out..."
+msgstr "Saliendo del sistema..."
+
+#: js/data/Record.js:199
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Tarea"
+msgstr[1] "Tareas"
+
+#: js/data/Record.js:203
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "lista por hacer"
+msgstr[1] "to do lists"
+
+#: js/ExceptionHandler.js:169
+msgid "Your session timed out. You need to login again."
+msgstr "Su sesión ha expirado. Necesita ingresar otra vez"
+
+#: js/ExceptionHandler.js:184
+msgid "Insufficient Rights"
+msgstr "Atribuciones Insuficientes"
+
+#: js/ExceptionHandler.js:185
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "Lo sentimos, no tiene permitido realizar esta acción"
+
+#: js/ExceptionHandler.js:193
+msgid "Not Found"
+msgstr "No Encontrado"
+
+#: js/ExceptionHandler.js:194
+msgid ""
+"Sorry, your request could not be completed because the required data could "
+"not be found. In most cases this means that someone already deleted the "
+"data. Please refresh your current view."
+msgstr "Lo sentimos, su petición no pude completarse debido a que los datos no se pudieron encontrar. En la mayoría de los casos esto significa que alguien ya borró esta información. Por favor actualice la vista actual."
+
+#: js/ExceptionHandler.js:202
+msgid "Concurrent Updates"
+msgstr "Actualizaciones Concurrentes"
+
+#: js/ExceptionHandler.js:203
+msgid ""
+"Someone else saved this record while you where editing the data. You need to"
+" reload and make your changes again."
+msgstr "Alguien guardó este registro mientras usted editaba los datos. Necesitará volver a cagar los datos y realizar los cambios otra vez."
+
+#: js/ExceptionHandler.js:211
+msgid "Service Unavailable"
+msgstr "Servicio no disponible"
+
+#: js/ExceptionHandler.js:212
+msgid ""
+"The server is currently unable to handle the request due to a temporary "
+"overloading, maintenance or misconfiguration of the server. Please try again"
+" or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:218
+msgid "Server Message:"
+msgstr "Mensaje del Servidor:"
+
+#: js/ExceptionHandler.js:220
+msgid "Invalid Data"
+msgstr "Datos invalidos"
+
+#: js/ExceptionHandler.js:221
+msgid "Your input data is not valid. Please provide valid data."
+msgstr ""
+
+#: js/ExceptionHandler.js:239
+msgid "Timeout"
+msgstr "Demasiada Espera"
+
+#: js/ExceptionHandler.js:240
+msgid ""
+"Sorry, some timeout occured while processing your request. Please reload "
+"your browser, try again or contact your administrator."
+msgstr "Lo sentimos, su petición sobrepasó el tiempo de espera. Por favor reinicie su navegador, intente otra vez o contacte a su administrador."
+
+#: js/ExceptionHandler.js:248
+msgid "No Response"
+msgstr "No hay respuesta"
+
+#: js/ExceptionHandler.js:249
+msgid ""
+"Sorry, the Server did not respond any data. Please reload your browser, try "
+"again or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:256
+msgid "Out of Resources"
+msgstr "Sin recursos"
+
+#: js/ExceptionHandler.js:257
+msgid ""
+"Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
+"your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:273
+msgid "No Role Memberships"
+msgstr ""
+
+#: js/ExceptionHandler.js:274
+msgid ""
+"Your user account has no role memberships. Please contact your "
+"administrator."
 msgstr ""
 
 #: js/ExceptionHandler.js:281
@@ -3083,6 +1107,170 @@ msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
 msgstr ""
+
+#: js/Container.js:123
+msgid "All {0}"
+msgstr "Todos {0}"
+
+#: js/Container.js:124
+msgid "Shared {0}"
+msgstr "Compartido {0}"
+
+#: js/Container.js:125
+msgid "Other Users {0}"
+msgstr "Otros Usuarios {0}"
+
+#: js/Container.js:130
+msgid "My {0}"
+msgstr "Mi {0}"
+
+#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:442
+#: js/widgets/dialog/EditDialog.js:470
+msgid "Saved in"
+msgstr "Guardado en"
+
+#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:402
+msgid "delete"
+msgstr "borrar"
+
+#: js/widgets/tags/TagToggleBox.js:52
+msgid "Detach Tags"
+msgstr "Quitar etiquetas"
+
+#: js/widgets/tags/TagToggleBox.js:52
+msgid "Attach Tags"
+msgstr "Añadir Etiquetas"
+
+#: js/widgets/tags/TagToggleBox.js:140
+msgid "No Tags to detach found in the selected records"
+msgstr ""
+
+#: js/widgets/tags/TagToggleBox.js:141
+msgid "Please Wait..."
+msgstr "Por Favor Espere..."
+
+#: js/widgets/tags/TagToggleBox.js:152
+msgid "Detaching Tags"
+msgstr ""
+
+#: js/widgets/tags/TagsPanel.js:114
+msgid "Add a new personal tag"
+msgstr "Agregar una nueva etiqueta personal"
+
+#: js/widgets/tags/TagsPanel.js:117
+msgid "Add New Personal Tag"
+msgstr "Agregar una nueva Etiqueta Personal"
+
+#: js/widgets/tags/TagsPanel.js:118
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr "Por favor considere: Ud. crea una etiqueta personal. ¡Solamente Ud. la podrá ver!"
+
+#: js/widgets/tags/TagsPanel.js:118
+msgid "Enter tag name:"
+msgstr "Ingrese el nombre de la etiqueta:"
+
+#: js/widgets/tags/TagsPanel.js:159
+msgid "No Tags to display"
+msgstr "No hay Etiquetas para mostrar"
+
+#: js/widgets/tags/TagsPanel.js:182
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] "Quitar etiqueta"
+msgstr[1] "Quitar etiquetas"
+
+#: js/widgets/tags/TagsPanel.js:192
+msgid "Edit tag"
+msgstr "Editar etiquetas"
+
+#: js/widgets/tags/TagsPanel.js:197 js/widgets/tags/TagsPanel.js:202
+msgid "Rename Tag"
+msgstr "Renombrar Etiquetas"
+
+#: js/widgets/tags/TagsPanel.js:202
+msgid "Please enter a new name:"
+msgstr "Por favor ingrese un nuevo nombre:"
+
+#: js/widgets/tags/TagsPanel.js:211
+msgid "Edit Description"
+msgstr "Editar Descripción"
+
+#: js/widgets/tags/TagsPanel.js:216
+msgid "Description for tag"
+msgstr "Descripción de la etiqueta"
+
+#: js/widgets/tags/TagsPanel.js:216
+msgid "Please enter new description:"
+msgstr "Por favor ingrese una nueva descripción:"
+
+#: js/widgets/tags/TagsPanel.js:225
+msgid "Change Color"
+msgstr "Cambiar Color"
+
+#: js/widgets/tags/TagsPanel.js:254
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] "Eliminar Etiqueta"
+msgstr[1] "Eliminar Etiquetas"
+
+#: js/widgets/tags/TagsPanel.js:267
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] "¿Realmente Eliminar la Etiqueta Seleccionada?"
+msgstr[1] "¿Realmente Eliminar las Etiquetas Seleccionadas?"
+
+#: js/widgets/tags/TagsPanel.js:268
+msgid "the selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] "la etiqueta seleccionada será eliminada y desaparecerá de todas las entradas"
+msgstr[1] "las etiquetas seleccionadas serán eliminadas y desaparecerán de todas las entradas"
+
+#: js/widgets/tags/TagsPanel.js:272
+msgid "Please wait a moment..."
+msgstr "Por favor espere un momento..."
+
+#: js/widgets/tags/TagsPanel.js:272
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] "Eliminando Etiqueta"
+msgstr[1] "Eliminando Etiquetas"
+
+#: js/widgets/tags/TagsPanel.js:288 js/widgets/tags/TagsPanel.js:380
+#: js/widgets/tags/TagsPanel.js:413 js/widgets/dialog/EditDialog.js:839
+msgid "Failed"
+msgstr "Fallido"
+
+#: js/widgets/tags/TagsPanel.js:288
+msgid "Could not delete Tag(s)."
+msgstr "No se pudo eliminar la(s) Etiqueta(s)"
+
+#: js/widgets/tags/TagsPanel.js:332 js/widgets/tags/TagsPanel.js:394
+msgid "Notice"
+msgstr "Aviso"
+
+#: js/widgets/tags/TagsPanel.js:333 js/widgets/tags/TagsPanel.js:395
+msgid "The minimum tag length is three."
+msgstr "El mínimo largo de la etiqueta es tres."
+
+#: js/widgets/tags/TagsPanel.js:380
+msgid "Could not create tag."
+msgstr "No se pudo crear la etiqueta."
+
+#: js/widgets/tags/TagsPanel.js:413
+msgid "Could not update tag."
+msgstr "No se pudo actualizar la etiqueta."
+
+#: js/widgets/tags/TagsPanel.js:509
+#: js/widgets/relation/GenericPickerGridPanel.js:457
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:191
+#: js/ExceptionDialog.js:162
+msgid "Description"
+msgstr "Descripción"
+
+#: js/widgets/tags/TagsPanel.js:513
+#: js/widgets/container/PropertiesDialog.js:113
+msgid "Color"
+msgstr "Color"
 
 #: js/widgets/tags/TagsMassAttachAction.js:18
 msgid "Add Tag"
@@ -3096,6 +1284,86 @@ msgstr "Agregar la siguiente etiqueta a todos los ítems seleccionados:"
 msgid "Select Tag"
 msgstr "Seleccionar Etiqueta"
 
+#: js/widgets/tags/TagsMassAttachAction.js:128
+msgid "Attaching Tag"
+msgstr ""
+
+#: js/widgets/tags/TagFilter.js:30 js/Models.js:141
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Etiqueta"
+msgstr[1] "Etiquetas"
+
+#: js/widgets/tags/TagsMassDetachAction.js:18
+msgid "Detach tag(s)"
+msgstr "Quitar etiqueta(s)"
+
+#: js/widgets/tags/TagsMassDetachAction.js:84
+msgid "Select Tag(s) to detach"
+msgstr "Seleccionar Etiqueta(s) para quitar"
+
+#: js/widgets/tags/TagCombo.js:46
+msgid "tag name"
+msgstr "nombre de etiqueta"
+
+#: js/widgets/VersionCheck.js:50 js/widgets/VersionCheck.js:59
+msgid "New version of Tine 2.0 available"
+msgstr "Una nueva versión de Tine 2.0 está disponible"
+
+#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "Versión \"{0}\" de Tine 2.0 está disponible."
+
+#: js/widgets/VersionCheck.js:52
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "¡Una actualización crítica debe ser instalada lo antes posible!"
+
+#: js/widgets/VersionCheck.js:61
+msgid "Please consider updating!"
+msgstr "Por favor considere una actualización!"
+
+#: js/widgets/grid/PickerGridPanel.js:162
+msgid "Remove record"
+msgstr "Eliminar registro"
+
+#: js/widgets/grid/PickerGridPanel.js:260 js/widgets/grid/PickerFilter.js:310
+#: js/widgets/grid/FilterModelMultiSelect.js:214
+#: js/widgets/container/FilterModel.js:267
+msgid "Selected  {0}"
+msgstr "Seleccionados {0}"
+
+#: js/widgets/grid/PickerGridPanel.js:304
+msgid "Search for records ..."
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:180
+msgid "today"
+msgstr "hoy"
+
+#: js/widgets/grid/FilterModel.js:181
+msgid "yesterday"
+msgstr "ayer"
+
+#: js/widgets/grid/FilterModel.js:182
+msgid "this week"
+msgstr "esta semana"
+
+#: js/widgets/grid/FilterModel.js:183
+msgid "last week"
+msgstr "la semana pasada"
+
+#: js/widgets/grid/FilterModel.js:184
+msgid "the week before last"
+msgstr "la semana ante pasada"
+
+#: js/widgets/grid/FilterModel.js:185 js/widgets/grid/MonthFilter.js:121
+msgid "this month"
+msgstr "este mes"
+
+#: js/widgets/grid/FilterModel.js:186 js/widgets/grid/MonthFilter.js:122
+msgid "last month"
+msgstr "el último mes"
+
 #: js/widgets/grid/FilterModel.js:187
 msgid "last three months"
 msgstr ""
@@ -3108,13 +1376,144 @@ msgstr ""
 msgid "anytime"
 msgstr ""
 
+#: js/widgets/grid/FilterModel.js:190 js/widgets/grid/MonthFilter.js:123
+msgid "this quarter"
+msgstr "este cuarto"
+
+#: js/widgets/grid/FilterModel.js:191 js/widgets/grid/MonthFilter.js:124
+msgid "last quarter"
+msgstr "el último cuarto"
+
+#: js/widgets/grid/FilterModel.js:192 js/widgets/grid/MonthFilter.js:125
+msgid "this year"
+msgstr "este año"
+
+#: js/widgets/grid/FilterModel.js:193 js/widgets/grid/MonthFilter.js:126
+msgid "last year"
+msgstr "el año pasado"
+
+#: js/widgets/grid/FilterModel.js:204
+msgid "tomorrow"
+msgstr "mañana"
+
+#: js/widgets/grid/FilterModel.js:205
+msgid "next week"
+msgstr "la próxima semana"
+
+#: js/widgets/grid/FilterModel.js:206
+msgid "next month"
+msgstr "el próximo mes"
+
+#: js/widgets/grid/FilterModel.js:207
+msgid "next quarter"
+msgstr "el próximo cuarto"
+
+#: js/widgets/grid/FilterModel.js:208
+msgid "next year"
+msgstr "el próximo año"
+
+#: js/widgets/grid/FilterModel.js:224
+msgid "contains"
+msgstr "contiene"
+
+#: js/widgets/grid/FilterModel.js:225
+msgid "reg. exp."
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:226 js/widgets/container/FilterModel.js:160
+#: js/widgets/container/FilterModel.js:164
+msgid "is equal to"
+msgstr "es igual a"
+
 #: js/widgets/grid/FilterModel.js:227
 msgid "is equal to without (-, )"
 msgstr ""
 
+#: js/widgets/grid/FilterModel.js:228
+msgid "is greater than"
+msgstr "es mayor que"
+
+#: js/widgets/grid/FilterModel.js:229
+msgid "is less than"
+msgstr "es menor que"
+
+#: js/widgets/grid/FilterModel.js:230
+msgid "is not"
+msgstr "no es"
+
+#: js/widgets/grid/FilterModel.js:231
+msgid "one of"
+msgstr "uno de"
+
+#: js/widgets/grid/FilterModel.js:232
+msgid "none of"
+msgstr ""
+
+#: js/widgets/grid/FilterModel.js:233
+msgid "is before"
+msgstr "es antes de"
+
+#: js/widgets/grid/FilterModel.js:234
+msgid "is after"
+msgstr "es después"
+
+#: js/widgets/grid/FilterModel.js:235
+msgid "is within"
+msgstr "es enmedio de"
+
+#: js/widgets/grid/FilterModel.js:236
+msgid "is in week no."
+msgstr "está en la semana número."
+
+#: js/widgets/grid/FilterModel.js:237
+msgid "starts with"
+msgstr "comienza con"
+
+#: js/widgets/grid/FilterModel.js:238
+msgid "ends with"
+msgstr "termina on"
+
+#: js/widgets/grid/FilterModel.js:239
+msgid "defined by"
+msgstr "definido por"
+
+#: js/widgets/grid/FilterModel.js:285
+#: js/widgets/grid/ForeignRecordFilter.js:406
+#: js/widgets/relation/FilterModel.js:92
+msgid "select a operator"
+msgstr "seleccione un operador"
+
+#: js/widgets/grid/FilterModel.js:409
+msgid "Search Account ..."
+msgstr "Buscar Cuenta ..."
+
 #: js/widgets/grid/MonthFilter.js:34
 msgid "Month"
 msgstr ""
+
+#: js/widgets/grid/FilterPanel.js:78
+msgid "Attention: There are more filters active!"
+msgstr ""
+
+#: js/widgets/grid/FilterPanel.js:261
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
+msgid "show details"
+msgstr "mostrar detalles"
+
+#: js/widgets/grid/FilterPanel.js:262
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
+msgid "Always show advanced filters"
+msgstr "Siempre mostrar filtros avanzados"
+
+#: js/widgets/grid/FilterPanel.js:511
+msgid "Criteria {0}"
+msgstr "Criterio {0}"
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:475
 msgid "File"
@@ -3122,8 +1521,124 @@ msgid_plural "Files"
 msgstr[0] ""
 msgstr[1] ""
 
+#: js/widgets/grid/FileUploadGrid.js:114 js/ux/form/ImageField.js:211
+msgid "Upload Failed"
+msgstr "Carga Fallida"
+
+#: js/widgets/grid/FileUploadGrid.js:115
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size: "
+msgstr ""
+
 #: js/widgets/grid/FileUploadGrid.js:179
 msgid "Remove {0}"
+msgstr ""
+
+#: js/widgets/grid/FileUploadGrid.js:187 js/widgets/tree/ContextMenu.js:116
+msgid "Pause upload"
+msgstr "Pausar cargar"
+
+#: js/widgets/grid/FileUploadGrid.js:195 js/widgets/tree/ContextMenu.js:100
+msgid "Resume upload"
+msgstr "Reanudar carga"
+
+#: js/widgets/grid/FileUploadGrid.js:241 js/widgets/grid/GridPanel.js:548
+#: js/widgets/tree/ContextMenu.js:35
+msgid "Add {0}"
+msgstr "Agregar {0}"
+
+#: js/widgets/grid/FileUploadGrid.js:283
+msgid "name"
+msgstr "nombre"
+
+#: js/widgets/grid/FileUploadGrid.js:290
+msgid "size"
+msgstr "tamaño"
+
+#: js/widgets/grid/FileUploadGrid.js:297
+msgid "type"
+msgstr "tipo"
+
+#: js/widgets/grid/QuickaddGridPanel.js:91
+msgid "Remove"
+msgstr "Eliminar"
+
+#: js/widgets/grid/FilterToolbar.js:92 js/widgets/grid/FilterToolbar.js:595
+msgid "Show"
+msgstr "Mostrar"
+
+#: js/widgets/grid/FilterToolbar.js:178
+msgid "add new filter"
+msgstr "agregar un nuevo filtro"
+
+#: js/widgets/grid/FilterToolbar.js:184
+msgid "reset all filters"
+msgstr "resetear todos los filtros"
+
+#: js/widgets/grid/FilterToolbar.js:190
+msgid "start search"
+msgstr "comenzar la búsqueda"
+
+#: js/widgets/grid/FilterToolbar.js:198
+msgid "save as favorite"
+msgstr "guardar como favorito"
+
+#: js/widgets/grid/FilterToolbar.js:205
+msgid "Load a favorite"
+msgstr "Cargar un favorito"
+
+#: js/widgets/grid/FilterToolbar.js:370
+msgid "select a field"
+msgstr "seleccione un campo"
+
+#: js/widgets/grid/FilterToolbar.js:408
+msgid "Delete this filter"
+msgstr "Eliminar este filtro"
+
+#: js/widgets/grid/RendererManager.js:54
+msgid "has notes"
+msgstr ""
+
+#: js/widgets/grid/RendererManager.js:57
+msgid "has relations"
+msgstr ""
+
+#: js/widgets/grid/LinkGridPanel.js:103
+#: js/widgets/dialog/AttachmentsGridPanel.js:86
+#: js/widgets/account/PickerGridPanel.js:267
+#: js/widgets/container/PropertiesDialog.js:107 js/Models.js:428
+msgid "Name"
+msgstr "Nombre"
+
+#: js/widgets/grid/LinkGridPanel.js:105
+#: js/widgets/relation/GenericPickerGridPanel.js:460
+#: js/widgets/ActivitiesPanel.js:489 js/widgets/ActivitiesPanel.js:626
+msgid "Type"
+msgstr "Tipo"
+
+#: js/widgets/grid/FilterStructureTreePanel.js:35
+#: js/widgets/grid/FilterStructureTreePanel.js:52
+msgid "Show records that match to one of the following filters"
+msgstr ""
+
+#: js/widgets/grid/FilterStructureTreePanel.js:37
+#: js/widgets/grid/FilterStructureTreePanel.js:51
+msgid "or alternatively"
+msgstr ""
+
+#: js/widgets/grid/FilterStructureTreePanel.js:55
+msgid "Add alternative filter"
+msgstr ""
+
+#: js/widgets/grid/FilterStructureTreePanel.js:61
+msgid "Remove Filter"
+msgstr "Eliminar Filtro"
+
+#: js/widgets/grid/GridPanel.js:309
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
 msgstr ""
 
 #: js/widgets/grid/GridPanel.js:310
@@ -3132,29 +1647,539 @@ msgid ""
 " view-options or change the module you search in."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1033
+#: js/widgets/grid/GridPanel.js:312 js/widgets/grid/GridPanel.js:522
+#: js/widgets/grid/GridPanel.js:523 js/widgets/grid/GridPanel.js:524
+msgid "Edit {0}"
+msgid_plural "Edit {0}"
+msgstr[0] "Editar {0}"
+msgstr[1] "Editar {0}"
+
+#: js/widgets/grid/GridPanel.js:537 js/widgets/dialog/EditDialog.js:599
+msgid "Copy {0}"
+msgstr "Copiar {0}"
+
+#: js/widgets/grid/GridPanel.js:556
+msgid "Print Page"
+msgstr "Imprimir Página"
+
+#: js/widgets/grid/GridPanel.js:586
+#: js/widgets/dialog/DuplicateMergeDialog.js:220
+msgid "Merge {0}"
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:622 js/widgets/grid/GridPanel.js:623
+#: js/widgets/grid/GridPanel.js:625 js/widgets/tree/ContextMenu.js:52
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "Borrar {0}"
+msgstr[1] "Borrar {0}"
+
+#: js/widgets/grid/GridPanel.js:1038
 msgid "No data to display"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:264
+#: js/widgets/grid/GridPanel.js:1060
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Mostrando registros {0} - {1} de {2}"
+
+#: js/widgets/grid/GridPanel.js:1061
+msgid "No {0} to display"
+msgstr "No hay {0} para mostrar"
+
+#: js/widgets/grid/GridPanel.js:1303
+msgid "New..."
+msgstr "Nuevo..."
+
+#: js/widgets/grid/GridPanel.js:1322
+msgid "Add to..."
+msgstr "Añadir a..."
+
+#: js/widgets/grid/GridPanel.js:1370
+#: js/widgets/relation/GenericPickerGridPanel.js:461
+#: js/widgets/dialog/AttachmentsGridPanel.js:104
+msgid "Creation Time"
+msgstr "Fecha de Creación"
+
+#: js/widgets/grid/GridPanel.js:1371
+#: js/widgets/dialog/AttachmentsGridPanel.js:106
+#: js/widgets/ActivitiesPanel.js:492
+msgid "Created By"
+msgstr "Creada Por"
+
+#: js/widgets/grid/GridPanel.js:1372
+msgid "Last Modified Time"
+msgstr "Fecha última modificación"
+
+#: js/widgets/grid/GridPanel.js:1373
+msgid "Last Modified By"
+msgstr "Última modificación por"
+
+#: js/widgets/grid/GridPanel.js:1735
+msgid "Not Allowed"
+msgstr "No permitido"
+
+#: js/widgets/grid/GridPanel.js:1736
+msgid "You are not allowed to delete all pages at once"
+msgstr "Ud. no tiene autorización para eliminar todas las páginas de una sola vez"
+
+#: js/widgets/grid/GridPanel.js:1759
+msgid "Do you really want to delete the selected record ({0})?"
+msgid_plural "Do you really want to delete the selected records ({0})?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/widgets/grid/GridPanel.js:1804 js/widgets/dialog/EditDialog.js:829
+msgid "Deleting {0}"
+msgstr "Eliminando {0}"
+
+#: js/widgets/grid/GridPanel.js:1804
+msgid " ... This may take a long time!"
+msgstr " ... Esto podría tomar un tiempo largo"
+
+#: js/widgets/grid/ForeignRecordFilter.js:61
+msgid "Edit definition"
+msgstr "Editar definición"
+
+#: js/widgets/grid/ForeignRecordFilter.js:71
+msgid "Start definition"
+msgstr ""
+
+#: js/widgets/grid/ForeignRecordFilter.js:111
+msgid "Related to"
+msgstr "Relacionado a"
+
+#: js/widgets/relation/FilterModel.js:32
+#: js/widgets/relation/GenericPickerGridPanel.js:133 js/Models.js:400
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] "Relación"
+msgstr[1] "Relaciones"
+
+#: js/widgets/relation/FilterModel.js:76
+msgid "Defined by ..."
+msgstr "definido por ..."
+
+#: js/widgets/relation/FilterModel.js:119
+msgid "Define ..."
+msgstr "Definir ..."
+
+#: js/widgets/relation/GenericPickerGridPanel.js:126
+msgid "Edit record"
+msgstr "Editar registro"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:162
+msgid "Sibling"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:163
+msgid "Parent"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:164
+msgid "Child"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:263
+msgid ""
+"The maximum number of {0} with the type {1} is reached. Please change the "
+"type of this relation"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:272
 msgid ""
 "The maximum number of {0}s with the type {1} is reached at the {2} you "
 "added. Please change the type of this relation or edit the {2}"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:291
+#: js/widgets/relation/GenericPickerGridPanel.js:299
 msgid "No Dialog"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:292
+#: js/widgets/relation/GenericPickerGridPanel.js:300
 msgid ""
 "The Record can't be opened. There doesn't exist any dialog for editing this "
 "Record!"
 msgstr ""
 
+#: js/widgets/relation/GenericPickerGridPanel.js:456
+msgid "Record"
+msgstr "Registro"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:458
+msgid "Remark"
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:459
+msgid "Dependency"
+msgstr "Dependencia"
+
+#: js/widgets/relation/GenericPickerGridPanel.js:948
+msgid ""
+"The record you tried to link is already linked. Please edit the existing "
+"link."
+msgstr ""
+
+#: js/widgets/relation/GenericPickerGridPanel.js:961
+#: js/widgets/form/RecordPickerComboBox.js:295
+msgid "You tried to link a record with itself. This is not allowed!"
+msgstr ""
+
+#: js/widgets/relation/PickerCombo.js:93
+msgid ""
+"The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
+"once!"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:265
+msgid "Rename {0}"
+msgstr "Renombrar {0}"
+
+#: js/widgets/tree/ContextMenu.js:61
+msgid "Manage {0} Permissions"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:69
+msgid "{0} Properties"
+msgstr "{0} Propiedades"
+
+#: js/widgets/tree/ContextMenu.js:78
+msgid "Set {0} color"
+msgstr "Ajustar color a {0} "
+
+#: js/widgets/tree/ContextMenu.js:92
+msgid "Reload {0}"
+msgstr "Recargar {0}"
+
+#: js/widgets/tree/ContextMenu.js:109
+msgid "Edit Properties"
+msgstr "Editar Propiedades"
+
+#: js/widgets/tree/ContextMenu.js:124
+#: js/widgets/dialog/AttachmentsGridPanel.js:131
+msgid "Download"
+msgstr "Descargar"
+
+#: js/widgets/tree/ContextMenu.js:185
+msgid "New {0}"
+msgstr "Nuevo {0}"
+
+#: js/widgets/tree/ContextMenu.js:185
+msgid "Please enter the name of the new {0}:"
+msgstr "Por favor ingrese el nombre del nuevo {0}:"
+
+#: js/widgets/tree/ContextMenu.js:188
+msgid "No {0} added"
+msgstr "No {0} agregado"
+
+#: js/widgets/tree/ContextMenu.js:188 js/widgets/tree/ContextMenu.js:272
+msgid "You have to supply a {0} name!"
+msgstr "¡Ud. debe ingresar {0} nombre!"
+
+#: js/widgets/tree/ContextMenu.js:191
+msgid "Creating {0}..."
+msgstr "Creando {0}..."
+
+#: js/widgets/tree/ContextMenu.js:266
+msgid "Please enter the new name of the {0}:"
+msgstr "Por favor ingrese el nuevo nombre de {0}:"
+
+#: js/widgets/tree/ContextMenu.js:272
+msgid "Not renamed {0}"
+msgstr "No ha sido renombrado {0}"
+
+#: js/widgets/tree/ContextMenu.js:346
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr "¿Realmente desea agregar el {0} \"{1}\"?"
+
+#: js/widgets/tree/ContextMenu.js:457
+msgid "Manage Permissions for {0} \"{1}\""
+msgstr "Manejar los Permisos para {0} \"{1}\""
+
+#: js/widgets/tree/ContextMenu.js:481
+msgid "Properties for {0} \"{1}\""
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:223
+msgid "Choose File and Format"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:232
+msgid "Choose Import File"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:236
+msgid ""
+"Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:240
+msgid "Select file containing your {0}"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:248 js/widgets/dialog/ImportDialog.js:253
+msgid "What should the file you upload look like?"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:256
+msgid ""
+"Tine 2.0 does not understand all kind of files you might want to upload. You"
+" will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:259
+msgid ""
+"Following you find a list of all supported import formats and a sample file,"
+" how Tine 2.0 expects your file to look like."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:262
+msgid "Please select the import format of the file you want to upload"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:283 js/widgets/dialog/ImportDialog.js:315
+msgid "Download example file"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:286
+msgid "Import description"
+msgstr "Importar descripción"
+
+#: js/widgets/dialog/ImportDialog.js:336
+msgid "Set Import Options"
+msgstr "Ajustar opciones de importación"
+
+#: js/widgets/dialog/ImportDialog.js:344
+msgid "Select {0} to add you {1} to:"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:396
+msgid "Checking Import"
+msgstr "Comprobando importación"
+
+#: js/widgets/dialog/ImportDialog.js:425
+msgid "Resolve Conflicts"
+msgstr "Resolver Conflictos"
+
+#: js/widgets/dialog/ImportDialog.js:434
+msgid "There are {0} {1} that might already exist."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:441
+msgid "Conflict"
+msgstr "Conflicto"
+
+#: js/widgets/dialog/ImportDialog.js:442
+msgid "First Conflict"
+msgstr "Primer Conflicto"
+
+#: js/widgets/dialog/ImportDialog.js:443
+msgid "Previous Conflict"
+msgstr "Conflicto anterior"
+
+#: js/widgets/dialog/ImportDialog.js:444
+msgid "Next Conflict"
+msgstr "Conflicto siguiente"
+
+#: js/widgets/dialog/ImportDialog.js:445
+msgid "Last Conflict"
+msgstr "Último Conflicto"
+
+#: js/widgets/dialog/ImportDialog.js:451
+msgid "Conflict is resolved"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:456
+msgid "Resolve all conflicts"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:550
+msgid "Processing Conflict Data"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:575 js/widgets/dialog/ImportDialog.js:595
+msgid "No conflict to resolve"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:594
+msgid "(This is record {0} in your import file)"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:619
+msgid "No Detail Informations"
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:624
+#: js/widgets/dialog/MultipleEditResultSummary.js:213
+msgid "Summary"
+msgstr "Resumen"
+
+#: js/widgets/dialog/ImportDialog.js:653
+#: js/widgets/dialog/MultipleEditResultSummary.js:192
+msgid "Index"
+msgstr "Indice"
+
+#: js/widgets/dialog/ImportDialog.js:669
+msgid "Importing {0}"
+msgstr "Importando {0}"
+
+#: js/widgets/dialog/ImportDialog.js:700
+msgid "{0} records had failures and where discarded."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:742
+msgid "In total we found {0} records in your import file."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:745
+msgid "{0} of them will be added as new records into: \"{1}\"."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:752
+msgid "{0} of them where identified as duplicates."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:755
+msgid ""
+"From the identified duplicates {0} will be merged into the existing records."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:759
+msgid "From the identified duplicates {0} will be discarded."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:775
+msgid "All records will be tagged with: \"{0}\" so you can find them easily."
+msgstr ""
+
+#: js/widgets/dialog/ImportDialog.js:786
+msgid "{0} records have failures and will be discarded."
+msgstr ""
+
+#: js/widgets/dialog/AdminPanel.js:59
+msgid "Change settings for application {0}"
+msgstr ""
+
+#: js/widgets/dialog/AdminPanel.js:107
+msgid "Defaults"
+msgstr "Por defecto"
+
 #: js/widgets/dialog/LinkPanel.js:46
 msgid "Links"
 msgstr "Links"
+
+#: js/widgets/dialog/AlarmPanel.js:34
+msgid "Alarms"
+msgstr "Alarmas"
+
+#: js/widgets/dialog/AlarmPanel.js:37
+msgid "0 minutes before"
+msgstr "0 minutos antes"
+
+#: js/widgets/dialog/AlarmPanel.js:38
+msgid "5 minutes before"
+msgstr "5 minutos antes"
+
+#: js/widgets/dialog/AlarmPanel.js:39
+msgid "15 minutes before"
+msgstr "15 minutos antes"
+
+#: js/widgets/dialog/AlarmPanel.js:40
+msgid "30 minutes before"
+msgstr "30 minutos antes"
+
+#: js/widgets/dialog/AlarmPanel.js:41
+msgid "1 hour before"
+msgstr "1 hora antes"
+
+#: js/widgets/dialog/AlarmPanel.js:42
+msgid "2 hours before"
+msgstr "2 hora antes"
+
+#: js/widgets/dialog/AlarmPanel.js:43
+msgid "12 hours before"
+msgstr "12 horas antes"
+
+#: js/widgets/dialog/AlarmPanel.js:44
+msgid "1 day before"
+msgstr "1 día antes"
+
+#: js/widgets/dialog/AlarmPanel.js:45
+msgid "2 days before"
+msgstr "2 días antes"
+
+#: js/widgets/dialog/AlarmPanel.js:46
+msgid "Custom Datetime"
+msgstr "Personalizar Fecha y Hora"
+
+#: js/widgets/dialog/AlarmPanel.js:58
+msgid "Alarm Time"
+msgstr ""
+
+#: js/widgets/dialog/AlarmPanel.js:170
+msgid "{0} minutes before"
+msgstr "{0} minutos antes"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:87
+#: js/widgets/dialog/MultipleEditResultSummary.js:86
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:69
+msgid "OK"
+msgstr "OK"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:134
+msgid "Merging Records..."
+msgstr "Fusionando registros"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:173
+msgid "Merge Failed"
+msgstr "Falló la fusión"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:173
+msgid "The merge succeeded, but the duplicate {0} could not be deleted."
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:212
+msgid "Merge {0}, prefer First"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:213
+msgid "Merge {0}, prefer Second"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:223
+msgid "First {0}"
+msgstr "Primero {0}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:224
+msgid "Second {0}"
+msgstr "Segundo {0}"
+
+#: js/widgets/dialog/DuplicateMergeDialog.js:225
+msgid "Final {0}"
+msgstr "Último {0}"
+
+#: js/widgets/dialog/PreferencesPanel.js:185
+msgid "There are no preferences for this application."
+msgstr "No hay preferencias para esta aplicación."
+
+#: js/widgets/dialog/MultiOptionsDialog.js:28
+#: js/widgets/dialog/MultiOptionsDialog.js:81
+#: js/widgets/dialog/FileListDialog.js:28
+msgid "What would you like to do?"
+msgstr ""
+
+#: js/widgets/dialog/MultiOptionsDialog.js:32
+#: js/widgets/dialog/MultiOptionsDialog.js:141
+#: js/widgets/dialog/FileListDialog.js:32
+msgid "You need to select an option!"
+msgstr ""
+
+#: js/widgets/dialog/FileListDialog.js:93
+msgid "No"
+msgstr "No"
+
+#: js/widgets/dialog/FileListDialog.js:102
+msgid "Yes"
+msgstr "Si"
 
 #: js/widgets/dialog/AttachmentsGridPanel.js:63
 msgid "Attachments"
@@ -3172,6 +2197,10 @@ msgstr ""
 msgid "Content Type"
 msgstr ""
 
+#: js/widgets/dialog/CredentialsDialog.js:84
+msgid "Please enter your credentials"
+msgstr "Ingrese sus credenciales"
+
 #: js/widgets/dialog/ExceptionHandlerDialog.js:217
 msgid "{1} - Exception {0}"
 msgstr ""
@@ -3180,17 +2209,700 @@ msgstr ""
 msgid "{0} - Unknown Exception"
 msgstr ""
 
+#: js/widgets/dialog/PreferencesDialog.js:125
+msgid "Admin Mode"
+msgstr "Modo Administrador"
+
+#: js/widgets/dialog/PreferencesDialog.js:163
+msgid "Applications"
+msgstr "Aplicaciones"
+
+#: js/widgets/dialog/PreferencesDialog.js:192
+msgid "Edit Preferences"
+msgstr "Editar Preferencias"
+
+#: js/widgets/dialog/PreferencesDialog.js:193
+msgid "Loading ..."
+msgstr "Cargando ..."
+
+#: js/widgets/dialog/PreferencesDialog.js:248
+#: js/widgets/form/ConfigPanel.js:134
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr "Por favor corrija los campos marcados en rojo antes de guardar las preferencias"
+
+#: js/widgets/dialog/PreferencesDialog.js:277
+msgid "Saving of preferences failed."
+msgstr "Las preferencias no fueron guardadas."
+
+#: js/widgets/dialog/EditDialog.js:602
+msgid "Add New {0}"
+msgstr "Agregar Nuevo {0}"
+
+#: js/widgets/dialog/EditDialog.js:604
+msgid "Edit {0} \"{1}\""
+msgstr "Editar {0} \"{1}\""
+
+#: js/widgets/dialog/EditDialog.js:674
+msgid "Transferring {0}..."
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:827
+msgid "Do you really want to delete this {0}?"
+msgstr "¿Realmente desea eliminar esto {0}?"
+
+#: js/widgets/dialog/EditDialog.js:839
+msgid "Could not delete {0}."
+msgstr "No se pudo eliminar {0}."
+
+#: js/widgets/dialog/EditDialog.js:894
+msgid "Resolve Duplicate {0} Suspicion"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditResultSummary.js:146
+msgid "You edited {0} {1}."
+msgstr "Tu has editado {0} {1}."
+
+#: js/widgets/dialog/MultipleEditResultSummary.js:149
+msgid "{0} {1} have been updated properly."
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditResultSummary.js:149
+msgid "{0} {1} has been updated properly."
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditResultSummary.js:152
+msgid ""
+"{0} {1} have invalid data after updating. These {1} have not been changed."
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditResultSummary.js:152
+msgid ""
+"{0} {1} has invalid data after updating. This {1} has not been changed."
+msgstr ""
+
+#: js/widgets/dialog/ExportDialog.js:48 js/widgets/container/GrantsGrid.js:51
+#: js/Models.js:336
+msgid "Export"
+msgid_plural "Export"
+msgstr[0] "Exportar"
+msgstr[1] "Exportar"
+
+#: js/widgets/dialog/ExportDialog.js:84
+msgid "Export {0} {1}"
+msgstr "Exportar {0} {1}"
+
+#: js/widgets/dialog/ExportDialog.js:111
+msgid "Export definition"
+msgstr "Exportar definición"
+
+#: js/widgets/dialog/ExportDialog.js:120
+msgid "Select Export Definition ..."
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:341
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:465
+msgid "Delete value from all selected records"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:448
+msgid "Undo change for all selected records"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:523
+msgid "Edit {0} {1}"
+msgstr "Editar {0} {1}"
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:582
+msgid "Different Values"
+msgstr "Valores Diferentes"
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:583
+msgid ""
+"This field has different values. Editing this field will overwrite the old "
+"values."
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:680
+msgid "Do you really want to change these {0} records?"
+msgstr ""
+
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:683
+msgid "Applying changes"
+msgstr "Aplicar cambios"
+
+#: js/widgets/dialog/PreferencesTreePanel.js:67
+msgid "General Preferences"
+msgstr "Preferencias Generales"
+
+#: js/widgets/dialog/PreferencesTreePanel.js:87
+msgid "My Profile"
+msgstr "Mi Perfil"
+
+#: js/widgets/dialog/WizardPanel.js:173
+msgid "Back"
+msgstr "Anterior"
+
+#: js/widgets/dialog/WizardPanel.js:180
+msgid "Next"
+msgstr "Siguiente"
+
+#: js/widgets/dialog/WizardPanel.js:194
+msgid "Finish"
+msgstr "Finalizar"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:41
+msgid "The record you try to add might already exist."
+msgstr "El registro que intenta agregar ya existe"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:196
+msgid "Field Group"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:210
+msgid "My Value"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:218
+msgid "Existing Value"
+msgstr "Valor existente"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:226
+msgid "Final Value"
+msgstr "Valor final"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:243
+msgid "Action:"
+msgstr "Acción:"
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:259
+msgid "Merge, keeping existing details"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:260
+msgid "Merge, keeping my details"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:261
+msgid "Keep existing record and discard mine"
+msgstr ""
+
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:262
+msgid "Keep both records"
+msgstr ""
+
 #: js/widgets/TimezoneChooser.js:77
 msgid "setting new timezone..."
 msgstr "Estableciendo una nueva zona horaria..."
+
+#: js/widgets/customfields/EditDialogPlugin.js:155
+msgid "General"
+msgstr "General"
+
+#: js/widgets/customfields/EditDialogPlugin.js:167
+msgid "Custom Fields"
+msgstr "Campos Personalizados"
+
+#: js/widgets/ActivitiesPanel.js:153
+msgid "Add a Note..."
+msgstr "Agregar una Nota..."
+
+#: js/widgets/ActivitiesPanel.js:168 js/widgets/ActivitiesPanel.js:181
+#: js/widgets/container/GrantsGrid.js:45
+msgid "Add"
+msgstr "Agregar"
+
+#: js/widgets/ActivitiesPanel.js:168 js/widgets/ActivitiesPanel.js:491
+msgid "Note"
+msgstr "Nota"
+
+#: js/widgets/ActivitiesPanel.js:182 js/widgets/ActivitiesPanel.js:413
+msgid "Add new note"
+msgstr "Agregar nueva nota"
+
+#: js/widgets/ActivitiesPanel.js:209 js/widgets/ActivitiesPanel.js:228
+msgid "Notes"
+msgstr "Notas"
+
+#: js/widgets/ActivitiesPanel.js:311
+msgid "Enter new note:"
+msgstr "Escriba nueva nota:"
+
+#: js/widgets/ActivitiesPanel.js:356 js/widgets/ActivitiesPanel.js:412
+msgid "Add Note"
+msgstr "Agregar Nota"
+
+#: js/widgets/ActivitiesPanel.js:399
+msgid "Add a {0} Note"
+msgstr "Agregar una {0} Nota"
+
+#: js/widgets/ActivitiesPanel.js:493
+msgid "Timestamp"
+msgstr "Timbre de Hora"
+
+#: js/widgets/ActivitiesPanel.js:507
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr "Mostrando registros históricos {0} - {1} de {2}"
+
+#: js/widgets/ActivitiesPanel.js:508
+msgid "No history to display"
+msgstr "No hay historial para mostrar"
+
+#: js/widgets/ActivitiesPanel.js:608
+msgid "History"
+msgstr "Historial"
 
 #: js/widgets/ActivitiesPanel.js:620
 msgid "Quick Search"
 msgstr ""
 
+#: js/widgets/ActivitiesPanel.js:621 js/widgets/ActivitiesPanel.js:622
+msgid "Time"
+msgstr "Hora"
+
+#: js/widgets/ActivitiesPanel.js:624
+msgid "User"
+msgstr "Usuario"
+
+#: js/widgets/persistentfilter/PickerPanel.js:121
+msgid "My favorites"
+msgstr "Mis favoritos"
+
+#: js/widgets/persistentfilter/PickerPanel.js:297
+msgid "Delete Favorite"
+msgstr "Borrar Favorito"
+
+#: js/widgets/persistentfilter/PickerPanel.js:302
+#: js/widgets/persistentfilter/PickerPanel.js:397
+msgid "Edit Favorite"
+msgstr "Editar Favorito"
+
+#: js/widgets/persistentfilter/PickerPanel.js:307
+msgid "Overwrite Favorite"
+msgstr "Sobreescribir Favorito"
+
+#: js/widgets/persistentfilter/PickerPanel.js:325
+msgid "Do you really want to delete the favorite \"{0}\"?"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:327
+msgid "Deleting Favorite \"{0}\""
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:363
+msgid "Overwrite?"
+msgstr "Sobreescribir?"
+
+#: js/widgets/persistentfilter/PickerPanel.js:363
+msgid "Do you want to overwrite the favorite \"{0}\"?"
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:365
+msgid "Overwriting Favorite \"{0}\""
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:386
+msgid "Could not save Favorite"
+msgstr "No se pudo guardar el Favorito"
+
+#: js/widgets/persistentfilter/PickerPanel.js:386
+msgid "Your current view does not support favorites"
+msgstr "La vista actual no admite favoritos"
+
+#: js/widgets/persistentfilter/PickerPanel.js:395
+msgid "Create Favorite"
+msgstr "Crear Favorito"
+
+#: js/widgets/persistentfilter/PickerPanel.js:417
+msgid "Saving Favorite \"{0}\""
+msgstr ""
+
+#: js/widgets/persistentfilter/PickerPanel.js:593
+msgid "(shared)"
+msgstr "(compartido)"
+
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:134
 msgid "Favorite not saved"
 msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:200
+msgid "Shared Favorite (visible by all users)"
+msgstr ""
+
+#: js/widgets/CountryCombo.js:34
+msgid "Select a country..."
+msgstr "Seleccionar un país..."
+
+#: js/widgets/account/PickerGridPanel.js:158
+msgid "Search User"
+msgstr "Buscar Usuario"
+
+#: js/widgets/account/PickerGridPanel.js:164
+msgid "Search Group"
+msgstr "Buscar Grupo"
+
+#: js/widgets/account/PickerGridPanel.js:170
+msgid "Add Anyone"
+msgstr "Agregar a Cualquiera"
+
+#: js/widgets/account/PickerGridPanel.js:213
+msgid "Anyone"
+msgstr "Cualquiera"
+
+#: js/widgets/account/PickerGridPanel.js:229
+msgid "Search for users ..."
+msgstr "Buscar por usuarios..."
+
+#: js/widgets/account/PickerGridPanel.js:251
+msgid "Search for groups ..."
+msgstr "Buscar por grupos..."
+
+#: js/widgets/LangChooser.js:68
+msgid "setting new language..."
+msgstr "estableciendo un nuevo idioma..."
+
+#: js/widgets/MainScreen.js:264
+msgid "Save current view as favorite"
+msgstr ""
+
+#: js/widgets/mainscreen/WestPanel.js:302
+msgid "containers"
+msgstr "contenedores"
+
+#: js/widgets/mainscreen/WestPanel.js:329
+msgid "Favorites"
+msgstr "Favoritos"
+
+#: js/widgets/container/GrantsDialog.js:52
+msgid "Folder"
+msgstr "Carpeta"
+
+#: js/widgets/container/GrantsDialog.js:95
+msgid "Updating Grants"
+msgstr "Actualizando Permisos"
+
+#: js/widgets/container/GrantsDialog.js:125
+msgid "Error"
+msgstr "Error"
+
+#: js/widgets/container/GrantsDialog.js:126
+msgid "You are not allowed to remove all admins for this container!"
+msgstr "Ud. no tiene permisos para eliminar todos los administradores para este contenedor!"
+
+#: js/widgets/container/FilterModel.js:160
+msgid "is personal of"
+msgstr ""
+
+#: js/widgets/container/ContainerSelect.js:129
+#: js/ux/form/ComboBoxRecentsPlugin.js:43
+msgid "choose other {0}..."
+msgstr "escoja otro {0}..."
+
+#: js/widgets/container/ContainerSelect.js:132
+msgid "Select a {0}"
+msgstr "Seleccionar {0}"
+
+#: js/widgets/container/ContainerSelect.js:152
+msgid "Recently used {0}:"
+msgstr "Recientemente usado {0}:"
+
+#: js/widgets/container/ContainerSelect.js:478
+msgid "please select a {0}"
+msgstr "por favor seleccione un(a) {0}"
+
+#: js/widgets/container/PropertiesDialog.js:90
+msgid "Properties"
+msgstr "Propiedades"
+
+#: js/widgets/container/PropertiesDialog.js:119
+msgid "My Grants"
+msgstr "Mis Subvenciones"
+
+#: js/widgets/container/TreePanel.js:142
+msgid "container"
+msgid_plural "containers"
+msgstr[0] "contenedor"
+msgstr[1] "contenedores"
+
+#: js/widgets/container/TreePanel.js:546
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr "No esta autorizado a seleccionar {0} '{1}':"
+
+#: js/widgets/container/TreePanel.js:547
+msgid "{0} grant is required for desired action"
+msgstr "{0} autorización requerida para la acción requerida"
+
+#: js/widgets/container/TreePanel.js:548
+msgid "Insufficient Grants"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:44
+msgid "The grant to read records of this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:46
+msgid "The grant to add records to this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:48
+msgid "The grant to edit records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:49
+msgid "Delete"
+msgstr "Borrar"
+
+#: js/widgets/container/GrantsGrid.js:50
+msgid "The grant to delete records in this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:52
+msgid "The grant to export records from this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:53
+msgid "Sync"
+msgstr "Sincronicar"
+
+#: js/widgets/container/GrantsGrid.js:54
+msgid "The grant to synchronise records with this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:55
+msgid "Admin"
+msgstr "Admin"
+
+#: js/widgets/container/GrantsGrid.js:56
+msgid "The grant to administrate this container"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:58
+msgid "Free Busy"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:59
+msgid "The grant to access free busy information of events in this calendar"
+msgstr ""
+
+#: js/widgets/container/GrantsGrid.js:60
+msgid "Private"
+msgstr "Privado"
+
+#: js/widgets/container/GrantsGrid.js:61
+msgid "The grant to access records marked as private in this container"
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:113
+msgid "Configuration Problem"
+msgstr "Problema de Configuración"
+
+#: js/widgets/form/ConfigPanel.js:134
+msgid "Invalid configuration"
+msgstr "Configuración inválida"
+
+#: js/widgets/form/ConfigPanel.js:158
+msgid "Transferring Configuration..."
+msgstr ""
+
+#: js/widgets/form/ConfigPanel.js:254
+msgid "Save config"
+msgstr "Guardar la configuración"
+
+#: js/widgets/form/ConfigPanel.js:264
+msgid "Reload config"
+msgstr "Recargar la configuración"
+
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Wrong File Type"
+msgstr ""
+
+#: js/widgets/form/FileUploadButton.js:65
+msgid "Please select a file with one of the following extensions:"
+msgstr ""
+
+#: js/widgets/form/RecordPickerManager.js:48
+#: js/widgets/form/RecordPickerComboBox.js:119
+msgid "Searching..."
+msgstr "Buscando..."
+
+#: js/ExceptionDialog.js:103 js/ExceptionDialog.js:126
+msgid "Send Report"
+msgstr "Enviar Reporte"
+
+#: js/ExceptionDialog.js:155
+msgid "The last action you made was potentially not performed correctly."
+msgstr "La última acción que realizó no fue concretada de forma correcta."
+
+#: js/ExceptionDialog.js:156
+msgid ""
+"Please help improving this software and notify the vendor. Include a brief "
+"description of what you where doing when the error occurred."
+msgstr "Por favor ayude a mejorar este programa y notifique al distribuidor. Incluya una descripción de lo que estaba haciendo cuando el error ocurrió."
+
+#: js/ExceptionDialog.js:170
+msgid "Send Contact Information"
+msgstr "Enviar Información de Contacto"
+
+#: js/ExceptionDialog.js:187
+msgid "Details:"
+msgstr "Detalles:"
+
+#: js/ExceptionDialog.js:211
+msgid "Sending report..."
+msgstr "Enviando reporte..."
+
+#: js/ExceptionDialog.js:211
+msgid "Please wait a moment"
+msgstr "Por favor espere"
+
+#: js/ExceptionDialog.js:260
+msgid "Transmission Completed"
+msgstr "Envío Completo"
+
+#: js/ExceptionDialog.js:261
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "Su reporte ha sido enviado. Gracias por su contribución"
+
+#: js/ExceptionDialog.js:261
+msgid "Please restart your browser now!"
+msgstr "Por favor reinicie su navegador ahora"
+
+#: js/MainScreen.js:205
+msgid "Your password expired. Please enter a new user password:"
+msgstr ""
+
+#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
+msgid "Outdent Text"
+msgstr ""
+
+#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
+msgid "Indent Text"
+msgstr ""
+
+#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
+msgid "Remove Formatting"
+msgstr "Eliminar Formato"
+
+#: js/ux/PopupWindowManager.js:175
+msgid ""
+"The window you want to work with is backgrounded. Your browser doesn't "
+"support to foreground the window for you, so you need to use your operating "
+"systems window switching features. Please send complaints to your browser "
+"vendor!"
+msgstr ""
+
+#: js/ux/Percentage.js:193
+msgid "(paused)"
+msgstr "(pausado)"
+
+#: js/ux/SearchField.js:44
+msgid "enter searchfilter"
+msgstr "escribir filtro de búsqueda"
+
+#: js/ux/grid/PagingToolbar.js:57
+msgid "{0} selected"
+msgstr "{0} seleccionados"
+
+#: js/ux/grid/PagingToolbar.js:58
+msgid "Unselect all"
+msgstr "Deseleccionar Todo"
+
+#: js/ux/grid/PagingToolbar.js:59
+msgid "Select all pages ({0} records)"
+msgstr "Seleccionar todas las páginas ({0} registros)"
+
+#: js/ux/grid/PagingToolbar.js:60
+msgid "Toggle selection"
+msgstr "Cambiar seleccion"
+
+#: js/ux/ConnectionStatus.js:56
+msgid "online"
+msgstr "En línea"
+
+#: js/ux/ConnectionStatus.js:57
+msgid "offline"
+msgstr "Desconectado"
+
+#: js/ux/form/RecordsComboBox.js:26
+msgid "Software Version"
+msgstr "Versión del Software"
+
+#: js/ux/form/ImageField.js:76
+msgid "Loading"
+msgstr "Cargando"
+
+#: js/ux/form/ImageField.js:78
+msgid "Click to edit"
+msgstr "Click para editar"
+
+#: js/ux/form/ImageField.js:146
+msgid "Image Failed"
+msgstr "Falló Imagen"
+
+#: js/ux/form/ImageField.js:146
+msgid "Could not load image. Please notify your Administrator"
+msgstr "No se pudo cargar la imagen. Por favor notifique a su Administrador"
+
+#: js/ux/form/ImageField.js:168
+msgid "Not An Image"
+msgstr "No es una imagen"
+
+#: js/ux/form/ImageField.js:168
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr "Seleccione un arhcivo de imágen (gif/png/jpg)"
+
+#: js/ux/form/ImageField.js:211
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "No se pudo cargar una imagen. Por favor notifique a su Administrador"
+
+#: js/ux/form/ImageField.js:224
+msgid "Change Image"
+msgstr "Cambiar Imagen"
+
+#: js/ux/form/ImageField.js:232 js/ux/form/ImageField.js:250
+msgid "Crop Image"
+msgstr "Recortar Imagen"
+
+#: js/ux/form/ImageField.js:256
+msgid "Delete Image"
+msgstr "Borrar Imagen"
+
+#: js/ux/form/ImageField.js:265
+msgid "Show Original Image"
+msgstr "Mostrar Imagen Original"
+
+#: js/Models.js:272
+msgid "Alarm"
+msgid_plural "Alarms"
+msgstr[0] "Alarma"
+msgstr[1] "Alarmas"
+
+#: js/Models.js:310
+msgid "Import"
+msgid_plural "Imports"
+msgstr[0] "Importar"
+msgstr[1] "Importar"
+
+#: js/Models.js:373
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] "Credencial"
+msgstr[1] "Credenciales"
+
+#: js/Models.js:421
+msgid "Department"
+msgid_plural "Departments"
+msgstr[0] "Departamento"
+msgstr[1] "Departamentos"
+
+#: js/Models.js:447
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] "Configuración"
+msgstr[1] "Configuraciones"
+
+#: js/Models.js:447
+msgid "Configs"
+msgstr "Configuraciones"
 
 #: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."

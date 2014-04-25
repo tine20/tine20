@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 11:59+0000\n"
+"PO-Revision-Date: 2014-04-25 12:47+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Spanish (Mexico) (http://www.transifex.com/projects/p/tine20/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
@@ -108,50 +108,46 @@ msgstr "Ruta hacia el archivo XML con reglas de dirección de análisis."
 msgid "Internal Contacts"
 msgstr "Contactos Internos"
 
-#: Setup/Update/Release5.php:194 Setup/Initialize.php:63
+#: Setup/Update/Release5.php:194 Setup/Initialize.php:68
 msgid "Mr"
 msgstr "Sr"
 
-#: Setup/Update/Release5.php:195 Setup/Initialize.php:64
+#: Setup/Update/Release5.php:195 Setup/Initialize.php:69
 msgid "Ms"
 msgstr "Sra"
 
-#: Setup/Update/Release5.php:196 Setup/Initialize.php:65 js/ContactGrid.js:115
-#: js/ContactGridDetailsPanel.js:131 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:128 js/ContactEditDialog.js:434
-#: js/ContactEditDialog.js:456 js/Addressbook-FAT-debug.js:98
-#: js/Addressbook-FAT-debug.js:212 js/Addressbook-FAT-debug.js:478
-#: js/Addressbook-FAT-debug.js:756 js/Addressbook-FAT-debug.js:1175
-#: js/Addressbook-FAT-debug.js:1464 js/Addressbook-FAT-debug.js:1482
-#: js/Model.js:27 js/Model.js:142
+#: Setup/Update/Release5.php:196 Setup/Initialize.php:70 js/ContactGrid.js:115
+#: js/ContactGridDetailsPanel.js:131 js/ContactEditDialog.js:128
+#: js/ContactEditDialog.js:434 js/ContactEditDialog.js:456 js/Model.js:27
+#: js/Model.js:142
 msgid "Company"
 msgstr "Compañía"
 
-#: Setup/Update/Release3.php:37 Setup/Initialize.php:135
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:140
 msgid "All contacts I have read grants for"
 msgstr ""
 
-#: Setup/Initialize.php:140
+#: Setup/Initialize.php:145
 msgid "My company"
 msgstr ""
 
-#: Setup/Initialize.php:141
+#: Setup/Initialize.php:146
 msgid "All coworkers in my company"
 msgstr ""
 
-#: Setup/Initialize.php:154
+#: Setup/Initialize.php:159
 msgid "My contacts"
 msgstr ""
 
-#: Setup/Initialize.php:155
+#: Setup/Initialize.php:160
 msgid "All contacts in my Addressbooks"
 msgstr ""
 
-#: Setup/Initialize.php:167
+#: Setup/Initialize.php:172
 msgid "Last modified by me"
 msgstr ""
 
-#: Setup/Initialize.php:168
+#: Setup/Initialize.php:173
 msgid "All contacts that I have last modified"
 msgstr ""
 
@@ -187,8 +183,7 @@ msgstr "Organización / Unidad"
 msgid "Business Address"
 msgstr "Dirección de la empresa"
 
-#: Export/Pdf.php:52 js/ContactGrid.js:130 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:771
+#: Export/Pdf.php:52 js/ContactGrid.js:130
 msgid "Email"
 msgstr "Email"
 
@@ -220,9 +215,7 @@ msgstr "URL"
 msgid "Role"
 msgstr "Cargo"
 
-#: Export/Pdf.php:76 js/ContactGrid.js:119 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:146 js/Addressbook-FAT-debug.js:104
-#: js/Addressbook-FAT-debug.js:760 js/Addressbook-FAT-debug.js:1212
+#: Export/Pdf.php:76 js/ContactGrid.js:119 js/ContactEditDialog.js:146
 #: js/Model.js:33
 msgid "Room"
 msgstr "Sala"
@@ -239,12 +232,9 @@ msgstr "Teléfono del asistente"
 msgid "Private Contact Data"
 msgstr "Datos de contacto privados"
 
-#: Export/Pdf.php:88 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:299
-#: js/Addressbook-FAT-debug.js:114 js/Addressbook-FAT-debug.js:226
-#: js/Addressbook-FAT-debug.js:227 js/Addressbook-FAT-debug.js:228
-#: js/Addressbook-FAT-debug.js:229 js/Addressbook-FAT-debug.js:230
-#: js/Addressbook-FAT-debug.js:1329 js/Model.js:43 js/Model.js:156
-#: js/Model.js:157 js/Model.js:158 js/Model.js:159 js/Model.js:160
+#: Export/Pdf.php:88 js/ContactEditDialog.js:299 js/Model.js:43
+#: js/Model.js:156 js/Model.js:157 js/Model.js:158 js/Model.js:159
+#: js/Model.js:160
 msgid "Private Address"
 msgstr "Dirección privada"
 
@@ -272,264 +262,192 @@ msgstr "URL doméstico"
 msgid "Other Data"
 msgstr "Otra Información"
 
-#: Export/Pdf.php:114 js/ContactGrid.js:145 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:173 js/Addressbook-FAT-debug.js:97
-#: js/Addressbook-FAT-debug.js:220 js/Addressbook-FAT-debug.js:786
-#: js/Addressbook-FAT-debug.js:1200 js/Model.js:26 js/Model.js:150
+#: Export/Pdf.php:114 js/ContactGrid.js:145 js/ContactEditDialog.js:173
+#: js/Model.js:26 js/Model.js:150
 msgid "Birthday"
 msgstr "Cumpleaños"
 
-#: Export/Pdf.php:117 js/ContactGrid.js:117 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:167 js/Addressbook-FAT-debug.js:101
-#: js/Addressbook-FAT-debug.js:215 js/Addressbook-FAT-debug.js:758
-#: js/Addressbook-FAT-debug.js:1194 js/Model.js:30 js/Model.js:145
+#: Export/Pdf.php:117 js/ContactGrid.js:117 js/ContactEditDialog.js:167
+#: js/Model.js:30 js/Model.js:145
 msgid "Job Title"
 msgstr "Nombre del Cargo"
 
-#: js/ContactGrid.js:101 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:231 js/Addressbook-FAT-debug.js:749
-#: js/Model.js:161
+#: js/ContactGrid.js:101 js/Model.js:161
 msgid "Type"
 msgstr "Tipo"
 
-#: js/ContactGrid.js:102 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:750
+#: js/ContactGrid.js:102
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: js/ContactGrid.js:103 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:91
-#: js/Addressbook-FAT-debug.js:100 js/Addressbook-FAT-debug.js:751
-#: js/Addressbook-FAT-debug.js:1130 js/Model.js:29
+#: js/ContactGrid.js:103 js/ContactEditDialog.js:91 js/Model.js:29
 msgid "Salutation"
 msgstr "Trato"
 
-#: js/ContactGrid.js:111 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:122
-#: js/ContactEditDialog.js:434 js/ContactEditDialog.js:456
-#: js/Addressbook-FAT-debug.js:90 js/Addressbook-FAT-debug.js:211
-#: js/Addressbook-FAT-debug.js:752 js/Addressbook-FAT-debug.js:1166
-#: js/Addressbook-FAT-debug.js:1464 js/Addressbook-FAT-debug.js:1482
-#: js/Model.js:19 js/Model.js:141
+#: js/ContactGrid.js:111 js/ContactEditDialog.js:122
+#: js/ContactEditDialog.js:434 js/ContactEditDialog.js:456 js/Model.js:19
+#: js/Model.js:141
 msgid "Last Name"
 msgstr "Apellidos"
 
-#: js/ContactGrid.js:112 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:112
-#: js/Addressbook-FAT-debug.js:91 js/Addressbook-FAT-debug.js:210
-#: js/Addressbook-FAT-debug.js:753 js/Addressbook-FAT-debug.js:1156
-#: js/Model.js:20 js/Model.js:140
+#: js/ContactGrid.js:112 js/ContactEditDialog.js:112 js/Model.js:20
+#: js/Model.js:140
 msgid "First Name"
 msgstr "Nombre"
 
-#: js/ContactGrid.js:113 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:754
+#: js/ContactGrid.js:113
 msgid "Full Name"
 msgstr "Nombre Completo"
 
-#: js/ContactGrid.js:114 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:162
-#: js/Addressbook-FAT-debug.js:95 js/Addressbook-FAT-debug.js:755
-#: js/Addressbook-FAT-debug.js:1189 js/Model.js:24
+#: js/ContactGrid.js:114 js/ContactEditDialog.js:162 js/Model.js:24
 msgid "Display Name"
 msgstr "Nombre a Mostrar"
 
-#: js/ContactGrid.js:116 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:133
-#: js/Addressbook-FAT-debug.js:99 js/Addressbook-FAT-debug.js:213
-#: js/Addressbook-FAT-debug.js:757 js/Addressbook-FAT-debug.js:1180
-#: js/Model.js:28 js/Model.js:143
+#: js/ContactGrid.js:116 js/ContactEditDialog.js:133 js/Model.js:28
+#: js/Model.js:143
 msgid "Unit"
 msgstr "Unidad"
 
-#: js/ContactGrid.js:118 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:142
-#: js/Addressbook-FAT-debug.js:102 js/Addressbook-FAT-debug.js:216
-#: js/Addressbook-FAT-debug.js:759 js/Addressbook-FAT-debug.js:1208
-#: js/Model.js:31 js/Model.js:149
+#: js/ContactGrid.js:118 js/ContactEditDialog.js:142 js/Model.js:31
+#: js/Model.js:149
 msgid "Job Role"
 msgstr "Descripción del Cargo"
 
-#: js/ContactGrid.js:120 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:273
-#: js/ContactEditDialog.js:302 js/Addressbook-FAT-debug.js:221
-#: js/Addressbook-FAT-debug.js:226 js/Addressbook-FAT-debug.js:761
-#: js/Addressbook-FAT-debug.js:1303 js/Addressbook-FAT-debug.js:1332
-#: js/Model.js:151 js/Model.js:156
+#: js/ContactGrid.js:120 js/ContactEditDialog.js:273
+#: js/ContactEditDialog.js:302 js/Model.js:151 js/Model.js:156
 msgid "Street"
 msgstr "Calle"
 
-#: js/ContactGrid.js:121 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:289
-#: js/ContactEditDialog.js:318 js/Addressbook-FAT-debug.js:224
-#: js/Addressbook-FAT-debug.js:229 js/Addressbook-FAT-debug.js:762
-#: js/Addressbook-FAT-debug.js:1319 js/Addressbook-FAT-debug.js:1348
-#: js/Model.js:154 js/Model.js:159
+#: js/ContactGrid.js:121 js/ContactEditDialog.js:289
+#: js/ContactEditDialog.js:318 js/Model.js:154 js/Model.js:159
 msgid "City"
 msgstr "Ciudad"
 
-#: js/ContactGrid.js:122 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:281
-#: js/ContactEditDialog.js:310 js/Addressbook-FAT-debug.js:222
-#: js/Addressbook-FAT-debug.js:227 js/Addressbook-FAT-debug.js:763
-#: js/Addressbook-FAT-debug.js:1311 js/Addressbook-FAT-debug.js:1340
-#: js/Model.js:152 js/Model.js:157
+#: js/ContactGrid.js:122 js/ContactEditDialog.js:281
+#: js/ContactEditDialog.js:310 js/Model.js:152 js/Model.js:157
 msgid "Region"
 msgstr "Región"
 
-#: js/ContactGrid.js:123 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:764
+#: js/ContactGrid.js:123
 msgid "Postalcode"
 msgstr "Código Postal"
 
-#: js/ContactGrid.js:124 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:294
-#: js/ContactEditDialog.js:323 js/Addressbook-FAT-debug.js:225
-#: js/Addressbook-FAT-debug.js:230 js/Addressbook-FAT-debug.js:765
-#: js/Addressbook-FAT-debug.js:1324 js/Addressbook-FAT-debug.js:1353
-#: js/Model.js:155 js/Model.js:160
+#: js/ContactGrid.js:124 js/ContactEditDialog.js:294
+#: js/ContactEditDialog.js:323 js/Model.js:155 js/Model.js:160
 msgid "Country"
 msgstr "País"
 
-#: js/ContactGrid.js:125 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:766
+#: js/ContactGrid.js:125
 msgid "Street (private)"
 msgstr "Calle (privado)"
 
-#: js/ContactGrid.js:126 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:767
+#: js/ContactGrid.js:126
 msgid "City (private)"
 msgstr "Ciudad (privado)"
 
-#: js/ContactGrid.js:127 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:768
+#: js/ContactGrid.js:127
 msgid "Region (private)"
 msgstr "Región (privado)"
 
-#: js/ContactGrid.js:128 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:769
+#: js/ContactGrid.js:128
 msgid "Postalcode (private)"
 msgstr "Código Postal (privado)"
 
-#: js/ContactGrid.js:129 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:770
+#: js/ContactGrid.js:129
 msgid "Country (private)"
 msgstr "País (privado)"
 
 #: js/ContactGrid.js:131 js/ContactGridDetailsPanel.js:139
-#: js/ContactGridDetailsPanel.js:163 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:186 js/Addressbook-FAT-debug.js:122
-#: js/Addressbook-FAT-debug.js:214 js/Addressbook-FAT-debug.js:486
-#: js/Addressbook-FAT-debug.js:510 js/Addressbook-FAT-debug.js:772
-#: js/Addressbook-FAT-debug.js:1224 js/Model.js:51 js/Model.js:144
+#: js/ContactGridDetailsPanel.js:163 js/ContactEditDialog.js:186
+#: js/Model.js:51 js/Model.js:144
 msgid "Phone"
 msgstr "Teléfono"
 
 #: js/ContactGrid.js:132 js/ContactGridDetailsPanel.js:140
-#: js/ContactGridDetailsPanel.js:164 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:191 js/Addressbook-FAT-debug.js:123
-#: js/Addressbook-FAT-debug.js:487 js/Addressbook-FAT-debug.js:511
-#: js/Addressbook-FAT-debug.js:773 js/Addressbook-FAT-debug.js:1229
+#: js/ContactGridDetailsPanel.js:164 js/ContactEditDialog.js:191
 #: js/Model.js:52
 msgid "Mobile"
 msgstr "Móvil"
 
 #: js/ContactGrid.js:133 js/ContactGridDetailsPanel.js:141
-#: js/ContactGridDetailsPanel.js:165 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:196 js/Addressbook-FAT-debug.js:124
-#: js/Addressbook-FAT-debug.js:488 js/Addressbook-FAT-debug.js:512
-#: js/Addressbook-FAT-debug.js:774 js/Addressbook-FAT-debug.js:1234
+#: js/ContactGridDetailsPanel.js:165 js/ContactEditDialog.js:196
 #: js/Model.js:53
 msgid "Fax"
 msgstr "Fax"
 
-#: js/ContactGrid.js:134 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:775
+#: js/ContactGrid.js:134
 msgid "Car phone"
 msgstr "Teléfono del Automóvil"
 
-#: js/ContactGrid.js:135 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:776
+#: js/ContactGrid.js:135
 msgid "Pager"
 msgstr "Buscapersonas"
 
-#: js/ContactGrid.js:136 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:201
-#: js/Addressbook-FAT-debug.js:128 js/Addressbook-FAT-debug.js:777
-#: js/Addressbook-FAT-debug.js:1239 js/Model.js:57
+#: js/ContactGrid.js:136 js/ContactEditDialog.js:201 js/Model.js:57
 msgid "Phone (private)"
 msgstr "Fono (privado)"
 
-#: js/ContactGrid.js:137 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:211
-#: js/Addressbook-FAT-debug.js:129 js/Addressbook-FAT-debug.js:778
-#: js/Addressbook-FAT-debug.js:1249 js/Model.js:58
+#: js/ContactGrid.js:137 js/ContactEditDialog.js:211 js/Model.js:58
 msgid "Fax (private)"
 msgstr "Fax (privado)"
 
-#: js/ContactGrid.js:138 js/Addressbook-FAT.js:6 js/ContactEditDialog.js:206
-#: js/Addressbook-FAT-debug.js:130 js/Addressbook-FAT-debug.js:779
-#: js/Addressbook-FAT-debug.js:1244 js/Model.js:59
+#: js/ContactGrid.js:138 js/ContactEditDialog.js:206 js/Model.js:59
 msgid "Mobile (private)"
 msgstr "Celular (privado)"
 
-#: js/ContactGrid.js:139 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:780
+#: js/ContactGrid.js:139
 msgid "Email (private)"
 msgstr "Email (privado)"
 
 #: js/ContactGrid.js:140 js/ContactGridDetailsPanel.js:144
-#: js/ContactGridDetailsPanel.js:168 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:229 js/Addressbook-FAT-debug.js:135
-#: js/Addressbook-FAT-debug.js:491 js/Addressbook-FAT-debug.js:515
-#: js/Addressbook-FAT-debug.js:781 js/Addressbook-FAT-debug.js:1267
+#: js/ContactGridDetailsPanel.js:168 js/ContactEditDialog.js:229
 #: js/Model.js:64
 msgid "Web"
 msgstr "Web"
 
-#: js/ContactGrid.js:141 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:782
+#: js/ContactGrid.js:141
 msgid "URL (private)"
 msgstr "URL (privado)"
 
-#: js/ContactGrid.js:142 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:783
+#: js/ContactGrid.js:142
 msgid "Note"
 msgstr "Nota"
 
-#: js/ContactGrid.js:143 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:784
+#: js/ContactGrid.js:143
 msgid "Timezone"
 msgstr "Zona Horaria"
 
-#: js/ContactGrid.js:144 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:785
+#: js/ContactGrid.js:144
 msgid "Geo"
 msgstr "Geo"
 
 #: js/ContactGrid.js:155 js/ContactGrid.js:156 js/ContactGrid.js:157
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:796
-#: js/Addressbook-FAT-debug.js:797 js/Addressbook-FAT-debug.js:798
 msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/ContactGrid.js:166 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:807
+#: js/ContactGrid.js:166
 msgid "Export as PDF"
 msgstr "Exportar como PDF"
 
-#: js/ContactGrid.js:173 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:814
+#: js/ContactGrid.js:173
 msgid "Export as CSV"
 msgstr "Exportar como CSV"
 
-#: js/ContactGrid.js:180 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:821
+#: js/ContactGrid.js:180
 msgid "Export as ODS"
 msgstr ""
 
-#: js/ContactGrid.js:187 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:828
+#: js/ContactGrid.js:187
 msgid "Export as XLS"
 msgstr ""
 
-#: js/ContactGrid.js:194 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:835
+#: js/ContactGrid.js:194
 msgid "Export as ..."
 msgstr ""
 
-#: js/ContactGrid.js:206 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:847
+#: js/ContactGrid.js:206
 msgid "Import contacts"
 msgstr ""
 
@@ -537,297 +455,242 @@ msgstr ""
 msgid "Contact of a user account"
 msgstr ""
 
-#: js/ContactGrid.js:295 js/Addressbook-FAT.js:6 js/ContactFilterModel.js:35
-#: js/Addressbook-FAT-debug.js:165 js/Addressbook-FAT-debug.js:204
-#: js/Addressbook-FAT-debug.js:990 js/Model.js:95 js/Model.js:134
+#: js/ContactGrid.js:295 js/ContactFilterModel.js:35 js/Model.js:95
+#: js/Model.js:134
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Contacto"
 msgstr[1] "Contactos"
 
-#: js/ContactGridDetailsPanel.js:62 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:165 js/Addressbook-FAT-debug.js:409
-#: js/Model.js:95
+#: js/ContactGridDetailsPanel.js:62 js/Model.js:95
 msgid "Contacts"
 msgstr "Contactos"
 
-#: js/ContactGridDetailsPanel.js:65 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:412
+#: js/ContactGridDetailsPanel.js:65
 msgid "Select contact"
 msgstr "Seleccionar contacto"
 
 #: js/ContactGridDetailsPanel.js:142 js/ContactGridDetailsPanel.js:166
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:216
-#: js/Addressbook-FAT-debug.js:133 js/Addressbook-FAT-debug.js:218
-#: js/Addressbook-FAT-debug.js:489 js/Addressbook-FAT-debug.js:513
-#: js/Addressbook-FAT-debug.js:1254 js/Model.js:62 js/Model.js:147
+#: js/ContactEditDialog.js:216 js/Model.js:62 js/Model.js:147
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: js/ContactGridDetailsPanel.js:155 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:502
+#: js/ContactGridDetailsPanel.js:155
 msgid "Private"
 msgstr "Privado"
 
-#: js/ContactGridDetailsPanel.js:178 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:525
+#: js/ContactGridDetailsPanel.js:178
 msgid "Info"
 msgstr "Información"
 
-#: js/ContactGridDetailsPanel.js:214 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:561
+#: js/ContactGridDetailsPanel.js:214
 msgid "Insecure link"
 msgstr ""
 
-#: js/ContactGridDetailsPanel.js:214 js/Addressbook-FAT.js:6
-#: js/Addressbook-FAT-debug.js:561
+#: js/ContactGridDetailsPanel.js:214
 msgid "Please review this link in edit dialog."
 msgstr ""
 
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:42
+#: js/ContactEditDialog.js:41 js/ContactEditDialog.js:50 js/MapPanel.js:40
+msgid "Map"
+msgstr "Mapa"
+
+#: js/ContactEditDialog.js:79
+msgid "Personal Information"
+msgstr "Información Personal"
+
+#: js/ContactEditDialog.js:107 js/Model.js:22
+msgid "Title"
+msgstr "Título"
+
+#: js/ContactEditDialog.js:117 js/Model.js:21
+msgid "Middle Name"
+msgstr "Segundo Nombre"
+
+#: js/ContactEditDialog.js:138 js/Model.js:23
+msgid "Suffix"
+msgstr "Sufijo"
+
+#: js/ContactEditDialog.js:181
+msgid "Contact Information"
+msgstr "Información de Contacto"
+
+#: js/ContactEditDialog.js:222 js/Model.js:63
+msgid "E-Mail (private)"
+msgstr "E-Mail (privado)"
+
+#: js/ContactEditDialog.js:270 js/Model.js:34 js/Model.js:151 js/Model.js:152
+#: js/Model.js:153 js/Model.js:154 js/Model.js:155
+msgid "Company Address"
+msgstr "Dirección de la Empresa"
+
+#: js/ContactEditDialog.js:277 js/ContactEditDialog.js:306
+msgid "Street 2"
+msgstr "Dirección 2"
+
+#: js/ContactEditDialog.js:285 js/ContactEditDialog.js:314 js/Model.js:153
+#: js/Model.js:158
+msgid "Postal Code"
+msgstr "Código Postal"
+
+#: js/ContactEditDialog.js:344 js/Model.js:68 js/Model.js:146
+msgid "Description"
+msgstr "Descripción"
+
+#: js/ContactEditDialog.js:358
+msgid "Enter description"
+msgstr "Escribir descripción"
+
+#: js/ContactEditDialog.js:402
+msgid "Export as pdf"
+msgstr "Exportar como pdf"
+
+#: js/ContactEditDialog.js:410 js/ContactEditDialog.js:499
+msgid "Parse address"
+msgstr ""
+
+#: js/ContactEditDialog.js:434 js/ContactEditDialog.js:456
+msgid "Either {0} or {1} must be given"
+msgstr "Debe ingresar {0} o {1}"
+
+#: js/ContactEditDialog.js:491
+msgid "Paste address"
+msgstr ""
+
+#: js/ContactEditDialog.js:491
+msgid "Please paste an address that should be parsed:"
+msgstr ""
+
+#: js/ContactEditDialog.js:527
+msgid "End token mode"
+msgstr ""
+
+#: js/MapPanel.js:58
+msgid "Company address"
+msgstr ""
+
+#: js/MapPanel.js:65
+msgid "Private address"
+msgstr ""
+
 #: js/ListMemberFilterModel.js:37
 msgid "Member of List"
 msgstr ""
 
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:204 js/Model.js:134
-msgid "User Account"
-msgstr "Cuenta de Usuario"
-
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:207
-msgid "Quick search"
+#: js/CardDAVContainerPropertiesHookField.js:35
+msgid "CardDAV URL"
 msgstr ""
 
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:344
-#: js/Addressbook-FAT-debug.js:139 js/Addressbook-FAT-debug.js:217
-#: js/Addressbook-FAT-debug.js:1374 js/Model.js:68 js/Model.js:146
-msgid "Description"
-msgstr "Descripción"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:270
-#: js/Addressbook-FAT-debug.js:105 js/Addressbook-FAT-debug.js:221
-#: js/Addressbook-FAT-debug.js:222 js/Addressbook-FAT-debug.js:223
-#: js/Addressbook-FAT-debug.js:224 js/Addressbook-FAT-debug.js:225
-#: js/Addressbook-FAT-debug.js:1300 js/Model.js:34 js/Model.js:151
-#: js/Model.js:152 js/Model.js:153 js/Model.js:154 js/Model.js:155
-msgid "Company Address"
-msgstr "Dirección de la Empresa"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:285
-#: js/ContactEditDialog.js:314 js/Addressbook-FAT-debug.js:223
-#: js/Addressbook-FAT-debug.js:228 js/Addressbook-FAT-debug.js:1315
-#: js/Addressbook-FAT-debug.js:1344 js/Model.js:153 js/Model.js:158
-msgid "Postal Code"
-msgstr "Código Postal"
-
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:232 js/Model.js:162
-msgid "Last Modified Time"
+#: js/Model.js:19
+msgid "Name"
 msgstr ""
 
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:233 js/Model.js:163
-msgid "Last Modified By"
+#: js/Model.js:34
+msgid "Street (Company Address)"
 msgstr ""
 
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:234 js/Model.js:164
-msgid "Creation Time"
-msgstr "Fecha de Creación"
-
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:235 js/Model.js:165
-msgid "Created By"
+#: js/Model.js:35
+msgid "Street 2 (Company Address)"
 msgstr ""
 
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:169
-#: js/Addressbook-FAT-debug.js:276 js/Addressbook-FAT-debug.js:312
+#: js/Model.js:36
+msgid "City (Company Address)"
+msgstr ""
+
+#: js/Model.js:37
+msgid "Region (Company Address)"
+msgstr ""
+
+#: js/Model.js:38
+msgid "Postal Code (Company Address)"
+msgstr ""
+
+#: js/Model.js:39
+msgid "Country (Company Address)"
+msgstr ""
+
+#: js/Model.js:43
+msgid "Street (Private Address)"
+msgstr ""
+
+#: js/Model.js:44
+msgid "Street 2 (Private Address)"
+msgstr ""
+
+#: js/Model.js:45
+msgid "City (Private Address)"
+msgstr ""
+
+#: js/Model.js:46
+msgid "Region (Private Address)"
+msgstr ""
+
+#: js/Model.js:47
+msgid "Postal Code (Private Address)"
+msgstr ""
+
+#: js/Model.js:48
+msgid "Country (Private Address)"
+msgstr ""
+
+#: js/Model.js:51
+msgid "Company Communication"
+msgstr ""
+
+#: js/Model.js:57
+msgid "Private Communication"
+msgstr ""
+
+#: js/Model.js:65
+msgid "Web (private)"
+msgstr ""
+
 #: js/Model.js:99 js/Model.js:206 js/Addressbook.js:32
 msgid "Addressbook"
 msgid_plural "Addressbooks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:936
-msgid "Internal Contact"
-msgstr ""
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:41
-#: js/ContactEditDialog.js:50 js/Addressbook-FAT-debug.js:1074
-#: js/Addressbook-FAT-debug.js:1083 js/Addressbook-FAT-debug.js:1831
-#: js/MapPanel.js:40
-msgid "Map"
-msgstr "Mapa"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:79
-#: js/Addressbook-FAT-debug.js:1109
-msgid "Personal Information"
-msgstr "Información Personal"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:107
-#: js/Addressbook-FAT-debug.js:93 js/Addressbook-FAT-debug.js:1148
-#: js/Model.js:22
-msgid "Title"
-msgstr "Título"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:117
-#: js/Addressbook-FAT-debug.js:92 js/Addressbook-FAT-debug.js:1161
-#: js/Model.js:21
-msgid "Middle Name"
-msgstr "Segundo Nombre"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:181
-#: js/Addressbook-FAT-debug.js:1219
-msgid "Contact Information"
-msgstr "Información de Contacto"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:222
-#: js/Addressbook-FAT-debug.js:134 js/Addressbook-FAT-debug.js:1260
-#: js/Model.js:63
-msgid "E-Mail (private)"
-msgstr "E-Mail (privado)"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:277
-#: js/ContactEditDialog.js:306 js/Addressbook-FAT-debug.js:1307
-#: js/Addressbook-FAT-debug.js:1336
-msgid "Street 2"
-msgstr "Dirección 2"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:358
-#: js/Addressbook-FAT-debug.js:1388
-msgid "Enter description"
-msgstr "Escribir descripción"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:402
-#: js/Addressbook-FAT-debug.js:1432
-msgid "Export as pdf"
-msgstr "Exportar como pdf"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:410
-#: js/ContactEditDialog.js:499 js/Addressbook-FAT-debug.js:1440
-#: js/Addressbook-FAT-debug.js:1525
-msgid "Parse address"
-msgstr ""
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:434
-#: js/ContactEditDialog.js:456 js/Addressbook-FAT-debug.js:1464
-#: js/Addressbook-FAT-debug.js:1482
-msgid "Either {0} or {1} must be given"
-msgstr "Debe ingresar {0} o {1}"
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:491
-#: js/Addressbook-FAT-debug.js:1517
-msgid "Paste address"
-msgstr ""
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:491
-#: js/Addressbook-FAT-debug.js:1517
-msgid "Please paste an address that should be parsed:"
-msgstr ""
-
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:527
-#: js/Addressbook-FAT-debug.js:1553
-msgid "End token mode"
-msgstr ""
-
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:1849 js/MapPanel.js:58
-msgid "Company address"
-msgstr ""
-
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:1856 js/MapPanel.js:65
-msgid "Private address"
-msgstr ""
-
-#: js/Addressbook-FAT.js:6 js/Addressbook-FAT-debug.js:1977
-#: js/CardDAVContainerPropertiesHookField.js:35
-msgid "CardDAV URL"
-msgstr ""
-
-#: js/ContactEditDialog.js:138 js/Addressbook-FAT-debug.js:94
-#: js/Addressbook-FAT-debug.js:1204 js/Model.js:23
-msgid "Suffix"
-msgstr "Sufijo"
-
-#: js/Addressbook-FAT-debug.js:90 js/Model.js:19
-msgid "Name"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:105 js/Model.js:34
-msgid "Street (Company Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:106 js/Model.js:35
-msgid "Street 2 (Company Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:107 js/Model.js:36
-msgid "City (Company Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:108 js/Model.js:37
-msgid "Region (Company Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:109 js/Model.js:38
-msgid "Postal Code (Company Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:110 js/Model.js:39
-msgid "Country (Company Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:114 js/Model.js:43
-msgid "Street (Private Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:115 js/Model.js:44
-msgid "Street 2 (Private Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:116 js/Model.js:45
-msgid "City (Private Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:117 js/Model.js:46
-msgid "Region (Private Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:118 js/Model.js:47
-msgid "Postal Code (Private Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:119 js/Model.js:48
-msgid "Country (Private Address)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:122 js/Model.js:51
-msgid "Company Communication"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:128 js/Model.js:57
-msgid "Private Communication"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:136 js/Model.js:65
-msgid "Web (private)"
-msgstr ""
-
-#: js/Addressbook-FAT-debug.js:169 js/Addressbook-FAT-debug.js:276
 #: js/Model.js:99 js/Model.js:206
 msgid "Addressbooks"
 msgstr ""
 
-#: js/Addressbook-FAT-debug.js:272 js/Model.js:202
+#: js/Model.js:134
+msgid "User Account"
+msgstr "Cuenta de Usuario"
+
+#: js/Model.js:137
+msgid "Quick Search"
+msgstr ""
+
+#: js/Model.js:162
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/Model.js:163
+msgid "Last Modified By"
+msgstr ""
+
+#: js/Model.js:164
+msgid "Creation Time"
+msgstr "Fecha de Creación"
+
+#: js/Model.js:165
+msgid "Created By"
+msgstr ""
+
+#: js/Model.js:202
 msgid "List"
 msgid_plural "Lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Addressbook-FAT-debug.js:272 js/Model.js:202
+#: js/Model.js:202
 msgid "Lists"
 msgstr ""
 
-#: js/Addressbook-FAT-debug.js:302 js/Addressbook.js:22
+#: js/Addressbook.js:22
 msgid "New Contact"
-msgstr ""
-
-#: js/Model.js:137
-msgid "Quick Search"
 msgstr ""
 
 #: Controller/Contact.php:330

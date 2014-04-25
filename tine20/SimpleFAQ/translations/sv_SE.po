@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 12:01+0000\n"
+"PO-Revision-Date: 2014-04-25 12:47+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
@@ -76,104 +76,32 @@ msgid "The default FAQ list to create new FAQ in."
 msgstr "Standard FAQ lista för att skapa ny FAQ i."
 
 #: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
-#: js/SimpleFAQ-FAT.js:6 js/FaqStatus.js:26 js/SimpleFAQ-FAT-debug.js:399
-#: js/SimpleFAQ-FAT-debug.js:914 js/SimpleFAQ-FAT-debug.js:946
-#: js/SimpleFAQ-FAT-debug.js:1041 js/SimpleFAQ-FAT-debug.js:1186
-#: js/FaqGridDetailsPanel.js:199
+#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] "FAQ-status"
 msgstr[1] "FAQ-status"
 
 #: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
-#: js/FaqTypeFilterModel.js:27 js/SimpleFAQ-FAT.js:6
-#: js/SimpleFAQ-FAT-debug.js:404 js/SimpleFAQ-FAT-debug.js:918
-#: js/SimpleFAQ-FAT-debug.js:953 js/SimpleFAQ-FAT-debug.js:1326
-#: js/SimpleFAQ-FAT-debug.js:1474 js/FaqGridDetailsPanel.js:204
+#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] "FAQ typ"
 msgstr[1] "FAQ typer"
 
-#: js/AdminPanel.js:105 js/SimpleFAQ-FAT.js:6 js/SimpleFAQ-FAT-debug.js:926
+#: js/AdminPanel.js:105
 msgid "Defaults"
 msgstr "Standard"
 
-#: js/FaqType.js:144 js/SimpleFAQ-FAT-debug.js:1444
+#: js/FaqType.js:144
 msgid "Add a new FAQ Type..."
 msgstr "Lägg till en ny FAQ-typ"
 
-#: js/SimpleFAQ-FAT.js:6 js/SimpleFAQ-FAT-debug.js:77
-msgid "Quick search"
-msgstr ""
-
-#: js/SimpleFAQ-FAT.js:6 js/SimpleFAQ.js:19 js/SimpleFAQ-FAT-debug.js:38
-#: js/SimpleFAQ-FAT-debug.js:141 js/Model.js:35
+#: js/SimpleFAQ.js:19 js/Model.js:35
 msgid "FAQ"
 msgid_plural "FAQs"
 msgstr[0] "FAQ"
 msgstr[1] "FAQ:er"
-
-#: js/SimpleFAQ-FAT.js:6 js/SimpleFAQ-FAT-debug.js:297
-#: js/SimpleFAQ-FAT-debug.js:382 js/FaqGridDetailsPanel.js:97
-#: js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr "FAQ info"
-
-#: js/SimpleFAQ-FAT.js:6 js/FaqGridPanel.js:98 js/SimpleFAQ-FAT-debug.js:351
-#: js/SimpleFAQ-FAT-debug.js:609 js/SimpleFAQ-FAT-debug.js:741
-#: js/FaqEditDialog.js:111 js/FaqGridDetailsPanel.js:151
-msgid "Question"
-msgstr "Fråga"
-
-#: js/SimpleFAQ-FAT.js:6 js/SimpleFAQ.js:44 js/FaqGridPanel.js:105
-#: js/SimpleFAQ-FAT-debug.js:357 js/SimpleFAQ-FAT-debug.js:616
-#: js/SimpleFAQ-FAT-debug.js:748 js/FaqEditDialog.js:118
-#: js/FaqGridDetailsPanel.js:157
-msgid "Answer"
-msgstr "Svar"
-
-#: js/SimpleFAQ-FAT.js:6 js/FaqGridPanel.js:79 js/SimpleFAQ-FAT-debug.js:363
-#: js/SimpleFAQ-FAT-debug.js:590 js/FaqGridDetailsPanel.js:163
-msgid "Tags"
-msgstr "Taggar"
-
-#: js/SimpleFAQ-FAT.js:6 js/SimpleFAQ-FAT-debug.js:389
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Skapelsedatum"
-
-#: js/SimpleFAQ-FAT.js:6 js/SimpleFAQ-FAT-debug.js:394
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Skapad av"
-
-#: js/SimpleFAQ-FAT.js:6 js/SimpleFAQ-FAT-debug.js:426
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Inget svar ännu"
-
-#: js/SimpleFAQ-FAT.js:6 js/FaqGridPanel.js:72 js/SimpleFAQ-FAT-debug.js:583
-msgid "FAQ id"
-msgstr "FAQ id"
-
-#: js/SimpleFAQ-FAT.js:6 js/FaqGridPanel.js:86 js/SimpleFAQ-FAT-debug.js:597
-#: js/SimpleFAQ-FAT-debug.js:769 js/FaqEditDialog.js:139
-msgid "Status"
-msgstr "Status"
-
-#: js/SimpleFAQ-FAT.js:6 js/FaqGridPanel.js:92 js/SimpleFAQ-FAT-debug.js:603
-#: js/SimpleFAQ-FAT-debug.js:757 js/FaqEditDialog.js:127
-msgid "Type"
-msgstr "Typ"
-
-#: js/SimpleFAQ-FAT.js:6 js/SimpleFAQ-FAT-debug.js:742 js/FaqEditDialog.js:112
-msgid "Enter a question..."
-msgstr "Ställ en fråga"
-
-#: js/SimpleFAQ-FAT.js:6 js/SimpleFAQ-FAT-debug.js:749 js/FaqEditDialog.js:119
-msgid "Enter a answer..."
-msgstr "Ange svar"
 
 #: js/SimpleFAQ.js:26
 msgid "Find Question"
@@ -183,17 +111,42 @@ msgstr ""
 msgid "Search question"
 msgstr ""
 
-#: js/FaqStatus.js:141 js/SimpleFAQ-FAT-debug.js:1156
+#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:118
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Svar"
+
+#: js/FaqGridPanel.js:72
+msgid "FAQ id"
+msgstr "FAQ id"
+
+#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Taggar"
+
+#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:139
+msgid "Status"
+msgstr "Status"
+
+#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:127
+msgid "Type"
+msgstr "Typ"
+
+#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:111 js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Fråga"
+
+#: js/FaqStatus.js:141
 msgid "Add a new FAQ Status..."
 msgstr "Lägg till en ny FAQ-status"
 
-#: js/SimpleFAQ-FAT-debug.js:42 js/Model.js:39
+#: js/Model.js:39
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
 msgstr[0] "FAQ-lista"
 msgstr[1] "FAQ-listor"
 
-#: js/SimpleFAQ-FAT-debug.js:42 js/Model.js:39
+#: js/Model.js:39
 msgid "FAQ Lists"
 msgstr "FAQ-listor"
 
@@ -201,6 +154,30 @@ msgstr "FAQ-listor"
 msgid "Quick Search"
 msgstr ""
 
+#: js/FaqEditDialog.js:112
+msgid "Enter a question..."
+msgstr "Ställ en fråga"
+
+#: js/FaqEditDialog.js:119
+msgid "Enter a answer..."
+msgstr "Ange svar"
+
 #: js/SearchCombo.js:8
 msgid "Search FAQ"
 msgstr ""
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "FAQ info"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Skapelsedatum"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Skapad av"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Inget svar ännu"

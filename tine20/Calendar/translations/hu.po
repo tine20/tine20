@@ -397,23 +397,23 @@ msgstr "Normál riasztási ideje"
 msgid "Minutes before the event starts"
 msgstr "Esemény kezdése előtt ennyi perccel"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "Never"
 msgstr "Sosem"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On invitation and cancellation only"
 msgstr "Csak meghíváskor és lemondáskor"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On time changes"
 msgstr "Időpont változtatáskor"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On all updates but attendee responses"
 msgstr "Minden frissítéskor de résztvevő visszajelzéskor nem"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On attendee responses too"
 msgstr "Résztvevő visszajelzésekor is"
 
