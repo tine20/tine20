@@ -512,14 +512,13 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testParallelAlarmTrigger()
     {
-        $this->markTestSkipped('TODO fixme: 0009116: fix Calendar_Controller_EventNotificationsTests::testParallelAlarmTrigger');
-        
         $this->_testNeedsTransaction();
         
         try {
             $this->_emailTestClass = new Felamimail_Controller_MessageTest();
             $this->_emailTestClass->setup();
         } catch (Exception $e) {
+            Tinebase_Exception::log($e);
             $this->markTestIncomplete('email not available.');
         }
         
