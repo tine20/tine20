@@ -190,12 +190,19 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      */
     public function sanitizeAccountIdAndFillWithAllGrants()
     {
-        if ($this->account_id == 0) {
-            if ($this->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && is_object(Tinebase_Core::getUser())) {
+        if (empty($this->account_id)) {
+            if ($this->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && 
+                is_object(Tinebase_Core::getUser())) 
+            {
                 $this->account_id = Tinebase_Core::getUser()->getId();
-            } else {
+            } else if ($this->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP || 
+                Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED))
+            {
                 $this->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP;
                 $this->account_id = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
+            } else {
+                $this->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
+                $this->account_id = 0;
             }
         }
         

@@ -181,28 +181,20 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
                     . ' Filter ' . $filter->name . ' already has grants.');
                 continue;
             }
-            $filter->grants = new Tinebase_Record_RecordSet('Tinebase_Model_PersistentFilterGrant');
-            if ($filter->isPersonal()) {
-                // personal filter -> user gets all grants
-                $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
-                $accountId = $filter->account_id;
-            } else {
-                // shared filter -> anyone or admin group (if ANYONE_ACCOUNT_DISABLED) gets all grants
-                if (Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
-                    $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP;
-                    $accountId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
-                } else {
-                    $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
-                    $accountId = 0;
-                }
-            }
             $grant = new Tinebase_Model_PersistentFilterGrant(array(
-                'account_type' => $accountType,
-                'account_id'   => $accountId,
+                'account_type' => $filter->isPersonal() ? Tinebase_Acl_Rights::ACCOUNT_TYPE_USER : Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                'account_id'   => $filter->account_id,
                 'record_id'    => $filter->getId(),
             ));
+            
             $grant->sanitizeAccountIdAndFillWithAllGrants();
+
+            $filter->grants = new Tinebase_Record_RecordSet('Tinebase_Model_PersistentFilterGrant');
             $filter->grants->addRecord($grant);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Updating filter "' . $filter->name . '" with grant: ' . print_r($grant->toArray(), true));
+            
             Tinebase_PersistentFilter::getInstance()->setGrants($filter);
         }
     }
