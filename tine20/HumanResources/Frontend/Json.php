@@ -471,7 +471,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // set time to 0
         foreach($feastDays as &$feastDay) {
-            $feastDay->setTime(0,0,0);
+            $feastDay->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
         }
         
         // search free times for the account and the interval
