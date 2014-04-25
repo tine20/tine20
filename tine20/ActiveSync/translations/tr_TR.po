@@ -81,44 +81,43 @@ msgstr "Standart Görev Listesi"
 msgid "The default task list to create new tasks in."
 msgstr ""
 
-#: js/ActiveSync-FAT-debug.js:32 js/Application.js:27 js/ActiveSync-FAT.js:6
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/ActiveSync-FAT-debug.js:48 js/Application.js:43 js/ActiveSync-FAT.js:6
-msgid "Select a Device"
-msgstr "Bir Cihaz Seçiniz"
-
-#: js/ActiveSync-FAT-debug.js:62 js/Application.js:57 js/ActiveSync-FAT.js:6
-msgid "No ActiveSync Device registered"
-msgstr "Active Sync Cihazı Bulunamamıstır"
-
-#: js/ActiveSync-FAT-debug.js:70 js/Application.js:65 js/ActiveSync-FAT.js:6
-msgid "Set as {0} Filter"
-msgstr ""
-
-#: js/ActiveSync-FAT-debug.js:95 js/Application.js:90 js/ActiveSync-FAT.js:6
-msgid "Resetted Sync Filter"
-msgstr "Senkronize Filtresini Sıfırla"
-
-#: js/ActiveSync-FAT-debug.js:96 js/ActiveSync-FAT-debug.js:108
-#: js/Application.js:91 js/Application.js:103 js/ActiveSync-FAT.js:6
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr ""
-
-#: js/ActiveSync-FAT-debug.js:99 js/Application.js:94 js/ActiveSync-FAT.js:6
-msgid "resetted"
-msgstr "Sıfırlandı"
-
-#: js/ActiveSync-FAT-debug.js:107 js/Application.js:102 js/ActiveSync-FAT.js:6
-msgid "Set Sync Filter"
-msgstr "Senkronize Filtresini Ayarla"
-
-#: js/ActiveSync-FAT-debug.js:158 js/Model.js:42
+#: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] "one: Cihaz\n\nother: Cihazlar"
 
-#: js/ActiveSync-FAT-debug.js:158 js/Model.js:42
+#: js/Model.js:42
 msgid "Devices"
 msgstr "Cihazlar"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Bir Cihaz Seçiniz"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Active Sync Cihazı Bulunamamıstır"
+
+#: js/Application.js:65
+msgid "Set as {0} Filter"
+msgstr ""
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Senkronize Filtresini Sıfırla"
+
+#: js/Application.js:91 js/Application.js:103
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr ""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "Sıfırlandı"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Senkronize Filtresini Ayarla"

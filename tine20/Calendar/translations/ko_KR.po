@@ -395,23 +395,23 @@ msgstr ""
 msgid "Minutes before the event starts"
 msgstr ""
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "Never"
 msgstr ""
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On invitation and cancellation only"
 msgstr ""
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On time changes"
 msgstr ""
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On all updates but attendee responses"
 msgstr ""
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On attendee responses too"
 msgstr ""
 

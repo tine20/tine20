@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 11:59+0000\n"
+"PO-Revision-Date: 2014-04-25 12:47+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -17,27 +17,19 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:113
-msgid "manage leads"
-msgstr "quản lý đầu mối"
-
-#: Acl/Rights.php:114
-msgid "add, edit and delete leads"
-msgstr "thêm, sửa và xóa đầu mối"
-
-#: Acl/Rights.php:117
+#: Acl/Rights.php:106
 msgid "manage shared lead folders"
 msgstr "Quản lý thư mục đầu mối chia sẻ"
 
-#: Acl/Rights.php:118
+#: Acl/Rights.php:107
 msgid "Create new shared lead folders"
 msgstr "Tạo thư mục đầu mối chia sẻ mới"
 
-#: Acl/Rights.php:121
+#: Acl/Rights.php:110
 msgid "manage shared leads favorites"
 msgstr "quản lý đầu mối chia sẻ thường dùng"
 
-#: Acl/Rights.php:122
+#: Acl/Rights.php:111
 msgid "Create or update shared leads favorites"
 msgstr "Tạo hoặc cập nhật đầu mối chia sẻ thường dùng"
 
@@ -46,20 +38,14 @@ msgstr "Tạo hoặc cập nhật đầu mối chia sẻ thường dùng"
 msgid "%s's personal leads"
 msgstr "Đầu mối cá nhân của %s"
 
-#: Controller.php:162 Model/Lead.php:120 js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:45 js/Crm-FAT-debug.js:981
-#: js/Crm-FAT-debug.js:1143 js/Crm-FAT-debug.js:1586 js/Crm-FAT-debug.js:3271
-#: js/Crm-FAT-debug.js:3466 js/Crm-FAT-debug.js:3506 js/Contact.js:161
-#: js/Contact.js:356 js/Contact.js:396 js/LeadGridPanel.js:122
-#: Controller/Lead.php:186
+#: Controller.php:162 Model/Lead.php:120 js/LeadGridDetailsPanel.js:45
+#: js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
+#: js/LeadGridPanel.js:122 Controller/Lead.php:186
 msgid "Customer"
 msgstr "Khách hàng"
 
-#: Controller.php:163 js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:45
-#: js/Crm-FAT-debug.js:980 js/Crm-FAT-debug.js:1143 js/Crm-FAT-debug.js:1569
-#: js/Crm-FAT-debug.js:3291 js/Crm-FAT-debug.js:3467 js/Crm-FAT-debug.js:3510
-#: js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
-#: js/LeadGridPanel.js:121
+#: Controller.php:163 js/LeadGridDetailsPanel.js:45 js/Contact.js:181
+#: js/Contact.js:357 js/Contact.js:400 js/LeadGridPanel.js:121
 msgid "Partner"
 msgstr "Đôi tác"
 
@@ -107,9 +93,7 @@ msgstr "Điện thoại"
 msgid "Website"
 msgstr "Website"
 
-#: Model/Lead.php:119 js/Crm-FAT.js:6 js/Crm-FAT-debug.js:979
-#: js/Crm-FAT-debug.js:3281 js/Crm-FAT-debug.js:3465 js/Crm-FAT-debug.js:3502
-#: js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
+#: Model/Lead.php:119 js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
 #: js/LeadGridPanel.js:120
 msgid "Responsible"
 msgstr "Trách nhiệm"
@@ -118,27 +102,27 @@ msgstr "Trách nhiệm"
 msgid "Task"
 msgstr "Công việc"
 
-#: Setup/Update/Release3.php:37 Setup/Initialize.php:55
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:36
 msgid "All leads I have read grants for"
 msgstr "Mọi đầu mối tôi đã đọc quyền"
 
-#: Setup/Initialize.php:62
+#: Setup/Initialize.php:43
 msgid "Last modified by me"
 msgstr "Sửa lần cuối bởi tôi"
 
-#: Setup/Initialize.php:63
+#: Setup/Initialize.php:44
 msgid "All leads that I have last modified"
 msgstr "Mọi đầu mối tôi đã sửa"
 
-#: Setup/Initialize.php:72
+#: Setup/Initialize.php:53
 msgid "My leads"
 msgstr "Đầu mối của tôi"
 
-#: Setup/Initialize.php:73
+#: Setup/Initialize.php:54
 msgid "All leads that I am responsible for"
 msgstr "Mọi đầu mối tôi chịu trách nhiệm"
 
-#: Setup/Initialize.php:86
+#: Setup/Initialize.php:67
 msgid "Leads with overdue tasks"
 msgstr "Đầu mối với việc quá hạn"
 
@@ -182,44 +166,37 @@ msgstr "Thường dùng mặc định được nạp khi quản lý quan hệ kh
 msgid "Lead Data"
 msgstr "Dữ liệu đầu mối"
 
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/Crm-FAT.js:6
-#: js/LeadStateFilterModel.js:32 js/LeadEditDialog.js:343
-#: js/Crm-FAT-debug.js:982 js/Crm-FAT-debug.js:1997 js/Crm-FAT-debug.js:2406
-#: js/Crm-FAT-debug.js:2711 js/LeadGridPanel.js:123
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadStateFilterModel.js:32
+#: js/LeadEditDialog.js:343 js/LeadGridPanel.js:123
 msgid "Leadstate"
 msgstr "Trạng thái đầu mối"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:454 js/LeadEditDialog.js:362
-#: js/Crm-FAT-debug.js:1553 js/Crm-FAT-debug.js:2016 js/Crm-FAT-debug.js:2420
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:454
+#: js/LeadEditDialog.js:362
 msgid "Leadtype"
 msgstr "Loại đầu mối"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:459 js/LeadEditDialog.js:369
-#: js/Crm-FAT-debug.js:1558 js/Crm-FAT-debug.js:2023 js/Crm-FAT-debug.js:2413
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:459
+#: js/LeadEditDialog.js:369
 msgid "Leadsource"
 msgstr "Nguồn đầu mối"
 
-#: Export/Pdf.php:87 js/Crm-FAT.js:6 js/Model.js:109 js/Crm-FAT-debug.js:394
-#: js/Crm-FAT-debug.js:984 js/LeadGridPanel.js:125 Controller/Lead.php:193
+#: Export/Pdf.php:87 js/Model.js:109 js/LeadGridPanel.js:125
+#: Controller/Lead.php:193
 msgid "Turnover"
 msgstr "Doanh số"
 
-#: Export/Pdf.php:90 js/Crm-FAT.js:6 js/Model.js:108 js/LeadEditDialog.js:222
-#: js/Crm-FAT-debug.js:393 js/Crm-FAT-debug.js:983 js/Crm-FAT-debug.js:1879
+#: Export/Pdf.php:90 js/Model.js:108 js/LeadEditDialog.js:222
 #: js/LeadGridPanel.js:124 Controller/Lead.php:194
 msgid "Probability"
 msgstr "Có khả năng"
 
-#: Export/Pdf.php:93 js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:444
-#: js/LeadEditDialog.js:401 js/Crm-FAT-debug.js:1543 js/Crm-FAT-debug.js:2055
+#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:444 js/LeadEditDialog.js:401
 #: Controller/Lead.php:190
 msgid "Start"
 msgstr "Bắt đầu"
 
-#: Export/Pdf.php:96 js/Crm-FAT.js:6 js/LeadEditDialog.js:229
-#: js/Crm-FAT-debug.js:1886 Controller/Lead.php:192
+#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:192
 msgid "End"
 msgstr "Kết thúc"
 
@@ -231,25 +208,23 @@ msgstr "Lịch kết thúc"
 msgid "Contacts"
 msgstr "Liên lạc"
 
-#: Export/Pdf.php:211 js/Crm-FAT-debug.js:3341 js/Contact.js:231
+#: Export/Pdf.php:211 js/Contact.js:231
 msgid "Address"
 msgstr "Địa chỉ"
 
-#: Export/Pdf.php:232 js/Crm-FAT.js:6 js/Task.js:83 js/LeadEditDialog.js:245
-#: js/Crm-FAT-debug.js:1902 js/Crm-FAT-debug.js:3845
+#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:245
 msgid "Tasks"
 msgstr "Công việc"
 
-#: Export/Pdf.php:252 js/Task.js:176 js/Crm-FAT-debug.js:3938
+#: Export/Pdf.php:252 js/Task.js:176
 msgid "Due Date"
 msgstr "Ngày đến hạn"
 
-#: Export/Pdf.php:259 js/Task.js:189 js/Crm-FAT-debug.js:3951
+#: Export/Pdf.php:259 js/Task.js:189
 msgid "Priority"
 msgstr "Độ quan trọng"
 
-#: Export/Pdf.php:274 js/Crm-FAT.js:6 js/Product.js:85
-#: js/LeadEditDialog.js:256 js/Crm-FAT-debug.js:1913 js/Crm-FAT-debug.js:3602
+#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:256
 msgid "Products"
 msgstr "Sản phẩm"
 
@@ -269,274 +244,169 @@ msgstr "cao"
 msgid "urgent"
 msgstr "khẩn cấp"
 
-#: js/AdminPanel.js:122 js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:194
-#: js/LeadGridDetailsPanel.js:227 js/Crm-FAT-debug.js:1292
-#: js/Crm-FAT-debug.js:1325 js/Crm-FAT-debug.js:2371
+#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
+#: js/LeadGridDetailsPanel.js:227
 msgid "Leadstates"
 msgstr "Trạng thái đầu mối"
 
-#: js/AdminPanel.js:126 js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:216
-#: js/Crm-FAT-debug.js:1314 js/Crm-FAT-debug.js:2375
+#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
 msgid "Leadtypes"
 msgstr "Kiểu đầu mối"
 
-#: js/AdminPanel.js:130 js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:205
-#: js/Crm-FAT-debug.js:1303 js/Crm-FAT-debug.js:2379
+#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
 msgid "Leadsources"
 msgstr "Nguồn đầu mối"
 
-#: js/AdminPanel.js:138 js/Crm-FAT.js:6 js/Crm-FAT-debug.js:2387
+#: js/AdminPanel.js:138
 msgid "Defaults"
 msgstr "Mặc định"
 
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:389
-msgid "Quick search"
-msgstr ""
-
-#: js/Crm-FAT.js:6 js/Model.js:106 js/Crm-FAT-debug.js:391
-#: js/Crm-FAT-debug.js:978 js/LeadGridPanel.js:119
-msgid "Lead name"
-msgstr "Tên đầu mối"
-
-#: js/Crm-FAT.js:6 js/Model.js:111 js/Crm-FAT-debug.js:396
-msgid "Last Modified Time"
-msgstr "Thời gian sửa lần cuối"
-
-#: js/Crm-FAT.js:6 js/Model.js:112 js/Crm-FAT-debug.js:397
-msgid "Last Modified By"
-msgstr "Sửa lần cuối bởi"
-
-#: js/Crm-FAT.js:6 js/Model.js:113 js/Crm-FAT-debug.js:398
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/Crm-FAT.js:6 js/Model.js:114 js/Crm-FAT-debug.js:399
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:615 js/LinkGridPanel.js:34
-msgid "Add new {0}"
-msgstr "Thêm mới {0}"
-
-#: js/Crm-FAT.js:6 js/Product.js:185 js/Crm-FAT-debug.js:637
-#: js/Crm-FAT-debug.js:3702 js/LinkGridPanel.js:56
-msgid "Unlink {0}"
-msgstr "Ngừng liên kết {0}"
-
-#: js/Crm-FAT.js:6 js/Product.js:186 js/Crm-FAT-debug.js:638
-#: js/Crm-FAT-debug.js:3703 js/LinkGridPanel.js:57
-msgid "Unlink selected {0}"
-msgstr "Ngừng liên kết phần chọn {0}"
-
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:653 js/LinkGridPanel.js:72
-msgid "Edit {0}"
-msgstr "Sửa {0}"
-
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:654 js/LinkGridPanel.js:73
-msgid "Edit selected {0}"
-msgstr "Sửa phần chọn {0}"
-
-#: js/Crm-FAT.js:6 js/LeadGridContactFilter.js:47 js/Crm-FAT-debug.js:823
-msgid "Contact"
-msgstr "Liên hệ"
-
-#: js/Crm-FAT.js:6 js/LeadGridContactFilter.js:54 js/Crm-FAT-debug.js:830
-msgid "CRM Role"
-msgstr "Vai trò quan hệ khách hàng"
-
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:976 js/LeadGridPanel.js:117
-msgid "Lead id"
-msgstr "Mã đầu mối"
-
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:977 js/LeadGridPanel.js:118
-msgid "Tags"
-msgstr "Thẻ"
-
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:985 js/LeadGridPanel.js:126
-msgid "Probable Turnover"
-msgstr "Có thể bỏ qua"
-
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:1027 js/LeadGridPanel.js:168
-msgid "Export Lead"
-msgstr "Xuất dữ liệu đầu mối"
-
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:1036 js/LeadGridPanel.js:177
-msgid "Export as PDF"
-msgstr "Xuất dạng PDF"
-
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:1043 js/LeadGridPanel.js:184
-msgid "Export as CSV"
-msgstr "Xuất dạng CSV"
-
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:1050 js/LeadGridPanel.js:191
-msgid "Export as ODS"
-msgstr "Xuất dạng ODS"
-
-#: js/Crm-FAT.js:6 js/Crm-FAT-debug.js:1057 js/LeadGridPanel.js:198
-msgid "Export as XLS"
-msgstr "Xuất dạng XLS"
-
-#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:48 js/Crm-FAT-debug.js:1146
-#: js/Crm-FAT-debug.js:3355 js/Contact.js:245
-msgid "Phone"
-msgstr "Điện thoại"
-
-#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:51 js/Crm-FAT-debug.js:1149
-msgid "Mobile"
-msgstr "Điện thoại"
-
-#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:54 js/Crm-FAT-debug.js:1152
-msgid "Fax"
-msgstr "Fax"
-
-#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:57 js/Crm-FAT-debug.js:1155
-msgid "E-Mail"
-msgstr "Email"
-
-#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:60 js/Crm-FAT-debug.js:1158
-msgid "Web"
-msgstr "Web"
-
-#: js/Crm-FAT.js:6 js/Task.js:218 js/LeadGridDetailsPanel.js:439
-#: js/Crm-FAT-debug.js:1538 js/Crm-FAT-debug.js:3980
-msgid "Status"
-msgstr "Trạng thái"
-
-#: js/Crm-FAT.js:6 js/LeadGridDetailsPanel.js:449 js/LeadEditDialog.js:407
-#: js/Crm-FAT-debug.js:1548 js/Crm-FAT-debug.js:2061
-msgid "Estimated end"
-msgstr "Dự kiến thời gian kết thúc"
-
-#: js/Crm-FAT.js:6 js/LeadEditDialog.js:246 js/Crm-FAT-debug.js:1903
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
-msgstr "Bạn không có quyền chạy ứng dụng Công việc hoặc nó chưa được kích hoạt"
-
-#: js/Crm-FAT.js:6 js/LeadEditDialog.js:257 js/Crm-FAT-debug.js:1914
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
-msgstr "Bạn không có quyền chạy ứng dụng Bán hàng hoặc nó chưa được kích hoạt"
-
-#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:73 js/Model.js:50
-#: js/LeadEditDialog.js:274 js/Crm-FAT-debug.js:335 js/Crm-FAT-debug.js:1928
-#: js/Crm-FAT-debug.js:2222
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "one: Đầu mối\nother: Đầu mối khác"
-
-#: js/Crm-FAT.js:6 js/LeadEditDialog.js:301 js/Crm-FAT-debug.js:1955
-msgid "Enter short name"
-msgstr "Nhâp tên ngắn"
-
-#: js/Crm-FAT.js:6 js/LeadEditDialog.js:385 js/Crm-FAT-debug.js:2039
-msgid "Expected turnover"
-msgstr "Doanh số mong đợi"
-
-#: js/Crm-FAT.js:6 js/Product.js:139 js/LeadEditDialog.js:439
-#: js/Crm-FAT-debug.js:2093 js/Crm-FAT-debug.js:3656
-msgid "Description"
-msgstr "Mô tả"
-
-#: js/Crm-FAT.js:6 js/LeadEditDialog.js:453 js/Crm-FAT-debug.js:2107
-msgid "Enter description"
-msgstr "Nhập mô tả"
-
-#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:31 js/Crm-FAT-debug.js:2180
-msgid "Please choose the Lead to add the contacts to"
-msgstr "Xin chọn đầu mối để thêm liên lạc"
-
-#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:36 js/Crm-FAT-debug.js:2185
-msgid "Please select the attenders' role"
-msgstr "Chọn vai trò người tham gia"
-
-#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:74 js/Crm-FAT-debug.js:2223
-msgid "Select Lead"
-msgstr "Chọn đầu mối"
-
-#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:78 js/Crm-FAT-debug.js:2227
-#: js/Crm-FAT-debug.js:3362 js/Contact.js:252 Controller/Lead.php:188
-msgid "Role"
-msgstr "Vai trò"
-
-#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:79 js/Crm-FAT-debug.js:2228
-msgid "Select Role"
-msgstr "Chọn vai trò"
-
-#: js/Crm-FAT.js:6 js/AddToLeadPanel.js:93 js/Crm-FAT-debug.js:2242
-msgid "Adding {0} contacts to lead"
-msgstr "Thêm {0} liên lạc vào đầu mối"
-
-#: js/LeadType.js:29 js/Crm-FAT-debug.js:3001
+#: js/LeadType.js:29
 msgid "Lead Type"
 msgid_plural "Lead Types"
 msgstr[0] "one: Loại đầu mối\nother: Loại đầu mối"
 
-#: js/LeadType.js:134 js/Crm-FAT-debug.js:3106
+#: js/LeadType.js:134
 msgid "Add a Leadtype..."
 msgstr "Thêm loại đầu mối"
 
-#: js/Task.js:109 js/Crm-FAT-debug.js:3871
+#: js/AddToLeadPanel.js:31
+msgid "Please choose the Lead to add the contacts to"
+msgstr "Xin chọn đầu mối để thêm liên lạc"
+
+#: js/AddToLeadPanel.js:36
+msgid "Please select the attenders' role"
+msgstr "Chọn vai trò người tham gia"
+
+#: js/AddToLeadPanel.js:73 js/Model.js:50 js/LeadEditDialog.js:274
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "one: Đầu mối\nother: Đầu mối khác"
+
+#: js/AddToLeadPanel.js:74
+msgid "Select Lead"
+msgstr "Chọn đầu mối"
+
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:188
+msgid "Role"
+msgstr "Vai trò"
+
+#: js/AddToLeadPanel.js:79
+msgid "Select Role"
+msgstr "Chọn vai trò"
+
+#: js/AddToLeadPanel.js:93
+msgid "Adding {0} contacts to lead"
+msgstr "Thêm {0} liên lạc vào đầu mối"
+
+#: js/Task.js:109
 msgid "No Tasks to display"
 msgstr "Chưa có việc gì"
 
-#: js/Task.js:168 js/Crm-FAT-debug.js:3930
+#: js/Task.js:168
 msgid "Summary"
 msgstr "Tóm tắt"
 
-#: js/Task.js:172 js/Crm-FAT-debug.js:3934
+#: js/Task.js:172
 msgid "Add a task..."
 msgstr "Thêm 1 việc..."
 
-#: js/Task.js:205 js/Crm-FAT-debug.js:3967
+#: js/Task.js:205
 msgid "Percent"
 msgstr "Phần trăm"
 
-#: js/LeadState.js:32 js/Crm-FAT-debug.js:2515
+#: js/Task.js:218 js/LeadGridDetailsPanel.js:439
+msgid "Status"
+msgstr "Trạng thái"
+
+#: js/LeadState.js:32
 msgid "Lead State"
 msgid_plural "Lead States"
 msgstr[0] "one: Trạng thái đầu mối\nother: Trạng thái đầu mối"
 
-#: js/LeadState.js:166 js/Crm-FAT-debug.js:2649
+#: js/LeadState.js:166
 msgid "Add a Leadstate..."
 msgstr "Thêm 1 trạng thái đầu mối"
 
-#: js/LeadStateFilterModel.js:37 js/Crm-FAT-debug.js:2716
+#: js/LeadGridContactFilter.js:47
+msgid "Contact"
+msgstr "Liên hệ"
+
+#: js/LeadGridContactFilter.js:54
+msgid "CRM Role"
+msgstr "Vai trò quan hệ khách hàng"
+
+#: js/LeadStateFilterModel.js:37
 msgid "Show closed"
 msgstr "Hiển thị đã bị đóng"
 
-#: js/Product.js:134 js/Crm-FAT-debug.js:3651
+#: js/Product.js:134
 msgid "Product"
 msgstr "Sản phẩm"
 
-#: js/Product.js:146 js/Crm-FAT-debug.js:3663
+#: js/Product.js:139 js/LeadEditDialog.js:439
+msgid "Description"
+msgstr "Mô tả"
+
+#: js/Product.js:146
 msgid "Price"
 msgstr "Giá"
 
-#: js/Product.js:158 js/Crm-FAT-debug.js:3675
+#: js/Product.js:158
 msgid "Quantity"
 msgstr "Số lượng"
 
-#: js/Product.js:216 js/Crm-FAT-debug.js:3733
+#: js/Product.js:185 js/LinkGridPanel.js:56
+msgid "Unlink {0}"
+msgstr "Ngừng liên kết {0}"
+
+#: js/Product.js:186 js/LinkGridPanel.js:57
+msgid "Unlink selected {0}"
+msgstr "Ngừng liên kết phần chọn {0}"
+
+#: js/Product.js:216
 msgid "Search for Products to add ..."
 msgstr "Tìm sản phẩm để thêm..."
 
-#: js/LeadSource.js:29 js/Crm-FAT-debug.js:2861
+#: js/LeadGridDetailsPanel.js:48 js/Contact.js:245
+msgid "Phone"
+msgstr "Điện thoại"
+
+#: js/LeadGridDetailsPanel.js:51
+msgid "Mobile"
+msgstr "Điện thoại"
+
+#: js/LeadGridDetailsPanel.js:54
+msgid "Fax"
+msgstr "Fax"
+
+#: js/LeadGridDetailsPanel.js:57
+msgid "E-Mail"
+msgstr "Email"
+
+#: js/LeadGridDetailsPanel.js:60
+msgid "Web"
+msgstr "Web"
+
+#: js/LeadGridDetailsPanel.js:449 js/LeadEditDialog.js:407
+msgid "Estimated end"
+msgstr "Dự kiến thời gian kết thúc"
+
+#: js/LeadSource.js:29
 msgid "Lead Source"
 msgid_plural "Lead Sources"
 msgstr[0] "one: Nguồn đầu mối\nother: Nguồn đầu mối"
 
-#: js/LeadSource.js:136 js/Crm-FAT-debug.js:2968
+#: js/LeadSource.js:136
 msgid "Add a Leadsource..."
 msgstr "Thêm 1 nguồn đầu mối"
 
-#: js/Model.js:54 js/Crm-FAT-debug.js:339
+#: js/Model.js:54
 msgid "lead list"
 msgid_plural "lead lists"
 msgstr[0] "one: danh sách lãnh đạo\nother: danh sách lãnh đạo"
 
-#: js/Model.js:54 js/Crm-FAT-debug.js:339
+#: js/Model.js:54
 msgid "lead lists"
 msgstr "danh sách lãnh đạo"
 
@@ -544,51 +414,139 @@ msgstr "danh sách lãnh đạo"
 msgid "Quick Search"
 msgstr "Tìm nhanh"
 
-#: js/Model.js:153 js/Crm-FAT-debug.js:438
+#: js/Model.js:106 js/LeadGridPanel.js:119
+msgid "Lead name"
+msgstr "Tên đầu mối"
+
+#: js/Model.js:111
+msgid "Last Modified Time"
+msgstr "Thời gian sửa lần cuối"
+
+#: js/Model.js:112
+msgid "Last Modified By"
+msgstr "Sửa lần cuối bởi"
+
+#: js/Model.js:113
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/Model.js:114
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/Model.js:153
 msgid "Settings"
 msgid_plural "Settings"
 msgstr[0] "one: Thiết lập\nother: Thiết lập"
 
-#: js/Model.js:156 js/Crm-FAT-debug.js:442
+#: js/Model.js:156
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "one: Danh sách biểu ghi\nother: Danh sách biểu ghi"
 
-#: js/Crm-FAT-debug.js:481 js/Crm.js:24
-msgid "New Lead"
-msgstr "Đầu mối mới"
+#: js/LeadEditDialog.js:246
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr "Bạn không có quyền chạy ứng dụng Công việc hoặc nó chưa được kích hoạt"
 
-#: js/Crm-FAT-debug.js:3272 js/Contact.js:162
+#: js/LeadEditDialog.js:257
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr "Bạn không có quyền chạy ứng dụng Bán hàng hoặc nó chưa được kích hoạt"
+
+#: js/LeadEditDialog.js:301
+msgid "Enter short name"
+msgstr "Nhâp tên ngắn"
+
+#: js/LeadEditDialog.js:385
+msgid "Expected turnover"
+msgstr "Doanh số mong đợi"
+
+#: js/LeadEditDialog.js:453
+msgid "Enter description"
+msgstr "Nhập mô tả"
+
+#: js/Contact.js:162
 msgid "Change type to Customer"
 msgstr "Đổi loại khách hàng"
 
-#: js/Crm-FAT-debug.js:3282 js/Contact.js:172
+#: js/Contact.js:172
 msgid "Change type to Responsible"
 msgstr "Thay đổi loại trách nhiệm"
 
-#: js/Crm-FAT-debug.js:3292 js/Contact.js:182
+#: js/Contact.js:182
 msgid "Change type to Partner"
 msgstr "Thay đổi loại đối tác"
 
-#: js/Crm-FAT-debug.js:3303 js/Contact.js:193
+#: js/Contact.js:193
 msgid "Change contact type"
 msgstr "Thay đổi kiểu liên lạc"
 
-#: js/Crm-FAT-debug.js:3315 js/Contact.js:205
+#: js/Contact.js:205
 msgid "Search for Contacts to add ..."
 msgstr "Tìm kiếm liên lạc để thêm..."
 
-#: js/Crm-FAT-debug.js:3332 js/Contact.js:222
+#: js/Contact.js:222
 msgid "Name"
 msgstr "Tên"
 
-#: js/Crm-FAT-debug.js:3352 js/Contact.js:242
+#: js/Contact.js:242
 msgid "Data"
 msgstr "Dữ liệu"
 
-#: js/Crm-FAT-debug.js:3356 js/Contact.js:246
+#: js/Contact.js:246
 msgid "Cellphone"
 msgstr "Số cầm tay"
+
+#: js/LinkGridPanel.js:34
+msgid "Add new {0}"
+msgstr "Thêm mới {0}"
+
+#: js/LinkGridPanel.js:72
+msgid "Edit {0}"
+msgstr "Sửa {0}"
+
+#: js/LinkGridPanel.js:73
+msgid "Edit selected {0}"
+msgstr "Sửa phần chọn {0}"
+
+#: js/LeadGridPanel.js:117
+msgid "Lead id"
+msgstr "Mã đầu mối"
+
+#: js/LeadGridPanel.js:118
+msgid "Tags"
+msgstr "Thẻ"
+
+#: js/LeadGridPanel.js:126
+msgid "Probable Turnover"
+msgstr "Có thể bỏ qua"
+
+#: js/LeadGridPanel.js:168
+msgid "Export Lead"
+msgstr "Xuất dữ liệu đầu mối"
+
+#: js/LeadGridPanel.js:177
+msgid "Export as PDF"
+msgstr "Xuất dạng PDF"
+
+#: js/LeadGridPanel.js:184
+msgid "Export as CSV"
+msgstr "Xuất dạng CSV"
+
+#: js/LeadGridPanel.js:191
+msgid "Export as ODS"
+msgstr "Xuất dạng ODS"
+
+#: js/LeadGridPanel.js:198
+msgid "Export as XLS"
+msgstr "Xuất dạng XLS"
+
+#: js/Crm.js:24
+msgid "New Lead"
+msgstr "Đầu mối mới"
 
 #: Controller/Lead.php:187
 msgid "State"

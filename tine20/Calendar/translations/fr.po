@@ -399,23 +399,23 @@ msgstr "Alarme"
 msgid "Minutes before the event starts"
 msgstr "Minutes avant le début de l'événement"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "Never"
 msgstr "Jamais"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On invitation and cancellation only"
 msgstr "Sur invitation et annulation uniquement"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On time changes"
 msgstr "Sur modification de la date / heure"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On all updates but attendee responses"
 msgstr "Sur toutes les mises à jour sauf réponse d'un participant"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On attendee responses too"
 msgstr "Sur toutes les mises à jour y compris réponse d'un participant"
 

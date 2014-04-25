@@ -396,23 +396,23 @@ msgstr "Thời gian nhắc việc chuẩn"
 msgid "Minutes before the event starts"
 msgstr "Số phút trước khi sự kiện xảy ra"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "Never"
 msgstr "Không bao giờ"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On invitation and cancellation only"
 msgstr "Chỉ khi có lời mời và hủy bỏ"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On time changes"
 msgstr "Chỉ khi thời gian thay đổi"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On all updates but attendee responses"
 msgstr "Khi có mọi cập nhật trừ trả lời của người tham gia"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On attendee responses too"
 msgstr "Cả khi người tham gia trả lời"
 

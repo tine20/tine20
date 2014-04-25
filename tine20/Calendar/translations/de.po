@@ -406,23 +406,23 @@ msgstr "Standardalarmzeit"
 msgid "Minutes before the event starts"
 msgstr "Minuten bevor der Termin beginnt"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "Never"
 msgstr "Nie"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On invitation and cancellation only"
 msgstr "Nur bei Einladung oder Absage"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On time changes"
 msgstr "Bei Zeitänderungen"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On all updates but attendee responses"
 msgstr "Bei allen Änderungen außer Teilnehmer-Anworten"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On attendee responses too"
 msgstr "Auch bei Teilnehmer-Antworten"
 

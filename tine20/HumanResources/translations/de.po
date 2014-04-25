@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 12:03+0000\n"
+"PO-Revision-Date: 2014-04-25 12:56+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -40,13 +40,11 @@ msgstr "Negativer Zeitraum"
 msgid "The start date of the contract must be before the end date!"
 msgstr "Der Anfang des Vertrages muss vor dem Ende sein!"
 
-#: Exception/NoContract.php:26 js/HumanResources-FAT-debug.js:467
-#: js/HumanResources-FAT.js:5
+#: Exception/NoContract.php:26
 msgid "No contract could be found."
 msgstr "Es  konnte kein Vertrag gefunden werden."
 
-#: Exception/NoContract.php:31 js/HumanResources-FAT-debug.js:468
-#: js/HumanResources-FAT.js:5
+#: Exception/NoContract.php:31
 msgid "Please create a contract for this employee!"
 msgstr "Bitte erstellen Sie einen Vertrag für diesen Mitarbeiter!"
 
@@ -66,6 +64,14 @@ msgstr "Nicht erlaubt!"
 msgid ""
 "It's only allowed to book remaining vacation days from years in the past!"
 msgstr "Es ist nur erlaubt, Resturlaub aus vergangenen Jahren zu buchen!"
+
+#: Exception/NeedsYear.php:26
+msgid "No or no valid year given"
+msgstr "Kein oder kein valides Jahr angegeben"
+
+#: Exception/NeedsYear.php:31
+msgid "Please use a valid year!"
+msgstr "Bitte geben Sie ein korrektes Jahr an!"
 
 #: Exception/NoCurrentContract.php:33
 msgid "No current contract!"
@@ -100,8 +106,6 @@ msgid "You do not have admin rights on HumanResources"
 msgstr "Sie haben keine Administratorenrechte am Modul Human Ressources"
 
 #: Model/Contract.php:33 js/ContractGridPanel.js:42
-#: js/HumanResources-FAT-debug.js:236 js/HumanResources-FAT-debug.js:1792
-#: js/HumanResources-FAT-debug.js:2021 js/HumanResources-FAT.js:5
 #: js/ContractEditDialog.js:210 js/ContractEditDialog.js:223
 msgid "Contract"
 msgid_plural "Contracts"
@@ -110,35 +114,25 @@ msgstr[1] "Verträge"
 
 #: Model/Contract.php:49 Model/FreeTime.php:49 Model/Employee.php:35
 #: Model/CostCenter.php:50 js/EmployeeEditDialog.js:185
-#: js/EmployeeEditDialog.js:198 js/HumanResources-FAT-debug.js:72
-#: js/HumanResources-FAT-debug.js:990 js/HumanResources-FAT-debug.js:1003
-#: js/HumanResources-FAT-debug.js:1641 js/HumanResources-FAT-debug.js:1782
-#: js/HumanResources-FAT-debug.js:2197 js/HumanResources-FAT-debug.js:2347
-#: js/FreeTimeEmployeeFilter.js:31 js/HumanResources-FAT.js:5
+#: js/EmployeeEditDialog.js:198 js/FreeTimeEmployeeFilter.js:31
 msgid "Employee"
 msgid_plural "Employees"
 msgstr[0] "Mitarbeiter"
 msgstr[1] "Mitarbeiter"
 
-#: Model/Contract.php:61 Model/CostCenter.php:72
-#: js/HumanResources-FAT-debug.js:2105 js/HumanResources-FAT.js:5
-#: js/ContractEditDialog.js:228
+#: Model/Contract.php:61 Model/CostCenter.php:72 js/ContractEditDialog.js:228
 msgid "Start Date"
 msgstr "Anfang"
 
-#: Model/Contract.php:71 js/HumanResources-FAT-debug.js:2108
-#: js/HumanResources-FAT.js:5 js/ContractEditDialog.js:229
+#: Model/Contract.php:71 js/ContractEditDialog.js:229
 msgid "End Date"
 msgstr "Ende"
 
-#: Model/Contract.php:77 js/HumanResources-FAT-debug.js:2094
-#: js/HumanResources-FAT.js:5 js/FreeTimeGridPanel.js:76
-#: js/FreeTimeGridPanel.js:77
+#: Model/Contract.php:77 js/FreeTimeGridPanel.js:76 js/FreeTimeGridPanel.js:77
 msgid "Vacation Days"
 msgstr "Urlaubstage"
 
-#: Model/Contract.php:85 js/HumanResources-FAT-debug.js:2111
-#: js/HumanResources-FAT.js:5 js/ContractEditDialog.js:240
+#: Model/Contract.php:85 js/ContractEditDialog.js:240
 msgid "Feast Calendar"
 msgstr "Feiertagskalender"
 
@@ -146,38 +140,28 @@ msgstr "Feiertagskalender"
 msgid "Workingtime"
 msgstr "Arbeitszeit"
 
-#: Model/FreeTime.php:34 js/HumanResources-FAT-debug.js:311
-#: js/HumanResources-FAT-debug.js:973 js/HumanResources-FAT.js:5
+#: Model/FreeTime.php:34
 msgid "Free Time"
 msgid_plural "Free Times"
 msgstr[0] "Freizeitanspruch"
 msgstr[1] "Freizeitansprüche"
 
 #: Model/FreeTime.php:60 Model/Employee.php:77 js/EmployeeEditDialog.js:216
-#: js/HumanResources-FAT-debug.js:119 js/HumanResources-FAT-debug.js:1021
-#: js/HumanResources-FAT.js:5
 msgid "Account"
 msgstr "Benutzerkonto"
 
 #: Model/FreeTime.php:71 Model/ExtraFreeTime.php:58
-#: js/HumanResources-FAT-debug.js:345 js/HumanResources-FAT-debug.js:1642
-#: js/HumanResources-FAT-debug.js:1847 js/HumanResources-FAT-debug.js:2348
-#: js/HumanResources-FAT.js:5 js/ExtraFreeTimeEditDialog.js:129
+#: js/ExtraFreeTimeEditDialog.js:129
 msgid "Type"
 msgstr "Typ"
 
 #: Model/FreeTime.php:77 Model/ExtraFreeTime.php:64 Model/Employee.php:83
-#: js/EmployeeEditDialog.js:428 js/HumanResources-FAT-debug.js:125
-#: js/HumanResources-FAT-debug.js:359 js/HumanResources-FAT-debug.js:1218
-#: js/HumanResources-FAT-debug.js:1904 js/HumanResources-FAT-debug.js:2351
-#: js/FreeTimeEditDialog.js:506 js/HumanResources-FAT.js:5
+#: js/EmployeeEditDialog.js:428 js/FreeTimeEditDialog.js:506
 #: js/ExtraFreeTimeEditDialog.js:154
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Model/FreeTime.php:82 js/HumanResources-FAT-debug.js:353
-#: js/HumanResources-FAT-debug.js:1855 js/HumanResources-FAT-debug.js:2349
-#: js/FreeTimeEditDialog.js:355 js/HumanResources-FAT.js:5
+#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:355
 msgid "Status"
 msgstr "Status"
 
@@ -193,11 +177,9 @@ msgstr "Letzter Tag"
 msgid "Days Count"
 msgstr "Anzahl der Tage"
 
-#: Model/FreeTime.php:102 js/HumanResources-FAT-debug.js:399
+#: Model/FreeTime.php:102
 msgid "Free Days"
-msgid_plural "Free Days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr "freie Tage"
 
 #: Model/ExtraFreeTime.php:33 js/AccountEditDialog.js:74
 #: js/ExtraFreeTimeEditDialog.js:99 js/ExtraFreeTimeEditDialog.js:111
@@ -220,13 +202,11 @@ msgid_plural "Personal accounts"
 msgstr[0] "Personalkonto"
 msgstr[1] "Personalkonten"
 
-#: Model/Account.php:52 js/HumanResources-FAT-debug.js:110
-#: js/HumanResources-FAT-debug.js:201 js/HumanResources-FAT-debug.js:274
-#: js/HumanResources-FAT-debug.js:343 js/HumanResources-FAT.js:5
+#: Model/Account.php:52
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: Model/Account.php:71
+#: Model/Account.php:71 js/AccountGridPanel.js:46
 msgid "Year"
 msgstr "Jahr"
 
@@ -235,7 +215,6 @@ msgid "Extra free times"
 msgstr "Sonderurlaub"
 
 #: Model/Employee.php:50 js/EmployeeEditDialog.js:383
-#: js/HumanResources-FAT-debug.js:1179 js/HumanResources-FAT.js:5
 msgid "Banking Information"
 msgstr "Bankverbindung"
 
@@ -248,13 +227,10 @@ msgid "Is employed"
 msgstr "Ist angestellt"
 
 #: Model/Employee.php:71 js/EmployeeEditDialog.js:204
-#: js/HumanResources-FAT-debug.js:744 js/HumanResources-FAT-debug.js:1009
-#: js/HumanResources-FAT.js:5
 msgid "Number"
 msgstr "Pers.-Nr."
 
 #: Model/Employee.php:87 js/EmployeeEditDialog.js:314
-#: js/HumanResources-FAT-debug.js:1118 js/HumanResources-FAT.js:5
 msgid "Country"
 msgstr "Land"
 
@@ -263,22 +239,18 @@ msgid "Germany"
 msgstr "Deutschland"
 
 #: Model/Employee.php:93 js/EmployeeEditDialog.js:317
-#: js/HumanResources-FAT-debug.js:1121 js/HumanResources-FAT.js:5
 msgid "Locality"
 msgstr "Ort"
 
 #: Model/Employee.php:98 js/EmployeeEditDialog.js:320
-#: js/HumanResources-FAT-debug.js:1124 js/HumanResources-FAT.js:5
 msgid "Postalcode"
 msgstr "Postleitzahl"
 
 #: Model/Employee.php:103 js/EmployeeEditDialog.js:323
-#: js/HumanResources-FAT-debug.js:1127 js/HumanResources-FAT.js:5
 msgid "Region"
 msgstr "Region"
 
 #: Model/Employee.php:108 js/EmployeeEditDialog.js:326
-#: js/HumanResources-FAT-debug.js:1130 js/HumanResources-FAT.js:5
 msgid "Street"
 msgstr "Straße"
 
@@ -287,107 +259,78 @@ msgid "Street 2"
 msgstr "Straße 2"
 
 #: Model/Employee.php:118 js/EmployeeEditDialog.js:332
-#: js/HumanResources-FAT-debug.js:1136 js/HumanResources-FAT.js:5
 msgid "E-Mail"
 msgstr "E-Mail"
 
 #: Model/Employee.php:123 js/EmployeeEditDialog.js:335
-#: js/HumanResources-FAT-debug.js:1139 js/HumanResources-FAT.js:5
 msgid "Telephone Number"
 msgstr "Telefonnummer"
 
 #: Model/Employee.php:128 js/EmployeeEditDialog.js:338
-#: js/HumanResources-FAT-debug.js:1142 js/HumanResources-FAT.js:5
 msgid "Cell Phone Number"
 msgstr "Handynummer"
 
 #: Model/Employee.php:133 js/EmployeeEditDialog.js:277
-#: js/HumanResources-FAT-debug.js:121 js/HumanResources-FAT-debug.js:764
-#: js/HumanResources-FAT-debug.js:1081 js/HumanResources-FAT.js:5
 msgid "Title"
 msgstr "Titel"
 
 #: Model/Employee.php:136 js/EmployeeEditDialog.js:269
-#: js/HumanResources-FAT-debug.js:124 js/HumanResources-FAT-debug.js:757
-#: js/HumanResources-FAT-debug.js:1073 js/HumanResources-FAT.js:5
 msgid "Salutation"
 msgstr "Anrede"
 
 #: Model/Employee.php:139 js/EmployeeEditDialog.js:290
-#: js/HumanResources-FAT-debug.js:123 js/HumanResources-FAT-debug.js:778
-#: js/HumanResources-FAT-debug.js:1094 js/HumanResources-FAT.js:5
 msgid "Last Name"
 msgstr "Nachname"
 
 #: Model/Employee.php:142 js/EmployeeEditDialog.js:281
-#: js/HumanResources-FAT-debug.js:120 js/HumanResources-FAT-debug.js:771
-#: js/HumanResources-FAT-debug.js:1085 js/HumanResources-FAT.js:5
 msgid "First Name"
 msgstr "Vorname"
 
-#: Model/Employee.php:145 js/HumanResources-FAT-debug.js:111
-#: js/HumanResources-FAT.js:5
+#: Model/Employee.php:145
 msgid "Employee name"
 msgstr "Name des Mitarbeiters"
 
 #: Model/Employee.php:150 js/EmployeeEditDialog.js:342
-#: js/HumanResources-FAT-debug.js:1146 js/HumanResources-FAT.js:5
 msgid "Birthday"
 msgstr "Geburtstag"
 
 #: Model/Employee.php:155 js/EmployeeEditDialog.js:392
-#: js/HumanResources-FAT-debug.js:1188 js/HumanResources-FAT.js:5
 msgid "Account Holder"
 msgstr "Kontoinhaber"
 
 #: Model/Employee.php:160 js/EmployeeEditDialog.js:395
-#: js/HumanResources-FAT-debug.js:1191 js/HumanResources-FAT.js:5
 msgid "Account Number"
 msgstr "Kontonummer"
 
 #: Model/Employee.php:178 js/EmployeeEditDialog.js:398
-#: js/HumanResources-FAT-debug.js:1194 js/HumanResources-FAT.js:5
 msgid "Bank Name"
 msgstr "Name der Bank"
 
 #: Model/Employee.php:183 js/EmployeeEditDialog.js:401
-#: js/HumanResources-FAT-debug.js:1197 js/HumanResources-FAT.js:5
 msgid "Code Number"
 msgstr "Bankleitzahl"
 
 #: Model/Employee.php:189 js/EmployeeEditDialog.js:359
-#: js/HumanResources-FAT-debug.js:116 js/HumanResources-FAT-debug.js:785
-#: js/HumanResources-FAT-debug.js:1163 js/HumanResources-FAT.js:5
 msgid "Employment begin"
 msgstr "Angestellt von"
 
 #: Model/Employee.php:194 js/EmployeeEditDialog.js:366
-#: js/HumanResources-FAT-debug.js:117 js/HumanResources-FAT-debug.js:792
-#: js/HumanResources-FAT-debug.js:1168 js/HumanResources-FAT.js:5
 msgid "Employment end"
 msgstr "Angestellt bis"
 
 #: Model/Employee.php:199 js/EmployeeEditDialog.js:131
-#: js/HumanResources-FAT-debug.js:799 js/HumanResources-FAT-debug.js:944
-#: js/HumanResources-FAT.js:5
 msgid "Supervisor"
 msgstr "Vorgesetzter"
 
 #: Model/Employee.php:210 js/EmployeeEditDialog.js:139
-#: js/HumanResources-FAT-debug.js:814 js/HumanResources-FAT-debug.js:951
-#: js/HumanResources-FAT.js:5
 msgid "Division"
 msgstr "Abteilung"
 
 #: Model/Employee.php:220 js/EmployeeEditDialog.js:146
-#: js/HumanResources-FAT-debug.js:126 js/HumanResources-FAT-debug.js:808
-#: js/HumanResources-FAT-debug.js:958 js/HumanResources-FAT.js:5
 msgid "Health Insurance"
 msgstr "Krankenkasse"
 
 #: Model/Employee.php:224 js/EmployeeEditDialog.js:370
-#: js/HumanResources-FAT-debug.js:122 js/HumanResources-FAT-debug.js:1171
-#: js/HumanResources-FAT.js:5
 msgid "Profession"
 msgstr "Beruf"
 
@@ -395,11 +338,9 @@ msgstr "Beruf"
 msgid "Position"
 msgstr "Position"
 
-#: Model/Employee.php:231 js/HumanResources-FAT-debug.js:240
+#: Model/Employee.php:231
 msgid "Contracts"
-msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr "Verträge"
 
 #: Model/Employee.php:244
 msgid "Cost Centers"
@@ -415,7 +356,7 @@ msgstr "Urlaub"
 msgid "Sickness"
 msgstr "Krankheit"
 
-#: Model/FreeDay.php:34 js/HumanResources-FAT-debug.js:396
+#: Model/FreeDay.php:34
 msgid "Free Day"
 msgid_plural "Free Days"
 msgstr[0] "freier Tag"
@@ -567,13 +508,11 @@ msgstr "Als ODS exportieren"
 msgid "Export as XLS"
 msgstr "Als XLS exportieren"
 
-#: js/AdminPanel.js:64 js/HumanResources-FAT-debug.js:2433
-#: js/HumanResources-FAT.js:5
+#: js/AdminPanel.js:64
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: js/AdminPanel.js:72 js/HumanResources-FAT-debug.js:2441
-#: js/HumanResources-FAT.js:5
+#: js/AdminPanel.js:72
 msgid "OK"
 msgstr "OK"
 
@@ -581,15 +520,11 @@ msgstr "OK"
 msgid "Please use the following format: MM-DD"
 msgstr "Bitte das folgende Format verwenden: MM-TT"
 
-#: js/AdminPanel.js:219 js/HumanResources-FAT-debug.js:2074
-#: js/HumanResources-FAT-debug.js:2569 js/HumanResources-FAT.js:5
-#: js/ContractEditDialog.js:233
+#: js/AdminPanel.js:219 js/ContractEditDialog.js:233
 msgid "Calendar"
 msgstr "Kalender"
 
-#: js/AdminPanel.js:220 js/HumanResources-FAT-debug.js:2075
-#: js/HumanResources-FAT-debug.js:2570 js/HumanResources-FAT.js:5
-#: js/ContractEditDialog.js:234
+#: js/AdminPanel.js:220 js/ContractEditDialog.js:234
 msgid "Calendars"
 msgstr "Kalender"
 
@@ -597,129 +532,30 @@ msgstr "Kalender"
 msgid "Account is disabled or deleted!"
 msgstr "Benutzer nicht mehr vorhanden!"
 
-#: js/EmployeeEditDialog.js:235 js/HumanResources-FAT-debug.js:1040
-#: js/HumanResources-FAT.js:5
+#: js/EmployeeEditDialog.js:235
 msgid "Apply contact data on form"
 msgstr "Wende Kontaktdaten auf dieses Formular an"
 
-#: js/EmployeeEditDialog.js:264 js/HumanResources-FAT-debug.js:751
-#: js/HumanResources-FAT-debug.js:1068 js/HumanResources-FAT.js:5
+#: js/EmployeeEditDialog.js:264
 msgid "Full Name"
 msgstr "Name"
 
-#: js/EmployeeEditDialog.js:304 js/HumanResources-FAT-debug.js:1108
-#: js/HumanResources-FAT.js:5
+#: js/EmployeeEditDialog.js:304
 msgid "Personal Information"
 msgstr "Persönliche Informationen"
 
-#: js/EmployeeEditDialog.js:329 js/HumanResources-FAT-debug.js:1133
-#: js/HumanResources-FAT.js:5
+#: js/EmployeeEditDialog.js:329
 msgid "Street2"
 msgstr "Straße 2"
 
-#: js/EmployeeEditDialog.js:350 js/HumanResources-FAT-debug.js:1154
-#: js/HumanResources-FAT.js:5
+#: js/EmployeeEditDialog.js:350
 msgid "Internal Information"
 msgstr "Interne Informationen"
 
-#: js/EmployeeEditDialog.js:442 js/HumanResources-FAT-debug.js:1232
-#: js/HumanResources-FAT-debug.js:1918 js/FreeTimeEditDialog.js:520
-#: js/HumanResources-FAT.js:5 js/ExtraFreeTimeEditDialog.js:168
+#: js/EmployeeEditDialog.js:442 js/FreeTimeEditDialog.js:520
+#: js/ExtraFreeTimeEditDialog.js:168
 msgid "Enter description"
 msgstr "Geben Sie eine Beschreibung an"
-
-#: js/HumanResources-FAT-debug.js:76
-msgid "Employees"
-msgid_plural "Employees"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/HumanResources-FAT-debug.js:113 js/HumanResources-FAT-debug.js:360
-#: js/HumanResources-FAT.js:5
-msgid "Last Modified Time"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:114 js/HumanResources-FAT-debug.js:361
-#: js/HumanResources-FAT.js:5
-msgid "Last Modified By"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:115 js/HumanResources-FAT-debug.js:362
-#: js/HumanResources-FAT.js:5
-msgid "Creation Time"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:118 js/HumanResources-FAT-debug.js:363
-#: js/HumanResources-FAT.js:5
-msgid "Created By"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:163 js/AccountEditDialog.js:135
-#: js/Models.js:23 js/ContractEditDialog.js:248
-msgid "Working Time"
-msgid_plural "Working Times"
-msgstr[0] "Arbeitszeitmodell"
-msgstr[1] "Arbeitszeitmodelle"
-
-#: js/HumanResources-FAT-debug.js:167
-msgid "Working Times"
-msgid_plural "Working Times"
-msgstr[0] "Arbeitszeitmodelle"
-msgstr[1] "Arbeitszeitmodelle"
-
-#: js/HumanResources-FAT-debug.js:499 js/HumanResources-FAT.js:5
-msgid "Human Resources"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:741 js/HumanResources-FAT-debug.js:1640
-#: js/HumanResources-FAT.js:5
-msgid "Tags"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:1320 js/HumanResources-FAT.js:5
-#: js/DatePicker.js:102
-msgid "WK"
-msgstr "KW"
-
-#: js/HumanResources-FAT-debug.js:1341 js/HumanResources-FAT.js:5
-#: js/DatePicker.js:163
-msgid "Loading calendar data..."
-msgstr "Lade Kalender.."
-
-#: js/HumanResources-FAT-debug.js:1643 js/HumanResources-FAT-debug.js:2350
-#: js/HumanResources-FAT.js:5
-msgid "Date Start"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:1644 js/HumanResources-FAT.js:5
-msgid "Remark"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:1818 js/HumanResources-FAT-debug.js:1830
-#: js/HumanResources-FAT.js:5
-msgid "FreeTime"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:1862 js/HumanResources-FAT.js:5
-msgid "First Day Length"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:1870 js/HumanResources-FAT.js:5
-msgid "Last Day Length"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:1887 js/FreeTimeEditDialog.js:487
-#: js/HumanResources-FAT.js:5
-msgid "Select Days"
-msgstr "Wählen Sie die Tage"
-
-#: js/HumanResources-FAT-debug.js:2091 js/HumanResources-FAT.js:5
-msgid "Working Time Model"
-msgstr ""
-
-#: js/HumanResources-FAT-debug.js:2099 js/HumanResources-FAT.js:5
-msgid "Cost Centre"
-msgstr ""
 
 #: js/FreeTimeEditDialog.js:158
 msgid "Edit {0} \"{1}\""
@@ -749,15 +585,35 @@ msgstr "Kein Tag gewählt"
 msgid "Remaining"
 msgstr "Übrig"
 
+#: js/FreeTimeEditDialog.js:487
+msgid "Select Days"
+msgstr "Wählen Sie die Tage"
+
 #: js/AccountGridPanel.js:32
 msgid "Book remaining vacation"
 msgstr "Urlaub vom letzten Jahr als Sonderurlaub buchen"
 
-#: js/AccountGridPanel.js:79
+#: js/AccountGridPanel.js:46
+msgid "Please enter the year you want to create accounts for:"
+msgstr "Bitte geben Sie das Jahr an, für das Personalkonten erzeugt werden sollen:"
+
+#: js/AccountGridPanel.js:68
+msgid "Accounts has been created"
+msgstr ""
+
+#: js/AccountGridPanel.js:69
+msgid "{0} accounts for the year {1} has been created successfully!"
+msgstr ""
+
+#: js/AccountGridPanel.js:80
+msgid "Create new accounts"
+msgstr "Personalkonten anlegen"
+
+#: js/AccountGridPanel.js:134
 msgid "Booking has been successfull!"
 msgstr "Buchung erfolgreich!"
 
-#: js/AccountGridPanel.js:80
+#: js/AccountGridPanel.js:135
 msgid ""
 "The remaining vacation days of the selected accounts have been booked "
 "successfully!"
@@ -786,6 +642,14 @@ msgid ""
 "The unexcused sickness days could not be booked as vacation. There are not "
 "enough days left!"
 msgstr "Die unentschuldigten Krankheitstage konnten nicht als Urlaub gebucht werden, da keine Urlaubstage mehr übrig sind!"
+
+#: js/DatePicker.js:102
+msgid "WK"
+msgstr "KW"
+
+#: js/DatePicker.js:163
+msgid "Loading calendar data..."
+msgstr "Lade Kalender.."
 
 #: js/DatePicker.js:387
 msgid "Year can not be changed"
@@ -847,6 +711,12 @@ msgstr "Entschuldigte Krankheitstage"
 #: js/AccountEditDialog.js:128
 msgid "Unexcused sickness days"
 msgstr "Unentschuldigte Krankheitstage"
+
+#: js/AccountEditDialog.js:135 js/Models.js:23 js/ContractEditDialog.js:248
+msgid "Working Time"
+msgid_plural "Working Times"
+msgstr[0] "Arbeitszeitmodell"
+msgstr[1] "Arbeitszeitmodelle"
 
 #: js/AccountEditDialog.js:141
 msgid "Days to work"

@@ -274,7 +274,7 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
         }
         
         $event = new Calendar_Model_Event(array(
-            'summary'     => 'Wakeup',
+            'summary'     => 'Feast Day',
             'dtstart'     => $dtstart->format('Y-m-d H:i:s'),
             'dtend'       => $dtend->format('Y-m-d H:i:s'),
             'description' => Tinebase_Record_Abstract::generateUID(10),

@@ -399,23 +399,23 @@ msgstr "Hora do Alarme Padrão"
 msgid "Minutes before the event starts"
 msgstr "Minutos antes do evento começar"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "Never"
 msgstr "Nunca"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On invitation and cancellation only"
 msgstr "A convite e cancelamento somente"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On time changes"
 msgstr "Mudanças na hora"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On all updates but attendee responses"
 msgstr "Em todas as atualizações mas respostas dos participantes"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On attendee responses too"
 msgstr "Em respostas dos participantes também"
 

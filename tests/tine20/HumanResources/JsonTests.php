@@ -751,11 +751,14 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $contract1->end_date = $employmentEnd;
             $contract1->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
             $contract1->vacation_days = 25;
-        
+            $contract1->feast_calendar_id = $this->_getFeastCalendar()->getId();
+            
             $recordData = $employee->toArray();
             $recordData['contracts'] = array($contract1->toArray());
             $recordData = $this->_json->saveEmployee($recordData);
 
+            $this->_createFeastDay(Tinebase_DateTime::now()->setDate(2014,1,6));
+            
             $accountController = HumanResources_Controller_Account::getInstance();
             
             // should not be created, exist already
@@ -770,7 +773,11 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $this->assertEquals(0, count($res['sicknessDays']));
             $this->assertEquals(8, count($res['excludeDates']));
             $this->assertEquals(NULL, $res['ownFreeDays']);
-            $this->assertEquals(0, count($res['feastDays']));
+            
+            $this->assertEquals(1, count($res['feastDays']));
+            $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $res['feastDays'][0]->getTimezone()->getName());
+            $this->assertEquals('2014-01-06 00:00:00', $res['feastDays'][0]->toString());
+            
             $this->assertEquals(1, count($res['contracts']));
             $this->assertEquals($recordData['id'], $res['employee']['id']);
             $this->assertEquals('2014-01-02 00:00:00', $res['firstDay']->toString());

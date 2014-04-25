@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 12:02+0000\n"
+"PO-Revision-Date: 2014-04-25 12:48+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -46,8 +46,7 @@ msgid "Create or update shared timesheet favorites"
 msgstr "Utwórz albo uaktualnij wspólne ulubione śledzenia czasu"
 
 #: Model/Timeaccount.php:43 Model/Timeaccount.php:47
-#: js/TimeaccountEditDialog.js:125 js/Timetracker-FAT-debug.js:990
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:125
 msgid "Cost Center"
 msgstr "Centrum kosztów"
 
@@ -56,20 +55,17 @@ msgid "Timetracker"
 msgstr "Zliczanie czasu"
 
 #: Setup/setup.xml:81 js/TimeaccountEditDialog.js:90
-#: js/Timetracker-FAT-debug.js:632 js/Timetracker-FAT-debug.js:963
-#: js/TimeAccountBilledFilterModel.js:47 js/Timetracker-FAT.js:6
+#: js/TimeAccountBilledFilterModel.js:47
 msgid "not yet billed"
 msgstr "jeszcze nieprzeliczone"
 
 #: Setup/setup.xml:82 js/TimeaccountEditDialog.js:91
-#: js/Timetracker-FAT-debug.js:633 js/Timetracker-FAT-debug.js:964
-#: js/TimeAccountBilledFilterModel.js:48 js/Timetracker-FAT.js:6
+#: js/TimeAccountBilledFilterModel.js:48
 msgid "to bill"
 msgstr "przelicz"
 
 #: Setup/setup.xml:83 js/TimeaccountEditDialog.js:92
-#: js/Timetracker-FAT-debug.js:634 js/Timetracker-FAT-debug.js:965
-#: js/TimeAccountBilledFilterModel.js:49 js/Timetracker-FAT.js:6
+#: js/TimeAccountBilledFilterModel.js:49
 msgid "billed"
 msgstr "przeliczone"
 
@@ -117,71 +113,56 @@ msgstr "Użyj niniejszej konfiguracji podczas eksportu kart czasu pracy do forma
 msgid "default"
 msgstr "domyślnie"
 
-#: js/TimeaccountEditDialog.js:62 js/Timetracker-FAT-debug.js:935
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:62
 msgid "Unit"
 msgstr "Jednostka"
 
-#: js/TimeaccountEditDialog.js:66 js/Timetracker-FAT-debug.js:939
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:66
 msgid "Unit Price"
 msgstr "Cena jednostkowa"
 
-#: js/TimeaccountEditDialog.js:71 js/Timetracker-FAT-debug.js:795
-#: js/Timetracker-FAT-debug.js:944 js/Timetracker-FAT.js:6
-#: js/TimeaccountGridPanel.js:97
+#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:97
 msgid "Budget"
 msgstr "Budżet"
 
-#: js/TimeaccountEditDialog.js:74 js/Timetracker-FAT-debug.js:264
-#: js/Timetracker-FAT-debug.js:812 js/Timetracker-FAT-debug.js:947
-#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:119 js/Models.js:178
+#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:119
+#: js/Models.js:178
 msgid "Status"
 msgstr "Status"
 
-#: js/TimeaccountEditDialog.js:80 js/Timetracker-FAT-debug.js:242
-#: js/Timetracker-FAT-debug.js:574 js/Timetracker-FAT-debug.js:817
-#: js/Timetracker-FAT-debug.js:953 js/TimeAccountStatusFilterModel.js:46
-#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:124 js/Models.js:156
+#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
+#: js/TimeaccountGridPanel.js:124 js/Models.js:156
 msgid "closed"
 msgstr "zakończone"
 
-#: js/TimeaccountEditDialog.js:80 js/Timetracker-FAT-debug.js:574
-#: js/Timetracker-FAT-debug.js:816 js/Timetracker-FAT-debug.js:953
-#: js/TimeAccountStatusFilterModel.js:46 js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
 #: js/TimeaccountGridPanel.js:123
 msgid "open"
 msgstr "otwarte"
 
-#: js/TimeaccountEditDialog.js:82 js/Timetracker-FAT-debug.js:263
-#: js/Timetracker-FAT-debug.js:789 js/Timetracker-FAT-debug.js:955
-#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:91 js/Models.js:177
+#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:91
+#: js/Models.js:177
 msgid "Billed"
 msgstr "Przeliczone"
 
-#: js/TimeaccountEditDialog.js:100 js/Timetracker-FAT-debug.js:969
+#: js/TimeaccountEditDialog.js:100
 msgid "not cleared yet..."
 msgstr "jeszcze nieprzeliczone..."
 
 #: js/TimeaccountEditDialog.js:101 js/TimesheetEditDialog.js:221
-#: js/Timetracker-FAT-debug.js:970 js/Timetracker-FAT-debug.js:1806
-#: js/Timetracker-FAT.js:6
 msgid "Cleared In"
 msgstr "Przeliczone w"
 
-#: js/TimeaccountEditDialog.js:105 js/Timetracker-FAT-debug.js:269
-#: js/Timetracker-FAT-debug.js:807 js/Timetracker-FAT-debug.js:974
-#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:109 js/Models.js:184
+#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:109
+#: js/Models.js:184
 msgid "Booking deadline"
 msgstr "Ostateczny termin rezerwacji"
 
-#: js/TimeaccountEditDialog.js:113 js/Timetracker-FAT-debug.js:982
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:113
 msgid "none"
 msgstr "Brak"
 
-#: js/TimeaccountEditDialog.js:114 js/Timetracker-FAT-debug.js:983
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:114
 msgid "last week"
 msgstr "ubiegły tydzień"
 
@@ -194,361 +175,286 @@ msgstr ""
 msgid "Responsible person"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:151 js/Timetracker-FAT-debug.js:1003
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:151
 msgid "Timesheets are billable"
 msgstr "Karty czasu pracy gotowe do przeliczenia"
 
 #: js/TimeaccountEditDialog.js:169 js/TimesheetEditDialog.js:155
-#: js/Timetracker-FAT-debug.js:234 js/Timetracker-FAT-debug.js:1018
-#: js/Timetracker-FAT-debug.js:1740 js/Timetracker-FAT.js:6 js/Models.js:147
+#: js/Models.js:147
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "Konto godzin"
 msgstr[1] "konta godzin"
 msgstr[2] "konta godzin"
 
-#: js/TimeaccountEditDialog.js:185 js/Timetracker-FAT-debug.js:260
-#: js/Timetracker-FAT-debug.js:779 js/Timetracker-FAT-debug.js:1034
-#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:81 js/Models.js:174
+#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:81
+#: js/Models.js:174
 msgid "Number"
 msgstr "Numer"
 
-#: js/TimeaccountEditDialog.js:190 js/Timetracker-FAT-debug.js:261
-#: js/Timetracker-FAT-debug.js:784 js/Timetracker-FAT-debug.js:1039
-#: js/Timetracker-FAT.js:6 js/TimeaccountGridPanel.js:86 js/Models.js:175
+#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:86
+#: js/Models.js:175
 msgid "Title"
 msgstr "Tytuł"
 
 #: js/TimeaccountEditDialog.js:195 js/TimeaccountEditDialog.js:214
-#: js/TimesheetEditDialog.js:186 js/Timetracker-FAT-debug.js:183
-#: js/Timetracker-FAT-debug.js:262 js/Timetracker-FAT-debug.js:1044
-#: js/Timetracker-FAT-debug.js:1063 js/Timetracker-FAT-debug.js:1285
-#: js/Timetracker-FAT-debug.js:1433 js/Timetracker-FAT-debug.js:1771
-#: js/TimesheetGridPanel.js:86 js/TimesheetGridPanel.js:234
-#: js/Timetracker-FAT.js:6 js/Models.js:93 js/Models.js:176
+#: js/TimesheetEditDialog.js:186 js/TimesheetGridPanel.js:86
+#: js/TimesheetGridPanel.js:234 js/Models.js:93 js/Models.js:176
 msgid "Description"
 msgstr "Opis"
 
-#: js/TimeaccountEditDialog.js:228 js/Timetracker-FAT-debug.js:1077
+#: js/TimeaccountEditDialog.js:228
 msgid "Enter description"
 msgstr "Wprowadź opis"
 
-#: js/TimeaccountEditDialog.js:244 js/Timetracker-FAT-debug.js:1093
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:244
 msgid "Access"
 msgstr "Dostępność"
 
-#: js/TimeaccountEditDialog.js:267 js/Timetracker-FAT-debug.js:1116
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:267
 msgid "Book Own"
 msgstr "Zarezerwuj własne"
 
-#: js/TimeaccountEditDialog.js:269 js/Timetracker-FAT-debug.js:1118
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:269
 msgid "The grant to add Timesheets to this Timeaccount"
 msgstr "Uprawnienia do dodawania kart czasu pracy do konta godzin"
 
-#: js/TimeaccountEditDialog.js:273 js/Timetracker-FAT-debug.js:1122
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:273
 msgid "View All"
 msgstr "Pokaż wszystko"
 
-#: js/TimeaccountEditDialog.js:274 js/Timetracker-FAT-debug.js:1123
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:274
 msgid "The grant to view Timesheets of other users"
 msgstr "Uprawnienia do podglądu kart czasu pracy innych użytkowników"
 
-#: js/TimeaccountEditDialog.js:279 js/Timetracker-FAT-debug.js:1128
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:279
 msgid "Book All"
 msgstr "Zarezerwuj wszystkie"
 
-#: js/TimeaccountEditDialog.js:280 js/Timetracker-FAT-debug.js:1129
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:280
 msgid "The grant to add Timesheets for other users"
 msgstr "Uprawnienia do dodawania kart czasu pracy innych użytkowników"
 
-#: js/TimeaccountEditDialog.js:285 js/Timetracker-FAT-debug.js:1134
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:285
 msgid "Manage Clearing"
 msgstr "Edytuj przeliczalne"
 
-#: js/TimeaccountEditDialog.js:286 js/Timetracker-FAT-debug.js:1135
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:286
 msgid "The grant to manage clearing of Timesheets"
 msgstr "Uprawnienia do czyszczenia kart czasu pracy"
 
-#: js/TimeaccountEditDialog.js:291 js/Timetracker-FAT-debug.js:839
-#: js/Timetracker-FAT-debug.js:1140 js/Timetracker-FAT.js:6
-#: js/TimeaccountGridPanel.js:146
+#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:146
 msgid "Export"
 msgstr "Eksportuj"
 
-#: js/TimeaccountEditDialog.js:292 js/Timetracker-FAT-debug.js:1141
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:292
 msgid "The grant to export Timesheets of Timeaccount"
 msgstr "Uprawnienia do eksportu kart czasu pracy z konta godzin"
 
-#: js/TimeaccountEditDialog.js:297 js/Timetracker-FAT-debug.js:1146
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:297
 msgid "Manage All"
 msgstr "Edytuj wszystkie"
 
-#: js/TimeaccountEditDialog.js:298 js/Timetracker-FAT-debug.js:1147
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:298
 msgid "Includes all other grants"
 msgstr "Zawiera wszystkie inne uprawnienia"
 
-#: js/TimeaccountEditDialog.js:306 js/Timetracker-FAT-debug.js:1155
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountEditDialog.js:306
 msgid "Permissions"
 msgstr "Uprawnienia"
 
-#: js/TimesheetEditDialog.js:138 js/Timetracker-FAT-debug.js:141
-#: js/Timetracker-FAT-debug.js:1723 js/Timetracker-FAT.js:6 js/Models.js:50
+#: js/TimesheetEditDialog.js:138 js/Models.js:50
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "Karta czasu pracy"
 msgstr[1] "Karty czasu pracy"
 msgstr[2] "Karty czasu pracy"
 
-#: js/TimesheetEditDialog.js:156 js/Timetracker-FAT-debug.js:1741
-#: js/Timetracker-FAT.js:6
+#: js/TimesheetEditDialog.js:156
 msgid "Select Time Account..."
 msgstr "Zaznacz konto godzin..."
 
-#: js/TimesheetEditDialog.js:170 js/Timetracker-FAT-debug.js:1293
-#: js/Timetracker-FAT-debug.js:1755 js/TimesheetGridPanel.js:94
-#: js/Timetracker-FAT.js:6
+#: js/TimesheetEditDialog.js:170 js/TimesheetGridPanel.js:94
 msgid "Duration"
 msgstr "Czas trwania"
 
-#: js/TimesheetEditDialog.js:175 js/Timetracker-FAT-debug.js:182
-#: js/Timetracker-FAT-debug.js:1277 js/Timetracker-FAT-debug.js:1760
-#: js/TimesheetGridPanel.js:78 js/Timetracker-FAT.js:6 js/Models.js:92
+#: js/TimesheetEditDialog.js:175 js/TimesheetGridPanel.js:78 js/Models.js:92
 msgid "Date"
 msgstr "Data"
 
-#: js/TimesheetEditDialog.js:180 js/Timetracker-FAT-debug.js:1765
-#: js/Timetracker-FAT.js:6
+#: js/TimesheetEditDialog.js:180
 msgid "Start"
 msgstr "Początek"
 
-#: js/TimesheetEditDialog.js:181 js/Timetracker-FAT-debug.js:1766
-#: js/Timetracker-FAT.js:6
+#: js/TimesheetEditDialog.js:181
 msgid "not set"
 msgstr "nieustawiony"
 
-#: js/TimesheetEditDialog.js:187 js/Timetracker-FAT-debug.js:1772
-#: js/Timetracker-FAT.js:6
+#: js/TimesheetEditDialog.js:187
 msgid "Enter description..."
 msgstr "Wprowadź opis..."
 
-#: js/TimesheetEditDialog.js:200 js/Timetracker-FAT-debug.js:181
-#: js/Timetracker-FAT-debug.js:1291 js/Timetracker-FAT-debug.js:1785
-#: js/TimesheetGridPanel.js:92 js/Timetracker-FAT.js:6 js/Models.js:91
+#: js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:92 js/Models.js:91
 msgid "Account"
 msgstr "Konto"
 
-#: js/TimesheetEditDialog.js:205 js/Timetracker-FAT-debug.js:184
-#: js/Timetracker-FAT-debug.js:1286 js/Timetracker-FAT-debug.js:1574
-#: js/Timetracker-FAT-debug.js:1790 js/TimesheetGridPanel.js:87
-#: js/TimesheetGridPanel.js:375 js/Timetracker-FAT.js:6 js/Models.js:94
+#: js/TimesheetEditDialog.js:205 js/TimesheetGridPanel.js:87
+#: js/TimesheetGridPanel.js:375 js/Models.js:94
 msgid "Billable"
 msgstr "Do przeliczenia"
 
-#: js/TimesheetEditDialog.js:211 js/Timetracker-FAT-debug.js:185
-#: js/Timetracker-FAT-debug.js:1288 js/Timetracker-FAT-debug.js:1579
-#: js/Timetracker-FAT-debug.js:1796 js/TimesheetGridPanel.js:89
-#: js/TimesheetGridPanel.js:380 js/Timetracker-FAT.js:6 js/Models.js:95
+#: js/TimesheetEditDialog.js:211 js/TimesheetGridPanel.js:89
+#: js/TimesheetGridPanel.js:380 js/Models.js:95
 msgid "Cleared"
 msgstr "Przeliczone"
 
-#: js/TimesheetEditDialog.js:271 js/Timetracker-FAT-debug.js:1854
-#: js/Timetracker-FAT.js:6
+#: js/TimesheetEditDialog.js:271
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/TimesheetEditDialog.js:272 js/Timetracker-FAT-debug.js:1855
-#: js/Timetracker-FAT.js:6
+#: js/TimesheetEditDialog.js:272
 msgid "Could not save {0}."
 msgstr "Zapisanie {0} było niemożliwe."
 
-#: js/TimesheetEditDialog.js:273 js/Timetracker-FAT-debug.js:1856
-#: js/Timetracker-FAT.js:6
+#: js/TimesheetEditDialog.js:273
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Ostateczny termin rezerwacji dla niniejszego konta godzin został przekroczony."
 
 #: js/DurationSpinner.js:69 js/DurationSpinner.js:79
-#: js/Timetracker-FAT-debug.js:74 js/Timetracker-FAT-debug.js:84
-#: js/Timetracker-FAT.js:6
 msgid "Not a valid time"
 msgstr "Nieprawidłowy czas"
 
-#: js/TimeaccountPickerCombo.js:46 js/Timetracker-FAT-debug.js:434
-#: js/Timetracker-FAT.js:6
+#: js/TimeaccountPickerCombo.js:46
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 
-#: js/Timetracker.js:25 js/Timetracker-FAT-debug.js:319
-#: js/Timetracker-FAT.js:6
+#: js/Timetracker.js:25
 msgid "New Timesheet"
 msgstr "Nowa karta czasu pracy"
 
-#: js/Timetracker-FAT-debug.js:145 js/Models.js:54
+#: js/TimeAccountStatusFilterModel.js:24
+msgid "Time Account - Status"
+msgstr "Status konta godzin"
+
+#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:78
+msgid "Tags"
+msgstr "Znaczniki"
+
+#: js/TimesheetGridPanel.js:80
+msgid "Start time"
+msgstr "Czas rozpoczęcia"
+
+#: js/TimesheetGridPanel.js:82
+msgid "Time Account (Number - Title)"
+msgstr "Konto czasu (numer - tytuł)"
+
+#: js/TimesheetGridPanel.js:84
+msgid "Time Account closed"
+msgstr "Konto godzin zamknięte"
+
+#: js/TimesheetGridPanel.js:91 js/TimesheetGridPanel.js:385
+#: js/TimeaccountGridPanel.js:103
+msgid "Cleared in"
+msgstr "Przeliczone w"
+
+#: js/TimesheetGridPanel.js:147
+msgid "timeframe"
+msgstr "przedział czasu"
+
+#: js/TimesheetGridPanel.js:171
+msgid "summary"
+msgstr "streszczenie"
+
+#: js/TimesheetGridPanel.js:174
+msgid "Total Timesheets"
+msgstr "Wszystkie karty czasu pracy"
+
+#: js/TimesheetGridPanel.js:175
+msgid "Billable Timesheets"
+msgstr "Karty czasu pracy do przeliczenia"
+
+#: js/TimesheetGridPanel.js:176
+msgid "Total Time"
+msgstr "Łączny czas"
+
+#: js/TimesheetGridPanel.js:177
+msgid "Time of Billable Timesheets"
+msgstr "Czas z kart czasu pracy gotowych do przeliczenia"
+
+#: js/TimesheetGridPanel.js:248
+msgid "Detail"
+msgstr "Szczegół"
+
+#: js/TimesheetGridPanel.js:301
+msgid "Export Timesheets"
+msgstr "Eksportuj karty czasu pracy"
+
+#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:155
+msgid "Export as ODS"
+msgstr "Eksportuj jako ODS"
+
+#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:162
+msgid "Export as CSV"
+msgstr "Eksportuj jako CSV"
+
+#: js/TimesheetGridPanel.js:324
+msgid "Export as ..."
+msgstr "Eksportuj jako ..."
+
+#: js/TimesheetGridPanel.js:367
+msgid "Mass Update"
+msgstr "Aktualizacja całości"
+
+#: js/TimesheetGridPanel.js:373
+msgid "Update field:"
+msgstr "Aktualizacja zakończona niepowodzeniem"
+
+#: js/TimeAccountBilledFilterModel.js:24
+msgid "Time Account - Billed"
+msgstr "Czas pracy - zliczony"
+
+#: js/DurationSlider.js:94
+msgid "{0}"
+msgstr "{0}"
+
+#: js/TimeAccountContractFilterModel.js:30
+msgid "Contract"
+msgstr "Kontrakt"
+
+#: js/TimeAccountContractFilterModel.js:32
+msgid "without contract"
+msgstr "bez kontraktu"
+
+#: js/Models.js:54
 msgid "timesheets list"
 msgid_plural "timesheets lists"
 msgstr[0] "Lista kart czasu pracy"
 msgstr[1] "listy kart czasu pracy"
 msgstr[2] "listy kart czasu pracy"
 
-#: js/Timetracker-FAT-debug.js:180 js/Timetracker-FAT-debug.js:259
-#: js/Timetracker-FAT.js:6
-msgid "Quick search"
+#: js/Models.js:90 js/Models.js:173
+msgid "Quick Search"
 msgstr ""
 
-#: js/Timetracker-FAT-debug.js:186 js/Timetracker-FAT-debug.js:265
-#: js/Timetracker-FAT.js:6 js/Models.js:96 js/Models.js:180
+#: js/Models.js:96 js/Models.js:180
 msgid "Last Modified Time"
 msgstr "Czas ostatniej zmiany"
 
-#: js/Timetracker-FAT-debug.js:187 js/Timetracker-FAT-debug.js:266
-#: js/Timetracker-FAT.js:6 js/Models.js:97 js/Models.js:181
+#: js/Models.js:97 js/Models.js:181
 msgid "Last Modified By"
 msgstr "Ostatnio zmienione przez"
 
-#: js/Timetracker-FAT-debug.js:188 js/Timetracker-FAT-debug.js:267
-#: js/Timetracker-FAT.js:6 js/Models.js:98 js/Models.js:182
+#: js/Models.js:98 js/Models.js:182
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/Timetracker-FAT-debug.js:189 js/Timetracker-FAT-debug.js:268
-#: js/Timetracker-FAT.js:6 js/Models.js:99 js/Models.js:183
+#: js/Models.js:99 js/Models.js:183
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: js/Timetracker-FAT-debug.js:238 js/Models.js:152
+#: js/Models.js:152
 msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "Lista kont godzin"
 msgstr[1] "listy kont godzin"
 msgstr[2] "listy kont godzin"
-
-#: js/Timetracker-FAT-debug.js:552 js/TimeAccountStatusFilterModel.js:24
-#: js/Timetracker-FAT.js:6
-msgid "Time Account - Status"
-msgstr "Status konta godzin"
-
-#: js/Timetracker-FAT-debug.js:609 js/TimeAccountBilledFilterModel.js:24
-#: js/Timetracker-FAT.js:6
-msgid "Time Account - Billed"
-msgstr "Czas pracy - zliczony"
-
-#: js/Timetracker-FAT-debug.js:676 js/Timetracker-FAT.js:6
-#: js/TimeAccountContractFilterModel.js:30
-msgid "Contract"
-msgstr "Kontrakt"
-
-#: js/Timetracker-FAT-debug.js:678 js/Timetracker-FAT.js:6
-#: js/TimeAccountContractFilterModel.js:32
-msgid "without contract"
-msgstr "bez kontraktu"
-
-#: js/Timetracker-FAT-debug.js:776 js/Timetracker-FAT-debug.js:1275
-#: js/TimesheetGridPanel.js:76 js/Timetracker-FAT.js:6
-#: js/TimeaccountGridPanel.js:78
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/Timetracker-FAT-debug.js:801 js/Timetracker-FAT-debug.js:1290
-#: js/Timetracker-FAT-debug.js:1584 js/TimesheetGridPanel.js:91
-#: js/TimesheetGridPanel.js:385 js/Timetracker-FAT.js:6
-#: js/TimeaccountGridPanel.js:103
-msgid "Cleared in"
-msgstr "Przeliczone w"
-
-#: js/Timetracker-FAT-debug.js:848 js/Timetracker-FAT-debug.js:1509
-#: js/TimesheetGridPanel.js:310 js/Timetracker-FAT.js:6
-#: js/TimeaccountGridPanel.js:155
-msgid "Export as ODS"
-msgstr "Eksportuj jako ODS"
-
-#: js/Timetracker-FAT-debug.js:855 js/Timetracker-FAT-debug.js:1516
-#: js/TimesheetGridPanel.js:317 js/Timetracker-FAT.js:6
-#: js/TimeaccountGridPanel.js:162
-msgid "Export as CSV"
-msgstr "Eksportuj jako CSV"
-
-#: js/Timetracker-FAT-debug.js:1279 js/TimesheetGridPanel.js:80
-#: js/Timetracker-FAT.js:6
-msgid "Start time"
-msgstr "Czas rozpoczęcia"
-
-#: js/Timetracker-FAT-debug.js:1281 js/TimesheetGridPanel.js:82
-#: js/Timetracker-FAT.js:6
-msgid "Time Account (Number - Title)"
-msgstr "Konto czasu (numer - tytuł)"
-
-#: js/Timetracker-FAT-debug.js:1283 js/TimesheetGridPanel.js:84
-#: js/Timetracker-FAT.js:6
-msgid "Time Account closed"
-msgstr "Konto godzin zamknięte"
-
-#: js/Timetracker-FAT-debug.js:1346 js/TimesheetGridPanel.js:147
-msgid "timeframe"
-msgstr "przedział czasu"
-
-#: js/Timetracker-FAT-debug.js:1370 js/TimesheetGridPanel.js:171
-msgid "summary"
-msgstr "streszczenie"
-
-#: js/Timetracker-FAT-debug.js:1373 js/TimesheetGridPanel.js:174
-#: js/Timetracker-FAT.js:6
-msgid "Total Timesheets"
-msgstr "Wszystkie karty czasu pracy"
-
-#: js/Timetracker-FAT-debug.js:1374 js/TimesheetGridPanel.js:175
-#: js/Timetracker-FAT.js:6
-msgid "Billable Timesheets"
-msgstr "Karty czasu pracy do przeliczenia"
-
-#: js/Timetracker-FAT-debug.js:1375 js/TimesheetGridPanel.js:176
-#: js/Timetracker-FAT.js:6
-msgid "Total Time"
-msgstr "Łączny czas"
-
-#: js/Timetracker-FAT-debug.js:1376 js/TimesheetGridPanel.js:177
-#: js/Timetracker-FAT.js:6
-msgid "Time of Billable Timesheets"
-msgstr "Czas z kart czasu pracy gotowych do przeliczenia"
-
-#: js/Timetracker-FAT-debug.js:1447 js/TimesheetGridPanel.js:248
-msgid "Detail"
-msgstr "Szczegół"
-
-#: js/Timetracker-FAT-debug.js:1500 js/TimesheetGridPanel.js:301
-#: js/Timetracker-FAT.js:6
-msgid "Export Timesheets"
-msgstr "Eksportuj karty czasu pracy"
-
-#: js/Timetracker-FAT-debug.js:1523 js/TimesheetGridPanel.js:324
-#: js/Timetracker-FAT.js:6
-msgid "Export as ..."
-msgstr "Eksportuj jako ..."
-
-#: js/Timetracker-FAT-debug.js:1566 js/TimesheetGridPanel.js:367
-msgid "Mass Update"
-msgstr "Aktualizacja całości"
-
-#: js/Timetracker-FAT-debug.js:1572 js/TimesheetGridPanel.js:373
-msgid "Update field:"
-msgstr "Aktualizacja zakończona niepowodzeniem"
-
-#: js/DurationSlider.js:94
-msgid "{0}"
-msgstr "{0}"
-
-#: js/Models.js:90 js/Models.js:173
-msgid "Quick Search"
-msgstr ""

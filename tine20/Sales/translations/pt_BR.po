@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 12:01+0000\n"
+"PO-Revision-Date: 2014-04-25 12:47+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -73,8 +73,7 @@ msgstr "Validaçãod do Número do Contrato"
 msgid "The Number can be validated as text or number."
 msgstr "O número pode ser alidade como texto ou numérico."
 
-#: Config.php:69 js/Sales-FAT-debug.js:205 js/Sales-FAT-debug.js:934
-#: js/Sales-FAT.js:6 js/Models.js:208 js/ContractEditDialog.js:138
+#: Config.php:69 js/Models.js:208 js/ContractEditDialog.js:138
 msgid "Number"
 msgstr "Número"
 
@@ -116,162 +115,66 @@ msgstr "Meus Contratos"
 msgid "Contracts created by myself"
 msgstr "Contratos criados por mim"
 
-#: js/AdminPanel.js:61 js/Sales-FAT-debug.js:403 js/Sales-FAT.js:6
+#: js/AdminPanel.js:61
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: js/AdminPanel.js:69 js/Sales-FAT-debug.js:411 js/Sales-FAT.js:6
+#: js/AdminPanel.js:69
 msgid "OK"
 msgstr "OK"
 
-#: js/AdminPanel.js:90 js/Sales-FAT-debug.js:432 js/Sales-FAT.js:6
+#: js/AdminPanel.js:90
 msgid "Loading..."
 msgstr "Carregando..."
 
 #: js/ContractGridPanel.js:62 js/ProductGridPanel.js:97
-#: js/Sales-FAT-debug.js:1164 js/Sales-FAT.js:6
 msgid "Tags"
 msgstr "Rótulo"
 
-#: js/ContractGridPanel.js:70 js/Sales-FAT-debug.js:765 js/Sales-FAT.js:6
+#: js/ContractGridPanel.js:70
 msgid "Contract number"
 msgstr "Número do contrato"
 
-#: js/ContractGridPanel.js:76 js/Sales-FAT-debug.js:242
-#: js/Sales-FAT-debug.js:771 js/Sales-FAT-debug.js:941 js/Sales-FAT.js:6
-#: js/Models.js:245 js/ContractEditDialog.js:145
+#: js/ContractGridPanel.js:76 js/Models.js:245 js/ContractEditDialog.js:145
 msgid "Title"
 msgstr "Título"
 
-#: js/ContractGridPanel.js:82 js/Sales-FAT-debug.js:152
-#: js/Sales-FAT-debug.js:777 js/Sales-FAT-debug.js:974 js/Sales-FAT.js:6
-#: js/Models.js:151 js/ContractEditDialog.js:189
+#: js/ContractGridPanel.js:82 js/Models.js:151 js/ContractEditDialog.js:189
 msgid "Status"
 msgstr "Situação"
 
-#: js/ContractGridPanel.js:89 js/Sales-FAT-debug.js:159
-#: js/Sales-FAT-debug.js:784 js/Sales-FAT-debug.js:981 js/Sales-FAT.js:6
-#: js/Models.js:158 js/ContractEditDialog.js:196
+#: js/ContractGridPanel.js:89 js/Models.js:158 js/ContractEditDialog.js:196
 msgid "Cleared"
 msgstr "Autorizado"
 
-#: js/ContractGridPanel.js:96 js/Sales-FAT-debug.js:165
-#: js/Sales-FAT-debug.js:791 js/Sales-FAT-debug.js:985 js/Sales-FAT.js:6
-#: js/Models.js:164 js/ContractEditDialog.js:200
+#: js/ContractGridPanel.js:96 js/Models.js:164 js/ContractEditDialog.js:200
 msgid "Cleared in"
 msgstr "Autorizado em"
 
 #: js/ProductEditDialog.js:93 js/ProductGridPanel.js:98
-#: js/Sales-FAT-debug.js:1165 js/Sales-FAT-debug.js:1276 js/Sales-FAT.js:6
 msgid "Name"
 msgstr "Nome"
 
 #: js/ProductEditDialog.js:99 js/ProductGridPanel.js:102
-#: js/Sales-FAT-debug.js:1169 js/Sales-FAT-debug.js:1282 js/Sales-FAT.js:6
 msgid "Price"
 msgstr "Preço"
 
 #: js/ProductEditDialog.js:106 js/ProductGridPanel.js:99
-#: js/Sales-FAT-debug.js:1166 js/Sales-FAT-debug.js:1289 js/Sales-FAT.js:6
 msgid "Manufacturer"
 msgstr "Fabricante"
 
 #: js/ProductEditDialog.js:110 js/ProductGridPanel.js:100
-#: js/Sales-FAT-debug.js:1167 js/Sales-FAT-debug.js:1293 js/Sales-FAT.js:6
 msgid "Category"
 msgstr "Categoria"
 
 #: js/ProductEditDialog.js:114 js/ProductGridPanel.js:101
-#: js/Sales-FAT-debug.js:991 js/Sales-FAT-debug.js:1168
-#: js/Sales-FAT-debug.js:1297 js/Sales-FAT.js:6 js/ContractEditDialog.js:206
+#: js/ContractEditDialog.js:206
 msgid "Description"
 msgstr "Descrição"
 
-#: js/ProductEditDialog.js:115 js/Sales-FAT-debug.js:992
-#: js/Sales-FAT-debug.js:1298 js/Sales-FAT.js:6 js/ContractEditDialog.js:207
+#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:207
 msgid "Enter description..."
 msgstr "Digite a descrição..."
-
-#: js/Sales-FAT-debug.js:44 js/Models.js:41
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Produto"
-msgstr[1] "Produtos"
-
-#: js/Sales-FAT-debug.js:48 js/Sales-FAT-debug.js:231 js/Models.js:44
-#: js/Models.js:234
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "lista de registro"
-msgstr[1] "Listas de registro"
-
-#: js/Sales-FAT-debug.js:82 js/Sales-FAT-debug.js:148
-#: js/Sales-FAT-debug.js:204 js/Sales-FAT-debug.js:241 js/Sales-FAT.js:6
-msgid "Quick search"
-msgstr ""
-
-#: js/Sales-FAT-debug.js:83 js/Sales-FAT.js:6 js/Models.js:79
-msgid "Product name"
-msgstr "Nome do produto"
-
-#: js/Sales-FAT-debug.js:85 js/Sales-FAT-debug.js:150 js/Sales-FAT.js:6
-#: js/Models.js:81 js/Models.js:149
-msgid "Creator"
-msgstr "Criador"
-
-#: js/Sales-FAT-debug.js:118 js/Models.js:117
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Contrato"
-msgstr[1] "Contratos"
-
-#: js/Sales-FAT-debug.js:122
-msgid "All Contracts"
-msgid_plural "contracts lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Sales-FAT-debug.js:149 js/Sales-FAT.js:6 js/Models.js:148
-msgid "Contract name"
-msgstr "Nome do contrato"
-
-#: js/Sales-FAT-debug.js:191 js/Models.js:194
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] "Centro de Custo"
-msgstr[1] "Centros de Custo"
-
-#: js/Sales-FAT-debug.js:194 js/Models.js:197
-msgid "All CostCenters"
-msgid_plural "All CostCenters"
-msgstr[0] "Todos os Centros de Custos"
-msgstr[1] "Todos os Centros de Custos"
-
-#: js/Sales-FAT-debug.js:206 js/Sales-FAT.js:6 js/Models.js:209
-msgid "Remark"
-msgstr "Observação"
-
-#: js/Sales-FAT-debug.js:228 js/Models.js:231
-msgid "Division"
-msgid_plural "Divisions"
-msgstr[0] "Divisão"
-msgstr[1] "Divisões"
-
-#: js/Sales-FAT-debug.js:894 js/Sales-FAT.js:6 js/ContractEditDialog.js:96
-msgid "Please use a decimal number here!"
-msgstr "Favor usar número decimal aqui!"
-
-#: js/Sales-FAT-debug.js:947 js/Sales-FAT.js:6 js/ContractEditDialog.js:151
-msgid "Contract Contact"
-msgstr "Contado do Contrato"
-
-#: js/Sales-FAT-debug.js:959 js/Sales-FAT.js:6 js/ContractEditDialog.js:163
-msgid "Account Manager"
-msgstr "Gerente de Conta"
-
-#: js/Sales-FAT-debug.js:968 js/ContractEditDialog.js:183
-msgid "Company"
-msgstr "Empresa"
 
 #: js/ContractCostCenterFilterModel.js:30
 msgid "Cost Center"
@@ -281,15 +184,45 @@ msgstr ""
 msgid "without CostCenter"
 msgstr ""
 
+#: js/Models.js:41
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Produto"
+msgstr[1] "Produtos"
+
+#: js/Models.js:44 js/Models.js:234
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "lista de registro"
+msgstr[1] "Listas de registro"
+
 #: js/Models.js:78 js/Models.js:147 js/Models.js:207 js/Models.js:244
 msgid "Quick Search"
 msgstr ""
+
+#: js/Models.js:79
+msgid "Product name"
+msgstr "Nome do produto"
+
+#: js/Models.js:81 js/Models.js:149
+msgid "Creator"
+msgstr "Criador"
+
+#: js/Models.js:117
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Contrato"
+msgstr[1] "Contratos"
 
 #: js/Models.js:121
 msgid "Contracts"
 msgid_plural "Contracts"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/Models.js:148
+msgid "Contract name"
+msgstr "Nome do contrato"
 
 #: js/Models.js:167
 msgid "Last Modified Time"
@@ -306,6 +239,44 @@ msgstr ""
 #: js/Models.js:170
 msgid "Created By"
 msgstr ""
+
+#: js/Models.js:194
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] "Centro de Custo"
+msgstr[1] "Centros de Custo"
+
+#: js/Models.js:197
+msgid "All CostCenters"
+msgid_plural "All CostCenters"
+msgstr[0] "Todos os Centros de Custos"
+msgstr[1] "Todos os Centros de Custos"
+
+#: js/Models.js:209
+msgid "Remark"
+msgstr "Observação"
+
+#: js/Models.js:231
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] "Divisão"
+msgstr[1] "Divisões"
+
+#: js/ContractEditDialog.js:96
+msgid "Please use a decimal number here!"
+msgstr "Favor usar número decimal aqui!"
+
+#: js/ContractEditDialog.js:151
+msgid "Contract Contact"
+msgstr "Contado do Contrato"
+
+#: js/ContractEditDialog.js:163
+msgid "Account Manager"
+msgstr "Gerente de Conta"
+
+#: js/ContractEditDialog.js:183
+msgid "Company"
+msgstr "Empresa"
 
 #: Controller/Contract.php:83
 msgid "The number you have tried to set is already in use!"

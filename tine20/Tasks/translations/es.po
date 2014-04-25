@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 14:53+0000\n"
-"Last-Translator: jfortuna <jfortuna@antel.com.uy>\n"
+"PO-Revision-Date: 2014-04-25 12:48+0000\n"
+"Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/tine20/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,8 +44,7 @@ msgstr "Tareas personales de %s"
 msgid "Due"
 msgstr "Apta"
 
-#: Model/Task.php:207 js/Tasks-FAT.js:6 js/TaskEditDialog.js:200
-#: js/Tasks-FAT-debug.js:686
+#: Model/Task.php:207 js/TaskEditDialog.js:200
 msgid "Organizer"
 msgstr "Organizador"
 
@@ -53,28 +52,22 @@ msgstr "Organizador"
 msgid "Description"
 msgstr "Descripción"
 
-#: Model/Task.php:209 js/Tasks-FAT.js:6 js/TaskGridPanel.js:119
-#: js/TaskEditDialog.js:192 js/Tasks-FAT-debug.js:364
-#: js/Tasks-FAT-debug.js:678
+#: Model/Task.php:209 js/TaskGridPanel.js:119 js/TaskEditDialog.js:192
 msgid "Priority"
 msgstr "Prioridad"
 
-#: Model/Task.php:210 js/Tasks-FAT.js:6 js/TaskGridPanel.js:148
-#: js/TaskEditDialog.js:222 js/Tasks-FAT-debug.js:113
-#: js/Tasks-FAT-debug.js:171 js/Tasks-FAT-debug.js:393
-#: js/Tasks-FAT-debug.js:708 js/Models.js:110 js/Models.js:168
+#: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
+#: js/Models.js:110 js/Models.js:168
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Estado"
 msgstr[1] "Estados"
 
-#: Model/Task.php:211 js/Tasks-FAT.js:6 js/TaskGridPanel.js:135
-#: js/Tasks-FAT-debug.js:380
+#: Model/Task.php:211 js/TaskGridPanel.js:135
 msgid "Percent"
 msgstr "Porcentaje"
 
-#: Model/Task.php:218 js/Tasks-FAT.js:6 js/TaskGridPanel.js:90
-#: js/Tasks-FAT-debug.js:339
+#: Model/Task.php:218 js/TaskGridPanel.js:90
 msgid "Lead"
 msgstr "Iniciativa"
 
@@ -110,9 +103,8 @@ msgstr "Posible prioridad de las tareas. Tenga en cuenta que el estado del asist
 msgid "No response"
 msgstr "No hay respuesta"
 
-#: Setup/Update/Release5.php:75 Setup/Initialize.php:35 js/Tasks-FAT.js:6
-#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230 js/Tasks-FAT-debug.js:416
-#: js/Tasks-FAT-debug.js:715
+#: Setup/Update/Release5.php:75 Setup/Initialize.php:35
+#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230
 msgid "Completed"
 msgstr "Completado"
 
@@ -192,108 +184,99 @@ msgstr "Lista de tareas por defecto"
 msgid "The default task list to create new tasks in."
 msgstr "Lista de tareas por defecto para crear nuevas tareas en él."
 
-#: js/Tasks.js:39 js/Tasks-FAT-debug.js:197
+#: js/Tasks.js:39
 msgid "New Task"
 msgstr "Nueva Tarea"
 
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:108
-msgid "Quick search"
-msgstr "Búsqueda Rápida"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:97 js/TaskEditDialog.js:181
-#: js/Tasks-FAT-debug.js:110 js/Tasks-FAT-debug.js:342
-#: js/Tasks-FAT-debug.js:667 js/Models.js:107
-msgid "Summary"
-msgstr "Resumen"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:105 js/Tasks-FAT-debug.js:111
-#: js/Tasks-FAT-debug.js:350 js/Models.js:108
-msgid "Due Date"
-msgstr "Fecha Apta"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:178 js/Tasks-FAT-debug.js:121
-#: js/Tasks-FAT-debug.js:423 js/Models.js:118
-msgid "Responsible"
-msgstr "Responsable"
-
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:123 js/Models.js:120
-msgid "Last Modified Time"
-msgstr "Fecha última modificación"
-
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:124 js/Models.js:121
-msgid "Last Modified By"
-msgstr "Última modificación por"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:164 js/Tasks-FAT-debug.js:125
-#: js/Tasks-FAT-debug.js:409 js/Models.js:122
-msgid "Creation Time"
-msgstr "Fecha de Creación"
-
-#: js/Tasks-FAT.js:6 js/Tasks-FAT-debug.js:126 js/Models.js:123
-msgid "Created By"
-msgstr "Creada Por"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:87 js/Tasks-FAT-debug.js:338
-msgid "Tags"
-msgstr "Etiquetas"
-
-#: js/Tasks-FAT.js:6 js/TaskGridPanel.js:101 js/Tasks-FAT-debug.js:346
-msgid "Add a task..."
-msgstr "Agregar una tarea..."
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:136 js/Tasks-FAT-debug.js:625
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Tienes que proporcionar una fecha de vencimiento, ya que una alarma esta programada!"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:188 js/Tasks-FAT-debug.js:674
-msgid "Due date"
-msgstr "Fecha apta"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:201 js/Tasks-FAT-debug.js:687
-msgid "Add Responsible ..."
-msgstr "Agregar Responsable..."
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:208 js/Tasks-FAT-debug.js:694
-msgid "Notes"
-msgstr "Notas"
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:209 js/Tasks-FAT-debug.js:695
-msgid "Enter description..."
-msgstr "Escribir descripción..."
-
-#: js/Tasks-FAT.js:6 js/TaskEditDialog.js:215 js/Tasks-FAT-debug.js:701
-msgid "Percentage"
-msgstr "Porcentaje"
-
-#: js/TaskGridPanel.js:54 js/Tasks-FAT-debug.js:282
+#: js/TaskGridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "¿Realmente desea borrar la tarea seleccionada?"
 msgstr[1] "¿Realmente desea borrar las tareas seleccionadas?"
 
-#: js/Tasks-FAT-debug.js:69 js/Models.js:66
+#: js/TaskGridPanel.js:87
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:107
+msgid "Summary"
+msgstr "Resumen"
+
+#: js/TaskGridPanel.js:101
+msgid "Add a task..."
+msgstr "Agregar una tarea..."
+
+#: js/TaskGridPanel.js:105 js/Models.js:108
+msgid "Due Date"
+msgstr "Fecha Apta"
+
+#: js/TaskGridPanel.js:164 js/Models.js:122
+msgid "Creation Time"
+msgstr "Fecha de Creación"
+
+#: js/TaskGridPanel.js:178 js/Models.js:118
+msgid "Responsible"
+msgstr "Responsable"
+
+#: js/TaskEditDialog.js:136
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Tienes que proporcionar una fecha de vencimiento, ya que una alarma esta programada!"
+
+#: js/TaskEditDialog.js:188
+msgid "Due date"
+msgstr "Fecha apta"
+
+#: js/TaskEditDialog.js:201
+msgid "Add Responsible ..."
+msgstr "Agregar Responsable..."
+
+#: js/TaskEditDialog.js:208
+msgid "Notes"
+msgstr "Notas"
+
+#: js/TaskEditDialog.js:209
+msgid "Enter description..."
+msgstr "Escribir descripción..."
+
+#: js/TaskEditDialog.js:215
+msgid "Percentage"
+msgstr "Porcentaje"
+
+#: js/Models.js:66
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Tarea"
 msgstr[1] "Tareas"
 
-#: js/Tasks-FAT-debug.js:69 js/Models.js:66
+#: js/Models.js:66
 msgid "Tasks"
 msgstr "Tareas"
 
-#: js/Tasks-FAT-debug.js:73 js/Models.js:70
+#: js/Models.js:70
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "lista para hacer"
 msgstr[1] "listas para hacer"
 
-#: js/Tasks-FAT-debug.js:73 js/Models.js:70
+#: js/Models.js:70
 msgid "to do lists"
 msgstr "listas para hacer"
 
 #: js/Models.js:105
 msgid "Quick Search"
 msgstr "Búsqueda Rápida"
+
+#: js/Models.js:120
+msgid "Last Modified Time"
+msgstr "Fecha última modificación"
+
+#: js/Models.js:121
+msgid "Last Modified By"
+msgstr "Última modificación por"
+
+#: js/Models.js:123
+msgid "Created By"
+msgstr "Creada Por"
 
 #: Controller/Task.php:202
 msgid "Notification for Task "

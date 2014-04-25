@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 11:59+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-03-30 17:25+0000\n"
+"Last-Translator: jaruwan <luca.ingianni@gmail.com>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -355,11 +355,11 @@ msgstr "ปฏิทินหลักสำหรับคำเชิญแล
 
 #: Preference.php:99
 msgid "Default Favorite"
-msgstr ""
+msgstr "ค่าที่ชอบหลัก"
 
 #: Preference.php:100
 msgid "The default favorite which is loaded on calendar startup"
-msgstr ""
+msgstr "ค่าที่ชอบหลักจะโหลดทันทีเมื่อเริ่มเปิดปฏิทิน"
 
 #: Preference.php:103
 msgid "Get Notification Emails"
@@ -396,23 +396,23 @@ msgstr "เวลาเตือนมาตรฐาน"
 msgid "Minutes before the event starts"
 msgstr "จำนวนนาทีก่อนเหตุการณ์จะเริ่ม"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "Never"
 msgstr "ไม่เลย"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On invitation and cancellation only"
 msgstr "เฉพาะเรื่องคำเชิญและการยกเลิกเท่านั้น"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On time changes"
 msgstr "ตามการเปลี่ยนแปลงตามกำหนดการ"
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On all updates but attendee responses"
 msgstr ""
 
-#: Preference.php:169
+#: Preference.php:172
 msgid "On attendee responses too"
 msgstr "ตามที่ผู้เข้าร่วมตอบรับด้วย"
 
@@ -808,7 +808,7 @@ msgstr "CalDAV URL"
 
 #: js/MonthView.js:88 js/WestPanel.js:55
 msgid "WK"
-msgstr ""
+msgstr "สัปดาห์"
 
 #: js/MonthView.js:93
 msgid "{0} more..."
