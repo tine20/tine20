@@ -141,6 +141,8 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         this.onAddressLoad();
+        
+        this.positionsPanel.setTitle(this.app.i18n._('Positions') + ' (' +  (Ext.isArray(this.record.data.positions) ? this.record.data.positions.length : 0) + ')');
     },
     
     /**
@@ -254,6 +256,12 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             labelSeparator: '',
             columnWidth: .5
         };
+        
+        this.positionsPanel = new Tine.Sales.InvoicePositionGridPanel({
+            editDialog: this,
+            app: this.app,
+            title: this.app.i18n._('Positions')
+        });
         
         return {
             xtype: 'tabpanel',
@@ -425,25 +433,6 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 margins: '0 5 0 5',
                 border: true,
                 items: [
-//                    new Ext.Panel({
-//                        title: this.app.i18n._('Description'),
-//                        iconCls: 'descriptionIcon',
-//                        layout: 'form',
-//                        labelAlign: 'top',
-//                        border: false,
-//                        items: [{
-//                            style: 'margin-top: -4px; border 0px;',
-//                            labelSeparator: '',
-//                            xtype: 'textarea',
-//                            name: 'description',
-//                            hideLabel: true,
-//                            grow: false,
-//                            preventScrollbars: false,
-//                            anchor: '100% 100%',
-//                            emptyText: this.app.i18n._('Enter description'),
-//                            requiredGrant: 'editGrant'
-//                        }]
-//                    }),
                     new Tine.widgets.activities.ActivitiesPanel({
                         app: 'Sales',
                         showAddNoteForm: false,
@@ -457,7 +446,8 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     })
                 ]
             }]
-        }, new Tine.widgets.activities.ActivitiesTabPanel({
+        }, this.positionsPanel, 
+        new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: 'Sales_Model_Invoice'

@@ -124,6 +124,29 @@ Tine.Sales.renderAddressAsLine = function(values) {
  */
 Tine.widgets.grid.RendererManager.register('Sales', 'Invoice', 'address_id', Tine.Sales.renderAddressAsLine);
 
+/**
+ * renders the model of the invoice position
+ * 
+ * @param {String} value
+ * @param {Object} row
+ * @param {Tine.Tinebase.data.Record} rec
+ * @return {String}
+ */
+Tine.Sales.renderInvoicePositionModel = function(value, row, rec) {
+    if (! value) {
+        return '';
+    }
+    var split = value.split('_Model_');
+    var model = Tine[split[0]].Model[split[1]];
+    
+    return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName') + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
+};
+
+/**
+ * register special renderer for the invoice position
+ */
+Tine.widgets.grid.RendererManager.register('Sales', 'InvoicePosition', 'model', Tine.Sales.renderInvoicePositionModel);
+
 
 Tine.Sales.renderBillingPoint = function(v) {
     var app = Tine.Tinebase.appMgr.get('Sales');

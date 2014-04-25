@@ -204,7 +204,7 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
             $contract->last_autobill->addMonth($contract->interval);
         }
         
-        $this->update($contract);
+        return $this->update($contract);
     }
     
     /**

@@ -147,6 +147,17 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'type' => 'bool',
                 'label' => NULL
             ),
+            'positions' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Positions', // _('Positions')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName'     => 'Sales',
+                    'modelName'   => 'InvoicePosition',
+                    'refIdField'  => 'invoice_id',
+                    'dependentRecords' => TRUE
+                ),
+            ),
             'contract' => array(
                 'type' => 'virtual',
                 'config' => array(

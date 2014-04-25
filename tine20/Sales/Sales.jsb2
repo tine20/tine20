@@ -124,6 +124,10 @@
           "path": "js/"
         },
         {
+          "text": "InvoicePositionGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "InvoiceGridPanel.js",
           "path": "js/"
         },

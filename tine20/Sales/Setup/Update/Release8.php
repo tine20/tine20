@@ -1026,16 +1026,16 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Sales', '8.9');
     }
-        
+    
     /**
      * update to 8.9
-     * 
+     *
      *  - add products to contracts
      */
     public function update_9()
     {
         $this->_createProductAggregateTable();
-        
+    
         $this->setApplicationVersion('Sales', '8.10');
     }
     
@@ -1104,8 +1104,84 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 </index>
             </declaration>
         </table>';
-        
+    
         $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $table);
         $this->_backend->createTable($table);
+    }
+    
+    public function update_10()
+    {
+        $declaration = '<table>
+            <name>sales_invoice_positions</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>invoice_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>accountable_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>model</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>title</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>month</name>
+                    <type>text</type>
+                    <length>7</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>unit</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>quantity</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>1</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>invoice_id</name>
+                    <field>
+                        <name>invoice_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>';
+        
+        $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $declaration);
+        $this->_backend->createTable($table);
+        
+        $this->setApplicationVersion('Sales', '8.11');
     }
 }

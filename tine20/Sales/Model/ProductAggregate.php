@@ -13,8 +13,15 @@
  * 
  * @package     Sales
  */
-class Sales_Model_ProductAggregate extends Tinebase_Record_Abstract
+class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
 {
+    /**
+     * if this is billed the first time, this is true
+     * 
+     * @var boolean
+     */
+    protected $_firstBill = FALSE;
+    
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -99,4 +106,143 @@ class Sales_Model_ProductAggregate extends Tinebase_Record_Abstract
         ), 'defaultType' => 'INVOICE_ITEM'
         ),
     );
+    
+    /**
+     * returns the max interval of all billables
+     *
+     * @param Tinebase_DateTime $date
+     * @return array
+     */
+    public function getInterval(Tinebase_DateTime $date = NULL)
+    {
+        $from = clone $this->last_autobill;
+        
+        if (! $this->_firstBill) {
+            $from->addMonth($this->interval);
+        }
+        
+        $to   = clone $from;
+        $to->addMonth($this->interval)->subSecond(1);
+        
+        return array($from, $to);
+    }
+    
+    /**
+     * loads billables for this record
+     *
+     * @param Tinebase_DateTime $date
+     * @return void
+     */
+    public function loadBillables(Tinebase_DateTime $date)
+    {
+        $this->_referenceDate = $date;
+        
+        list($from, $to) = $this->getInterval();
+        $this->_billables = array();
+        
+        while($from < $to) {
+            $this->_billables[$from->format('Y-m')] = array(clone $this);
+            $from->addMonth(1);
+        }
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Sales_Model_Accountable_Abstract::getBillables()
+     */
+    public function getBillables(Tinebase_DateTime $date = NULL)
+    {
+        return $this->_billables;
+    }
+    
+    /**
+     * returns true if this record should be billed for the specified date
+     * 
+     * @param Tinebase_DateTime $date
+     * @param Sales_Model_Contract $contract
+     * @return boolean
+     */
+     public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
+     {
+         $this->_referenceDate = clone $date;
+         
+         if (! $this->last_autobill) {
+             
+             $this->_firstBill = TRUE;
+             
+             // products always get billed at the beginning of a period
+             $this->last_autobill = clone $contract->start_date;
+             
+             return TRUE;
+         }
+         
+         $lastAutobill = clone $this->last_autobill;
+         
+         if ($lastAutobill->addMonth($this->interval) < $date) {
+             return TRUE;
+         }
+         
+         return FALSE;
+     }
+     
+     /**
+      * returns the quantity of this billable
+      *
+      * @return float
+      */
+     public function getQuantity()
+     {
+         return $this->quantity;
+     }
+     
+
+     /**
+      * the billed_in - field of all billables of this accountable gets the id of this invoice
+      *
+      * @param Sales_Model_Invoice $invoice
+      */
+     public function conjunctInvoiceWithBillables($invoice)
+     {
+         // nothing to do. ProductAggregates are always conjuncted with the invoice
+     }
+     
+     /**
+      * set each billable of this accountable billed
+      *
+      * @param Sales_Model_Invoice $invoice
+      */
+     public function clearBillables(Sales_Model_Invoice $invoice)
+     {
+         // nothing to do. ProductAggregates are always billed
+     }
+     
+     public function updateLastBilledDate()
+     {
+         if (! $this->_firstBill) {
+             $this->last_autobill->addMonth($this->interval);
+         }
+         
+         Sales_Controller_ProductAggregate::getInstance()->update($this);
+     }
+     
+     /**
+      * returns the unit of the accountable
+      *
+      * @return string
+      */
+     public function getUnit()
+     {
+         return 'piece'; // _('piece')
+     }
+     
+     /**
+      * (non-PHPdoc)
+      * @see Tinebase_Record_Abstract::getTitle()
+      */
+     public function getTitle()
+     {
+         $p = Sales_Controller_Product::getInstance()->get($this->product_id);
+         
+         return $p->name;
+     }
 }

@@ -68,21 +68,21 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     /**
      * creates the auto invoices, gets called by cli
      * 
-     * @param Tinebase_DateTime $date
+     * @param Tinebase_DateTime $currentDate
      */
-    public function createAutoInvoices(Tinebase_DateTime $date)
+    public function createAutoInvoices(Tinebase_DateTime $currentDate)
     {
-        $contractController = Sales_Controller_Contract::getInstance();
-        $contractsToBill = $contractController->getBillableContracts($date);
-        $timesheetController = Timetracker_Controller_Timesheet::getInstance();
-        $productAggregateController = Sales_Controller_ProductAggregate::getInstance();
+        // the usertimezone of the calling user will be used
+//         $currentDate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        
+        $contractController          = Sales_Controller_Contract::getInstance();
+        $productAggregateController  = Sales_Controller_ProductAggregate::getInstance();
+        
+        $contractsToBill             = $contractController->getBillableContracts($currentDate);
         
         $failures = array();
         $created = new Tinebase_Record_RecordSet('Sales_Model_Invoice');
-        $customer = $costcenter = NULL;
         
-        // this holds all relations for the invoice
-        $relations = array();
         $relationDefaults = array(
             'own_model'              => 'Sales_Model_Invoice',
             'own_backend'            => Tasks_Backend_Factory::SQL,
@@ -91,21 +91,17 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'type'                   => 'INVOICE_ITEM'
         );
-        $billVolatileModels = array(
-            'WebAccounting_Model_StoragePath',
-            'WebAccounting_Model_BackupPath',
-            'WebAccounting_Model_CertificateDomain',
-            'WebAccounting_Model_Dreg',
-            'WebAccounting_Model_MailAccount',
-            'WebAccounting_Model_IPNet'
-        );
         
         foreach($contractsToBill as $contract) {
+            // this holds all relations for the invoice
+            $relations        = array();
+            $invoicePositions = array();
             
-            $relations = array();
+            $customer = $costcenter = NULL;
             
-            $customer = NULL;
             $addressId = $contract->billing_address_id;
+            $volatileBilled = FALSE;
+            $earliestStartDate = $latestEndDate = NULL;
             
             if (! $addressId) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -116,81 +112,54 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 continue;
             }
             
-            // if the contract gets billed the first time, no last_autobill date will be set
-            $startDate = $contract->last_autobill ? clone $contract->last_autobill : NULL;
+            $billableAccountables = array();
             
-            if ($startDate === NULL) {
-                $startDate = clone $contract->start_date;
-            } else {
-                if ($contract->billing_point != 'end') {
-                    $startDate->addMonth($contract->interval);
-                }
-            }
-            
-            $endDate = clone $startDate;
-            $endDate->addMonth($contract->interval)->subSecond(1);
-            
-            if ($contract->end_date !== NULL && $endDate->isLater($contract->end_date)) {
-                $endDate = clone $contract->end_date;
-                $endDate->subSecond(1);
-            }
-            
-            $billVolatile       = array();
-            $billProducts       = array();
-            $billTimeaccounts   = array();
-            $updateTimeaccounts = array();
-            
+            // iterate relations, look for customer, cost center and accountables
             foreach($contract->relations as $relation) {
-                if ($relation->type == 'CUSTOMER' && $relation->related_model == 'Sales_Model_Customer') {
-                    $customer = $relation->related_record;
+                
+                switch ($relation->type) {
+                    case 'CUSTOMER':
+                        $customer = $relation->related_record;
+                        continue /* foreach */;
+                    case 'LEAD_COST_CENTER':
+                        $costcenter = $relation->related_record;
+                        continue /* foreach */;
+                }
+                
+                // find accountables
+                if (in_array('Sales_Model_Accountable_Interface', class_implements($relation->related_record))) {
                     
-                } elseif ($relation->type == 'LEAD_COST_CENTER' && $relation->related_model == 'Sales_Model_CostCenter') {
-                    $costcenter = $relation->related_record;
+                    $billIt = FALSE;
                     
-                } elseif ($relation->related_model == 'Timetracker_Model_Timeaccount') {
-                    // if this has a budget and status is "to clear", bill it
-                    if (intval($relation->related_record->budget) > 0 && $relation->related_record->status == 'to bill') {
-                        $billTimeaccounts[]   = $relation->related_id;
+                    // if the related record is volatile, it does not know when billed last
+                    if ($relation->related_record->isVolatile() && $relation->related_record->isBillable($currentDate)) {
+                        $referenceDate = $contract->last_autobill ? clone $contract->last_autobill : clone $contract->start_date;
                         
+                        $referenceDate->subSecond(10);
+                        
+                        if ($contract->billing_point == 'end') {
+                            $referenceDate->addMonth($contract->interval);
+                        }
+                        
+                        if ($referenceDate->isEarlier($currentDate)) {
+                            $billIt = TRUE;
+                            // this is true even if there are no efforts to bill
+                            $volatileBilled = TRUE;
+                        }
+                        
+                    } else if ($relation->related_record->isBillable($currentDate)) {
+                        $billIt = TRUE;
+                    }
+                    
+                    if ($billIt) {
                         $relations[] = array_merge(array(
-                            'related_model'  => 'Timetracker_Model_Timeaccount',
+                            'related_model'  => get_class($relation->related_record),
                             'related_id'     => $relation->related_id,
                             'related_record' => $relation->related_record->toArray(),
                         ), $relationDefaults);
                         
-                    } elseif (intval($relation->related_record->budget) == 0) {
-                        // if this is not budgeted, show for timesheets in this period
-                        $filter = new Timetracker_Model_TimesheetFilter(array(
-                            array('field' => 'start_date', 'operator' => 'before', 'value' => $endDate),
-                            array('field' => 'start_date', 'operator' => 'after', 'value' => $startDate)
-                            
-                        ));
-                        
-                        $filter->addFilter(new Tinebase_Model_Filter_Text(
-                            array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $relation->related_id)
-                        ));
-                        
-                        $timesheets = $timesheetController->search($filter);
-                        
-                        $updateTimeaccounts[] = $relation->related_id;
-                        
-                        if ($timesheets->count() > 0)  {
-                            $billTimeaccounts[] = $relation->related_id;
-                            
-                            $relations[] = array_merge(array(
-                                'related_model'          => 'Timetracker_Model_Timeaccount',
-                                'related_id'             => $relation->related_record->getId(),
-                                'related_record'         => $relation->related_record->toArray(),
-                            ), $relationDefaults);
-                        }
+                        $billableAccountables[] = $relation->related_record;
                     }
-                } elseif (in_array($relation->related_model, $billVolatileModels)) {
-                    $billVolatile[] = array($relation->related_model, $relation->related_id);
-                    $relations[] = array_merge(array(
-                        'related_model'          => $relation->related_model,
-                        'related_id'             => $relation->related_record->getId(),
-                        'related_record'         => $relation->related_record->toArray(),
-                    ), $relationDefaults);
                 }
             }
             
@@ -212,69 +181,66 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 continue;
             }
             
-            $earliestStartDate = clone $startDate;
-            $latestEndDate     = clone $endDate;
-            
+            // iterate products (they are non volatile)
             if ($contract->products && is_array($contract->products) && ! empty($contract->products)) {
-                // find out max interval of any billable
-                if (empty($billVolatile) && empty($billTimeaccounts)) {
-                    $earliestStartDate = $latestEndDate = NULL;
-                }
+                $productAggregates = new Tinebase_Record_RecordSet('Sales_Model_ProductAggregate', $contract->products);
                 
-                foreach($contract->products as $productAggregate) {
-                    $prodStartDate = $productAggregate['last_autobill'] ? new Tinebase_DateTime($productAggregate['last_autobill']) : NULL;
+                foreach($productAggregates as $productAggregate) {
                     
-                    if ($prodStartDate === NULL) {
-                        $prodStartDate = clone $contract->start_date;
-                    }
-                    
-                    $prodEndDate = clone $prodStartDate;
-                    $prodEndDate->addMonth($productAggregate['interval'])->subSecond(1);
-                    
-                    if ($contract->end_date !== NULL && $prodEndDate->isLater($contract->end_date)) {
-                        $prodEndDate = clone $contract->end_date;
-                        $prodEndDate->subSecond(1);
-                    }
-                    
-                    if ($prodStartDate <= $date && $prodEndDate >= $date) {
-                        $paRecord = new Sales_Model_ProductAggregate($productAggregate, TRUE);
-
-                        if ($earliestStartDate == NULL || $earliestStartDate > $prodStartDate) {
-                            $earliestStartDate = $prodStartDate;
-                        }
-                        
-                        if ($latestEndDate == NULL || $latestEndDate < $prodEndDate) {
-                            $latestEndDate = $prodEndDate;
-                        }
-                        
+                    if ($productAggregate->isBillable($currentDate, $contract)) {
                         $relations[] = array_merge(array(
                             'related_model'          => 'Sales_Model_ProductAggregate',
-                            'related_id'             => $paRecord->getId(),
-                            'related_record'         => $paRecord->toArray(),
+                            'related_id'             => $productAggregate->getId(),
+                            'related_record'         => $productAggregate->toArray(),
                         ), $relationDefaults);
                         
-                        $billProducts[] = $paRecord;
+                        $billableAccountables[] = $productAggregate;
                     }
                 }
             }
             
-            // skip invoice if there aren't any efforts
-            if (empty($billVolatile) && empty($billProducts) && empty($billTimeaccounts)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . 'No efforts for the contract with the id "' . $contract->getId() . '" could have been found.', Zend_Log::INFO);
+            // put each position into
+            $invoicePositions = new Tinebase_Record_RecordSet('Sales_Model_InvoicePosition');
+            
+            foreach($billableAccountables as $accountable) {
+                $accountable->loadBillables($currentDate);
+                $billables = $accountable->getBillables();
+                
+                if (empty($billables)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . 'No efforts for the contract with the id "' . $contract->getId() . '" could have been found.', Zend_Log::INFO);
+                    }
+                    continue;
                 }
                 
-                // but update last billed date if there are timeaccounts to bill but having no timesheets
-                if (! empty($updateTimeaccounts)) {
+                $invoicePositions = $invoicePositions->merge($this->_getInvoicePositionsFromBillables($billables, $accountable));
+                
+                list($startDate, $endDate) = $accountable->getInterval();
+
+                if (! $latestEndDate) {
+                    $latestEndDate = $endDate;
+                } elseif ($endDate > $latestEndDate) {
+                    $latestEndDate = clone $endDate;
+                }
+                if (! $earliestStartDate) {
+                    $earliestStartDate = clone $startDate;
+                } elseif ($startDate < $earliestStartDate) {
+                    $earliestStartDate = clone $startDate;
+                }
+            }
+            
+            // if there are no positions, no bill will be created, but the last_autobill info is set
+            if ($invoicePositions->count() == 0) {
+                if ($volatileBilled) {
                     $contractController->updateLastBilledDate($contract);
                 }
-                
                 continue;
             }
+            
             // prepare invoice
             $invoice = new Sales_Model_Invoice(array(
                 'is_auto'       => TRUE,
-                'description'   => $date->toString() . ' ' . $contract->title,
+                'description'   => $contract->title . ' (' . $currentDate->toString() . ')',
                 'type'          => 'INVOICE',
                 'address_id'    => $addressId,
                 'credit_term'   => $customer['credit_term'],
@@ -282,9 +248,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 'costcenter_id' => $costcenter->getId(),
                 'start_date'    => $earliestStartDate,
                 'end_date'      => $latestEndDate,
+                'positions'     => $invoicePositions->toArray(),
+                'date'          => NULL
             ));
             
-            // add relations
+            // add contract relation
             $relations[] = array(
                 'own_model'              => 'Sales_Model_Invoice',
                 'own_backend'            => Tasks_Backend_Factory::SQL,
@@ -297,6 +265,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 'type'                   => 'CONTRACT',
             );
             
+            // add customer relation
             $relations[] = array(
                 'own_model'              => 'Sales_Model_Invoice',
                 'own_backend'            => Tasks_Backend_Factory::SQL,
@@ -311,17 +280,26 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             
             $invoice->relations = $relations;
             
+            $invoice->setTimezone('UTC');
+            
             // create invoice
             $created->addRecord($this->create($invoice));
             
             // update global last autobill date (for timeaccounts and volatile efforts) only if there are any
-            if (! (empty($billTimeaccounts) && empty($billVolatile))) {
+            if ($volatileBilled) {
                 $contractController->updateLastBilledDate($contract);
             }
             
             // update last autobill info of the product
-            foreach($billProducts as $productAggregate) {
-                $productAggregateController->updateLastBilledDate($productAggregate, $contract);
+            foreach($billableAccountables as $accountable) {
+                if (! $accountable->isVolatile()) {
+                    $accountable->updateLastBilledDate();
+                    
+                    // TODO: not here, after invoice gets billed
+                    // $accountable->clearBillables($invoice);
+                }
+                
+                $accountable->conjunctInvoiceWithBillables($invoice);
             }
         }
         
@@ -336,6 +314,48 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     }
     
     /**
+     * creates invoice positions by the billables per each month
+     * 
+     * @param array $billables
+     * @param Sales_Model_Accountable_Interface $accountable
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _getInvoicePositionsFromBillables(array $billables, Sales_Model_Accountable_Interface $accountable)
+    {
+        $invoicePositions = new Tinebase_Record_RecordSet('Sales_Model_InvoicePosition');
+        
+        foreach($billables as $month => $billablesPerMonth) {
+            
+            $sumQuantity = 0.0;
+            
+            foreach($billablesPerMonth as $billable) {
+                $qty = $billable->getQuantity();
+                if (is_array($qty)) {
+                    $qty = $qty[0];
+                }
+                $sumQuantity = $sumQuantity + $qty;
+            }
+            
+            $pos = array(
+                'month' => $month,
+                'model' => get_class($accountable),
+                'accountable_id' => $accountable->getId(),
+                'title' => $accountable->getTitle(),
+                'quantity' => $sumQuantity,
+                'unit' => $accountable->getUnit()
+            );
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Create invoice position ' . print_r($pos, 1), Zend_Log::INFO);
+            }
+            
+            $invoicePositions->addRecord(new Sales_Model_InvoicePosition($pos));
+        }
+        
+        return $invoicePositions;
+    }
+    
+    /**
      * inspect creation of one record (before create)
      *
      * @param   Tinebase_Record_Interface $_record
@@ -347,65 +367,38 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     }
     
     /**
-     * checks cleared state and sets the date to the current date
+     * checks cleared state and sets the date to the current date, also sets all billables billed
      * 
      * @param Tinebase_Record_Interface $record
      */
     protected function _checkCleared(Tinebase_Record_Interface &$record)
     {
-        $foundCustomer = FALSE;
-        $customerCalculated = FALSE;
+        $foundCustomer = NULL;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Invoice: ' . print_r($record->toArray(), true));
         
         if (is_array($record->relations)) {
-            foreach($record->relations as $relation) {
+            foreach ($record->relations as $relation) {
                 if ($relation['related_model'] == 'Sales_Model_Customer') {
                     $foundCustomer = $relation['related_record'];
                     break;
                 }
-            }
-        }
-        
-        $foundContract = FALSE;
-        if (is_array($record->relations)) {
-            foreach($record->relations as $relation) {
                 if ($relation['related_model'] == 'Sales_Model_Contract') {
-                    $foundContract = $relation['related_record'];
-                    
-                    if (! $foundCustomer) {
-                        
-                        $foundContractRecord = Sales_Controller_Contract::getInstance()->get($foundContract['id']);
-                        
-                        foreach($foundContractRecord->relations as $relation) {
-                            if ($relation['related_model'] == 'Sales_Model_Customer') {
-                                $foundCustomer = $relation['related_record'];
-                                $customerCalculated = TRUE;
-                                break;
-                            }
+                    $foundContractRecord = Sales_Controller_Contract::getInstance()->get($relation['related_record']['id']);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' Contract: ' . print_r($foundContractRecord->toArray(), true));
+                    foreach ($foundContractRecord->relations as $relation) {
+                        if ($relation['related_model'] == 'Sales_Model_Customer') {
+                            $foundCustomer = $relation['related_record'];
+                            break;
                         }
                     }
-                    break;
                 }
             }
         }
         
-        if (! $foundCustomer) {
-            throw new Tinebase_Exception_Data('You have to set a customer!');
-        } else {
-            if ($customerCalculated) {
-                $record->relations = array_merge($record->relations, array(array(
-                    "own_model"              => "Sales_Model_Invoice",
-                    "own_backend"            => Tasks_Backend_Factory::SQL,
-                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => 'Sales_Model_Customer',
-                    'related_backend'        => Tasks_Backend_Factory::SQL,
-                    'related_id'             => $foundCustomer->getId(),
-                    'related_record'         => $foundCustomer->toArray(),
-                    'type'                   => 'CUSTOMER'
-                )));
-            }
-        }
-        
-        if (empty($record->address_id)) {
+        if (empty($record->address_id) && $foundCustomer) {
             $json = new Sales_Frontend_Json();
             $resolved = $json->getCustomer($foundCustomer->getId());
             if (! empty($resolved['billing'])) {
@@ -415,7 +408,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
         }
         
+        // if the record hasn't been cleared before, no date is set
         if ($record->cleared == 'CLEARED' && $record->date == NULL) {
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Clearing Invoice ' . print_r($record->toArray(), 1), Zend_Log::INFO);
+            }
+            
             if (! $record->date) {
                 $record->date = new Tinebase_DateTime();
             }
@@ -441,6 +440,22 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $string .= $address->countryname ? $address->countryname : '';
             
             $record->fixed_address = $string;
+            
+            // clear all billables
+            if (is_array($record->relations)) {
+                foreach($record->relations as $relation) {
+                    $relatedModel = $relation['related_model'];
+                    $relatedRecord = new $relatedModel($relation['related_record']);
+                    
+                    if (in_array('Sales_Model_Accountable_Interface', class_implements($relatedRecord))) {
+                        $relatedRecord->clearBillables($record);
+                        
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                            Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Clearing billables ' . print_r($relation['related_record'], 1), Zend_Log::INFO);
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -469,11 +484,17 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * @param   Tinebase_Record_Interface $_createdRecord
      * @param   Tinebase_Record_Interface $_record
      * @return  void
+     *
+     * @todo $_record->contracts should be a Tinebase_Record_RecordSet
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
+        $config = $_record::getConfiguration()->recordsFields;
+        foreach (array_keys($config) as $property) {
+            $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
+        }
     }
-
+    
     /**
      * inspect update of one record (before update)
      *
@@ -500,6 +521,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
         }
         $this->_checkCleared($_record);
+        
+        $config = $_record::getConfiguration()->recordsFields;
+        
+        foreach (array_keys($config) as $p) {
+            $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
+        }
     }
     
     /**

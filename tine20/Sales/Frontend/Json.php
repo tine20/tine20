@@ -54,7 +54,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Address',
         'Invoice',
         'OrderConfirmation',
-        'ProductAggregate'
+        'ProductAggregate',
+        'InvoicePosition',
     );
     
    /**
@@ -518,8 +519,75 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveInvoice($recordData, $duplicateCheck = TRUE)
     {
+        // validate customer
+        $foundCustomer = FALSE;
+        $customerCalculated = FALSE;
+        
+        if (is_array($recordData['relations'])) {
+            foreach($recordData['relations'] as $relation) {
+                if ($relation['related_model'] == 'Sales_Model_Customer') {
+                    $foundCustomer = $relation['related_record'];
+                    break;
+                }
+            }
+        }
+        // if no customer is set, try to find by contract
+        if (is_array($recordData['relations']) && ! $foundCustomer) {
+            foreach($recordData['relations'] as $relation) {
+                if ($relation['related_model'] == 'Sales_Model_Contract') {
+                    $foundContractRecord = Sales_Controller_Contract::getInstance()->get($relation['related_record']['id']);
+                    foreach($foundContractRecord->relations as $relation) {
+                        if ($relation['related_model'] == 'Sales_Model_Customer') {
+                            $foundCustomer = $relation['related_record'];
+                            $customerCalculated = TRUE;
+                            break 2;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if ($customerCalculated) {
+            $recordData['relations'] = array_merge($recordData['relations'], array(array(
+                "own_model"              => "Sales_Model_Invoice",
+                "own_backend"            => Tasks_Backend_Factory::SQL,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => 'Sales_Model_Customer',
+                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_id'             => $foundCustomer['id'],
+                'related_record'         => $foundCustomer,
+                'type'                   => 'CUSTOMER'
+            )));
+        }
+        
+        if (! $foundCustomer) {
+            throw new Tinebase_Exception_Data('You have to set a customer!');
+        }
+        
         if (is_array($recordData["address_id"])) {
             $recordData["address_id"] = $recordData["address_id"]['id'];
+        }
+        if (is_array($recordData["costcenter_id"])) {
+            $recordData["costcenter_id"] = $recordData["costcenter_id"]['id'];
+        }
+        // sanitize product_id
+        if (is_array($recordData['positions'])) {
+            for ($i = 0; $i < count($recordData['positions']); $i++) {
+                if (isset($recordData['positions'][$i]['product_id']) && is_array($recordData['positions'][$i]['product_id'])) {
+                    $recordData['positions'][$i]['product_id'] = $recordData['positions'][$i]['product_id']['id'];
+                }
+            }
+        }
+        
+        if (is_array($recordData['relations'])) {
+            for ($i = 0; $i < count($recordData['relations']); $i++) {
+                if (isset($recordData['relations'][$i]['related_record']['product_id'])) {
+        
+                    if (is_array($recordData['relations'][$i]['related_record']['product_id'])) {
+                        $recordData['relations'][$i]['related_record']['product_id'] = $recordData['relations'][$i]['related_record']['product_id']['id'];
+                    }
+                }
+            }
         }
 
         return $this->_save($recordData, Sales_Controller_Invoice::getInstance(), 'Invoice', 'id', array($duplicateCheck));
