@@ -40,6 +40,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('number', 'title'))),
         'title'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'budget'         => array('filter' => 'Tinebase_Model_Filter_Int'),
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'deadline'       => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -47,6 +48,12 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
             'idProperty' => 'timetracker_timeaccount.id',
             'applicationName' => 'Timetracker',
         )),
+        'invoice_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId',
+            'options' => array(
+                'filtergroup'       => 'Sales_Model_InvoiceFilter',
+                'controller'        => 'Sales_Controller_Invoice',
+            )
+        ),
         'created_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),

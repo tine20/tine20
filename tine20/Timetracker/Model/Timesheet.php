@@ -14,7 +14,7 @@
  * 
  * @package     Timetracker
  */
-class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
+class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sales_Model_Billable_Interface
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -50,6 +50,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
         'is_billable'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'is_billable_combined'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'billed_in'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'invoice_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_cleared'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'is_cleared_combined'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // custom fields array
@@ -107,5 +108,30 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract
         $this->_filters['start_time'] = new Zend_Filter_Empty(NULL);
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+    
+    /**
+     * returns the interval of this billable
+     *
+     * @return array
+     */
+    public function getInterval()
+    {
+        $startDate = new Tinebase_DateTime($this->start_date);
+        $startDate->setDate($startDate->format('Y'), $startDate->format('m'), 1);
+        $endDate = clone $startDate;
+        $endDate->addMonth(1)->subSecond(1);
+        
+        return array($startDate, $endDate);
+    }
+    
+    /**
+     * returns the quantity of this billable
+     *
+     * @return float
+     */
+    public function getQuantity()
+    {
+        return (int) $this->duration / 60;
     }
 }

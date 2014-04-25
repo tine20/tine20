@@ -83,7 +83,7 @@ class Sales_InvoiceTestCase extends TestCase
     {
         // set reference date to the 1st january of last year
         $this->_referenceDate = Tinebase_DateTime::now();
-        $this->_referenceDate->setTimezone('UTC');
+        $this->_referenceDate->setTimezone('UTC');//Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $this->_referenceDate->subYear(1);
         $this->_referenceDate->setDate($this->_referenceDate->format('Y'), 1 ,1);
         $this->_referenceDate->setTime(0,0,0);
@@ -260,10 +260,11 @@ class Sales_InvoiceTestCase extends TestCase
         $customer3Timeaccount = $this->_timeaccounts->filter('title', 'TA-for-Customer3')->getFirstRecord();
         
         $tsDate = clone $this->_referenceDate;
-        $tsDate->addMonth(4);
+        $tsDate->addMonth(4)->addDay(5);
         
         $timesheetController = Timetracker_Controller_Timesheet::getInstance();
         
+        // this is a ts on 20xx-05-06
         $timesheet = new Timetracker_Model_Timesheet(array(
             'account_id' => Tinebase_Core::getUser()->getId(),
             'timeaccount_id' => $customer3Timeaccount->getId(),
@@ -274,6 +275,7 @@ class Sales_InvoiceTestCase extends TestCase
         
         $timesheetController->create($timesheet);
         
+        // this is a ts on 20xx-09-06
         $timesheet->id = NULL;
         $timesheet->start_date = $tsDate->addMonth(4);
         $timesheet->description = 'ts from ' . (string) $tsDate;
@@ -313,7 +315,7 @@ class Sales_InvoiceTestCase extends TestCase
         }
         
         $contractData = array(
-            // 13 invoices should be created from 1.1.2013 - 1.1.2014
+            // 1 invoice should be created from 1.1.2013 - 1.1.2014
             array(
                 'number'       => 1,
                 'title'        => Tinebase_Record_Abstract::generateUID(),
@@ -326,7 +328,7 @@ class Sales_InvoiceTestCase extends TestCase
                 'end_date' => NULL,
             ),
             
-            // 2 invoices should be created on 1.5 and 1.8
+            // 1 invoice should be created on 1.5 for interval 1.1. - 30.4
             array(
                 'number'       => 2,
                 'title'        => Tinebase_Record_Abstract::generateUID(),
@@ -338,7 +340,7 @@ class Sales_InvoiceTestCase extends TestCase
                 'start_date' => $startDate,
                 'end_date' => $endDate,
             ),
-            // 4 invoices should be created on 1.4.2013, 1.7.2013, 1.10.2013 and 1.1.2014
+            // 2 invoices should be created on 1.5.2013 and 1.10.2013
             array(
                 'number'       => 3,
                 'title'        => Tinebase_Record_Abstract::generateUID(),

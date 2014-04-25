@@ -18,8 +18,22 @@
  * @package     Timetracker
  * @subpackage  Model
  */
-class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
+class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract implements Sales_Model_Billable_Interface
 {
+    /**
+     * if billables has been loaded or should have been loaded, but none has been found, this is set to true
+     *
+     * @var boolean
+     */
+    protected $_billablesLoaded = FALSE;
+    
+    /**
+     * holds found billables
+     *
+     * @var array
+     */
+    protected $_billables = NULL;
+    
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -88,6 +102,7 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
         'is_open'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'is_billable'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'billed_in'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'invoice_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'not yet billed'),
         'cleared_at'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // how long can users book timesheets for this timeaccount 
@@ -160,4 +175,194 @@ class Timetracker_Model_Timeaccount extends Tinebase_Record_Abstract
             $this->grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants');
         }
     }
+    
+    /**
+     * returns the timesheet filter 
+     * 
+     * @param Tinebase_DateTime $date
+     * @return Timetracker_Model_TimesheetFilter
+     */
+    protected function _getBillableTimesheetsFilter(Tinebase_DateTime $date)
+    {
+        // find all timesheets for this timeaccount the last year
+        $startDate = clone $date;
+        $startDate->subYear(1);
+        
+        // if this is not budgeted, show for timesheets in this period
+        $filter = new Timetracker_Model_TimesheetFilter(array(
+            array('field' => 'start_date', 'operator' => 'before', 'value' => $date),
+            array('field' => 'start_date', 'operator' => 'after', 'value' => $startDate),
+            array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
+        ), 'AND');
+        
+        $filter->addFilter(new Tinebase_Model_Filter_Text(
+            array('field' => 'invoice_id', 'operator' => 'isnull', 'value' => NULL)
+        ));
+        
+        $filter->addFilter(new Tinebase_Model_Filter_Text(
+            array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())
+        ));
+        
+        return $filter;
+    }
+    
+    /**
+     * returns the max interval of all billables
+     *
+     * @param Tinebase_DateTime $date
+     * @return array
+     */
+    public function getInterval(Tinebase_DateTime $date = NULL)
+    {
+        if (! $date) {
+            $date = $this->_referenceDate;
+        }
+        
+        // if this is a timeaccount with a budget, the timeaccount is the billable
+        if (intval($this->budget > 0)) {
+            
+            $startDate = clone $date;
+            $startDate->setDate($date->format('Y'), $date->format('m'), 1);
+            $endDate = clone $startDate;
+            $endDate->addMonth(1)->subSecond(1);
+            
+            $interval = array($startDate, $endDate);
+        } else {
+            $interval = parent::getInterval($date);
+        }
+        
+        return $interval;
+    }
+    
+    /**
+     * returns the quantity of this billable
+     *
+     * @return float
+     */
+    public function getQuantity()
+    {
+        return (float) $this->budget;
+    }
+    
+    /**
+     * loads billables for this record
+     *
+     * @param Tinebase_DateTime $date
+     * @return void
+    */
+    public function loadBillables(Tinebase_DateTime $date)
+    {
+        $this->_referenceDate = $date;
+        $this->_billables = array();
+        
+        if (intval($this->budget) > 0) {
+            
+            $month = $date->format('Y-m');
+            
+            $this->_billables[$month] = array($this);
+            
+        } else {
+            $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($this->_getBillableTimesheetsFilter($date));
+            
+            foreach($timesheets as $timesheet) {
+                $month = new Tinebase_DateTime($timesheet->start_date);
+                $month = $month->format('Y-m');
+                
+                if (! isset($billables[$month])) {
+                    $this->_billables[$month] = array();
+                }
+                
+                $this->_billables[$month][] = $timesheet;
+            }
+        }
+    }
+    
+    /**
+     * returns true if this record should be billed for the specified date
+     *
+     * @param Tinebase_DateTime $date
+     * @param Sales_Model_Contract $contract
+     * @return boolean
+    */
+    public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
+    {
+        $this->_referenceDate = $date;
+
+        if (intval($this->budget) > 0 && $this->status == 'to bill' && $this->invoice_id == NULL) {
+            // if there is a budget, bill it
+            return TRUE;
+            
+        } else {
+            $pagination = new Tinebase_Model_Pagination(array('limit' => 1));
+            $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($this->_getBillableTimesheetsFilter($date), $pagination, FALSE, /* $_onlyIds = */ TRUE);
+        
+            if (! empty($timesheets))  {
+                return TRUE;
+            }
+        }
+        
+        // no match, not billable
+        return FALSE;
+    }
+    
+    /**
+     * the invoice_id - field of all billables of this accountable gets the id of this invoice
+     *
+     * @param Sales_Model_Invoice $invoice
+     */
+    public function conjunctInvoiceWithBillables($invoice)
+    {
+        if (intval($this->budget) > 0) {
+            $this->invoice_id = $invoice->getId();
+            Timetracker_Controller_Timeaccount::getInstance()->update($this);
+        } else {
+            $ids = $this->_getIdsOfBillables();
+            
+            if (! empty($ids)) {
+                $filter = new Timetracker_Model_TimesheetFilter(array());
+                $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $ids)));
+                
+                Timetracker_Controller_Timesheet::getInstance()->updateMultiple($filter, array('invoice_id' => $invoice->getId()));
+            }
+        }
+    }
+    
+    /**
+     * returns the unit of the accountable
+     *
+     * @return string
+     */
+    public function getUnit()
+    {
+        return 'hour'; // _('hour')
+    }
+    
+    /**
+     * set each billable of this accountable billed
+     *
+     * @param Sales_Model_Invoice $invoice
+     */
+    public function clearBillables(Sales_Model_Invoice $invoice)
+    {
+        // if this timeaccount has a budget, close and bill this and set cleared at date
+        if (intval($this->budget) > 0) {
+            $this->is_open    = 0;
+            $this->status     = 'billed';
+            $this->cleared_at = Tinebase_DateTime::now();
+            
+            Timetracker_Controller_Timeaccount::getInstance()->update($this);
+            
+        } else {
+            // otherwise clear all timesheets of this invoice
+            $tsController = Timetracker_Controller_Timesheet::getInstance();
+            
+            $filter = new Timetracker_Model_TimesheetFilter(array(), 'AND');
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'is_cleared', 'operator' => 'equals', 'value' => 0)));
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())));
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId())));
+            
+            $tsController->updateMultiple($filter, array('is_cleared' => 1));
+        }
+    }
+    
 }
