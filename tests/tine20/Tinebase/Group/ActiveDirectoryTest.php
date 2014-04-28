@@ -29,8 +29,8 @@ class Tinebase_Group_ActiveDirectoryTest extends PHPUnit_Framework_TestCase
     protected $domainSid  = 'S-1-5-21-2127521184-1604012920-1887927527';
     protected $userSid    = 'S-1-5-21-2127521184-1604012920-1887927527-72713';
     protected $groupSid   = 'S-1-5-21-2127521184-1604012920-1887927527-62713';
-    protected $groupObjectGUID = '2127521184-1604012920-1787927527';
-    protected $userObjectGUID  = '2127521184-1604012920-1887927527';
+    protected $groupObjectGUID = '0cbadcc5-72f7-4a2d-8858-7ba6c80e6c15';
+    protected $userObjectGUID  = '0cbadcc5-72f7-4a2d-8858-7ba6c80e6c16';
     protected $groupBaseFilter = 'objectclass=group';
     
     /**
@@ -93,13 +93,15 @@ class Tinebase_Group_ActiveDirectoryTest extends PHPUnit_Framework_TestCase
     
     public function _stubSearchCallback($filter, $basedn = null, $scope = self::SEARCH_SCOPE_SUB, array $attributes = array(), $sort = null, $collectionClass = null)
     {
-        switch ((string) $filter) {
-            case 'objectClass=domain':
+        switch (base64_encode((string) $filter)) {
+            #case 'objectClass=domain':
+            case 'b2JqZWN0Q2xhc3M9ZG9tYWlu':
                 return $this->_getZendLdapCollectionStub(array('objectsid' => array($this->domainSid), 'distinguishedname' => array('DC=tine20,DC=org')));
                 
                 break;
                 
-            case "(&(objectclass=group)(objectguid=$this->groupObjectGUID))":
+            #case "(&(objectclass=group)(objectguid=$this->groupObjectGUID))":
+            case 'KCYob2JqZWN0Y2xhc3M9Z3JvdXApKG9iamVjdGd1aWQ9xdy6XDBj93ItSohYe6bIXDBlbFwxNSkp':
                 return $this->_getZendLdapCollectionStub(array('objectsid' => array($this->groupSid)));
                 
                 break;

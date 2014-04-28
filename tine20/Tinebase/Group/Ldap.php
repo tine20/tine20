@@ -161,7 +161,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
-            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId))
+            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, $this->_encodeGroupId($groupId))
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " ldap filter: " . $filter);
@@ -363,7 +363,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " account meta data: " . print_r($accountMetaData, true));
         
         $filter = Zend_Ldap_Filter::andFilter(
-            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)),
+            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, $this->_encodeGroupId($groupId)),
             Zend_Ldap_Filter::equals('memberuid', Zend_Ldap::filterEscape($accountMetaData['uid']))
         );
         
@@ -382,7 +382,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         if ($this->_options['useRfc2307bis']) {
             $filter = Zend_Ldap_Filter::andFilter(
-                Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)),
+                Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, $this->_encodeGroupId($groupId)),
                 Zend_Ldap_Filter::equals('member', Zend_Ldap::filterEscape($accountMetaData['dn']))
             );
             
@@ -406,7 +406,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if ($this->_options['useRfc2307bis']) {
             // remove groupdn if no longer needed
             $filter = Zend_Ldap_Filter::andFilter(
-                Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)),
+                Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, $this->_encodeGroupId($groupId)),
                 Zend_Ldap_Filter::equals('member', Zend_Ldap::filterEscape($groupDn))
             );
             
@@ -644,7 +644,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $filter = Zend_Ldap_Filter::equals(
-            $this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)
+            $this->_groupUUIDAttribute, $this->_encodeGroupId($groupId)
         );
         
         $result = $this->_ldap->search(
@@ -669,10 +669,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     protected function _getUserMetaData($_userId)
     {
-        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
+        $userId = $this->_encodeAccountId(Tinebase_Model_User::convertUserIdToInt($_userId));
 
         $filter = Zend_Ldap_Filter::equals(
-            $this->_userUUIDAttribute, Zend_Ldap::filterEscape($userId)
+            $this->_userUUIDAttribute, $userId
         );
 
         $result = $this->_ldap->search(
@@ -753,6 +753,28 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      * @return string
      */
     protected function _decodeGroupId($groupId)
+    {
+        return $groupId;
+    }
+    
+    /**
+     * helper function to be overwriten in subclasses
+     * 
+     * @param  string  $accountId
+     * @return string
+     */
+    protected function _encodeAccountId($accountId)
+    {
+        return $accountId;
+    }
+    
+    /**
+     * convert binary id to plain text id
+     * 
+     * @param  string  $groupId
+     * @return string
+     */
+    protected function _encodeGroupId($groupId)
     {
         return $groupId;
     }
@@ -858,7 +880,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
-            Zend_Ldap_Filter::equals('gidnumber', Zend_Ldap::filterEscape($_gidNumber))
+            Zend_Ldap_Filter::equals('gidnumber', $_gidNumber)
         );
         
         $groupId = $this->_ldap->search(
@@ -889,7 +911,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
-            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($_uuid))
+            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, $this->_encodeGroupId($_uuid))
         );
         
         $groupId = $this->_ldap->search(

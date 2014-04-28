@@ -223,7 +223,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         // find user in AD and retrieve memberOf attribute
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_userBaseFilter),
-            Zend_Ldap_Filter::equals($this->_userUUIDAttribute, Zend_Ldap::filterEscape($userId))
+            Zend_Ldap_Filter::equals($this->_userUUIDAttribute, $this->_encodeAccountId($userId))
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
@@ -388,7 +388,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
     {
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
-            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($_uuid))
+            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, $this->_encodeGroupId($_uuid))
         );
         
         $groupData = $this->_ldap->search(
@@ -413,7 +413,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
     {
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
-            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($_uuid))
+            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, $this->_encodeGroupId($_uuid))
         );
         
         $groupData = $this->_ldap->search(
@@ -507,6 +507,45 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
     }
     
     /**
+     * convert plain text id to binary id
+     * 
+     * @param  string  $accountId
+     * @return string
+     */
+    protected function _encodeAccountId($accountId)
+    {
+        switch ($this->_userUUIDAttribute) {
+            case 'objectguid':
+                return Tinebase_Ldap::encodeGuid($accountId);
+                break;
+                
+            default:
+                return $accountId;
+                break;
+        }
+        
+    }
+    
+    /**
+     * convert plain text id to binary id
+     * 
+     * @param  string  $groupId
+     * @return string
+     */
+    protected function _encodeGroupId($groupId)
+    {
+        switch ($this->_groupUUIDAttribute) {
+            case 'objectguid':
+                return Tinebase_Ldap::encodeGuid($groupId);
+                break;
+                
+            default:
+                return $groupId;
+                break;
+        }
+    }
+    
+    /**
      * returns arrays of metainfo from given accountIds
      *
      * @param array $_accountIds
@@ -518,7 +557,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         $filterArray = array();
         foreach ($_accountIds as $accountId) {
             $accountId = Tinebase_Model_User::convertUserIdToInt($accountId);
-            $filterArray[] = Zend_Ldap_Filter::equals($this->_userUUIDAttribute, Zend_Ldap::filterEscape($accountId));
+            $filterArray[] = Zend_Ldap_Filter::equals($this->_userUUIDAttribute, $this->_encodeAccountId($accountId));
         }
         $filter = new Zend_Ldap_Filter_Or($filterArray);
         
@@ -579,7 +618,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $filter = Zend_Ldap_Filter::equals(
-            $this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId)
+            $this->_groupUUIDAttribute, $this->_encodeGroupId($groupId)
         );
         
         $result = $this->_ldap->search(
