@@ -462,7 +462,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     public function getTemplates($containerId = NULL)
     {
         if (! $containerId) {
-            throw new Tinebase_Exception_InvalidArgument('A container id must be set!');
+            return array(
+                'totalcount' => 0,
+                'results'    => array(),
+            );
         }
     
         try {

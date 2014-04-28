@@ -65,8 +65,8 @@ Tine.HumanResources.AccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.MessageBox.show({
             buttons: Ext.Msg.OK,
             icon: Ext.MessageBox.INFO,
-            title: this.app.i18n._('Accounts has been created'), 
-            msg: String.format(this.app.i18n._('{0} accounts for the year {1} has been created successfully!'), data.totalcount, data.year)
+            title: this.app.i18n._('Accounts have been created'), 
+            msg: String.format(this.app.i18n._('{0} accounts for the year {1} have been created successfully!'), data.totalcount, data.year)
         });
     },
     
