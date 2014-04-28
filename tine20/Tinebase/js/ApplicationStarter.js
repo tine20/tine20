@@ -532,6 +532,22 @@ Tine.Tinebase.ApplicationStarter = {
                     } else {
                         Ext.apply(Tine[appName][gridPanelName].prototype, gpConfig);
                     }
+                    
+                    // add model to global add splitbutton if set
+                    if (modelConfig.hasOwnProperty('splitButton') && modelConfig.splitButton == true) {
+                        Ext.ux.ItemRegistry.registerItem('Tine.widgets.grid.GridPanel.addButton', {
+                            text: Tine[appName].i18n._('New ' + modelName), 
+                            iconCls: appName + modelName,
+                            scope: Tine.Tinebase.appMgr.get(appName),
+                            handler: (function() {
+                                var ms = this.getMainScreen(),
+                                    cp = ms.getCenterPanel(modelName);
+                                    
+                                cp.onEditInNewWindow.call(cp, {});
+                            }).createDelegate(Tine.Tinebase.appMgr.get(appName))
+                        });
+                    }
+                    
                 }, this);
             }
         }, this);

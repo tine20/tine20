@@ -173,7 +173,11 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $groupId = $group->getId();
                 
                 // TODO think about fetching this from IMAP config
-                $testconfig = Zend_Registry::get('testConfig');
+                try {
+                    $testconfig = Zend_Registry::get('testConfig');
+                } catch (Zend_Exception $e) {
+                    $testconfig = NULL;
+                }
                 $emailDomain = ($testconfig && isset($testconfig->maildomain)) ? $testconfig->maildomain : 'tine20.org';
 
                 $user = new Tinebase_Model_FullUser(array(

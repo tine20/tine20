@@ -603,10 +603,12 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 value: '0'
             }, commonComboConfig),
             Ext.applyIf({
+                hidden: type === 'ActiveDirectory' ,
                 name: 'accounts_' + type + '_pwEncType',
-                fieldLabel: this.app.i18n._('Password encryption type'),
+                fieldLabel: this.app.i18n._('Password encoding'),
                 store: [
                     ['des', this.app.i18n._('des')],
+                    ['crypt', this.app.i18n._('crypt')],
                     ['blowfish_crypt', this.app.i18n._('blowfish_crypt')],
                     ['md5_crypt', this.app.i18n._('md5_crypt')],
                     ['ext_crypt', this.app.i18n._('ext_crypt')],
@@ -618,7 +620,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                     ['plain', this.app.i18n._('plain')]
                 ],
                 value: 'ssha'
-            }, commonComboConfig), 
+            }, commonComboConfig),
             {
                 name: 'accounts_' + type + '_userDn',
                 fieldLabel: this.app.i18n._('User DN')
@@ -646,12 +648,6 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 value: '1'
             }, commonComboConfig), 
             Ext.applyIf({
-                name: 'accounts_' + type + '_pwEncType',
-                fieldLabel: this.app.i18n._('Password encoding'),
-                store: [['SSHA', 'SSHA'], ['SHA', 'SHA'], ['MD5', 'MD5 (unsecure)'], ['CRYPT', 'CRYPT (very unsecure)']],
-                value: 'SSHA'
-            }, commonComboConfig), 
-            Ext.applyIf({
                 name: 'accounts_' + type + (type === 'Ldap') ? '_useRfc2307bis' : '_useRfc2307',
                 fieldLabel: (type === 'Ldap') ? this.app.i18n._('Use Rfc 2307 bis') : this.app.i18n._('Maintain RFC 2307 attributes'),
                 store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
@@ -669,13 +665,18 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             }, {
                 name: 'accounts_' + type + '_maxGroupId',
                 fieldLabel: this.app.i18n._('Max Group Id')
-            }, {
+            },
+            Ext.applyIf({
                 name: 'accounts_' + type + '_groupUUIDAttribute',
-                fieldLabel: this.app.i18n._('Group UUID Attribute name')
-            }, {
+                fieldLabel: this.app.i18n._('Group UUID Attribute name'),
+                store: (type === 'ActiveDirectory' ? [['objectGUID', 'objectGUID']] : [['entryUUID', 'entryUUID'], ['gidNumber', 'gidNumber']])
+            }, commonComboConfig),
+            Ext.applyIf({
                 name: 'accounts_' + type + '_userUUIDAttribute',
-                fieldLabel: this.app.i18n._('User UUID Attribute name')
-            }, {
+                fieldLabel: this.app.i18n._('User UUID Attribute name'),
+                store: (type === 'ActiveDirectory' ? [['objectGUID', 'objectGUID']] : [['entryUUID', 'entryUUID'], ['uidNumber', 'uidNumber']])
+            }, commonComboConfig),
+            {
                 name: 'accounts_' + type + '_defaultUserGroupName',
                 fieldLabel: this.app.i18n._('Default user group name')
             }, {

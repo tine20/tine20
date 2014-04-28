@@ -326,6 +326,10 @@
           "path": "js/ux/Printer/renderers/"
         },
         {
+          "text": "TitleRendererManager.js",
+          "path": "js/data/"
+        },
+        {
           "text": "Record.js",
           "path": "js/data/"
         },
@@ -545,6 +549,11 @@
           "text": "ForeignRecordFilter.js",
           "path": "js/widgets/grid/"
         },
+        {
+          "text": "GroupingGridPlugin.js",
+          "path": "js/ux/grid/"
+        },
+        
         {
           "text": "OwnRecordFilter.js",
           "path": "js/widgets/grid/"
