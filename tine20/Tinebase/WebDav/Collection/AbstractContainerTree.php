@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\DAV\Collection implements \Sabre\DAV\IProperties, \Sabre\DAVACL\IACL
+abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\DAV\Collection implements \Sabre\DAV\IProperties, \Sabre\DAVACL\IACL, \Sabre\DAV\IExtendedCollection
 {
     /**
      * the current application object
@@ -78,41 +78,25 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
     /**
      * (non-PHPdoc)
      * @see \Sabre\DAV\Collection::createDirectory()
-     * 
-     * @todo allow to create personal folders only when in personal path
      */
     public function createDirectory($name) 
     {
-        if (count($this->_getPathParts()) !== 2) {
-            throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create directory ' . $name);
-        }
-        
-        $containerType = array_value(1, $this->_getPathParts()) == Tinebase_Model_Container::TYPE_SHARED ?
-            Tinebase_Model_Container::TYPE_SHARED :
-            Tinebase_Model_Container::TYPE_PERSONAL;
-        
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => $name,
-            'type'              => $containerType,
-            'backend'           => 'Sql',
-            'application_id'    => $this->_getApplication()->getId(),
-            'model'             => Tinebase_Core::getApplicationInstance($this->_applicationName)->getDefaultModel()
+        return $this->_createContainer(array(
+            'name' => $name
         ));
-
-        try {
-            $container = Tinebase_Container::getInstance()->addContainer($newContainer);
-        } catch (Tinebase_Exception_AccessDenied $tead) {
-            throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create directory ' . $name);
-        }
-        
-        return $container;
-        
-        //$result = $container->toArray();
-        //$result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
-        //$result['path'] = $container->getPath();
-        
-        //return $result;
-        
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Sabre\DAV\IExtendedCollection::createExtendedCollection()
+     */
+    function createExtendedCollection($name, array $resourceType, array $properties)
+    {
+        return $this->_createContainer(array(
+            'name'  => isset($properties['{DAV:}displayname']) ? $properties['{DAV:}displayname'] : $name,
+            'uuid'  => $name,
+            'color' => isset($properties['{http://apple.com/ns/ical/}calendar-color']) ? substr($properties['{http://apple.com/ns/ical/}calendar-color'], 0, 7) : null
+        ));
     }
     
     /**
@@ -156,11 +140,17 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
             # list container
             case 2:
                 if (array_value(1, $this->_getPathParts()) == Tinebase_Model_Container::TYPE_SHARED) {
-                    try {
+                    try { 
                         if ($name instanceof Tinebase_Model_Container) {
                             $container = $name;
                         } elseif ($this->_useIdAsName) {
-                            $container = Tinebase_Container::getInstance()->getContainerById($name);
+                            // first try to fetch by uuid ...
+                            try {
+                                $container = Tinebase_Container::getInstance()->getByProperty($name, 'uuid');
+                            } catch (Tinebase_Exception_NotFound $tenf) {
+                                // ... if that fails by id
+                                $container = Tinebase_Container::getInstance()->getContainerById($name);
+                            }
                         } else {
                             $container = Tinebase_Container::getInstance()->getContainerByName(
                                 $this->_getAppliationName(), 
@@ -174,7 +164,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                         
                     } catch (Tinebase_Exception_InvalidArgument $teia) {
                         // invalid container id provided
-                        throw new \SabreDAV\Exception\NotFound("Directory $this->_path/$name not found");
+                        throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
                     }
                 } elseif ($this->_hasRecordFolder && array_value(1, $this->_getPathParts()) == Tinebase_FileSystem::FOLDER_TYPE_RECORDS) {
                     
@@ -192,7 +182,14 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                         if ($name instanceof Tinebase_Model_Container) {
                             $container = $name;
                         } elseif ($this->_useIdAsName) {
-                            $container = Tinebase_Container::getInstance()->getContainerById($name);
+                            // first try to fetch by uuid ...
+                            try {
+                                $container = Tinebase_Container::getInstance()->getByProperty((string) $name, 'uuid');
+                            } catch (Tinebase_Exception_NotFound $tenf) {
+                                // ... if that fails by id
+                                $container = Tinebase_Container::getInstance()->getContainerById($name);
+                            }
+                            
                         } else { 
                             $container = Tinebase_Container::getInstance()->getContainerByName(
                                 $this->_getAppliationName(), 
@@ -207,7 +204,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                         
                     } catch (Tinebase_Exception_InvalidArgument $teia) {
                         // invalid container id provided
-                        throw new \SabreDAV\Exception\NotFound("Directory $this->_path/$name not found");
+                        throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
                     }
                     
                 } else {
@@ -571,6 +568,41 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
         }
         
         return $this->_application;
+    }
+    
+    /**
+     * creates a new container
+     * 
+     * @todo allow to create personal folders only when in currents users own path
+     * 
+     * @param  array  $properties  properties for new container
+     * @throws \Sabre\DAV\Exception\Forbidden
+     * @return Tinebase_Model_Container
+     */
+    protected function _createContainer(array $properties) 
+    {
+        if (count($this->_getPathParts()) !== 2) {
+            throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create directory ' . $properties['name']);
+        }
+        
+        $containerType = array_value(1, $this->_getPathParts()) == Tinebase_Model_Container::TYPE_SHARED ?
+            Tinebase_Model_Container::TYPE_SHARED :
+            Tinebase_Model_Container::TYPE_PERSONAL;
+        
+        $newContainer = new Tinebase_Model_Container(array_merge($properties, array(
+            'type'              => $containerType,
+            'backend'           => 'Sql',
+            'application_id'    => $this->_getApplication()->getId(),
+            'model'             => Tinebase_Core::getApplicationInstance($this->_applicationName)->getDefaultModel()
+        )));
+
+        try {
+            $container = Tinebase_Container::getInstance()->addContainer($newContainer);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create directory ' . $name);
+        }
+        
+        return $container;
     }
     
     /**

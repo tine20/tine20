@@ -19,6 +19,28 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
 {
     /**
      * (non-PHPdoc)
+     * @see \Sabre\DAV\IExtendedCollection::createExtendedCollection()
+     */
+    function createExtendedCollection($name, array $resourceType, array $properties)
+    {
+        if (count($this->_getPathParts()) === 2 && isset($properties['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'])) {
+            $componentSet = $properties['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'];
+            
+            if ($componentSet instanceof \Sabre\CalDAV\Property\SupportedCalendarComponentSet &&
+                in_array('VTODO', $componentSet->getValue()) &&
+                Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN)
+            ) {
+                $tasks = new Tasks_Frontend_WebDAV('tasks/' . $this->getName(), $this->_useIdAsName);
+                
+                return $tasks->createExtendedCollection($name, $resourceType, $properties);
+            }
+        }
+        
+        return parent::createExtendedCollection($name, $resourceType, $properties);
+    }
+    
+    /**
+     * (non-PHPdoc)
      * @see Tinebase_WebDav_Collection_AbstractContainerTree::getChild()
      */
     public function getChild($name)
