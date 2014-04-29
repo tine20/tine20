@@ -202,31 +202,31 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             ), 'defaultType' => 'REVERSAL'
         ),
         array('relatedApp' => 'Timetracker', 'relatedModel' => 'Timeaccount', 'config' => array(
-            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '1:0'), // _('Invoice Item')
+            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
         array('relatedApp' => 'IPAccounting', 'relatedModel' => 'IPNet', 'config' => array(
-            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '1:0'), // _('Invoice Item')
+            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
         array('relatedApp' => 'IPAccounting', 'relatedModel' => 'StoragePath', 'config' => array(
-            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '1:0'), // _('Invoice Item')
+            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
         array('relatedApp' => 'IPAccounting', 'relatedModel' => 'BackupPath', 'config' => array(
-            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '1:0'), // _('Invoice Item')
+            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
         array('relatedApp' => 'IPAccounting', 'relatedModel' => 'CertificateDomain', 'config' => array(
-            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '1:0'), // _('Invoice Item')
+            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
         array('relatedApp' => 'IPAccounting', 'relatedModel' => 'DReg', 'config' => array(
-            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '1:0'), // _('Invoice Item')
+            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
         array('relatedApp' => 'IPAccounting', 'relatedModel' => 'MailAccount', 'config' => array(
-            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '1:0'), // _('Invoice Item')
+            array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
     );
