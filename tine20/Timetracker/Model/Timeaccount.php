@@ -287,7 +287,9 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
     public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
     {
         $this->_referenceDate = $date;
-
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), true));
+        
         if (intval($this->budget) > 0 && $this->status == 'to bill' && $this->invoice_id == NULL) {
             // if there is a budget, bill it
             return TRUE;
