@@ -791,24 +791,3 @@ msgstr "Sa."
 #: js/ContractEditDialog.js:296
 msgid "Sun."
 msgstr "So."
-
-msgid "Miscellaneous"
-msgstr "Sonstiges"
-
-msgid "Create new accounts"
-msgstr "Personalkonten anlegen"
-
-msgid "Accounts has been created"
-msgstr "Personalkonten wurden angelegt"
-
-msgid "{0} accounts for the year {1} has been created successfully!"
-msgstr "Es wurden {0} Personalkonten für das Jahr {1} angelegt!"
-
-msgid "Please enter the year you want to create accounts for:"
-msgstr "Bitte geben Sie das Jahr an, für das Personalkonten erzeugt werden sollen:"
-
-msgid "No or no valid year given"
-msgstr "Kein oder kein valides Jahr angegeben"
-
-msgid "Please use a valid year!"
-msgstr "Bitte geben Sie ein korrektes Jahr an!"
