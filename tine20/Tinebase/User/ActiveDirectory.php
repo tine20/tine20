@@ -389,6 +389,26 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
     }
     
     /**
+     * convert plain text id to binary id
+     * 
+     * @param  string  $accountId
+     * @return string
+     */
+    protected function _encodeAccountId($accountId)
+    {
+        switch ($this->_userUUIDAttribute) {
+            case 'objectguid':
+                return Tinebase_Ldap::encodeGuid($accountId);
+                break;
+                
+            default:
+                return $accountId;
+                break;
+        }
+        
+    }
+    
+    /**
      * generates dn for new user
      *
      * @param  Tinebase_Model_FullUser $_account

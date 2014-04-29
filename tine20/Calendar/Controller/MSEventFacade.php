@@ -327,7 +327,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             $this->_eventController->update($exception, $_checkBusyConflicts);
         }
         
-        return $this->_toiTIP($updatedBaseEvent);
+        // NOTE: we need to refetch here, otherwise eTag fail's as exception updates change baseEvents seq
+        return $this->get($updatedBaseEvent->getId());
     }
     
     /**

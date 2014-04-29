@@ -601,16 +601,16 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     {
         switch($_property) {
             case 'accountId':
-                $value = Tinebase_Model_User::convertUserIdToInt($_userId);
+                $value = $this->_encodeAccountId(Tinebase_Model_User::convertUserIdToInt($_userId));
                 break;
             default:
-                $value = $_userId;
+                $value = Zend_Ldap::filterEscape($_userId);
                 break;
         }
-
+        
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_userBaseFilter),
-            Zend_Ldap_Filter::equals($this->_rowNameMapping[$_property], Zend_Ldap::filterEscape($value))
+            Zend_Ldap_Filter::equals($this->_rowNameMapping[$_property], $value)
         );
         
         $attributes = array_values($this->_rowNameMapping);
@@ -651,10 +651,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     protected function _getMetaData($_userId)
     {
-        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
+        $userId = $this->_encodeAccountId(Tinebase_Model_User::convertUserIdToInt($_userId));
 
         $filter = Zend_Ldap_Filter::equals(
-            $this->_rowNameMapping['accountId'], Zend_Ldap::filterEscape($userId)
+            $this->_rowNameMapping['accountId'], $userId
         );
 
         $result = $this->_ldap->search(
@@ -856,6 +856,17 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     }
 
     /**
+     * helper function to be overwriten in subclasses
+     * 
+     * @param  string  $accountId
+     * @return string
+     */
+    protected function _encodeAccountId($accountId)
+    {
+        return $accountId;
+    }
+
+    /**
      * parse ldap result set and update Addressbook_Model_Contact
      *
      * @param array                      $_userData
@@ -993,12 +1004,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function resolveUUIdToUIdNumber($_uuid)
     {
-        if ($this->_groupUUIDAttribute == 'uidnumber') {
+        if ($this->_userUUIDAttribute == 'uidnumber') {
             return $_uuid;
         }
 
         $filter = Zend_Ldap_Filter::equals(
-            $this->_userUUIDAttribute, Zend_Ldap::filterEscape($_uuid)
+            $this->_userUUIDAttribute, $this->_encodeAccountId($_uuid)
         );
 
         $groupId = $this->_ldap->search(
