@@ -289,7 +289,15 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
      */
     public function getName()
     {
-        return $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name;
+        if ($this->_useIdAsName == true) {
+            if ($this->_container->uuid) {
+                return $this->_container->uuid;
+            } else {
+                return $this->_container->getId();
+            }
+        } 
+        
+        return $this->_container->name;
     }
     
     /**

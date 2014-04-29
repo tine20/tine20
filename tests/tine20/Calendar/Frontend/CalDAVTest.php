@@ -130,6 +130,64 @@ class Calendar_Frontend_CalDAVTest extends TestCase
     }
 
     /**
+     * test to create a new directory
+     */
+    public function testCreateExtendedCollectionVEvent()
+    {
+        $randomName = Tinebase_Record_Abstract::generateUID();
+        
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
+        
+        $collection->createExtendedCollection(
+            'B1B3BEA0-F1F9-409F-B1A0-43E41119F851', 
+            array('{DAV:}collection', '{urn:ietf:params:xml:ns:caldav}calendar'),
+            array(
+                '{DAV:}displayname' => $randomName,
+                '{http://apple.com/ns/ical/}calendar-color' => '#711A76FF',
+                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new \Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT'))
+            )
+        );
+        
+        $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+        $this->assertTrue($container instanceof Tinebase_Model_Container);
+        
+        $subCollection = $collection->getChild('B1B3BEA0-F1F9-409F-B1A0-43E41119F851');
+        $this->assertEquals('B1B3BEA0-F1F9-409F-B1A0-43E41119F851', $subCollection->getName());
+        
+        $properties = $subCollection->getProperties(array('{DAV:}displayname'));
+        $this->assertEquals($randomName, $properties['{DAV:}displayname']);
+    }
+
+    /**
+     * test to create a new directory
+     */
+    public function testCreateExtendedCollectionVTodo()
+    {
+        $randomName = Tinebase_Record_Abstract::generateUID();
+        
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
+        
+        $collection->createExtendedCollection(
+            'B1B3BEA0-F1F9-409F-B1A0-43E41119F851', 
+            array('{DAV:}collection', '{urn:ietf:params:xml:ns:caldav}calendar'),
+            array(
+                '{DAV:}displayname' => $randomName,
+                '{http://apple.com/ns/ical/}calendar-color' => '#711A76FF',
+                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new \Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VTODO'))
+            )
+        );
+        
+        $container = Tinebase_Container::getInstance()->getContainerByName('Tasks', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+        $this->assertTrue($container instanceof Tinebase_Model_Container);
+        
+        $subCollection = $collection->getChild('B1B3BEA0-F1F9-409F-B1A0-43E41119F851');
+        $this->assertEquals('B1B3BEA0-F1F9-409F-B1A0-43E41119F851', $subCollection->getName());
+        
+        $properties = $subCollection->getProperties(array('{DAV:}displayname'));
+        $this->assertEquals($randomName, $properties['{DAV:}displayname']);
+    }
+
+    /**
      * 
      * @return \Sabre\DAV\ObjectTree
      */
