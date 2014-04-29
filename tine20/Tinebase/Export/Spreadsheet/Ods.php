@@ -231,6 +231,8 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
      */
     protected function _addHead()
     {
+        $i18n = $this->_translate->getAdapter();
+        
         // add header (replace placeholders)
         if (isset($this->_config->headers)) {
             
@@ -239,11 +241,16 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             $patterns = array(
                 '/\{date\}/', 
                 '/\{user\}/',
+                '/\{count\}/',
             );
+            
+            $c = $this->_controller;
+            $count = $c::getInstance()->searchCount($this->_filter);
             
             $replacements = array(
                 Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale),
                 Tinebase_Core::getUser()->accountDisplayName,
+                $i18n->translate('Total: ') . $count
             );
             
             foreach($this->_config->headers->header as $headerCell) {
