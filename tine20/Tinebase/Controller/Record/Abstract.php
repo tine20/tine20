@@ -1918,7 +1918,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
             if (! empty($deleteIds)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Deleting dependent records with id = "' . print_r($deleteContracts->getId(), 1) . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Deleting dependent records with id = "' . print_r($deleteIds, 1) . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
                 }
                 $controller->delete($deleteIds);
             }
