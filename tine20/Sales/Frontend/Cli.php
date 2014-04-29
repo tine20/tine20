@@ -36,10 +36,11 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * creates missing accounts
      *
      * @param Zend_Console_Getopt $_opts
-     * @return integer
      */
     public function create_auto_invoices($_opts)
     {
+        $this->_addOutputLogWriter();
+        
         $date = NULL;
         $args = $this->_parseArgs($_opts, array());
     
@@ -56,6 +57,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     try {
                         $date = new Tinebase_DateTime($args['day']);
                     } catch (Exception $e) {
+                        Tinebase_Exception::log($e);
                     }
                 }
             }
@@ -68,7 +70,16 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $date = Tinebase_DateTime::now();
         }
         
-        Sales_Controller_Invoice::getInstance()->createAutoInvoices($date);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating invoices for ' . $date->toString());
+        }
+        
+        $result = Sales_Controller_Invoice::getInstance()->createAutoInvoices($date);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            unset($result['created']);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
+        }
     }
     
     /**

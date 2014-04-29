@@ -133,7 +133,6 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
         return ! in_array('last_autobill', $this->getFields());
     }
     
-
     /**
      * returns the unit of the accountable
      *

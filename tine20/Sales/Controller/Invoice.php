@@ -92,7 +92,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'type'                   => 'INVOICE_ITEM'
         );
         
-        foreach($contractsToBill as $contract) {
+        foreach ($contractsToBill as $contract) {
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Processing contract ' . $contract->title);
+            }
+            
             // this holds all relations for the invoice
             $relations        = array();
             $invoicePositions = array();
@@ -115,7 +120,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $billableAccountables = array();
             
             // iterate relations, look for customer, cost center and accountables
-            foreach($contract->relations as $relation) {
+            foreach ($contract->relations as $relation) {
                 
                 switch ($relation->type) {
                     case 'CUSTOMER':
@@ -126,6 +131,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         continue /* foreach */;
                 }
                 
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Checking relation ' . $relation->related_model);
+                
                 // find accountables
                 if (in_array('Sales_Model_Accountable_Interface', class_implements($relation->related_record))) {
                     
@@ -133,6 +141,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     
                     // if the related record is volatile, it does not know when billed last
                     if ($relation->related_record->isVolatile() && $relation->related_record->isBillable($currentDate)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                            . ' Found volatile & billable accountable');
+                        
                         $referenceDate = $contract->last_autobill ? clone $contract->last_autobill : clone $contract->start_date;
                         
                         $referenceDate->subSecond(10);
@@ -202,13 +213,15 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             // put each position into
             $invoicePositions = new Tinebase_Record_RecordSet('Sales_Model_InvoicePosition');
             
-            foreach($billableAccountables as $accountable) {
+            foreach ($billableAccountables as $accountable) {
                 $accountable->loadBillables($currentDate);
                 $billables = $accountable->getBillables();
                 
                 if (empty($billables)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                        Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . 'No efforts for the contract with the id "' . $contract->getId() . '" could have been found.', Zend_Log::INFO);
+                        Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' 
+                            . 'No efforts for the accountable ' . $accountable->getId() . ' of contract with the id "'
+                            . $contract->title . '" could be found.', Zend_Log::INFO);
                     }
                     continue;
                 }
@@ -231,6 +244,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             
             // if there are no positions, no bill will be created, but the last_autobill info is set
             if ($invoicePositions->count() == 0) {
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' 
+                        . 'No efforts for the contract "' . $contract->title . '" could be found.', Zend_Log::INFO);
+                }
+            
                 if ($volatileBilled) {
                     $contractController->updateLastBilledDate($contract);
                 }
