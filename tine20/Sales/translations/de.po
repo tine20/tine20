@@ -179,10 +179,6 @@ msgstr "Beschreibung"
 msgid "Enter description..."
 msgstr "Bitte geben Sie eine Beschreibung ein..."
 
-#: js/ContractCostCenterFilterModel.js:30
-msgid "Cost Center"
-msgstr "Kostenstelle"
-
 #: js/ContractCostCenterFilterModel.js:32
 msgid "without CostCenter"
 msgstr "ohne Kostenstelle"
