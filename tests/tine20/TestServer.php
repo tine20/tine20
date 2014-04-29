@@ -64,6 +64,7 @@ class TestServer
         Zend_Registry::set('testConfig', $config);
 
         $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
+        $_SERVER['REQUEST_URI'] = '';
 
         Tinebase_Core::initFramework();
 
