@@ -1614,6 +1614,23 @@ class Tinebase_Core
     }
     
     /**
+     * returns protocol + hostname
+     * 
+     * @return string
+     */
+    public static function getHostname()
+    {
+        $hostname = self::get('HOSTNAME');
+        if (! $hostname) {
+            $request = new Sabre\HTTP\Request();
+            $hostname = str_replace($request->getUri(), '', $request->getAbsoluteUri());
+            self::set('HOSTNAME', $hostname);
+        }
+        
+        return $hostname;
+    }
+    
+    /**
      * Singleton instance
      *
      * @return Zend_Scheduler

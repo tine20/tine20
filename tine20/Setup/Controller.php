@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        move $this->_db calls to backend class
  */
@@ -58,6 +58,13 @@ class Setup_Controller
      * @var integer
      */
     protected $_updatedApplications = 0;
+    
+    /**
+     * is filesystem available
+     * 
+     * @var boolean
+     */
+    protected $_isFileSystemAvailable = null;
     
     /**
      * don't clone. Use the singleton.
@@ -1804,7 +1811,7 @@ class Setup_Controller
         // deactivate cache again
         Tinebase_Core::setupCache(FALSE);
     }
-
+    
     /**
      * returns TRUE if filesystem is available
      * 
@@ -1812,16 +1819,21 @@ class Setup_Controller
      */
     public function isFilesystemAvailable()
     {
-        $session = Tinebase_Core::getSession();
-        if (! isset($session->filesystemAvailable)) {
-            $result = (! empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
-            if (is_object($session) && Zend_Session::isWritable()) {
-                $session->filesystemAvailable = $result;
+        if ($this->_isFileSystemAvailable === null) {
+            $session = Tinebase_Core::getSession();
+            if (! isset($session->filesystemAvailable)) {
+                $this->_isFileSystemAvailable = (! empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
+                if (is_object($session) && Zend_Session::isWritable()) {
+                    $session->filesystemAvailable = $this->_isFileSystemAvailable;
+                }
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' Filesystem available: ' . ($this->_isFileSystemAvailable ? 'yes' : 'no'));
+                
+            } else {
+                $this->_isFileSystemAvailable = $session->filesystemAvailable;
             }
-        } else {
-            $result = $session->filesystemAvailable;
         }
         
-        return $result;
+        return $this->_isFileSystemAvailable;
     }
 }

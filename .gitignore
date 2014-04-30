@@ -14,6 +14,11 @@ tine20/*/js/*-lang-*
 tine20/Tinebase/js/Locale/build/*.js
 scripts/packaging/tine20build/
 .vagrant
+scripts/vagrant/tmp
+scripts/vagrant/cache
+scripts/vagrant/files
+scripts/vagrant/logs
+scripts/vagrant/conf
 tine20/build
 scripts/weeklyevents
 scripts/custom

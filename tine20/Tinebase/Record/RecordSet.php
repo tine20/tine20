@@ -579,7 +579,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     protected function _getMatchingRecords($_field, $_value, $_valueIsRegExp = FALSE)
     {
-        if (is_callable($_field)) {
+        if (!is_string($_field) && is_callable($_field)) {
             $matchingRecords = array_filter($this->_listOfRecords, $_field);
         } else {
             // NOTE: indices may lead to wrong results if a record is changed after build of indices
