@@ -497,9 +497,11 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
      */
     protected function _contactForSharedPrincipal()
     {
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        
         $principal = array(
             'uri'                     => self::PREFIX_USERS . '/' . self::SHARED,
-            '{DAV:}displayname'       => 'Principal for shared folders',
+            '{DAV:}displayname'       => $translate->_('Shared folders'),
             
             '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => 'INDIVIDUAL',
             

@@ -35,8 +35,6 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
      */
     public function getProperties($requestedProperties) 
     {
-        $displayName = $this->_container->type == Tinebase_Model_Container::TYPE_SHARED ? $this->_container->name . ' (shared)' : $this->_container->name;
-        
         $ctags = Tinebase_Container::getInstance()->getContentSequence($this->_container);
         
         $properties = array(
@@ -45,10 +43,10 @@ class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Ab
             'uri'                                    => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
             '{DAV:}resource-id'                      => 'urn:uuid:' . $this->_container->getId(),
             '{DAV:}owner'                            => new DAVACL\Property\Principal(DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
-            '{DAV:}displayname'                      => $displayName,
+            '{DAV:}displayname'                      => $this->_container->name,
          
             #'principaluri'      => $principalUri,
-            '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description'    => 'Addressbook ' . $displayName,
+            '{' . CardDAV\Plugin::NS_CARDDAV . '}addressbook-description'    => 'Addressbook ' . $this->_container->name,
             '{' . CardDAV\Plugin::NS_CARDDAV . '}supported-addressbook-data' => new CardDAV\Property\SupportedAddressData(array(array('contentType' => 'text/vcard', 'version' => '3.0')))
         );
         
