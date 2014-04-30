@@ -52,7 +52,7 @@ mv composer.phar /usr/local/bin/composer
 #chsh vagrant -s /usr/bin/zsh
 
 # Create www link to /vagrant
-ln -s /vagrant /home/vagrant/www
+#ln -s /vagrant /home/vagrant/www
 
 ################# MYSQL AND WEBSERVER #####################
 

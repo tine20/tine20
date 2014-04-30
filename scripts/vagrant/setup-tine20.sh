@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Tine 2.0 Vhost
 tine20_vhost="
 <VirtualHost *:80>\n
@@ -38,7 +40,7 @@ a2ensite tine20-vagrant
 
 # update dependencies
 cd /vagrant/tine20.git/tine20
-composer install --dev --prefer-source --no-interaction
+sudo -u vagrant composer install --dev --prefer-source --no-interaction
 
 # setup directories
 mkdir -p /vagrant/logs /vagrant/conf /vagrant/cache /vagrant/files /vagrant/tmp
@@ -98,4 +100,4 @@ if [ ! -f /vagrant/conf/install.properties ]; then
 fi
 
 cd /vagrant/tine20.git/tine20
-/vagrant/tine20.git/tine20/vendor/bin/phing -D configdir=/vagrant/conf/ tine-install
+sudo -u vagrant /vagrant/tine20.git/tine20/vendor/bin/phing -D configdir=/vagrant/conf/ tine-install
