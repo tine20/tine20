@@ -1811,7 +1811,7 @@ class Setup_Controller
         // deactivate cache again
         Tinebase_Core::setupCache(FALSE);
     }
-
+    
     /**
      * returns TRUE if filesystem is available
      * 
@@ -1824,10 +1824,10 @@ class Setup_Controller
             if (! isset($session->filesystemAvailable)) {
                 $this->_isFileSystemAvailable = (! empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
                 if (is_object($session) && Zend_Session::isWritable()) {
-                    $session->filesystemAvailable = $result;
+                    $session->filesystemAvailable = $this->_isFileSystemAvailable;
                 }
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                    . ' Filesystem available: ' . ($result ? 'yes' : 'no'));
+                    . ' Filesystem available: ' . ($this->_isFileSystemAvailable ? 'yes' : 'no'));
                 
             } else {
                 $this->_isFileSystemAvailable = $session->filesystemAvailable;
