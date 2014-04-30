@@ -21,6 +21,8 @@
  * - add the constant to the $addRights in getAllApplicationRights() function
  * . add getText identifier in getTranslatedRightDescriptions() function
  * 
+ * TODO: make the manage_ right generic for each model
+ * 
  * @package     Tinebase
  * @subpackage  Acl
  */
@@ -31,6 +33,12 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_PRODUCTS = 'manage_products';
+    
+    /**
+     * the right to manage contracts
+     * @staticvar string
+     */
+    const MANAGE_CONTRACTS = 'manage_contracts';
     
     /**
      * the right to manage cost centers
@@ -45,6 +53,19 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     const MANAGE_CUSTOMERS = 'manage_customers';
     
+    /**
+     * the right to manage order confirmations
+     *
+     * @staticvar string
+     */
+    const MANAGE_ORDERCONFIRMATIONS = 'manage_orderconfirmations';
+    
+    /**
+     * the right to manage divisions
+     *
+     * @staticvar string
+     */
+    const MANAGE_DIVISIONS = 'manage_divisions';
     
     /**
      * the right to manage invoices
@@ -95,9 +116,12 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $addRights = array ( 
             self::MANAGE_PRODUCTS,
+            self::MANAGE_CONTRACTS,
             self::MANAGE_COSTCENTERS,
             self::MANAGE_CUSTOMERS,
-            self::MANAGE_INVOICES
+            self::MANAGE_INVOICES,
+            self::MANAGE_DIVISIONS,
+            self::MANAGE_ORDERCONFIRMATIONS
         );
         
         $allRights = array_merge($allRights, $addRights);
@@ -119,6 +143,10 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('manage products'),
                 'description'   => $translate->_('add, edit and delete products'),
             ),
+            self::MANAGE_CONTRACTS => array(
+                'text'          => $translate->_('manage contracts'),
+                'description'   => $translate->_('add, edit and delete contracts'),
+            ),
             self::MANAGE_COSTCENTERS => array(
                 'text'          => $translate->_('manage cost centers'),
                 'description'   => $translate->_('add, edit and delete cost centers'),
@@ -130,6 +158,14 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_INVOICES => array(
                 'text'          => $translate->_('manage invoices'),
                 'description'   => $translate->_('add, edit and delete invoices'),
+            ),
+            self::MANAGE_DIVISIONS => array(
+                'text'          => $translate->_('manage divisions'),
+                'description'   => $translate->_('add, edit and delete divisions'),
+            ),
+            self::MANAGE_ORDERCONFIRMATIONS => array(
+                'text'          => $translate->_('manage order confirmations'),
+                'description'   => $translate->_('add, edit and delete order confirmations'),
             )
         );
         

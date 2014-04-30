@@ -615,8 +615,25 @@ msgstr "Anzahl"
 msgid "Invoice Item"
 msgstr "Rechnungsposten"
 
-
 msgid "Costcenter"
 msgid_plural "Costcenters"
 msgstr[0] "Kostenstelle"
 msgstr[1] "Kostenstellen"
+
+msgid "manage divisions"
+msgstr "Abteilungen verwalten"
+
+msgid "add, edit and delete divisions"
+msgstr "Abteilungen hinzufügen, bearbeiten und löschen"
+
+msgid "manage order confirmations"
+msgstr "Auftragsbestätigungen verwalten"
+
+msgid "add, edit and delete order confirmations"
+msgstr "Auftragsbestätigungen hinzufügen, bearbeiten und löschen"
+
+msgid "add, edit and delete contracts"
+msgstr "Verträge hinzufügen, bearbeiten und löschen"
+
+msgid "manage contracts"
+msgstr "Verträge verwalten"
