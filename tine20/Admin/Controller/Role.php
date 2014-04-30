@@ -112,6 +112,9 @@ class Admin_Controller_Role extends Tinebase_Controller_Abstract
     {
         $this->checkRight('MANAGE_ROLES');
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Creating role ' . $_role->name);
+        
         $role = Tinebase_Acl_Roles::getInstance()->createRole($_role);
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($role->getId(), $_roleMembers);
         Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $_roleRights);
@@ -147,6 +150,9 @@ class Admin_Controller_Role extends Tinebase_Controller_Abstract
     public function delete($_roleIds)
     {
         $this->checkRight('MANAGE_ROLES');
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Deleting role ids: ' . print_r($_roleIds, true));
         
         Tinebase_Acl_Roles::getInstance()->deleteRoles($_roleIds);
     }
