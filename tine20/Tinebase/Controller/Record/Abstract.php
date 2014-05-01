@@ -1712,7 +1712,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $ccn = $_fieldConfig['controllerClassName'];
             $controller = $ccn::getInstance();
     
-            // legacy - should be already done in frontent json - remove if all record properties are record sets before getting to controller
+            // legacy - should be already done in frontend json - remove if all record properties are record sets before getting to controller
             if (is_array($_record->{$_property})) {
                 $rs = new Tinebase_Record_RecordSet($recordClassName);
                 foreach ($_record->{$_property} as $recordArray) {
