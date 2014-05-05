@@ -107,7 +107,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         secondRow.push({
             columnWidth: 1/3,
-            disabled: true,
+            disabled: false,
             fieldLabel: this.app.i18n._('Cleared In'),
             name: 'billed_in'
         });
