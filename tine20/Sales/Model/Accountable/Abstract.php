@@ -39,6 +39,7 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
     protected $_referenceDate = NULL;
     
     /**
+     * returns the ids of all loaded billables
      * 
      * @return array
      */
@@ -85,16 +86,20 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
      */
     public function getInterval(Tinebase_DateTime $date = NULL)
     {
+        if (! $date) {
+            if (! $this->_referenceDate) {
+                throw new Tinebase_Exception_InvalidArgument('date is needed if not set before');
+            }
+            
+            $date = clone $this->_referenceDate;
+        }
+        
         if (! $this->_billablesLoaded) {
             $this->loadBillables($date);
         }
         
         if (empty($this->_billables)) {
             return array(NULL, NULL);
-        }
-        
-        if (! $date) {
-            $date = clone $this->_referenceDate;
         }
         
         $latestEndDate = NULL;

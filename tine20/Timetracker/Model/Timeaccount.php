@@ -21,20 +21,6 @@
 class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract implements Sales_Model_Billable_Interface
 {
     /**
-     * if billables has been loaded or should have been loaded, but none has been found, this is set to true
-     *
-     * @var boolean
-     */
-    protected $_billablesLoaded = FALSE;
-    
-    /**
-     * holds found billables
-     *
-     * @var array
-     */
-    protected $_billables = NULL;
-    
-    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -268,7 +254,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
                 $month = new Tinebase_DateTime($timesheet->start_date);
                 $month = $month->format('Y-m');
                 
-                if (! isset($billables[$month])) {
+                if (! isset($this->_billables[$month])) {
                     $this->_billables[$month] = array();
                 }
                 
