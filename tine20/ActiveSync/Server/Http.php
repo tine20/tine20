@@ -72,7 +72,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
         try {
             $authResult = $this->_authenticate($loginName, $password, $this->_request->getClientIp());
         } catch (Exception $e) {
-            Tinebase_Exception::log($exception);
+            Tinebase_Exception::log($e);
             $authResult = false;
         }
         
