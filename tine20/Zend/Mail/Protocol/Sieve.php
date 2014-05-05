@@ -109,15 +109,19 @@ class Zend_Mail_Protocol_Sieve
         $this->_welcome = $this->readResponse();
         $this->_parseWelcomeArray();
 
-        if ($ssl === 'TLS') {
-            $result = $this->requestAndResponse('STARTTLS');
-            $result = $result && stream_socket_enable_crypto($this->_socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
-            if (!$result) {
+        if (strtoupper($ssl) === 'TLS') {
+            $result1 = $this->requestAndResponse('STARTTLS');
+            $result2 = stream_socket_enable_crypto($this->_socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+            if (!$result2) {
                 /**
                  * @see Zend_Mail_Protocol_Exception
                  */
                 require_once 'Zend/Mail/Protocol/Exception.php';
-                throw new Zend_Mail_Protocol_Exception('cannot enable TLS');
+                $message = "requestAndResponse failed: $result1";
+                if (!$result1) {
+                   $message = "stream_socket_enable_crypto failed.";
+                }
+                throw new Zend_Mail_Protocol_Exception("cannot enable TLS: $message");
             }
         }
         
