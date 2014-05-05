@@ -210,4 +210,18 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             $this->assertEquals('billed', $ta->status);
         }
     }
+    
+    /**
+     * tests if product_id gets converted to string
+     */
+    public function testSanitizingProductId()
+    {
+        $json = new Sales_Frontend_Json();
+        
+        $contract = $json->getContract($this->_contractRecords->filter('number', 4)->getFirstRecord()->getId());
+        
+        $this->assertTrue(is_array($contract['products'][0]['product_id']));
+        
+        $json->saveContract($contract);
+    }
 }

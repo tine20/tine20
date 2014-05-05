@@ -195,7 +195,6 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
          return $this->quantity;
      }
      
-
      /**
       * the billed_in - field of all billables of this accountable gets the id of this invoice
       *
@@ -245,4 +244,24 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
          
          return $p->name;
      }
+
+    /**
+     * sanitize product_id
+     * 
+     * @param array $_data the json decoded values
+     * @return void
+     * 
+     * @todo should be moved to json converter (toTine20Model) (@see 0009906: generic solution for sanitizing ids by extracting id value from array)
+     * @todo needs a test
+     */
+    protected function _setFromJson(array &$_data)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' json data: ' . print_r($_data, true));
+        
+        // sanitize product id if it is an array
+        if (is_array($_data['product_id']) && isset($_data['product_id']['id']) ) {
+            $_data['product_id'] = $_data['product_id']['id'];
+        }
+    }
 }

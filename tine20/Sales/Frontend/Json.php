@@ -144,9 +144,15 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param  array $recordData
      * @return array created/updated record
+     * 
+     * @todo remove billing_address_id sanitizing (@see 0009906: generic solution for sanitizing ids by extracting id value from array)
      */
     public function saveContract($recordData)
     {
+        if (isset($recordData['billing_address_id']) && is_array($recordData['billing_address_id'])) {
+            $recordData['billing_address_id'] = $recordData['billing_address_id']['id'];
+        }
+        
         return $this->_save($recordData, Sales_Controller_Contract::getInstance(), 'Contract');
     }
 
