@@ -97,7 +97,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             'fixed_address' => array(
                 'label'      => 'Address',    // _('Address')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-            
+                'label' => NULL
             ),
             'date' => array(
                 'type' => 'date',
@@ -155,6 +155,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                     'appName'     => 'Sales',
                     'modelName'   => 'InvoicePosition',
                     'refIdField'  => 'invoice_id',
+                    'paging'      => array('sort' => 'month', 'dir' => 'ASC'),
                     'dependentRecords' => TRUE
                 ),
             ),

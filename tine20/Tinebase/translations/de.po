@@ -2954,3 +2954,6 @@ msgstr "Fehlerhafte Verknüpfung"
 
 msgid "Records"
 msgstr "Datensätze"
+
+msgid "Export Records from these Positions"
+msgstr "Datensätze dieser Rechnungspositionen exportieren"

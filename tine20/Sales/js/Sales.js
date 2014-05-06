@@ -96,9 +96,9 @@ Tine.Sales.addToClipboard = function(record, companyName) {
 };
 
 Tine.Sales.renderAddressAsLine = function(values) {
-    var ret = '';
+    var ret = '';console.warn(values);
     var app = Tine.Tinebase.appMgr.get('Sales');
-    if (values.customer_id) {
+    if (values.customer_id && values.customer_id.hasOwnProperty('name')) {
         ret += '<b>' + Ext.util.Format.htmlEncode(values.customer_id.name) + '</b> - ';
     }
     

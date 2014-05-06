@@ -82,6 +82,7 @@ summaryRenderer: function(v, params, data){
         cs = cs || this.view.getColumnData();
         var cfg = this.grid.getColumnModel().config,
             buf = [], c, p = {}, cf, last = cs.length-1;
+            
         for(var i = 0, len = cs.length; i < len; i++){
             c = cs[i];
             cf = cfg[i];
@@ -91,7 +92,7 @@ summaryRenderer: function(v, params, data){
             if(cf.summaryType || cf.summaryRenderer){
                 p.value = (cf.summaryRenderer || c.renderer)(o.data[c.name], p, o);
             }else{
-                p.value = '';
+                p.value = i == 0 ? '<div style="position:relative" ext:model="' + o.data.model + '" ext:qtip="' + _('Export Records from these Positions') + '" class="x-menu-item-icon action_export">&nbsp;</div>' : '';
             }
             if(p.value == undefined || p.value === "") p.value = "&#160;";
             buf[buf.length] = this.cellTpl.apply(p);
@@ -125,6 +126,7 @@ summaryRenderer: function(v, params, data){
 
     doGroupEnd : function(buf, g, cs, ds, colCount){
         var data = this.calculate(g.rs, cs);
+        data.model = g.rs[0].data.model;
         buf.push('</div>', this.renderSummary({data: data}, cs), '</div>');
     },
 
@@ -191,7 +193,7 @@ summaryRenderer: function(v, params, data){
             data = this.calculate(rs, cs),
             markup = this.renderSummary({data: data}, cs),
             existing = this.getSummaryNode(gid);
-            
+           
         if(existing){
             g.removeChild(existing);
         }

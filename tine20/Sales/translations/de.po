@@ -637,3 +637,12 @@ msgstr "Verträge hinzufügen, bearbeiten und löschen"
 
 msgid "manage contracts"
 msgstr "Verträge verwalten"
+
+msgid "Item"
+msgstr "Position"
+
+msgid "Items"
+msgstr "Positionen"
+
+msgid "Month"
+msgstr "Monat"

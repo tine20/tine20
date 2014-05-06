@@ -13,41 +13,614 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Exception/DuplicateNumber.php:26
-msgid "Number duplicate"
+#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
+msgid "My Products"
 msgstr ""
 
-#: Exception/DuplicateNumber.php:31
+#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
+msgid "Products created by myself"
+msgstr ""
+
+#: Setup/Update/Release5.php:84 Setup/Initialize.php:51
+msgid "My Contracts"
+msgstr ""
+
+#: Setup/Update/Release5.php:85 Setup/Initialize.php:52
+msgid "Contracts created by myself"
+msgstr ""
+
+#: Setup/Update/Release8.php:242 Setup/Initialize.php:68
+msgid "All Customers"
+msgstr ""
+
+#: Setup/Update/Release8.php:243 Setup/Initialize.php:69
+msgid "All customer records"
+msgstr ""
+
+#: Setup/Update/Release8.php:753
+msgid "Status"
+msgstr ""
+
+#: Setup/Update/Release8.php:759 Model/Invoice.php:135
+#: js/InvoiceEditDialog.js:404 js/InvoiceDetailsPanel.js:131
+msgid "Cleared"
+msgstr ""
+
+#: Setup/Update/Release8.php:765
+msgid "Cleared In"
+msgstr ""
+
+#: Setup/Initialize.php:96
+msgid "invoice"
+msgstr ""
+
+#: Setup/Initialize.php:97
+msgid "reversal"
+msgstr ""
+
+#: Setup/Initialize.php:98
+msgid "credit"
+msgstr ""
+
+#: Setup/Initialize.php:112
+msgid "to clear"
+msgstr ""
+
+#: Setup/Initialize.php:113
+msgid "cleared"
+msgstr ""
+
+#: Model/ProductAggregate.php:39 Model/ProductAggregate.php:56
+#: Model/Product.php:34 js/ProductAggregateGridPanel.js:57
+#: js/ProductAggregateGridPanel.js:207
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/ProductAggregate.php:68 Model/OrderConfirmation.php:49
+#: Model/OrderConfirmation.php:81 Model/Invoice.php:52 Model/Invoice.php:166
+#: Model/Invoice.php:194 Model/Contract.php:44
+#: js/OrderConfirmationEditDialog.js:109 js/InvoiceEditDialog.js:319
+#: js/ContractFilterModel.js:30 js/InvoiceDetailsPanel.js:105
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/ProductAggregate.php:80 Model/InvoicePosition.php:81
+#: js/ProductAggregateGridPanel.js:157 js/ProductAggregateGridPanel.js:182
+#: js/ProductAggregateGridPanel.js:211
+msgid "Quantity"
+msgstr ""
+
+#: Model/ProductAggregate.php:86 Model/Contract.php:162
+#: js/ContractEditDialog.js:286
+msgid "Billing Interval"
+msgstr ""
+
+#: Model/ProductAggregate.php:105 Model/Invoice.php:206 Model/Invoice.php:210
+#: Model/Invoice.php:214 Model/Invoice.php:218 Model/Invoice.php:222
+#: Model/Invoice.php:226 Model/Invoice.php:230
+msgid "Invoice Item"
+msgstr ""
+
+#: Model/ProductAggregate.php:234
+msgid "piece"
+msgstr ""
+
+#: Model/Customer.php:35 Model/Customer.php:246 Model/Address.php:52
+#: Model/Invoice.php:64 Model/Invoice.php:178 Model/Invoice.php:198
+#: Model/Contract.php:66 Model/Contract.php:179 Model/Contract.php:233
+#: Model/Contract.php:254 js/ContractEditDialog.js:264
+#: js/CustomerFilterModel.js:30 js/ContractCustomerFilterModel.js:30
+#: js/CustomerEditDialog.js:169 js/InvoiceEditDialog.js:336
+#: js/InvoiceDetailsPanel.js:104
+msgid "Customer"
+msgid_plural "Customers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Customer.php:51 js/CustomerEditDialog.js:182
+#: js/CustomerDetailsPanel.js:123
+msgid "Core Data"
+msgstr ""
+
+#: Model/Customer.php:52 js/CustomerEditDialog.js:232
+#: js/CustomerDetailsPanel.js:141
+msgid "Accounting"
+msgstr ""
+
+#: Model/Customer.php:53 js/CustomerEditDialog.js:345
+#: js/InvoiceEditDialog.js:376 js/InvoiceDetailsPanel.js:127
+msgid "Miscellaneous"
+msgstr ""
+
+#: Model/Customer.php:58 js/CustomerEditDialog.js:188
+#: js/CustomerDetailsPanel.js:125
+msgid "Customer Number"
+msgstr ""
+
+#: Model/Customer.php:63 Model/Product.php:50 js/ProductEditDialog.js:87
+#: js/CustomerEditDialog.js:205 js/CustomerDetailsPanel.js:126
+msgid "Name"
+msgstr ""
+
+#: Model/Customer.php:70 js/CustomerEditDialog.js:353
+#: js/CustomerDetailsPanel.js:127
+msgid "Web"
+msgstr ""
+
+#: Model/Customer.php:76 Model/OrderConfirmation.php:72 Model/Product.php:55
+#: Model/Invoice.php:82 Model/Invoice.php:131 Model/Contract.php:126
+#: js/ContractEditDialog.js:335 js/ProductEditDialog.js:108
+#: js/OrderConfirmationEditDialog.js:134 js/CustomerEditDialog.js:398
+#: js/CustomerDetailsPanel.js:157 js/InvoiceEditDialog.js:315
+#: js/InvoiceDetailsPanel.js:103
+msgid "Description"
+msgstr ""
+
+#: Model/Customer.php:82 Model/Contract.php:102 Model/Contract.php:191
+#: js/ContractEditDialog.js:301 js/CustomerEditDialog.js:214
+#: js/ContractContactExternalFilterModel.js:30 js/CustomerDetailsPanel.js:128
+msgid "Contact Person (external)"
+msgstr ""
+
+#: Model/Customer.php:93 Model/Contract.php:90 Model/Contract.php:203
+#: js/ContractEditDialog.js:313 js/ContractContactInternalFilterModel.js:30
+#: js/CustomerEditDialog.js:224 js/CustomerDetailsPanel.js:129
+msgid "Contact Person (internal)"
+msgstr ""
+
+#: Model/Customer.php:104 js/CustomerEditDialog.js:240
+#: js/CustomerDetailsPanel.js:145
+msgid "VAT No."
+msgstr ""
+
+#: Model/Customer.php:110 js/CustomerEditDialog.js:243
+msgid "Credit Term (days)"
+msgstr ""
+
+#: Model/Customer.php:116 js/CustomerEditDialog.js:254
+#: js/CustomerDetailsPanel.js:146
+msgid "Currency"
+msgstr ""
+
+#: Model/Customer.php:121 js/CustomerEditDialog.js:259
+#: js/CustomerDetailsPanel.js:147
+msgid "Currency Translation Rate"
+msgstr ""
+
+#: Model/Customer.php:137 js/CustomerEditDialog.js:277
+msgid "Discount (%)"
+msgstr ""
+
+#: Model/Customer.php:144 js/AddressEditDialog.js:78
+msgid "Delivery Addresses"
+msgstr ""
+
+#: Model/Customer.php:157 js/AddressEditDialog.js:75
+msgid "Billing Addresses"
+msgstr ""
+
+#: Model/Customer.php:181 Model/Address.php:89 js/AddressEditDialog.js:166
+#: js/CustomerEditDialog.js:332
+msgid "Prefix"
+msgstr ""
+
+#: Model/Customer.php:188 Model/Address.php:93 js/AddressEditDialog.js:169
+#: js/CustomerEditDialog.js:336
+msgid "Additional Prefix"
+msgstr ""
+
+#: Model/Customer.php:195 Model/Address.php:64 js/AddressEditDialog.js:147
+#: js/CustomerEditDialog.js:303
+msgid "Street"
+msgstr ""
+
+#: Model/Customer.php:205 Model/Address.php:72 js/AddressEditDialog.js:153
+#: js/CustomerEditDialog.js:313
+msgid "Postalcode"
+msgstr ""
+
+#: Model/Customer.php:211 Model/Address.php:76 js/AddressEditDialog.js:156
+#: js/CustomerEditDialog.js:318
+msgid "Locality"
+msgstr ""
+
+#: Model/Customer.php:218 Model/Address.php:80 js/AddressEditDialog.js:159
+#: js/CustomerEditDialog.js:322
+msgid "Region"
+msgstr ""
+
+#: Model/Customer.php:227 Model/Address.php:84 js/AddressEditDialog.js:163
+#: js/CustomerEditDialog.js:327
+msgid "Country"
+msgstr ""
+
+#: Model/Customer.php:234 Model/Address.php:68 js/AddressEditDialog.js:150
+#: js/CustomerEditDialog.js:307
+msgid "Postbox"
+msgstr ""
+
+#: Model/OrderConfirmation.php:33
+msgid "Order Confirmation"
+msgid_plural "Order Confirmations"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/OrderConfirmation.php:62 Model/CostCenter.php:50
+#: Model/Contract.php:116 js/CostCenterGridPanel.js:56
+#: js/ContractEditDialog.js:239 js/OrderConfirmationEditDialog.js:100
+#: js/CostCenterEditDialog.js:97 Config.php:76
+msgid "Number"
+msgstr ""
+
+#: Model/OrderConfirmation.php:67 Model/Division.php:50
+#: Model/InvoicePosition.php:64 Model/Contract.php:121
+#: js/DivisionEditDialog.js:81 js/ContractEditDialog.js:246
+#: js/OrderConfirmationEditDialog.js:104
+msgid "Title"
+msgstr ""
+
+#: Model/Address.php:33 Model/Invoice.php:87 Model/Invoice.php:98
+#: js/AddressEditDialog.js:189 js/AddressEditDialog.js:199
+msgid "Address"
+msgid_plural "Addresss"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Address.php:97 js/AddressEditDialog.js:176
+msgid "Number Debit"
+msgstr ""
+
+#: Model/CostCenter.php:34
+msgid "Costcenter"
+msgid_plural "Costcenters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/CostCenter.php:57 js/CostCenterGridPanel.js:62
+#: js/CostCenterEditDialog.js:104
+msgid "Remark"
+msgstr ""
+
+#: Model/Division.php:34
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Product.php:61 js/ProductEditDialog.js:93
+msgid "Price"
+msgstr ""
+
+#: Model/Product.php:65 js/ProductEditDialog.js:100
+msgid "Manufacturer"
+msgstr ""
+
+#: Model/Product.php:70 js/ProductEditDialog.js:104
+msgid "Category"
+msgstr ""
+
+#: Model/InvoicePosition.php:33
+msgid "Invoice Position"
+msgid_plural "Invoice Positions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/InvoicePosition.php:49 Model/Invoice.php:141
+#: js/InvoiceEditDialog.js:310 js/InvoiceDetailsPanel.js:102
+msgid "Type"
+msgstr ""
+
+#: Model/InvoicePosition.php:73
+msgid "Month"
+msgstr ""
+
+#: Model/InvoicePosition.php:77
+msgid "Unit"
+msgstr ""
+
+#: Model/Invoice.php:35 js/InvoiceEditDialog.js:275
+#: js/InvoiceEditDialog.js:288 js/InvoiceDetailsPanel.js:98
+msgid "Invoice"
+msgid_plural "Invoices"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Invoice.php:78 js/InvoiceEditDialog.js:296
+#: js/InvoiceDetailsPanel.js:100
+msgid "Invoice Number"
+msgstr ""
+
+#: Model/Invoice.php:104 js/InvoiceEditDialog.js:303
+#: js/InvoiceDetailsPanel.js:101
+msgid "Date"
+msgstr ""
+
+#: Model/Invoice.php:108 js/InvoiceEditDialog.js:411
+msgid "Interval Begins"
+msgstr ""
+
+#: Model/Invoice.php:112 js/InvoiceEditDialog.js:416
+msgid "Interval Ends"
+msgstr ""
+
+#: Model/Invoice.php:115 js/InvoiceEditDialog.js:383
+#: js/InvoiceDetailsPanel.js:129
+msgid "Credit Term"
+msgstr ""
+
+#: Model/Invoice.php:121 Model/Contract.php:78 js/InvoiceEditDialog.js:398
+#: js/InvoiceDetailsPanel.js:130
+msgid "Cost Center"
+msgstr ""
+
+#: Model/Invoice.php:152 js/InvoiceEditDialog.js:145
+#: js/InvoiceEditDialog.js:263
+msgid "Positions"
+msgstr ""
+
+#: Model/Invoice.php:202
+msgid "Reversal Invoice"
+msgstr ""
+
+#: Model/Contract.php:146 js/ContractEditDialog.js:266
+#: js/AddressEditDialog.js:74 js/InvoiceEditDialog.js:351
+#: js/InvoiceDetailsPanel.js:115
+msgid "Billing Address"
+msgstr ""
+
+#: Model/Contract.php:156 js/ContractEditDialog.js:291
+msgid "Billing Point"
+msgstr ""
+
+#: Model/Contract.php:169 js/ContractEditDialog.js:276
+msgid "Start Date"
+msgstr ""
+
+#: Model/Contract.php:173 js/ContractEditDialog.js:281
+msgid "End Date"
+msgstr ""
+
+#: Model/Contract.php:213 js/ContractEditDialog.js:204
+msgid "Products"
+msgstr ""
+
+#: Model/Contract.php:232
+msgid "Responsible"
+msgstr ""
+
+#: Model/Contract.php:234
+msgid "Partner"
+msgstr ""
+
+#: Model/Contract.php:246 js/ContractEditDialog.js:324
+msgid "Lead Cost Center"
+msgstr ""
+
+#: Model/Contract.php:250
+msgid "Time Account"
+msgstr ""
+
+#: js/ContractEditDialog.js:101
+msgid "Please use a decimal number here!"
+msgstr ""
+
+#: js/ContractEditDialog.js:294
+msgid "begin"
+msgstr ""
+
+#: js/ContractEditDialog.js:295
+msgid "end"
+msgstr ""
+
+#: js/ContractEditDialog.js:336 js/ProductEditDialog.js:109
+msgid "Enter description..."
+msgstr ""
+
+#: js/CustomerFilterModel.js:32 js/ContractCustomerFilterModel.js:32
+msgid "without customer"
+msgstr ""
+
+#: js/ContractCostCenterFilterModel.js:32
+msgid "without CostCenter"
+msgstr ""
+
+#: js/AddressEditDialog.js:77
+msgid "Delivery Address"
+msgstr ""
+
+#: js/AddressEditDialog.js:84
+#, python-brace-format
+msgid "Edit {0} \"{1}\""
+msgstr ""
+
+#: js/AddressEditDialog.js:87
+msgid "Add new Billing Address"
+msgstr ""
+
+#: js/AddressEditDialog.js:89
+msgid "Add new Delivery Address"
+msgstr ""
+
+#: js/AddressEditDialog.js:128
+msgid "Apply postal address"
+msgstr ""
+
+#: js/CustomerGridPanel.js:44
+msgid "Export Customers"
+msgstr ""
+
+#: js/CustomerGridPanel.js:54 js/CustomerGridPanel.js:56
+msgid "Export selected customers as ODS"
+msgstr ""
+
+#: js/CustomerGridPanel.js:55
+msgid "Export selected customer as ODS"
+msgstr ""
+
+#: js/AdminPanel.js:61
+msgid "Cancel"
+msgstr ""
+
+#: js/AdminPanel.js:69
+msgid "OK"
+msgstr ""
+
+#: js/AdminPanel.js:90
+msgid "Loading..."
+msgstr ""
+
+#: js/ContractContactInternalFilterModel.js:32
+msgid "without internal contact person"
+msgstr ""
+
+#: js/OrderConfirmationEditDialog.js:148 js/CustomerEditDialog.js:412
+msgid "Enter description"
+msgstr ""
+
+#: js/AddressGridPanel.js:53
+#, python-brace-format
 msgid ""
-"The number you tried to use has been taken already. Please use another one "
-"leave the field blank to take the next free number."
+"There could not be found any {0}. Please try to change your filter-criteria "
+"or view-options."
 msgstr ""
 
-#: Exception/InvoiceAlreadyClearedEdit.php:26
-#: Exception/InvoiceAlreadyClearedDelete.php:26
-msgid "Invoice is cleared already"
+#: js/AddressGridPanel.js:56
+msgid "Clipboard"
 msgstr ""
 
-#: Exception/InvoiceAlreadyClearedEdit.php:31
+#: js/AddressGridPanel.js:61 js/CustomerEditDialog.js:126 js/Sales.js:54
+msgid "Copy address to the clipboard"
+msgstr ""
+
+#: js/CustomerEditDialog.js:45
+msgid "Either street or postbox is required!"
+msgstr ""
+
+#: js/CustomerEditDialog.js:66
+msgid "Copy Customer"
+msgstr ""
+
+#: js/CustomerEditDialog.js:69
+msgid "Add New Customer"
+msgstr ""
+
+#: js/CustomerEditDialog.js:71
+#, python-brace-format
+msgid "Edit Customer \"{0}\""
+msgstr ""
+
+#: js/CustomerEditDialog.js:271 js/CustomerDetailsPanel.js:143
+msgid "IBAN"
+msgstr ""
+
+#: js/CustomerEditDialog.js:274 js/CustomerDetailsPanel.js:144
+msgid "BIC"
+msgstr ""
+
+#: js/CustomerEditDialog.js:295
+msgid "Postal Address"
+msgstr ""
+
+#: js/ContractContactExternalFilterModel.js:32
+msgid "without external contact person"
+msgstr ""
+
+#: js/CustomerDetailsPanel.js:68
+msgid "Select customer"
+msgstr ""
+
+#: js/ProductAggregateGridPanel.js:169 js/ProductAggregateGridPanel.js:194
+#: js/ProductAggregateGridPanel.js:212
+msgid "Interval"
+msgstr ""
+
+#: js/InvoiceEditDialog.js:113 js/InvoiceGridPanel.js:73
+msgid "Create Reversal Invoice"
+msgstr ""
+
+#: js/InvoiceEditDialog.js:119
+msgid "Copy Invoice"
+msgstr ""
+
+#: js/InvoiceEditDialog.js:122
+msgid "Add New Invoice"
+msgstr ""
+
+#: js/InvoiceEditDialog.js:124
+#, python-brace-format
+msgid "Edit Invoice \"{0}\""
+msgstr ""
+
+#: js/InvoiceEditDialog.js:225
+msgid "No customer assigned"
+msgstr ""
+
+#: js/InvoiceEditDialog.js:226
 msgid ""
-"The Invoice you tried to edit is cleared already, so no editing is possible "
-"anymore!"
+"The selected contract doesn't have a customer assigned, yet. Add a customer "
+"to the contract with the contract edit dialog."
 msgstr ""
 
-#: Exception/InvoiceAlreadyClearedDelete.php:31
+#: js/InvoiceEditDialog.js:237
+msgid "No cost center assigned"
+msgstr ""
+
+#: js/InvoiceEditDialog.js:238
 msgid ""
-"The Invoice you tried to delete is cleared already, so deleting is not "
-"possible anymore!"
+"The selected contract doesn't have a cost center assigned, yet. Add a cost "
+"center to the contract with the contract edit dialog."
 msgstr ""
 
-#: Exception/UnknownCurrencyCode.php:26
-msgid "Unknown Currency Code"
+#: js/InvoiceEditDialog.js:299 js/InvoiceEditDialog.js:306
+msgid "automatically set..."
 msgstr ""
 
-#: Exception/UnknownCurrencyCode.php:31
-msgid ""
-"The Currency Code you tried to use is not valid. Please use a valid Currency "
-"Code as defined in ISO 4217."
+#: js/ContractFilterModel.js:32
+msgid "without contract"
+msgstr ""
+
+#: js/CopyAddressDialog.js:121
+msgid "Ok"
+msgstr ""
+
+#: js/InvoiceGridPanel.js:44
+msgid "Export Invoices"
+msgstr ""
+
+#: js/InvoiceGridPanel.js:54 js/InvoiceGridPanel.js:56
+msgid "Export selected invoices as ODS"
+msgstr ""
+
+#: js/InvoiceGridPanel.js:55
+msgid "Export selected invoice as ODS"
+msgstr ""
+
+#: js/InvoicePositionGridPanel.js:169
+msgid "Items"
+msgstr ""
+
+#: js/InvoicePositionGridPanel.js:169
+msgid "Item"
+msgstr ""
+
+#: js/InvoiceDetailsPanel.js:66
+msgid "Select invoice"
+msgstr ""
+
+#: Controller/NumberableAbstract.php:59
+msgid "The number you have tried to set is already in use!"
+msgstr ""
+
+#: Export/Ods/Invoice.php:119
+msgid "CLEARED"
+msgstr ""
+
+#: Export/Ods/Invoice.php:122
+msgid "INVOICE"
 msgstr ""
 
 #: Acl/Rights.php:143
@@ -106,348 +679,6 @@ msgstr ""
 msgid "add, edit and delete order confirmations"
 msgstr ""
 
-#: Controller.php:83 Controller.php:105
-msgid "You do not have admin rights on Sales"
-msgstr ""
-
-#: Model/Customer.php:35 Model/Customer.php:246 Model/Contract.php:66
-#: Model/Contract.php:194 Model/Contract.php:248 Model/Contract.php:269
-#: Model/Invoice.php:64 Model/Invoice.php:177 Model/Invoice.php:197
-#: Model/Address.php:52 js/CustomerFilterModel.js:30
-#: js/InvoiceEditDialog.js:336 js/InvoiceDetailsPanel.js:104
-#: js/ContractCustomerFilterModel.js:30 js/CustomerEditDialog.js:169
-#: js/ContractEditDialog.js:264
-msgid "Customer"
-msgid_plural "Customers"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/Customer.php:51 js/CustomerDetailsPanel.js:123
-#: js/CustomerEditDialog.js:182
-msgid "Core Data"
-msgstr ""
-
-#: Model/Customer.php:52 js/CustomerDetailsPanel.js:141
-#: js/CustomerEditDialog.js:232
-msgid "Accounting"
-msgstr ""
-
-#: Model/Customer.php:53 js/InvoiceEditDialog.js:376
-#: js/InvoiceDetailsPanel.js:127 js/CustomerEditDialog.js:345
-msgid "Miscellaneous"
-msgstr ""
-
-#: Model/Customer.php:58 js/CustomerDetailsPanel.js:125
-#: js/CustomerEditDialog.js:188
-msgid "Customer Number"
-msgstr ""
-
-#: Model/Customer.php:63 Model/Product.php:50 js/CustomerDetailsPanel.js:126
-#: js/ProductEditDialog.js:87 js/CustomerEditDialog.js:205
-msgid "Name"
-msgstr ""
-
-#: Model/Customer.php:70 js/CustomerDetailsPanel.js:127
-#: js/CustomerEditDialog.js:353
-msgid "Web"
-msgstr ""
-
-#: Model/Customer.php:76 Model/Contract.php:141 Model/Invoice.php:82
-#: Model/Invoice.php:131 Model/OrderConfirmation.php:72 Model/Product.php:55
-#: js/CustomerDetailsPanel.js:157 js/InvoiceEditDialog.js:315
-#: js/ProductEditDialog.js:108 js/InvoiceDetailsPanel.js:103
-#: js/OrderConfirmationEditDialog.js:134 js/CustomerEditDialog.js:398
-#: js/ContractEditDialog.js:335
-msgid "Description"
-msgstr ""
-
-#: Model/Customer.php:82 Model/Contract.php:102 Model/Contract.php:206
-#: js/CustomerDetailsPanel.js:128 js/CustomerEditDialog.js:214
-#: js/ContractContactExternalFilterModel.js:30 js/ContractEditDialog.js:301
-msgid "Contact Person (external)"
-msgstr ""
-
-#: Model/Customer.php:93 Model/Contract.php:90 Model/Contract.php:218
-#: js/ContractContactInternalFilterModel.js:30 js/CustomerDetailsPanel.js:129
-#: js/CustomerEditDialog.js:224 js/ContractEditDialog.js:313
-msgid "Contact Person (internal)"
-msgstr ""
-
-#: Model/Customer.php:104 js/CustomerDetailsPanel.js:145
-#: js/CustomerEditDialog.js:240
-msgid "VAT No."
-msgstr ""
-
-#: Model/Customer.php:110 js/CustomerEditDialog.js:243
-msgid "Credit Term (days)"
-msgstr ""
-
-#: Model/Customer.php:116 js/CustomerDetailsPanel.js:146
-#: js/CustomerEditDialog.js:254
-msgid "Currency"
-msgstr ""
-
-#: Model/Customer.php:121 js/CustomerDetailsPanel.js:147
-#: js/CustomerEditDialog.js:259
-msgid "Currency Translation Rate"
-msgstr ""
-
-#: Model/Customer.php:137 js/CustomerEditDialog.js:277
-msgid "Discount (%)"
-msgstr ""
-
-#: Model/Customer.php:144 js/AddressEditDialog.js:78
-msgid "Delivery Addresses"
-msgstr ""
-
-#: Model/Customer.php:157 js/AddressEditDialog.js:75
-msgid "Billing Addresses"
-msgstr ""
-
-#: Model/Customer.php:181 Model/Address.php:89 js/CustomerEditDialog.js:332
-#: js/AddressEditDialog.js:166
-msgid "Prefix"
-msgstr ""
-
-#: Model/Customer.php:188 Model/Address.php:93 js/CustomerEditDialog.js:336
-#: js/AddressEditDialog.js:169
-msgid "Additional Prefix"
-msgstr ""
-
-#: Model/Customer.php:195 Model/Address.php:64 js/CustomerEditDialog.js:303
-#: js/AddressEditDialog.js:147
-msgid "Street"
-msgstr ""
-
-#: Model/Customer.php:205 Model/Address.php:72 js/CustomerEditDialog.js:313
-#: js/AddressEditDialog.js:153
-msgid "Postalcode"
-msgstr ""
-
-#: Model/Customer.php:211 Model/Address.php:76 js/CustomerEditDialog.js:318
-#: js/AddressEditDialog.js:156
-msgid "Locality"
-msgstr ""
-
-#: Model/Customer.php:218 Model/Address.php:80 js/CustomerEditDialog.js:322
-#: js/AddressEditDialog.js:159
-msgid "Region"
-msgstr ""
-
-#: Model/Customer.php:227 Model/Address.php:84 js/CustomerEditDialog.js:327
-#: js/AddressEditDialog.js:163
-msgid "Country"
-msgstr ""
-
-#: Model/Customer.php:234 Model/Address.php:68 js/CustomerEditDialog.js:307
-#: js/AddressEditDialog.js:150
-msgid "Postbox"
-msgstr ""
-
-#: Model/ProductAggregate.php:39 Model/ProductAggregate.php:56
-#: Model/Product.php:34 js/ProductAggregateGridPanel.js:57
-#: js/ProductAggregateGridPanel.js:207
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/ProductAggregate.php:68 Model/Contract.php:44 Model/Invoice.php:52
-#: Model/Invoice.php:165 Model/Invoice.php:193 Model/OrderConfirmation.php:49
-#: Model/OrderConfirmation.php:81 js/ContractFilterModel.js:30
-#: js/InvoiceEditDialog.js:319 js/InvoiceDetailsPanel.js:105
-#: js/OrderConfirmationEditDialog.js:109
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/ProductAggregate.php:80 Model/InvoicePosition.php:81
-#: js/ProductAggregateGridPanel.js:157 js/ProductAggregateGridPanel.js:182
-#: js/ProductAggregateGridPanel.js:211
-msgid "Quantity"
-msgstr ""
-
-#: Model/ProductAggregate.php:86 Model/Contract.php:177
-#: js/ContractEditDialog.js:286
-msgid "Billing Interval"
-msgstr ""
-
-#: Model/ProductAggregate.php:105 Model/Invoice.php:205 Model/Invoice.php:209
-#: Model/Invoice.php:213 Model/Invoice.php:217 Model/Invoice.php:221
-#: Model/Invoice.php:225 Model/Invoice.php:229
-msgid "Invoice Item"
-msgstr ""
-
-#: Model/ProductAggregate.php:235
-msgid "piece"
-msgstr ""
-
-#: Model/Contract.php:78 Model/Contract.php:117 Model/Invoice.php:121
-#: js/InvoiceEditDialog.js:398 js/InvoiceDetailsPanel.js:130
-msgid "Cost Center"
-msgstr ""
-
-#: Model/Contract.php:131 Model/OrderConfirmation.php:62
-#: Model/CostCenter.php:50 Config.php:76 js/CostCenterEditDialog.js:97
-#: js/OrderConfirmationEditDialog.js:100 js/CostCenterGridPanel.js:56
-#: js/ContractEditDialog.js:239
-msgid "Number"
-msgstr ""
-
-#: Model/Contract.php:136 Model/Division.php:50 Model/InvoicePosition.php:64
-#: Model/OrderConfirmation.php:67 js/DivisionEditDialog.js:81
-#: js/OrderConfirmationEditDialog.js:104 js/ContractEditDialog.js:246
-msgid "Title"
-msgstr ""
-
-#: Model/Contract.php:161 js/InvoiceEditDialog.js:351
-#: js/InvoiceDetailsPanel.js:115 js/AddressEditDialog.js:74
-#: js/ContractEditDialog.js:266
-msgid "Billing Address"
-msgstr ""
-
-#: Model/Contract.php:171 js/ContractEditDialog.js:291
-msgid "Billing Point"
-msgstr ""
-
-#: Model/Contract.php:184 js/ContractEditDialog.js:276
-msgid "Start Date"
-msgstr ""
-
-#: Model/Contract.php:188 js/ContractEditDialog.js:281
-msgid "End Date"
-msgstr ""
-
-#: Model/Contract.php:228 js/ContractEditDialog.js:204
-msgid "Products"
-msgstr ""
-
-#: Model/Contract.php:247
-msgid "Responsible"
-msgstr ""
-
-#: Model/Contract.php:249
-msgid "Partner"
-msgstr ""
-
-#: Model/Contract.php:261 js/ContractEditDialog.js:324
-msgid "Lead Cost Center"
-msgstr ""
-
-#: Model/Contract.php:265
-msgid "Time Account"
-msgstr ""
-
-#: Model/Division.php:34
-msgid "Division"
-msgid_plural "Divisions"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/InvoicePosition.php:33
-msgid "Invoice Position"
-msgid_plural "Invoice Positions"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/InvoicePosition.php:49 Model/Invoice.php:141
-#: js/InvoiceEditDialog.js:310 js/InvoiceDetailsPanel.js:102
-msgid "Type"
-msgstr ""
-
-#: Model/InvoicePosition.php:73
-msgid "Month"
-msgstr ""
-
-#: Model/InvoicePosition.php:77
-msgid "Unit"
-msgstr ""
-
-#: Model/Invoice.php:35 js/InvoiceEditDialog.js:275
-#: js/InvoiceEditDialog.js:288 js/InvoiceDetailsPanel.js:98
-msgid "Invoice"
-msgid_plural "Invoices"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/Invoice.php:78 js/InvoiceEditDialog.js:296
-#: js/InvoiceDetailsPanel.js:100
-msgid "Invoice Number"
-msgstr ""
-
-#: Model/Invoice.php:87 Model/Invoice.php:98 Model/Address.php:33
-#: js/AddressEditDialog.js:189 js/AddressEditDialog.js:199
-msgid "Address"
-msgid_plural "Addresss"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/Invoice.php:104 js/InvoiceEditDialog.js:303
-#: js/InvoiceDetailsPanel.js:101
-msgid "Date"
-msgstr ""
-
-#: Model/Invoice.php:108 js/InvoiceEditDialog.js:411
-msgid "Interval Begins"
-msgstr ""
-
-#: Model/Invoice.php:112 js/InvoiceEditDialog.js:416
-msgid "Interval Ends"
-msgstr ""
-
-#: Model/Invoice.php:115 js/InvoiceEditDialog.js:383
-#: js/InvoiceDetailsPanel.js:129
-msgid "Credit Term"
-msgstr ""
-
-#: Model/Invoice.php:135 Setup/Update/Release8.php:759
-#: js/InvoiceEditDialog.js:404 js/InvoiceDetailsPanel.js:131
-msgid "Cleared"
-msgstr ""
-
-#: Model/Invoice.php:152 js/InvoiceEditDialog.js:145
-#: js/InvoiceEditDialog.js:263
-msgid "Positions"
-msgstr ""
-
-#: Model/Invoice.php:201
-msgid "Reversal Invoice"
-msgstr ""
-
-#: Model/Address.php:97 js/AddressEditDialog.js:176
-msgid "Number Debit"
-msgstr ""
-
-#: Model/OrderConfirmation.php:33
-msgid "Order Confirmation"
-msgid_plural "Order Confirmations"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/Product.php:61 js/ProductEditDialog.js:93
-msgid "Price"
-msgstr ""
-
-#: Model/Product.php:65 js/ProductEditDialog.js:100
-msgid "Manufacturer"
-msgstr ""
-
-#: Model/Product.php:70 js/ProductEditDialog.js:104
-msgid "Category"
-msgstr ""
-
-#: Model/CostCenter.php:34
-msgid "Costcenter"
-msgid_plural "Costcenters"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/CostCenter.php:57 js/CostCenterEditDialog.js:104
-#: js/CostCenterGridPanel.js:62
-msgid "Remark"
-msgstr ""
-
 #: Config.php:58
 msgid "Contract Number Creation"
 msgstr ""
@@ -502,261 +733,43 @@ msgstr ""
 msgid "Possible Invoice Cleared States."
 msgstr ""
 
-#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
-msgid "My Products"
+#: Controller.php:83 Controller.php:105
+msgid "You do not have admin rights on Sales"
 msgstr ""
 
-#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
-msgid "Products created by myself"
+#: Exception/UnknownCurrencyCode.php:26
+msgid "Unknown Currency Code"
 msgstr ""
 
-#: Setup/Update/Release5.php:84 Setup/Initialize.php:51
-msgid "My Contracts"
-msgstr ""
-
-#: Setup/Update/Release5.php:85 Setup/Initialize.php:52
-msgid "Contracts created by myself"
-msgstr ""
-
-#: Setup/Update/Release8.php:242 Setup/Initialize.php:68
-msgid "All Customers"
-msgstr ""
-
-#: Setup/Update/Release8.php:243 Setup/Initialize.php:69
-msgid "All customer records"
-msgstr ""
-
-#: Setup/Update/Release8.php:753
-msgid "Status"
-msgstr ""
-
-#: Setup/Update/Release8.php:765
-msgid "Cleared In"
-msgstr ""
-
-#: Setup/Initialize.php:96
-msgid "invoice"
-msgstr ""
-
-#: Setup/Initialize.php:97
-msgid "reversal"
-msgstr ""
-
-#: Setup/Initialize.php:98
-msgid "credit"
-msgstr ""
-
-#: Setup/Initialize.php:112
-msgid "to clear"
-msgstr ""
-
-#: Setup/Initialize.php:113
-msgid "cleared"
-msgstr ""
-
-#: Export/Ods/Invoice.php:119
-msgid "CLEARED"
-msgstr ""
-
-#: Export/Ods/Invoice.php:122
-msgid "INVOICE"
-msgstr ""
-
-#: js/ContractContactInternalFilterModel.js:32
-msgid "without internal contact person"
-msgstr ""
-
-#: js/AdminPanel.js:61
-msgid "Cancel"
-msgstr ""
-
-#: js/AdminPanel.js:69
-msgid "OK"
-msgstr ""
-
-#: js/AdminPanel.js:90
-msgid "Loading..."
-msgstr ""
-
-#: js/CustomerFilterModel.js:32 js/ContractCustomerFilterModel.js:32
-msgid "without customer"
-msgstr ""
-
-#: js/ContractFilterModel.js:32
-msgid "without contract"
-msgstr ""
-
-#: js/CustomerDetailsPanel.js:68
-msgid "Select customer"
-msgstr ""
-
-#: js/CustomerDetailsPanel.js:143 js/CustomerEditDialog.js:271
-msgid "IBAN"
-msgstr ""
-
-#: js/CustomerDetailsPanel.js:144 js/CustomerEditDialog.js:274
-msgid "BIC"
-msgstr ""
-
-#: js/InvoiceEditDialog.js:113 js/InvoiceGridPanel.js:73
-msgid "Create Reversal Invoice"
-msgstr ""
-
-#: js/InvoiceEditDialog.js:119
-msgid "Copy Invoice"
-msgstr ""
-
-#: js/InvoiceEditDialog.js:122
-msgid "Add New Invoice"
-msgstr ""
-
-#: js/InvoiceEditDialog.js:124
-msgid "Edit Invoice \"{0}\""
-msgstr ""
-
-#: js/InvoiceEditDialog.js:225
-msgid "No customer assigned"
-msgstr ""
-
-#: js/InvoiceEditDialog.js:226
+#: Exception/UnknownCurrencyCode.php:31
 msgid ""
-"The selected contract doesn't have a customer assigned, yet. Add a customer "
-"to the contract with the contract edit dialog."
+"The Currency Code you tried to use is not valid. Please use a valid Currency "
+"Code as defined in ISO 4217."
 msgstr ""
 
-#: js/InvoiceEditDialog.js:237
-msgid "No cost center assigned"
+#: Exception/DuplicateNumber.php:26
+msgid "Number duplicate"
 msgstr ""
 
-#: js/InvoiceEditDialog.js:238
+#: Exception/DuplicateNumber.php:31
 msgid ""
-"The selected contract doesn't have a cost center assigned, yet. Add a cost "
-"center to the contract with the contract edit dialog."
+"The number you tried to use has been taken already. Please use another one "
+"leave the field blank to take the next free number."
 msgstr ""
 
-#: js/InvoiceEditDialog.js:299 js/InvoiceEditDialog.js:306
-msgid "automatically set..."
+#: Exception/InvoiceAlreadyClearedDelete.php:26
+#: Exception/InvoiceAlreadyClearedEdit.php:26
+msgid "Invoice is cleared already"
 msgstr ""
 
-#: js/ProductEditDialog.js:109 js/ContractEditDialog.js:336
-msgid "Enter description..."
-msgstr ""
-
-#: js/InvoiceDetailsPanel.js:66
-msgid "Select invoice"
-msgstr ""
-
-#: js/Sales.js:54 js/CustomerEditDialog.js:126 js/AddressGridPanel.js:61
-msgid "Copy address to the clipboard"
-msgstr ""
-
-#: js/CopyAddressDialog.js:121
-msgid "Ok"
-msgstr ""
-
-#: js/OrderConfirmationEditDialog.js:148 js/CustomerEditDialog.js:412
-msgid "Enter description"
-msgstr ""
-
-#: js/CustomerEditDialog.js:45
-msgid "Either street or postbox is required!"
-msgstr ""
-
-#: js/CustomerEditDialog.js:66
-msgid "Copy Customer"
-msgstr ""
-
-#: js/CustomerEditDialog.js:69
-msgid "Add New Customer"
-msgstr ""
-
-#: js/CustomerEditDialog.js:71
-msgid "Edit Customer \"{0}\""
-msgstr ""
-
-#: js/CustomerEditDialog.js:295
-msgid "Postal Address"
-msgstr ""
-
-#: js/AddressGridPanel.js:53
+#: Exception/InvoiceAlreadyClearedDelete.php:31
 msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria "
-"or view-options."
+"The Invoice you tried to delete is cleared already, so deleting is not "
+"possible anymore!"
 msgstr ""
 
-#: js/AddressGridPanel.js:56
-msgid "Clipboard"
-msgstr ""
-
-#: js/AddressEditDialog.js:77
-msgid "Delivery Address"
-msgstr ""
-
-#: js/AddressEditDialog.js:84
-msgid "Edit {0} \"{1}\""
-msgstr ""
-
-#: js/AddressEditDialog.js:87
-msgid "Add new Billing Address"
-msgstr ""
-
-#: js/AddressEditDialog.js:89
-msgid "Add new Delivery Address"
-msgstr ""
-
-#: js/AddressEditDialog.js:128
-msgid "Apply postal address"
-msgstr ""
-
-#: js/InvoiceGridPanel.js:44
-msgid "Export Invoices"
-msgstr ""
-
-#: js/InvoiceGridPanel.js:54 js/InvoiceGridPanel.js:56
-msgid "Export selected invoices as ODS"
-msgstr ""
-
-#: js/InvoiceGridPanel.js:55
-msgid "Export selected invoice as ODS"
-msgstr ""
-
-#: js/CustomerGridPanel.js:44
-msgid "Export Customers"
-msgstr ""
-
-#: js/CustomerGridPanel.js:54 js/CustomerGridPanel.js:56
-msgid "Export selected customers as ODS"
-msgstr ""
-
-#: js/CustomerGridPanel.js:55
-msgid "Export selected customer as ODS"
-msgstr ""
-
-#: js/ContractCostCenterFilterModel.js:32
-msgid "without CostCenter"
-msgstr ""
-
-#: js/ContractContactExternalFilterModel.js:32
-msgid "without external contact person"
-msgstr ""
-
-#: js/ContractEditDialog.js:101
-msgid "Please use a decimal number here!"
-msgstr ""
-
-#: js/ContractEditDialog.js:294
-msgid "begin"
-msgstr ""
-
-#: js/ContractEditDialog.js:295
-msgid "end"
-msgstr ""
-
-#: js/ProductAggregateGridPanel.js:169 js/ProductAggregateGridPanel.js:194
-#: js/ProductAggregateGridPanel.js:212
-msgid "Interval"
-msgstr ""
-
-#: Controller/NumberableAbstract.php:59
-msgid "The number you have tried to set is already in use!"
+#: Exception/InvoiceAlreadyClearedEdit.php:31
+msgid ""
+"The Invoice you tried to edit is cleared already, so no editing is possible "
+"anymore!"
 msgstr ""
