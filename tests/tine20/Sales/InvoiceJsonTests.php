@@ -218,7 +218,9 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
     {
         $json = new Sales_Frontend_Json();
         
-        $contract = $json->getContract($this->_contractRecords->filter('number', 4)->getFirstRecord()->getId());
+        $firstContract = $this->_contractRecords->filter('number', 4)->getFirstRecord();
+        $this->assertTrue($firstContract !== null);
+        $contract = $json->getContract($firstContract->getId());
         
         $this->assertTrue(is_array($contract['products'][0]['product_id']));
         
