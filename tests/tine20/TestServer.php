@@ -260,8 +260,8 @@ class TestServer
     {
         $tinebaseController = Tinebase_Controller::getInstance();
         $config = $this->getConfig();
-        $username = $config->login->username ? $config->login->username : $config->username;
-        $password = $config->login->password ? $config->login->password : $config->password;
+        $username = isset($config->login->username) ? $config->login->username : $config->username;
+        $password = isset($config->login->password) ? $config->login->password : $config->password;
         $ip = $config->ip ? $config->ip : '127.0.0.1';
         if (! $tinebaseController->login($username, $password, $ip, 'TineUnittest')){
             throw new Exception("Couldn't login, user session required for tests! \n");
