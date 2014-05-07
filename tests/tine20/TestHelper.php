@@ -42,14 +42,9 @@ Zend_Session::setOptions(array(
 // fake session_id to trigger creation of session
 $_REQUEST['TINE20SESSID'] = Tinebase_Record_Abstract::generateUID();
 
-// init base framework
 TestServer::getInstance()->initFramework();
 
-$tinebaseController = Tinebase_Controller::getInstance();
-$config = TestServer::getInstance()->getConfig();
-if (!$tinebaseController->login($config->username, $config->password, $config->ip, 'TineUnittest')){
-    throw new Exception("Couldn't login, user session required for tests! \n");
-}
+TestServer::getInstance()->login();
 
 // do this after login because we need the current user
 TestServer::getInstance()->initTestUsers();

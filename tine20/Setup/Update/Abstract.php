@@ -224,6 +224,9 @@ class Setup_Update_Abstract
     {
         if (php_sapi_name() == 'cli') {
             
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Prompting for username on CLI');
+            
             $userFound = NULL;
             
             do {

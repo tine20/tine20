@@ -54,7 +54,14 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_personas = array();
-    
+
+    /**
+     * unit in test
+     *
+     * @var Object
+     */
+    protected $_uit = null;
+
     /**
      * set up tests
      */
