@@ -1236,4 +1236,104 @@ class Filemanager_Frontend_JsonTests extends TestCase
             $this->_fsController->mkdir($path);
         }
     }
+    
+    /**
+     * testSaveDownloadLinkFile
+     * 
+     * @return array Filemanager_Model_DownloadLink
+     */
+    public function testSaveDownloadLinkFile()
+    {
+        $downloadLinkData = $this->_getDownloadLinkData();
+        $result = $this->_json->saveDownloadLink($downloadLinkData);
+        
+        $this->assertTrue(! empty($result['url']));
+        $this->assertEquals(Tinebase_Core::getHostname() . '/files/' . $result['id'], $result['url']);
+        $this->assertEquals(0, $result['access_count']);
+        
+        return $result;
+    }
+    
+    /**
+     * testSaveDownloadLinkDirectory
+     *
+     * @return array Filemanager_Model_DownloadLink
+     */
+    public function testSaveDownloadLinkDirectory()
+    {
+        $downloadLinkData = $this->_getDownloadLinkData();
+        $result = $this->_json->saveDownloadLink($downloadLinkData);
+        
+        $this->assertTrue(! empty($result['url']));
+        $this->assertEquals(Tinebase_Core::getHostname() . '/files/' . $result['id'], $result['url']);
+        
+        return $result;
+    }
+    
+    /**
+     * get download link data
+     * 
+     * @param string $nodeType
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _getDownloadLinkData($nodeType = Tinebase_Model_Tree_Node::TYPE_FILE)
+    {
+        // create node first
+        if ($nodeType === Tinebase_Model_Tree_Node::TYPE_FILE) {
+            $node = $this->testCreateFileNodeWithTempfile();
+        } else if ($nodeType === Tinebase_Model_Tree_Node::TYPE_FOLDER) {
+            $node = $this->testCreateContainerNodeInPersonalFolder();
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('only file and folder nodes are supported');
+        }
+        
+        return array(
+            'node_id'       => $node['id'],
+            'expiry_date'   => Tinebase_DateTime::now()->addDay(1)->toString(),
+            'access_count'  => 7,
+        );
+    }
+    
+    /**
+     * testGetDownloadLink
+     */
+    public function testGetDownloadLink()
+    {
+        $downloadLink = $this->testSaveDownloadLinkFile();
+        
+        $this->assertEquals($downloadLink, $this->_json->getDownloadLink($downloadLink['id']));
+    }
+    
+    /**
+     * testSearchDownloadLinks
+     */
+    public function testSearchDownloadLinks()
+    {
+        $downloadLink = $this->testSaveDownloadLinkFile();
+        $filter = array(array(
+            'field'     => 'id',
+            'operator'  => 'equals',
+            'value'     => $downloadLink['id']
+        ));
+        $result = $this->_json->searchDownloadLinks($filter, array());
+        
+        $this->assertEquals(1, $result['totalcount']);
+    }
+    
+    /**
+     * testDeleteDownloadLinks
+     */
+    public function testDeleteDownloadLinks()
+    {
+        $downloadLink = $this->testSaveDownloadLinkFile();
+        
+        $result = $this->_json->deleteDownloadLinks(array($downloadLink['id']));
+        try {
+            Filemanager_Controller_DownloadLink::getInstance()->get($downloadLink['id']);
+            $this->fail('link should have been deleted');
+        } catch (Exception $e) {
+            $this->assertTrue($e instanceof Tinebase_Exception_NotFound);
+        }
+    }
 }
