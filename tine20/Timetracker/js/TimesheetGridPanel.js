@@ -88,8 +88,9 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 renderer: Tine.Tinebase.common.booleanRenderer },
             { id: 'is_cleared',         header: this.app.i18n._("Cleared"),             width: 100, dataIndex: 'is_cleared_combined',   hidden: true,
                 renderer: Tine.Tinebase.common.booleanRenderer },
-            { id: 'billed_in',          header: this.app.i18n._("Cleared in"),          width: 150, dataIndex: 'billed_in',             hidden: true,
-              renderer: function(value, row, record) {
+            { id: 'billed_in',          header: this.app.i18n._("Cleared in"),          width: 150, dataIndex: 'billed_in',             hidden: true },
+            { id: 'invoice_id',          header: this.app.i18n._("Invoice"),          width: 150, dataIndex: 'invoice_id',             hidden: true,
+            renderer: function(value, row, record) {
                     if (value) {
                         var data = record.get('billed_in');
                         

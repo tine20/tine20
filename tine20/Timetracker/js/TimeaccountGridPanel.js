@@ -103,16 +103,9 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 hidden: true,
                 header: this.app.i18n._("Cleared in"),
                 width: 150,
-                dataIndex: 'billed_in',
-                renderer: function(value, row, record) {
-                    if (value) {
-                        var data = record.get('billed_in');
-                        
-                        return (data.number ? (data.number + ' - ' ) : '') + data.description
-                    }
-                    return '';
-                }
-            }
+                dataIndex: 'billed_in'
+                
+            }, { id: 'invoice_id',          header: this.app.i18n._("Invoice"),          width: 150, dataIndex: 'invoice_id',             hidden: true}
             ,{
                 id: 'deadline',
                 hidden: true,
