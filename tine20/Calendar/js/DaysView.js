@@ -304,7 +304,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                     
                     if (! event.get('is_all_day_event') && targetDate.is_all_day_event && event.duration < Date.msDAY) {
                         // draged from scroller -> dropped to allDay and duration less than a day
-                        event.set('dtend', targetDate.add(Date.DAY, 1));
+                        event.set('dtend', targetDate.add(Date.DAY, 1).add(Date.SECOND, -1));
                     } else if (event.get('is_all_day_event') && !targetDate.is_all_day_event) {
                         // draged from allDay -> droped to scroller will be resetted to hone hour
                         event.set('dtend', targetDate.add(Date.HOUR, 1));
@@ -1156,7 +1156,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                 var timePart = this.timeScale.getAt(parts[2]);
                 date = date.add(Date.MINUTE, timePart.get('minutes'));
                 date.is_all_day_event = false;
-            }   
+            }
+            
             return date;
         }
     },
