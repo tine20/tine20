@@ -306,6 +306,8 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
                 v.getSelectionModel().clearSelections(true);
             }
         }, this);
+        
+        this.resizeWholeDayArea.defer(this.attendeeViews.items.length * 120, this);
     },
     
     setActiveAttendeeView: function(view) {
@@ -316,9 +318,39 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
     
     updatePeriod: function() {
         var origArgs = arguments;
+        
         this.attendeeViews.each(function(view) {
             view.constructor.prototype.updatePeriod.apply(view, origArgs);
         }, this);
+        
+        this.resizeWholeDayArea.defer(this.attendeeViews.items.length * 120, this, [true]);
+    },
+    
+    /**
+     * set whole day area to the height of the highest whole day area
+     */
+    resizeWholeDayArea: function(onupdate) {
+        if (this.attendeeViews.items.length > 1) {
+            var maxWholeDayAreaSize = 10;
+            this.attendeeViews.each(function(view) {
+                if (onupdate) {
+                    view.heightIsCalculated = false;
+                }
+                if (view.wholeDayArea.children.length > 1  && ((view.wholeDayArea.hasOwnProperty('heightIsCalculated') && view.wholeDayArea.heightIsCalculated == false) || (! view.wholeDayArea.hasOwnProperty('heightIsCalculated')))) {
+                    maxWholeDayAreaSize = (parseInt(view.wholeDayArea.clientHeight) > maxWholeDayAreaSize) ? view.wholeDayArea.clientHeight : maxWholeDayAreaSize;
+                }
+            });
+            this.attendeeViews.each(function(view) {
+                var wholeDayAreaEl = Ext.get(view.wholeDayArea);
+                if (wholeDayAreaEl.getHeight() != maxWholeDayAreaSize) {
+                    wholeDayAreaEl.setHeight(maxWholeDayAreaSize);
+                    view.wholeDayArea.heightIsCalculated = true;
+                } else {
+                    view.wholeDayArea.heightIsCalculated = false;
+                }
+                Ext.fly(view.wholeDayScroller).setHeight(maxWholeDayAreaSize);
+            });
+        }
     },
     
     cloneStore: function(filterFn) {
