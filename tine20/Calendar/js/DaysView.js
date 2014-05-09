@@ -120,6 +120,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * @type {Number}
      */
     scrollOffset: 19,
+    
+    /**
+     * The time in milliseconds, a scroll should be delayed after using the mousewheel
+     * 
+     * @type Number
+     */
+    scrollBuffer: 200,
+    
     /**
      * @property {bool} editing
      * @private
@@ -1203,7 +1211,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         this.scroller = new E(this.mainWrap.dom.childNodes[1]);
         this.scroller.setStyle('overflow-x', 'hidden');
         this.mon(this.scroller, 'scroll', this.onBeforeScroll, this);
-        this.mon(this.scroller, 'scroll', this.onScroll, this, {buffer: 200});
+        this.mon(this.scroller, 'scroll', this.onScroll, this, {buffer: this.scrollBuffer});
         
         this.mainBody = new E(this.scroller.dom.firstChild);
         
