@@ -111,21 +111,6 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             )
         ),
         
-        'filterModel' => array(
-            'costcenter' => array(
-                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
-                'label' => 'Cost Center', // _('Cost Center')
-                'options' => array(
-                    'controller' => 'Sales_Controller_CostCenter',
-                    'filtergroup' => 'Sales_Model_CostCenterFilter',
-                    'own_filtergroup' => 'Sales_Model_ContractFilter',
-                    'own_controller' => 'Sales_Controller_Contract',
-                    'related_model' => 'Sales_Model_CostCenter',
-                ),
-                'jsConfig' => array('filtertype' => 'sales.contractcostcenter')
-            ),
-        ),
-        
         'fields'            => array(
             'number' => array(
                 'label' => 'Number', //_('Number')
