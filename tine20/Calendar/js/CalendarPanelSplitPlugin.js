@@ -243,7 +243,8 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             startDate: this.calPanel.getTopToolbar().periodPicker.getPeriod().from,
             numOfDays: this.calPanel.view.numOfDays,
             period: this.calPanel.getTopToolbar().periodPicker.getPeriod(),
-            updatePeriod: this.updatePeriod.createDelegate(this)
+            updatePeriod: this.updatePeriod.createDelegate(this),
+            scrollBuffer: 0
         }, config));
         
         this.calPanel.relayEvents(view, ['changeView', 'changePeriod', 'addEvent', 'updateEvent', 'click', 'dblclick', 'contextmenu', 'keydown']);
