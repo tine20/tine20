@@ -185,9 +185,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function getContainerPath(Tinebase_Model_Container $container)
     {
-        $path = $this->getApplicationBasePath($container->application_id, $container->type) . '/' . $container->getId();
+        $treeNodePath = new Tinebase_Model_Tree_Node_Path(array(
+            'application' => Tinebase_Application::getInstance()->getApplicationById($container->application_id)
+        ));
+        $treeNodePath->setContainer($container);
         
-        return $path;
+        return $treeNodePath->statpath;
     }
     
     /**

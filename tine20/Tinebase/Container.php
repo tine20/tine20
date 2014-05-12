@@ -1289,7 +1289,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             return FALSE;
         }
         
-        $grants = (! $_container->account_grants) ? $this->getGrantsOfContainer($_container) : $_container->account_grants;
+        $grants = (! $_container->account_grants) ? $this->getGrantsOfContainer($_container, true) : $_container->account_grants;
         
         if (count($grants) === 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
@@ -1304,7 +1304,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Container ' . $_container->name . ' has no owner.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Container ' . $_container->name . ' has no owner.');
+        
         return FALSE;
     }
     

@@ -228,15 +228,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                 
                 $objectClass = Tinebase_Application::getInstance()->getApplicationById($container->application_id)->name . '_Frontend_WebDAV_Container';
                 
-                $containerClass = new $objectClass($container, $this->_useIdAsName);
-                
-                try {
-                    $containerClass->getETag();
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    throw new \Sabre\DAV\Exception\NotFound("Filesystem path for $this->_path/$name not found");
-                }
-                
-                return $containerClass;
+                return new $objectClass($container, $this->_useIdAsName);
                 
                 break;
                 
