@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>adb_lxoffice_import_csv_merge</name>
+    <model>Addressbook_Model_Contact</model>
+    <plugin>Addressbook_Import_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <label>Contact CSV import</label>
+    <!-- _("Contact CSV import") -->
+    <description>tine adb import</description>
+    <example>Addressbook/Import/examples/adb_tine_import.csv</example>
+    <extension>csv</extension>
+    <duplicateResolveStrategy>mergeMine</duplicateResolveStrategy>
+    <!--container_id>12</container_id-->
+    <mapping>
+        <field>
+            <source>customernumber</source>
+            <destination>customernumber</destination>
+        </field>
+        <field>
+            <source>greeting</source>
+            <destination>salutation</destination>
+        </field>
+        <field>
+            <source>name</source>
+            <destination>n_fn</destination>
+        </field>
+        <field>
+            <source>department_1</source>
+            <destination>adr_one_region</destination>
+        </field>
+        <field>
+            <source>street</source>
+            <destination>adr_one_street</destination>
+        </field>
+        <field>
+            <source>country</source>
+            <destination>adr_one_countryname</destination>
+        </field>
+        <field>
+            <source>zipcode</source>
+            <destination>adr_one_postalcode</destination>
+        </field>
+        <field>
+            <source>city</source>
+            <destination>adr_one_locality</destination>
+        </field>
+        <field>
+            <source>phone</source>
+            <destination>tel_work</destination>
+        </field>
+        <field>
+            <source>fax</source>
+            <destination>tel_fax</destination>
+        </field>
+        <field>
+            <source>email</source>
+            <destination>email</destination>
+        </field>
+     </mapping>
+</config>

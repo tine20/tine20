@@ -1,0 +1,4 @@
+customernumber,greeting,name,department_1,street,country,zipcode,city,phone,fax,email,cp_greeting,cp_title,cp_givenname,cp_name,cp_phone1,cp_phone2,cp_fax,cp_mobile1,cp_mobile2,cp_email
+"73029",,"Wolfgang Berger","","Heuerstraße 2","D","11108","Weixdorf DD","12345","","",,,,,,,,,,
+"72810",,"Nitsch","","Heuerstraße 16","D","11418","Staßfurt","1234","","",,,,,,,,,,
+"72911",,"Wolfer","","Heuerstraße 44","D","11558","Großenhain","","","",,,,,,,,,,

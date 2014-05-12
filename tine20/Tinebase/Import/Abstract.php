@@ -809,39 +809,83 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * 
      * @param Tinebase_Record_Abstract $record
      * @param string $resolveStrategy
-     * @param Tinebase_Record_Abstract $existingRecord
+     * @param Tinebase_Record_Abstract $clientRecord
      * @return Tinebase_Record_Abstract
      */
-    protected function _importAndResolveConflict(Tinebase_Record_Abstract $record, $resolveStrategy = null, $existingRecord = null)
+    protected function _importAndResolveConflict(Tinebase_Record_Abstract $record, $resolveStrategy = null, $clientRecord = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' resolveStrategy: ' . $resolveStrategy);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' record to import: ' . print_r($record->toArray(), TRUE));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $existingRecord) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' existing record: ' . print_r($existingRecord->toArray(), TRUE));
+            . ' ResolveStrategy: ' . $resolveStrategy);
+        if ($clientRecord && Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $clientRecord) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Client record: ' . print_r($clientRecord->toArray(), TRUE));
         
         switch ($resolveStrategy) {
             case 'mergeTheirs':
             case 'mergeMine':
                 if ($resolveStrategy === 'mergeTheirs') {
-                    $record = $record->merge($existingRecord);
-                } else if ($existingRecord) {
-                    $record = $existingRecord->merge($record);
+                    $recordToUpdate = $this->_mergeRecord($record, $clientRecord);
+                } else if ($clientRecord) {
+                    $recordToUpdate = $this->_mergeRecord($clientRecord, $record);
+                } else {
+                    $recordToUpdate = null;
                 }
-                $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $record, FALSE);
+                
+                if ($recordToUpdate !== null) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $clientRecord) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' Merged record: ' . print_r($record->toArray(), TRUE));
+                    
+                    $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $recordToUpdate, FALSE);
+                }
+                
                 break;
             case 'keep':
-                // do not check for duplicates (keep both)
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Record to import (keep both / no duplicate check): ' . print_r($record->toArray(), TRUE));
+                
                 $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $record, FALSE);
                 break;
             default:
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Record to import: ' . print_r($record->toArray(), TRUE));
+                
                 $record = call_user_func(array($this->_controller, $this->_options['createMethod']), $record);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' record: ' . print_r($record->toArray(), TRUE));
         
         return $record;
+    }
+    
+    /**
+     * merge record / skip if no diff
+     * 
+     * @param Tinebase_Record_Abstract $updateRecord
+     * @param Tinebase_Record_Abstract $mergeRecord
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _mergeRecord($updateRecord, $mergeRecord)
+    {
+        $omitFields = array(
+            'creation_time',
+            'created_by',
+            'last_modified_time',
+            'last_modified_by',
+            'seq',
+            'id'
+        );
+        
+        $diff = $updateRecord->diff($mergeRecord, $omitFields);
+        if (! $diff || $diff->isEmpty()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Records are identical, no need to update');
+            return null;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Got diff: ' . print_r($diff->diff, TRUE));
+        }
+        
+        return $updateRecord->merge($mergeRecord, $diff);
     }
     
     /**

@@ -77,6 +77,8 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
                 'field' => 'container_id', 'operator' => 'equals', 'value' => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId()
             ))));
         }
+        
+        Addressbook_Controller_Contact::getInstance()->duplicateCheckFields(Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_DUP_FIELDS));
     }
     
     /**
@@ -251,9 +253,9 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      * @param string $filename
      * @return Tinebase_Model_ImportExportDefinition
      */
-    protected function _getDefinitionFromFile($filename)
+    protected function _getDefinitionFromFile($filename, $path = null)
     {
-        $filename = dirname(__FILE__) . '/files/' . $filename;
+        $filename = ($path ? $path : dirname(__FILE__) . '/files/') . $filename;
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
         $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
         
@@ -287,14 +289,15 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     
     /**
     * get custom field record
-    *
+    * 
+    * @param string $name
     * @return Tinebase_Model_CustomField_Config
     */
-    protected function _createCustomField()
+    protected function _createCustomField($name = 'Yomi Name')
     {
         $cfData = new Tinebase_Model_CustomField_Config(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            'name'              => 'Yomi Name',
+            'name'              => $name,
             'model'             => 'Addressbook_Model_Contact',
             'definition'        => array(
                 'label' => Tinebase_Record_Abstract::generateUID(),
@@ -313,7 +316,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         } catch (Zend_Db_Statement_Exception $zdse) {
             // customfield already exists
             $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication('Addressbook');
-            $result = $cfs->filter('name', 'Yomi Name')->getFirstRecord();
+            $result = $cfs->filter('name', $name)->getFirstRecord();
         }
         
         return $result;
@@ -335,12 +338,58 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->_deletePersonalContacts = TRUE;
 
         $this->_filename = dirname(__FILE__) . '/files/import_duplicate_2.csv';
-        $this->_deleteImportFile = FALSE;
         
         $result = $this->_doImport(array(), $definition);
         
         $this->assertEquals(1, $result['updatecount'], 'should have updated 1 contact');
         $this->assertEquals('joerg@home.com', $result['results'][0]->email_home, 'duplicates resolving did not work: ' . print_r($result['results']->toArray(), true));
         $this->assertEquals('Jörg', $result['results'][0]->n_given, 'wrong encoding: ' . print_r($result['results']->toArray(), true));
+    }
+
+    /**
+     * testImportLxOffice
+     */
+    public function testImportLxOffice()
+    {
+        $options = array(
+            'container_id'  => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId(),
+        );
+        
+        // add duplicate field "customernumber"
+        Addressbook_Controller_Contact::getInstance()->duplicateCheckFields(array(
+            array('n_given', 'n_family', 'org_name'),
+            array('email'),
+            array('customernumber')
+        ));
+        
+        $this->_createCustomField('customernumber');
+        
+        $definition = $this->_getDefinitionFromFile('adb_lxoffice_import_csv.xml',
+            dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/tine20/Addressbook/Import/definitions/');
+        
+        $this->_filename = dirname(__FILE__) . '/files/importtest_lxoffice1.csv';
+        $this->_deleteImportFile = FALSE;
+        
+        $result = $this->_doImport($options, $definition);
+        $this->_deletePersonalContacts = TRUE;
+        
+        $this->assertEquals(3, $result['totalcount'], print_r($result['results']->toArray(), true));
+        
+        $contacts = $result['results'];
+        $berger = $contacts->getFirstRecord();
+        $this->assertEquals(array('customernumber' => '73029'), $berger->customfields, print_r($berger->toArray(), true));
+        
+        $this->_filename = dirname(__FILE__) . '/files/importtest_lxoffice2.csv';
+        
+        $result = $this->_doImport($options, $definition);
+        
+        $this->assertEquals(4, count($result['results']));
+        $this->assertEquals(3, $result['updatecount'], 'should have updated 3 contacts');
+        $this->assertEquals(1, $result['totalcount'], 'should have added 1 contact');
+        $this->assertEquals('Straßbough', $result['results'][1]['adr_one_locality'],
+                'should have changed the locality of contact #2: ' . print_r($result['results'][1]->toArray(), true));
+        $this->assertEquals('Dr. Schutheiss', $result['results'][3]['n_family']);
+        $this->assertEquals(1, $result['results'][2]['seq'], 'Wolfer should not be updated - nothing changed');
+        $this->assertEquals('Weixdorf DD', $result['results'][0]['adr_one_locality'], 'locality should persist');
     }
 }
