@@ -44,6 +44,14 @@
           "path": "js/"
         },
         {
+          "text": "DownloadLinkDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "DownloadLinkGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "Filemanager.js",
           "path": "js/"
         }

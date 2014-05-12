@@ -236,3 +236,13 @@ msgstr "Gemeinsame Ordner"
 #: Controller/Node.php:332
 msgid "Other users folders"
 msgstr "Ordner anderer Benutzer"
+
+
+msgid "Public Links"
+msgstr "Öffentliche Links"
+
+msgid "Create Public Link"
+msgstr "Öffentlichen Link Erstellen"
+
+msgid "Expiration Time"
+msgstr "Ablaufdatum"
