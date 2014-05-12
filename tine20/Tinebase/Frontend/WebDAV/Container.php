@@ -51,12 +51,13 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     {
         parent::__construct($_container, $_useIdAsName);
         
-        $this->_path = '/' . $this->_application->getId() . '/folders/' . $this->_container->type . '/';
+        $this->_path = Tinebase_FileSystem::getInstance()->getContainerPath($this->_container);
         
-        if ($this->_container->type == Tinebase_Model_Container::TYPE_SHARED) {
-            $this->_path .= $this->_container->getId();
-        } else {
-            $this->_path .= Tinebase_Core::getUser()->accountId . '/' . $this->_container->getId();
+        // make sure filesystem path exists
+        try {
+            Tinebase_FileSystem::getInstance()->stat($this->_path);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_FileSystem::getInstance()->mkdir($this->_path);
         }
     }
     

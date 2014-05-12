@@ -63,7 +63,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         
         $children = $node->getChildren();
         
-        $this->assertEquals(2, count($children));
+        $this->assertGreaterThanOrEqual(2, count($children));
         $this->assertInstanceOf('Filemanager_Frontend_WebDAV', $children[0], 'wrong node class');
         
         $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
