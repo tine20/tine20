@@ -112,19 +112,24 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
             # * contact_id of user
             # * 'shared'
             case 1:
-                if ($name === Tinebase_Model_Container::TYPE_SHARED || 
+                if ($name === Tinebase_Model_Container::TYPE_SHARED ||
                     ($this->_hasRecordFolder && $name === Tinebase_FileSystem::FOLDER_TYPE_RECORDS)) {
                     $path = $this->_path . '/' . $name;
                     
                 } elseif ($this->_hasPersonalFolders) {
-                    try {
-                        $contact = $this->_getContact($name);
+                    if ($name === '__currentuser__') {
+                        $path = $this->_path . '/__currentuser__';
                         
-                    } catch (Tinebase_Exception_NotFound $tenf) {
-                        throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
+                    } else {
+                        try {
+                            $contact = $this->_getContact($name);
+                            
+                        } catch (Tinebase_Exception_NotFound $tenf) {
+                            throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
+                        }
+                        
+                        $path = $this->_path . '/' . ($this->_useIdAsName ? $contact->getId() : $contact->n_fileas);
                     }
-                    
-                    $path = $this->_path . '/' . ($this->_useIdAsName ? $contact->getId() : $contact->n_fileas);
                     
                 } else {
                     throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
@@ -171,11 +176,16 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                     return new Tinebase_Frontend_WebDAV_RecordCollection($this->_path . '/' . $name);
                     
                 } elseif ($this->_hasPersonalFolders) {
-                    try {
-                        $contact = $this->_getContact(array_value(1, $this->_getPathParts()));
+                    if (array_value(1, $this->_getPathParts()) === '__currentuser__') {
+                        $accountId = Tinebase_Core::getUser()->accountId;
                         
-                    } catch (Tinebase_Exception_NotFound $tenf) {
-                        throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
+                    } else {
+                        try {
+                            $accountId = $this->_getContact(array_value(1, $this->_getPathParts()))->account_id;
+                            
+                        } catch (Tinebase_Exception_NotFound $tenf) {
+                            throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
+                        }
                     }
                     
                     try {
@@ -193,9 +203,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                         } else { 
                             $container = Tinebase_Container::getInstance()->getContainerByName(
                                 $this->_getAppliationName(), 
-                                $name, 
+                                $name,
                                 Tinebase_Model_Container::TYPE_PERSONAL, 
-                                $contact->account_id
+                                $accountId
                             );
                         }
                         
@@ -218,7 +228,15 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                 
                 $objectClass = Tinebase_Application::getInstance()->getApplicationById($container->application_id)->name . '_Frontend_WebDAV_Container';
                 
-                return new $objectClass($container, $this->_useIdAsName);
+                $containerClass = new $objectClass($container, $this->_useIdAsName);
+                
+                try {
+                    $containerClass->getETag();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    throw new \Sabre\DAV\Exception\NotFound("Filesystem path for $this->_path/$name not found");
+                }
+                
+                return $containerClass;
                 
                 break;
                 
@@ -283,16 +301,21 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                     );
                     
                 } elseif ($this->_hasPersonalFolders) {
-                    try {
-                        $contact = $this->_getContact(array_value(1, $this->_getPathParts()));
-                    } catch (Tinebase_Exception_NotFound $tenf) {
-                        throw new \Sabre\DAV\Exception\NotFound("Path $this->_path not found");
+                    if (array_value(1, $this->_getPathParts()) === '__currentuser__') {
+                        $accountId = Tinebase_Core::getUser()->accountId;
+                        
+                    } else {
+                        try {
+                            $accountId = $this->_getContact(array_value(1, $this->_getPathParts()))->account_id;
+                        } catch (Tinebase_Exception_NotFound $tenf) {
+                            throw new \Sabre\DAV\Exception\NotFound("Path $this->_path not found");
+                        }
                     }
                     
                     $containers = Tinebase_Container::getInstance()->getPersonalContainer(
                         Tinebase_Core::getUser(),
                         $this->_getAppliationName(),
-                        $contact->account_id,
+                        $accountId,
                         array(
                             Tinebase_Model_Grants::GRANT_READ, 
                             Tinebase_Model_Grants::GRANT_SYNC
