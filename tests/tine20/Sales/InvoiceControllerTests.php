@@ -159,6 +159,15 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals($year + 1 . '-01-01 00:00:00', $c4IsArray[4]->toString());
         $this->assertEquals($year + 1 . '-06-30 23:59:59', $c4IeArray[4]->toString());
         
+        // look if hours of timesheets gets calculated properly
+        $c3Invoice = $customer3Invoices->getFirstRecord();
+        $filter = new Sales_Model_InvoicePositionFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $c3Invoice->getId())));
+        $c3InvoicePositions = Sales_Controller_InvoicePosition::getInstance()->search($filter);
+        
+        $this->assertEquals(1, $c3InvoicePositions->count());
+        $this->assertEquals(3.5, $c3InvoicePositions->getFirstRecord()->quantity);
+        
         $invoice = $customer1Invoices->getFirstRecord();
         $invoice->relations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $invoice->getId())->toArray();
         

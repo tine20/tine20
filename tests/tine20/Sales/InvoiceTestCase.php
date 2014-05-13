@@ -269,15 +269,29 @@ class Sales_InvoiceTestCase extends TestCase
             'account_id' => Tinebase_Core::getUser()->getId(),
             'timeaccount_id' => $customer3Timeaccount->getId(),
             'start_date' => $tsDate,
-            'duration' => 30,
+            'duration' => 105,
             'description' => 'ts from ' . (string) $tsDate,
         ));
         
         $timesheetController->create($timesheet);
         
-        // this is a ts on 20xx-09-06
+        // this is a ts on 20xx-05-07
+        $timesheet->id = NULL;
+        $timesheet->start_date = $tsDate->addDay(1);
+        $timesheet->description = 'ts from ' . (string) $tsDate;
+        
+        $timesheetController->create($timesheet);
+        
+        // this is a ts on 20xx-09-07
         $timesheet->id = NULL;
         $timesheet->start_date = $tsDate->addMonth(4);
+        $timesheet->description = 'ts from ' . (string) $tsDate;
+        
+        $timesheetController->create($timesheet);
+        
+        // this is a ts on 20xx-09-08
+        $timesheet->id = NULL;
+        $timesheet->start_date = $tsDate->addDay(1);
         $timesheet->description = 'ts from ' . (string) $tsDate;
         
         $timesheetController->create($timesheet);

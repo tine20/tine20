@@ -1184,4 +1184,22 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Sales', '8.11');
     }
+    
+    /**
+     * quantity of invoice position -> float
+     */
+    public function update_11()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+            <name>quantity</name>
+            <type>float</type>
+            <notnull>true</notnull>
+            <default>1</default>
+        </field>');
+        
+        $this->_backend->alterCol('sales_invoice_positions', $declaration, 'quantity');
+        
+        $this->setTableVersion('sales_invoice_positions', 2);
+        $this->setApplicationVersion('Sales', '8.12');
+    }
 }

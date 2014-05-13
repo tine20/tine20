@@ -349,9 +349,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             
             foreach($billablesPerMonth as $billable) {
                 $qty = $billable->getQuantity();
-                if (is_array($qty)) {
-                    $qty = $qty[0];
-                }
                 $sumQuantity = $sumQuantity + $qty;
             }
             

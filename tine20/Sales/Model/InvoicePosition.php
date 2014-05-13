@@ -79,7 +79,7 @@ class Sales_Model_InvoicePosition extends Tinebase_Record_Abstract
             ),
             'quantity' => array(
                 'label' => 'Quantity', //_('Quantity')
-                'type'  => 'integer',
+                'type'  => 'float',
                 'summaryType' => 'sum',
             ),
         )

@@ -132,6 +132,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
      */
     public function getQuantity()
     {
-        return (int) $this->duration / 60;
+        return $this->duration / 60;
     }
 }
