@@ -48,7 +48,7 @@ class ExampleApplication_Controller_ExampleRecord extends Tinebase_Controller_Re
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new ExampleApplication_Controller_ExampleRecord();
+            self::$_instance = new self();
         }
         
         return self::$_instance;
