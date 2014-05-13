@@ -28,9 +28,7 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
     /**
      * @private
      */
-    appName: 'ExampleApplication',
-    modelName: 'ExampleRecord',
-    
+    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     windowHeight: 470,
     windowWidth: 800,
     
