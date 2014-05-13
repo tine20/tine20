@@ -150,19 +150,22 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      *
      * @param Tinebase_Model_NoteFilter $_filter
      * @param Tinebase_Model_Pagination $_pagination
+     * @param boolean $ignoreACL
      * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Note
      */
-    public function searchNotes(Tinebase_Model_NoteFilter $_filter, Tinebase_Model_Pagination $_pagination = NULL)
+    public function searchNotes(Tinebase_Model_NoteFilter $_filter, Tinebase_Model_Pagination $_pagination = NULL, $ignoreACL = true)
     {
         $select = $this->_db->select()
             ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'));
+        
+        if (! $ignoreACL) {
+            $this->_checkFilterACL($_filter);
+        }
         
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $_filter, $this);
         if ($_pagination !== NULL) {
             $_pagination->appendPaginationSql($select);
         }
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         $rows = $this->_db->fetchAssoc($select);
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $rows, true);
@@ -171,18 +174,53 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     }
     
     /**
+     * checks acl of filter
+     * 
+     * @param Tinebase_Model_NoteFilter $noteFilter
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkFilterACL(Tinebase_Model_NoteFilter $noteFilter)
+    {
+        $recordModelFilter = $noteFilter->getFilter('record_model');
+        if (empty($recordModelFilter)) {
+            throw new Tinebase_Exception_AccessDenied('record model filter required');
+        }
+        
+        $recordIdFilter = $noteFilter->getFilter('record_id');
+        if (empty($recordIdFilter) || $recordIdFilter->getOperator() !== 'equals') {
+            throw new Tinebase_Exception_AccessDenied('record id filter required or wrong operator');
+        }
+        
+        $recordModel = $recordModelFilter->getValue();
+        if (! is_string($recordModel)) {
+            throw new Tinebase_Exception_AccessDenied('no explicit record model set in filter');
+        }
+        
+        try {
+            $record = Tinebase_Core::getApplicationInstance($recordModel)->get($recordIdFilter->getValue());
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Do not fetch record notes because user has no read grant for container');
+            $recordIdFilter->setValue('');
+        }
+    }
+    
+    /**
      * count notes
      *
      * @param Tinebase_Model_NoteFilter $_filter
+     * @param boolean $ignoreACL
      * @return int notes count
      */
-    public function searchNotesCount(Tinebase_Model_NoteFilter $_filter)
+    public function searchNotesCount(Tinebase_Model_NoteFilter $_filter, $ignoreACL = true)
     {
         $select = $this->_db->select()
             ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'), array('count' => 'COUNT(' . $this->_db->quoteIdentifier('id') . ')'));
         
+        if (! $ignoreACL) {
+            $this->_checkFilterACL($_filter);
+        }
+        
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $_filter, $this);
-        //$_filter->appendFilterSql($select);
         
         $result = $this->_db->fetchOne($select);
         return $result;
@@ -443,13 +481,14 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * 
      * @param Tinebase_Record_RecordSet $_mods
      * @param string $_userId
+     * @param string $modelName
      */
-    public function addMultipleModificationSystemNotes($_mods, $_userId)
+    public function addMultipleModificationSystemNotes($_mods, $_userId, $modelName = null)
     {
         $_mods->addIndices(array('record_id'));
         foreach ($_mods->record_id as $recordId) {
             $modsOfRecord = $_mods->filter('record_id', $recordId);
-            $this->addSystemNote($recordId, $_userId, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modsOfRecord);
+            $this->addSystemNote($recordId, $_userId, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modsOfRecord, 'Sql', $modelName);
         }
     }
     

@@ -9,11 +9,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Json Frontend
  * 
  * @package     Calendar
@@ -692,6 +687,8 @@ class Calendar_JsonTests extends Calendar_TestCase
     
     /**
      * testFreeBusyCleanup
+     * 
+     * @return array event data
      */
     public function testFreeBusyCleanup()
     {
@@ -741,6 +738,33 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertFalse((isset($eventData['attendee']) || array_key_exists('attendee', $eventData)), 'attendee not empty');
         $this->assertFalse((isset($eventData['organizer']) || array_key_exists('organizer', $eventData)), 'organizer not empty');
         $this->assertFalse((isset($eventData['alarms']) || array_key_exists('alarms', $eventData)), 'alarms not empty');
+        
+        return $eventData;
+    }
+
+    /**
+     * testFreeBusyCleanupOfNotes
+     * 
+     * @see 0009918: shared (only free/busy) calendar is showing event details within the history tab.
+     */
+    public function testFreeBusyCleanupOfNotes()
+    {
+        $eventData = $this->testFreeBusyCleanup();
+        
+        $tinebaseJson = new Tinebase_Frontend_Json();
+        $filter = array(array(
+            'field' => "record_model",
+            'operator' => "equals",
+            'value' => "Calendar_Model_Event"
+        ), array(
+            'field' => 'record_id',
+            'operator' => 'equals',
+            'value' => $eventData['id']
+        ));
+        $notes = $tinebaseJson->searchNotes($filter, array());
+        
+        $this->assertEquals(0, $notes['totalcount'], 'should not find any notes of record');
+        $this->assertEquals(0, count($notes['results']), 'should not find any notes of record');
     }
     
     /**
