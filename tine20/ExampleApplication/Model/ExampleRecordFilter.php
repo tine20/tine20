@@ -18,32 +18,5 @@
  */
 class ExampleApplication_Model_ExampleRecordFilter extends Tinebase_Model_Filter_FilterGroup 
 {
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'ExampleApplication_Model_ExampleRecordFilter';
-    
-    /**
-     * @var string application of this filter group
-     */
-    protected $_applicationName = 'ExampleApplication';
-    
-    /**
-     * @var string name of model this filter group is designed for
-     */
-    protected $_modelName = 'ExampleApplication_Model_ExampleRecord';
-    
-    protected $_defaultFilter = 'query';
-    
-    /**
-     * @var array filter model fieldName => definition
-     */
-    protected $_filterModel = array(
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', /*'...'*/))),
-        'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-    );
+    protected $_configuredModel = 'ExampleApplication_Model_ExampleRecord';
 }
