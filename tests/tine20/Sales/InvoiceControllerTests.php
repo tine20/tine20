@@ -195,19 +195,4 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $c->update($invoice);
     }
-    
-    public function testGetBillableContracts()
-    {
-        $date = clone $this->_referenceDate;
-        // 1.4.2013
-        $date->addMonth(3);
-        
-        $c = Sales_Controller_Contract::getInstance();
-        $result = $c->getBillableContracts($date);
-        $this->assertEquals(5, $result->count());
-        
-        // 1.5.2013
-        $date->addMonth(1);
-        $this->assertEquals(5, $result->count());
-    }
 }

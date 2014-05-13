@@ -75,11 +75,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         // the usertimezone of the calling user will be used
 //         $currentDate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
-        $contractController          = Sales_Controller_Contract::getInstance();
-        $productAggregateController  = Sales_Controller_ProductAggregate::getInstance();
-        
-        $contractsToBill             = $contractController->getBillableContracts($currentDate);
-        
         $failures = array();
         $created = new Tinebase_Record_RecordSet('Sales_Model_Invoice');
         
@@ -92,7 +87,79 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'type'                   => 'INVOICE_ITEM'
         );
         
-        foreach ($contractsToBill as $contract) {
+        $contractController          = Sales_Controller_Contract::getInstance();
+        $productAggregateController  = Sales_Controller_ProductAggregate::getInstance();
+        
+        $dateBig = clone $currentDate;
+        $dateBig->addSecond(2);
+        
+        $dateSmall = clone $currentDate;
+        $dateSmall->subSecond(2);
+        
+        $contractBackend = new Sales_Backend_Contract();
+        
+        $ids = $contractBackend->getBillableContractIds($currentDate);
+        
+        foreach($ids as $contractId) {
+            $contract = $contractController->get($contractId);
+            
+            $filter = new Sales_Model_ProductAggregateFilter(array());
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId())));
+            $products = $productAggregateController->search($filter);
+            
+            
+            // if there aren't any products, and the interval of the contract is 0, don't handle contract
+            if ($products->count() == 0 && $contract->interval == 0) {
+                continue;
+            }
+            
+            // contract has been terminated and last bill has been created already
+            if ($contract->end_date && $contract->last_autobill > $contract->end_date) {
+                continue;
+            }
+            
+            $nextBill = $contractController->getNextBill($contract);
+            
+            if ($nextBill->isLater($dateBig)) {
+                // don't handle, if contract don't have to be billed and there aren't any products
+                if ($products->count() == 0) {
+                    continue;
+                } else {
+                    $billIt = FALSE;
+                    // otherwise iterate products
+                    foreach($products as $product) {
+                        // is null, if this is the first time to bill the contract
+                        $lastBilled = ($product->last_autobill === NULL) ? NULL : clone $product->last_autobill;
+                        
+                        // if the contract has been billed already, add the interval
+                        if ($lastBilled) {
+                            $nextBill = $lastBilled->addMonth($product->interval);
+                        } else {
+                            // it hasn't been billed already, so take the start_date of the contract as date
+                            $nextBill = clone $contract->start_date;
+                        }
+        
+                        // assure creating the last bill bill if a contract has bee terminated
+                        if (($contract->end_date !== NULL) && $nextBill->isLater($contract->end_date)) {
+                            $nextBill = clone $contract->end_date;
+                        }
+        
+                        $nextBill->setTime(0,0,0);
+                        // there is a product to bill, so stop to iterate
+                        if ($nextBill->isLater($dateBig)) {
+                            $billIt = TRUE;
+                            break;
+                        }
+        
+                    }
+        
+                    if (! $billIt) {
+                        continue;
+                    }
+                }
+            }
+            
+            $contract->products = $products->count() ? $products->toArray() : NULL;
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Processing contract ' . $contract->title);
@@ -313,9 +380,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             foreach($billableAccountables as $accountable) {
                 if (! $accountable->isVolatile()) {
                     $accountable->updateLastBilledDate();
-                    
-                    // TODO: not here, after invoice gets billed
-                    // $accountable->clearBillables($invoice);
                 }
                 
                 $accountable->conjunctInvoiceWithBillables($invoice);
