@@ -437,8 +437,16 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     {
         $tinebaseJson = new Tinebase_Frontend_Json();
         $history = $tinebaseJson->searchNotes(array(array(
-            'field' => 'record_id', 'operator' => 'equals', 'value' => $_recordId
-        )), array('sort' => array('note_type_id', 'creation_time')));
+            'field' => 'record_id',
+            'operator' => 'equals',
+            'value' => $_recordId
+        ), array(
+            'field' => "record_model",
+            'operator' => "equals",
+            'value' => 'Addressbook_Model_Contact'
+        )), array(
+            'sort' => array('note_type_id', 'creation_time')
+        ));
         $this->assertEquals($_changedNoteNumber, $history['totalcount'], print_r($history, TRUE));
         $changedNote = $history['results'][$_changedNoteNumber - 1];
         foreach ((array) $_expectedText as $text) {
