@@ -19,51 +19,48 @@
 class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
 {
     /**
-     * application the record belongs to
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var string
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_application = 'ExampleApplication';
+    protected static $_configurationObject = NULL;
     
     /**
-     * array with meta information about the model (like models.js)
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
      * @var array
      */
-    protected static $_meta = array(
-        'idProperty'        => 'id',
-        'titleProperty'     => 'name',
-        'recordName'        => 'example record', // _('example record')
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'example record', // _('example record') ngettext('example record', 'example records', n)
         'recordsName'       => 'example records', // _('example records')
         'containerProperty' => 'container_id',
+        'titleProperty'     => 'name',
         'containerName'     => 'example record list', // _('example record list')
         'containersName'    => 'example record lists', // _('example record lists')
-        'defaultFilter'     => 'query',
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
         'hasNotes'          => TRUE,
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
         'hasAttachments'    => TRUE,
-    );
-    
-    /**
-     * fields for auto start
-     * @var array
-     */
-    protected static $_fields = array(
-        'id'     => array(
-            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-            'label' => NULL
-        ),
-        'name'   => array(
-            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-            'label' => 'Name',    // _('Name')
+
+        'createModule'    => TRUE,
+
+        'appName'         => 'ExampleApplication',
+        'modelName'       => 'ExampleRecord',
+        
+        'fields'          => array(
+            'name' => array(
+                'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                'label'       => 'Name', // _('Name')
+                'queryFilter' => TRUE
             ),
-        'status' => array(
-            'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-            'label' => 'Status',    // _('Status')
-            'type' => 'keyfield',
-            'name' => 'exampleStatus'
-            )
-        );
+            'status' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label' => 'Status', // _('Status')
+                'type' => 'keyfield',
+                'name' => 'exampleStatus'
+            ),
+        )
+    );
 }

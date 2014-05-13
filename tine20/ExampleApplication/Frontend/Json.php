@@ -29,7 +29,7 @@ class ExampleApplication_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * the models handled by this frontend
      * @var array
      */
-    protected $_models = array('ExampleRecord');
+    protected $_configuredModels = array('ExampleRecord');
 
     /**
      * the constructor
