@@ -82,38 +82,45 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordLoad.defer(250, this);
             return;
         }
+        
         if (this.createReversal) {
             var originalRecord = this.recordProxy.recordReader({responseText: Ext.encode(this.record.data)}); ;
             
             this.record.set('cleared', 'TO_CLEAR');
-            this.record.set('id', null);
             this.record.set('number', null);
             this.record.set('date', null);
             this.record.set('type', 'REVERSAL');
-            delete originalRecord.data.relations;
-            originalRecord.data.address_id = originalRecord.data.address_id.id;
             
             var relations = this.record.get('relations');
-            relations.push({
+            var newRelations = [];
+            var allowedRelations = ['Sales_Model_Customer', 'Sales_Model_CostCenter', 'Sales_Model_Contract'];
+            Ext.each(relations, function(relation, index) {
+                if (allowedRelations.indexOf(relation.related_model) > -1) {
+                    relation.id = null;
+                    newRelations.push(relation);
+                }
+            });
+            
+            newRelations.push({
                 own_degree:      'sibling',
                 own_backend:     'Sql',
                 related_id:      originalRecord.get('id'),
                 related_record:  originalRecord.data,
                 related_model:   'Sales_Model_Invoice',
                 related_backend: 'Sql',
+                own_model:       'Sales_Model_Invoice',
                 type:            'REVERSAL'
             });
             
-            this.record.set('relations', relations);
+            this.record.set('relations', newRelations);
         }
         
         Tine.Sales.InvoiceEditDialog.superclass.onRecordLoad.call(this);
 
         if (this.createReversal) {
             this.window.setTitle(this.app.i18n._('Create Reversal Invoice'));
-            
             this.doCopyRecord();
-            this.onAfterContractLoad();
+            
         } else if (this.copyRecord) {
             this.doCopyRecord();
             this.window.setTitle(this.app.i18n._('Copy Invoice'));

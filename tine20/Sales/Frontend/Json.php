@@ -592,6 +592,10 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     if (is_array($recordData['relations'][$i]['related_record']['product_id'])) {
                         $recordData['relations'][$i]['related_record']['product_id'] = $recordData['relations'][$i]['related_record']['product_id']['id'];
                     }
+                } elseif ($recordData['relations'][$i]['related_model'] == 'Sales_Model_Invoice') {
+                    if (is_array($recordData['relations'][$i]['related_record']['address_id'])) {
+                        $recordData['relations'][$i]['related_record']['address_id'] = $recordData['relations'][$i]['related_record']['address_id']['id'];
+                    }
                 }
             }
         }
