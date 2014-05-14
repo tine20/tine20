@@ -70,6 +70,10 @@ class Sales_Controller_OrderConfirmation extends Sales_Controller_NumberableAbst
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         if ($_record->number != $_oldRecord->number) {
+            if (! Tinebase_Core::getUser()->hasRight('Sales', Sales_Acl_Rights::CHANGE_OC_NUMBER)) {
+                throw new Sales_Exception_AlterOCNumberForbidden();
+            }
+            
             $this->_setNextNumber($_record);
         }
     }

@@ -48,5 +48,9 @@ class Sales_OrderConfirmationControllerTests extends TestCase
         // the next number should be a number after the manual number
         $record = $controller->create(new Sales_Model_OrderConfirmation(array('title' => 'auto3')));
         $this->assertEquals('AB-000005', $record->number);
+        
+        // the user manually set this numer, so this should be corrected
+        $record = $controller->create(new Sales_Model_OrderConfirmation(array('title' => 'manu1', 'number' => 'AB-100')));
+        $this->assertEquals('AB-000100', $record->number);
     }
 }

@@ -43,6 +43,7 @@ Tine.Sales.handleRequestException = function(exception, callback, callbackScope)
         case 911: // Sales_Exception_DuplicateNumber
         case 913: // Sales_Exception_InvoiceAlreadyClearedEdit
         case 914: // Sales_Exception_InvoiceAlreadyClearedDelete
+        case 915: // Sales_Exception_AlterOCNumberForbidden
             Ext.MessageBox.show(defaults);
             break;
         // return false will the generic exceptionhandler handle the caught exception

@@ -99,6 +99,7 @@ Tine.Sales.OrderConfirmationEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     items: [[{
                         fieldLabel: this.app.i18n._('Number'),
                         name: 'number',
+                        disabled: (! Tine.Tinebase.common.hasRight('change', 'Sales', 'oc_number') && this.record.id),
                         allowBlank: true // autoset if empty
                     },{
                         fieldLabel: this.app.i18n._('Title'),

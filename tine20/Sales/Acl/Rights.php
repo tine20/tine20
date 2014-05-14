@@ -61,6 +61,13 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_ORDERCONFIRMATIONS = 'manage_orderconfirmations';
     
     /**
+     * the right to change the number of order confirmations after creating
+     *
+     * @staticvar string
+     */
+    const CHANGE_OC_NUMBER = 'change_oc_number';
+    
+    /**
      * the right to manage divisions
      *
      * @staticvar string
@@ -121,7 +128,8 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_CUSTOMERS,
             self::MANAGE_INVOICES,
             self::MANAGE_DIVISIONS,
-            self::MANAGE_ORDERCONFIRMATIONS
+            self::MANAGE_ORDERCONFIRMATIONS,
+            self::CHANGE_OC_NUMBER
         );
         
         $allRights = array_merge($allRights, $addRights);
@@ -166,7 +174,11 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_ORDERCONFIRMATIONS => array(
                 'text'          => $translate->_('manage order confirmations'),
                 'description'   => $translate->_('add, edit and delete order confirmations'),
-            )
+            ),
+            self::CHANGE_OC_NUMBER => array(
+                'text'          => $translate->_('change number of an order confirmations'),
+                'description'   => $translate->_('allow to change the number of an order confirmation on update'),
+            ),
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
