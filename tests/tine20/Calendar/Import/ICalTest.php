@@ -183,7 +183,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportRruleNormalize()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'importContainerId' => $this->_getTestCalendar()->getId(),
         ));
         
         $importer->importFile(dirname(__FILE__) . '/files/ni-zsk.ics');
