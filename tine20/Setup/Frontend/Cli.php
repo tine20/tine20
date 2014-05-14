@@ -441,6 +441,7 @@ class Setup_Frontend_Cli
      * @param Zend_Console_Getopt $_opts
      * 
      * @todo check role by rights and not by name
+     * @todo replace echos with stdout logger
      */
     protected function _createAdminUser(Zend_Console_Getopt $_opts)
     {
@@ -471,25 +472,10 @@ class Setup_Frontend_Cli
                 echo "User password has been reset.\n";
             }
             
-            // check admin group membership
-            $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
-            $memberships = Tinebase_Group::getInstance()->getGroupMemberships($user);
-            if (! in_array($adminGroup->getId(), $memberships)) {
-                try {
-                    Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
-                    echo "Added user to default admin group\n";
-                } catch (Zend_Ldap_Exception $zle) {
-                    echo "Could not add user to default admin group: " . $zle->getMessage();
-                }
-            }
-            
+            $this->_checkAdminGroupMembership($user);
             $this->_checkAdminRole($user);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::SQL) {
-                die('It is not possible to create a new user with other user backend than SQL here.');
-            }
-            
             // create new admin user that expires tomorrow
             $password = $this->_promptPassword();
             Tinebase_User::createInitialAccounts(array(
@@ -498,6 +484,26 @@ class Setup_Frontend_Cli
                 'expires'        => $tomorrow,
             ));
             echo "Created new admin user '$username' that expires tomorrow.\n";
+        }
+    }
+
+    /**
+     * check admin group membership
+     * 
+     * @param Tinebase_Model_FullUser $user
+     */
+    protected function _checkAdminGroupMembership($user)
+    {
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $memberships = Tinebase_Group::getInstance()->getGroupMemberships($user);
+        if (! in_array($adminGroup->getId(), $memberships)) {
+            try {
+                Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
+                echo "Added user to default admin group\n";
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                echo "Could not add user to default admin group: " . $e->getMessage();
+            }
         }
     }
     

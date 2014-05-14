@@ -1000,7 +1000,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 . ' Writing modlog for ' . count($ids) . ' records ...');
             
             $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLogMultiple($ids, $_oldData, $_newData, $this->_modelName, $this->_getBackendType(), $updateMetaData);
-            Tinebase_Notes::getInstance()->addMultipleModificationSystemNotes($currentMods, $currentAccountId);
+            Tinebase_Notes::getInstance()->addMultipleModificationSystemNotes($currentMods, $currentAccountId, $this->_modelName);
         }
     }
     
@@ -1492,10 +1492,9 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (!$hasGrant) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No permissions to ' . $_action . ' in container ' . $_record->container_id);
             if ($_throw) {
                 throw new Tinebase_Exception_AccessDenied($_errorMessage);
-            } else {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No permissions to ' . $_action . ' in container ' . $_record->container_id);
             }
         }
 

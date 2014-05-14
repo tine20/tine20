@@ -4,21 +4,19 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Calendar_Import_ICal
  */
 class Calendar_Import_ICalTest extends Calendar_TestCase
 {
+    /**
+     * testImportSimpleFromString
+     */
     public function testImportSimpleFromString()
     {
         $importer = new Calendar_Import_Ical(array(
@@ -175,5 +173,34 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         exec($cmd, $output);
         $failMessage = print_r($output, TRUE);
         $this->_checkImport($failMessage);
+    }
+    
+    /**
+     * testImportRruleNormalize
+     * 
+     * @see 0009856: ics import: recurring events one day earlier
+     */
+    public function testImportRruleNormalize()
+    {
+        $importer = new Calendar_Import_Ical(array(
+            'importContainerId' => $this->_testCalendar->getId(),
+        ));
+        
+        $importer->importFile(dirname(__FILE__) . '/files/ni-zsk.ics');
+        
+        // fetch first of may in 2014
+        $from = new Tinebase_DateTime('2014-04-23 22:00:00');
+        $until = new Tinebase_DateTime('2014-05-23 22:00:00');
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => $from->toString(),
+                'until' => $until->toString()
+            )),
+        )), NULL);
+        Calendar_Model_Rrule::mergeRecurrenceSet($events, $from, $until);
+        $firstOfMay2014 = $events[1];
+        
+        $this->assertEquals('2014-04-30 22:00:00', $firstOfMay2014->dtstart);
     }
 }

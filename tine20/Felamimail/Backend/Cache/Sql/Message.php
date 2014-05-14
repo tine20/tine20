@@ -85,7 +85,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @param integer $_limit
      * @return Tinebase_Record_RecordSet
      */
-    public function getFlagsForFolder($_folderId, $_start = NULL, $_limit = NULL)    
+    public function getFlagsForFolder($_folderId, $_start = NULL, $_limit = NULL)
     {
         $filter = $this->_getMessageFilterWithFolderId($_folderId);
         $pagination = ($_start !== NULL || $_limit !== NULL) ? new Tinebase_Model_Pagination(array(

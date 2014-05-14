@@ -368,13 +368,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $filter = new Tinebase_Model_NoteFilter($filter);
         $paging = new Tinebase_Model_Pagination($paging);
-
-        $records = Tinebase_Notes::getInstance()->searchNotes($filter, $paging);
+        
+        $records = Tinebase_Notes::getInstance()->searchNotes($filter, $paging, /* ignoreACL = */ false);
         $result = $this->_multipleRecordsToJson($records);
 
         return array(
             'results'       => $result,
-            'totalcount'    => Tinebase_Notes::getInstance()->searchNotesCount($filter)
+            'totalcount'    => Tinebase_Notes::getInstance()->searchNotesCount($filter, /* ignoreACL = */ false)
         );
     }
 

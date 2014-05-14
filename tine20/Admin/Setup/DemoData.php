@@ -172,12 +172,12 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $group   = Tinebase_Group::getInstance()->getGroupByName('Users');
                 $groupId = $group->getId();
                 
-                // TODO think about fetching this from IMAP config
                 try {
                     $testconfig = Zend_Registry::get('testConfig');
                 } catch (Zend_Exception $e) {
                     $testconfig = NULL;
                 }
+                // TODO think about fetching this from IMAP config
                 $emailDomain = ($testconfig && isset($testconfig->maildomain)) ? $testconfig->maildomain : 'tine20.org';
 
                 $user = new Tinebase_Model_FullUser(array(
@@ -210,14 +210,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     $listBackend->addListMember($group->list_id, $user->contact_id);
                 }
 
-                // give additional testusers the same password as the primary test account
-                try {
-                    Tinebase_User::getInstance()->setPassword($user, $testconfig->password);
-                } catch (Zend_Exception $e) {
-                    Tinebase_User::getInstance()->setPassword($user, static::$_defaultPassword);
-                    $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
-                    Tinebase_User::getInstance()->updateUser($user);
-                }
+                $this->_setUserPassword($user, $testconfig);
             }
             
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
@@ -243,6 +236,30 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $this->_createGroups();
         $this->_createRoles();
         $this->_createSharedTags();
+    }
+    
+    /**
+     * give additional testusers a password
+     * 
+     * @param Tinebase_Model_User $user
+     * @param Zend_Config|null $testconfig
+     */
+    protected function _setUserPassword($user, $testconfig)
+    {
+        $password =
+            // use password of the primary test account 
+            ($testconfig && isset($testconfig->password)) ? $testconfig->password :
+            // use password from login in config.inc.php
+                (isset(Tinebase_Config::getInstance()->login->password) ? Tinebase_Config::getInstance()->login->password :
+            // use static password
+                static::$_defaultPassword);
+        if (empty($password)) {
+            // disable user if empty password
+            $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
+            Tinebase_User::getInstance()->updateUser($user);
+        } else {
+            Tinebase_User::getInstance()->setPassword($user, $password);
+        }
     }
     
     /**

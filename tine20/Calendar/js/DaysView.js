@@ -120,6 +120,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * @type {Number}
      */
     scrollOffset: 19,
+    
+    /**
+     * The time in milliseconds, a scroll should be delayed after using the mousewheel
+     * 
+     * @type Number
+     */
+    scrollBuffer: 200,
+    
     /**
      * @property {bool} editing
      * @private
@@ -296,7 +304,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                     
                     if (! event.get('is_all_day_event') && targetDate.is_all_day_event && event.duration < Date.msDAY) {
                         // draged from scroller -> dropped to allDay and duration less than a day
-                        event.set('dtend', targetDate.add(Date.DAY, 1));
+                        event.set('dtend', targetDate.add(Date.DAY, 1).add(Date.SECOND, -1));
                     } else if (event.get('is_all_day_event') && !targetDate.is_all_day_event) {
                         // draged from allDay -> droped to scroller will be resetted to hone hour
                         event.set('dtend', targetDate.add(Date.HOUR, 1));
@@ -1148,7 +1156,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                 var timePart = this.timeScale.getAt(parts[2]);
                 date = date.add(Date.MINUTE, timePart.get('minutes'));
                 date.is_all_day_event = false;
-            }   
+            }
+            
             return date;
         }
     },
@@ -1203,7 +1212,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         this.scroller = new E(this.mainWrap.dom.childNodes[1]);
         this.scroller.setStyle('overflow-x', 'hidden');
         this.mon(this.scroller, 'scroll', this.onBeforeScroll, this);
-        this.mon(this.scroller, 'scroll', this.onScroll, this, {buffer: 200});
+        this.mon(this.scroller, 'scroll', this.onScroll, this, {buffer: this.scrollBuffer});
         
         this.mainBody = new E(this.scroller.dom.firstChild);
         

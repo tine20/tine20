@@ -273,7 +273,14 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * 
      * @param Calendar_Model_Event $event
      */
-    public function normalize(Calendar_Model_Event $event) {
+    public function normalize(Calendar_Model_Event $event)
+    {
+        // set originators TZ to get correct byday/bymonth/bymonthday rrules
+        $originatorDtStart = clone($event->dtstart);
+        if (! empty($event->originator_tz)) {
+            $originatorDtStart->setTimezone($event->originator_tz);
+        }
+        
         switch ($this->freq) {
             case self::FREQ_WEEKLY:
                 if (! $this->wkst ) {
@@ -281,22 +288,22 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 }
             
                 if (! $this->byday) {
-                    $this->byday = array_search($event->dtstart->format('w'), self::$WEEKDAY_DIGIT_MAP);
+                    $this->byday = array_search($originatorDtStart->format('w'), self::$WEEKDAY_DIGIT_MAP);
                 }
                 break;
             
             case self::FREQ_MONTHLY:
                 if (! $this->byday && ! $this->bymonthday) {
-                    $this->bymonthday = $event->dtstart->format('j');
+                    $this->bymonthday = $originatorDtStart->format('j');
                 }
                 break;
                 
             case self::FREQ_YEARLY:
                 if (! $this->byday && ! $this->bymonthday) {
-                    $this->bymonthday = $event->dtstart->format('j');
+                    $this->bymonthday = $originatorDtStart->format('j');
                 }
                 if (! $this->bymonth) {
-                    $this->bymonth = $event->dtstart->format('n');
+                    $this->bymonth = $originatorDtStart->format('n');
                 }
                 break;
             default:

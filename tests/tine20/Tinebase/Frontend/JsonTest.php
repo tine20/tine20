@@ -6,19 +6,14 @@
  * @subpackage  Json
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tinebase_Group
  */
-class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
+class Tinebase_Frontend_JsonTest extends TestCase
 {
     /**
      * unit under test (UIT)
@@ -46,7 +41,7 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_instance = new Tinebase_Frontend_Json();
         
@@ -71,7 +66,6 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'note'              => 'phpunit test note',
             'record_model'      => $this->_objects['record']['model'],
             'record_backend'    => $this->_objects['record']['backend'],
-            'record_id'         => $this->_objects['record']['id']
         ));
     }
     
@@ -80,7 +74,7 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
         
         // reset tz in core
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, Tinebase_Core::getPreference()->getValue(Tinebase_Preference::TIMEZONE));
@@ -88,16 +82,26 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to add a note type
-     *
      */
     public function testSearchNotes()
     {
-        Tinebase_Notes::getInstance()->addNote($this->_objects['note']);
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Schulz')));
+        $note = $this->_objects['note'];
+        $note->record_id = $contact->getId();
+        Tinebase_Notes::getInstance()->addNote($note);
 
         $filter = array(array(
             'field' => 'query',
             'operator' => 'contains',
             'value' => 'phpunit'
+        ), array(
+            'field' => "record_model",
+            'operator' => "equals",
+            'value' => $this->_objects['record']['model']
+        ), array(
+            'field' => 'record_id',
+            'operator' => 'equals',
+            'value' => $contact->getId()
         ));
         $paging = array();
         
@@ -116,7 +120,7 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         Tinebase_Notes::getInstance()->deleteNotesOfRecord(
             $this->_objects['record']['model'], 
             $this->_objects['record']['backend'], 
-            $this->_objects['record']['id']
+            $contact->getId()
         );
     }
     

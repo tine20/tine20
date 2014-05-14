@@ -37,7 +37,7 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @private
      */
-    windowNamePrefix: 'VacationEditWindow_',
+    windowNamePrefix: 'RulesWindow_',
     appName: 'Felamimail',
 //    loadRecord: false,
     mode: 'local',
