@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,7 +18,6 @@
 class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Command_Interface
 {
     /**
-     * 
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_adapter;
@@ -42,7 +41,7 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
         
         return new Zend_Db_Expr("GROUP_CONCAT( DISTINCT $quotedField)");
     }
-
+    
     /**
      * @param string $field
      * @param mixed $returnIfTrue
@@ -74,7 +73,7 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     {
         return "TO_DATE({$date}, 'YYYY-MM-DD hh24:mi:ss') ";
     }
-
+    
     /**
      * @param string $value
      * @return string
@@ -83,7 +82,7 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     {
         return "TO_DATE('{$value}', 'YYYY-MM-DD hh24:mi:ss') ";
     }
-
+    
     /**
      * @return mixed
      */
@@ -91,7 +90,7 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     {
         return '0';
     }
-
+    
     /**
      * @return mixed
      */
@@ -99,7 +98,7 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     {
         return '1';
     }
-
+    
     /**
      * @return string
      */
@@ -110,7 +109,7 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     
     /**
      * get like keyword
-     * 
+     *
      * @return string
      */
     public function getLike()
@@ -120,7 +119,7 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     
     /**
      * prepare value for case insensitive search
-     * 
+     *
      * @param string $value
      * @return string
      */
@@ -131,7 +130,7 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     
     /**
      * returns field without accents (diacritic signs) - for Pgsql;
-     * 
+     *
      * @param string $field
      * @return string
      */
@@ -141,12 +140,96 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     }
     
     /**
-     * escape special char 
-     * 
+     * escape special char
+     *
      * @return string
-     */ 
+     */
      public function escapeSpecialChar($value)
      {
          return $value;
-     }    
+     }
+     
+     /**
+      * Initializes database procedures
+      * 
+      * @param Setup_Backend_Interface $backend
+      */
+     public function initProcedures(Setup_Backend_Interface $backend)
+     {
+         $md5 = "CREATE OR REPLACE
+            function md5( input varchar2 ) return sys.dbms_obfuscation_toolkit.varchar2_checksum as
+            begin
+                return lower(rawtohex(utl_raw.cast_to_raw(sys.dbms_obfuscation_toolkit.md5( input_string => input ))));
+            end;";
+         $backend->execQueryVoid($md5);
+
+         $now = "CREATE OR REPLACE
+            function NOW return DATE as
+            begin
+                return SYSDATE;
+            end;";
+         $backend->execQueryVoid($now);
+
+         $typeStringAgg = "CREATE OR REPLACE TYPE t_string_agg AS OBJECT
+                (
+                  g_string  VARCHAR2(32767),
+
+                  STATIC FUNCTION ODCIAggregateInitialize(sctx  IN OUT  t_string_agg)
+                    RETURN NUMBER,
+
+                  MEMBER FUNCTION ODCIAggregateIterate(self   IN OUT  t_string_agg, value  IN      VARCHAR2 )
+                     RETURN NUMBER,
+
+                  MEMBER FUNCTION ODCIAggregateTerminate(self         IN   t_string_agg,
+                                                         returnValue  OUT  VARCHAR2,
+                                                         flags        IN   NUMBER)
+                    RETURN NUMBER,
+
+                  MEMBER FUNCTION ODCIAggregateMerge(self  IN OUT  t_string_agg,
+                                                     ctx2  IN      t_string_agg)
+                    RETURN NUMBER
+                );";
+         $backend->execQueryVoid($typeStringAgg);
+
+         $typeStringAgg = "CREATE OR REPLACE TYPE BODY t_string_agg IS
+              STATIC FUNCTION ODCIAggregateInitialize(sctx  IN OUT  t_string_agg)
+                RETURN NUMBER IS
+              BEGIN
+                sctx := t_string_agg(NULL);
+                RETURN ODCIConst.Success;
+              END;
+
+              MEMBER FUNCTION ODCIAggregateIterate(self   IN OUT  t_string_agg,
+                                                   value  IN      VARCHAR2 )
+                RETURN NUMBER IS
+              BEGIN
+                SELF.g_string := self.g_string || ',' || value;
+                RETURN ODCIConst.Success;
+              END;
+
+              MEMBER FUNCTION ODCIAggregateTerminate(self         IN   t_string_agg,
+                                                     returnValue  OUT  VARCHAR2,
+                                                     flags        IN   NUMBER)
+                RETURN NUMBER IS
+              BEGIN
+                returnValue := RTRIM(LTRIM(SELF.g_string, ','), ',');
+                RETURN ODCIConst.Success;
+              END;
+
+              MEMBER FUNCTION ODCIAggregateMerge(self  IN OUT  t_string_agg,
+                                                 ctx2  IN      t_string_agg)
+                RETURN NUMBER IS
+              BEGIN
+                SELF.g_string := SELF.g_string || ',' || ctx2.g_string;
+                RETURN ODCIConst.Success;
+              END;
+            END;";
+         $backend->execQueryVoid($typeStringAgg);
+
+         $group_concat = "CREATE OR REPLACE
+            FUNCTION GROUP_CONCAT (p_input VARCHAR2)
+            RETURN VARCHAR2
+            PARALLEL_ENABLE AGGREGATE USING t_string_agg;";
+         $backend->execQueryVoid($group_concat);
+     }
 }

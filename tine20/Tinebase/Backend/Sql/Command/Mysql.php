@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,7 +18,6 @@
 class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command_Interface
 {
     /**
-     * 
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_adapter;
@@ -41,10 +40,10 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
         
         return new Zend_Db_Expr("GROUP_CONCAT( DISTINCT $quotedField)");
     }
-
+    
     /**
      * returns concatenation expression
-     * 
+     *
      * @param array $values
      */
     public function getConcat($values)
@@ -79,7 +78,6 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
     }
     
     /**
-     *
      * @param string $condition
      * @param string $returnIfTrue
      * @param string $returnIfFalse
@@ -144,7 +142,7 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
     
     /**
      * prepare value for case insensitive search
-     * 
+     *
      * @param string $value
      * @return string
      */
@@ -155,7 +153,7 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
     
     /**
      * returns field without accents (diacritic signs) - for Pgsql;
-     * 
+     *
      * @param string $field
      * @return string
      */
@@ -166,11 +164,21 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
     
     /**
      * escape special char
-     *  
+     *
      * @return string
-     */ 
+     */
      public function escapeSpecialChar($value)
      {
          return $value;
+     }
+
+     /**
+      * Initializes database procedures
+      * 
+      * @param Setup_Backend_Interface $backend
+      */
+     public function initProcedures(Setup_Backend_Interface $backend)
+     {
+
      }
 }

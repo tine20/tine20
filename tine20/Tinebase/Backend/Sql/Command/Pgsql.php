@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,7 +18,6 @@
 class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command_Interface
 {
     /**
-     * 
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_adapter;
@@ -80,9 +79,8 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
         
         return new Zend_Db_Expr("(CASE WHEN $quotedField IS NULL THEN $returnIfTrue ELSE $returnIfFalse END)");
     }
-
+    
     /**
-     *
      * @param Zend_Db_Adapter_Abstract $adapter
      * @param string $condition
      * @param string $returnIfTrue
@@ -102,7 +100,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     {
         return "DATE({$date})";
     }
-
+    
     /**
      * @param string $value
      * @return string
@@ -111,7 +109,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     {
         return $this->_adapter->quote($value);
     }
-
+    
     /**
      * @return mixed
      */
@@ -119,7 +117,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     {
         return 'FALSE';
     }
-
+    
     /**
      * @return mixed
      */
@@ -127,7 +125,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     {
         return 'TRUE';
     }
-
+    
     /**
      * @return string
      */
@@ -138,7 +136,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     
     /**
      * get like keyword
-     * 
+     *
      * @return string
      */
     public function getLike()
@@ -148,7 +146,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     
     /**
      * prepare value for case insensitive search
-     * 
+     *
      * @param string $value
      * @return string
      */
@@ -159,9 +157,9 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     
     /**
      * Even if the database backend is PostgreSQL, we have to verify
-     *  if the extension Unaccent is installed and loaded. 
+     *  if the extension Unaccent is installed and loaded.
      *  This is done in Tinebase_Core::checkUnaccentExtension.
-     * 
+     *
      * @return boolean
      */
     protected function _hasUnaccentExtension()
@@ -177,7 +175,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     
     /**
      * returns field without accents (diacritic signs) - for Pgsql;
-     * 
+     *
      * @param string $field
      * @return string
      */
@@ -191,13 +189,21 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     }
     
     /**
-     * escape special char 
-     * 
+     * escape special char
+     *
      * @return string
-     */ 
+     */
      public function escapeSpecialChar($value)
      {
          return str_replace('\\', '\\\\', $value);
-     }     
+     }
      
+     /**
+      * Initializes database procedures
+      * @param Setup_Backend_Interface $backend
+      */
+     public function initProcedures(Setup_Backend_Interface $backend)
+     {
+
+     }
 }

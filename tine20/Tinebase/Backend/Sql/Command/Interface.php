@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -21,18 +21,17 @@ interface Tinebase_Backend_Sql_Command_Interface
      * @param string $field
      * @return string
      */
-     public function getAggregate($field);
-
-     /**
-      * @param string $field
-      * @param mixed $returnIfTrue
-      * @param mixed $returnIfFalse
-      * @return string
-      */
-    public function getIfIsNull($field, $returnIfTrue, $returnIfFalse);
-
+    public function getAggregate($field);
+    
     /**
-     *
+     * @param string $field
+     * @param mixed $returnIfTrue
+     * @param mixed $returnIfFalse
+     * @return string
+     */
+    public function getIfIsNull($field, $returnIfTrue, $returnIfFalse);
+    
+    /**
      * @param string $condition
      * @param string $returnIfTrue
      * @param string $returnIfFalse
@@ -55,28 +54,28 @@ interface Tinebase_Backend_Sql_Command_Interface
      * @return mixed
      */
     public function getFalseValue();
-
+    
     /**
      * returns the true value according to backend
      * @return mixed
      */
     public function getTrueValue();
-
+    
     /**
      * @param array $field
      */
     public function setDatabaseJokerCharacters();
-
+    
     /**
      * get like keyword
-     * 
+     *
      * @return string
      */
     public function getLike();
     
     /**
      * prepare value for case insensitive search
-     * 
+     *
      * @param string $value
      * @return string
      */
@@ -84,7 +83,7 @@ interface Tinebase_Backend_Sql_Command_Interface
     
     /**
      * returns field without accents (diacritic signs) - for Pgsql;
-     * 
+     *
      * @param string $field
      * @return string
      */
@@ -92,8 +91,14 @@ interface Tinebase_Backend_Sql_Command_Interface
     
     /**
      * escape special char
-     *  
+     *
      * @ return string
      */
-     public function escapeSpecialChar($value);
+    public function escapeSpecialChar($value);
+    
+    /**
+     * Initializes database procedures
+     * @param Setup_Backend_Interface $backend
+     */
+    public function initProcedures(Setup_Backend_Interface $backend);
 }
