@@ -578,10 +578,49 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     protected function _inspectDelete(array $_ids)
     {
         $records = $this->_backend->getMultiple($_ids);
+        $invoicePositionController = Sales_Controller_InvoicePosition::getInstance();
         
         foreach($records as $record) {
             if ($record->cleared == 'CLEARED') {
+                // cleared invoices must not be deleted
                 throw new Sales_Exception_InvoiceAlreadyClearedDelete();
+                
+            } else {
+                
+                // remove invoice_id from billables
+                $filter = new Sales_Model_InvoicePositionFilter(array());
+                $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $record->getId())));
+                $invoicePositions = $invoicePositionController->search($filter);
+                
+                $allModels = array_unique($invoicePositions->model);
+                
+                foreach($allModels as $model) {
+                    
+                    if ($model == 'Sales_Model_ProductAggregate') {
+                        continue;
+                    }
+                    
+                    $split          = explode('_Model_', $model);
+                    $controllerName = $split[0] . '_Controller_' . $split[1];
+                    $filterName     = $model . 'Filter';
+                    
+                    $controllerInstance = $controllerName::getInstance();
+                    
+                    $filteredInvoicePositions = $invoicePositions->filter('model', $model);
+                    $filterInstance     = new $filterName(array());
+
+                    $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'in', 'value' => $record->getId())));
+                    $controllerInstance->updateMultiple($filterInstance, array('invoice_id' => NULL));
+                    
+                    if ($model = 'Timetracker_Model_Timeaccount') {
+                        $filterInstance = new Timetracker_Model_TimesheetFilter(array());
+                        $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'in', 'value' => $record->getId())));
+                        Timetracker_Controller_Timesheet::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
+                    }
+                }
+                
+                // delete invoice positions
+                $invoicePositionController->delete($invoicePositions->getId());
             }
         }
         

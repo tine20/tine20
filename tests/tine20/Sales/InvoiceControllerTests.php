@@ -195,4 +195,52 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $c->update($invoice);
     }
+    
+    public function testDeleteInvoice()
+    {
+        $invoiceController = Sales_Controller_Invoice::getInstance();
+        $date = clone $this->_referenceDate;
+        $i = 0;
+        
+        // the whole year, 12 months
+        while ($i < 12) {
+            $result = $invoiceController->createAutoInvoices($date);
+            $date->addMonth(1);
+            $i++;
+        }
+        
+        $taController = Timetracker_Controller_Timeaccount::getInstance();
+        $tsController = Timetracker_Controller_Timesheet::getInstance();
+        
+        $allInvoices = $invoiceController->getAll();
+        $allTimesheets = $tsController->getAll();
+        $allTimeaccounts = $taController->getAll();
+        
+        foreach($allTimesheets as $ts) {
+            $this->assertTrue($ts->invoice_id != NULL);
+        }
+        
+        foreach($allTimeaccounts as $ta) {
+            if (intval($ta->budget) < 0) {
+                $this->assertTrue($ta->invoice_id != NULL);
+            }
+        }
+        
+        $invoiceController->delete($allInvoices->getId());
+        
+        $allTimesheets = $tsController->getAll();
+        $allTimeaccounts = $taController->getAll();
+        
+        foreach($allTimeaccounts as $ta) {
+//             var_dump($ta->toArray());
+            $this->assertTrue($ta->invoice_id == NULL);
+        }
+        
+        foreach($allTimesheets as $ts) {
+//             var_dump($ts->toArray());
+            $this->assertTrue($ts->invoice_id == NULL);
+        }
+        
+        
+    }
 }
