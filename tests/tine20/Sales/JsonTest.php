@@ -530,8 +530,16 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         
         $ccs = $this->_instance->searchCostCenters(array(array('field' => 'number', 'operator' => 'equals', 'value' => $number - 5000)), array());
         
-        $this->assertEquals(1, $ccs['totalcount']);
-        $this->assertEquals(1, $ccs['results'][0]['is_deleted']);
+        $this->assertEquals(0, $ccs['totalcount']);
+        
+        $be = new Sales_Backend_CostCenter();
+        $be->setModlogActive(FALSE);
+        
+        $filter = new Sales_Model_CostCenterFilter(array(array('field' => 'number', 'operator' => 'equals', 'value' => $number - 5000)), array());
+        $result = $be->search($filter);
+        
+        $this->assertEquals(1, $result->count());
+        $this->assertEquals(1, $result->getFirstRecord()->is_deleted);
     }
 
     

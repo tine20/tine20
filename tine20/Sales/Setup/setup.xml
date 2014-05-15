@@ -269,13 +269,6 @@
                     <length>255</length>
                     <notnull>false</notnull>
                 </field>
-                <index>
-                    <name>number</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>number</name>
-                    </field>
-                </index>
                 <field>
                     <name>created_by</name>
                     <type>text</type>
@@ -319,6 +312,13 @@
                     <primary>true</primary>
                     <field>
                         <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>number</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>number</name>
                     </field>
                 </index>
             </declaration>
