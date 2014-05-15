@@ -93,7 +93,8 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * returns one of the un setup created workintimes
+     * returns one of the on setup created workingtimes
+     * 
      * @return HumanResources_Model_WorkingTime
      */
     protected function _getWorkingTime()
