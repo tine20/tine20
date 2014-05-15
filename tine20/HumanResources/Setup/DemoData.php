@@ -252,6 +252,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'operator' => 'equals',
                 'value'    => $number,
             ))))->getFirstRecord();
+            
             if ($c) {
                 return $c;
             }
@@ -261,7 +262,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'remark' => Tinebase_Record_Abstract::generateUID(),
         ));
         
-        return $hrc;
+        return $c;
     }
     
     /**
@@ -274,7 +275,6 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $this->_workingtimes = HumanResources_Controller_WorkingTime::getInstance()->search($filter);
         }
         $count = $this->_workingtimes->count();
-        
         $wt = $this->_workingtimes->getByIndex(rand(0, $count-1));
         
         return $wt;
