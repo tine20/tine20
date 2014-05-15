@@ -39,6 +39,8 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function create_auto_invoices($_opts)
     {
+        $executionLifeTime = Tinebase_Core::setExecutionLifeTime(3600*8);
+        
         $this->_addOutputLogWriter();
         
         $date = NULL;
@@ -80,6 +82,8 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             unset($result['created']);
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         }
+        
+        Tinebase_Core::setExecutionLifeTime($executionLifeTime);
     }
     
     /**
