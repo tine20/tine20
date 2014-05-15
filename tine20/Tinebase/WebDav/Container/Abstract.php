@@ -70,6 +70,19 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     
     /**
      * (non-PHPdoc)
+     * @see \Sabre\DAV\Node::delete()
+     */
+    public function delete()
+    {
+        try {
+            Tinebase_Container::getInstance()->deleteContainer($this->_container);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            throw new Exception\Forbidden('Permission denied to delete node');
+        }
+    }
+    
+    /**
+     * (non-PHPdoc)
      * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($_name)
