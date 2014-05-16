@@ -407,7 +407,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'iteratable' => $this,
             'controller' => Sales_Controller_Contract::getInstance(),
             'filter'     => $filter,
-            'options'    => array('getRelations' => TRUE),
+            'options'    => array(
+                'getRelations' => TRUE,
+                'limit' => 30
+            ),
             'function'   => 'processAutoInvoiceIteration',
         ));
         
