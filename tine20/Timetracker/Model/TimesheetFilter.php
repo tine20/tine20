@@ -67,6 +67,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
                 'requiredCols'  => array('is_billable_combined')
             ),
         ),
+        'is_cleared'   => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'is_cleared_combined'   => array(
             'filter' => 'Tinebase_Model_Filter_Bool', 
             'options' => array(
