@@ -67,7 +67,7 @@ class Filemanager_Model_DownloadLink extends Tinebase_Record_Abstract
         
         // always set url here (or is there a better place?)
         if ($this->getId()) {
-            $this->url = Tinebase_Core::getHostname() . '/files/' . $this->getId();
+            $this->url = Tinebase_Core::getHostname() . '/download/show/' . $this->getId();
         }
     }
     

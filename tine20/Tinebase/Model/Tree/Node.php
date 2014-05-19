@@ -20,6 +20,7 @@
  * @property    string             name
  * @property    Tinebase_DateTime  last_modified_time
  * @property    string             object_id
+ * @property    string             parent_id
  * @property    string             size
  * @property    string             type
  */

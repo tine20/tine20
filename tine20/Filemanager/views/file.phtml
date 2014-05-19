@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title><?php echo $this->title ?></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=8; IE=7" />
+</head>
+ <body>
+    <img alt="Tine 2.0" src="/images/tine_logo.png"><h1><?php echo $this->path ?></h1>
+    <hr>
+    <table>
+        <tr><td>Name:</td><td><?php echo $this->file->name ?></td></tr>
+        <tr><td>Größe:</td><td><?php echo $this->file->size ?></td></tr>
+        <tr><td>Last Modified:</td><td><?php echo ($this->file->last_modified_time ? $this->file->last_modified_time : $this->file->creation_time) ?></td></tr>
+        <tr><td>&nbsp;</td><td><a href="<?php echo $this->file->path ?>">Download</a></td></tr>
+    </table>
+</body>
+</html>
