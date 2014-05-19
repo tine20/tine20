@@ -80,6 +80,10 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $c4Invoice = $c1Invoice = NULL;
         
         foreach($invoices['results'] as $invoice) {
+            
+            // fetch invoice by get to have all relations set
+            $invoice = $json->getInvoice($invoice['id']);
+            
             // first invoice for customer 4
             if (count($invoice['relations']) == 4) {
                 
@@ -160,8 +164,12 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $invoiceIds = array();
         
+        $this->assertEquals(2, $invoices['totalcount']);
+        
         foreach($invoices['results'] as $invoice) {
             $invoiceIds[] = $invoice['id'];
+            // fetch invoice by get to have all relations set
+            $invoice = $json->getInvoice($invoice['id']);
             $invoice['cleared'] = 'CLEARED';
             $json->saveInvoice($invoice);
         }
@@ -191,6 +199,8 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         foreach($invoices['results'] as $invoice) {
             $invoiceIds[] = $invoice['id'];
+            // fetch invoice by get to have all relations set
+            $invoice = $json->getInvoice($invoice['id']);
             $invoice['cleared'] = 'CLEARED';
             $json->saveInvoice($invoice);
         }

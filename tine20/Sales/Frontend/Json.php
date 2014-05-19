@@ -486,7 +486,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchInvoices($filter, $paging)
     {
-        return $this->_search($filter, $paging, Sales_Controller_Invoice::getInstance(), 'Sales_Model_InvoiceFilter', TRUE);
+        return $this->_search($filter, $paging, Sales_Controller_Invoice::getInstance(), 'Sales_Model_InvoiceFilter', array('Sales_Model_Customer', 'Sales_Model_Contract'));
     }
     
     /**
