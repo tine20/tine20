@@ -306,6 +306,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 continue;
             }
             
+            $deleteCount = 0;
             try {
                 $deleteCount = $db->delete(SQL_TABLE_PREFIX . $table, $where);
             } catch (Zend_Db_Statement_Exception $zdse) {
