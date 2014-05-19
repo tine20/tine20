@@ -316,7 +316,10 @@ class Tinebase_ModelConfiguration {
      * 
      * record accepts keys additionally
      *     - @string isParent   set this to true if the field is the parent property of an dependent record. This field will be hidden in an edit dialog nested grid
-     * 
+     *     
+     * records accepts keys additionally
+     *     - @string omitOnSearch set this to FALSE, if the field should be resolved on json-search (defaults to TRUE)
+     *     
      * <code>
      *
      * array(

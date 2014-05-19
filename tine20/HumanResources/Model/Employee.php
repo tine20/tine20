@@ -231,6 +231,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'label'      => 'Contracts', // _('Contracts')
                 'type'       => 'records',
                 'config'     => array(
+                    'omitOnSearch' => FALSE,
                     'appName'     => 'HumanResources',
                     'modelName'   => 'Contract',
                     'refIdField'  => 'employee_id',
