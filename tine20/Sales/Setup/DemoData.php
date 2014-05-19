@@ -183,10 +183,12 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array(
                 'name' => 'ELKO Elektronik und Söhne',
                 'url' => 'www.elko-elektronik.de',
+                'discount' => 0
             ), 
             array(
                 'name' => 'Reifenlieferant Gebrüder Platt',
                 'url' => 'www.platt-reifen.de',
+                'discount' => 0
             ), 
             array(
                 'name' => 'Frische Fische Gmbh & Co. KG',

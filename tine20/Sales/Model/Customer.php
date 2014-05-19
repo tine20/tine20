@@ -157,6 +157,8 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'label'      => 'Billing Addresses', // _('Billing Addresses')
                 'type'       => 'records',
                 'config'     => array(
+                    // we need the billing address on search in the contract-customer combo to automatically set the first billing address
+                    'omitOnSearch' => FALSE,
                     'appName' => 'Sales',
                     'modelName'   => 'Address',
                     'refIdField'  => 'customer_id',

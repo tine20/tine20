@@ -30,7 +30,11 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
-
+    
+    protected $_contactController;
+    protected $_contractController;
+    protected $_json;
+    
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -40,6 +44,10 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
+        $this->_contactController = Addressbook_Controller_Contact::getInstance();
+        $this->_contractController = Sales_Controller_Contract::getInstance();
+        $this->_json = new Sales_Frontend_Json();
     }
 
     /**
@@ -72,10 +80,14 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         return $r;
     }
     
-    public function testLifecycleCustomer()
+    /**
+     * 
+     * @return array
+     */
+    protected function _createCustomer()
     {
         $container = Tinebase_Container::getInstance()->getSharedContainer(
-            Tinebase_Core::getUser()->getId(), 
+            Tinebase_Core::getUser()->getId(),
             Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             'WRITE'
         );
@@ -88,17 +100,14 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         
         $container = $container->getFirstRecord();
         
-        $contactController = Addressbook_Controller_Contact::getInstance();
-        $contractController = Sales_Controller_Contract::getInstance();
-        
-        $contact1 = $contactController->create(new Addressbook_Model_Contact(
+        $contact1 = $this->_contactController->create(new Addressbook_Model_Contact(
             array('n_given' => 'Yiting', 'n_family' => 'Huang', 'container_id' => $container->getId()))
         );
-        $contact2 = $contactController->create(new Addressbook_Model_Contact(
+        $contact2 = $this->_contactController->create(new Addressbook_Model_Contact(
             array('n_given' => 'Hans Friedrich', 'n_family' => 'Ochs', 'container_id' => $container->getId()))
         );
         
-        $contract = $contractController->create(new Sales_Model_Contract(
+        $contract = $this->_contractController->create(new Sales_Model_Contract(
             array('number' => '123', 'title' => 'Testing', 'description' => 'test123', 'container_id' => $containerContracts->getId())
         ));
         
@@ -107,7 +116,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
             'cpextern_id' => $contact1->getId(),
             'cpintern_id' => $contact2->getId(),
             'number'      => 4294967,
-            
+        
             'iban'        => 'CN09234098324098234598',
             'bic'         => '0239580429570923432444',
             'url'         => 'http://wwei.cn',
@@ -116,7 +125,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
             'currency'    => 'EUR',
             'curreny_trans_rate' => 7.034,
             'discount'    => 12.5,
-            
+        
             'adr_prefix1' => 'no prefix 1',
             'adr_prefix2' => 'no prefix 2',
             'adr_street' => 'Mao st. 2000',
@@ -125,7 +134,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
             'adr_region' => 'Shanghai',
             'adr_countryname' => 'China',
             'adr_pobox'   => '7777777',
-            
+        
             'billing' => array(array(
                 'prefix1' => 'no prefix1',
                 'prefix2' => 'no prefix2',
@@ -163,8 +172,12 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
             ))
         );
         
-        $json = new Sales_Frontend_Json();
-        $retVal = $json->saveCustomer($customerData);
+        return $this->_json->saveCustomer($customerData);
+    }
+    
+    public function testLifecycleCustomer()
+    {
+        $retVal = $this->_createCustomer();
         
         $this->assertEquals(4294967, $retVal["number"]);
         $this->assertEquals("Worldwide Electronics International", $retVal["name"]);
@@ -199,7 +212,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('China', $retVal['billing'][0]['countryname']);
         
         // delete record (set deleted=1) of customer and assigned addresses
-        $json->deleteCustomers(array($retVal['id']));
+        $this->_json->deleteCustomers(array($retVal['id']));
         
         $customerBackend = new Sales_Backend_Customer();
         $deletedCustomer = $customerBackend->get($retVal['id'], TRUE);
@@ -215,7 +228,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         }
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
-        $json->getCustomer($retVal['id']);
+        return $this->_json->getCustomer($retVal['id']);
     }
     
     /**
@@ -240,5 +253,22 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         // the next number should be a number after the manual number
         $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto3')));
         $this->assertEquals(5, $record->number);
+    }
+    
+    /**
+     * on search we need the billing address, but not the delivery address
+     * used in search combo of the contract edit dialog
+     */
+    public function testResolvingBillingAddressesOnSearch()
+    {
+        $customer = $this->_createCustomer();
+        
+        $this->assertEquals(1, count($customer['billing']));
+        $this->assertEquals(1, count($customer['delivery']));
+        
+        $customers = $this->_json->searchCustomers(array(), array());
+        
+        $this->assertEquals(1, count($customers['results'][0]['billing']));
+        $this->assertFalse(isset($customers['results'][0]['delivery']));
     }
 }
