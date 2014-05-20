@@ -93,6 +93,20 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
     );
     
     /**
+     * if foreign Id fields should be resolved on search and get from json
+     * should have this format:
+     *     array('Calendar_Model_Contact' => 'contact_id', ...)
+     * or for more fields:
+     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
+     * (e.g. resolves contact_id with the corresponding Model)
+     *
+     * @var array
+     */
+    protected static $_resolveForeignIdFields = array(
+        'Sales_Model_Invoice' => array('invoice_id'),
+    );
+    
+    /**
      * overwrite constructor to add more filters
      *
      * @param mixed $_data
