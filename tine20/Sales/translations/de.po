@@ -646,3 +646,9 @@ msgstr "Positionen"
 
 msgid "Month"
 msgstr "Monat"
+
+msgid "Positions"
+msgstr "Positionen"
+
+msgid "Unit"
+msgstr "Einheit"

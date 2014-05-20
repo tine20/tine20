@@ -463,3 +463,6 @@ msgstr[1] "Stundenzettel-Listen"
 #: js/TimeaccountEditDialog.js:41
 msgid "Add New Timeaccount"
 msgstr "Neues Zeitkonto hinzufügen"
+
+msgid "hour"
+msgstr "Stunde"

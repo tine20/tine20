@@ -147,6 +147,32 @@ Tine.Sales.renderInvoicePositionModel = function(value, row, rec) {
  */
 Tine.widgets.grid.RendererManager.register('Sales', 'InvoicePosition', 'model', Tine.Sales.renderInvoicePositionModel);
 
+/**
+ * renders the unit of the invoice position
+ * 
+ * @param {String} value
+ * @param {Object} row
+ * @param {Tine.Tinebase.data.Record} rec
+ * @return {String}
+ */
+Tine.Sales.renderInvoicePositionUnit = function(value, row, rec) {
+    
+    if (! value) {
+        return '';
+    }
+    
+    var model = rec.get('model');
+    var split = model.split('_Model_');
+    
+    var app = Tine.Tinebase.appMgr.get(split[0]);
+    
+    return app.i18n._(value);
+};
+
+/**
+ * register special renderer for the invoice position
+ */
+Tine.widgets.grid.RendererManager.register('Sales', 'InvoicePosition', 'unit', Tine.Sales.renderInvoicePositionUnit);
 
 Tine.Sales.renderBillingPoint = function(v) {
     var app = Tine.Tinebase.appMgr.get('Sales');
