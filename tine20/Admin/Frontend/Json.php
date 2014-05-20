@@ -893,7 +893,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param   array $roleData        role data
      * @param   array $roleMembers     role members
-     * @param   array $roleMembers     role rights
+     * @param   array $roleRights      role rights
      * @return  array
      */
     public function saveRole($roleData, $roleMembers, $roleRights)
