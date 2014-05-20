@@ -148,6 +148,52 @@ Tine.Sales.renderInvoicePositionModel = function(value, row, rec) {
 Tine.widgets.grid.RendererManager.register('Sales', 'InvoicePosition', 'model', Tine.Sales.renderInvoicePositionModel);
 
 /**
+ * renders the quantity of the invoice position
+ */
+Tine.Sales.InvoicePositionQuantityRendererRegistry = function() {
+    var renderers = {};
+    
+    return {
+        /**
+         * return renderer
+         * 
+         * @param {String} phpModelName
+         * @return {Function}
+         */
+        get: function(phpModelName) {
+            if (renderers.hasOwnProperty(phpModelName)) {
+                return renderers[phpModelName];
+            } else {
+                // default function
+                return function(value, row, rec) {
+                    return value;
+                }
+            }
+        },
+        
+        /**
+         * register renderer
+         * 
+         * @param {String} phpModelName
+         * @param {Function} func
+         */
+        register: function(phpModelName, func) {
+            renderers[phpModelName] = func;
+        },
+        
+        /**
+         * check if a renderer is explicitly registered
+         * 
+         * @param {String} phpModelName
+         * @return {Boolean}
+         */
+        has: function(phpModelName) {
+            return renderers.hasOwnProperty(phpModelName);
+        }
+    }
+}();
+
+/**
  * renders the unit of the invoice position
  * 
  * @param {String} value
@@ -168,11 +214,30 @@ Tine.Sales.renderInvoicePositionUnit = function(value, row, rec) {
     
     return app.i18n._(value);
 };
+/**
+ * renders the unit of the invoice position
+ * @param {} value
+ * @param {} row
+ * @param {} rec
+ * @return {}
+ */
+Tine.Sales.renderInvoicePositionQuantity = function(value, row, rec) {
+    var model = rec.data.model;
+    
+    if (Tine.Sales.InvoicePositionQuantityRendererRegistry.has(model)) {
+        var renderer = Tine.Sales.InvoicePositionQuantityRendererRegistry.get(model);
+        return renderer(value, row, rec);
+    } else {
+        return value;
+    }
+};
 
 /**
  * register special renderer for the invoice position
  */
 Tine.widgets.grid.RendererManager.register('Sales', 'InvoicePosition', 'unit', Tine.Sales.renderInvoicePositionUnit);
+Tine.widgets.grid.RendererManager.register('Sales', 'InvoicePosition', 'quantity', Tine.Sales.renderInvoicePositionQuantity);
+
 
 Tine.Sales.renderBillingPoint = function(v) {
     var app = Tine.Tinebase.appMgr.get('Sales');
