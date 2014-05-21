@@ -128,7 +128,7 @@ abstract class Sales_Controller_NumberableAbstract extends Tinebase_Controller_R
     protected function _removePrefix($record)
     {
         if (strpos($record->{$this->_numberProperty}, $this->_numberPrefix) > -1) {
-            $record->{$this->_numberProperty} = substr($this->_numberPrefix, strlen($record->{$this->_numberProperty}));
+            $record->{$this->_numberProperty} = substr($record->{$this->_numberProperty}, strlen($this->_numberPrefix));
         }
     }
     
