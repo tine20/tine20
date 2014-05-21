@@ -180,20 +180,33 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
      * returns the timesheet filter 
      * 
      * @param Tinebase_DateTime $date
+     * @param Sales_Model_Contract
      * @return Timetracker_Model_TimesheetFilter
      */
-    protected function _getBillableTimesheetsFilter(Tinebase_DateTime $date)
+    protected function _getBillableTimesheetsFilter(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
     {
         // find all timesheets for this timeaccount the last year
         $startDate = clone $date;
         $startDate->subYear(1);
         
+        if (! $contract) {
+            $contract = $this->_referenceContract;
+        }
+        
         // if this is not budgeted, show for timesheets in this period
         $filter = new Timetracker_Model_TimesheetFilter(array(
             array('field' => 'start_date', 'operator' => 'before', 'value' => $date),
+            array('field' => 'start_date', 'operator' => 'after', 'value' => $contract->start_date),
             array('field' => 'start_date', 'operator' => 'after', 'value' => $startDate),
             array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
+            array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
         ), 'AND');
+        
+        if (! is_null($contract->end_date)) {
+            $filter->addFilter(new Tinebase_Model_Filter_Date(
+                array('field' => 'start_date', 'operator' => 'before', 'value' => $contract->end_date)
+            ));
+        }
         
         $filter->addFilter(new Tinebase_Model_Filter_Text(
             array('field' => 'invoice_id', 'operator' => 'isnull', 'value' => NULL)
@@ -287,16 +300,20 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
     public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
     {
         $this->_referenceDate = $date;
+        $this->_referenceContract = $contract;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), true));
         
-        if (intval($this->budget) > 0 && $this->status == 'to bill' && $this->invoice_id == NULL) {
-            // if there is a budget, bill it
-            return TRUE;
-            
+        if (intval($this->budget) > 0) {
+             if ($this->status == 'to bill' && $this->invoice_id == NULL) {
+                // if there is a budget, this timeaccount should be billed and there is no invoice linked, bill it
+                return TRUE;
+             } else {
+                 return FALSE;
+             }
         } else {
             $pagination = new Tinebase_Model_Pagination(array('limit' => 1));
-            $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($this->_getBillableTimesheetsFilter($date), $pagination, FALSE, /* $_onlyIds = */ TRUE);
+            $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($this->_getBillableTimesheetsFilter($date, $contract), $pagination, FALSE, /* $_onlyIds = */ TRUE);
         
             if (! empty($timesheets))  {
                 return TRUE;
@@ -315,8 +332,15 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
     public function conjunctInvoiceWithBillables($invoice)
     {
         if (intval($this->budget) > 0) {
+            // set this ta billed
             $this->invoice_id = $invoice->getId();
             Timetracker_Controller_Timeaccount::getInstance()->update($this);
+            
+            // set all ts of this ta billed
+            $filter = new Timetracker_Model_TimesheetFilter(array());
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())));
+            
+            Timetracker_Controller_Timesheet::getInstance()->updateMultiple($filter, array('invoice_id' => $invoice->getId()));
         } else {
             $ids = $this->_getIdsOfBillables();
             

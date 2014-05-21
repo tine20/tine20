@@ -32,11 +32,18 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
     protected $_billables = NULL;
     
     /**
-     * the reference date fo work on
+     * the reference date to work on
      *
      * @var Tinebase_DateTime
      */
     protected $_referenceDate = NULL;
+    
+    /**
+     * the reference contract to work on
+     *
+     * @var Sales_Model_Contract
+     */
+    protected $_referenceContract = NULL;
     
     /**
      * returns the ids of all loaded billables

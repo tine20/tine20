@@ -191,6 +191,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $this->assertEquals("R-000002", $invoice->number);
         
+        $invoice->credit_term = 20;
         $this->setExpectedException('Sales_Exception_InvoiceAlreadyClearedEdit');
         
         $c->update($invoice);
@@ -232,15 +233,74 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $allTimeaccounts = $taController->getAll();
         
         foreach($allTimeaccounts as $ta) {
-//             var_dump($ta->toArray());
             $this->assertTrue($ta->invoice_id == NULL);
         }
         
         foreach($allTimesheets as $ts) {
-//             var_dump($ts->toArray());
             $this->assertTrue($ts->invoice_id == NULL);
         }
+    }
+    
+    /**
+     * @see: rt127444
+     * 
+     * make sure timeaccounts won't be billed if they shouln't
+     */
+    public function testBudgetTimeaccountBilled()
+    {
+        $invoiceController = Sales_Controller_Invoice::getInstance();
+        $date = clone $this->_referenceDate;
+        $i = 0;
         
+        // do not set to bill, this ta has a budget
+        $customer1Timeaccount = $this->_timeaccounts->filter('title', 'TA-for-Customer1')->getFirstRecord();
+        $customer1Timeaccount->status = 'not yet billed';
         
+        $tsController = Timetracker_Controller_Timesheet::getInstance();
+        $taController = Timetracker_Controller_Timeaccount::getInstance();
+        $taController->update($customer1Timeaccount);
+        
+        // this is a ts on 20xx-01-17
+        $timesheet = new Timetracker_Model_Timesheet(array(
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id' => $customer1Timeaccount->getId(),
+            'start_date' => $date->addDay(17),
+            'duration' => 120,
+            'description' => 'ts from ' . (string) $date,
+        ));
+        
+        $tsController->create($timesheet);
+        
+        // this is a ts on 20xx-02-03
+        $timesheet->id = NULL;
+        $timesheet->start_date  = $date->addDay(17);
+        $timesheet->description = 'ts from ' . (string) $date;
+        
+        $tsController->create($timesheet);
+        
+        $date = clone $this->_referenceDate;
+        $date->addMonth(1);
+        
+        $result = $invoiceController->createAutoInvoices($date);
+        
+        $this->assertEquals(1, count($result['created']));
+        
+        $customer1Timeaccount->status = 'to bill';
+        $taController->update($customer1Timeaccount);
+        
+        $result = $invoiceController->createAutoInvoices($date);
+        $this->assertEquals(1, count($result['created']));
+        
+        $ta = $result['created']->getFirstRecord();
+        $found = FALSE;
+        
+        foreach($ta->relations as $relation) {
+            if ($relation->related_model == 'Timetracker_Model_Timeaccount') {
+                $this->assertEquals('TA-for-Customer1',     $relation->related_record->title);
+                $found = TRUE;
+            }
+        }
+
+        $this->assertTrue($found, 'the timeaccount could not be found in the invoice!');
     }
 }

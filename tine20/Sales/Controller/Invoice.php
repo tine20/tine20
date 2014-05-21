@@ -206,7 +206,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     $billIt = FALSE;
         
                     // if the related record is volatile, it does not know when billed last
-                    if ($relation->related_record->isVolatile() && $relation->related_record->isBillable($currentDate)) {
+                    if ($relation->related_record->isVolatile() && $relation->related_record->isBillable($currentDate, $contract)) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . ' Found volatile & billable accountable');
         
@@ -224,7 +224,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                             $volatileBilled = TRUE;
                         }
         
-                    } else if ($relation->related_record->isBillable($currentDate)) {
+                    } else if ($relation->related_record->isBillable($currentDate, $contract)) {
                         $billIt = TRUE;
                     }
         
@@ -658,7 +658,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $diff = $diff['diff'];
             
             $allowChange = array('relations', 'notes', 'tags', 'attachments', 'description', 'created_by', 'creation_time',
-                'last_modified_by', 'last_modified_time', 'is_deleted', 'deleted_by', 'deleted_time'
+                'last_modified_by', 'last_modified_time', 'is_deleted', 'deleted_by', 'deleted_time', 'date', 'start_date', 'end_date', 'seq'
             );
             
             foreach($allowChange as $field) {

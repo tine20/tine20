@@ -247,6 +247,8 @@ class Sales_InvoiceTestCase extends TestCase
         // timeaccounts
         $this->_timeaccounts = new Tinebase_Record_RecordSet('Timetracker_Model_Timeaccount');
         $taController = Timetracker_Controller_Timeaccount::getInstance();
+
+        // ta for customer 1 and 2 is budgeted AND to bill
         foreach($this->_customerRecords as $customer) {
             $this->_timeaccounts->addRecord($taController->create(new Timetracker_Model_Timeaccount(array(
                 'title'         => 'TA-for-' . $customer->name,

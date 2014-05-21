@@ -91,6 +91,8 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.record.set('date', null);
             this.record.set('type', 'REVERSAL');
             
+            this.record.set('positions', []);
+            
             var relations = this.record.get('relations');
             var newRelations = [];
             var allowedRelations = ['Sales_Model_Customer', 'Sales_Model_CostCenter', 'Sales_Model_Contract'];

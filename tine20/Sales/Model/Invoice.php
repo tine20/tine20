@@ -80,7 +80,6 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             ),
             'description' => array(
                 'label'   => 'Description', // _('Description')
-                'type'    => 'text',
                 'queryFilter' => TRUE,
             ),
             'address_id'       => array(
@@ -126,10 +125,6 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                     'modelName'   => 'CostCenter',
                     'idProperty'  => 'id'
                 )
-            ),
-            'description' => array(
-                'label' => 'Description', //_('Description')
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL)
             ),
             'cleared' => array(
                 'label' => 'Cleared', //_('Cleared')
