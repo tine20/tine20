@@ -474,6 +474,21 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     }
                 }
                 
+                // initialize attachments from base event as clients may skip parameters like
+                // name and contentytpe and we can't backward relove them from managedId
+                if ($event->attachments instanceof Tinebase_Record_RecordSet && 
+                        ! $recurException->attachments instanceof Tinebase_Record_RecordSet) {
+                    $recurException->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+                    foreach ($event->attachments as $attachment) {
+                        $recurException->attachments->addRecord(new Tinebase_Model_Tree_Node(array(
+                            'name'         => $attachment->name,
+                            'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
+                            'contenttype'  => $attachment->contenttype,
+                            'hash'         => $attachment->hash,
+                        ), true));
+                    }
+                }
+                
                 if ($baseVevent) {
                     $this->_adaptBaseEventProperties($vevent, $baseVevent);
                 }
@@ -952,17 +967,38 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                     
                 case 'ATTACH':
-                    $name = $property['FILENAME'];
+                    $name = (string) $property['FILENAME'];
+                    $managedId = (string) $property['MANAGED-ID'];
                     
-                    $managedId = $property['MANAGED-ID'];
                     if ($managedId) {
-                        $attachment = $event->attachments->filter('hash', $property['MANAGED-ID'])->getFirstRecord();
+                        $attachment = $event->attachments instanceof Tinebase_Record_RecordSet ?
+                            $event->attachments->filter('hash', $property['MANAGED-ID'])->getFirstRecord() :
+                            NULL;
                         
-                        // client reuses managed id to add attachment
+                        
+                        // NOTE: we might miss a attachment here for the following reasons
+                        //       1. client reuses a managed id (we are server):
+                        //          We havn't observerd this yet. iCal client reuse manged id's
+                        //          from base events in exceptions but this is covered as we 
+                        //          initialize new exceptions with base event attachments
+                        //          
+                        //          When a client reuses a managed id it's not clear yet if
+                        //          this managed id needs to be in the same series/calendar/server
+                        //
+                        //          As we use the object hash the managed id might be used in the 
+                        //          same files with different names. We need to evaluate the name
+                        //          (if attached) in this case as well.
+                        //       
+                        //       2. server send his managed id (we are client)
+                        //          * we need to download the attachment (here?)
+                        //          * we need to have a mapping externalid / internalid (where?)
                         if (! $attachment) {
-//                             @TODO: implement
-//                             Tinebase_FileSystem_RecordAttachments::getInstance()
-//                                 ->addRecordAttachment($event, $name, $attachment);
+//                             $attachment = new Tinebase_Model_Tree_Node(array(
+//                                 'name'         => $name,
+//                                 'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
+//                                 'contenttype'  => (string) $property['FMTTYPE'],
+//                                 'hash'         => $managedId,
+//                             ), true);
                         }
                         
                         $attachments->addRecord($attachment);

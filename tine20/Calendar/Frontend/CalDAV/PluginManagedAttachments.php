@@ -5,7 +5,6 @@
  * see: http://tools.ietf.org/html/draft-daboo-caldav-attachments-03
  * 
  * NOTE: At the moment Apple's iCal clients seem to support only a small subset of the spec:
- * - reusing managed attachments is not used
  * - deleting is done by PUT and not via managed-remove
  * - client does not update files
  * - client can not cope with recurring exceptions. It always acts on the whole serices and all exceptions
@@ -220,15 +219,15 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
             $affectedEvents->addRecord($event);
         }
         
-        if ($event->exceptions instanceof Tinebase_Record_RecordSet) {
-            foreach($event->exceptions as $exception) {
+        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+            foreach($event->exdate as $exception) {
                 if (! $rid /*|| $exception->recurid ...*/) {
                     $affectedEvents->addRecord($exception);
                 }
             }
         }
         foreach($affectedEvents as $record) {
-            if ($method($record) == false) break;
+            if ($method($record) === false) break;
         }
         
         return $affectedEvents;
