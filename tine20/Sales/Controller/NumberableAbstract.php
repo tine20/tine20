@@ -111,11 +111,25 @@ abstract class Sales_Controller_NumberableAbstract extends Tinebase_Controller_R
         $numberBackend = new Sales_Backend_Number();
         $number = $numberBackend->getCurrent($this->_modelName);
         
+        $this->_removePrefix($record);
+        
         if (intval($record->{$this->_numberProperty}) > $number) {
             $numberBackend->setCurrent($this->_modelName, $record->{$this->_numberProperty});
         }
         
         $this->_formatNumber($record);
+    }
+    
+    /**
+     * removes the prefix from the number
+     * 
+     * @param Tinebase_Record_Interface $record
+     */
+    protected function _removePrefix($record)
+    {
+        if (strpos($record->{$this->_numberProperty}, $this->_numberPrefix) > -1) {
+            $record->{$this->_numberProperty} = substr($this->_numberPrefix, strlen($record->{$this->_numberProperty}));
+        }
     }
     
     /**
@@ -125,9 +139,11 @@ abstract class Sales_Controller_NumberableAbstract extends Tinebase_Controller_R
      */
     protected function _formatNumber($record)
     {
-        if (strpos($record->{$this->_numberProperty}, $this->_numberPrefix) > -1) {
-            $record->{$this->_numberProperty} = substr($this->_numberPrefix, strlen($record->{$this->_numberProperty}));
-        }
-        $record->{$this->_numberProperty} = ($this->_numberPrefix ? $this->_numberPrefix : '') . ($this->_numberZerofill ? str_pad((string) $record->{$this->_numberProperty}, $this->_numberZerofill, '0', STR_PAD_LEFT) : $record->{$this->_numberProperty});
+        $this->_removePrefix($record);
+        
+        $record->{$this->_numberProperty} = ($this->_numberPrefix ? $this->_numberPrefix : '') . ($this->_numberZerofill 
+            ? str_pad((string) $record->{$this->_numberProperty}, $this->_numberZerofill, '0', STR_PAD_LEFT) 
+            : $record->{$this->_numberProperty});
+        
     }
 }
