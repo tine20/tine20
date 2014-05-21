@@ -76,7 +76,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
      */
     public function testAddAttachment()
     {
-        $event = $this->calDAVTests->testCreateEventWithInternalOrganizer();
+        $event = $this->calDAVTests->testCreateRepeatingEventAndPutExdate();
         
         $request = new Sabre\HTTP\Request(array(
             'HTTP_CONTENT_TYPE' => 'text/plain',
@@ -99,13 +99,17 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $vcalendar = stream_get_contents($this->response->body);
 //         echo $vcalendar;
         
-        $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()
-        ->getRecordAttachments($event->getRecord());
+        $baseAttachments = Tinebase_FileSystem_RecordAttachments::getInstance()
+            ->getRecordAttachments($event->getRecord());
+        $exdateAttachments = Tinebase_FileSystem_RecordAttachments::getInstance()
+            ->getRecordAttachments($event->getRecord()->exdate[0]);
         
         $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
         $this->assertContains('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
-        $this->assertEquals(1, $attachments->count());
-        $this->assertEquals('agenda.txt', $attachments[0]->name);
+        $this->assertEquals(1, $baseAttachments->count());
+        $this->assertEquals('agenda.txt', $baseAttachments[0]->name);
+        $this->assertEquals(1, $exdateAttachments->count());
+        $this->assertEquals('agenda.txt', $exdateAttachments[0]->name);
     }
     
     /**
@@ -209,5 +213,35 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         
         $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($event->getRecord());
         $this->assertEquals(0, $attachments->count());
+    }
+    
+    public function testCreateRecurringExceptionWithManagedBaseAttachment()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+        
+        $event = $this->calDAVTests->createEventWithAttachment();
+        
+        // assemble vcalendar with exception
+        $eventWithExdate = clone $event;
+        $exception = clone $eventWithExdate->getRecord();
+        $eventWithExdate->getRecord()->exdate->addRecord($exception);
+        $exception->exdate = NULL;
+        $exception->rrule = NULL;
+        $exception->dtstart->addDay(5)->addHour(1);
+        $exception->dtend->addDay(5)->addHour(1);
+        $exception->setRecurId();
+
+        $event->put($eventWithExdate->get());
+        
+        $createdException = $event->getRecord()->exdate
+            ->filter('recurid', '9d28b78f-aa6d-44fc-92f6-5ab98d35d692-2011-10-09 09:00:00')
+            ->getFirstRecord();
+        
+        $this->assertEquals(1, $createdException->attachments->count());
+        
+        $attachment = $createdException->attachments->getFirstRecord();
+        $this->assertEquals('agenda.html', $attachment->name);
+        
+
     }
 }

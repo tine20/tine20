@@ -241,6 +241,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $event->put($vcalendarStreamException);
         
         $this->_checkExdate($event);
+        
+        return $event;
     }
     
     /**
@@ -860,7 +862,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      */
     public function createEventWithAttachment($count=1)
     {
-        $event = $this->testCreateEventWithInternalOrganizer();
+        $event = $this->testCreateRepeatingEvent();
         
         for ($i=1; $i<=$count; $i++) {
             $suffix = $i>1 ? $i : '';
