@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -241,7 +241,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param Tinebase_ModelConfiguration $modelConfiguration
      * @param boolean $multiple
      */
-    protected function _resolveMultipleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL, $multiple)
+    protected function _resolveMultipleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL, $multiple = false)
     {
         if (! $modelConfiguration || (! $_records->count())) {
             return;
@@ -333,7 +333,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param Tinebase_ModelConfiguration $modelConfiguration
      * @param boolean $multiple
      */
-    protected function _resolveVirtualFields($resultSet, $modelConfiguration = NULL, $multiple = FALSE)
+    protected function _resolveVirtualFields($resultSet, $modelConfiguration = NULL, $multiple = false)
     {
         if (! $modelConfiguration || ! ($virtualFields = $modelConfiguration->virtualFields)) {
             return $resultSet;
@@ -396,7 +396,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param Tinebase_ModelConfiguration $modelConfiguration
      * @param boolean $multiple
      */
-    protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple)
+    protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
     {
         Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($records);
         
@@ -421,7 +421,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @return array
      */
-    protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = FALSE)
+    protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = false)
     {
         $result = $this->_resolveVirtualFields($result, $modelConfiguration, $multiple);
         return $result;
