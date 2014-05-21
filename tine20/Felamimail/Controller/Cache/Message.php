@@ -29,7 +29,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      *
      * @var integer
      */
-    protected $_flagSyncCountPerStep = 200;
+    protected $_flagSyncCountPerStep = 500;
     
     /**
      * max size of message to cache body for
@@ -1154,29 +1154,33 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $flags = $imap->getChangedFlags($folder->imap_lastmodseq);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' got ' . count($flags) . ' changed flags');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Flags: ' . print_r($flags, true));
+        
         if (! empty($flags)) {
             
-            $filter = new Felamimail_Model_MessageFilter(array(
-                array(
-                    'field' => 'account_id', 'operator' => 'equals', 'value' => $folder->account_id
-                ),
-                array(
-                    'field' => 'folder_id',  'operator' => 'equals', 'value' => $folder->getId()
-                ),
-                array(
-                    'field' => 'messageuid', 'operator' => 'in', 'value' => array_keys($flags)
-                )
-            ));
-            $pagination = new Tinebase_Model_Pagination(array(
-                'start' => 0,
-                'limit' => $this->_flagSyncCountPerStep,
-            ));
-            $messages = $this->_backend->search($filter, $pagination);
-            
-            while (count($messages) > 0) {
+            if (count($flags) <= $this->_flagSyncCountPerStep) {
+                $filter = new Felamimail_Model_MessageFilter(array(
+                    array(
+                        'field' => 'account_id', 'operator' => 'equals', 'value' => $folder->account_id
+                    ),
+                    array(
+                        'field' => 'folder_id',  'operator' => 'equals', 'value' => $folder->getId()
+                    ),
+                    array(
+                        'field' => 'messageuid', 'operator' => 'in', 'value' => array_keys($flags)
+                    )
+                ));
+                $messages = $this->_backend->search($filter);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' got ' . count($messages) . ' messages.');
+                
                 $this->_setFlagsOnCache($flags, $folder, $messages, false);
-                $pagination->start += $this->_flagSyncCountPerStep;
-                $messages = $this->_backend->search($filter, $pagination);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' Got too many changed flags. Maybe this is the initial load of the cache. Just updating last mod seq ...');
             }
             
             foreach ($flags as $flag) {
