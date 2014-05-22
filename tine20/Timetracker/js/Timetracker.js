@@ -92,3 +92,22 @@ Tine.Timetracker.timeaccountBackend = new Tine.Tinebase.data.RecordProxy({
     modelName: 'Timeaccount',
     recordClass: Tine.Timetracker.Model.Timeaccount
 });
+
+
+
+// add renderer for invoice position gridpanel
+Tine.Timetracker.HumanHourRenderer = function(value) {
+    return Ext.util.Format.round(value, 2);
+}
+
+Tine.Timetracker.registerRenderers = function() {
+    
+    if (! Tine.hasOwnProperty('Sales') || ! Tine.Sales.hasOwnProperty('InvoicePositionQuantityRendererRegistry')) {
+        Tine.Timetracker.registerRenderers.defer(500);
+        return false;
+    }
+    
+    Tine.Sales.InvoicePositionQuantityRendererRegistry.register('Timetracker_Model_Timeaccount', Tine.Timetracker.HumanHourRenderer);
+};
+
+Tine.Timetracker.registerRenderers();
