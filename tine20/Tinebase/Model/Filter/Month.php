@@ -18,7 +18,7 @@
  */
 class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
 {
-    protected $_operators = array('within', 'before', 'after', 'equals');
+    protected $_operators = array('within', 'before', 'after', 'equals', 'before_or_equals', 'after_or_equals');
 
     /**
      * appends sql to given select statement
@@ -79,16 +79,6 @@ class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
             } else {
                 $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " IN (?)", $months));
             }
-        } elseif (($this->_operator == 'before') || ($this->_operator == 'after')) {
-            
-            $date = new Tinebase_DateTime($this->_value);
-            $dateString = $date->format('Y-m');
-            
-            if ($this->_operator == 'before') {
-                $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " < (?)", $dateString));
-            } else {
-                $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " > (?)", $dateString));
-            }
         } elseif ($this->_operator == 'equals') {
             $split = explode('-', $this->_value);
             if (!((strlen($this->_value) == 7) && ((int) $split[0] > 1900) && ((int) $split[1] > 0) && ((int) $split[1] < 13))) {
@@ -97,7 +87,28 @@ class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
             
             $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " = (?)", $this->_value));
         } else {
-            throw new Tinebase_Exception_InvalidArgument('The operator ' . $this->_operator . ' is not supported for this filter!');
+            
+            $date = new Tinebase_DateTime($this->_value);
+            $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            
+            $dateString = $date->format('Y-m');
+            
+            switch ($this->_operator) {
+                case 'before':
+                    $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " < (?)", $dateString));
+                    break;
+                case 'after':
+                    $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " > (?)", $dateString));
+                    break;
+                case 'before_or_equals':
+                    $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " <= (?)", $dateString));
+                    break;
+                case 'after_or_equals':
+                    $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " >= (?)", $dateString));
+                    break;
+                default:
+                    throw new Tinebase_Exception_InvalidArgument('The operator ' . $this->_operator . ' is not supported for this filter!');
+            }
         }
     }
 }
