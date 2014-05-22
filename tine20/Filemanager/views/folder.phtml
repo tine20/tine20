@@ -13,7 +13,7 @@
         <?php foreach ($this->files as $file) { ?>
         <tr>
             <td><a href="<?php echo $file->path ?>"><?php echo htmlentities($file->name) ?></a></td>
-            <td><?php echo ($this->file->last_modified_time ? $file->last_modified_time->format('Y-m-d H:i:s') : $file->creation_time->format('Y-m-d H:i:s')) ?></td>
+            <td><?php echo ($file->last_modified_time ? $file->last_modified_time->format('Y-m-d H:i:s') : $file->creation_time->format('Y-m-d H:i:s')) ?></td>
             <td><?php echo $file->size ?></td>
             <td>&nbsp;</td>
         </tr>

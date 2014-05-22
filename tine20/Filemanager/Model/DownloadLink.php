@@ -14,6 +14,12 @@
  * 
  * @package     Filemanager
  * @subpackage  Model
+ * 
+ * @property    node_id
+ * @property    url
+ * @property    password
+ * @property    expiry_time
+ * @property    access_count
  */
 class Filemanager_Model_DownloadLink extends Tinebase_Record_Abstract
 {
@@ -84,6 +90,7 @@ class Filemanager_Model_DownloadLink extends Tinebase_Record_Abstract
     protected static $_resolveForeignIdFields = array(
         'Tinebase_Model_User' => array('created_by', 'last_modified_by'),
     );
+    
     /**
      * name of fields containing datetime or an array of datetime information
      *

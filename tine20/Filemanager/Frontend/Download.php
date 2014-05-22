@@ -13,15 +13,11 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
  * @todo        allow to download a folder as ZIP file
  */
 class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
 {
-    /**
-     * @var Tinebase_Tree_Node
-     */
-    protected $_treeNodeBackend;
-    
     /**
      * display download
      * 
@@ -32,15 +28,14 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         try {
             $splittedPath = explode('/', trim($path, '/'));
             
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Display download node with path ' . print_r($splittedPath, true));
+            
             $downloadId = array_shift($splittedPath);
+            $download = $this->_getDownloadLink($downloadId);
+            $this->_setDownloadLinkOwnerAsUser($download);
             
-            $download = $this->_getDownload($downloadId);
-            
-            $node = $this->_getRootNode($download);
-    
-            foreach ($splittedPath as $subPath) {
-                $node = $this->_getTreeNodeBackend()->getChild($node, $subPath);
-            }
+            $node = Filemanager_Controller_DownloadLink::getInstance()->getNode($download, $splittedPath);
             
             switch ($node->type) {
                 case Tinebase_Model_Tree_Node::TYPE_FILE:
@@ -79,16 +74,11 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
     {
         try {
             $splittedPath = explode('/', trim($path, '/'));
-            
             $downloadId = array_shift($splittedPath);
+            $download = $this->_getDownloadLink($downloadId);
+            $this->_setDownloadLinkOwnerAsUser($download);
             
-            $download = $this->_getDownload($downloadId);
-            
-            $node = $this->_getRootNode($download);
-            
-            foreach ($splittedPath as $subPath) {
-                $node = $this->_getTreeNodeBackend()->getChild($node, $subPath);
-            }
+            $node = Filemanager_Controller_DownloadLink::getInstance()->getNode($download, $splittedPath);
             
             if ($node->type === Tinebase_Model_Tree_Node::TYPE_FILE) {
                 $nodeController = Filemanager_Controller_Node::getInstance();
@@ -119,41 +109,14 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
     /**
      * resolve download id
      * 
-     * @param  string $id the download id
+     * @param  string $id
      * @return Filemanager_Model_DownloadLink
      */
-    protected function _getDownload($id)
+    protected function _getDownloadLink($id)
     {
         $download = Filemanager_Controller_DownloadLink::getInstance()->get($id);
         
         return $download;
-    }
-    
-    /**
-     * resolve root tree node
-     * 
-     * @param  Filemanager_Model_DownloadLink $download
-     * @return Tinebase_Model_Tree_Node
-     */
-    protected function _getRootNode(Filemanager_Model_DownloadLink $download)
-    {
-        $node = $this->_getTreeNodeBackend()->get($download->node_id);
-        
-        return $node;
-    }
-    
-    /**
-     * get tree node backend instance
-     * 
-     * @return Tinebase_Tree_Node
-     */
-    protected function _getTreeNodeBackend()
-    {
-        if (!$this->_treeNodeBackend) {
-            $this->_treeNodeBackend = new Tinebase_Tree_Node();
-        }
-        
-        return $this->_treeNodeBackend;
     }
     
     /**
@@ -170,27 +133,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         
         $view->path = '/' . implode('/', $path);
         
-        $basePath = '/download/show/' . $download->getId() . '/';
-        
-        if (count($path) > 0) {
-             $basePath .= implode('/', $path) . '/';
-        }
-        
-        $children = $this->_getTreeNodeBackend()->getChildren($node);
-        foreach ($children as $child) {
-            $child->path = $basePath . $child->name;
-        }
-        
-        $view->files = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
-        if (count($path) > 0) {
-            $parent = $this->_getTreeNodeBackend()->get($node->parent_id);
-            $parent->name = '..';
-            $parent->path = $basePath . '..';
-            
-            $view->files->addRecord($parent);
-        }
-        $view->files->merge($children->filter('type', Tinebase_Model_Tree_Node::TYPE_FOLDER)->sort('name'));
-        $view->files->merge($children->filter('type', Tinebase_Model_Tree_Node::TYPE_FILE)->sort('name'));
+        $view->files = Filemanager_Controller_DownloadLink::getInstance()->getFileList($download, $path, $node);
         
         header('Content-Type: text/html; charset=utf-8');
         die($view->render('folder.phtml'));
@@ -215,5 +158,16 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         
         header('Content-Type: text/html; charset=utf-8');
         die($view->render('file.phtml'));
+    }
+    
+    /**
+     * sets download link owner (creator) as current user to ensure ACL handling
+     * 
+     * @param Filemanager_Model_DownloadLink $download
+     */
+    protected function _setDownloadLinkOwnerAsUser(Filemanager_Model_DownloadLink $download)
+    {
+        $user = Tinebase_User::getInstance()->getFullUserById($download->created_by);
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
     }
 }
