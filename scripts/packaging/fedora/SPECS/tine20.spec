@@ -27,7 +27,7 @@
 
 %global vyear 2013
 %global vmonth 10
-%global vmin 6
+%global vmin 7
 # comment out release suffix when not an unstable release
 # %global rsuffix rc2
 
@@ -337,6 +337,9 @@ fi
 
 
 %changelog
+* Thu May 22 2014 Philipp Schüle <p.schuele@metaways.de> - 2013.10.7-0
+- New upstream release Collin Service Release 6
+
 * Wed Feb 14 2014 Philipp Schüle <p.schuele@metaways.de> - 2013.10.6-0
 - New upstream release Collin Service Release 5
 
