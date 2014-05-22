@@ -7,11 +7,10 @@
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
-/**
- * Test helper
- */
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
+/**
+ * @package     Tinebase
+ */
 class AllTests
 {
     public static function main()
@@ -44,6 +43,7 @@ class AllTests
         $suite->addTest(Sipgate_AllTests::suite());
         $suite->addTest(SimpleFAQ_AllTests::suite());
         $suite->addTest(Zend_AllTests::suite());
+        
         return $suite;
     }
 }

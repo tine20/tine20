@@ -49,8 +49,8 @@ class Calendar_Frontend_iMIP
     public function process($_iMIP, $_status = NULL)
     {
         // client spoofing protection
-        $iMIP = Felamimail_Controller_Message::getInstance()->getiMIP($_iMIP->getId());
-        
+        $iMIP = Tinebase_EmailUser_Factory::getInstance('Controller_Message')->getiMIP($_iMIP->getId());
+
         return $this->_process($_iMIP, $_status);
     }
     

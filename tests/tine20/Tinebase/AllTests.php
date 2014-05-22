@@ -78,7 +78,7 @@ class Tinebase_AllTests
         $suite->addTest(Tinebase_Tree_AllTests::suite());
         $suite->addTest(Tinebase_Scheduler_AllTests::suite());
         $suite->addTest(Tinebase_WebDav_AllTests::suite());
-        $suite->addTest(OpenDocument_AllTests::suite());        
+        $suite->addTest(OpenDocument_AllTests::suite());
         return $suite;
     }
 }
