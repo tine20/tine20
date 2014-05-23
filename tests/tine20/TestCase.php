@@ -54,14 +54,21 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_personas = array();
-
+    
     /**
      * unit in test
      *
      * @var Object
      */
     protected $_uit = null;
-
+    
+    /**
+     * the test user
+     *
+     * @var Tinebase_Model_FullUser
+     */
+    protected $_originalTestUser;
+    
     /**
      * set up tests
      */
@@ -72,6 +79,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
         
         $this->_personas = Zend_Registry::get('personas');
+        
+        $this->_originalTestUser = Tinebase_Core::getUser();
     }
     
     /**
@@ -88,6 +97,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
+        
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
     }
     
     /**
@@ -173,5 +184,28 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         $testconfig = Zend_Registry::get('testConfig');
         return ($testconfig && isset($testconfig->maildomain)) ? $testconfig->maildomain : 'tine20.org';
+    }
+
+    /**
+     * lazy init of uit
+     * 
+     * @return Object
+     * 
+     * @todo fix ide object class detection for completions
+     */
+    protected function _getUit()
+    {
+        if ($this->_uit === null) {
+            $uitClass = preg_replace('/Tests{0,1}$/', '', get_class($this));
+            if (@method_exists($uitClass, 'getInstance')) {
+                $this->_uit = call_user_func($uitClass . '::getInstance');
+            } else if (@class_exists($uitClass)) {
+                $this->_uit = new $uitClass();
+            } else {
+                throw new Exception('could not find class ' . $uitClass);
+            }
+        }
+        
+        return $this->_uit;
     }
 }
