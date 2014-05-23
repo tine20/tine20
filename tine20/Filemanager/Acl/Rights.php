@@ -5,8 +5,8 @@
  * @package     Addressbook
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -26,6 +26,11 @@
  */
 class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
+    /**
+     * @static string
+     */
+    const MANAGE_DOWNLOADLINKS = 'manage_downloadlinks';
+    
     /**
      * holds the instance of the singleton
      *
@@ -49,7 +54,7 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     private function __construct()
     {
         
-    }    
+    }
     
     /**
      * the singleton pattern
@@ -76,7 +81,8 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array(
-            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS,
+            self::MANAGE_DOWNLOADLINKS
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -97,10 +103,13 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('manage shared folders'),
                 'description'   => $translate->_('Create new shared folders'),
             ),
+            self::MANAGE_DOWNLOADLINKS  => array(
+                'text'          => $translate->_('Manage anonymous download links'),
+                'description'   => $translate->_('Allow to see, add and delete download links of files and folders'),
+            )
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
         return $rightDescriptions;
     }
-
 }

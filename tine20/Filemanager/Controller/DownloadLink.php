@@ -82,6 +82,26 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
     }
     
     /**
+     * check if user has the right to manage download links
+     *
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        switch ($_action) {
+            case 'create':
+            case 'update':
+            case 'delete':
+                $this->checkRight('MANAGE_DOWNLOADLINKS');
+                break;
+            default;
+            break;
+        }
+    }
+    
+    /**
      * the singleton pattern
      * @return Filemanager_Controller_DownloadLink
      */
