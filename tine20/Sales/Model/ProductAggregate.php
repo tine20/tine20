@@ -231,7 +231,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
       */
      public function getUnit()
      {
-         return 'piece'; // _('piece')
+         return 'Piece'; // _('Piece')
      }
      
      /**

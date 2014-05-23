@@ -652,3 +652,6 @@ msgstr "Positionen"
 
 msgid "Unit"
 msgstr "Einheit"
+
+msgid "Piece"
+msgstr "Stück"
