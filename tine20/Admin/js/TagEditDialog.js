@@ -68,9 +68,6 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     tagData: tag.data
                 },
                 success: function (response) {
-                    //if(this.window.opener.Tine.Admin.Tags) {
-                    //    this.window.opener.Tine.Admin.Tags.Main.reload();
-                    //}
                     this.fireEvent('update', Ext.util.JSON.encode(this.tag.data));
                     Ext.MessageBox.hide();
                     if (closeWindow === true) {
@@ -80,7 +77,13 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     }
                 },
                 failure: function (result, request) {
-                    Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save tag.'));
+                    var responseText = Ext.util.JSON.decode(result.responseText),
+                        message = (responseText && responseText.message) ? responseText.message : 'unknown error';
+                    
+                    Ext.MessageBox.alert(
+                        this.translation._('Failed'),
+                        String.format(this.translation._('Could not save tag ({0})'), message)
+                    );
                 },
                 scope: this 
             });
@@ -239,7 +242,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 deferredRender: false,
                 defaults: { autoScroll: true },
                 border: true,
-                plain: true,                    
+                plain: true,
                 items: [
                     this.rightsPanel, 
                     contextPanel
