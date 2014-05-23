@@ -267,7 +267,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * set headers for mainscreen
      * 
+     * @todo think about CSP: is only supported by FF atm, which options/exceptions should we choose?
      * @todo allow to configure security headers?
+     * @todo add violation report for CSP? @see https://developer.mozilla.org/en/Security/CSP/Using_CSP_violation_reports
      */
     protected function _setMainscreenHeaders()
     {
@@ -281,16 +283,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // @see https://developer.mozilla.org/en/the_x-frame-options_response_header
         header('X-Frame-Options: SAMEORIGIN');
         
-        // set Content-Security-Policy header against clickjacking and XSS
+        // set X-Content-Security-Policy header against clickjacking and XSS
         // @see https://developer.mozilla.org/en/Security/CSP/CSP_policy_directives
-        header("Content-Security-Policy: default-src 'self'");
-        header("Content-Security-Policy: script-src 'self' 'unsafe-eval' https://versioncheck.tine20.net");
-        // headers for IE 10+11
-        header("X-Content-Security-Policy: default-src 'self'");
-        header("X-Content-Security-Policy: script-src 'self' 'unsafe-eval' https://versioncheck.tine20.net");
-        
-        // set Strict-Transport-Security; used only when served over HTTPS
-        header('Strict-Transport-Security: max-age=16070400');
+        //header("X-Content-Security-Policy: allow 'self' https://*.officespot20.com;");
         
         // cache mainscreen for 10 minutes
         $maxAge = 600;
