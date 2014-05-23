@@ -4,14 +4,9 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Admin json frontend
@@ -77,6 +72,12 @@ class Admin_JsonTest extends TestCase
             'name'                  => 'phpunit test role',
             'description'           => 'phpunit test role',
         ));
+    }
+    
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, false);
     }
     
     /**
@@ -813,6 +814,29 @@ class Admin_JsonTest extends TestCase
             'description' => 'xxxx',
             'color' => '#003300'
         );
+    }
+    
+    /**
+     * testSaveTagWithoutAnyone
+     * 
+     * @see 0009934: can't save shared tag with anyoneAccountDisabled
+     */
+    public function testSaveTagWithoutAnyone()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, true);
+        
+        $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        $tagData = $this->_getTagData();
+        $tagData['rights'] = array(array(
+            'account_id' => $defaultUserGroup->getId(),
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+            'view_right' => true,
+            'use_right' => true
+        ));
+        $this->objects['tag'] = $this->_json->saveTag($tagData);
+        
+        $this->assertEquals('supertag', $this->objects['tag']['name']);
+        $this->assertEquals(1, count($this->objects['tag']['rights']));
     }
     
     /**
