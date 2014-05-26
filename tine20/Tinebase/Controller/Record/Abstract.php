@@ -343,7 +343,22 @@ abstract class Tinebase_Controller_Record_Abstract
         $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
         return $this->_setBooleanMemberVar('_doForceModlogInfo', $value);
     }
-
+    
+    /**
+     * set/get duplicateCheckFields
+     * 
+     * @param array optional
+     * @return array
+     */
+    public function duplicateCheckFields()
+    {
+        if (func_num_args() === 1) {
+            $this->_duplicateCheckFields = func_get_arg(0);
+        }
+        
+        return $this->_duplicateCheckFields;
+    }
+    
     /**
      * get by id
      *
@@ -627,13 +642,24 @@ abstract class Tinebase_Controller_Record_Abstract
         if (empty($this->_duplicateCheckFields)) {
             return NULL;
         }
-
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Duplicate check fields: ' . print_r($this->_duplicateCheckFields, TRUE));
+        
         $filters = array();
         foreach ($this->_duplicateCheckFields as $group) {
             $addFilter = array();
             foreach ($group as $field) {
                 if (! empty($_record->{$field})) {
                     $addFilter[] = array('field' => $field, 'operator' => 'equals', 'value' => $_record->{$field});
+                } else if (isset($_record->customfields[$field])) {
+                    $customFieldConfig = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($this->_applicationName, $field, $this->_modelName);
+                    if ($customFieldConfig) {
+                        $addFilter[] = array('field' => 'customfield', 'operator' => 'equals', 'value' => array(
+                            'value' => $_record->customfields[$field],
+                            'cfId'  => $customFieldConfig->getId()
+                        ));
+                    }
                 }
             }
             if (! empty($addFilter)) {
@@ -656,7 +682,8 @@ abstract class Tinebase_Controller_Record_Abstract
         
         $filter = new $filterClass($filterData);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+            . print_r($filter->toArray(), TRUE));
         
         return $filter;
     }

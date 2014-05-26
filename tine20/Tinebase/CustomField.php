@@ -142,6 +142,20 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     }
 
     /**
+     * get custom field by name and app
+     *
+     * @param string|Tinebase_Model_Application $applicationId application object, id or name
+     * @param string $customFieldName
+     * @param string $modelName
+     * @return Tinebase_Model_CustomField_Config|null
+     */
+    public function getCustomFieldByNameAndApplication($applicationId, $customFieldName, $modelName = null)
+    {
+        $allAppCustomfields = $this->getCustomFieldsForApplication($applicationId, $modelName);
+        return $allAppCustomfields->find('name', $customFieldName);
+    }
+    
+    /**
      * get custom fields for an application
      * - results are cached in class cache $_cfByApplicationCache
      * - results are cached if caching is active (with cache tag 'customfields')
