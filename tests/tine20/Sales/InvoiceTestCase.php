@@ -49,6 +49,7 @@ class Sales_InvoiceTestCase extends TestCase
     protected function setUp()
     {
         Sales_Controller_Contract::getInstance()->deleteByFilter(new Sales_Model_ContractFilter(array()));
+        Sales_Controller_Invoice::getInstance()->deleteByFilter(new Sales_Model_InvoiceFilter(array()));
         
         parent::setUp();
         $this->_createFixtures();
