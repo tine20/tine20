@@ -254,6 +254,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             }
 
             this.editDialog.getForm().findField('remaining_vacation_days').setValue(rr.remainingVacation - substractDays);
+            this.editDialog.accountPicker.setValue(this.currentYear);
         }
         
         this.updateCellClasses();
