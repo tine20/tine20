@@ -278,7 +278,6 @@ class Tinebase_Core
 
         if (self::getConfig()->profiler->xhprof) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Enabling xhprof');
-            
             xhprof_enable(XHPROF_FLAGS_MEMORY);
         } 
     }
@@ -309,8 +308,9 @@ class Tinebase_Core
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saving xhprof profiling run for method ' . $method);
             
-            $XHPROF_ROOT = '/usr/share/php5-xhprof';
+            $XHPROF_ROOT = $config->path ? $config->path : '/usr/share/php5-xhprof';
             if (file_exists($XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php")) {
+                define(XHPROF_LIB_ROOT, $XHPROF_ROOT . '/xhprof_lib');
                 include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
                 include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
                 $xhprof_runs = new XHProfRuns_Default();
