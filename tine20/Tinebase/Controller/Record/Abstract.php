@@ -1815,7 +1815,7 @@ abstract class Tinebase_Controller_Record_Abstract
                         // do not try to update if the record hasn't changed
                         $oldRecord = $oldRecords->getById($record->getId());
                         
-                        if (! empty($oldRecord->diff($record)->diff)) {
+                        if ($oldRecord && ! empty($oldRecord->diff($record)->diff)) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Updating dependent record with id = "' . $record->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
                             }
