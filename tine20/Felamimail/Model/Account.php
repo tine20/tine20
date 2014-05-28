@@ -431,7 +431,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             } else {
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
                     . ' Something went wrong with the CredentialsCache! Forcing logout ...');
-                Zend_Session::destroy();
+                Tinebase_Session::destroyAndRemoveCookie();
                 return FALSE;
             }
             

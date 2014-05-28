@@ -30,8 +30,8 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
      */
     protected function _authenticate()
     {
-        if (Zend_Session::isStarted()) {
-            $snomSession = new Zend_Session_Namespace('snomPhone');
+        if (Tinebase_Session::isStarted()) {
+            $snomSession = Phone_Session::getSessionNamespace();
             
             if (isset($snomSession->phoneIsAuthenticated)) {
                 return;
@@ -40,11 +40,11 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         parent::_authenticate();
         
-        if (!Zend_Session::isStarted()) {
-            Tinebase_Core::startSession('snomPhone');
+        if (!Tinebase_Session::isStarted()) {
+            Tinebase_Core::startCoreSession();
         }
         
-        $snomSession = new Zend_Session_Namespace('snomPhone');
+        $snomSession = Phone_Session::getSessionNamespace();
         $snomSession->phoneIsAuthenticated = 1;
     }
     /**
@@ -80,7 +80,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
                 <URL>' . $baseUrl . '</URL>
                 <InputItem>
                     <DisplayName>' . $translate->_('Enter search') . ':</DisplayName>
-                    <QueryStringParam>method=Phone.searchContacts&TINE20SESSID=' . Zend_Session::getId() . '&mac=' . $mac . '&query</QueryStringParam>
+                    <QueryStringParam>method=Phone.searchContacts&TINE20SESSID=' . Tinebase_Session::getId() . '&mac=' . $mac . '&query</QueryStringParam>
                     <DefaultValue/>
                     <InputFlags>a</InputFlags>
                 </InputItem>
@@ -114,11 +114,11 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
                 <Title>Menu</Title>
                 <MenuItem>
                     <Name>Call Forward</Name>
-                    <URL>' . $baseUrl . '?method=Phone.getCallForward&TINE20SESSID=' . Zend_Session::getId() . '&activeLine=' . $activeLine . '&mac=' . $mac . '</URL>
+                    <URL>' . $baseUrl . '?method=Phone.getCallForward&TINE20SESSID=' . Tinebase_Session::getId() . '&activeLine=' . $activeLine . '&mac=' . $mac . '</URL>
                 </MenuItem>
                 <MenuItem>
                     <Name>Addressbook</Name>
-                    <URL>' . $baseUrl . '?method=Phone.directory&TINE20SESSID=' . Zend_Session::getId() . '&mac=' . $mac . '</URL>
+                    <URL>' . $baseUrl . '?method=Phone.directory&TINE20SESSID=' . Tinebase_Session::getId() . '&mac=' . $mac . '</URL>
                 </MenuItem>
             </SnomIPPhoneMenu>
         ';
@@ -156,13 +156,13 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             $softKeyItem->setSoftKey('F_ABORT');
         } else {
             $softKeyItem->setLabel('Off');
-            $softKeyItem->setURL($baseUrl . '?method=Phone.setCallForward&TINE20SESSID=' . Zend_Session::getId() . '&number=&mode=' . Voipmanager_Model_Asterisk_SipPeer::CFMODE_OFF . '&activeLine=' . $activeLine . '&mac=' . $mac);
+            $softKeyItem->setURL($baseUrl . '?method=Phone.setCallForward&TINE20SESSID=' . Tinebase_Session::getId() . '&number=&mode=' . Voipmanager_Model_Asterisk_SipPeer::CFMODE_OFF . '&activeLine=' . $activeLine . '&mac=' . $mac);
         }
         
         // cfi number key
         $softKeyItem = $ipPhoneInput->addSoftKeyItem('F3');
         $softKeyItem->setLabel( (($sipPeer->cfi_mode == Voipmanager_Model_Asterisk_SipPeer::CFMODE_NUMBER) ? '*' : null) . 'Number' );
-        $softKeyItem->setURL($baseUrl . '?method=Phone.setCallForward&TINE20SESSID=' . Zend_Session::getId() . '&number=&mode=' . Voipmanager_Model_Asterisk_SipPeer::CFMODE_NUMBER . '&activeLine=' . $activeLine . '&mac=' . $mac);        
+        $softKeyItem->setURL($baseUrl . '?method=Phone.setCallForward&TINE20SESSID=' . Tinebase_Session::getId() . '&number=&mode=' . Voipmanager_Model_Asterisk_SipPeer::CFMODE_NUMBER . '&activeLine=' . $activeLine . '&mac=' . $mac);
         
         // cfi mailbox key
         $softKeyItem = $ipPhoneInput->addSoftKeyItem('F4');
@@ -171,7 +171,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             $softKeyItem->setSoftKey('F_ABORT');
         } else {
             $softKeyItem->setLabel('Mailbox');
-            $softKeyItem->setURL($baseUrl . '?method=Phone.setCallForward&TINE20SESSID=' . Zend_Session::getId() . '&number=&mode=' .  Voipmanager_Model_Asterisk_SipPeer::CFMODE_VOICEMAIL . '&activeLine=' . $activeLine . '&mac=' . $mac);
+            $softKeyItem->setURL($baseUrl . '?method=Phone.setCallForward&TINE20SESSID=' . Tinebase_Session::getId() . '&number=&mode=' .  Voipmanager_Model_Asterisk_SipPeer::CFMODE_VOICEMAIL . '&activeLine=' . $activeLine . '&mac=' . $mac);
         }
         
         header('Content-Type: text/xml');
@@ -213,7 +213,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
                 $inputItem->appendChild($doc->createElement('InputFlags', 't'));
                 
                 $queryStringParamElement = $doc->createElement('QueryStringParam');
-                $queryStringParamElement->appendChild($doc->createTextNode('method=Phone.setCallForward&TINE20SESSID=' . Zend_Session::getId() . '&mode=' . Voipmanager_Model_Asterisk_SipPeer::CFMODE_NUMBER . '&activeLine=' . $activeLine . '&mac=' . $mac . '&number'));
+                $queryStringParamElement->appendChild($doc->createTextNode('method=Phone.setCallForward&TINE20SESSID=' . Tinebase_Session::getId() . '&mode=' . Voipmanager_Model_Asterisk_SipPeer::CFMODE_NUMBER . '&activeLine=' . $activeLine . '&mac=' . $mac . '&number'));
                 $inputItem->appendChild($queryStringParamElement);
                 
             } else {
@@ -255,7 +255,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
                 <SnomIPPhoneText>
                 <Title>Nothing found!</Title>
                 <Text>Nothing found!</Text>
-                <fetch mil="1000">' . $baseUrl . '?method=Phone.directory&TINE20SESSID=' . Zend_Session::getId() . '&mac=' . $mac . '</fetch>
+                <fetch mil="1000">' . $baseUrl . '?method=Phone.directory&TINE20SESSID=' . Tinebase_Session::getId() . '&mac=' . $mac . '</fetch>
                 </SnomIPPhoneText>
             ');
             
@@ -299,7 +299,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             $xml = '<SnomIPPhoneText>
                 <Title>Nothing found!</Title>
                 <Text>Nothing found!</Text>
-                <fetch mil="1000">' . $baseUrl . '?method=Phone.directory&TINE20SESSID=' . Zend_Session::getId() . '&mac=' . $mac . '</fetch>
+                <fetch mil="1000">' . $baseUrl . '?method=Phone.directory&TINE20SESSID=' . Tinebase_Session::getId() . '&mac=' . $mac . '</fetch>
             </SnomIPPhoneText>
             ';
         } else {

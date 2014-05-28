@@ -782,7 +782,7 @@ class Setup_Controller
             ),
             'tmpdir' => $defaultPath,
             'session' => array(
-                'path'      => Setup_Core::getSessionDir(),
+                'path'      => Tinebase_Session::getSessionDir(),
                 'liftime'   => 86400,
             ),
         );
@@ -1319,16 +1319,16 @@ class Setup_Controller
         
         if ($authResult->isValid()) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Valid credentials, setting username in session and registry.');
-            //Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
-            Zend_Session::regenerateId();
+            //Tinebase_Session::registerValidator(new Tinebase_Session_Validator_HttpUserAgent());
+            Tinebase_Session::regenerateId();
             
             Setup_Core::set(Setup_Core::USER, $_username);
-            Setup_Core::getSession()->setupuser = $_username;
+            Setup_Session::getSessionNamespace()->setupuser = $_username;
             return true;
             
         } else {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Invalid credentials! ' . print_r($authResult->getMessages(), TRUE));
-            Zend_Session::expireSessionCookie();
+            Tinebase_Session::expireSessionCookie();
             sleep(2);
             return false;
         }
@@ -1343,7 +1343,7 @@ class Setup_Controller
     {
         $_SESSION = array();
         
-        Zend_Session::destroy();
+        Tinebase_Session::destroyAndRemoveCookie();
     }
     
     /**
@@ -1820,10 +1820,10 @@ class Setup_Controller
     public function isFilesystemAvailable()
     {
         if ($this->_isFileSystemAvailable === null) {
-            $session = Tinebase_Core::getSession();
+            $session = Tinebase_Session::getSessionNamespace();
             if (! isset($session->filesystemAvailable)) {
                 $this->_isFileSystemAvailable = (! empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
-                if (is_object($session) && Zend_Session::isWritable()) {
+                if (is_object($session) && Tinebase_Session::isWritable()) {
                     $session->filesystemAvailable = $this->_isFileSystemAvailable;
                 }
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 

@@ -68,11 +68,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
             
             // handle all kind of session exceptions as 'Not Authorised'
-            if ($exception instanceof Zend_Session_Exception) {
+            if ($exception instanceof Tinebase_Session_Exception) {
                 $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
                 
                 // expire session cookie for client
-                Zend_Session::expireSessionCookie();
+                Tinebase_Session::expireSessionCookie();
             }
         }
         
@@ -210,7 +210,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             $classes['Tinebase_Frontend_Json'] = 'Tinebase';
             
             // register additional Json apis only available for authorised users
-            if (Zend_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
+            if (Tinebase_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
                 
                 $applicationParts = explode('.', $method);
                 $applicationName = ucfirst($applicationParts[0]);
@@ -338,22 +338,22 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             'Tinebase.getTranslations',
             'Tinebase.setLocale'
         );
+        
         // check json key for all methods but some exceptions
-        if ( !(in_array($method, $anonymnousMethods))
-                && $jsonKey != Tinebase_Core::get('jsonKey')) {
+        if ( !(in_array($method, $anonymnousMethods)) && $jsonKey !== Tinebase_Core::get('jsonKey')) {
         
             if (! Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Attempt to request a privileged Json-API method (' . $method . ') without authorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
-                
-                throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .
+                    ' Attempt to request a privileged Json-API method (' . $method . ') without authorisation from "' .
+                    $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
             } else {
                 Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Fatal: got wrong json key! (' . $jsonKey . ') Possible CSRF attempt!' .
                     ' affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), true) .
                     ' request: ' . print_r($_REQUEST, true)
                 );
-                
-                throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
             }
+            
+            throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
         }
     }
     

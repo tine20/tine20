@@ -25,7 +25,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var boolean
      */
     protected $_hasCaptcha = null;
-
+    
     /**
      * wait for changes
      * 
@@ -33,11 +33,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function ping()
     {
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         sleep(10);
         return array('changes' => 'contacts');
     }
-
+    
     /**
      * get list of translated country names
      * 
@@ -49,7 +49,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return Tinebase_Translation::getCountryList();
     }
-
+    
     /**
      * returns list of all available translations
      *
@@ -58,14 +58,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getAvailableTranslations()
     {
         $availableTranslations = Tinebase_Translation::getAvailableTranslations();
-        foreach($availableTranslations as &$info) unset($info['path']);
-
+        foreach($availableTranslations as &$info) {
+            unset($info['path']);
+        }
+        
         return array(
             'results'    => array_values($availableTranslations),
             'totalcount' => count($availableTranslations)
         );
     }
-
+    
     /**
      * sets locale
      *
@@ -78,17 +80,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         Tinebase_Core::setupUserLocale($localeString, $saveaspreference);
         $locale = Tinebase_Core::get('locale');
-
+        
         // save in cookie (expires in 365 days)
         if ($setcookie) {
             setcookie('TINE20LOCALE', $localeString, time()+60*60*24*365);
         }
-
+        
         return array(
             'success'      => TRUE
         );
     }
-
+    
     /**
      * sets timezone
      *
@@ -99,10 +101,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function setTimezone($timezoneString, $saveaspreference)
     {
         $timezone = Tinebase_Core::setupUserTimezone($timezoneString, $saveaspreference);
-
+        
         return $timezone;
     }
-
+    
     /**
      * get users
      *
@@ -119,7 +121,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'results'     => array(),
             'totalcount'  => 0
         );
-
+        
         if($rows = Tinebase_User::getInstance()->getUsers($filter, $sort, $dir, $start, $limit)) {
             $result['results']    = $rows->toArray();
             if($start == 0 && count($result['results']) < $limit) {
@@ -128,10 +130,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 //$result['totalcount'] = $backend->getCountByAddressbookId($addressbookId, $filter);
             }
         }
-
+        
         return $result;
     }
-
+    
     /**
      * Search for roles
      *
@@ -145,21 +147,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'results'     => array(),
             'totalcount'  => 0
         );
-
+        
         $filter = new Tinebase_Model_RoleFilter(array(
             'name'        => '%' . $filter[0]['value'] . '%',
             'description' => '%' . $filter[0]['value'] . '%'
         ));
-
+        
         $paging['sort'] = isset($paging['sort']) ? $paging['sort'] : 'name';
         $paging['dir'] = isset($paging['dir']) ? $paging['dir'] : 'ASC';
-
+        
         $result['results'] = Tinebase_Acl_Roles::getInstance()->searchRoles($filter, new Tinebase_Model_Pagination($paging))->toArray();
         $result['totalcount'] = Tinebase_Acl_Roles::getInstance()->searchCount($filter);
-
+        
         return $result;
     }
-
+    
     /**
      * change password of user
      *
@@ -172,7 +174,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $response = array(
             'success'      => TRUE
         );
-
+        
         try {
             Tinebase_Controller::getInstance()->changePassword($oldPassword, $newPassword);
         } catch (Tinebase_Exception $e) {
@@ -181,10 +183,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'errorMessage' => "New password could not be set! Error: " . $e->getMessage()
             );
         }
-
+        
         return $response;
     }
-
+    
     /**
      * clears state
      *
@@ -195,7 +197,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         Tinebase_State::getInstance()->clearState($name);
     }
-
+    
     /**
      * retuns all states
      *
@@ -205,7 +207,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return Tinebase_State::getInstance()->loadStateInfo();
     }
-
+    
     /**
      * set state
      *
@@ -218,7 +220,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
         Tinebase_State::getInstance()->setState($name, $value);
     }
-
+    
     /**
      * adds a new personal tag
      *
@@ -228,7 +230,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveTag($tag)
     {
         $inTag = new Tinebase_Model_Tag($tag);
-
+        
         if (strlen($inTag->getId()) < 40) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' creating tag: ' . print_r($inTag->toArray(), true));
             $outTag = Tinebase_Tags::getInstance()->createTag($inTag);
@@ -236,9 +238,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' updating tag: ' .print_r($inTag->toArray(), true));
             $outTag = Tinebase_Tags::getInstance()->updateTag($inTag);
         }
+        
         return $outTag->toArray();
     }
-
+    
     /**
      * Used for updating multiple records
      * 
@@ -271,13 +274,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $filter = new Tinebase_Model_TagFilter($filter);
         $paging = new Tinebase_Model_Pagination($paging);
-
+        
         return array(
             'results'    => Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray(),
             'totalCount' => Tinebase_Tags::getInstance()->getSearchTagsCount($filter)
         );
     }
-
+    
     /**
     * search tags by foreign filter
     *
@@ -288,14 +291,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchTagsByForeignFilter($filterData, $filterName)
     {
         $filter = $this->_getFilterGroup($filterData, $filterName);
-
+        
         $result = Tinebase_Tags::getInstance()->searchTagsByForeignFilter($filter)->toArray();
         return array(
             'results'    => $result,
             'totalCount' => count($result)
         );
     }
-
+    
     /**
      * get filter group defined by filterName and filterData
      *
@@ -313,23 +316,23 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
             die('go away!');
         }
-
+        
         if (! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
             throw new Tinebase_Exception_AccessDenied('No right to access application');
         }
-
+        
         $filterGroup = new $_filterName(array());
         if (! $filterGroup instanceof Tinebase_Model_Filter_FilterGroup) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
             die('go away!');
         }
-
+        
         // at this point we are sure request is save ;-)
         $filterGroup->setFromArray($_filterData);
-
+        
         return $filterGroup;
     }
-
+    
     /**
      * attach tag to multiple records identified by a filter
      *
@@ -342,11 +345,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $this->_longRunningRequest();
         $filter = $this->_getFilterGroup($filterData, $filterName);
-
+        
         Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
         return array('success' => true);
     }
-
+    
     /**
      * detach tags to multiple records identified by a filter
      *
@@ -359,11 +362,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $this->_longRunningRequest();
         $filter = $this->_getFilterGroup($filterData, $filterName);
-
+        
         Tinebase_Tags::getInstance()->detachTagsFromMultipleRecords($filter, $tag);
         return array('success' => true);
     }
-
+    
     /**
      * search / get notes
      * - used by activities grid
@@ -379,13 +382,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $records = Tinebase_Notes::getInstance()->searchNotes($filter, $paging, /* ignoreACL = */ false);
         $result = $this->_multipleRecordsToJson($records);
-
+        
         return array(
             'results'       => $result,
             'totalcount'    => Tinebase_Notes::getInstance()->searchNotesCount($filter, /* ignoreACL = */ false)
         );
     }
-
+    
     /**
      * get note types
      *
@@ -394,13 +397,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $noteTypes = Tinebase_Notes::getInstance()->getNoteTypes();
         $noteTypes->translate();
-
+        
         return array(
             'results'       => $noteTypes->toArray(),
             'totalcount'    => count($noteTypes)
         );
     }
-
+    
     /**
      * deletes tags identified by an array of identifiers
      *
@@ -423,7 +426,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function authenticate($username, $password)
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($username, $password);
-
+        
         if ($authResult->isValid()) {
             $response = array(
                 'status'    => 'success',
@@ -436,7 +439,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'msg'       => 'authentication failed',
             );
         }
-
+        
         return $response;
     }
 
@@ -450,7 +453,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function login($username, $password, $securitycode = null)
     {
-        Tinebase_Core::startSession('tinebase');
+        Tinebase_Core::startCoreSession();
         
         if (is_array(($response = $this->_getCaptchaResponse($securitycode)))) {
             return $response;
@@ -495,10 +498,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($this->_hasCaptcha()) {
             $config_count = Tinebase_Core::getConfig()->captcha->count;
             
-            $count = (isset($_SESSION['captcha']['count']) ? $_SESSION['captcha']['count'] : 1);
+            $count = (isset(Tinebase_Session::getSessionNamespace()->captcha['count'])
+                ? Tinebase_Session::getSessionNamespace()->captcha['count']
+                : 1
+            );
             
             if ($count >= $config_count) {
-                $aux = isset($_SESSION['captcha']['code']) ? $_SESSION['captcha']['code'] : null;
+                $aux = isset(Tinebase_Session::getSessionNamespace()->captcha['code'])
+                    ? Tinebase_Session::getSessionNamespace()->captcha['code']
+                    : null;
                 
                 if ($aux != $securitycode) {
                     $rets = Tinebase_Controller::getInstance()->makeCaptcha(); 
@@ -515,7 +523,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return null;
     }
-        
+    
     /**
      *
      * @param string $username
@@ -558,13 +566,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($this->_hasCaptcha()) {
             $config_count = Tinebase_Core::getConfig()->captcha->count;
             
-            if (!isset($_SESSION['captcha']['count'])) {
-                $_SESSION['captcha']['count'] = 1;
+            if (!isset(Tinebase_Session::getSessionNamespace()->captcha['count'])) {
+                Tinebase_Session::getSessionNamespace()->captcha['count'] = 1;
             } else {
-                $_SESSION['captcha']['count'] = $_SESSION['captcha']['count'] + 1;
+                Tinebase_Session::getSessionNamespace()->captcha['count'] = Tinebase_Session::getSessionNamespace()->captcha['count'] + 1;
             }
             
-            if ($_SESSION['captcha']['count'] >= $config_count) {
+            if (Tinebase_Session::getSessionNamespace()->captcha['count'] >= $config_count) {
                 $rets = Tinebase_Controller::getInstance()->makeCaptcha(); 
                 $response = array(
                     'success'      => false,
@@ -573,7 +581,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 );
             }
         } else {
-            Zend_Session::destroy(false,true);
+            Tinebase_Session::destroyAndMantainCookie();
         }
         
         return $response;
@@ -586,14 +594,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _setCredentialCacheCookie()
     {
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
-            Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->setCache(Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE));
-        } else {
+        if (!Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
             
             return false;
         }
-
+        
+        Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->setCache(Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE));
+        
         return true;
     }
 
@@ -610,16 +618,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $oldCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
         $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(Tinebase_Core::getUser()->accountLoginName, $password);
         Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
-
+        
         $success = $this->_setCredentialCacheCookie();
-
+        
         if ($success) {
             // close session to allow other requests
-            Zend_Session::writeClose(true);
+            Tinebase_Session::writeClose(true);
             $event = new Tinebase_Event_User_ChangeCredentialCache($oldCredentialCache);
             Tinebase_Event::fireEvent($event);
         }
-
+        
         return array(
             'success'      => $success
         );
@@ -636,17 +644,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
         
-        if (Zend_Session::isStarted()) {
-            Zend_Session::destroy();
+        if (Tinebase_Session::isStarted()) {
+            Tinebase_Session::destroyAndRemoveCookie();
         }
-
+        
         $result = array(
             'success'=> true,
         );
-
+        
         return $result;
     }
-
+    
     /**
      * Returns registry data of tinebase.
      * @see Tinebase_Application_Json_Abstract
@@ -858,7 +866,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $registryData;
     }
-
+    
     /**
      * search / get custom field values
      *
@@ -871,9 +879,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = $this->_search($filter, $paging, Tinebase_CustomField::getInstance(), 'Tinebase_Model_CustomField_ValueFilter');
         return $result;
     }
-
+    
     /************************ preferences functions ***************************/
-
+    
     /**
      * search preferences
      *
@@ -884,14 +892,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchPreferencesForApplication($applicationName, $filter)
     {
         $decodedFilter = is_array($filter) ? $filter : Zend_Json::decode($filter);
-
+        
         $filter = new Tinebase_Model_PreferenceFilter();
         if (! empty($decodedFilter)) {
             $filter->setFromArrayInUsersTimezone($decodedFilter);
         }
         $appId = Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId();
         $filter->addFilter($filter->createFilter(array('field'     => 'application_id',  'operator'  => 'equals', 'value'     => $appId)));
-
+        
         $backend = Tinebase_Core::getPreference($applicationName);
         if ($backend) {
             $records = $backend->search($filter);
@@ -902,7 +910,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 . ' ' . print_r($records->toArray(), TRUE));
             
             $result = $this->_multipleRecordsToJson($records, $filter);
-
+            
             // add translated labels and descriptions
             $translations = $backend->getTranslatedPreferences();
             foreach ($result as $key => $prefArray) {
@@ -928,13 +936,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $result = array();
         }
-
+        
         return array(
             'results'       => $result,
             'totalcount'    => count($result)
         );
     }
-
+    
     /**
      * save preferences for application
      *
@@ -947,17 +955,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function savePreferences($data, $adminMode)
     {
         $decodedData = is_array($data) ? $data : Zend_Json::decode($data);
-
+        
         $result = array();
         foreach ($decodedData as $applicationName => $data) {
-
+            
             if ($applicationName == 'Tinebase.UserProfile') {
                 $userProfileData = array();
                 foreach($data as $fieldName => $valueArray) {
                     $userProfileData[$fieldName] = $valueArray['value'];
                 }
                 $this->updateUserProfile($userProfileData);
-
+                
             } else {
                 $backend = Tinebase_Core::getPreference($applicationName);
                 if ($backend !== NULL) {
@@ -974,7 +982,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
         }
-
+        
         return array(
             'status'    => 'success',
             'results'   => $result
@@ -991,18 +999,18 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         // NOTE: $userProfile is a contact where non readable fields are clearad out!
         $userProfile = Tinebase_UserProfile::getInstance()->get($userId);
-
+        
         // NOTE: This hurts! We don't have methods to call in our frontends yet which convert
         //       a record to the json representaion :( Thus image link will be broken!
         $userProfile->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-
+        
         return array(
             'userProfile'      => $userProfile->toArray(),
             'readableFields'   => Tinebase_UserProfile::getInstance()->getReadableFields(),
             'updateableFields' => Tinebase_UserProfile::getInstance()->getUpdateableFields(),
         );
     }
-
+    
     /**
      * update user profile
      *
@@ -1013,16 +1021,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $contact = new Addressbook_Model_Contact(array(), TRUE);
         $contact->setFromJsonInUsersTimezone($profileData);
-
+        
         // NOTE: $userProfile is a contact where non readable fields are clearad out!
         $userProfile = Tinebase_UserProfile::getInstance()->update($contact);
-
+        
         // NOTE: This hurts! We don't have methods to call in our frontends yet which convert
         //       a record to the json representaion :( Thus image link will be broken!
         $userProfile->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         return $userProfile->toArray();
     }
-
+    
     /**
      * dummy function to measure speed of framework initialization
      */
@@ -1030,7 +1038,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return array();
     }
-
+    
     /**
      * gets the userProfile config
      *
@@ -1044,7 +1052,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'updateableFields' => array_values(Tinebase_UserProfile::getInstance()->getUpdateableFields()),
         );
     }
-
+    
     /**
      * saves userProfile config
      *
@@ -1055,7 +1063,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_UserProfile::getInstance()->setReadableFields($configData['readableFields']);
         Tinebase_UserProfile::getInstance()->setUpdateableFields($configData['updateableFields']);
     }
-
+    
     /**
      * switch to another user's account
      * 
@@ -1071,7 +1079,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /************************ department functions **************************/
-
+    
     /**
      * search / get departments
      *
@@ -1084,9 +1092,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = $this->_search($filter, $paging, Tinebase_Department::getInstance(), 'Tinebase_Model_DepartmentFilter');
         return $result;
     }
-
+    
     /************************ config functions ******************************/
-
+    
     /**
      * get config settings for application
      *
@@ -1097,13 +1105,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $controllerName = $id . '_Controller';
         $appController = Tinebase_Controller_Abstract::getController($controllerName);
-
+        
         return array(
             'id'        => $id,
             'settings'  => $appController->getConfigSettings(TRUE),
         );
     }
-
+    
     /**
      * save application config
      *
@@ -1113,16 +1121,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveConfig($recordData)
     {
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, TRUE));
-
+        
         $controllerName = $recordData['id'] . '_Controller';
         $appController = Tinebase_Controller_Abstract::getController($controllerName);
         $appController->saveConfigSettings($recordData['settings']);
-
+        
         return $this->getConfig($recordData['id']);
     }
-
+    
     /************************ tempFile functions ******************************/
-
+    
     /**
      * joins all given tempfiles in given order to a single new tempFile
      *
@@ -1137,14 +1145,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $record->setFromJsonInUsersTimezone($tempFileData);
             $tempFileRecords->addRecord($record);
         }
-
+        
         $joinedTempFile = Tinebase_TempFile::getInstance()->joinTempFiles($tempFileRecords);
-
+        
         return $joinedTempFile->toArray();
     }
-
+    
     /************************ protected functions ***************************/
-
+    
     /**
      * returns multiple records prepared for json transport
      *
@@ -1158,7 +1166,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (count($_records) == 0) {
             return array();
         }
-
+        
         switch ($_records->getRecordClassName()) {
             case 'Tinebase_Model_Preference':
                 $accountFilterArray = $_filter->getFilter('account')->toArray();
@@ -1175,7 +1183,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
                 break;
         }
-
+        
         $result = parent::_multipleRecordsToJson($_records, $_filter, $_pagination);
         return $result;
     }
@@ -1195,40 +1203,40 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $recordClassName = $appName . '_Model_' . $modelName;
         $controller      = Tinebase_Core::getApplicationInstance($appName, $modelName);
         $filterClassName = $recordClassName . 'Filter';
-    
+        
         if (! class_exists($recordClassName)) {
             throw new Tinebase_Exception_InvalidArgument('A record class for the given appName and modelName does not exist!');
         }
-    
+        
         if (! $controller) {
             throw new Tinebase_Exception_InvalidArgument('A controller for the given appName and modelName does not exist!');
         }
-    
+        
         if (! class_exists($filterClassName)) {
             throw new Tinebase_Exception_InvalidArgument('A filter for the given appName and modelName does not exist!');
         }
-    
+        
         if (! in_array($property, $recordClassName::getAutocompleteFields())) {
             throw new Tinebase_Exception_UnexpectedValue('bad property name');
         }
-    
+        
         $filter = new $filterClassName(array(
             array('field' => $property, 'operator' => 'startswith', 'value' => $startswith),
         ));
-    
+        
         $paging = new Tinebase_Model_Pagination(array('sort' => $property));
-    
+        
         $values = array_unique($controller->search($filter, $paging)->{$property});
-    
+        
         $result = array(
             'results'   => array(),
             'totalcount' => count($values)
         );
-    
+        
         foreach($values as $value) {
             $result['results'][] = array($property => $value);
         }
-    
+        
         return $result;
     }
 }

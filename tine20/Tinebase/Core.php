@@ -257,7 +257,7 @@ class Tinebase_Core
         $server->handle();
         $method = get_class($server) . '::' . $server->getRequestMethod();
         self::set(self::METHOD, $method);
-
+        
         self::finishProfiling();
         self::getDbProfiling();
     }
@@ -428,10 +428,10 @@ class Tinebase_Core
         
         Tinebase_Core::setupBuildConstants();
         
-        Tinebase_Core::setupSession();
+        Tinebase_Session::setupSession();
         
-        if (Zend_Session::sessionExists()) {
-            Tinebase_Core::startSession();
+        if (Tinebase_Session::sessionExists()) {
+            Tinebase_Core::startCoreSession();
         }
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
@@ -454,6 +454,33 @@ class Tinebase_Core
                 header('X-TransactionID: ' . substr($_SERVER['HTTP_X_TRANSACTIONID'], 1, -1) . ';' . $_SERVER['SERVER_NAME'] . ';16.4.5009.816;' . date('Y-m-d H:i:s') . ' UTC;265.1558 ms');
             }
         }
+    }
+    
+    /**
+     * start session helper function
+     *
+     * @param array $_options
+     * @throws Exception
+     */
+    public static function startCoreSession ($namespace = null)
+    {
+        try {
+            $coreSession = Tinebase_Session::getSessionNamespace();
+            $userSession = Tinebase_User_Session::getSessionNamespace();
+        } catch (Exception $e) {
+            throw $e;
+        }
+        
+        if (isset($userSession->currentAccount)) {
+            self::set(self::USER, $userSession->currentAccount);
+        }
+        
+        if (! isset($coreSession->jsonKey)) {
+            $coreSession->jsonKey = Tinebase_Record_Abstract::generateUID();
+        }
+        
+        Tinebase_Core::set('jsonKey', $coreSession->jsonKey);
+        Tinebase_Core::setDbCapabilitiesInSession($coreSession);
     }
     
     /**
@@ -485,7 +512,7 @@ class Tinebase_Core
         if (error_reporting() == 0) {
             return;
         }
-
+        
         $logLine = " $errstr in {$errfile}::{$errline} ($severity)";
         $e = new Exception('just to get trace');
         $trace = $e->getTraceAsString();
@@ -499,7 +526,7 @@ class Tinebase_Core
             case E_USER_ERROR:
                 throw new ErrorException($errstr, 0, $severity, $errfile, $errline);
                 break;
-
+                
             case E_COMPILE_WARNING:
             case E_CORE_WARNING:
             case E_USER_WARNING:
@@ -512,7 +539,7 @@ class Tinebase_Core
                     error_log(__METHOD__ . '::' . __LINE__ . ' ' . $trace);
                 }
                 break;
-
+                
             case E_NOTICE:
             case E_STRICT:
             case E_USER_NOTICE:
@@ -555,7 +582,7 @@ class Tinebase_Core
     public static function guessTempDir()
     {
         $config = self::getConfig();
-
+        
         $tmpdir = $config->tmpdir;
         if ($tmpdir == Tinebase_Model_Config::NOTSET || !@is_writable($tmpdir)) {
             $tmpdir = sys_get_temp_dir();
@@ -566,10 +593,10 @@ class Tinebase_Core
                 }
             }
         }
-
+        
         return $tmpdir;
     }
-
+    
     /**
      * initializes the logger
      *
@@ -579,7 +606,7 @@ class Tinebase_Core
     {
         $config = self::getConfig();
         $logger = new Tinebase_Log();
-
+        
         if (isset($config->logger) && $config->logger->active) {
             try {
                 $logger->addWriterByConfig($config->logger);
@@ -593,7 +620,7 @@ class Tinebase_Core
                 $writer = ($_defaultWriter === NULL) ? new Zend_Log_Writer_Null() : $_defaultWriter;
                 $logger->addWriter($writer);
             }
-
+            
             // For saving log into syslog too, create a key syslog into logger (value does not matter)
             if ((bool) $config->logger->syslog){
                 $writer = new Zend_Log_Writer_Syslog(array(
@@ -615,12 +642,12 @@ class Tinebase_Core
         }
         
         self::set(self::LOGGER, $logger);
-
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) $logger->info(__METHOD__ . '::' . __LINE__ .' Logger initialized');
         if (isset($loggerConfig) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) $logger->trace(__METHOD__ . '::' . __LINE__ 
             .' Logger settings: ' . print_r($loggerConfig->toArray(), TRUE));
     }
-
+    
     /**
      * setup the cache and add it to zend registry
      *
@@ -642,7 +669,7 @@ class Tinebase_Core
                 self::set(self::SHAREDCACHE, false);
             }
         }
-
+        
         // create zend cache
         if ($_enabled === true && $config->caching && $config->caching->active) {
             $frontendOptions = array(
@@ -654,10 +681,10 @@ class Tinebase_Core
                 'logging'                   => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
                 'logger'                    => self::getLogger(),
             );
-
+            
             $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
             $backendOptions = ($config->caching->backendOptions) ? $config->caching->backendOptions->toArray() : false;
-
+            
             if (! $backendOptions) {
                 switch ($backendType) {
                     case 'File':
@@ -698,7 +725,7 @@ class Tinebase_Core
                         break;
                 }
             }
-
+            
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " cache of backend type '{$backendType}' enabled");
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
@@ -709,7 +736,7 @@ class Tinebase_Core
                 }
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " backend options: " . print_r($backendOptionsWithoutLogger, TRUE));
             }
-
+            
         } else {
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' cache disabled');
             $backendType = 'Test';
@@ -719,7 +746,7 @@ class Tinebase_Core
             $backendOptions = array(
             );
         }
-
+        
         // getting a Zend_Cache_Core object
         try {
             $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
@@ -734,12 +761,11 @@ class Tinebase_Core
             }
             
             Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Cache error: ' . $e->getMessage());
-
+            
             self::setupCache($enabled);
             return;
         }
-
-
+        
         // some important caches
         Zend_Locale::setCache($cache);
         Zend_Translate::setCache($cache);
@@ -764,17 +790,6 @@ class Tinebase_Core
             self::set(self::USERCREDENTIALCACHE, $cache);
         }
     }
-
-    /**
-     * initializes the session
-     */
-    public static function setupSession()
-    {
-        self::setSessionOptions(array(
-            'name' => 'TINE20SESSID'
-        ));
-        self::setSessionBackend();
-    }
     
     /**
      * setup stream wrapper for tine20:// prefix
@@ -792,41 +807,6 @@ class Tinebase_Core
     }
     
     /**
-     * start session helper function
-     * 
-     * @param array $_options
-     * @throws Exception
-     */
-    public static function startSession()
-    {
-        try {
-            $session = new Zend_Session_Namespace('TinebaseCore');
-        } catch (Exception $e) {
-            self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Session error: ' . $e->getMessage());
-            self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-            
-            Zend_Session::expireSessionCookie();
-            
-            throw $e;
-        }
-
-        if (isset($session->currentAccount)) {
-            self::set(self::USER, $session->currentAccount);
-        }
-        if (isset($session->setupuser)) {
-            self::set(self::USER, $session->setupuser);
-        }
-        if (!isset($session->jsonKey)) {
-            $session->jsonKey = Tinebase_Record_Abstract::generateUID();
-        }
-        self::set('jsonKey', $session->jsonKey);
-        
-        self::set(self::SESSION, $session);
-        self::set(self::SESSIONID, session_id());
-        self::setDbCapabilitiesInSession($session);
-    }
-    
-    /**
      * set database capabilities in session
      * 
      * @param Zend_Session_Namespace $session
@@ -841,114 +821,6 @@ class Tinebase_Core
             }
             $session->dbcapabilities = $capabilities;
         }
-    }
-    
-    /**
-     * set session options
-     * 
-     * @param array $_options
-     */
-    public static function setSessionOptions($_options = array())
-    {
-        Zend_Session::setOptions(array_merge($_options, array(
-            'cookie_httponly'   => true,
-            'hash_function'     => 1
-        )));
-        
-        if (isset($_SERVER['REQUEST_URI'])) {
-            // cut of path behind caldav/webdav (removeme when dispatching is refactored)
-            if (isset($_SERVER['REDIRECT_WEBDAV']) && $_SERVER['REDIRECT_WEBDAV'] == 'true') {
-                $decodedUri = Sabre\DAV\URLUtil::decodePath($_SERVER['REQUEST_URI']);
-                $baseUri = '/' . substr($decodedUri, 0, strpos($decodedUri, 'webdav/') + strlen('webdav/'));
-            } else if (isset($_SERVER['REDIRECT_CALDAV']) && $_SERVER['REDIRECT_CALDAV'] == 'true') {
-                $decodedUri = Sabre\DAV\URLUtil::decodePath($_SERVER['REQUEST_URI']);
-                $baseUri = '/' . substr($decodedUri, 0, strpos($decodedUri, 'caldav/') + strlen('caldav/'));
-            } else {
-                $baseUri = dirname($_SERVER['REQUEST_URI']);
-            }
-            
-            if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
-                $exploded = explode("/", $_SERVER['REQUEST_URI']);
-                if (strtolower($exploded[1]) == strtolower($_SERVER['HTTP_HOST'])) {
-                     $baseUri = '/' . $_SERVER['HTTP_HOST'] . (($baseUri == '/') ? '' : $baseUri);
-                }
-            }
-            
-            // fix for windows server with backslash directory separator
-            $baseUri = str_replace(DIRECTORY_SEPARATOR, '/', $baseUri);
-            
-            Zend_Session::setOptions(array(
-                'cookie_path'     => $baseUri
-            ));
-        }
-        
-        if (self::isHttpsRequest()) {
-            Zend_Session::setOptions(array(
-                'cookie_secure'     => true
-            ));
-        }
-    }
-        
-    /**
-     * set session backend
-     */
-    public static function setSessionBackend()
-    {
-        $config = self::getConfig();
-        $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : 'File';
-        $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400; // one day is default
-        
-        switch ($backendType) {
-            case 'File':
-                if ($config->gc_maxlifetime) {
-                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key 'gc_maxlifetime' should be renamed to 'lifetime' and moved to 'session' group.");
-                    $maxLifeTime = $config->get('gc_maxlifetime', 86400);
-                }
-                Zend_Session::setOptions(array(
-                    'gc_maxlifetime'     => $maxLifeTime
-                ));
-                
-                $sessionSavepath = self::getSessionDir();
-                if (ini_set('session.save_path', $sessionSavepath) !== FALSE) {
-                    if (!is_dir($sessionSavepath)) {
-                        mkdir($sessionSavepath, 0700);
-                    }
-                }
-                
-                $lastSessionCleanup = Tinebase_Config::getInstance()->get(Tinebase_Config::LAST_SESSIONS_CLEANUP_RUN);
-                if ($lastSessionCleanup instanceof DateTime && $lastSessionCleanup > Tinebase_DateTime::now()->subHour(2)) {
-                    Zend_Session::setOptions(array(
-                        'gc_probability' => 0,
-                        'gc_divisor'     => 100
-                    ));
-                } else if (@opendir(ini_get('session.save_path')) !== FALSE) {
-                    Zend_Session::setOptions(array(
-                        'gc_probability' => 1,
-                        'gc_divisor'     => 100
-                    ));
-                } else {
-                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Unable to initialize automatic session cleanup. Check permissions to " . ini_get('session.save_path'));
-                }
-                
-                break;
-                
-            case 'Redis':
-                $host   = ($config->session->host) ? $config->session->host : 'localhost';
-                $port   = ($config->session->port) ? $config->session->port : 6379;
-                $prefix = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '_SESSION_';
-                
-                Zend_Session::setOptions(array(
-                    'gc_maxlifetime' => $maxLifeTime,
-                    'save_handler'   => 'redis',
-                    'save_path'      => "tcp://$host:$port?prefix=$prefix"
-                ));
-                break;
-                
-            default:
-                break;
-        }
-        
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Session of backend type '{$backendType}' configured.");
     }
     
     /**
@@ -1074,11 +946,11 @@ class Tinebase_Core
     {
         $tableName = 'pg_extension';
         $cols = 'COUNT(*)';
-
+        
         $select = $db->select()
             ->from($tableName, $cols)
             ->where("extname = 'unaccent'");
-
+        
         // if there is no table pg_extension, returns 0 (false)
         try {
             // checks if unaccent extension is installed or not
@@ -1169,10 +1041,10 @@ class Tinebase_Core
      */
     public static function setupUserLocale($localeString = 'auto', $saveaspreference = FALSE)
     {
-        $session = self::get(self::SESSION);
-
+        $session = Tinebase_User_Session::getSessionNamespace();
+        
         if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$localeString'");
-
+        
         // get locale object from session or ...
         if (   $session !== NULL 
             && isset($session->userLocale) 
@@ -1204,7 +1076,7 @@ class Tinebase_Core
             }
             
             $locale = Tinebase_Translation::getLocale($localeString);
-    
+            
             // save in session
             if ($session !== NULL) {
                 $session->userLocale = $locale;
@@ -1242,7 +1114,7 @@ class Tinebase_Core
      */
     public static function setupUserTimezone($_timezone = NULL, $_saveaspreference = FALSE)
     {
-        $session = self::get(self::SESSION);
+        $session = Tinebase_User_Session::getSessionNamespace();
 
         if ($_timezone === NULL) {
             
@@ -1355,9 +1227,9 @@ class Tinebase_Core
         
         return ' Real patch cache size: ' . $realPathCacheSize;
     }
-
+    
     /******************************* REGISTRY ************************************/
-
+    
     /**
      * get a value from the registry
      *
@@ -1366,7 +1238,7 @@ class Tinebase_Core
     {
         return (Zend_Registry::isRegistered($index)) ? Zend_Registry::get($index) : NULL;
     }
-
+    
     /**
      * set a registry value
      * 
@@ -1394,7 +1266,7 @@ class Tinebase_Core
         
         Zend_Registry::set($index, $value);
     }
-
+    
     /**
      * checks a registry value
      *
@@ -1420,7 +1292,7 @@ class Tinebase_Core
 
         return ucfirst($authType);
     }
-
+    
     /**
      * get config from the registry
      *
@@ -1433,7 +1305,7 @@ class Tinebase_Core
         }
         return self::get(self::CONFIG);
     }
-
+    
     /**
      * get max configured loglevel
      * 
@@ -1446,6 +1318,7 @@ class Tinebase_Core
             $logLevel = Tinebase_Log::getMaxLogLevel(isset($config->logger) ? $config->logger : NULL);
             self::set(self::LOGLEVEL, $logLevel);
         }
+        
         return $logLevel;
     }
     
@@ -1473,7 +1346,7 @@ class Tinebase_Core
         
         return self::get(self::LOGGER);
     }
-
+    
     /**
      * get cache from the registry
      *
@@ -1483,17 +1356,7 @@ class Tinebase_Core
     {
         return self::get(self::CACHE);
     }
-        
-    /**
-     * get session namespace from the registry
-     *
-     * @return Zend_Session_Namespace tinebase session namespace
-     */
-    public static function getSession()
-    {
-        return self::get(self::SESSION);
-    }
-
+    
     /**
      * get locale from the registry
      *
@@ -1588,7 +1451,7 @@ class Tinebase_Core
         
         return self::get(self::DBNAME);
     }
-
+    
     /**
      * get temp dir string (without PATH_SEP at the end)
      *
@@ -1597,47 +1460,6 @@ class Tinebase_Core
     public static function getTempDir()
     {
         return self::get(self::TMPDIR);
-    }
-
-    /**
-     * get session dir string (without PATH_SEP at the end)
-     *
-     * @return string
-     * 
-     * @todo remove obsolete session config paths in 2011-05
-     */
-    public static function getSessionDir()
-    {
-        $sessionDirName ='tine20_sessions';
-        $config = self::getConfig();
-        
-        $sessionDir = ($config->session && $config->session->path) ? $config->session->path : null;
-        
-        #####################################
-        # LEGACY/COMPATIBILITY: 
-        # (1) had to rename session.save_path key to sessiondir because otherwise the
-        # generic save config method would interpret the "_" as array key/value seperator
-        # (2) moved session config to subgroup 'session'
-        if (empty($sessionDir)) {
-            foreach (array('session.save_path', 'sessiondir') as $deprecatedSessionDir) {
-                $sessionDir = $config->get($deprecatedSessionDir, null);
-                if ($sessionDir) {
-                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key '{$deprecatedSessionDir}' should be renamed to 'path' and moved to 'session' group.");
-                }
-            }
-        }
-        #####################################
-
-        if (empty($sessionDir) || !@is_writable($sessionDir)) {
-
-            $sessionDir = session_save_path();
-            if (empty($sessionDir) || !@is_writable($sessionDir)) {
-                $sessionDir = self::guessTempDir();
-            }
-
-            $sessionDir .= DIRECTORY_SEPARATOR . $sessionDirName;
-        }
-        return $sessionDir;
     }
     
     /**
@@ -1679,7 +1501,7 @@ class Tinebase_Core
         }
         return self::get(self::SCHEDULER);
     }
-
+    
     /**
      * filter input string for database as some databases (looking at you, MySQL) can't cope with some chars
      * 

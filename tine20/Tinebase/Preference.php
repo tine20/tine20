@@ -353,7 +353,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using default (' . $value . ') for ' . $name);
             }
             
-            $session = Tinebase_Core::get(Tinebase_Core::SESSION);
+            $session = Tinebase_Core::get(Tinebase_Session::SESSION);
             
             switch ($name) {
                 case Tinebase_Preference::LOCALE:

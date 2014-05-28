@@ -48,7 +48,7 @@ class Setup_Core extends Tinebase_Core
         
         Setup_Core::setupSession();
         
-        Setup_Core::startSession();
+        Setup_Core::startSetupSession();
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as seesion timeout
@@ -58,6 +58,25 @@ class Setup_Core extends Tinebase_Core
         Setup_Core::setupUserLocale();
         
         header('X-API: http://www.tine20.org/apidocs/tine20/');
+    }
+    
+    /**
+     * 
+     * @throws Exception
+     */
+    public static function startSetupSession ()
+    {
+        try {
+            $setupSession = Setup_Session::getSessionNamespace();
+        } catch (Exception $e) {
+            throw $e;
+        }
+        
+        if (isset($setupSession->setupuser)) {
+            self::set(self::USER, $setupSession->setupuser);
+        }
+        
+        Tinebase_Core::startCoreSession();
     }
     
     /**
@@ -256,7 +275,7 @@ class Setup_Core extends Tinebase_Core
      */
     public static function setupSession()
     {
-        self::setSessionOptions(array(
+        Tinebase_Session::setSessionOptions(array(
             'name' => 'TINE20SETUPSESSID'
         ));
     }

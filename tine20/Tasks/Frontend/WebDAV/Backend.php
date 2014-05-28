@@ -46,7 +46,7 @@ class Tasks_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBackend
         }
         
         $calendars = array();
-//        $sessionUriMap = (array) Tinebase_Core::getSession()->CalDAVUriMap;
+//        $sessionUriMap = (array) Tinebase_Session::getSessionNamespace()->CalDAVUriMap;
         
         foreach($containers as $container) {
             $containerId = $container->getId();

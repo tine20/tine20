@@ -327,7 +327,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function loginFromPost($username, $password)
     {
-        Tinebase_Core::startSession();
+        Tinebase_Core::startCoreSession();
         
         if (!empty($username)) {
             // try to login user
@@ -356,7 +356,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // authentication failed
         if ($success !== TRUE) {
             $_SESSION = array();
-            Zend_Session::destroy();
+            Tinebase_Session::destroyAndRemoveCookie();
             
             // redirect back to loginurl if needed
             $defaultUrl = ((isset($_SERVER['HTTP_REFERER']) || array_key_exists('HTTP_REFERER', $_SERVER))) ? $_SERVER['HTTP_REFERER'] : '';
@@ -388,7 +388,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function sessionException()
     {
-        Zend_Session::expireSessionCookie();
+        Tinebase_Session::expireSessionCookie();
         echo "
             <script type='text/javascript'>
                 window.location.href = window.location.href;
@@ -521,7 +521,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected function _deliverChangedFiles($_fileType)
     {
         // close session to allow other requests
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         
         $cacheId         = null;
         $clientETag      = null;
@@ -653,7 +653,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $this->checkAuth();
             
             // close session to allow other requests
-            Zend_Session::writeClose(true);
+            Tinebase_Session::writeClose(true);
         
             $tempFile = Tinebase_TempFile::getInstance()->uploadTempFile();
             
@@ -688,7 +688,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $this->checkAuth();
 
         // close session to allow other requests
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         
         $clientETag      = null;
         $ifModifiedSince = null;

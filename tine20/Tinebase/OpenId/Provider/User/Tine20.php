@@ -32,7 +32,7 @@ class Tinebase_OpenId_Provider_User_Tine20 extends Zend_OpenId_Provider_User
      */
     public function __construct(Zend_Session_Namespace $session = null)
     {
-        $this->_sessionNameSpace = new Zend_Session_Namespace("openid");
+        $this->_sessionNameSpace = Tinebase_OpenId_Session::getSessionNamespace();
     }
 
     /**

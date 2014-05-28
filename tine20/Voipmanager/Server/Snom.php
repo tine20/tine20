@@ -25,7 +25,7 @@ class Voipmanager_Server_Snom implements Tinebase_Server_Interface
      */
     public function handle()
     {
-        Tinebase_Core::setSessionOptions(array(
+        Tinebase_Session::setSessionOptions(array(
             'use_cookies'      => 0,
             'use_only_cookies' => 0
         ));

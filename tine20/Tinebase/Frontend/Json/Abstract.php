@@ -319,7 +319,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     {
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
         // close session to allow other requests
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         
         return $oldMaxExcecutionTime;
     }

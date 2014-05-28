@@ -124,6 +124,15 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     *  test if there is a user logged in
+     */
+    public function testUser()
+    {
+        $this->assertTrue(is_object($this->_testUser), 'attribute user is of type ' . gettype($this->_testUser));
+        $this->assertTrue(is_object(Tinebase_Core::get(Tinebase_Core::USER)), 'core user is of type ' . gettype($this->_testUser));
+    }
+    
+    /**
      * test clear message cache
      *
      */

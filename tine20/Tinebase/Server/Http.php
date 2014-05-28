@@ -40,16 +40,16 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
         try {
             try {
                 Tinebase_Core::initFramework();
-            } catch (Zend_Session_Exception $zse) {
+            } catch (Tinebase_Session_Exception $zse) {
                 // expire session cookie on client
-                Zend_Session::expireSessionCookie();
+                Tinebase_Session::expireSessionCookie();
             }
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Is HTTP request. method: ' . $this->getRequestMethod());
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' REQUEST: ' . print_r($_REQUEST, TRUE));
             
             // register addidional HTTP apis only available for authorised users
-            if (Zend_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
+            if (Tinebase_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.mainScreen';
                 }
@@ -71,9 +71,9 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 }
                 
                 // sessionId got send by client, but we don't use sessions for non authenticated users
-                if (Zend_Session::sessionExists()) {
+                if (Tinebase_Session::sessionExists()) {
                     // expire session cookie on client
-                    Zend_Session::expireSessionCookie();
+                    Tinebase_Session::expireSessionCookie();
                 }
             }
             

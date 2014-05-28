@@ -37,7 +37,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * the constructor
      *
      */
-    private function __construct() 
+    private function __construct()
     {
         $this->_writeAccessLog = Tinebase_Core::get('serverclassname') !== 'ActiveSync_Server_Http' ||
             !(ActiveSync_Config::getInstance()->get(ActiveSync_Config::DISABLE_ACCESS_LOG));
@@ -54,7 +54,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @return Tinebase_Controller
      */
-    public static function getInstance() 
+    public static function getInstance()
     {
         if (self::$_instance === NULL) {
             self::$_instance = new Tinebase_Controller;
@@ -77,7 +77,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
         
-        $accessLog = $this->_getModelAccessLog($loginName, $authResult, $request, $clientIdString);
+        $accessLog = $this->_getAccessLogEntry($loginName, $authResult, $request, $clientIdString);
         
         $user = $this->_validateAuthResult($authResult, $accessLog);
         
@@ -116,7 +116,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                  * catch all exceptions during user data sync
                  * either it's the first sync and no user data get synchronized or
                  * we can work with the data synced during previous login
-                 */ 
+                 */
                 try {
                     Tinebase_User::syncUser($_username,array('syncContactData' => TRUE));
                 } catch (Exception $e) {
@@ -216,7 +216,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     protected function _initUserSession(Tinebase_Model_FullUser $user, $fixCookieHeader = true)
     {
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONUSERAGENTVALIDATION, TRUE)) {
-            Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
+            Tinebase_Session::registerValidatorHttpUserAgent();
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' User agent validation disabled.');
         }
@@ -224,13 +224,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         // we only need to activate ip session validation for non-encrypted connections
         $ipSessionValidationDefault = Tinebase_Core::isHttpsRequest() ? FALSE : TRUE;
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONIPVALIDATION, $ipSessionValidationDefault)) {
-            Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
+            Tinebase_Session::registerValidatorIpAddress();
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
         }
         
-        if (Zend_Session::isStarted()) {
-            Zend_Session::regenerateId();
+        if (Tinebase_Session::isStarted()) {
+            Tinebase_Session::regenerateId();
             Tinebase_Core::set(Tinebase_Core::SESSIONID, session_id());
             
             if ($fixCookieHeader) {
@@ -248,7 +248,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 /** end of fix **/
             }
             
-            Tinebase_Core::getSession()->currentAccount = $user;
+            Tinebase_User_Session::getSessionNamespace()->currentAccount = $user;
         }
     }
     
@@ -332,7 +332,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             imagedestroy($image);
             $result = array();
             $result['1'] = base64_encode($image_code);
-            $_SESSION['captcha']['code'] = $code;
+            Tinebase_Session::getSessionNamespace()->captcha['code'] = $code;
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         }
@@ -357,8 +357,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
          * but the user is not logged into Tine 2.0
          * we use this to validate passwords for OpenId for example
          */
-        unset(Tinebase_Core::getSession()->Zend_Auth);
-        unset(Tinebase_Core::getSession()->currentAccount);
+        $coreSession = Tinebase_Session::getSessionNamespace();
+        unset($coreSession->Zend_Auth);
+        
+        $userSession = Tinebase_User_Session::getSessionNamespace();
+        unset($userSession->currentAccount);        
         
         return $result;
     }
@@ -397,40 +400,42 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function changeUserAccount($loginName)
     {
         $allowedRoleChanges = Tinebase_Config::getInstance()->get(Tinebase_Config::ROLE_CHANGE_ALLOWED);
-        $currentAccountName = Tinebase_Core::getUser()->accountLoginName;
-        if ($allowedRoleChanges) {
-            $allowedRoleChangesArray = $allowedRoleChanges->toArray();
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' ROLE_CHANGE_ALLOWED: ' . print_r($allowedRoleChangesArray, true));
-            
-            $user = null;
-            
-            if (isset($allowedRoleChangesArray[$currentAccountName])
-                && in_array($loginName, $allowedRoleChangesArray[$currentAccountName])
-            ) {
-                $user = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
-                Tinebase_Core::getSession()->userAccountChanged = true;
-                Tinebase_Core::getSession()->originalAccountName = $currentAccountName;
-                
-            } else if (Tinebase_Core::getSession()->userAccountChanged 
-                && isset($allowedRoleChangesArray[Tinebase_Core::getSession()->originalAccountName])
-            ) {
-                $user = Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_Core::getSession()->originalAccountName);
-                Tinebase_Core::getSession()->userAccountChanged = false;
-                Tinebase_Core::getSession()->originalAccountName = null;
-            }
-            
-            if ($user) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                    __METHOD__ . '::' . __LINE__ . ' Switching to user account ' . $user->accountLoginName);
-                
-                $this->initUser($user, /* $fixCookieHeader = */ false);
-                return true;
-            }
-        } 
         
-        throw new Tinebase_Exception_AccessDenied('It is not allowed to switch to this account');
+        if (!$allowedRoleChanges) {
+            throw new Tinebase_Exception_AccessDenied('It is not allowed to switch to this account');
+        }
+        
+        $currentAccountName = Tinebase_Core::getUser()->accountLoginName;
+        
+        $allowedRoleChangesArray = $allowedRoleChanges->toArray();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ROLE_CHANGE_ALLOWED: ' . print_r($allowedRoleChangesArray, true));
+        
+        $user = null;
+        
+        if (isset($allowedRoleChangesArray[$currentAccountName])
+            && in_array($loginName, $allowedRoleChangesArray[$currentAccountName])
+        ) {
+            $user = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
+            Tinebase_Session::getSessionNamespace()->userAccountChanged = true;
+            Tinebase_Session::getSessionNamespace()->originalAccountName = $currentAccountName;
+            
+        } else if (Tinebase_Session::getSessionNamespace()->userAccountChanged 
+            && isset($allowedRoleChangesArray[Tinebase_Session::getSessionNamespace()->originalAccountName])
+        ) {
+            $user = Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_Session::getSessionNamespace()->originalAccountName);
+            Tinebase_Session::getSessionNamespace()->userAccountChanged = false;
+            Tinebase_Session::getSessionNamespace()->originalAccountName = null;
+        }
+        
+        if ($user) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Switching to user account ' . $user->accountLoginName);
+            
+            $this->initUser($user, /* $fixCookieHeader = */ false);
+            return true;
+        }
     }
     
     /**
@@ -561,7 +566,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param string $clientIdString
      * @return Tinebase_Model_AccessLog
      */
-    protected function _getModelAccessLog($loginName, Zend_Auth_Result $authResult, Zend_Controller_Request_Abstract $request, $clientIdString)
+    protected function _getAccessLogEntry($loginName, Zend_Auth_Result $authResult, Zend_Controller_Request_Abstract $request, $clientIdString)
     {
         $accessLog = new Tinebase_Model_AccessLog(array(
             'ip'         => $request->getClientIp(),
@@ -570,7 +575,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             'clienttype' => $clientIdString,
             'login_name' => $loginName ? $loginName : $authResult->getIdentity(),
             'user_agent' => substr($request->getHeader('USER_AGENT'), 0, 255)
-        ), TRUE);
+        ), true);
         
         return $accessLog;
     }
@@ -684,8 +689,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function userAccountChanged()
     {
-        return (is_object(Tinebase_Core::getSession()) && isset(Tinebase_Core::getSession()->userAccountChanged)) 
-                ? Tinebase_Core::getSession()->userAccountChanged
+        return (is_object(Tinebase_Session::getSessionNamespace()) && isset(Tinebase_Session::getSessionNamespace()->userAccountChanged)) 
+                ? Tinebase_Session::getSessionNamespace()->userAccountChanged
                 : false;
     }
 }

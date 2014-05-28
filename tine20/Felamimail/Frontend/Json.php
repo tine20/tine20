@@ -31,7 +31,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchFolders($filter)
     {
         // close session to allow other requests
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         
         $result = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
         
@@ -108,7 +108,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function emptyFolder($folderId)
     {
         // close session to allow other requests
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         
         $result = Felamimail_Controller_Folder::getInstance()->emptyFolder($folderId, TRUE);
         return $this->_recordToJson($result);
@@ -136,7 +136,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getFolderStatus($filterData)
     {
         // close session to allow other requests
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         
         $filter = new Felamimail_Model_FolderFilter($filterData);
         $result = Felamimail_Controller_Cache_Message::getInstance()->getFolderStatus($filter);
@@ -170,7 +170,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function updateMessageCache($folderId, $time)
     {
         // close session to allow other requests
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         
         $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folderId, $time);
         
@@ -186,7 +186,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getMessage($id)
     {
         // close session to allow other requests
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         
         if (strpos($id, '_') !== false) {
             list($messageId, $partId) = explode('_', $id);
@@ -211,7 +211,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function moveMessages($filterData, $targetFolderId)
     {
         // close session to allow other requests
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         
         $filter = new Felamimail_Model_MessageFilter(array());
         $filter->setFromArrayInUsersTimezone($filterData);
@@ -271,7 +271,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function addFlags($filterData, $flags)
     {
         // close session to allow other requests
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         
         // as long as we get array of ids or filter data from the client, we need to do this legacy handling (1 dimensional -> ids / 2 dimensional -> filter data)
         if (! empty($filterData) && is_array($filterData[0])) {
@@ -376,7 +376,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function updateFlags($folderId, $time)
     {
         // close session to allow other requests
-        Zend_Session::writeClose(true);
+        Tinebase_Session::writeClose(true);
         
         $folder = Felamimail_Controller_Cache_Message::getInstance()->updateFlags($folderId, $time);
         
