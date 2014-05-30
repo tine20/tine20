@@ -9,11 +9,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Calendar_Backend_Sql
  * 
  * @package     Calendar
