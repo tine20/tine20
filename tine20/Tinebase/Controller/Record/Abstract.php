@@ -375,6 +375,18 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * disable this to do not check any rights
+     *
+     * @param  boolean optional
+     * @return boolean
+     */
+     public function doRightChecks()
+     {
+         $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+         return $this->_setBooleanMemberVar('_doRightChecks', $value);
+     }
+
+    /**
      * get by id
      *
      * @param string $_id
