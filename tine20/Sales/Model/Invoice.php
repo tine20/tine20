@@ -201,27 +201,27 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
-        array('relatedApp' => 'IPAccounting', 'relatedModel' => 'IPNet', 'config' => array(
+        array('relatedApp' => 'WebAccounting', 'relatedModel' => 'IPNet', 'config' => array(
             array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
-        array('relatedApp' => 'IPAccounting', 'relatedModel' => 'StoragePath', 'config' => array(
+        array('relatedApp' => 'WebAccounting', 'relatedModel' => 'StoragePath', 'config' => array(
             array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
-        array('relatedApp' => 'IPAccounting', 'relatedModel' => 'BackupPath', 'config' => array(
+        array('relatedApp' => 'WebAccounting', 'relatedModel' => 'BackupPath', 'config' => array(
             array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
-        array('relatedApp' => 'IPAccounting', 'relatedModel' => 'CertificateDomain', 'config' => array(
+        array('relatedApp' => 'WebAccounting', 'relatedModel' => 'CertificateDomain', 'config' => array(
             array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
-        array('relatedApp' => 'IPAccounting', 'relatedModel' => 'DReg', 'config' => array(
+        array('relatedApp' => 'WebAccounting', 'relatedModel' => 'DReg', 'config' => array(
             array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),
-        array('relatedApp' => 'IPAccounting', 'relatedModel' => 'MailAccount', 'config' => array(
+        array('relatedApp' => 'WebAccounting', 'relatedModel' => 'MailAccount', 'config' => array(
             array('type' => 'INVOICE_ITEM', 'degree' => 'sibling', 'text' => 'Invoice Item', 'max' => '0:0'), // _('Invoice Item')
             ), 'defaultType' => 'INVOICE_ITEM'
         ),

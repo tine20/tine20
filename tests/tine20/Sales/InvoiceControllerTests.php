@@ -291,10 +291,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $result = $invoiceController->createAutoInvoices($date);
         $this->assertEquals(1, count($result['created']));
         
-        $ta = $result['created']->getFirstRecord();
+        $invoiceId = $result['created'][0];
+        $invoice = $invoiceController->get($invoiceId);
         $found = FALSE;
         
-        foreach($ta->relations as $relation) {
+        foreach($invoice->relations as $relation) {
             if ($relation->related_model == 'Timetracker_Model_Timeaccount') {
                 $this->assertEquals('TA-for-Customer1',     $relation->related_record->title);
                 $found = TRUE;

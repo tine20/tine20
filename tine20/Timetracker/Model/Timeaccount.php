@@ -304,6 +304,10 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), true));
         
+        if (! $this->is_open || $this->status == 'billed' || $this->cleared_at || $this->invoice_id) {
+            return FALSE;
+        }
+        
         if (intval($this->budget) > 0) {
              if ($this->status == 'to bill' && $this->invoice_id == NULL) {
                 // if there is a budget, this timeaccount should be billed and there is no invoice linked, bill it
@@ -312,6 +316,11 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
                  return FALSE;
              }
         } else {
+            
+            if (! $this->is_billable) {
+                return FALSE;
+            }
+            
             $pagination = new Tinebase_Model_Pagination(array('limit' => 1));
             $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($this->_getBillableTimesheetsFilter($date, $contract), $pagination, FALSE, /* $_onlyIds = */ TRUE);
         
@@ -331,16 +340,20 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
      */
     public function conjunctInvoiceWithBillables($invoice)
     {
+        $tsController = Timetracker_Controller_Timesheet::getInstance();
+        $this->_disableTimesheetChecks($tsController);
+        
         if (intval($this->budget) > 0) {
             // set this ta billed
             $this->invoice_id = $invoice->getId();
-            Timetracker_Controller_Timeaccount::getInstance()->update($this);
+            Timetracker_Controller_Timeaccount::getInstance()->update($this, FALSE);
             
             // set all ts of this ta billed
             $filter = new Timetracker_Model_TimesheetFilter(array());
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())));
             
-            Timetracker_Controller_Timesheet::getInstance()->updateMultiple($filter, array('invoice_id' => $invoice->getId()));
+            
+            $tsController->updateMultiple($filter, array('invoice_id' => $invoice->getId()));
         } else {
             $ids = $this->_getIdsOfBillables();
             
@@ -348,9 +361,37 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
                 $filter = new Timetracker_Model_TimesheetFilter(array());
                 $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $ids)));
                 
-                Timetracker_Controller_Timesheet::getInstance()->updateMultiple($filter, array('invoice_id' => $invoice->getId()));
+                $tsController->updateMultiple($filter, array('invoice_id' => $invoice->getId()));
             }
         }
+        
+        $this->_enableTimesheetChecks($tsController);
+    }
+    
+    /**
+     * disable ts checks
+     * 
+     * @param Timetracker_Controller_Timesheet $tsController
+     */
+    protected function _disableTimesheetChecks($tsController)
+    {
+        $tsController->doCheckDeadLine(false);
+        $tsController->doContainerACLChecks(false);
+        $tsController->doRightChecks(false);
+        $tsController->doRelationUpdate(false);
+    }
+    
+    /**
+     * enable ts checks
+     * 
+     * @param Timetracker_Controller_Timesheet $tsController
+     */
+    protected function _enableTimesheetChecks($tsController)
+    {
+        $tsController->doCheckDeadLine(true);
+        $tsController->doContainerACLChecks(true);
+        $tsController->doRightChecks(true);
+        $tsController->doRelationUpdate(true);
     }
     
     /**
@@ -370,6 +411,14 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
      */
     public function clearBillables(Sales_Model_Invoice $invoice)
     {
+        $tsController = Timetracker_Controller_Timesheet::getInstance();
+        $this->_disableTimesheetChecks($tsController);
+        
+        $filter = new Timetracker_Model_TimesheetFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'is_cleared', 'operator' => 'equals', 'value' => 0)));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId())));
+        
         // if this timeaccount has a budget, close and bill this and set cleared at date
         if (intval($this->budget) > 0) {
             $this->is_open    = 0;
@@ -377,18 +426,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
             $this->cleared_at = Tinebase_DateTime::now();
             
             Timetracker_Controller_Timeaccount::getInstance()->update($this);
-            
+            // also clear all timesheets belonging to this invoice and timeaccount
+            $tsController->updateMultiple($filter, array('is_cleared' => 1));
         } else {
             // otherwise clear all timesheets of this invoice
-            $tsController = Timetracker_Controller_Timesheet::getInstance();
-            
-            $filter = new Timetracker_Model_TimesheetFilter(array(), 'AND');
-            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'is_cleared', 'operator' => 'equals', 'value' => 0)));
-            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())));
-            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId())));
-            
             $tsController->updateMultiple($filter, array('is_cleared' => 1));
         }
+        
+        $this->_enableTimesheetChecks($tsController);
     }
-    
 }

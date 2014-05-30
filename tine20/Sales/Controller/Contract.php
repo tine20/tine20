@@ -44,6 +44,12 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
     }    
     
     /**
+     * 
+     * @var boolean
+     */
+    protected $_handleDependentRecords = TRUE;
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Sales_Controller_Contract
@@ -210,7 +216,7 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
             $contract->last_autobill->addMonth($contract->interval);
         }
         
-        return $this->update($contract);
+        return $this->update($contract, FALSE);
     }
     
     /**
@@ -245,6 +251,16 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
         
         return $nextBill;
     }
+    
+    /**
+     * if dependent records should not be handled, set this to false
+     * @param unknown $toggle
+     */
+    public function setHandleDependentRecords($toggle)
+    {
+        $this->_handleDependentRecords = $toggle;
+    }
+    
     /**
      * inspect creation of one record (after create)
      *
@@ -254,9 +270,11 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        $config = $_record::getConfiguration()->recordsFields;
-        foreach (array_keys($config) as $property) {
-            $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
+        if ($this->_handleDependentRecords) {
+            $config = $_record::getConfiguration()->recordsFields;
+            foreach (array_keys($config) as $property) {
+                $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
+            }
         }
     }
     
@@ -269,9 +287,11 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        $config = $_record::getConfiguration()->recordsFields;
-        foreach (array_keys($config) as $p) {
-            $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
+        if ($this->_handleDependentRecords) {
+            $config = $_record::getConfiguration()->recordsFields;
+            foreach (array_keys($config) as $p) {
+                $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
+            }
         }
     }
 }

@@ -221,7 +221,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
              $this->last_autobill->addMonth($this->interval);
          }
          
-         Sales_Controller_ProductAggregate::getInstance()->update($this);
+         Sales_Controller_ProductAggregate::getInstance()->update($this, FALSE);
      }
      
      /**
