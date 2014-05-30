@@ -18,6 +18,23 @@
 class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * should deadline be checked
+     * 
+     * @var boolean
+     */
+    protected $_doCheckDeadline = TRUE;
+    
+    /**
+     * check deadline or not
+     * 
+     * @return boolean
+     */
+    public function doCheckDeadLine()
+    {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_doCheckDeadline', $value);
+    }
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -142,6 +159,10 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      */
     protected function _checkDeadline(Timetracker_Model_Timesheet $_record, $_throwException = TRUE)
     {
+        if (! $this->_doCheckDeadline) {
+            return;
+        }
+        
         // get timeaccount
         $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
         
