@@ -101,6 +101,11 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
         } else if ($result === FALSE) {
             $result = 1;
         }
+        
+        // finish profiling here - we won't run in Tinebase_Core again
+        Tinebase_Core::finishProfiling();
+        Tinebase_Core::getDbProfiling();
+        
         exit($result);
     }
     
