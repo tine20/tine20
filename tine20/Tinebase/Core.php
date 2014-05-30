@@ -296,7 +296,7 @@ class Tinebase_Core
      */
     public static function finishProfiling()
     {
-    if (! self::getConfig() || ! self::getConfig()->profiler) {
+        if (! self::getConfig() || ! self::getConfig()->profiler) {
             return;
         }
         
