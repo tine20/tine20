@@ -622,68 +622,76 @@ msgstr ""
 msgid "INVOICE"
 msgstr ""
 
-#: Acl/Rights.php:151
+#: Acl/Rights.php:159
 msgid "manage products"
 msgstr ""
 
-#: Acl/Rights.php:152
+#: Acl/Rights.php:160
 msgid "add, edit and delete products"
 msgstr ""
 
-#: Acl/Rights.php:155
+#: Acl/Rights.php:163
 msgid "manage contracts"
 msgstr ""
 
-#: Acl/Rights.php:156
+#: Acl/Rights.php:164
 msgid "add, edit and delete contracts"
 msgstr ""
 
-#: Acl/Rights.php:159
+#: Acl/Rights.php:167
 msgid "manage cost centers"
 msgstr ""
 
-#: Acl/Rights.php:160
+#: Acl/Rights.php:168
 msgid "add, edit and delete cost centers"
 msgstr ""
 
-#: Acl/Rights.php:163
+#: Acl/Rights.php:171
 msgid "manage customers"
 msgstr ""
 
-#: Acl/Rights.php:164
+#: Acl/Rights.php:172
 msgid "add, edit and delete customers"
 msgstr ""
 
-#: Acl/Rights.php:167
+#: Acl/Rights.php:175
 msgid "manage invoices"
 msgstr ""
 
-#: Acl/Rights.php:168
+#: Acl/Rights.php:176
 msgid "add, edit and delete invoices"
 msgstr ""
 
-#: Acl/Rights.php:171
+#: Acl/Rights.php:179
 msgid "manage divisions"
 msgstr ""
 
-#: Acl/Rights.php:172
+#: Acl/Rights.php:180
 msgid "add, edit and delete divisions"
 msgstr ""
 
-#: Acl/Rights.php:175
+#: Acl/Rights.php:183
 msgid "manage order confirmations"
 msgstr ""
 
-#: Acl/Rights.php:176
+#: Acl/Rights.php:184
 msgid "add, edit and delete order confirmations"
 msgstr ""
 
-#: Acl/Rights.php:179
+#: Acl/Rights.php:187
 msgid "change number of an order confirmations"
 msgstr ""
 
-#: Acl/Rights.php:180
+#: Acl/Rights.php:188
 msgid "allow to change the number of an order confirmation on update"
+msgstr ""
+
+#: Acl/Rights.php:191
+msgid "set number of invoices"
+msgstr ""
+
+#: Acl/Rights.php:192
+msgid "allow to set the number of an invoice"
 msgstr ""
 
 #: Config.php:58

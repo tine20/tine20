@@ -304,7 +304,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             name: 'number',
                             fieldLabel: this.app.i18n._('Invoice Number'),
                             columnWidth: 1/3,
-                            readOnly: true,
+                            readOnly: ! Tine.Tinebase.common.hasRight('set_invoice_number', 'Sales'),
                             emptyText: this.app.i18n._('automatically set...')
                         }, {
                             xtype: 'datefield',

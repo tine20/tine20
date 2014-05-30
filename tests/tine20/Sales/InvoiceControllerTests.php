@@ -14,6 +14,8 @@
  */
 class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
 {
+    protected $_testUser = NULL;
+    
     /**
      * Runs the test methods of this class.
      *
@@ -25,7 +27,22 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Invoice Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
-
+    
+    /**
+     * (non-PHPdoc)
+     * @see TestCase::tearDown()
+     */
+    protected function tearDown()
+    {
+        // switch back to admin user
+        if ($this->_testUser) {
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+        }
+        
+        parent::tearDown();
+        
+    }
+    
     /**
      * tests auto invoice creation
      */
@@ -303,5 +320,89 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         }
 
         $this->assertTrue($found, 'the timeaccount could not be found in the invoice!');
+    }
+    
+
+    /**
+     * tests if the rights work: Sales_Acl_Rights::SET_INVOICE_NUMBER, Sales_Acl_Rights::MANAGE_INVOICES
+     */
+    public function testSetManualNumberRight()
+    {
+        $invoiceController = Sales_Controller_Invoice::getInstance();
+        $customer = $this->_customerRecords->filter('name', 'Customer1')->getFirstRecord();
+        $invoice = $invoiceController->create(new Sales_Model_Invoice(array(
+            'number' => 'R-3000',
+            'customer_id' => $customer->getId(),
+            'description' => 'Manual',
+            'address_id' => $this->_addressRecords->filter('customer_id', $customer->getId())->getFirstRecord()->getId(),
+            'costcenter_id' => $this->_costcenterRecords->getFirstRecord()->getId()
+        )));
+        
+        // fetch user group
+        $group   = Tinebase_Group::getInstance()->getGroupByName('Users');
+        $groupId = $group->getId();
+        
+        // create new user
+        $user = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'testuser',
+            'accountPrimaryGroup'   => $groupId,
+            'accountDisplayName'    => 'Test User',
+            'accountLastName'       => 'User',
+            'accountFirstName'      => 'Test',
+            'accountFullName'       => 'Test User',
+            'accountEmailAddress'   => 'unittestx8@tine20.org',
+        ));
+        
+        $user = Admin_Controller_User::getInstance()->create($user, 'pw', 'pw');
+        $this->_testUser = Tinebase_Core::getUser();
+
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+        
+        $e = new Exception('No Message');
+        
+        try {
+            $invoice = $invoiceController->create(new Sales_Model_Invoice(array(
+                'number' => 'R-3001',
+                'customer_id' => $customer->getId(),
+                'description' => 'Manual Forbidden',
+                'address_id' => $this->_addressRecords->filter('customer_id', $customer->getId())->getFirstRecord()->getId(),
+                'costcenter_id' => $this->_costcenterRecords->getFirstRecord()->getId()
+            )));
+        } catch (Exception $e) {
+        }
+        
+        $this->assertTrue(get_class($e) == 'Tinebase_Exception_AccessDenied');
+        $this->assertTrue($e->getMessage() == 'You don\'t have the right to manage invoices!');
+        
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+        
+        $fe = new Admin_Frontend_Json();
+        $userRoles = $fe->getRoles('user', array(), array(), 0, 1);
+        $userRole = $fe->getRole($userRoles['results'][0]['id']);
+        
+        $roleRights = $fe->getRoleRights($userRole['id']);
+        $roleMembers = $fe->getRoleMembers($userRole['id']);
+        $roleMembers['results'][] = array('name' => 'testuser', 'type' => 'user', 'id' => $user->accountId);
+        
+        $app = Tinebase_Application::getInstance()->getApplicationByName('Sales');
+        
+        $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Sales_Acl_Rights::MANAGE_INVOICES);
+        $fe->saveRole($userRole, $roleMembers['results'], $roleRights['results']);
+        
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+        
+        try {
+            $invoice = $invoiceController->create(new Sales_Model_Invoice(array(
+                'number' => 'R-3001',
+                'customer_id' => $customer->getId(),
+                'description' => 'Manual Forbidden',
+                'address_id' => $this->_addressRecords->filter('customer_id', $customer->getId())->getFirstRecord()->getId(),
+                'costcenter_id' => $this->_costcenterRecords->getFirstRecord()->getId()
+            )));
+        } catch (Exception $e) {
+        }
+        
+        $this->assertTrue(get_class($e) == 'Tinebase_Exception_AccessDenied');
+        $this->assertTrue($e->getMessage() == 'You have no right to set the invoice number!');
     }
 }

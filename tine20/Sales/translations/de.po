@@ -655,3 +655,9 @@ msgstr "Einheit"
 
 msgid "Piece"
 msgstr "Stück"
+
+msgid "set number of invoices"
+msgstr "Rechnungsnummer manuell vergeben"
+
+msgid "allow to set the number of an invoice"
+msgstr "Erlaubt, die Rechnungsnummer manuell zu vergeben"

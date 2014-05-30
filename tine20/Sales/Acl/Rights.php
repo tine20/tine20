@@ -68,6 +68,13 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const CHANGE_OC_NUMBER = 'change_oc_number';
     
     /**
+     * the right to change or set the number of invoices
+     *
+     * @staticvar string
+     */
+    const SET_INVOICE_NUMBER = 'set_invoice_number';
+    
+    /**
      * the right to manage divisions
      *
      * @staticvar string
@@ -129,7 +136,8 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_INVOICES,
             self::MANAGE_DIVISIONS,
             self::MANAGE_ORDERCONFIRMATIONS,
-            self::CHANGE_OC_NUMBER
+            self::CHANGE_OC_NUMBER,
+            self::SET_INVOICE_NUMBER
         );
         
         $allRights = array_merge($allRights, $addRights);
@@ -179,11 +187,13 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('change number of an order confirmations'),
                 'description'   => $translate->_('allow to change the number of an order confirmation on update'),
             ),
+            self::SET_INVOICE_NUMBER => array(
+                'text'          => $translate->_('set number of invoices'),
+                'description'   => $translate->_('allow to set the number of an invoice'),
+            ),
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
         return $rightDescriptions;
     }
-
-    
 }
