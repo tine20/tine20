@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -271,6 +271,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const ALARMS_EACH_JOB = 'alarmsEachJob';
+    
+    /**
+     * ACCOUNT_DEACTIVATION_NOTIFICATION
+     *
+     * @var string
+     */
+    const ACCOUNT_DEACTIVATION_NOTIFICATION = 'accountDeactivationNotification';
     
     /**
      * (non-PHPdoc)
@@ -609,6 +616,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)')
             'description'           => 'Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)',
             'type'                  => 'integer',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::ACCOUNT_DEACTIVATION_NOTIFICATION => array(
+            //_('Account deactivation notfication')
+            'label'                 => 'Account deactivation notfication',
+            //_('Send E-Mail to user if the account is deactivated or the user tries to login with deactivated account')
+            'description'           => 'Send E-Mail to User if the account is deactivated or the user tries to login with deactivated account',
+            'type'                  => 'bool',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,

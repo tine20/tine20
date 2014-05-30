@@ -1006,4 +1006,45 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         return $result;
     }
+
+    /**
+     * send deactivation email to user
+     * 
+     * @param mixed $accountId
+     */
+    public function sendDeactivationNotification($accountId)
+    {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DEACTIVATION_NOTIFICATION)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Deactivation notification disabled.');
+            return;
+        }
+        
+        try {
+            $user = $this->getFullUserById($accountId);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Send deactivation notification to user ' . $user->accountLoginName);
+            
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            
+            $view = new Zend_View();
+            $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
+            
+            $view->translate            = $translate;
+            $view->accountLoginName     = $user->accountLoginName;
+            // TODO add this?
+            //$view->deactivationDate     = $user->deactivationDate;
+            $view->tine20Url            = Tinebase_Core::getHostname();
+            
+            $messageBody = $view->render('deactivationNotification.php');
+            $messageSubject = $translate->_('Your Tine 2.0 account has been deactivated');
+            
+            $recipient = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), /* $_ignoreACL = */ true);
+            Tinebase_Notification::getInstance()->send(/* sender = */ null, array($recipient), $messageSubject, $messageBody);
+            
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
+    }
 }

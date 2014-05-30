@@ -102,6 +102,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             
             $result = true;
         } else {
+            if ($user !== NULL && $user->accountStatus === Tinebase_User::STATUS_DISABLED) {
+                // TODO send this for blocked/expired, too? allow to configure this?
+                Tinebase_User::getInstance()->sendDeactivationNotification($user);
+            }
+            
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
                 __METHOD__ . '::' . __LINE__ . " Login with username $_loginname from $_ipAddress failed ($authResultCode)!");
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(

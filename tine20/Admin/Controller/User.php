@@ -134,6 +134,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $result = $this->_userBackend->setStatus($_accountId, $_status);
         
+        if ($_status === Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {
+            // TODO send this for blocked/expired, too? allow to configure this?
+            Tinebase_User::getInstance()->sendDeactivationNotification($_accountId);
+        }
+        
         return $result;
     }
     
