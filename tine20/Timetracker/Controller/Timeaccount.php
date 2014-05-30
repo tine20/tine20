@@ -31,6 +31,8 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
         $this->_resolveCustomFields = TRUE;
     }
     
+    protected $_doGrantChecks = TRUE;
+    
     /**
      * don't clone. Use the singleton.
      *
@@ -142,11 +144,13 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      * - save timeaccount grants
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
+     * 
      * @return  Tinebase_Record_Interface
      */
-    public function update(Tinebase_Record_Interface $_record)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
     {
-        $timeaccount = parent::update($_record);
+        $timeaccount = parent::update($_record, $_duplicateCheck);
 
         // save grants
         if (count($_record->grants) > 0) {
@@ -180,6 +184,10 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      */
     protected function _checkRight($_action)
     {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+        
         $hasRight = $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
         
         switch ($_action) {
@@ -198,6 +206,12 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
         return;
     }
     
+    public function doGrantChecks()
+    {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_doGrantChecks', $value);
+    }
+    
     /**
      * check grant for action (CRUD)
      *
@@ -211,7 +225,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
-        if ($_action == 'create') {
+        if ($_action == 'create' || $this->_doGrantChecks == FALSE) {
             // no check here because the MANAGE_TIMEACCOUNTS right has been already checked before
             return TRUE;
         }
