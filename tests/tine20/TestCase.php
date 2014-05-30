@@ -54,14 +54,28 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_personas = array();
-
+    
     /**
      * unit in test
      *
      * @var Object
      */
     protected $_uit = null;
-
+    
+    /**
+     * the test user
+     *
+     * @var Tinebase_Model_FullUser
+     */
+    protected $_originalTestUser;
+    
+    /**
+     * the mailer
+     * 
+     * @var Zend_Mail_Transport_Array
+     */
+    protected static $_mailer = null;
+    
     /**
      * set up tests
      */
@@ -72,6 +86,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
         
         $this->_personas = Zend_Registry::get('personas');
+        
+        $this->_originalTestUser = Tinebase_Core::getUser();
     }
     
     /**
@@ -88,6 +104,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
+        
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
     }
     
     /**
@@ -173,5 +191,70 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         $testconfig = Zend_Registry::get('testConfig');
         return ($testconfig && isset($testconfig->maildomain)) ? $testconfig->maildomain : 'tine20.org';
+    }
+
+    /**
+     * lazy init of uit
+     * 
+     * @return Object
+     * 
+     * @todo fix ide object class detection for completions
+     */
+    protected function _getUit()
+    {
+        if ($this->_uit === null) {
+            $uitClass = preg_replace('/Tests{0,1}$/', '', get_class($this));
+            if (@method_exists($uitClass, 'getInstance')) {
+                $this->_uit = call_user_func($uitClass . '::getInstance');
+            } else if (@class_exists($uitClass)) {
+                $this->_uit = new $uitClass();
+            } else {
+                throw new Exception('could not find class ' . $uitClass);
+            }
+        }
+        
+        return $this->_uit;
+    }
+    
+    /**
+     * get messages
+     * 
+     * @return array
+     */
+    public static function getMessages()
+    {
+        // make sure messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(100);
+        }
+        
+        return self::getMailer()->getMessages();
+    }
+    
+    /**
+     * get mailer
+     * 
+     * @return Zend_Mail_Transport_Abstract
+     */
+    public static function getMailer()
+    {
+        if (! self::$_mailer) {
+            self::$_mailer = Tinebase_Smtp::getDefaultTransport();
+        }
+        
+        return self::$_mailer;
+    }
+    
+    /**
+     * flush mailer (send all remaining mails first)
+     */
+    public static function flushMailer()
+    {
+        // make sure all messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
+        }
+        
+        self::getMailer()->flush();
     }
 }

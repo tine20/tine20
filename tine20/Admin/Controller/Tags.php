@@ -101,7 +101,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      */
     public function get($_tagId)
     {
-        $fullTag = parent::get($_tagId);
+        $fullTag = Tinebase_Tags::getInstance()->getFullTagById($_tagId, /* ignoreAcl = */ true);
         
         $fullTag->rights =  Tinebase_Tags::getInstance()->getRights($_tagId);
         $fullTag->contexts = Tinebase_Tags::getInstance()->getContexts($_tagId);

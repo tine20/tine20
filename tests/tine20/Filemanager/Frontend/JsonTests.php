@@ -4,22 +4,17 @@
  * 
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Filemanager_Frontend_Json
  * 
  * @package     Filemanager
  */
-class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
+class Filemanager_Frontend_JsonTests extends TestCase
 {
     /**
      * @var array test objects
@@ -69,13 +64,6 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     protected $_otherUserContainer;
     
     /**
-     * the test user
-     * 
-     * @var Tinebase_Model_FullUser
-     */
-    protected $_originalTestUser;
-    
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -83,12 +71,11 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_json = new Filemanager_Frontend_Json();
         $this->_fsController = Tinebase_FileSystem::getInstance();
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
-        $this->_originalTestUser = Tinebase_Core::getUser();
     }
     
     /**
@@ -99,9 +86,8 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        parent::tearDown();
         
-        Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         
@@ -145,7 +131,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalContainer()->name
+            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name
         ));
         $this->_searchHelper($filter, 'unittestdir_personal');
     }
@@ -229,7 +215,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
             'operator' => 'equals', 
             'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
         ));
-        $this->_searchHelper($filter, $this->_getPersonalContainer()->name, TRUE);
+        $this->_searchHelper($filter, $this->_getPersonalFilemanagerContainer()->name, TRUE);
         
         $another = $this->testCreateContainerNodeInPersonalFolder();
         $this->_searchHelper($filter, $another['name']['name'], TRUE);
@@ -981,15 +967,15 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
     public function testSetContainerInPathRecord()
     {
         $flatpath = Filemanager_Controller_Node::getInstance()->addBasePath(
-            '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalContainer()->name);
+            '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name);
         $path = Tinebase_Model_Tree_Node_Path::createFromPath($flatpath);
         $path->setContainer($this->_getSharedContainer());
         $this->assertEquals('/' . $this->_application->getId() . '/folders/shared/' . $this->_getSharedContainer()->getId(), $path->statpath);
         
         // move it back
-        $path->setContainer($this->_getPersonalContainer());
+        $path->setContainer($this->_getPersonalFilemanagerContainer());
         $this->assertEquals('/' . $this->_application->getId() . '/folders/personal/' 
-            . Tinebase_Core::getUser()->getId() . '/' . $this->_getPersonalContainer()->getId(), $path->statpath, 'wrong statpath: ' . print_r($path->toArray(), TRUE));
+            . Tinebase_Core::getUser()->getId() . '/' . $this->_getPersonalFilemanagerContainer()->getId(), $path->statpath, 'wrong statpath: ' . print_r($path->toArray(), TRUE));
     }
 
     /**
@@ -1180,10 +1166,10 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
      * 
      * @return Tinebase_Model_Container
      */
-    protected function _getPersonalContainer()
+    protected function _getPersonalFilemanagerContainer()
     {
         if (!$this->_personalContainer) {
-            $this->_personalContainer = Tinebase_Container::getInstance()->getDefaultContainer('Filemanager');
+            $this->_personalContainer = $this->_getPersonalContainer('Filemanager');
         }
         
         return $this->_personalContainer;
@@ -1230,7 +1216,7 @@ class Filemanager_Frontend_JsonTests extends PHPUnit_Framework_TestCase
             switch ($type) {
                 case Tinebase_Model_Container::TYPE_PERSONAL:
                     $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->getId() . '/' 
-                        . $this->_getPersonalContainer()->getId() . '/unittestdir_personal';
+                        . $this->_getPersonalFilemanagerContainer()->getId() . '/unittestdir_personal';
                     break;
                 case Tinebase_Model_Container::TYPE_SHARED:
                     $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_getSharedContainer()->getId();

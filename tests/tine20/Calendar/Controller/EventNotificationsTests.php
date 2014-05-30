@@ -25,11 +25,6 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     protected $_notificationController;
     
-    /**
-     * @var Zend_Mail_Transport_Array
-     */
-    protected static $_mailer = NULL;
-    
    /**
     * email test class
     *
@@ -1026,48 +1021,6 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         }
         
         return $result;
-    }
-    
-    /**
-     * get messages
-     * 
-     * @return array
-     */
-    public static function getMessages()
-    {
-        // make sure messages are sent if queue is activated
-        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue(100);
-        }
-        
-        return self::getMailer()->getMessages();
-    }
-    
-    /**
-     * get mailer
-     * 
-     * @return Zend_Mail_Transport_Abstract
-     */
-    public static function getMailer()
-    {
-        if (! self::$_mailer) {
-            self::$_mailer = Tinebase_Smtp::getDefaultTransport();
-        }
-        
-        return self::$_mailer;
-    }
-    
-    /**
-     * flush mailer (send all remaining mails first)
-     */
-    public static function flushMailer()
-    {
-        // make sure all messages are sent if queue is activated
-        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue(10000);
-        }
-        
-        self::getMailer()->flush();
     }
     
     /**

@@ -281,11 +281,18 @@ class Tinebase_Core
         if (! self::getConfig() || ! self::getConfig()->profiler) {
             return;
         }
-
-        if (self::getConfig()->profiler->xhprof) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Enabling xhprof');
-            
-            xhprof_enable(XHPROF_FLAGS_MEMORY);
+        
+        $config = self::getConfig()->profiler;
+        
+        if ($config && $config->xhprof) {
+            $XHPROF_ROOT = $config->path ? $config->path : '/usr/share/php5-xhprof';
+            if (file_exists($XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php")) {
+                define('XHPROF_LIB_ROOT', $XHPROF_ROOT . '/xhprof_lib');
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Enabling xhprof');
+                xhprof_enable(XHPROF_FLAGS_MEMORY);
+            } else {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Could not find xhprof lib root');
+            }
         } 
     }
 
@@ -295,7 +302,7 @@ class Tinebase_Core
      */
     public static function finishProfiling()
     {
-    if (! self::getConfig() || ! self::getConfig()->profiler) {
+        if (! self::getConfig() || ! self::getConfig()->profiler) {
             return;
         }
         
@@ -315,14 +322,13 @@ class Tinebase_Core
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saving xhprof profiling run for method ' . $method);
             
-            $XHPROF_ROOT = '/usr/share/php5-xhprof';
-            if (file_exists($XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php")) {
-                include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
-                include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
+            if (! defined('XHPROF_LIB_ROOT')) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  ' . print_r($xhprof_data, TRUE));
+            } else {
+                include_once XHPROF_LIB_ROOT . "/utils/xhprof_lib.php";
+                include_once XHPROF_LIB_ROOT . "/utils/xhprof_runs.php";
                 $xhprof_runs = new XHProfRuns_Default();
                 $run_id = $xhprof_runs->save_run($xhprof_data, "tine");
-            } else {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  ' . print_r($xhprof_data, TRUE));
             }
         }
     }

@@ -153,4 +153,32 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
             $this->assertNotEquals($transactionId, $column['Column1'], 'RollBack failed, data was inserted anyway');
         }
     }
+    
+    /**
+     * tests if nested transactions will be rolled back, if the outer fails
+     */
+    public function testNestedTransactions()
+    {
+        $c1 = Sales_Controller_Contract::getInstance();
+        $c2 = Sales_Controller_CostCenter::getInstance();
+        $tm = Tinebase_TransactionManager::getInstance();
+        
+        $tm->startTransaction(Tinebase_Core::getDb());
+
+        try {
+            // create cost center
+            $costCenter = $c2->create(new Sales_Model_CostCenter(array('number' => 123, 'remark' => 'unittest123')));
+            
+            // exception should be thrown (title needed)
+            $c1->create(new Sales_Model_Contract(array()));
+            
+        } catch (Exception $e) {
+            $tm->rollBack();
+        }
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        
+        // try to get the created cost center
+        $c2->get($costCenter->getId());
+    }
 }

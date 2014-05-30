@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  *
  * @todo        this should implement Tinebase_Backend_Sql_Interface or use standard sql backend + refactor this
@@ -171,19 +171,31 @@ class Tinebase_Tags
      */
     public function get($_id, $_getDeleted = FALSE)
     {
-        $tagId = ($_id instanceof Tinebase_Model_Tag) ? $_id->getId() : $_id;
-
-        $tag = Tinebase_Tags::getInstance()->getTagsById($tagId);
-
-        if (count($tag) == 0) {
-            throw new Tinebase_Exception_NotFound("Tag $_id not found or insufficient rights.");
-        }
-
-        $fullTag = new Tinebase_Model_FullTag($tag[0]->toArray(), true);
-
+        $fullTag = $this->getFullTagById($_id);
         return $fullTag;
     }
-
+    
+    /**
+     * get full tag by id
+     * 
+     * @param string|Tinebase_Model_Tag $id
+     * @param string $ignoreAcl
+     * @throws Tinebase_Exception_NotFound
+     * @return Tinebase_Model_FullTag
+     */
+    public function getFullTagById($id, $ignoreAcl = false)
+    {
+        $tagId = ($id instanceof Tinebase_Model_Tag) ? $id->getId() : $id;
+        
+        $tags = Tinebase_Tags::getInstance()->getTagsById($tagId, Tinebase_Model_TagRight::VIEW_RIGHT, $ignoreAcl);
+        
+        if (count($tags) == 0) {
+            throw new Tinebase_Exception_NotFound("Tag $id not found or insufficient rights.");
+        }
+        
+        return new Tinebase_Model_FullTag($tags[0]->toArray(), true);
+    }
+    
     /**
      * Returns (bare) tags identified by its id(s)
      *
