@@ -42,22 +42,17 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
     
     public function testCreateResource()
     {
-        $resource = new Calendar_Model_Resource(array(
-            'name'                 => 'Meeting Room',
-            'description'          => 'Our main meeting room',
-            'email'                => 'room@example.com',
-            'is_location'          => TRUE,
-        ));
+        $resource = $this->_getResource();
         
-        $persitentResource = Calendar_Controller_Resource::getInstance()->create($resource);
-        $this->_toCleanup->addRecord($persitentResource);
+        $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
+        $this->_toCleanup->addRecord($persistentResource);
         
-        $this->assertEquals($resource->name, $persitentResource->name);
+        $this->assertEquals($resource->name, $persistentResource->name);
         
         return $resource;
     }
     
-    public function testRecouseConfict()
+    public function testResourceConfict()
     {
         $resource = $this->testCreateResource();
         

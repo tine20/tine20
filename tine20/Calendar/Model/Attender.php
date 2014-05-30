@@ -182,7 +182,19 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $resolvable = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($clone));
         self::resolveAttendee($resolvable);
         
-        return $clone->user_id;
+        if ($this->user_type === self::USERTYPE_RESOURCE) {
+            $resource = $clone->user_id;
+            // return pseudo contact with resource data
+            $result = new Addressbook_Model_Contact(array(
+                'n_family'  => $resource->name,
+                'email'     => $resource->email,
+                'id'        => $resource->getId(),
+            ));
+        } else {
+            $result = $clone->user_id;
+        }
+        
+        return $result;
     }
     
     public function getStatusString()

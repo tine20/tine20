@@ -183,25 +183,41 @@ abstract class Calendar_TestCase extends TestCase
     protected function _getAttendee()
     {
         return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            array(
-                'user_id'        => $this->_testUserContact->getId(),
-                'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
-                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
-                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
-            ),
-            array(
-                'user_id'        => $this->_personasContacts['sclever']->getId(),
-                'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
-                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
-                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
-            ),
-            /* no group suppoert yet
-            array(
-                'user_id'        => Tinebase_Core::getUser()->accountPrimaryGroup,
-                'user_type'      => Calendar_Model_Attender::USERTYPE_GROUP,
-                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
-            )
-            */
+            $this->_createAttender($this->_testUserContact->getId())->toArray(),
+            $this->_createAttender($this->_personasContacts['sclever']->getId())->toArray(),
+        ));
+    }
+    
+
+    /**
+     * create new attender
+     *
+     * @param string $userId
+     * @param string $type
+     * @return Calendar_Model_Attender
+     */
+    protected function _createAttender($userId, $type = Calendar_Model_Attender::USERTYPE_USER)
+    {
+        return new Calendar_Model_Attender(array(
+            'user_id'        => $userId,
+            'user_type'      => $type,
+            'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+            'status_authkey' => Tinebase_Record_Abstract::generateUID(),
+        ));
+    }
+    
+    /**
+     * get resource
+     * 
+     * @return Calendar_Model_Resource
+     */
+    protected function _getResource()
+    {
+        return new Calendar_Model_Resource(array(
+            'name'                 => 'Meeting Room',
+            'description'          => 'Our main meeting room',
+            'email'                => 'room@example.com',
+            'is_location'          => TRUE,
         ));
     }
     

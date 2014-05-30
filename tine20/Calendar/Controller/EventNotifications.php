@@ -133,17 +133,21 @@
     {
         // we only send notifications to attendee
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Event has no attendee");
             return;
         }
 
         if ($_event->dtend === NULL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($_event->toArray(), TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . " ". print_r($_event->toArray(), TRUE));
             throw new Tinebase_Exception_UnexpectedValue('no dtend set in event');
         }
         
-        // skip notifications to past events
         if (Tinebase_DateTime::now()->subHour(1)->isLater($_event->dtend)) {
             if ($_action == 'alarm' || ! ($_event->isRecurException() || $_event->rrule)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . " Skip notifications to past events");
                 return;
             }
         }
@@ -151,6 +155,11 @@
         // lets resolve attendee once as batch to fill cache
         $attendee = clone $_event->attendee;
         Calendar_Model_Attender::resolveAttendee($attendee);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . " " . print_r($_event->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Notification action: " . $_action);
         
         switch ($_action) {
             case 'alarm':
@@ -267,7 +276,8 @@
             // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
             // NOTE prefUser is organzier for external notifications
             if (($attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions) || ($sendLevel < $_notificationLevel && ($attendeeAccountId != $organizerAccountId || $sendLevel == self::NOTIFICATION_LEVEL_NONE))) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Preferred notification level not reached -> skipping notification for {$_attender->getEmail()}");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Preferred notification level not reached -> skipping notification for {$_attender->getEmail()}");
                 return;
             }
             
@@ -297,7 +307,7 @@
         
             Tinebase_Notification::getInstance()->send($sender, array($attendee), $messageSubject, $messageBody, $calendarPart, $attachments);
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " exception: " . $e);
+            Tinebase_Exception::log($e);
             return;
         }
     }

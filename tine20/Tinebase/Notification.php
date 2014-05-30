@@ -74,9 +74,9 @@ class Tinebase_Notification
         
         $exception = NULL;
         $sentContactIds = array();
-        foreach($_recipients as $recipient) {
+        foreach ($_recipients as $recipient) {
             try {
-                if (!$recipient instanceof Addressbook_Model_Contact) {
+                if (! $recipient instanceof Addressbook_Model_Contact) {
                     $recipient = $contactsBackend->get($recipient);
                 }
                 if (! in_array($recipient->getId(), $sentContactIds)) {
