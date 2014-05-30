@@ -68,7 +68,7 @@ class Tinebase_Notification
      * 
      * @todo improve exception handling: collect all messages / exceptions / failed email addresses / ...
      */
-    public function send(Tinebase_Model_FullUser $_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL)
+    public function send($_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL)
     {
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
