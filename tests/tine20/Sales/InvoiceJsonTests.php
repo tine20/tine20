@@ -242,4 +242,48 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $json->saveContract($contract);
     }
+    /**
+     * test constraints after changing relation
+     */
+    public function testTimeaccountRelation()
+    {
+        $sjson = new Sales_Frontend_Json();
+        $tjson = new Timetracker_Frontend_Json();
+        
+        $ta = $tjson->saveTimeaccount(array('number' => 43379, 'title' => 'bla'));
+        
+        $c1 = $sjson->saveContract(array('number' => '1', 'description' => 'blub bla', 'title' => 'blub'));
+        $c2 = $sjson->saveContract(array('number' => '2', 'description' => 'bla blub', 'title' => 'bla'));
+        
+        $c1['relations'] = array(array(
+            'related_model' => 'Timetracker_Model_Timeaccount',
+            'related_id'    => $ta['id'],
+            'own_degree'    => 'sibling',
+            'type'          => 'TIME_ACCOUNT',
+            'remark'        => 'unittest',
+            'related_backend' => 'Sql'
+        ));
+        
+        $c1 = $sjson->saveContract($c1);
+        $c1Id = $c1['id'];
+        
+        // delete timeaccount relation from the first contract
+        $c1 = $sjson->getContract($c1Id);
+        $c1['relations'] = array();
+        $c1 = $sjson->saveContract($c1);
+        
+        // save second contract having the timeaccount related
+        $c2['relations'] = array(array(
+            'related_model'   => 'Timetracker_Model_Timeaccount',
+            'related_id'      => $ta['id'],
+            'own_degree'      => 'sibling',
+            'type'            => 'TIME_ACCOUNT',
+            'remark'          => 'unittest',
+            'related_backend' => 'Sql'
+        ));
+        
+        $c2 = $sjson->saveContract($c2);
+        
+        $this->assertEquals(1, count($c2['relations']));
+    }
 }

@@ -13,12 +13,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Model/Timeaccount.php:43 Model/Timeaccount.php:47
-#: js/TimeaccountEditDialog.js:138
+#: Model/Timeaccount.php:43 js/TimeaccountEditDialog.js:138
 msgid "Cost Center"
 msgstr ""
 
-#: Model/Timeaccount.php:339
+#: Model/Timeaccount.php:47 js/TimeaccountEditDialog.js:153
+msgid "Responsible Person"
+msgstr ""
+
+#: Model/Timeaccount.php:404
 msgid "hour"
 msgstr ""
 
@@ -248,10 +251,6 @@ msgstr ""
 #: js/TimeaccountEditDialog.js:132 js/TimeaccountGridPanel.js:117
 #: js/Models.js:184
 msgid "Cleared at"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:153
-msgid "Responsible person"
 msgstr ""
 
 #: js/TimeaccountEditDialog.js:162

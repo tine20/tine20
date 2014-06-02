@@ -150,7 +150,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             columnWidth: 1/3,
             editDialog: this,
             xtype: 'tinerelationpickercombo',
-            fieldLabel: this.app.i18n._('Responsible person'),
+            fieldLabel: this.app.i18n._('Responsible Person'),
             allowBlank: true,
             app: 'Addressbook',
             recordClass: Tine.Addressbook.Model.Contact,

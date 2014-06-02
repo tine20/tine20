@@ -44,7 +44,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
             )
         ),
         array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
-            array('type' => 'RESPONSIBLE', 'degree' => 'sibling', 'text' => 'Responsible person', 'max' => '1:0'), // _('Cost Center')
+            array('type' => 'RESPONSIBLE', 'degree' => 'sibling', 'text' => 'Responsible Person', 'max' => '1:0'), // _('Responsible Person')
         )
         )
     );

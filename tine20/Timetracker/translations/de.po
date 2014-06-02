@@ -177,7 +177,7 @@ msgid "Cleared at"
 msgstr "Abgerechnet am"
 
 #: js/TimeaccountEditDialog.js:140
-msgid "Responsible person"
+msgid "Responsible Person"
 msgstr "Verantwortlicher"
 
 #: js/TimeaccountEditDialog.js:151
