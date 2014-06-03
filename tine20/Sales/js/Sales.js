@@ -245,3 +245,13 @@ Tine.Sales.renderBillingPoint = function(v) {
 }
 
 Tine.widgets.grid.RendererManager.register('Sales', 'Contract', 'billing_point', Tine.Sales.renderBillingPoint);
+
+Tine.Sales.renderCostCenter = function(value, row, rec) {
+    if (Ext.isObject(value)) {
+        return value.number + ' - ' + value.remark;
+    }
+    
+    return '';
+};
+
+Tine.widgets.grid.RendererManager.register('Sales', 'Invoice', 'costcenter_id', Tine.Sales.renderCostCenter);
