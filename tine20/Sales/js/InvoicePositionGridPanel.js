@@ -75,6 +75,7 @@ Tine.Sales.InvoicePositionGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             var exportFunction = appName + '.export' + split[1] + 's';
             var exportIds     = [];
+            var recordClass = Tine[split[0]].Model[split[1]];
             
             this.store.each(function(record, index) {
                 if (record.get('model') == phpModelName) {
@@ -108,7 +109,7 @@ Tine.Sales.InvoicePositionGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         break;
                     default:
                         var filter = [];
-                        filter.push({field: 'id', operator: 'in', value: exportIds });
+                        filter.push({field: recordClass.getMeta('idProperty'), operator: 'in', value: exportIds });
                 }
                 
                 var downloader = new Ext.ux.file.Download({
