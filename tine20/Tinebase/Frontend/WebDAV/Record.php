@@ -56,12 +56,10 @@ class Tinebase_Frontend_WebDAV_Record implements Sabre\DAV\ICollection
         
         $children = array();
         
-        // TODO throw exception?
-            
         // Loop through record attachments / record data
-//         foreach ($this->_record->attachments as $attachment) {
-//             $children[] = $this->getChild($attachment->path);
-//         }
+        foreach ($this->_record->attachments as $attachment) {
+            $children[] = $this->getChild($attachment->name);
+        }
         
         return $children;
     }
@@ -94,7 +92,15 @@ class Tinebase_Frontend_WebDAV_Record implements Sabre\DAV\ICollection
      */
     function createFile($name, $data = null)
     {
-        // TODO throw exception?
+        if (is_resource($data)) {
+            // convert to rewindable stream
+            $rewindableStream = fopen('php://temp','r+');
+            stream_copy_to_stream($data, $rewindableStream);
+            rewind($rewindableStream);
+            $data = $rewindableStream;
+        }
+        
+        Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($this->_record, $name, $data);
     }
 
     /**

@@ -63,6 +63,40 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
         $this->server = $server;
 
         $this->server->subscribeEvent('unknownMethod',array($this,'httpPOSTHandler'));
+        
+        $server->subscribeEvent('beforeGetProperties', array($this, 'beforeGetProperties'));
+        
+        $server->xmlNamespaces[\Sabre\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
+        
+        $server->resourceTypeMapping['\\Sabre\\CalDAV\\ICalendar'] = '{urn:ietf:params:xml:ns:caldav}calendar';
+        
+    }
+    
+    /**
+     * beforeGetProperties
+     *
+     * This method handler is invoked before any after properties for a
+     * resource are fetched. This allows us to add in any CalDAV specific
+     * properties.
+     *
+     * @param string $path
+     * @param \Sabre\DAV\INode $node
+     * @param array $requestedProperties
+     * @param array $returnedProperties
+     * @return void
+     */
+    public function beforeGetProperties($path, \Sabre\DAV\INode $node, &$requestedProperties, &$returnedProperties) {
+        if ($node instanceof \Sabre\DAVACL\IPrincipal) {
+            // dropbox-home-URL property
+            $scheduleProp = '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}dropbox-home-URL';
+            if (in_array($scheduleProp,$requestedProperties)) {
+                $principalId = $node->getName();
+                $dropboxPath = \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $principalId . '/dropbox';
+                
+                unset($requestedProperties[array_search($scheduleProp, $requestedProperties)]);
+                $returnedProperties[200][$scheduleProp] = new \Sabre\DAV\Property\Href($dropboxPath);
+            }
+        }
     }
     
     /**

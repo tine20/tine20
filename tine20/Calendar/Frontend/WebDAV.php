@@ -46,7 +46,7 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
     public function getChild($name)
     {
         // do this only for caldav requests
-        if ($this->_useIdAsName && count($this->_getPathParts()) == 2 && in_array($name, array('inbox', 'outbox'))) {
+        if ($this->_useIdAsName && count($this->_getPathParts()) == 2 && in_array($name, array('inbox', 'outbox', 'dropbox'))) {
             switch ($name) {
                 case 'inbox':
                     return new Calendar_Frontend_CalDAV_ScheduleInbox(Tinebase_Core::getUser());
@@ -55,6 +55,11 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
                     
                 case 'outbox':
                     return new \Sabre\CalDAV\Schedule\Outbox('principals/users/' . Tinebase_Core::getUser()->contact_id);
+                    
+                    break;
+                    
+                case 'dropbox':
+                    return new Calendar_Frontend_CalDAV_Dropbox(Tinebase_Core::getUser());
                     
                     break;
             }

@@ -71,6 +71,36 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $this->assertEquals('calendarManagedAttachments', $pluginName);
     }
     
+    public function testGetProperties()
+    {
+        $body = '<?xml version="1.0" encoding="UTF-8"?>
+             <A:propfind xmlns:A="DAV:">
+               <A:prop>
+                 <B:dropbox-home-URL xmlns:B="http://calendarserver.org/ns/"/>
+               </A:prop>
+             </A:propfind>';
+    
+        $request = new Sabre\HTTP\Request(array(
+                'REQUEST_METHOD' => 'PROPFIND',
+                'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id
+        ));
+        $request->setBody($body);
+    
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+        
+        $responseDoc = new DOMDocument();
+        $responseDoc->loadXML($this->response->body);
+        //$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
+        $xpath->registerNamespace('cs',  'http://calendarserver.org/ns/');
+        
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cs:dropbox-home-URL/d:href');
+        $dropboxUrl = $nodes->item(0)->nodeValue;
+        $this->assertTrue(!! strstr($dropboxUrl, 'dropbox'), $dropboxUrl);
+    }
+    
     /**
      * test testAddAttachment 
      */
@@ -241,7 +271,48 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         
         $attachment = $createdException->attachments->getFirstRecord();
         $this->assertEquals('agenda.html', $attachment->name);
-        
+    }
 
+    public function testDropBoxMKCol()
+    {
+        $event = $this->calDAVTests->testCreateEventWithInternalOrganizer();
+        
+        $body = '';
+        $request = new Sabre\HTTP\Request(array(
+                'REQUEST_METHOD' => 'MKCOL',
+                'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/dropbox/' . 
+                    $event->getRecord()->getId() . '.dropbox'
+        ));
+        $request->setBody($body);
+        
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+        
+        // attachement folder is managed by tine20 itself
+        $this->assertEquals('HTTP/1.1 405 Method Not Allowed', $this->response->status);
+    }
+    
+    public function testDropBoxPut()
+    {
+        $event = $this->calDAVTests->testCreateEventWithInternalOrganizer();
+    
+        $request = new Sabre\HTTP\Request(array(
+                'REQUEST_METHOD' => 'PUT',
+                'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/dropbox/' .
+                $event->getRecord()->getId() . '.dropbox/agenda.txt'
+        ));
+        
+        $agenda = 'HELLO WORLD';
+        $request->setBody($agenda);
+    
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+        
+//         echo $this->response->body;
+        $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()
+        ->getRecordAttachments($event->getRecord());
+        
+        $this->assertEquals(1, $attachments->count());
+        $this->assertEquals('agenda.txt', $attachments[0]->name);
     }
 }
