@@ -44,6 +44,19 @@ class Tinebase_Frontend_WebDAV_RecordTest extends TestCase
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Calendar/records/Calendar_Model_Event/' . $savedEvent->getId() . '/' . $tempFile->name);
         $this->assertEquals('text/plain', $node->getContentType());
         $this->assertEquals(17, $node->getSize());
+        
+        return $savedEvent;
+    }
+    
+    public function testListAttachments()
+    {
+        $savedEvent = $this->testDownloadAttachment();
+        
+        $children = $this->_getWebDAVTree()->getChildren('/webdav/Calendar/records/Calendar_Model_Event/' . $savedEvent->getId() . '/');
+        $node = $children[0];
+        
+        $this->assertEquals('text/plain', $node->getContentType());
+        $this->assertEquals(17, $node->getSize());
     }
     
     /**
