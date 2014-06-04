@@ -59,14 +59,15 @@ class Tinebase_Relations
      * NOTE: given relation data is expected to be an array atm.
      * @todo check read ACL for new relations to existing records.
      * 
-     * @param  string $_model        own model to get relations for
-     * @param  string $_backend      own backend to get relations for
-     * @param  string $_id           own id to get relations for 
-     * @param  array  $_relationData data for relations to create
-     * @param  bool   $_ignoreACL    create relations without checking permissions
+     * @param  string $_model           own model to get relations for
+     * @param  string $_backend         own backend to get relations for
+     * @param  string $_id              own id to get relations for 
+     * @param  array  $_relationData    data for relations to create
+     * @param  bool   $_ignoreACL       create relations without checking permissions
+     * @param  bool   $_inspectRelated  do update/create related records on the fly
      * @return void
      */
-    public function setRelations($_model, $_backend, $_id, $_relationData, $_ignoreACL = FALSE)
+    public function setRelations($_model, $_backend, $_id, $_relationData, $_ignoreACL = FALSE, $_inspectRelated = FALSE)
     {
         $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
         foreach((array) $_relationData as $relationData) {
@@ -117,26 +118,29 @@ class Tinebase_Relations
             $current = $currentRelations[$currentRelations->getIndexById($relationId)];
             $update = $relations[$relations->getIndexById($relationId)];
             
-            // @todo do we need to omit so many fields?
-            if (! $current->related_record->isEqual(
-                $update->related_record, 
-                array(
-                    'jpegphoto', 
-                    'creation_time', 
-                    'last_modified_time',
-                    'created_by',
-                    'last_modified_by',
-                    'is_deleted',
-                    'deleted_by',
-                    'deleted_time',
-                    'tags',
-                    'notes',
-                )
-            )) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' Related record diff: ' . print_r($current->related_record->diff($update->related_record)->toArray(), true));
-                
-                $this->_setAppRecord($update);
+            // update related records if explicitly needed
+            if ($_inspectRelated) {
+                // @todo do we need to omit so many fields?
+                if (! $current->related_record->isEqual(
+                    $update->related_record, 
+                    array(
+                        'jpegphoto', 
+                        'creation_time', 
+                        'last_modified_time',
+                        'created_by',
+                        'last_modified_by',
+                        'is_deleted',
+                        'deleted_by',
+                        'deleted_time',
+                        'tags',
+                        'notes',
+                    )
+                )) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' Related record diff: ' . print_r($current->related_record->diff($update->related_record)->toArray(), true));
+                    
+                    $this->_setAppRecord($update);
+                }
             }
             
             if (! $current->isEqual($update, array('related_record'))) {

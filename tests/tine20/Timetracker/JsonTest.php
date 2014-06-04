@@ -975,4 +975,39 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $ta = $this->_json->getTimeaccount($ta['id']);
         $this->assertEquals(2, count($ta['relations']));
     }
+    
+    /**
+     * on saving 
+     */
+    public function testUpdateTimeaccountWithRelatedContact()
+    {
+        $this->_getTimeaccount(array(), TRUE);
+        $ta = $this->_lastCreatedRecord;
+        
+        $contactController  = Addressbook_Controller_Contact::getInstance();
+        $taController       = Timetracker_Controller_Timeaccount::getInstance();
+        
+        $bday = new Tinebase_DateTime();
+        $bday->setDate(2013, 12, 24);
+        $bday->setTime(0,0,0);
+        
+        $contact  = $contactController->create(new Addressbook_Model_Contact(array('n_given' => 'Test', 'n_family' => 'Unit', 'bday' => $bday)));
+        $bday = $contact['bday'];
+        
+        Tinebase_Relations::getInstance()->setRelations('Timetracker_Model_Timeaccount', 'Sql', $ta['id'], array(
+            array('related_backend' => 'Sql', 'type' => 'RESPONSIBLE', 'related_model' => 'Addressbook_Model_Contact', 'related_id' => $contact->getId(), 'own_degree' => 'sibling'),
+        ));
+        
+        // update a few times, bday of contract should not change
+        $tajson = $this->_json->getTimeaccount($ta['id']);
+        $this->_json->saveTimeaccount($tajson);
+        $tajson = $this->_json->getTimeaccount($ta['id']);
+        $this->_json->saveTimeaccount($tajson);
+        $tajson = $this->_json->getTimeaccount($ta['id']);
+        
+        $ajson = new Addressbook_Frontend_Json();
+        $contactJson = $ajson->getContact($contact->getId());
+        
+        $this->assertEquals($bday->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->toString(), $contactJson['bday']);
+    }
 }
