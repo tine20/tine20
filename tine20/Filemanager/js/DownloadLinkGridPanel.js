@@ -32,6 +32,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     border: true,
     autoScroll: true,
     layout: 'fit',
+    autoExpandColumn: 'url',
     
     enableHdMenu: false,
     /**
@@ -134,7 +135,10 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         this.createMask.show();
         
-        var record = new this.recordClass({node_id: this.editDialog.record.get('id'), expiry_time: (new Date()).add(Date.WEEK, 1)});
+        var date = new Date();
+        date.setDate(date.getDate() + 30);
+        
+        var record = new this.recordClass({node_id: this.editDialog.record.get('id'), expiry_time: date});
         this.recordProxy.saveRecord(record, {success: this.onAfterCreate, scope: this});
     },
     

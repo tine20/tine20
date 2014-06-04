@@ -246,3 +246,18 @@ msgstr "Öffentlichen Link Erstellen"
 
 msgid "Expiration Time"
 msgstr "Ablaufdatum"
+
+msgid "Publish"
+msgstr "Veröffentlichen"
+
+msgid "File has been published successfully"
+msgstr "Die Datei wurde erfolgreich veröffentlicht"
+
+msgid "Folder has been published successfully"
+msgstr "Der Ordner wurde erfolgreich veröffentlicht"
+
+msgid "Url: {0}"
+msgstr "Url: {0}"
+
+msgid "Valid Until: {1}"
+msgstr "Gültig bis: {1}"

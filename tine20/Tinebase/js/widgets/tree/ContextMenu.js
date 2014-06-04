@@ -95,7 +95,7 @@ Tine.widgets.tree.ContextMenu = {
             scope: this.config
         });
         
-        // TODO move the next 3 to Filemanager!
+        // TODO move the next 5 to Filemanager!
         this.action_resume = new Ext.Action({
             text: String.format(_('Resume upload'), config.nodeName),
             iconCls: 'action_resume',
@@ -128,13 +128,21 @@ Tine.widgets.tree.ContextMenu = {
             scope: this.config
         });
         
+        this.action_publish = new Ext.Action({
+            text: String.format(_('Publish'), config.nodeName),
+            iconCls: 'action_publish',
+            handler: this.publishFile,
+            actionUpdater: true,
+            scope: this.config
+        });
+        
         var items = [];
         for (var i=0; i < config.actions.length; i++) {
             switch(config.actions[i]) {
                 case 'add':
                     items.push(this.action_add);
                     break;
-                case 'delete':                    
+                case 'delete':
                     items.push(this.action_delete);
                     break;
                 case 'rename':
@@ -163,6 +171,9 @@ Tine.widgets.tree.ContextMenu = {
                     break;
                 case 'edit':
                     items.push(this.action_editFile);
+                    break;
+                case 'publish':
+                    items.push(this.action_publish);
                     break;
                 default:
                     // add custom actions
