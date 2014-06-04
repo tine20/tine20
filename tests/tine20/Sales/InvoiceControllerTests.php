@@ -391,6 +391,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         Tinebase_Core::set(Tinebase_Core::USER, $user);
         
+        $e = new Exception('No Message');
+        
         try {
             $invoice = $invoiceController->create(new Sales_Model_Invoice(array(
                 'number' => 'R-3001',
@@ -402,7 +404,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         } catch (Exception $e) {
         }
         
-        $this->assertTrue(get_class($e) == 'Tinebase_Exception_AccessDenied');
-        $this->assertTrue($e->getMessage() == 'You have no right to set the invoice number!');
+        $this->assertEquals('Tinebase_Exception_AccessDenied', get_class($e));
+        $this->assertEquals('You have no right to set the invoice number!', $e->getMessage());
     }
 }

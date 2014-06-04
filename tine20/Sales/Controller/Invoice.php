@@ -444,6 +444,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $filter = new Sales_Model_ContractFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $ids)));
         
+        
         $iterator = new Tinebase_Record_Iterator(array(
             'iteratable' => $this,
             'controller' => Sales_Controller_Contract::getInstance(),
@@ -520,6 +521,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             if (! Tinebase_Core::getUser()->hasRight('Sales', Sales_Acl_Rights::SET_INVOICE_NUMBER)) {
                 throw new Tinebase_Exception_AccessDenied('You have no right to set the invoice number!');
             }
+            
             $this->_setNextNumber($_record);
         }
     }
@@ -648,22 +650,25 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         continue;
                     }
                     
-                    $split          = explode('_Model_', $model);
-                    $controllerName = $split[0] . '_Controller_' . $split[1];
-                    $filterName     = $model . 'Filter';
-                    
-                    $controllerInstance = $controllerName::getInstance();
-                    
                     $filteredInvoicePositions = $invoicePositions->filter('model', $model);
-                    $filterInstance     = new $filterName(array());
-
-                    $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'in', 'value' => $record->getId())));
-                    $controllerInstance->updateMultiple($filterInstance, array('invoice_id' => NULL));
                     
+                    $billableControllerName = $model::getBillableControllerName();
+                    $billableFilterName     = $model::getBillableFilterName();
+                    
+                    $filterInstance = new $billableFilterName(array());
+                    $filterInstance->addFilter(new Tinebase_Model_Filter_Text(
+                        array('field' => 'invoice_id', 'operator' => 'in', 'value' => $record->getId())
+                    ));
+                    
+                    $billableControllerName::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
+                    
+                    // set invoice ids of the timeaccounts
                     if ($model = 'Timetracker_Model_Timeaccount') {
-                        $filterInstance = new Timetracker_Model_TimesheetFilter(array());
+                        $billableModelName      = $model::getBillableModelName();
+                        
+                        $filterInstance = new Timetracker_Model_TimeaccountFilter(array());
                         $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'in', 'value' => $record->getId())));
-                        Timetracker_Controller_Timesheet::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
+                        Timetracker_Controller_Timeaccount::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
                     }
                 }
                 
@@ -705,7 +710,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             if (! Tinebase_Core::getUser()->hasRight('Sales', Sales_Acl_Rights::SET_INVOICE_NUMBER)) {
                 throw new Tinebase_Exception_AccessDenied('You have no right to set the invoice number!');
             }
-        
             $this->_setNextNumber($_record);
         }
         

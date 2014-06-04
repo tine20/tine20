@@ -264,4 +264,31 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
             $_data['product_id'] = $_data['product_id']['id'];
         }
     }
+    
+    /**
+     * returns the name of the billable controller
+     *
+     * @return string
+     */
+    public static function getBillableControllerName() {
+        throw new Tinebase_Exception_NotImplemented('Must be implemented seperately.');
+    }
+    
+    /**
+     * returns the name of the billable filter
+     *
+     * @return string
+     */
+    public static function getBillableFilterName() {
+        throw new Tinebase_Exception_NotImplemented('Must be implemented seperately.');
+    }
+    
+    /**
+     * returns the name of the billable model
+     *
+     * @return string
+     */
+    public static function getBillableModelName() {
+        throw new Tinebase_Exception_NotImplemented('Must be implemented seperately.');
+    }
 }

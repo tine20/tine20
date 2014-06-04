@@ -70,4 +70,25 @@ interface Sales_Model_Accountable_Interface
      * @return boolean
      */
     public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL);
+    
+    /**
+     * returns the name of the billable controller
+     * 
+     * @return string
+     */
+    public static function getBillableControllerName();
+    
+    /**
+     * returns the name of the billable filter
+     *
+     * @return string
+     */
+    public static function getBillableFilterName();
+    
+    /**
+     * returns the name of the billable model
+     *
+     * @return string
+     */
+    public static function getBillableModelName();
 }

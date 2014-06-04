@@ -66,7 +66,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
     /**
      * tests if all relations and positions are resolved properly
      */
-    public function testResolvingAndClearing()
+    public function testResolving()
     {
         $date = clone $this->_referenceDate;
         
@@ -242,6 +242,41 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $json->saveContract($contract);
     }
+    
+    /**
+     * tests if invoice id gets removed from the billables if the invoice gets deleted
+     */
+    public function testRemoveInvoiceFromBillables()
+    {
+        $i = 0;
+        $c = Sales_Controller_Invoice::getInstance();
+        $date = clone $this->_referenceDate;
+        
+        $result = $c->createAutoInvoices($date);
+        
+        $json = new Sales_Frontend_Json();
+        $invoices = $json->searchInvoices(array(), array());
+        $this->assertEquals(2, $invoices['totalcount']);
+        
+        foreach($invoices['results'] as $result) {
+            $ids[] = $result['id'];
+        }
+        
+        $json->deleteInvoices($ids);
+        
+        $taJson = new Timetracker_Frontend_Json();
+        $tas = $taJson->searchTimeaccounts(array(), array());
+        $tss = $taJson->searchTimesheets(array(), array());
+        
+        foreach($tas['results'] as $t) {
+            $this->assertEquals(NULL, $t['invoice_id']);
+        }
+        
+        foreach($tss['results'] as $t) {
+            $this->assertEquals(NULL, $t['invoice_id']);
+        }
+    }
+    
     /**
      * test constraints after changing relation
      */

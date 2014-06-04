@@ -334,6 +334,33 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
     }
     
     /**
+     * returns the name of the billable controller
+     *
+     * @return string
+     */
+    public static function getBillableControllerName() {
+        return 'Timetracker_Controller_Timesheet';
+    }
+    
+    /**
+     * returns the name of the billable filter
+     *
+     * @return string
+    */
+    public static function getBillableFilterName() {
+        return 'Timetracker_Model_TimesheetFilter';
+    }
+    
+    /**
+     * returns the name of the billable model
+     *
+     * @return string
+    */
+    public static function getBillableModelName() {
+        return 'Timetracker_Model_Timesheet';
+    }
+    
+    /**
      * the invoice_id - field of all billables of this accountable gets the id of this invoice
      *
      * @param Sales_Model_Invoice $invoice
