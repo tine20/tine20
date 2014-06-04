@@ -111,6 +111,13 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_relatedObjectsToDelete = array();
 
     /**
+     * set this to true to create/update related records
+     * 
+     * @var boolean
+     */
+    protected $_inspectRelatedRecords  = FALSE;
+    
+    /**
      * record alarm field
      *
      * @var string
@@ -346,6 +353,17 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
         return $this->_setBooleanMemberVar('_doForceModlogInfo', $value);
+    }
+    
+    /**
+     * set/get _inspectRelatedRecords
+     * 
+     * @return boolean
+     */
+    public function doInspectRelatedRecords()
+    {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_inspectRelatedRecords', $value);
     }
     
     /**
@@ -934,9 +952,11 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _setRelatedData($updatedRecord, $record, $returnUpdatedRelatedData = FALSE)
     {
+        // relations won't be touched if the property is set to NULL
+        // an empty array on the relations property will remove all relations
         if ($record->has('relations') && isset($record->relations) && is_array($record->relations)) {
             $type = $this->_getBackendType();
-            Tinebase_Relations::getInstance()->setRelations($this->_modelName, $type, $updatedRecord->getId(), $record->relations);
+            Tinebase_Relations::getInstance()->setRelations($this->_modelName, $type, $updatedRecord->getId(), $record->relations, FALSE, $this->_inspectRelatedRecords);
         }
         if ($record->has('tags') && isset($record->tags) && (is_array($record->tags) || $record->tags instanceof Tinebase_Record_RecordSet)) {
             $updatedRecord->tags = $record->tags;
