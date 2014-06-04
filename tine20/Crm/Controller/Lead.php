@@ -21,6 +21,11 @@
 class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * @see Tinebase_Controller_Record_Abstract
+     */
+    protected $_inspectRelatedRecords = TRUE;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 

@@ -207,7 +207,7 @@ class Tinebase_Relation_RelationTest extends TestCase
             $relation->setTimezone(Zend_Registry::get('userTimeZone'));
             $relation->related_record = $relation->related_record->toArray();
         }        
-        $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray());
+        $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray(), FALSE, TRUE);
         
         $updatedRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         $updatedConacts = $updatedRelations->filter('related_model', 'Addressbook_Model_Contact');
