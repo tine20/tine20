@@ -299,8 +299,27 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             })]
         };
     },
-    
+
+    /**
+     * mute first alert
+     * 
+     * @param {} button
+     * @param {} e
+     */
+    onMuteAlertOnce: function (button, e) {
+        this.record.set('mute', button.pressed);
+    },
+
     initComponent: function() {
+        this.tbarItems.push(new Ext.Button(new Ext.Action({
+                    text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Alert'),
+                    handler: this.onMuteAlertOnce,
+                    iconCls: 'notes_noteIcon',
+                    disabled: false,
+                    scope: this,
+                    enableToggle: true
+                })));
+
         var organizerCombo;
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
             bbar: [{
