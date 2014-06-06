@@ -15,30 +15,103 @@
 class Sales_InvoiceTestCase extends TestCase
 {
     /**
+     * holds created customers
+     * 
      * @var Tinebase_Record_RecordSet
      */
     protected $_customerRecords = NULL;
     
     /**
+    * holds created timesheets
+    *
+    * @var Tinebase_Record_RecordSet
+    */
+    protected $_timesheetRecords = NULL;
+    
+    /**
+     * holds created addresses (Sales_Model_Address)
+     * 
      * @var Tinebase_Record_RecordSet
      */
     protected $_addressRecords = NULL;
     
     /**
+     * holds created costcenters
+     * 
      * @var Tinebase_Record_RecordSet
      */
     protected $_costcenterRecords = NULL;
     
     /**
+     * holds created contracts
+     * 
      * @var Tinebase_Record_RecordSet
      */
     protected $_contractRecords = NULL;
     
     /**
+     * holds created products
+     * 
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_productRecords = NULL;
+    
+    /**
+     * holds created timeaccounts
+     * 
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_timeaccountRecords = NULL;
+    
+    /**
+     * holds created timeaccounts
+     *
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_contactRecords = NULL;
+    
+    /**
      * the referrence date all tests should depend on
+     * 
      * @var Tinebase_DateTime
      */
     protected $_referenceDate = NULL;
+    
+    /**
+     * 
+     * @var Addressbook_Controller_Contact
+     */
+    protected $_contactController = NULL;
+    
+    /**
+     * @var Sales_Controller_Customer
+     */
+    protected $_customerController = NULL;
+    
+    /**
+     * @var Sales_Controller_Address
+     */
+    protected $_addressController = NULL;
+    
+    /**
+     * 
+     * @var Sales_Controller_CostCenter
+     */
+    protected $_costcenterController = NULL;
+    
+    /**
+     *
+     * @var Sales_Controller_Invoice
+     */
+    protected $_invoiceController = NULL;
+    
+    /**
+     * 
+     * @var Sales_Controller_Contract
+     */
+    protected $_contractController = NULL;
+    
+    protected $_sharedContractsContainerId = NULL;
     
     /**
      * Sets up the fixture.
@@ -49,11 +122,14 @@ class Sales_InvoiceTestCase extends TestCase
     protected function setUp()
     {
         Sales_Controller_Contract::getInstance()->deleteByFilter(new Sales_Model_ContractFilter(array()));
-        Sales_Controller_Invoice::getInstance()->deleteByFilter(new Sales_Model_InvoiceFilter(array()));
+        
+        $this->_invoiceController = Sales_Controller_Invoice::getInstance();
+        
+        $this->_invoiceController->deleteByFilter(new Sales_Model_InvoiceFilter(array()));
         
         parent::setUp();
-        $this->_createFixtures();
-        $this->_testFixtures();
+        
+        $this->_setReferenceDate();
     }
     
     /**
@@ -72,15 +148,20 @@ class Sales_InvoiceTestCase extends TestCase
             Sales_Controller_Customer::getInstance()->delete($this->_customerRecords->getId());
         }
         
-        if ($this->_addressRecords) {
-            Addressbook_Controller_Contact::getInstance()->delete($this->_addressRecords->getId());
+        if ($this->_contactRecords) {
+            $this->_contactController->delete($this->_contactRecords->getId());
         }
+        
+        if ($this->_addressRecords) {
+            $this->_addressController->delete($this->_addressRecords->getId());
+        }
+        
         if ($this->_contractRecords) {
             Sales_Controller_Contract::getInstance()->delete($this->_contractRecords->getId());
         }
     }
     
-    protected function _createFixtures()
+    protected function _setReferenceDate()
     {
         // set reference date to the 1st january of last year
         $this->_referenceDate = Tinebase_DateTime::now();
@@ -88,7 +169,10 @@ class Sales_InvoiceTestCase extends TestCase
         $this->_referenceDate->subYear(1);
         $this->_referenceDate->setDate($this->_referenceDate->format('Y'), 1 ,1);
         $this->_referenceDate->setTime(0,0,0);
-        
+    }
+    
+    protected function _createContacts($count = 20)
+    {
         // addresses
         $csvFile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20'  . DIRECTORY_SEPARATOR . 'Addressbook' . DIRECTORY_SEPARATOR . 'Setup' . DIRECTORY_SEPARATOR . 'DemoData' . DIRECTORY_SEPARATOR . 'out1000.csv';
         
@@ -98,17 +182,18 @@ class Sales_InvoiceTestCase extends TestCase
         $fhcsv = fopen($csvFile, 'r');
         
         $i = 0;
-    
+        
         $indexes = fgetcsv($fhcsv);
-    
-        $contactController = Addressbook_Controller_Contact::getInstance();
+        
+        $this->_contactController = Addressbook_Controller_Contact::getInstance();
+        
         $addresses = array();
         
         while ($row = fgetcsv($fhcsv)) {
-            if ($i >= 20) {
+            if ($i >= $count) {
                 break;
             }
-            
+        
             foreach($row as $index => $field) {
                 if ($indexes[$index] == 'gender') {
                     if ($field == 'male') {
@@ -122,7 +207,7 @@ class Sales_InvoiceTestCase extends TestCase
                     $addresses[$i][$indexes[$index]] = $field;
                 }
             }
-            
+        
             $i++;
         }
         fclose($fhcsv);
@@ -137,18 +222,53 @@ class Sales_InvoiceTestCase extends TestCase
                     'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
                     'model'          => 'Addressbook_Model_Contact',
                     'color'          => '#000000'
-            )), NULL, TRUE
+                )), NULL, TRUE
         );
         
-        $cid = $container->getId();
+        $this->_sharedContractsContainerId = $container->getId();
         
-        $this->_addressRecords = new Tinebase_Record_RecordSet('Sales_Model_Address');
+        
         $this->_contactRecords = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         
         foreach($addresses as $address) {
-            $data = array_merge($address, array('container_id' => $cid));
-            $this->_contactRecords->addRecord($contactController->create(new Addressbook_Model_Contact($data, TRUE), FALSE));
+            $data = array_merge($address, array('container_id' => $this->_sharedContractsContainerId));
+            $this->_contactRecords->addRecord($this->_contactController->create(new Addressbook_Model_Contact($data, TRUE), FALSE));
         }
+    }
+    
+    protected function _createCostCenters()
+    {
+        $this->_costcenterController = Sales_Controller_CostCenter::getInstance();
+        
+        $this->_costcenterRecords = new Tinebase_Record_RecordSet('Sales_Model_CostCenter');
+        $ccs = array('unittest1', 'unittest2', 'unittest3', 'unittest4');
+        
+        $id = 1;
+        
+        foreach($ccs as $title) {
+            $cc = new Sales_Model_CostCenter(
+                array('remark' => $title, 'number' => $id)
+            );
+            $this->_costcenterRecords->addRecord($this->_costcenterController->create($cc));
+            $id++;
+        }
+    }
+    
+    /**
+     * create customers and their addresses
+     */
+    protected function _createCustomers($count = 4)
+    {
+        if (! $this->_contactRecords) {
+            // each customer may have 5 contacts
+            $this->_createContacts($count * 5);
+        }
+        $this->_customerController = Sales_Controller_Customer::getInstance();
+        $this->_customerRecords = new Tinebase_Record_RecordSet('Sales_Model_Customer');
+        $this->_addressController = Sales_Controller_Address::getInstance();
+        $this->_addressRecords = new Tinebase_Record_RecordSet('Sales_Model_Address');
+        
+        $countAll = 0;
         
         // customers
         $customers = array(
@@ -174,13 +294,16 @@ class Sales_InvoiceTestCase extends TestCase
             )
         );
         
-        $i=0;
-        
-        $customerController = Sales_Controller_Customer::getInstance();
-        $this->_customerRecords = new Tinebase_Record_RecordSet('Sales_Model_Customer');
-        $addressController = Sales_Controller_Address::getInstance();
+        $i = 0;
         
         foreach ($customers as $customer) {
+            
+            if ($countAll == $count) {
+                break;
+            }
+            
+            $countAll++;
+            
             $customer['cpextern_id'] = $this->_contactRecords->getByIndex($i)->getId();
             $i++;
             $customer['cpintern_id'] = $this->_contactRecords->getByIndex($i)->getId();
@@ -191,7 +314,7 @@ class Sales_InvoiceTestCase extends TestCase
             $customer['currency'] = 'EUR';
             $customer['currency_trans_rate'] = 1;
         
-            $this->_customerRecords->addRecord($customerController->create(new Sales_Model_Customer($customer)));
+            $this->_customerRecords->addRecord($this->_customerController->create(new Sales_Model_Customer($customer)));
         }
         
         foreach($this->_customerRecords as $customer) {
@@ -210,96 +333,17 @@ class Sales_InvoiceTestCase extends TestCase
                     'custom1'     => ($type == 'billing') ? Tinebase_Record_Abstract::generateUID(5) : NULL
                 ));
         
-                $this->_addressRecords->addRecord($addressController->create($address));
+                $this->_addressRecords->addRecord($this->_addressController->create($address));
         
                 $i++;
             }
         }
         
-        // cost centers
-        
-        $costcenterController = Sales_Controller_CostCenter::getInstance();
-        
-        $this->_costcenterRecords = new Tinebase_Record_RecordSet('Sales_Model_CostCenter');
-        $ccs = array('unittest1', 'unittest2', 'unittest3', 'unittest4');
-        
-        $id = 1;
-        
-        foreach($ccs as $title) {
-            $cc = new Sales_Model_CostCenter(
-                array('remark' => $title, 'number' => $id)
-            );
-            $this->_costcenterRecords->addRecord($costcenterController->create($cc));
-            $id++;
-        }
-
-        // contracts
-        $contractController = Sales_Controller_Contract::getInstance();
-        $container = $contractController->getSharedContractsContainer();
-        $cid = $container->getId();
-        
-        $i = 0;
         $this->_customerRecords->sort('name', 'ASC');
-        $customer1 = $this->_customerRecords->filter('name', 'Customer1')->getFirstRecord();
-        $customer2 = $this->_customerRecords->filter('name', 'Customer2')->getFirstRecord();
-        $customer3 = $this->_customerRecords->filter('name', 'Customer3')->getFirstRecord();
-        $customer4 = $this->_customerRecords->filter('name', 'Customer4')->getFirstRecord();
-        
-        // timeaccounts
-        $this->_timeaccounts = new Tinebase_Record_RecordSet('Timetracker_Model_Timeaccount');
-        $taController = Timetracker_Controller_Timeaccount::getInstance();
-
-        // ta for customer 1 and 2 is budgeted AND to bill
-        foreach($this->_customerRecords as $customer) {
-            $this->_timeaccounts->addRecord($taController->create(new Timetracker_Model_Timeaccount(array(
-                'title'         => 'TA-for-' . $customer->name,
-                'description'   => 'blabla',
-                'is_open'       => 1,
-                'status'        => $customer->name == 'Customer4' ? 'billed' : 'to bill',
-                'budget' => $customer->name == 'Customer3' ? null : 100
-            ), TRUE)));
-        }
-        
-        $customer3Timeaccount = $this->_timeaccounts->filter('title', 'TA-for-Customer3')->getFirstRecord();
-        
-        $tsDate = clone $this->_referenceDate;
-        $tsDate->addMonth(4)->addDay(5);
-        
-        $timesheetController = Timetracker_Controller_Timesheet::getInstance();
-        
-        // this is a ts on 20xx-05-06
-        $timesheet = new Timetracker_Model_Timesheet(array(
-            'account_id' => Tinebase_Core::getUser()->getId(),
-            'timeaccount_id' => $customer3Timeaccount->getId(),
-            'start_date' => $tsDate,
-            'duration' => 105,
-            'description' => 'ts from ' . (string) $tsDate,
-        ));
-        
-        $timesheetController->create($timesheet);
-        
-        // this is a ts on 20xx-05-07
-        $timesheet->id = NULL;
-        $timesheet->start_date = $tsDate->addDay(1);
-        $timesheet->description = 'ts from ' . (string) $tsDate;
-        
-        $timesheetController->create($timesheet);
-        
-        // this is a ts on 20xx-09-07
-        $timesheet->id = NULL;
-        $timesheet->start_date = $tsDate->addMonth(4);
-        $timesheet->description = 'ts from ' . (string) $tsDate;
-        
-        $timesheetController->create($timesheet);
-        
-        // this is a ts on 20xx-09-08
-        $timesheet->id = NULL;
-        $timesheet->start_date = $tsDate->addDay(1);
-        $timesheet->description = 'ts from ' . (string) $tsDate;
-        
-        $timesheetController->create($timesheet);
-        
-        $this->_contractRecords = new Tinebase_Record_RecordSet('Sales_Model_Contract');
+    }
+    
+    protected function _createProducts()
+    {
         // 1.1.20xx
         $startDate = clone $this->_referenceDate;
         $endDate   = clone $startDate;
@@ -325,74 +369,116 @@ class Sales_InvoiceTestCase extends TestCase
         );
         
         $productController = Sales_Controller_Product::getInstance();
-        $products = new Tinebase_Record_RecordSet('Sales_Model_Product');
+        $this->_productRecords = new Tinebase_Record_RecordSet('Sales_Model_Product');
         
         foreach($productArray as $product) {
-            $products->addRecord($productController->create(new Sales_Model_Product(array_merge($product, $default))));
+            $this->_productRecords->addRecord($productController->create(new Sales_Model_Product(array_merge($product, $default))));
+        }
+    }
+    
+    protected function _createContracts($contractData = NULL)
+    {
+        // 1.1.20xx
+        $startDate = clone $this->_referenceDate;
+        $endDate   = clone $startDate;
+        // 1.8.20xx
+        $endDate->addMonth(7);
+        
+        $this->_contractController = Sales_Controller_Contract::getInstance();
+        $container = $this->_contractController->getSharedContractsContainer();
+        $this->_sharedContractsContainerId = $container->getId();
+        
+        if (! $contractData) {
+            
+            if (! $this->_costcenterRecords) {
+                $this->_createCostCenters();
+            }
+            
+            if (! $this->_productRecords) {
+                $this->_createProducts();
+            }
+            
+            if (! $this->_customerRecords) {
+                $this->_createCustomers();
+            }
+            if (! $this->_timesheetRecords) {
+                $this->_createTimesheets();
+            }
+            
+            $contractData = array(
+                // 1 invoice should be created from 1.1.2013 - 1.1.2014
+                array(
+                    'number'       => 1,
+                    'title'        => Tinebase_Record_Abstract::generateUID(),
+                    'description'  => '1 unittest begin',
+                    'container_id' => $this->_sharedContractsContainerId,
+                    'billing_point' => 'begin',
+                    'billing_address_id' => $this->_addressRecords->filter(
+                        'customer_id', $this->_customerRecords->filter(
+                            'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                                'type', 'billing')->getFirstRecord()->getId(),
+                    
+                    'interval' => 1,
+                    'start_date' => $startDate,
+                    'end_date' => NULL,
+                ),
+            
+                // 1 invoice should be created on 1.5 for interval 1.1. - 30.4
+                array(
+                    'number'       => 2,
+                    'title'        => Tinebase_Record_Abstract::generateUID(),
+                    'description'  => '2 unittest end',
+                    'container_id' => $this->_sharedContractsContainerId,
+                    'billing_point' => 'end',
+                    'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer2')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
+                    'interval' => 4,
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                ),
+                // 2 invoices should be created on 1.5.2013 and 1.10.2013
+                array(
+                    'number'       => 3,
+                    'title'        => Tinebase_Record_Abstract::generateUID(),
+                    'description'  => '3 unittest end',
+                    'container_id' => $this->_sharedContractsContainerId,
+                    'billing_point' => 'end',
+                    'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
+                    'interval' => 3,
+                    'start_date' => $startDate,
+                    'end_date' => NULL,
+                ),
+                // 4 invoices should be created on 1.4.2013, 1.7.2013, 1.10.2013 and 1.1.2014
+                array(
+                    'number'       => 4,
+                    'title'        => Tinebase_Record_Abstract::generateUID(),
+                    'description'  => '4 unittest products',
+                    'container_id' => $this->_sharedContractsContainerId,
+                    'billing_point' => 'begin',
+                    'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer4')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
+                    // this has an interval of 1 month, but there will be 2 products (6,3 months), so we need 5 invoices (4 in the first year, 1 for the beginning of the second year)
+                    'interval' => 1,
+                    'start_date' => $startDate,
+                    'end_date' => NULL,
+                    'products' => array(
+                        array('quantity' => 1, 'interval' => 6, 'product_id' => $this->_productRecords->filter('name', 'billhalfyearly')->getFirstRecord()->getId()),
+                        array('quantity' => 1, 'interval' => 3, 'product_id' => $this->_productRecords->filter('name', 'billeachquarter')->getFirstRecord()->getId()),
+                    )
+                )
+            );
         }
         
-        $contractData = array(
-            // 1 invoice should be created from 1.1.2013 - 1.1.2014
-            array(
-                'number'       => 1,
-                'title'        => Tinebase_Record_Abstract::generateUID(),
-                'description'  => '1 unittest begin',
-                'container_id' => $cid,
-                'billing_point' => 'begin',
-                'billing_address_id' => $this->_addressRecords->filter('customer_id', $customer1->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
-                'interval' => 1,
-                'start_date' => $startDate,
-                'end_date' => NULL,
-            ),
-            
-            // 1 invoice should be created on 1.5 for interval 1.1. - 30.4
-            array(
-                'number'       => 2,
-                'title'        => Tinebase_Record_Abstract::generateUID(),
-                'description'  => '2 unittest end',
-                'container_id' => $cid,
-                'billing_point' => 'end',
-                'billing_address_id' => $this->_addressRecords->filter('customer_id', $customer2->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
-                'interval' => 4,
-                'start_date' => $startDate,
-                'end_date' => $endDate,
-            ),
-            // 2 invoices should be created on 1.5.2013 and 1.10.2013
-            array(
-                'number'       => 3,
-                'title'        => Tinebase_Record_Abstract::generateUID(),
-                'description'  => '3 unittest end',
-                'container_id' => $cid,
-                'billing_point' => 'end',
-                'billing_address_id' => $this->_addressRecords->filter('customer_id', $customer3->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
-                'interval' => 3,
-                'start_date' => $startDate,
-                'end_date' => NULL,
-            ),
-            // 4 invoices should be created on 1.4.2013, 1.7.2013, 1.10.2013 and 1.1.2014
-            array(
-                'number'       => 4,
-                'title'        => Tinebase_Record_Abstract::generateUID(),
-                'description'  => '4 unittest products',
-                'container_id' => $cid,
-                'billing_point' => 'begin',
-                'billing_address_id' => $this->_addressRecords->filter('customer_id', $customer4->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
-                // this has an interval of 1 month, but there will be 2 products (6,3 months), so we need 5 invoices (4 in the first year, 1 for the beginning of the second year)
-                'interval' => 1,
-                'start_date' => $startDate,
-                'end_date' => NULL,
-                'products' => array(
-                    array('quantity' => 1, 'interval' => 6, 'product_id' => $products->filter('name', 'billhalfyearly')->getFirstRecord()->getId()),
-                    array('quantity' => 1, 'interval' => 3, 'product_id' => $products->filter('name', 'billeachquarter')->getFirstRecord()->getId()),
-                )
-            )
-        );
+        $this->_contractRecords = new Tinebase_Record_RecordSet('Sales_Model_Contract');
         
         $i = 0;
+        
         foreach($contractData as $cd) {
             $costcenter = $this->_costcenterRecords->getByIndex($i);
             $customer   = $this->_customerRecords->getByIndex($i);
-            $timeaccount = $this->_timeaccounts->getByIndex($i);
+            
+            if ($this->_timesheetRecords) {
+                $timeaccount = $this->_timeaccountRecords->getByIndex($i);
+            }
+            
             $i++;
             $contract = new Sales_Model_Contract($cd);
             $contract->relations = array(
@@ -416,7 +502,10 @@ class Sales_InvoiceTestCase extends TestCase
                     'related_id'             => $customer->getId(),
                     'type'                   => 'CUSTOMER'
                 ),
-                array(
+            );
+
+            if ($this->_timesheetRecords) {
+                $contract->relations = array_merge($contract->relations, array(array(
                     'own_model'              => 'Sales_Model_Contract',
                     'own_backend'            => Tasks_Backend_Factory::SQL,
                     'own_id'                 => NULL,
@@ -425,71 +514,89 @@ class Sales_InvoiceTestCase extends TestCase
                     'related_backend'        => Tasks_Backend_Factory::SQL,
                     'related_id'             => $timeaccount->getId(),
                     'type'                   => 'TIME_ACCOUNT'
-                )
-            );
+                )));
+            }
             
-            $this->_contractRecords->addRecord($contractController->create($contract));
+            $this->_contractRecords->addRecord($this->_contractController->create($contract));
         }
         
-        // add contract not to bill
-        $this->_contractRecords->addRecord($contractController->create(new Sales_Model_Contract(array(
-            'number'       => 4,
-            'title'        => Tinebase_Record_Abstract::generateUID(),
-            'description'  => '4 unittest no auto',
-            'container_id' => $cid,
-            'billing_point' => 'end',
-            'billing_address_id' => $this->_addressRecords->filter('customer_id', $customer3->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
-            'interval' => 0,
-            'start_date' => $startDate,
-            'end_date' => NULL,
-        ))));
-        
-        // add contract without customer
-        $contract = new Sales_Model_Contract(array(
-            'number'       => 5,
-            'title'        => Tinebase_Record_Abstract::generateUID(),
-            'description'  => '5 unittest auto not possible',
-            'container_id' => $cid,
-            'interval' => 1,
-            'start_date' => $startDate,
-            'end_date' => NULL,
-            'billing_address_id' => $this->_addressRecords->filter('customer_id', $customer3->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
-        ));
-        
-        $contract->relations = array(
-            array(
-                'own_model'              => 'Sales_Model_Contract',
-                'own_backend'            => Tasks_Backend_Factory::SQL,
-                'own_id'                 => NULL,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model'          => 'Sales_Model_CostCenter',
-                'related_backend'        => Tasks_Backend_Factory::SQL,
-                'related_id'             => $costcenter->getId(),
-                'type'                   => 'LEAD_COST_CENTER'
-            ),
-        );
-        
-        $this->_contractRecords->addRecord($contractController->create($contract));
-        
-        // add contract without address
-        $contract = new Sales_Model_Contract(array(
-            'number'       => 5,
-            'title'        => Tinebase_Record_Abstract::generateUID(),
-            'description'  => '6 unittest auto not possible',
-            'container_id' => $cid,
-            'interval' => 1,
-            'start_date' => $startDate,
-            'end_date' => NULL,
-        ));
-        
-        $this->_contractRecords->addRecord($contractController->create($contract));
     }
     
-    protected function _testFixtures()
+    protected function _createTimeaccounts()
+    {
+        $this->_timeaccountRecords = new Tinebase_Record_RecordSet('Timetracker_Model_Timeaccount');
+        $taController = Timetracker_Controller_Timeaccount::getInstance();
+        // ta for customer 1 and 2 is budgeted AND to bill
+        foreach($this->_customerRecords as $customer) {
+            $this->_timeaccountRecords->addRecord($taController->create(new Timetracker_Model_Timeaccount(array(
+                'title'         => 'TA-for-' . $customer->name,
+                'description'   => 'blabla',
+                'is_open'       => 1,
+                'status'        => $customer->name == 'Customer4' ? 'billed' : 'to bill',
+                'budget' => $customer->name == 'Customer3' ? null : 100
+            ), TRUE)));
+        }
+    }
+    
+    protected function _createTimesheets()
+    {
+        if (! $this->_timeaccountRecords) {
+            $this->_createTimeaccounts();
+        }
+        
+        $this->_timesheetRecords = new Tinebase_Record_RecordSet('Timetracker_Model_Timesheet');
+        
+        $tsDate = clone $this->_referenceDate;
+        $tsDate->addMonth(4)->addDay(5);
+        
+        $timesheetController = Timetracker_Controller_Timesheet::getInstance();
+        
+        // this is a ts on 20xx-05-06
+        $timesheet = new Timetracker_Model_Timesheet(array(
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id' => $this->_timeaccountRecords->filter('title', 'TA-for-Customer3')->getFirstRecord()->getId(),
+            'start_date' => $tsDate,
+            'duration' => 105,
+            'description' => 'ts from ' . (string) $tsDate,
+        ));
+        
+        $this->_timesheetRecords->addRecord($timesheetController->create($timesheet));
+        
+        // this is a ts on 20xx-05-07
+        $timesheet->id = NULL;
+        $timesheet->start_date = $tsDate->addDay(1);
+        $timesheet->description = 'ts from ' . (string) $tsDate;
+        
+        $this->_timesheetRecords->addRecord($timesheetController->create($timesheet));
+        
+        // this is a ts on 20xx-09-07
+        $timesheet->id = NULL;
+        $timesheet->start_date = $tsDate->addMonth(4);
+        $timesheet->description = 'ts from ' . (string) $tsDate;
+        
+        $this->_timesheetRecords->addRecord($timesheetController->create($timesheet));
+        
+        // this is a ts on 20xx-09-08
+        $timesheet->id = NULL;
+        $timesheet->start_date = $tsDate->addDay(1);
+        $timesheet->description = 'ts from ' . (string) $tsDate;
+        
+        $this->_timesheetRecords->addRecord($timesheetController->create($timesheet));
+    }
+    
+    protected function _createFullFixtures()
+    {
+        $this->_createContacts();
+        $this->_createContracts();
+        
+        $this->_testFullFixtures();
+    }
+    
+    protected function _testFullFixtures()
     {
         $this->assertEquals(4, $this->_customerRecords->count());
         $this->assertEquals(12, $this->_addressRecords->count());
-        $this->assertEquals(7, $this->_contractRecords->count());
+        $this->assertEquals(4, $this->_contractRecords->count());
         $this->assertEquals(20, $this->_contactRecords->count());
     }
 }

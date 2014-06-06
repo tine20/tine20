@@ -43,18 +43,78 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
     }
     
+    protected function _createFailingContracts()
+    {
+        // add contract not to bill
+        $this->_contractRecords->addRecord($this->_contractController->create(new Sales_Model_Contract(array(
+            'number'       => 4,
+            'title'        => Tinebase_Record_Abstract::generateUID(),
+            'description'  => '4 unittest no auto',
+            'container_id' => $this->_sharedContractsContainerId,
+            'billing_point' => 'end',
+            'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
+            'interval' => 0,
+            'start_date' => $this->_referenceDate,
+            'end_date' => NULL,
+        ))));
+        
+        // add contract without customer
+        $contract = new Sales_Model_Contract(array(
+            'number'       => 5,
+            'title'        => Tinebase_Record_Abstract::generateUID(),
+            'description'  => '5 unittest auto not possible',
+            'container_id' => $this->_sharedContractsContainerId,
+            'interval' => 1,
+            'start_date' => $this->_referenceDate,
+            'end_date' => NULL,
+            'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
+        ));
+        
+        $contract->relations = array(
+            array(
+                'own_model'              => 'Sales_Model_Contract',
+                'own_backend'            => Tasks_Backend_Factory::SQL,
+                'own_id'                 => NULL,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => 'Sales_Model_CostCenter',
+                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_id'             => $this->_costcenterRecords->getFirstRecord()->getId(),
+                'type'                   => 'LEAD_COST_CENTER'
+            ),
+        );
+        
+        $this->_contractRecords->addRecord($this->_contractController->create($contract));
+        
+        // add contract without address
+        $contract = new Sales_Model_Contract(array(
+            'number'       => 5,
+            'title'        => Tinebase_Record_Abstract::generateUID(),
+            'description'  => '6 unittest auto not possible',
+            'container_id' => $this->_sharedContractsContainerId,
+            'interval' => 1,
+            'start_date' => $this->_referenceDate,
+            'end_date' => NULL,
+        ));
+        
+        $this->_contractRecords->addRecord($this->_contractController->create($contract));
+    }
+    
     /**
      * tests auto invoice creation
      */
     public function testAutoInvoice()
     {
-        $c = Sales_Controller_Invoice::getInstance();
+        $this->_createFullFixtures();
+        $this->_createFailingContracts();
+        
+        $this->assertEquals(7, $this->_contractRecords->count());
+        
         $date = clone $this->_referenceDate;
         $i = 0;
         
         // the whole year, 12 months
         while ($i < 12) {
-            $result = $c->createAutoInvoices($date);
+            $result = $this->_invoiceController->createAutoInvoices($date);
             $date->addMonth(1);
             $i++;
         }
@@ -70,11 +130,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         // also add an hour to get the last end
         $date->addHour(1);
-        $c->createAutoInvoices($date);
+        $this->_invoiceController->createAutoInvoices($date);
         $date->addHour(1);
-        $c->createAutoInvoices($date);
+        $this->_invoiceController->createAutoInvoices($date);
         
-        $all = $c->getAll();
+        $all = $this->_invoiceController->getAll();
         
         $cc1 = $this->_costcenterRecords->filter('remark', 'unittest1')->getFirstRecord();
         $cc2 = $this->_costcenterRecords->filter('remark', 'unittest2')->getFirstRecord();
@@ -193,8 +253,9 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $invoice->positions = Sales_Controller_InvoicePosition::getInstance()->search($filter);
         
         $invoice->cleared = 'CLEARED';
-        $invoice = $c->update($invoice);
+        $invoice = $this->_invoiceController->update($invoice);
         
+        // check correct number generation
         $this->assertEquals("R-000001", $invoice->number);
         
         $invoice = $customer2Invoices->getFirstRecord();
@@ -204,25 +265,27 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $invoice->positions = Sales_Controller_InvoicePosition::getInstance()->search($filter);
         
         $invoice->cleared = 'CLEARED';
-        $invoice = $c->update($invoice);
+        $invoice = $this->_invoiceController->update($invoice);
         
         $this->assertEquals("R-000002", $invoice->number);
         
+        // check disallow editing invoice after clearing
         $invoice->credit_term = 20;
         $this->setExpectedException('Sales_Exception_InvoiceAlreadyClearedEdit');
         
-        $c->update($invoice);
+        $this->_invoiceController->update($invoice);
     }
     
     public function testDeleteInvoice()
     {
-        $invoiceController = Sales_Controller_Invoice::getInstance();
+        $this->_createFullFixtures();
+        
         $date = clone $this->_referenceDate;
         $i = 0;
         
         // the whole year, 12 months
         while ($i < 12) {
-            $result = $invoiceController->createAutoInvoices($date);
+            $result = $this->_invoiceController->createAutoInvoices($date);
             $date->addMonth(1);
             $i++;
         }
@@ -230,7 +293,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $taController = Timetracker_Controller_Timeaccount::getInstance();
         $tsController = Timetracker_Controller_Timesheet::getInstance();
         
-        $allInvoices = $invoiceController->getAll();
+        $allInvoices = $this->_invoiceController->getAll();
         $allTimesheets = $tsController->getAll();
         $allTimeaccounts = $taController->getAll();
         
@@ -244,7 +307,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             }
         }
         
-        $invoiceController->delete($allInvoices->getId());
+        $this->_invoiceController->delete($allInvoices->getId());
         
         $allTimesheets = $tsController->getAll();
         $allTimeaccounts = $taController->getAll();
@@ -265,12 +328,13 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
      */
     public function testBudgetTimeaccountBilled()
     {
-        $invoiceController = Sales_Controller_Invoice::getInstance();
+        $this->_createFullFixtures();
+        
         $date = clone $this->_referenceDate;
         $i = 0;
         
         // do not set to bill, this ta has a budget
-        $customer1Timeaccount = $this->_timeaccounts->filter('title', 'TA-for-Customer1')->getFirstRecord();
+        $customer1Timeaccount = $this->_timeaccountRecords->filter('title', 'TA-for-Customer1')->getFirstRecord();
         $customer1Timeaccount->status = 'not yet billed';
         
         $tsController = Timetracker_Controller_Timesheet::getInstance();
@@ -298,18 +362,18 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $date = clone $this->_referenceDate;
         $date->addMonth(1);
         
-        $result = $invoiceController->createAutoInvoices($date);
+        $result = $this->_invoiceController->createAutoInvoices($date);
         
         $this->assertEquals(1, count($result['created']));
         
         $customer1Timeaccount->status = 'to bill';
         $taController->update($customer1Timeaccount);
         
-        $result = $invoiceController->createAutoInvoices($date);
+        $result = $this->_invoiceController->createAutoInvoices($date);
         $this->assertEquals(1, count($result['created']));
         
         $invoiceId = $result['created'][0];
-        $invoice = $invoiceController->get($invoiceId);
+        $invoice = $this->_invoiceController->get($invoiceId);
         $found = FALSE;
         
         foreach($invoice->relations as $relation) {
@@ -328,9 +392,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
      */
     public function testSetManualNumberRight()
     {
-        $invoiceController = Sales_Controller_Invoice::getInstance();
+        $this->_createCustomers();
+        $this->_createCostCenters();
+        
         $customer = $this->_customerRecords->filter('name', 'Customer1')->getFirstRecord();
-        $invoice = $invoiceController->create(new Sales_Model_Invoice(array(
+        $invoice = $this->_invoiceController->create(new Sales_Model_Invoice(array(
             'number' => 'R-3000',
             'customer_id' => $customer->getId(),
             'description' => 'Manual',
@@ -361,7 +427,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $e = new Exception('No Message');
         
         try {
-            $invoice = $invoiceController->create(new Sales_Model_Invoice(array(
+            $invoice = $this->_invoiceController->create(new Sales_Model_Invoice(array(
                 'number' => 'R-3001',
                 'customer_id' => $customer->getId(),
                 'description' => 'Manual Forbidden',
@@ -394,7 +460,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $e = new Exception('No Message');
         
         try {
-            $invoice = $invoiceController->create(new Sales_Model_Invoice(array(
+            $invoice = $this->_invoiceController->create(new Sales_Model_Invoice(array(
                 'number' => 'R-3001',
                 'customer_id' => $customer->getId(),
                 'description' => 'Manual Forbidden',
@@ -406,5 +472,79 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $this->assertEquals('Tinebase_Exception_AccessDenied', get_class($e));
         $this->assertEquals('You have no right to set the invoice number!', $e->getMessage());
+    }
+    
+    /**
+     * tests if a product aggregate gets billed in the correct periods
+     */
+    public function testOneProductContractInterval()
+    {
+        $startDate = clone $this->_referenceDate;
+        $year = $startDate->format('Y');
+        
+        $this->_createProducts();
+        
+        $this->_createCustomers(1);
+        $this->_createCostCenters();
+        
+        $monthBack = clone $this->_referenceDate;
+        $monthBack->subMonth(1);
+        
+        // this contract begins 6 months before the first invoice will be created
+        $this->_createContracts(array(array(
+            'number'       => 100,
+            'title'        => 'MyContract',
+            'description'  => 'unittest',
+            'container_id' => $this->_sharedContractsContainerId,
+            'billing_point' => 'begin',
+            'billing_address_id' => $this->_addressRecords->filter(
+                'customer_id', $this->_customerRecords->filter(
+                    'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                        'type', 'billing')->getFirstRecord()->getId(),
+            
+            'interval' => 1,
+            'start_date' => $startDate->subMonth(6),
+            'last_autobill' => clone $this->_referenceDate,
+            'end_date' => NULL,
+            'products' => array(
+                array('product_id' => $this->_productRecords->getByIndex(0)->getId(), 'quantity' => 1, 'interval' => 1, 'last_autobill' => $monthBack),
+            )
+        )));
+        
+        $startDate = clone $this->_referenceDate;
+        // the whole year, 12 months
+        $i=0;
+        
+        $startDate->addDay(5);
+        
+        while ($i < 24) {
+            $startDate->addMonth(1);
+            $result = $this->_invoiceController->createAutoInvoices($startDate);
+            $this->assertEquals(1, $result['created_count']);
+            $i++;
+        }
+        
+        $invoices = $this->_invoiceController->getAll('start_date');
+        
+        $this->assertEquals(24, $invoices->count());
+        $this->assertEquals('0101', $invoices->getFirstRecord()->start_date->format('md'));
+        
+        $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->getAll('month');
+        
+        // get sure each invoice positions has the same month as the invoice and the start_date is the first
+        foreach($invoices as $invoice) {
+            $this->assertEquals(1, $invoice->start_date->format('d'));
+            $pos = $invoicePositions->filter('invoice_id', $invoice->getId())->getFirstRecord();
+            $this->assertEquals($invoice->start_date->format('Y-m'), $pos->month);
+            $this->assertEquals($invoice->end_date->format('Y-m'), $pos->month);
+        }
+        
+        $this->assertEquals(24, $invoicePositions->count());
+        
+        $this->assertEquals($year . '-01', $invoicePositions->getFirstRecord()->month);
+        
+        $invoicePositions->sort('month', 'DESC');
+        
+        $this->assertEquals($year + 1 . '-12', $invoicePositions->getFirstRecord()->month);
     }
 }

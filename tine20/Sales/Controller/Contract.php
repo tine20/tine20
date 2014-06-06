@@ -193,7 +193,6 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
      */
     public function updateLastBilledDate(Sales_Model_Contract $contract)
     {
-        
         // update last billed information -> set last_autobill to the date the invoice should have
         // been created and not to the current date, so we can calculate the interval properly
         $lastBilled = $contract->last_autobill ? clone $contract->last_autobill : NULL;

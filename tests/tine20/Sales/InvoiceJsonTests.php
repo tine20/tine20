@@ -31,6 +31,9 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
      */
     public function testCRUD()
     {
+        $this->_createCustomers();
+        $this->_createContracts();
+        
         $json = new Sales_Frontend_Json();
         $customer = $json->getCustomer($this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->getId());
         
@@ -45,6 +48,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $this->assertTrue(is_array($customer['relations']));
         $this->assertTrue(is_array($customer['relations'][0]['related_record']));
+        
         $this->assertEquals(1, count($customer['relations']));
         $this->assertEquals('CUSTOMER', $customer['relations'][0]['type']);
         
@@ -68,10 +72,11 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
      */
     public function testResolving()
     {
+        $this->_createFullFixtures();
+        
         $date = clone $this->_referenceDate;
         
-        $c = Sales_Controller_Invoice::getInstance();
-        $c->createAutoInvoices($date);
+        $this->_invoiceController->createAutoInvoices($date);
         
         $json = new Sales_Frontend_Json();
         $invoices = $json->searchInvoices(array(), array());
@@ -136,13 +141,14 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
      */
     public function testClearing()
     {
+        $this->_createFullFixtures();
+        
         // the whole year, 12 months
         $i = 0;
-        $c = Sales_Controller_Invoice::getInstance();
         $date = clone $this->_referenceDate;
         
         while ($i < 12) {
-            $result = $c->createAutoInvoices($date);
+            $result = $this->_invoiceController->createAutoInvoices($date);
             $date->addMonth(1);
             $i++;
         }
@@ -226,6 +232,8 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
      */
     public function testSanitizingProductId()
     {
+        $this->_createProducts();
+        $this->_createContracts();
         
         $json = new Sales_Frontend_Json();
         
@@ -248,11 +256,12 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
      */
     public function testRemoveInvoiceFromBillables()
     {
+        $this->_createFullFixtures();
+        
         $i = 0;
-        $c = Sales_Controller_Invoice::getInstance();
         $date = clone $this->_referenceDate;
         
-        $result = $c->createAutoInvoices($date);
+        $result = $this->_invoiceController->createAutoInvoices($date);
         
         $json = new Sales_Frontend_Json();
         $invoices = $json->searchInvoices(array(), array());
