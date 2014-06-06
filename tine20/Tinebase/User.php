@@ -449,18 +449,24 @@ class Tinebase_User
         try {
             $group = $groupBackend->getGroupById($user->accountPrimaryGroup);
         } catch (Tinebase_Exception_Record_NotDefined $tern) {
-            try {
-                $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
-            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                throw new Tinebase_Exception('Primary group ' . $user->accountPrimaryGroup . ' not found in sync backend.');
-            }
-            try {
-                $sqlGgroup = $groupBackend->getGroupByName($group->name);
-                throw new Tinebase_Exception('Group already exists but it has a different ID: ' . $group->name);
-                
-            } catch (Tinebase_Exception_Record_NotDefined $tern) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Adding group " . $group->name);
-                $group = $groupBackend->addGroupInSqlBackend($group);
+            if ($groupBackend->isDisabledBackend()) {
+                // groups are sql only
+                $group = $groupBackend->getDefaultGroup();
+                $user->accountPrimaryGroup = $group->getId();
+            } else {
+                try {
+                    $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
+                } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                    throw new Tinebase_Exception('Primary group ' . $user->accountPrimaryGroup . ' not found in sync backend.');
+                }
+                try {
+                    $sqlGgroup = $groupBackend->getGroupByName($group->name);
+                    throw new Tinebase_Exception('Group already exists but it has a different ID: ' . $group->name);
+                    
+                } catch (Tinebase_Exception_Record_NotDefined $tern) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Adding group " . $group->name);
+                    $group = $groupBackend->addGroupInSqlBackend($group);
+                }
             }
         }
         
