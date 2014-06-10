@@ -536,6 +536,8 @@ class Sales_InvoiceTestCase extends TestCase
                 'budget' => $customer->name == 'Customer3' ? null : 100
             ), TRUE)));
         }
+        
+        return $this->_timeaccountRecords;
     }
     
     protected function _createTimesheets()

@@ -178,7 +178,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
          
          $lastAutobill = clone $this->last_autobill;
          
-         if ($lastAutobill->addMonth($this->interval) < $date) {
+         if ($lastAutobill->addMonth($this->interval) <= $date) {
              return TRUE;
          }
          

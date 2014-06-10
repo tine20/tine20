@@ -629,6 +629,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     {
         $records = $this->_backend->getMultiple($_ids);
         $invoicePositionController = Sales_Controller_InvoicePosition::getInstance();
+        $contractController = Sales_Controller_Contract::getInstance();
         
         foreach($records as $record) {
             if ($record->cleared == 'CLEARED') {
@@ -674,6 +675,39 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 
                 // delete invoice positions
                 $invoicePositionController->delete($invoicePositions->getId());
+                
+                // set last_autobill a period back
+                $relations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $record->getId(), NULL, array(), TRUE, array('Sales_Model_Contract'));
+                
+                if ($relations->count()) {
+                    $contract = $relations->getFirstRecord()->related_record;
+                    
+                    if ($contract->last_autobill) {
+                        $lab = clone $contract->last_autobill;
+                        $contract->last_autobill = $lab->subMonth($contract->interval);
+                        
+                        $contractController->update($contract);
+                    }
+                    
+                    // check product aggregates
+                    $filter = new Sales_Model_ProductAggregateFilter(array());
+                    $filter->addFilter(new Tinebase_Model_Filter_Text(
+                        array('field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId())
+                    ));
+                    
+                    $paController = Sales_Controller_ProductAggregate::getInstance();
+                    $productAggregates = $paController->search($filter);
+                    
+                    foreach($productAggregates as $productAggregate) {
+                        $lab = clone $productAggregate->last_autobill;
+                    
+                        if ($lab) {
+                            $productAggregate->last_autobill = $lab->addMonth(- (int) $productAggregate->interval);
+                        }
+                    
+                        $paController->update($productAggregate);
+                    }
+                }
             }
         }
         

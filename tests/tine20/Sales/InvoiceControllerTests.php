@@ -290,6 +290,15 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $i++;
         }
         
+        $paController = Sales_Controller_ProductAggregate::getInstance();
+        $productAggregates = $paController->getAll();
+        $contracts = $this->_contractController->getAll();
+        $contracts->sort('id', 'DESC');
+        
+        $c1 = $contracts->getFirstRecord();
+        
+        $this->assertEquals(2, $productAggregates->count());
+        
         $taController = Timetracker_Controller_Timeaccount::getInstance();
         $tsController = Timetracker_Controller_Timesheet::getInstance();
         
@@ -547,4 +556,76 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $this->assertEquals($year + 1 . '-12', $invoicePositions->getFirstRecord()->month);
     }
+    
+    /**
+     * test product only contract setting last_autobill and resetting last_autobill on delete
+     */
+    public function testLastAutobillAfterDeleteInvoice()
+    {
+        $startDate = clone $this->_referenceDate;
+        $year = $startDate->format('Y');
+        
+        $this->_createProducts();
+        
+        $this->_createCustomers(1);
+        $this->_createCostCenters();
+        
+        $this->_createContracts(array(array(
+            'number'       => 100,
+            'title'        => 'MyContract',
+            'description'  => 'unittest',
+            'container_id' => $this->_sharedContractsContainerId,
+            'billing_point' => 'begin',
+            'billing_address_id' => $this->_addressRecords->filter(
+                'customer_id', $this->_customerRecords->filter(
+                    'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                        'type', 'billing')->getFirstRecord()->getId(),
+        
+            'interval' => 1,
+            'start_date' => $startDate,
+            'last_autobill' => NULL,
+            'end_date' => NULL,
+            'products' => array(
+                array('product_id' => $this->_productRecords->getByIndex(0)->getId(), 
+                    'quantity' => 1, 'interval' => 1, 'last_autobill' => NULL),
+            )
+        )));
+        
+        $startDate = clone $this->_referenceDate;
+        $i=0;
+        
+        $result = $this->_invoiceController->createAutoInvoices($startDate);
+        $this->assertEquals(1, $result['created_count']);
+        $contract = $this->_contractController->getAll()->getFirstRecord();
+
+        // there hasn't been any volatile efforts, so do not set last_autobill
+        $this->assertEquals(NULL, $contract->last_autobill);
+        
+        $paController = Sales_Controller_ProductAggregate::getInstance();
+        $productAggregate = $paController->getAll()->getFirstRecord();
+        
+        $this->assertEquals($startDate, $productAggregate->last_autobill);
+        
+        $startDate->addMonth(1);
+        $result = $this->_invoiceController->createAutoInvoices($startDate);
+        $this->assertEquals(1, $result['created_count']);
+        
+        $startDate->addMonth(1);
+        $result = $this->_invoiceController->createAutoInvoices($startDate);
+        
+        $this->assertEquals(1, $result['created_count']);
+        
+        $productAggregate = $paController->getAll()->getFirstRecord();
+        $this->assertEquals($startDate, $productAggregate->last_autobill);
+        
+        // the last invoice gets deleted
+        $startDate->subMonth(1);
+        
+        $lastInvoice = $this->_invoiceController->get($result['created'][0]);
+        $this->_invoiceController->delete($lastInvoice->getId());
+        
+        $productAggregate = $paController->getAll()->getFirstRecord();
+        $this->assertEquals($startDate, $productAggregate->last_autobill);
+    }
+    
 }
