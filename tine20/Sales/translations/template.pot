@@ -796,3 +796,6 @@ msgid ""
 "The Invoice you tried to edit is cleared already, so no editing is possible "
 "anymore!"
 msgstr ""
+
+msgid "Last Billed"
+msgstr ""

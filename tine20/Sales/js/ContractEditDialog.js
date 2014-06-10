@@ -205,6 +205,121 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             editDialogRecordProperty: 'products'
         });
         
+        var items = [[{
+            columnWidth: .25,
+            fieldLabel: this.app.i18n._('Number'),
+            name: 'number',
+            multiEditable: false,
+            readOnly: this.autoGenerateNumber,
+            allowBlank: this.autoGenerateNumber
+        },{
+            columnWidth: .75,
+            fieldLabel: this.app.i18n._('Title'),
+            name: 'title',
+            allowBlank: false
+        }], [{
+            columnWidth: 1,
+            editDialog: this,
+            xtype: 'tinerelationpickercombo',
+            allowBlank: true,
+            app: 'Sales',
+            recordClass: Tine.Sales.Model.Customer,
+            relationType: 'CUSTOMER',
+            relationDegree: 'sibling',
+            modelUnique: true,
+            listeners: {
+                scope: this,
+                select: this.onCustomerLoad
+            },
+            ref: '../../../../../customerPicker',
+            fieldLabel: this.app.i18n._('Customer')
+        }], [ Tine.widgets.form.RecordPickerManager.get('Sales', 'Address', {
+                fieldLabel: this.app.i18n._('Billing Address'),
+                name: 'billing_address_id',
+                ref: '../../../../../addressPicker',
+                columnWidth: 1,
+                disabled: true,
+                allowBlank: true
+            })], [{
+                    xtype: 'datefield',
+                    name: 'start_date',
+                    columnWidth: 1/6,
+                    fieldLabel: this.app.i18n._('Start Date'),
+                    allowBlank: false
+                }, {
+                    xtype: 'datefield',
+                    name: 'end_date',
+                    fieldLabel: this.app.i18n._('End Date'),
+                    columnWidth: 1/6
+                }, {
+                    columnWidth: 2/6,
+                    name: 'interval',
+                    fieldLabel: this.app.i18n._('Billing Interval'),
+                    xtype: 'combo',
+                    store: [0,1,2,3,4,5,6,7,8,9,10,11,12]
+                }, {
+                    name: 'billing_point',
+                    fieldLabel: this.app.i18n._('Billing Point'),
+                    xtype: 'combo',
+                    store: [
+                        ['begin', this.app.i18n._('begin') ],
+                        [  'end', this.app.i18n._('end') ]
+                    ],
+                    columnWidth: 2/6
+            }], [{
+                columnWidth: 1/3,
+                xtype: 'tinerelationpickercombo',
+                fieldLabel: this.app.i18n._('Contact Person (external)'),
+                editDialog: this,
+                allowBlank: true,
+                app: 'Addressbook',
+                recordClass: Tine.Addressbook.Model.Contact,
+                relationType: 'CUSTOMER',
+                relationDegree: 'sibling',
+                modelUnique: true
+            }, {
+                columnWidth: 1/3,
+                editDialog: this,
+                xtype: 'tinerelationpickercombo',
+                fieldLabel: this.app.i18n._('Contact Person (internal)'),
+                allowBlank: true,
+                app: 'Addressbook',
+                recordClass: Tine.Addressbook.Model.Contact,
+                relationType: 'RESPONSIBLE',
+                relationDegree: 'sibling',
+                modelUnique: true
+            }, {
+                columnWidth: 1/3,
+                editDialog: this,
+                xtype: 'tinerelationpickercombo',
+                fieldLabel: this.app.i18n._('Lead Cost Center'),
+                allowBlank: true,
+                app: 'Sales',
+                recordClass: Tine.Sales.Model.CostCenter,
+                relationType: 'LEAD_COST_CENTER',
+                relationDegree: 'sibling',
+                modelUnique: true
+            }]];
+            
+        if (Tine.Tinebase.common.hasRight('manage_invoices', 'Sales')) {
+            items.push([{
+                xtype: 'datefield',
+                name: 'last_autobill',
+                columnWidth: 1/3,
+                fieldLabel: this.app.i18n._('Last Billed'),
+                allowBlank: true
+            }]);
+        }
+            
+        items.push([{
+            columnWidth: 1,
+            fieldLabel: this.app.i18n._('Description'),
+            emptyText: this.app.i18n._('Enter description...'),
+            name: 'description',
+            xtype: 'textarea',
+            height: 200
+        }]);
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -234,110 +349,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         labelSeparator: '',
                         columnWidth: .333
                     },
-                    items: [[{
-                        columnWidth: .25,
-                        fieldLabel: this.app.i18n._('Number'),
-                        name: 'number',
-                        multiEditable: false,
-                        readOnly: this.autoGenerateNumber,
-                        allowBlank: this.autoGenerateNumber
-                    },{
-                        columnWidth: .75,
-                        fieldLabel: this.app.i18n._('Title'),
-                        name: 'title',
-                        allowBlank: false
-                    }], [{
-                        columnWidth: 1,
-                        editDialog: this,
-                        xtype: 'tinerelationpickercombo',
-                        allowBlank: true,
-                        app: 'Sales',
-                        recordClass: Tine.Sales.Model.Customer,
-                        relationType: 'CUSTOMER',
-                        relationDegree: 'sibling',
-                        modelUnique: true,
-                        listeners: {
-                            scope: this,
-                            select: this.onCustomerLoad
-                        },
-                        ref: '../../../../../customerPicker',
-                        fieldLabel: this.app.i18n._('Customer')
-                    }], [ Tine.widgets.form.RecordPickerManager.get('Sales', 'Address', {
-                            fieldLabel: this.app.i18n._('Billing Address'),
-                            name: 'billing_address_id',
-                            ref: '../../../../../addressPicker',
-                            columnWidth: 1,
-                            disabled: true,
-                            allowBlank: true
-                        })], [{
-                                xtype: 'datefield',
-                                name: 'start_date',
-                                columnWidth: 1/6,
-                                fieldLabel: this.app.i18n._('Start Date'),
-                                allowBlank: false
-                            }, {
-                                xtype: 'datefield',
-                                name: 'end_date',
-                                fieldLabel: this.app.i18n._('End Date'),
-                                columnWidth: 1/6
-                            }, {
-                                columnWidth: 2/6,
-                                name: 'interval',
-                                fieldLabel: this.app.i18n._('Billing Interval'),
-                                xtype: 'combo',
-                                store: [0,1,2,3,4,5,6,7,8,9,10,11,12]
-                            }, {
-                                name: 'billing_point',
-                                fieldLabel: this.app.i18n._('Billing Point'),
-                                xtype: 'combo',
-                                store: [
-                                    ['begin', this.app.i18n._('begin') ],
-                                    [  'end', this.app.i18n._('end') ]
-                                ],
-                                columnWidth: 2/6
-                        }], [{
-                            columnWidth: 1/3,
-                            xtype: 'tinerelationpickercombo',
-                            fieldLabel: this.app.i18n._('Contact Person (external)'),
-                            editDialog: this,
-                            allowBlank: true,
-                            app: 'Addressbook',
-                            recordClass: Tine.Addressbook.Model.Contact,
-                            relationType: 'CUSTOMER',
-                            relationDegree: 'sibling',
-                            modelUnique: true
-                        }, {
-                            columnWidth: 1/3,
-                            editDialog: this,
-                            xtype: 'tinerelationpickercombo',
-                            fieldLabel: this.app.i18n._('Contact Person (internal)'),
-                            allowBlank: true,
-                            app: 'Addressbook',
-                            recordClass: Tine.Addressbook.Model.Contact,
-                            relationType: 'RESPONSIBLE',
-                            relationDegree: 'sibling',
-                            modelUnique: true
-                        }, {
-                            columnWidth: 1/3,
-                            editDialog: this,
-                            xtype: 'tinerelationpickercombo',
-                            fieldLabel: this.app.i18n._('Lead Cost Center'),
-                            allowBlank: true,
-                            app: 'Sales',
-                            recordClass: Tine.Sales.Model.CostCenter,
-                            relationType: 'LEAD_COST_CENTER',
-                            relationDegree: 'sibling',
-                            modelUnique: true
-                        }],[
-                        
-                    ], [{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Description'),
-                        emptyText: this.app.i18n._('Enter description...'),
-                        name: 'description',
-                        xtype: 'textarea',
-                        height: 200
-                    }]] 
+                    items: items
                 }, {
                     // activities and tags
                     layout: 'accordion',

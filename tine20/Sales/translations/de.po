@@ -661,3 +661,6 @@ msgstr "Rechnungsnummer manuell vergeben"
 
 msgid "allow to set the number of an invoice"
 msgstr "Erlaubt, die Rechnungsnummer manuell zu vergeben"
+
+msgid "Last Billed"
+msgstr "Zuletzt abgerechnet"
