@@ -345,6 +345,12 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 this.getForm().findField('cleared_at').setValue(new Date());
             }
         }
+    },
+    
+    doCopyRecord: function() {
+        Tine.Timetracker.TimeaccountEditDialog.superclass.doCopyRecord.call(this);
+        
+        this.record.set('status', 'not yet billed');
     }
 });
 

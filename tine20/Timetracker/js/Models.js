@@ -155,7 +155,7 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.data.Record.create(Tine.Timet
     containerName: 'All Timeaccounts',
     containersName: 'timeaccount lists',
     
-    copyOmitFields: ['cleared_at', 'cleared_in', 'invoice_id'],
+    copyOmitFields: ['cleared_at', 'billed_in', 'invoice_id', 'status'],
     
     getTitle: function() {
         var closedText = this.get('is_open') ? '' : (' (' + Tine.Tinebase.appMgr.get('Timetracker').i18n._('closed') + ')');
