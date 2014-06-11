@@ -406,7 +406,7 @@ class Sales_InvoiceTestCase extends TestCase
             }
             
             $contractData = array(
-                // 1 invoice should be created from 1.1.2013 - 1.1.2014
+                // 1 invoice should be created from 1.2.2013 - 28.2.2013
                 array(
                     'number'       => 1,
                     'title'        => Tinebase_Record_Abstract::generateUID(),
@@ -475,7 +475,7 @@ class Sales_InvoiceTestCase extends TestCase
             $costcenter = $this->_costcenterRecords->getByIndex($i);
             $customer   = $this->_customerRecords->getByIndex($i);
             
-            if ($this->_timesheetRecords) {
+            if ($this->_timesheetRecords || $this->_timeaccountRecords) {
                 $timeaccount = $this->_timeaccountRecords->getByIndex($i);
             }
             
@@ -504,7 +504,7 @@ class Sales_InvoiceTestCase extends TestCase
                 ),
             );
 
-            if ($this->_timesheetRecords) {
+            if ($this->_timesheetRecords || $this->_timeaccountRecords) {
                 $contract->relations = array_merge($contract->relations, array(array(
                     'own_model'              => 'Sales_Model_Contract',
                     'own_backend'            => Tasks_Backend_Factory::SQL,

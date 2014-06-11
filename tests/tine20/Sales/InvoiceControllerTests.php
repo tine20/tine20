@@ -110,6 +110,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(7, $this->_contractRecords->count());
         
         $date = clone $this->_referenceDate;
+        
         $i = 0;
         
         // the whole year, 12 months
@@ -182,7 +183,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         // contract 1 gets billed at the begin of the period
         $c1IArray = $customer1Invoices->start_date;
-        $this->assertEquals($year . '-01-01 00:00:00', $c1IArray[0]->toString());
+        
+        $this->assertEquals($year . '-02-01 00:00:00', $c1IArray[0]->toString());
         
         // find out if year is a leap year
         if (($year % 400) == 0 || (($year % 4) == 0 && ($year % 100) != 0)) {
@@ -192,7 +194,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         }
         
         $c1IArray = $customer1Invoices->end_date;
-        $this->assertEquals($year . '-01-31 23:59:59', $c1IArray[0]->toString());
+        $this->assertEquals($year . '-02-' . $lastFebruaryDay . ' 23:59:59', $c1IArray[0]->toString());
         
         // contract 2 gets billed at the end of the period, and the second period ends at 1.8.20xx
         $c2IsArray = $customer2Invoices->start_date;
@@ -333,7 +335,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
     /**
      * @see: rt127444
      * 
-     * make sure timeaccounts won't be billed if they shouln't
+     * make sure timeaccounts won't be billed if they shouldn't
      */
     public function testBudgetTimeaccountBilled()
     {
@@ -377,6 +379,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $customer1Timeaccount->status = 'to bill';
         $taController->update($customer1Timeaccount);
+        
+        $date->addSecond(1);
         
         $result = $this->_invoiceController->createAutoInvoices($date);
         $this->assertEquals(1, count($result['created']));
@@ -570,6 +574,10 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->_createCustomers(1);
         $this->_createCostCenters();
         
+        // has budget, is to bill
+        $ta = $this->_createTimeaccounts()->getFirstRecord();
+        
+        
         $this->_createContracts(array(array(
             'number'       => 100,
             'title'        => 'MyContract',
@@ -598,8 +606,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(1, $result['created_count']);
         $contract = $this->_contractController->getAll()->getFirstRecord();
 
-        // there hasn't been any volatile efforts, so do not set last_autobill
-        $this->assertEquals(NULL, $contract->last_autobill);
+        // there has been some volatile effort, so do set last_autobill
+        $this->assertEquals($startDate, $contract->last_autobill);
         
         $paController = Sales_Controller_ProductAggregate::getInstance();
         $productAggregate = $paController->getAll()->getFirstRecord();
@@ -626,6 +634,10 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $productAggregate = $paController->getAll()->getFirstRecord();
         $this->assertEquals($startDate, $productAggregate->last_autobill);
+        
+        $contract = $this->_contractController->getAll()->getFirstRecord();
+        
+        $this->assertEquals($startDate, $contract->last_autobill);
     }
     
 }

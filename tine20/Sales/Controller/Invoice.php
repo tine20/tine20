@@ -154,8 +154,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         }
         
         $nextBill = Sales_Controller_Contract::getInstance()->getNextBill($contract);
-        
-        if ($nextBill->isLater($currentDate)) {
+
+        if ($nextBill->isLaterOrEquals($currentDate)) {
             if ($products->count() == 0) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Don\'t handle - contract does not have to be billed and there aren\'t any products');
@@ -176,13 +176,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     }
                     
                     // assure creating the last bill bill if a contract has bee terminated
-                    if (($contract->end_date !== NULL) && $nextBill->isLater($contract->end_date)) {
+                    if (($contract->end_date !== NULL) && $nextBill->isLaterOrEquals($contract->end_date)) {
                         $nextBill = clone $contract->end_date;
                     }
                     
                     $nextBill->setTime(0,0,0);
                     // there is a product to bill, so stop to iterate
-                    if ($nextBill->isLater($currentDate)) {
+                    if ($nextBill->isLaterOrEquals($currentDate)) {
                         $billIt = TRUE;
                         break;
                     }
@@ -257,10 +257,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         $referenceDate->addMonth($contract->interval);
                     }
         
-                    if ($referenceDate->isEarlier($currentDate)) {
+                    if ($referenceDate->isEarlierOrEquals($currentDate)) {
                         $billIt = TRUE;
-                        // this is true even if there are no efforts to bill
-                        $volatileBilled = TRUE;
                     }
         
                 } else if ($relation->related_record->isBillable($currentDate, $contract)) {
@@ -354,10 +352,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' '
                         . 'No efforts for the contract "' . $contract->title . '" could be found.', Zend_Log::INFO);
             }
-        
-            if ($volatileBilled) {
-                Sales_Controller_Contract::getInstance()->updateLastBilledDate($contract);
-            }
+            
+            Sales_Controller_Contract::getInstance()->updateLastBilledDate($contract);
             return false;
         }
         
@@ -411,10 +407,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $this->_autoInvoiceIterationResults[] = $invoice->getId();
         
         
-        // update global last autobill date (for timeaccounts and volatile efforts) only if there are any
-        if ($volatileBilled) {
-            Sales_Controller_Contract::getInstance()->updateLastBilledDate($contract);
-        }
+        // always update global last autobill date (for timeaccounts and volatile efforts)
+        Sales_Controller_Contract::getInstance()->updateLastBilledDate($contract);
         
         // update last autobill info of the product
         foreach($billableAccountables as $accountable) {
@@ -685,7 +679,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     if ($contract->last_autobill) {
                         $lab = clone $contract->last_autobill;
                         $contract->last_autobill = $lab->subMonth($contract->interval);
-                        
+                        $contract->products = NULL;
                         $contractController->update($contract);
                     }
                     

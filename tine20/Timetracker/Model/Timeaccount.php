@@ -195,16 +195,16 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
         
         // if this is not budgeted, show for timesheets in this period
         $filter = new Timetracker_Model_TimesheetFilter(array(
-            array('field' => 'start_date', 'operator' => 'before', 'value' => $date),
-            array('field' => 'start_date', 'operator' => 'after', 'value' => $contract->start_date),
-            array('field' => 'start_date', 'operator' => 'after', 'value' => $startDate),
+            array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $date),
+            array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $contract->start_date),
+            array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $startDate),
             array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
             array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
         ), 'AND');
         
         if (! is_null($contract->end_date)) {
             $filter->addFilter(new Tinebase_Model_Filter_Date(
-                array('field' => 'start_date', 'operator' => 'before', 'value' => $contract->end_date)
+                array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $contract->end_date)
             ));
         }
         

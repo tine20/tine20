@@ -30,11 +30,4 @@ interface Sales_Model_Billable_Interface
      * @return float
      */
     public function getQuantity();
-    
-//     /**
-//      * clears this billable
-//      *
-//      * @return float
-//      */
-//     public function setCleared();
 }
