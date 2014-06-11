@@ -212,6 +212,17 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             {id: 'interval', editor: this.intervalEditor, quickaddField: this.intervalQuickadd, dataIndex: 'interval', header: this.app.i18n._('Interval'),  scope: this, width: 90}
         ];
         
+        if (Tine.Tinebase.common.hasRight('manage_invoices', 'Sales')) {
+            columns.push({
+                id: 'last_autobill',
+                editor: new Ext.ux.form.ClearableDateField(),
+                quickaddField: new Ext.ux.form.ClearableDateField(),
+                dataIndex: 'last_autobill',
+                header: this.app.i18n._('Last Billed'),
+                scope: this,
+                width: 90
+            });
+        }
         
         return new Ext.grid.ColumnModel({
             defaults: {
