@@ -98,7 +98,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testMuteToogle()
     {
-        $event = $this->_getEvent(false, 1);
+        $event = $this->_getEvent(false, /* $mute = */ 1);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
 
         self::flushMailer();

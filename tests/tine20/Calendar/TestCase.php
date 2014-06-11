@@ -129,6 +129,7 @@ abstract class Calendar_TestCase extends TestCase
      * returns a simple event
      * 
      * @param bool $now
+     * @param bool $mute
      * @return Calendar_Model_Event
      */
     protected function _getEvent($now = FALSE, $mute = NULL)
