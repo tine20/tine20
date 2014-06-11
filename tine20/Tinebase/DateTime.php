@@ -392,6 +392,30 @@ class Tinebase_DateTime extends DateTime
     }
     
     /**
+     * Returns true if this date or datepart is earlier or equals than the given date
+     *
+     * @param  DateTime                        $date    Date to compare with
+     * @param  string                          $part    OPTIONAL Part of the date to compare, if null the timestamp is used
+     * @return boolean
+     */
+    public function isEarlierOrEquals($_date, $_part = 'c')
+    {
+        return $this->compare($_date, $_part) < 1;
+    }
+    
+    /**
+     * Returns true if this date or datepart is later or equals than the given date
+     *
+     * @param  DateTime                        $date    Date to compare with
+     * @param  string                          $part    OPTIONAL Part of the date to compare, if null the timestamp is used
+     * @return boolean
+     */
+    public function isLaterOrEquals($_date, $_part = 'c')
+    {
+        return $this->compare($_date, $_part) > -1;
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see DateTime::setDate()
      * @note PHP 5.3.0 changed the return value on success from NULL to DateTime.
