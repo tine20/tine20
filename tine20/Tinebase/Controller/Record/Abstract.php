@@ -1840,7 +1840,8 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
     
-        if ($_record->has($_property)) {
+        // don't handle property if it is set to null. an empty array will remove all records on this property
+        if ($_record->has($_property) && $_record->{$_property} != NULL) {
     
             $ccn = $_fieldConfig['controllerClassName'];
             $controller = $ccn::getInstance();
