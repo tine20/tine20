@@ -24,6 +24,8 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
     {
         parent::setUp();
         
+        Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);
+        
         $this->_uit = Calendar_Controller_MSEventFacade::getInstance();
         $this->_uit->setEventFilter(new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'equals', 'value' => array(

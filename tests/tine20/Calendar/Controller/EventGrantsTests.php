@@ -45,6 +45,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $this->_setupTestCalendars();
         
         $this->_uit = Calendar_Controller_Event::getInstance();
+        $this->_uit->doContainerACLChecks(true);
     }
     
     public function tearDown()
