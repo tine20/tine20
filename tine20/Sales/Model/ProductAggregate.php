@@ -116,13 +116,17 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
     public function getInterval(Tinebase_DateTime $date = NULL)
     {
         $from = clone $this->last_autobill;
+        $from->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
         if (! $this->_firstBill) {
             $from->addMonth($this->interval);
         }
         
-        $to   = clone $from;
-        $to->addMonth($this->interval)->subSecond(1);
+        $from->setTime(0,0,0);
+        
+        $to = clone $from;
+        $to->addMonth($this->interval);
+        $to->subSecond(1);
         
         return array($from, $to);
     }
@@ -139,6 +143,8 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
         
         list($from, $to) = $this->getInterval();
         $this->_billables = array();
+        
+        $this->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
         while($from < $to) {
             $this->_billables[$from->format('Y-m')] = array(clone $this);
@@ -172,6 +178,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
              
              // products always get billed at the beginning of a period
              $this->last_autobill = clone $contract->start_date;
+             $this->last_autobill->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
              
              return TRUE;
          }
@@ -217,9 +224,15 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      
      public function updateLastBilledDate()
      {
+         $this->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+         
          if (! $this->_firstBill) {
              $this->last_autobill->addMonth($this->interval);
          }
+         
+         $this->last_autobill->setTime(0,0,0);
+         
+         $this->setTimezone('UTC');
          
          Sales_Controller_ProductAggregate::getInstance()->update($this, FALSE);
      }

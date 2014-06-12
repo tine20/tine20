@@ -193,6 +193,8 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
      */
     public function updateLastBilledDate(Sales_Model_Contract $contract)
     {
+        $contract->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        
         // update last billed information -> set last_autobill to the date the invoice should have
         // been created and not to the current date, so we can calculate the interval properly
         $lastBilled = $contract->last_autobill ? clone $contract->last_autobill : NULL;
@@ -215,13 +217,17 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
             $contract->last_autobill->addMonth($contract->interval);
         }
         
+        $contract->last_autobill->setTime(0,0,0);
+        $contract->setTimezone('UTC');
+        
         return $this->update($contract, FALSE);
     }
     
     /**
+     * get next date to bill the contract given.
      * 
-     * @param unknown $contract
-     * @return unknown
+     * @param Sales_Model_Contract $contract
+     * @return Tinebase_DateTime
      */
     public function getNextBill($contract)
     {
@@ -253,6 +259,7 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
     
     /**
      * if dependent records should not be handled, set this to false
+     * 
      * @param unknown $toggle
      */
     public function setHandleDependentRecords($toggle)

@@ -220,7 +220,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 dataIndex: 'last_autobill',
                 header: this.app.i18n._('Last Billed'),
                 scope: this,
-                width: 90
+                width: 180
             });
         }
         

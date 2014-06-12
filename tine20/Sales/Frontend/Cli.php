@@ -48,17 +48,23 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     
         // if day argument is given, validate
         if (array_key_exists('day', $args)) {
-            $dateOK = TRUE;
             $split = explode('-', $args['day']);
             if (! count($split == 3)) {
+                // failure
             } else {
                 if ((strlen($split[0]) != 4) || (strlen($split[1]) != 2) || (strlen($split[2]) != 2)) {
+                    // failure
                 } elseif ((intval($split[1]) == 0) || (intval($split[2]) == 0)) {
-                    // other errors are caught by datetime
+                    // failure
                 } else {
+                    // other errors are caught by datetime
                     try {
+                        
                         $date = new Tinebase_DateTime();
-                        $date->setDate($split[0], $split[1], $split[2]);
+                        // use usertimezone
+                        $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                        // if a date is given, set hour to 3
+                        $date->setDate($split[0], $split[1], $split[2])->setTime(3,0,0);
                     } catch (Exception $e) {
                         Tinebase_Exception::log($e);
                     }
@@ -71,6 +77,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         if (! $date) {
             $date = Tinebase_DateTime::now();
+            $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -114,6 +121,44 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'related_id' => $contract->getId(),
                 'type' => 'CONTRACT'
             )));
+        }
+    }
+    
+    public function setLastAutobill()
+    {
+        $cc = Sales_Controller_Contract::getInstance();
+        $pc = Sales_Controller_ProductAggregate::getInstance();
+        
+        $date = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $date->setDate($date->format('Y'), 1, 1)->setTime(0,0,0);
+        $date->setTimezone('UTC');
+        
+        $filter = new Sales_Model_ContractFilter(array(
+            array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $date)
+        ));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'isnull', 'value' => NULL)));
+
+        $contracts = $cc->search($filter);
+        
+        foreach($contracts as $contract) {
+            $filter = new Sales_Model_ProductAggregateFilter(array());
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId())));
+            
+            echo 'Updating last_autobill of ' . $contract->title . PHP_EOL;
+            
+            $contract->last_autobill = clone $contract->start_date;
+            $contract->last_autobill->subMonth($contract->interval);
+            
+            foreach ($pc->search($filter) as $pagg) {
+                echo 'Updating last_autobill of product assigned to ' . $contract->title . PHP_EOL;
+                
+                $pagg->last_autobill = clone $contract->start_date;
+                $pagg->last_autobill->subMonth($pagg->interval);
+                
+                $pc->update($pagg);
+            }
+            
+            $cc->update($contract);
         }
     }
 }

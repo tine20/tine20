@@ -78,6 +78,26 @@ class Sales_InvoiceTestCase extends TestCase
     protected $_referenceDate = NULL;
     
     /**
+     * the year part of the reference date
+     * 
+     * @var string
+     */
+    protected $_referenceYear = NULL;
+    
+    /**
+     * this is true, if the year of the reference date is a leap year
+     * 
+     * @var bool
+     */
+    protected $_isLeapYear = FALSE;
+    
+    /**
+     * holds the last day of each month (january is on the 0 index!)
+     * 
+     * @var array
+     */
+    protected $_lastMonthDays = NULL;
+    /**
      * 
      * @var Addressbook_Controller_Contact
      */
@@ -98,6 +118,18 @@ class Sales_InvoiceTestCase extends TestCase
      * @var Sales_Controller_CostCenter
      */
     protected $_costcenterController = NULL;
+    
+    /**
+     * 
+     * @var Timetracker_Controller_Timesheet
+     */
+    protected $_timesheetController = NULL;
+    
+    /**
+     *
+     * @var Timetracker_Controller_Timeaccount
+     */
+    protected $_timeaccountController = NULL;
     
     /**
      *
@@ -165,10 +197,19 @@ class Sales_InvoiceTestCase extends TestCase
     {
         // set reference date to the 1st january of last year
         $this->_referenceDate = Tinebase_DateTime::now();
-        $this->_referenceDate->setTimezone('UTC');//Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $this->_referenceDate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $this->_referenceDate->subYear(1);
         $this->_referenceDate->setDate($this->_referenceDate->format('Y'), 1 ,1);
         $this->_referenceDate->setTime(0,0,0);
+        
+        $this->_referenceYear = $this->_referenceDate->format('Y');
+        $this->_lastMonthDays = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+        
+        // find out if year is a leap year
+        if (($this->_referenceYear % 400) == 0 || (($this->_referenceYear % 4) == 0 && ($this->_referenceYear % 100) != 0)) {
+            $this->_isLeapYear = TRUE;
+            $this->_lastMonthDays[1] = 29;
+        }
     }
     
     protected function _createContacts($count = 20)
@@ -256,6 +297,9 @@ class Sales_InvoiceTestCase extends TestCase
     
     /**
      * create customers and their addresses
+     * 
+     * @param number $count
+     * @return Tinebase_Record_RecordSet
      */
     protected function _createCustomers($count = 4)
     {
@@ -340,6 +384,8 @@ class Sales_InvoiceTestCase extends TestCase
         }
         
         $this->_customerRecords->sort('name', 'ASC');
+        
+        return $this->_customerRecords;
     }
     
     protected function _createProducts()
@@ -372,10 +418,18 @@ class Sales_InvoiceTestCase extends TestCase
         $this->_productRecords = new Tinebase_Record_RecordSet('Sales_Model_Product');
         
         foreach($productArray as $product) {
-            $this->_productRecords->addRecord($productController->create(new Sales_Model_Product(array_merge($product, $default))));
+            $p = new Sales_Model_Product(array_merge($product, $default));
+            $p->setTimezone('UTC');
+            $this->_productRecords->addRecord($productController->create($p));
         }
     }
     
+    /**
+     * create contracts, auto add timeaccounts if there are any
+     * 
+     * @param array $contractData
+     * @return Tinebase_Record_RecordSet
+     */
     protected function _createContracts($contractData = NULL)
     {
         // 1.1.20xx
@@ -475,12 +529,14 @@ class Sales_InvoiceTestCase extends TestCase
             $costcenter = $this->_costcenterRecords->getByIndex($i);
             $customer   = $this->_customerRecords->getByIndex($i);
             
-            if ($this->_timesheetRecords || $this->_timeaccountRecords) {
+            if ($this->_timeaccountRecords) {
                 $timeaccount = $this->_timeaccountRecords->getByIndex($i);
             }
             
             $i++;
             $contract = new Sales_Model_Contract($cd);
+            $contract->setTimezone('UTC');
+            
             $contract->relations = array(
                 array(
                     'own_model'              => 'Sales_Model_Contract',
@@ -504,7 +560,7 @@ class Sales_InvoiceTestCase extends TestCase
                 ),
             );
 
-            if ($this->_timesheetRecords || $this->_timeaccountRecords) {
+            if ($this->_timeaccountRecords) {
                 $contract->relations = array_merge($contract->relations, array(array(
                     'own_model'              => 'Sales_Model_Contract',
                     'own_backend'            => Tasks_Backend_Factory::SQL,
@@ -520,70 +576,99 @@ class Sales_InvoiceTestCase extends TestCase
             $this->_contractRecords->addRecord($this->_contractController->create($contract));
         }
         
+        return $this->_contractRecords;
     }
     
-    protected function _createTimeaccounts()
+    /**
+     * 
+     * @param array $recordData
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _createTimeaccounts($recordData = NULL)
     {
         $this->_timeaccountRecords = new Tinebase_Record_RecordSet('Timetracker_Model_Timeaccount');
-        $taController = Timetracker_Controller_Timeaccount::getInstance();
-        // ta for customer 1 and 2 is budgeted AND to bill
-        foreach($this->_customerRecords as $customer) {
-            $this->_timeaccountRecords->addRecord($taController->create(new Timetracker_Model_Timeaccount(array(
-                'title'         => 'TA-for-' . $customer->name,
-                'description'   => 'blabla',
-                'is_open'       => 1,
-                'status'        => $customer->name == 'Customer4' ? 'billed' : 'to bill',
-                'budget' => $customer->name == 'Customer3' ? null : 100
-            ), TRUE)));
+        $this->_timeaccountController = Timetracker_Controller_Timeaccount::getInstance();
+        
+        if (! $recordData) {
+            // ta for customer 1 and 2 is budgeted AND to bill
+            foreach($this->_customerRecords as $customer) {
+                $this->_timeaccountRecords->addRecord($this->_timeaccountController->create(new Timetracker_Model_Timeaccount(array(
+                    'title'         => 'TA-for-' . $customer->name,
+                    'description'   => 'blabla',
+                    'is_open'       => 1,
+                    'status'        => $customer->name == 'Customer4' ? 'billed' : 'to bill',
+                    'budget' => $customer->name == 'Customer3' ? null : 100
+                ), TRUE)));
+            }
+        } else {
+            foreach($recordData as $taArray) {
+                $this->_timeaccountRecords->addRecord($this->_timeaccountController->create(new Timetracker_Model_Timeaccount($taArray, TRUE)));
+            }
         }
         
         return $this->_timeaccountRecords;
     }
     
-    protected function _createTimesheets()
+    /**
+     * 
+     * @param array $recordData
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _createTimesheets($recordData = NULL)
     {
-        if (! $this->_timeaccountRecords) {
-            $this->_createTimeaccounts();
+        $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();
+        
+        if (! $this->_timesheetRecords) {
+            $this->_timesheetRecords = new Tinebase_Record_RecordSet('Timetracker_Model_Timesheet');
         }
         
-        $this->_timesheetRecords = new Tinebase_Record_RecordSet('Timetracker_Model_Timesheet');
+        if (! $recordData) {
+            if (! $this->_timeaccountRecords) {
+                $this->_createTimeaccounts();
+            }
+            
+            $tsDate = clone $this->_referenceDate;
+            $tsDate->addMonth(4)->addDay(5);
+            
+            // this is a ts on 20xx-05-06
+            $timesheet = new Timetracker_Model_Timesheet(array(
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                'timeaccount_id' => $this->_timeaccountRecords->filter('title', 'TA-for-Customer3')->getFirstRecord()->getId(),
+                'start_date' => $tsDate,
+                'duration' => 105,
+                'description' => 'ts from ' . (string) $tsDate,
+            ));
+            
+            $this->_timesheetRecords->addRecord($this->_timesheetController->create($timesheet));
+            
+            // this is a ts on 20xx-05-07
+            $timesheet->id = NULL;
+            $timesheet->start_date = $tsDate->addDay(1);
+            $timesheet->description = 'ts from ' . (string) $tsDate;
+            
+            $this->_timesheetRecords->addRecord($this->_timesheetController->create($timesheet));
+            
+            // this is a ts on 20xx-09-07
+            $timesheet->id = NULL;
+            $timesheet->start_date = $tsDate->addMonth(4);
+            $timesheet->description = 'ts from ' . (string) $tsDate;
+            
+            $this->_timesheetRecords->addRecord($this->_timesheetController->create($timesheet));
+            
+            // this is a ts on 20xx-09-08
+            $timesheet->id = NULL;
+            $timesheet->start_date = $tsDate->addDay(1);
+            $timesheet->description = 'ts from ' . (string) $tsDate;
+            
+            $this->_timesheetRecords->addRecord($this->_timesheetController->create($timesheet));
+        } else {
+            foreach($recordData as $tsData) {
+                $timesheet = new Timetracker_Model_Timesheet($tsData);
+                $this->_timesheetRecords->addRecord($this->_timesheetController->create($timesheet));
+            }
+        }
         
-        $tsDate = clone $this->_referenceDate;
-        $tsDate->addMonth(4)->addDay(5);
-        
-        $timesheetController = Timetracker_Controller_Timesheet::getInstance();
-        
-        // this is a ts on 20xx-05-06
-        $timesheet = new Timetracker_Model_Timesheet(array(
-            'account_id' => Tinebase_Core::getUser()->getId(),
-            'timeaccount_id' => $this->_timeaccountRecords->filter('title', 'TA-for-Customer3')->getFirstRecord()->getId(),
-            'start_date' => $tsDate,
-            'duration' => 105,
-            'description' => 'ts from ' . (string) $tsDate,
-        ));
-        
-        $this->_timesheetRecords->addRecord($timesheetController->create($timesheet));
-        
-        // this is a ts on 20xx-05-07
-        $timesheet->id = NULL;
-        $timesheet->start_date = $tsDate->addDay(1);
-        $timesheet->description = 'ts from ' . (string) $tsDate;
-        
-        $this->_timesheetRecords->addRecord($timesheetController->create($timesheet));
-        
-        // this is a ts on 20xx-09-07
-        $timesheet->id = NULL;
-        $timesheet->start_date = $tsDate->addMonth(4);
-        $timesheet->description = 'ts from ' . (string) $tsDate;
-        
-        $this->_timesheetRecords->addRecord($timesheetController->create($timesheet));
-        
-        // this is a ts on 20xx-09-08
-        $timesheet->id = NULL;
-        $timesheet->start_date = $tsDate->addDay(1);
-        $timesheet->description = 'ts from ' . (string) $tsDate;
-        
-        $this->_timesheetRecords->addRecord($timesheetController->create($timesheet));
+        return $this->_timesheetRecords;
     }
     
     protected function _createFullFixtures()

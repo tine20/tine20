@@ -185,26 +185,40 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
      */
     protected function _getBillableTimesheetsFilter(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
     {
-        // find all timesheets for this timeaccount the last year
+        // find all timesheets for this timeaccount the last year until end of last month
         $startDate = clone $date;
         $startDate->subYear(1);
+        
+        $endDate = clone $date;
+        $endDate->setDate($endDate->format('Y'), $endDate->format('n'), 1);
+        $endDate->setTime(0,0,0);
+        $endDate->subSecond(1);
         
         if (! $contract) {
             $contract = $this->_referenceContract;
         }
         
+        $csdt = clone $contract->start_date;
+        
+        $csdt->setTimezone('UTC');
+        $startDate->setTimezone('UTC');
+        $endDate->setTimezone('UTC');
+        
         // if this is not budgeted, show for timesheets in this period
         $filter = new Timetracker_Model_TimesheetFilter(array(
-            array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $date),
-            array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $contract->start_date),
+            array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $endDate),
+            array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $csdt),
             array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $startDate),
             array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
             array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
         ), 'AND');
         
         if (! is_null($contract->end_date)) {
+            $ced = clone $contract->end_date;
+            $ced->setTimezone('UTC');
+            
             $filter->addFilter(new Tinebase_Model_Filter_Date(
-                array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $contract->end_date)
+                array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $ced)
             ));
         }
         
@@ -235,7 +249,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
         if (intval($this->budget > 0)) {
             
             $startDate = clone $date;
-            $startDate->setDate($date->format('Y'), $date->format('m'), 1);
+            $startDate->setDate($date->format('Y'), $date->format('n'), 1);
             $endDate = clone $startDate;
             $endDate->addMonth(1)->subSecond(1);
             
@@ -299,7 +313,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
     */
     public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
     {
-        $this->_referenceDate = $date;
+        $this->_referenceDate = clone $date;
         $this->_referenceContract = $contract;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), true));
@@ -323,7 +337,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
             
             $pagination = new Tinebase_Model_Pagination(array('limit' => 1));
             $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($this->_getBillableTimesheetsFilter($date, $contract), $pagination, FALSE, /* $_onlyIds = */ TRUE);
-        
+            
             if (! empty($timesheets))  {
                 return TRUE;
             }

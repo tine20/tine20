@@ -93,8 +93,6 @@ Tine.Timetracker.timeaccountBackend = new Tine.Tinebase.data.RecordProxy({
     recordClass: Tine.Timetracker.Model.Timeaccount
 });
 
-
-
 // add renderer for invoice position gridpanel
 Tine.Timetracker.HumanHourRenderer = function(value) {
     return Ext.util.Format.round(value, 2);

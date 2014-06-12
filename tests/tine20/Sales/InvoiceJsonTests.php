@@ -75,7 +75,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $this->_createFullFixtures();
         
         $date = clone $this->_referenceDate;
-        $date->addSecond(1);
+        $date->addHour(3);
         
         $this->_invoiceController->createAutoInvoices($date);
         
@@ -261,7 +261,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $i = 0;
         $date = clone $this->_referenceDate;
-        $date->addSecond(1);
+        $date->addHour(3);
         
         $result = $this->_invoiceController->createAutoInvoices($date);
         

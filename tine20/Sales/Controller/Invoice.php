@@ -19,6 +19,13 @@
 class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 {
     /**
+     * holds the limit the iterator should have
+     * 
+     * @var integer
+     */
+    protected $_autoInvoiceIterationLimit = 25;
+    
+    /**
      * the number gets prefixed zeros until this amount of chars is reached
      * 
      * @var integer
@@ -87,9 +94,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      */
     public function processAutoInvoiceIteration($contracts, $currentDate)
     {
+        Timetracker_Controller_Timeaccount::getInstance()->resolveCustomfields(FALSE);
+        Timetracker_Controller_Timesheet::getInstance()->resolveCustomfields(FALSE);
+        
         Sales_Controller_Contract::getInstance()->resolveCustomfields(FALSE);
         Sales_Controller_Contract::getInstance()->setHandleDependentRecords(FALSE);
         Sales_Controller_ProductAggregate::getInstance()->resolveCustomfields(FALSE);
+        
+        $contracts->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
         foreach ($contracts as $contract) {
             
@@ -110,6 +122,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         Sales_Controller_Contract::getInstance()->setHandleDependentRecords(TRUE);
         Sales_Controller_Contract::getInstance()->resolveCustomfields(TRUE);
         Sales_Controller_ProductAggregate::getInstance()->resolveCustomfields(TRUE);
+        
+        Timetracker_Controller_Timeaccount::getInstance()->resolveCustomfields(TRUE);
+        Timetracker_Controller_Timesheet::getInstance()->resolveCustomfields(TRUE);
     }
     
     /**
@@ -139,7 +154,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     {
         $filter = new Sales_Model_ProductAggregateFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId())));
+        
         $products = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+        $products->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
         if ($products->count() == 0 && $contract->interval == 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -165,9 +182,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 // otherwise iterate products
                 foreach ($products as $product) {
                     // is null, if this is the first time to bill the contract
-                    $lastBilled = ($product->last_autobill === NULL) ? NULL : clone $product->last_autobill;
+                    $lastBilled = $product->last_autobill == NULL ? NULL : clone $product->last_autobill;
                     
-                    // if the contract has been billed already, add the interval
+                    // if the product has been billed already, add the interval
                     if ($lastBilled) {
                         $nextBill = $lastBilled->addMonth($product->interval);
                     } else {
@@ -175,12 +192,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         $nextBill = clone $contract->start_date;
                     }
                     
-                    // assure creating the last bill bill if a contract has bee terminated
+                    // assure creating the last bill if a contract has bee terminated
                     if (($contract->end_date !== NULL) && $nextBill->isLaterOrEquals($contract->end_date)) {
                         $nextBill = clone $contract->end_date;
                     }
                     
                     $nextBill->setTime(0,0,0);
+                    
                     // there is a product to bill, so stop to iterate
                     if ($nextBill->isLaterOrEquals($currentDate)) {
                         $billIt = TRUE;
@@ -251,8 +269,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
                     $referenceDate = $contract->last_autobill ? clone $contract->last_autobill : clone $contract->start_date;
         
-                    $referenceDate->subSecond(10);
-        
                     if ($contract->billing_point == 'end') {
                         $referenceDate->addMonth($contract->interval);
                     }
@@ -276,7 +292,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 }
             }
         }
-        
+
         if (! $customer) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 $failure = 'Could not create auto invoice for contract "' . $contract->title . '", because no customer could be found!';
@@ -400,7 +416,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         $invoice->relations = $relations;
         
-        $invoice->setTimezone('UTC');
+        $invoice->setTimezone('UTC', TRUE);
         
         // create invoice
         $invoice = $this->create($invoice, FALSE);
@@ -445,7 +461,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'filter'     => $filter,
             'options'    => array(
                 'getRelations' => TRUE,
-                'limit' => 10
+                'limit' => $this->_autoInvoiceIterationLimit
             ),
             'function'   => 'processAutoInvoiceIteration',
         ));
@@ -622,6 +638,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     protected function _inspectDelete(array $_ids)
     {
         $records = $this->_backend->getMultiple($_ids);
+        $records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        
         $invoicePositionController = Sales_Controller_InvoicePosition::getInstance();
         $contractController = Sales_Controller_Contract::getInstance();
         
@@ -631,6 +649,21 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 throw new Sales_Exception_InvoiceAlreadyClearedDelete();
                 
             } else {
+                // try to find a invoice after this one
+                
+                // there must be a contract
+                $contractRelation = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $record->getId(), NULL, array(), TRUE, array('Sales_Model_Contract'))->getFirstRecord();
+                $contract = $contractRelation->related_record;
+                $contract->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                
+                // get all invoices related to this contract. throw exception if a follwing invoice has been found
+                $invoiceRelations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Contract', 'Sql', $contract->getId(), NULL, array(), TRUE, array('Sales_Model_Invoice'));
+                foreach($invoiceRelations as $invoiceRelation) {
+                    $invoiceRelation->related_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->start_date < $invoiceRelation->related_record->start_date) {
+                        throw new Sales_Exception_DeletePreviousInvoice();
+                    }
+                }
                 
                 // remove invoice_id from billables
                 $filter = new Sales_Model_InvoicePositionFilter(array());
@@ -663,6 +696,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         
                         $filterInstance = new Timetracker_Model_TimeaccountFilter(array());
                         $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'in', 'value' => $record->getId())));
+                        
                         Timetracker_Controller_Timeaccount::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
                     }
                 }
@@ -671,15 +705,15 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $invoicePositionController->delete($invoicePositions->getId());
                 
                 // set last_autobill a period back
-                $relations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $record->getId(), NULL, array(), TRUE, array('Sales_Model_Contract'));
-                
-                if ($relations->count()) {
-                    $contract = $relations->getFirstRecord()->related_record;
-                    
+                if ($contract) {
                     if ($contract->last_autobill) {
                         $lab = clone $contract->last_autobill;
+                        
                         $contract->last_autobill = $lab->subMonth($contract->interval);
+                        $contract->last_autobill->setTime(0,0,0);
+                        // do not try to update dependent records (products)
                         $contract->products = NULL;
+                        $contract->setTimezone('UTC');
                         $contractController->update($contract);
                     }
                     
@@ -691,14 +725,18 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     
                     $paController = Sales_Controller_ProductAggregate::getInstance();
                     $productAggregates = $paController->search($filter);
+                    $productAggregates->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
                     
                     foreach($productAggregates as $productAggregate) {
                         $lab = clone $productAggregate->last_autobill;
                     
                         if ($lab) {
                             $productAggregate->last_autobill = $lab->addMonth(- (int) $productAggregate->interval);
+                            $productAggregate->last_autobill->setTime(0,0,0);
                         }
-                    
+                        
+                        $productAggregate->setTimezone('UTC');
+                        
                         $paController->update($productAggregate);
                     }
                 }
