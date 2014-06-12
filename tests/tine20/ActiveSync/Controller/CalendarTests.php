@@ -514,6 +514,8 @@ Zeile 3</AirSyncBase:Data>
     {
         parent::setUp();
         
+        Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);
+        
         // replace email to make current user organizer and attendee
         $testConfig = Zend_Registry::get('testConfig');
         $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
