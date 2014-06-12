@@ -37,6 +37,10 @@ table td {
 	font-size: 20px;
 }
 
+.cal-print-daysview-day td {
+    vertical-align: top;
+}
+
 .cal-print-daysview-day-dayOfMonth {
     font-size: 20px;
     font-weight: bold;
@@ -79,8 +83,12 @@ table td {
     border-right: 0px;
 }
 
+.cal-print-daysview-day-summary {
+    word-break: break-all;
+}
+
 .cal-print-daycell {
-	vertical-align: top;
+    vertical-align: top;
     border: 0;
 }
 
@@ -95,6 +103,8 @@ table td {
 	text-align: center;
 	font-size: 12px;
 	font-weight: bold;
+	background-color: #FFFFFF;
+	padding-top: 20px;
 }
 
 .cal-print-monthview .cal-print-daycell {
