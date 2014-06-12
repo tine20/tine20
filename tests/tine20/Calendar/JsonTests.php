@@ -29,6 +29,9 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function setUp()
     {
         parent::setUp();
+        
+        Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);
+        
         $this->_uit = new Calendar_Frontend_Json();
     }
     
