@@ -612,6 +612,30 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertEquals($config, $newConfig);
     }
     
+    /**
+     * testChangeUserAccount
+     * 
+     * @see 0009984: allow to change user role
+     */
+    public function testChangeUserAccount()
+    {
+        // allow test user to sign in as sclever
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ROLE_CHANGE_ALLOWED, new Tinebase_Config_Struct(array(
+            Tinebase_Core::getUser()->accountLoginName => array('sclever')
+        )));
+        
+        $sclever = $this->_personas['sclever'];
+        $result = $this->_instance->changeUserAccount('sclever');
+        
+        $this->assertEquals(array('success' => true), $result);
+        
+        // make sure, we are sclever
+        $this->assertEquals('sclever', Tinebase_Core::getUser()->accountLoginName);
+        $this->assertEquals('sclever', Tinebase_Core::getSession()->currentAccount->accountLoginName);
+        
+        Tinebase_Controller::getInstance()->initUser($this->_originalTestUser, /* $fixCookieHeader = */ false);
+    }
+    
     /******************** protected helper funcs ************************/
     
     /**

@@ -988,6 +988,20 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_UserProfile::getInstance()->setUpdateableFields($configData['updateableFields']);
     }
 
+    /**
+     * switch to another user's account
+     * 
+     * @param string $loginName
+     * @return array
+     */
+    public function changeUserAccount($loginName)
+    {
+        $result = Tinebase_Controller::getInstance()->changeUserAccount($loginName);
+        return array(
+            'success' => $result
+        );
+    }
+    
     /************************ department functions **************************/
 
     /**

@@ -273,6 +273,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ALARMS_EACH_JOB = 'alarmsEachJob';
     
     /**
+     * roleChangeAllowed
+     *
+     * @var string
+     */
+    const ROLE_CHANGE_ALLOWED = 'roleChangeAllowed';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -610,6 +617,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)',
             'type'                  => 'integer',
             'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::ROLE_CHANGE_ALLOWED => array(
+                                   //_('Role change allowed')
+            'label'                 => 'Role change allowed',
+                                   //_('Allows to configure which user is allowed to switch to another users account')
+            'description'           => 'Allows to configure which user is allowed to switch to another users account',
+            'type'                  => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
