@@ -297,7 +297,9 @@ class Setup_Frontend_Cli
         Setup_Core::setExecutionLifeTime(0);
         
         // import groups
-        Tinebase_Group::syncGroups();
+        if (! $_opts->onlyusers) {
+            Tinebase_Group::syncGroups();
+        }
         
         // import users
         $options = array('syncContactData' => TRUE);
