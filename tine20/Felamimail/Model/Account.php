@@ -275,17 +275,26 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     /**
      * add domain from imap settings to username
      * 
-     * @param string $_username
+     * @param string $username
+     * @param string $type (imap|smtp)
+     * @param array $config
      * @return string
      */
-    public function getUsername($_username = NULL)
+    public function getUsername($username = null, $type = Tinebase_Config::IMAP, $config = null)
     {
-        $result = ($_username !== NULL) ? $_username : $this->user;
+        $result = ($username !== null) ? $username : $this->user;
         
         if ($this->type == self::TYPE_SYSTEM) {
-            $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-            if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
-                $result .= '@' . $imapConfig['domain'];
+            if (! $config) {
+                $config = Tinebase_Config::getInstance()->get($type, new Tinebase_Config_Struct())->toArray();
+            }
+            
+            // @todo add documentation for config option and add it to setup gui
+            $domainConfigKey = ($type === Tinebase_Config::IMAP) ? 'domain' : 'primarydomain';
+            if (isset($config['useEmailAsUsername']) && $config['useEmailAsUsername']) {
+                $result = $this->email;
+            } else if (isset($config[$domainConfigKey]) && ! empty($config[$domainConfigKey])) {
+                $result .= '@' . $config[$domainConfigKey];
             }
         }
         
@@ -332,12 +341,10 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             unset($systemAccountConfig['username']);
             unset($systemAccountConfig['password']);
             $result = array_merge($result, $systemAccountConfig);
+            
+            $result['username'] = $this->getUsername($result['username'], Tinebase_Config::SMTP, $systemAccountConfig);
         }
         
-        // sanitizing some values
-        if (isset($result['primarydomain']) && ! empty($result['primarydomain'])) {
-            $result['username'] .= '@' . $result['primarydomain'];
-        }
         if ((isset($result['auth']) || array_key_exists('auth', $result)) && $result['auth'] == 'none') {
             unset($result['username']);
             unset($result['password']);
