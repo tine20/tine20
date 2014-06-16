@@ -103,7 +103,7 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @return {Boolean}
      */
     onBeforeClick: function(node, e) {
-        if (node.attributes.path.match(/^\/$|^\/personal$/)) {
+        if (! node.disabled && node.attributes.path.match(/^\/$|^\/personal$/)) {
             this.onClick(node, e);
             return false;
         }

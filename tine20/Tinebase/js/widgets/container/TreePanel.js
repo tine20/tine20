@@ -194,6 +194,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforeNodeDrop, this);
         this.on('append', this.onAppendNode, this);
+        this.on('beforecollapsenode', this.onBeforeCollapse, this);
         
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
         return;
@@ -605,6 +606,16 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         */
     },
     
+    /**
+     * If first node is collapsed, reload all data
+     */
+    onBeforeCollapse: function(node) {
+        if (node.attributes && node.attributes.path == "/") {
+            this.getLoader().load(this.root);
+        }
+    },
+
+
     /**
      * called when tree selection changes
      * 
