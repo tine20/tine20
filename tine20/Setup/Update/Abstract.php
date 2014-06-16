@@ -270,4 +270,70 @@ class Setup_Update_Abstract
     {
         return $this->_db;
     }
+    
+    /**
+     * Search for text fields that contain a string longer as a specific length and truncate it to this length
+     * 
+     * @param string $table
+     * @param string $field
+     * @param int $length
+     */
+    public function shortenTextValues($table, $field, $length)
+    {
+        $results = $this->_db->query(
+            "SELECT " . $this->_db->quoteIdentifier($field) .
+            ", LEFT(" . $this->_db->quoteIdentifier($field) . "," . $length . ") AS `short`" .
+            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $table) .
+            " WHERE CHAR_LENGTH(" . $this->_db->quoteIdentifier($field) . ") > " . $length
+            )->fetchAll();
+        
+        foreach ($results as $result) {
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier($field) . ' = ?', $result[$field]),
+            );
+            
+            $newContent = array($field => $result['short']);
+            
+            try {
+                $this->_db->update(SQL_TABLE_PREFIX . $table, $newContent, $where);
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Field was shortend: ' . print_r($result, true));
+            } catch (Tinebase_Exception_Record_Validation $terv) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Failed to shorten field: ' . print_r($result, true));
+                Tinebase_Exception::log($terv);
+            }
+        }
+    }
+    
+    /**
+     * truncate text fields to a specific length
+     * Array needs to contain the table name, field name, and a config option for "<notnull>" ("true", "false")
+     * or use "null" to set default to NULL
+     * 
+     * @param array $columns
+     * @param int $length
+     */
+    public function truncateTextColumn($columns, $length)
+    {
+        foreach ($columns as $table => $fields) {
+            foreach ($fields as $field => $config) {
+                
+                $this->shortenTextValues($table, $field, $length);
+                if (isset($config)) {
+                    $config = ($config == 'null' ? '<default>NULL</default>': '<notnull>' . $config . '</notnull>');
+                }
+                $declaration = new Setup_Backend_Schema_Field_Xml('
+                    <field>
+                        <name>' . $field . '</name>
+                        <type>text</type>
+                        <length>' . $length . '</length>'
+                        . $config .
+                    '</field>
+                ');
+                
+                $this->_backend->alterCol($table, $declaration);
+            }
+        }
+    }
 }

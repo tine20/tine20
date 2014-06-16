@@ -59,4 +59,35 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '8.2');
     }
+    
+    /**
+     * update to 8.3
+     * - update 256 char fields
+     * 
+     * @see 0008070: check index lengths
+     */
+    public function update_2()
+    {
+        $columns = array("container" => array(
+                            "name" => 'true'
+                            ),
+                        "note_types" => array(
+                            "icon" => 'true',
+                            "description" => 'null'
+                            ),
+                        "tags" => array(
+                            "name" => 'null',
+                            "description" => 'null'
+                            ),
+                        "accounts" => array(
+                            "home_dir" => 'false'
+                            )
+                        );
+        $this->truncateTextColumn($columns, 255);
+        $this->setTableVersion('container', '9');
+        $this->setTableVersion('note_types', '3');
+        $this->setTableVersion('tags', '7');
+        $this->setTableVersion('accounts', '10');
+        $this->setApplicationVersion('Tinebase', '8.3');
+    }
 }
