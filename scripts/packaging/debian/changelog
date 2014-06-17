@@ -1,3 +1,9 @@
+tine20 (2013.10.8-0) natty; urgency=low
+
+  * New upstream release "Collin" Service Release 7
+
+ -- Philipp Schüle <p.schuele@metaways.de>  Tue, 17 Jun 2014 15:34:10 +0200
+
 tine20 (2013.10.7-0) natty; urgency=low
 
   * New upstream release "Collin" Service Release 6
