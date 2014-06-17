@@ -821,6 +821,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice2Id)));
         $timesheets = $this->_timesheetController->search($filter);
         $this->assertEquals(2, $timesheets->count());
+        
+        // now try to delete the first invoice, which is not allowed
+        $this->setExpectedException('Sales_Exception_DeletePreviousInvoice');
+        
+        $this->_invoiceController->delete(array($invoice1Id));
     }
     
     /**

@@ -799,3 +799,9 @@ msgstr ""
 
 msgid "Last Billed"
 msgstr ""
+
+msgid "Following Invoices Found"
+msgstr ""
+
+msgid "There is an invoice for the same contract after this one. Please delete the following invoice(s) before deleting this one!"
+msgstr ""

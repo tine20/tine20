@@ -664,3 +664,9 @@ msgstr "Erlaubt, die Rechnungsnummer manuell zu vergeben"
 
 msgid "Last Billed"
 msgstr "Zuletzt abgerechnet"
+
+msgid "Following Invoices Found"
+msgstr "Nachfolgende Rechnungen gefunden"
+
+msgid "There is an invoice for the same contract after this one. Please delete the following invoice(s) before deleting this one!"
+msgstr "Es existiert bereits eine spätere Rechnung für den selben Vertrag. Bitte löschen Sie die spätere(n) Rechnung(en), bevor Sie diese Rechnung löschen!"
