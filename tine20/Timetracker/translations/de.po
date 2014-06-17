@@ -466,3 +466,6 @@ msgstr "Neues Zeitkonto hinzufügen"
 
 msgid "hour"
 msgstr "Stunde"
+
+msgid "Invoice"
+msgstr "Rechnung"

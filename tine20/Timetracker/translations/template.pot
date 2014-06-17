@@ -460,3 +460,6 @@ msgstr ""
 #: Preference.php:116
 msgid "default"
 msgstr ""
+
+msgid "Invoice"
+msgstr ""
