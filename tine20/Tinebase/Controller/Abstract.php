@@ -59,6 +59,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      * @return  boolean
      * @throws  Tinebase_Exception_UnexpectedValue
      * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Tinebase_Exception
      * 
      * @todo move that to *_Acl_Rights
      * @todo include Tinebase admin? atm only the application admin right is checked
@@ -68,6 +69,9 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
     {
         if (empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
+        }
+        if (! is_object(Tinebase_Core::getUser())) {
+            throw new Tinebase_Exception('No user found for right check!');
         }
         
         $right = strtoupper($_right);

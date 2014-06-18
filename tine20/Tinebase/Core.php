@@ -1344,11 +1344,23 @@ class Tinebase_Core
 
     /**
      * set a registry value
-     *
+     * 
+     * @throws Tinebase_Exception_InvalidArgument
      * @return mixed value
      */
     public static function set($index, $value)
     {
+        if ($index === self::USER) {
+            if ($value === null) {
+                throw new Tinebase_Exception_InvalidArgument('Invalid user object!');
+            }
+            if ($value instanceof Tinebase_Model_FullUser) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . $value->accountLoginName);
+            } else {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . var_export($value, true));
+            }
+        }
+        
         Zend_Registry::set($index, $value);
     }
 
