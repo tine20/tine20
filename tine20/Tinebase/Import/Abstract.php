@@ -555,6 +555,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         }
         
         $this->_handleTags($_record, $_resolveStrategy);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Record to import: ' . print_r($_record->toArray(), true));
+        
         $importedRecord = $this->_importAndResolveConflict($_record, $_resolveStrategy);
         
         $this->_importResult['results']->addRecord($importedRecord);

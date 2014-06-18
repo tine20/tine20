@@ -169,12 +169,22 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     protected function _addEmailUser($password)
     {
         if (! empty($this->accountEmailAddress)) {
-            $this->imapUser = new Tinebase_Model_EmailUser(array(
-                'emailPassword' => $password
-            ));
-            $this->smtpUser = new Tinebase_Model_EmailUser(array(
-                'emailPassword' => $password
-            ));
+            
+            if (isset($this->imapUser)) {
+                $this->imapUser->emailPassword = $password;
+            } else {
+                $this->imapUser = new Tinebase_Model_EmailUser(array(
+                    'emailPassword' => $password
+                ));
+            }
+            
+            if (isset($this->smtpUser)) {
+                $this->smtpUser->emailPassword = $password;
+            } else {
+                $this->smtpUser = new Tinebase_Model_EmailUser(array(
+                    'emailPassword' => $password
+                ));
+            }
         }
     }
     

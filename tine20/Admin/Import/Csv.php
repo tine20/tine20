@@ -77,11 +77,19 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         if ($_record instanceof Tinebase_Model_FullUser && $this->_controller instanceof Admin_Controller_User) {
             
             $record = $_record;
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' record Data' . print_r($_recordData, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' ' . print_r($record->toArray(), true));
+            if (isset($_recordData['smtpUser'])) {
+                $record->smtpUser = new Tinebase_Model_EmailUser($_recordData['smtpUser']);
+            }
+            if (isset($_recordData['imapUser'])) {
+                $record->imapUser = new Tinebase_Model_EmailUser($_recordData['imapUser']);
+            }
             $password = $record->applyOptionsAndGeneratePassword($this->_options, (isset($_recordData['password'])) ? $_recordData['password'] : NULL);
-
             Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             
             // try to create record with password
             if ($record->isValid()) {
@@ -100,5 +108,16 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         }
         
         return $record;
+    }
+    
+    protected function _doMapping($_data)
+    {
+        $result = parent::_doMapping($_data);
+            $result['smtpUser'] = array(
+                'emailForwardOnly' => isset($_recordData['emailForwardOnly']) ? $_recordData['emailForwardOnly'] : true,
+                'emailForwards'    => isset($result['emailForwards']) && !empty($result['emailForwards']) ? explode(' ', trim($result['emailForwards'])) : array(),
+                'emailAliases'     => isset($result['emailAliases']) ? explode(' ', trim($result['emailAliases'])) : array()
+                            );
+        return $result;
     }
 }
