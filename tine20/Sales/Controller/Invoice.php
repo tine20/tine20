@@ -491,27 +491,47 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         foreach($billables as $month => $billablesPerMonth) {
             
-            $sumQuantity = 0.0;
+            if ($accountable->sumBillables()) {
+                $sumQuantity = 0.0;
+                
+                foreach($billablesPerMonth as $billable) {
+                    $qty = $billable->getQuantity();
+                    $sumQuantity = $sumQuantity + $qty;
+                }
+                
+                $pos = array(
+                    'month' => $month,
+                    'model' => get_class($accountable),
+                    'accountable_id' => $accountable->getId(),
+                    'title' => $accountable->getTitle(),
+                    'quantity' => $sumQuantity,
+                    'unit' => $billable->getUnit()
+                );
             
-            foreach($billablesPerMonth as $billable) {
-                $qty = $billable->getQuantity();
-                $sumQuantity = $sumQuantity + $qty;
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Create invoice position ' . print_r($pos, 1), Zend_Log::DEBUG);
+                }
+                
+                $invoicePositions->addRecord(new Sales_Model_InvoicePosition($pos));
+                
+            } else {
+                foreach($billablesPerMonth as $billable) {
+                    $pos = array(
+                        'month' => $month,
+                        'model' => get_class($accountable),
+                        'accountable_id' => $accountable->getId(),
+                        'title' => $accountable->getTitle(),
+                        'quantity' => $billable->getQuantity(),
+                        'unit' => $billable->getUnit()
+                    );
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Create invoice position ' . print_r($pos, 1), Zend_Log::DEBUG);
+                    }
+                    
+                    $invoicePositions->addRecord(new Sales_Model_InvoicePosition($pos));
+                }
             }
-            
-            $pos = array(
-                'month' => $month,
-                'model' => get_class($accountable),
-                'accountable_id' => $accountable->getId(),
-                'title' => $accountable->getTitle(),
-                'quantity' => $sumQuantity,
-                'unit' => $accountable->getUnit()
-            );
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Create invoice position ' . print_r($pos, 1), Zend_Log::DEBUG);
-            }
-            
-            $invoicePositions->addRecord(new Sales_Model_InvoicePosition($pos));
         }
         
         return $invoicePositions;

@@ -151,4 +151,14 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
     {
         return $this->duration / 60;
     }
+    
+    /**
+     * returns the unit of this billable
+     *
+     * @return string
+     */
+    public function getUnit()
+    {
+        return 'hour'; // _('hour')
+    }
 }

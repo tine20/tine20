@@ -146,11 +146,15 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
     }
     
     /**
-     * returns the unit of the accountable
+     * this returns true, if the billables should be summarized per month
+     * if this returns false, each billable will get its own invoice position
      *
-     * @return string
+     * @return array
      */
-    abstract public function getUnit();
+    public function sumBillables()
+    {
+        return TRUE;
+    }
     
     /**
      * the billed_in - field of all billables of this accountable gets the id of this invoice

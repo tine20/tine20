@@ -238,7 +238,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      }
      
      /**
-      * returns the unit of the accountable
+      * returns the unit of this billable
       *
       * @return string
       */

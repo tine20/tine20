@@ -30,4 +30,11 @@ interface Sales_Model_Billable_Interface
      * @return float
      */
     public function getQuantity();
+    
+    /**
+     * returns the unit of this billable
+     *
+     * @return string
+     */
+    public function getUnit();
 }

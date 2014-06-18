@@ -25,18 +25,19 @@ interface Sales_Model_Accountable_Interface
     public function clearBillables(Sales_Model_Invoice $invoice);
     
     /**
-     * returns the unit of the accountable
-     *
-     * @return string
-     */
-    public function getUnit();
-
-    /**
      * if the model does not have its own last_autobill property, this is volatile and controlled by the contract
      *
      * @return boolean
      */
     public function isVolatile();
+    
+    /**
+     * this returns true, if the billables should be summarized per month
+     * if this returns false, each billable will get its own invoice position
+     * 
+     * @return array
+     */
+    public function sumBillables();
     
     /**
      * returns billables for this record

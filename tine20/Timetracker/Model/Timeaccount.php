@@ -436,7 +436,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
     }
     
     /**
-     * returns the unit of the accountable
+     * returns the unit of this billable
      *
      * @return string
      */
