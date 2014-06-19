@@ -732,7 +732,10 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
         }
         
         // check if initial username/passwords are set
-        if (Tine.Setup.registry.get('setupRequired') && form.findField('authentication_Sql_adminLoginName')) {
+        if (Tine.Setup.registry.get('setupRequired')
+            && form.findField('authentication_Sql_adminLoginName')
+            && ! form.findField('authentication_Sql_adminLoginName').disabled) 
+        {
             if (Ext.isEmpty(form.findField('authentication_Sql_adminLoginName').getValue())) {
                 form.markInvalid([{
                     id: 'authentication_Sql_adminLoginName',

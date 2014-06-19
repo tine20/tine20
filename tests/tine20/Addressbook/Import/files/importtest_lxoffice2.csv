@@ -1,0 +1,7 @@
+customernumber,greeting,name,department_1,street,country,zipcode,city,phone,fax,email,cp_greeting,cp_title,cp_givenname,cp_name,cp_phone1,cp_phone2,cp_fax,cp_mobile1,cp_mobile2,cp_email
+"73029","Wolfgang","Berger","","Heuerstraße 2","D","11108","","12345","","",,,,,,,,,,
+"72810",,"Nitsch","","Heuerstraße 16","D","22222","Straßbough","12345","","",,,,,,,,,,
+"72911",,"Wolfer","","Heuerstraße 44","D","11558","Großenhain","","","",,,,,,,,,,
+"73222",,"Dr. Schutheiss","","Heuerstraße 4","D","11120","Magdeburg","1233453","","",,,,,,,,,,
+"60014","","Gartencenter Röhr & Vater","","Südstraße 811","D","1112","Dorf","123 2323883","123 92319","adr1l@googlemail.com, adr2l@googlemail.com, adr3l@googlemail.com","Herr","","Bruno","Röhr","","","","0172 6508462","","jr@schwimmbad-und-mehr.de"
+"72811",,"Nitsch","","Heuerstraße 16","D","22222","Straßback","12345","","",,,,,,,,,,

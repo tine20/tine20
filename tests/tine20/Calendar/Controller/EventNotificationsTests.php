@@ -1142,22 +1142,6 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     }
     
     /**
-     * create new attender
-     * 
-     * @param string $_userId
-     * @return Calendar_Model_Attender
-     */
-    protected function _createAttender($_userId)
-    {
-        return new Calendar_Model_Attender(array(
-            'user_id'        => $_userId,
-            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
-            'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
-            'status_authkey' => Tinebase_Record_Abstract::generateUID(),
-        ));
-    }
-    
-    /**
      * setup preferences for personas
      * 
      * jsmith   -> no updates
@@ -1203,5 +1187,33 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         foreach ($this->_getPersonas() as $name => $account) {
             $preferences->setValueForUser(Tinebase_Preference::LOCALE, 'en', $account->getId(), TRUE);
         }
+    }
+    
+    /**
+     * testResourceNotification
+     * 
+     * checks if notification mail is sent to configured mail address of a resource
+     * 
+     * @see 0009954: resource manager and email handling
+     */
+    public function testResourceNotification()
+    {
+        // create resource with email address of unittest user
+        $resource = $this->_getResource();
+        $resource->email = Tinebase_Core::getUser()->accountEmailAddress;
+        $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
+        
+        // create event with this resource as attender
+        $event = $this->_getEvent(/* now = */ true);
+        $event->attendee->addRecord($this->_createAttender($persistentResource->getId(), Calendar_Model_Attender::USERTYPE_RESOURCE));
+
+        self::flushMailer();
+        $persistentEvent = $this->_eventController->create($event);
+        
+        $this->assertEquals(3, count($persistentEvent->attendee));
+
+        $messages = self::getMessages();
+        
+        $this->assertEquals(2, count($messages), 'two mails should be send to current user (resource + attender)');
     }
 }

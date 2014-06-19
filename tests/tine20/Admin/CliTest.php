@@ -40,9 +40,10 @@ class Admin_CliTest extends TestCase
     {
         parent::setUp();
         
+        
         $this->_cli = new Admin_Frontend_Cli();
         
-        $this->_usernamesToDelete = array('hmaster', 'hmeister', 'hmoster', 'irmeli');
+        $this->_usernamesToDelete = array('hmaster', 'hmeister', 'hmoster', 'irmeli', 'testuser');
         
         $this->objects['config'] = '<?xml version="1.0" encoding="UTF-8"?>
         <config>
@@ -133,8 +134,47 @@ class Admin_CliTest extends TestCase
                 </field>
             </mapping>
         </config>';
+        $this->objects['configEmailuser'] = '<?xml version="1.0" encoding="UTF-8"?>
+        <config>
+            <model>Tinebase_Model_FullUser</model>
+            <plugin>Admin_Import_Csv</plugin>
+            <type>import</type>
+            <headline>1</headline>
+            <dryrun>0</dryrun>
+            <extension>csv</extension>
+            <mapping>
+                <field>
+                    <source>firstname</source>
+                    <destination>accountFirstName</destination>
+                </field>
+                <field>
+                    <source>lastname</source>
+                    <destination>accountLastName</destination>
+                </field>
+                <field>
+                    <source>loginname</source>
+                    <destination>accountLoginName</destination>
+                </field>
+                <field>
+                    <source>password</source>
+                    <destination>password</destination>
+                </field>
+                <field>
+                    <source>email</source>
+                    <destination>accountEmailAddress</destination>
+                </field>
+                <field>
+                    <source>emailAliases</source> <!-- leerzeichen separator -->
+                    <destination>emailAliases</destination>
+                </field>
+                <field>
+                    <source>emailForwards</source>
+                    <destination>emailForwards</destination>
+                </field>
+            </mapping>
+        </config>';
     }
-
+    
     /**
      * test to import admin users
      *
@@ -224,5 +264,41 @@ class Admin_CliTest extends TestCase
     {
         $out = $this->_importUsers($this->objects['configSemicolon'], dirname(__FILE__) . '/files/tine_user3.csv', 'admin_user_import_csv_test_semicolon');
         $this->_checkResult($out, 'irmeli');
+    }
+    
+    /**
+     * testImportUsersWithEmailUser
+     */
+    public function testImportUsersWithEmailUser()
+    {
+        $userBackend = Tinebase_User::getInstance();
+        $config = TestServer::getInstance()->getConfig();
+        $maildomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+
+        $readFile = fopen(dirname(__FILE__) . '/files/tine_user5.csv', 'r');
+        $writeFile = fopen('test.csv', 'w');
+        $delimiter = ',';
+        $enclosure = '"';
+        
+        while (($row = fgetcsv($readFile)) !== false) {
+            foreach ($row as $colIndex => &$field) {
+                $field = str_replace('DOMAIN', $maildomain, $field);
+            }
+            fputcsv($writeFile, $row, $delimiter, $enclosure);
+        }
+        
+        fclose($readFile);
+        fclose($writeFile);
+        
+        if (! array_key_exists('Tinebase_EmailUser_Smtp_Postfix', $userBackend->getPlugins())) {
+            $this->markTestSkipped('Postfix SQL plugin not enabled');
+        }
+        
+        $this->_importUsers($this->objects['configEmailuser'], 'test.csv', 'admin_user_import_csv_test_emailuser');
+        $newUser = $userBackend->getFullUserByLoginName('testuser');
+        $this->assertEquals(array('contact@' . $maildomain, 'kontakt@' . $maildomain), $newUser->smtpUser->emailAliases);
+        $this->assertEquals(array('test@' . $maildomain), $newUser->smtpUser->emailForwards);
+        $this->assertTrue($newUser->smtpUser->emailForwardOnly);
+        unlink("test.csv");
     }
 }

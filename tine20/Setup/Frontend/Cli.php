@@ -500,6 +500,7 @@ class Setup_Frontend_Cli
             try {
                 Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
                 echo "Added user to default admin group\n";
+                // @todo clear roles/groups cache
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
                 echo "Could not add user to default admin group: " . $e->getMessage();
@@ -520,11 +521,12 @@ class Setup_Frontend_Cli
             $role = Tinebase_Acl_Roles::getInstance()->getRoleById($roleId);
             if ($role->name === 'admin role') {
                 $adminRoleFound = TRUE;
+                //print_r(Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId()));
                 break;
             }
         }
         
-        if (! $adminRoleFound) {
+        if (! $adminRoleFound || ! Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $user->getId(), Tinebase_Acl_Rights::ADMIN)) {
             echo "Admin role not found for user " . $user->accountLoginName . ".\n";
             $adminRole = new Tinebase_Model_Role(array(
                 'name'                  => 'admin role',
@@ -553,6 +555,7 @@ class Setup_Frontend_Cli
             Tinebase_Acl_Roles::getInstance()->setRoleRights($adminRole->getId(), $roleRights);
             
             echo "Created admin role for user " . $user->accountLoginName . ".\n";
+            // @todo clear roles/groups cache
         }
     }
     

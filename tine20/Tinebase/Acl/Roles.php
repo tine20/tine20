@@ -184,6 +184,9 @@ class Tinebase_Acl_Roles
         
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . $select);
+        
         $stmt = $this->_db->query($select);
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));

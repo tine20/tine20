@@ -222,6 +222,19 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
                 $result[$key] = $accounts[$key];
             }
         }
+        
+        if (! isset($result['adminLoginName']) || ! isset($result['adminPassword'])) {
+            $loginConfig = Tinebase_Config::getInstance()->get('login');
+            if ($loginConfig) {
+                $result = array(
+                    'adminLoginName' => $loginConfig->username,
+                    'adminPassword' => $loginConfig->password,
+                );
+            } else {
+                throw Setup_Exception('Inital admin username and password are required');
+            }
+        }
+        
         return $result;
     }
     

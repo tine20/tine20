@@ -1,6 +1,6 @@
 Tine.Calendar.Printer.MonthViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRenderer, {
     paperHeight: 155,
-    
+
     generateBody: function(view) {
         var daysHtml = this.splitDays(view.store, view.dateMesh[0], view.dateMesh.length),
             body = [];
@@ -10,10 +10,8 @@ Tine.Calendar.Printer.MonthViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
             '@page {',
                 'size:landscape',
             '}',
+            '@media print {thead {display: table-header-group;}}',
         '</style>');
-        
-        // title
-        body.push(this.generateTitle(view));
         
         // day headers
         var dayNames = [];
@@ -22,13 +20,21 @@ Tine.Calendar.Printer.MonthViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
             if(d > 6){
                 d = d-7;
             }
-            dayNames.push("<td class='cal-print-monthview-daycell'><span>", view.dayNames[d], "</span></td>");
+            dayNames.push("<th class='cal-print-monthview-daycell'><span>", view.dayNames[d], "</span></th>");
         }
         
-        // body
-        body.push(String.format('<br/><table class="cal-print-monthview"><tr>{0}</thead>{1}</tr>', dayNames.join("\n"), this.generateCalRows(daysHtml, 7, true)));
-   
+        body.push(
+        '<table class="cal-print-monthview">',
+            '<thead>',
+                '<tr><th colspan="7" class="cal-print-title">', this.getTitle(view), '</th></tr>',
+                '<tr>', dayNames.join("\n"), '</tr>',
+            '</thead>',
+            '<tbody>',
+                this.generateCalRows(daysHtml, 7, true),
+            '</tbody>');
+            
         return body.join("\n");
+
     },
     
     getTitle: function(view) {
