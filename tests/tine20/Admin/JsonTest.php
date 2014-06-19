@@ -342,6 +342,11 @@ class Admin_JsonTest extends TestCase
      */
     public function testAccountDeactivationNotification()
     {
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        if (! isset($smtpConfig->from) && ! isset($smtpConfig->primarydomain)) {
+            $this->markTestSkipped('no notification service address configured.');
+        }
+        
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DEACTIVATION_NOTIFICATION, true);
         
         $userArray = $this->testSaveAccount();
@@ -352,13 +357,12 @@ class Admin_JsonTest extends TestCase
         
         $messages = self::getMessages();
         
-        $translate = Tinebase_Translation::getTranslation('Tinebase');
-        
-        $this->assertEquals(1, count($messages));
+        $this->assertEquals(1, count($messages), 'did not get notification message');
         
         $message = $messages[0];
         $bodyText = $message->getBodyText(/* textOnly = */ true);
         
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
         $this->assertEquals($translate->_('Your Tine 2.0 account has been deactivated'), $message->getSubject());
         $this->assertContains($userArray['accountLoginName'], $bodyText);
         $this->assertContains(Tinebase_Core::getHostname(), $bodyText);
