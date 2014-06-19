@@ -130,9 +130,14 @@ abstract class Sales_Controller_NumberableAbstract extends Tinebase_Controller_R
      * adds the next available number to the record
      * 
      * @param Tinebase_Record_Interface $record
+     * @throws Tinebase_Exception
      */
     protected function _addNextNumber($record)
     {
+        if (! is_object(Tinebase_Core::getUser())) {
+            throw new Tinebase_Exception('User required to create Number');
+        }
+        
         $numberBackend = new Sales_Backend_Number();
         $number = $numberBackend->getNext($this->_modelName, Tinebase_Core::getUser()->getId());
         $record->{$this->_numberProperty} = intval($number->number);

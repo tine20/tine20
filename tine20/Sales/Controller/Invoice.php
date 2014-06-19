@@ -663,7 +663,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $invoicePositionController = Sales_Controller_InvoicePosition::getInstance();
         $contractController = Sales_Controller_Contract::getInstance();
         
-        foreach($records as $record) {
+        foreach ($records as $record) {
             if ($record->cleared == 'CLEARED') {
                 // cleared invoices must not be deleted
                 throw new Sales_Exception_InvoiceAlreadyClearedDelete();
@@ -671,18 +671,32 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             } else {
                 // try to find a invoice after this one
                 
-                // there must be a contract
-                $contractRelation = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $record->getId(), NULL, array(), TRUE, array('Sales_Model_Contract'))->getFirstRecord();
-                $contract = $contractRelation->related_record;
-                $contract->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                // there should be a contract
+                $contractRelation = Tinebase_Relations::getInstance()->getRelations(
+                    'Sales_Model_Invoice',
+                    'Sql', $record->getId(),
+                    NULL,
+                    array(),
+                    TRUE,
+                    array('Sales_Model_Contract')
+                )->getFirstRecord();
                 
-                // get all invoices related to this contract. throw exception if a follwing invoice has been found
-                $invoiceRelations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Contract', 'Sql', $contract->getId(), NULL, array(), TRUE, array('Sales_Model_Invoice'));
-                foreach($invoiceRelations as $invoiceRelation) {
-                    $invoiceRelation->related_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-                    if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->start_date < $invoiceRelation->related_record->start_date) {
-                        throw new Sales_Exception_DeletePreviousInvoice();
+                if ($contractRelation) {
+                    $contract = $contractRelation->related_record;
+                    $contract->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    
+                    // get all invoices related to this contract. throw exception if a follwing invoice has been found
+                    $invoiceRelations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Contract', 'Sql', $contract->getId(), NULL, array(), TRUE, array('Sales_Model_Invoice'));
+                    foreach($invoiceRelations as $invoiceRelation) {
+                        $invoiceRelation->related_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                        if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->start_date < $invoiceRelation->related_record->start_date) {
+                            throw new Sales_Exception_DeletePreviousInvoice();
+                        }
                     }
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Could not find contract relation -> skip contract handling');
+                    $contract = null;
                 }
                 
                 // remove invoice_id from billables
