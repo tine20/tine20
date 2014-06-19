@@ -1106,3 +1106,7 @@ msgstr "Keine Antwort von %1$s für den Termin \"%2$s\" am  %3$s"
 #: Controller/EventNotifications.php:374
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Geänderte Teilnehmer beim Termin  \"%1$s\" am %2$s"
+
+#: js/EventEditDialog.js:315
+msgid "Mute Alert"
+msgstr "Benachrichtigungen unterdrücken"
