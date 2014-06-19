@@ -483,6 +483,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
      * 
      * @see 0007934: change pw button active even if it is not allowed
      * @see 0008310: apps should be sorted the other way round in menu
+     * @see 0009130: Can't open login page on Ubuntu "due to a temporary overloading"
      */
     public function testGetAllRegistryData()
     {
@@ -504,6 +505,10 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         $userApps = $registryData['Tinebase']['userApplications'];
         $this->assertEquals('Admin', $userApps[0]['name'], 'first app should be Admin: ' . print_r($userApps, TRUE));
+        
+        $locale = Tinebase_Core::getLocale();
+        $symbols = Zend_Locale::getTranslationList('symbols', $locale);
+        $this->assertEquals($symbols['decimal'], $registryData['Tinebase']['decimalSeparator']);
     }
 
     /**

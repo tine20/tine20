@@ -658,7 +658,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $locale = Tinebase_Core::get('locale');
         $tbFrontendHttp = new Tinebase_Frontend_Http();
-
+        
         // default credentials
         if (isset(Tinebase_Core::getConfig()->login)) {
             $loginConfig = Tinebase_Core::getConfig()->login;
@@ -669,7 +669,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $defaultPassword = '';
         }
         
-        $numberString = Zend_Locale_Format::toFloat(1234.56);
+        $symbols = Zend_Locale::getTranslationList('symbols', $locale);
         
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
@@ -695,8 +695,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'helpUrl'           => Tinebase_Core::getConfig()->helpUrl,
             'maxFileUploadSize' => convertToBytes(ini_get('upload_max_filesize')),
             'maxPostSize'       => convertToBytes(ini_get('post_max_size')),
-            'thousandSeparator' => $numberString[1],
-            'decimalSeparator'  => $numberString[5],
+            'thousandSeparator' => $symbols['group'],
+            'decimalSeparator'  => $symbols['decimal'],
             'filesystemAvailable' => Setup_Controller::getInstance()->isFilesystemAvailable(),
         );
         
