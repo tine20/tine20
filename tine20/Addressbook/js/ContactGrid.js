@@ -108,6 +108,8 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 150,
                 renderer: Tine.Tinebase.common.containerRenderer
             },
+            { id: 'n_prefix', header: this.app.i18n._('Title'), dataIndex: 'n_prefix', width: 80 },
+            { id: 'n_middle', header: this.app.i18n._('Middle Name'), dataIndex: 'n_middle', width: 80 },
             { id: 'n_family', header: this.app.i18n._('Last Name'), dataIndex: 'n_family' },
             { id: 'n_given', header: this.app.i18n._('First Name'), dataIndex: 'n_given', width: 80 },
             { id: 'n_fn', header: this.app.i18n._('Full Name'), dataIndex: 'n_fn' },
