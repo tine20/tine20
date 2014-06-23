@@ -961,3 +961,14 @@ body.x-body-masked .x-window-plain .x-window-mc {
     background-image: url(../../../../images/tabs_sprite_slope_right.gif);
     padding-right: 24px;
 }
+
+/* Calendar */
+.cal-monthview-daycell-valid {
+    background: #FFF;
+}
+.cal-monthview-daycell-invalid {
+    background: #F9F9F9;
+}
+.cal-monthview-daycell-today {
+    background: #EBF3FD;
+}

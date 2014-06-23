@@ -971,21 +971,23 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
         
         // update dates and bg colors
         var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-date]', this.mainBody.dom);
-        for(var i=0; i<this.dateMesh.length; i++) {
-            this.dayCells[i].style.background = this.dateMesh[i].getMonth() == this.startDate.getMonth() ? '#FFFFFF' : '#F9F9F9';
+        for(var i = 0; i < this.dateMesh.length; i++) {
+            clsToAdd = ((this.dateMesh[i].getMonth() == this.startDate.getMonth()) ? ' cal-monthview-daycell-valid' : ' cal-monthview-daycell-invalid');
+            oldVal = this.dayCells[i].getAttribute('class');
             if (this.dateMesh[i].getTime() == this.toDay.getTime()) {
-                this.dayCells[i].style.background = '#EBF3FD';
+                clsToAdd += ' cal-monthview-daycell-today';
             }
-                
+            this.dayCells[i].setAttribute('class', oldVal + clsToAdd);
             dayHeaders[i].innerHTML = this.dateMesh[i].format('j');
         }
         
         // update weeks
         var wkCells = Ext.DomQuery.select('td[class=cal-monthview-wkcell]', this.mainBody.dom);
-        for(var i=0; i<wkCells.length; i++) {
-            if (this.dateMesh.length > i*7 +1) {
+
+        for(var i = 0; i < wkCells.length; i++) {
+            if (this.dateMesh.length > i * 7 + 1) {
                 // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
-                wkCells[i].innerHTML = this.dateMesh[i*7 +1].getWeekOfYear();
+                wkCells[i].innerHTML = this.dateMesh[i * 7 + 1].getWeekOfYear();
                 //Ext.fly(wkCells[i]).unselectable(); // this supresses events ;-(
             }
         }
