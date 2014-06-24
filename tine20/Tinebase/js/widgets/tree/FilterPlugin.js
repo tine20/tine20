@@ -137,9 +137,9 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                 value = values[idx] = {path: value};
             }
             
-            var containerPath = value.path.split('/'),
+            var containerPath = value && Ext.isString(value.path) ? value.path.split('/') : [''],
                 containerId = containerPath.pop(),
-                namePath = value.name.split('/');
+                namePath = value && Ext.isString(value.name) ? value.name.split('/') : [''];
                 if (namePath[0] == "") {
                     namePath.shift();
                 }

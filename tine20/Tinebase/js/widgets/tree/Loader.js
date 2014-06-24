@@ -79,8 +79,15 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
 
         // read every node
         Ext.each(response.responseData, function (node) {
+            var parentNode = newResponse;
+            
+            if (! Ext.isString(node.name)) {
+                parentNode.push(node);
+                return;
+            }
+            
             // Get folder name to final container
-            var parts = node.name.split("/");
+            var parts = Ext.isString(node.name) ? node.name.split("/") : [''];
             var containerName = parts[parts.length-1];
 
             // Remove first "" and last item because they don't belong to the folder names
@@ -89,8 +96,6 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
                 parts.shift();
             }
             parts.pop();
-
-            var parentNode = newResponse;
 
             Ext.each(parts, function (part, idx) {
                 var child = this.findNodeByName(part, parentNode);
@@ -135,7 +140,7 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
     findNodeByName: function (name, nodes) {
         var ret = false;
         Ext.each(nodes, function (node, idx) {
-            if (node && node.name && node.name == name) {
+            if (node && node.name && node.name == name && Ext.isArray(node.children)) {
                 ret = node;
             }
         }, this);
