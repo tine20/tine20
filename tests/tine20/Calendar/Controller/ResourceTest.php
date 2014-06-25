@@ -49,6 +49,12 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         
         $this->assertEquals($resource->name, $persistentResource->name);
         
+        // assert autocreated resource container
+        $resourceContainer = Tinebase_Container::getInstance()->getContainerById($resource->container_id);
+        $this->assertEquals($resource->name, $resourceContainer->name);
+        $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $resourceContainer->type);
+        $this->assertEquals('Calendar_Model_Event', $resourceContainer->model);
+        
         return $resource;
     }
     
@@ -94,5 +100,16 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         ));
         $this->setExpectedException('Calendar_Exception_AttendeeBusy');
         $conflictingEvent = Calendar_Controller_Event::getInstance()->create($event, TRUE);
+    }
+    
+    public function testDeleteResource()
+    {
+        $resource = $this->testCreateResource();
+        
+        Calendar_Controller_Resource::getInstance()->delete($resource->getId());
+        
+        $this->assertEquals(0, count(Calendar_Controller_Resource::getInstance()->getMultiple(array($resource->getId()))));
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        Tinebase_Container::getInstance()->getContainerById($resource->container_id);
     }
 }
