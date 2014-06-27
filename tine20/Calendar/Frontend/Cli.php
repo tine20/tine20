@@ -29,18 +29,25 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @return void
      */
     protected $_help = array(
+        'importCalDav' => array(
+            'description'    => 'import calendar/events from a CalDav source',
+            'params'         => array(
+                'url'        => 'CalDav source URL',
+                'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
+             )
+        ),
         'importegw14' => array(
-            'description'   => 'imports calendars/events from egw 1.4',
-            'params'        => array(
-                'host'     => 'dbhost',
-                'username' => 'username',
-                'password' => 'password',
-                'dbname'   => 'dbname'
+            'description'    => 'imports calendars/events from egw 1.4',
+            'params'         => array(
+                'host'       => 'dbhost',
+                'username'   => 'username',
+                'password'   => 'password',
+                'dbname'     => 'dbname'
             )
         ),
         'exportICS' => array(  
-            'description' => "export calendar as ics", 
-            'params' => array('container_id') 
+            'description'    => "export calendar as ics", 
+            'params'         => array('container_id') 
         ),
     );
     
@@ -130,5 +137,56 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $be = new Calendar_Backend_Sql();
         $be->repairDanglingDisplaycontainerEvents();
+    }
+    
+    /**
+     * import calendar/events from a CalDav source
+     * 
+     * param Zend_Console_Getopt $_opts
+     */
+    public function importCalDav(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
+        
+        $writer = new Zend_Log_Writer_Stream('php://output');
+        $writer->addFilter(new Zend_Log_Filter_Priority(4));
+        Tinebase_Core::getLogger()->addWriter($writer);
+        
+        $users = $this->_readCalDavUserFile($args['caldavuserfile']);
+        
+        $client = new Calendar_Import_CalDav_Client(array('baseUri' => $args['url']), 'MacOSX');
+        $client->setVerifyPeer(false);
+        
+        $client->importAllCalendarDataForUsers($users);
+    }
+    
+    /**
+     * read caldav user credentials file
+     * 
+     * - file should have the following format (CSV):
+     * USERNAME1;PASSWORD1
+     * USERNAME2;PASSWORD2
+     * 
+     * @param string $file
+     * @throws Exception
+     */
+    protected function _readCalDavUserFile($file)
+    {
+        if (!($fh = fopen($file, 'r')))
+        {
+            Tinebase_Core::getLogger()->error(__METHOD__ . '::' . __LINE__ . ' couldn\'t open file: '.$file);
+            throw new Exception('Couldn\'t open file: '.$file);
+        }
+        $users = array();
+        while ($row = fgetcsv($fh, 2048, ';'))
+        {
+            $users[$row[0]] = $row[1];
+        }
+        if (count($users) < 1)
+        {
+            Tinebase_Core::getLogger()->error(__METHOD__ . '::' . __LINE__ . ' no users found in: '.$file);
+            throw new Exception('No users found in: '.$file);
+        }
+        return $users;
     }
 }

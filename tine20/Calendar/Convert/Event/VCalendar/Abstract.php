@@ -722,7 +722,9 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $email = $calAddress['EMAIL']->getValue();
         } else {
             if (!preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/i', $calAddress->getValue(), $matches)) {
-                throw new Tinebase_Exception_UnexpectedValue('invalid attendee provided: ' . $calAddress->getValue());
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid attendee provided: ' . $calAddress->getValue());
+                return null;
             }
             $email = $matches['email'];
         }
@@ -969,12 +971,18 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 case 'ATTACH':
                     $name = (string) $property['FILENAME'];
                     $managedId = (string) $property['MANAGED-ID'];
+                    $value = (string) $property['VALUE'];
+                    $attachment = NULL;
+                    $readFromURL = false;
+                    $url = '';
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' attachment found: ' . $name . ' ' . $managedId);
                     
                     if ($managedId) {
                         $attachment = $event->attachments instanceof Tinebase_Record_RecordSet ?
                             $event->attachments->filter('hash', $property['MANAGED-ID'])->getFirstRecord() :
                             NULL;
-                        
                         
                         // NOTE: we might miss a attachment here for the following reasons
                         //       1. client reuses a managed id (we are server):
@@ -992,21 +1000,48 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                         //       2. server send his managed id (we are client)
                         //          * we need to download the attachment (here?)
                         //          * we need to have a mapping externalid / internalid (where?)
-                        if (! $attachment) {
-//                             $attachment = new Tinebase_Model_Tree_Node(array(
-//                                 'name'         => $name,
-//                                 'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
-//                                 'contenttype'  => (string) $property['FMTTYPE'],
-//                                 'hash'         => $managedId,
-//                             ), true);
-                        }
                         
-                        $attachments->addRecord($attachment);
+                        if (! $attachment) {
+                            $readFromURL = true;
+                            $url = $property->getValue();
+                        } else {
+                            $attachments->addRecord($attachment);
+                        }
+                    } elseif('URI' === $value) {
+                        /*
+                         * ATTACH;VALUE=URI:https://ical.familienservice.de/calendars/__uids__/0AA0
+ 3A3B-F7B6-459A-AB3E-4726E53637D0/dropbox/4971F93F-8657-412B-841A-A0FD913
+ 9CD61.dropbox/Canada.png
+                         */
+                        $readFromURL = true;
+                        $url = $property->getValue();
+                        $name = parse_url($url, PHP_URL_PATH);
+                        $name = pathinfo($name, PATHINFO_BASENAME);
                     }
-                    
                     // base64
                     else {
                         // @TODO: implement (check if add / update / update is needed)
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' attachment found that could not be imported due to missing managed id');
+                    }
+                    
+                    if($readFromURL) {
+                        if (preg_match('#^(https?://)(.*)$#', str_replace(array("\n","\r"), '', $url), $matches)) {
+                            // we are client and found an external hosted attachment that we need to import
+                            $user = Tinebase_Core::getUser();
+                            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+                            $stream = fopen($matches[1] . $userCredentialCache->username . ':' . $userCredentialCache->password . '@' . $matches[2], 'r');
+                            $attachment = new Tinebase_Model_Tree_Node(array(
+                                'name'         => $name,
+                                'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
+                                'contenttype'  => (string) $property['FMTTYPE'],
+                                'tempFile'     => $stream,
+                                ), true);
+                            $attachments->addRecord($attachment);
+                        } else {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' attachment found with malformed url: '.$url. ' '.$name. ' '.$managedId);
+                        }
                     }
                     break;
                     
