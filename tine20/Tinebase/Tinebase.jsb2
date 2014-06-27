@@ -306,6 +306,10 @@
           "path": "js/ux/"
         },
         {
+          "text": "Function.createBuffered.js",
+          "path": "js/ux/"
+        },
+        {
           "text": "Printer.js",
           "path": "js/ux/Printer/"
         },
