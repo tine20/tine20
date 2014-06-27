@@ -28,7 +28,7 @@ try {
         'info|i'                => 'Get usage description of method',
     
         'method=s'              => 'Method to call [required]',
-        'username=s'            => 'Username [required]',
+        'username=s'            => 'Username',
         'password=s'            => 'Password',
         'passwordfile=s'        => 'Name of file that contains password',
     ));

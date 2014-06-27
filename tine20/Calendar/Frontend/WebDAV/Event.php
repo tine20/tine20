@@ -109,7 +109,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * @param  stream|string             $vobjectData
      * @return Calendar_Frontend_WebDAV_Event
      */
-    public static function create(Tinebase_Model_Container $container, $name, $vobjectData)
+    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = false)
     {
         if (is_resource($vobjectData)) {
             $vobjectData = stream_get_contents($vobjectData);
@@ -122,6 +122,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
         $event = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
+        
+        if (true === $onlyCurrentUserOrganizer) {
+            if ($event->organizer && $event->organizer != Tinebase_Core::getUser()->contact_id) {
+                return null;
+            }
+        }
+        
         $event->container_id = $container->getId();
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
         if (strlen($id) > 40) {
