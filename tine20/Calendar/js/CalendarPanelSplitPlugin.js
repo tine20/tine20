@@ -81,7 +81,6 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             attendee = activeView && activeView.ownerCt ? activeView.ownerCt.attendee : null;
         
         if (useSplit && attendee && this.calPanel == activeCalPanel) {
-            console.log(activeView);
             defaultData.attendee = [attendee.data];
         }
         
@@ -243,8 +242,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             startDate: this.calPanel.getTopToolbar().periodPicker.getPeriod().from,
             numOfDays: this.calPanel.view.numOfDays,
             period: this.calPanel.getTopToolbar().periodPicker.getPeriod(),
-            updatePeriod: this.updatePeriod.createDelegate(this),
-            scrollBuffer: 0
+            updatePeriod: this.updatePeriod.createDelegate(this)
         }, config));
         
         this.calPanel.relayEvents(view, ['changeView', 'changePeriod', 'addEvent', 'updateEvent', 'click', 'dblclick', 'contextmenu', 'keydown']);
@@ -252,8 +250,8 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         this.calPanel.view.getSelectionModel().relayEvents(view.getSelectionModel(), 'selectionchange');
         view.getSelectionModel().on('selectionchange', this.onSelectionChange.createDelegate(this, [view]));
         
-        if (view.onScroll) {
-            view.onScroll = view.onScroll.createSequence(this.onScroll, this, view);
+        if (view.onBeforeScroll) {
+            view.onBeforeScroll = view.onBeforeScroll.createSequence(this.onScroll, this, view);
         }
         
         return view;
@@ -271,8 +269,6 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         }
         
         var scrollTop = activeView.target.scrollTop;
-        
-        Tine.log.debug('Caught scroll top of ' + scrollTop);
         
         this.attendeeViews.each(function(view) {
             if (activeView.id != view.id) {
