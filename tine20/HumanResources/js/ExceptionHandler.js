@@ -40,6 +40,7 @@ Tine.HumanResources.handleRequestException = function(exception, callback, callb
 
     switch(exception.code) {
         case 911: // HumanResources_Exception_NoContract
+        case 912: // HumanResources_Exception_ContractNotEditable
         case 913: // HumanResources_Exception_RemainingNotBookable
         case 914: // HumanResources_Exception_NoAccount
         case 915: // HumanResources_Exception_ContractOverlap
