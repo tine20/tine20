@@ -820,4 +820,66 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $this->assertEquals('2014-04-01 00:00:00', $recordData['bday']);
     }
+    
+
+    /**
+     * test adding a contract with manually setting the end_date of the contract before
+     */
+    public function testAddContract()
+    {
+        $sdate = new Tinebase_DateTime('2013-01-01 00:00:00');
+        $sdate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $employee = $this->_getEmployee('rwright');
+    
+        $contractController = HumanResources_Controller_Contract::getInstance();
+        $employeeController = HumanResources_Controller_Employee::getInstance();
+        $employee = $employeeController->create($employee);
+        $contract = $this->_getContract($sdate);
+        $contract->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
+        $contract->employee_id = $employee->getId();
+        
+        $feastCalendar = $this->_getFeastCalendar();
+        $contract->feast_calendar_id = $feastCalendar->getId();
+        
+        $contract->start_date = $sdate;
+        $contractController->create($contract);
+    
+        $employeeJson = $this->_json->getEmployee($employee->getId());
+        
+        $accountController = HumanResources_Controller_Account::getInstance();
+        
+        // should not be created, exist already
+        $accountController->createMissingAccounts(2013, $employee);
+        $account = $accountController->getAll()->getFirstRecord();
+        
+        $employeeJson['vacation'] = array(array(
+            'account_id' => $account->getId(),
+            'type' => 'vacation',
+            'status' => 'ACCEPTED',
+            'freedays' => array(array('duration' => '1', 'date' => '2013-01-11 00:00:00')),
+        ));
+        
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+        
+        $this->assertEquals(1, count($employeeJson['vacation']));
+        
+        // manually set the end date and add a new contract
+        $employeeJson['contracts'][0]['end_date'] = '2013-05-31 00:00:00';
+        $employeeJson['contracts'][1] = array(
+            'start_date' => '2013-06-01 00:00:00', 
+            'workingtime_json' => '{"days": [8,8,8,8,8,0,0]}',
+            'vacation_days' => 27,
+            'feast_calendar_id' => $feastCalendar->getId()
+        );
+        
+        // no exception should be thrown
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+        $this->assertEquals(2, count($employeeJson['contracts']));
+        
+        // an exception should be thrown
+        $employeeJson['contracts'][0]['vacation_days'] = 31;
+        $this->setExpectedException('HumanResources_Exception_ContractNotEditable');
+        
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+    }
 }

@@ -24,15 +24,14 @@ class HumanResources_Exception_ContractNotEditable extends HumanResources_Except
      * @var string
      */
     protected $_title = 'Contract not editable'; // _('Contract not editable')
+    
     /**
-     * construct
-     *
-     * @param string $_message
-     * @param integer $_code
-     * @return void
+     * @see SPL Exception
      */
-    public function __construct($_message = "You are not allowed to change the record if a vacation has been booked already!", $_code = 912) {
-        // _("You are not allowed to change the record if a vacation has been booked already!")
-        parent::__construct($_message, $_code);
-    }
+    protected $message = 'You are not allowed to change the record if a vacation has been booked already!'; // _('You are not allowed to change the record if a vacation has been booked already!')
+
+    /**
+     * @see SPL Exception
+     */
+    protected $code = 912;
 }
