@@ -424,6 +424,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _applyNominatimPlaceToRecord($address, $record, $place)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+            ' Place: ' . var_export($place, true));
+        
         $record->{$address . 'lon'} = $place->lon;
         $record->{$address . 'lat'} = $place->lat;
         
@@ -458,7 +461,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Got postalcode from Nominatim: ' . $postcode);
-        
         
         // @see 0009424: missing postalcode prevents saving of contact
         if (strpos($postcode, ',') !== false) {

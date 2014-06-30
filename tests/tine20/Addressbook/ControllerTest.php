@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -310,6 +310,10 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateContactWithMissingPostalcode()
     {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::MAPPANEL, TRUE)) {
+            $this->markTestSkipped('Nominatim disabled');
+        }
+        
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
         $contact = $this->_addContact();
         $contact->adr_two_street = null;
@@ -318,7 +322,10 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $contact->adr_two_region = 'Nordrhein-Westfalen';
         
         $updatedContact = $this->_instance->update($contact);
-        $this->assertEquals('481xx', $updatedContact->adr_two_postalcode);
+        
+        // Nominatim no longer returns multiple postcodes
+        // TODO verify if there are still places with multiple postcodes
+        $this->assertEquals(null, $updatedContact->adr_two_postalcode);
     }
     
     /**
