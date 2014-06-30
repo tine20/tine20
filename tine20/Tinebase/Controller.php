@@ -433,6 +433,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 
                 $this->initUser($user, /* $fixCookieHeader = */ false);
                 
+                Tinebase_Core::getSession()->userAccountChanged = true;
+                
                 return true;
             }
         } 
@@ -582,5 +584,17 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 }
                 break;
         }
+    }
+    
+    /**
+     * returns true if user account has been changed
+     * 
+     * @return boolean
+     */
+    public function userAccountChanged()
+    {
+        return (is_object(Tinebase_Core::getSession()) && isset(Tinebase_Core::getSession()->userAccountChanged)) 
+                ? Tinebase_Core::getSession()->userAccountChanged
+                : false;
     }
 }

@@ -682,16 +682,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $userRegistryData = array(
-            'currentAccount'    => $user->toArray(),
-            'userContact'       => $userContactArray,
-            'accountBackend'    => Tinebase_User::getConfiguredBackend(),
-            'jsonKey'           => Tinebase_Core::get('jsonKey'),
-            'userApplications'  => $user->getApplications()->toArray(),
-            'NoteTypes'         => $this->getNoteTypes(),
-            'stateInfo'         => Tinebase_State::getInstance()->loadStateInfo(),
-            'mustchangepw'      => $user->mustChangePassword(),
-            'confirmLogout'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
-            'persistentFilters' => $persistentFilters,
+            'currentAccount'     => $user->toArray(),
+            'userContact'        => $userContactArray,
+            'accountBackend'     => Tinebase_User::getConfiguredBackend(),
+            'jsonKey'            => Tinebase_Core::get('jsonKey'),
+            'userApplications'   => $user->getApplications()->toArray(),
+            'NoteTypes'          => $this->getNoteTypes(),
+            'stateInfo'          => Tinebase_State::getInstance()->loadStateInfo(),
+            'mustchangepw'       => $user->mustChangePassword(),
+            'confirmLogout'      => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
+            'persistentFilters'  => $persistentFilters,
+            'userAccountChanged' => Tinebase_Controller::getInstance()->userAccountChanged(),
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
