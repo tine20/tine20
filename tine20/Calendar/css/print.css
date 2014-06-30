@@ -18,7 +18,7 @@ table th {
 table td {
   padding: 4px 3px 4px 5px;
   border-style: none solid solid;
-  border-width: 1px;
+  border-width: 5px;
   border-color: #ededed;
 }
 
@@ -112,12 +112,12 @@ table td {
     padding-top: 0px;
     padding-left: 0px;
     padding-right: 0px;
-    border: 1px solid #d0d0d0;
+    border: 5px solid #d0d0d0;
 }
 
 .cal-print-monthview .cal-print-daysview-day th {
     border: 0;
-    border-bottom: 1px solid #d0d0d0;
+    border-bottom: 5px solid #d0d0d0;
 }
 
 .cal-print-monthview {
