@@ -728,7 +728,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $typeMap[self::USERTYPE_LIST] = Addressbook_Controller_List::getInstance()->getMultiple($typeMap[$type]->list_id, true);
                     break;
                 case self::USERTYPE_RESOURCE:
-                    $typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids));
+                    $typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids), true);
                     break;
                 default:
                     throw new Exception("type $type not supported");
