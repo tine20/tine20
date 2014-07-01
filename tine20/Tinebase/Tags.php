@@ -187,7 +187,7 @@ class Tinebase_Tags
     {
         $tagId = ($id instanceof Tinebase_Model_Tag) ? $id->getId() : $id;
         
-        $tags = Tinebase_Tags::getInstance()->getTagsById($tagId, Tinebase_Model_TagRight::VIEW_RIGHT, $ignoreAcl);
+        $tags = $this->getTagsById($tagId, Tinebase_Model_TagRight::VIEW_RIGHT, $ignoreAcl);
         
         if (count($tags) == 0) {
             throw new Tinebase_Exception_NotFound("Tag $id not found or insufficient rights.");

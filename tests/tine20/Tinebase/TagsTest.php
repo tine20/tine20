@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Tags
  */
-class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
+class Tinebase_TagsTest extends TestCase
 {
     /**
      * unit under test (UIT)
@@ -40,19 +40,9 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
+        
         $this->_instance = Tinebase_Tags::getInstance();
-    }
-
-    /**
-    * Tears down the fixture
-    * This method is called after a test is executed.
-    *
-    * @access protected
-    */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
     }
 
     /**
@@ -74,14 +64,16 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
 
     /**
      * create shared tag
-     *
+     * 
+     * @param string $name
+     * @param array $context
      * @return Tinebase_Model_Tag
      */
-    protected function _createSharedTag()
+    protected function _createSharedTag($name = NULL, $context = NULL)
     {
         $sharedTag = new Tinebase_Model_Tag(array(
             'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-            'name'  => 'tagSingle::shared',
+            'name'  => $name ? $name : 'tagSingle::shared',
             'description' => 'this is a shared tag',
             'color' => '#009B31',
         ));
@@ -96,7 +88,7 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         ));
         $this->_instance->setRights($right);
         
-        $this->_instance->setContexts(array('any'), $savedSharedTag);
+        $this->_instance->setContexts($context ? $context : array('any'), $savedSharedTag);
         
         $this->assertEquals($sharedTag->name, $savedSharedTag->name);
 
@@ -318,5 +310,27 @@ class Tinebase_TagsTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(50, count($tags), 'did not find 50 tags');
         $this->assertGreaterThanOrEqual(50, $count, 'count mismatch');
+    }
+    
+    /**
+     * test if the application parameter is used properly
+     */
+    public function testSearchTagsForApplication()
+    {
+        $filter = new Tinebase_Model_TagFilter(array());
+        $ids = $this->_instance->searchTags($filter)->getId();
+        $this->_instance->deleteTags($ids);
+        
+        $t1 = $this->_createSharedTag('tag1');
+        $t2 = $this->_createSharedTag('tag2');
+        
+        // this tag should not occur, search is in the addressbook application
+        $crmAppId = Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId();
+        $t3 = $this->_createSharedTag('tag3', array($crmAppId));
+        
+        $filter = new Tinebase_Model_TagFilter(array('application' => 'Addressbook'));
+        
+        $tags = $this->_instance->searchTags($filter);
+        $this->assertEquals(2, $tags->count());
     }
 }

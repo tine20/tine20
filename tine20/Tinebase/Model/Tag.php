@@ -21,6 +21,7 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
      * Type of a shared tag
      */
     const TYPE_SHARED = 'shared';
+    
     /**
      * Type of a personal tag
      */

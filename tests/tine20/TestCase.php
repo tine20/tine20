@@ -120,6 +120,40 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * get tag
+     *
+     * @param string $tagType
+     * @param string $tagName
+     * @param array $contexts
+     * @return Tinebase_Model_Tag
+     */
+    protected function _getTag($tagType = Tinebase_Model_Tag::TYPE_SHARED, $tagName = NULL, $contexts = NULL)
+    {
+        if ($tagName) {
+            try {
+                $tag = Tinebase_Tags::getInstance()->getTagByName($tagName);
+                return $tag;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            }
+        } else {
+            $tagName = Tinebase_Record_Abstract::generateUID();
+        }
+    
+        $targ = array(
+            'type'          => $tagType,
+            'name'          => $tagName,
+            'description'   => 'testTagDescription',
+            'color'         => '#009B31',
+        );
+    
+        if ($contexts) {
+            $targ['contexts'] = $contexts;
+        }
+    
+        return new Tinebase_Model_Tag($targ);
+    }
+    
+    /**
      * delete groups and their members
      * 
      * - also deletes groups and users in sync backends

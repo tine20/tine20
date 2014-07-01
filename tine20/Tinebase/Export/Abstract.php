@@ -136,6 +136,14 @@ abstract class Tinebase_Export_Abstract
      * @var array
      */
     protected $_customFieldNames = NULL;
+
+    /**
+     * holds resolved records for matrices. this is an array holding each recordset on 
+     * a property with the same name as the field identifier.
+     * 
+     * @var array
+     */
+    protected $_matrixRecords = NULL;
     
     /**
      * the constructor
@@ -350,6 +358,7 @@ abstract class Tinebase_Export_Abstract
             
             if (! empty($definition->filename)) {
                 // check if file with plugin options exists and use that
+                // TODO: this is confusing when imported an extra definition from a file having the same name as the default -> the default will be used
                 $completeFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName . 
                     DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'definitions' . DIRECTORY_SEPARATOR . $definition->filename;
                 try {
@@ -366,9 +375,59 @@ abstract class Tinebase_Export_Abstract
         }
         
         $config = Tinebase_ImportExportDefinition::getInstance()->getOptionsAsZendConfigXml($definition, $_additionalOptions);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' export config: ' . print_r($config->toArray(), TRUE));
+        
+        $this->_addMatrices($config);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' export config: ' . print_r($config->toArray(), TRUE));
+        }
         
         return $config;
+    }
+    
+    /**
+     * 
+     * @param Zend_Config_Xml $config
+     * @param Zend_Config_Xml $fieldConfig
+     * @throws Tinebase_Exception_Data
+     */
+    protected function _addMatrixHeaders(Zend_Config_Xml $config, Zend_Config $fieldConfig)
+    {
+        switch ($fieldConfig->type) {
+            case 'tags':
+                $filter = new Tinebase_Model_TagFilter(array('application' => $this->_applicationName));
+                $tags = Tinebase_Tags::getInstance()->searchTags($filter);
+                
+                $count = $config->columns->column->count();
+                
+                foreach($tags as $tag) {
+                    $cfg = new Zend_Config(array($count => array('identifier' => $tag->name, 'type' => 'tags', 'isMatrixField' => TRUE)));
+                    $config->columns->column->merge($cfg);
+                    $count++;
+                }
+                
+                $this->_matrixRecords['tags'] = $tags;
+                
+                break;
+            default:
+                throw new Tinebase_Exception_Data('Other types than tags are not supported at the moment.');
+        }
+    }
+    
+    /**
+     * if there are matrix fields configured, add them as columns to config
+     * 
+     * @param Zend_Config_Xml $config
+     */
+    protected function _addMatrices(Zend_Config_Xml $config)
+    {
+        for ($i = 0; $i < $config->columns->column->count(); $i++) {
+            $column = $config->columns->column->{$i};
+            if ($column->separateColumns) {
+                $this->_addMatrixHeaders($config, $config->columns->column->{$i});
+                unset($config->columns->column->{$i});
+            }
+        }
     }
 
     /**

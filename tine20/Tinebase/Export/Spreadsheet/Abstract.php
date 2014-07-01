@@ -19,6 +19,13 @@
 abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abstract
 {
     /**
+     * holds all records for the matrix
+     * 
+     * @var array
+     */
+    protected $_matrixCache = array();
+    
+    /**
      * get export document object
      * 
      * @return Object the generated document
@@ -41,27 +48,33 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
     {
         $result = NULL;
         
-        if (in_array($_field->type, $this->_specialFields)) {
-            // special field handling
-            $result = $this->_getSpecialFieldValue($_record, $_field->toArray(), $_field->identifier, $_cellType);
-            $result = $this->_replaceAndMatchvalue($result, $_field);
-            return $result;
-            
-        } else if (isset($field->formula) 
-            || (! isset($_record->{$_field->identifier}) 
-                && ! in_array($_field->type, $this->_resolvedFields) 
-                && ! in_array($_field->identifier, $this->_getCustomFieldNames())
-            )
-        ) {
-            // check if empty -> use alternative field
-            if (isset($_field->empty)) {
-                $fieldConfig = $_field->toArray();
-                unset($fieldConfig['empty']);
-                $fieldConfig['identifier'] = $_field->empty;
-                $result = $this->_getCellValue(new Zend_Config($fieldConfig), $_record, $_cellType);
+        if (! (isset($_field->type) && $_field->separateColumns)) {
+            if (in_array($_field->type, $this->_specialFields)) {
+                // special field handling
+                $result = $this->_getSpecialFieldValue($_record, $_field->toArray(), $_field->identifier, $_cellType);
+                $result = $this->_replaceAndMatchvalue($result, $_field);
+                return $result;
+                
+            } else if (isset($field->formula) 
+                || (! isset($_record->{$_field->identifier}) 
+                    && ! in_array($_field->type, $this->_resolvedFields) 
+                    && ! in_array($_field->identifier, $this->_getCustomFieldNames())
+                )
+            ) {
+                // check if empty -> use alternative field
+                if (isset($_field->empty)) {
+                    $fieldConfig = $_field->toArray();
+                    unset($fieldConfig['empty']);
+                    $fieldConfig['identifier'] = $_field->empty;
+                    $result = $this->_getCellValue(new Zend_Config($fieldConfig), $_record, $_cellType);
+                }
+                // don't add value for formula or undefined fields
+                return $result;
             }
-            // don't add value for formula or undefined fields
-            return $result;
+        }
+        
+        if ($_field->isMatrixField) {
+            return $this->_getMatrixCellValue($_field, $_record);
         }
         
         switch($_field->type) {
@@ -149,6 +162,38 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
         return $result;
     }
     
+    /**
+     * returns the value of a matrix field
+     * 
+     * @param Zend_Config $field
+     * @param Tinebase_Record_Interface $record
+     * @throws Tinebase_Exception_Data
+     * @return number
+     */
+    protected function _getMatrixCellValue($field, $record)
+    {
+        $result = 0;
+        
+        switch ($field->type) {
+            case 'tags':
+                if (! isset($this->_matrixCache[$field->identifier])) {
+                    $this->_matrixCache[$field->identifier] = array();
+                }
+            
+                if (! isset($this->_matrixCache[$field->identifier][$record->getId()])) {
+                    // clear cache, its not needed anymore (could have been filled by the previous record)
+                    $this->_matrixCache[$field->identifier] = array();
+                    $this->_matrixCache[$field->identifier][$record->getId()] = Tinebase_Tags::getInstance()->getTagsOfRecord($record);
+                }
+                $result = $this->_matrixCache[$field->identifier][$record->getId()]->filter('name', $field->identifier)->count();
+                break;
+            default:
+                throw new Tinebase_Exception_Data('Other types than tags are not supported at the moment.');
+        }
+        
+        return $result;
+    }
+
     /**
      * get value from resolved user record
      * 

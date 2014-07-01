@@ -227,9 +227,6 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             $row = $this->_activeTable->appendRow();
 
             foreach ($this->_config->columns->column as $field) {
-                
-                //$altStyle = 'ceAlternate';
-                
                 // get type and value for cell
                 $cellType = $this->_getCellType($field->type);
                 $cellValue = $this->_getCellValue($field, $record, $cellType);
@@ -241,18 +238,9 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
                 if ($field->formula) {
                     $cell->setFormula($field->formula);
                 }
-
-                /*
-                if ($i % 2 == 1) {
-                    $cell->setStyle($altStyle);
-                }
-                */
-                
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($field->toArray(), true));
             }
             $i++;
         }
-        
     }
     
     /**
