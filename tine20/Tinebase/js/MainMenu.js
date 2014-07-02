@@ -106,7 +106,10 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 this.action_installChromeWebApp
             ];
             
-            if (Tine.Tinebase.registry.get("config").roleChangeAllowed && Tine.Tinebase.registry.get("config").roleChangeAllowed.value) {
+            if (Tine.Tinebase.registry.get("config") 
+                && Tine.Tinebase.registry.get("config").roleChangeAllowed 
+                && Tine.Tinebase.registry.get("config").roleChangeAllowed.value) 
+            {
                 var roleChangeAllowed = Tine.Tinebase.registry.get("config").roleChangeAllowed.value,
                     currentAccountName = Tine.Tinebase.registry.get('currentAccount').accountLoginName;
                 Tine.log.debug(roleChangeAllowed);
