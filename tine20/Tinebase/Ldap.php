@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Ldap
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -24,6 +24,12 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function __construct(array $_options)
     {
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::LDAP_DISABLE_TLSREQCERT)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Disable TLS certificate check');
+            putenv('LDAPTLS_REQCERT=never');
+        }
+        
         // strip non Zend_Ldap options
         $options = array_intersect_key($_options, array(
             'host'                      => null,
@@ -133,7 +139,7 @@ class Tinebase_Ldap extends Zend_Ldap
                 unset($entry[$attr]);
             }
         }
-                
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn->toString());
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $data: ' . print_r($entry, true));
         
