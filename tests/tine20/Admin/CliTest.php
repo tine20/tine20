@@ -36,6 +36,18 @@ class Admin_CliTest extends TestCase
      *
      * @access protected
      */
+    
+    /**
+     * config groups
+     * 
+     */
+    protected $_testGroup = array();
+    
+    /**
+     * @var Tinebase_Record_RecordSet
+     */
+    protected $_groupsToDelete = null;
+    
     protected function setUp()
     {
         parent::setUp();
@@ -43,7 +55,13 @@ class Admin_CliTest extends TestCase
         
         $this->_cli = new Admin_Frontend_Cli();
         
-        $this->_usernamesToDelete = array('hmaster', 'hmeister', 'hmoster', 'irmeli', 'testuser');
+        $this->_usernamesToDelete = array('hmaster', 'hmeister', 'hmoster', 'irmeli', 'testuser', 'm.muster');
+        
+        $this->_groupsToDelete = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
+        $this->_testGroup['teacher'] = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
+            'name'   => 'teacher'
+        )));
+        $this->_groupsToDelete->addRecord($this->_testGroup['teacher']);
         
         $this->objects['config'] = '<?xml version="1.0" encoding="UTF-8"?>
         <config>
@@ -173,6 +191,57 @@ class Admin_CliTest extends TestCase
                 </field>
             </mapping>
         </config>';
+          $this->objects['configGroup'] = '<?xml version="1.0" encoding="UTF-8"?>
+        <config>
+           <model>Tinebase_Model_FullUser</model>
+           <plugin>Admin_Import_Csv</plugin>
+           <type>import</type>
+           <headline>1</headline>
+           <dryrun>0</dryrun>
+           <delimiter>;</delimiter>
+           <mapping>
+               <field>
+                   <source>firstname</source>
+                   <destination>accountFirstName</destination>
+               </field>
+               <field>
+                   <source>lastname</source>
+                   <destination>accountLastName</destination>
+               </field>
+               <field>
+                   <source>objectname</source>
+                   <destination>accountLoginName</destination>
+               </field>
+               <field>
+                   <source>password</source>
+                   <destination>password</destination>
+               </field>
+               <field>
+                   <source>group_id</source>
+                   <destination>accountPrimaryGroup</destination>
+               </field>
+               <field>
+                   <source>accountHomeDirectory</source>
+                   <destination>accountHomeDirectory</destination>
+               </field>
+               <field>
+                   <source>accountLoginShell</source>
+                   <destination>accountLoginShell</destination>
+               </field>
+           </mapping>
+        </config>';
+    }
+    
+    /**
+     * Tears down the fixture
+     * This method is called after a test is executed.
+     *
+     * @access protected
+     */
+    protected function tearDown()
+    {
+        $this->_groupIdsToDelete = $this->_groupsToDelete->getArrayOfIds();
+        parent::tearDown();
     }
     
     /**
@@ -300,5 +369,35 @@ class Admin_CliTest extends TestCase
         $this->assertEquals(array('test@' . $maildomain), $newUser->smtpUser->emailForwards);
         $this->assertTrue($newUser->smtpUser->emailForwardOnly);
         unlink("test.csv");
+    }
+    
+    /**
+     * testImportUsersWithGroup
+     */
+    public function testImportUsersWithGroup()
+    {
+        $readFile = fopen(dirname(__FILE__) . '/files/test_teacher.csv', 'r');
+        $writeFile = fopen('test2.csv', 'w');
+        $delimiter = ',';
+        $enclosure = '"';
+        
+        while (($row = fgetcsv($readFile)) !== false) {
+            foreach ($row as $colIndex => &$field) {
+                $field = str_replace('GROUP', $this->_testGroup['teacher']->getId(), $field);
+            }
+            fputcsv($writeFile, $row, $delimiter, $enclosure);
+        }
+        
+        fclose($readFile);
+        fclose($writeFile);
+        
+        $this->_importUsers($this->objects['configGroup'], 'test2.csv', 'admin_user_import_csv_test_teacher');
+        $newUser = Tinebase_User::getInstance()->getFullUserByLoginName('m.muster');
+        $newUserMemberships = Tinebase_Group::getInstance()->getGroupMemberships($newUser);
+        $this->assertTrue(in_array($this->_testGroup['teacher']->getId(), $newUserMemberships),
+        ' not member of the test group (' . $this->_testGroup['teacher']->getId() . ') ' . print_r($newUserMemberships, TRUE));
+        $this->assertEquals('/bin/false', $newUser->accountLoginShell);
+        
+        unlink("test2.csv");
     }
 }

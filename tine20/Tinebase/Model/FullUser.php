@@ -124,7 +124,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             $this->_addSambaSettings($options['samba']);
         }
         
-        if (isset($options['accountLoginShell'])) {
+        if (empty($this->accountLoginShell) && ! empty($options['accountLoginShell'])) {
             $this->accountLoginShell = $options['accountLoginShell'];
         }
         

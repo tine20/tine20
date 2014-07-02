@@ -1,0 +1,2 @@
+objectname;firstname;lastname;password;accountLoginShell;accountHomeDirectory;group_id
+m.muster;Max;Muster;foo;/bin/false;/storage/lehrer/m.muster;GROUP
