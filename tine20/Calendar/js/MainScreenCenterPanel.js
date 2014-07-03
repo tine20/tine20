@@ -689,10 +689,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 if (createdEvent.isRecurBase()) {
                     store.load({refresh: true});
                 } else {
+                    // store may be lost on conflict or else
                     if (store) {
                         store.replaceRecord(event, createdEvent);
+                        this.setLoading(false);
+                    } else {
+                        this.refresh();
                     }
-                    this.setLoading(false);
+                    
                     if (view && view.rendered) {
                         view.getSelectionModel().select(createdEvent);
                     }
