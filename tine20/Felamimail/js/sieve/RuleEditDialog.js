@@ -282,7 +282,9 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             {
                 region: 'north',
                 border: false,
+                xtype: 'panel',
                 autoScroll: true,
+                height: 200,
                 items: [{
                     layout: 'form',
                     labelWidth: 200,
@@ -295,7 +297,6 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     ]
                 }, this.conditionsPanel
                 ],
-                xtype: 'panel',
                 listeners: {
                     scope: this,
                     afterlayout: function(ct, layout) {
@@ -312,6 +313,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 region: 'center',
                 border: false,
                 frame: true,
+                xtype: 'panel',
                 layout: 'column',
                 items: [
                     this.actionTypeCombo,
@@ -328,6 +330,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     activeItem: this.idPrefix + 'fileinto',
                     border: false,
                     columnWidth: 0.5,
+                    xtype: 'panel',
                     defaults: {
                         border: false
                     },
