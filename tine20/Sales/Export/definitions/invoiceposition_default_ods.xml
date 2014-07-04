@@ -10,16 +10,10 @@
         <header>{date}</header>
         <header>{user}</header>
     </headers>
-    <defaultColumnStyle>
-        <column-width>6cm</column-width>
-    </defaultColumnStyle>
     <columns>
         <column>
             <identifier>name</identifier>
             <header>Name</header>
-            <style>
-                <column-width>4cm</column-width>
-            </style>
         </column>
         <column>
             <identifier>month</identifier>
@@ -40,9 +34,6 @@
         <column>
             <identifier>quantity</identifier>
             <header>Quantity</header>
-            <style>
-                <column-width>2cm</column-width>
-            </style>
         </column>
     </columns>
 </config>

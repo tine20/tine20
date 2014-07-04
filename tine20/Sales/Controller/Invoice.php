@@ -454,7 +454,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $filter = new Sales_Model_ContractFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $ids)));
         
-        
         $iterator = new Tinebase_Record_Iterator(array(
             'iteratable' => $this,
             'controller' => Sales_Controller_Contract::getInstance(),

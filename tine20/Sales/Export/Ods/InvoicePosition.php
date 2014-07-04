@@ -48,22 +48,6 @@ class Sales_Export_Ods_InvoicePosition extends Sales_Export_Ods_Abstract
     protected $_contacts = NULL;
     
     /**
-     * constructor (adds more values with Crm_Export_Helper)
-     *
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Controller_Record_Interface $_controller
-     * @param array $_additionalOptions
-     * @return void
-    */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
-    {
-        $this->_userStyles[] = '<number:date-style style:name="germanDate" number:language="de" number:country="DE" number:automatic-order="true"><number:day number:style="long"/><number:text>.</number:text><number:month number:style="long"/><number:text>.</number:text><number:year number:style="long"/></number:date-style>';
-        $this->_userStyles[] = '<style:style style:name="germanDateCell" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="germanDate"/>';
-        
-        parent::__construct($_filter, $_controller, $_additionalOptions);
-    }
-
-    /**
      * add body rows
      * 
      * @alternate, kind of POC or VIP, overwrites the default one
@@ -121,7 +105,6 @@ class Sales_Export_Ods_InvoicePosition extends Sales_Export_Ods_Abstract
                     $cell->setStyle((string) $field->customStyle);
                 }
             }
-            $i++;
         }
     }
 }

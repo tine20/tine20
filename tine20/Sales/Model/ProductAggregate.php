@@ -284,7 +284,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      * @return string
      */
     public static function getBillableControllerName() {
-        throw new Tinebase_Exception_NotImplemented('Must be implemented seperately.');
+        return 'Sales_Controller_ProductAggregate';
     }
     
     /**
@@ -293,7 +293,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      * @return string
      */
     public static function getBillableFilterName() {
-        throw new Tinebase_Exception_NotImplemented('Must be implemented seperately.');
+        return 'Sales_Model_ProductAggregateFilter';
     }
     
     /**
@@ -302,6 +302,6 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      * @return string
      */
     public static function getBillableModelName() {
-        throw new Tinebase_Exception_NotImplemented('Must be implemented seperately.');
+        return 'Sales_Model_ProductAggregate';
     }
 }

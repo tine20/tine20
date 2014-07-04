@@ -92,4 +92,44 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $filter = new Sales_Model_InvoicePositionFilter($decodedFilter);
         parent::_export($filter, Zend_Json::decode($options), Sales_Controller_InvoicePosition::getInstance());
     }
+    
+    /**
+     * export invoice positions by invoice id and accountable (php class name)
+     * 
+     * @param string $invoiceId
+     * @param string $accountable
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function exportInvoicePositions($invoiceId, $accountable)
+    {
+        if (! (class_exists($accountable) && in_array('Sales_Model_Accountable_Interface', class_implements($accountable)))) {
+            throw new Tinebase_Exception_InvalidArgument('The given accountable ' . $accountable . ' does not exist or doesn\'t implement Sales_Model_Accountable_Interface');
+        }
+        
+        if ($accountable == 'Sales_Model_ProductAggregate') {
+            $billableFilterName     = 'Sales_Model_InvoicePositionFilter';
+            $billableControllerName = 'Sales_Controller_InvoicePosition';
+        } else {
+            $billableFilterName     = $accountable::getBillableFilterName();
+            $billableControllerName = $accountable::getBillableControllerName();
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Export invoicepositions with the parameters:' .
+                ' invoiceId: ' . $invoiceId .
+                ' accountable: ' . $accountable .
+                ' billableFilterName: ' . $billableFilterName .
+                ' billableControllerName: ' . $billableControllerName
+            );
+        }
+        
+        $filter = new $billableFilterName(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoiceId)));
+        
+        if ($accountable == 'Sales_Model_ProductAggregate') {
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'model', 'operator' => 'equals', 'value' => 'Sales_Model_ProductAggregate')));
+        }
+        
+        parent::_export($filter, array('format' => 'ods'), $billableControllerName::getInstance());
+    }
 }

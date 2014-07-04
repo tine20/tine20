@@ -69,60 +69,14 @@ Tine.Sales.InvoicePositionGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var phpModelName = target.getAttribute('ext:model');
         
         if (phpModelName) {
-            var split = phpModelName.split('_Model_');
-            var appName = split[0];
-            var modelName = split[1];
-            
-            var exportFunction = appName + '.export' + split[1] + 's';
-            var exportIds     = [];
-            var recordClass = Tine[split[0]].Model[split[1]];
-            
-            this.store.each(function(record, index) {
-                if (record.get('model') == phpModelName) {
-                    
-                    var property = 'accountable_id';
-                    
-                    switch (phpModelName) {
-                        case 'Sales_Model_ProductAggregate':
-                            property = 'id';
-                            break;
-                    }
-                    
-                    exportIds.push(record.get(property));
+            var downloader = new Ext.ux.file.Download({
+                params: {
+                    method: 'Sales.exportInvoicePositions',
+                    requestType: 'HTTP',
+                    invoiceId: this.editDialog.record.get('id'),
+                    accountable: phpModelName
                 }
-            });
-            
-            if (exportIds.length) {
-                switch (phpModelName) {
-                    case 'Timetracker_Model_Timeaccount':
-                        exportFunction = 'Timetracker.exportTimesheets';
-                        var filter = [{condition: "OR", filters: [{condition: "AND", filters: 
-                                [{field: "invoice_id",
-                                operator: "AND",
-                                value: [{
-                                    field: ":id",
-                                    operator: "equals",
-                                    value: this.editDialog.record.get('id')
-                                }]
-                            }]
-                        }]}];
-                        break;
-                    default:
-                        var filter = [];
-                        filter.push({field: recordClass.getMeta('idProperty'), operator: 'in', value: exportIds });
-                }
-                
-                var downloader = new Ext.ux.file.Download({
-                    params: {
-                        method: exportFunction,
-                        requestType: 'HTTP',
-                        filter: Ext.util.JSON.encode(filter),
-                        options: Ext.util.JSON.encode({
-                            format: 'ods'
-                        })
-                    }
-                }).start();
-            }
+            }).start();
         }
     },
     
