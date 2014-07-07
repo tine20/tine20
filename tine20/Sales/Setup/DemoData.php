@@ -277,59 +277,18 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createSharedInvoices()
     {
-        $contracts = Sales_Controller_Contract::getInstance()->getAll();
-        $addresses = Sales_Controller_Address::getInstance()->getAll()->filter('type', 'billing');
-        $costcenters = Sales_Controller_CostCenter::getInstance()->getAll();
+        $sic = Sales_Controller_Invoice::getInstance();
         
-        $cCount = $contracts->count();
-        $ccCount = $costcenters->count();
+        $now = new Tinebase_DateTime();
+        $now->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $now->setDate($now->format('Y'), $now->format('m'), 1);
+        $now->setTime(3,0,0);
         
-        if ($cCount < 1) {
-            throw new Tinebase_Exeption('Please create some contracts before creating the invoices!');
-        }
+        $date = clone $this->_referenceDate;
         
-        $c = Sales_Controller_Invoice::getInstance();
-        $i = 0;
-        $ccI = 0;
-        $cI = 0;
-        
-        while ($i < 120) {
-            
-            $contract = $contracts->getByIndex($cI);
-            
-            $invoice = new Sales_Model_Invoice(array(
-                'description' => 'Invoice - ' . Tinebase_Record_Abstract::generateUID(4),
-                'type' => 'INVOICE',
-                'costcenter_id' => $costcenters->getByIndex($ccI),
-                'relations' => array(
-                    array(
-                        'own_model'              => 'Sales_Model_Invoice',
-                        'own_backend'            => Tasks_Backend_Factory::SQL,
-                        'own_id'                 => NULL,
-                        'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-                        'related_model'          => 'Sales_Model_Contract',
-                        'related_backend'        => Tasks_Backend_Factory::SQL,
-                        'related_id'             => $contract->getId(),
-                        'related_record'         => $contract->toArray(),
-                        'type'                   => 'CONTRACT'
-                    ),
-                )
-            ));
-            
-            $c->create($invoice);
-            
-            if ($cI == ($cCount - 1)) {
-                $cI = 0;
-            } else {
-                $cI++;
-            }
-            
-            if ($ccI == ($ccCount - 1)) {
-                $ccI = 0;
-            } else {
-                $ccI++;
-            }
-            $i++;
+        while ($date < $now) {
+            $sic->createAutoInvoices($date);
+            $date->addMonth(1);
         }
     }
     
@@ -346,7 +305,11 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         $i = 0;
         
+        $this->_setReferenceDate();
+        
         $customers = Sales_Controller_Customer::getInstance()->getAll();
+        $addresses = Sales_Controller_Address::getInstance()->getAll();
+        
         $customersCount = $customers->count();
         $ccIndex = 0;
         
@@ -355,6 +318,9 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $i++;
             
             $customer = $customers->getByIndex($ccIndex);
+            
+            $address = $addresses->filter('customer_id', $customer->getId())->filter('type', 'billing')->getFirstRecord();
+            $addressId = $address ? $address->getId() : NULL;
             
             $title = self::$_de ? ('Vertrag für KST ' . $costcenter->number . ' - ' . $costcenter->remark) : ('Contract for costcenter ' . $costcenter->number . ' - ' . $costcenter->remark) . ' ' . Tinebase_Record_Abstract::generateUID(3);
             $ccid = $costcenter->getId();
@@ -365,7 +331,9 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'description'  => 'Created by Tine 2.0 DemoData',
                 'container_id' => $cid,
                 'status'       => 'OPEN',
-                'cleared'      => 'NOT_YET_CLEARED'
+                'cleared'      => 'NOT_YET_CLEARED',
+                'start_date'   => clone $this->_referenceDate,
+                'billing_address_id' => $addressId
             ));
             
             $relations = array(
@@ -390,6 +358,20 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'type'                   => 'CUSTOMER'
                 )
             );
+            
+            $genericProduct = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product(
+                self::$_de
+                    ? 
+                    array('name' => 'Generisches Produkt', 'description' => 'ein generisches produkt aus den demo daten', 'price' => 100)
+                    :
+                    array('name' => 'Generic Product', 'description' => 'this is a generic product used in demo data', 'price' => 100)
+            ));
+            
+            $contract->products = array(array(
+                'product_id' => $genericProduct->getId(),
+                'quantity' => 1
+            ));
+            
             $contract->relations = $relations;
             
             $this->_contractController->create($contract);
