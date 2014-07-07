@@ -316,6 +316,28 @@ abstract class Tinebase_Setup_DemoData_Abstract
             )
         ),
     );
+    
+    /**
+     * the reference date for data in aggregates/invoices...
+     * 
+     * @var Tinebase_DateTime
+     */
+    protected $_referenceDate = NULL;
+    
+    /**
+     * holds an array containing the last day of each month for last year
+     * 
+     * @var array
+     */
+    protected $_lastMonthDays = NULL;
+    
+    /**
+     * if the last year was a leap year, this is set to true
+     * 
+     * @var boolean
+     */
+    protected $_isLeapYear = FALSE;
+    
     // this week
     protected $_monday       = NULL;
     protected $_tuesday      = NULL;
@@ -338,6 +360,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
         
     protected $_wednesday2week = NULL;
     protected $_friday2week    = NULL;
+    
     /**
      * shall shared data be created?
      * @var boolean
@@ -415,7 +438,29 @@ abstract class Tinebase_Setup_DemoData_Abstract
      * shortcut for locale
      */
     protected static $_en = false;
-
+    
+    /**
+     * sets $this->_referenceDate to the first january of last year
+     */
+    protected function _setReferenceDate()
+    {
+        // set reference date to the 1st january of last year
+        $this->_referenceDate = Tinebase_DateTime::now();
+        $this->_referenceDate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $this->_referenceDate->subYear(1);
+        $this->_referenceDate->setDate($this->_referenceDate->format('Y'), 1 ,1);
+        $this->_referenceDate->setTime(0,0,0);
+    
+        $this->_referenceYear = $this->_referenceDate->format('Y');
+        $this->_lastMonthDays = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+    
+        // find out if year is a leap year
+        if (($this->_referenceYear % 400) == 0 || (($this->_referenceYear % 4) == 0 && ($this->_referenceYear % 100) != 0)) {
+            $this->_isLeapYear = TRUE;
+            $this->_lastMonthDays[1] = 29;
+        }
+    }
+    
     /**
      * 
      * @param Tinebase_DateTime $now
