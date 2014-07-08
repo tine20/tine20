@@ -113,6 +113,9 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
             {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
             {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+            
+            {label: app.i18n._('Estimated end'), field: 'end_scheduled', valueType: 'date'},
+            
             {filtertype: 'crm.contact'},
             {filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Tasks.Model.Task, ownField: 'task'}
         ];
