@@ -164,6 +164,14 @@ class Crm_JsonTest extends Crm_AbstractTest
         $getLead = $this->_instance->getLead($savedLead['id']);
         $searchLeads = $this->_instance->searchLeads($this->_getLeadFilter(), '');
         
+        // test manual resolving of organizer in related_record and set it back for following tests
+        for ($i = 0; $i < count($getLead['relations']); $i++) {
+            if (isset($getLead['relations'][$i]['related_record']['organizer'])) {
+                $this->assertTrue(is_array($getLead['relations'][$i]['related_record']['organizer']));
+                $getLead['relations'][$i]['related_record']['organizer'] = $getLead['relations'][$i]['related_record']['organizer']['accountId'];
+            }
+        }
+        
         // assertions
         $this->assertEquals($getLead, $savedLead);
         $this->assertEquals($getLead['notes'][0]['note'], 'phpunit test note');
