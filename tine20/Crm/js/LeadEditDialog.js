@@ -388,7 +388,12 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         anchor: '95%',
                                         minValue: 0
                                     },  
-                                        this.combo_probability
+                                        this.combo_probability,
+                                        new Ext.ux.form.ClearableDateField({
+                                            fieldLabel: this.app.i18n._('Resubmission Date'), 
+                                            id: 'resubmission_date',
+                                            anchor: '95%'
+                                        })
                                     ]
                                 }]
                             }, {

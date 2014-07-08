@@ -30,6 +30,8 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.gener
         {name: 'probability',   type: 'int'},
         {name: 'probableTurnover',   type: 'int'},
         {name: 'end_scheduled', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+        {name: 'resubmission_date', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+
         {name: 'lastread'},
         {name: 'lastreader'},
         {name: 'responsible'},
@@ -115,6 +117,7 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
             
             {label: app.i18n._('Estimated end'), field: 'end_scheduled', valueType: 'date'},
+            {label: app.i18n._('Resubmission Date'), field: 'resubmission_date', valueType: 'date'},
             
             {filtertype: 'crm.contact'},
             {filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Tasks.Model.Task, ownField: 'task'}

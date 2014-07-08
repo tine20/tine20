@@ -79,6 +79,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'probableTurnover'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'probability'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'end_scheduled'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'resubmission_date'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
     // linked objects
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
@@ -108,7 +109,8 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'end_scheduled',
         'creation_time',
         'last_modified_time',
-        'deleted_time'
+        'deleted_time',
+        'resubmission_date'
     );
     
     /**

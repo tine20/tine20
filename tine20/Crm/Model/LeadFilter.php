@@ -58,6 +58,8 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
         'customfield'           => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'metacrm_lead.id')),
         
         'end_scheduled'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'resubmission_date'     => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+
     // relation filters
         'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
             'related_model'     => 'Addressbook_Model_Contact',
