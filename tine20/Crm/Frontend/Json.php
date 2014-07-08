@@ -68,7 +68,28 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getLead($id)
     {
-        return $this->_get($id, $this->_controller);
+        $organizerIds = array();
+        $lead = $this->_get($id, $this->_controller);
+        
+        foreach($lead['relations'] as $relation) {
+            if ($relation['related_model'] == 'Tasks_Model_Task') {
+                $organizerIds[] = $relation['related_record']['organizer'];
+            }
+        }
+        
+        $be = new Tinebase_User_Sql();
+        $organizers = $be->getMultiple($organizerIds);
+
+        for ($i = 0; $i < count($lead['relations']); $i++) {
+            if ($lead['relations'][$i]['related_model'] == 'Tasks_Model_Task') {
+                $organizer = $organizers->getById($lead['relations'][$i]['related_record']['organizer']);
+                if ($organizer) {
+                    $lead['relations'][$i]['related_record']['organizer'] = $organizer->toArray();
+                }
+            }
+        }
+        
+        return $lead;
     }
 
     /**
