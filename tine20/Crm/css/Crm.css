@@ -189,3 +189,7 @@
     height:108px;
     position:relative;
 }
+
+.crm-highlight-task {
+    color: red;
+}
