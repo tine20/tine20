@@ -70,7 +70,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
 
     /**
      * record class
-     * @cfg {Tine.Addressbook.Model.Contact} recordClass
+     * @cfg {Tine.Tasks.Model.Task} recordClass
      */
     recordClass: null,
     
@@ -85,7 +85,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         this.recordClass = Tine.Tasks.Model.Task;
         
         this.storeFields = Tine.Tasks.Model.TaskArray;
-        this.storeFields.push({name: 'relation'});   // the relation object           
+        this.storeFields.push({name: 'relation'});   // the relation object
         this.storeFields.push({name: 'relation_type'});
         
         // create delegates
@@ -118,6 +118,8 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
             }
         });
         
+        this.on('afteredit', this.onAfterEdit);
+        
         this.on('newentry', function(taskData){
             var newTask = taskData;
             newTask.relation_type = 'task';
@@ -127,8 +129,20 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
             while (this.record.data.relations.length > i && this.record.data.relations[i].type != 'responsible') {
                 i++;
             }
-            if (this.record.data.relations[i] && this.record.data.relations[i].type == 'responsible' && this.record.data.relations[i].related_record.account_id != '') {
-                newTask.organizer = this.record.data.relations[i].related_record.account_id;
+            if (! newTask.organizer) {
+                if (this.record.data.relations[i] && this.record.data.relations[i].type == 'responsible' && this.record.data.relations[i].related_record.account_id != '') {
+                    newTask.organizer = Tine.Tinebase.registry.get('currentAccount');
+                }
+            } else {
+                var contactRecord = this.organizerQuickAdd.selectedRecord;
+                
+                if (contactRecord) {
+                    var organizer = {
+                        accountId: contactRecord.get('account_id'),
+                        accountDisplayName: contactRecord.get('n_fileas')
+                    };
+                    newTask.organizer = organizer;
+                }
             }
             
             // add new task to store
@@ -154,10 +168,47 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
     },
     
     /**
+     * is called on after edit to set related records
+     * @param {} o
+     */
+    onAfterEdit: function(o) {
+        if (o.field == 'organizer') {
+            var contactRecord = this.organizerEditor.selectedRecord;
+            
+            if (contactRecord) {
+                var organizer = {
+                    accountId: contactRecord.get('account_id'),
+                    accountDisplayName: contactRecord.get('n_fileas')
+                };
+                
+                o.record.set('organizer', organizer);
+            } else {
+                if (o.originalValue.accountId == o.value) {
+                    o.record.set('organizer', o.originalValue);
+                }
+            }
+        }
+    },
+    
+    
+    /**
      * @return Ext.grid.ColumnModel
      * @private
      */
     getColumnModel: function() {
+        
+        this.organizerQuickAdd = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+            userOnly: true,
+            useAccountRecord: true,
+            scope: this
+        });
+        
+        this.organizerEditor = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+            userOnly: true,
+            useAccountRecord: true,
+            scope: this
+        });
+        
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true
@@ -229,6 +280,15 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                         keyFieldName: 'taskStatus',
                         value: 'NEEDS-ACTION'
                     })
+                }, {
+                    id: 'organizer',
+                    header: this.app.i18n._("Organizer"),
+                    width: 45,
+                    dataIndex: 'organizer',
+                    hidden: true,
+                    renderer: Tine.Tinebase.common.usernameRenderer,
+                    quickaddField: this.organizerQuickAdd,
+                    editor: this.organizerEditor
                 }
             ]}
         );
