@@ -152,6 +152,13 @@
             }
         }
         
+        $notificationPeriodConfig = Calendar_Config::getInstance()->get(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM);
+        if (Tinebase_DateTime::now()->subWeek($notificationPeriodConfig)->isLater($_event->dtend)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Skip notifications to past events (MAX_NOTIFICATION_PERIOD_FROM: " . $notificationPeriodConfig . " week(s))");
+            return;
+        }
+        
         // lets resolve attendee once as batch to fill cache
         $attendee = clone $_event->attendee;
         Calendar_Model_Attender::resolveAttendee($attendee);
