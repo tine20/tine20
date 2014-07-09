@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -803,7 +803,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                 switch($keyMapping) {
                     case 'accountLastPasswordChange':
                     case 'accountExpires':
-                        $accountArray[$keyMapping] = new Tinebase_DateTime($value[0] * 86400);
+                        $shadowExpire = $value[0];
+                        if ($shadowExpire < 0) {
+                            // account does not expire
+                            $accountArray[$keyMapping] = null;
+                        } else {
+                            $accountArray[$keyMapping] = new Tinebase_DateTime($shadowExpire * 86400);
+                        }
                         break;
                         
                     case 'accountStatus':
