@@ -192,7 +192,18 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $testconfig = Zend_Registry::get('testConfig');
         return ($testconfig && isset($testconfig->maildomain)) ? $testconfig->maildomain : 'tine20.org';
     }
-
+    
+    /**
+     * get test user email address
+     * 
+     * @return test user email address
+     */
+    protected function _getEmailAddress()
+    {
+        $testConfig = Zend_Registry::get('testConfig');
+        return ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
+    }
+    
     /**
      * lazy init of uit
      * 

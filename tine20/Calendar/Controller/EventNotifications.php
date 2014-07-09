@@ -274,7 +274,7 @@
             $sendOnOwnActions = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUserId);
             
             // external (non account) notification
-            if (!$attendeeAccountId) {
+            if (! $attendeeAccountId) {
                 // external organizer needs status updates
                 $sendLevel = is_object($organizer) && $_attender->getEmail() == $organizer->getPreferedEmailAddress() ? 40 : 30;
                 $sendOnOwnActions = false;
@@ -290,6 +290,13 @@
             
             $method = NULL;
             $messageSubject = $this->_getSubject($_event, $_notificationLevel, $_action, $_updates, $timezone, $locale, $translate, $method);
+            
+            // we don't send iMIP parts to external attendee if config is active
+            if (Calendar_Config::getInstance()->get(Calendar_Config::DISABLE_EXTERNAL_IMIP) && ! $attendeeAccountId) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . " External iMIP is disabled.");
+                $method = NULL;
+            }
             
             $view = new Zend_View();
             $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');

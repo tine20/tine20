@@ -57,12 +57,13 @@ class Calendar_Frontend_iMIP
     /**
      * prepares iMIP component for client
      *  
-     * @param  Calendar_Model_iMIP $_iMIP
+     * @param Calendar_Model_iMIP $_iMIP
+     * @param boolean $_throwException
      * @return Calendar_Model_iMIP
      */
-    public function prepareComponent($_iMIP)
+    public function prepareComponent($_iMIP, $_throwException = false)
     {
-        $this->_checkPreconditions($_iMIP);
+        $this->_checkPreconditions($_iMIP, $_throwException);
         
         Calendar_Convert_Event_Json::resolveRelatedData($_iMIP->event);
         Tinebase_Model_Container::resolveContainerOfRecord($_iMIP->event);
@@ -182,6 +183,9 @@ class Calendar_Frontend_iMIP
      */
     protected function _checkRequestPreconditions($_iMIP)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Checking REQUEST preconditions of iMIP ...');
+        
         $result  = $this->_assertOwnAttender($_iMIP, TRUE, FALSE);
         $result &= $this->_assertOrganizer($_iMIP, TRUE, TRUE);
         
@@ -259,7 +263,7 @@ class Calendar_Frontend_iMIP
     * 
     * @todo this needs to be splitted into assertExternalOrganizer / assertInternalOrganizer
     */
-    protected function _assertOrganizer($_iMIP, $_assertExistence, $_assertOriginator, $_assertAccount = FALSE)
+    protected function _assertOrganizer($_iMIP, $_assertExistence, $_assertOriginator, $_assertAccount = false)
     {
         $result = TRUE;
         
@@ -281,12 +285,15 @@ class Calendar_Frontend_iMIP
         }
         */
         
-        /*
-        if ($_assertAccount && (! $organizer || ! $organizer->account_id)) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Organizer: ' . ($organizer ? print_r($organizer->toArray(), true) : 'not found'));
+        
+        // config setting overwrites method param
+        $assertAccount = Calendar_Config::getInstance()->get(Calendar_Config::DISABLE_EXTERNAL_IMIP, $_assertAccount);
+        if ($assertAccount && (! $organizer || ! $organizer->account_id)) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} without organizer user account is not possible");
             $result = FALSE;
         }
-        */
         
         return $result;
     }
@@ -398,7 +405,8 @@ class Calendar_Frontend_iMIP
             $result = FALSE;
         }
         
-        if (! $this->_assertOrganizer($_iMIP, TRUE, FALSE, TRUE)) {
+        // TODO fix organizer account asserting
+        if (! $this->_assertOrganizer($_iMIP, TRUE, FALSE/*, $_assertAccount = TRUE */)) {
             $result = FALSE;
         }
         

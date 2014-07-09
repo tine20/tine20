@@ -4,19 +4,14 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Calendar_Frontend_iMIP
  */
-class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
+class Calendar_Frontend_iMIPTest extends TestCase
 {
     /**
      * event ids that should be deleted in tearDown
@@ -251,14 +246,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
      */
     public function testExternalInvitationRequestProcess()
     {
-        $this->_checkIMAPConfig();
-        
-        $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
-        
-        // handle message with fmail (add to cache)
-        $message = $this->_emailTestClass->messageTestHelper('calendar_request.eml', NULL, NULL, array('unittest@tine20.org', $email));
-        $complete = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        $complete = $this->_addImipMessageToEmailCache();
         
         $iMIP = $complete->preparedParts->getFirstRecord()->preparedData;
         
@@ -273,7 +261,7 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         
         // assert attendee
         $this->assertEquals(1, count($iMIP->event->attendee), 'all attendee but curruser must be whiped');
-        $this->assertEquals($email, $iMIP->event->attendee->getFirstRecord()->user_id->email, 'wrong attendee mail');
+        $this->assertEquals($this->_getEmailAddress(), $iMIP->event->attendee->getFirstRecord()->user_id->email, 'wrong attendee mail');
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $iMIP->event->attendee->getFirstRecord()->user_id->account_id, 'wrong attendee');
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $iMIP->event->attendee->getFirstRecord()->status);
         
@@ -282,6 +270,33 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($messages), 'only one mails should be send');
         $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
         $this->assertContains('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
+    }
+    
+    /**
+     * adds new imip message to Felamimail cache
+     * 
+     * @return Felamimail_Model_Message
+     */
+    protected function _addImipMessageToEmailCache()
+    {
+        $this->_checkIMAPConfig();
+        
+        // handle message with fmail (add to cache)
+        $message = $this->_emailTestClass->messageTestHelper('calendar_request.eml', NULL, NULL, array('unittest@tine20.org', $this->_getEmailAddress()));
+        return Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+    }
+    
+    /**
+     * testDisabledExternalImip
+     */
+    public function testDisabledExternalImip()
+    {
+        Calendar_Config::getInstance()->set(Calendar_Config::DISABLE_EXTERNAL_IMIP, true);
+        $complete = $this->_addImipMessageToEmailCache();
+        $fmailJson = new Felamimail_Frontend_Json();
+        $jsonMessage = $fmailJson->getMessage($complete->getId());
+        Calendar_Config::getInstance()->set(Calendar_Config::DISABLE_EXTERNAL_IMIP, false);
+        $this->assertEmpty($jsonMessage['preparedParts']);
     }
     
     /**
@@ -375,8 +390,6 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         } catch (Exception $e) {
             $this->fail('autoProcess throwed Exception');
         }
-        
-        
     }
     */
     
@@ -459,18 +472,23 @@ class Calendar_Frontend_iMIPTest extends PHPUnit_Framework_TestCase
         $this->_iMIPFrontend->autoProcess($iMIP);
     }
 
-//     /**
-//      * testInvitationCancel
-//      * 
-//      * @todo implement
-//      */
-//     public function testInvitationCancel()
-//     {
-        
-//     }
+    /**
+     * testInvitationCancel
+     * 
+      * @todo implement
+      */
+     public function testInvitationCancel()
+     {
+        $this->markTestIncomplete('implement me');
+     }
     
-//     public function testOrganizerSendBy()
-//     {
-        
-//     }
+    /**
+      * testInvitationCancel
+      * 
+      * @todo implement
+      */
+     public function testOrganizerSendBy()
+     {
+         $this->markTestIncomplete('implement me');
+     }
 }
