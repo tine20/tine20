@@ -94,6 +94,8 @@ Tine.widgets.dialog.ExceptionHandlerDialog = Ext.extend(Ext.FormPanel, {
      */
     callbackScope: null,
     
+    messageHeight: 40,
+    
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get(this.exception.appName);
         this.message = this.app.i18n._hidden(this.exception.message);
@@ -130,6 +132,7 @@ Tine.widgets.dialog.ExceptionHandlerDialog = Ext.extend(Ext.FormPanel, {
                     minHeight: '40px',
                     paddingLeft: '40px'
                 },
+                height: this.messageHeight,
                 'name': 'message',
                 value: this.message,
                 hideLabel: true,
