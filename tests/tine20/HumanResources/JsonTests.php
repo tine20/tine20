@@ -143,6 +143,18 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $this->assertEquals(5, $employee['vacation'][0]['days_count']);
         $this->assertEquals(3, count($employee['costcenters']));
+        
+        // @see: 0010050: Delete last dependent record fails
+        
+        // if the property is set to null, no dependent record handling will be done
+        $employee['costcenters'] = NULL;
+        $employee = $this->_json->saveEmployee($employee);
+        $this->assertEquals(3, count($employee['costcenters']));
+        
+        // if the property is set to an empty array, all dependent records will be removed
+        $employee['costcenters'] = array();
+        $employee = $this->_json->saveEmployee($employee);
+        $this->assertEquals(0, count($employee['costcenters']));
     }
     
     /**

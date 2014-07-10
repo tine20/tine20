@@ -1873,79 +1873,87 @@ abstract class Tinebase_Controller_Record_Abstract
         if (! (isset($_fieldConfig['dependentRecords']) || array_key_exists('dependentRecords', $_fieldConfig)) || ! $_fieldConfig['dependentRecords']) {
             return;
         }
-    
-        // don't handle property if it is set to null. an empty array will remove all records on this property
-        if ($_record->has($_property) && $_record->{$_property} != NULL) {
-    
-            $ccn = $_fieldConfig['controllerClassName'];
-            $controller = $ccn::getInstance();
-            $recordClassName = $_fieldConfig['recordClassName'];
-            $filterClassName = $_fieldConfig['filterClassName'];
-            $existing = new Tinebase_Record_RecordSet($recordClassName);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' ' . print_r($_record->{$_property}, TRUE));
-            
-            if (! empty($_record->{$_property}) && $_record->{$_property}) {
-                
-                // legacy - should be already done in frontent json - remove if all record properties are record sets before getting to controller
-                if (is_array($_record->{$_property})) {
-                    $rs = new Tinebase_Record_RecordSet($recordClassName);
-                    foreach ($_record->{$_property} as $recordArray) {
-                        $rec = new $recordClassName(array(),true);
-                        $rec->setFromJsonInUsersTimezone($recordArray);
-                        $rs->addRecord($rec);
-                    }
-                    $_record->{$_property} = $rs;
-                }
-                
-                $idProperty = $_record->{$_property}->getFirstRecord()->getIdProperty();
-                
-                // legacy end
-                $oldFilter = new $filterClassName(array(array('field' => $idProperty, 'operator' => 'in', 'value' => $_record->{$_property}->getId())));
-                $oldRecords = $controller->search($oldFilter);
-                
-                foreach ($_record->{$_property} as $record) {
-                    $record->{$_fieldConfig['refIdField']} = $_oldRecord->getId();
-                    // update record if ID exists and has a length of 40 (it has a length of 10 if it is a timestamp)
-                    if ($record->getId() && strlen($record->getId()) == 40) {
-                        
-                        // do not try to update if the record hasn't changed
-                        $oldRecord = $oldRecords->getById($record->getId());
-                        
-                        if ($oldRecord && ! empty($oldRecord->diff($record)->diff)) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Updating dependent record with id = "' . $record->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
-                            }
-                            $existing->addRecord($controller->update($record));
-                        } else {
-                            $existing->addRecord($record);
-                        }
-                        // create if ID does not exist or has not a length of 40
-                    } else {
-                        $record->{$record->getIdProperty()} = NULL;
-                        $crc = $controller->create($record);
-                        $existing->addRecord($crc);
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating dependent record with id = "' . $crc->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
-                        }
-                    }
-                }
+        
+        // don't handle dependet records on property if it is set to null or doesn't exist.
+        if (($_record->{$_property} === NULL) || (! $_record->has($_property))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Skip updating dependent records (got NULL) on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName . ' with id = "' . $_record->getId() . '"');
             }
-    
-            $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : array(), 'AND');
-            $filter->addFilter(new Tinebase_Model_Filter_Text($_fieldConfig['refIdField'], 'equals', $_record->getId()));
-            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $existing->getId()));
-    
-            $deleteIds = $controller->search($filter, NULL, FALSE, TRUE);
-            
-            if (! empty($deleteIds)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Deleting dependent records with id = "' . print_r($deleteIds, 1) . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
-                }
-                $controller->delete($deleteIds);
-            }
-            $_record->{$_property} = $existing->toArray();
+            return;
         }
+        
+        $ccn = $_fieldConfig['controllerClassName'];
+        $controller = $ccn::getInstance();
+        $recordClassName = $_fieldConfig['recordClassName'];
+        $filterClassName = $_fieldConfig['filterClassName'];
+        $existing = new Tinebase_Record_RecordSet($recordClassName);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($_record->{$_property}, TRUE));
+        
+        if (! empty($_record->{$_property}) && $_record->{$_property}) {
+            
+            // legacy - should be already done in frontend json - remove if all record properties are record sets before getting to controller
+            if (is_array($_record->{$_property})) {
+                $rs = new Tinebase_Record_RecordSet($recordClassName);
+                foreach ($_record->{$_property} as $recordArray) {
+                    $rec = new $recordClassName(array(),true);
+                    $rec->setFromJsonInUsersTimezone($recordArray);
+                    $rs->addRecord($rec);
+                }
+                $_record->{$_property} = $rs;
+            }
+            
+            $idProperty = $_record->{$_property}->getFirstRecord()->getIdProperty();
+            
+            // legacy end
+            $oldFilter = new $filterClassName(array(array('field' => $idProperty, 'operator' => 'in', 'value' => $_record->{$_property}->getId())));
+            $oldRecords = $controller->search($oldFilter);
+            
+            foreach ($_record->{$_property} as $record) {
+                $record->{$_fieldConfig['refIdField']} = $_oldRecord->getId();
+                // update record if ID exists and has a length of 40 (it has a length of 10 if it is a timestamp)
+                if ($record->getId() && strlen($record->getId()) == 40) {
+                    
+                    // do not try to update if the record hasn't changed
+                    $oldRecord = $oldRecords->getById($record->getId());
+                    
+                    if ($oldRecord && ! empty($oldRecord->diff($record)->diff)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Updating dependent record with id = "' . $record->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+                        }
+                        $existing->addRecord($controller->update($record));
+                    } else {
+                        $existing->addRecord($record);
+                    }
+                    // create if ID does not exist or has not a length of 40
+                } else {
+                    $record->{$record->getIdProperty()} = NULL;
+                    $crc = $controller->create($record);
+                    $existing->addRecord($crc);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating dependent record with id = "' . $crc->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+                    }
+                }
+            }
+        }
+
+        $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text($_fieldConfig['refIdField'], 'equals', $_record->getId()));
+        
+        // an empty array will remove all records on this property
+        if (! empty($_record->{$_property})) {
+            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'notin', $existing->getId()));
+        }
+
+        $deleteIds = $controller->search($filter, NULL, FALSE, TRUE);
+        
+        if (! empty($deleteIds)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Deleting dependent records with id = "' . print_r($deleteIds, 1) . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+            }
+            $controller->delete($deleteIds);
+        }
+        $_record->{$_property} = $existing->toArray();
     }
 }
