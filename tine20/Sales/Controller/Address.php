@@ -118,4 +118,29 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         
         return $resultSet;
     }
+    
+    /**
+     * inspects delete action
+     *
+     * @param array $_ids
+     * @return array of ids to actually delete
+     */
+    protected function _inspectDelete(array $_ids)
+    {
+        $cc = Sales_Controller_Contract::getInstance();
+    
+        $filter = new Sales_Model_ContractFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'billing_address_id', 'operator' => 'in', 'value' => $_ids)));
+    
+        $contracts = $cc->search($filter);
+    
+        if ($contracts->count()) {
+            $e = new Sales_Exception_DeleteUsedBillingAddress();
+            $e->setContracts($contracts);
+    
+            throw $e;
+        }
+    
+        return $_ids;
+    }
 }

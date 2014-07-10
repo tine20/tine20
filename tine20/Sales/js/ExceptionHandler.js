@@ -46,6 +46,60 @@ Tine.Sales.handleRequestException = function(exception, callback, callbackScope)
         case 915: // Sales_Exception_AlterOCNumberForbidden
         case 916: // Sales_Exception_DeletePreviousInvoice
             Ext.MessageBox.show(defaults);
+            return true;
+            break;
+        case 917: // Sales_Exception_DeleteUsedBillingAddress
+            var app = Tine.Tinebase.appMgr.get('Sales');
+            var storeData = {
+                results: exception.contracts,
+                totalcount: exception.contracts.length
+            };
+                
+            var window = Tine.widgets.dialog.ExceptionHandlerDialog.openWindow({
+                height: 245,
+                messageHeight: 70,
+                exception: exception,
+                type: 'error',
+                
+                callback: function() {
+                    location.reload();
+                },
+                
+                fields: [[{
+                    xtype: 'grid',
+                    height: 110,
+                    autoExpandColumn: 'title',
+                    listeners: { 
+                        scope: this,
+                        rowdblclick: function(grid, index, event) {
+                            Tine.Sales.ContractEditDialog.openWindow({record: grid.store.getAt(index)});
+                        }
+                    },
+                    store: new Ext.data.Store({
+                        data: storeData,
+                        reader: new Ext.data.JsonReader({
+                            id: 'id',
+                            root: 'results',
+                            totalProperty: 'totalcount'
+                        }, Tine.Sales.Model.Contract)
+                    }),
+                    
+                    title: null,
+                    columns: [{
+                        id: 'number',
+                        dataIndex: 'number',
+                        header: app.i18n._('Number'),
+                        sortable: true
+                    }, {
+                        id: 'title',
+                        dataIndex: 'title',
+                        header: app.i18n._('Title'),
+                        sortable: true
+                    }]
+                }]]
+            });
+            
+            return true;
             break;
         // return false will the generic exceptionhandler handle the caught exception
         default:

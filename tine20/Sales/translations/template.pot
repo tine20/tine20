@@ -95,7 +95,7 @@ msgid "Quantity"
 msgstr ""
 
 #: Model/ProductAggregate.php:86 Model/Contract.php:162
-#: js/ContractEditDialog.js:286
+#: js/ContractEditDialog.js:257
 msgid "Billing Interval"
 msgstr ""
 
@@ -105,14 +105,14 @@ msgstr ""
 msgid "Invoice Item"
 msgstr ""
 
-#: Model/ProductAggregate.php:234
+#: Model/ProductAggregate.php:247
 msgid "Piece"
 msgstr ""
 
 #: Model/Customer.php:35 Model/Customer.php:248 Model/Address.php:52
 #: Model/Invoice.php:64 Model/Invoice.php:173 Model/Invoice.php:193
 #: Model/Contract.php:66 Model/Contract.php:179 Model/Contract.php:233
-#: Model/Contract.php:254 js/ContractEditDialog.js:264
+#: Model/Contract.php:254 js/ContractEditDialog.js:235
 #: js/CustomerFilterModel.js:30 js/ContractCustomerFilterModel.js:30
 #: js/CustomerEditDialog.js:169 js/InvoiceEditDialog.js:345
 #: js/InvoiceDetailsPanel.js:104
@@ -152,7 +152,7 @@ msgid "Web"
 msgstr ""
 
 #: Model/Customer.php:76 Model/OrderConfirmation.php:72 Model/Product.php:55
-#: Model/Invoice.php:82 Model/Contract.php:126 js/ContractEditDialog.js:335
+#: Model/Invoice.php:82 Model/Contract.php:126 js/ContractEditDialog.js:316
 #: js/ProductEditDialog.js:108 js/OrderConfirmationEditDialog.js:135
 #: js/CustomerEditDialog.js:398 js/CustomerDetailsPanel.js:157
 #: js/InvoiceEditDialog.js:324 js/InvoiceDetailsPanel.js:103
@@ -160,13 +160,13 @@ msgid "Description"
 msgstr ""
 
 #: Model/Customer.php:82 Model/Contract.php:102 Model/Contract.php:191
-#: js/ContractEditDialog.js:301 js/CustomerEditDialog.js:214
+#: js/ContractEditDialog.js:272 js/CustomerEditDialog.js:214
 #: js/ContractContactExternalFilterModel.js:30 js/CustomerDetailsPanel.js:128
 msgid "Contact Person (external)"
 msgstr ""
 
 #: Model/Customer.php:93 Model/Contract.php:90 Model/Contract.php:203
-#: js/ContractEditDialog.js:313 js/ContractContactInternalFilterModel.js:30
+#: js/ContractEditDialog.js:284 js/ContractContactInternalFilterModel.js:30
 #: js/CustomerEditDialog.js:224 js/CustomerDetailsPanel.js:129
 msgid "Contact Person (internal)"
 msgstr ""
@@ -250,15 +250,15 @@ msgstr[1] ""
 
 #: Model/OrderConfirmation.php:62 Model/CostCenter.php:50
 #: Model/Contract.php:116 js/CostCenterGridPanel.js:56
-#: js/ContractEditDialog.js:239 js/OrderConfirmationEditDialog.js:100
-#: js/CostCenterEditDialog.js:97 Config.php:76
+#: js/ContractEditDialog.js:210 js/OrderConfirmationEditDialog.js:100
+#: js/ExceptionHandler.js:87 js/CostCenterEditDialog.js:97 Config.php:76
 msgid "Number"
 msgstr ""
 
 #: Model/OrderConfirmation.php:67 Model/Division.php:50
 #: Model/InvoicePosition.php:64 Model/Contract.php:121
-#: js/DivisionEditDialog.js:81 js/ContractEditDialog.js:246
-#: js/OrderConfirmationEditDialog.js:105
+#: js/DivisionEditDialog.js:81 js/ContractEditDialog.js:217
+#: js/OrderConfirmationEditDialog.js:105 js/ExceptionHandler.js:92
 msgid "Title"
 msgstr ""
 
@@ -365,21 +365,21 @@ msgstr ""
 msgid "Reversal Invoice"
 msgstr ""
 
-#: Model/Contract.php:146 js/ContractEditDialog.js:266
+#: Model/Contract.php:146 js/ContractEditDialog.js:237
 #: js/AddressEditDialog.js:74 js/InvoiceEditDialog.js:360
 #: js/InvoiceDetailsPanel.js:115
 msgid "Billing Address"
 msgstr ""
 
-#: Model/Contract.php:156 js/ContractEditDialog.js:291
+#: Model/Contract.php:156 js/ContractEditDialog.js:262
 msgid "Billing Point"
 msgstr ""
 
-#: Model/Contract.php:169 js/ContractEditDialog.js:276
+#: Model/Contract.php:169 js/ContractEditDialog.js:247
 msgid "Start Date"
 msgstr ""
 
-#: Model/Contract.php:173 js/ContractEditDialog.js:281
+#: Model/Contract.php:173 js/ContractEditDialog.js:252
 msgid "End Date"
 msgstr ""
 
@@ -395,7 +395,7 @@ msgstr ""
 msgid "Partner"
 msgstr ""
 
-#: Model/Contract.php:246 js/ContractEditDialog.js:324
+#: Model/Contract.php:246 js/ContractEditDialog.js:295
 msgid "Lead Cost Center"
 msgstr ""
 
@@ -407,15 +407,19 @@ msgstr ""
 msgid "Please use a decimal number here!"
 msgstr ""
 
-#: js/ContractEditDialog.js:294
+#: js/ContractEditDialog.js:265
 msgid "begin"
 msgstr ""
 
-#: js/ContractEditDialog.js:295
+#: js/ContractEditDialog.js:266
 msgid "end"
 msgstr ""
 
-#: js/ContractEditDialog.js:336 js/ProductEditDialog.js:109
+#: js/ContractEditDialog.js:309 js/ProductAggregateGridPanel.js:221
+msgid "Last Billed"
+msgstr ""
+
+#: js/ContractEditDialog.js:317 js/ProductEditDialog.js:109
 msgid "Enter description..."
 msgstr ""
 
@@ -598,11 +602,11 @@ msgstr ""
 msgid "Export selected invoice as ODS"
 msgstr ""
 
-#: js/InvoicePositionGridPanel.js:169
+#: js/InvoicePositionGridPanel.js:170
 msgid "Items"
 msgstr ""
 
-#: js/InvoicePositionGridPanel.js:169
+#: js/InvoicePositionGridPanel.js:170
 msgid "Item"
 msgstr ""
 
@@ -797,11 +801,23 @@ msgid ""
 "anymore!"
 msgstr ""
 
-msgid "Last Billed"
-msgstr ""
-
+#: Exception/DeletePreviousInvoice.php:26
 msgid "Following Invoices Found"
 msgstr ""
 
-msgid "There is an invoice for the same contract after this one. Please delete the following invoice(s) before deleting this one!"
+#: Exception/DeletePreviousInvoice.php:31
+msgid ""
+"There is an invoice for the same contract after this one. Please delete the "
+"following invoice(s) before deleting this one!"
+msgstr ""
+
+#: Exception/DeleteUsedBillingAddress.php:26
+msgid "Address as Billing Address in Use"
+msgstr ""
+
+#: Exception/DeleteUsedBillingAddress.php:31
+msgid ""
+"The Address you tried to delete is used in one or more contract(s) as "
+"Billing Address. Please assign another Billing Address to these contracts or "
+"change this one and do not delete."
 msgstr ""

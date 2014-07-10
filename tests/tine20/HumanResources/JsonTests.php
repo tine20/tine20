@@ -166,6 +166,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     {
         $e = $this->_getEmployee();
         $e->contracts = array($this->_getContract($firstDate)->toArray());
+        
         if ($costCenter) {
             $e->costcenters = array($costCenter->toArray());
         }

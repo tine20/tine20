@@ -271,4 +271,58 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($customers['results'][0]['billing']));
         $this->assertFalse(isset($customers['results'][0]['delivery']));
     }
+    
+    /**
+     * tests if the last billing address gets deleted
+     */
+    public function testDeleteLastBillingAddress()
+    {
+        $customer = $this->_createCustomer();
+        
+        $this->assertEquals(1, count($customer['billing']));
+        $this->assertEquals(1, count($customer['delivery']));
+        
+        $customer['billing'] = array();
+        $this->_json->saveCustomer($customer);
+        
+        $customer = $this->_json->getCustomer($customer['id']);
+        
+        $this->assertTrue(empty($customer['billing']));
+    }
+    
+    /**
+     * tests if an exception gets thrown if a address is used as a billing address
+     */
+    public function testDeleteUsedBillingAddress()
+    {
+        $customer = $this->_createCustomer();
+        
+        $containerContracts = Tinebase_Container::getInstance()->getSharedContainer(
+            Tinebase_Core::getUser()->getId(),
+            Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
+            'WRITE'
+        );
+        
+        $contract = $this->_contractController->create(new Sales_Model_Contract(array(
+            'number' => '123', 
+            'title' => 'Testing', 
+            'description' => 'test123', 
+            'container_id' => $containerContracts->getId(),
+            'start_date' => Tinebase_DateTime::now(),
+            'billing_address_id' => $customer['billing'][0]['id'],
+        )));
+
+        // if the property is set to null, no handling of this dependent records must be done
+        $customer['billing'] = NULL;
+        $customer = $this->_json->saveCustomer($customer);
+        $this->assertEquals(1, count($customer['billing']));
+        
+        // if the property is set to an empty array, all (in this case the last) dependent record(s) should 
+        // be deleted (in this case deleting should fail, because the billing address is used in a contract)
+        
+        $this->setExpectedException('Sales_Exception_DeleteUsedBillingAddress');
+        
+        $customer['billing'] = array();
+        $this->_json->saveCustomer($customer);
+    }
 }

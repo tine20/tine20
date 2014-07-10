@@ -670,3 +670,15 @@ msgstr "Nachfolgende Rechnungen gefunden"
 
 msgid "There is an invoice for the same contract after this one. Please delete the following invoice(s) before deleting this one!"
 msgstr "Es existiert bereits eine spätere Rechnung für den selben Vertrag. Bitte löschen Sie die spätere(n) Rechnung(en), bevor Sie diese Rechnung löschen!"
+
+#: Exception/DeleteUsedBillingAddress.php:26
+msgid "Address as Billing Address in Use"
+msgstr "Adresse als Rechnungsadresse in Benutzung"
+
+#: Exception/DeleteUsedBillingAddress.php:31
+msgid ""
+"The Address you tried to delete is used in one or more contract(s) as "
+"Billing Address. Please assign another Billing Address to these contracts or "
+"change this one and do not delete."
+msgstr "Die Adresse, die Sie löschen wollten, ist bei einem oder mehreren Verträgen als Rechnungsadresse gesetzt. Bitte weisen Sie den Verträgen eine andere Rechnungsadresse zu oder verändern Sie diese, ohne sie zu löschen."
+

@@ -60,6 +60,9 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $this->assertEquals(2, count($customer['billing']));
         $this->assertEquals(2, count($customer['delivery']));
         
+        // remove contracts, otherwise deleting customers having an contract-assigned billing address would fail
+        $this->_contractController->delete($this->_contractRecords->getId());
+        
         $json->deleteCustomers(array($customer['id']));
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
