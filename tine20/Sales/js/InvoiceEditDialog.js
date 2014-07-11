@@ -117,6 +117,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.record.set('relations', newRelations);
         }
         
+        // this will start preparing the gridpanels for the invoice positions
+        this.positionsPanel.positions = this.record.get('positions');
+        this.positionsPanel.invoiceId = this.record.get('id');
+        
         Tine.Sales.InvoiceEditDialog.superclass.onRecordLoad.call(this);
 
         if (this.createReversal) {
@@ -266,10 +270,9 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             columnWidth: .5
         };
         
-        this.positionsPanel = new Tine.Sales.InvoicePositionGridPanel({
-            editDialog: this,
+        this.positionsPanel = new Tine.Sales.InvoicePositionPanel({
             app: this.app,
-            title: this.app.i18n._('Positions')
+            title: null
         });
         
         return {

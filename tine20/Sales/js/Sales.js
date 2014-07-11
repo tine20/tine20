@@ -32,6 +32,9 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     ]
 });
 
+// rendered sums registry for the invoiceposition grid panel
+Tine.Sales.renderedSumsPerMonth = {};
+
 Tine.Sales.addToClipboard = function(record, companyName) {
     // this is called either from the edit dialog or from the grid, so we have different record types
     var fieldPrefix = record.data.hasOwnProperty('bic') ? 'adr_' : '';
@@ -96,7 +99,7 @@ Tine.Sales.addToClipboard = function(record, companyName) {
 };
 
 Tine.Sales.renderAddressAsLine = function(values) {
-    var ret = '';console.warn(values);
+    var ret = '';
     var app = Tine.Tinebase.appMgr.get('Sales');
     if (values.customer_id && values.customer_id.hasOwnProperty('name')) {
         ret += '<b>' + Ext.util.Format.htmlEncode(values.customer_id.name) + '</b> - ';
@@ -160,9 +163,10 @@ Tine.Sales.InvoicePositionQuantityRendererRegistry = function() {
          * @param {String} phpModelName
          * @return {Function}
          */
-        get: function(phpModelName) {
-            if (renderers.hasOwnProperty(phpModelName)) {
-                return renderers[phpModelName];
+        get: function(phpModelName, unit) {
+            var unit = unit.replace(/\s/, '');
+            if (renderers.hasOwnProperty(phpModelName+unit)) {
+                return renderers[phpModelName+unit];
             } else {
                 // default function
                 return function(value, row, rec) {
@@ -177,8 +181,9 @@ Tine.Sales.InvoicePositionQuantityRendererRegistry = function() {
          * @param {String} phpModelName
          * @param {Function} func
          */
-        register: function(phpModelName, func) {
-            renderers[phpModelName] = func;
+        register: function(phpModelName, unit, func) {
+            var unit = unit.replace(/\s/, '');
+            renderers[phpModelName+unit] = func;
         },
         
         /**
@@ -187,8 +192,9 @@ Tine.Sales.InvoicePositionQuantityRendererRegistry = function() {
          * @param {String} phpModelName
          * @return {Boolean}
          */
-        has: function(phpModelName) {
-            return renderers.hasOwnProperty(phpModelName);
+        has: function(phpModelName, unit) {
+            var unit = unit.replace(/\s/, '');
+            return renderers.hasOwnProperty(phpModelName+unit);
         }
     }
 }();
@@ -223,9 +229,8 @@ Tine.Sales.renderInvoicePositionUnit = function(value, row, rec) {
  */
 Tine.Sales.renderInvoicePositionQuantity = function(value, row, rec) {
     var model = rec.data.model;
-    
-    if (Tine.Sales.InvoicePositionQuantityRendererRegistry.has(model)) {
-        var renderer = Tine.Sales.InvoicePositionQuantityRendererRegistry.get(model);
+    if (Tine.Sales.InvoicePositionQuantityRendererRegistry.has(model, rec.data.unit)) {
+        var renderer = Tine.Sales.InvoicePositionQuantityRendererRegistry.get(model, rec.data.unit);
         return renderer(value, row, rec);
     } else {
         return value;

@@ -105,7 +105,7 @@ Tine.Timetracker.registerRenderers = function() {
         return false;
     }
     
-    Tine.Sales.InvoicePositionQuantityRendererRegistry.register('Timetracker_Model_Timeaccount', Tine.Timetracker.HumanHourRenderer);
+    Tine.Sales.InvoicePositionQuantityRendererRegistry.register('Timetracker_Model_Timeaccount', 'hour', Tine.Timetracker.HumanHourRenderer);
 };
 
 Tine.Timetracker.registerRenderers();

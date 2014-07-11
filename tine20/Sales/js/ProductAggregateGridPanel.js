@@ -206,7 +206,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
         var columns = [
             {id: 'product_id', dataIndex: 'product_id', type: Tine.Sales.Model.ProductAggregate, header: this.app.i18n._('Product'),
                  quickaddField: this.productQuickadd, renderer: this.renderProductAggregate,
-                 editor: this.productEditor, scope: this, doSort: function(a,b,c){console.warn(a,b,c)}
+                 editor: this.productEditor, scope: this
             },
             {id: 'quantity', editor: this.quantityEditor, quickaddField: this.quantityQuickadd, dataIndex: 'quantity', header: this.app.i18n._('Quantity'),  scope: this, width: 90},
             {id: 'interval', editor: this.intervalEditor, quickaddField: this.intervalQuickadd, dataIndex: 'interval', header: this.app.i18n._('Interval'),  scope: this, width: 90}

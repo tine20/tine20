@@ -29,106 +29,96 @@ Tine.Sales.InvoicePositionGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     storeRemoteSort: false,
     defaultSortInfo: {field: 'month', direction: 'ASC'},
     usePagingToolbar: false,
-    frame: true,
+    frame: false,
     layout: 'fit',
     border: true,
     anchor: '100% 100%',
     editDialogRecordProperty: 'positions',
-    plugins: [{
-        ptype: 'grouping_grid'
-    }],
+    
+    /**
+     * holds the php model name of the accountable
+     * 
+     * @type string
+     */
+    accountable: null,
+    
+    accountableApplication: null,
+    
+    groupField: null,
+    
+    invoiceId: null,
+    
+    i18nModelsName: null,
+    i18nUnitName: null,
+    unitName: null,
+    renderedSum: null,
+    renderedSumsPerMonth: null,
     
     initComponent: function() {
+        this.groupTextTpl = '{text} (' + this.i18nUnitName +  ': {[Tine.Sales.renderedSumsPerMonth["' + this.invoiceId + '"][(values.rs[0].data.model + values.rs[0].data.unit.replace(" ", ""))]["month-" + values.rs[0].data.month]]})';
+        this.bbar = [];
+        
         Tine.Sales.InvoicePositionGridPanel.superclass.initComponent.call(this);
         
-        this.onAfterRender();
-    },
-    
-    onAfterRender: function() {
-        if (! this.rendered) {
-            this.onAfterRender.defer(1000, this);
-            return;
-        }
+        this.fillBottomToolbar();
         
-        var elements = this.getEl().select('.action_export');
+        this.grid.renderedSumsPerMonth = this.renderedSumsPerMonth;
+        this.grid.view.renderedSumsPerMonth = this.renderedSumsPerMonth;
         
-        elements.on('click', this.onExport.createDelegate(this));
-        elements.setStyle('cursor', 'pointer');
-    },
-    
-    onExport: function(event, element) {
-        if (! event) {
-            return;
-        }
-        var target = event.getTarget('.action_export');
-        
-        if (! target) {
-            return;
-        }
-        
-        var phpModelName = target.getAttribute('ext:model');
-        
-        if (phpModelName) {
-            var downloader = new Ext.ux.file.Download({
-                params: {
-                    method: 'Sales.exportInvoicePositions',
-                    requestType: 'HTTP',
-                    invoiceId: this.editDialog.record.get('id'),
-                    accountable: phpModelName
-                }
-            }).start();
+        if (this.groupField) {
+            this.doGroup();
         }
     },
     
-    initStore: function() {
-        this.store = new Ext.data.GroupingStore({
-            fields: this.recordClass,
-            proxy: this.recordProxy,
-            reader: this.recordProxy.getReader(),
-            remoteSort: this.storeRemoteSort,
-            sortInfo: this.defaultSortInfo,
-            listeners: {
-                scope: this,
-                'add': this.onStoreAdd,
-                'remove': this.onStoreRemove,
-                'update': this.onStoreUpdate,
-                'beforeload': this.onStoreBeforeload,
-                'load': this.onStoreLoad,
-                'beforeloadrecords': this.onStoreBeforeLoadRecords,
-                'loadexception': this.onStoreLoadException
-            },
-            autoDestroy: true,
-            groupOnSort: false,
-            remoteGroup: false,
-            groupField: 'model'
-        });
-    },
-    
-    initActions: function(){},
-    
-    /**
-     * 
-     * @return {}
-     */
-    getColumnModel: function()
-    {
-        return this.gridConfig.cm;
-    },
-    
-    /**
-     * creates and returns the view for the grid
-     * 
-     * @return {Ext.grid.GridView}
-     */
     createView: function() {
-        var tpl = '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "' + this.app.i18n._("Items") + '" : "' + this.app.i18n._("Item") + '"]})';
-        var view = new Ext.grid.GroupingView({
-            forceFit: true,
-            // custom grouping text template to display the number of items per group
-    
-            groupTextTpl: tpl
-        });
-        
+        var view = Tine.Sales.InvoicePositionGridPanel.superclass.createView.call(this);
+        view.renderedSumsPerMonth = this.renderedSumsPerMonth;
         return view;
+    },
+    
+    doGroup: function() {
+        if (! this.rendered) {
+            this.doGroup.defer(200, this);
+            return false;
+        }
+        
+        this.store.sort(this.defaultSortInfo);
+        this.store.groupBy(this.groupField);
+    },
+    
+    /**
+     * the export handler
+     */
+    onExport: function() {
+        var downloader = new Ext.ux.file.Download({
+            params: {
+                method: 'Sales.exportInvoicePositions',
+                requestType: 'HTTP',
+                invoiceId: this.invoiceId,
+                accountable: this.accountable
+            }
+        }).start();
+    },
+    
+    initActions: function() {
+        this.action_export = new Ext.Action({
+            requiredGrant: 'addGrant',
+            actionType: 'export',
+            text: String.format(_('Export Records from these Positions') + ' ({0})', this.i18nModelsName),
+            handler: this.onExport.createDelegate(this),
+            iconCls: 'action_export',
+            scope: this
+        });
+    },
+    
+    /**
+     * will be called in Edit Dialog Mode
+     */
+    fillBottomToolbar: function() {
+        var bbar = this.getBottomToolbar();
+        bbar.addButton(new Ext.Button(this.action_export));
+        bbar.addItem('->');
+        bbar.addItem({xtype: 'tbtext', text: this.i18nModelsName + ' (' + this.i18nUnitName + '): ' + '<b>' + this.renderedSum + '</b>'});
+        bbar.addItem({xtype: 'tbspacer', width: 20});
     }
 });

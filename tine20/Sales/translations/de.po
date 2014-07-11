@@ -682,3 +682,7 @@ msgid ""
 "change this one and do not delete."
 msgstr "Die Adresse, die Sie löschen wollten, ist bei einem oder mehreren Verträgen als Rechnungsadresse gesetzt. Bitte weisen Sie den Verträgen eine andere Rechnungsadresse zu oder verändern Sie diese, ohne sie zu löschen."
 
+msgid "Invoice Position"
+msgid_plural "Invoice Positions"
+msgstr[0] "Rechnungsposition"
+msgstr[1] "Rechnungspositionen"
