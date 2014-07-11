@@ -139,21 +139,24 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
     protected function _getSpecialOptions($_value)
     {
         $translate = Tinebase_Translation::getTranslation($this->_application);
-    
         $result = array();
+        
         switch($_value) {
             case self::DEFAULT_CONTACT_ODS_EXPORTCONFIG:
             case self::DEFAULT_CONTACT_XLS_EXPORTCONFIG:
-                if ($value == self::DEFAULT_CONTACT_XLS_EXPORTCONFIG) {
+                if ($_value == self::DEFAULT_CONTACT_XLS_EXPORTCONFIG) {
                     $plugin = 'Addressbook_Export_Xls';
                 } else {
                     $plugin = 'Addressbook_Export_Ods';
                 }
+                
                 // get names from import export definitions
                 $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
-                array('field' => 'plugin', 'operator' => 'equals', 'value' => $plugin),
+                    array('field' => 'plugin', 'operator' => 'equals', 'value' => $plugin),
                 ));
+                
                 $configs = Tinebase_ImportExportDefinition::getInstance()->search($filter);
+                
                 if (! empty($configs)) {
                     foreach($configs as $tsConfig) {
                         $result[] = array($tsConfig->name, $tsConfig->name);
