@@ -163,4 +163,14 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Calendar', '8.3');
     }
+    
+    /**
+     * update to 8.4
+     * - update import / export
+     */
+    public function update_3()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Calendar'));
+        $this->setApplicationVersion('Calendar', '8.4');
+    }
 }

@@ -41,7 +41,13 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
          * container the events should be imported in
          * @var string
          */
-        'importContainerId'     => NULL,
+        'container_id'     => NULL,
+        
+        /**
+         * Model to be used for import
+         * @var string
+         */
+        'model' => 'Calendar_Model_Event'
     );
     
     /**
@@ -64,7 +70,6 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         'dtstart'               => 'DTSTART',
         'dtend'                 => 'DTEND',
         'rrule'                 => 'RRULE',
-//        '' => 'DTSTAMP',
         'creation_time'         => 'CREATED',
         'last_modified_time'    => 'LAST-MODIFIED',
     );
@@ -98,8 +103,10 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
      */
     public function import($_resource = NULL, $_clientRecordData = array())
     {
-        if (! $this->_options['importContainerId']) {
-            throw new Tinebase_Exception_InvalidArgument('you need to define a importContainerId');
+        $this->_initImportResult();
+        
+        if (! $this->_options['container_id']) {
+            throw new Tinebase_Exception_InvalidArgument('you need to define a container_id');
         }
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
@@ -113,17 +120,17 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
             throw $isce;
         }
         
-        $events->container_id = $this->_options['importContainerId'];
+        $events->container_id = $this->_options['container_id'];
         
         $cc = Calendar_Controller_MSEventFacade::getInstance();
         $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
         
         // search uid's and remove already existing -> only in import cal?
         $existingEventsFilter = new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'in', 'value' => array($this->_options['importContainerId'])),
+            array('field' => 'container_id', 'operator' => 'in', 'value' => array($this->_options['container_id'])),
             array('field' => 'uid', 'operator' => 'in', 'value' => array_unique($events->uid)),
         ));
-        $existingEvents = $cc->search($existingEventsFilter, NULL);
+        $existingEvents = $cc->search($existingEventsFilter);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' 
                 . ' Found ' . count($existingEvents) . ' existing events');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' '
@@ -135,12 +142,14 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
             $existingEvent = $existingEvents->find('uid', $event->uid);
             try {
                 if (! $existingEvent) {
-                    $cc->create($event, FALSE);
+                    $event = $cc->create($event, FALSE);
                     $this->_importResult['totalcount'] += 1;
+                    $this->_importResult['results']->addRecord($event);
                 } else if ($this->_options['forceUpdateExisting'] || ($this->_options['updateExisting'] && $event->seq > $existingEvent->seq)) {
                     $event->id = $existingEvent->getId();
                     $event->last_modified_time = ($existingEvent->last_modified_time instanceof Tinebase_DateTime) ? clone $existingEvent->last_modified_time : NULL;
                     $cc->update($event, FALSE);
+                    $this->_importResult['results']->addRecord($event);
                     $this->_importResult['totalcount'] += 1;
                 } else {
                     $this->_importResult['duplicatecount'] += 1;
