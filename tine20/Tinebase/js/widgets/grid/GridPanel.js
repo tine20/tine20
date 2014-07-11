@@ -274,6 +274,20 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     modelConfig: null,
     
     /**
+     * group grid by this property
+     * 
+     * @type {String}
+     */
+    groupField: null,
+    
+    /**
+     * header template for the grouping view, if needed
+     * 
+     * @type String
+     */
+    groupTextTpl: null,
+    
+    /**
      * @property selectionModel
      * @type Tine.widgets.grid.FilterSelectionModel
      */
@@ -676,12 +690,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initStore: function() {
         if (this.recordProxy) {
-            this.store = new Ext.data.Store({
+            var storeClass = this.groupField ? Ext.data.GroupingStore : Ext.data.Store;
+            this.store = new storeClass({
                 fields: this.recordClass,
                 proxy: this.recordProxy,
                 reader: this.recordProxy.getReader(),
                 remoteSort: this.storeRemoteSort,
                 sortInfo: this.defaultSortInfo,
+                groupField: 'month',
                 listeners: {
                     scope: this,
                     'add': this.onStoreAdd,
@@ -1127,12 +1143,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     createView: function() {
         // init view
-        var view =  new Ext.grid.GridView({
+        
+        if (this.groupField && ! this.groupTextTpl) {
+            this.groupTextTpl = '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "' + _("Records") + '" : "' + _("Record") + '"]})';
+        }
+        
+        var viewClass = this.groupField ? Ext.grid.GroupingView : Ext.grid.GridView;
+        var view =  new viewClass({
             getRowClass: this.getViewRowClass,
             autoFill: true,
             forceFit:true,
             ignoreAdd: true,
             emptyText: this.i18nEmptyText,
+            groupTextTpl: this.groupTextTpl,
             onLoad: Ext.grid.GridView.prototype.onLoad.createInterceptor(function() {
                 if (this.grid.getView().isPagingRefresh) {
                     this.grid.getView().isPagingRefresh = false;
