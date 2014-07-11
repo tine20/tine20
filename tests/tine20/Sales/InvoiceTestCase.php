@@ -156,7 +156,6 @@ class Sales_InvoiceTestCase extends TestCase
         Sales_Controller_Contract::getInstance()->deleteByFilter(new Sales_Model_ContractFilter(array()));
         
         $this->_invoiceController = Sales_Controller_Invoice::getInstance();
-        
         $this->_invoiceController->deleteByFilter(new Sales_Model_InvoiceFilter(array()));
         
         parent::setUp();
@@ -191,6 +190,9 @@ class Sales_InvoiceTestCase extends TestCase
         if ($this->_contractRecords) {
             Sales_Controller_Contract::getInstance()->delete($this->_contractRecords->getId());
         }
+        
+        $this->_invoiceController = Sales_Controller_Invoice::getInstance();
+        $this->_invoiceController->deleteByFilter(new Sales_Model_InvoiceFilter(array()));
     }
     
     protected function _setReferenceDate()
