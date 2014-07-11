@@ -150,6 +150,10 @@
         {
           "text": "calendarRenderer.js",
           "path": "js/"
+        },
+        {
+          "text": "ImportDialog.js",
+          "path": "js/"
         }
       ]
     },

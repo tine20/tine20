@@ -20,7 +20,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportSimpleFromString()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
         ));
 
         $icalData = file_get_contents(dirname(__FILE__) . '/files/simple.ics');
@@ -40,7 +40,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportSimpleFromFile()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
         ));
         
         $importer->importFile(dirname(__FILE__) . '/files/simple.ics');
@@ -58,7 +58,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportRecur()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
         ));
         
         $importer->importFile(dirname(__FILE__) . '/files/XMAS_DE.ics');
@@ -77,7 +77,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportHorde()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
         ));
         
         $importer->importFile(dirname(__FILE__) . '/files/horde.ics');
@@ -105,7 +105,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportHordeBroken()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
         ));
         
         try {
@@ -119,7 +119,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportOutlook12()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
         ));
         
         $importer->importFile(dirname(__FILE__) . '/files/outlook12.ics');
@@ -140,7 +140,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $this->_testNeedsTransaction();
         
         $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.import ' .
-            'plugin=Calendar_Import_Ical importContainerId=' . $this->_testCalendar->getId() .
+            'plugin=Calendar_Import_Ical container_id=' . $this->_getTestCalendar()->getId() .
             ' ' . dirname(__FILE__) . '/files/horde.ics';
         
         $cmd = TestServer::assembleCliCommand($cmd, TRUE);
@@ -160,7 +160,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $this->_testNeedsTransaction();
         
         $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.import ' .
-            'plugin=Calendar_Import_Ical forceUpdateExisting=1 importContainerId=' . $this->_testCalendar->getId() .
+            'plugin=Calendar_Import_Ical forceUpdateExisting=1 container_id=' . $this->_getTestCalendar()->getId() .
             ' ' . dirname(__FILE__) . '/files/termine.ics';
         
         $cmd = TestServer::assembleCliCommand($cmd, TRUE);
@@ -183,7 +183,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     public function testImportRruleNormalize()
     {
         $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
         ));
         
         $importer->importFile(dirname(__FILE__) . '/files/ni-zsk.ics');

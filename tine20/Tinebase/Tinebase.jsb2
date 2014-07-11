@@ -478,6 +478,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "SimpleImportDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "ExportDialog.js",
           "path": "js/widgets/dialog/"
         },

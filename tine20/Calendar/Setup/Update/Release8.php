@@ -211,4 +211,13 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('cal_events', 8);
         $this->setApplicationVersion('Calendar', '8.5');
     }
+    
+    /**
+     * - update import / export
+     */
+    public function update_5()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Calendar'));
+        $this->setApplicationVersion('Calendar', '8.6');
+    }
 }

@@ -117,10 +117,110 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $defaultCalendarArray = array();
         }
         
-        return array(
-            // registry setting is called defaultContainer to be compatible to the other apps
-            'defaultContainer' => $defaultCalendarArray
+
+        $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
+        $importDefinitions = $this->_getImportDefinitions();
+        $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
+        
+        $registryData = array(
+            'defaultContainer'          => $defaultCalendarArray,
+            'defaultImportDefinition'   => ($defaultDefinition) ? $definitionConverter->fromTine20Model($defaultDefinition) : array(),
+            'importDefinitions'         => array(
+                'results'               => $definitionConverter->fromTine20RecordSet($importDefinitions),
+                'totalcount'            => count($importDefinitions),
+            ),
         );
+        
+        return $registryData;
+    }
+    
+    /**
+     * get default addressbook
+     * 
+     * @return array
+     */
+    public function getDefaultCalendar() 
+   {
+        $defaultCalendar = Calendar_Controller_Event::getInstance()->getDefaultCalendar();
+        $defaultCalendarArray = $defaultCalendar->toArray();
+        $defaultCalendarArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultCalendar->getId())->toArray();
+        Tinebase_Core::getLogger()->notice(print_r($defaultCalendar, true));
+        return $defaultCalendarArray;
+    }
+    
+    /**
+     * import contacts
+     * 
+     * @param string $tempFileId to import
+     * @param string $definitionId
+     * @param array $importOptions
+     * @param array $clientRecordData
+     * @return array
+     */
+    public function importEvents($tempFileId, $definitionId, $importOptions, $clientRecordData = array())
+    {
+        return $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
+    }
+    
+    /**
+     * @todo
+     */
+    public function remoteImportEvents()
+    {
+        // @todo
+        /*
+         * credentials
+         * infos
+         * 
+         * create container
+         * 
+         * add scheduler job
+         * 
+         * 
+         */
+    }
+    
+    /**
+     * get addressbook import definitions
+     * 
+     * @return Tinebase_Record_RecordSet
+     * 
+     * @todo generalize this
+     */
+    protected function _getImportDefinitions()
+    {
+        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+            array('field' => 'application_id',  'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()),
+            array('field' => 'type',            'operator' => 'equals', 'value' => 'import'),
+        ));
+        
+        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
+        
+        return $importDefinitions;
+    }
+    
+    /**
+     * get default definition
+     * 
+     * @param Tinebase_Record_RecordSet $_importDefinitions
+     * @return Tinebase_Model_ImportExportDefinition
+     * 
+     * @todo generalize this
+     */
+    protected function _getDefaultImportDefinition($_importDefinitions)
+    {
+        try {
+            $defaultDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName('cal_import_ical');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (count($_importDefinitions) > 0) {
+                $defaultDefinition = $_importDefinitions->getFirstRecord();
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No import definitions found for Calendar');
+                $defaultDefinition = NULL;
+            }
+        }
+        
+        return $defaultDefinition;
     }
     
     /**

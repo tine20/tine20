@@ -242,6 +242,21 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             toggleGroup: 'Calendar_Toolbar_tgViews'
         });
         
+       this.action_import = new Ext.Action({
+            requiredGrant: 'addGrant',
+            text: this.app.i18n._('Import Events'),
+            disabled: false,
+            handler: this.onImport,
+            scale: 'medium',
+            minWidth: 60,
+            rowspan: 2,
+            iconAlign: 'top',
+            requiredGrant: 'readGrant',
+            iconCls: 'action_import',
+            scope: this,
+            allowMultiple: true
+        });
+
         this.changeViewActions = [
             this.showDayView,
             this.showWeekView,
@@ -249,8 +264,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         ];
         
         this.recordActions = [
+            this.action_import,
             this.action_editInNewWindow,
             this.action_deleteRecord
+            
         ];
         
         this.actionUpdater = new  Tine.widgets.ActionUpdater({
@@ -272,7 +289,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }],
             items: [
                 this.showSheetView,
-                this.showGridView
+                this.showGridView,
+                this.action_import
             ]
         };
     },
@@ -327,6 +345,31 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 }
             });
         }
+    },
+    
+    /**
+     * import events
+     * 
+     * @param {Button} btn 
+     */
+    onImport: function(btn) {
+        var popupWindow = Tine.Calendar.ImportDialog.openWindow({
+            appName: 'Calendar',
+            modelName: 'Event',
+            defaultImportContainer: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer('defaultContainer'),
+            
+            ignoreConflicts: true,
+            doTryRun: false,
+            
+            
+            // update grid after import
+            listeners: {
+                scope: this,
+                'finish': function() {
+                    this.refresh();
+                }
+            }
+        });
     },
     
     /**
