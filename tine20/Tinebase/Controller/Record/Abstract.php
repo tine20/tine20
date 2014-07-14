@@ -218,14 +218,18 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action for right/acl check
-     * @return int
+     * @return int|array
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         $this->checkFilterACL($_filter, $_action);
 
         $count = $this->_backend->searchCount($_filter);
-
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . is_array($count) ? print_r($count, 1) : $count . ' search count');
+        }
+        
         return $count;
     }
 
