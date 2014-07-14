@@ -191,6 +191,9 @@ class Sales_InvoiceTestCase extends TestCase
             Sales_Controller_Contract::getInstance()->delete($this->_contractRecords->getId());
         }
         
+        $paController = Sales_Controller_ProductAggregate::getInstance();
+        $paController->deleteByFilter(new Sales_Model_ProductAggregateFilter(array()));
+        
         $this->_invoiceController = Sales_Controller_Invoice::getInstance();
         $this->_invoiceController->deleteByFilter(new Sales_Model_InvoiceFilter(array()));
     }
