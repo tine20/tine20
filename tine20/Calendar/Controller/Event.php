@@ -912,15 +912,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $originalEvent = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, new Tinebase_Record_RecordSet('Calendar_Model_Event'), $originalDtstart);
         
         if ($_allFollowing != TRUE) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " adding exdate for: '{$_event->recurid}'");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . " Adding exdate for: '{$_event->recurid}'");
             
             array_push($exdates, $exdate);
             $baseEvent->exdate = $exdates;
             $updatedBaseEvent = $this->update($baseEvent, FALSE);
             
             if ($_deleteInstance == FALSE) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Creating persistent exception for: '{$_event->recurid}'");
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Recur exception: " . print_r($_event->toArray(), TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . " Creating persistent exception for: '{$_event->recurid}'");
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                    . " Recur exception: " . print_r($_event->toArray(), TRUE));
                 
                 $_event->setId(NULL);
                 unset($_event->rrule);
@@ -1271,7 +1274,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_alarm->sent_status = $nextOccurrence ? Tinebase_Model_Alarm::STATUS_PENDING : Tinebase_Model_Alarm::STATUS_SUCCESS;
             $_alarm->sent_message = $nextOccurrence ?  '' : 'Nothing to send, series is over';
             
-            $eventStart = $nextOccurrence ? clone $nextOccurrence->dtstart : $_record->dtstart;
+            $eventStart = $nextOccurrence ? clone $nextOccurrence->dtstart : clone $_record->dtstart;
         } else {
             $eventStart = clone $_record->dtstart;
         }
@@ -1288,6 +1291,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($_record->rrule && $_alarm->sent_status == Tinebase_Model_Alarm::STATUS_PENDING && $_alarm->alarm_time < $_alarm->sent_time) {
             $this->adoptAlarmTime($_record, $_alarm, 'instance');
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+            ' alarm: ' . print_r($_alarm->toArray(), true));
     }
     
     /****************************** overwritten functions ************************/

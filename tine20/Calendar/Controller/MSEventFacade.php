@@ -258,7 +258,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $savedEvent = $this->_eventController->create($_event);
         
         if ($exceptions instanceof Tinebase_Record_RecordSet) {
-            foreach($exceptions as $exception) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' About to create ' . count($exceptions) . ' exdates for event ' . $_event->summary . ' (' . $_event->dtstart . ')');
+            
+            foreach ($exceptions as $exception) {
                 $exception->assertCurrentUserAsAttendee();
                 $this->_prepareException($savedEvent, $exception);
                 $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
