@@ -1202,4 +1202,13 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('sales_invoice_positions', 2);
         $this->setApplicationVersion('Sales', '8.12');
     }
+
+    /**
+     * import new import definition
+     */
+    public function update_12()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'));
+        $this->setApplicationVersion('Sales', '8.13');
+    }
 }

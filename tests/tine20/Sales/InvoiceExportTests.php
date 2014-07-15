@@ -128,4 +128,40 @@ class Sales_InvoiceExportTests extends Sales_InvoiceTestCase
         
         unlink($doc);
     }
+    
+    /**
+     * tests special auto invoice creation
+     */
+    public function testSpecialExportInvoice()
+    {
+        $this->_createFullFixtures();
+    
+        $date = clone $this->_referenceDate;
+    
+        $i = 0;
+    
+        // until 1.7
+        while ($i < 8) {
+            $result = $this->_invoiceController->createAutoInvoices($date);
+            $date->addMonth(1);
+            $i++;
+        }
+    
+        $definition = dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/Sales/Export/definitions/invoice_special_ods.xml';
+    
+        $filter = new Sales_Model_InvoiceFilter(array());
+        $exporter = new Sales_Export_Ods_Invoice($filter, Sales_Controller_Invoice::getInstance(), array('definitionFilename' => $definition));
+        $doc = $exporter->generate();
+    
+        $xml = $this->_getContentXML($doc);
+    
+        $ns = $xml->getNamespaces(true);
+        $spreadsheetXml = $xml->children($ns['office'])->{'body'}->{'spreadsheet'};
+    
+        // the product should be found here
+        $half = 0;
+        $quarter = 0;
+    
+        $this->assertEquals('Debitor', (string) $spreadsheetXml->children($ns['table'])->{'table'}->{'table-row'}->{1}->children($ns['table'])->{'table-cell'}->{3}->children($ns['text'])->{0});
+    }
 }

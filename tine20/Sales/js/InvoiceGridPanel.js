@@ -58,15 +58,23 @@ Tine.Sales.InvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         iconCls: 'tinebase-action-export-ods',
                         exportFunction: 'Sales.exportInvoices',
                         gridPanel: this
+                    }),
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as ...'),
+                        iconCls: 'tinebase-action-export-xls',
+                        exportFunction: 'Sales.exportInvoices',
+                        showExportDialog: true,
+                        gridPanel: this
                     })
                 ]
             }
         });
-        
-        var exportButton = Ext.apply(new Ext.Button(this.actions_export), {
+
+        var exportButton = Ext.apply(new Ext.SplitButton(this.actions_export), {
             scale: 'medium',
             rowspan: 2,
-            iconAlign: 'top'
+            iconAlign: 'top',
+            arrowAlign:'right'
         });
         
         this.actions_reversal = new Ext.Action({
