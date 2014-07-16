@@ -219,21 +219,21 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         } else {
             // create new object for rfc822 message
             $structure = $_message->getPartStructure($_partId, FALSE);
-        
+            
             $message = new Felamimail_Model_Message(array(
                 'messageuid'  => $_message->messageuid,
                 'folder_id'   => $_message->folder_id,
                 'received'    => $_message->received,
-                'size'        => ((isset($structure['size']) || array_key_exists('size', $structure))) ? $structure['size'] : 0,
+                'size'        => isset($structure['size']) ? $structure['size'] : 0,
                 'partid'      => $_partId,
                 'body'        => $body,
                 'headers'     => $headers,
                 'attachments' => $attachments
             ));
-        
+            
             $message->parseHeaders($headers);
-        
-            $structure = (isset($structure['messageStructure']) || array_key_exists('messageStructure', $structure)) ? $structure['messageStructure'] : $structure;
+            
+            $structure = isset($structure['messageStructure']) ? $structure['messageStructure'] : $structure;
             $message->parseStructure($structure);
         }
         
@@ -833,10 +833,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $structure = $message->getPartStructure($_partId);
-
+        
         $attachments = array();
         
-        if (!(isset($structure['parts']) || array_key_exists('parts', $structure))) {
+        if (! isset($structure['parts'])) {
             return $attachments;
         }
         
@@ -894,6 +894,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $filename = $part['parameters']['name'];
         } else {
             $filename = 'Part ' . $part['partId'];
+            if (isset($part['contentType'])) {
+                $filename .= ' (' . $part['contentType'] . ')';
+            }
         }
         
         return $filename;

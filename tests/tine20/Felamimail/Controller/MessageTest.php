@@ -611,8 +611,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                     echo "\nchecking message: " . $fileName . "\n";
                     $cachedMessage = $this->messageTestHelper($fileName, $filename);
                     $message = $this->_controller->getCompleteMessage($cachedMessage);
-                    echo $message->body;
                     $this->assertTrue(! empty($message->body));
+                    
+                    echo "body: " . $message->body . "\n";
+                    echo "attachements: ";
+                    print_r($message->attachments);
                 }
             }
         }
