@@ -63,18 +63,18 @@ Tine.Sales.InvoicePositionPanel = Ext.extend(Ext.Panel, {
         
         // defer this, otherwise renderers won't have been registered, yet.
         if (! deferred) {
-            this.initComponent.defer(50, this, [true]);
+            this.initComponent.defer(150, this, [true]);
             return false;
         }
-        
-        this.initStoreAndPanels();
-        
+
         this.accountables = [];
         this.positionsPerAccountable = {};
         this.sumsPerAccountable = {};
         this.modelsOfAccountable = [];
         
         Tine.Sales.InvoicePositionPanel.superclass.initComponent.call(this);
+        
+        this.initStoreAndPanels();
     },
     
     /**
