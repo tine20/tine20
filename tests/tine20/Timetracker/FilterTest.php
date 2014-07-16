@@ -133,4 +133,41 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
         $r->setFromArray($ra);
         return $r;
     }
+    
+    /**
+     * tests the corret handling of the usertimezone in the date filter
+     */
+    public function testDateIntervalFilter()
+    {
+        $taController = Timetracker_Controller_Timeaccount::getInstance();
+        $tsController = Timetracker_Controller_Timesheet::getInstance();
+        $dateString = '2014-07-14 00:15:00';
+        
+        $date = new Tinebase_DateTime($dateString, Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        
+        $ta = $taController->create(new Timetracker_Model_Timeaccount(array('number' => '123', 'title' => 'test')));
+        $r = new Timetracker_Model_Timesheet(array(
+            'timeaccount_id' => $ta->getId(), 
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'description' => 'lazy boring',
+            'start_date' => $date,
+        ));
+        
+        $r->setTimezone('UTC');
+        
+        $ts = $tsController->create($r);
+        
+        $filter = new Timetracker_Model_TimesheetFilter(array());
+        $dateFilter = new Tinebase_Model_Filter_DateMock(
+            array('field' => 'start_date', 'operator' => "within", "value" => "weekThis")
+        );
+        
+        $dateFilter::$testDate = $date;
+        
+        $filter->addFilter($dateFilter);
+        
+        $results = $tsController->search($filter);
+        
+        $this->assertEquals(1, $results->count());
+    }
 }
