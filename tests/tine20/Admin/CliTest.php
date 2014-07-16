@@ -58,8 +58,14 @@ class Admin_CliTest extends TestCase
         $this->_usernamesToDelete = array('hmaster', 'hmeister', 'hmoster', 'irmeli', 'testuser', 'm.muster');
         
         $this->_groupsToDelete = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
+        $this->_testGroup['domainuser'] = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
+            'name'   => 'domainuser'
+        )));
         $this->_testGroup['teacher'] = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
             'name'   => 'teacher'
+        )));
+        $this->_testGroup['student'] = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
+            'name'   => 'student'
         )));
         $this->_groupsToDelete->addRecord($this->_testGroup['teacher']);
         
@@ -191,14 +197,14 @@ class Admin_CliTest extends TestCase
                 </field>
             </mapping>
         </config>';
-          $this->objects['configGroup'] = '<?xml version="1.0" encoding="UTF-8"?>
+          $this->objects['configAdvanced'] = '<?xml version="1.0" encoding="UTF-8"?>
         <config>
            <model>Tinebase_Model_FullUser</model>
            <plugin>Admin_Import_Csv</plugin>
            <type>import</type>
            <headline>1</headline>
            <dryrun>0</dryrun>
-           <delimiter>;</delimiter>
+           <delimiter>,</delimiter>
            <mapping>
                <field>
                    <source>firstname</source>
@@ -217,16 +223,40 @@ class Admin_CliTest extends TestCase
                    <destination>password</destination>
                </field>
                <field>
-                   <source>group_id</source>
+                   <source>primary_group_id</source>
                    <destination>accountPrimaryGroup</destination>
                </field>
                <field>
+                   <source>additional_groups</source>
+                   <destination>groups</destination>
+               </field>
+              <field>
                    <source>accountHomeDirectory</source>
                    <destination>accountHomeDirectory</destination>
                </field>
                <field>
+                   <source>accountHomeDirectoryPrefix</source>
+                   <destination>accountHomeDirectoryPrefix</destination>
+               </field>
+               <field>
                    <source>accountLoginShell</source>
                    <destination>accountLoginShell</destination>
+               </field>
+               <field>
+                   <source>homePath</source>
+                   <destination>homePath</destination>
+               </field>
+               <field>
+                   <source>homeDrive</source>
+                   <destination>homeDrive</destination>
+               </field>
+               <field>
+                   <source>logonScript</source>
+                   <destination>logonScript</destination>
+               </field>
+               <field>
+                   <source>profilePath</source>
+                   <destination>profilePath</destination>
                </field>
            </mapping>
         </config>';
@@ -372,10 +402,12 @@ class Admin_CliTest extends TestCase
     }
     
     /**
-     * testImportUsersWithGroup
+     * testImportUsersAdvanced
      */
-    public function testImportUsersWithGroup()
+    public function testImportUsersAdvanced()
     {
+        $userBackend = Tinebase_User::getInstance();
+        
         $readFile = fopen(dirname(__FILE__) . '/files/test_teacher.csv', 'r');
         $writeFile = fopen('test2.csv', 'w');
         $delimiter = ',';
@@ -383,7 +415,9 @@ class Admin_CliTest extends TestCase
         
         while (($row = fgetcsv($readFile)) !== false) {
             foreach ($row as $colIndex => &$field) {
-                $field = str_replace('GROUP', $this->_testGroup['teacher']->getId(), $field);
+                $field = str_replace('PRIMARYGROUP', $this->_testGroup['domainuser']->getId(), $field);
+                $field = str_replace('GROUP1', $this->_testGroup['teacher']->getId(), $field);
+                $field = str_replace('GROUP2', $this->_testGroup['student']->getId(), $field);
             }
             fputcsv($writeFile, $row, $delimiter, $enclosure);
         }
@@ -391,13 +425,23 @@ class Admin_CliTest extends TestCase
         fclose($readFile);
         fclose($writeFile);
         
-        $this->_importUsers($this->objects['configGroup'], 'test2.csv', 'admin_user_import_csv_test_teacher');
+        $this->_importUsers($this->objects['configAdvanced'], 'test2.csv', 'admin_user_import_csv_test_advanced');
         $newUser = Tinebase_User::getInstance()->getFullUserByLoginName('m.muster');
-        $newUserMemberships = Tinebase_Group::getInstance()->getGroupMemberships($newUser);
-        $this->assertTrue(in_array($this->_testGroup['teacher']->getId(), $newUserMemberships),
-        ' not member of the test group (' . $this->_testGroup['teacher']->getId() . ') ' . print_r($newUserMemberships, TRUE));
-        $this->assertEquals('/bin/false', $newUser->accountLoginShell);
         
+        $newUserMemberships = Tinebase_Group::getInstance()->getGroupMemberships($newUser);
+        $this->assertTrue(in_array($this->_testGroup['domainuser']->getId(), $newUserMemberships),
+        ' not member of the domainuser group (' . $this->_testGroup['domainuser']->getId() . ') ' . print_r($newUserMemberships, TRUE));
+        $this->assertTrue(in_array($this->_testGroup['student']->getId(), $newUserMemberships),
+        ' not member of the student group (' . $this->_testGroup['student']->getId() . ') ' . print_r($newUserMemberships, TRUE));
+        $this->assertTrue(in_array($this->_testGroup['teacher']->getId(), $newUserMemberships),
+        ' not member of the teacher group (' . $this->_testGroup['teacher']->getId() . ') ' . print_r($newUserMemberships, TRUE));
+        
+        $this->assertEquals('/bin/false', $newUser->accountLoginShell);
+        $this->assertEquals('/storage/lehrer/m.muster', $newUser->accountHomeDirectory);
+        
+        if (array_key_exists('Tinebase_User_Plugin_Samba', $userBackend->getPlugins())) {
+            $this->assertEquals('\\fileserver\profiles\m.muster', $newUser->sambaSAM->profilePath);
+        }
         unlink("test2.csv");
     }
 }
