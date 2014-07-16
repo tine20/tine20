@@ -54,6 +54,13 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_doRightChecks = TRUE;
 
     /**
+     * use notes - can be enabled/disabled by useNotes
+     *
+     * @var boolean
+     */
+    protected $_setNotes = TRUE;
+
+    /**
      * delete or just set is_delete=1 if record is going to be deleted
      * - legacy code -> remove that when all backends/applications are using the history logging
      *
@@ -955,7 +962,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _setNotes($_updatedRecord, $_record, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL)
     {
-        if (! $_record->has('notes')) {
+        if (! $_record->has('notes') || $this->_setNotes === false) {
             return;
         }
 
@@ -1138,6 +1145,18 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         return $this->_updateMultipleResult;
+    }
+    
+    /**
+     * enable / disable notes
+     *
+     * @param boolean $_value
+     * @return void
+     */
+    public function useNotes()
+    {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        return $this->_setBooleanMemberVar('_setNotes', $value);
     }
     
     /**

@@ -171,6 +171,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     {
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
         
+        $this->_instance->useNotes(true);
         if ((isset($this->objects['contact']) || array_key_exists('contact', $this->objects))) {
             $this->_instance->delete($this->objects['contact']);
         }
@@ -424,5 +425,41 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $count2 = $this->_instance->searchCount($filter);
         $this->assertEquals($count1, $count2);
+    }
+    
+    /**
+     * test useNotes
+     */
+    public function testUseNotes()
+    {
+        $contact = $this->objects['initialContact'];
+        $contact1 = clone $contact;
+    
+        $contact1->notes = array(new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note'])));
+        $contact->notes = array(new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note'])));
+    
+        $newcontact1 = $this->_instance->create($contact1);
+        $this->_instance->delete($newcontact1);
+    
+        $this->_instance->useNotes(false);
+        $this->objects['contact'] = $this->_instance->create($contact);
+    
+        $compStr = 'Array
+(
+    [0] => Array
+        (
+            [note_type_id] => 1
+            [note] => phpunit test note
+            [record_backend] => Sql
+            [id] => 
+        )
+
+)';
+        
+        $this->assertTrue($newcontact1->has('notes'));
+        $this->assertEquals($compStr, $newcontact1->notes[0]->note);
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->objects['contact']->notes[0]->note = 'note';
     }
 }
