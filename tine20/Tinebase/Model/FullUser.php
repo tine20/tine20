@@ -92,6 +92,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         // create valid login name
         if (! isset($this->accountLoginName)) {
             $this->accountLoginName = Tinebase_User::getInstance()->generateUserName($this, (isset($options['userNameSchema'])) ? $options['userNameSchema'] : 1);
+            $this->accountFullName = Tinebase_User::getInstance()->generateAccountFullName($this);
         }
         
         if (empty($this->accountPrimaryGroup)) {
