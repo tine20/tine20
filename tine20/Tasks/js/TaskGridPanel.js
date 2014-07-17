@@ -78,21 +78,21 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getColumnModel: function(){
-        return new Ext.grid.ColumnModel({
-        defaults: {
-            sortable: true,
-            resizable: true
-        },
-        columns: [
-        {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer 
-        }, {
-            id: 'lead',
-            header: this.app.i18n._('Lead'),
-            width: 150,
-            dataIndex: 'relations',
-            renderer: Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'lead'),
-            sortable: false
-        }, {
+        
+        var columns = [{id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer}];
+        
+        if (Tine.hasOwnProperty('Crm') && Tine.Tinebase.common.hasRight('view', 'Crm')) {
+            columns.push({
+                id: 'lead',
+                header: this.app.i18n._('Lead'),
+                width: 150,
+                dataIndex: 'relations',
+                renderer: Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'lead'),
+                sortable: false
+            });
+        }
+        
+        columns = columns.concat([{
             id: 'summary',
             header: this.app.i18n._("Summary"),
             width: 400,
@@ -188,7 +188,15 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 value: Tine.Tinebase.registry.get('currentAccount')
             })
           // TODO add customfields and modlog columns, atm they break the layout :(
-        }]/*.concat(this.getModlogColumns().concat(this.getCustomfieldColumns()))*/});
+        }]);/*.concat(this.getModlogColumns().concat(this.getCustomfieldColumns()))*/
+        
+        return new Ext.grid.ColumnModel({
+            defaults: {
+                sortable: true,
+                resizable: true
+            },
+            columns: columns
+        });
     },
 
     /**
