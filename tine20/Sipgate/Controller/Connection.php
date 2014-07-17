@@ -36,7 +36,7 @@ class Sipgate_Controller_Connection extends Tinebase_Controller_Record_Abstract
     protected $_apiBackend = NULL;
 
     /**
-     * do right checks - can be enabled/disabled by _setRightChecks
+     * do right checks - can be enabled/disabled by doRightChecks
      * @var boolean
      */
     protected $_doRightChecks = false;
