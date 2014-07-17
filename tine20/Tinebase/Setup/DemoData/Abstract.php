@@ -430,9 +430,10 @@ abstract class Tinebase_Setup_DemoData_Abstract
     protected static $_de = true;
     
     /**
-     * defaults to an empty password
+     * defaults to NULL, a random password will be generated and shown on the cli output
+     * prevent this by adding a 'login' array containing 'username' and 'password' to the config
      */
-    protected static $_defaultPassword = '';
+    protected static $_defaultPassword = NULL;
     
     /**
      * shortcut for locale
