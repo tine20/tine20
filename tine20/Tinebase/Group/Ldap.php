@@ -84,6 +84,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
     
     protected $_isReadOnlyBackend    = false;
     
+    protected $_isDisabledBackend    = false;
+    
     /**
      * the constructor
      *
@@ -111,19 +113,22 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if(empty($_options['groupFilter'])) {
             $_options['groupFilter'] = 'objectclass=posixgroup';
         }
-
-        if (isset($_options['requiredObjectClass'])) {
-            $this->_requiredObjectClass = (array)$_options['requiredObjectClass'];
-        }
+        
+        $this->_options = $_options;
+        
         if ((isset($_options['readonly']) || array_key_exists('readonly', $_options))) {
             $this->_isReadOnlyBackend = (bool)$_options['readonly'];
         }
         if ((isset($_options['ldap']) || array_key_exists('ldap', $_options))) {
             $this->_ldap = $_options['ldap'];
         }
+        if (isset($this->_options['requiredObjectClass'])) {
+            $this->_requiredObjectClass = (array)$this->_options['requiredObjectClass'];
+        }
+        if (! array_key_exists('groupsDn', $this->_options) || empty($this->_options['groupsDn'])) {
+            $this->_isDisabledBackend = true;
+        }
         
-        $this->_options = $_options;
-
         $this->_userUUIDAttribute  = strtolower($this->_options['userUUIDAttribute']);
         $this->_groupUUIDAttribute = strtolower($this->_options['groupUUIDAttribute']);
         $this->_baseDn             = $this->_options['baseDn'];
@@ -131,23 +136,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $this->_userSearchScope    = $this->_options['userSearchScope'];
         $this->_groupBaseFilter    = $this->_options['groupFilter'];
         
-        if (! $this->_ldap instanceof Tinebase_Ldap) {
-            $this->_ldap = new Tinebase_Ldap($this->_options);
-            try {
-                $this->_ldap->bind();
-            } catch (Zend_Ldap_Exception $zle) {
-                // @todo move this to Tinebase_Ldap?
-                throw new Tinebase_Exception_Backend_Ldap('Could not bind to LDAP: ' . $zle->getMessage());
-            }
-        }
-        
         if (isset($_options['plugins']) && is_array($_options['plugins'])) {
             foreach ($_options['plugins'] as $className) {
-                $this->_plugins[$className] = new $className($this->_ldap, $this->_options);
+                $this->_plugins[$className] = new $className($this->getLdap(), $this->_options);
             }
         }
     }
-        
+    
     /**
      * get syncable group by id from sync backend
      * 
@@ -157,6 +152,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function getGroupByIdFromSyncBackend($_groupId)
     {
+        if ($this->isDisabledBackend()) {
+            throw new Tinebase_Exception_UnexpectedValue('backend is disabled');
+        }
+        
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $filter = Zend_Ldap_Filter::andFilter(
@@ -164,9 +163,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, $this->_encodeGroupId($groupId))
         );
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " ldap filter: " . $filter);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " ldap filter: " . $filter);
         
-        $groups = $this->_ldap->search(
+        $groups = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 
@@ -203,9 +203,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function getGroupsFromSyncBackend($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {
+        if ($this->isDisabledBackend()) {
+            throw new Tinebase_Exception_UnexpectedValue('backend is disabled');
+        }
+        
         $filter = Zend_Ldap_Filter::string($this->_groupBaseFilter);
         
-        $groups = $this->_ldap->search(
+        $groups = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 
@@ -228,6 +232,45 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
     }
     
     /**
+     * get ldap connection handling class
+     * 
+     * @throws Tinebase_Exception_Backend_Ldap
+     * @return Tinebase_Ldap
+     */
+    public function getLdap()
+    {
+        if (! $this->_ldap instanceof Tinebase_Ldap) {
+            $this->_ldap = new Tinebase_Ldap($this->_options);
+            try {
+                $this->getLdap()->bind();
+            } catch (Zend_Ldap_Exception $zle) {
+                // @todo move this to Tinebase_Ldap?
+                throw new Tinebase_Exception_Backend_Ldap('Could not bind to LDAP: ' . $zle->getMessage());
+            }
+        }
+        
+        return $this->_ldap;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Group_Interface_SyncAble::isReadOnlyBackend()
+     */
+    public function isReadOnlyBackend()
+    {
+        return $this->_isReadOnlyBackend;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Group_Interface_SyncAble::isDisabledBackend()
+     */
+    public function isDisabledBackend()
+    {
+        return $this->_isDisabledBackend;
+    }
+    
+    /**
      * replace all current groupmembers with the new groupmembers list in sync backend
      *
      * @param  string  $_groupId
@@ -236,8 +279,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function setGroupMembersInSyncBackend($_groupId, $_groupMembers) 
     {
-        if ($this->_isReadOnlyBackend) {
-            return;
+        if ($this->isDisabledBackend() || $this->isReadOnlyBackend()) {
+            return $_groupMembers;
         }
         
         $metaData = $this->_getMetaData($_groupId);
@@ -285,7 +328,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_ldap->update($metaData['dn'], $ldapData);
+        $this->getLdap()->update($metaData['dn'], $ldapData);
         
         return $_groupMembers;
     }
@@ -300,8 +343,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function setGroupMembershipsInSyncBackend($_userId, $_groupIds)
     {
-        if ($this->_isReadOnlyBackend) {
-            return;
+        if ($this->isDisabledBackend() || $this->isReadOnlyBackend()) {
+            return $_groupIds;
         }
         
         if ($_groupIds instanceof Tinebase_Record_RecordSet) {
@@ -343,7 +386,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function addGroupMemberInSyncBackend($_groupId, $_accountId) 
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isDisabledBackend() || $this->isReadOnlyBackend()) {
             return;
         }
         
@@ -367,7 +410,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             Zend_Ldap_Filter::equals('memberuid', Zend_Ldap::filterEscape($accountMetaData['uid']))
         );
         
-        $groups = $this->_ldap->search(
+        $groups = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 
@@ -386,7 +429,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 Zend_Ldap_Filter::equals('member', Zend_Ldap::filterEscape($accountMetaData['dn']))
             );
             
-            $groups = $this->_ldap->search(
+            $groups = $this->getLdap()->search(
                 $filter, 
                 $this->_options['groupsDn'], 
                 $this->_groupSearchScope, 
@@ -400,7 +443,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         }
                 
         if (!empty($ldapData)) {
-            $this->_ldap->addProperty($groupDn, $ldapData);
+            $this->getLdap()->addProperty($groupDn, $ldapData);
         }
         
         if ($this->_options['useRfc2307bis']) {
@@ -410,7 +453,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 Zend_Ldap_Filter::equals('member', Zend_Ldap::filterEscape($groupDn))
             );
             
-            $groups = $this->_ldap->search(
+            $groups = $this->getLdap()->search(
                 $filter, 
                 $this->_options['groupsDn'], 
                 $this->_groupSearchScope, 
@@ -421,7 +464,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 $ldapData = array (
                     'member' => $groupDn
                 );
-                $this->_ldap->deleteProperty($groupDn, $ldapData);
+                $this->getLdap()->deleteProperty($groupDn, $ldapData);
             }
         }
     }
@@ -434,7 +477,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function removeGroupMemberInSyncBackend($_groupId, $_accountId) 
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isDisabledBackend() || $this->isReadOnlyBackend()) {
             return;
         }
         
@@ -479,7 +522,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 $dataAdd = array(
                     'member' => $groupDn
                 );
-                $this->_ldap->addProperty($groupDn, $dataAdd);
+                $this->getLdap()->addProperty($groupDn, $dataAdd);
             } else {
                 $ldapData['member'] = $accountMetaData['dn'];
             }
@@ -489,7 +532,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         try {
-            $this->_ldap->deleteProperty($groupDn, $ldapData);
+            $this->getLdap()->deleteProperty($groupDn, $ldapData);
         } catch (Zend_Ldap_Exception $zle) {
             if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . 
                 " Failed to remove groupmember {$accountMetaData['dn']} from group $groupDn: " . $zle->getMessage()
@@ -507,8 +550,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function addGroupInSyncBackend(Tinebase_Model_Group $_group) 
     {
-        if ($this->_isReadOnlyBackend) {
-            return NULL;
+        if ($this->isDisabledBackend() || $this->isReadOnlyBackend()) {
+            return $_group;
         }
         
         $dn = $this->_generateDn($_group);
@@ -538,9 +581,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-        $this->_ldap->add($dn, $ldapData);
+        $this->getLdap()->add($dn, $ldapData);
         
-        $groupId = $this->_ldap->getEntry($dn, array($this->_groupUUIDAttribute));
+        $groupId = $this->getLdap()->getEntry($dn, array($this->_groupUUIDAttribute));
         
         $groupId = $this->_decodeGroupId($groupId[$this->_groupUUIDAttribute][0]);
         
@@ -558,8 +601,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function updateGroupInSyncBackend(Tinebase_Model_Group $_group) 
     {
-        if ($this->_isReadOnlyBackend) {
-            return;
+        if ($this->isDisabledBackend() || $this->isReadOnlyBackend()) {
+            return $_group;
         }
         
         $metaData = $this->_getMetaData($_group->getId());
@@ -580,7 +623,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_ldap->update($dn, $ldapData);
+        $this->getLdap()->update($dn, $ldapData);
         
         $group = $this->getGroupByIdFromSyncBackend($_group);
 
@@ -594,7 +637,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function deleteGroupsInSyncBackend($_groupId) 
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isDisabledBackend() || $this->isReadOnlyBackend()) {
             return;
         }
         
@@ -608,12 +651,11 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             $groupIds[] = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         }
         
-        
         foreach ($groupIds as $groupId) {
             $dn = $this->_getDn($groupId);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Deleting group ' . $dn . ' from LDAP');
-            $this->_ldap->delete($dn);
+            $this->getLdap()->delete($dn);
         }
     }
     
@@ -647,7 +689,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             $this->_groupUUIDAttribute, $this->_encodeGroupId($groupId)
         );
         
-        $result = $this->_ldap->search(
+        $result = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 
@@ -675,7 +717,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             $this->_userUUIDAttribute, $userId
         );
 
-        $result = $this->_ldap->search(
+        $result = $this->getLdap()->search(
             $filter,
             $this->_baseDn,
             $this->_userSearchScope
@@ -707,7 +749,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $filter: ' . $filter . ' count: ' . count($filterArray));
         
         // fetch all dns at once
-        $accounts = $this->_ldap->search(
+        $accounts = $this->getLdap()->search(
             $filter, 
             $this->_options['userDn'], 
             $this->_userSearchScope, 
@@ -820,7 +862,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             'objectclass', 'posixgroup'
         );
         
-        $groups = $this->_ldap->search(
+        $groups = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
@@ -863,6 +905,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function resolveSyncAbleGidToUUid($_groupId)
     {
+        if ($this->isDisabledBackend()) {
+            throw new Tinebase_Exception_UnexpectedValue('backend is disabled');
+        }
+        
         return $this->resolveGIdNumberToUUId($_groupId);
     }
     
@@ -878,12 +924,16 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             return $_gidNumber;
         }
         
+        if ($this->isDisabledBackend()) {
+            throw new Tinebase_Exception_UnexpectedValue('backend is disabled');
+        }
+        
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
             Zend_Ldap_Filter::equals('gidnumber', $_gidNumber)
         );
         
-        $groupId = $this->_ldap->search(
+        $groupId = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 
@@ -909,12 +959,16 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             return $_uuid;
         }
         
+        if ($this->isDisabledBackend()) {
+            throw new Tinebase_Exception_UnexpectedValue('backend is disabled');
+        }
+        
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
             Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, $this->_encodeGroupId($_uuid))
         );
         
-        $groupId = $this->_ldap->search(
+        $groupId = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 
@@ -932,32 +986,42 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function getGroupMembershipsFromSyncBackend($_userId)
     {
-        $metaData = $this->_getUserMetaData($_userId);
-        
-        $filter = Zend_Ldap_Filter::andFilter(
-            Zend_Ldap_Filter::string($this->_groupBaseFilter),
-            Zend_Ldap_Filter::orFilter(
-                Zend_Ldap_Filter::equals('memberuid', Zend_Ldap::filterEscape($metaData['uid'][0])),
-                Zend_Ldap_Filter::equals('member',    Zend_Ldap::filterEscape($metaData['dn']))
-            )
-        );
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' ldap search filter: ' . $filter);
-        
-        $groups = $this->_ldap->search(
-            $filter, 
-            $this->_options['groupsDn'], 
-            $this->_groupSearchScope, 
-            array('cn', 'description', $this->_groupUUIDAttribute)
-        );
-        
-        $memberships = array();
-        
-        foreach ($groups as $group) {
-            $memberships[] = $group[$this->_groupUUIDAttribute][0];
+        if (!$this->isDisabledBackend()) {
+            $metaData = $this->_getUserMetaData($_userId);
+            
+            $filter = Zend_Ldap_Filter::andFilter(
+                Zend_Ldap_Filter::string($this->_groupBaseFilter),
+                Zend_Ldap_Filter::orFilter(
+                    Zend_Ldap_Filter::equals('memberuid', Zend_Ldap::filterEscape($metaData['uid'][0])),
+                    Zend_Ldap_Filter::equals('member',    Zend_Ldap::filterEscape($metaData['dn']))
+                )
+            );
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' ldap search filter: ' . $filter);
+            
+            $groups = $this->getLdap()->search(
+                $filter, 
+                $this->_options['groupsDn'], 
+                $this->_groupSearchScope, 
+                array('cn', 'description', $this->_groupUUIDAttribute)
+            );
+            
+            $memberships = array();
+            
+            foreach ($groups as $group) {
+                $memberships[] = $group[$this->_groupUUIDAttribute][0];
+            }
+        } else {
+            $memberships = $this->getGroupMemberships($_userId);
+            
+            if (empty($memberships)) {
+                $memberships[] = Tinebase_Group::getInstance()->getDefaultGroup()->getId();
+            }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' group memberships: ' . print_r($memberships, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' group memberships: ' . print_r($memberships, TRUE));
         
         return $memberships;
     }

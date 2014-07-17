@@ -368,7 +368,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         if ($this instanceof Tinebase_Group_Interface_SyncAble) {
             $groupFromSyncBackend = $this->addGroupInSyncBackend($_group);
-            if ($groupFromSyncBackend !== NULL) {
+            
+            if (isset($groupFromSyncBackend->id)) {
                 $_group->setId($groupFromSyncBackend->getId());
             }
         }
