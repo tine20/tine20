@@ -79,16 +79,20 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
      */
     public static function getTableDescriptionFromCache($tableName, $db = NULL)
     {
+        if ($db === NULL) {
+            $db = Tinebase_Core::getDb();
+        }
         try {
-            $tableDescription = new Tinebase_Db_Table(array('name' => $tableName));
+            $config = array(
+                'name' => $tableName,
+                'db'   => $db
+            );
+            $tableDescription = new Tinebase_Db_Table($config);
             $tableInfo = $tableDescription->info();
             $result = $tableInfo['metadata'];
         } catch (Zend_Db_Table_Exception $zdte) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' Could not fetch schema from cache: ' . $zdte->getMessage());
-            if ($db === NULL) {
-                $db = Tinebase_Core::getDb();
-            }
             $result = $db->describeTable($tableName);
         }
         return $result;

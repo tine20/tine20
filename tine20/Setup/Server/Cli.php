@@ -46,13 +46,12 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'uninstall-s'               => 'Uninstall application [All] or comma separated list',
                 'list-s'                    => 'List installed applications',
                 'sync_accounts_from_ldap'   => 'Import user and groups from ldap',
-                'dbmailldap'                => 'Only usable with sync_accounts_from_ldap. Fetches dbmail email user data from LDAP.',
+                    'dbmailldap'            => 'Only usable with sync_accounts_from_ldap. Fetches dbmail email user data from LDAP.',
+                    'onlyusers'             => 'Only usable with sync_accounts_from_ldap. Fetches only users and no groups from LDAP.',
                 'sync_passwords_from_ldap'  => 'Synchronize user passwords from ldap',
                 'egw14import'               => 'Import user and groups from egw14
                          Examples: 
                           setup.php --egw14import /path/to/config.ini'
-                #'username'             => 'Username [required]',
-                #'password'             => 'Password [required]',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -13,10 +13,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_LdapTest::main');
-}
 
 /**
  * Test class for Tinebase_User_Ldap
@@ -36,18 +32,6 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_SqlTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -62,7 +46,7 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
         
         $this->objects['users'] = array();
     }
-
+    
     /**
      * Tears down the fixture
      * This method is called after a test is executed.
@@ -218,14 +202,12 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
     {
         $user = $this->testAddUser();
         
-        
         $this->_backend->setExpiryDate($user, Tinebase_DateTime::now()->subDay(1));
         
         $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
         
         $this->assertEquals('Tinebase_DateTime', get_class($testUser->accountExpires), 'wrong type');
         $this->assertEquals(Tinebase_User::STATUS_EXPIRED, $testUser->accountStatus);
-        
 
         $this->_backend->setExpiryDate($user, NULL);
         

@@ -82,6 +82,9 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
             array(array('field' => ':id', 'operator' => 'equals', 'value' => $contract->getId()))
         )));
 
+        $filterArray = $f->toArray();
+        $this->assertEquals($contract->getId(), $filterArray[0]['value'][0]['value']['id']);
+        
         $result = $this->_timeaccountController->search($f);
         $this->assertEquals(1, $result->count());
         $this->assertEquals('TA1', $result->getFirstRecord()->title);

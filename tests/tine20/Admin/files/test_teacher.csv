@@ -1,0 +1,2 @@
+"objectname","firstname","lastname","password","accountLoginShell","accountHomeDirectory","accountHomeDirectoryPrefix","primary_group_id","additional_groups","homePath","homeDrive","logonScript","profilePath"
+"m.muster","Max","Muster","foo","/bin/false","/storage/lehrer/m.muster","/storage/lehrer/","PRIMARYGROUP","GROUP1, GROUP2","\\\\fileserver\\","U:","lehrer.cmd","\\\\fileserver\\profiles\\"

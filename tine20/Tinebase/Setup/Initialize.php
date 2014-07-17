@@ -116,10 +116,12 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
 
     /**
      * import groups(ldap)/create initial groups(sql)
+     * 
+     * @todo allow to configure if groups should be synced?
      */
     protected function _setupGroups()
     {
-        if (Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
+        if (Tinebase_Group::getInstance() instanceof Tinebase_Group_Interface_SyncAble && ! Tinebase_Group::getInstance()->isDisabledBackend()) {
             Tinebase_Group::syncGroups();
         } else {
             Tinebase_Group::createInitialGroups();

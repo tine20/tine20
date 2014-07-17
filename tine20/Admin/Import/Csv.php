@@ -80,14 +80,19 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' record Data' . print_r($_recordData, true));
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                . ' ' . print_r($record->toArray(), true));
             if (isset($_recordData['smtpUser'])) {
                 $record->smtpUser = new Tinebase_Model_EmailUser($_recordData['smtpUser']);
             }
             if (isset($_recordData['imapUser'])) {
                 $record->imapUser = new Tinebase_Model_EmailUser($_recordData['imapUser']);
             }
+            if (isset($_recordData['samba'])) {
+                $this->_options['samba'] = $_recordData['samba'];
+            }
+            if (isset($_recordData['accountHomeDirectoryPrefix'])) {
+                $this->_options['accountHomeDirectoryPrefix'] = $_recordData['accountHomeDirectoryPrefix'];
+            }
+            
             $password = $record->applyOptionsAndGeneratePassword($this->_options, (isset($_recordData['password'])) ? $_recordData['password'] : NULL);
             Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
             
@@ -106,7 +111,6 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
         } else {
             $record = parent::_importRecord($_record, $_resolveStrategy, $_recordData);
         }
-        
         return $record;
     }
     
@@ -117,6 +121,16 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
                 'emailForwardOnly' => isset($_recordData['emailForwardOnly']) ? $_recordData['emailForwardOnly'] : true,
                 'emailForwards'    => isset($result['emailForwards']) && !empty($result['emailForwards']) ? explode(' ', trim($result['emailForwards'])) : array(),
                 'emailAliases'     => isset($result['emailAliases']) ? explode(' ', trim($result['emailAliases'])) : array()
+                            );
+            $result['groups'] = !empty($result['groups']) ? array_map('trim',explode(",",$result['groups'])) : array();
+            
+            $result['samba'] = array(
+                'homePath'      => (isset($result['homePath'])) ? stripslashes($result['homePath']) : '',
+                'homeDrive'     => (isset($result['homeDrive'])) ? stripslashes($result['homeDrive']) : '',
+                'logonScript'   => (isset($result['logonScript'])) ? $result['logonScript'] : '',
+                'profilePath'   => (isset($result['profilePath'])) ? stripslashes($result['profilePath']) : '',
+                'pwdCanChange'  => isset($result['pwdCanChange'])  ? new Tinebase_DateTime($result['pwdCanChange']) : '',
+                'pwdMustChange' => isset($result['pwdMustChange']) ? new Tinebase_DateTime($result['pwdMustChange']) : ''
                             );
         return $result;
     }

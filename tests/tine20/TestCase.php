@@ -257,4 +257,30 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         
         self::getMailer()->flush();
     }
+    
+    /**
+     * returns the content.xml of an ods document
+     * 
+     * @param string $filename
+     * @return SimpleXMLElement
+     */
+    protected function _getContentXML($filename)
+    {
+        $zipHandler = zip_open($filename);
+        
+        do {
+            $entry = zip_read($zipHandler);
+        } while ($entry && zip_entry_name($entry) != "content.xml");
+        
+        // open entry
+        zip_entry_open($zipHandler, $entry, "r");
+        
+        // read entry
+        $entryContent = zip_entry_read($entry, zip_entry_filesize($entry));
+        
+        $xml = simplexml_load_string($entryContent);
+        zip_close($zipHandler);
+        
+        return $xml;
+    }
 }

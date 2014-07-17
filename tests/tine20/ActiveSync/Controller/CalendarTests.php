@@ -303,7 +303,191 @@ Zeile 3</AirSyncBase:Data>
             <InstanceId>20121125T130000Z</InstanceId>
         </Request>
     </MeetingResponse>';
-    
+
+    protected $_testConcurrentUpdate = '<?xml version="1.0" encoding="utf-8"?>
+    <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+    <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Calendar="uri:Calendar">
+      <Collections>
+        <Collection>
+          <SyncKey>26</SyncKey>
+          <CollectionId>calendar-root</CollectionId>
+          <GetChanges/>
+          <WindowSize>25</WindowSize>
+          <Options>
+            <FilterType>4</FilterType>
+            <BodyPreference xmlns="uri:AirSyncBase">
+              <Type>1</Type>
+              <TruncationSize>32768</TruncationSize>
+            </BodyPreference>
+          </Options>
+          <Commands>
+            <Change>
+              <ServerId>b2cb312482f641185b205591f40f78a47ea9f667</ServerId>
+              <ApplicationData>
+                <Timezone xmlns="uri:Calendar">xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMAAAAAAAAAxP///w==</Timezone>
+                <AllDayEvent xmlns="uri:Calendar">0</AllDayEvent>
+                <BusyStatus xmlns="uri:Calendar">2</BusyStatus>
+                <DtStamp xmlns="uri:Calendar">20131106T072501Z</DtStamp>
+                <EndTime xmlns="uri:Calendar">20140113T140000Z</EndTime>
+                <Sensitivity xmlns="uri:Calendar">0</Sensitivity>
+                <Subject xmlns="uri:Calendar">Mittagspause</Subject>
+                <StartTime xmlns="uri:Calendar">20140113T120000Z</StartTime>
+                <UID xmlns="uri:Calendar">1a5010a3d46316a2709cda40683911f95a856665</UID>
+                <MeetingStatus xmlns="uri:Calendar">1</MeetingStatus>
+                <Attendees xmlns="uri:Calendar">
+                  <Attendee>
+                    <Name>Unittest, Tine</Name>
+                    <Email>unittest@tine20.org</Email>
+                    <AttendeeType>1</AttendeeType>
+                  </Attendee>
+                </Attendees>
+                <Recurrence xmlns="uri:Calendar">
+                  <Type>1</Type>
+                  <Interval>1</Interval>
+                  <DayOfWeek>62</DayOfWeek>
+                  <FirstDayOfWeek>1</FirstDayOfWeek>
+                </Recurrence>
+                <Exceptions xmlns="uri:Calendar">
+                  <Exception>
+                    <Body xmlns="uri:AirSyncBase">
+                      <Type>1</Type>
+                      <Data/>
+                    </Body>
+                    <Deleted>0</Deleted>
+                    <ExceptionStartTime>20141203T120000Z</ExceptionStartTime>
+                    <StartTime>20141203T140000Z</StartTime>
+                    <EndTime>20141203T153000Z</EndTime>
+                    <Subject>Mittagspause</Subject>
+                    <BusyStatus>2</BusyStatus>
+                    <AllDayEvent>0</AllDayEvent>
+                    <Attendees>
+                      <Attendee>
+                        <Name>Unittest, Tine</Name>
+                        <Email>unittest@tine20.org</Email>
+                        <AttendeeType>1</AttendeeType>
+                      </Attendee>
+                    </Attendees>
+                  </Exception>
+                  <Exception>
+                    <Body xmlns="uri:AirSyncBase">
+                      <Type>1</Type>
+                      <Data/>
+                    </Body>
+                    <Deleted>0</Deleted>
+                    <ExceptionStartTime>20140625T110000Z</ExceptionStartTime>
+                    <StartTime>20140625T130000Z</StartTime>
+                    <EndTime>20140625T150000Z</EndTime>
+                    <Subject>Mittagspause</Subject>
+                    <BusyStatus>2</BusyStatus>
+                    <AllDayEvent>0</AllDayEvent>
+                    <Attendees>
+                      <Attendee>
+                        <Name>Unittest, Tine</Name>
+                        <Email>unittest@tine20.org</Email>
+                        <AttendeeType>1</AttendeeType>
+                      </Attendee>
+                    </Attendees>
+                  </Exception>
+                </Exceptions>
+              </ApplicationData>
+            </Change>
+          </Commands>
+        </Collection>
+      </Collections>
+    </Sync>';
+
+    protected $_testConcurrentUpdateUpdate = '<?xml version="1.0" encoding="utf-8"?>
+    <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+    <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Calendar="uri:Calendar">
+      <Collections>
+        <Collection>
+          <SyncKey>26</SyncKey>
+          <CollectionId>calendar-root</CollectionId>
+          <GetChanges/>
+          <WindowSize>25</WindowSize>
+          <Options>
+            <FilterType>4</FilterType>
+            <BodyPreference xmlns="uri:AirSyncBase">
+              <Type>1</Type>
+              <TruncationSize>32768</TruncationSize>
+            </BodyPreference>
+          </Options>
+          <Commands>
+            <Change>
+              <ServerId>b2cb312482f641185b205591f40f78a47ea9f667</ServerId>
+              <ApplicationData>
+                <Timezone xmlns="uri:Calendar">xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMAAAAAAAAAxP///w==</Timezone>
+                <AllDayEvent xmlns="uri:Calendar">0</AllDayEvent>
+                <BusyStatus xmlns="uri:Calendar">2</BusyStatus>
+                <DtStamp xmlns="uri:Calendar">20131106T072501Z</DtStamp>
+                <EndTime xmlns="uri:Calendar">20140113T140000Z</EndTime>
+                <Sensitivity xmlns="uri:Calendar">0</Sensitivity>
+                <Subject xmlns="uri:Calendar">Mittagspause</Subject>
+                <StartTime xmlns="uri:Calendar">20140113T120000Z</StartTime>
+                <UID xmlns="uri:Calendar">1a5010a3d46316a2709cda40683911f95a856665</UID>
+                <MeetingStatus xmlns="uri:Calendar">1</MeetingStatus>
+                <Attendees xmlns="uri:Calendar">
+                  <Attendee>
+                    <Name>Unittest, Tine</Name>
+                    <Email>unittest@tine20.org</Email>
+                    <AttendeeType>1</AttendeeType>
+                  </Attendee>
+                </Attendees>
+                <Recurrence xmlns="uri:Calendar">
+                  <Type>1</Type>
+                  <Interval>1</Interval>
+                  <DayOfWeek>62</DayOfWeek>
+                  <FirstDayOfWeek>1</FirstDayOfWeek>
+                </Recurrence>
+                <Exceptions xmlns="uri:Calendar">
+                  <Exception>
+                    <Body xmlns="uri:AirSyncBase">
+                      <Type>1</Type>
+                      <Data/>
+                    </Body>
+                    <Deleted>0</Deleted>
+                    <ExceptionStartTime>20141203T120000Z</ExceptionStartTime>
+                    <StartTime>20141203T140000Z</StartTime>
+                    <EndTime>20141203T153000Z</EndTime>
+                    <Subject>Mittagspause</Subject>
+                    <BusyStatus>2</BusyStatus>
+                    <AllDayEvent>0</AllDayEvent>
+                    <Attendees>
+                      <Attendee>
+                        <Name>Unittest, Tine</Name>
+                        <Email>unittest@tine20.org</Email>
+                        <AttendeeType>1</AttendeeType>
+                      </Attendee>
+                    </Attendees>
+                  </Exception>
+                  <Exception>
+                    <Body xmlns="uri:AirSyncBase">
+                      <Type>1</Type>
+                      <Data/>
+                    </Body>
+                    <Deleted>0</Deleted>
+                    <ExceptionStartTime>20140625T110000Z</ExceptionStartTime>
+                    <StartTime>20140625T130000Z</StartTime>
+                    <EndTime>20140625T150000Z</EndTime>
+                    <Subject>Abendessen</Subject>
+                    <BusyStatus>2</BusyStatus>
+                    <AllDayEvent>0</AllDayEvent>
+                    <Attendees>
+                      <Attendee>
+                        <Name>Unittest, Tine</Name>
+                        <Email>unittest@tine20.org</Email>
+                        <AttendeeType>1</AttendeeType>
+                      </Attendee>
+                    </Attendees>
+                  </Exception>
+                </Exceptions>
+              </ApplicationData>
+            </Change>
+          </Commands>
+        </Collection>
+      </Collections>
+    </Sync>';
+
     /**
      * Runs the test methods of this class.
      *
@@ -474,6 +658,51 @@ Zeile 3</AirSyncBase:Data>
         return array($serverId, $syncrotonEvent);
     }
     
+    public function testConcurrentUpdate($syncrotonFolder = null)
+    {
+        if ($syncrotonFolder === null) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        
+        $xml = new SimpleXMLElement($this->_testConcurrentUpdate);
+        $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+        
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        
+        // change exception #2
+        $exceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($event);
+        foreach ($exceptions as $exception) {
+            if ($exception->dtstart->toString() == '2014-06-25 13:00:00') {
+                $exception->summary = 'Fruehstueck';
+                Calendar_Controller_Event::getInstance()->update($exceptions[1]);
+            }
+        }
+        
+        $xmlUpdate = new SimpleXMLElement($this->_testConcurrentUpdateUpdate);
+        $syncrotonEvent = new Syncroton_Model_Event($xmlUpdate->Collections->Collection->Commands->Change[0]->ApplicationData);
+
+        $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->creation_time;
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
+        
+        // update exception - should not throw concurrency exception
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
+        
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $exceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($event);
+        
+        foreach ($exceptions as $exception) {
+            if ($exception->dtstart->toString() == '2014-06-25 13:00:00') {
+                $this->assertEquals('Abendessen', $exception->summary, print_r($exceptions[1]->toArray(), true));
+            } else {
+                $this->assertEquals('Mittagspause', $exception->summary, print_r($exceptions[1]->toArray(), true));
+            }
+        }
+    }
+
     public function testCreateEntryOutlook13($syncrotonFolder = null)
     {
         if ($syncrotonFolder === null) {

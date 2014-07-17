@@ -111,9 +111,9 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         parent::__construct($_options);
         
         // get domain sid
-        $this->_domainConfig = $this->_ldap->search(
+        $this->_domainConfig = $this->getLdap()->search(
             'objectClass=domain',
-            $this->_ldap->getFirstNamingContext(),
+            $this->getLdap()->getFirstNamingContext(),
             Zend_Ldap::SEARCH_SCOPE_BASE
         )->getFirst();
         
@@ -163,9 +163,9 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_ldap->add($dn, $ldapData);
+        $this->getLdap()->add($dn, $ldapData);
         
-        $groupId = $this->_ldap->getEntry($dn, array($this->_groupUUIDAttribute));
+        $groupId = $this->getLdap()->getEntry($dn, array($this->_groupUUIDAttribute));
         
         $groupId = $this->_decodeGroupId($groupId[$this->_groupUUIDAttribute][0]);
         
@@ -207,7 +207,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             'member' => $accountMetaData['dn']
         );
         
-        $this->_ldap->addProperty($groupDn, $ldapData);
+        $this->getLdap()->addProperty($groupDn, $ldapData);
     }
     
     /**
@@ -229,7 +229,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' ldap search filter: ' . $filter);
         
-        $memberOfs = $this->_ldap->search(
+        $memberOfs = $this->getLdap()->search(
             $filter, 
             $this->_options['userDn'], 
             $this->_userSearchScope, 
@@ -246,7 +246,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             Zend_Ldap_Filter::equals('objectsid', Zend_Ldap::filterEscape($this->_domainSidPlain . '-' . $memberOfs['primarygroupid'][0]))
         );
         
-        $group = $this->_ldap->search(
+        $group = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 
@@ -267,7 +267,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' ldap search filter: ' . $filter);
             
-            $groups = $this->_ldap->search(
+            $groups = $this->getLdap()->search(
                 $filter, 
                 $this->_options['groupsDn'], 
                 $this->_groupSearchScope, 
@@ -340,7 +340,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         try {
-            $this->_ldap->deleteProperty($groupDn, $ldapData);
+            $this->getLdap()->deleteProperty($groupDn, $ldapData);
         } catch (Zend_Ldap_Exception $zle) {
             if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) 
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " Failed to remove groupmember {$accountMetaData['dn']} from group $groupDn: " . $zle->getMessage());
@@ -364,7 +364,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             Zend_Ldap_Filter::equals('objectsid', $groupSid)
         );
         
-        $groupId = $this->_ldap->search(
+        $groupId = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 
@@ -391,7 +391,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, $this->_encodeGroupId($_uuid))
         );
         
-        $groupData = $this->_ldap->search(
+        $groupData = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 
@@ -416,7 +416,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, $this->_encodeGroupId($_uuid))
         );
         
-        $groupData = $this->_ldap->search(
+        $groupData = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 
@@ -478,7 +478,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_ldap->update($groupMetaData['dn'], $ldapData);
+        $this->getLdap()->update($groupMetaData['dn'], $ldapData);
         
         return $_groupMembers;
     }
@@ -565,7 +565,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $filter: ' . $filter . ' count: ' . count($filterArray));
         
         // fetch all dns at once
-        $accounts = $this->_ldap->search(
+        $accounts = $this->getLdap()->search(
             $filter, 
             $this->_options['userDn'], 
             $this->_userSearchScope, 
@@ -621,7 +621,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             $this->_groupUUIDAttribute, $this->_encodeGroupId($groupId)
         );
         
-        $result = $this->_ldap->search(
+        $result = $this->getLdap()->search(
             $filter, 
             $this->_options['groupsDn'], 
             $this->_groupSearchScope, 

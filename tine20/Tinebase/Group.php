@@ -245,8 +245,26 @@ class Tinebase_Group
     {
         $groupBackend = Tinebase_Group::getInstance();
         
-        $groups = $groupBackend->getGroupsFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
-        
+        if (!$groupBackend->isDisabledBackend()) {
+            $groups = $groupBackend->getGroupsFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL);
+        } else {
+            // fake groups by reading all gidnumber's of the accounts
+            $accountProperties = Tinebase_User::getInstance()->getUserAttributes(array('gidnumber'));
+            
+            $groupIds = array();
+            foreach ($accountProperties as $accountProperty) {
+                $groupIds[$accountProperty['gidnumber']] = $accountProperty['gidnumber'];
+            }
+            
+            $groups = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
+            foreach ($groupIds as $groupId) {
+                $groups->addRecord(new Tinebase_Model_Group(array(
+                    'id'            => $groupId,
+                    'name'          => 'Group ' . $groupId
+                ), TRUE));
+            }
+        }
+            
         foreach ($groups as $group) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                 ' Sync group: ' . $group->name . ' - update or create group in local sql backend');

@@ -228,6 +228,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     protected function _setStructure($structure)
     {
+        if (! empty($structure['partId'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                . ' Don\'t cache structure of subparts');
+            return;
+        }
+        
         $cacheId = $this->_getStructureCacheId();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Caching message structure: ' . $cacheId);

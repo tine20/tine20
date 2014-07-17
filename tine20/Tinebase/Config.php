@@ -129,6 +129,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const MAPPANEL = 'mapPanel';
+
+    /**
+     * disable ldap certificate check
+     *
+     * @var string
+     */
+    const LDAP_DISABLE_TLSREQCERT = 'ldapDisableTlsReqCert';
     
     /**
      * Config key for session ip validation -> if this is set to FALSE no Zend_Session_Validator_IpAddress is registered
@@ -431,6 +438,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::LDAP_DISABLE_TLSREQCERT => array(
+                                   //_('Disable LDAP TLS Certificate Check')
+            'label'                 => 'Disable LDAP TLS Certificate Check',
+                                   //_('LDAP TLS Certificate should not be checked')
+            'description'           => 'LDAP TLS Certificate should not be checked',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => false
         ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')

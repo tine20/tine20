@@ -520,6 +520,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
             $data->copyFieldsFromParent();
         }
         
+        // Update seq to entries seq to prevent concurrent update
+        $event->seq = $entry['seq'];
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . " Event before mapping: " . print_r($event->toArray(), true));
         
@@ -582,7 +585,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
                     
                     break;
-                    
+
                 case 'exdate':
                     // handle exceptions from recurrence
                     $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -590,7 +593,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     foreach ($data->$syncrotonProperty as $exception) {
                         if ($exception->deleted == 0) {
                             $eventException = $this->toTineModel($exception);
-                            $eventException->last_modified_time = $this->_syncTimeStamp;
+                            $eventException->last_modified_time = new Tinebase_DateTime($this->_syncTimeStamp);
                             $eventException->recurid            = new Tinebase_DateTime($exception->exceptionStartTime);
                             $eventException->is_deleted         = false;
                         } else {
@@ -600,8 +603,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                             ));
                         }
                         
+                        $eventException->seq = $entry['seq'];
                         $exdates->addRecord($eventException);
                     }
+                    
                     $event->$tine20Property = $exdates;
                     
                     break;

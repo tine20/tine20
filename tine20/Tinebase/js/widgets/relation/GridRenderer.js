@@ -48,7 +48,12 @@ Ext.extend(Tine.widgets.relation.GridRenderer, Ext.Component, {
         }
         
         if (! this.recordClass) {
-             this.recordClass = Tine[this.foreignApp].Model[this.foreignModel];
+            if (! Tine[this.foreignApp]) {
+                Tine.log.warn('Tine.widgets.relation.GridRenderer::render - ForeignApp not found: ' + this.foreignApp);
+                return '';
+            }
+            
+            this.recordClass = Tine[this.foreignApp].Model[this.foreignModel];
         }
         
         for (var index = 0; index < relations.length; index++) {

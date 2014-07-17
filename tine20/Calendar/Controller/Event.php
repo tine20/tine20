@@ -1131,10 +1131,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function getRecurBaseEvent($_event)
     {
-        $baseEventId = array_value(0, $this->_backend->search(new Calendar_Model_EventFilter(array(
+        $possibleBaseEventIds = $this->_backend->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals', 'value' => $_event->uid),
             array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
-        )), NULL, TRUE));
+        )), NULL, TRUE);
+        
+        if (count($possibleBaseEventIds) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                ' Got multiple possible base events: ' . print_r($possibleBaseEventIds, true));
+        }
+        $baseEventId = array_value(0, $possibleBaseEventIds);
         
         if (! $baseEventId) {
             throw new Tinebase_Exception_NotFound('base event of a recurring series not found');

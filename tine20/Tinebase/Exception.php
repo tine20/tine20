@@ -104,7 +104,8 @@ class Tinebase_Exception extends Exception
             
             if ($suppressTrace === null) {
                 try {
-                    $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
+                    $config = Tinebase_Core::getConfig();
+                    $suppressTrace = (isset($config->suppressExceptionTraces)) ? $config->suppressExceptionTraces : true;
                 } catch (Exception $e) {
                     // catch all config exceptions here
                     $suppressTrace = true;
