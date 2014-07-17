@@ -36,7 +36,7 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
     protected $_doContainerACLChecks = FALSE;
 
     /**
-     * do right checks - can be enabled/disabled by _setRightChecks
+     * do right checks - can be enabled/disabled by doRightChecks
      * 
      * @var boolean
      */
@@ -95,6 +95,7 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
         if (self::$_instance === NULL) {
             self::$_instance = new Tinebase_PersistentFilter();
         }
+        
         return self::$_instance;
     }
     

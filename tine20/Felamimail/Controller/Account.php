@@ -461,9 +461,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $account->password = $_password;
         
         // update account
-        $this->_setRightChecks(FALSE);
+        $this->doRightChecks(FALSE);
         $this->update($account);
-        $this->_setRightChecks(TRUE);
+        $this->doRightChecks(TRUE);
         
         return TRUE;
     }

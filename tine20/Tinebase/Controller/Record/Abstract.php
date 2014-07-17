@@ -47,7 +47,7 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_doContainerACLChecks = TRUE;
 
     /**
-     * do right checks - can be enabled/disabled by _setRightChecks
+     * do right checks - can be enabled/disabled by doRightChecks
      *
      * @var boolean
      */
@@ -1725,17 +1725,6 @@ abstract class Tinebase_Controller_Record_Abstract
         );
 
         Tinebase_Alarm::getInstance()->deleteAlarmsOfRecord($this->_modelName, $_recordIds);
-    }
-
-    /**
-     * enable / disable right checks
-     *
-     * @param boolean $_value
-     * @return void
-     */
-    protected function _setRightChecks($_value)
-    {
-        $this->_doRightChecks = (bool) $_value;
     }
 
     /**
