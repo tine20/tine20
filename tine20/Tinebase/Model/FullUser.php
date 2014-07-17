@@ -94,7 +94,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             $this->accountLoginName = Tinebase_User::getInstance()->generateUserName($this, (isset($options['userNameSchema'])) ? $options['userNameSchema'] : 1);
         }
         
-        if (! isset($this->accountPrimaryGroup)) {
+        if (empty($this->accountPrimaryGroup)) {
             if (! empty($options['group_id'])) {
                 $groupId = $options['group_id'];
             } else {
