@@ -40,7 +40,7 @@ class Tinebase_Department extends Tinebase_Controller_Record_Abstract
     protected $_doContainerACLChecks = false;
 
     /**
-     * do right checks - can be enabled/disabled by _setRightChecks
+     * do right checks - can be enabled/disabled by doRightChecks
      * 
      * @var boolean
      */

@@ -29,7 +29,7 @@ class Sales_Controller_Division extends Tinebase_Controller_Record_Abstract
     protected $_doContainerACLChecks = FALSE;
 
     /**
-     * do right checks - can be enabled/disabled by _setRightChecks
+     * do right checks - can be enabled/disabled by doRightChecks
      *
      * @var boolean
      */
