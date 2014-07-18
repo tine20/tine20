@@ -52,7 +52,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                         exit;
                     }
                 } else {
-                    Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " forbidden CORS request from {$_SERVER['HTTP_ORIGIN']}");
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " forbidden CORS request from {$_SERVER['HTTP_ORIGIN']}");
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " you may want to set \"'allowedJsonOrigins' => array('{$parsedUrl['host']}'),\" to config.inc.php");
                     Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " allowed origins: " . print_r($allowedOrigins, TRUE));
                     header("HTTP/1.1 403 Access Forbidden");
                     exit;
