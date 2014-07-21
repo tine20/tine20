@@ -133,12 +133,12 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 return this.getAt(index);
             },
             getFirstDay: function() {
-                this.sort({field: 'date', direction: 'ASC'});
+                this.sort('date', 'ASC');
                 return this.getAt(0);
             },
             
             getLastDay: function() {
-                this.sort({field: 'date', direction: 'ASC'});
+                this.sort('date', 'ASC');
                 return this.getAt(this.getCount() - 1);
             }
         }, this);

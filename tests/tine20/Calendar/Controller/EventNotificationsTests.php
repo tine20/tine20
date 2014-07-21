@@ -51,6 +51,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_notificationController = Calendar_Controller_EventNotifications::getInstance();
         
         $this->_setupPreferences();
+        
+        Calendar_Config::getInstance()->set(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM, /* last 10 years */ 52 * 10);
     }
     
     /**
@@ -66,6 +68,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
             $this->_emailTestClass->tearDown();
         }
+        
+        Calendar_Config::getInstance()->set(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM, /* last week */ 1);
     }
     
     /**
@@ -345,7 +349,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_eventController->createRecurException($recurSet[6], FALSE, FALSE); //2012-03-21
         $this->_assertMail('jmcblack', 'reschedule');
         
-        // cancle thisandfuture
+        // cancel thisandfuture
         // @TODO check RANGE in ics
         // @TODO add RANGE text to message
         self::flushMailer();
@@ -360,13 +364,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $updatedBaseEvent->summary = 'update first occurence';
         $this->_eventController->createRecurException($updatedBaseEvent, FALSE, FALSE); // 2012-03-14
         $this->_assertMail('jmcblack', 'has been updated');
-        
-        // update thisandfuture
-        
-        // reschedule thisandfuture
-        
-        
     }
+    
     public function testAttendeeAlarmSkip()
     {
         $event = $this->_getEvent();
@@ -969,14 +968,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testPutEventExceptionAlarmReminder()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
-    
-        // create recurring event
-        self::flushMailer();
-        $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../Import/files/apple_ical_remind_part1.ics');
-        $id = Tinebase_Record_Abstract::generateUID();
-        $event = Calendar_Frontend_WebDAV_Event::create($this->_getTestCalendar(), "$id.ics", $vcalendar);
-    
+        $event = $this->_createRecurringCalDavEvent();
         $messages = self::getMessages();
         $this->assertEquals(1, count($messages), 'one invitation should be send to sclever');
         $this->_assertMail('sclever', 'invitation');
@@ -989,6 +981,36 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert no reschedule mail
         $messages = Calendar_Controller_EventNotificationsTests::getMessages();
         $this->assertEquals(0, count($messages), 'no reschedule mails should be send for implicit exception');
+    }
+    
+    /**
+     * createRecurringCalDavEvent
+     * 
+     * @return Calendar_Frontend_WebDAV_Event
+     */
+    protected function _createRecurringCalDavEvent()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
+        
+        self::flushMailer();
+        $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../Import/files/apple_ical_remind_part1.ics');
+        $id = Tinebase_Record_Abstract::generateUID();
+        $event = Calendar_Frontend_WebDAV_Event::create($this->_getTestCalendar(), "$id.ics", $vcalendar);
+        
+        return $event;
+    }
+    
+    /**
+     * testNotificationPeriodConfig
+     * 
+     * @see 0010048: config for notifications for past events
+     */
+    public function testNotificationPeriodConfig()
+    {
+        Calendar_Config::getInstance()->set(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM, /* last week */ 1);
+        $event = $this->_createRecurringCalDavEvent();
+        $messages = self::getMessages();
+        $this->assertEquals(0, count($messages), 'no invitation should be send to sclever');
     }
     
     /**

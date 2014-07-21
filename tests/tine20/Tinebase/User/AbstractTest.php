@@ -90,6 +90,40 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
         $this->_uit->deleteUsers($createdUserIds);
     }
     
+    /**
+     * test User with the same Name
+     * Suffix for accountLoginName and accountFullName
+     */
+    public function testDoubleUserNames()
+    {
+        $user1 = new Tinebase_Model_FullUser(array(
+            'accountFirstName' => 'Leonie',
+            'accountLastName'  => 'Weiss',
+            'accountPrimaryGroup' => Tinebase_Core::getUser()->accountPrimaryGroup
+        ), true);
+        $user1->accountLoginName = $this->_uit->generateUserName($user1);
+        $user1->accountFullName = $this->_uit->generateAccountFullName($user1);
+        $this->_uit->addUser($user1);
+        
+        $user2 = new Tinebase_Model_FullUser(array(
+            'accountFirstName' => 'Leonie',
+            'accountLastName'  => 'Weiss',
+            'accountPrimaryGroup' => Tinebase_Core::getUser()->accountPrimaryGroup
+        ), true);
+        $user2->accountLoginName = $this->_uit->generateUserName($user2);
+        $user2->accountFullName = $this->_uit->generateAccountFullName($user2);
+        $this->_uit->addUser($user2);
+        
+        $this->assertEquals('weissle', $user1->accountLoginName);
+        $this->assertEquals('weissle00', $user2->accountLoginName);
+        
+        $this->assertEquals('Leonie Weiss', $user1->accountFullName);
+        $this->assertEquals('Leonie Weiss00', $user2->accountFullName);
+        
+        $this->_uit->deleteUser($user1->getId());
+        $this->_uit->deleteUser($user2->getId());
+    }
+    
     public function testCachePassword()
     {
         //Tinebase_User::getInstance()->cachePassword('secret');

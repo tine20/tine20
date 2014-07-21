@@ -32,7 +32,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Sales', '8.1');
     }
-
+    
     /**
      * update to 8.2
      *   - add modlog to costcenter model
@@ -354,5 +354,24 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         }
         
         $this->setApplicationVersion('Sales', '8.4');
+    }
+    
+    /**
+     * update to 8.5
+     * - update 256 char fields
+     * 
+     * @see 0008070: check index lengths
+     */
+    public function update_4()
+    {
+        $columns = array("sales_contracts" => array(
+                    "title" => "true",
+                    "cleared_in" => "false"
+                    )
+                );
+        
+        $this->truncateTextColumn($columns, 255);
+        $this->setTableVersion('sales_contracts', 6);
+        $this->setApplicationVersion('Sales', '8.5');
     }
 }

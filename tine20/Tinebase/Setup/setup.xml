@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>8.2</version>
+    <version>8.3</version>
     <tables>
         <table>
             <name>applications</name>
@@ -206,7 +206,7 @@
 
         <table>
             <name>accounts</name>
-            <version>9</version>
+            <version>10</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -235,7 +235,7 @@
                 <field>
                     <name>home_dir</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -439,7 +439,7 @@
         </table>
         <table>
             <name>container</name>
-            <version>8</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -449,7 +449,7 @@
                 <field>
                     <name>name</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -1170,7 +1170,7 @@
 
         <table>
             <name>tags</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1192,13 +1192,13 @@
                 <field>
                     <name>name</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                     <default>NULL</default>
                 </field>
                 <field>
                     <name>description</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                     <default>NULL</default>
                 </field>
                 <field>
@@ -2080,7 +2080,7 @@
         </table>
         <table>
             <name>note_types</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2097,13 +2097,13 @@
                 <field>
                     <name>description</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                     <default>NULL</default>
                 </field>
                 <field>
                     <name>icon</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

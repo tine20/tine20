@@ -44,6 +44,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const MAX_FILTER_PERIOD_CALDAV = 'maxfilterperiodcaldav';
     
     /**
+     * MAX_NOTIFICATION_PERIOD_FROM
+     * 
+     * @var string
+     */
+    const MAX_NOTIFICATION_PERIOD_FROM = 'maxnotificationperiodfrom';
+    
+    /**
      * MAX_JSON_DEFAULT_FILTER_PERIOD_FROM
      * 
      * @var string
@@ -102,6 +109,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => 2,
+        ),
+        self::MAX_NOTIFICATION_PERIOD_FROM => array(
+        //_('Timeslot for event notifications')
+            'label'                 => 'Timeslot for event notifications',
+        //_('For how long in the past (in weeks) event notifications should be sent.')
+            'description'           => 'For how long in the past (in weeks) event notifications should be sent.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => 1, // 1 week is default
         ),
         self::MAX_JSON_DEFAULT_FILTER_PERIOD_FROM => array(
         //_('Default filter period (from) for events fetched via JSON API')

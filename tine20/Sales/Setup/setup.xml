@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>8.4</version>
+    <version>8.5</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -83,7 +83,7 @@
                 <field>
                     <name>title</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

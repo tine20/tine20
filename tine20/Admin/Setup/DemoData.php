@@ -253,13 +253,13 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 (isset(Tinebase_Config::getInstance()->login->password) ? Tinebase_Config::getInstance()->login->password :
             // use static password
                 static::$_defaultPassword);
-        if (empty($password)) {
-            // disable user if empty password
-            $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
-            Tinebase_User::getInstance()->updateUser($user);
-        } else {
-            Tinebase_User::getInstance()->setPassword($user, $password);
+        if (! $password || empty($password)) {
+            // set random password
+            $password = Tinebase_Record_Abstract::generateUID(12);
+            echo "\033[33mUser \"" . $user->accountDisplayName . "\" got a random password: \"" . $password . "\"\033[0m" . PHP_EOL;
         }
+        
+        Tinebase_User::getInstance()->setPassword($user, $password);
     }
     
     /**

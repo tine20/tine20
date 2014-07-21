@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>8.2</version>
+    <version>8.3</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>19</version>
+            <version>20</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -29,12 +29,12 @@
                 <field>
                     <name>name</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>host</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>credentials_id</name>
@@ -44,17 +44,17 @@
                 <field>
                     <name>email</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>from</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>organization</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>port</name>
@@ -69,22 +69,22 @@
                 <field>
                     <name>sent_folder</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>trash_folder</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>drafts_folder</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>templates_folder</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>has_children_support</name>
@@ -105,17 +105,17 @@
                 <field>
                     <name>ns_personal</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>ns_other</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>ns_shared</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>signature</name>
@@ -130,7 +130,7 @@
                 <field>
                     <name>smtp_hostname</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>smtp_port</name>
@@ -156,7 +156,7 @@
                 <field>
                     <name>sieve_hostname</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>sieve_port</name>
@@ -239,7 +239,7 @@
         </table>
         <table>
             <name>felamimail_folder</name>
-            <version>13</version>
+            <version>14</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -256,7 +256,7 @@
                 <field>
                     <name>localname</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>globalname</name>
@@ -265,7 +265,7 @@
                 <field>
                     <name>parent</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>delimiter</name>
@@ -379,7 +379,7 @@
         </table>
         <table>
             <name>felamimail_cache_message</name>
-            <version>8</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -411,27 +411,27 @@
                 <field>
                     <name>content_type</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>body_content_type</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>from_email</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>from_name</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>sender</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>has_attachment</name>
@@ -565,7 +565,7 @@
         </table>
         <table>
             <name>felamimail_cache_message_to</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>message_id</name>
@@ -576,12 +576,12 @@
                 <field>
                     <name>name</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>email</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <index>
                     <name>to::message_id--message::id</name>
@@ -600,7 +600,7 @@
         </table>
         <table>
             <name>felamimail_cache_message_cc</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>message_id</name>
@@ -611,12 +611,12 @@
                 <field>
                     <name>name</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>email</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <index>
                     <name>cc::message_id--message::id</name>
@@ -635,7 +635,7 @@
         </table>
         <table>
             <name>felamimail_cache_message_bcc</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>message_id</name>
@@ -646,12 +646,12 @@
                 <field>
                     <name>name</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>email</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <index>
                     <name>bcc::message_id--message::id</name>
@@ -692,12 +692,12 @@
                 <field>
                     <name>action_type</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>action_argument</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>conditions</name>
@@ -723,7 +723,7 @@
         </table>
         <table>
             <name>felamimail_sieve_vacation</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -740,17 +740,17 @@
                 <field>
                     <name>subject</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>from</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>mime</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>days</name>

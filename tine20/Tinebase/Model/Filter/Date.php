@@ -105,7 +105,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting "within" filter: ' . $_value);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Timezone: ' . date_default_timezone_get());
             
-            $date = new Tinebase_DateTime();
+            $date = $this->_getDate(NULL, TRUE);
             
             // special values like this week, ...
             switch($_value) {
@@ -228,7 +228,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                 /******* try to create datetime from value string *********/
                 default:
                     try {
-                        $date = new Tinebase_DateTime($_value);
+                        $date = $this->_getDate($_value, TRUE);
+                        
                         $value = array(
                             $date->toString($this->_dateFormat),
                             $date->toString($this->_dateFormat),
@@ -240,7 +241,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     }
             }
         } elseif ($_operator === 'inweek') {
-            $date = new Tinebase_DateTime();
+            $date = $this->_getDate(NULL, TRUE);
             
             if ($_value > 52) {
                 $_value = 52;
@@ -301,5 +302,26 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         $result = ($weekInfo['firstDay'] == 'sun') ? 0 : 1;
         
         return $result;
+    }
+    
+    /**
+     * returns the current date if no $date string is given (needed for mocking only)
+     * 
+     * @param string $date
+     * @param boolean $usertimezone
+     */
+    protected function _getDate($date = NULL, $usertimezone = FALSE)
+    {
+        if (! $date) {
+            $date = Tinebase_DateTime::now();
+        } else {
+            $date = new Tinebase_DateTime($date);
+        }
+        
+        if ($usertimezone) {
+            $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        }
+        
+        return $date;
     }
 }

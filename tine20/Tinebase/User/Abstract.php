@@ -350,11 +350,23 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
                 $userName = strtolower(replaceSpecialChars(substr($_account->accountLastName, 0, 10)));
             }
         }
-        $userName = $this->_addSuffixToUsernameIfExists($userName);
+        $userName = $this->_addSuffixToNameIfExists('accountLoginName', $userName);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
         
         return $userName;
+    }
+    
+    /**
+     * Full name generation for user with the same name
+     * this is needed for active directory because accountFullName is used for the dn
+     *
+     * @param Tinebase_Model_FullUser $_account
+     * @return string
+     */
+    public function generateAccountFullName($_account)
+    {
+        return $this->_addSuffixToNameIfExists('accountFullName', $_account->accountFullName);
     }
     
     /**
@@ -381,7 +393,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         for ($i=0; $i < strlen($_account->accountFirstName); $i++) {
         
             $userName = strtolower(replaceSpecialChars(substr($_account->accountFirstName, 0, $i+1) . $_account->accountLastName));
-            if (! $this->userNameExists($userName)) {
+            if (! $this->nameExists('accountLoginName', $userName)) {
                 $result = $userName;
                 break;
             }
@@ -402,7 +414,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         for ($i=0; $i < strlen($_account->accountFirstName); $i++) {
         
             $userName = strtolower(replaceSpecialChars(substr($_account->accountFirstName, 0, $i+1) . '.' . $_account->accountLastName));
-            if (! $this->userNameExists($userName)) {
+            if (! $this->nameExists('accountLoginName', $userName)) {
                 $result = $userName;
                 break;
             }
@@ -412,22 +424,23 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     }
     
     /**
-     * add a suffix to username if it already exists
+     * add a suffix to username and AccountFullName
      * 
-     * @param string $_userName
+     * @param string $_property
+     * @param string $_name
      * @return string
      */
-    protected function _addSuffixToUsernameIfExists($_userName)
+    protected function _addSuffixToNameIfExists($_property, $_name)
     {
-        $result = $_userName;
-        if ($this->userNameExists($_userName)) {
+        $result = $_name;
+        if ($this->nameExists($_property, $_name)) {
             $numSuffix = 0;
         
             while ($numSuffix < 100) {
                 $suffix = sprintf('%02d', $numSuffix);
         
-                if (! $this->userNameExists($_userName . $suffix)) {
-                    $result = $_userName . $suffix;
+                if (! $this->nameExists($_property, $_name . $suffix)) {
+                    $result = $_name . $suffix;
                     break;
                 }
         
@@ -506,18 +519,19 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     }
     
     /**
-     * checks if username already exists
+     * checks if accountLoginName/accountFullName already exists
      *
-     * @param   string  $_username
+     * @param   string  $_property
+     * @param   string  $_value
      * @return  bool    
      * 
      */
-    public function userNameExists($_username)
+    public function nameExists($_property, $_value)
     {
         try {
-            $this->getUserByLoginName($_username)->getId();
+            $this->getUserByProperty($_property, $_value)->getId();
         } catch (Tinebase_Exception_NotFound $e) {
-            // username not found
+            // username or full name not found
             return false;
         }
         

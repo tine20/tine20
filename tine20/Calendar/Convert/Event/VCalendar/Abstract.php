@@ -912,73 +912,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     break;
                     
                 case 'VALARM':
-                    foreach ($property as $valarm) {
-                        
-                        if ($valarm->ACTION == 'NONE') {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                                . ' We can\'t cope with action NONE: iCal 6.0 sends default alarms in the year 1976 with action NONE. Skipping alarm.');
-                            continue;
-                        }
-                        
-                        # TRIGGER:-PT15M
-                        if (is_string($valarm->TRIGGER->getValue()) && $valarm->TRIGGER instanceof Sabre\VObject\Property\ICalendar\Duration) {
-                            $valarm->TRIGGER->add('VALUE', 'DURATION');
-                        }
-                        
-                        $trigger = is_object($valarm->TRIGGER['VALUE']) ? $valarm->TRIGGER['VALUE'] : (is_object($valarm->TRIGGER['RELATED']) ? $valarm->TRIGGER['RELATED'] : NULL);
-                        
-                        if ($trigger === NULL) {
-                            // added Trigger/Related for eM Client alarms
-                            // 2014-01-03 - Bullshit, why don't we have testdata for emclient alarms?
-                            //              this alarm handling should be refactored, the logic is scrambled
-                            // @see 0006110: handle iMIP messages from outlook
-                            // @todo fix 0007446: handle broken alarm in outlook invitation message
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                                . ' Alarm has no TRIGGER value. Skipping it.');
-                            continue;
-                        }
-                        
-                        switch (strtoupper($trigger->getValue())) {
-                            # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
-                            case 'DATE-TIME':
-                                $alarmTime = new Tinebase_DateTime($valarm->TRIGGER->getValue());
-                                $alarmTime->setTimezone('UTC');
-                                
-                                $alarm = new Tinebase_Model_Alarm(array(
-                                    'alarm_time'        => $alarmTime,
-                                    'minutes_before'    => 'custom',
-                                    'model'             => 'Calendar_Model_Event'
-                                ));
-                                
-                                break;
-                                
-                            # TRIGGER;VALUE=DURATION:-PT1H15M
-                            case 'DURATION':
-                            default:
-                                $alarmTime = $this->_convertToTinebaseDateTime($vevent->DTSTART);
-                                $alarmTime->setTimezone('UTC');
-                                
-                                preg_match('/(?P<invert>[+-]?)(?P<spec>P.*)/', $valarm->TRIGGER->getValue(), $matches);
-                                $duration = new DateInterval($matches['spec']);
-                                $duration->invert = !!($matches['invert'] === '-');
-
-                                $alarm = new Tinebase_Model_Alarm(array(
-                                    'alarm_time'        => $alarmTime->add($duration),
-                                    'minutes_before'    => ($duration->format('%d') * 60 * 24) + ($duration->format('%h') * 60) + ($duration->format('%i')),
-                                    'model'             => 'Calendar_Model_Event'
-                                ));
-                                
-                                break;
-                        }
-                        
-                        if ($valarm->ACKNOWLEDGED) {
-                            $dtack = $valarm->ACKNOWLEDGED->getDateTime();
-                            Calendar_Controller_Alarm::setAcknowledgeTime($alarm, $dtack);
-                        }
-                        
-                        $event->alarms->addRecord($alarm);
-                    }
-                    
+                    $this->_parseAlarm($event, $property, $vevent);
                     break;
                     
                 case 'CATEGORIES':
@@ -1030,6 +964,85 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         // convert all datetime fields to UTC
         $event->setTimezone('UTC');
+    }
+    
+    /**
+     * parse valarm properties
+     * 
+     * @param Calendar_Model_Event $event
+     * @param unknown $valarms
+     * @param \Sabre\VObject\Component\VEvent $vevent
+     */
+    protected function _parseAlarm(Calendar_Model_Event $event, $valarms, \Sabre\VObject\Component\VEvent $vevent)
+    {
+        foreach ($valarms as $valarm) {
+            
+            if ($valarm->ACTION == 'NONE') {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' We can\'t cope with action NONE: iCal 6.0 sends default alarms in the year 1976 with action NONE. Skipping alarm.');
+                continue;
+            }
+        
+            # TRIGGER:-PT15M
+            if (is_string($valarm->TRIGGER->getValue()) && $valarm->TRIGGER instanceof Sabre\VObject\Property\ICalendar\Duration) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Adding DURATION trigger value for ' . $valarm->TRIGGER->getValue());
+                $valarm->TRIGGER->add('VALUE', 'DURATION');
+            }
+            
+            $trigger = is_object($valarm->TRIGGER['VALUE']) ? $valarm->TRIGGER['VALUE'] : (is_object($valarm->TRIGGER['RELATED']) ? $valarm->TRIGGER['RELATED'] : NULL);
+            
+            if ($trigger === NULL) {
+                // added Trigger/Related for eM Client alarms
+                // 2014-01-03 - Bullshit, why don't we have testdata for emclient alarms?
+                        //              this alarm handling should be refactored, the logic is scrambled
+                // @see 0006110: handle iMIP messages from outlook
+                // @todo fix 0007446: handle broken alarm in outlook invitation message
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Alarm has no TRIGGER value. Skipping it.');
+                continue;
+            }
+            
+            switch (strtoupper($trigger->getValue())) {
+                # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
+                case 'DATE-TIME':
+                    $alarmTime = new Tinebase_DateTime($valarm->TRIGGER->getValue());
+                    $alarmTime->setTimezone('UTC');
+                    
+                    $alarm = new Tinebase_Model_Alarm(array(
+                        'alarm_time'        => $alarmTime,
+                        'minutes_before'    => 'custom',
+                        'model'             => 'Calendar_Model_Event'
+                    ));
+                    
+                    break;
+                
+                # TRIGGER;VALUE=DURATION:-PT1H15M
+                case 'DURATION':
+                default:
+                    $alarmTime = $this->_convertToTinebaseDateTime($vevent->DTSTART);
+                    $alarmTime->setTimezone('UTC');
+                    
+                    preg_match('/(?P<invert>[+-]?)(?P<spec>P.*)/', $valarm->TRIGGER->getValue(), $matches);
+                    $duration = new DateInterval($matches['spec']);
+                    $duration->invert = !!($matches['invert'] === '-');
+                    
+                    $alarm = new Tinebase_Model_Alarm(array(
+                        'alarm_time'        => $alarmTime->add($duration),
+                        'minutes_before'    => ($duration->format('%d') * 60 * 24) + ($duration->format('%h') * 60) + ($duration->format('%i')),
+                        'model'             => 'Calendar_Model_Event'
+                    ));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' Adding DURATION alarm ' . print_r($alarm->toArray(), true));
+            }
+            
+            if ($valarm->ACKNOWLEDGED) {
+                $dtack = $valarm->ACKNOWLEDGED->getDateTime();
+                Calendar_Controller_Alarm::setAcknowledgeTime($alarm, $dtack);
+            }
+            
+            $event->alarms->addRecord($alarm);
+        }
     }
     
     /**

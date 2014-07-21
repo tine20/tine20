@@ -275,3 +275,14 @@ msgstr ""
 #: Controller/Task.php:202
 msgid "Notification for Task "
 msgstr ""
+
+
+#: Controller/Task.php:202
+msgid "Notification for Task "
+msgstr ""
+#: Controller/Task.php:202
+msgid "Notification for Task "
+msgstr ""
+
+msgid "Add New Task"
+msgstr ""

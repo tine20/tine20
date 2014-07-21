@@ -50,6 +50,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     protected function setUp()
     {
+        Calendar_Controller_Event::getInstance()->sendNotifications(false);
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
 
@@ -628,5 +629,25 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event = $this->_converter->toTine20Model($vcalendarStream);
         
         $this->assertEquals('meeting Philipp / Lars', $event->summary, print_r($event->toArray(), true));
+    }
+
+    /**
+     * testConvertWithInvalidAlarmTime
+     * 
+     * @see 0010058: vevent with lots of exdates leads alarm saving failure
+     */
+    public function testConvertWithInvalidAlarmTime()
+    {
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/invalid_alarm_time.ics', 'r');
+        
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        
+        $event = $this->_converter->toTine20Model($vcalendarStream);
+        
+        // try to save event
+        $savedEvent = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+        
+        $this->assertEquals(104, count($savedEvent->exdate), print_r($savedEvent->toArray(), true));
+        $this->assertEquals(2, count($savedEvent->alarms), print_r($savedEvent->toArray(), true));
     }
 }

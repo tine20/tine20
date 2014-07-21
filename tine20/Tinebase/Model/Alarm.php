@@ -121,19 +121,22 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      */
     public function setMinutesBefore(DateTime $_date)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Current alarm: ' . print_r($this->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Date: ' . $_date);
         
         if ($this->getOption(self::OPTION_CUSTOM) !== TRUE) {
             $dtStartTS = $_date->getTimestamp();
             $alarmTimeTS = $this->alarm_time->getTimestamp();
-            
             $this->minutes_before = $dtStartTS < $alarmTimeTS ? 0 : round(($dtStartTS - $alarmTimeTS) / 60);
+            
         } else {
             $this->minutes_before = self::OPTION_CUSTOM;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Result: ' . $this->minutes_before);
+            . ' Resulting minutes_before: ' . $this->minutes_before);
     }
     
     /**

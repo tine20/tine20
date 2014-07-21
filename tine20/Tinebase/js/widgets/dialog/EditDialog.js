@@ -322,14 +322,31 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.initRecord();
         // get items for this dialog
         this.items = this.getFormItems();
+        
         // init relations panel if relations are defined
         this.initRelationsPanel();
         // init attachments panel
         this.initAttachmentsPanel();
 
         Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
+        
         // set fields readOnly if set
         this.fixFields();
+        
+        // firefox fix: blur each item before tab changes, so no field  will be focused afterwards
+        if (Ext.isGecko) {
+            this.items.items[0].addListener('beforetabchange', function(tabpanel, newtab, oldtab) {
+                if (! oldtab) {
+                    return;
+                }
+                var form = this.getForm();
+                
+                if (form && form.hasOwnProperty('items'))
+                    form.items.each(function(item, index) {
+                        item.blur();
+                    });
+            }, this);
+        }
     },
 
     /**

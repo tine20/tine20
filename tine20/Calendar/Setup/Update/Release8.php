@@ -80,7 +80,6 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         )->fetchAll(Zend_Db::FETCH_ASSOC);
         
         foreach ($eventIds as $eventId) {
-
             $event = $eventBE->get($eventId['id']);
             $event->organizer = (string) Tinebase_User::getInstance()->getFullUserById($event->created_by)->contact_id;
             

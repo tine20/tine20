@@ -281,3 +281,6 @@ msgstr "Angelegt von"
 #: Controller/Task.php:202
 msgid "Notification for Task "
 msgstr "Benachrichtigung für Aufgabe "
+
+msgid "Add New Task"
+msgstr "Neue Aufgabe hinzufügen"
