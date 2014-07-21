@@ -184,11 +184,13 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     items: [[{
                         fieldLabel: this.app.i18n._('Number'),
                         name: 'number',
-                        allowBlank: false
+                        allowBlank: false,
+                        maxLength: 127
                         }, {
                         columnWidth: .666,
                         fieldLabel: this.app.i18n._('Title'),
                         name: 'title',
+                        maxLength: 255,
                         allowBlank: false
                         }], [{
                         columnWidth: 1,
