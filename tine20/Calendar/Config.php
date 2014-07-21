@@ -35,7 +35,14 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const ATTENDEE_ROLES = 'attendeeRoles';
-    
+
+    /**
+     * Crop days view
+     *
+     * @var string
+     */
+    const CROP_DAYS_VIEW = 'daysviewcroptime';
+
     /**
      * MAX_FILTER_PERIOD_CALDAV
      * 
@@ -76,7 +83,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'description'           => 'Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar.',
             'type'                  => 'array',
             'contents'              => 'string', // in fact this are ids of Tinebase_Model_Container of app Calendar and we might what to have te ui to autocreate pickers panel here? x-type? -> later
-            'clientRegistryInclude' => TRUE,
+            'clientRegistryInclude' => TRUE
+        
+        ),
+        self::CROP_DAYS_VIEW => array(
+                                   //_('Crop Days')
+            'label'                 => 'Crop Days',
+                                   //_('Crop calendar view configured start and endtime.')
+            'description'           => 'Crop calendar view configured start and endtime.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => true,
+            'default'               => false
         
         ),
         self::ATTENDEE_STATUS => array(

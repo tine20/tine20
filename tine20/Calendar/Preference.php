@@ -22,10 +22,15 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const DAYSVIEW_STARTTIME = 'daysviewstarttime';
     
     /**
+     * where daysvoew should be scrolled maximum up to
+     */
+    const DAYSVIEW_ENDTIME = 'daysviewendtime';
+
+    /**
      * default calendar all newly created/invited events are placed in
      */
     const DEFAULTCALENDAR = 'defaultCalendar';
-    
+
     /**
      * have name of default favorite an a central palce
      * _("All my events")
@@ -66,6 +71,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     {
         $allPrefs = array(
             self::DAYSVIEW_STARTTIME,
+            self::DAYSVIEW_ENDTIME,
             self::DEFAULTCALENDAR,
             self::DEFAULTPERSISTENTFILTER,
             self::NOTIFICATION_LEVEL,
@@ -90,6 +96,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DAYSVIEW_STARTTIME => array(
                 'label'         => $translate->_('Start Time'),
                 'description'   => $translate->_('Position on the left time axis, day and week view should start with'),
+            ),
+            self::DAYSVIEW_ENDTIME => array(
+                'label'         => $translate->_('End Time'),
+                'description'   => $translate->_('Position on the left time axis, day and week view should end with'),
             ),
             self::DEFAULTCALENDAR  => array(
                 'label'         => $translate->_('Default Calendar'),
@@ -121,6 +131,39 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     }
     
     /**
+     * Creates XML Data for a combobox
+     *
+     * Hours: 0 to 24
+     *
+     * @param string $default
+     * @return string
+     */
+    private function createTimespanDataXML($default)
+    {
+        $doc = new DomDocument('1.0');
+        $options = $doc->createElement('options');
+        $doc->appendChild($options);
+        
+        $time = new Tinebase_DateTime('@0');
+        for ($i=0; $i<48; $i++) {
+            $time->addMinute($i ? 30 : 0);
+            $timeString = $time->format('H:i');
+            
+            $value  = $doc->createElement('value');
+            $value->appendChild($doc->createTextNode($timeString));
+            $label  = $doc->createElement('label');
+            $label->appendChild($doc->createTextNode($timeString)); // @todo l10n
+            
+            $option = $doc->createElement('option');
+            $option->appendChild($value);
+            $option->appendChild($label);
+            $options->appendChild($option);
+        }
+        
+        return $doc->saveXML();
+    }
+
+    /**
      * get preference defaults if no default is found in the database
      *
      * @param string $_preferenceName
@@ -137,28 +180,12 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
         
         switch ($_preferenceName) {
             case self::DAYSVIEW_STARTTIME:
-                $doc = new DomDocument('1.0');
-                $options = $doc->createElement('options');
-                $doc->appendChild($options);
-                
-                $time = new Tinebase_DateTime('@0');
-                for ($i=0; $i<48; $i++) {
-                    $time->addMinute($i ? 30 : 0);
-                    $timeString = $time->format('H:i');
-                    
-                    $value  = $doc->createElement('value');
-                    $value->appendChild($doc->createTextNode($timeString));
-                    $label  = $doc->createElement('label');
-                    $label->appendChild($doc->createTextNode($timeString)); // @todo l10n
-                    
-                    $option = $doc->createElement('option');
-                    $option->appendChild($value);
-                    $option->appendChild($label);
-                    $options->appendChild($option);
-                }
-                
                 $preference->value      = '08:00';
-                $preference->options = $doc->saveXML();
+                $preference->options = $this->createTimespanDataXML($preference->value);
+                break;
+            case self::DAYSVIEW_ENDTIME:
+                $preference->value      = '18:00';
+                $preference->options = $this->createTimespanDataXML($preference->value);
                 break;
             case self::DEFAULTCALENDAR:
                 $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId);
