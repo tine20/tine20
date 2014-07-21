@@ -1670,4 +1670,25 @@ class Tinebase_Core
         
         return $result;
     }
+    
+    /**
+     * checks if a system command exists. Works on POSIX systems.
+     * 
+     * @param string $name
+     */
+    public static function systemCommandExists($name)
+    {
+        $ret = shell_exec('which ' . $name);
+        return ! empty($ret);
+    }
+    
+    /**
+     * calls a system command with escapeshellcmd
+     * 
+     * @param unknown $cmd
+     */
+    public static function callSystemCommand($cmd)
+    {
+        return shell_exec(escapeshellcmd($cmd));
+    }
 }

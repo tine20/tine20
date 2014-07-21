@@ -60,53 +60,62 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
         
         try {
-            $part = Felamimail_Controller_Message::getInstance()->getMessagePart($_messageId, $_partId);
-            
-            if ($part instanceof Zend_Mime_Part) {
+            // fetch extracted winmail dat contents
+            if (strstr($_partId, 'winmail-')) {
+                $partIndex = explode('winmail-', $_partId);
+                $partIndex = intval($partIndex[1]);
                 
+                $files = Felamimail_Controller_Message::getInstance()->extractWinMailDat($_messageId);
+                $file = $files[$partIndex];
+                
+                $part = NULL;
+                
+                $path = Tinebase_Core::getTempDir() . '/winmail/';
+                $path = $path . $_messageId . '/';
+                
+                $contentType = mime_content_type($path . $file);
+                $this->_prepareHeader($file, $contentType);
+                
+                $stream = fopen($path . $file, 'r');
+                
+            } else { // fetch normal attachment
+                $part = Felamimail_Controller_Message::getInstance()->getMessagePart($_messageId, $_partId);
                 $contentType = ($_partId === NULL) ? Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 : $part->type;
                 $filename = $this->_getDownloadFilename($part, $_messageId, $contentType);
-
+                
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
                     . ' filename: '    . $filename
                     . ' content type ' . $contentType
                 );
-
+                
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '. print_r($part, TRUE));
                 
-                // cache for 3600 seconds
-                $maxAge = 3600;
-                header('Cache-Control: private, max-age=' . $maxAge);
-                header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
-                
-                // overwrite Pragma header from session
-                header("Pragma: cache");
-                
-                header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
-                header("Content-Type: " . $contentType);
+                $this->_prepareHeader($filename, $contentType);
                 
                 $stream = ($_partId === NULL) ? $part->getRawStream() : $part->getDecodedStream();
-                
-                if ($validateImage) {
-                    $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_imgdata');
-                    $tmpFile = fopen($tmpPath, 'w');
-                    stream_copy_to_stream($stream, $tmpFile);
-                    fclose($tmpFile);
-                    // @todo check given mimetype or all images types?
-                    if (! Tinebase_ImageHelper::isImageFile($tmpPath)) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                            . ' Resource is no image file: ' . $filename);
-                    } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                            . ' Verified ' . $contentType . ' image.');
-                        readfile($tmpPath);
-                    }
-                    
-                } else {
-                    fpassthru($stream);
-                }
-                fclose($stream);
             }
+            
+            if ($validateImage) {
+                $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_imgdata');
+                $tmpFile = fopen($tmpPath, 'w');
+                stream_copy_to_stream($stream, $tmpFile);
+                fclose($tmpFile);
+                // @todo check given mimetype or all images types?
+                if (! Tinebase_ImageHelper::isImageFile($tmpPath)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                        . ' Resource is no image file: ' . $filename);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                        . ' Verified ' . $contentType . ' image.');
+                    readfile($tmpPath);
+                }
+                
+            } else {
+                fpassthru($stream);
+            }
+            
+            fclose($stream);
+            
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to get message part: ' . $e->getMessage());
         }
@@ -114,6 +123,27 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         exit;
+    }
+    
+    /**
+     * prepares the header for attachment download
+     * 
+     * @param string $filename
+     * @param string $contentType
+     */
+    protected function _prepareHeader($filename, $contentType)
+    {
+        // cache for 3600 seconds
+        $maxAge = 3600;
+        $disposition = 'attachment';
+        header('Cache-Control: private, max-age=' . $maxAge);
+        header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
+        
+        // overwrite Pragma header from session
+        header("Pragma: cache");
+        
+        header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
+        header("Content-Type: " . $contentType);
     }
     
     /**

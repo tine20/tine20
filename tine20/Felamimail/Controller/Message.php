@@ -859,24 +859,133 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     continue;
                 }
                 
-                $attachmentData = array(
-                    'content-type' => $part['contentType'], 
-                    'filename'     => $filename,
-                    'partId'       => $part['partId'],
-                    'size'         => $part['size'],
-                    'description'  => $part['description'],
-                    'cid'          => (! empty($part['id'])) ? $part['id'] : NULL,
-                );
+                $expanded = array();
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Got attachment with name ' . $filename);
+                // if a winmail.dat exists, try to expand it
+                if (strtolower($filename) == 'winmail.dat' && Tinebase_Core::systemCommandExists('tnef') && $part['contentType'] == 'application/ms-tnef') {
+                    
+                    $expanded = $this->_expandWinMailDat($_messageId, $part['partId']);
+                    
+                    if (! empty($expanded)) {
+                        $attachments = array_merge($attachments, $expanded);
+                    }
                 
-                $attachments[] = $attachmentData;
+                }
+                
+                // if its not a winmail.dat, or the winmail.dat couldn't be expanded 
+                // properly because it has richtext embedded, return attachment as it is
+                if (empty($expanded)) {
+                
+                    $attachmentData = array(
+                        'content-type' => $part['contentType'], 
+                        'filename'     => $filename,
+                        'partId'       => $part['partId'],
+                        'size'         => $part['size'],
+                        'description'  => $part['description'],
+                        'cid'          => (! empty($part['id'])) ? $part['id'] : NULL,
+                    );
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Got attachment with name ' . $filename);
+                    
+                    $attachments[] = $attachmentData;
+                }
             }
         }
         
         return $attachments;
     }
+    
+    /**
+     * extracts contents from the ugly .dat format
+     * 
+     * @param string $messageId
+     * @param string $partId
+     */
+    protected function _expandWinMailDat($messageId, $partId)
+    {
+        $files = $this->extractWinMailDat($messageId['id'], $partId);
+        $path = Tinebase_Core::getTempDir() . '/winmail/' . $messageId['id'] . '/';
+        
+        $attachmentData = array();
+        
+        $i = 0;
+        
+        foreach($files as $filename) {
+            $attachmentData[] = array(
+                'content-type' => mime_content_type($path . $filename),
+                'filename'     => $filename,
+                'partId'       => 'winmail-' . $i,
+                'size'         => filesize($path . $filename),
+                'description'  => 'Extracted Content',
+                'cid'          => 'winmail-' . Tinebase_Record_Abstract::generateUID(10),
+            );
+            
+            $i++;
+        }
+        
+        return $attachmentData;
+    }
+    
+    /**
+     * @param string $partId
+     * @param string $messageId
+     * 
+     * @return array
+     */
+    public function extractWinMailDat($messageId, $partId = NULL)
+    {
+        $path = Tinebase_Core::getTempDir() . '/winmail/';
+        
+        // create base path
+        if (! is_dir($path)) {
+            mkdir($path);
+        }
+        
+        // create path for this message id
+        if (! is_dir($path . $messageId)) {
+            mkdir($path . $messageId);
+            
+            $part = $this->getMessagePart($messageId, $partId);
+            
+            $path = $path . $messageId . '/';
+            $datFile =  $path . 'winmail.dat';
+            
+            $stream = $part->getDecodedStream();
+            $tmpFile = fopen($datFile, 'w');
+            stream_copy_to_stream($stream, $tmpFile);
+            fclose($tmpFile);
+            
+            // find out filenames
+            $files = array();
+            $fileString = explode(chr(10), Tinebase_Core::callSystemCommand('tnef -t ' . $datFile));
+            
+            foreach($fileString as $line) {
+                $split = explode('|', $line);
+                $clean = trim($split[0]);
+                if (! empty($clean)) {
+                    $files[] = $clean;
+                }
+            }
+            
+            // extract files
+            Tinebase_Core::callSystemCommand('tnef -C ' . $path . ' ' . $datFile);
+            
+        } else { // temp files still existing
+            $dir = new DirectoryIterator($path . $messageId);
+            $files = array();
+            
+            foreach($dir as $file) {
+                if ($file->isFile() && $file->getFilename() != 'winmail.dat') {
+                    $files[] = $file->getFilename();
+                }
+            }
+        }
+        
+        asort($files);
+        return $files;
+    }
+    
     
     /**
      * fetch attachment filename from part
