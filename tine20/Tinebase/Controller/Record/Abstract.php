@@ -1767,9 +1767,20 @@ abstract class Tinebase_Controller_Record_Abstract
                 foreach ($_record->{$_property} as $recordArray) {
                     $rec = new $recordClassName(array(),true);
                     $rec->setFromJsonInUsersTimezone($recordArray);
+                    
+                    if (strlen($rec->getId()) < 40) {
+                        $rec->{$rec->getIdProperty()} = Tinebase_Record_Abstract::generateUID();
+                    }
+                    
                     $rs->addRecord($rec);
                 }
                 $_record->{$_property} = $rs;
+            } else {
+                foreach ($_record->{$_property} as $rec) {
+                    if (strlen($rec->getId()) < 40) {
+                        $rec->{$rec->getIdProperty()} = Tinebase_Record_Abstract::generateUID();
+                    }
+                }
             }
             // legacy end
 
@@ -1848,7 +1859,7 @@ abstract class Tinebase_Controller_Record_Abstract
                         }
                         // create if ID does not exist or has not a length of 40
                     } else {
-                        $record->id = NULL;
+                        $record->{$record->getIdProperty()} = NULL;
                         $crc = $controller->create($record);
                         $existing->addRecord($crc);
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
