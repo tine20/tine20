@@ -31,11 +31,11 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected $_contractController = NULL;
     
     /**
-     * 
      * required apps
+     * 
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'HumanResources');
+    protected static $_requiredApplications = array('Admin');
     
     /**
      * The product controller
@@ -65,7 +65,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $this->_productController     = Sales_Controller_Product::getInstance();
         $this->_contractController    = Sales_Controller_Contract::getInstance();
         
-        $this->_loadCostCenters();
+        $this->_loadCostCentersAndDivisions();
     }
 
     /**
@@ -224,5 +224,46 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createProduct($data)
     {
         
+    }
+    
+    /**
+     * create some costcenters
+     *
+     * @see Tinebase_Setup_DemoData_Abstract
+     */
+    protected function _onCreate()
+    {
+        $controller = Sales_Controller_CostCenter::getInstance();
+        $this->_costCenters = new Tinebase_Record_RecordSet('Sales_Model_CostCenter');
+        $ccs = (static::$_de)
+        ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
+        : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
+        ;
+    
+        $id = 1;
+        foreach($ccs as $title) {
+            $cc = new Sales_Model_CostCenter(
+                array('remark' => $title, 'number' => $id)
+            );
+            try {
+                $record = $controller->create($cc);
+                $this->_costCenters->addRecord($record);
+            } catch (Zend_Db_Statement_Exception $e) {
+                $this->_costCenters = $controller->search(new Sales_Model_CostCenterFilter(array()));
+            }
+    
+            $id++;
+        }
+    
+        $divisionsArray = (static::$_de)
+        ? array('Management', 'EDV', 'Marketing', 'Public Relations', 'Produktion', 'Verwaltung')
+        : array('Management', 'IT', 'Marketing', 'Public Relations', 'Production', 'Administration')
+        ;
+    
+        foreach($divisionsArray as $divisionName) {
+            Sales_Controller_Division::getInstance()->create(new Sales_Model_Division(array('title' => $divisionName)));
+        }
+        
+        $this->_loadCostCentersAndDivisions();
     }
 }

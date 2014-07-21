@@ -29,21 +29,23 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * @var string
      */
     protected $_appName         = 'HumanResources';
-    protected $_costcenters     = NULL;
+    protected $_costCenters     = NULL;
     protected $_feastCalendar   = NULL;
     protected $_workingtimes    = NULL;
+    
     /**
      * models to work on
-     * @var unknown_type
+     * 
+     * @var array
      */
     protected $_models = array('employee');
     
     /**
-     * 
      * required apps
+     * 
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'Calendar');
+    protected static $_requiredApplications = array('Admin', 'Calendar', 'Sales');
     
     /**
      * the start date of contracts costcenters, employees
@@ -90,6 +92,8 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         // set start date to start date of june 1st before last year
         $date = Tinebase_DateTime::now();
         $this->_startDate = $date->setDate($date->format('Y') - 2, 6, 1);
+        
+        $this->_loadCostCentersAndDivisions();
     }
 
     /**
@@ -119,49 +123,8 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $f = new HumanResources_Model_EmployeeFilter(array(
             array('field' => 'n_fn', 'operator' => 'equals', 'value' => 'Paul Wulf'),
         ), 'AND');
-        
-        return ($c->search($f)->count() == 1) ? true : false;
-    }
-    
-    /**
-     * create some costcenters
-     * 
-     * @see Tinebase_Setup_DemoData_Abstract
-     */
-    protected function _onCreate()
-    {
-        $controller = Sales_Controller_CostCenter::getInstance();
-        $this->_costcenters = new Tinebase_Record_RecordSet('Sales_Model_CostCenter');
-        $ccs = (static::$_de)
-            ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
-            : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
-        ;
-        
-        $id = 1;
-        foreach($ccs as $title) {
-            $cc = new Sales_Model_CostCenter(
-                array('remark' => $title, 'number' => $id)
-            );
-            try {
-                $record = $controller->create($cc);
-                $this->_costcenters->addRecord($record);
-            } catch (Zend_Db_Statement_Exception $e) {
-                $this->_costcenters = $controller->search(new Sales_Model_CostCenterFilter(array()));
-            }
 
-            $id++;
-        }
-        
-        $divisionsArray = (static::$_de)
-            ? array('Management', 'EDV', 'Marketing', 'Public Relations', 'Produktion', 'Verwaltung')
-            : array('Management', 'IT', 'Marketing', 'Public Relations', 'Production', 'Administration')
-        ;
-        
-        $this->_divisions = new Tinebase_Record_RecordSet('Sales_Model_Division');
-        
-        foreach($divisionsArray as $divisionName) {
-            $this->_divisions->addRecord(Sales_Controller_Division::getInstance()->create(new Sales_Model_Division(array('title' => $divisionName))));
-        }
+        return ($c->search($f)->count() == 1) ? true : false;
     }
     
     /**
@@ -214,7 +177,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             }
             
             // add costcenter
-            $scs = $this->_costcenters->getByIndex($i);
+            $scs = $this->_costCenters->getByIndex($i);
             
             $hrc = array('cost_center_id' => $scs->getId(), 'start_date' => $this->_startDate);
             $employee->costcenters = array($hrc);
@@ -224,7 +187,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $employee->contracts = array($contract->toArray());
             
             // add division
-            $division = $this->_divisions[$i];
+            $division = $this->_divisions->getByIndex($i);
             $employee->division_id = $division->getId();
             
             // update and increment counter
