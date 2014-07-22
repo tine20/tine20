@@ -770,6 +770,37 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     }
     
     /**
+     * Trying to reproduce a fatal error but won't work yet
+     */
+    public function testAlarmWithoutOrganizer()
+    {
+        $calInstance = Addressbook_Controller_Contact::getInstance();
+        $newContactData = array(
+            'n_given'           => 'foo',
+            'n_family'          => 'PHPUNIT',
+            'email'             => 'foo@tine20.org',
+            'tel_cell_private'  => '+49TELCELLPRIVATE',
+        );
+        $newContact = $calInstance->create(new Addressbook_Model_Contact($newContactData));
+        
+        $event = $this->_getEvent();
+        $event->attendee = $this->_createAttender($newContact->getId());
+        $event->organizer = $newContact->getId();
+        
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        $persistentEvent = $this->_eventController->create($event);
+        
+        $calInstance->delete(array($newContact->getId()));
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $this->assertEquals(0, count(self::getMessages()));
+    }
+    
+    /**
      * testRecuringAlarmAfterSeriesEnds
      * 
      * @see 0008386: alarm is sent for recur series that is already over
