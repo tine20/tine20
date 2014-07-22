@@ -107,20 +107,20 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                 )
             )
         ));
-    
+        
         /**
          * see http://forge.tine20.org/mantisbt/view.php?id=5122
          * we must use action 'sync' and not 'get' as
          * otherwise the calendar also return events the user only can see because of freebusy
          */
         $objects = $this->_getController()->search($filter, null, false, false, 'sync');
-    
+        
         $children = array();
-    
+        
         foreach ($objects as $object) {
             $children[] = $this->getChild($object);
         }
-    
+        
         return $children;
     }
     
