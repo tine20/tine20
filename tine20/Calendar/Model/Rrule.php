@@ -334,15 +334,15 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 
             case self::FREQ_WEEKLY:
                 $rule .= $this->interval > 1 ?
-                    sprintf($translation->_('Every %s week on '), $this->_formatInterval($this->interval, $translation, $numberFormatter)) :
-                    $translation->_('Weekly on ');
+                    sprintf($translation->_('Every %s week on') . ' ', $this->_formatInterval($this->interval, $translation, $numberFormatter)) :
+                    $translation->_('Weekly on') . ' ';
                 
                 $recurWeekDays = explode(',', $this->byday);
                 $recurWeekDaysCount = count($recurWeekDays);
                 foreach ($recurWeekDays as $idx => $recurWeekDay) {
                     $rule .= $weekDays[self::$WEEKDAY_MAP[$recurWeekDay]];
                     if ($recurWeekDaysCount && $idx+1 != $recurWeekDaysCount) {
-                        $rule .= $idx == $recurWeekDaysCount-2 ? $translation->_(' and ') : ', ';
+                        $rule .= $idx == $recurWeekDaysCount-2 ? ' ' . $translation->_('and') . ' ' : ', ';
                     }
                 }
                 break;

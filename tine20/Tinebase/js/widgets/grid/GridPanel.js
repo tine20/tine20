@@ -1827,7 +1827,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (sm.isFilterSelect && this.filterSelectionDelete) {
                 if (! this.deleteMask) {
                     this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {
-                        msg: String.format(_('Deleting {0}'), i18nItems) + _(' ... This may take a long time!')
+                        msg: String.format(_('Deleting {0}'), i18nItems) + ' ' + _('... This may take a long time!')
                     });
                 }
                 this.deleteMask.show();

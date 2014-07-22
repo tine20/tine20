@@ -293,7 +293,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                             }, commonComboConfig), 
                             {
                                 name: 'authentication_Sql_accountDomainName',
-                                fieldLabel: this.app.i18n._('Account domain name ')
+                                fieldLabel: this.app.i18n._('Account domain name')
                             }, {
                                 name: 'authentication_Sql_accountDomainNameShort',
                                 fieldLabel: this.app.i18n._('Account domain short name')
@@ -350,7 +350,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         }, commonComboConfig), 
                         {
                             name: 'authentication_Ldap_accountDomainName',
-                            fieldLabel: this.app.i18n._('Account domain name ')
+                            fieldLabel: this.app.i18n._('Account domain name')
                         }, {
                             name: 'authentication_Ldap_accountDomainNameShort',
                             fieldLabel: this.app.i18n._('Account domain short name')

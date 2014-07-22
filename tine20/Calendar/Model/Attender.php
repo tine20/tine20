@@ -450,7 +450,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $i18nNote = $translation->_('This contact has been automatically added by the system as an event attender');
             if ($email !== $_attenderData['email']) {
                 $i18nNote .= "\n";
-                $i18nNote .= $translation->_('The email address has been shortened: ') . $_attenderData['email'] . ' -> ' . $email;
+                $i18nNote .= $translation->_('The email address has been shortened:') . ' ' . $_attenderData['email'] . ' -> ' . $email;
             }
             $contactData = array(
                 'note'        => $i18nNote,

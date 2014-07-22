@@ -241,7 +241,7 @@ Tine.Sipgate.CallStateWindow = Ext.extend(Ext.FormPanel, {
  */
 Tine.Sipgate.CallStateWindow.openWindow = function(config) {
     var window = Tine.WindowFactory.getExtWindow({
-        title : Tine.Tinebase.appMgr.get('Sipgate').i18n._('Connecting to: ') + ' ' + config.number,
+        title : Tine.Tinebase.appMgr.get('Sipgate').i18n._('Connecting to:') + ' ' + config.number,
         width : 360,
         height : 160,
         contentPanelConstructor : 'Tine.Sipgate.CallStateWindow',
