@@ -1432,9 +1432,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testAddAttachmentToRecurSeries()
     {
-        $tempFileBackend = new Tinebase_TempFile();
-        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/Filemanager/files/test.txt');
-        
+        $tempFile = $this->_getTempFile();
         $recurSet = array_value('results', $this->testSearchRecuringIncludes());
         // update recurseries 
         $someRecurInstance = $recurSet[2];

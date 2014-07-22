@@ -1832,6 +1832,10 @@ class Setup_Controller
             } else {
                 $this->_isFileSystemAvailable = $session->filesystemAvailable;
             }
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Filesystem available: ' . ($result ? 'yes' : 'no'));
+            
+        } else {
+            $result = $session->filesystemAvailable;
         }
         
         return $this->_isFileSystemAvailable;
