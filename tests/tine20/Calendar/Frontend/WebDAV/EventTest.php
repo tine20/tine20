@@ -4,14 +4,9 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Calendar_Frontend_WebDAV_Event
@@ -62,17 +57,6 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['REQUEST_URI'] = 'lars';
     }
 
-    /**
-     * tear down tests
-     *
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-        
-        Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
-    }
-    
     /**
      * test create event with internal organizer
      * 
@@ -137,8 +121,14 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
         
         $record = $event->getRecord();
-
+        $container = Tinebase_Container::getInstance()->getContainerById($record->container_id);
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($record->attendee);
+        
         $this->assertEquals('New Event', $record->summary);
+        $this->assertEquals('l.kneschke@metaways.de', $container->name, 'event no in invitation calendar');
+        $this->assertTrue(!! $ownAttendee, 'own attendee missing');
+        $this->assertEquals(1, $record->seq, 'tine20 seq starts with 1');
+        $this->assertEquals(0, $record->external_seq, 'external seq not set -> 0');
         
         return $event;
     }
@@ -279,7 +269,6 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
         
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/apple_caldendar_repeating.ics');
-        
         
         $id = Tinebase_Record_Abstract::generateUID();
 
@@ -462,6 +451,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $record = $event->getRecord();
         
         $this->assertEquals('New Event', $record->summary);
+        $this->assertEquals(2, $record->seq, 'tine20 seq should have increased');
+        $this->assertEquals(0, $record->external_seq, 'external seq must not have increased');
     }
     
     /**
@@ -779,7 +770,6 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     
     /**
      * validate that users can set alarms for events with external organizers
-     * 
      */
     public function testSetAlarmForEventWithExternalOrganizer()
     {
@@ -811,17 +801,11 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $vcalendar = preg_replace(
             array(
                 '/l.kneschke@metaway\n s.de/',
-                '/unittest@\n tine20.org/',
-                '/un\n ittest@tine20.org/',
-                '/unittest@tine20.org/',
-                '/unittest@ti\n ne20.org/',
-                '/pwulf\n @tine20.org/',
+                '/un[\r\n ]{0,3}ittest@[\r\n ]{0,3}ti[\r\n ]{0,3}ne20.org/',
+                '/pwulf(\n )?@tine20.org/',
                 '/sclever@tine20.org/',
             ), 
             array(
-                $unittestUserEmail,
-                $unittestUserEmail,
-                $unittestUserEmail,
                 $unittestUserEmail,
                 $unittestUserEmail,
                 array_value('pwulf', Zend_Registry::get('personas'))->accountEmailAddress,

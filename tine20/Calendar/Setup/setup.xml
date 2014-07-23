@@ -2,14 +2,14 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>8.4</version>
+    <version>8.5</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -55,6 +55,12 @@
                 </field>
                 <field>
                     <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <field>
+                    <name>external_seq</name>
                     <type>integer</type>
                     <notnull>true</notnull>
                     <default>0</default>

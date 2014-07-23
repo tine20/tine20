@@ -14,21 +14,10 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
  * 
  * @package     Calendar
  */
-class Calendar_Setup_DemoDataTests extends PHPUnit_Framework_TestCase
+class Calendar_Setup_DemoDataTests extends TestCase
 {
-    
-    public function setUp()
+    public function testCreateDemoCalendars()
     {
-         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-    }
-
-    public function tearDown()
-    {
-         Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-    
-    public function testCreateDemoCalendars() {
-        
         ob_start();
         Calendar_Setup_DemoData::getInstance()->createDemoData(array('locale' => 'en'));
         ob_end_clean();
@@ -48,7 +37,5 @@ class Calendar_Setup_DemoDataTests extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($businessEvents->count(), 1);
         $this->assertEquals($sharedEvents->count(), 10);
-        
-        
     }
 }

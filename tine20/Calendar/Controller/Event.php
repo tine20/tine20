@@ -1408,10 +1408,34 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
         $_record->transp = $_record->transp ? $_record->transp : Calendar_Model_Event::TRANSP_OPAQUE;
         
-        // external organizer (iTIP)
-        if (! $_record->resolveOrganizer()->account_id && count($_record->attendee) > 1) {
-            $ownAttendee = Calendar_Model_Attender::getOwnAttender($_record->attendee);
-            $_record->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $ownAttendee ? array($ownAttendee) : array());
+        if ($_record->hasExternalOrganizer()) {
+            // assert calendarUser as attendee. This is important to keep the event in the loop via its displaycontianer(s)
+            try {
+                $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
+                $owner = $container->getOwner();
+                $calendarUserId = Addressbook_Controller_Contact::getInstance()->getContactByUserId($owner, true)->getId();
+            } catch (Exception $e) {
+                $container = NULL;
+                $calendarUserId = Tinebase_Core::getUser()->contact_id;
+            }
+            
+            $attendee = $_record->assertAttendee(new Calendar_Model_Attender(array(
+                'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'      => $calendarUserId
+            )), false, false, true);
+            
+            if ($attendee && $container instanceof Tinebase_Model_Container) {
+                $attendee->displaycontainer_id = $container->getId();
+            }
+            
+            if (! $container instanceof Tinebase_Model_Container || $container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
+                // move into spechial (external users) container
+                $container = Calendar_Controller::getInstance()->getInvitationContainer($_record->resolveOrganizer());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Setting container_id to ' . $container->getId() . ' for external organizer ' . $_record->organizer->email);
+                $_record->container_id = $container->getId();
+            }
+            
         }
         
         if ($_record->is_all_day_event) {
@@ -1517,10 +1541,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // admin grant includes all others (only if class is PUBLIC)
             ||  (! empty($this->class) && $this->class === Calendar_Model_Event::CLASS_PUBLIC 
                 && $_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))
+            // external invitations are in a spechial invitaion calendar. only attendee can see it via displaycal
+            ||  $_record->hasExternalOrganizer()
         ) {
-            return TRUE;
+            return true;
         }
-
+        
         switch ($_action) {
             case 'get':
                 // NOTE: free/busy is not a read grant!
@@ -1555,7 +1581,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if ($_throw) {
                 throw new Tinebase_Exception_AccessDenied($_errorMessage);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No permissions to ' . $_action . ' in container ' . $_record->container_id);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' No permissions to ' . $_action . ' in container ' . $_record->container_id);
             }
         }
         

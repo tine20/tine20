@@ -122,9 +122,10 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             'LAST-MODIFIED' => $lastModifiedDateTime->getClone()->setTimezone('UTC'),
             'DTSTAMP'       => Tinebase_DateTime::now(),
             'UID'           => $event->uid,
-            'SEQUENCE'      => $event->seq
         ));
-
+        
+        $vevent->add('SEQUENCE', $event->hasExternalOrganizer() ? $event->external_seq : $event->seq);
+        
         if ($event->isRecurException()) {
             $originalDtStart = $_event->getOriginalDtStart()->setTimezone($_event->originator_tz);
             
@@ -734,6 +735,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     if (! isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
                         $event->seq = $property->getValue();
                     }
+                    // iMIP only
+                    $event->external_seq = $property->getValue();
                     break;
                     
                 case 'DESCRIPTION':
