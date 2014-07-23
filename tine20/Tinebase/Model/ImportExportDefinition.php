@@ -44,6 +44,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract
         'application_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'model'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'label'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(
             Zend_Filter_Input::ALLOW_EMPTY  => false, 

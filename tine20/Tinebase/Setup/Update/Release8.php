@@ -90,4 +90,24 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('accounts', '10');
         $this->setApplicationVersion('Tinebase', '8.3');
     }
+    
+    /**
+     * adds a label property to hold a humanreadable text
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+            <name>label</name>
+            <type>text</type>
+            <length>128</length>
+            <notnull>false</notnull>
+        </field>');
+        
+        $this->_backend->addCol('importexport_definition', $declaration);
+        
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
+        
+        $this->setTableVersion('importexport_definition', '8');
+        $this->setApplicationVersion('Tinebase', '8.4');
+    }
 }
