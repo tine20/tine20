@@ -66,6 +66,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected $_sendNotifications = TRUE;
     
     /**
+     * @see Tinebase_Controller_Record_Abstract
+     * 
+     * @var boolean
+     */
+    protected $_resolveCustomFields = TRUE;
+    
+    /**
      * @var Calendar_Controller_Event
      */
     private static $_instance = NULL;
