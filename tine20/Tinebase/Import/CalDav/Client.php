@@ -136,12 +136,23 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
     }
     
     public function calDavRequest($method, $uri, $body, $depth = 0)
-    {try {
-        $response = $this->request($method, $uri, $body, array(
-            'Depth' => $depth,
-            'Content-Type' => 'text/xml',
-        )); } catch (Exception $e) {
-            echo $method. $uri .$body. $e->getMessage() ."\n\n";throw $e;
+    {
+        $redo = 0;
+        while (++$redo < 4)
+        {
+            try {
+                $response = $this->request($method, $uri, $body, array(
+                    'Depth' => $depth,
+                    'Content-Type' => 'text/xml',
+                ));
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' caldav request failed, sleeping 60 seconds and retrying: '
+                            . $method . ' ' . $uri . "\n" . $body . "\n" . $e->getMessage());
+                sleep(60);
+                continue;
+            }
+            break;
         }
         
         $result = $this->parseMultiStatus($response['body']);
