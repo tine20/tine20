@@ -69,8 +69,9 @@
 }
 
 .cal-daysviewpanel-scroller {
-	border-top: 1px solid #D0D0D0;
-    overflow:auto;
+    border-top: 1px solid #D0D0D0;
+    overflow-y: scroll;
+    overflow-x: hidden;
     position:relative;
 }
 
@@ -130,6 +131,11 @@
     z-index: 1000;
     cursor: pointer;
     display: none;
+}
+
+.cal-daysviewpanel-body-cropDayTime .cal-daysviewpanel-body-daycolumn-hint-above,
+.cal-daysviewpanel-body-cropDayTime .cal-daysviewpanel-body-daycolumn-hint-below {
+    display: none !important;
 }
 
 .cal-daysviewpanel-body-daycolumn-today {
