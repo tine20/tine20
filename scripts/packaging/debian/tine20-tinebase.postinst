@@ -10,13 +10,27 @@ if [ "$1" = "configure" ]; then
     done
     
     chown www-data:www-data /var/log/tine20
-    chmod 0750 /var/log/tine20    
+    chmod 0750 /var/log/tine20
     
     # create link used by PHP when running as (fast)cgi
-    if [ ! -f /etc/php5/conf.d/tine20.ini -a ! -h /etc/php5/conf.d/tine20.ini ]; then
-        ln -s /etc/tine20/php5.ini /etc/php5/conf.d/tine20.ini
+    if [ -d /etc/php5/conf.d ]; then
+        if [ ! -f /etc/php5/conf.d/tine20.ini -a ! -h /etc/php5/conf.d/tine20.ini ]; then
+            ln -s /etc/tine20/php5.ini /etc/php5/conf.d/tine20.ini
+        fi
     fi
 
+    # php5 conf.d has moved on ubuntu 14.04
+    if [ -d /etc/php5/apache2/conf.d ]; then
+        # create link used by PHP when running as (fast)cgi
+        if [ ! -f /etc/php5/apache2/conf.d/tine20.ini -a ! -h /etc/php5/apache2/conf.d/tine20.ini ]; then
+            ln -s /etc/tine20/php5.ini /etc/php5/apache2/conf.d/tine20.ini
+        fi
+        
+        # enable mcrypt if not already done
+        if [ ! -f /etc/php5/apache2/conf.d/20-mcrypt.ini ]; then
+            php5enmod mcrypt
+        fi
+    fi
 fi
 
 #DEBHELPER#

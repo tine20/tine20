@@ -42,8 +42,8 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 
     case "$webserver" in
         apache2)
-            if [ -L /etc/$webserver/conf.d/tine20 ]; then
-                rm -f /etc/$webserver/conf.d/tine20
+            if [ -L /etc/$webserver/conf.d/tine20.conf ]; then
+                rm -f /etc/$webserver/conf.d/tine20.conf
                 
             elif [ -L /etc/$webserver/conf-available/tine20.conf ]; then
                 /usr/sbin/a2disconf tine20
