@@ -27,7 +27,7 @@ if [ "$1" = "configure" ]; then
         fi
         
         # enable mcrypt if not already done
-        if [ ! -f /etc/php5/apache2/conf.d/20-mcrypt.ini ]; then
+        if [ ! -f /etc/php5/apache2/conf.d/20-mcrypt.ini ] && [ -x /usr/sbin/php5enmod ]; then
             php5enmod mcrypt
         fi
     fi
