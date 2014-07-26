@@ -28,6 +28,7 @@ Tine.widgets.account.ChangeAccountAction = function(config) {
 Ext.extend(Tine.widgets.account.ChangeAccountAction, Ext.Action, {
     
     loadMask: null,
+    returnToOriginalUser: false,
     
     getFormItems: function() {
         var roleChangeAllowed = Tine.Tinebase.registry.get("config").roleChangeAllowed.value,
@@ -68,6 +69,11 @@ Ext.extend(Tine.widgets.account.ChangeAccountAction, Ext.Action, {
     
     handleClick: function() {
         
+        if (this.returnToOriginalUser) {
+            this.onOk();
+            return;
+        }
+        
         this.okButton = new Ext.Button({
             text: _('Ok'),
             minWidth: 70,
@@ -105,10 +111,13 @@ Ext.extend(Tine.widgets.account.ChangeAccountAction, Ext.Action, {
     },
     
     onOk: function() {
-        this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: _('Changing user account ...')});
-        this.loadMask.show();
+        if (this.win) {
+            this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: _('Changing user account ...')});
+            this.loadMask.show();
+        }
         
-        Tine.Tinebase.changeUserAccount(this.accountSelect.getValue(), this.onSuccess.createDelegate(this));
+        var accountToSelect = this.returnToOriginalUser ? null : this.accountSelect.getValue();
+        Tine.Tinebase.changeUserAccount(accountToSelect, this.onSuccess.createDelegate(this));
     },
     
     onSuccess: function() {

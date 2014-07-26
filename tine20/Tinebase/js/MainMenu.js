@@ -106,13 +106,21 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 this.action_installChromeWebApp
             ];
             
-            if (Tine.Tinebase.registry.get("config") 
+            if (Tine.Tinebase.registry.get('userAccountChanged')) {
+                this.action_returnToOriginalUser = new Tine.widgets.account.ChangeAccountAction({
+                    returnToOriginalUser: true,
+                    text: _('Return to original user account')
+                });
+                this.userActions = this.userActions.concat(this.action_returnToOriginalUser);
+                
+            } else if (Tine.Tinebase.registry.get("config") 
                 && Tine.Tinebase.registry.get("config").roleChangeAllowed 
                 && Tine.Tinebase.registry.get("config").roleChangeAllowed.value) 
             {
+                this.action_changeUserAccount = new Tine.widgets.account.ChangeAccountAction({});
+                
                 var roleChangeAllowed = Tine.Tinebase.registry.get("config").roleChangeAllowed.value,
                     currentAccountName = Tine.Tinebase.registry.get('currentAccount').accountLoginName;
-                Tine.log.debug(roleChangeAllowed);
                 if (roleChangeAllowed[currentAccountName]) {
                     this.userActions = this.userActions.concat(this.action_changeUserAccount);
                 }
@@ -205,8 +213,6 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             },
             scope: this
         });
-        
-        this.action_changeUserAccount = new Tine.widgets.account.ChangeAccountAction({});
     },
     
     /**

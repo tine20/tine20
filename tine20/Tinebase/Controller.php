@@ -423,18 +423,28 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' ROLE_CHANGE_ALLOWED: ' . print_r($allowedRoleChangesArray, true));
             
+            $user = null;
+            
             if (isset($allowedRoleChangesArray[$currentAccountName])
                 && in_array($loginName, $allowedRoleChangesArray[$currentAccountName])
             ) {
                 $user = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
+                Tinebase_Core::getSession()->userAccountChanged = true;
+                Tinebase_Core::getSession()->originalAccountName = $currentAccountName;
                 
+            } else if (Tinebase_Core::getSession()->userAccountChanged 
+                && isset($allowedRoleChangesArray[Tinebase_Core::getSession()->originalAccountName])
+            ) {
+                $user = Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_Core::getSession()->originalAccountName);
+                Tinebase_Core::getSession()->userAccountChanged = false;
+                Tinebase_Core::getSession()->originalAccountName = null;
+            }
+            
+            if ($user) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                    __METHOD__ . '::' . __LINE__ . ' Switching to user account ' . $loginName);
+                    __METHOD__ . '::' . __LINE__ . ' Switching to user account ' . $user->accountLoginName);
                 
                 $this->initUser($user, /* $fixCookieHeader = */ false);
-                
-                Tinebase_Core::getSession()->userAccountChanged = true;
-                
                 return true;
             }
         } 
