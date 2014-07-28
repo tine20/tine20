@@ -1,26 +1,29 @@
 /*
  * Tine 2.0
  * 
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license http://www.gnu.org/licenses/agpl.html AGPL Version 3 @author
+ * Alexander Stintzing <a.stintzing@metaways.de> @copyright Copyright (c) 2013
+ * Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Sales');
 
 /**
- * @namespace   Tine.Sales
- * @class       Tine.Sales.InvoiceEditDialog
- * @extends     Tine.widgets.dialog.EditDialog
+ * @namespace Tine.Sales
+ * @class Tine.Sales.InvoiceEditDialog
+ * @extends Tine.widgets.dialog.EditDialog
  * 
- * <p>Invoice Compose Dialog</p>
- * <p></p>
+ * <p>
+ * Invoice Compose Dialog
+ * </p>
+ * <p>
+ * </p>
  * 
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Alexander Stintzing <a.stintzing@metaways.de>
+ * @license http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author Alexander Stintzing <a.stintzing@metaways.de>
  * 
- * @param       {Object} config
- * @constructor
- * Create a new Tine.Sales.InvoiceEditDialog
+ * @param {Object}
+ *            config
+ * @constructor Create a new Tine.Sales.InvoiceEditDialog
  */
 Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
@@ -174,12 +177,16 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * loads the full-featured record, if a contract gets selected
      * 
-     * @param {Tine.widgets.relation.PickerCombo} combo
-     * @param {Tine.Sales.Model.Contract} record
-     * @param {Number} index
+     * @param {Tine.widgets.relation.PickerCombo}
+     *            combo
+     * @param {Tine.Sales.Model.Contract}
+     *            record
+     * @param {Number}
+     *            index
      */
     onContractLoad: function(combo, record, index) {
-        // here we fetch the record again to have the related customer, where we can find the address for
+        // here we fetch the record again to have the related customer, where we
+        // can find the address for
         var proxy = Tine.Sales.contractBackend;
         
         proxy.loadRecord(record, {
@@ -191,7 +198,8 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * 
-     * @param {Tine.Sales.Model.Contract} record
+     * @param {Tine.Sales.Model.Contract}
+     *            record
      */
     onAfterContractLoad: function(record, customer) {
         var record = record ? record : this.record;
@@ -425,6 +433,24 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('Interval Ends'),
                                     columnWidth: 1/3
                                 }
+                            ], [{
+                                name: 'price_net',
+                                xtype: 'numberfield',
+                                decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+                                fieldLabel: this.app.i18n._('Price Net'),
+                                columnWidth: 1/3
+                            }, {
+                                name: 'price_net',
+                                xtype: 'numberfield',
+                                decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+                                fieldLabel: this.app.i18n._('Price Gross'),
+                                columnWidth: 1/3
+                            }, {
+                                xtype: 'numberfield',
+                                name: 'sales_tax',
+                                fieldLabel: this.app.i18n._('Sales Tax'),
+                                columnWidth: 1/3
+                            }
                             ]
                         ]
                     }]

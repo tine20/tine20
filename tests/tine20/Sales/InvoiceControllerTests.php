@@ -921,4 +921,28 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $timesheets = $this->_timesheetController->search($filter);
         $this->assertEquals(4, $timesheets->count());
     }
+    
+    /**
+     * tests new fields
+     */
+    public function testManualInvoice()
+    {
+        $customer = $this->_createCustomers(1)->getFirstRecord();
+        $this->_createCostCenters();
+        
+        $invoice = $this->_invoiceController->create(new Sales_Model_Invoice(array(
+            'number' => 100,
+            'description' => 'test',
+            'address_id' => $this->_addressRecords->getFirstRecord()->getId(),
+            'costcenter_id' => $this->_costcenterRecords->getFirstRecord()->getId(),
+            'is_auto' => TRUE,
+            'price_net' => 20000,
+            'price_gross' => 23800,
+            'sales_tax' => 19
+        )));
+        
+        $this->assertEquals(19, $invoice->sales_tax);
+        $this->assertEquals(20000, $invoice->price_net);
+        $this->assertEquals(23800, $invoice->price_gross);
+    }
 }

@@ -686,3 +686,15 @@ msgid "Invoice Position"
 msgid_plural "Invoice Positions"
 msgstr[0] "Rechnungsposition"
 msgstr[1] "Rechnungspositionen"
+
+#: Model/Invoice.php:146 js/InvoiceEditDialog.js:443
+msgid "Price Net"
+msgstr "Nettopreis"
+
+#: Model/Invoice.php:152 js/InvoiceEditDialog.js:449
+msgid "Price Gross"
+msgstr "Bruttopreis"
+
+#: Model/Invoice.php:158 js/InvoiceEditDialog.js:453
+msgid "Sales Tax"
+msgstr "Mehrwertsteuer"

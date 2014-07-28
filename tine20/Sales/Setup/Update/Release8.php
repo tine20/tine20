@@ -1211,4 +1211,35 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'));
         $this->setApplicationVersion('Sales', '8.13');
     }
+    
+    /**
+     * import new import definition
+     */
+    public function update_13()
+    {
+        $fields = array('<field>
+            <name>price_net</name>
+            <type>integer</type>
+            <notnull>false</notnull>
+        </field>','
+        <field>
+            <name>price_gross</name>
+            <type>integer</type>
+            <notnull>false</notnull>
+        </field>','
+        <field>
+            <name>sales_tax</name>
+            <type>integer</type>
+            <notnull>false</notnull>
+            <length>10</length>
+        </field>');
+        
+        foreach($fields as $field) {
+            $definition = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->addCol('sales_invoices', $definition);
+        }
+        
+        $this->setTableVersion('sales_invoices', 2);
+        $this->setApplicationVersion('Sales', '8.14');
+    }
 }

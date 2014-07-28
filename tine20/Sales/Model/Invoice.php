@@ -142,6 +142,23 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'type' => 'bool',
                 'label' => NULL
             ),
+            'price_net' => array(
+                'title' => 'Price Net', // _('Price Net')
+                'type'  => 'integer',
+                'specialType' => 'euMoney',
+                'default' => 0
+            ),
+            'price_gross' => array(
+                'title' => 'Price Gross', // _('Price Gross')
+                'type'  => 'integer',
+                'specialType' => 'euMoney',
+                'default' => 0
+            ),
+            'sales_tax' => array(
+                'title' => 'Sales Tax', // _('Sales Tax')
+                'type'  => 'integer',
+                'default' => 19
+            ),
             'positions' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'label'      => 'Positions', // _('Positions')
