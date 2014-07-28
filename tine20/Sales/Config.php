@@ -17,6 +17,13 @@
 class Sales_Config extends Tinebase_Config_Abstract
 {
     /**
+     * sets the biggest interval, contracts will be billed
+     * 
+     * @var string
+     */
+    const AUTO_INVOICE_CONTRACT_INTERVAL = 'auto_invoice_contract_interval';
+    
+    /**
      * How should the contract number be created
      * @var string
      */
@@ -54,6 +61,16 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::AUTO_INVOICE_CONTRACT_INTERVAL => array(
+            //_('Auto Invoice Contract Interval')
+            'label'                 => 'Auto Invoice Contract Interval',
+            //_('Sets the biggest interval, contracts will be billed.')
+            'description'           => 'Sets the biggest interval, contracts will be billed.',
+            'type'                  => 'integer',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => 12
+        ),
         self::CONTRACT_NUMBER_GENERATION => array(
                                    //_('Contract Number Creation')
             'label'                 => 'Contract Number Creation',

@@ -158,10 +158,22 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $products = Sales_Controller_ProductAggregate::getInstance()->search($filter);
         $products->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
-        if ($products->count() == 0 && $contract->interval == 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' There aren\'t any products, and the interval of the contract is 0 -> don\'t handle contract');
-            return false;
+        if ($products->count() == 0) {
+            if ($contract->interval == 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' There aren\'t any products, and the interval of the contract is 0 -> don\'t handle contract');
+                return false;
+            }
+            
+            // check max interval
+            $cfg = Sales_Config::getInstance();
+            $maxInterval = $cfg->get(Sales_Config::AUTO_INVOICE_CONTRACT_INTERVAL);
+            
+            if ($contract->interval > $maxInterval) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' There aren\'t any products, and the interval of the contract is bigger than the value defined as 0 "auto_invoice_contract_interval in config.inc.php" -> don\'t handle contract');
+                return false;
+            }
         }
         
         if ($contract->end_date && $contract->last_autobill >= $contract->end_date) {
