@@ -276,7 +276,7 @@
             // external (non account) notification
             if (!$attendeeAccountId) {
                 // external organizer needs status updates
-                $sendLevel = $organizer && $_attender->getEmail() == $organizer->getPreferedEmailAddress() ? 40 : 30;
+                $sendLevel = is_object($organizer) && $_attender->getEmail() == $organizer->getPreferedEmailAddress() ? 40 : 30;
                 $sendOnOwnActions = false;
             }
             

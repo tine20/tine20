@@ -982,7 +982,13 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                         . ' We can\'t cope with action NONE: iCal 6.0 sends default alarms in the year 1976 with action NONE. Skipping alarm.');
                 continue;
             }
-        
+            
+            if (! is_object($valarm->TRIGGER)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Alarm has no TRIGGER value. Skipping it.');
+                continue;
+            }
+            
             # TRIGGER:-PT15M
             if (is_string($valarm->TRIGGER->getValue()) && $valarm->TRIGGER instanceof Sabre\VObject\Property\ICalendar\Duration) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

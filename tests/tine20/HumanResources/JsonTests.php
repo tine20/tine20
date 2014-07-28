@@ -267,7 +267,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'end_date'   => clone $edate,
             'vacation_days' => 23,
             'feast_calendar_id' => $fcId,
-            'creation_time' => $now
+            'creation_time' => $now,
+            'id' => 1234567891
         ));
         
         $sdate->addMonth(1);
@@ -278,7 +279,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'end_date'   => clone $edate,
             'vacation_days' => 27,
             'feast_calendar_id' => $fcId,
-            'creation_time' => $now
+            'creation_time' => $now,
+            'id' => 1234567890
         );
         
         $employee = $this->_getEmployee('unittest')->toArray();
@@ -286,6 +288,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $employee = $this->_json->saveEmployee($employee);
         $this->assertEquals(2, count($employee['contracts']));
+        
+        // get sure the ids are generated properly
+        $this->assertEquals(40, strlen($employee['contracts'][1]['id']));
+        $this->assertEquals(40, strlen($employee['contracts'][0]['id']));
         
         $this->_removeAllEmployees();
         

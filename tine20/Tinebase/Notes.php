@@ -156,7 +156,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     public function searchNotes(Tinebase_Model_NoteFilter $_filter, Tinebase_Model_Pagination $_pagination = NULL, $ignoreACL = true)
     {
         $select = $this->_db->select()
-            ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'));
+            ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'))
+            ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
         
         if (! $ignoreACL) {
             $this->_checkFilterACL($_filter);
@@ -214,7 +215,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     public function searchNotesCount(Tinebase_Model_NoteFilter $_filter, $ignoreACL = true)
     {
         $select = $this->_db->select()
-            ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'), array('count' => 'COUNT(' . $this->_db->quoteIdentifier('id') . ')'));
+            ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'), array('count' => 'COUNT(' . $this->_db->quoteIdentifier('id') . ')'))
+            ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
         
         if (! $ignoreACL) {
             $this->_checkFilterACL($_filter);
