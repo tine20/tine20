@@ -590,9 +590,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ])
         };
         
-        var smtpConfig = Tine.Felamimail.registry.get('defaults').smtp;
-        var domains = (smtpConfig.secondarydomains && smtpConfig.secondarydomains.length) ? smtpConfig.secondarydomains.split(',') : [];
-        if (smtpConfig.primarydomain.length) {
+        // TODO how to fetch smtp config if Felamimail isn't installed?
+        var smtpConfig = Tine.Felamimail ? Tine.Felamimail.registry.get('defaults').smtp : null;
+        var domains = (smtpConfig && smtpConfig.secondarydomains && smtpConfig.secondarydomains.length) ? smtpConfig.secondarydomains.split(',') : [];
+        if (smtpConfig && smtpConfig.primarydomain.length) {
             domains.push(smtpConfig.primarydomain);
         }
         var app = this.app,
