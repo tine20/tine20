@@ -118,8 +118,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         // this will start preparing the gridpanels for the invoice positions
-        this.positionsPanel.positions = this.record.get('positions');
-        this.positionsPanel.invoiceId = this.record.get('id');
+        if (this.positionsPanel) {
+            this.positionsPanel.positions = this.record.get('positions');
+            this.positionsPanel.invoiceId = this.record.get('id');
+        }
         
         Tine.Sales.InvoiceEditDialog.superclass.onRecordLoad.call(this);
 
@@ -154,15 +156,16 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         this.onAddressLoad();
-        
-        this.positionsPanel.setTitle(this.app.i18n._('Positions') + ' (' +  (Ext.isArray(this.record.data.positions) ? this.record.data.positions.length : 0) + ')');
+        if (this.positionsPanel) {
+            this.positionsPanel.setTitle(this.app.i18n._('Positions') + ' (' +  (Ext.isArray(this.record.data.positions) ? this.record.data.positions.length : 0) + ')');
+        }
     },
     
     /**
      * loads the address to the plaintext field
      */
     onAddressLoad: function(combo, record) {
-        var ba = record ? record : new Tine.Sales.Model.Address(this.record.get('address_id'));
+        var ba = record ? record : ( this.record.get('address_id') ? new Tine.Sales.Model.Address(this.record.get('address_id')) : null);
         if (ba) {
             this.form.findField('fixed_address').setValue(Tine.Sales.renderAddress(ba));
         }
@@ -270,20 +273,14 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             columnWidth: .5
         };
         
-        this.positionsPanel = new Tine.Sales.InvoicePositionPanel({
-            app: this.app,
-            title: null
-        });
+        if (this.record.get('is_auto')) {
+            this.positionsPanel = new Tine.Sales.InvoicePositionPanel({
+                app: this.app,
+                title: null
+            });
+        }
         
-        return {
-            xtype: 'tabpanel',
-            defaults: {
-                hideMode: 'offsets'
-            },
-            border: false,
-            plain: true,
-            activeTab: 0,
-            items: [{
+        var items = [{
             title: this.app.i18n._('Invoice'),
             autoScroll: true,
             border: false,
@@ -458,12 +455,27 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     })
                 ]
             }]
-        }, this.positionsPanel, 
-        new Tine.widgets.activities.ActivitiesTabPanel({
-                app: this.appName,
-                record_id: this.record.id,
-                record_model: 'Sales_Model_Invoice'
-            })
-        ]};
+        }];
+        
+        if (this.positionsPanel) {
+            items.push(this.positionsPanel);
+        }
+        
+        items.push(new Tine.widgets.activities.ActivitiesTabPanel({
+            app: this.appName,
+            record_id: this.record.id,
+            record_model: 'Sales_Model_Invoice'
+        }));
+        
+        return {
+            xtype: 'tabpanel',
+            defaults: {
+                hideMode: 'offsets'
+            },
+            border: false,
+            plain: true,
+            activeTab: 0,
+            items: items
+        };
     }
 });
