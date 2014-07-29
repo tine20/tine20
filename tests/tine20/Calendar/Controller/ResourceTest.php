@@ -4,14 +4,9 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Resources related stuff
@@ -56,6 +51,33 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $this->assertEquals('Calendar_Model_Event', $resourceContainer->model);
         
         return $resource;
+    }
+    
+    /**
+     * testRenameResource
+     * 
+     * @see 0010106: rename resource does not update container name
+     */
+    public function testRenameResource()
+    {
+        $resource = $this->_getResource();
+        $createResource = Calendar_Controller_Resource::getInstance()->create($resource);
+        
+        $calenderFrontend = new Calendar_Frontend_Json();
+        $resourceArrayFromDB = $calenderFrontend->getResource($createResource->getId());
+        $resourceArrayFromDB['name'] = 'Other Room';
+        
+        $calenderFrontend->saveResource($resourceArrayFromDB);
+        
+        $containerFrontend = new Tinebase_Frontend_Json_Container();
+        $result = $containerFrontend->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, '');
+        
+        foreach($result as $container) {
+            if ($container['id'] != $createResource->container_id) {
+                continue;
+            }
+            $this->assertEquals($container['name'], 'Other Room');
+        }
     }
     
     public function testResourceConfict()
