@@ -29,8 +29,15 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @return void
      */
     protected $_help = array(
-        'importCalDav' => array(
+        'importCalDavData' => array(
             'description'    => 'import calendar/events from a CalDav source',
+            'params'         => array(
+                'url'        => 'CalDav source URL',
+                'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
+             )
+        ),
+        'importCalDavCalendars' => array(
+            'description'    => 'import calendars without events from a CalDav source',
             'params'         => array(
                 'url'        => 'CalDav source URL',
                 'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
@@ -144,7 +151,28 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * 
      * param Zend_Console_Getopt $_opts
      */
-    public function importCalDav(Zend_Console_Getopt $_opts)
+    public function importCalDavCalendars(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
+        
+        $writer = new Zend_Log_Writer_Stream('php://output');
+        $writer->addFilter(new Zend_Log_Filter_Priority(4));
+        Tinebase_Core::getLogger()->addWriter($writer);
+        
+        $users = $this->_readCalDavUserFile($args['caldavuserfile']);
+        
+        $client = new Calendar_Import_CalDav_Client(array('baseUri' => $args['url']), 'MacOSX');
+        $client->setVerifyPeer(false);
+        
+        $client->importAllCalendarsForUsers($users);
+    }
+    
+    /**
+     * import calendar/events from a CalDav source
+     * 
+     * param Zend_Console_Getopt $_opts
+     */
+    public function importCalDavData(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
         
