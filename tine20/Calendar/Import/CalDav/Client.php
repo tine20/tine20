@@ -172,6 +172,43 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
     }
     
+    public function importAllCalendars()
+    {
+        if (count($this->calendars) < 1 && ! $this->findAllCalendars())
+            return false;
+        
+        Calendar_Controller_Event::getInstance()->sendNotifications(false);
+        Sabre\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
+        
+        $this->decorator->initCalendarImport();
+        
+        $modelName = Tinebase_Core::getApplicationInstance('Calendar')->getDefaultModel();
+        $application_id = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
+        $type = Tinebase_Model_Container::TYPE_PERSONAL; //Tinebase_Model_Container::TYPE_SHARED;
+        $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer('Calendar_Model_Event');
+        
+        //decide which calendar to use as default calendar
+        //if there is a remote default calendar, use that. If not, use the first we find
+        $defaultCalendarsName = '';
+        foreach ($this->calendarICSs as $calUri => $calICSs) {
+            if ($this->mapToDefaultContainer == $this->calendars[$calUri]['displayname']) {
+                $container = Tinebase_Container::getInstance()->getDefaultContainer('Calendar_Model_Event');
+            } elseif ($defaultsCalendarsName === '') {
+                $defaultCalendarsName = $this->calendars[$calUri]['displayname'];
+            }
+        }
+        
+        foreach ($this->calendars as $calUri => $cal) {
+            $container = $this->findContainerForCalendar($calUri, $cal['displayname'], $defaultCalendarsName,
+                    $type, $application_id, $modelName);
+            
+            $this->decorator->setCalendarProperties($container, $this->calendars[$calUri]);
+            
+            $grants = $this->getCalendarGrants($calUri);
+            Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, FALSE);
+        }
+    }
+    
     public function importAllCalendarData($onlyCurrentUserOrganizer = false)
     {
         if (count($this->calendarICSs) < 1 && ! $this->findAllCalendarICSs())
@@ -204,8 +241,10 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             
             $this->decorator->setCalendarProperties($container, $this->calendars[$calUri]);
             
-            $grants = $this->getCalendarGrants($calUri);
-            Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, FALSE);
+            // we shouldnt do the grants here as the caldav user file may not contain all users, so setting the grants wont work properly!
+            // use importAllCalendars to have the grants set
+            //$grants = $this->getCalendarGrants($calUri);
+            //Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, FALSE);
             
             $start = 0;
             $max = count($calICSs);
@@ -341,6 +380,23 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             $this->userName = $username;
             $this->password = $pwd;
             if (!$this->importAllCalendarData(false)) {
+                $result = false;
+            }
+        }
+        return $result;
+    }
+    
+    public function importAllCalendarsForUsers(array $users)
+    {
+        if (!$this->findCurrentUserPrincipalForUsers($users))
+            return false;
+        
+        $result = true;
+        foreach ($users as $username => $pwd) {
+            $this->clearCurrentUserCalendarData();
+            $this->userName = $username;
+            $this->password = $pwd;
+            if (!$this->importAllCalendars()) {
                 $result = false;
             }
         }
