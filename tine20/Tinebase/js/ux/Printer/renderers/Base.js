@@ -10,6 +10,12 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
    */
   printStrategy: 'iframe',
   
+  constructor: function(config) {
+    Ext.apply(this, config);
+    
+    Ext.ux.Printer.BaseRenderer.superclass.constructor.call(this, config);
+  },
+  
   /**
    * Prints the component
    * @param {Ext.Component} component The component to print
@@ -110,6 +116,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
       '<html>',
         '<head>',
           '<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />',
+          this.getAdditionalHeaders(),
           '<link href="' + this.stylesheetPath + '?' + new Date().getTime() + '" rel="stylesheet" type="text/css" media="screen,print" />',
           '<title>' + this.getTitle(component) + '</title>',
         '</head>',
@@ -121,6 +128,14 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     ).apply(this.prepareData(component));
   },
   
+  /**
+   * Returns the HTML that will be placed into the <head> element of th print window.
+   * @param {Ext.Component} component The component to render
+   * @return {String} The HTML fragment to place inside the print window's <head> element
+   */
+  getAdditionalHeaders: function(component) {
+    return '';
+  },
   /**
    * Returns the HTML that will be placed into the print window. This should produce HTML to go inside the
    * <body> element only, as <head> is generated in the print function

@@ -1218,7 +1218,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             
             if (this.actions_print) {
                 items.push(Ext.apply(
-                    new Ext.Button(this.actions_print), {
+                    new (this.actions_print.initialConfig && this.actions_print.initialConfig.menu ? Ext.SplitButton : Ext.Button) (this.actions_print), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'

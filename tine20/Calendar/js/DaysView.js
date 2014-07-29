@@ -1123,8 +1123,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     /**
      * print wrapper
      */
-    print: function() {
-        var renderer = new this.printRenderer();
+    print: function(printMode) {
+        var renderer = new this.printRenderer({printMode: printMode});
         renderer.print(this);
     },
     

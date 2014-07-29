@@ -1,6 +1,50 @@
 Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRenderer, {
     paperHeight: 200, 
+    
+    printMode: 'sheet',
+    
     generateBody: function(view) {
+        var mode = Ext.util.Format.capitalize(this.printMode),
+            method = 'generate' + mode + 'HTML';
+        
+        return this[method](view);
+    },
+    
+    /**
+     * Returns the HTML that will be placed into the <head> element of th print window.
+     * @param {Ext.Component} component The component to render
+     * @return {String} The HTML fragment to place inside the print window's <head> element
+     */
+    getAdditionalHeaders: function(component) {
+        var calendarCSS = Tine.clientVersion.buildType.match(/DEBUG|RELEASE/) ? 
+            '@import url(Calendar/css/Calendar-FAT.css);' : (
+            
+            '@import url(Calendar/css/daysviewpanel.css);' +
+            '@import url(Calendar/css/Calendar.css);'
+        );
+            
+        var head = 
+            '<style type="text/css" title="text/css" media="screen,print">' +
+                '@import url(library/ExtJS/resources/css/ext-all.css);' +
+                calendarCSS +
+            '</style>';
+        
+        return head;
+    },
+    
+    generateSheetHTML: function(view) {
+        var node = view.el.dom.cloneNode(true),
+            header = node.getElementsByClassName('cal-daysviewpanel-wholedayheader-scroller')[0],
+            scroller = node.getElementsByClassName('cal-daysviewpanel-scroller')[0];
+        
+        // resize header/scroller to fullsize
+        header.style.height = [header.firstChild.style.height, header.style.height].sort().pop();
+        scroller.style.height = view.dayEndPx - view.getTimeOffset(view.dayStart) + 20 + 'px';
+        
+        return /*this.generateTitle(view) + */ node.innerHTML;
+    },
+    
+    generateGridHTML: function(view) {
         var daysHtml = this.splitDays(view.store, view.startDate, view.numOfDays),
             body = [];
         
