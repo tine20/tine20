@@ -37,6 +37,9 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.grantsStore.loadData({results: grants});
         Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordLoad.call(this);
         
+        if (! this.copyRecord && ! this.record.id) {
+            this.window.setTitle(this.app.i18n._('Add New Timeaccount'));
+        }
     },
     
     onRecordUpdate: function() {
