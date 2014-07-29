@@ -1265,7 +1265,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         }
         
         if (is_resource($in) !== NULL) {
-            rewind($in);
+            $metaData = stream_get_meta_data($in);
+            if (true === $metaData['seekable']) {
+                rewind($in);
+            }
             stream_copy_to_stream($in, $handle);
             
             $this->clearStatCache($path);
