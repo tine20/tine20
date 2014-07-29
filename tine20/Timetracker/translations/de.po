@@ -459,3 +459,7 @@ msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "Stundenzettel-Liste"
 msgstr[1] "Stundenzettel-Listen"
+
+#: js/TimeaccountEditDialog.js:41
+msgid "Add New Timeaccount"
+msgstr "Neues Zeitkonto hinzufügen"

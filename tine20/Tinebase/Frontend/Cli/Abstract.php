@@ -135,14 +135,16 @@ class Tinebase_Frontend_Cli_Abstract
         if (class_exists($className)) {
             if ($checkDependencies) {
                 foreach($className::getRequiredApplications() as $appName) {
-                    $cname = $appName . '_Setup_DemoData';
-                    if (class_exists($cname)) {
-                        if (! $cname::hasBeenRun()) {
-                            $className2 = $appName . '_Frontend_Cli';
-                            if (class_exists($className2)) {
-                                echo 'Creating required DemoData of application "' . $appName . '"...' . PHP_EOL;
-                                $class = new $className2();
-                                $class->createDemoData($_opts, TRUE);
+                    if (Tinebase_Application::getInstance()->isInstalled($appName)) {
+                        $cname = $appName . '_Setup_DemoData';
+                        if (class_exists($cname)) {
+                            if (! $cname::hasBeenRun()) {
+                                $className2 = $appName . '_Frontend_Cli';
+                                if (class_exists($className2)) {
+                                    echo 'Creating required DemoData of application "' . $appName . '"...' . PHP_EOL;
+                                    $class = new $className2();
+                                    $class->createDemoData($_opts, TRUE);
+                                }
                             }
                         }
                     }

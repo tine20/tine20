@@ -529,7 +529,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
      * 
      * @return Tinebase_Record_RecordSet
      */
-    protected function _loadCostCenters()
+    protected function _loadCostCentersAndDivisions()
     {
         $filter = new Sales_Model_CostCenterFilter(array());
         $this->_costCenters  = Sales_Controller_CostCenter::getInstance()->search($filter)->sort('number');
@@ -544,6 +544,10 @@ abstract class Tinebase_Setup_DemoData_Abstract
             }
             $this->_costCenterKeys[] = $cc->getId();
         }
+        
+        $filter = new Sales_Model_DivisionFilter(array());
+        $this->_divisions  = Sales_Controller_Division::getInstance()->search($filter)->sort('number');
+        
         return $this->_costCenters;
     }
     

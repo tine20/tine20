@@ -1305,4 +1305,49 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             )
         ));
     }
+    
+    /**
+     * tests if customfields gets saved properly
+     */
+    public function testCustomFields()
+    {
+        $cfData = new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'name'              => 'unittest',
+            'model'             => 'Calendar_Model_Event',
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )
+        ));
+    
+        try {
+            $cf = Tinebase_CustomField::getInstance()->addCustomField($cfData);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // customfield already exists
+            $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication('Calendar');
+            $cf = $cfs->filter('name', $name)->getFirstRecord();
+        }
+    
+        $event = new Calendar_Model_Event(array(
+            'summary'     => 'Abendessen',
+            'dtstart'     => '2014-04-06 18:00:00',
+            'dtend'       => '2014-04-06 19:00:00',
+            'description' => 'Guten Appetit',
+            
+            'container_id' => $this->_testCalendar->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT    => true,
+            'customfields' => array('unittest' => 'Hello')
+        ));
+        
+        $event = $this->_controller->create($event);
+        
+        $this->assertEquals('Hello', $event->customfields['unittest']);
+    }
 }

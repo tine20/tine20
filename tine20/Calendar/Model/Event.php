@@ -134,7 +134,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 
         // relations
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-
+        'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+        
         // grant helper fields
         Tinebase_Model_Grants::GRANT_FREEBUSY => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         Tinebase_Model_Grants::GRANT_READ     => array(Zend_Filter_Input::ALLOW_EMPTY => true),

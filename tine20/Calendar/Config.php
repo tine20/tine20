@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -63,6 +63,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const MAX_JSON_DEFAULT_FILTER_PERIOD_UNTIL = 'maxjsondefaultfilterperioduntil';
+    
+    /**
+     * DISABLE_EXTERNAL_IMIP
+     *
+     * @var string
+     */
+    const DISABLE_EXTERNAL_IMIP = 'disableExternalImip';
     
     /**
      * (non-PHPdoc)
@@ -142,6 +149,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => 1,
+        ),
+        self::DISABLE_EXTERNAL_IMIP => array(
+        //_('Disable iMIP for external organizers')
+            'label'                 => 'Disable iMIP for external organizers',
+        //_('Disable iMIP for external organizers')
+            'description'           => 'Disable iMIP for external organizers',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => false,
         ),
     );
     

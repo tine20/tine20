@@ -1615,4 +1615,50 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
 
         return $folder;
     }
+    
+    /**
+     * test Tnef-Attachment (winmail.dat)
+     * 
+     * @see 0010076: Extract winmail.dat
+     */
+    public function testTnefAttachment()
+    {
+        if (! Tinebase_Core::systemCommandExists('tnef')) {
+            $this->markTestSkipped('The tnef command could not be found!');
+        }
+        
+        $cachedMessage = $this->messageTestHelper('winmail_dat_attachment.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+    
+        $this->assertEquals(2, count($message->attachments));
+        
+        $this->assertEquals('bookmark.htm', $message->attachments[0]['filename']);
+        $this->assertEquals('zappa_av1.jpg', $message->attachments[1]['filename']);
+        
+        $path = Tinebase_Core::getTempDir() . '/winmail/' . $message->getId() . '/';
+        $content = file_get_contents($path . 'bookmark.htm');
+        
+        $this->assertStringStartsWith('<!DOCTYPE NETSCAPE-Bookmark-file-1>', $content);
+    }
+    
+    /**
+     * test Tnef-Attachment (winmail.dat)
+     *
+     * @TODO: handle richtext encapsulated in tnef - this test assures, rtf-tnef won't produce any errors
+     *
+     * @see 0010076: Extract winmail.dat
+     */
+    public function testTnefRichtext()
+    {
+        if (! Tinebase_Core::systemCommandExists('tnef')) {
+            $this->markTestSkipped('The tnef command could not be found!');
+        }
+        
+        $cachedMessage = $this->messageTestHelper('winmail_dat_richtext.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+    
+        $this->assertEquals(1, count($message->attachments));
+    
+        $this->assertEquals('winmail.dat', $message->attachments[0]['filename']);
+    }
 }

@@ -57,7 +57,8 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     {name: 'deleteGrant' , type: 'bool'},
     {name: 'editGrant'   , type: 'bool'},
     // relations
-    { name: 'relations',   omitDuplicateResolving: true}
+    { name: 'relations',   omitDuplicateResolving: true},
+    { name: 'customfields', omitDuplicateResolving: true}
 ]), {
     appName: 'Calendar',
     modelName: 'Event',

@@ -17,11 +17,11 @@
 class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 {
     /**
-     * 
      * required apps
+     * 
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'Sales');
+    protected static $_requiredApplications = array('Admin', 'Sales', 'HumanResources');
     
     /**
      * holds the instance of the singleton
@@ -163,7 +163,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $this->_tsController  = Timetracker_Controller_Timesheet::getInstance();
         $this->_tsController->sendNotifications(FALSE);
         $this->_tsController->doContainerACLChecks(false);
-        $this->_empController = HumanResources_Controller_Employee::getInstance();
+        
         $this->_contractController    = Sales_Controller_Contract::getInstance();
         $contracts = $this->_contractController->getAll();
         $developmentString = self::$_de ? 'Entwicklung' : 'Development';
@@ -171,13 +171,12 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $this->_contractsDevelopment = $contracts->filter('title', '/.' . $developmentString . '/', TRUE);
         $this->_contractsMarketing = $contracts->filter('title', '/.Marketing/', TRUE);
         
-        $this->_loadCostCenters();
+        $this->_loadCostCentersAndDivisions();
         
-        $filter = new HumanResources_Model_EmployeeFilter(array());
-        $this->_employees = $this->_empController->search($filter);
-        
-        if (! $this->_costCenters || ! $this->_costCenters->count()) {
-            die('No costcenters are available. Please call HumanResources.createDemoData before running this!');
+        if (Tinebase_Application::getInstance()->isInstalled('HumanResources')) {
+            $this->_empController = HumanResources_Controller_Employee::getInstance();
+            $filter = new HumanResources_Model_EmployeeFilter(array());
+            $this->_employees = $this->_empController->search($filter);
         }
         
         // set start date to start date of june 1st before last year
@@ -319,7 +318,13 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createTimesheets()
     {
-        $cc = $this->_getCurrentUsersCostCenter();
+        if (Tinebase_Application::getInstance()->isInstalled('HumanResources')) {
+            $cc = $this->_getCurrentUsersCostCenter();
+        } else {
+            $cc = $this->_costCenters->filter('remark', 'Management')->getFirstRecord();
+        }
+        
+        
         $ownTimeAccountRecordSet = $this->_timeAccounts[$cc->getId()]->sort('number');
         $userId = Tinebase_Core::getUser()->accountId;
         
