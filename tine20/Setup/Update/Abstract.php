@@ -5,7 +5,7 @@
  * @package     Setup
  * @subpackage  Update
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -318,21 +318,26 @@ class Setup_Update_Abstract
     {
         foreach ($columns as $table => $fields) {
             foreach ($fields as $field => $config) {
-                
-                $this->shortenTextValues($table, $field, $length);
-                if (isset($config)) {
-                    $config = ($config == 'null' ? '<default>NULL</default>': '<notnull>' . $config . '</notnull>');
+                try {
+                    $this->shortenTextValues($table, $field, $length);
+                    if (isset($config)) {
+                        $config = ($config == 'null' ? '<default>NULL</default>': '<notnull>' . $config . '</notnull>');
+                    }
+                    $declaration = new Setup_Backend_Schema_Field_Xml('
+                        <field>
+                            <name>' . $field . '</name>
+                            <type>text</type>
+                            <length>' . $length . '</length>'
+                            . $config .
+                        '</field>
+                    ');
+                    
+                    $this->_backend->alterCol($table, $declaration);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . ' Could not truncate text column ' . $field . ' in table ' . $table);
+                    Tinebase_Exception::log($zdse);
                 }
-                $declaration = new Setup_Backend_Schema_Field_Xml('
-                    <field>
-                        <name>' . $field . '</name>
-                        <type>text</type>
-                        <length>' . $length . '</length>'
-                        . $config .
-                    '</field>
-                ');
-                
-                $this->_backend->alterCol($table, $declaration);
             }
         }
     }

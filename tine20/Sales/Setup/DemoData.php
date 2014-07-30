@@ -35,7 +35,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * 
      * @var array
      */
-    protected static $_requiredApplications = array('Admin');
+    protected static $_requiredApplications = array('Admin', 'Addressbook');
     
     /**
      * The product controller
