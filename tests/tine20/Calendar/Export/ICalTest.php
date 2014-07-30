@@ -191,7 +191,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
         
         $this->_testNeedsTransaction();
         $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.exportICS ' .
-            $this->_testCalendar->getId() ;
+            $this->_getTestCalendar()->getId() ;
         
         $cmd = TestServer::assembleCliCommand($cmd, TRUE);
         exec($cmd, $output);

@@ -192,7 +192,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $from = new Tinebase_DateTime('2014-04-23 22:00:00');
         $until = new Tinebase_DateTime('2014-05-23 22:00:00');
         $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
             array('field' => 'period', 'operator' => 'within', 'value' => array(
                 'from'  => $from->toString(),
                 'until' => $until->toString()

@@ -26,11 +26,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     protected $_controller;
     
     /**
-     * @var Tinebase_Model_Container
-     *
-    protected $_testCalendar; */
-    
-    /**
      * (non-PHPdoc)
      * @see Calendar_TestCase::setUp()
      */
@@ -1341,7 +1336,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'dtend'       => '2014-04-06 19:00:00',
             'description' => 'Guten Appetit',
             
-            'container_id' => $this->_testCalendar->getId(),
+            'container_id' => $this->_getTestCalendar()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT    => true,
             'customfields' => array('unittest' => 'Hello')
         ));
