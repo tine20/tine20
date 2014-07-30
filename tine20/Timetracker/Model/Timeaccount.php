@@ -204,11 +204,14 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
         $startDate->setTimezone('UTC');
         $endDate->setTimezone('UTC');
         
+        $border = new Tinebase_DateTime(Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE));
+        
         // if this is not budgeted, show for timesheets in this period
         $filter = new Timetracker_Model_TimesheetFilter(array(
             array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $endDate),
             array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $csdt),
             array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $startDate),
+            array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $border),
             array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
             array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
         ), 'AND');

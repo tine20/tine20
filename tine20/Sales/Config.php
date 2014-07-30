@@ -24,6 +24,13 @@ class Sales_Config extends Tinebase_Config_Abstract
     const AUTO_INVOICE_CONTRACT_INTERVAL = 'auto_invoice_contract_interval';
     
     /**
+     * defines which billables should be ignored
+     * 
+     * @var string
+     */
+    const IGNORE_BILLABLES_BEFORE = 'ignoreBillablesBefore';
+    
+    /**
      * How should the contract number be created
      * @var string
      */
@@ -70,6 +77,16 @@ class Sales_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default'               => 12
+        ),
+        self::IGNORE_BILLABLES_BEFORE => array(
+            //_('Ignore Billables Before Date')
+            'label'                 => 'Ignore Billables Before Date',
+            //_('Sets the date billables will be ignored before.')
+            'description'           => 'Sets the date billables will be ignored before.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => '2000-01-01 22:00:00'
         ),
         self::CONTRACT_NUMBER_GENERATION => array(
                                    //_('Contract Number Creation')
