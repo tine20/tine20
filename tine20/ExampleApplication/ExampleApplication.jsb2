@@ -10,11 +10,7 @@
       "name": "ExampleApplication FAT Client",
       "file": "js/ExampleApplication-FAT.js",
       "isDebug": true,
-      "fileIncludes": [
-        {
-          "text": "Models.js",
-          "path": "js/"
-        },      
+      "fileIncludes": [    
         {
           "text": "Example.js",
           "path": "js/"
@@ -24,7 +20,7 @@
           "path": "js/"
         },            
         {
-          "text": "ExampleEditDialog.js",
+          "text": "ExampleRecordEditDialog.js",
           "path": "js/"
         },
         {

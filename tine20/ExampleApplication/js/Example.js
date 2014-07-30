@@ -19,7 +19,6 @@ Ext.ns('Tine', 'Tine.Example');
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
  */
 Tine.Example.Application = Ext.extend(Tine.Tinebase.Application, {
-    
     /**
      * auto hook text _('New Example')
      */
@@ -40,6 +39,7 @@ Tine.Example.ExampleTreePanel = function(config) {
     this.filterMode = 'filterToolbar';
     Tine.Example.ExampleTreePanel.superclass.constructor.call(this);
 };
+
 Ext.extend(Tine.Example.ExampleTreePanel, Tine.widgets.container.TreePanel, {
     afterRender: function() {
         this.supr().afterRender.apply(this, arguments);
@@ -50,6 +50,7 @@ Tine.Example.ExampleFilterPanel = function(config) {
     Ext.apply(this, config);
     Tine.Example.ExampleFilterPanel.superclass.constructor.call(this);
 };
+
 Ext.extend(Tine.Example.ExampleFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Example_Model_ExampleFilter'}]
 });

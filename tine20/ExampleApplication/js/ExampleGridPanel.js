@@ -29,12 +29,6 @@ Ext.namespace('Tine.ExampleApplication');
  * Create a new Tine.ExampleApplication.ExampleGridPanel
  */
 Tine.ExampleApplication.ExampleGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
-    /**
-     * record class
-     * @cfg {Tine.Example.Model.Task} recordClass
-     */
-    recordClass: Tine.Example.Model.Example,
-    
     initComponent: function() {
         this.initDetailsPanel();
         Tine.ExampleApplication.ExampleGridPanel.superclass.initComponent.call(this);

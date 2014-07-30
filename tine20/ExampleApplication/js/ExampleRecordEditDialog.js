@@ -24,7 +24,6 @@ Ext.ns('Tine.ExampleApplication');
  * Create a new Tine.ExampleApplication.ExampleRecordEditDialog
  */
 Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    
     /**
      * @private
      */
