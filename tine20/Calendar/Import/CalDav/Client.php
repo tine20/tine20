@@ -268,10 +268,10 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                                 $value['{urn:ietf:params:xml:ns:caldav}calendar-data'],
                                 $onlyCurrentUserOrganizer
                             );
-                        } catch(Tinebase_Exception_UnexpectedValue $e) {
-                            if ('no vevents found' != $e->getMessage()) {
-                                throw $e;
-                            }
+                        } catch (Exception $e) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not create event from data: ' . $value['{urn:ietf:params:xml:ns:caldav}calendar-data']);
+                            Tinebase_Exception::log($e);
                         }
                     }
                 }
