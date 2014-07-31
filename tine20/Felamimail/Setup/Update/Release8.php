@@ -88,25 +88,31 @@ class Felamimail_Setup_Update_Release8 extends Setup_Update_Abstract
                             "localname" => "",
                             "parent" => ""
                             ),
-                        "felamimail_cache_message" => array(
-                            "content_type" => "",
-                            "body_content_type" => "",
-                            "from_email" => "",
-                            "from_name" => "",
-                            "sender" => ""
-                            ),
-                        "felamimail_cache_message_to" => array(
-                            "name" => "",
-                            "email" => ""
-                            ),
-                        "felamimail_cache_message_cc" => array(
-                            "name" => "",
-                            "email" => ""
-                            ),
-                        "felamimail_cache_message_bcc" => array(
-                            "name" => "",
-                            "email" => ""
-                            ),
+            // NOTE: we do not update the current message cache structure as this could
+            // lead to problems for large installations with lots of messages in the cache
+            // TODO: find out cache size, no problems with smaller sizes
+            // TODO: find out ways to improve alter table speed for big caches
+            
+//                         "felamimail_cache_message" => array(
+//                             "content_type" => "",
+//                             "body_content_type" => "",
+//                             "from_email" => "",
+//                             "from_name" => "",
+//                             "sender" => ""
+//                             ),
+//                         "felamimail_cache_message_to" => array(
+//                             "name" => "",
+//                             "email" => ""
+//                             ),
+//                         "felamimail_cache_message_cc" => array(
+//                             "name" => "",
+//                             "email" => ""
+//                             ),
+//                         "felamimail_cache_message_bcc" => array(
+//                             "name" => "",
+//                             "email" => ""
+//                             ),
+
                         "felamimail_sieve_rule" => array(
                             "action_type" => "",
                             "action_argument" => ""
@@ -121,10 +127,10 @@ class Felamimail_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->truncateTextColumn($columns, 255);
         $this->setTableVersion('felamimail_account', 20);
         $this->setTableVersion('felamimail_folder', 14);
-        $this->setTableVersion('felamimail_cache_message', 9);
-        $this->setTableVersion('felamimail_cache_message_to', 2);
-        $this->setTableVersion('felamimail_cache_message_cc', 2);
-        $this->setTableVersion('felamimail_cache_message_bcc', 2);
+//         $this->setTableVersion('felamimail_cache_message', 9);
+//         $this->setTableVersion('felamimail_cache_message_to', 2);
+//         $this->setTableVersion('felamimail_cache_message_cc', 2);
+//         $this->setTableVersion('felamimail_cache_message_bcc', 2);
         $this->setTableVersion('felamimail_sieve_rule', 3);
         $this->setTableVersion('felamimail_sieve_vacation', 3);
         $this->setApplicationVersion('Felamimail', '8.3');
