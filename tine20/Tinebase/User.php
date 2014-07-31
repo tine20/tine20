@@ -438,37 +438,16 @@ class Tinebase_User
             }
         }
         
-        $groupBackend = Tinebase_Group::getInstance();
-        
         $user = $userBackend->getUserByPropertyFromSyncBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
-        $user->accountPrimaryGroup = $groupBackend->resolveGIdNumberToUUId($user->accountPrimaryGroup);
+        $user->accountPrimaryGroup = Tinebase_Group::getInstance()->resolveGIdNumberToUUId($user->accountPrimaryGroup);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), TRUE));
+        $userProperties = method_exists($userBackend, 'getLastUserProperties') ? $userBackend->getLastUserProperties() : array();
+        self::_syncUserHook($user, $userProperties);
         
-        // make sure primary group exists
-        try {
-            $group = $groupBackend->getGroupById($user->accountPrimaryGroup);
-        } catch (Tinebase_Exception_Record_NotDefined $tern) {
-            if ($groupBackend->isDisabledBackend()) {
-                // groups are sql only
-                $group = $groupBackend->getDefaultGroup();
-                $user->accountPrimaryGroup = $group->getId();
-            } else {
-                try {
-                    $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
-                } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                    throw new Tinebase_Exception('Primary group ' . $user->accountPrimaryGroup . ' not found in sync backend.');
-                }
-                try {
-                    $sqlGgroup = $groupBackend->getGroupByName($group->name);
-                    throw new Tinebase_Exception('Group already exists but it has a different ID: ' . $group->name);
-                    
-                } catch (Tinebase_Exception_Record_NotDefined $tern) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Adding group " . $group->name);
-                    $group = $groupBackend->addGroupInSqlBackend($group);
-                }
-            }
-        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+            . print_r($user->toArray(), TRUE));
+        
+        $group = self::getPrimaryGroupForUser($user);
         
         try {
             $currentUser = $userBackend->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
@@ -491,19 +470,26 @@ class Tinebase_User
         } catch (Tinebase_Exception_NotFound $ten) {
             try {
                 $invalidUser = $userBackend->getUserByPropertyFromSqlBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
-                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " remove invalid user: " . $username);
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
+                    . " Remove invalid user: " . $username);
                 $userBackend->deleteUserInSqlBackend($invalidUser);
             } catch (Tinebase_Exception_NotFound $ten) {
                 // do nothing
             }
-        
-            self::syncContact($user);
+            
+            if ($user->visibility !== Tinebase_Model_FullUser::VISIBILITY_HIDDEN) {
+                self::syncContact($user);
+            }
             $syncedUser = $userBackend->addUserInSqlBackend($user);
             $userBackend->addPluginUser($syncedUser, $user);
         }
         
         // import contactdata(phone, address, fax, birthday. photo)
-        if (isset($options['syncContactData']) && $options['syncContactData'] && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+        if (isset($options['syncContactData']) 
+                && $options['syncContactData'] 
+                && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true
+                && $syncedUser->visibility !== Tinebase_Model_FullUser::VISIBILITY_HIDDEN
+        ) {
             $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
             
             try {
@@ -520,6 +506,65 @@ class Tinebase_User
         Tinebase_Group::syncMemberships($syncedUser);
         
         return $syncedUser;
+    }
+    
+    /**
+     * get primary group for user and make sure that group exists
+     * 
+     * @param Tinebase_Model_FullUser $user
+     * @throws Tinebase_Exception
+     * @return Tinebase_Model_Group
+     */
+    public static function getPrimaryGroupForUser($user)
+    {
+        $groupBackend = Tinebase_Group::getInstance();
+        
+        try {
+            $group = $groupBackend->getGroupById($user->accountPrimaryGroup);
+        } catch (Tinebase_Exception_Record_NotDefined $tern) {
+            if ($groupBackend->isDisabledBackend()) {
+                // groups are sql only
+                $group = $groupBackend->getDefaultGroup();
+                $user->accountPrimaryGroup = $group->getId();
+            } else {
+                try {
+                    $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
+                } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                    throw new Tinebase_Exception('Primary group ' . $user->accountPrimaryGroup . ' not found in sync backend.');
+                }
+                try {
+                    $sqlGgroup = $groupBackend->getGroupByName($group->name);
+                    throw new Tinebase_Exception('Group already exists but it has a different ID: ' . $group->name);
+        
+                } catch (Tinebase_Exception_Record_NotDefined $tern) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . " Adding group " . $group->name);
+                    $group = $groupBackend->addGroupInSqlBackend($group);
+                }
+            }
+        }
+        
+        return $group;
+    }
+    
+    /**
+     * call configured hooks for adjusting synced user data
+     * 
+     * @param Tinebase_Model_FullUser $user
+     * @param array $userProperties
+     */
+    protected static function _syncUserHook(Tinebase_Model_FullUser $user, $userProperties)
+    {
+        $hookClass = Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_HOOK_CLASS);
+        if ($hookClass) {
+            $hook = new $hookClass();
+            if (method_exists($hook, 'syncUser')) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Calling ' . $hookClass . '::syncUser() ...');
+                
+                call_user_func_array(array($hook, 'syncUser'), array($user, $userProperties));
+            }
+        }
     }
     
     /**
