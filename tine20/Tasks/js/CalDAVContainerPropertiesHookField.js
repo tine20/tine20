@@ -5,7 +5,7 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-Ext.ns('Tine.Calendar');
+Ext.ns('Tine.Tasks');
 
 /**
  * render the CalDAV Url into property panel of containers
@@ -13,8 +13,8 @@ Ext.ns('Tine.Calendar');
  * @class   Tine.Calendar.CalDAVContainerPropertiesHookField
  * @extends Tine.widgets.container.CalDAVContainerPropertiesHookField
  */
-Tine.Calendar.CalDAVContainerPropertiesHookField = Ext.extend(Tine.widgets.container.CalDAVContainerPropertiesHookField, {
-    appName: 'Calendar'
+Tine.Tasks.CalDAVContainerPropertiesHookField = Ext.extend(Tine.widgets.container.CalDAVContainerPropertiesHookField, {
+    appName: 'Tasks'
 });
 
-Ext.ux.ItemRegistry.registerItem('Tine.widgets.container.PropertiesDialog.FormItems.Properties', Tine.Calendar.CalDAVContainerPropertiesHookField, 100);
+Ext.ux.ItemRegistry.registerItem('Tine.widgets.container.PropertiesDialog.FormItems.Properties', Tine.Tasks.CalDAVContainerPropertiesHookField, 100);
