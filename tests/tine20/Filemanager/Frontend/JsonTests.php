@@ -1190,6 +1190,41 @@ class Filemanager_Frontend_JsonTests extends TestCase
         // this must not work
         $this->_json->moveNodes(array('/shared/Parent/Child'), array('/shared/Parent/Child'), FALSE);
     }
+
+    /**
+     * test to move a folder containing another folder
+     *
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=9990
+     */
+    public function testMove2FoldersOnToplevel()
+    {
+        $path = '/personal/' .Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name;
+    
+        $this->_json->createNode($path . '/Parent', 'folder', NULL, FALSE);
+        $this->_json->createNode($path . '/Parent/Child', 'folder', NULL, FALSE);
+        $this->_json->createNode('/shared/Another', 'folder', NULL, FALSE);
+    
+        // move forth and back, no exception should occur
+        $this->_json->moveNodes(array($path . '/Parent'), array('/shared/Parent'), FALSE);
+        $this->_json->moveNodes(array('/shared/Parent'), array($path . '/Parent'), FALSE);
+    
+        try {
+            $c = Tinebase_Container::getInstance()->getContainerByName('Filemanager', 'Parent', Tinebase_Model_Container::TYPE_SHARED);
+            $this->fail('Container doesn\'t get deleted');
+        } catch (Tinebase_Exception_NotFound $e) {
+        }
+        
+        // may be any exception
+        $e = new Tinebase_Exception('Dog eats cat');
+    
+        try {
+            $this->_json->moveNodes(array($path . '/Parent'), array('/shared/Parent'), FALSE);
+        } catch (Filemanager_Exception_NodeExists $e) {
+        }
+    
+        // if $e gets overridden, an error occured (the exception Filemanager_Exception_NodeExists must not be thrown)
+        $this->assertEquals('Tinebase_Exception', get_class($e));
+    }
     
     /**
      * get other users container

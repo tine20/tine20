@@ -1042,7 +1042,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $destinationNodeName = $destination->container->getId();
         } else {
             $this->_checkPathACL($destinationParentPathRecord, 'update');
-            
             if ($source->getParent()->flatpath != $destinationParentPathRecord->flatpath) {
                 try {
                     $this->_checkIfExists($destination);
@@ -1060,6 +1059,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     $this->_checkIfExists($destination);
                 }
             }
+        }
+        
+        // remove source container if it doesn't have the same parent - otherwise a new one will be created
+        if ($source->isToplevelPath() && $source->getParent()->getId() !== $destination->getParent()->getId()) {
+            Tinebase_Container::getInstance()->deleteContainer($source->container->getId());
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -1090,7 +1094,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 . ' Moving container ' . $source->container->name . ' to ' . $destination->flatpath);
         
             $this->_checkACLContainer($source->container, 'update');
-        
+            
             $container = $source->container;
             if ($container->name !== $destination->name) {
                 try {
