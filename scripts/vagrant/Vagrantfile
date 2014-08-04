@@ -19,11 +19,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		#}
 	end
 
+	config.vm.synced_folder "", "/vagrant", disabled: true
+
 	# cookies special provisioning
 	config.vm.provision :shell, :path => "bootstrap_vagrant.sh"
 
 	# Configure NFS shared folder
 	config.vm.synced_folder "../../", "/vagrant/tine20.git", type: "nfs"
+	config.vm.synced_folder "", "/vagrant/", type: "nfs"
+
         #config.vm.synced_folder "../../", "/vagrant/tine20.git", :nfs => false
 
 	# Create a private network, which allows host-only access to the machine
