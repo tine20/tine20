@@ -1,18 +1,18 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * 
+ *
  */
 
 /**
  * the class provides functions to handle applications
- * 
+ *
  * @package     Tinebase
  * @subpackage  Server
  */
@@ -36,7 +36,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * the constructor
      *
      */
-    private function __construct() 
+    private function __construct()
     {
     }
 
@@ -51,7 +51,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @return Tinebase_Controller
      */
-    public static function getInstance() 
+    public static function getInstance()
     {
         if (self::$_instance === NULL) {
             self::$_instance = new Tinebase_Controller;
@@ -73,22 +73,49 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function login($_loginname, $_password, $_ipAddress, $_clientIdString = NULL, $securitycode = NULL)
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($_loginname, $_password);
-        $authResultCode = $authResult->getCode();
-        $authResultIdentity = $authResult->getIdentity();
         
         Tinebase_Core::set(Tinebase_Core::SESSIONID, Zend_Session::isStarted() ? session_id() : Tinebase_Record_Abstract::generateUID());
         
-        $accessLog = new Tinebase_Model_AccessLog(array(
+        $accessLog = $this->_getModelAccessLog($authResult, $_clientIdString, $_ipAddress);
+        
+        $result = $this->_getResultFromAccessLog($accessLog, $authResult, $_loginname, $_password, $_ipAddress);
+        
+        $this->_updateAccessLogInstance($accessLog);
+
+        return $result;
+    }
+    
+    /**
+     *
+     * @param Zend_Auth_Result  $authResult
+     * @param string            $_clientIdString
+     * @param string            $_ipAddress
+     * @return Tinebase_Model_AccessLog
+     */
+    protected function _getModelAccessLog(Zend_Auth_Result $authResult, $_clientIdString, $_ipAddress)
+    {
+        return new Tinebase_Model_AccessLog(array(
             'sessionid'     => Tinebase_Core::get(Tinebase_Core::SESSIONID),
             'ip'            => $_ipAddress,
             'li'            => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-            'result'        => $authResultCode,
+            'result'        => $authResult->getCode(),
             'clienttype'    => $_clientIdString,
         ), TRUE);
-        
+    }
+    
+    /**
+     *
+     * @param Tinebase_Model_AccessLog          $accessLog
+     * @param Zend_Auth_Result                  $authResult
+     * @param string                            $_loginname
+     * @param string                            $_password
+     * @param string                            $_ipAddress
+     */
+    protected function _getResultFromAccessLog(Tinebase_Model_AccessLog $accessLog, Zend_Auth_Result $authResult, $_loginname, $_password, $_ipAddress)
+    {
         $user = NULL;
         if ($accessLog->result == Tinebase_Auth::SUCCESS) {
-            $user = $this->_getLoginUser($authResultIdentity, $accessLog);
+            $user = $this->_getLoginUser($authResult->getIdentity(), $accessLog);
             if ($user !== NULL) {
                 $this->_checkUserStatus($user, $accessLog);
             }
@@ -96,32 +123,39 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         
         if ($accessLog->result === Tinebase_Auth::SUCCESS && $user !== NULL && $user->accountStatus === Tinebase_User::STATUS_ENABLED) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                __METHOD__ . '::' . __LINE__ . " Login with username $_loginname from $_ipAddress succeeded.");
-
+                    __METHOD__ . '::' . __LINE__ . " Login with username $_loginname from $_ipAddress succeeded.");
+        
             $this->_initUser($user, $accessLog, $_password);
-            
-            $result = true;
+        
+            $result = TRUE;
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                __METHOD__ . '::' . __LINE__ . " Login with username $_loginname from $_ipAddress failed ($authResultCode)!");
+                    __METHOD__ . '::' . __LINE__ . " Login with username $_loginname from $_ipAddress failed ({$authResult->getCode()})!");
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Failure messages: ' . print_r($authResult->getMessages(), TRUE));
-
-            $this->_loginFailed($_loginname ? $_loginname : $authResultIdentity, $accessLog);
-            
-            $result = false;
-        } 
-
+                    __METHOD__ . '::' . __LINE__ . ' Failure messages: ' . print_r($authResult->getMessages(), TRUE));
+        
+            $this->_loginFailed($_loginname ? $_loginname : $authResult->getIdentity(), $accessLog);
+        
+            $result = FALSE;
+        }
+        return $result;
+    }
+    
+    
+    /**
+     *
+     * @param Tinebase_Model_AccessLog $accessLog
+     */
+    protected function _updateAccessLogInstance(Tinebase_Model_AccessLog $accessLog)
+    {
         if (Tinebase_Core::get('serverclassname') !== 'ActiveSync_Server_Http' || !(ActiveSync_Config::getInstance()->get(ActiveSync_Config::DISABLE_ACCESS_LOG))) {
             Tinebase_AccessLog::getInstance()->create($accessLog);
         }
-
-        return $result;
     }
     
     /**
      * get login user
-     * 
+     *
      * @param string $_username
      * @param Tinebase_Model_AccessLog $_accessLog
      * @return Tinebase_Model_FullUser|NULL
@@ -138,7 +172,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                  * catch all exceptions during user data sync
                  * either it's the first sync and no user data get synchronized or
                  * we can work with the data synced during previous login
-                 */ 
+                 */
                 try {
                     Tinebase_User::syncUser($_username,array('syncContactData' => TRUE));
                 } catch (Exception $e) {
@@ -161,7 +195,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     
     /**
      * check user status
-     * 
+     *
      * @param Tinebase_Model_FullUser $_user
      * @param Tinebase_Model_AccessLog $_accessLog
      */
@@ -185,13 +219,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             else if ($_user->accountStatus == Tinebase_User::STATUS_BLOCKED) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $_user->accountLoginName . ' is blocked');
                 $_accessLog->result = Tinebase_Auth::FAILURE_BLOCKED;
-            } 
+            }
         }
     }
     
     /**
      * init user session
-     * 
+     *
      * @param Tinebase_Model_FullUser $_user
      * @param Tinebase_Model_AccessLog $_accessLog
      * @param string $_password
@@ -224,7 +258,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     
     /**
      * init session after successful login
-     * 
+     *
      * @param Tinebase_Model_FullUser $_user
      */
     protected function _initUserSession(Tinebase_Model_FullUser $_user)
@@ -247,8 +281,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             Zend_Session::regenerateId();
             Tinebase_Core::set(Tinebase_Core::SESSIONID, session_id());
             
-            /** 
-             * fix php session header handling http://forge.tine20.org/mantisbt/view.php?id=4918 
+            /**
+             * fix php session header handling http://forge.tine20.org/mantisbt/view.php?id=4918
              * -> search all Set-Cookie: headers and replace them with the last one!
              **/
             $cookieHeaders = array();
@@ -267,7 +301,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     
     /**
      * login failed
-     * 
+     *
      * @param  string                    $loginName
      * @param  Tinebase_Model_AccessLog  $accessLog
      */
@@ -362,7 +396,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
          * we unset the Zend_Auth session variable. This way we keep the session,
          * but the user is not logged into Tine 2.0
          * we use this to validate passwords for OpenId for example
-         */ 
+         */
         unset(Tinebase_Core::getSession()->Zend_Auth);
         unset(Tinebase_Core::getSession()->currentAccount);
         
@@ -408,7 +442,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     
     /**
      * gets image info and data
-     * 
+     *
      * @param   string $_application application which manages the image
      * @param   string $_identifier identifier of image/record
      * @param   string $_location optional additional identifier
@@ -434,7 +468,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * remove obsolete/outdated stuff from cache
      * notes: CLEANING_MODE_OLD -> removes obsolete cache entries (files for file cache)
      *        CLEANING_MODE_ALL -> removes complete cache structure (directories for file cache) + cache entries
-     * 
+     *
      * @param string $_mode
      */
     public function cleanupCache($_mode = Zend_Cache::CLEANING_MODE_OLD)
@@ -485,10 +519,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     
     /**
      * spy function for unittesting of queue workers
-     * 
-     * this function writes the number of executions of itself in the given 
+     *
+     * this function writes the number of executions of itself in the given
      * file and optionally sleeps a given time
-     * 
+     *
      * @param string  $filename
      * @param int     $sleep
      * @param int     $fail
@@ -513,7 +547,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
     /**
      * handle events for Tinebase
-     * 
+     *
      * @param Tinebase_Event_Abstract $_eventObject
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
