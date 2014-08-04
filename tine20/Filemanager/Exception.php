@@ -16,6 +16,12 @@
  * @package     Filemanager
  * @subpackage  Exception
  */
-class Filemanager_Exception extends Exception
+class Filemanager_Exception extends Tinebase_Exception
 {
+    /**
+     * the name of the application, this exception belongs to
+     *
+     * @var string
+     */
+    protected $_appName = 'Filemanager';
 }

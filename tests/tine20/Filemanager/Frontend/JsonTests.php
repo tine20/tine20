@@ -614,6 +614,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             $target, 
             FALSE
         );
+        
         $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($target . '/testcontainer');
         $this->assertEquals(1, count($result));
         $this->_objects['containerids'][] = $result[0]['name']['id'];
@@ -652,9 +653,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
     {
         $filesToCopy = $this->testCreateFileNodes();
         $file1 = $filesToCopy[0];
+        $file2 = $filesToCopy[1];
         
         $this->setExpectedException('Filemanager_Exception_NodeExists');
-        $result = $this->_json->copyNodes(array($file1), array($file1), FALSE);
+        $result = $this->_json->copyNodes(array($file1), array($file2), FALSE);
     }
     
     /**
@@ -664,9 +666,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
     {
         $filesToCopy = $this->testCreateFileNodes();
         $file1 = $filesToCopy[0];
+        $file2 = $filesToCopy[1];
         
         try {
-            $result = $this->_json->copyNodes(array($file1), array($file1), FALSE);
+            $result = $this->_json->copyNodes(array($file1), array($file2), FALSE);
         } catch (Filemanager_Exception_NodeExists $fene) {
             $info = $fene->toArray();
             $this->assertEquals(1, count($info['existingnodesinfo']));
@@ -1136,6 +1139,38 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->testDeleteFileNodes();
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         $this->assertEquals(1, $result, 'should cleanup one file');
+    }
+    
+    /**
+     * test preventing to copy a folder in its subfolder
+     * 
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=9990
+     */
+    public function testMoveFolderIntoChildFolder()
+    {
+        $this->_json->createNode('/shared/Parent', 'folder', NULL, FALSE);
+        $this->_json->createNode('/shared/Parent/Child', 'folder', NULL, FALSE);
+        
+        $this->setExpectedException('Filemanager_Exception_DestinationIsOwnChild');
+        
+        // this must not work
+        $this->_json->moveNodes(array('/shared/Parent'), array('/shared/Parent/Child/Parent'), FALSE);
+    }
+    
+    /**
+     * test exception on moving to the same position
+     * 
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=9990
+     */
+    public function testMoveFolderToSamePosition()
+    {
+        $this->_json->createNode('/shared/Parent', 'folder', NULL, FALSE);
+        $this->_json->createNode('/shared/Parent/Child', 'folder', NULL, FALSE);
+    
+        $this->setExpectedException('Filemanager_Exception_DestinationIsSameNode');
+    
+        // this must not work
+        $this->_json->moveNodes(array('/shared/Parent/Child'), array('/shared/Parent/Child'), FALSE);
     }
     
     /**

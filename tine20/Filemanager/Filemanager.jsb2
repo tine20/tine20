@@ -12,6 +12,10 @@
       "isDebug": true,
       "fileIncludes": [
         {
+          "text": "ExceptionHandler.js",
+          "path": "js/"
+        },
+        {
           "text": "GridContextMenu.js",
           "path": "js/"
         },

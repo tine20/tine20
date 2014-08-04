@@ -236,3 +236,23 @@ msgstr "Gemeinsame Ordner"
 #: Controller/Node.php:332
 msgid "Other users folders"
 msgstr "Ordner anderer Benutzer"
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr "Zielpfad ist der selbe Pfad"
+
+#: Exception/DestinationIsSameNode.php:31
+msgid ""
+"The destination has the same path the source has. No action has been "
+"performed."
+msgstr "Das Ziel hat den gleichen Pfad wie die Quelle. Es wurde keine Aktion ausgeführt."
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr "Zielpfad ist ein Unterordner"
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
+msgstr "Sie haben versucht, einen Ordner in einen Unterordner von sich selbst zu kopieren oder verschieben. Dieser Vorgang ist nicht erlaubt."

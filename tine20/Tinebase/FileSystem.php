@@ -716,7 +716,6 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     public function stat($path)
     {
         $pathParts = $this->_splitPath($path);
-        
         $cacheId = $this->_getCacheId($pathParts);
         
         // let's see if the path is cached in statCache

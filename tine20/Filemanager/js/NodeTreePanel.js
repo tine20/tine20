@@ -75,15 +75,17 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             appendOnly: this.ddAppendOnly === true,
             /**
              * @todo check acl!
+             * @todo combine with repeated code from isValidDropPoint. DRY!
              */
             onNodeOver : function(n, dd, e, data) {
-                
                 var preventDrop = false,
                     selectionContainsFiles = false;
                 
-                if(dd.dragData.selections) {
-                    for(var i=0; i<dd.dragData.selections.length; i++) {
-                        if(n.node.id == dd.dragData.selections[i].id) {
+                if (dd.dragData.selections) {
+                    for (var i=0; i<dd.dragData.selections.length; i++) {
+                        if (n.node.id == dd.dragData.selections[i].id) {
+                            preventDrop = true;
+                        } else if (this.isSubPath(dd.dragData.selections[i].data.path, n.node.attributes.path)) {
                             preventDrop = true;
                         }
                         if(dd.dragData.selections[i].data.type == 'file') {
@@ -108,16 +110,23 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                     && !preventDrop ? 'x-dd-drop-ok' : false;
             },
             
+            /**
+             * this is called on drop
+             * 
+             * @TODO: combine with repeated code from onNodeOver. DRY!
+             */
             isValidDropPoint: function(n, op, dd, e){
-                
                 var preventDrop = false,
-                selectionContainsFiles = false;
-                
-                if(dd.dragData.selections) {
+                    selectionContainsFiles = false;
+                    
+                if (dd.dragData.selections) {
                     for(var i=0; i<dd.dragData.selections.length; i++) {
-                        if(n.node.id == dd.dragData.selections[i].id) {
+                        if (n.node.id == dd.dragData.selections[i].id) {
+                            preventDrop = true;
+                        } else if (this.isSubPath(dd.dragData.selections[i].data.path, n.node.attributes.path)) {
                             preventDrop = true;
                         }
+    
                         if(dd.dragData.selections[i].data.type == 'file') {
                             selectionContainsFiles = true;
                         }
@@ -139,10 +148,33 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                         && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
                         && !preventDrop;
             },
+            
             completeDrop: function(de) {
                 var ns = de.dropNode, p = de.point, t = de.target;
                 t.ui.endDrop();
                 this.tree.fireEvent("nodedrop", de);
+            },
+            
+            /**
+             * checks if the path needle is a sub path of haystack
+             */
+            isSubPath: function(haystack, needle) {
+                var h = haystack.split('/');
+                var n = needle.split('/');
+                var res = true;
+                
+                for (var index = 0; index < h.length; index++) {
+                    
+                    if (n.length <= index) {
+                        break;
+                    }
+                    
+                    if (h[index] != n[index]) {
+                        res = false;
+                    }
+                }
+                
+                return res;
             }
         };
         

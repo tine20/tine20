@@ -13,61 +13,8 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:97
-msgid "manage shared folders"
-msgstr ""
-
-#: Acl/Rights.php:98
-msgid "Create new shared folders"
-msgstr ""
-
-#: Controller.php:102
-#, python-format
-msgid "%s's personal files"
-msgstr ""
-
 #: js/PathFilterModel.js:50
 msgid "path"
-msgstr ""
-
-#: js/NodeEditDialog.js:44 js/Filemanager.js:44 js/NodeGridPanel.js:346
-msgid "Save locally"
-msgstr ""
-
-#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
-msgid "Node"
-msgstr ""
-
-#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:135
-msgid "Name"
-msgstr ""
-
-#: js/NodeEditDialog.js:121 js/Model.js:530
-msgid "Type"
-msgstr ""
-
-#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:189
-msgid "Created By"
-msgstr ""
-
-#: js/NodeEditDialog.js:132 js/Model.js:532 js/NodeGridPanel.js:181
-msgid "Creation Time"
-msgstr ""
-
-#: js/NodeEditDialog.js:141
-msgid "Modified By"
-msgstr ""
-
-#: js/NodeEditDialog.js:144
-msgid "Last Modified"
-msgstr ""
-
-#: js/NodeEditDialog.js:167
-msgid "Description"
-msgstr ""
-
-#: js/NodeEditDialog.js:181
-msgid "Enter description"
 msgstr ""
 
 #: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:653
@@ -86,19 +33,57 @@ msgid "Putting files in this folder is not allowed!"
 msgstr ""
 
 #: js/GridContextMenu.js:34
+#, python-brace-format
 msgid "Please enter the new name of the {0}:"
 msgstr ""
 
 #: js/GridContextMenu.js:40
+#, python-brace-format
 msgid "Not renamed {0}"
 msgstr ""
 
 #: js/GridContextMenu.js:40 js/NodeGridPanel.js:505
+#, python-brace-format
 msgid "You have to supply a {0} name!"
 msgstr ""
 
 #: js/GridContextMenu.js:144 js/NodeGridPanel.js:546
 msgid "Do you really want to delete the following files?"
+msgstr ""
+
+#: js/ExceptionHandler.js:32
+msgid "Service Unavailable"
+msgstr ""
+
+#: js/ExceptionHandler.js:33
+#, python-brace-format
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 "
+"Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:55
+msgid "Files already exists"
+msgstr ""
+
+#: js/ExceptionHandler.js:55
+msgid "Do you want to replace the following file(s)?"
+msgstr ""
+
+#: js/ExceptionHandler.js:88
+msgid "Failure on create folder"
+msgstr ""
+
+#: js/ExceptionHandler.js:89
+msgid "Item with this name already exists!"
+msgstr ""
+
+#: js/Filemanager.js:36
+msgid "Filemanager"
+msgstr ""
+
+#: js/Filemanager.js:44 js/NodeEditDialog.js:44 js/NodeGridPanel.js:346
+msgid "Save locally"
 msgstr ""
 
 #: js/Model.js:40
@@ -114,10 +99,12 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/Model.js:281 js/Model.js:297
+#, python-brace-format
 msgid "Copying data .. {0}"
 msgstr ""
 
 #: js/Model.js:284 js/Model.js:299
+#, python-brace-format
 msgid "Moving data .. {0}"
 msgstr ""
 
@@ -129,38 +116,44 @@ msgstr ""
 msgid "Quick Search"
 msgstr ""
 
+#: js/Model.js:530 js/NodeEditDialog.js:121
+msgid "Type"
+msgstr ""
+
 #: js/Model.js:531 js/NodeGridPanel.js:149
 msgid "Contenttype"
 msgstr ""
 
-#: js/Filemanager.js:36
-msgid "Filemanager"
+#: js/Model.js:532 js/NodeEditDialog.js:132 js/NodeGridPanel.js:181
+msgid "Creation Time"
 msgstr ""
 
-#: js/Filemanager.js:91
-msgid "Service Unavailable"
+#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
+msgid "Node"
 msgstr ""
 
-#: js/Filemanager.js:92
-msgid ""
-"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 "
-"Admin FAQ{1} for configuration advice or contact your administrator."
+#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:135
+msgid "Name"
 msgstr ""
 
-#: js/Filemanager.js:114
-msgid "Files already exists"
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:189
+msgid "Created By"
 msgstr ""
 
-#: js/Filemanager.js:114
-msgid "Do you want to replace the following file(s)?"
+#: js/NodeEditDialog.js:141
+msgid "Modified By"
 msgstr ""
 
-#: js/Filemanager.js:147
-msgid "Failure on create folder"
+#: js/NodeEditDialog.js:144
+msgid "Last Modified"
 msgstr ""
 
-#: js/Filemanager.js:148
-msgid "Item with this name already exists!"
+#: js/NodeEditDialog.js:167
+msgid "Description"
+msgstr ""
+
+#: js/NodeEditDialog.js:181
+msgid "Enter description"
 msgstr ""
 
 #: js/NodeGridPanel.js:127
@@ -184,6 +177,7 @@ msgid "Last Modified By"
 msgstr ""
 
 #: js/NodeGridPanel.js:251
+#, python-brace-format
 msgid "The max. Upload Filesize is {0} MB"
 msgstr ""
 
@@ -216,6 +210,7 @@ msgid "Please enter the name of the new folder:"
 msgstr ""
 
 #: js/NodeGridPanel.js:505
+#, python-brace-format
 msgid "No {0} added"
 msgstr ""
 
@@ -229,4 +224,37 @@ msgstr ""
 
 #: Controller/Node.php:332
 msgid "Other users folders"
+msgstr ""
+
+#: Acl/Rights.php:97
+msgid "manage shared folders"
+msgstr ""
+
+#: Acl/Rights.php:98
+msgid "Create new shared folders"
+msgstr ""
+
+#: Controller.php:102
+#, python-format
+msgid "%s's personal files"
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:31
+msgid ""
+"The destination has the same path the source has. No action has been "
+"performed."
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
 msgstr ""

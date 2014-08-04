@@ -805,7 +805,30 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         foreach ($_sourceFilenames as $idx => $source) {
             $sourcePathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($source));
             $destinationPathRecord = $this->_getDestinationPath($_destinationFilenames, $idx, $sourcePathRecord);
-
+            
+            if ($this->_backend->fileExists($destinationPathRecord->statpath) && $sourcePathRecord->flatpath == $destinationPathRecord->flatpath) {
+                throw new Filemanager_Exception_DestinationIsSameNode();
+            }
+            
+            // test if destination is subfolder of source
+            $dest = explode('/', $destinationPathRecord->statpath);
+            $source = explode('/', $sourcePathRecord->statpath);
+            $isSub = TRUE;
+            
+            for ($i = 0; $i < count($source); $i++) {
+                
+                if (! isset($dest[$i])) {
+                    break;
+                }
+                
+                if ($source[$i] != $dest[$i]) {
+                    $isSub = FALSE;
+                }
+            }
+            if ($isSub) {
+                throw new Filemanager_Exception_DestinationIsOwnChild();
+            }
+            
             try {
                 if ($_action === 'move') {
                     $node = $this->_moveNode($sourcePathRecord, $destinationPathRecord, $_forceOverwrite);
