@@ -119,7 +119,6 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'label' => 'Cost Center', //_('Cost Center')
                 'type'  => 'record',
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'config' => array(
                     'appName'     => 'Sales',
                     'modelName'   => 'CostCenter',
@@ -146,18 +145,21 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'title' => 'Price Net', // _('Price Net')
                 'type'  => 'integer',
                 'specialType' => 'euMoney',
-                'default' => 0
+                'default' => 0,
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'price_gross' => array(
                 'title' => 'Price Gross', // _('Price Gross')
                 'type'  => 'integer',
                 'specialType' => 'euMoney',
-                'default' => 0
+                'default' => 0,
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'sales_tax' => array(
                 'title' => 'Sales Tax', // _('Sales Tax')
                 'type'  => 'integer',
-                'default' => 19
+                'default' => 19,
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'positions' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),

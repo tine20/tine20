@@ -440,7 +440,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 fieldLabel: this.app.i18n._('Price Net'),
                                 columnWidth: 1/3
                             }, {
-                                name: 'price_net',
+                                name: 'price_gross',
                                 xtype: 'numberfield',
                                 decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
                                 fieldLabel: this.app.i18n._('Price Gross'),
