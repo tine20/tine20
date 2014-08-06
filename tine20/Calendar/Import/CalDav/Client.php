@@ -259,23 +259,31 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 
                 foreach ($result as $key => $value) {
                     if (isset($value['{urn:ietf:params:xml:ns:caldav}calendar-data'])) {
+                        $data = $value['{urn:ietf:params:xml:ns:caldav}calendar-data'];
                         $name = explode('/', $key);
                         $name = end($name);
                         try {
                             Calendar_Frontend_WebDAV_Event::create(
                                 $container,
                                 $name,
-                                $value['{urn:ietf:params:xml:ns:caldav}calendar-data'],
+                                $data,
                                 $onlyCurrentUserOrganizer
                             );
                         } catch (Exception $e) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not create event from data: ' . $value['{urn:ietf:params:xml:ns:caldav}calendar-data']);
-                            Tinebase_Exception::log($e);
+                            // don't warn on VTODOs
+                            if (strpos($data, 'BEGIN:VTODO') !== false) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Skipping VTODO');
+                            } else {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not create event from data: '
+                                            . $data);
+                                Tinebase_Exception::log($e);
+                            }
                         }
                     }
                 }
-            } while($start < $max);
+            } while ($start < $max);
         }
         return true;
     }
