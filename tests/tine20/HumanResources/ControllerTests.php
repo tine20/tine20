@@ -157,7 +157,7 @@ class HumanResources_ControllerTests extends HumanResources_TestCase
         $contract->employee_id = $employee->getId();
         
         $contractController->create($contract);
-        $this->assertEquals(15, $contractController->calculateVacationDays($contract, $start, $stop));
+        $this->assertEquals(15, round($contractController->calculateVacationDays($contract, $start, $stop), 0));
 
         // test "getDatesToWorkOn"
         $contract->start_date = $start;
