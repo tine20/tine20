@@ -138,7 +138,8 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
     public function calDavRequest($method, $uri, $body, $depth = 0)
     {
         $redo = 0;
-        while (++$redo < 4)
+        $response = null;
+        while (++$redo < 10)
         {
             try {
                 $response = $this->request($method, $uri, $body, array(
@@ -153,6 +154,10 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
                 continue;
             }
             break;
+        }
+        
+        if (! $response) {
+            throw new Tinebase_Exception("no response after several retries");
         }
         
         $result = $this->parseMultiStatus($response['body']);
