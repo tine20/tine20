@@ -764,6 +764,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vevent ' . $vevent->serialize());
         
         $newAttendees = array();
+        $shortenedFields = array();
         $attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         
@@ -848,7 +849,18 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 case 'UID':
                 case 'SUMMARY':
                     $key = strtolower($property->name);
-                    $event->$key = $property->getValue();
+                    $value = $property->getValue();
+                    switch ($key) {
+                        case 'summary':
+                            if (strlen($value) > 255) {
+                                $shortenedFields[$key] = $value;
+                                $endPos = strpos($value, "\n") < 255 ? strpos($value, "\n") : 255;
+                                $value = substr($value, 0, $endPos);
+                            }
+                            break;
+                    }
+                    $event->$key = $value;
+                    
                     break;
                     
                 case 'ORGANIZER':
@@ -1063,6 +1075,10 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     }
                     break;
             }
+        }
+        
+        foreach ($shortenedFields as $key => $value) {
+            $event->description = "--------\n$key: $value";
         }
         
         if (isset($lastAck)) {
