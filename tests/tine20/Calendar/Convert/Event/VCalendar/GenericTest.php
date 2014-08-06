@@ -672,4 +672,17 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals(1, $savedEvent->rrule->bymonthday, print_r($savedEvent->toArray(), true));
         $this->assertTrue(! isset($savedEvent->rrule->byday), print_r($savedEvent->toArray(), true));
     }
+
+    /**
+     * testLongSummary
+     * 
+     * @see 0010120: shorten long event summaries
+     */
+    public function testLongSummary()
+    {
+        $savedEvent = $this->_saveIcsEvent('iphone_longsummary.ics');
+        
+        $this->assertEquals('Finanz-IT anrufen, xxxxxxxxxxxh', $savedEvent->summary, print_r($savedEvent->toArray(), true));
+        $this->assertContains("Finanz-IT anrufen, xxxxxxxxxxxh\nFestgelegt für 25. Juli 2012", $savedEvent->description, print_r($savedEvent->toArray(), true));
+    }
 }

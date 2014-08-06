@@ -1,0 +1,39 @@
+BEGIN:VCALENDAR
+CALSCALE:GREGORIAN
+PRODID:-//Apple Inc.//iCal 3.0m//EN
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+BEGIN:DAYLIGHT
+DTSTART:19810329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+TZNAME:CEST
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:19961027T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+TZNAME:CET
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTEND;TZID=Europe/Berlin:20111020T100000
+DTSTAMP:20111020T064721Z
+DTSTART;TZID=Europe/Berlin:20111020T090000
+LOCATION:Ortrud
+SEQUENCE:0
+SUMMARY:Finanz-IT anrufen\, xxxxxxxxxxxh\nFestgelegt für 25. Juli 2012\nH
+ allo xxxxxx\,\n\nHerr xxxxxxxxxxxhvon der F-I hatte mich heute versucht 
+ zu erreichen\, leider habe ich ihn jetzt verpasst. Kannst du versuchen I
+ hn diese Woche noch anzurufen?\n\nWie es aussieht möchte er jetzt doch n
+ och mal über die Abschlagszahlungen handeln. Aussage auf der Mailbox war
+  das er die Datierung und die Summe klären möchte.\nIch befürchte das xx
+ x und xxx soweit noch nicht sind und deshalb die Bitte an dich\, bevor w
+ ieder was falsch läuft.\n\nVertraglich haben wir Zahlung in zwei Summen 
+ (Halbjahr) immer im Voraus vereinbart.\nBezahlt haben sie letztes mal xx
+UID:631C01AB-0FE0-4E37-B774-56F05DDAD1E6
+END:VEVENT
+END:VCALENDAR
