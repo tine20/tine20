@@ -638,16 +638,38 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function testConvertWithInvalidAlarmTime()
     {
-        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/invalid_alarm_time.ics', 'r');
+        $savedEvent = $this->_saveIcsEvent('invalid_alarm_time.ics');
+        $this->assertEquals(104, count($savedEvent->exdate), print_r($savedEvent->toArray(), true));
+        $this->assertEquals(2, count($savedEvent->alarms), print_r($savedEvent->toArray(), true));
+    }
+    
+    /**
+     * save ics test event
+     * 
+     * @param string $filename
+     * @return Calendar_Model_Event
+     */
+    protected function _saveIcsEvent($filename)
+    {
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/' . $filename, 'r');
         
         $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $event = $this->_converter->toTine20Model($vcalendarStream);
         
-        // try to save event
-        $savedEvent = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+        return Calendar_Controller_MSEventFacade::getInstance()->create($event);
+    }
+
+    /**
+     * testRruleWithBysetpos
+     * 
+     * @see 0010058: vevent with lots of exdates leads alarm saving failure
+     */
+    public function testRruleWithBysetpos()
+    {
+        $savedEvent = $this->_saveIcsEvent('outlook_bysetpos.ics');
         
-        $this->assertEquals(104, count($savedEvent->exdate), print_r($savedEvent->toArray(), true));
-        $this->assertEquals(2, count($savedEvent->alarms), print_r($savedEvent->toArray(), true));
+        $this->assertEquals(1, $savedEvent->rrule->bymonthday, print_r($savedEvent->toArray(), true));
+        $this->assertTrue(! isset($savedEvent->rrule->byday), print_r($savedEvent->toArray(), true));
     }
 }
