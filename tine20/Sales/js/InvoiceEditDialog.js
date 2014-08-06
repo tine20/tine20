@@ -266,6 +266,16 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * calculates price gross by price net and tax
+     */
+    calcGross: function() {
+        var net = parseFloat(this.priceNetField.getValue());
+        var tax = parseFloat(this.salesTaxField.getValue());
+        var gross = net + (net * (tax / 100));
+        this.priceGrossField.setValue(gross.toFixed(2));
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -281,12 +291,44 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             columnWidth: .5
         };
         
-        if (this.record.get('is_auto')) {
+        if (this.record.get('is_auto') == 1) {
             this.positionsPanel = new Tine.Sales.InvoicePositionPanel({
                 app: this.app,
                 title: null
             });
         }
+        
+        this.priceNetField = Ext.create({
+            name: 'price_net',
+            xtype: 'numberfield',
+            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+            fieldLabel: this.app.i18n._('Price Net'),
+            columnWidth: 1/3,
+            listeners: {
+                scope: this,
+                blur: this.calcGross.createDelegate(this)
+            }
+        });
+        
+        this.priceGrossField = Ext.create({
+            name: 'price_gross',
+            xtype: 'numberfield',
+            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+            fieldLabel: this.app.i18n._('Price Gross'),
+            columnWidth: 1/3
+        });
+        
+        this.salesTaxField = Ext.create({
+            xtype: 'numberfield',
+            name: 'sales_tax',
+            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+            fieldLabel: this.app.i18n._('Sales Tax'),
+            columnWidth: 1/3,
+            listeners: {
+                scope: this,
+                blur: this.calcGross.createDelegate(this)
+            }
+        });
         
         var items = [{
             title: this.app.i18n._('Invoice'),
@@ -319,8 +361,8 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             name: 'date',
                             fieldLabel: this.app.i18n._('Date'),
                             columnWidth: 1/3,
-                            readOnly: true,
-                            emptyText: this.app.i18n._('automatically set...')
+                            readOnly: (this.record.get('is_auto') == 1),
+                            emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
                         }, new Tine.Tinebase.widgets.keyfield.ComboBox({
                             app: 'Sales',
                             keyFieldName: 'invoiceType',
@@ -433,24 +475,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('Interval Ends'),
                                     columnWidth: 1/3
                                 }
-                            ], [{
-                                name: 'price_net',
-                                xtype: 'numberfield',
-                                decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-                                fieldLabel: this.app.i18n._('Price Net'),
-                                columnWidth: 1/3
-                            }, {
-                                name: 'price_gross',
-                                xtype: 'numberfield',
-                                decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-                                fieldLabel: this.app.i18n._('Price Gross'),
-                                columnWidth: 1/3
-                            }, {
-                                xtype: 'numberfield',
-                                name: 'sales_tax',
-                                fieldLabel: this.app.i18n._('Sales Tax'),
-                                columnWidth: 1/3
-                            }
+                            ], [
+                                this.priceNetField, 
+                                this.priceGrossField, 
+                                this.salesTaxField
                             ]
                         ]
                     }]

@@ -556,7 +556,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        $this->_checkCleared($_record);
+        if ($_record->is_auto) {
+            $this->_checkCleared($_record);
+        }
         
         if (! empty($_record->number)) {
             if (! Tinebase_Core::getUser()->hasRight('Sales', Sales_Acl_Rights::SET_INVOICE_NUMBER)) {
@@ -675,6 +677,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $contractController = Sales_Controller_Contract::getInstance();
         
         foreach ($records as $record) {
+            
+            if (! $record->is_auto) {
+                continue;
+            }
+            
             if ($record->cleared == 'CLEARED') {
                 // cleared invoices must not be deleted
                 throw new Sales_Exception_InvoiceAlreadyClearedDelete();
@@ -822,6 +829,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 throw new Tinebase_Exception_AccessDenied('You have no right to set the invoice number!');
             }
             $this->_setNextNumber($_record);
+        }
+        
+        if (! $_record->is_auto) {
+            return;
         }
         
         if ($_oldRecord->cleared == 'CLEARED') {

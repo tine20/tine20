@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>8.14</version>
+    <version>8.15</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -654,7 +654,7 @@
         </table>
         <table>
             <name>sales_invoices</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -702,19 +702,18 @@
                 </field>
                 <field>
                     <name>price_net</name>
-                    <type>integer</type>
+                    <type>float</type>
                     <notnull>false</notnull>
                 </field>
                 <field>
                     <name>price_gross</name>
-                    <type>integer</type>
+                    <type>float</type>
                     <notnull>false</notnull>
                 </field>
                 <field>
                     <name>sales_tax</name>
-                    <type>integer</type>
+                    <type>float</type>
                     <notnull>false</notnull>
-                    <length>10</length>
                 </field>
                 <field>
                     <name>costcenter_id</name>

@@ -1242,4 +1242,33 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('sales_invoices', 2);
         $this->setApplicationVersion('Sales', '8.14');
     }
+    
+    /**
+     * import new import definition
+     */
+    public function update_14() {
+        $fields = array('<field>
+            <name>price_net</name>
+            <type>float</type>
+            <notnull>false</notnull>
+        </field>','
+        <field>
+            <name>price_gross</name>
+            <type>float</type>
+            <notnull>false</notnull>
+        </field>','
+        <field>
+            <name>sales_tax</name>
+            <type>float</type>
+            <notnull>false</notnull>
+        </field>');
+        
+        foreach($fields as $field) {
+            $definition = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->alterCol('sales_invoices', $definition);
+        }
+        
+        $this->setTableVersion('sales_invoices', 3);
+        $this->setApplicationVersion('Sales', '8.15');
+    }
 }
