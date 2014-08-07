@@ -202,7 +202,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         if (!($fh = fopen($file, 'r')))
         {
-            Tinebase_Core::getLogger()->error(__METHOD__ . '::' . __LINE__ . ' couldn\'t open file: '.$file);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' couldn\'t open file: '.$file);
             throw new Exception('Couldn\'t open file: '.$file);
         }
         $users = array();
@@ -212,7 +212,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         if (count($users) < 1)
         {
-            Tinebase_Core::getLogger()->error(__METHOD__ . '::' . __LINE__ . ' no users found in: '.$file);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' no users found in: '.$file);
             throw new Exception('No users found in: '.$file);
         }
         return $users;
