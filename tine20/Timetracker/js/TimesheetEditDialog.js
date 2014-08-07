@@ -22,7 +22,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     appName: 'Timetracker',
     recordClass: Tine.Timetracker.Model.Timesheet,
     recordProxy: Tine.Timetracker.timesheetBackend,
-    loadRecord: false,
     tbarItems: null,
     evalGrants: false,
     
@@ -97,7 +96,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     initComponent: function() {
         var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
         this.tbarItems = [addNoteButton];
-        this.supr().initComponent.apply(this, arguments);
+        
+        Tine.Timetracker.TimesheetEditDialog.superclass.initComponent.apply(this, arguments);
     },
     
     /**

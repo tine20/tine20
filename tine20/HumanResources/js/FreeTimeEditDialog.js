@@ -25,7 +25,6 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     mode: 'local',
-    loadRecord: false,
     
     /**
      * show private Information (autoset due to rights)

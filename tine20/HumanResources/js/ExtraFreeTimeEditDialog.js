@@ -32,7 +32,6 @@ Tine.HumanResources.ExtraFreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.Edi
     evalGrants: false,
     showContainerSelector: false,
     mode: 'local',
-    loadRecord: false,
     windowWidth: 400,
     windowHeight: 350,
     /**

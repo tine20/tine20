@@ -17,7 +17,6 @@ Tine.SimpleFAQ.FaqEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'SimpleFAQ',
     recordClass: Tine.SimpleFAQ.Model.Faq,
     recordProxy: Tine.SimpleFAQ.faqBackend,
-    loadRecord: false,
     showContainerSelector: true,
 
     /**

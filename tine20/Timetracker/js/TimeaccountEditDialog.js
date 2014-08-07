@@ -19,7 +19,6 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     appName: 'Timetracker',
     recordClass: Tine.Timetracker.Model.Timeaccount,
     recordProxy: Tine.Timetracker.timeaccountBackend,
-    loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
     /**
