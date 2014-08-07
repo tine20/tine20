@@ -608,17 +608,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         if ($groupId) {
             $accountIds = Admin_Controller_Group::getInstance()->getGroupMembers($groupId);
-    
+            $users = Tinebase_User::getInstance()->getMultiple($accountIds);
             $result['results'] = array();
-            foreach ($accountIds as $accountId) {
-                $account = Tinebase_User::getInstance()->getUserById($accountId);
+            foreach ($users as $user) {
                 $result['results'][] = array(
-                    'id'        => $accountId,
+                    'id'        => $user->getId(),
                     'type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                    'name'      => $account->accountDisplayName,
+                    'name'      => $user->accountDisplayName,
                 );
             }
-                    
+            
             $result['totalcount'] = count($result['results']);
         }
         
