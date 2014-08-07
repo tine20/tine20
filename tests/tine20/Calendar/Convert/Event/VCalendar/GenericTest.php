@@ -672,7 +672,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertEquals(1, $savedEvent->rrule->bymonthday, print_r($savedEvent->toArray(), true));
         $this->assertTrue(! isset($savedEvent->rrule->byday), print_r($savedEvent->toArray(), true));
     }
-
+    
     /**
      * testLongSummary
      * 
@@ -684,5 +684,16 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $this->assertEquals('Finanz-IT anrufen, xxxxxxxxxxxh', $savedEvent->summary, print_r($savedEvent->toArray(), true));
         $this->assertContains("Finanz-IT anrufen, xxxxxxxxxxxh\nFestgelegt für 25. Juli 2012", $savedEvent->description, print_r($savedEvent->toArray(), true));
+    }
+    
+    /**
+     * testLongLocation
+     */
+    public function testLongLocation()
+    {
+        $savedEvent = $this->_saveIcsEvent('iphone_longlocation.ics');
+        
+        $this->assertContains('1. Rufen Sie folgende Seite auf: https://xxxxxxxxxxxxxx.webex.', $savedEvent->location, print_r($savedEvent->toArray(), true));
+        $this->assertContains("und Ihre E-Mail-Adresse ein.; geben Sie das Meeting-Passwort ein: xxxx", $savedEvent->description, print_r($savedEvent->toArray(), true));
     }
 }
