@@ -852,9 +852,12 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     $value = $property->getValue();
                     switch ($key) {
                         case 'summary':
+                        case 'location':
                             if (strlen($value) > 255) {
                                 $shortenedFields[$key] = $value;
-                                $endPos = strpos($value, "\n") < 255 ? strpos($value, "\n") : 255;
+                                $endPos = strpos($value, "\n") !== false && strpos($value, "\n") < 255 
+                                    ? strpos($value, "\n") 
+                                    : 255;
                                 $value = substr($value, 0, $endPos);
                             }
                             break;
