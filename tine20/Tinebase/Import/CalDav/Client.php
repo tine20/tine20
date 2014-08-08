@@ -66,7 +66,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
     
     public function findCurrentUserPrincipal()
     {
-        $result = $this->calDavRequest('PROPFIND', '/principals/', self::findCurrentUserPrincipalRequest);
+        $result = $this->calDavRequest('PROPFIND', '/principals/', self::findCurrentUserPrincipalRequest, 0, /* tries = */ 1);
         if (isset($result['{DAV:}current-user-principal']))
         {
             try {
@@ -87,17 +87,28 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         return false;
     }
     
-    public function findCurrentUserPrincipalForUsers(array $users)
+    public function findCurrentUserPrincipalForUsers(array &$users)
     {
-        $result = true;
         foreach ($users as $username => $pwd) {
             $this->userName = $username;
             $this->password = $pwd;
-            if (!$this->findCurrentUserPrincipal()) {
-                $result = false;
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                . ' Find principal for user ' . $this->userName);
+            try {
+                if (! $this->findCurrentUserPrincipal()) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
+                        . ' Skipping ' . $username);
+                    unset($users[$username]);
+                }
+            } catch (Tinebase_Exception $te) {
+                // TODO should use better exception (Not_Authenticatied, ...)
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
+                        . ' Skipping ' . $username);
+                unset($users[$username]);
             }
         }
-        return $result;
+        return count($users) > 0;
     }
     
     public function findCalendarHomeSet()
@@ -135,29 +146,36 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         $this->calendarHomeSet = '';
     }
     
-    public function calDavRequest($method, $uri, $body, $depth = 0)
+    public function calDavRequest($method, $uri, $body, $depth = 0, $tries = 10)
     {
-        $redo = 0;
         $response = null;
-        while (++$redo < 10)
+        while ($tries > 0)
         {
             try {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Sending ' . $method . ' request ...');
                 $response = $this->request($method, $uri, $body, array(
                     'Depth' => $depth,
                     'Content-Type' => 'text/xml',
                 ));
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' caldav request failed, sleeping 60 seconds and retrying: '
-                            . $method . ' ' . $uri . "\n" . $body . "\n" . $e->getMessage());
-                sleep(60);
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' Caldav request failed: '
+                            . '(' . $this->userName . ')' . $method . ' ' . $uri . "\n" . $body
+                            . "\n" . $e->getMessage());
+                if (--$tries > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' Sleeping 60 seconds and retrying ... ');
+                    sleep(60);
+                }
                 continue;
             }
             break;
         }
         
         if (! $response) {
-            throw new Tinebase_Exception("no response after several retries");
+            throw new Tinebase_Exception("no response");
         }
         
         $result = $this->parseMultiStatus($response['body']);
