@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -31,6 +31,7 @@
  * @property string originator_tz
  * @property string seq
  * @property string uid
+ * @property string etag
  * @property int container_id
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
@@ -105,6 +106,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'summary'              => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'url'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'uid'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'etag'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         // ical common fields with multiple appearance
         //'attach'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'attendee'              => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // RecordSet of Calendar_Model_Attender
