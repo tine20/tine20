@@ -1213,18 +1213,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     {
         if ($tempFile === NULL) {
             $tempStream = fopen('php://memory', 'r');
-        }
-        
-        else if (is_resource($tempFile)) {
+        } else if (is_resource($tempFile)) {
             $tempStream = $tempFile;
-        }
-        
-        else if (is_string($tempFile) || is_array($tempFile)) {
+        } else if (is_string($tempFile) || is_array($tempFile)) {
             $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFile);
             return $this->copyTempfile($tempFile, $path);
-        }
-        
-        else if ($tempFile instanceof Tinebase_Model_Tree_Node) {
+        } else if ($tempFile instanceof Tinebase_Model_Tree_Node) {
             if (isset($tempFile->hash)) {
                 $hashFile = $this->_basePath . '/' . substr($tempFile->hash, 0, 3) . '/' . substr($tempFile->hash, 3);
                 $tempStream = fopen($hashFile, 'r');
@@ -1233,14 +1227,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             } else {
                 return $this->copyTempfile($tempFile->tempFile, $path);
             }
-        }
-        
-        else if ($tempFile instanceof Tinebase_Model_TempFile) {
+        } else if ($tempFile instanceof Tinebase_Model_TempFile) {
             $tempStream = fopen($tempFile->path, 'r');
-        }
-        
-        else {
-            throw new Tasks_Exception_UnexpectedValue('unexpected tempfile value');
+        } else {
+            throw new Tinebase_Exception_UnexpectedValue('unexpected tempfile value');
         }
         
         return $this->copyStream($tempStream, $path);
