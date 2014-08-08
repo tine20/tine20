@@ -174,8 +174,12 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     
     public function importAllCalendars()
     {
-        if (count($this->calendars) < 1 && ! $this->findAllCalendars())
+        if (count($this->calendars) < 1 && ! $this->findAllCalendars()) {
             return false;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ 
+            . ' Importing all calendars for user ' . $this->userName);
         
         Calendar_Controller_Event::getInstance()->sendNotifications(false);
         Sabre\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
@@ -211,8 +215,12 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     
     public function importAllCalendarData($onlyCurrentUserOrganizer = false)
     {
-        if (count($this->calendarICSs) < 1 && ! $this->findAllCalendarICSs())
+        if (count($this->calendarICSs) < 1 && ! $this->findAllCalendarICSs()) {
             return false;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+            . ' Importing all calendar data for user ' . $this->userName);
         
         Calendar_Controller_Event::getInstance()->sendNotifications(false);
         Sabre\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
@@ -369,8 +377,9 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     
     public function importAllCalendarDataForUsers(array $users)
     {
-        if (!$this->findCurrentUserPrincipalForUsers($users))
+        if (!$this->findCurrentUserPrincipalForUsers($users)) {
             return false;
+        }
         
         $result = true;
         // first only import events where the current user is also the organizer
@@ -396,8 +405,9 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     
     public function importAllCalendarsForUsers(array $users)
     {
-        if (!$this->findCurrentUserPrincipalForUsers($users))
+        if (!$this->findCurrentUserPrincipalForUsers($users)) {
             return false;
+        }
         
         $result = true;
         foreach ($users as $username => $pwd) {
