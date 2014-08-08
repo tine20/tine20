@@ -65,11 +65,13 @@ class Calendar_JsonTests extends Calendar_TestCase
             'note_type_id' => Tinebase_Notes::getInstance()->getNoteTypes()->getFirstRecord()->getId(),
         ));
         $eventData['notes'] = array($note->toArray());
+        $eventData['etag'] = Tinebase_Record_Abstract::generateUID();
         
         $persistentEventData = $this->_uit->saveEvent($eventData);
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
         
         $this->_assertJsonEvent($eventData, $loadedEventData, 'failed to create/load event');
+        $this->assertEquals($eventData['etag'], $loadedEventData['etag']);
         
         $contentSeqAfter = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
         $this->assertEquals($contentSeqBefore + 1, $contentSeqAfter,

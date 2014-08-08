@@ -2,14 +2,14 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>8.3</version>
+    <version>8.4</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -124,6 +124,11 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>etag</name>
+                    <type>text</type>
+                    <length>60</length>
+                </field>
+                <field>
                     <name>dtstart</name>
                     <type>datetime</type>
                 </field>
@@ -191,6 +196,12 @@
                     <name>uid</name>
                     <field>
                         <name>uid</name>
+                    </field>
+                </index>
+                <index>
+                    <name>etag</name>
+                    <field>
+                        <name>etag</name>
                     </field>
                 </index>
                 <index>
