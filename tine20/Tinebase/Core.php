@@ -1354,10 +1354,16 @@ class Tinebase_Core
             if ($value === null) {
                 throw new Tinebase_Exception_InvalidArgument('Invalid user object!');
             }
-            if ($value instanceof Tinebase_Model_FullUser) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . $value->accountLoginName);
-            } else {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . var_export($value, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                if ($value instanceof Tinebase_Model_FullUser) {
+                    $userString =  $value->accountLoginName;
+                } else if ($value instanceof Tinebase_Model_User) {
+                    $userString = $value->accountDisplayName;
+                } else {
+                    $userString = var_export($value, true);
+                }
+                
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . $userString);
             }
         }
         
