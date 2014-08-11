@@ -844,6 +844,13 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $dates[2]->addMonth(1);
         $dates[3]->addMonth(2)->subDay(1);
     
+        // create much more timesheets
+        $dt = clone $this->_referenceDate;
+        for ($i = 0; $i < 80; $i++) {
+            $dt->addHour(12);
+            $dates[] = clone $dt;
+        }
+
         $customer = $this->_createCustomers(1)->getFirstRecord();
         $this->_createCostCenters();
     
@@ -868,7 +875,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             );
         }
     
-        $this->assertEquals(4, $this->_timesheetRecords->count());
+        $this->assertEquals(84, $this->_timesheetRecords->count());
     
         $csDate = clone $this->_referenceDate;
         $csDate->subMonth(10);
@@ -919,7 +926,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $filter = new Timetracker_Model_TimesheetFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice2Id)));
         $timesheets = $this->_timesheetController->search($filter);
-        $this->assertEquals(4, $timesheets->count());
+        $this->assertEquals(84, $timesheets->count());
     }
     
     /**
@@ -936,14 +943,14 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             'address_id' => $this->_addressRecords->getFirstRecord()->getId(),
             'costcenter_id' => $this->_costcenterRecords->getFirstRecord()->getId(),
             'is_auto' => TRUE,
-            'price_net' => 20000,
-            'price_gross' => 23800,
-            'sales_tax' => 19
+            'price_net' => 200.20,
+            'price_gross' => 238.45,
+            'sales_tax' => 19.5
         )));
         
-        $this->assertEquals(19, $invoice->sales_tax);
-        $this->assertEquals(20000, $invoice->price_net);
-        $this->assertEquals(23800, $invoice->price_gross);
+        $this->assertEquals(19.5, $invoice->sales_tax);
+        $this->assertEquals(200.20, $invoice->price_net);
+        $this->assertEquals(238.45, $invoice->price_gross);
     }
     
     /**
