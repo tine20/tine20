@@ -292,7 +292,8 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
             $this->_billables[$month] = array($this);
             
         } else {
-            $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($this->_getBillableTimesheetsFilter($date));
+            $filter = $this->_getBillableTimesheetsFilter($date);
+            $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($filter);
             
             foreach($timesheets as $timesheet) {
                 $month = new Tinebase_DateTime($timesheet->start_date);
@@ -339,7 +340,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
             }
             
             $pagination = new Tinebase_Model_Pagination(array('limit' => 1));
-            $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($this->_getBillableTimesheetsFilter($date, $contract), $pagination, FALSE, /* $_onlyIds = */ TRUE);
+            $filter = $this->_getBillableTimesheetsFilter($date, $contract);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Use filter in "isBillable"-Method of Timetracker_Model_Timeaccount: ' . print_r($filter->toArray(), 1));
+            }
+            
+            $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($filter, $pagination, FALSE, /* $_onlyIds = */ TRUE);
             
             if (! empty($timesheets))  {
                 return TRUE;
