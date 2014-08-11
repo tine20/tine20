@@ -64,9 +64,9 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         $this->propertyMap['{DAV:}group-member-set'] = 'Tinebase_Import_CalDav_GroupMemberSet';
     }
     
-    public function findCurrentUserPrincipal()
+    public function findCurrentUserPrincipal($tries = 1)
     {
-        $result = $this->calDavRequest('PROPFIND', '/principals/', self::findCurrentUserPrincipalRequest, 0, /* tries = */ 1);
+        $result = $this->calDavRequest('PROPFIND', '/principals/', self::findCurrentUserPrincipalRequest, 0, $tries);
         if (isset($result['{DAV:}current-user-principal']))
         {
             try {
@@ -113,11 +113,12 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
     
     public function findCalendarHomeSet()
     {
-        if ('' == $this->currentUserPrincipal && ! $this->findCurrentUserPrincipal())
+        if ('' == $this->currentUserPrincipal && ! $this->findCurrentUserPrincipal(/* tries = */ 3)) {
             return false;
+        }
         $result = $this->calDavRequest('PROPFIND', $this->currentUserPrincipal, self::findCalendarHomeSetRequest);
-        if (isset($result['{urn:ietf:params:xml:ns:caldav}calendar-home-set']))
-        {
+        
+        if (isset($result['{urn:ietf:params:xml:ns:caldav}calendar-home-set'])) {
             $this->calendarHomeSet = $result['{urn:ietf:params:xml:ns:caldav}calendar-home-set'];
             return true;
         }
