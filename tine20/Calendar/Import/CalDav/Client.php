@@ -1,7 +1,6 @@
 <?php
 //./tine20.php --username unittest --method Calendar.importCalDav url="https://osx-testfarm-mavericks-server.hh.metaways.de:8443" caldavuserfile=caldavuserfile.csv
 
-
 /**
  * Tine 2.0
  * 
@@ -10,8 +9,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        
  */
 
 /**
@@ -19,7 +16,6 @@
  * 
  * @package     Calendar
  * @subpackage  Import
- * 
  */
 class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
 {
@@ -222,7 +218,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
     }
     
-    public function updateAllCalendarData()
+    public function updateAllCalendarData($onlyCurrentUserOrganizer = false)
     {
         if (count($this->calendarICSs) < 1 && ! $this->findAllCalendarICSs())
             return false;
@@ -268,7 +264,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $count . ' calendar(s) changed for: ' . $this->userName);
             $this->calendarICSs = $newICSs;
-            $this->importAllCalendarData();
+            $this->importAllCalendarData($onlyCurrentUserOrganizer);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' no changes found for: ' . $this->userName);
@@ -446,9 +442,30 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     
     public function updateAllCalendarDataForUsers(array $users)
     {
-        if (!$this->findCurrentUserPrincipalForUsers($users))
-            return false;
-        
+        // first only update/import events where the current user is also the organizer
+        $result = true;
+        foreach ($users as $username => $pwd) {
+            $this->clearCurrentUserCalendarData();
+            $this->userName = $username;
+            $this->password = $pwd;
+            if (!$this->updateAllCalendarData(true)) {
+                $result = false;
+            }
+        }
+        // then update all events again
+        foreach ($users as $username => $pwd) {
+            $this->clearCurrentUserCalendarData();
+            $this->userName = $username;
+            $this->password = $pwd;
+            if (!$this->updateAllCalendarData(false)) {
+                $result = false;
+            }
+        }
+        return $result;
+    }
+    
+    public function importAllCalendarDataForUsers(array $users)
+    {
         $result = true;
         foreach ($users as $username => $pwd) {
             $this->clearCurrentUserCalendarData();
