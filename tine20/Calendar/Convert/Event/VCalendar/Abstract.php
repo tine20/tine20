@@ -858,7 +858,11 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                                 $endPos = strpos($value, "\n") !== false && strpos($value, "\n") < 255 
                                     ? strpos($value, "\n") 
                                     : 255;
-                                $value = substr($value, 0, $endPos);
+                                if (extension_loaded('mbstring')) {
+                                    $value = mb_substr($value, 0, $endPos, 'UTF-8');
+                                } else {
+                                    $value = Tinebase_Core::filterInputForDatabase(substr($value, 0, $endPos));
+                                }
                             }
                             break;
                     }
