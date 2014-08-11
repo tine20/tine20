@@ -826,4 +826,41 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             }
         }
     }
+    
+    /**
+     * sets etags, expects ids as keys and etags as value
+     * 
+     * @param array $etags
+     */
+    public function setETags(array $etags)
+    {
+        foreach ($etags as $id => $etag) {
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id),
+            );
+            $this->_db->update($this->_tablePrefix . $this->_tableName, array('etag' => $etag), $where);
+        }
+    }
+    
+    /**
+     * checks if there is and event with this id and etag
+     * 
+     * @param string $id
+     * @param string $etag
+     */
+    public function checkETag($id, $etag)
+    {
+        $select = $this->_db->select();
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $this->_identifier);
+        $select->where($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id);
+        $select->where($this->_db->quoteIdentifier('etag') . ' = ?', $etag);
+        
+        $stmt = $select->query();
+        
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            return true;
+        }
+        return false;
+    }
 }
