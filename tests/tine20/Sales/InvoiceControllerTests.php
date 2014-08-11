@@ -318,11 +318,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $allTimeaccounts = $taController->getAll();
         
         foreach($allTimeaccounts as $ta) {
-            $this->assertTrue($ta->invoice_id == NULL);
+            $this->assertTrue($ta->invoice_id === NULL);
         }
         
         foreach($allTimesheets as $ts) {
-            $this->assertTrue($ts->invoice_id == NULL);
+            $this->assertTrue($ts->invoice_id === NULL);
         }
     }
     
@@ -974,7 +974,9 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $myInvoice = $allInvoices->filter('id', isset($myInvoice[1]) ? $myInvoice[1] : $myInvoice[0]);
 
         $f = new Timetracker_Model_TimesheetFilter(array());
-        $f->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $myInvoice->getId())));
+        $f->addFilter(new Tinebase_Model_Filter_Text(
+                array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $myInvoice->getId())
+        ));
         $myTimesheets = $tsController->search($f);
         $this->assertEquals(2, $myTimesheets->count());
         
