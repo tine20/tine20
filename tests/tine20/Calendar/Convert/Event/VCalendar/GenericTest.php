@@ -696,4 +696,14 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertContains('1. Rufen Sie folgende Seite auf: https://xxxxxxxxxxxxxx.webex.', $savedEvent->location, print_r($savedEvent->toArray(), true));
         $this->assertContains("und Ihre E-Mail-Adresse ein.; geben Sie das Meeting-Passwort ein: xxxx", $savedEvent->description, print_r($savedEvent->toArray(), true));
     }
+
+    /**
+     * test4ByteUTF8Summary
+     */
+    public function test4ByteUTF8Summary()
+    {
+        $savedEvent = $this->_saveIcsEvent('utf8mb4_summary.ics');
+        
+        $this->assertContains('Mail an Frau LaLiLoLu ging am 4.11 raus, dass du später zur Ralf Sitzung kommst (joda)', $savedEvent->summary);
+    }
 }

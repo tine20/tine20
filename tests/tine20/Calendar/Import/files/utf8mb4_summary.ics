@@ -1,0 +1,70 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Apple Inc.//iCal 5.0.3//EN
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+DTSTART:19810329T020000
+TZNAME:CEST
+TZOFFSETTO:+0200
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+DTSTART:19961027T030000
+TZNAME:CET
+TZOFFSETTO:+0100
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Berlin:20131126T090000
+DTEND;TZID=Europe/Berlin:20131126T120000
+TRANSP:OPAQUE
+UID:86311155-2891-4AEF-9D99-3D47418FF709
+DTSTAMP:20131122T100127Z
+X-BUSYMAC-LASTMODBY:jeanette
+SEQUENCE:6
+SUMMARY:Mail an Frau LaLiLoLu ging am 4.11 raus\, dass du später zur Ral
+ f Sitzung kommst (joda) RALF-Sitzung (bleibt trotz Ausfall des Frühstück
+ s - laut telefonischer Info von Frau LaLiLoLu am 25.10 (joda) Themen:   
+                                   1. Begrüßung und Eröffnung\n1.1 Begru
+ ̈ßung der Gäste\n1.2 Feststellung der Anwesenheit\n1.3 Eingaben zu TOP 1
+ 2                  Verschiedenes (Zeit: 10 Minuten\, Person: Sandra Sull
+ e)                                 2. Protokoll der letzten Sitzung (Zei
+ t: 5 Minuten\, Ziel: Genehmigung)                         3. Geschlossen
+ e Unterbringung\,\nEingabe vom PPK-Landesverband\nBayern\n(Zeit: nach Be
+ darf\, Ziel: Information Diskussion\, Person: Sandra Poliz)             
+                          4. Vorläufige Festlegung des\nWirtschaftsplanes
+ \n(30 Minuten\, Ziel: Information Festlegung\, Person: Präsidium) 5. Ein
+ gaben aus der Sitzung vom 23.09.2013\n5.1 \n->Lokale Mitgliedschaften fu
+ ̈r\nKita-Träger (Zeit: 20 Minuten\, Ziel: Information\, Person: Präsidiu
+ m)\n5.2 ->RahmenverträgePPK-Landesverband\nNordrhein-Westfalen (Zeit: 5 
+ Minuten\, Ziel: Information\, Person: Paul Haustie\nZoschke)           
+                           6. Vorbereitung von Veranstaltungen\n6.1 ->Del
+ egiertenversammlung und\nPODIUM\, 28.-30.04.2014 in\nHannover\n->DJHT\, 
+ 03.-05.06.2014 in Berlin (Zeit: 30 Minuten\, Ziel: Information\, Person:
+  Präsidium) 7. Unternehmerlöhne (Zeit: nach Bedarf\, Ziel: Information\n
+ Diskussion\, Person: \nOleks Schuster)                           8. Arbe
+ itsgruppen\n8.1 ->AG Beitragsordnung\n8.2 ->AG AVE/Tarifvertrag\n(Zeit: 
+ 15 Minuten\, Ziel: Bericht\, Person: Pauler Paul)                9. Mita
+ rbeiterbefragung (Zeit: 10 Minuten\, Ziel: Information\, Person: Präsidi
+ um)                   10. Statistische Grunddaten (Zeit: 10 Minuten\, Zi
+ el: Information\, Person: Präsidium)       11. Bericht des Präsidiums (Z
+ eit: 30 Minuten\, Ziel: Bericht\, Person: Präsidium)                  12
+ . Verschiedenes (Zeit: 30 Minuten\, Ziel: Information)    13. Orte und T
+ ermine der nächsten Sitzungen\n(Zeit: 10 Minuten\, Ziel: Information)
+LAST-MODIFIED:20131104T115830Z
+CREATED:20120926T092233Z
+BEGIN:VALARM
+UID:89774719-61CB-4971-BE9D-2695DA1C500D
+ACTION:DISPLAY
+DESCRIPTION:
+TRIGGER;VALUE=DATE-TIME:19760401T005545Z
+X-WR-ALARMUID:B11CCE60-6F7A-4CD1-96BB-717B10C30CEB
+X-APPLE-DEFAULT-ALARM:TRUE
+END:VALARM
+END:VEVENT
+END:VCALENDAR
