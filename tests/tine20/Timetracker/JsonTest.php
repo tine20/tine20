@@ -1236,4 +1236,18 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $ta = $this->_json->getTimeaccount($ta['id']);
         $this->assertTrue(count($ta['relations']) == 1);
     }
+    
+    /**
+     * try to add a Timesheet
+     */
+    public function testTimesheetInvoiceId()
+    {
+        $timesheet = $this->_getTimesheet();
+        $tsData = $timesheet->toArray();
+        $tsData['invoice_id'] = '';
+        $tsData = $this->_json->saveTimesheet($tsData);
+        $this->assertSame(NULL,  $tsData['invoice_id']);
+        $tsData = $this->_json->getTimesheet($tsData['id']);
+        $this->assertSame(NULL,  $tsData['invoice_id']);
+    }
 }
