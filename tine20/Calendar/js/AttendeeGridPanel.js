@@ -181,11 +181,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }, {
             id: 'user_type',
             dataIndex: 'user_type',
-            width: 40,
+            width: 50,
             sortable: true,
-            resizable: false,
-            header: '&#160;',
-            tooltip: this.app.i18n._('Type'),
+            header: this.app.i18n._('Type'),
+            tooltip: this.app.i18n._('Click icon to change'),
             renderer: this.renderAttenderType.createDelegate(this),
             editor: new Ext.form.ComboBox({
                 blurOnSelect  : true,
