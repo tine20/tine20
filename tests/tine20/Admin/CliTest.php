@@ -129,7 +129,7 @@ class Admin_CliTest extends TestCase
         $this->objects['configSemicolon'] = '<?xml version="1.0" encoding="UTF-8"?>
         <config>
             <model>Tinebase_Model_FullUser</model>
-            <plugin>Admin_Import_Csv</plugin>
+            <plugin>Admin_Import_User_Csv</plugin>
             <type>import</type>
             <headline>1</headline>
             <dryrun>0</dryrun>
@@ -161,7 +161,7 @@ class Admin_CliTest extends TestCase
         $this->objects['configEmailuser'] = '<?xml version="1.0" encoding="UTF-8"?>
         <config>
             <model>Tinebase_Model_FullUser</model>
-            <plugin>Admin_Import_Csv</plugin>
+            <plugin>Admin_Import_User_Csv</plugin>
             <type>import</type>
             <headline>1</headline>
             <dryrun>0</dryrun>
@@ -200,7 +200,7 @@ class Admin_CliTest extends TestCase
           $this->objects['configAdvanced'] = '<?xml version="1.0" encoding="UTF-8"?>
         <config>
            <model>Tinebase_Model_FullUser</model>
-           <plugin>Admin_Import_Csv</plugin>
+           <plugin>Admin_Import_User_Csv</plugin>
            <type>import</type>
            <headline>1</headline>
            <dryrun>0</dryrun>
@@ -303,7 +303,7 @@ class Admin_CliTest extends TestCase
                 'name'              => $_definition,
                 'type'              => 'import',
                 'model'             => 'Tinebase_Model_FullUser',
-                'plugin'            => 'Admin_Import_Csv',
+                'plugin'            => 'Admin_Import_User_Csv',
                 'plugin_options'    => $_config
             )));
         }
@@ -443,5 +443,32 @@ class Admin_CliTest extends TestCase
             $this->assertEquals('\\fileserver\profiles\m.muster', $newUser->sambaSAM->profilePath);
         }
         unlink("test2.csv");
+    }
+    
+    /**
+     * tests if import with members from csv works correctly
+     */
+    public function testImportGroups()
+    {
+        $opts = new Zend_Console_Getopt('abp:');
+        $opts->setArguments(array(dirname(__FILE__) . '/files/import_groups.csv', 'definition=admin_group_import_csv'));
+        
+        // start import (dry run)
+        ob_start();
+        $this->_cli->importGroups($opts);
+        $out = ob_get_clean();
+        
+        $this->assertStringStartsWith('Imported 2 records.', $out);
+        
+        $be = new Tinebase_Group_Sql();
+        $menGroup = $be->getGroupByName('men');
+        $members = $be->getGroupMembers($menGroup);
+        
+        $this->assertEquals(3, count($members));
+        
+        $womenGroup = $be->getGroupByName('women');
+        $members = $be->getGroupMembers($womenGroup);
+        
+        $this->assertEquals(2, count($members));
     }
 }

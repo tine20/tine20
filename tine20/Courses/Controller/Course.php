@@ -460,7 +460,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         // check if group exists, too
         $group = $this->_groupController->get($course->group_id);
         
-        $importer = Admin_Import_Csv::createFromDefinition($definition, $this->_getNewUserConfig($course));
+        $importer = Admin_Import_User_Csv::createFromDefinition($definition, $this->_getNewUserConfig($course));
         $result = $importer->importFile($tempFile->path);
         
         $groupMembers = $this->_groupController->getGroupMembers($course->group_id);

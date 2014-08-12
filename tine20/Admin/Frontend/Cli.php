@@ -48,4 +48,14 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         parent::_import($_opts);
     }
+    
+    /**
+     * import groups
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function importGroups($_opts)
+    {
+        parent::_import($_opts);
+    }
 }
