@@ -226,7 +226,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
         }
         
         $filter->addFilter(new Tinebase_Model_Filter_Text(
-            array('field' => 'invoice_id', 'operator' => 'isnull', 'value' => NULL)
+            array('field' => 'invoice_id', 'operator' => 'equals', 'value' => '')
         ));
         
         $filter->addFilter(new Tinebase_Model_Filter_Text(

@@ -945,4 +945,51 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(20000, $invoice->price_net);
         $this->assertEquals(23800, $invoice->price_gross);
     }
+    
+    /**
+     * tests if timesheets get resetted properly after deleting the invoice
+     * and recreate the same invoice again containing the same timesheets
+     */
+    public function testDeleteAndRunAgainInvoice()
+    {
+        $this->_createFullFixtures();
+    
+        $date = clone $this->_referenceDate;
+        $date->addMonth(8);
+        $i = 0;
+    
+        $this->_invoiceController->createAutoInvoices($date);
+    
+        $tsController = Timetracker_Controller_Timesheet::getInstance();
+    
+        $allInvoices = $this->_invoiceController->getAll();
+        $myInvoice = array_unique($tsController->getAll()->invoice_id);
+        $myInvoice = $allInvoices->filter('id', isset($myInvoice[1]) ? $myInvoice[1] : $myInvoice[0]);
+
+        $f = new Timetracker_Model_TimesheetFilter(array());
+        $f->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $myInvoice->getId())));
+        $myTimesheets = $tsController->search($f);
+        $this->assertEquals(2, $myTimesheets->count());
+        
+        $this->_invoiceController->delete(array($myInvoice->getId()));
+        $allTimesheets = $tsController->getAll();
+        foreach($allTimesheets as $ts) {
+            $this->assertSame(NULL, $ts->invoice_id);
+        }
+        
+        $this->_invoiceController->createAutoInvoices($date);
+        
+        $tsId = $myTimesheets->getFirstRecord()->getId();
+        
+        $myTimesheet = $tsController->get($tsId);
+        $f = new Timetracker_Model_TimesheetFilter(array());
+        $f->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $myTimesheet->invoice_id)));
+        
+        $myTimesheets = $tsController->search($f);
+        $this->assertEquals(2, $myTimesheets->count());
+        
+        foreach($myTimesheets as $ts) {
+            $this->assertEquals(40, strlen($ts->invoice_id));
+        }
+    }
 }
