@@ -121,7 +121,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
         // set start_time to NULL if not set
         $this->_filters['start_time'] = new Zend_Filter_Empty(NULL);
         
-        $this->_filters['invoice_id'] = new Zend_Filter_Null();
+        $this->_filters['invoice_id'] = new Zend_Filter_Empty(NULL);
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
