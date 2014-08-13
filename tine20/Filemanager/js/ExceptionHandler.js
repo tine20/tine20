@@ -62,14 +62,25 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
                         params.forceOverwrite = true;
 
                         if (button == 'no') {
+                            if (params.method == 'Filemanager.moveNodes') {
+                                // reload grid
+                                var app = Tine.Tinebase.appMgr.get('Filemanager');
+                                app.getMainScreen().getCenterPanel().grid.getStore().reload();
+                                // do nothing, other nodes has been moved already
+                                return;
+                            }
+                            
                             Tine.log.debug('Tine.Filemanager.handleRequestException::' + params.method + ' -> only non-existant nodes.');
+                            
                             Ext.each(params.filenames, function(filename) {
                                 filenameWithoutPath = filename.match(/[^\/]*$/);
                                 if (filenameWithoutPath && existingFilenames.indexOf(filenameWithoutPath[0]) === -1) {
                                     nonExistantFilenames.push(filename);
                                 }
                             });
+                            
                             params.filenames = nonExistantFilenames;
+                            
                             uploadKey = nonExistantFilenames;
                         } else {
                             Tine.log.debug('Tine.Filemanager.handleRequestException::' + params.method + ' -> replace all existing nodes.');
