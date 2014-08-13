@@ -999,4 +999,152 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->assertEquals(40, strlen($ts->invoice_id));
         }
     }
+    
+    /**
+     * tests if a product aggregate won't be billed after setting the last_autobill date of the invoice one month back
+     * but the timesheet must be billed
+     */
+    public function testTimesheetBillingAfterSettingLastAutobill()
+    {
+        $this->_testBillingAfterSettingLastAutobill(TRUE);
+    }
+    
+    /**
+     * tests on manually setting back the last_autobill date without finding any new positions (timesheets)
+     * on the next autobill run but the date must be set to a interval later
+     */
+    public function testContinueBillingAfterSettingLastAutobill()
+    {
+        $this->_testBillingAfterSettingLastAutobill(FALSE);
+    }
+    
+    /**
+     * @see testContinueBillingAfterSettingLastAutobill, testTimesheetBillingAfterSettingLastAutobill
+     */
+    protected function _testBillingAfterSettingLastAutobill($addTimesheet = TRUE)
+    {
+        $startDate = clone $this->_referenceDate;
+    
+        $this->_createProducts();
+        $this->_createCustomers(1);
+        $this->_createCostCenters();
+    
+        $tas = $this->_createTimeaccounts(array(array(
+            'title'         => 'tatest',
+            'description'   => 'blabla',
+            'is_open'       => 1,
+            'status'        => 'to bill',
+            'budget'        => null
+        )));
+        
+        $ta = $tas->getFirstRecord();
+        
+        // this contract begins 6 months before the first invoice will be created
+        $this->_createContracts(array(array(
+            'number'       => 100,
+            'title'        => 'MyContract',
+            'description'  => 'unittest',
+            'container_id' => $this->_sharedContractsContainerId,
+            'billing_point' => 'begin',
+            'billing_address_id' => $this->_addressRecords->filter(
+                    'customer_id', $this->_customerRecords->filter(
+                            'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                                    'type', 'billing')->getFirstRecord()->getId(),
+
+            'interval' => 1,
+            'start_date' => $startDate->subMonth(6),
+            'last_autobill' => clone $this->_referenceDate,
+            'end_date' => NULL,
+            'products' => array(
+                    array('product_id' => $this->_productRecords->getByIndex(0)->getId(), 'quantity' => 1, 'interval' => 1, 'last_autobill' => clone $this->_referenceDate),
+            )
+        )));
+        
+        $startDate = clone $this->_referenceDate;
+        $startDate->addDay(5);
+        
+        $ts = $this->_createTimesheets(array(array(
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id' => $ta->getId(),
+            'start_date' => $startDate,
+            'duration' => 105,
+            'description' => 'ts from ' . (string) $startDate,
+        )))->getFirstRecord();
+        
+        $startDate = clone $this->_referenceDate;
+        $startDate->addDay(5)->addMonth(1);
+        $result = $this->_invoiceController->createAutoInvoices($startDate);
+        $this->assertEquals(1, $result['created_count']);
+    
+        $invoices = $this->_invoiceController->getAll();
+        $firstInvoice = $invoices->getFirstRecord();
+        $this->assertEquals(1, $invoices->count());
+        $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->getAll();
+        
+        $this->assertEquals(2, $invoicePositions->count());
+        
+        $contract = $this->_contractRecords->getFirstRecord();
+        $contract->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        
+        $autobillDate = clone $this->_referenceDate;
+        
+        $this->assertEquals($autobillDate, $contract->last_autobill);
+        
+        $pa = Sales_Controller_ProductAggregate::getInstance()->getAll()->getFirstRecord();
+        $pa->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $autobillDate = clone $this->_referenceDate;
+        $autobillDate->addMonth(1);
+        $this->assertEquals($autobillDate, $pa->last_autobill);
+        
+        if ($addTimesheet) {
+            // create a timesheet in the same interval as the first
+            $startDate = clone $this->_referenceDate;
+            $startDate->addDay(6);
+            
+            $ts = $this->_createTimesheets(array(array(
+                    'account_id' => Tinebase_Core::getUser()->getId(),
+                    'timeaccount_id' => $ta->getId(),
+                    'start_date' => $startDate,
+                    'duration' => 105,
+                    'description' => 'ts from ' . (string) $startDate,
+            )))->getFirstRecord();
+        }
+        
+        // set last autobill of contract one month back
+        $contract = $this->_contractController->get($contract->getId());
+        $lab = clone $contract->last_autobill;
+        $lab->subMonth(1);
+        $contract->last_autobill = $lab;
+        $contract = $this->_contractController->update($contract);
+        $contract->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        
+        $autobillDate = clone $this->_referenceDate;
+        $this->assertEquals($autobillDate, $contract->last_autobill);
+        
+        $startDate = clone $this->_referenceDate;
+        $startDate->addDay(5)->addMonth(1);
+        $result = $this->_invoiceController->createAutoInvoices($startDate);
+        $this->assertEquals(($addTimesheet ? 1 : 0), $result['created_count']);
+        
+        $allInvoices = $this->_invoiceController->getAll();
+        $this->assertEquals(($addTimesheet ? 2 : 1), $allInvoices->count());
+        
+        if ($addTimesheet) {
+            foreach($allInvoices as $invoice) {
+                if ($invoice->getId() != $firstInvoice->getId()) {
+                    $secondInvoice = $invoice;
+                }
+            }
+            
+            $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->getAll()->filter('invoice_id', $secondInvoice->getId());
+            $this->assertEquals('Timetracker_Model_Timeaccount', $invoicePositions->getFirstRecord()->model);
+            $this->assertEquals(1, $invoicePositions->count());
+        }
+        
+        $autobillDate->addMonth(1);
+        
+        $contract = $this->_contractController->get($contract->getId());
+        $contract->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $this->assertEquals($autobillDate, $contract->last_autobill);
+    }
 }
