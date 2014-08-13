@@ -537,7 +537,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             }
             
             if (belowEvents.length) {
-                var belowHint = this.aboveHints.item(idx);
+                var belowHint = this.belowHints.item(idx);
                 belowHint.setTop(visibleEnd - 14);
                 if (!belowHint.isVisible()) {
                     belowHint.fadeIn({duration: 1.6});
