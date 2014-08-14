@@ -166,4 +166,45 @@ class Timetracker_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         return TRUE;
     }
+
+    /**
+     * create customfield value (tr_budget) for timeaccounts starting with S-AB and moves the value from budget to tr_budget
+     */
+    public function moveBudget()
+    {
+        $filter = new Timetracker_Model_TimeaccountFilter(array(
+            array('field' => 'budget', 'operator' => 'greater', 'value' => 0),
+            array('field' => 'number', 'operator' => 'startswith', 'value' => 'S-AB')
+        ));
+        
+        $taController = Timetracker_Controller_Timeaccount::getInstance();
+        $tas = $taController->search($filter);
+        
+        $cfi = Tinebase_CustomField::getInstance();
+        $cfb = new Tinebase_Backend_Sql(array(
+                'modelName' => 'Tinebase_Model_CustomField_Value',
+                'tableName' => 'customfield',
+        ));
+        
+        $cf = $cfi->getCustomFieldByNameAndApplication('Timetracker', 'tr_budget');
+        
+        if (! $cf) {
+            die('No CustomField tr_budget found!');
+        }
+        
+        foreach($tas as $ta) {
+            echo 'Working on ' . $ta->title . PHP_EOL;
+            $cf = new Tinebase_Model_CustomField_Value(array(
+                'record_id' => $ta->getId(),
+                'customfield_id' => $cf->getId(),
+                'value' => $ta->budget
+            ));
+            
+            $cfb->create($cf);
+            $ta->budget = NULL;
+            $taController->update($ta);
+        }
+        echo PHP_EOL;
+        echo 'done!' . PHP_EOL;
+    }
 }
