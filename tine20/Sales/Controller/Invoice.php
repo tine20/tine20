@@ -30,7 +30,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * 
      * @var integer
      */
-    protected $_numberZerofill = 6;
+    protected $_numberZerofill = 5;
     
     /**
      * the prefix for the invoice

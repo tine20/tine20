@@ -155,6 +155,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
         $this->_filters['budget']  = array('Digits', new Zend_Filter_Empty(NULL));
         $this->_filters['price'] = array(new Zend_Filter_PregReplace('/,/', '.'), new Zend_Filter_Empty(NULL));
         $this->_filters['is_open'] = new Zend_Filter_Empty(0);
+        $this->_filters['invoice_id']  = array(new Zend_Filter_Empty(NULL));
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }

@@ -248,7 +248,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $invoice = $this->_invoiceController->update($invoice);
         
         // check correct number generation
-        $this->assertEquals("R-000001", $invoice->number);
+        $this->assertEquals("R-00001", $invoice->number);
         
         $invoice = $customer2Invoices->getFirstRecord();
         $invoice->relations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $invoice->getId())->toArray();
@@ -259,7 +259,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $invoice->cleared = 'CLEARED';
         $invoice = $this->_invoiceController->update($invoice);
         
-        $this->assertEquals("R-000002", $invoice->number);
+        $this->assertEquals("R-00002", $invoice->number);
         
         // check disallow editing invoice after clearing
         $invoice->credit_term = 20;
@@ -318,11 +318,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $allTimeaccounts = $taController->getAll();
         
         foreach($allTimeaccounts as $ta) {
-            $this->assertTrue($ta->invoice_id === NULL);
+            $this->assertTrue($ta->invoice_id == NULL);
         }
         
         foreach($allTimesheets as $ts) {
-            $this->assertTrue($ts->invoice_id === NULL);
+            $this->assertTrue($ts->invoice_id == NULL);
         }
     }
     
@@ -965,8 +965,10 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $date->addMonth(8);
         $i = 0;
     
-        $this->_invoiceController->createAutoInvoices($date);
+        $result = $this->_invoiceController->createAutoInvoices($date);
     
+        $this->assertEquals(3, count($result['created']));
+        
         $tsController = Timetracker_Controller_Timesheet::getInstance();
     
         $allInvoices = $this->_invoiceController->getAll();
