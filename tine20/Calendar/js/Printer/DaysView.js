@@ -40,8 +40,9 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
         // resize header/scroller to fullsize
         header.style.height = [header.firstChild.style.height, header.style.height].sort().pop();
         scroller.style.height = view.dayEndPx - view.getTimeOffset(view.dayStart) + 20 + 'px';
+        scroller.style.width = null;
         
-        return /*this.generateTitle(view) + */ node.innerHTML;
+        return this.generateTitle(view) + node.innerHTML;
     },
     
     generateGridHTML: function(view) {
