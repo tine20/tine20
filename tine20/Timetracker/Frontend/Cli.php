@@ -186,9 +186,9 @@ class Timetracker_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'tableName' => 'customfield',
         ));
         
-        $cf = $cfi->getCustomFieldByNameAndApplication('Timetracker', 'tr_budget');
+        $trBudget = $cfi->getCustomFieldByNameAndApplication('Timetracker', 'tr_budget');
         
-        if (! $cf) {
+        if (! $trBudget) {
             die('No CustomField tr_budget found!');
         }
         
@@ -196,7 +196,7 @@ class Timetracker_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo 'Working on ' . $ta->title . PHP_EOL;
             $cf = new Tinebase_Model_CustomField_Value(array(
                 'record_id' => $ta->getId(),
-                'customfield_id' => $cf->getId(),
+                'customfield_id' => $trBudget->getId(),
                 'value' => $ta->budget
             ));
             
