@@ -32,6 +32,12 @@ table td {
     display: none;
 }
 
+div.page
+{
+    page-break-after: always;
+    page-break-inside: avoid;
+}
+
 .cal-print-title {
 	text-align: center;
 	font-size: 20px;

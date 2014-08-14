@@ -10,9 +10,14 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
    */
   printStrategy: 'iframe',
   
+  debug: false,
+  
   constructor: function(config) {
     Ext.apply(this, config);
     
+    if (this.debug) {
+        this.printStrategy = 'window';
+    }
     Ext.ux.Printer.BaseRenderer.superclass.constructor.call(this, config);
   },
   
@@ -41,7 +46,9 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     // gecko looses its document after document.close(). but fortunally waits with printing till css is loaded itself
     if (Ext.isGecko) {
         win.print();
-        win.close();
+        if (! this.debug) {
+            win.close();
+        }
         return;
     }
     
@@ -102,7 +109,9 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
       return;
     }
     win.print();
-    win.close();
+    if (! this.debug) {
+        win.close();
+    }
   },
   
   /**

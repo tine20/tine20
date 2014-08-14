@@ -23,9 +23,15 @@ table td {
 }
 
 @media print {
-   thead {display: table-header-group;}
+  thead {display: table-header-group;}
 }
 
 #csscheck {
-	display: none;
+  display: none;
+}
+
+div.page
+{
+  page-break-after: always;
+  page-break-inside: avoid;
 }
