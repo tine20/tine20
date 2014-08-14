@@ -21,6 +21,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
 {
     protected $calendars = array();
     protected $calendarICSs = array();
+    protected $existingRecordIds = array();
     protected $maxBulkRequest = 20;
     protected $mapToDefaultContainer = 'calendar';
     protected $decorator = null;
@@ -124,7 +125,13 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     
     protected function findContainerForCalendar($calendarUri, $displayname, $defaultCalendarsName, $type, $application_id, $modelName)
     {
-        $uuid = basename($calendarUri);
+        if (! preg_match('@__uids__/([^/]+)@', $calendarUri, $matches)) {
+            throw new Exception('no uuid found in calendar uri');
+        }
+        $uuid = $matches[1];
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+                . ' $displayname = ' . $displayname . ' $defaultCalendarsName = ' . $defaultCalendarsName . ' $uuid = ' . $uuid);
         
         $filter = new Tinebase_Model_ContainerFilter(array(
             array(
@@ -139,7 +146,9 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             ),
         ));
         $existingCalendar = Tinebase_Container::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
-        if($existingCalendar) {
+        if ($existingCalendar) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+                . ' Found existing calendar ' . $existingCalendar->name . ' (id: ' . $existingCalendar->getId() . ')');
             return $existingCalendar;
         }
         
@@ -148,6 +157,8 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         if ($defaultCalendarsName == $displayname) {
             $existingCalendar = Tinebase_Container::getInstance()->getDefaultContainer('Calendar_Model_Event');
             if (! $existingCalendar->uuid) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+                    . ' Found existing calendar with the same name');
                 $existingCalendar->uuid = $uuid;
                 return $existingCalendar;
             }
@@ -158,6 +169,10 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         try {
             while (true) {
                 $existingCalendar = Tinebase_Container::getInstance()->getContainerByName('Calendar', $displayname . $counter, $type, Tinebase_Core::getUser());
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                    . ' Got calendar: ' . $existingCalendar->name . ' (id: ' . $existingCalendar->getId() . ')');
+                
                 if (! $existingCalendar->uuid) {
                     $existingCalendar->uuid = $uuid;
                     return $existingCalendar;
@@ -187,6 +202,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             . ' Importing all calendars for user ' . $this->userName);
         
         Calendar_Controller_Event::getInstance()->sendNotifications(false);
+        Calendar_Controller_Event::getInstance()->useNotes(false);
         Sabre\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
         
         $this->decorator->initCalendarImport();
@@ -196,16 +212,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         $type = Tinebase_Model_Container::TYPE_PERSONAL; //Tinebase_Model_Container::TYPE_SHARED;
         $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer('Calendar_Model_Event');
         
-        //decide which calendar to use as default calendar
-        //if there is a remote default calendar, use that. If not, use the first we find
-        $defaultCalendarsName = '';
-        foreach ($this->calendarICSs as $calUri => $calICSs) {
-            if ($this->mapToDefaultContainer == $this->calendars[$calUri]['displayname']) {
-                $container = Tinebase_Container::getInstance()->getDefaultContainer('Calendar_Model_Event');
-            } elseif ($defaultsCalendarsName === '') {
-                $defaultCalendarsName = $this->calendars[$calUri]['displayname'];
-            }
-        }
+        $defaultCalendarsName = $this->_getDefaultCalendarsName();
         
         foreach ($this->calendars as $calUri => $cal) {
             $container = $this->findContainerForCalendar($calUri, $cal['displayname'], $defaultCalendarsName,
@@ -218,10 +225,40 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
     }
     
+    /**
+     * decide which calendar to use as default calendar
+     * if there is a remote default calendar, use that. If not, use the first we find
+     * 
+     * @return string
+     */
+    protected function _getDefaultCalendarsName() 
+    {
+        $defaultCalendarsName = '';
+        foreach ($this->calendarICSs as $calUri => $calICSs) {
+            if ($this->mapToDefaultContainer == $this->calendars[$calUri]['displayname']) {
+                return $this->calendars[$calUri]['displayname'];
+            } elseif ($defaultCalendarsName === '') {
+                $defaultCalendarsName = $this->calendars[$calUri]['displayname'];
+            }
+        }
+        return $defaultCalendarsName;
+    }
+    
+    /**
+     * 
+     * @param string $onlyCurrentUserOrganizer
+     * @return boolean
+     * 
+     * @todo check if $onlyCurrentUserOrganizer is needed
+     * @todo check deletes
+     */
     public function updateAllCalendarData($onlyCurrentUserOrganizer = false)
     {
-        if (count($this->calendarICSs) < 1 && ! $this->findAllCalendarICSs())
+        if (count($this->calendarICSs) < 1 && ! $this->findAllCalendarICSs()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' no calendars found for: ' . $this->userName);
             return false;
+        }
         
         $newICSs = array();
         $calendarEventBackend = Calendar_Controller_Event::getInstance()->getBackend();
@@ -243,45 +280,71 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                     if (isset($value['{DAV:}getetag'])) {
                         $name = explode('/', $key);
                         $name = end($name);
-                        $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
+                        $id = $this->_getEventIdFromName($name);
                         $etags[$key] = array( 'id' => $id, 'etag' => $value['{DAV:}getetag']);
                     }
                 }
             } while($start < $max);
             
             //check etags
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                . ' Got ' . count($etags) . ' etags');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                . ' etags: ' . print_r($etags, true));
+            
+            // @todo find out deleted events
             foreach ($etags as $ics => $data) {
-                if (! $calendarEventBackend->checkETag($data['id'], $data['etag'])) {
-                    if (!isset($newICSs[$calUri])) {
-                        $newICSs[$calUri] = array();
+                try {
+                    $etagCheck = $calendarEventBackend->checkETag($data['id'], $data['etag']);
+                    if ($etagCheck) {
+                        continue; // same
+                    } else {
+                        $eventExists = true; // different
                     }
-                    $newICSs[$calUri][] = $ics;
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $eventExists = false;
+                }
+                
+                if (!isset($newICSs[$calUri])) {
+                    $newICSs[$calUri] = array();
+                    $this->existingRecordIds[$calUri] = array();
+                }
+                $newICSs[$calUri][] = $ics;
+                if ($eventExists) {
+                    $this->existingRecordIds[$calUri][] = $data['id'];
                 }
             }
         }
         
         if (($count = count($newICSs)) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $count . ' calendar(s) changed for: ' . $this->userName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
+                    . $count . ' calendar(s) changed for: ' . $this->userName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
+                    . ' events changed: ' . print_r($newICSs, true));
             $this->calendarICSs = $newICSs;
-            $this->importAllCalendarData($onlyCurrentUserOrganizer);
+            $this->importAllCalendarData($onlyCurrentUserOrganizer, /* $update = */ true);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' no changes found for: ' . $this->userName);
-            
         }
     }
     
-    public function importAllCalendarData($onlyCurrentUserOrganizer = false)
+    protected function _getEventIdFromName($name)
+    {
+        return ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
+    }
+    
+    public function importAllCalendarData($onlyCurrentUserOrganizer = false, $update = false)
     {
         if (count($this->calendarICSs) < 1 && ! $this->findAllCalendarICSs()) {
             return false;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
-            . ' Importing all calendar data for user ' . $this->userName);
+            . ' Importing all calendar data for user ' . $this->userName . ' with ics uris: ' . print_r(array_keys($this->calendarICSs), true));
         
         Calendar_Controller_Event::getInstance()->sendNotifications(false);
+        Calendar_Controller_Event::getInstance()->useNotes(false);
         Sabre\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
         
         $this->decorator->initCalendarImport();
@@ -292,18 +355,12 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer('Calendar_Model_Event');
         $calendarEventBackend = Calendar_Controller_Event::getInstance()->getBackend();
         
-        //decide which calendar to use as default calendar
-        //if there is a remote default calendar, use that. If not, use the first we find
-        $defaultCalendarsName = '';
-        foreach ($this->calendarICSs as $calUri => $calICSs) {
-            if ($this->mapToDefaultContainer == $this->calendars[$calUri]['displayname']) {
-                $container = Tinebase_Container::getInstance()->getDefaultContainer('Calendar_Model_Event');
-            } elseif ($defaultsCalendarsName === '') {
-                $defaultCalendarsName = $this->calendars[$calUri]['displayname'];
-            }
-        }
+        $defaultCalendarsName = $this->_getDefaultCalendarsName();
         
         foreach ($this->calendarICSs as $calUri => $calICSs) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                . ' Processing calendar ' . print_r($this->calendars[$calUri], true));
+            
             $container = $this->findContainerForCalendar($calUri, $this->calendars[$calUri]['displayname'], $defaultCalendarsName,
                     $type, $application_id, $modelName);
             
@@ -331,13 +388,20 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                         $data = $value['{urn:ietf:params:xml:ns:caldav}calendar-data'];
                         $name = explode('/', $key);
                         $name = end($name);
+                        $id = $this->_getEventIdFromName($name);
                         try {
-                            $event = Calendar_Frontend_WebDAV_Event::create(
-                                $container,
-                                $name,
-                                $data,
-                                $onlyCurrentUserOrganizer
-                            );
+                            if ($update && in_array($id, $this->existingRecordIds[$calUri])) {
+                                $event = new Calendar_Frontend_WebDAV_Event($container, $id);
+                                $event->put($data);
+                            } else {
+                                $event = Calendar_Frontend_WebDAV_Event::create(
+                                    $container,
+                                    $name,
+                                    $data,
+                                    $onlyCurrentUserOrganizer
+                                );
+                            }
+                            
                             if ($event) {
                                 $etags[$event->getRecord()->getId()] = $value['{DAV:}getetag'];
                             }
@@ -442,16 +506,16 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     
     public function updateAllCalendarDataForUsers(array $users)
     {
-        // first only update/import events where the current user is also the organizer
         $result = true;
-        foreach ($users as $username => $pwd) {
-            $this->clearCurrentUserCalendarData();
-            $this->userName = $username;
-            $this->password = $pwd;
-            if (!$this->updateAllCalendarData(true)) {
-                $result = false;
-            }
-        }
+        // first only update/import events where the current user is also the organizer
+//         foreach ($users as $username => $pwd) {
+//             $this->clearCurrentUserCalendarData();
+//             $this->userName = $username;
+//             $this->password = $pwd;
+//             if (!$this->updateAllCalendarData(true)) {
+//                 $result = false;
+//             }
+//         }
         // then update all events again
         foreach ($users as $username => $pwd) {
             $this->clearCurrentUserCalendarData();
@@ -466,24 +530,6 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     
     public function importAllCalendarDataForUsers(array $users)
     {
-        $result = true;
-        foreach ($users as $username => $pwd) {
-            $this->clearCurrentUserCalendarData();
-            $this->userName = $username;
-            $this->password = $pwd;
-            if (!$this->updateAllCalendarData()) {
-                $result = false;
-            }
-        }
-        return $result;
-    }
-    
-    public function importAllCalendarDataForUsers(array $users)
-    {
-        if (!$this->findCurrentUserPrincipalForUsers($users)) {
-            return false;
-        }
-        
         $result = true;
         // first only import events where the current user is also the organizer
         foreach ($users as $username => $pwd) {
