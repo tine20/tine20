@@ -835,6 +835,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function setETags(array $etags)
     {
         foreach ($etags as $id => $etag) {
+            //$etag = replaceSpecialChars($etag);
+            
             $where  = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id),
             );
@@ -843,24 +845,34 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * checks if there is and event with this id and etag
+     * checks if there is an event with this id and etag, or an event with the same id 
      * 
      * @param string $id
      * @param string $etag
+     * @return boolean
+     * @throws Tinebase_Exception_NotFound
      */
     public function checkETag($id, $etag)
     {
+        //$etag = replaceSpecialChars($etag);
+        
         $select = $this->_db->select();
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $this->_identifier);
         $select->where($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id);
-        $select->where($this->_db->quoteIdentifier('etag') . ' = ?', $etag);
         
         $stmt = $select->query();
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
         
-        $stmt->execute();
-        if ($stmt->rowCount() > 0) {
-            return true;
+        if ($queryResult === false) {
+            throw new Tinebase_Exception_NotFound('no event with id ' . $id .' found');
         }
-        return false;
+        
+        $select->where($this->_db->quoteIdentifier('etag') . ' = ?', $etag);
+        $stmt = $select->query();
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+        
+        return ($queryResult !== false);
     }
 }
