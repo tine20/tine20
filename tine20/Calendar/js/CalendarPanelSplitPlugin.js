@@ -288,8 +288,8 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         return this.activeAttendeeView;
     },
     
-    onPrint: function() {
-        var renderer = new Tine.Calendar.Printer.SplitViewRenderer();
+    onPrint: function(printMode) { 
+        var renderer = new Tine.Calendar.Printer.SplitViewRenderer({printMode: printMode});
         renderer.print(this);
     },
     
@@ -459,6 +459,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.SplitBtn = Ext.extend(Ext.Button, {
 });
 
 Tine.Calendar.Printer.SplitViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRenderer, {
+    getAdditionalHeaders: Tine.Calendar.Printer.DaysViewRenderer.prototype.getAdditionalHeaders,
     generateBody: function(splitView) {
         var viewRenderer = splitView.calPanel.view.printRenderer,
         htmlArray = [];
@@ -466,11 +467,11 @@ Tine.Calendar.Printer.SplitViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
         this.paperHeight = viewRenderer.paperHeight;
         
         splitView.attendeeViews.each(function(v, i) {
-            var renderer = new v.printRenderer();
+            var renderer = new v.printRenderer({printMode: this.printMode});
             renderer.extraTitle = v.title + ' // ';
             renderer.titleStyle = i > 0 ? 'page-break-before:always' : '';
 
-            htmlArray.push(renderer.generateBody(v));
+            htmlArray.push('<div class="page">' + renderer.generateBody(v) + '</div>');
         }, this);
         
         return htmlArray.join('');
