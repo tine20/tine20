@@ -689,7 +689,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         ]);
         
         this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.i18nRecordName)});
-        this.loadMask.show();
+
+        if (this.i18nRecordName) {
+            this.loadMask.show();
+        }
     },
     
     /**
