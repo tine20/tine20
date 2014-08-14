@@ -103,7 +103,16 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         $contracts->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
+        $cfg = Sales_Config::getInstance();
+        $interval = $cfg->get(Sales_Config::AUTO_INVOICE_CONTRACT_INTERVAL);
+        
         foreach ($contracts as $contract) {
+            
+            if ($contract->interval > $interval) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' The Interval is longer than the configured AUTO_INVOICE_CONTRACT_INTERVAL');
+                continue;
+            }
             
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
@@ -269,6 +278,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Checking relation ' . $relation->related_model);
         
+            $contractLastAutobill = $contract->last_autobill ? clone $contract->last_autobill : clone $contract->start_date;
+            
+            if ($contract->billing_point == 'end') {
+                $contractLastAutobill->addMonth($contract->interval);
+            }
+            
             // find accountables
             if (in_array('Sales_Model_Accountable_Interface', class_implements($relation->related_record))) {
         
@@ -279,13 +294,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . ' Found volatile & billable accountable');
         
-                    $referenceDate = $contract->last_autobill ? clone $contract->last_autobill : clone $contract->start_date;
-        
-                    if ($contract->billing_point == 'end') {
-                        $referenceDate->addMonth($contract->interval);
-                    }
-        
-                    if ($referenceDate->isEarlierOrEquals($currentDate)) {
+                    if ($contractLastAutobill->isEarlierOrEquals($currentDate)) {
                         $billIt = TRUE;
                     }
         
@@ -373,7 +382,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
         }
         
-        // if there are no positions, no bill will be created, but the last_autobill info is set
+        // if there are no positions, no bill will be created, but the last_autobill info is set, if the current date is later
         if ($invoicePositions->count() == 0) {
         
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -381,7 +390,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         . 'No efforts for the contract "' . $contract->title . '" could be found.', Zend_Log::INFO);
             }
             
-            Sales_Controller_Contract::getInstance()->updateLastBilledDate($contract);
+            if ($contractLastAutobill < $currentDate->subMonth($contract->interval)) {
+                Sales_Controller_Contract::getInstance()->updateLastBilledDate($contract);
+            }
             return false;
         }
         

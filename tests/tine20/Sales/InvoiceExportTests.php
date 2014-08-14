@@ -27,21 +27,11 @@ class Sales_InvoiceExportTests extends Sales_InvoiceTestCase
     }
     
     /**
-     * (non-PHPdoc)
-     * @see TestCase::tearDown()
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-    
-    /**
      * tests auto invoice creation
      */
     public function testExportInvoice()
     {
         $this->_createFullFixtures();
-        
         $date = clone $this->_referenceDate;
         
         $i = 0;
@@ -67,7 +57,7 @@ class Sales_InvoiceExportTests extends Sales_InvoiceTestCase
         $this->assertEquals(1, $customer3Invoices->count(), 'Customer 3 must have 1 invoice!');
         
         // there are 2 products, interval 3,6 -> so every quarter in this and the first quarter of next year must be found
-        $this->assertEquals(2, $customer4Invoices->count(), 'Customer 4 must have 2 invoices!');
+        $this->assertEquals(3, $customer4Invoices->count(), 'Customer 4 must have 3 invoices!');
         
         // test products export
         $definition = dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/Sales/Export/definitions/invoiceposition_default_ods.xml';

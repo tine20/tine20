@@ -155,6 +155,9 @@ class Sales_InvoiceTestCase extends TestCase
     {
         Sales_Controller_Contract::getInstance()->deleteByFilter(new Sales_Model_ContractFilter(array()));
         
+        $cfg = Sales_Config::getInstance();
+        $cfg->set(Sales_Config::AUTO_INVOICE_CONTRACT_INTERVAL, 12);
+        
         $this->_invoiceController = Sales_Controller_Invoice::getInstance();
         $this->_invoiceController->deleteByFilter(new Sales_Model_InvoiceFilter(array()));
         
@@ -393,7 +396,12 @@ class Sales_InvoiceTestCase extends TestCase
         return $this->_customerRecords;
     }
     
-    protected function _createProducts()
+    /**
+     * creates products
+     * 
+     * @param string $productArray
+     */
+    protected function _createProducts($productArray = NULL)
     {
         // 1.1.20xx
         $startDate = clone $this->_referenceDate;
@@ -401,7 +409,7 @@ class Sales_InvoiceTestCase extends TestCase
         // 1.8.20xx
         $endDate->addMonth(7);
         
-        $productArray = array(
+        if (! $productArray) $productArray = array(
             array(
                 'name' => 'billhalfyearly',
                 'description' => 'bill this 2 times a year',
