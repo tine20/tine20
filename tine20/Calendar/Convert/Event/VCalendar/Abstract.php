@@ -962,6 +962,16 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $event->class = Calendar_Model_Event::CLASS_PUBLIC;
         }
         
+        if (empty($event->dtend)) {
+            // TODO find out duration (see TRIGGER DURATION)
+//             if (isset($vevent->DURATION)) {
+//             }
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Got event without dtend. Assuming 30 minutes duration');
+            $event->dtend = clone $event->dtstart;
+            $event->dtend->addMinute(30);
+        }
+        
         // convert all datetime fields to UTC
         $event->setTimezone('UTC');
     }
