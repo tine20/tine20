@@ -1077,6 +1077,24 @@ class Filemanager_Frontend_JsonTests extends TestCase
     }
     
     /**
+     * test renaming a folder in a folder containing a folder with the same name
+     *
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=10132
+     */
+     public function testRenameFolderInFolderContainingFolderAlready()
+     {
+        $path = '/personal/' .Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name;
+     
+        $this->_json->createNode($path . '/Test1', 'folder', NULL, FALSE);
+        $this->_json->createNode($path . '/Test1/Test2', 'folder', NULL, FALSE);
+        $this->_json->createNode($path . '/Test1/Test3', 'folder', NULL, FALSE);
+        
+        $this->setExpectedException('Filemanager_Exception_NodeExists');
+        
+        $this->_json->moveNodes(array($path . '/Test1/Test3'), array($path . '/Test1/Test2'), FALSE);
+     }
+    
+    /**
      * tests the recursive filter
      */
     public function testSearchRecursiveFilter()

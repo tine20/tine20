@@ -1055,6 +1055,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                         throw $fene;
                     }
                 }
+            } else {
+                if (! $_forceOverwrite) {
+                    $this->_checkIfExists($destination);
+                }
             }
         }
         
