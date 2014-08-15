@@ -1075,7 +1075,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         foreach ($pathParts as $pathPart) {
             $subPath .= "/$pathPart"; 
             
-            $pathNodes->addRecord($this->stat($subPath));
+            $node = $this->stat($subPath);
+            if ($node) {
+                $pathNodes->addRecord($node);
+            }
         }
         
         return $pathNodes;

@@ -1227,6 +1227,27 @@ class Filemanager_Frontend_JsonTests extends TestCase
     }
     
     /**
+     * test creating a folder in a folder with the same name (below personal folders)
+     *
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=10132
+     */
+    public function testCreateFolderInFolderWithSameName()
+    {
+        $path = '/personal/' .Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name;
+        
+        $this->_json->createNode($path . '/Test1', 'folder', NULL, FALSE);
+        $this->_json->createNode($path . '/Test1/Test1', 'folder', NULL, FALSE);
+        $e = new Tinebase_Exception('nothing');
+        try {
+            $this->_json->createNode($path . '/Test1/Test1/Test2', 'folder', NULL, FALSE);
+        } catch(Exception $e) {
+            $this->fail('The folder couldn\'t be found, so it hasn\'t ben created');
+        }
+        
+        $this->assertEquals('nothing', $e->getMessage());
+    }
+    
+    /**
      * get other users container
      * 
      * @return Tinebase_Model_Container
