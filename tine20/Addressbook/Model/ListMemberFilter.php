@@ -42,4 +42,19 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_Abstract
         );
         $_select->where($db->quoteIdentifier($correlationName . '.list_id') . ' IN (?)', (array) $this->_value);
     }
+    
+    /**
+     * returns array with the filter settings of this filter group
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        if (is_string($this->_value)) {
+            $this->_value = Addressbook_Controller_List::getInstance()->get($this->_value)->toArray();
+        }
+        
+        return parent::toArray($_valueToJson);
+    }
 }
