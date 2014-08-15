@@ -163,11 +163,11 @@ msgstr "Möchten Sie die folgenden Datei(en) ersetzen?"
 
 #: js/Filemanager.js:147
 msgid "Failure on create folder"
-msgstr "Fehler beim anlegen des Ordners"
+msgstr "Fehler beim Anlegen des Ordners"
 
 #: js/Filemanager.js:148
 msgid "Item with this name already exists!"
-msgstr "Item(s) mit diesem Namen schon vorhanden!"
+msgstr "Ordner mit diesem Namen schon vorhanden!"
 
 #: js/NodeGridPanel.js:127
 msgid "Tags"
