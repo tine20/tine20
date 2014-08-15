@@ -70,7 +70,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         if (isset($result['{DAV:}current-user-principal']))
         {
             try {
-                $user = Tinebase_User::getInstance()->getUserByLoginName($this->userName);
+                $user = Tinebase_User::getInstance()->getUserByLoginName($this->userName, 'Tinebase_Model_FullUser');
                 Tinebase_Core::set(Tinebase_Core::USER, $user);
                 $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($this->userName, $this->password);
                 Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
@@ -116,6 +116,10 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         if ('' == $this->currentUserPrincipal && ! $this->findCurrentUserPrincipal(/* tries = */ 3)) {
             return false;
         }
+        
+        // @todo add caching here
+        //Tinebase_Core::getCache()
+        
         $result = $this->calDavRequest('PROPFIND', $this->currentUserPrincipal, self::findCalendarHomeSetRequest);
         
         if (isset($result['{urn:ietf:params:xml:ns:caldav}calendar-home-set'])) {
@@ -147,7 +151,18 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         $this->calendarHomeSet = '';
     }
     
-    public function calDavRequest($method, $uri, $body, $depth = 0, $tries = 10)
+    /**
+     * perform calDavRequest
+     * 
+     * @param string $method
+     * @param string $uri
+     * @param strubg $body
+     * @param number $depth
+     * @param number $tries
+     * @param number $sleep
+     * @throws Tinebase_Exception
+     */
+    public function calDavRequest($method, $uri, $body, $depth = 0, $tries = 10, $sleep = 30)
     {
         $response = null;
         while ($tries > 0)
@@ -167,8 +182,8 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
                             . "\n" . $e->getMessage());
                 if (--$tries > 0) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                            . ' Sleeping 60 seconds and retrying ... ');
-                    sleep(60);
+                            . ' Sleeping ' . $sleep . ' seconds and retrying ... ');
+                    sleep($sleep);
                 }
                 continue;
             }
@@ -182,8 +197,9 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         $result = $this->parseMultiStatus($response['body']);
         
         //fputs($this->requestLogFH, $method.' '.$uri."\n".$body."\n".$depth."\n".$response['body']."\n\n\n\n\n\n\n", 10000000);
-        //echo $body."\n\n";
-        //print_r($response);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' request: ' . $body . ' response: ' . print_r($response, true));
         
         // If depth was 0, we only return the top item
         if ($depth===0) {
