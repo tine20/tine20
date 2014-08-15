@@ -600,3 +600,6 @@ msgstr "Lead %s wurde angelegt"
 #: js/LeadGridPanel.js:144 js/LeadEditDialog.js:393
 msgid "Resubmission Date"
 msgstr "Wiedervorlagedatum"
+
+msgid "Organizer"
+msgstr "Organisator"
