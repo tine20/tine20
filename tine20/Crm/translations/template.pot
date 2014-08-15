@@ -599,3 +599,6 @@ msgstr ""
 #: Controller.php:178
 msgid "Website"
 msgstr ""
+
+msgid "Organizer"
+msgstr ""
