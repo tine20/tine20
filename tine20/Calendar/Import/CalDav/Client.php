@@ -474,8 +474,9 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                         $type[] = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
                         $privilege[] = $ace['privilege'];
                     } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' there is an unresolved principal: ' . $principal . ' in group: ' . $ace['principal']);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                                . ' there is an unresolved principal: ' . $principal . ' in group: ' . $ace['principal']);
                     }
                 }
             } else {
@@ -520,8 +521,11 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             $grants[$user[$i]]['account_id'] = $user[$i];
             $grants[$user[$i]]['account_type'] = $type[$i];
         }
-        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' found grants: ' . print_r($grants, true) . ' for calendar: ' . $calUri);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' found ' . count($grants) . ' grants for calendar: ' . $calUri);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' grants: ' . print_r($grants, true));
         
         return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grants, TRUE);
     }
@@ -530,14 +534,14 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     {
         $result = true;
         // first only update/import events where the current user is also the organizer
-//         foreach ($users as $username => $pwd) {
-//             $this->clearCurrentUserCalendarData();
-//             $this->userName = $username;
-//             $this->password = $pwd;
-//             if (!$this->updateAllCalendarData(true)) {
-//                 $result = false;
-//             }
-//         }
+        foreach ($users as $username => $pwd) {
+            $this->clearCurrentUserCalendarData();
+            $this->userName = $username;
+            $this->password = $pwd;
+            if (!$this->updateAllCalendarData(true)) {
+                $result = false;
+            }
+        }
         // then update all events again
         foreach ($users as $username => $pwd) {
             $this->clearCurrentUserCalendarData();
