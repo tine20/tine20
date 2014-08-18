@@ -647,13 +647,14 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      * save ics test event
      * 
      * @param string $filename
+     * @param string $client
      * @return Calendar_Model_Event
      */
-    protected function _saveIcsEvent($filename)
+    protected function _saveIcsEvent($filename, $client = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC)
     {
         $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/' . $filename, 'r');
         
-        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($client);
         
         $event = $this->_converter->toTine20Model($vcalendarStream);
         
@@ -705,5 +706,15 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $savedEvent = $this->_saveIcsEvent('utf8mb4_summary.ics');
         
         $this->assertContains('Mail an Frau LaLiLoLu ging am 4.11 raus, dass du später zur Ralf Sitzung kommst (joda)', $savedEvent->summary);
+    }
+
+    /**
+     * testEmptyCategories
+     */
+    public function testEmptyCategories()
+    {
+        $savedEvent = $this->_saveIcsEvent('empty_categories.ics', Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX);
+        
+        $this->assertEquals('Flug nach Hamburg', $savedEvent->summary);
     }
 }
