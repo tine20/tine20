@@ -8,8 +8,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        
  */
 
 /**
@@ -64,8 +62,24 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         $this->propertyMap['{DAV:}group-member-set'] = 'Tinebase_Import_CalDav_GroupMemberSet';
     }
     
+    /**
+     * findCurrentUserPrincipal
+     * - result ($this->currentUserPrincipal) is cached for 1 week
+     * 
+     * @param number $tries
+     * @return boolean
+     */
     public function findCurrentUserPrincipal($tries = 1)
     {
+        $cacheId = convertCacheId('findCurrentUserPrincipal' . $this->userName);
+        if (Tinebase_Core::getCache()->test($cacheId)) {
+            $this->currentUserPrincipal = Tinebase_Core::getCache()->load($cacheId);
+            $this->principals[$this->currentUserPrincipal] = Tinebase_User::getInstance()->getUserByLoginName($this->userName, 'Tinebase_Model_FullUser');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                    . ' Loading user principal from cache');
+            return true;
+        }
+        
         $result = $this->calDavRequest('PROPFIND', '/principals/', self::findCurrentUserPrincipalRequest, 0, $tries);
         if (isset($result['{DAV:}current-user-principal']))
         {
@@ -80,6 +94,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
             }
             $this->currentUserPrincipal = $result['{DAV:}current-user-principal'];
             $this->principals[$this->currentUserPrincipal] = $user;
+            Tinebase_Core::getCache()->save($this->currentUserPrincipal, $cacheId, array(), /* 1 week */ 24*3600*7);
             return true;
         }
         
@@ -111,19 +126,31 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         return count($users) > 0;
     }
     
+    /**
+     * findCalendarHomeSet
+     * - result ($this->calendarHomeSet) is cached for 1 week
+     * 
+     * @return boolean
+     */
     public function findCalendarHomeSet()
     {
+        $cacheId = convertCacheId('findCalendarHomeSet' . $this->userName);
+        if (Tinebase_Core::getCache()->test($cacheId)) {
+            $this->calendarHomeSet = Tinebase_Core::getCache()->load($cacheId);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                    . ' Loading user home set from cache');
+            return true;
+        }
+        
         if ('' == $this->currentUserPrincipal && ! $this->findCurrentUserPrincipal(/* tries = */ 3)) {
             return false;
         }
-        
-        // @todo add caching here
-        //Tinebase_Core::getCache()
         
         $result = $this->calDavRequest('PROPFIND', $this->currentUserPrincipal, self::findCalendarHomeSetRequest);
         
         if (isset($result['{urn:ietf:params:xml:ns:caldav}calendar-home-set'])) {
             $this->calendarHomeSet = $result['{urn:ietf:params:xml:ns:caldav}calendar-home-set'];
+            Tinebase_Core::getCache()->save($this->calendarHomeSet, $cacheId, array(), /* 1 week */ 24*3600*7);
             return true;
         }
         

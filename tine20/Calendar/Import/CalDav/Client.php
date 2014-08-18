@@ -79,7 +79,14 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         if ($this->calendarHomeSet[strlen($this->calendarHomeSet)-1] !== '/')
             $this->calendarHomeSet .= '/';
         
-        $result = $this->calDavRequest('PROPFIND', $this->calendarHomeSet, $this->decorator->preparefindAllCalendarsRequest(self::findAllCalendarsRequest), 1);
+        try {
+            $result = $this->calDavRequest('PROPFIND', $this->calendarHomeSet, $this->decorator->preparefindAllCalendarsRequest(self::findAllCalendarsRequest), 1);
+        } catch (Tinebase_Exception $te) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' request failed');
+            Tinebase_Exception::log($te);
+            return false;
+        }
         
         foreach ($result as $uri => $response) {
             if (isset($response['{DAV:}resourcetype']) && isset($response['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set']) && 
@@ -117,21 +124,20 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         if (count($this->calendarICSs) > 0) {
             return true;
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' all found calendars are empty');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' all found calendars are empty');
             return false;
         }
     }
     
     protected function findContainerForCalendar($calendarUri, $displayname, $defaultCalendarsName, $type, $application_id, $modelName)
     {
-        if (! preg_match('@__uids__/([^/]+)@', $calendarUri, $matches)) {
-            throw new Exception('no uuid found in calendar uri');
-        }
-        $uuid = $matches[1];
+        // sha1() the whole calendar uri as it is very hard to separate a uuid string from the uri otherwise
+        $uuid = sha1($calendarUri);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
-                . ' $displayname = ' . $displayname . ' $defaultCalendarsName = ' . $defaultCalendarsName . ' $uuid = ' . $uuid);
+                . ' $calendarUri = ' . $calendarUri . ' / $displayname = ' . $displayname 
+                . ' / $defaultCalendarsName = ' . $defaultCalendarsName . ' / $uuid = ' . $uuid);
         
         $filter = new Tinebase_Model_ContainerFilter(array(
             array(
@@ -209,10 +215,12 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
         $modelName = Tinebase_Core::getApplicationInstance('Calendar')->getDefaultModel();
         $application_id = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
-        $type = Tinebase_Model_Container::TYPE_PERSONAL; //Tinebase_Model_Container::TYPE_SHARED;
-        $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer('Calendar_Model_Event');
+        $type = Tinebase_Model_Container::TYPE_PERSONAL;
         
         $defaultCalendarsName = $this->_getDefaultCalendarsName();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+            . ' Calendar uris to import: ' . print_r(array_keys($this->calendars), true));
         
         foreach ($this->calendars as $calUri => $cal) {
             $container = $this->findContainerForCalendar($calUri, $cal['displayname'], $defaultCalendarsName,
@@ -324,14 +332,18 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             $this->calendarICSs = $newICSs;
             $this->importAllCalendarData($onlyCurrentUserOrganizer, /* $update = */ true);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' no changes found for: ' . $this->userName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' no changes found for: ' . $this->userName);
         }
     }
     
     protected function _getEventIdFromName($name)
     {
-        return ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
+        $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
+        if (strlen($id) > 40) {
+            $id = sha1($id);
+        }
+        return $id;
     }
     
     public function importAllCalendarData($onlyCurrentUserOrganizer = false, $update = false)
