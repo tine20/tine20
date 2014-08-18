@@ -721,12 +721,17 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         if (!empty($calAddress['EMAIL'])) {
             $email = $calAddress['EMAIL']->getValue();
         } else {
-            if (!preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/i', $calAddress->getValue(), $matches)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid attendee provided: ' . $calAddress->getValue());
-                return null;
+            if (! preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/i', $calAddress->getValue(), $matches)) {
+                if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $calAddress->getValue())) {
+                    $email = $calAddress->getValue();
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid attendee provided: ' . $calAddress->getValue());
+                    return null;
+                }
+            } else {
+                $email = $matches['email'];
             }
-            $email = $matches['email'];
         }
         
         $fullName = isset($calAddress['CN']) ? $calAddress['CN']->getValue() : $email;
