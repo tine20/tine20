@@ -391,6 +391,8 @@ class Tinebase_Core
         }
         
         if (! $_ignoreACL && is_object(Tinebase_Core::getUser()) && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' User ' . Tinebase_Core::getUser()->accountDisplayName . '/' . Tinebase_Core::getUser()->getId() . ' has no right to access ' . $appName);
             throw new Tinebase_Exception_AccessDenied('No right to access application ' . $appName);
         }
         
