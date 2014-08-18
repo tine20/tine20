@@ -231,7 +231,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         . ' --method Calendar.' . $mode . 'CalDavDataForUser'
                 . ' url=' .  $args['url'] . ' caldavuserfile=' . $args['caldavuserfile'];
         
-        $numberOfRuns = ($mode === 'import') ? 2 : 1;
+        $numberOfRuns = 2;
         for ($run = 1; $run <= $numberOfRuns; ++$run)
         {
             $this->_runMultiProcessImportUpdate($numProc, $cliParams, $users, $run);
@@ -374,7 +374,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function updateCalDavDataForUser(Zend_Console_Getopt $_opts)
     {
-        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'line'));
+        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'line', 'run'));
         
         $writer = new Zend_Log_Writer_Stream('php://output');
         $writer->addFilter(new Zend_Log_Filter_Priority(4));
@@ -392,9 +392,9 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 ), 'MacOSX');
         $client->setVerifyPeer(false);
         
-        $client->updateAllCalendarData();
+        $client->updateAllCalendarData($args['run']==1 ? true : false);
     }
-    
+   
     /**
      * update calendar/events from a CalDav source using etags
      * 
