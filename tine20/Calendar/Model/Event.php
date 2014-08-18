@@ -492,7 +492,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             }
         }
         
-        if ($this->rrule_until && $this->rrule_until < $this->dtstart) {
+        if ($this->rrule_until && $this->rrule_until->getTimeStamp() - $this->dtstart->getTimeStamp() < -1) {
             throw new Tinebase_Exception_Record_Validation('rrule until must not be before dtstart');
         }
     }

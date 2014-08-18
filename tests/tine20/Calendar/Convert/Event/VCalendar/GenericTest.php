@@ -688,6 +688,16 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     }
     
     /**
+     * testRruleUntilAtDtstartForAllDayEvent
+     */
+    public function testRruleUntilAtDtstartForAllDayEvent()
+    {
+        $savedEvent = $this->_saveIcsEvent('rrule_until_at_dtstart_allday.ics');
+        
+        $this->assertTrue(true, 'no exception should be thrown ;-)');
+    }
+    
+    /**
      * testLongLocation
      */
     public function testLongLocation()
