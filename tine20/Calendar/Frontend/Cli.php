@@ -222,7 +222,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $users = $this->_readCalDavUserFile($args['caldavuserfile']);
         
-        if ($mode === 'import') {
+        if ($mode === 'import' && (empty($args['dataonly']) || $args['dataonly'] == false)) {
             // first import the calendars, serial sadly
             $this->_importAllCalendars($users, $args['url']);
         }

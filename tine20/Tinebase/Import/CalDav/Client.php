@@ -73,33 +73,50 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
     {
         $cacheId = convertCacheId('findCurrentUserPrincipal' . $this->userName);
         if (Tinebase_Core::getCache()->test($cacheId)) {
-            $this->currentUserPrincipal = Tinebase_Core::getCache()->load($cacheId);
-            $this->principals[$this->currentUserPrincipal] = Tinebase_User::getInstance()->getUserByLoginName($this->userName, 'Tinebase_Model_FullUser');
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
                     . ' Loading user principal from cache');
+            
+            $this->currentUserPrincipal = Tinebase_Core::getCache()->load($cacheId);
+            $user = $this->_setUser();
+            if (! $user) {
+                return false;
+            }
+            
             return true;
         }
         
         $result = $this->calDavRequest('PROPFIND', '/principals/', self::findCurrentUserPrincipalRequest, 0, $tries);
         if (isset($result['{DAV:}current-user-principal']))
         {
-            try {
-                $user = Tinebase_User::getInstance()->getUserByLoginName($this->userName, 'Tinebase_Model_FullUser');
-                Tinebase_Core::set(Tinebase_Core::USER, $user);
-                $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($this->userName, $this->password);
-                Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
-            } catch (Tinebase_Exception_NotFound $e) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can\'t find tine20 user: ' . $this->userName);
+            $this->currentUserPrincipal = $result['{DAV:}current-user-principal'];
+            $user = $this->_setUser();
+            if (! $user) {
                 return false;
             }
-            $this->currentUserPrincipal = $result['{DAV:}current-user-principal'];
-            $this->principals[$this->currentUserPrincipal] = $user;
+            
             Tinebase_Core::getCache()->save($this->currentUserPrincipal, $cacheId, array(), /* 1 week */ 24*3600*7);
             return true;
         }
         
         Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' couldn\'t find current users principal');
         return false;
+    }
+    
+    protected function _setUser()
+    {
+        try {
+            $user = Tinebase_User::getInstance()->getUserByLoginName($this->userName, 'Tinebase_Model_FullUser');
+            Tinebase_Core::set(Tinebase_Core::USER, $user);
+            $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($this->userName, $this->password);
+            Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
+        } catch (Tinebase_Exception_NotFound $e) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can\'t find tine20 user: ' . $this->userName);
+            return null;
+        }
+        
+        $this->principals[$this->currentUserPrincipal] = $user;
+        
+        return $user;
     }
     
     public function findCurrentUserPrincipalForUsers(array &$users)
@@ -134,16 +151,15 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
      */
     public function findCalendarHomeSet()
     {
+        if ('' == $this->currentUserPrincipal && ! $this->findCurrentUserPrincipal(/* tries = */ 3)) {
+            return false;
+        }
         $cacheId = convertCacheId('findCalendarHomeSet' . $this->userName);
         if (Tinebase_Core::getCache()->test($cacheId)) {
             $this->calendarHomeSet = Tinebase_Core::getCache()->load($cacheId);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
                     . ' Loading user home set from cache');
             return true;
-        }
-        
-        if ('' == $this->currentUserPrincipal && ! $this->findCurrentUserPrincipal(/* tries = */ 3)) {
-            return false;
         }
         
         $result = $this->calDavRequest('PROPFIND', $this->currentUserPrincipal, self::findCalendarHomeSetRequest);
@@ -158,13 +174,22 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         return false;
     }
     
+    /**
+     * resolve principals
+     * 
+     * @param array $privileges
+     * 
+     * @todo improve algorithm (recursive?)
+     */
     public function resolvePrincipals(array $privileges)
     {
         foreach ($privileges as $ace)
         {
             if ( $ace['principal'] == '{DAV:}authenticated' || $ace['principal'] == $this->currentUserPrincipal ||
-                 isset($this->principals[$ace['principal']]) || isset($this->principalGroups[$ace['principal']]))
-                         continue;
+                 isset($this->principals[$ace['principal']]) || isset($this->principalGroups[$ace['principal']])) {
+                     continue;
+            }
+            
             $result = $this->calDavRequest('PROPFIND', $ace['principal'], self::resolvePrincipalRequest);
             if (isset($result['{DAV:}group-member-set'])) {
                 $principals = $result['{DAV:}group-member-set']->getPrincipals();
@@ -175,14 +200,20 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
                 $groupPrincipals = array();
                 foreach ($principals as $key => $principal) {
                     if (! isset($this->principals[$principal])) {
+                        if (isset($this->principalGroups[$principal])) {
+                            $groupPrincipals = array_merge($groupPrincipals, $this->principalGroups[$principal]);
+                            continue;
+                        }
+                        
                         $result = $this->calDavRequest('PROPFIND', $principal, self::resolvePrincipalRequest);
                         if (isset($result['{DAV:}group-member-set'])) {
                             
                             $groupMemberPrincipals = $result['{DAV:}group-member-set']->getPrincipals();
                             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
-                                    . ' Found group member principals (group: ' . principal . '): ' . print_r($groupMemberPrincipals, true));
+                                    . ' Found group member principals (group: ' . $principal . '): ' . print_r($groupMemberPrincipals, true));
                             
                             $groupPrincipals = array_merge($groupPrincipals, $groupMemberPrincipals);
+                            $this->principalGroups[$principal] = $groupMemberPrincipals;
 
                             unset($principals[$key]);
                         }
