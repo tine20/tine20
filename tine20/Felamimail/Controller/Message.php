@@ -670,6 +670,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $config->set('HTML.DefinitionID', 'purify message body contents');
         $config->set('HTML.DefinitionRev', 1);
         
+        // @see: http://htmlpurifier.org/live/configdoc/plain.html#Attr.EnableID
+        $config->set('Attr.EnableID', TRUE);
+        $config->set('Attr.IDPrefix', 'felamimail_inline_');
+        
         // @see: http://htmlpurifier.org/live/configdoc/plain.html#HTML.TidyLevel
         $config->set('HTML.TidyLevel', 'heavy');
         

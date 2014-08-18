@@ -26,6 +26,17 @@ class Felamimail_HTMLPurifier_AttrTransform_AValidator extends HTMLPurifier_Attr
     function transform($attr, $config, $context)
     {
         $attr['target'] = '_blank';
+        
+        if (isset($attr['href'])) {
+            $href = preg_replace('/#(.*)/', '#felamimail_inline_$1', $attr['href']);
+            
+            if ($attr['href'] != $href) {
+                $attr['target'] = '_self';
+            }
+            
+            $attr['href'] = $href;
+        }
+        
         return $attr;
     }
 }

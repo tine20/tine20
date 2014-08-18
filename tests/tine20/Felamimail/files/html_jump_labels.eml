@@ -1,0 +1,46 @@
+Return-Path: <a.stintzing@metaways.de>
+Received: from localhost (localhost [127.0.0.1])
+	by vm01.stintzing.net (Postfix) with ESMTP id 64BAE20C45
+	for <alex@stintzing.net>; Mon, 18 Aug 2014 12:04:57 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at vm01.stintzing.net
+Received: from vm01.stintzing.net ([127.0.0.1])
+	by localhost (mail.stintzing.net [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DyvDe0DYHbqF for <alex@stintzing.net>;
+	Mon, 18 Aug 2014 12:04:42 +0200 (CEST)
+Received: from mailout03.metaways.net (mailout03.metaways.net [195.244.121.121])
+	by vm01.stintzing.net (Postfix) with ESMTPS id 056AE2005E
+	for <alex@stintzing.net>; Mon, 18 Aug 2014 12:04:41 +0200 (CEST)
+Received: from localhost (zmw01.osp-hosting.net [10.129.31.223])
+	by mx03.metaways.net (Postfix) with ESMTPSA id F37C22137
+	for <alex@stintzing.net>; Mon, 18 Aug 2014 12:04:42 +0200 (CEST)
+Subject: test
+From: "Alexander Stintzing" <a.stintzing@metaways.de>
+To: alex@stintzing.net
+User-Agent: Tine 2.0 Email Client (version Collin - 2013.10.6metaways23)
+Organization: Metaways Infosystems GmbH
+Message-Id: <0e99d75432d884bceb368bef0a5f62f4c096aaaa@metaways.de>
+X-MailGenerator: Tine 2.0
+X-Tine20TestMessage: html_jump_labels.eml
+Date: Mon, 18 Aug 2014 10:04:40 +0000
+Content-Type: multipart/alternative; charset=UTF-8;
+ boundary="=_155f86dcb781c37b0b5a06e6f61e45ac"
+MIME-Version: 1.0
+
+--=_155f86dcb781c37b0b5a06e6f61e45ac
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+test=0AHello,=0AText Content
+
+--=_155f86dcb781c37b0b5a06e6f61e45ac
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; char=
+set=3DUTF-8"><title></title><style type=3D"text/css">.felamimail-body-bl=
+ockquote {margin: 5px 10px 0 3px;padding-left: 10px;border-left: 2px sol=
+id #000088;} </style></head><body><a href=3D"#test" target=3D"_self">tes=
+t</a>=0A<p>Hello,</p>=0A<p id=3D"test">Text Content</p></body></html>
+
+--=_155f86dcb781c37b0b5a06e6f61e45ac--
+
