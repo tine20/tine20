@@ -404,7 +404,17 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                         try {
                             if ($update && in_array($id, $this->existingRecordIds[$calUri])) {
                                 $event = new Calendar_Frontend_WebDAV_Event($container, $id);
-                                $event->put($data);
+                                if ($onlyCurrentUserOrganizer) {
+                                    // assert current user is organizer
+                                    if ($event->getRecord()->organizer && $event->getRecord()->organizer == Tinebase_Core::getUser()->contact_id) {
+                                        $event->put($data);
+                                    } else {
+                                        continue;
+                                    }
+                                } else {
+                                    $event->put($data);
+                                }
+                                
                             } else {
                                 $event = Calendar_Frontend_WebDAV_Event::create(
                                     $container,
