@@ -717,4 +717,14 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $this->assertEquals('Flug nach Hamburg', $savedEvent->summary);
     }
+    
+    /**
+     * testEmptyAttenderNameAndBrokenEmail
+     */
+    public function testEmptyAttenderNameAndBrokenEmail()
+    {
+        $savedEvent = $this->_saveIcsEvent('attender_empty_name.ics', Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX);
+        
+        $this->assertEquals('Telko axel', $savedEvent->summary);
+    }
 }
