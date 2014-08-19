@@ -125,7 +125,17 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
         if (! empty($this->_parts[Zend_Db_Select::WHERE])) {
             $method = $_concatenationCondition == Zend_Db_Select::SQL_OR ? 'orWhere' : 'where';
             
-            $this->_select->$method(implode(' ', $this->_parts[Zend_Db_Select::WHERE]));
+            $this->_select->$method($this->getSQL());
         }
+    }
+    
+    /**
+     * returns where buffer as SQL at once
+     * 
+     * @return string sql clause
+     */
+    public function getSQL()
+    {
+        return implode(' ', $this->_parts[Zend_Db_Select::WHERE]);
     }
 }

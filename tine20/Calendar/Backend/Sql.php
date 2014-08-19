@@ -163,6 +163,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
             /* select */ array('exdate' => $this->_dbCommand->getAggregate('exdate.exdate')));
         
+        // NOTE: we join here as attendee and role filters need it
         $select->joinLeft(
             /* table  */ array('attendee' => $this->_tablePrefix . 'cal_attendee'),
             /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.id'),

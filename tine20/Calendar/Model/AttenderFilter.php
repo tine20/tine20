@@ -25,8 +25,10 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
      */
     protected $_operators = array(
         0 => 'equals',
-        1 => 'in',
-        3 => 'specialNode' // one of {allResources}
+        1 => 'not',
+        2 => 'in',
+        3 => 'notin',
+        4 => 'specialNode' // one of {allResources}
     );
 
     /**
@@ -38,9 +40,11 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
     {
         switch ($this->_operator) {
             case 'equals':
+            case 'not':
                 $this->_value = array($_value);
                 break;
             case 'in':
+            case 'notin':
                 $this->_value = $_value;
                 break;
             case 'specialNode' :
@@ -138,7 +142,19 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                 );
             }
         }
-        $gs->appendWhere(Zend_Db_Select::SQL_OR);
+        
+        if (substr($this->_operator, 0, 3) === 'not') {
+            // join attendee to be excluded as a new column. records having this column NULL don't have the attendee
+            $dname = 'attendee-not-' . Tinebase_Record_Abstract::generateUID(5);
+            $_select->joinLeft(
+                    /* table  */ array($dname => $_backend->getTablePrefix() . 'cal_attendee'),
+                    /* on     */ $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id') .
+                                 ' AND ' .  $gs->getSQL(),
+                    /* select */ array($dname => $_backend->getDbCommand()->getAggregate($dname . '.id')));
+            $_select->having($adapter->quoteIdentifier($dname) . ' IS NULL');
+        } else {
+            $gs->appendWhere(Zend_Db_Select::SQL_OR);
+        }
     }
     
     /**
