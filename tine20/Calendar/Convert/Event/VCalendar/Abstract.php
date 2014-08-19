@@ -571,6 +571,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $blob = stream_get_contents($blob);
         }
         
+        $blob = Tinebase_Core::filterInputForDatabase($blob);
+        
         $vcalendar = self::readVCalBlob($blob);
         
         return $vcalendar;
