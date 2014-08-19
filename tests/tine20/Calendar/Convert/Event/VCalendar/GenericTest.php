@@ -698,6 +698,15 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     }
     
     /**
+     * testInvalidUtf8
+     */
+    public function testInvalidUtf8()
+    {
+        $savedEvent = $this->_saveIcsEvent('invalid_utf8.ics');
+        $this->assertContains('Hoppegarten Day', $savedEvent->summary);
+    }
+    
+    /**
      * testLongLocation
      */
     public function testLongLocation()
