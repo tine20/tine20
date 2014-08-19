@@ -34,7 +34,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     windowNamePrefix: 'ExportWindow_',
-    loadRecord: false,
+    loadMask: false,
     tbarItems: [],
     evalGrants: false,
     sendRequest: true,
