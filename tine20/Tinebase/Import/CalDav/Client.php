@@ -105,7 +105,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
     protected function _setUser()
     {
         try {
-            $user = Tinebase_User::getInstance()->getUserByLoginName($this->userName, 'Tinebase_Model_FullUser');
+            $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $this->userName, 'Tinebase_Model_FullUser');
             Tinebase_Core::set(Tinebase_Core::USER, $user);
             $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($this->userName, $this->password);
             Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);

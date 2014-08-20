@@ -302,7 +302,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
                 case Tinebase_Model_Container::TYPE_PERSONAL:
                     if (count($_pathParts) > 4) {
                         $subPathParts = explode('/', $_pathParts[4], 2);
-                        $owner = ($this->containerOwner) ? Tinebase_User::getInstance()->getUserByLoginName($this->containerOwner) : Tinebase_Core::getUser();
+                        $owner = ($this->containerOwner) ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $this->containerOwner) : Tinebase_Core::getUser();
                         $container = Tinebase_Container::getInstance()->getContainerByName(
                             $this->application->name, $subPathParts[0], Tinebase_Model_Container::TYPE_PERSONAL, $owner->getId());
                     }

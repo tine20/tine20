@@ -35,7 +35,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBack
         
         $principalParts = explode('/', $principalUri);
         if (count($principalParts) == 2) {
-            $owner = Tinebase_User::getInstance()->getUserByLoginName($principalParts[1]);
+            $owner = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $principalParts[1]);
             $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Calendar', $owner, Tinebase_Model_Grants::GRANT_READ);
         } else {
             throw new Sabre\DAV\Exception\PreconditionFailed('unsupported pricipalUri');
@@ -94,7 +94,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBack
             $container = new Tinebase_Model_Container(array(
                 'name'              => $properties['{DAV:}displayname'],
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-                'owner_id'          => Tinebase_User::getInstance()->getUserByLoginName($principalParts[1]),
+                'owner_id'          => Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $principalParts[1]),
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
                 'backend'           => 'Sql',
                 'model'             => 'Calendar_Model_Event'

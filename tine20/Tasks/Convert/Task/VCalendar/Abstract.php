@@ -644,7 +644,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
 //                                 'email'     => $matches['email'],
 //                                 'lastName'  => $name,
 //                             ));
-                            $user = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $matches['email']);
+                            $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountEmailAddress', $matches['email']);
                             $task->organizer = $user ? $user->getId() : Tinebase_Core::getUser()->getId();
                         }
                     }

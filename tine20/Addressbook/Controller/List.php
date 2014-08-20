@@ -348,9 +348,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         }
     
         foreach ($_userIds as $userId) {
-            $fullUser = Tinebase_User::getInstance()->getUserById($userId, 'Tinebase_Model_FullUser');
-            if (!empty($fullUser->contact_id)) {
-                $contactIds[] = $fullUser->contact_id;
+            $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $userId);
+            if (! empty($user->contact_id)) {
+                $contactIds[] = $user->contact_id;
             }
         }
     
