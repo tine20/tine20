@@ -302,7 +302,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         
             case self::PREFIX_USERS:
                 if ($contactId !== self::SHARED) {
-                    $user = Tinebase_User::getInstance()->getUserByProperty('contactId', $contactId);
+                    $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('contactId', $contactId);
                     
                     $groupIds = Tinebase_Group::getInstance()->getGroupMemberships($user);
                     $groups   = Tinebase_Group::getInstance()->getMultiple($groupIds);
