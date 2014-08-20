@@ -16,8 +16,13 @@ class Calendar_Import_CalDav_Decorator_MacOSX extends Calendar_Import_CalDav_Dec
     
     public function processAdditionalCalendarProperties(array &$calendar, array $response)
     {
-        /*if (isset($response['{http://apple.com/ns/ical/}calendar-color']))
-            $calendar['color'] = $response['{http://apple.com/ns/ical/}calendar-color'];*/
+        if (isset($response['{http://apple.com/ns/ical/}calendar-color'])) {
+            $calendar['color'] = $response['{http://apple.com/ns/ical/}calendar-color'];
+            // cut off last two digits as this contains the alpha channel
+            if (strlen($calendar['color']) == 9) {
+                $calendar['color'] = substr($calendar['color'], 0, 7);
+            }
+        }
     }
     
     public function initCalendarImport()

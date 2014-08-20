@@ -20,7 +20,9 @@ abstract class Calendar_Import_CalDav_Decorator_Abstract
     
     public function setCalendarProperties(Tinebase_Model_Container $calendarContainer, array $calendar)
     {
-        if (isset($calendar['color']))
+        if (isset($calendar['color']) && $calendarContainer->color !== $calendar['color']) {
             $calendarContainer->color = $calendar['color'];
+            Tinebase_Container::getInstance()->update($calendarContainer);
+        }
     }
 }
