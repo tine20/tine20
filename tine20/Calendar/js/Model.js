@@ -153,23 +153,22 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
 
 
 /**
- * @namespace Tine.Calendar.Model
- * 
  * get default data for a new event
- * @todo: attendee according to calendar selection
  *  
  * @return {Object} default data
  * @static
  */ 
 Tine.Calendar.Model.Event.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar'),
+        mainScreen = app.getMainScreen(),
+        centerPanel = mainScreen.getCenterPanel(),
+        westPanel = mainScreen.getWestPanel(),
+        container = westPanel.getContainerTreePanel().getDefaultContainer(),
+        prefs = app.getRegistry().get('preferences'),
         dtstart = new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
-        // if dtstart is out of current period, take start of current period
-        mainPanel = app.getMainScreen().getCenterPanel(),
-        period = mainPanel.getCalendarPanel(mainPanel.activeView).getView().getPeriod(),
-        container = app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
-        prefs = app.getRegistry().get('preferences');
+        period = centerPanel.getCalendarPanel(centerPanel.activeView).getView().getPeriod();
         
+    // if dtstart is out of current period, take start of current period
     if (period.from.getTime() > dtstart.getTime() || period.until.getTime() < dtstart.getTime()) {
         dtstart = period.from.clearTime(true).add(Date.HOUR, 9);
     }
@@ -182,13 +181,13 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         transp: 'OPAQUE',
         editGrant: true,
         organizer: Tine.Tinebase.registry.get('userContact'),
-        attendee: [
+        attendee: Tine.Calendar.Model.Event.getDefaultAttendee() /*[
             Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                 user_type: 'user',
                 user_id: Tine.Tinebase.registry.get('userContact'),
                 status: 'ACCEPTED'
             })
-        ]
+        ]*/
     };
     
     if (prefs.get('defaultalarmenabled')) {
@@ -196,6 +195,76 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     }
     
     return data;
+};
+
+Tine.Calendar.Model.Event.getDefaultAttendee = function() {
+    var app = Tine.Tinebase.appMgr.get('Calendar'),
+        mainScreen = app.getMainScreen(),
+        centerPanel = mainScreen.getCenterPanel(),
+        westPanel = mainScreen.getWestPanel(),
+        filteredAttendee = westPanel.getAttendeeFilter().getValue() || [],
+        defaultAttendeeData = Tine.Calendar.Model.Attender.getDefaultData(),
+        filteredContainers = westPanel.getContainerTreePanel().getFilterPlugin().getFilter().value || [],
+        prefs = app.getRegistry().get('preferences'),
+        defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me', // one of['me', 'intelligent', 'calendarOwner', 'filteredAttendee']
+        defaultAttendee = [];
+        
+    // shift -> change intelligent <-> me
+    if (Ext.EventObject.shiftKey) {
+        defaultAttendeeStrategy = defaultAttendeeStrategy == 'intelligent' ? 'me' :
+                                  defaultAttendeeStrategy == 'me' ? 'intelligent' :
+                                  defaultAttendeeStrategy;
+    }
+    
+    // alt -> prefer calendarOwner in intelligent mode
+    if (defaultAttendeeStrategy == 'intelligent') {
+        defaultAttendeeStrategy = filteredAttendee.length && !Ext.EventObject.altKey > 0 ? 'filteredAttendee' :
+                                  filteredContainers.length > 0 ? 'calendarOwner' :
+                                  'me';
+    }
+    
+    switch(defaultAttendeeStrategy) {
+        case 'me':
+            defaultAttendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                user_type: 'user',
+                user_id: Tine.Tinebase.registry.get('userContact'),
+                status: 'ACCEPTED'
+            }));
+            break;
+            
+        case 'filteredAttendee':
+            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(filteredAttendee),
+                ownAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord(attendeeStore);
+                
+            attendeeStore.each(function(attendee){
+                var attendeeData = Ext.apply(attendee.data, defaultAttendeeData);
+                if (attendee == ownAttendee) {
+                    attendeeData.status = 'ACCEPTED';
+                }
+                defaultAttendee.push(attendeeData);
+            }, this);
+            break;
+            
+        case 'calendarOwner':
+            Ext.each(filteredContainers, function(container){
+                if (container.ownerContact) {
+                    var attendeeData = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                        user_type: 'user',
+                        user_id: container.ownerContact
+                    });
+                    
+                    if (attendeeData.user_id.id == Tine.Tinebase.registry.get('userContact').id){
+                        attendeeData.status = 'ACCEPTED';
+                    }
+                    
+                    defaultAttendee.push(attendeeData);
+                }
+            }, this);
+            
+            break;
+    }
+    
+    return defaultAttendee;
 };
 
 Tine.Calendar.Model.Event.getFilterModel = function() {

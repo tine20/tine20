@@ -84,6 +84,7 @@ Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     {name: 'type'},
     {name: 'color'},
     {name: 'path'},
+    {name: 'ownerContact'},
     {name: 'is_container_node', type: 'boolean'},
     {name: 'dtselect', type: 'number'},
     {name: 'backend'},
