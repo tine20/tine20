@@ -604,9 +604,30 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function getGroupByName($_name)
     {
+        $result = $this->getGroupByPropertyFromSqlBackend('name', $_name);
+        
+        return $result;
+    }
+    
+    /**
+     * get group by property
+     *
+     * @param   string  $_property      the key to filter
+     * @param   string  $_value         the value to search for
+     *
+     * @return  Tinebase_Model_Group
+     * @throws  Tinebase_Exception_Record_NotDefined
+     * @throws  Tinebase_Exception_InvalidArgument
+     */
+    public function getGroupByPropertyFromSqlBackend($_property, $_value)
+    {
+        if (! in_array($_property, array('id', 'name', 'description', 'list_id', 'email'))) {
+            throw new Tinebase_Exception_InvalidArgument('property not allowed');
+        }
+        
         $select = $this->_getSelect();
         
-        $select->where($this->_db->quoteIdentifier($this->_tableName . '.name') . ' = ?', $_name);
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $_property) . ' = ?', $_value);
         
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
@@ -615,11 +636,12 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         if (!$queryResult) {
             throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
-
+        
         $result = new Tinebase_Model_Group($queryResult, TRUE);
         
         return $result;
     }
+    
     
     /**
      * get group by id
@@ -632,19 +654,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $groupdId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
-        $select = $this->_getSelect();
-        
-        $select->where($this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ?', $groupdId);
-        
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetch();
-        $stmt->closeCursor();
-        
-        if (!$queryResult) {
-            throw new Tinebase_Exception_Record_NotDefined('Group not found.');
-        }
-        
-        $result = new Tinebase_Model_Group($queryResult, TRUE);
+        $result = $this->getGroupByPropertyFromSqlBackend('id', $groupdId);
         
         return $result;
     }
