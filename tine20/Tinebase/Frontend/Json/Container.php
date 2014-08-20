@@ -59,8 +59,15 @@ class Tinebase_Frontend_Json_Container
             if ($container instanceof Tinebase_Model_Container) {
                 $containerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
                 $containerArray['path'] = $container->getPath();
+                $ownerId = $container->getOwner();
             } else {
                 $containerArray['path'] = "personal/{$container->getId()}";
+                $ownerId = $container->getId();
+            }
+            try {
+                $containerArray['ownerContact'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($ownerId, true)->toArray();
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " can't resolve ownerContact: " . $e);
             }
             
             $response[] = $containerArray;

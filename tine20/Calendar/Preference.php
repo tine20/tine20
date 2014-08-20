@@ -58,6 +58,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const DEFAULTALARM_MINUTESBEFORE = 'defaultalarmminutesbefore';
     
     /**
+     * default alarm time in minutes before
+     */
+    const DEFAULTATTENDEE_STRATEGY = 'defaultAttendeeStrategy';
+    
+    /**
      * @var string application
      */
     protected $_application = 'Calendar';
@@ -78,6 +83,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
             self::DEFAULTALARM_ENABLED,
             self::DEFAULTALARM_MINUTESBEFORE,
+            self::DEFAULTATTENDEE_STRATEGY
         );
             
         return $allPrefs;
@@ -124,6 +130,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTALARM_MINUTESBEFORE => array(
                 'label'         => $translate->_('Standard Alarm Time'),
                 'description'   => $translate->_('Minutes before the event starts'),
+            ),
+            self::DEFAULTATTENDEE_STRATEGY => array(
+                    'label'         => $translate->_('Default Attendee Strategy'),
+                    'description'   => $translate->_('Default Attendee Strategy for new events'),
             ),
         );
         
@@ -239,6 +249,28 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             case self::DEFAULTALARM_MINUTESBEFORE:
                 $preference->value      = 15;
                 $preference->options    = '';
+                break;
+            case self::DEFAULTATTENDEE_STRATEGY:
+                $preference->value      = 'intelligent';
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>Me</label>
+                            <value>me</value>
+                        </option>
+                        <option>
+                            <label>Intelligent</label>
+                            <value>intelligent</value>
+                        </option>
+                        <option>
+                            <label>Calendar owner</label>
+                            <value>calendarOwner</value>
+                        </option>
+                        <option>
+                            <label>Filtered attendee</label>
+                            <value>filteredAttendee</value>
+                        </option>
+                    </options>';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
