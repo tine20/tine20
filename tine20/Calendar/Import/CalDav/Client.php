@@ -26,6 +26,12 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     protected $mapToDefaultContainer = 'calendar';
     protected $decorator = null;
     
+    protected $component = 'VEVENT';
+    protected $skipComonent = 'VTODO';
+    protected $modelName = 'Calendar_Model_Event';
+    protected $appName = 'Calendar';
+    protected $webdavFrontend = 'Calendar_Frontend_WebDAV_Event';
+    
     const findAllCalendarsRequest =
 '<?xml version="1.0"?>
 <d:propfind xmlns:d="DAV:">
@@ -66,7 +72,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     {
         parent::__construct($a);
         
-        $flavor = 'Calendar_Import_CalDav_Decorator_'.$flavor;
+        $flavor = 'Calendar_Import_CalDav_Decorator_' . $flavor;
         $this->decorator = new $flavor($this);
     }
     
@@ -91,7 +97,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         foreach ($result as $uri => $response) {
             if (isset($response['{DAV:}resourcetype']) && isset($response['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set']) && 
                     $response['{DAV:}resourcetype']->is('{urn:ietf:params:xml:ns:caldav}calendar') &&
-                    in_array('VEVENT', $response['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set']->getValue())) {
+                    in_array($this->component, $response['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set']->getValue())) {
                 $this->calendars[$uri]['acl'] = $response['{DAV:}acl'];
                 $this->calendars[$uri]['displayname'] = $response['{DAV:}displayname'];
                 $this->decorator->processAdditionalCalendarProperties($this->calendars[$uri], $response);
@@ -130,7 +136,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
     }
     
-    protected function findContainerForCalendar($calendarUri, $displayname, $defaultCalendarsName, $type, $application_id, $modelName)
+    protected function findContainerForCalendar($calendarUri, $displayname, $defaultCalendarsName, $type, $application_id)
     {
         // sha1() the whole calendar uri as it is very hard to separate a uuid string from the uri otherwise
         $uuid = sha1($calendarUri);
@@ -148,20 +154,20 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             array(
                 'field' => 'model', 
                 'operator' => 'equals', 
-                'value' => 'Calendar_Model_Event'
+                'value' => $this->modelName
             ),
         ));
-        $existingCalendar = Tinebase_Container::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
+        $existingCalendar = Tinebase_Container::getInstance()->search($filter)->getFirstRecord();
         if ($existingCalendar) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
-                . ' Found existing calendar ' . $existingCalendar->name . ' (id: ' . $existingCalendar->getId() . ')');
+                . ' Found existing container ' . $existingCalendar->name . ' (id: ' . $existingCalendar->getId() . ')');
             return $existingCalendar;
         }
         
         $counter = '';
         
         if ($defaultCalendarsName == $displayname) {
-            $existingCalendar = Tinebase_Container::getInstance()->getDefaultContainer('Calendar_Model_Event');
+            $existingCalendar = Tinebase_Container::getInstance()->getDefaultContainer($this->modelName);
             if (! $existingCalendar->uuid) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
                     . ' Found existing calendar with the same name');
@@ -174,7 +180,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
         try {
             while (true) {
-                $existingCalendar = Tinebase_Container::getInstance()->getContainerByName('Calendar', $displayname . $counter, $type, Tinebase_Core::getUser());
+                $existingCalendar = Tinebase_Container::getInstance()->getContainerByName($this->appName, $displayname . $counter, $type, Tinebase_Core::getUser());
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
                     . ' Got calendar: ' . $existingCalendar->name . ' (id: ' . $existingCalendar->getId() . ')');
@@ -191,9 +197,13 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 'type'              => $type,
                 'backend'           => 'Sql',
                 'application_id'    => $application_id,
-                'model'             => $modelName,
+                'model'             => $this->modelName,
                 'uuid'              => $uuid
             ));
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                    . ' Adding container: ' . $newContainer->name . ' for model ' . $this->modelName);
+            
             return Tinebase_Container::getInstance()->addContainer($newContainer);
         }
     }
@@ -207,14 +217,13 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ 
             . ' Importing all calendars for user ' . $this->userName);
         
-        Calendar_Controller_Event::getInstance()->sendNotifications(false);
-        Calendar_Controller_Event::getInstance()->useNotes(false);
+        Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->sendNotifications(false);
+        Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->useNotes(false);
         Sabre\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
         
         $this->decorator->initCalendarImport();
         
-        $modelName = Tinebase_Core::getApplicationInstance('Calendar')->getDefaultModel();
-        $application_id = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
+        $application_id = Tinebase_Application::getInstance()->getApplicationByName($this->appName)->getId();
         $type = Tinebase_Model_Container::TYPE_PERSONAL;
         
         $defaultCalendarsName = $this->_getDefaultCalendarsName();
@@ -226,7 +235,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
         foreach ($this->calendars as $calUri => $cal) {
             $container = $this->findContainerForCalendar($calUri, $cal['displayname'], $defaultCalendarsName,
-                    $type, $application_id, $modelName);
+                    $type, $application_id);
             
             $this->decorator->setCalendarProperties($container, $this->calendars[$calUri]);
             
@@ -271,7 +280,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
         
         $newICSs = array();
-        $calendarEventBackend = Calendar_Controller_Event::getInstance()->getBackend();
+        $calendarEventBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
         
         foreach ($this->calendarICSs as $calUri => $calICSs) {
             $start = 0;
@@ -357,17 +366,15 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
             . ' Importing all calendar data for user ' . $this->userName . ' with ics uris: ' . print_r(array_keys($this->calendarICSs), true));
         
-        Calendar_Controller_Event::getInstance()->sendNotifications(false);
-        Calendar_Controller_Event::getInstance()->useNotes(false);
+        Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->sendNotifications(false);
+        Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->useNotes(false);
         Sabre\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
         
         $this->decorator->initCalendarImport();
         
-        $modelName = Tinebase_Core::getApplicationInstance('Calendar')->getDefaultModel();
-        $application_id = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
-        $type = Tinebase_Model_Container::TYPE_PERSONAL; //Tinebase_Model_Container::TYPE_SHARED;
-        $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer('Calendar_Model_Event');
-        $calendarEventBackend = Calendar_Controller_Event::getInstance()->getBackend();
+        $application_id = Tinebase_Application::getInstance()->getApplicationByName($this->appName)->getId();
+        $type = Tinebase_Model_Container::TYPE_PERSONAL;
+        $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer($this->modelName);
         
         $defaultCalendarsName = $this->_getDefaultCalendarsName();
         
@@ -376,7 +383,10 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 . ' Processing calendar ' . print_r($this->calendars[$calUri], true));
             
             $container = $this->findContainerForCalendar($calUri, $this->calendars[$calUri]['displayname'], $defaultCalendarsName,
-                    $type, $application_id, $modelName);
+                    $type, $application_id);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
+                    . ' User container: ' . print_r($container->toArray(), true));
             
             $this->decorator->setCalendarProperties($container, $this->calendars[$calUri]);
             
@@ -398,55 +408,65 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 $result = $this->calDavRequest('REPORT', $calUri, self::getAllCalendarDataRequest . $requestEnd, 1);
                 
                 foreach ($result as $key => $value) {
-                    if (isset($value['{urn:ietf:params:xml:ns:caldav}calendar-data'])) {
-                        $data = $value['{urn:ietf:params:xml:ns:caldav}calendar-data'];
-                        $name = explode('/', $key);
-                        $name = end($name);
-                        $id = $this->_getEventIdFromName($name);
-                        try {
-                            if ($update && in_array($id, $this->existingRecordIds[$calUri])) {
-                                $event = new Calendar_Frontend_WebDAV_Event($container, $id);
-                                if ($onlyCurrentUserOrganizer) {
-                                    // assert current user is organizer
-                                    if ($event->getRecord()->organizer && $event->getRecord()->organizer == Tinebase_Core::getUser()->contact_id) {
-                                        $event->put($data);
-                                    } else {
-                                        continue;
-                                    }
+                    if (! isset($value['{urn:ietf:params:xml:ns:caldav}calendar-data'])) {
+                        continue;
+                    }
+                    
+                    $data = $value['{urn:ietf:params:xml:ns:caldav}calendar-data'];
+                    
+                    if (strpos($data, 'BEGIN:' . $this->skipComonent) !== false) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Skipping ' . $this->skipComonent);
+                        continue;
+                    }
+                    
+                    $name = explode('/', $key);
+                    $name = end($name);
+                    $id = $this->_getEventIdFromName($name);
+                    try {
+                        if ($update && in_array($id, $this->existingRecordIds[$calUri])) {
+                            $webdavFrontend = new $this->webdavFrontend($container, $id);
+                            // @todo move this to separate fn
+                            if ($onlyCurrentUserOrganizer && $this->modelName === 'Calendar_Model_Event') {
+                                // assert current user is organizer
+                                if ($webdavFrontend->getRecord()->organizer && $webdavFrontend->getRecord()->organizer == Tinebase_Core::getUser()->contact_id) {
+                                    $webdavFrontend->put($data);
                                 } else {
-                                    $event->put($data);
+                                    continue;
                                 }
-                                
                             } else {
-                                $event = Calendar_Frontend_WebDAV_Event::create(
-                                    $container,
-                                    $name,
-                                    $data,
-                                    $onlyCurrentUserOrganizer
-                                );
+                                $webdavFrontend->put($data);
                             }
                             
-                            if ($event) {
-                                $etags[$event->getRecord()->getId()] = $value['{DAV:}getetag'];
-                            }
-                        } catch (Exception $e) {
-                            // don't warn on VTODOs
-                            if (strpos($data, 'BEGIN:VTODO') !== false) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Skipping VTODO');
-                            } else {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not create event from data: ' . $data);
-                                Tinebase_Exception::log($e);
-                            }
+                        } else {
+                            $webdavFrontend = call_user_func_array(array($this->webdavFrontend, 'create'), array(
+                                $container,
+                                $name,
+                                $data,
+                                $onlyCurrentUserOrganizer
+                            ));
                         }
+                        
+                        if ($webdavFrontend) {
+                            $etags[$webdavFrontend->getRecord()->getId()] = $value['{DAV:}getetag'];
+                        }
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not create event from data: ' . $data);
+                        Tinebase_Exception::log($e);
                     }
                 }
                 
-                $calendarEventBackend->setETags($etags);
+                $this->_setEtags($etags);
             } while($start < $max);
         }
         return true;
+    }
+    
+    protected function _setEtags($etags)
+    {
+        $calendarEventBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
+        $calendarEventBackend->setETags($etags);
     }
     
     /**
@@ -469,7 +489,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         $group = null;
         
         $result = $this->calDavRequest('PROPFIND', $principal, self::resolvePrincipalRequest);
-        if (isset($result['{DAV:}group-member-set']) && isset($result['{DAV:}displayname'])) {
+        if (count($result['{DAV:}group-member-set']->getPrincipals()) > 0 && isset($result['{DAV:}displayname'])) {
             $groupDescription = $result['{DAV:}displayname'];
             try {
                 $group = Tinebase_Group::getInstance()->getGroupByPropertyFromSqlBackend('description',$groupDescription);
@@ -478,7 +498,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 Tinebase_Core::getCache()->save($group, $cacheId, array(), /* 1 week */ 24*3600*7);
             } catch (Tinebase_Exception_Record_NotDefined $ternd) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
-                        . ' Group not found: ' . $groupDescription);
+                        . ' Group not found: ' . $groupDescription . ' ' . print_r($result, true));
             }
         }
         
@@ -538,29 +558,16 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         for ($i=0; $i<count($user); ++$i) {
             switch ($privilege[$i]) {
                 case '{DAV:}all':
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_READ ] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_ADD] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_EDIT] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_DELETE] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_EXPORT] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_SYNC] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_ADMIN] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_FREEBUSY] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_PRIVATE] = true;
+                    $grants[$user[$i]] = $this->_getAllGrants();
                     break;
                 case '{urn:ietf:params:xml:ns:caldav}read-free-busy':
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_FREEBUSY] = true;
+                    $grants[$user[$i]] = $this->_getFreeBusyGrants();
                     break;
                 case '{DAV:}read':
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_READ] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_EXPORT] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_SYNC] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_FREEBUSY] = true;
+                    $grants[$user[$i]] = $this->_getReadGrants();
                     break;
                 case '{DAV:}write':
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_ADD] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_EDIT] = true;
-                    $grants[$user[$i]][Tinebase_Model_Grants::GRANT_DELETE] = true;
+                    $grants[$user[$i]] = $this->_getWriteGrants();
                     break;
                 case '{DAV:}read-current-user-privilege-set':
                     continue;
@@ -579,6 +586,48 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' grants: ' . print_r($grants, true));
         
         return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grants, TRUE);
+    }
+    
+    protected function _getAllGrants()
+    {
+        return array(
+            Tinebase_Model_Grants::GRANT_READ => true,
+            Tinebase_Model_Grants::GRANT_ADD=> true,
+            Tinebase_Model_Grants::GRANT_EDIT=> true,
+            Tinebase_Model_Grants::GRANT_DELETE=> true,
+            Tinebase_Model_Grants::GRANT_EXPORT=> true,
+            Tinebase_Model_Grants::GRANT_SYNC=> true,
+            Tinebase_Model_Grants::GRANT_ADMIN=> true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY=> true,
+            Tinebase_Model_Grants::GRANT_PRIVATE=> true,
+        );
+    }
+
+    protected function _getFreeBusyGrants()
+    {
+        return array(
+            Tinebase_Model_Grants::GRANT_FREEBUSY=> true,
+        );
+    }
+
+    protected function _getReadGrants()
+    {
+        return array(
+            Tinebase_Model_Grants::GRANT_READ=> true,
+            Tinebase_Model_Grants::GRANT_EXPORT=> true,
+            Tinebase_Model_Grants::GRANT_SYNC=> true,
+            Tinebase_Model_Grants::GRANT_FREEBUSY=> true,
+        );
+    }
+
+    protected function _getWriteGrants()
+    {
+        return array(
+            Tinebase_Model_Grants::GRANT_READ=> true,
+            Tinebase_Model_Grants::GRANT_ADD=> true,
+            Tinebase_Model_Grants::GRANT_EDIT=> true,
+            Tinebase_Model_Grants::GRANT_DELETE=> true,
+        );
     }
     
     public function updateAllCalendarDataForUsers(array $users)

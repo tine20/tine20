@@ -164,16 +164,8 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $this->_addOutputLogWriter(4);
         
-        $users = $this->_readCalDavUserFile($args['caldavuserfile']);
-        
-        $this->_importAllCalendars($users, $args['url']);
-    }
-    
-    protected function _importAllCalendars($users, $uri)
-    {
-        $client = new Calendar_Import_CalDav_Client(array('baseUri' => $uri), 'MacOSX');
-        $client->setVerifyPeer(false);
-        $client->importAllCalendarsForUsers($users);
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->importAllCalendars();
     }
     
     /**
@@ -185,16 +177,10 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
         
-        $writer = new Zend_Log_Writer_Stream('php://output');
-        $writer->addFilter(new Zend_Log_Filter_Priority(4));
-        Tinebase_Core::getLogger()->addWriter($writer);
+        $this->_addOutputLogWriter(4);
         
-        $users = $this->_readCalDavUserFile($args['caldavuserfile']);
-        
-        $client = new Calendar_Import_CalDav_Client(array('baseUri' => $args['url']), 'MacOSX');
-        $client->setVerifyPeer(false);
-        
-        $client->importAllCalendarDataForUsers($users);
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->importAllCalendarDataForUsers();
     }
     
     /**
@@ -204,129 +190,12 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function importCalDavMultiProc(Zend_Console_Getopt $_opts)
     {
-        $this->_runImportUpdateMultiproc($_opts, 'import');
-    }
-    
-    protected function _runImportUpdateMultiproc(Zend_Console_Getopt $_opts, $mode)
-    {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'numProc'));
-        
-        $numProc = intval($args['numProc']);
-        $this->_validateNumProc($numProc);
-        
-        if (empty($_opts->passwordfile)) {
-            throw new Exception('Passwordfile required for this method');
-        }
         
         $this->_addOutputLogWriter(4);
         
-        $users = $this->_readCalDavUserFile($args['caldavuserfile']);
-        
-        if ($mode === 'import' && (empty($args['dataonly']) || $args['dataonly'] == false)) {
-            // first import the calendars, serial sadly
-            $this->_importAllCalendars($users, $args['url']);
-        }
-        
-        $cliParams = '--username ' . $_opts->username . ' --passwordfile ' . $_opts->passwordfile
-        . ' --method Calendar.' . $mode . 'CalDavDataForUser'
-                . ' url=' .  $args['url'] . ' caldavuserfile=' . $args['caldavuserfile'];
-        
-        $numberOfRuns = 2;
-        for ($run = 1; $run <= $numberOfRuns; ++$run)
-        {
-            $this->_runMultiProcessImportUpdate($numProc, $cliParams, $users, $run);
-        }
-    }
-    
-    protected function _validateNumProc($numProc)
-    {
-        if ($numProc < 1) {
-            throw new Exception('numProc: ' . $numProc . ' needs to be at least 1');
-        }
-        if ($numProc > 32) {
-            throw new Exception('numProc: ' . $numProc . ' needs to be lower than 33');
-        }
-    }
-    
-    /**
-     * run multi process command
-     * 
-     * do multiprocess part, no system resources may be used as of here, 
-     * like file handles, db resources... see pcntl_fork man page!
-     * 
-     * @todo add pids to processes array to allow better control 
-     * @todo generalize and move to Tinebase_Frontend_Cli_Abstract
-     * 
-     * @param integer $numProc
-     * @param string $cliParams
-     * @param array $users
-     * @param integer $run
-     */
-    protected function _runMultiProcessImportUpdate($numProc, $cliParams, $users, $run = 1)
-    {
-        // $processes = array();
-        $processes = 0;
-        $line = 0;
-        foreach ($users as $user => $pwd)
-        {
-            ++$line;
-            //if (count($processes) >= $numProc) {
-            if ($processes >= $numProc) {
-                $pid = pcntl_wait($status);
-    
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
-                        . ' pid: ' . $pid);
-    
-                // debug
-                //                     echo '1' . (int) pcntl_wexitstatus($status);
-                //                     echo '2' . (int) pcntl_wifexited($status);
-                //                     echo '3' . (int) pcntl_wifsignaled($status);
-                //                     echo '4' . (int) pcntl_wifstopped($status);
-                //                     echo '5' . (int) pcntl_wstopsig($status);
-                //                     echo '6' . (int) pcntl_wtermsig($status);
-    
-                if (pcntl_wifexited($status) === false ) {
-                    exit('pcntl_wait return value was not found in process list: ' . $pid . ' status: ' . $status . PHP_EOL);
-                }
-                
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
-                    . ' Child exited');
-                
-                // unset($processes[$pid]);
-                --$processes;
-            }
-    
-            $pid = pcntl_fork();
-            if ($pid == -1) {
-                exit('could not fork' . PHP_EOL);
-            } else if ($pid) {
-                // we are the parent
-                // $processes[$pid] = true;
-                ++$processes;
-            } else {
-                // we are the child
-                $command = './tine20.php ' . $cliParams . ' run=' . $run . ' line=' . $line;
-                
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
-                     . ' Spawning new child with command: ' . $command);
-                
-                exec($command);
-                exit();
-            }
-        }
-        // wait for childs to finish
-        // while (count($processes) > 0) {
-        while ($processes > 0) {
-            $pid = pcntl_wait($status);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
-                    . ' pid: ' . $pid);
-    
-            if (pcntl_wifexited($status) === false) {
-                exit('pcntl_wait return value was not found in process list: ' . $pid . ' status: ' . $status . PHP_EOL);
-            }
-            // unset($processes[$pid]);
-            --$processes;
-        }
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->runImportUpdateMultiproc('import');
     }
     
     /**
@@ -336,7 +205,12 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function updateCalDavMultiProc(Zend_Console_Getopt $_opts)
     {
-        $this->_runImportUpdateMultiproc($_opts, 'update');
+        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'numProc'));
+        
+        $this->_addOutputLogWriter(4);
+        
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->runImportUpdateMultiproc('update');
     }
     
     /**
@@ -348,23 +222,10 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'line', 'run'));
         
-        $writer = new Zend_Log_Writer_Stream('php://output');
-        $writer->addFilter(new Zend_Log_Filter_Priority(4));
-        Tinebase_Core::getLogger()->addWriter($writer);
+        $this->_addOutputLogWriter(4);
         
-        $user = $this->_readCalDavUserFile($args['caldavuserfile'], $args['line']);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' user: ' . $user['username']);
-        
-        $client = new Calendar_Import_CalDav_Client(array(
-                'baseUri' => $args['url'],
-                'userName' => $user['username'],
-                'password' => $user['password'],
-                ), 'MacOSX');
-        $client->setVerifyPeer(false);
-        
-        $client->importAllCalendarData($args['run']==1 ? true : false);
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->importAllCalendarData();
     }
     
     /**
@@ -376,25 +237,12 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'line', 'run'));
         
-        $writer = new Zend_Log_Writer_Stream('php://output');
-        $writer->addFilter(new Zend_Log_Filter_Priority(4));
-        Tinebase_Core::getLogger()->addWriter($writer);
+        $this->_addOutputLogWriter(4);
         
-        $user = $this->_readCalDavUserFile($args['caldavuserfile'], $args['line']);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' user: ' . $user['username']);
-        
-        $client = new Calendar_Import_CalDav_Client(array(
-                'baseUri' => $args['url'],
-                'userName' => $user['username'],
-                'password' => $user['password'],
-                ), 'MacOSX');
-        $client->setVerifyPeer(false);
-        
-        $client->updateAllCalendarData($args['run']==1 ? true : false);
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->updateAllCalendarData();
     }
-   
+    
     /**
      * update calendar/events from a CalDav source using etags
      * 
@@ -404,51 +252,9 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
         
-        $writer = new Zend_Log_Writer_Stream('php://output');
-        $writer->addFilter(new Zend_Log_Filter_Priority(4));
-        Tinebase_Core::getLogger()->addWriter($writer);
+        $this->_addOutputLogWriter(4);
         
-        $users = $this->_readCalDavUserFile($args['caldavuserfile']);
-        
-        $client = new Calendar_Import_CalDav_Client(array('baseUri' => $args['url']), 'MacOSX');
-        $client->setVerifyPeer(false);
-        
-        $client->updateAllCalendarDataForUsers($users);
-    }
-    
-    /**
-     * read caldav user credentials file
-     * 
-     * - file should have the following format (CSV):
-     * USERNAME1;PASSWORD1
-     * USERNAME2;PASSWORD2
-     * 
-     * @param string $file
-     * @throws Exception
-     */
-    protected function _readCalDavUserFile($file, $line = 0)
-    {
-        if (!($fh = fopen($file, 'r'))) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Couldn\'t open file: '.$file);
-            throw new Exception('Couldn\'t open file: '.$file);
-        }
-        $users = array();
-        $i = 0;
-        while ($row = fgetcsv($fh, 2048, ';'))
-        {
-            if ($line > 0 && ++$i == $line) {
-                return array('username' => $row[0], 'password' => $row[1]);
-            }
-            $users[$row[0]] = $row[1];
-        }
-        if (count($users) < 1) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' No users found in: '.$file);
-            throw new Exception('No users found in: '.$file);
-        }
-        if ($line > 0) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Line: '.$line. ' out of bounds');
-            throw new Exception('No user found, line: '.$line. ' out of bounds');
-        }
-        return $users;
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->updateAllCalendarDataForUsers();
     }
 }
