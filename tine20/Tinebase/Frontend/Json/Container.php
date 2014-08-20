@@ -196,7 +196,7 @@ class Tinebase_Frontend_Json_Container
             switch($value['account_type']) {
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     try {
-                        $account = Tinebase_User::getInstance()->getUserById($value['account_id']);
+                        $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $value['account_id']);
                     } catch (Tinebase_Exception_NotFound $e) {
                         $account = Tinebase_User::getInstance()->getNonExistentUser();
                     }

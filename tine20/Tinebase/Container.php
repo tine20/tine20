@@ -670,7 +670,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        $account = ($accountId !== NULL) ? Tinebase_User::getInstance()->getUserById($accountId) : Tinebase_Core::getUser();
+        $account = ($accountId !== NULL) ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId) : Tinebase_Core::getUser();
         $result = $this->getPersonalContainer($account, $recordClass, $account, Tinebase_Model_Grants::GRANT_ADD)->getFirstRecord();
         
         if ($result === NULL) {

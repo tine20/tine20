@@ -290,7 +290,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     
                 case 'user':
                     try {
-                        $contact    = Tinebase_User::getInstance()->getUserById($grant->account_id);
+                        $contact = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         continue;
                     }

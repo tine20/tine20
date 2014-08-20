@@ -541,8 +541,19 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         return $principal;
     }
     
+    /**
+     * convert container grants to principals 
+     * 
+     * @param Tinebase_Record_RecordSet $containers
+     * @return array
+     * 
+     * @todo improve algorithm to fetch all contact/list_ids at once
+     */
     protected function _containerGrantsToPrincipals(Tinebase_Record_RecordSet $containers)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Converting grants to principals for ' . count($containers) . ' containers.');
+        
         $result = array();
         
         foreach ($containers as $container) {
@@ -562,7 +573,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                         if ($contact->account_id == $grant->account_id) {
                             continue;
                         }
-                        $user = Tinebase_User::getInstance()->getUserById($grant->account_id);
+                        $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
                         if ($user->contact_id) {
                             $result[] = self::PREFIX_USERS . '/' . $user->contact_id;
                         }
