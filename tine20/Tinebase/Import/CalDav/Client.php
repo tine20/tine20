@@ -178,8 +178,6 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
      * resolve principals
      * 
      * @param array $privileges
-     * 
-     * @todo improve algorithm (recursive?)
      */
     public function resolvePrincipals(array $privileges)
     {
@@ -193,34 +191,9 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
             $result = $this->calDavRequest('PROPFIND', $ace['principal'], self::resolvePrincipalRequest);
             if (isset($result['{DAV:}group-member-set'])) {
                 $principals = $result['{DAV:}group-member-set']->getPrincipals();
-                
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
                         . ' ' . print_r($principals, true));
-                
-                $groupPrincipals = array();
-                foreach ($principals as $key => $principal) {
-                    if (! isset($this->principals[$principal])) {
-                        if (isset($this->principalGroups[$principal])) {
-                            $groupPrincipals = array_merge($groupPrincipals, $this->principalGroups[$principal]);
-                            continue;
-                        }
-                        
-                        $result = $this->calDavRequest('PROPFIND', $principal, self::resolvePrincipalRequest);
-                        if (isset($result['{DAV:}group-member-set'])) {
-                            
-                            $groupMemberPrincipals = $result['{DAV:}group-member-set']->getPrincipals();
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
-                                    . ' Found group member principals (group: ' . $principal . '): ' . print_r($groupMemberPrincipals, true));
-                            
-                            $groupPrincipals = array_merge($groupPrincipals, $groupMemberPrincipals);
-                            $this->principalGroups[$principal] = $groupMemberPrincipals;
-
-                            unset($principals[$key]);
-                        }
-                    }
-                }
-                
-                $this->principalGroups[$ace['principal']] = array_merge($groupPrincipals, $principals);
+                $this->principalGroups[$ace['principal']] = $result['{DAV:}group-member-set']->getPrincipals();
             }
         }
     }
