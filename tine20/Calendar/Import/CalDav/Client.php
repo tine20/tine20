@@ -221,6 +221,8 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
             . ' Calendar uris to import: ' . print_r(array_keys($this->calendars), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
+            . ' Calendars to import: ' . print_r($this->calendars, true));
         
         foreach ($this->calendars as $calUri => $cal) {
             $container = $this->findContainerForCalendar($calUri, $cal['displayname'], $defaultCalendarsName,
@@ -447,6 +449,48 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         return true;
     }
     
+    /**
+     * get Tine 2.0 group for given principal (by display name)
+     * - result is cached for 1 week
+     * 
+     * @param string $principal
+     * @return null|Tinebase_Model_Group
+     */
+    protected function _getGroupForPrincipal($principal)
+    {
+        $cacheId = convertCacheId('_getGroupForPrincipal' . $principal);
+        if (Tinebase_Core::getCache()->test($cacheId)) {
+            $group = Tinebase_Core::getCache()->load($cacheId);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                    . ' Loading principal group from cache: ' . $group->name);
+            return $group;
+        }
+        
+        $group = null;
+        
+        $result = $this->calDavRequest('PROPFIND', $principal, self::resolvePrincipalRequest);
+        if (isset($result['{DAV:}group-member-set']) && isset($result['{DAV:}displayname'])) {
+            $groupDescription = $result['{DAV:}displayname'];
+            try {
+                $group = Tinebase_Group::getInstance()->getGroupByPropertyFromSqlBackend('description',$groupDescription);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                        . ' Found matching group ' . $group->name . ' (' . $group->description .') for principal ' . $principal);
+                Tinebase_Core::getCache()->save($group, $cacheId, array(), /* 1 week */ 24*3600*7);
+            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
+                        . ' Group not found: ' . $groupDescription);
+            }
+        }
+        
+        return $group;
+    }
+    
+    /**
+     * get grants for cal uri
+     * 
+     * @param string $calUri
+     * @return Tinebase_Record_RecordSet
+     */
     public function getCalendarGrants($calUri)
     {
         $grants = array();
@@ -474,14 +518,21 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                         $type[] = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
                         $privilege[] = $ace['privilege'];
                     } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                                . ' there is an unresolved principal: ' . $principal . ' in group: ' . $ace['principal']);
+                        $group = $this->_getGroupForPrincipal($principal);
+                        if ($group) {
+                            $user[] = $group->getId();
+                            $type[] = Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP;
+                            $privilege[] = $ace['privilege'];
+                        } else {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                    . ' There is an unresolved principal: ' . $principal . ' in group: ' . $ace['principal']);
+                        }
                     }
                 }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' couldn\'t resolve principal: '.$ace['principal']);
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Couldn\'t resolve principal: '.$ace['principal']);
             }
         }
         for ($i=0; $i<count($user); ++$i) {
@@ -524,8 +575,8 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' found ' . count($grants) . ' grants for calendar: ' . $calUri);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' grants: ' . print_r($grants, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' grants: ' . print_r($grants, true));
         
         return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grants, TRUE);
     }
