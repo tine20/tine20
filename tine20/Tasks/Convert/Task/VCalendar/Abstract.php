@@ -15,42 +15,13 @@
  *
  * @package     Tasks
  * @subpackage  Convert
+ * 
+ * @todo find a way to generalize VCARD/VEVENT/VTODO parsing
  */
-class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interface
+class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_Abstract implements Tinebase_Convert_Interface
 {
-    /**
-     * use servers modlogProperties instead of given DTSTAMP & SEQUENCE
-     * use this if the concurrency checks are done differntly like in CalDAV
-     * where the etag is checked
-     */
-    const OPTION_USE_SERVER_MODLOG = 'useServerModlog';
+    protected $_modelName = 'Tasks_Model_Task';
     
-    public static $cutypeMap = array(
-        //Tasks_Model_Attender::USERTYPE_USER          => 'INDIVIDUAL',
-        //Tasks_Model_Attender::USERTYPE_GROUPMEMBER   => 'INDIVIDUAL',
-        //Tasks_Model_Attender::USERTYPE_GROUP         => 'GROUP',
-        //Tasks_Model_Attender::USERTYPE_RESOURCE      => 'RESOURCE',
-    );
-    
-    protected $_supportedFields = array(
-    );
-    
-    protected $_version;
-    
-    /**
-     * value of METHOD property
-     * @var string
-     */
-    protected $_method;
-    
-    /**
-     * @param  string  $_version  the version of the client
-     */
-    public function __construct($_version = null)
-    {
-        $this->_version = $_version;
-    }
-        
     /**
      * convert Tasks_Model_Task to \Sabre\VObject\Component
      *
@@ -82,24 +53,6 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
         }
         
         $this->_convertTasksModelTask($vcalendar, $_record);
-        
-        # Tasks application does not yet support repeating tasks
-        #
-        #if ($_record->exdate instanceof Tinebase_Record_RecordSet) {
-        #    $eventExceptions = $_record->exdate->filter('is_deleted', false);
-        #    
-        #    foreach($eventExceptions as $eventException) {
-        #        // set timefields
-        #        // @todo move to MS event facade
-        #        $eventException->creation_time = $_record->creation_time;
-        #        if (isset($_record->last_modified_time)) {
-        #            $eventException->last_modified_time = $_record->last_modified_time;
-        #        }
-        #        $vevent = $this->_convertTasksModelTask($eventException, $_record);
-        #        $vcalendar->add($vevent);
-        #    }
-        #
-        #}
         
         $this->_afterFromTine20Model($vcalendar);
         
@@ -205,51 +158,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
             $vtodo->add('CATEGORIES', (array) $task->tags->name);
         }
         
-        // repeating event properties
-        /*if ($event->rrule) {
-            if ($event->is_all_day_event == true) {
-                $vtodo->add(new Sabre_VObject_Property_Recure('RRULE', preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', function($matches) {
-                    $dtUntil = new Tinebase_DateTime($matches[1]);
-                    $dtUntil->setTimezone((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-                    
-                    return 'UNTIL=' . $dtUntil->format('Ymd');
-                }, $event->rrule)));
-            } else {
-                $vtodo->add(new Sabre_VObject_Property_Recure('RRULE', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $event->rrule)));
-            }
-            if ($event->exdate instanceof Tinebase_Record_RecordSet) {
-                $deletedEvents = $event->exdate->filter('is_deleted', true);
-                
-                foreach($deletedEvents as $deletedEvent) {
-                    $exdate = new Sabre_VObject_Element_DateTime('EXDATE');
-                    $dateTime = $deletedEvent->getOriginalDtStart();
-                    
-                    if ($event->is_all_day_event == true) {
-                        $dateTime->setTimezone($event->originator_tz);
-                        $exdate->setDateTime($dateTime, Sabre_VObject_Element_DateTime::DATE);
-                    } else {
-                        $exdate->setDateTime($dateTime, Sabre_VObject_Element_DateTime::UTC);
-                    }
-                    $vtodo->add($exdate);
-                }
-            }
-        }
-        */
-        // add alarms only to vcalendar if current user attends to this event
         if ($task->alarms) {
-            //$ownAttendee = Calendar_Model_Attender::getOwnAttender($task->attendee);
-            
-            //if ($ownAttendee && $ownAttendee->alarm_ack_time instanceof Tinebase_DateTime) {
-            //    $xMozLastAck = new Sabre_VObject_Element_DateTime('X-MOZ-LASTACK');
-            //    $xMozLastAck->setDateTime($ownAttendee->alarm_ack_time, Sabre_VObject_Element_DateTime::UTC);
-            //    $vtodo->add($xMozLastAck);
-            //}
-            
-            //if ($ownAttendee && $ownAttendee->alarm_snooze_time instanceof Tinebase_DateTime) {
-            //    $xMozSnoozeTime = new Sabre_VObject_Element_DateTime('X-MOZ-SNOOZE-TIME');
-            //    $xMozSnoozeTime->setDateTime($ownAttendee->alarm_snooze_time, Sabre_VObject_Element_DateTime::UTC);
-            //    $vtodo->add($xMozSnoozeTime);
-            //}
             
             // fake X-MOZ-LASTACK
             $vtodo->add('X-MOZ-LASTACK', $task->creation_time->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
@@ -292,15 +201,6 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
     }
     
     /**
-     * to be overwriten in extended classes to modify/cleanup $_vcalendar
-     * 
-     * @param \Sabre\VObject\Component\VCalendar $vcalendar
-     */
-    protected function _afterFromTine20Model(\Sabre\VObject\Component\VCalendar $vcalendar)
-    {
-    }
-    
-    /**
      * converts vcalendar to Tasks_Model_Task
      * 
      * @param  mixed                 $_blob   the vcalendar to parse
@@ -312,7 +212,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
     {
         $vcalendar = self::getVObject($_blob);
         
-        // contains the VCALENDAR any VEVENTS
+        // contains the VCALENDAR any VTODOS
         if (!isset($vcalendar->VTODO)) {
             throw new Tinebase_Exception_UnexpectedValue('no vevents found');
         }
@@ -327,180 +227,28 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
         // bypass filters until end of this funtion
         $task->bypassFilters = true;
         
-        // keep current exdate's (only the not deleted ones)
-        /* if ($task->exdate instanceof Tinebase_Record_RecordSet) {
-            $oldExdates = $task->exdate->filter('is_deleted', false);
-        } else {
-            $oldExdates = new Tinebase_Record_RecordSet('Calendar_Model_Events');
-        }
-        */
-        if (!isset($vcalendar->METHOD)) {
-            $this->_method = $vcalendar->METHOD;
-        }
-        
         // find the main event - the main event has no RECURRENCE-ID
-        foreach($vcalendar->VTODO as $vtodo) {
-            if(!isset($vtodo->{"RECURRENCE-ID"})) {
+        foreach ($vcalendar->VTODO as $vtodo) {
+            if (!isset($vtodo->{"RECURRENCE-ID"})) {
                 $this->_convertVtodo($vtodo, $task, $options);
                 
                 break;
             }
         }
 
-        // if we have found no VEVENT component something went wrong, lets stop here
+        // if we have found no VTODO component something went wrong, lets stop here
         if (!isset($task)) {
-            throw new Tinebase_Exception_UnexpectedValue('no main VEVENT component found in VCALENDAR');
+            throw new Tinebase_Exception_UnexpectedValue('no main TODO component found in VCALENDAR');
         }
-        
-        #// parse the event exceptions
-        #foreach($vcalendar->VTODO as $vtodo) {
-        #    if(isset($vtodo->{"RECURRENCE-ID"}) && $task->id == $vtodo->UID) {
-        #        $recurException = $this->_getRecurException($oldExdates, $vtodo);
-        #        
-        #        // initialize attendee with attendee from base events for new exceptions
-        #        // this way we can keep attendee extra values like groupmember type
-        #        // attendees which do not attend to the new exception will be removed in _convertVtodo
-        #        /*if (! $recurException->attendee instanceof Tinebase_Record_RecordSet) {
-        #            $recurException->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-        #            foreach ($task->attendee as $attendee) {
-        #                $recurException->attendee->addRecord(new Calendar_Model_Attender(array(
-        #                    'user_id'   => $attendee->user_id,
-        #                    'user_type' => $attendee->user_type,
-        #                    'role'      => $attendee->role,
-        #                    'status'    => $attendee->status
-        #                )));
-        #            }
-        #        }*/
-        #        
-        #        $this->_convertVtodo($vtodo, $recurException);
-        #            
-        #        //if(! $task->exdate instanceof Tinebase_Record_RecordSet) {
-        #        //    $task->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        #        //}
-        #        $task->exdate->addRecord($recurException);
-        #    }
-        #}
         
         // enable filters again
         $task->bypassFilters = false;
         
         $task->isValid(true);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' FLAMENGO3 ' . print_r($task->toarray(),TRUE));
-        
         return $task;
     }
-    
-    /**
-     * returns VObject of input data
-     * 
-     * @param mixed $_blob
-     * @return Sabre\VObject\Component
-     */
-    public static function getVObject($_blob)
-    {
-        if ($_blob instanceof \Sabre\VObject\Component) {
-            $vcalendar = $_blob;
-        } else {
-            if (is_resource($_blob)) {
-                $_blob = stream_get_contents($_blob);
-            }
-            $vcalendar = self::readVCalBlob($_blob);
-        }
-        
-        return $vcalendar;
-    }
-    
-    /**
-     * reads vcal blob and tries to repair some parsing problems that Sabre has
-     * 
-     * @param string $blob
-     * @param integer $failcount
-     * @param integer $spacecount
-     * @param integer $lastBrokenLineNumber
-     * @param array $lastLines
-     * @throws Sabre\VObject\ParseException
-     * @return Sabre\VObject\Component
-     * 
-     * @see 0006110: handle iMIP messages from outlook
-     * @see 0007438: update Sabre library
-     * 
-     * @todo maybe we can remove this when #7438 is resolved
-     */
-    public static function readVCalBlob($blob, $failcount = 0, $spacecount = 0, $lastBrokenLineNumber = 0, $lastLines = array())
-    {
-        // convert to utf-8
-        $blob = mbConvertTo($blob);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-            ' ' . $blob);
-        
-        try {
-            $vcalendar = \Sabre\VObject\Reader::read($blob);
-        } catch (Sabre\VObject\ParseException $svpe) {
-            // NOTE: we try to repair \Sabre\VObject\Reader as it fails to detect followup lines that do not begin with a space or tab
-            if ($failcount < 10 && preg_match(
-                '/Invalid VObject, line ([0-9]+) did not follow the icalendar\/vcard format/', $svpe->getMessage(), $matches
-            )) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                    ' ' . $svpe->getMessage() .
-                    ' lastBrokenLineNumber: ' . $lastBrokenLineNumber);
-                
-                $brokenLineNumber = $matches[1] - 1 + $spacecount;
-                
-                if ($lastBrokenLineNumber === $brokenLineNumber) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                        ' Try again: concat this line to previous line.');
-                    $lines = $lastLines;
-                    $brokenLineNumber--;
-                    // increase spacecount because one line got removed
-                    $spacecount++;
-                } else {
-                    $lines = preg_split('/[\r\n]*\n/', $blob);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                        ' Concat next line to this one.');
-                    $lastLines = $lines; // for retry
-                }
-                $lines[$brokenLineNumber] .= $lines[$brokenLineNumber + 1];
-                unset($lines[$brokenLineNumber + 1]);
-                
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-                    ' failcount: ' . $failcount .
-                    ' brokenLineNumber: ' . $brokenLineNumber .
-                    ' spacecount: ' . $spacecount);
-                
-                $vcalendar = self::readVCalBlob(implode("\n", $lines), $failcount + 1, $spacecount, $brokenLineNumber, $lastLines);
-            } else {
-                throw $svpe;
-            }
-        }
-        
-        return $vcalendar;
-    }
-    
-    /**
-     * find a matching exdate or return an empty event record
-     * 
-     * @param  Tinebase_Record_RecordSet  $_oldExdates
-     * @param  \Sabre\VObject\Component    $_vevent
-     * @return Tasks_Model_Task
-     */
-    protected function _getRecurException(Tinebase_Record_RecordSet $_oldExdates, \Sabre\VObject\Component $_vevent)
-    {
-        $exDate = clone $_vevent->{"RECURRENCE-ID"}->getDateTime();
-        $exDate->setTimeZone(new DateTimeZone('UTC'));
-        $exDateString = $exDate->format('Y-m-d H:i:s');
-        foreach ($_oldExdates as $id => $oldExdate) {
-            if ($exDateString == substr((string) $oldExdate->recurid, -19)) {
-                unset($_oldExdates[$id]);
-                
-                return $oldExdate;
-            }
-        }
-        
-        return new Calendar_Model_Event();
-    }
-    
+
     /**
      * parse VTODO part of VCALENDAR
      * 
@@ -509,7 +257,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
      */
     protected function _convertVtodo(\Sabre\VObject\Component\VTodo $_vtodo, Tasks_Model_Task $_task, $options)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vevent ' . $_vtodo->serialize());  
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vtodo ' . $_vtodo->serialize());  
         
         $task = $_task;
         
@@ -639,77 +387,9 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                     if (preg_match('/mailto:(?P<email>.*)/i', $property->getValue(), $matches)) {
                         // it's not possible to change the organizer by spec
                         if (empty($task->organizer)) {
-//                             $name = isset($property['CN']) ? $property['CN']->getValue() : $matches['email'];
-//                             $contact = Calendar_Model_Attender::resolveEmailToContact(array(
-//                                 'email'     => $matches['email'],
-//                                 'lastName'  => $name,
-//                             ));
                             $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountEmailAddress', $matches['email']);
                             $task->organizer = $user ? $user->getId() : Tinebase_Core::getUser()->getId();
                         }
-                    }
-                    
-                    break;
-
-                case 'RECURRENCE-ID':
-                    // original start of the event
-                    $task->recurid = $this->_convertToTinebaseDateTime($property);
-                    
-                    // convert recurrence id to utc
-                    $task->recurid->setTimezone('UTC');
-                    
-                    break;
-                    
-                case 'RRULE':
-                    $task->rrule = $property->getValue();
-                    
-                    // convert date format
-                    $task->rrule = preg_replace_callback('/UNTIL=([\dTZ]+)(?=;?)/', function($matches) {
-                        if (strlen($matches[1]) < 10) {
-                            $dtUntil = date_create($matches[1], new DateTimeZone ((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)));
-                            $dtUntil->setTimezone(new DateTimeZone('UTC'));
-                        } else {
-                            $dtUntil = date_create($matches[1]);
-                        }
-                        
-                        return 'UNTIL=' . $dtUntil->format(Tinebase_Record_Abstract::ISO8601LONG);
-                    }, $task->rrule);
-
-                    // remove additional days from BYMONTHDAY property
-                    $task->rrule = preg_replace('/(BYMONTHDAY=)([\d]+)([,\d]+)/', '$1$2', $task->rrule);
-                    
-                    // process exceptions
-                    if (isset($_vtodo->EXDATE)) {
-                        $exdates = new Tinebase_Record_RecordSet('Tasks_Model_Task');
-                        
-                        foreach($_vtodo->EXDATE as $exdate) {
-                            foreach($exdate->getDateTimes() as $exception) {
-                                if (isset($exdate['VALUE']) && strtoupper($exdate['VALUE']) == 'DATE') {
-                                    $recurid = new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-                                } else {
-                                    $recurid = new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), $exception->getTimezone());
-                                }
-                                $recurid->setTimezone(new DateTimeZone('UTC'));
-                                                        
-                                $taskException = new Calendar_Model_Event(array(
-                                    'recurid'    => $recurid,
-                                    'is_deleted' => true
-                                ));
-                        
-                                $exdates->addRecord($taskException);
-                            }
-                        }
-                    
-                        $task->exdate = $exdates;
-                    }     
-                                   
-                    break;
-                    
-                case 'TRANSP':
-                    if (in_array($property->getValue(), array(Calendar_Model_Event::TRANSP_OPAQUE, Calendar_Model_Event::TRANSP_TRANSP))) {
-                        $task->transp = $property->getValue();
-                    } else {
-                        $task->transp = Calendar_Model_Event::TRANSP_TRANSP;
                     }
                     
                     break;
@@ -725,47 +405,7 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
                     break;
                     
                 case 'VALARM':
-                    foreach($property as $valarm) {
-                        switch(strtoupper($valarm->TRIGGER['VALUE']->getValue())) {
-                            # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
-                            case 'DATE-TIME':
-                                //@TODO fixme
-                                $alarmTime = new Tinebase_DateTime($valarm->TRIGGER->getValue());
-                                $alarmTime->setTimezone('UTC');
-                                
-                                $alarm = new Tinebase_Model_Alarm(array(
-                                    'alarm_time'        => $alarmTime,
-                                    'minutes_before'    => 'custom',
-                                    'model'             => 'Tasks_Model_Task'
-                                ));
-                                
-                                $task->alarms->addRecord($alarm);
-                                
-                                break;
-                                
-                            # TRIGGER;VALUE=DURATION:-PT1H15M
-                            case 'DURATION':
-                            default:
-                                # @todo the alarm should be based on DTSTART
-                                $alarmTime = $this->_convertToTinebaseDateTime($_vtodo->DUE);
-                                $alarmTime->setTimezone('UTC');
-                                
-                                preg_match('/(?P<invert>[+-]?)(?P<spec>P.*)/', $valarm->TRIGGER->getValue(), $matches);
-                                $duration = new DateInterval($matches['spec']);
-                                $duration->invert = !!($matches['invert'] === '-');
-
-                                $alarm = new Tinebase_Model_Alarm(array(
-                                    'alarm_time'        => $alarmTime->add($duration),
-                                    'minutes_before'    => ($duration->format('%d') * 60 * 24) + ($duration->format('%h') * 60) + ($duration->format('%i')),
-                                    'model'             => 'Tasks_Model_Task'
-                                ));
-                                
-                                $task->alarms->addRecord($alarm);
-                                
-                                break;
-                        }
-                    }
-                    
+                    $this->_parseAlarm($task, $property, $_vtodo);
                     break;
                     
                 case 'CATEGORIES':
@@ -801,35 +441,5 @@ class Tasks_Convert_Task_VCalendar_Abstract implements Tinebase_Convert_Interfac
         
         // convert all datetime fields to UTC
         $task->setTimezone('UTC');
-    }
-    
-    /**
-     * get datetime from sabredav datetime property (user TZ is fallback)
-     * 
-     * @param  \Sabre\VObject\Property  $dateTimeProperty
-     * @param  boolean                  $_useUserTZ
-     * @return Tinebase_DateTime
-     * 
-     * @todo try to guess some common timezones
-     */
-    protected function _convertToTinebaseDateTime(\Sabre\VObject\Property $dateTimeProperty, $_useUserTZ = FALSE)
-    {
-        $defaultTimezone = date_default_timezone_get();
-        date_default_timezone_set((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        
-        if ($dateTimeProperty instanceof Sabre\VObject\Property\ICalendar\DateTime) {
-            $dateTime = $dateTimeProperty->getDateTime();
-            $tz = ($_useUserTZ || (isset($dateTimeProperty['VALUE']) && strtoupper($dateTimeProperty['VALUE']) == 'DATE')) ? 
-                (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : 
-                $dateTime->getTimezone();
-            
-            $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
-        } else {
-            $result = new Tinebase_DateTime($dateTimeProperty->getValue());
-        }
-        
-        date_default_timezone_set($defaultTimezone);
-        
-        return $result;
     }
 }

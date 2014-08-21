@@ -4,71 +4,28 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tasks_Convert_Task_VCalendar_MacOSXTest::main');
-}
 
 /**
  * Test class for Tasks_Convert_Task_VCalendar_MacOSX
  */
-class Tasks_Convert_Task_VCalendar_MacOSXTest extends PHPUnit_Framework_TestCase
+class Tasks_Convert_Task_VCalendar_MacOSXTest extends TestCase
 {
     /**
-     * @var array test objects
-     */
-    protected $objects = array();
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV MacOSX Event Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        $this->markTestIncomplete('tests not yet implemented');
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-    }
-    
-    /**
-     * test converting vcard from sogo connector to Calendar_Model_Event 
+     * test converting vtodo without trigger valarm
      */
     public function testConvertToTine20Model()
     {
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/lightning.ics', 'r');
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/apple_valarm.ics', 'r');
+    
+        $converter = Tasks_Convert_Task_VCalendar_Factory::factory(Tasks_Convert_Task_VCalendar_Factory::CLIENT_MACOSX);
+    
+        $task = $converter->toTine20Model($vcalendarStream);
         
-        $converter = Tasks_Convert_Task_VCalendar_Factory::factory(Tasks_Convert_Task_VCalendar_Factory::CLIENT_GENERIC);
-        
-        $event = $converter->toTine20Model($vcalendarStream);
-    }            
+        $this->assertEquals('Stundenaufstellung Heinz Walter', $task->summary, print_r($task->toArray(), true));
+        $this->assertEquals(1, count($task->alarms), print_r($task->toArray(), true));
+        $this->assertEquals('2014-09-12 06:00:00', $task->alarms->getFirstRecord()->alarm_time->toString(), print_r($task->toArray(), true));
+    }
 }
