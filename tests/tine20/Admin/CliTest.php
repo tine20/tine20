@@ -200,7 +200,7 @@ class Admin_CliTest extends TestCase
           $this->objects['configAdvanced'] = '<?xml version="1.0" encoding="UTF-8"?>
         <config>
            <model>Tinebase_Model_FullUser</model>
-           <plugin>Admin_Import_User_Csv</plugin>
+           <plugin>Admin_Import_Csv</plugin>
            <type>import</type>
            <headline>1</headline>
            <dryrun>0</dryrun>
@@ -465,10 +465,12 @@ class Admin_CliTest extends TestCase
         $members = $be->getGroupMembers($menGroup);
         
         $this->assertEquals(3, count($members));
+        $this->assertEquals('displayed', $menGroup->visibility);
         
         $womenGroup = $be->getGroupByName('women');
         $members = $be->getGroupMembers($womenGroup);
         
         $this->assertEquals(2, count($members));
+        $this->assertEquals('displayed', $womenGroup->visibility);
     }
 }

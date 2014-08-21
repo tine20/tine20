@@ -51,10 +51,17 @@ class Admin_Import_Group_Csv extends Tinebase_Import_Csv_Abstract
         $this->_setController();
         
         $record = parent::_importRecord($_record, $_resolveStrategy, $_recordData);
+        
+        $group = Admin_Controller_Group::getInstance()->get($_record->getId());
+        $list = Addressbook_Controller_List::getInstance()->createByGroup($group);
+        $group->list_id = $list->getId();
+        $group->visibility = Tinebase_Model_Group::VISIBILITY_DISPLAYED;
+        $be = new Tinebase_Group_Sql();
+        $be->updateGroupInSqlBackend($group);
+        
         $memberUids = array();
         
         if (! empty($members)) {
-            $be = new Tinebase_Group_Sql();
             foreach($members as $member) {
                 try {
                     $userRecord = Tinebase_User::getInstance()->getUserByLoginName($member);

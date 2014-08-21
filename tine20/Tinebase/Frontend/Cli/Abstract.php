@@ -301,7 +301,10 @@ class Tinebase_Frontend_Cli_Abstract
             } else {
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($args['definition']);
             }
-        
+            // If old Admin Import plugin is given use the new one!
+            if ($definition->plugin == 'Admin_Import_Csv') {
+                $definition->plugin = 'Admin_Import_User_Csv';
+            }
             $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, $args);
         } else if ((isset($args['plugin']) || array_key_exists('plugin', $args))) {
             $importer =  new $args['plugin']($args);
