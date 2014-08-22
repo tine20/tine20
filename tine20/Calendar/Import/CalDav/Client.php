@@ -136,8 +136,23 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
     }
     
-    protected function findContainerForCalendar($calendarUri, $displayname, $defaultCalendarsName, $type, $application_id)
+    /**
+     * findContainerForCalendar
+     * 
+     * @param unknown $calendarUri
+     * @param unknown $displayname
+     * @param unknown $defaultCalendarsName
+     * @param unknown $type
+     * @param string $application_id
+     */
+    protected function findContainerForCalendar($calendarUri, 
+            $displayname, $defaultCalendarsName, $type = Tinebase_Model_Container::TYPE_PERSONAL,
+            $application_id = null)
     {
+        if (! $application_id) {
+            $application_id = Tinebase_Application::getInstance()->getApplicationByName($this->appName)->getId();
+        }
+        
         // sha1() the whole calendar uri as it is very hard to separate a uuid string from the uri otherwise
         $uuid = sha1($calendarUri);
         
@@ -223,9 +238,6 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
         $this->decorator->initCalendarImport();
         
-        $application_id = Tinebase_Application::getInstance()->getApplicationByName($this->appName)->getId();
-        $type = Tinebase_Model_Container::TYPE_PERSONAL;
-        
         $defaultCalendarsName = $this->_getDefaultCalendarsName();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
@@ -234,8 +246,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             . ' Calendars to import: ' . print_r($this->calendars, true));
         
         foreach ($this->calendars as $calUri => $cal) {
-            $container = $this->findContainerForCalendar($calUri, $cal['displayname'], $defaultCalendarsName,
-                    $type, $application_id);
+            $container = $this->findContainerForCalendar($calUri, $cal['displayname'], $defaultCalendarsName);
             
             $this->decorator->setCalendarProperties($container, $this->calendars[$calUri]);
             
@@ -267,9 +278,6 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
      * 
      * @param string $onlyCurrentUserOrganizer
      * @return boolean
-     * 
-     * @todo check if $onlyCurrentUserOrganizer is needed
-     * @todo check deletes
      */
     public function updateAllCalendarData($onlyCurrentUserOrganizer = false)
     {
@@ -280,72 +288,154 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
         
         $newICSs = array();
-        $calendarEventBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
+        $newEventCount = 0;
+        $updateEventCount = 0;
+        $deleteEventCount = 0;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Looking for updates in ' . count($this->calendarICSs). ' calendars ...');
         
         foreach ($this->calendarICSs as $calUri => $calICSs) {
-            $start = 0;
-            $max = count($calICSs);
-            $etags = array();
-            do {
-                $requestEnd = '';
-                for ($i = $start; $i < $max && $i < ($this->maxBulkRequest+$start); ++$i) {
-                    $requestEnd .= '  <a:href>' . $calICSs[$i] . "</a:href>\n";
-                }
-                $start = $i;
-                $requestEnd .= '</b:calendar-multiget>';
-                $result = $this->calDavRequest('REPORT', $calUri, self::getEventETagsRequest . $requestEnd, 1);
-                
-                foreach ($result as $key => $value) {
-                    if (isset($value['{DAV:}getetag'])) {
-                        $name = explode('/', $key);
-                        $name = end($name);
-                        $id = $this->_getEventIdFromName($name);
-                        $etags[$key] = array( 'id' => $id, 'etag' => $value['{DAV:}getetag']);
-                    }
-                }
-            } while($start < $max);
-            
-            //check etags
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-                . ' Got ' . count($etags) . ' etags');
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
-                . ' etags: ' . print_r($etags, true));
-            
-            // @todo find out deleted events
-            foreach ($etags as $ics => $data) {
-                try {
-                    $etagCheck = $calendarEventBackend->checkETag($data['id'], $data['etag']);
-                    if ($etagCheck) {
-                        continue; // same
-                    } else {
-                        $eventExists = true; // different
-                    }
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    $eventExists = false;
-                }
-                
-                if (!isset($newICSs[$calUri])) {
-                    $newICSs[$calUri] = array();
-                    $this->existingRecordIds[$calUri] = array();
-                }
-                $newICSs[$calUri][] = $ics;
-                if ($eventExists) {
-                    $this->existingRecordIds[$calUri][] = $data['id'];
-                }
+            $updateResult = $this->updateCalendar($calUri, $calICSs);
+            if (count($updateResult['ics']) > 0) {
+                $newICSs[$calUri] = $updateResult['ics'];
             }
+            
+            if (! empty($updateResult['todelete'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' '
+                        . ' Deleting ' . count($updateResult['todelete']) . ' ' . $this->modelName . ' in calendar '  . $calUri);
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                        . ' ' . print_r($updateResult['todelete'], true));
+                
+                $recordBackend->delete($updateResult['todelete']);
+            }
+            
+            $newEventCount += $updateResult['toadd'];
+            $updateEventCount += $updateResult['toupdate'];
+            $deleteEventCount += count($updateResult['todelete']);
         }
         
         if (($count = count($newICSs)) > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
-                    . $count . ' calendar(s) changed for: ' . $this->userName);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
-                    . ' events changed: ' . print_r($newICSs, true));
+                    . $count . ' calendar(s) changed for: ' . $this->userName
+                    . ' (' . $newEventCount . '/' . $updateEventCount . '/' . $deleteEventCount . ' records add/update/delete): '
+                    . print_r(array_keys($newICSs), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+                    . 'Events changed: ' . print_r($newICSs, true));
+            
             $this->calendarICSs = $newICSs;
             $this->importAllCalendarData($onlyCurrentUserOrganizer, /* $update = */ true);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' no changes found for: ' . $this->userName);
         }
+    }
+    
+    protected function updateCalendar($calUri, $calICSs)
+    {
+        $updateResult = array(
+            'ics'       => array(),
+            'toupdate'  => 0,
+            'toadd'     => 0,
+            'todelete'  => array(), // of record ids
+        );
+        
+        $serverEtags = $this->_fetchServerEtags($calUri, $calICSs);
+        
+        // get current tine20 id/etags of records
+        $recordBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
+        $defaultCalendarsName = $this->_getDefaultCalendarsName();
+        $container = $this->findContainerForCalendar($calUri, $this->calendars[$calUri]['displayname'], $defaultCalendarsName);
+        $containerEtags = $recordBackend->getEtagsForContainerId($container->getId());
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                . ' Got ' . count($serverEtags) . ' server etags for container ' . $container->name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                . ' server etags: ' . print_r($serverEtags, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                . ' tine20 etags: ' . print_r($containerEtags, true));
+        
+        // handle add/updates
+        foreach ($serverEtags as $ics => $data) {
+            if (isset($containerEtags[$data['id']])) {
+                $tine20Etag = $containerEtags[$data['id']];
+        
+                // remove from $containerEtags list to be able to tell deletes
+                unset($containerEtags[$data['id']]);
+        
+                if ($tine20Etag == $data['etag']) {
+                    continue; // same
+                } else if (empty($tine20Etag)) {
+                    // event has been added in tine -> don't overwrite/delete
+                    continue;
+                } else {
+                    $eventExists = true; // different
+                }
+            } else {
+                try {
+                    // might be a delegated event from another container/organizer
+                    $recordBackend->checkETag($data['id'], $data['etag']);
+                    continue; // ignore update here
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $eventExists = false; // new record;
+                }
+            }
+        
+            if (! isset($this->existingRecordIds[$calUri])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                        . ' Found changed event(s) for container ' . $container->name);
+        
+                $this->existingRecordIds[$calUri] = array();
+            }
+            $updateResult['ics'][] = $ics;
+            if ($eventExists) {
+                $this->existingRecordIds[$calUri][] = $data['id'];
+                $updateResult['toupdate']++;
+            } else {
+                $updateResult['toadd']++;
+            }
+        }
+        
+        // handle deletes
+        foreach ($containerEtags as $id => $etag) {
+            if (! empty($etag)) {
+                // record has been deleted on server
+                $updateResult['todelete'][] = $id;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                        . ' Record has been added in tine: ' . $id);
+            }
+        }
+        
+        return $updateResult;
+    }
+    
+    protected function _fetchServerEtags($calUri, $calICSs)
+    {
+        $start = 0;
+        $max = count($calICSs);
+        
+        $etags = array();
+        do {
+            $requestEnd = '';
+            for ($i = $start; $i < $max && $i < ($this->maxBulkRequest+$start); ++$i) {
+                $requestEnd .= '  <a:href>' . $calICSs[$i] . "</a:href>\n";
+            }
+            $start = $i;
+            $requestEnd .= '</b:calendar-multiget>';
+            $result = $this->calDavRequest('REPORT', $calUri, self::getEventETagsRequest . $requestEnd, 1);
+        
+            foreach ($result as $key => $value) {
+                if (isset($value['{DAV:}getetag'])) {
+                    $name = explode('/', $key);
+                    $name = end($name);
+                    $id = $this->_getEventIdFromName($name);
+                    $etags[$key] = array( 'id' => $id, 'etag' => $value['{DAV:}getetag']);
+                }
+            }
+        } while($start < $max);
+
+        return $etags;
     }
     
     protected function _getEventIdFromName($name)
@@ -465,8 +555,8 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     
     protected function _setEtags($etags)
     {
-        $calendarEventBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
-        $calendarEventBackend->setETags($etags);
+        $recordBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
+        $recordBackend->setETags($etags);
     }
     
     /**
