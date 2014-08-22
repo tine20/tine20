@@ -920,7 +920,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                         }
                     } elseif('URI' === $value) {
                         /*
-                         * ATTACH;VALUE=URI:https://ical.familienservice.de/calendars/__uids__/0AA0
+                         * ATTACH;VALUE=URI:https://server.com/calendars/__uids__/0AA0
  3A3B-F7B6-459A-AB3E-4726E53637D0/dropbox/4971F93F-8657-412B-841A-A0FD913
  9CD61.dropbox/Canada.png
                          */
@@ -941,17 +941,29 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                             // we are client and found an external hosted attachment that we need to import
                             $user = Tinebase_Core::getUser();
                             $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-                            $stream = fopen($matches[1] . $userCredentialCache->username . ':' . $userCredentialCache->password . '@' . $matches[2], 'r');
-                            $attachment = new Tinebase_Model_Tree_Node(array(
-                                'name'         => $name,
-                                'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
-                                'contenttype'  => (string) $property['FMTTYPE'],
-                                'tempFile'     => $stream,
-                                ), true);
-                            $attachments->addRecord($attachment);
+                            $url = $matches[1] . $userCredentialCache->username . ':' . $userCredentialCache->password . '@' . $matches[2];
+                            $attachmentInfo = $matches[1] . $matches[2]. ' ' . $name . ' ' . $managedId;
+                            if (urlExists($url)) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                            . ' Downloading attachment: ' . $attachmentInfo);
+                                
+                                $stream = fopen($url, 'r');
+                                $attachment = new Tinebase_Model_Tree_Node(array(
+                                    'name'         => $name,
+                                    'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
+                                    'contenttype'  => (string) $property['FMTTYPE'],
+                                    'tempFile'     => $stream,
+                                    ), true);
+                                $attachments->addRecord($attachment);
+                            } else {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                    . ' Url not found (got 404): ' . $attachmentInfo . ' - Skipping attachment');
+                            }
                         } else {
                             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' attachment found with malformed url: '.$url. ' '.$name. ' '.$managedId);
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                    . ' Attachment found with malformed url: ' . $attachmentInfo);
                         }
                     }
                     break;
