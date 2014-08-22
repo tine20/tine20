@@ -263,34 +263,50 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         return $diff;
     }
     /**
-     * add current user to attendee if he's organizer
+     * add given attendee if not present under given conditions
      * 
-     * @param bool $ifOrganizer      only add current user if he's organizer
-     * @param bool $ifNoOtherAttendee  only add current user if no other attendee are present
+     * @param Calendar_Model_Attender $attendee
+     * @param bool                    $ifOrganizer        only add attendee if he's organizer
+     * @param bool                    $ifNoOtherAttendee  only add attendee if no other attendee are present
+     * @param bool                    $personalOnly       only for personal containers
      */
-    public function assertCurrentUserAsAttendee($ifOrganizer = TRUE, $ifNoOtherAttendee = FALSE)
+    public function assertAttendee($attendee, $ifOrganizer = true, $ifNoOtherAttendee = false, $personalOnly = false)
     {
+        if ($personalOnly) {
+            try {
+                $container = Tinebase_Container::getInstance()->getContainerById($this->container_id);
+                if ($container->type != Tinebase_Model_Container::TYPE_PERSONAL) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . " not adding attendee as container is not personal.");
+                    return;
+                }
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " cannot get container: $e");
+            }
+        }
+        
+        
         if ($ifNoOtherAttendee && $this->attendee instanceof Tinebase_Record_RecordSet && $this->attendee->count() > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . " not adding current user as attendee as other attendee are present.");
+                    __METHOD__ . '::' . __LINE__ . " not adding attendee as other attendee are present.");
             return;
         }
         
-        $ownAttender = Calendar_Model_Attender::getOwnAttender($this->attendee);
+        $assertionAttendee = Calendar_Model_Attender::getAttendee($this->attendee, $attendee);
         
-        if (! $ownAttender) {
-            if ($ifOrganizer && $this->organizer && $this->organizer != Tinebase_Core::getUser()->contact_id) {
+        if (! $assertionAttendee) {
+            if ($ifOrganizer && ! $this->isOrganizer($attendee)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . " not adding current user as attendee as current user is not organizer.");
+                    __METHOD__ . '::' . __LINE__ . " not adding attendee as he is not organizer.");
             }
             
             else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . " adding current user as attendee.");
+                    __METHOD__ . '::' . __LINE__ . " adding attendee.");
                 
                 $newAttender = new Calendar_Model_Attender(array(
-                    'user_id'   => Tinebase_Core::getUser()->contact_id,
-                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'   => $attendee->user_id,
+                    'user_type' => $attendee->user_type,
                     'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
                     'role'      => Calendar_Model_Attender::ROLE_REQUIRED
                 ));

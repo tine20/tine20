@@ -254,7 +254,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $exceptions = $_event->exdate;
         $_event->exdate = NULL;
         
-        $_event->assertCurrentUserAsAttendee();
+        $_event->assertAttendee($this->getCalendarUser());
         $savedEvent = $this->_eventController->create($_event);
         
         if ($exceptions instanceof Tinebase_Record_RecordSet) {
@@ -262,7 +262,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 . ' About to create ' . count($exceptions) . ' exdates for event ' . $_event->summary . ' (' . $_event->dtstart . ')');
             
             foreach ($exceptions as $exception) {
-                $exception->assertCurrentUserAsAttendee();
+                $exception->assertAttendee($this->getCalendarUser());
                 $this->_prepareException($savedEvent, $exception);
                 $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
             }
@@ -291,7 +291,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $currentOriginEvent = $this->_eventController->get($_event->getId());
         $this->_fromiTIP($_event, $currentOriginEvent);
         
-        $_event->assertCurrentUserAsAttendee(TRUE, TRUE);
+        $_event->assertAttendee($this->getCalendarUser());
         
         $exceptions = $_event->exdate instanceof Tinebase_Record_RecordSet ? $_event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $exceptions->addIndices(array('is_deleted'));
@@ -312,7 +312,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             . ' Found ' . count($migration['toCreate']) . ' exceptions to create and ' . count($migration['toUpdate']) . ' to update.');
         
         foreach ($migration['toCreate'] as $exception) {
-            $exception->assertCurrentUserAsAttendee(TRUE, TRUE);
+            $exception->assertAttendee($this->getCalendarUser());
             $this->_prepareException($updatedBaseEvent, $exception);
             $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
         }
@@ -321,7 +321,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
                 . ' Update exdate ' . $exception->getId() . ' at ' . $exception->dtstart->toString());
             
-            $exception->assertCurrentUserAsAttendee(TRUE, TRUE);
+            $exception->assertAttendee($this->getCalendarUser());
             $this->_prepareException($updatedBaseEvent, $exception);
             $this->_addStatusAuthkeyForOwnAttender($exception);
             
@@ -497,6 +497,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public function setCalendarUser(Calendar_Model_Attender $_calUser)
     {
+        if (! in_array($_calUser->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+            throw new Tinebase_Exception_UnexpectedValue('Calendar user must be a contact');
+        }
         $oldUser = $this->_calendarUser;
         $this->_calendarUser = $_calUser;
         
@@ -731,7 +734,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         // assert organizer
-        $_event->organizer = $_event->organizer ?: ($_currentEvent->organizer ?: Tinebase_Core::getUser()->contact_id);
+        $_event->organizer = $_event->organizer ?: ($_currentEvent->organizer ?: $this->_calendarUser->user_id);
         
         $this->_addAttendeeWithoutEmail($_event, $_currentEvent);
         
