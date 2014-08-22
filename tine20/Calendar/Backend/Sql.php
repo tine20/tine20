@@ -859,6 +859,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $select = $this->_db->select();
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $this->_identifier);
         $select->where($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id);
+        $select->orWhere($this->_db->quoteIdentifier('uid') . ' = ?', $id);
         
         $stmt = $select->query();
         $queryResult = $stmt->fetch();
@@ -874,5 +875,30 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $stmt->closeCursor();
         
         return ($queryResult !== false);
+    }
+
+    /**
+     * return etag set for given container
+     * @param unknown $containerId
+     * @return multitype:Ambigous <mixed, Ambigous <string, boolean, mixed>>
+     */
+    public function getEtagsForContainerId($containerId)
+    {
+        $select = $this->_db->select();
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array($this->_identifier, 'etag', 'uid'));
+        $select->where($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId);
+        $select->where($this->_db->quoteIdentifier('is_deleted') . ' = ?', 0);
+        
+        $stmt = $select->query();
+        $queryResult = $stmt->fetchAll();
+        
+        $result = array();
+        foreach ($queryResult as $row) {
+            $result[$row['id']] = $row['etag'];
+            if ($row['id'] !== $row['uid']) {
+                $result[$row['uid']] = $row['etag'];
+            }
+        }
+        return $result;
     }
 }
