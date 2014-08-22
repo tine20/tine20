@@ -58,4 +58,28 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         parent::_import($_opts);
     }
+    
+    /**
+     * repair groups
+     * add missing lists
+     *
+     */
+    public function repairGroups()
+    {
+        $count = 0;
+        $be = new Tinebase_Group_Sql();
+        
+        $groups = $be->getGroups();
+        
+        foreach ($groups as $group) {
+            if ($group->list_id == null) {
+                $list = Addressbook_Controller_List::getInstance()->createByGroup($group);
+                $group->list_id = $list->getId();
+                $group->visibility = Tinebase_Model_Group::VISIBILITY_DISPLAYED;
+                $be->updateGroupInSqlBackend($group);
+                $count++;
+            }
+        }
+        echo $count . ' groups repaired!';
+    }
 }
