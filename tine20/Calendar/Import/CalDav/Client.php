@@ -295,8 +295,11 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Looking for updates in ' . count($this->calendarICSs). ' calendars ...');
         
+        // @todo move to a member variable
+        $recordBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
+        
         foreach ($this->calendarICSs as $calUri => $calICSs) {
-            $updateResult = $this->updateCalendar($calUri, $calICSs);
+            $updateResult = $this->updateCalendar($calUri, $calICSs, $recordBackend);
             if (count($updateResult['ics']) > 0) {
                 $newICSs[$calUri] = $updateResult['ics'];
             }
@@ -331,7 +334,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
     }
     
-    protected function updateCalendar($calUri, $calICSs)
+    protected function updateCalendar($calUri, $calICSs, $recordBackend)
     {
         $updateResult = array(
             'ics'       => array(),
@@ -343,7 +346,6 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         $serverEtags = $this->_fetchServerEtags($calUri, $calICSs);
         
         // get current tine20 id/etags of records
-        $recordBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
         $defaultCalendarsName = $this->_getDefaultCalendarsName();
         $container = $this->findContainerForCalendar($calUri, $this->calendars[$calUri]['displayname'], $defaultCalendarsName);
         $containerEtags = $recordBackend->getEtagsForContainerId($container->getId());
@@ -509,6 +511,9 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Skipping ' . $this->skipComonent);
                         continue;
                     }
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+                            . ' Processing caldav record: ' . $key);
                     
                     $name = explode('/', $key);
                     $name = end($name);
