@@ -252,13 +252,18 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         //fputs($this->requestLogFH, $method.' '.$uri."\n".$body."\n".$depth."\n".$response['body']."\n\n\n\n\n\n\n", 10000000);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' request: ' . $body . ' response: ' . print_r($response, true));
+                . ' Uri: ' . $uri . ' | request: ' . $body . ' | response: ' . print_r($response, true));
         
         // If depth was 0, we only return the top item
         if ($depth===0) {
             reset($result);
             $result = current($result);
-            return isset($result[200])?$result[200]:array();
+            $result = isset($result[200])?$result[200]:array();
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Result (depth 0): ' . var_export($result, true));
+            
+            return $result;
         }
         
         $newResult = array();
@@ -266,6 +271,9 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         {
             $newResult[$href] = isset($statusList[200])?$statusList[200]:array();
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Result: ' . var_export($newResult, true));
         
         return $newResult;
     }
