@@ -56,7 +56,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'containersName'    => 'Contracts',
         'containerUsesFilter' => FALSE,
         
-        'titleProperty'     => 'title',//array('%s - %s', array('number', 'title')),
+        'titleProperty'     => 'fulltext',//array('%s - %s', array('number', 'title')),
         'appName'           => 'Sales',
         'modelName'         => 'Contract',
         
@@ -216,12 +216,31 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'appName'     => 'Sales',
                     'modelName'   => 'ProductAggregate',
                     'refIdField'  => 'contract_id',
-//                     'paging'      => array('sort' => 'name', 'dir' => 'ASC'),
                     'dependentRecords' => TRUE
                 ),
             ),
+            
+            'fulltext' => array(
+                'type' => 'string',
+            ),
         )
     );
+
+    /**
+     * sets the record related properties from user generated input.
+     *
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data            the new data to set
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
+     *
+     * @todo remove custom fields handling (use Tinebase_Record_RecordSet for them)
+     */
+    public function setFromArray(array $_data)
+    {
+        parent::setFromArray($_data);
+        $this->fulltext = $this->number . ' - ' . $this->title;
+    }
     
     /**
      * @see Tinebase_Record_Abstract

@@ -136,8 +136,6 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     }
     
     /**
-     * @todo make this better, faster
-     * 
      * @param array $resultSet
      * 
      * @return array

@@ -24,6 +24,10 @@
           "path": "js/"
         },
         {
+          "text": "CustomerSearchCombo.js",
+          "path": "js/"
+        },
+        {
           "text": "CostCenterSearchCombo.js",
           "path": "js/"
         },

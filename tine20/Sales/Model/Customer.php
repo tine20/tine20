@@ -43,7 +43,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         'containerProperty' => NULL,
         'resolveVFGlobally' => TRUE,
         
-        'titleProperty'     => 'name',
+        'titleProperty'     => 'fulltext',
         'appName'           => 'Sales',
         'modelName'         => 'Customer',
         
@@ -236,9 +236,28 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'label' => 'Postbox', //_('Postbox')
                     'duplicateOmit' => TRUE
                 ),
-            )
+            ),
+            'fulltext' => array(
+                'type' => 'string'
+            ),
         )
     );
+    
+    /**
+     * sets the record related properties from user generated input.
+     *
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data            the new data to set
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
+     *
+     * @todo remove custom fields handling (use Tinebase_Record_RecordSet for them)
+     */
+    public function setFromArray(array $_data)
+    {
+        parent::setFromArray($_data);
+        $this->fulltext = $this->number . ' - ' . $this->name;
+    }
     
     /**
      * @see Tinebase_Record_Abstract
