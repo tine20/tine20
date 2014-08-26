@@ -95,9 +95,11 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
         
         foreach ($result as $uri => $response) {
-            if (isset($response['{DAV:}resourcetype']) && isset($response['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set']) && 
+            if (isset($response['{DAV:}resourcetype']) &&
+                    isset($response['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set']) && 
                     $response['{DAV:}resourcetype']->is('{urn:ietf:params:xml:ns:caldav}calendar') &&
-                    in_array($this->component, $response['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set']->getValue())) {
+                    in_array($this->component, $response['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set']->getValue())
+            ) {
                 $this->calendars[$uri]['acl'] = $response['{DAV:}acl'];
                 $this->calendars[$uri]['displayname'] = $response['{DAV:}displayname'];
                 $this->decorator->processAdditionalCalendarProperties($this->calendars[$uri], $response);
