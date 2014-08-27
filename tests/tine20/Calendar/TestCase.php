@@ -78,13 +78,7 @@ abstract class Calendar_TestCase extends TestCase
         
         $this->_testUser = Tinebase_Core::getUser();
         $this->_testUserContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_testUser->getId());
-        $this->_testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => 'PHPUnit test calendar',
-            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'       => Tinebase_Core::getUser(),
-            'backend'        => $this->_backend->getType(),
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
-        ), true));
+        $this->_testCalendar = $this->_getTestContainer('Calendar');
         
         $this->_testCalendars = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
         $this->_testCalendars->addRecord($this->_testCalendar);

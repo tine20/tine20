@@ -525,7 +525,8 @@ class Tinebase_Application
             'rights'        => array('tablename' => 'role_rights'),
             'definitions'   => array('tablename' => 'importexport_definition'),
             'filter'        => array('tablename' => 'filter'),
-            'modlog'        => array('tablename' => 'timemachine_modlog')
+            'modlog'        => array('tablename' => 'timemachine_modlog'),
+            'import'        => array('tablename' => 'import')
         );
         $countMessage = ' Deleted';
         
@@ -546,7 +547,12 @@ class Tinebase_Application
                       break;
                 default:
                     if ((isset($info['tablename']) || array_key_exists('tablename', $info)) && ! empty($info['tablename'])) {
-                        $count = $this->_db->delete(SQL_TABLE_PREFIX . $info['tablename'], $where);
+                        try {
+                            $count = $this->_db->delete(SQL_TABLE_PREFIX . $info['tablename'], $where);
+                        } catch (Zend_Db_Statement_Exception $zdse) {
+                            Tinebase_Exception::log($zdse);
+                            $count = 0;
+                        }
                     } else {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No tablename defined for ' . $dataType);
                         $count = 0;

@@ -248,5 +248,6 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
         Tinebase_Scheduler_Task::addSessionsCleanupTask($scheduler);
         Tinebase_Scheduler_Task::addAccessLogCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addImportTask($scheduler);
     }
 }

@@ -49,6 +49,7 @@ class Tinebase_Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
         Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
         Tinebase_Scheduler_Task::addSessionsCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addImportTask($scheduler);
     }
     
     /**
