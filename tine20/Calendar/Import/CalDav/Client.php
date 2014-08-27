@@ -31,6 +31,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     protected $modelName = 'Calendar_Model_Event';
     protected $appName = 'Calendar';
     protected $webdavFrontend = 'Calendar_Frontend_WebDAV_Event';
+    protected $_uuidPrefix = '';
     
     const findAllCalendarsRequest =
 '<?xml version="1.0"?>
@@ -156,7 +157,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
         
         // sha1() the whole calendar uri as it is very hard to separate a uuid string from the uri otherwise
-        $uuid = sha1($calendarUri);
+        $uuid = $this->_uuidPrefix . sha1($calendarUri);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
                 . ' $calendarUri = ' . $calendarUri . ' / $displayname = ' . $displayname 

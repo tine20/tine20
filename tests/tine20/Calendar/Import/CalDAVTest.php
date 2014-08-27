@@ -43,8 +43,6 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
     
     /**
      * test import of a single container/calendar of current user
-     * 
-     * @todo uuid needs to be changed as we need different uuids for tasks + events
      */
     public function testImportCalendars()
     {

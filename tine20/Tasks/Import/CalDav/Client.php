@@ -27,6 +27,7 @@ class Tasks_Import_CalDav_Client extends Calendar_Import_CalDav_Client
     protected $modelName = 'Tasks_Model_Task';
     protected $appName = 'Tasks';
     protected $webdavFrontend = 'Tasks_Frontend_WebDAV_Task';
+    protected $_uuidPrefix = 'aa-';
     
     /**
      * 
