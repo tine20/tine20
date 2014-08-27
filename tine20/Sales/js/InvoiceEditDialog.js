@@ -86,6 +86,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return;
         }
         
+        if (! this.record.get('sales_tax')) {
+            this.record.set('sales_tax', 19);
+        }
+        
         if (this.createReversal) {
             var originalRecord = this.recordProxy.recordReader({responseText: Ext.encode(this.record.data)}); ;
             
@@ -298,10 +302,12 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
         }
         
-        this.priceNetField = Ext.create({
+        this.priceNetField = new Ext.ux.form.NumberField({
             name: 'price_net',
             xtype: 'numberfield',
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+            decimalPrecision: 2,
+            suffix: ' €',
             fieldLabel: this.app.i18n._('Price Net'),
             columnWidth: 1/3,
             listeners: {
@@ -310,22 +316,33 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         });
         
-        this.priceGrossField = Ext.create({
+        this.priceGrossField = new Ext.ux.form.NumberField({
+            decimalPrecision: 2,
             name: 'price_gross',
             xtype: 'numberfield',
+            suffix: ' €',
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
             fieldLabel: this.app.i18n._('Price Gross'),
             columnWidth: 1/3
         });
         
         this.salesTaxField = Ext.create({
-            xtype: 'numberfield',
+            xtype: 'uxspinner',
+            decimalPrecision: 2,
+            strategy: new Ext.ux.form.Spinner.NumberStrategy({
+                incrementValue : 0.1,
+                alternateIncrementValue: 1,
+                minValue: 0,
+                maxValue: 100,
+                allowDecimals: 2
+            }),
             name: 'sales_tax',
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-            fieldLabel: this.app.i18n._('Sales Tax'),
+            fieldLabel: this.app.i18n._('Sales Tax (percent)'),
             columnWidth: 1/3,
             listeners: {
                 scope: this,
+                spin: this.calcGross.createDelegate(this),
                 blur: this.calcGross.createDelegate(this)
             }
         });

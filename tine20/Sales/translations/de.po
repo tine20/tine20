@@ -696,5 +696,5 @@ msgid "Price Gross"
 msgstr "Bruttopreis"
 
 #: Model/Invoice.php:158 js/InvoiceEditDialog.js:453
-msgid "Sales Tax"
-msgstr "Mehrwertsteuer"
+msgid "Sales Tax (percent)"
+msgstr "Mehrwertsteuer in Prozent"
