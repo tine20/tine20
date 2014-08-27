@@ -33,6 +33,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     protected $webdavFrontend = 'Calendar_Frontend_WebDAV_Event';
     protected $_uuidPrefix = '';
     
+    const calendarDataKey = '{urn:ietf:params:xml:ns:caldav}calendar-data';
     const findAllCalendarsRequest =
 '<?xml version="1.0"?>
 <d:propfind xmlns:d="DAV:">
