@@ -1,7 +1,7 @@
 {
   "projectName": "Tine 2.0 - Tinebase",
   "deployDir": "Tinebase",
-  "licenseText": "Tine 2.0 - Tinebase \nCopyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "licenseText": "Tine 2.0 - Tinebase \nCopyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
   "resources": [],
   "pkgs": [
     {
@@ -195,6 +195,10 @@
         },
         {
           "text": "ColumnFormPanel.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "NumberField.js",
           "path": "js/ux/form/"
         },
         {
