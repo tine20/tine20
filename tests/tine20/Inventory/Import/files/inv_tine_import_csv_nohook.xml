@@ -28,7 +28,7 @@
     </autotags>
     <mapping>
         <field>
-            <source>Titel</source>
+            <source>Name</source>
             <destination>name</destination>
         </field>
         <field>

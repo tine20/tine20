@@ -60,7 +60,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'label' => 'Status', // _('Status')
                 'type' => 'keyfield',
                 'name' => 'inventoryStatus',
-                'default' => 'UNKNOWN'
             ),
             'inventory_id' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),

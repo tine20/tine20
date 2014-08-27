@@ -28,8 +28,65 @@
     </autotags>
     <mapping>
         <field>
-            <source>Titel</source>
+            <source>Inventarnummer</source>
+            <destination>inventory_id</destination>
+        </field>
+        <field>
+            <source>Name</source>
             <destination>name</destination>
+        </field>
+        <field>
+            <source>Beschreibung</source>
+            <destination>description</destination>
+        </field>
+        <field>
+            <source>Anschaffung</source>
+            <destination>added_date</destination>
+            <typecast>datetime</typecast>
+        </field>
+        <field>
+            <source>Standort</source>
+            <destination>location</destination>
+        </field>
+        <field>
+            <source>Garantie</source>
+            <typecast>datetime</typecast>
+            <destination>warranty</destination>
+        </field>
+        <field>
+            <source>Status</source>
+            <destination>status</destination>
+        </field>
+        
+        <field>
+            <source>Preis</source>
+            <destination>price</destination>
+        </field>
+        <field>
+            <source>Kostenstelle</source>
+            <destination>costcentre</destination>
+        </field>
+        <field>
+            <source>Rechnung</source>
+            <destination>invoice</destination>
+        </field>
+        <field>
+            <source>Rechnungsdatum</source>
+            <typecast>datetime</typecast>
+            <destination>invoice_date</destination>
+        </field>
+        <field>
+            <source>Abgeschrieben</source>
+            <destination>depreciate_status</destination>
+        </field>
+        
+        <field>
+            <source>Seriennummer</source>
+            <destination>serial_number</destination>
+        </field>
+        <field>
+            <source>IMEI</source>
+            <destination>imei</destination>
         </field>
         <field>
             <source>Author</source>
@@ -48,14 +105,7 @@
             <typecast>datetime</typecast>
             <destination>Erscheinungs Datum</destination>
         </field>
-        <field>
-            <source>Anschaffung</source>
-            <destination>added_date</destination>
-            <typecast>datetime</typecast>
-        </field>
-        <field>
-            <source>Inventarnummer</source>
-            <destination>inventory_id</destination>
-        </field>
+
+
     </mapping>
 </config>

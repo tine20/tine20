@@ -31,12 +31,13 @@ class Inventory_Setup_Initialize extends Setup_Initialize
             'name'    => Inventory_Config::INVENTORY_STATUS,
             'records' => array(
                 array('id' => 'ORDERED',    'value' => 'ordered'                       ), //_('ordered')
-                array('id' => 'AVAILABLE',  'value' => 'available', 'system' => true   ), //_('available')
+                array('id' => 'AVAILABLE',  'value' => 'available'                     ), //_('available')
                 array('id' => 'DEFECT',     'value' => 'defect'                        ), //_('defect')
                 array('id' => 'MISSING',    'value' => 'missing'                       ), //_('missing')
-                array('id' => 'REMOVED',    'value' => 'removed', 'system' => true     ), //_('removed')
+                array('id' => 'REMOVED',    'value' => 'removed'                       ), //_('removed')
                 array('id' => 'UNKNOWN',    'value' => 'unknown'                       ), //_('unknown')
             ),
+            'default' => 'AVAILABLE',
         );
         
         $cb->create(new Tinebase_Model_Config(array(
