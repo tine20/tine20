@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
- * 
+ *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -26,6 +26,7 @@ class HumanResources_AllTests
         $suite->addTestSuite('HumanResources_JsonTests');
         $suite->addTestSuite('HumanResources_CliTests');
         $suite->addTestSuite('HumanResources_ControllerTests');
+        $suite->addTestSuite('HumanResources_ModelConfigurationTest');
         return $suite;
     }
 }
