@@ -17,14 +17,14 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
     /**
      * unit in test
      *
-     * @var Calendar_Import_CalDav_Client
+     * @var Calendar_Import_CalDAV_ClientMock
      */
     protected $_uit = null;
     
     /**
      * lazy init of uit
      *
-     * @return Calendar_Import_CalDav_Client
+     * @return Calendar_Import_CalDAV_ClientMock
      */
     protected function _getUit()
     {
@@ -51,6 +51,7 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         $importedCalendar = $this->_getImportCalendar();
         
         $this->assertEquals('calendar', $importedCalendar->name);
+        $this->assertEquals('#711A76', $importedCalendar->color);
         $this->assertEquals('Calendar_Model_Event', $importedCalendar->model, print_r($importedCalendar->toArray(), true));
         $this->assertEquals( Tinebase_Core::getUser()->getId(), $importedCalendar->owner_id, print_r($importedCalendar->toArray(), true));
     }
@@ -88,14 +89,38 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
     }
     
     /**
-     * @todo implement
+     * test update of events
      */
     public function testUpdateEvents()
     {
-        $this->markTestIncomplete('TODO: finish test');
         $this->testImportEvents();
-        // @todo change some events
+        
+        $importedCalendar = $this->_getImportCalendar();
+        
+        $tine20Event = $this->_getEvent();
+        $tine20Event->container_id = $importedCalendar->getId();
+        Calendar_Controller_Event::getInstance()->create($tine20Event);
+        
+        $this->_getUit()->updateServerEvents();
+        
         $this->_getUit()->updateAllCalendarData();
-        // @todo add assertions
+
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => array($importedCalendar->getId()))
+        )));
+        $this->assertEquals(4, count($events));
+        $expectedEtags = array(
+            '"bcc36c611f0b60bfee64b4d42e44aa1d"', // unchanged
+            '"3333914690ad7290fa9a2dc1da490489"', // added on server
+            '"aa3621a20e9045d8679075db57e881dd"', // updated
+            null,                                 // added on client (tine20)
+        );
+        sort($expectedEtags);
+        $currentEtags = $events->etag;
+        sort($currentEtags);
+        $this->assertEquals($expectedEtags, $currentEtags, 'etag mismatch');
+        
+        $updatedEvent = $events->filter('etag', '"aa3621a20e9045d8679075db57e881dd"')->getFirstRecord();
+        $this->assertEquals('test update', $updatedEvent->summary);
     }
 }
