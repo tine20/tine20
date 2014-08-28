@@ -894,10 +894,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $result = array();
         foreach ($queryResult as $row) {
-            $result[$row['id']] = $row['etag'];
-            if ($row['id'] !== $row['uid']) {
-                $result[$row['uid']] = $row['etag'];
-            }
+            $result[$row['id']] = $row;
         }
         return $result;
     }
