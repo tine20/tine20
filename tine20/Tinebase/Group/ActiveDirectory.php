@@ -286,6 +286,49 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
     }
     
     /**
+     * updates an existing group in sync backend
+     *
+     * @param  Tinebase_Model_Group  $_group
+     *
+     * @return Tinebase_Model_Group
+     */
+    public function updateGroupInSyncBackend(Tinebase_Model_Group $_group)
+    {
+        if ($this->isDisabledBackend() || $this->isReadOnlyBackend()) {
+            return $_group;
+        }
+        
+        $metaData = $this->_getMetaData($_group->getId());
+        $dn = $metaData['dn'];
+        
+        $ldapData = array(
+                'cn'          => $_group->name,
+                'description' => $_group->description,
+                'objectclass' => $metaData['objectclass']
+        );
+        
+        foreach ($this->_plugins as $plugin) {
+            $plugin->inspectUpdateGroup($_group, $ldapData);
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
+        $this->getLdap()->update($dn, $ldapData);
+        
+        if ($metaData['cn'] != $ldapData['cn']) {
+            $newDn = "cn={$ldapData['cn']},{$this->_options['baseDn']}";
+            $this->_ldap->rename($dn, $newDn);
+        }
+        
+        $group = $this->getGroupByIdFromSyncBackend($_group);
+        
+        return $group;
+    }
+    
+    /**
      * remove one member from the group in sync backend
      *
      * @param  mixed  $_groupId
