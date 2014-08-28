@@ -4,7 +4,7 @@ use Sabre\DAV;
 
 /**
  * Tine 2.0 - http://www.tine20.org
- * 
+ *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -57,7 +57,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_createdFolders = array();
-    
+
     /**
      * are there messages to delete?
      * 
@@ -67,57 +67,63 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * active sieve script name to be restored
-     * 
+     *
      * @var string
      */
     protected $_oldActiveSieveScriptName = NULL;
 
     /**
      * was sieve_vacation_active ?
-     * 
+     *
      * @var boolean
      */
     protected $_oldSieveVacationActiveState = FALSE;
     
     /**
      * old sieve data
-     * 
+     *
      * @var Felamimail_Sieve_Backend_Sql
      */
     protected $_oldSieveData = NULL;
 
     /**
      * sieve script name to delete
-     * 
+     *
      * @var string
      */
     protected $_testSieveScriptName = NULL;
 
     /**
      * sieve vacation template file name
-     * 
+     *
      * @var string
      */
     protected $_sieveVacationTemplateFile = 'vacation_template.tpl';
-    
+
     /**
      * test email domain
-     * 
+     *
      * @var string
      */
     protected $_mailDomain = 'tine20.org';
-    
+
     /**
      * @var Felamimail_Model_Folder
      */
     protected $_folder = NULL;
-    
+
     /**
      * paths in the vfs to delete
-     * 
+     *
      * @var array
      */
     protected $_pathsToDelete = array();
+
+    /**
+     *
+     * @var Tinebase_Frontend_Json
+     */
+    protected $_frontend = NULL;
     
     /**
      * Runs the test methods of this class.
@@ -160,6 +166,8 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         
         $config = TestServer::getInstance()->getConfig();
         $this->_mailDomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+
+        $this->_frontend = new Tinebase_Frontend_Json();
     }
 
     /**
@@ -170,7 +178,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Tearing down ...');
         
         if (count($this->_createdFolders) > 0) {
@@ -322,7 +330,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->_createdFolders[] = $this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub';
         $this->_createdFolders[] = $this->_testFolderName . $this->_account->delimiter . 'test';
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Update cache and check if folder is found');
         
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
@@ -331,13 +339,13 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->_testFolderName . $this->_account->delimiter . 'test', $testfolder['globalname']);
         $this->assertEquals(TRUE, (bool)$testfolder['has_children'], 'should have children');
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Delete subfolder directly on imap server');
         
         $this->_imap->removeFolder($this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub');
         array_shift($this->_createdFolders);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Check if has_children got updated and folder is removed from cache');
         
         $this->_json->updateFolderCache($this->_account->getId(), '');
@@ -349,7 +357,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testUpdateFolderCacheOfNonexistantFolder
-     * 
+     *
      * @see 0009800: unselectable folder with subfolders disappears
      */
     public function testUpdateFolderCacheOfNonexistantFolder()
@@ -358,7 +366,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         
         try {
             $folderName = $this->_testFolderName . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'testsub';
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Trying to fetch deleted folder ' . $folderName);
             
             $testfoldersub = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $folderName);
@@ -396,7 +404,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * get system account
-     * 
+     *
      * @return array
      */
     protected function _getSystemAccount()
@@ -417,7 +425,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test change / delete of account
      */
-    public function testChangeDeleteAccount() 
+    public function testChangeDeleteAccount()
     {
         $system = $this->_getSystemAccount();
         unset($system['id']);
@@ -482,7 +490,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test folder status of deleted folder
-     * 
+     *
      * @see 0007134: getFolderStatus should ignore non-existent folders
      */
     public function testGetFolderStatusOfDeletedFolder()
@@ -541,7 +549,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * check email note
-     * 
+     *
      * @param Addressbook_Model_Contact $contact
      * @param string $subject
      */
@@ -585,7 +593,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to get a message from imap server (with complete body, attachments, etc)
-     * 
+     *
      * @see 0006300: add unique message-id header to new messages (for message-id check)
      */
     public function testGetMessage()
@@ -727,7 +735,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testMarkFolderRead
-     * 
+     *
      * @see 0009812: mark folder as read does not work with pgsql
      */
     public function testMarkFolderRead()
@@ -787,7 +795,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test reply mail and check some headers
-     * 
+     *
      * @see 0006106: Add References header / https://forge.tine20.org/mantisbt/view.php?id=6106
      */
     public function testReplyMessage()
@@ -827,7 +835,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * get reply message data
-     * 
+     *
      * @param array $_original
      * @return array
      */
@@ -857,7 +865,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * test reply mail with long references header
-     * 
+     *
      * @see 0006644: "At least one mail header line is too long"
      */
     public function testReplyMessageWithLongHeader()
@@ -937,7 +945,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * forward message test
-     * 
+     *
      * @see 0007624: losing umlauts in attached filenames
      */
     public function testForwardMessageWithAttachment()
@@ -983,7 +991,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testSendMessageWithAttachmentWithoutExtension
-     * 
+     *
      * @see 0008328: email attachment without file extension is not sent properly
      */
     public function testSendMessageWithAttachmentWithoutExtension()
@@ -1008,7 +1016,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * save message in folder (draft) test
-     * 
+     *
      * @see 0007178: BCC does not save the draft message
      */
     public function testSaveMessageInFolder()
@@ -1031,7 +1039,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testSendReadingConfirmation
-     * 
+     *
      * @see 0007736: ask user before sending reading confirmation
      * @see 0008402: Wrong recipient with read confirmation
      */
@@ -1055,7 +1063,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * save message in non-existant folder (templates) test
-     * 
+     *
      * @see 0008476: Drafts are not working
      */
     public function testSaveMessageInNonExistantTemplatesFolder()
@@ -1077,7 +1085,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testSaveMessageNoteWithInvalidChar
-     * 
+     *
      * @see 0008644: error when sending mail with note (wrong charset)
      */
     public function testSaveMessageNoteWithInvalidChar()
@@ -1097,7 +1105,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testSaveMessageNoteWithInvalidChar
-     * 
+     *
      * @see 0008644: error when sending mail with note (wrong charset)
      */
     public function testSaveMessageWithInvalidChar()
@@ -1111,7 +1119,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testMessageWithInvalidICS
-     * 
+     *
      * @see 0008786: broken ics causes js error when showing details
      */
     public function testMessageWithInvalidICS()
@@ -1131,7 +1139,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * set and get vacation sieve script
-     * 
+     *
      * @see 0007768: Sieve - Vacation notify frequency not being set (Cyrus)
      */
     public function testGetSetVacation()
@@ -1162,7 +1170,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * get vacation data
-     * 
+     *
      * @return array
      */
     protected function _getVacationData()
@@ -1217,7 +1225,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testRemoveRules
-     * 
+     *
      * @see 0006490: can not delete single filter rule
      */
     public function testRemoveRules()
@@ -1231,14 +1239,14 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * get sieve rule data
-     * 
+     *
      * @return array
      */
     protected function _getRuleData()
     {
         return array(array(
             'id'            => 1,
-            'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
+            'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO,
             'action_argument' => $this->_testFolderName,
             'conjunction'  => 'allof',
             'conditions'    => array(array(
@@ -1250,7 +1258,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'enabled'       => 1,
         ), array(
             'id'            => 2,
-            'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
+            'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO,
             'action_argument' => $this->_testFolderName,
             'conjunction'  => 'allof',
             'conditions'    => array(array(
@@ -1262,7 +1270,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'enabled'       => 0,
         ), array(
             'id'            => 3,
-            'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
+            'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO,
             'action_argument' => $this->_testFolderName,
             'conjunction'  => 'allof',
             'conditions'    => array(array(
@@ -1283,7 +1291,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     {
         $ruleData = array(array(
             'id'            => 1,
-            'action_type'   => Felamimail_Sieve_Rule_Action::REDIRECT, 
+            'action_type'   => Felamimail_Sieve_Rule_Action::REDIRECT,
             'action_argument' => $this->_account->email,
             'conjunction'     => 'allof',
             'conditions'    => array(array(
@@ -1309,7 +1317,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testGetVacationTemplates
-     * 
+     *
      * @return array
      */
     public function testGetVacationTemplates()
@@ -1365,7 +1373,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * get vacation message with template
-     * 
+     *
      * @return array
      */
     protected function _getVacationMessageWithTemplate()
@@ -1388,7 +1396,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testGetVacationWithSignature
-     * 
+     *
      * @see 0006866: check signature linebreaks in vacation message from template
      */
     public function testGetVacationWithSignature()
@@ -1422,7 +1430,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testSieveRulesOrder
-     * 
+     *
      * @see 0007240: order of sieve rules changes when vacation message is saved
      */
     public function testSieveRulesOrder()
@@ -1555,7 +1563,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * returns message array from result
-     * 
+     *
      * @param array $_result
      * @param string $_subject
      * @return array
@@ -1574,7 +1582,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * get messages from folder
-     * 
+     *
      * @param string $_folderName
      * @return array
      */
@@ -1597,7 +1605,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * search for message defined by subject in folder
-     * 
+     *
      * @param string $_subject
      * @param string $_folderName
      * @return string message data
@@ -1620,7 +1628,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * sieve test helper
-     * 
+     *
      * @param array $_sieveData
      * @return array
      */
@@ -1638,7 +1646,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             if (preg_match('/dbmail/i', $_sieveBackend->getImplementation())) {
                 $translate = Tinebase_Translation::getTranslation('Felamimail');
                 $this->assertEquals(sprintf(
-                    $translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName), 
+                    $translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName),
                     $resultSet['subject']
                 );
             } else {
@@ -1657,5 +1665,19 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         }
         
         return $resultSet;
+    }
+
+    /**
+     * search preferences by application felamimail
+     *
+     */
+    public function testSearchFelamimailPreferences()
+    {
+        // search prefs
+        $result = $this->_frontend->searchPreferencesForApplication('Felamimail', '');
+
+        // check results
+        $this->assertTrue(isset($result['results']));
+        $this->assertGreaterThan(0, $result['totalcount']);
     }
 }

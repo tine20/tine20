@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     Tinebase
  * @subpackage  Json
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -109,8 +109,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         // delete note
         Tinebase_Notes::getInstance()->deleteNotesOfRecord(
-            $this->_objects['record']['model'], 
-            $this->_objects['record']['backend'], 
+            $this->_objects['record']['model'],
+            $this->_objects['record']['backend'],
             $contact->getId()
         );
     }
@@ -253,20 +253,6 @@ class Tinebase_Frontend_JsonTest extends TestCase
             $this->assertTrue(isset($pref['label']) && !empty($pref['label']));
             $this->assertTrue(isset($pref['description']) && !empty($pref['description']));
         }
-    }
-
-    /**
-     * search preferences by application felamimail
-     *
-     */
-    public function testSearchFelamimailPreferences()
-    {
-        // search prefs
-        $result = $this->_instance->searchPreferencesForApplication('Felamimail', '');
-        
-        // check results
-        $this->assertTrue(isset($result['results']));
-        $this->assertGreaterThan(0, $result['totalcount']);
     }
 
     /**
@@ -478,9 +464,9 @@ class Tinebase_Frontend_JsonTest extends TestCase
     
     /**
      * test get all registry data
-     * 
+     *
      * @return void
-     * 
+     *
      * @see 0007934: change pw button active even if it is not allowed
      * @see 0008310: apps should be sorted the other way round in menu
      * @see 0009130: Can't open login page on Ubuntu "due to a temporary overloading"
@@ -492,7 +478,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         $this->assertEquals($currentUser->toArray(), $registryData['Tinebase']['currentAccount']);
         $this->assertEquals(
-            Addressbook_Controller_Contact::getInstance()->getContactByUserId($currentUser->getId())->toArray(), 
+            Addressbook_Controller_Contact::getInstance()->getContactByUserId($currentUser->getId())->toArray(),
             $registryData['Tinebase']['userContact']
         );
         $this->assertEquals(TRUE, $registryData['Tinebase']['config']['changepw']['value'], 'changepw should be TRUE');
@@ -671,12 +657,12 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         $result = array(
             array(
-                'field' => 'account', 
-                'operator' => 'equals', 
+                'field' => 'account',
+                'operator' => 'equals',
                 'value' => array(
                     'accountId'     => ($_adminPrefs) ? 0 : $_userId,
-                    'accountType'   => ($_adminPrefs) 
-                        ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE 
+                    'accountType'   => ($_adminPrefs)
+                        ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE
                         : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
                 )
             )
@@ -684,8 +670,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         if ($_savedPrefs) {
             $result[] = array(
-                'field' => 'name', 
-                'operator' => 'contains', 
+                'field' => 'name',
+                'operator' => 'contains',
                 'value' => 'defaultapp'
             );
         }
