@@ -58,14 +58,14 @@ class HumanResources_TestCase extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
         // remove employees and costcenters, if there are some already
         $filter = new HumanResources_Model_EmployeeFilter(array());
         HumanResources_Controller_Employee::getInstance()->deleteByFilter($filter);
         
         $filter = new Sales_Model_CostCenterFilter(array());
         Sales_Controller_CostCenter::getInstance()->deleteByFilter($filter);
+        
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
 
     /**
