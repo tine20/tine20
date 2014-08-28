@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
- * 
+ *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -32,6 +32,7 @@ class Sales_AllTests
         $suite->addTestSuite('Sales_Backend_CostCenterTest');
         $suite->addTestSuite('Sales_ControllerTest');
         $suite->addTestSuite('Sales_JsonTest');
+        $suite->addTestSuite('Sales_CustomFieldTest');
         return $suite;
     }
 }

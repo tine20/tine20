@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
- * 
+ *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -96,7 +96,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     
     /**
      * test add customfield to the same record by multiple update
-     * 
+     *
      * @see #7330: https://forge.tine20.org/mantisbt/view.php?id=7330
      * @see 0007350: multipleUpdate - record not found
      */
@@ -198,7 +198,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     
     /**
      * testAddressbookCustomFieldAcl
-     * 
+     *
      * @see 0007630: Customfield read access to all users
      */
     public function testAddressbookCustomFieldAcl()
@@ -240,11 +240,11 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         $this->assertEquals(array($anotherCustomField->name => 'test value 2'), $contact->customfields, 'cf should be hidden: ' . print_r($contact->customfields, TRUE));
     }
-    
+
     /**
      * get custom field record
      *
-     * @param array $config 
+     * @param array $config
      * @return Tinebase_Model_CustomField_Config
      */
     public static function getCustomField($config = array())
@@ -262,7 +262,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
                     'group'  => 'unittest',
                     'order'  => 100,
                 )
-            )  
+            )
         ), $config));
     }
     
@@ -283,7 +283,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         $json = new Addressbook_Frontend_Json();
         $result = $json->searchContacts(array(
             array("condition" => "OR",
-                "filters" => array(array("condition" => "AND", 
+                "filters" => array(array("condition" => "AND",
                     "filters" => array(
                         array("field" => "customfield", "operator" => "within", "value" => array("cfId" => $cf->getId(), "value" => "weekThis")),
                         )
@@ -325,7 +325,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         $json = new Addressbook_Frontend_Json();
         $result = $json->searchContacts(array(
             array("condition" => "OR",
-                "filters" => array(array("condition" => "AND", 
+                "filters" => array(array("condition" => "AND",
                     "filters" => array(
                         array("field" => "customfield", "operator" => "equals", "value" => array("cfId" => $cf->getId(), "value" => true)),
                         array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Blütenrein')
@@ -340,7 +340,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         
         $result = $json->searchContacts(array(
             array("condition" => "OR",
-                "filters" => array(array("condition" => "AND", 
+                "filters" => array(array("condition" => "AND",
                     "filters" => array(
                         array("field" => "customfield", "operator" => "equals", "value" => array("cfId" => $cf->getId(), "value" => false)),
                         array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Blütenrein')
@@ -351,103 +351,5 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, $result['totalcount'], 'One Record should have been found where cf-bool is not set (Rainer Blütenrein)');
         $this->assertEquals('Rainer', $result['results'][0]['n_given'], 'The Record should be Rainer Blütenrein');
-    }
-    
-    /**
-     * test searching records by record as a customfield type
-     * https://forge.tine20.org/mantisbt/view.php?id=6730
-     */
-    public function testSearchByRecord()
-    {
-        $cf = self::getCustomField(array(
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            'model' => 'Addressbook_Model_Contact',
-            'definition' => array('type' => 'record', "recordConfig" => array("value" => array("records" => "Tine.Sales.Model.Contract")))
-        ));
-        $this->_instance->addCustomField($cf);
-        
-        $contract = Sales_Controller_Contract::getInstance()->create(
-            new Sales_Model_Contract(
-                array(
-                    'number' => Tinebase_Record_Abstract::generateUID(10),
-                    'title' => Tinebase_Record_Abstract::generateUID(10),
-                    'container_id' => Tinebase_Container::getInstance()->getDefaultContainer('Sales_Model_Contract')->getId()
-                )
-            )
-        );
-        
-        // contact1 with customfield record = contract
-        $contact1 = new Addressbook_Model_Contact(array('n_given' => 'Rita', 'n_family' => 'Blütenrein'));
-        $contact1->customfields = array($cf->name => $contract->getId());
-        $contact1 = Addressbook_Controller_Contact::getInstance()->create($contact1, false);
-        
-        // contact2 with customfield record is not set -> should act like without this record
-        $contact2 = new Addressbook_Model_Contact(array('n_given' => 'Rainer', 'n_family' => 'Blütenrein'));
-        $contact2 = Addressbook_Controller_Contact::getInstance()->create($contact2, false);
-        
-        $json = new Addressbook_Frontend_Json();
-        
-        $result = $json->searchContacts(array(
-            array("condition" => "OR",
-                "filters" => array(array("condition" => "AND", 
-                    "filters" => array(
-                        array("field" => "customfield", "operator" => "equals", "value" => array("cfId" => $cf->getId(), "value" => $contract->getId())),
-                    )
-                ))
-            )
-        ), array());
-        
-        $this->assertEquals(1, $result['totalcount'], 'One Record should have been found where cf-record = contract (Rita Blütenrein)');
-        $this->assertEquals('Rita', $result['results'][0]['n_given'], 'The Record should be Rita Blütenrein');
-        
-        $result = $json->searchContacts(array(
-            array("condition" => "OR",
-                "filters" => array(array("condition" => "AND", 
-                    "filters" => array(
-                        array("field" => "customfield", "operator" => "not", "value" => array("cfId" => $cf->getId(), "value" => $contract->getId())),
-                        array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Blütenrein')
-                    )
-                ))
-            )
-        ), array());
-        
-        $this->assertEquals(1, $result['totalcount'], 'One Record should have been found where cf-record is not set (Rainer Blütenrein)');
-        $this->assertEquals('Rainer', $result['results'][0]['n_given'], 'The Record should be Rainer Blütenrein');
-        
-        // search using the same cf filter in an or - filter
-        
-        $contract2 = Sales_Controller_Contract::getInstance()->create(
-            new Sales_Model_Contract(
-                array(
-                    'number' => Tinebase_Record_Abstract::generateUID(10),
-                    'title' => Tinebase_Record_Abstract::generateUID(10),
-                    'container_id' => Tinebase_Container::getInstance()->getDefaultContainer('Sales_Model_Contract')->getId()
-                )
-            )
-        );
-        $contact2->customfields = array($cf->name => $contract2->getId());
-        $contact2 = Addressbook_Controller_Contact::getInstance()->update($contact2, false);
-        
-        $result = $json->searchContacts(array(
-            array("condition" => "OR",
-                "filters" => array(
-                    array("condition" => "AND", 
-                        "filters" => array(
-                            array("field" => "customfield", "operator" => "equals", "value" => array("cfId" => $cf->getId(), "value" => $contract->getId())),
-                        )
-                    ),
-                    array("condition" => "AND", 
-                        "filters" => array(
-                            array("field" => "customfield", "operator" => "equals", "value" => array("cfId" => $cf->getId(), "value" => $contract2->getId())),
-                        )
-                    )
-                )
-            )
-        ), array());
-        
-        $this->assertEquals(2, $result['totalcount'], 'Rainer and Rita should have been found.');
-        
-        $this->assertEquals('Blütenrein', $result['results'][0]['n_family'], 'Rainer and Rita should have been found.');
-        $this->assertEquals('Blütenrein', $result['results'][1]['n_family'], 'Rainer and Rita should have been found.');
     }
 }
