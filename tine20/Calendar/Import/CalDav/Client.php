@@ -312,32 +312,36 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' '
                         . ' Deleting ' . count($updateResult['todelete']) . ' ' . $this->modelName . ' in calendar '  . $calUri);
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
-                        . ' ' . print_r($updateResult['todelete'], true));
-                
-                $recordBackend->delete($updateResult['todelete']);
+                        . ' IDs to delete: ' . print_r($updateResult['todelete'], true));
+                $deleteEventCount += Calendar_Controller_Event::getInstance()->delete($updateResult['todelete']);
             }
             
             $newEventCount += $updateResult['toadd'];
             $updateEventCount += $updateResult['toupdate'];
-            $deleteEventCount += count($updateResult['todelete']);
         }
         
-        if (($count = count($newICSs)) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
-                    . $count . ' calendar(s) changed for: ' . $this->userName
-                    . ' (' . $newEventCount . '/' . $updateEventCount . '/' . $deleteEventCount . ' records add/update/delete): '
-                    . print_r(array_keys($newICSs), true));
+        $count = count($newICSs);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' '
+                . $count . ' calendar(s) changed for: ' . $this->userName
+                . ' (' . $newEventCount . '/' . $updateEventCount . '/' . $deleteEventCount . ' records add/update/delete): '
+                . print_r(array_keys($newICSs), true));
+        
+        if ($count > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
                     . 'Events changed: ' . print_r($newICSs, true));
             
             $this->calendarICSs = $newICSs;
             $this->importAllCalendarData($onlyCurrentUserOrganizer, /* $update = */ true);
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' no changes found for: ' . $this->userName);
         }
     }
     
+    /**
+     * update calendar
+     * 
+     * @param string $calUri
+     * @param array $calICSs
+     * @param Tinebase_Backend_Sql $recordBackend
+     */
     protected function updateCalendar($calUri, $calICSs, $recordBackend)
     {
         $updateResult = array(
@@ -362,28 +366,29 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 . ' tine20 etags: ' . print_r($containerEtags, true));
         
         // handle add/updates
+        $existingIds = array();
         foreach ($serverEtags as $ics => $data) {
             if (isset($containerEtags[$data['id']])) {
-                $tine20Etag = $containerEtags[$data['id']];
-        
+                $tine20Etag = $containerEtags[$data['id']]['etag'];
+                
                 // remove from $containerEtags list to be able to tell deletes
                 unset($containerEtags[$data['id']]);
+                $existingIds[] = $data['id'];
         
                 if ($tine20Etag == $data['etag']) {
                     continue; // same
                 } else if (empty($tine20Etag)) {
                     // event has been added in tine -> don't overwrite/delete
                     continue;
-                } else {
-                    $eventExists = true; // different
                 }
+                // different -> update record
             } else {
                 try {
                     // might be a delegated event from another container/organizer
                     $recordBackend->checkETag($data['id'], $data['etag']);
                     continue; // ignore update here
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    $eventExists = false; // new record;
+                    // new record
                 }
             }
         
@@ -393,8 +398,9 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
                 $this->existingRecordIds[$calUri] = array();
             }
+            
             $updateResult['ics'][] = $ics;
-            if ($eventExists) {
+            if (in_array($data['id'], $existingIds)) {
                 $this->existingRecordIds[$calUri][] = $data['id'];
                 $updateResult['toupdate']++;
             } else {
@@ -402,9 +408,14 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             }
         }
         
-        // handle deletes
-        foreach ($containerEtags as $id => $etag) {
-            if (! empty($etag)) {
+        // handle deletes/exdates
+        foreach ($containerEtags as $id => $data) {
+            if (in_array($data['uid'], $existingIds)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                        . ' Record ' . $id . ' is exdate of ' . $data['uid']);
+                continue;
+            }
+            if (! empty($data['etag'])) {
                 // record has been deleted on server
                 $updateResult['todelete'][] = $id;
             } else {
@@ -552,7 +563,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                     } catch (Exception $e) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not create event from data: ' . $data);
-                        Tinebase_Exception::log($e);
+                        Tinebase_Exception::log($e, /* $suppressTrace = */ false);
                     }
                 }
                 
