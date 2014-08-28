@@ -98,13 +98,16 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
             throw new Tinebase_Exception_InvalidArgument('Operator "' . $this->_operator . '" not defined in sql map of ' . get_class($this));
         }
         $action = $this->_opSqlMap[$this->_operator];
-        $value = $this->_replaceWildcards($this->_value);
-
+        
+        // don't remove wildcards for certain operators
+        // TODO add an option for this?
+        $value = (! in_array($this->_operator, array('in', 'notin'))) ? $this->_replaceWildcards($this->_value) : $this->_value;
+        
         // check if group by is operator and return if this is the case
         if ($this->_operator == 'group') {
             $_select->group($this->_field);
         }
-
+        
         if (in_array($this->_operator, array('in', 'notin')) && ! is_array($value)) {
             $value = explode(' ', $value);
         }
@@ -129,8 +132,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         
         if (! in_array($this->_operator, array('in', 'notin'))) {
             $where = Tinebase_Core::getDb()->quoteInto(Tinebase_Backend_Sql_Command::factory($db)->prepareForILike($field) . ' ' . $action['sqlop'], $value);
-        }
-        else {
+        } else {
             $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
         }
 
