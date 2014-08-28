@@ -61,7 +61,7 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
         
         foreach (Tinebase_Core::getUser()->getApplications() as $application) {
             $applicationClass = $application->name . '_Frontend_WebDAV';
-            if (class_exists($applicationClass)) {
+            if (@class_exists($applicationClass)) {
                 $webDAVCollection->addChild(new $applicationClass($application->name));
             }
         }
