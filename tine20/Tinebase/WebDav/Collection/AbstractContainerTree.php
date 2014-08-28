@@ -304,15 +304,19 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                         }
                     }
                     
-                    $containers = Tinebase_Container::getInstance()->getPersonalContainer(
-                        Tinebase_Core::getUser(),
-                        $this->_getAppliationName(),
-                        $accountId,
-                        array(
-                            Tinebase_Model_Grants::GRANT_READ, 
-                            Tinebase_Model_Grants::GRANT_SYNC
-                        )
-                    );
+                    try {
+                        $containers = Tinebase_Container::getInstance()->getPersonalContainer(
+                            Tinebase_Core::getUser(),
+                            $this->_getAppliationName(),
+                            $accountId,
+                            array(
+                                Tinebase_Model_Grants::GRANT_READ, 
+                                Tinebase_Model_Grants::GRANT_SYNC
+                            )
+                        );
+                    } catch (Tinebase_Exception_AccessDenied $tead) {
+                        throw new Sabre\DAV\Exception\NotFound("Could not find path (" . $tead->getMessage() . ")");
+                    }
                     
                 } else {
                     throw new Sabre\DAV\Exception\NotFound("Path $this->_path not found");
