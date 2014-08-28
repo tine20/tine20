@@ -1808,6 +1808,9 @@ abstract class Tinebase_Controller_Record_Abstract
             
             foreach ($_record->{$_property} as $record) {
                 $record->{$_fieldConfig['refIdField']} = $_createdRecord->getId();
+                if (! $record->getId() || strlen($record->getId()) != 40) {
+                    $record->{$record->getIdProperty()} = NULL;
+                }
                 $new->add($controller->create($record));
             }
     
@@ -1829,7 +1832,11 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
         
-        // don't handle dependet records on property if it is set to null or doesn't exist.
+        if (! isset ($_fieldConfig['refIdField'])) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
+        }
+        
+        // don't handle dependent records on property if it is set to null or doesn't exist.
         if (($_record->{$_property} === NULL) || (! $_record->has($_property))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Skip updating dependent records (got NULL) on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName . ' with id = "' . $_record->getId() . '"');
@@ -1866,7 +1873,9 @@ abstract class Tinebase_Controller_Record_Abstract
             $oldRecords = $controller->search($oldFilter);
             
             foreach ($_record->{$_property} as $record) {
-                $record->{$_fieldConfig['refIdField']} = $_oldRecord->getId();
+                
+                $record->{$_fieldConfig['refIdField']} = $_record->getId();
+                
                 // update record if ID exists and has a length of 40 (it has a length of 10 if it is a timestamp)
                 if ($record->getId() && strlen($record->getId()) == 40) {
                     
@@ -1881,13 +1890,37 @@ abstract class Tinebase_Controller_Record_Abstract
                     } else {
                         $existing->addRecord($record);
                     }
-                    // create if ID does not exist or has not a length of 40
+                    // create if is not existing already
                 } else {
-                    $record->id = NULL;
-                    $crc = $controller->create($record);
-                    $existing->addRecord($crc);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating dependent record with id = "' . $crc->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+                    // try to find if it already exists (with corrupted id)
+                    if ($record->getId() == NULL) {
+                        $crc = $controller->create($record);
+                        $existing->addRecord($crc);
+                        
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating dependent record with id = "' . $crc->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+                        }
+                    } else {
+                        
+                        try {
+                            
+                            $prevRecord = $controller->get($record->getId());
+    
+                            if (! empty($prevRecord->diff($record)->diff)) {
+                                $existing->addRecord($controller->update($record));
+                            } else {
+                                $existing->addRecord($record);
+                            }
+                            
+                        } catch (Tinebase_Exception_NotFound $e) {
+                            $record->id = NULL;
+                            $crc = $controller->create($record);
+                            $existing->addRecord($crc);
+                            
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating dependent record with id = "' . $crc->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+                            }
+                        }
                     }
                 }
             }
@@ -1910,5 +1943,10 @@ abstract class Tinebase_Controller_Record_Abstract
             $controller->delete($deleteIds);
         }
         $_record->{$_property} = $existing->toArray();
+    }
+    
+    protected function _createDependentRecord($record, $_record, $_fieldConfig, $controller, $recordSet)
+    {
+        
     }
 }
