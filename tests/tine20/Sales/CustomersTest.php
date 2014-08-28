@@ -136,6 +136,8 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
             'adr_pobox'   => '7777777',
         
             'billing' => array(array(
+                // setting id here (id is needed in fe store)
+                'id' => '1406708670499',
                 'prefix1' => 'no prefix1',
                 'prefix2' => 'no prefix2',
                 'street' => 'Mao st. 1',
@@ -144,7 +146,6 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
                 'region' => 'Sichuan',
                 'countryname' => 'China',
                 'pobox'   => '999999999',
-                'custom1' => '123456789',
                 'type' => 'billing',
                 'relations' => array(
                     array(
@@ -160,6 +161,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
                 )
             )),
             'delivery' => array(array(
+                'id' => '1406708670491',
                 'prefix1' => 'no prefix 1',
                 'prefix2' => 'no prefix 2',
                 'street' => 'Mao st. 2',
@@ -324,5 +326,29 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         
         $customer['billing'] = array();
         $this->_json->saveCustomer($customer);
+    }
+    
+        
+    /**
+     * tests setting a debitor number of a billing address
+     */
+    public function testChangeDebitorNumber()
+    {
+        $customer = $this->_createCustomer();
+        $customer['delivery'] = array();
+        $customer = $this->_json->saveCustomer($customer);
+        
+        $this->assertEquals(1406708670499, $customer['billing'][0]['id']);
+        $this->assertEquals(1, count($customer['billing']));
+        $this->assertEquals(0, count($customer['delivery']));
+        
+        $customer = $this->_json->getCustomer($customer['id']);
+        $customer['billing'][0]['custom1'] = '4219832435';
+        $customer['delivery'] = NULL;
+        $customer = $this->_json->saveCustomer($customer);
+    
+        $this->assertEquals(1406708670499, $customer['billing'][0]['id']);
+        $this->assertEquals('4219832435', $customer['billing'][0]['custom1']);
+        $this->assertEquals(0, count($customer['delivery']));
     }
 }
