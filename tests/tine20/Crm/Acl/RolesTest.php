@@ -6,7 +6,8 @@
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
+ * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
  */
 
 /**
@@ -17,7 +18,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Acl_Roles
  */
-class Tinebase_Acl_RolesTest extends TestCase
+class Crm_Acl_RolesTest extends TestCase
 {
     /**
      * @var array test objects
@@ -34,7 +35,7 @@ class Tinebase_Acl_RolesTest extends TestCase
     {
         parent::setUp();
         
-        $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
+        $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
         $this->objects['user'] = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',

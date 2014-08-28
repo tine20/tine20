@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
- * 
+ *
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -32,6 +32,7 @@ class Crm_AllTests
         $suite->addTestSuite('Crm_ControllerTest');
         $suite->addTestSuite('Crm_JsonTest');
         $suite->addTestSuite('Crm_NotificationsTests');
+        $suite->addTestSuite('Crm_Acl_RolesTest');
         return $suite;
     }
 }
