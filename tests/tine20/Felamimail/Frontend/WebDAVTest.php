@@ -57,6 +57,8 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
     
     public function testgetNodeForPath_webdav_felamimail()
     {
+        $this->markTestSkipped('0010194: fix felamimail webdav tests');
+        
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Felamimail');
         
         $this->assertInstanceOf('Felamimail_Frontend_WebDAV', $node, 'wrong node class');
@@ -82,6 +84,8 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
     
     public function testgetNodeForPath_webdav_felamimail_shared()
     {
+        $this->markTestSkipped('0010194: fix felamimail webdav tests');
+        
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Felamimail/shared');
         
         $this->assertInstanceOf('Felamimail_Frontend_WebDAV', $node, 'wrong node class');
@@ -102,6 +106,8 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
      */
     public function testgetNodeForPath_webdav_felamimail_shared_unittestdirectory()
     {
+        $this->markTestSkipped('0010194: fix felamimail webdav tests');
+        
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Felamimail/shared');
         
         $node->createDirectory('unittestdirectory');
@@ -124,6 +130,8 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
      */
     public function testgetNodeForPath_webdav_felamimail_shared_unittestdirectory_file()
     {
+        $this->markTestSkipped('0010194: fix felamimail webdav tests');
+        
         $parent = $this->testgetNodeForPath_webdav_felamimail_shared_unittestdirectory();
         
         $etag = $parent->createFile('tine_logo.png', fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r'));
@@ -143,6 +151,8 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
     
     public function testDeleteFile()
     {
+        $this->markTestSkipped('0010194: fix felamimail webdav tests');
+        
         $node = $this->testgetNodeForPath_webdav_felamimail_shared_unittestdirectory_file();
     
         $this->_getWebDAVTree()->delete('/webdav/Felamimail/shared/unittestdirectory/tine_logo.png');

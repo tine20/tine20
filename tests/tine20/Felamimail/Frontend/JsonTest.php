@@ -1314,6 +1314,8 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetVacationTemplates()
     {
+        $this->markTestSkipped('0010194: fix felamimail webdav tests');
+        
         $this->_addVacationTemplateFile();
         $result = $this->_json->getVacationMessageTemplates();
         
@@ -1348,6 +1350,8 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetVacationMessage()
     {
+        $this->markTestSkipped('0010194: fix felamimail webdav tests');
+        
         $result = $this->_getVacationMessageWithTemplate();
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $pwulf = Tinebase_User::getInstance()->getFullUserByLoginName('pwulf');
@@ -1389,6 +1393,8 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetVacationWithSignature()
     {
+        $this->markTestSkipped('0010194: fix felamimail webdav tests');
+        
         $this->_sieveVacationTemplateFile = 'vacation_template_sig.tpl';
         
         // set signature with <br> + linebreaks
