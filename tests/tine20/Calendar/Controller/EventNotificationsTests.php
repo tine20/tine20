@@ -86,9 +86,25 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'invit');
         
         self::flushMailer();
-        $persistentEvent = $this->_eventController->delete($persistentEvent);
+       
+        $persistentEvent = $this->_eventController->delete($persistentEvent); 
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
+    }
+
+    /**
+     * Test event creation with muted invitation
+     */
+    public function testMuteToogle()
+    {
+        $event = $this->_getEvent(false, /* $mute = */ 1);
+        $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
+
+        self::flushMailer();
+        $persistentEvent = $this->_eventController->create($event);
+        $this->_assertMail('jsmith, pwulf, sclever, jmcblack, rwright', NULL);
+
+        $this->assertEquals($event->mute, 1);
     }
 
     /**

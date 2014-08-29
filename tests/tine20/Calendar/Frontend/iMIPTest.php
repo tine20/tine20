@@ -6,6 +6,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
+ * 
+ * @todo extend Calendar_TestCase
  */
 
 /**
@@ -195,11 +197,14 @@ class Calendar_Frontend_iMIPTest extends TestCase
     }
     
     /**
-    * returns a simple event
-    *
-    * @return Calendar_Model_Event
-    */
-    protected function _getEvent()
+     * returns a simple event
+     *
+     * @return Calendar_Model_Event
+     * @param bool $_now
+     * @param bool $mute
+     * @todo replace with TestCase::_getEvent
+     */
+    protected function _getEvent($now = FALSE, $mute = NULL)
     {
         return new Calendar_Model_Event(array(
             'summary'     => 'Sleep very long',
