@@ -279,17 +279,30 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     }
     
     /**
+     * update all calendars for current user
      * 
      * @param string $onlyCurrentUserOrganizer
      * @return boolean
      */
     public function updateAllCalendarData($onlyCurrentUserOrganizer = false)
     {
-        if (count($this->calendarICSs) < 1 && ! $this->findAllCalendarICSs()) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' no calendars found for: ' . $this->userName);
+        // only try once to find all user calendars
+        $this->_requestTries = 1;
+        try {
+            if (count($this->calendarICSs) < 1 && ! $this->findAllCalendarICSs()) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' no calendars found for: ' . $this->userName);
+                $this->_requestTries = null;
+                return false;
+            }
+        } catch (Tinebase_Exception $te) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not update user caldav data.');
+            Tinebase_Exception::log($te);
+            $this->_requestTries = null;
             return false;
         }
+        $this->_requestTries = null;
         
         $newICSs = array();
         $newEventCount = 0;
@@ -299,7 +312,6 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Looking for updates in ' . count($this->calendarICSs). ' calendars ...');
         
-        // @todo move to a member variable
         $recordBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
         
         foreach ($this->calendarICSs as $calUri => $calICSs) {
