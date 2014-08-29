@@ -23,52 +23,52 @@ msgstr ""
 msgid "default"
 msgstr ""
 
-#: Setup/setup.xml:3246
+#: Setup/setup.xml:3329
 msgid "note"
 msgstr ""
 
-#: Setup/setup.xml:3251
+#: Setup/setup.xml:3334
 msgid "default note type"
 msgstr ""
 
-#: Setup/setup.xml:3277
+#: Setup/setup.xml:3360
 msgid "telephone"
 msgstr ""
 
-#: Setup/setup.xml:3282
+#: Setup/setup.xml:3365
 msgid "telephone call"
 msgstr ""
 
-#: Setup/setup.xml:3308
+#: Setup/setup.xml:3391
 msgid "email"
 msgstr ""
 
-#: Setup/setup.xml:3313
+#: Setup/setup.xml:3396
 msgid "email contact"
 msgstr ""
 
-#: Setup/setup.xml:3339
+#: Setup/setup.xml:3422
 msgid "created"
 msgstr ""
 
-#: Setup/setup.xml:3344
+#: Setup/setup.xml:3427
 msgid "record created"
 msgstr ""
 
-#: Setup/setup.xml:3370
+#: Setup/setup.xml:3453
 msgid "changed"
 msgstr ""
 
-#: Setup/setup.xml:3375
+#: Setup/setup.xml:3458
 msgid "record changed"
 msgstr ""
 
-#: Container.php:688
+#: Container.php:690
 #, python-format
 msgid "%s's personal container"
 msgstr ""
 
-#: Container.php:1547
+#: Container.php:1549
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
@@ -199,6 +199,7 @@ msgid "Please Wait"
 msgstr ""
 
 #: js/AdminPanel.js:156 js/widgets/container/GrantsGrid.js:43
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:262
 msgid "Read"
 msgstr ""
 
@@ -207,6 +208,7 @@ msgid "The field is readable part of the profile"
 msgstr ""
 
 #: js/AdminPanel.js:161 js/widgets/container/GrantsGrid.js:47
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:268
 msgid "Edit"
 msgstr ""
 
@@ -349,9 +351,9 @@ msgstr ""
 
 #: js/LoginPanel.js:460 js/widgets/dialog/MultipleEditDialogPlugin.js:693
 #: js/widgets/tree/ContextMenu.js:202 js/widgets/container/GrantsDialog.js:95
-#: js/widgets/persistentfilter/PickerPanel.js:327
-#: js/widgets/persistentfilter/PickerPanel.js:365
-#: js/widgets/persistentfilter/PickerPanel.js:417
+#: js/widgets/persistentfilter/PickerPanel.js:328
+#: js/widgets/persistentfilter/PickerPanel.js:366
+#: js/widgets/persistentfilter/PickerPanel.js:421
 msgid "Please wait"
 msgstr ""
 
@@ -684,7 +686,7 @@ msgstr ""
 
 #: js/widgets/tags/TagsPanel.js:508
 #: js/widgets/relation/GenericPickerGridPanel.js:457
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:191
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:204
 #: js/ExceptionDialog.js:162
 msgid "Description"
 msgstr ""
@@ -694,7 +696,7 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
-#: js/widgets/tags/TagFilter.js:30 js/Models.js:142
+#: js/widgets/tags/TagFilter.js:30 js/Models.js:143
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] ""
@@ -755,7 +757,7 @@ msgstr ""
 #: js/widgets/account/PickerGridPanel.js:267
 #: js/widgets/dialog/AttachmentsGridPanel.js:86
 #: js/widgets/container/PropertiesDialog.js:107
-#: js/widgets/grid/LinkGridPanel.js:103 js/Models.js:429
+#: js/widgets/grid/LinkGridPanel.js:103 js/Models.js:430
 msgid "Name"
 msgstr ""
 
@@ -1068,7 +1070,7 @@ msgstr ""
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:690
 #: js/widgets/dialog/EditDialog.js:851 js/widgets/tree/ContextMenu.js:357
-#: js/widgets/persistentfilter/PickerPanel.js:325
+#: js/widgets/persistentfilter/PickerPanel.js:326
 #: js/widgets/grid/GridPanel.js:1810 js/MainMenu.js:263
 msgid "Confirm"
 msgstr ""
@@ -1193,7 +1195,7 @@ msgid "Keep both records"
 msgstr ""
 
 #: js/widgets/dialog/ExportDialog.js:48 js/widgets/container/GrantsGrid.js:51
-#: js/Models.js:337
+#: js/Models.js:338
 msgid "Export"
 msgid_plural "Export"
 msgstr[0] ""
@@ -1608,6 +1610,7 @@ msgid "The grant to edit records in this container"
 msgstr ""
 
 #: js/widgets/container/GrantsGrid.js:49
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:274
 msgid "Delete"
 msgstr ""
 
@@ -1652,7 +1655,7 @@ msgid "The grant to access records marked as private in this container"
 msgstr ""
 
 #: js/widgets/relation/FilterModel.js:32
-#: js/widgets/relation/GenericPickerGridPanel.js:133 js/Models.js:401
+#: js/widgets/relation/GenericPickerGridPanel.js:133 js/Models.js:402
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] ""
@@ -1745,65 +1748,81 @@ msgstr ""
 msgid "setting new language..."
 msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:134
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:140
 msgid "Favorite not saved"
 msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:182
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:195
 #: ModelConfiguration.php:209
 msgid "Title"
 msgstr ""
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:200
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:213
 msgid "Shared Favorite (visible by all users)"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:264
+msgid "The grant to see and use this filter"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:269
+msgid "The grant to edit this filter"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:275
+msgid "The grant to delete this filter"
+msgstr ""
+
+#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:283
+msgid "Permissions"
 msgstr ""
 
 #: js/widgets/persistentfilter/PickerPanel.js:121
 msgid "My favorites"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:297
+#: js/widgets/persistentfilter/PickerPanel.js:299
 msgid "Delete Favorite"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:302
+#: js/widgets/persistentfilter/PickerPanel.js:304
 #: js/widgets/persistentfilter/PickerPanel.js:397
 msgid "Edit Favorite"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:307
+#: js/widgets/persistentfilter/PickerPanel.js:309
 msgid "Overwrite Favorite"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:325
+#: js/widgets/persistentfilter/PickerPanel.js:326
 #, python-brace-format
 msgid "Do you really want to delete the favorite \"{0}\"?"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:327
+#: js/widgets/persistentfilter/PickerPanel.js:328
 #, python-brace-format
 msgid "Deleting Favorite \"{0}\""
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:363
+#: js/widgets/persistentfilter/PickerPanel.js:364
 msgid "Overwrite?"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:363
+#: js/widgets/persistentfilter/PickerPanel.js:364
 #, python-brace-format
 msgid "Do you want to overwrite the favorite \"{0}\"?"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:365
+#: js/widgets/persistentfilter/PickerPanel.js:366
 #, python-brace-format
 msgid "Overwriting Favorite \"{0}\""
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:386
+#: js/widgets/persistentfilter/PickerPanel.js:387
 msgid "Could not save Favorite"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:386
+#: js/widgets/persistentfilter/PickerPanel.js:387
 msgid "Your current view does not support favorites"
 msgstr ""
 
@@ -1811,12 +1830,12 @@ msgstr ""
 msgid "Create Favorite"
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:417
+#: js/widgets/persistentfilter/PickerPanel.js:421
 #, python-brace-format
 msgid "Saving Favorite \"{0}\""
 msgstr ""
 
-#: js/widgets/persistentfilter/PickerPanel.js:593
+#: js/widgets/persistentfilter/PickerPanel.js:621
 msgid "(shared)"
 msgstr ""
 
@@ -2027,7 +2046,7 @@ msgstr ""
 msgid "Search for records ..."
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:476
+#: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:477
 msgid "File"
 msgid_plural "Files"
 msgstr[0] ""
@@ -2645,37 +2664,37 @@ msgid ""
 "There are no applications enabled for you. Please contact your administrator."
 msgstr ""
 
-#: js/Models.js:273
+#: js/Models.js:274
 msgid "Alarm"
 msgid_plural "Alarms"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:311
+#: js/Models.js:312
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:374
+#: js/Models.js:375
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:422
+#: js/Models.js:423
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:448
+#: js/Models.js:449
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:448
+#: js/Models.js:449
 msgid "Configs"
 msgstr ""
 
@@ -2744,7 +2763,7 @@ msgstr ""
 msgid "Private Information"
 msgstr ""
 
-#: PersistentFilter.php:139
+#: PersistentFilter.php:152
 msgid "- The last filter I used -"
 msgstr ""
 

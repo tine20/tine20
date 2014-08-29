@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>8.5</version>
+    <version>8.6</version>
     <tables>
         <table>
             <name>applications</name>
@@ -2342,7 +2342,86 @@
                     <reference>
                         <table>applications</table>
                         <field>id</field>
-                        <!-- add onupdate/ondelete? -->
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>filter_acl</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_type</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>user</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_grant</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>record_id-account-type-account_id-account_grant</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_grant</name>
+                    </field>
+                </index>
+                <index>
+                    <name>id-account_type-account_id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>filter_acl::record_id--filter::id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>filter</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
                     </reference>
                 </index>
             </declaration>

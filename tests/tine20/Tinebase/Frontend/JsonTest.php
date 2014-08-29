@@ -11,7 +11,7 @@
  */
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Tinebase_Frontend_Json
  */
 class Tinebase_Frontend_JsonTest extends TestCase
 {
@@ -25,15 +25,6 @@ class Tinebase_Frontend_JsonTest extends TestCase
      * @var array test objects
      */
     protected $_objects = array();
-    
-    /**
-     * Runs the test methods of this class.
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Frontend_JsonTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
     
     /**
      * set up tests
@@ -513,6 +504,27 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         $userApps = $registryData['Tinebase']['userApplications'];
         $this->assertEquals('Admin', $userApps[0]['name'], 'first app should be Admin: ' . print_r($userApps, TRUE));
+    }
+
+    /**
+     * test get all registry data with persistent filters
+     * 
+     * @return void
+     * 
+     * @see 0009610: shared favorites acl
+     */
+    public function testGetAllPersistentFilters()
+    {
+        $registryData = $this->_instance->getAllRegistryData();
+        
+        $filterData = $registryData['Tinebase']['persistentFilters'];
+        $this->assertTrue($filterData['totalcount'] > 10);
+        $this->assertTrue(isset($filterData['results'][0]['grants']));
+        $grants = $filterData['results'][0]['grants'];
+        $this->assertTrue($grants[0]['readGrant']);
+        
+        // check if accounts are resolved
+        $this->assertTrue(is_array($grants[0]['account_name']), 'account should be resolved: ' . print_r($grants[0], true));
     }
     
     /**

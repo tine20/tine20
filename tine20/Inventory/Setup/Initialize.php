@@ -52,7 +52,7 @@ class Inventory_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeFavorites()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
             
         $commonValues = array(
             'account_id'        => NULL,
@@ -61,7 +61,7 @@ class Inventory_Setup_Initialize extends Setup_Initialize
         );
         
         // default persistent filter for all records
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "All Inventory Items", // _("All Inventory Items")
             'description'       => "All existing Inventory Items", // _("All existing Inventory Items")
             'filters'           => array(),

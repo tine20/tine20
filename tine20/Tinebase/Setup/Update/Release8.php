@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
@@ -92,9 +92,148 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
     }
     
     /**
-     * adds a label property to hold a humanreadable text
+     * - add filter acl
+     * - update current filter (add default grants: user for personal favorites, Admin group for shared favorites)
+     * 
+     * @see 0009610: shared favorites acl
      */
     public function update_3()
+    {
+        $this->_addFilterAclTable();
+        $this->_addGrantsToExistingFilters();
+        $this->setApplicationVersion('Tinebase', '8.4');
+    }
+    
+    /**
+     * add filter acl table
+     */
+    protected function _addFilterAclTable()
+    {
+        $xml = $declaration = new Setup_Backend_Schema_Table_Xml('<table>
+            <name>filter_acl</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_type</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>user</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_grant</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>record_id-account-type-account_id-account_grant</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_grant</name>
+                    </field>
+                </index>
+                <index>
+                    <name>id-account_type-account_id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>filter_acl::record_id--filter::id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>filter</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            </declaration>
+        </table>');
+        
+        $this->createTable('filter_acl', $declaration);
+    }
+    
+    /**
+     * add default grants to existing filters
+     */
+    protected function _addGrantsToExistingFilters()
+    {
+        $pfBackend = new Tinebase_PersistentFilter_Backend_Sql();
+        $filters = $pfBackend->getAll();
+        $pfGrantsBackend = new Tinebase_Backend_Sql_Grants(array(
+            'modelName' => 'Tinebase_Model_PersistentFilterGrant',
+            'tableName' => 'filter_acl'
+        ));
+        $pfGrantsBackend->getGrantsForRecords($filters);
+    
+        foreach ($filters as $filter) {
+            if (count($filter->grants) > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Filter ' . $filter->name . ' already has grants.');
+                continue;
+            }
+            $grant = new Tinebase_Model_PersistentFilterGrant(array(
+                'account_type' => $filter->isPersonal() ? Tinebase_Acl_Rights::ACCOUNT_TYPE_USER : Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                'account_id'   => $filter->account_id,
+                'record_id'    => $filter->getId(),
+            ));
+    
+            $grant->sanitizeAccountIdAndFillWithAllGrants();
+    
+            $filter->grants = new Tinebase_Record_RecordSet('Tinebase_Model_PersistentFilterGrant');
+            $filter->grants->addRecord($grant);
+    
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Updating filter "' . $filter->name . '" with grant: ' . print_r($grant->toArray(), true));
+    
+            Tinebase_PersistentFilter::getInstance()->setGrants($filter);
+        }
+    }
+    
+    /**
+     * adds a label property to hold a humanreadable text
+     */
+    public function update_4()
     {
         $declaration = new Setup_Backend_Schema_Field_Xml('<field>
             <name>label</name>
@@ -108,10 +247,14 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
         
         $this->setTableVersion('importexport_definition', '8');
-        $this->setApplicationVersion('Tinebase', '8.4');
+        $this->setApplicationVersion('Tinebase', '8.5');
     }
     
-    public function update_4() {
+    /**
+     * adds import table
+     */
+    public function update_5()
+    {
         $tableDefinition = '
             <table>
                 <name>import</name>
@@ -250,6 +393,6 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         $scheduler = Tinebase_Core::getScheduler();
         Tinebase_Scheduler_Task::addImportTask($scheduler);
         
-        $this->setApplicationVersion('Tinebase', '8.5');
+        $this->setApplicationVersion('Tinebase', '8.6');
     }
 }

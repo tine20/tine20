@@ -18,9 +18,9 @@ class Projects_Setup_Update_Release1 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $filters = Tinebase_PersistentFilter::getInstance()->getAll();
-        $projectFilters = $filters->filter('application_id', Tinebase_Application::getInstance()->getApplicationByName('Projects')->getId());
         $pfBackend = new Tinebase_PersistentFilter_Backend_Sql();
+        $filters = $pfBackend->getAll();
+        $projectFilters = $filters->filter('application_id', Tinebase_Application::getInstance()->getApplicationByName('Projects')->getId());
         
         foreach ($projectFilters as $pfilter) {
             foreach ($pfilter->filters as $filter) {

@@ -66,7 +66,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeFavorites()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -76,7 +76,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
         
         $closedStatus = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records->filter('is_open', 0);
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => Tasks_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All tasks of my taskslists", // _("All tasks of my taskslists")
             'filters'           => array(
@@ -85,7 +85,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
             )
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My open tasks",
             'description'       => "My open tasks", // _("My open tasks")
             'filters'           => array(
@@ -94,7 +94,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
             )
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My open tasks this week",
             'description'       => "My open tasks this week", // _("My open tasks this week")
             'filters'           => array(
@@ -104,7 +104,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
             )
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "All tasks for me",                      // _("All tasks for me")
             'description'       => "All tasks that I am responsible for",   // _("All tasks that I am responsible for")
             'filters'           => array(
@@ -112,7 +112,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
             )
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Last modified by me", // _("Last modified by me")
             'description'       => "All tasks that I have last modified", // _("All tasks that I have last modified")
             'filters'           => array(array(
@@ -122,7 +122,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
             )),
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Tasks without responsible", // _("Tasks without responsible")
             'description'       => "Tasks without responsible",
             'filters'           => array(array(

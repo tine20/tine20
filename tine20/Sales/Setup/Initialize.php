@@ -27,9 +27,9 @@ class Sales_Setup_Initialize extends Setup_Initialize
             'model'             => 'Sales_Model_ProductFilter',
         );
         
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'              => "My Products", // _('My Products')
                 'description'       => "Products created by me", // _('Products created by myself')
@@ -46,7 +46,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
         // Contracts
         $commonValues['model'] = 'Sales_Model_ContractFilter';
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'              => "My Contracts", // _('My Contracts')
                 'description'       => "Contracts created by me", // _('Contracts created by myself')

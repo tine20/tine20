@@ -25,6 +25,13 @@ Ext.ns('Tine.Calendar');
 Tine.Calendar.FilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Calendar_Model_EventFilter'}],
     
+    initComponent : function() {
+        // TODO this is set to null somewhere in the Calendar, find a better place to fix this
+        this.contentType = 'Event';
+
+        Tine.Calendar.FilterPanel.superclass.initComponent.call(this);
+    },
+    
     /**
      * returns filter toolbar of mainscreen center panel of app this picker panel belongs to
      */

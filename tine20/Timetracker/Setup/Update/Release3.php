@@ -45,7 +45,7 @@ class Timetracker_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_2()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -53,7 +53,7 @@ class Timetracker_Setup_Update_Release3 extends Setup_Update_Abstract
             'model'             => 'Timetracker_Model_TimesheetFilter',
         );
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Timesheets today",
             'description'       => "Timesheets today",
             'filters'           => array(array(
@@ -67,7 +67,7 @@ class Timetracker_Setup_Update_Release3 extends Setup_Update_Abstract
             )),
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Timesheets this week",
             'description'       => "Timesheets this week",
             'filters'           => array(array(
@@ -81,7 +81,7 @@ class Timetracker_Setup_Update_Release3 extends Setup_Update_Abstract
             )),
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Timesheets last week",
             'description'       => "Timesheets last week",
             'filters'           => array(array(
@@ -95,7 +95,7 @@ class Timetracker_Setup_Update_Release3 extends Setup_Update_Abstract
             )),
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Timesheets this month",
             'description'       => "Timesheets this month",
             'filters'           => array(array(
@@ -109,7 +109,7 @@ class Timetracker_Setup_Update_Release3 extends Setup_Update_Abstract
             )),
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Timesheets last month",
             'description'       => "Timesheets last month",
             'filters'           => array(array(

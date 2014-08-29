@@ -127,7 +127,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeFavorites()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -135,13 +135,13 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             'model'             => 'Addressbook_Model_ContactFilter',
         );
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => Addressbook_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All contacts I have read grants for", // _("All contacts I have read grants for")
             'filters'           => array(),
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My company", // _("My company")
             'description'       => "All coworkers in my company", // _("All coworkers in my company")
             'filters'           => array(array(
@@ -155,7 +155,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             )),
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My contacts", // _("My contacts")
             'description'       => "All contacts in my Addressbooks", // _("All contacts in my Addressbooks")
             'filters'           => array(array(
@@ -168,7 +168,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             )),
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Last modified by me", // _("Last modified by me")
             'description'       => "All contacts that I have last modified", // _("All contacts that I have last modified")
             'filters'           => array(array(

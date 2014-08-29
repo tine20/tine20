@@ -5,7 +5,7 @@
  * @package     Courses
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -30,6 +30,13 @@ class Courses_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const ADD_EXISTING_USER = 'add_existing_user';
+    
+    /**
+     * the right to manage shared course favorites
+     * 
+     * @staticvar string
+     */
+    const MANAGE_SHARED_COURSE_FAVORITES = 'manage_shared_course_favorites';
     
     /**
      * holds the instance of the singleton
@@ -79,6 +86,7 @@ class Courses_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $addRights = array(
             self::ADD_NEW_USER,
             self::ADD_EXISTING_USER,
+            self::MANAGE_SHARED_COURSE_FAVORITES,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -102,6 +110,10 @@ class Courses_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::ADD_EXISTING_USER => array(
                 'text'          => $translate->_('Add existing user'),
                 'description'   => $translate->_('Add existing user as member to a course')
+            ),
+            self::MANAGE_SHARED_COURSE_FAVORITES => array(
+                'text'          => $translate->_('Manage shared courses favorites'),
+                'description'   => $translate->_('Create or update shared courses favorites'),
             ),
         );
         

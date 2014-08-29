@@ -21,7 +21,7 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeFavorites()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
 
         $commonValues = array(
             'account_id'        => NULL,
@@ -29,7 +29,7 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
             'model'             => 'Timetracker_Model_TimesheetFilter',
         );
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My Timesheets today", // _("My Timesheets today")
             'description'       => "My Timesheets today",
             'filters'           => array(array(
@@ -43,7 +43,7 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
             )),
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My Timesheets this week", // _("My Timesheets this week")
             'description'       => "My Timesheets this week",
             'filters'           => array(array(
@@ -57,7 +57,7 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
             )),
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My Timesheets last week", // _("My Timesheets last week")
             'description'       => "My Timesheets last week",
             'filters'           => array(array(
@@ -71,7 +71,7 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
             )),
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My Timesheets this month", // _("My Timesheets this month")
             'description'       => "My Timesheets this month",
             'filters'           => array(array(
@@ -85,7 +85,7 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
             )),
         ))));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My Timesheets last month", // _("My Timesheets last month")
             'description'       => "My Timesheets last month",
             'filters'           => array(array(
@@ -107,7 +107,7 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
             'model'             => 'Timetracker_Model_TimeaccountFilter',
         );
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'              => "Timeaccounts to bill", // _('Timeaccounts to bill')
                 'description'       => "Timeaccounts to bill",
@@ -121,7 +121,7 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
             ))
         ));
 
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'              => "Timeaccounts not yet billed", // _('Timeaccounts not yet billed')
                 'description'       => "Timeaccounts not yet billed",
@@ -136,7 +136,7 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         ));
 
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'              => "Timeaccounts already billed", // _('Timeaccounts already billed')
                 'description'       => "Timeaccounts already billed",

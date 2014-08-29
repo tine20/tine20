@@ -22,7 +22,7 @@ class Courses_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeFavorites()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -30,7 +30,7 @@ class Courses_Setup_Initialize extends Setup_Initialize
             'model'             => 'Courses_Model_CourseFilter',
         );
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => Courses_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All courses", // _("All courses")
             'filters'           => array(

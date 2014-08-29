@@ -285,34 +285,35 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      *            e
      */
     onContextMenu : function(node, e) {
-        if (!node.attributes.isPersistentFilter) {
+        if (! node.attributes.isPersistentFilter) {
             return;
         }
-
+        
+        Tine.log.debug(node);
+        
         var record = this.store.getById(node.id);
-        var isHidden = ! this.hasRight(node.attributes);
-    
+        var hasManageRight = this.hasRight(node.attributes);
+        
         var menu = new Ext.menu.Menu({
             items : [{
                 text : _('Delete Favorite'),
                 iconCls : 'action_delete',
-                hidden : isHidden,
+                hidden : ! (hasManageRight || this.hasGrant(node.attributes, 'deleteGrant')),
                 handler : this.onDeletePersistentFilter.createDelegate(this, [node, e])
             }, {
                 text : _('Edit Favorite'),
                 iconCls : 'action_edit',
-                hidden : isHidden,
+                hidden : ! (hasManageRight || this.hasGrant(node.attributes, 'editGrant')),
                 handler : this.onEditPersistentFilter.createDelegate(this, [node, e])
             }, {
                 text : _('Overwrite Favorite'),
                 iconCls : 'action_saveFilter',
-                hidden : isHidden,
+                hidden : ! (hasManageRight || this.hasGrant(node.attributes, 'editGrant')),
                 handler : this.onOverwritePersistentFilter.createDelegate(this, [node, e])
             }].concat(this.getAdditionalCtxItems(record))
         });
-
+        
         menu.showAt(e.getXY());
-
     },
 
     /**
@@ -390,16 +391,19 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     },
     
     getEditWindow: function(record) {
-
-        if(record.hasOwnProperty('modified')) {
+        if (! record.get('id')) {
             var title = _('Create Favorite');
         } else {
             var title = _('Edit Favorite');
         }
-                
-        var height = 160;
         
-        if (this.hasRight() && (!record.isDefault())) height = 185;
+        var height = 160;
+        if ((this.hasRight() || this.hasGrant(record, 'editGrant')) && ! record.isDefault()) {
+            height = 440;
+        }
+        
+        Tine.log.debug('Tine.widgets.persistentfilter.PickerPanel::getEditWindow - create edit window for filter record: ');
+        Tine.log.debug(record);
         
         var newWindow = Tine.WindowFactory.getWindow({
             modal : true,
@@ -407,7 +411,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             modelName: this.contentType,
             record : record,
             title : title,
-            width : 300,
+            width : 400,
             height : height,
             contentPanelConstructor : 'Tine.widgets.persistentfilter.EditPersistentFilterPanel',
             contentPanelConstructorConfig : null
@@ -427,10 +431,28 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @return {Boolean}
      */
     hasRight: function(filter) {
-        if(filter && filter.created_by == this.currentUser.accountId) {
+        if (filter && filter.created_by == this.currentUser.accountId) {
             return true;
         }
         return (Tine.Tinebase.common.hasRight('manage_shared_' + this.contentType.toLowerCase() + '_favorites', this.app.name))
+    },
+    
+    
+    /**
+     * check if user has grant on record 
+     * 
+     * @param {Record} record
+     * @param {String} requiredGrant
+     * @return {Boolean}
+     * 
+     * TODO move this to generic Record
+     */
+    hasGrant: function(record, requiredGrant) {
+        var accountGrants = record && record.account_grants ? record.account_grants : 
+                (record && record.data && record.data.account_grants ? record.data.account_grants : false),
+            result = (accountGrants && accountGrants[requiredGrant] == true);
+        Tine.log.debug('hasGrant(' + requiredGrant + ') -> ' + result);
+        return result;
     },
     
     /**
@@ -440,13 +462,17 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      */
     
     createOrUpdateFavorite : function(record) {
+        Tine.log.debug('createOrUpdateFavorite() ->');
+        Tine.log.debug(record);
         
         Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
             scope : this,
             success : function(savedRecord) {
-
+                Tine.log.debug('savedRecord ->');
+                Tine.log.debug(record);
+                
                 var existing = this.recordCollection.get(savedRecord.id);
-
+                
                 if (existing) {
                     savedRecord.set('sorting', existing.get('sorting'));
                     this.store.remove(existing);
@@ -467,7 +493,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 this.recordCollection.add(savedRecord);
                 this.recordCollection.sort();
                 
-                if(!existing) this.saveState();
+                if(! existing) {
+                    this.saveState();
+                }
                 
                 Ext.Msg.hide();
                 // reload this filter?

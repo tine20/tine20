@@ -103,6 +103,7 @@ Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
  */
 Tine.Tinebase.Model.Grant = Ext.data.Record.create([
     {name: 'id'},
+    {name: 'record_id'},
     {name: 'account_id'},
     {name: 'account_type'},
     {name: 'account_name', sortType: Tine.Tinebase.common.accountSortType},

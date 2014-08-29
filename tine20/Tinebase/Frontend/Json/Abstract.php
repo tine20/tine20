@@ -181,11 +181,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $decodedPagination = is_array($_paging) ? $_paging : Zend_Json::decode($_paging);
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
         $filter = $this->_decodeFilter($_filter, $_filterModel);
-
+        
         $records = $_controller->search($filter, $pagination, $_getRelations);
-
+        
         $result = $this->_multipleRecordsToJson($records, $filter);
-
+        
         return array(
             'results'       => array_values($result),
             'totalcount'    => $_totalCountMethod == self::TOTALCOUNT_CONTROLLER ?
