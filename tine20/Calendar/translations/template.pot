@@ -1091,3 +1091,12 @@ msgstr ""
 #: Controller/EventNotifications.php:374
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr ""
+
+msgid "Cut event"
+msgstr ""
+
+msgid "Paste event \"{0}\""
+msgstr ""
+
+msgid "Stop cut & paste"
+msgstr "Verschieben & Einfügen abbrechen"
