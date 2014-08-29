@@ -49,16 +49,35 @@ class Tinebase_Export
             $model = $_filter->getModelName();
             
             $exportClass = $appName . '_Export_' . ucfirst(strtolower($_options['format']));
-            if (! @class_exists($exportClass)) {
+            
+            // start output buffering to catch errors, append them to log and exception
+            ob_start();
+            
+            if (! class_exists($exportClass)) {
+                
+                $ob = (ob_get_length() > 0) ? ob_get_clean() : '';
                 
                 // check for model specific export class
                 list($a, $b, $modelPart) = explode('_', $model);
-                $exportClass = $exportClass . '_' . $modelPart;
+                $exportClass2 = $exportClass . '_' . $modelPart;
                 
-                if (! @class_exists($exportClass)) {
-                    throw new Tinebase_Exception_NotFound('No ' . $_options['format'] . ' export class found for ' . $appName . ' / ' . $model);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Could not find class ' . $exportClass . ' trying ' . $exportClass2 . '. Output Buffer: ' . PHP_EOL . $ob, Zend_Log::NOTICE);
+                }
+                
+                if (! class_exists($exportClass2)) {
+                    
+                    $ob = (ob_get_length() > 0) ? ob_get_clean() : NULL;
+                    
+                    ob_end_flush();
+                    
+                    throw new Tinebase_Exception_NotFound('No ' . $_options['format'] . ' export class found for ' . $appName . ' / ' . $model . '. ClassName: ' . $exportClass2 . ($ob ? 'Output: ' . $ob : ''));
+                } else {
+                    $exportClass = $exportClass2;
                 }
             }
+            
+            ob_end_flush();
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Export options: ' . print_r($_options, TRUE));

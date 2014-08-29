@@ -23,43 +23,43 @@ msgstr ""
 msgid "default"
 msgstr ""
 
-#: Setup/setup.xml:3329
+#: Setup/setup.xml:3325
 msgid "note"
 msgstr ""
 
-#: Setup/setup.xml:3334
+#: Setup/setup.xml:3330
 msgid "default note type"
 msgstr ""
 
-#: Setup/setup.xml:3360
+#: Setup/setup.xml:3356
 msgid "telephone"
 msgstr ""
 
-#: Setup/setup.xml:3365
+#: Setup/setup.xml:3361
 msgid "telephone call"
 msgstr ""
 
-#: Setup/setup.xml:3391
+#: Setup/setup.xml:3387
 msgid "email"
 msgstr ""
 
-#: Setup/setup.xml:3396
+#: Setup/setup.xml:3392
 msgid "email contact"
 msgstr ""
 
-#: Setup/setup.xml:3422
+#: Setup/setup.xml:3418
 msgid "created"
 msgstr ""
 
-#: Setup/setup.xml:3427
+#: Setup/setup.xml:3423
 msgid "record created"
 msgstr ""
 
-#: Setup/setup.xml:3453
+#: Setup/setup.xml:3449
 msgid "changed"
 msgstr ""
 
-#: Setup/setup.xml:3458
+#: Setup/setup.xml:3454
 msgid "record changed"
 msgstr ""
 
@@ -126,12 +126,12 @@ msgstr ""
 msgid "Shared folders"
 msgstr ""
 
-#: Import/Csv/Abstract.php:201
+#: Import/Csv/Abstract.php:200
 #, python-format
 msgid "The following fields weren't imported: %s"
 msgstr ""
 
-#: Import/Csv/Abstract.php:202
+#: Import/Csv/Abstract.php:201
 msgid "N/A"
 msgstr ""
 
@@ -182,6 +182,10 @@ msgstr ""
 
 #: Export/Spreadsheet/Ods.php:365
 msgid "Data"
+msgstr ""
+
+#: Export/Spreadsheet/Xls.php:365
+msgid "Without company assigned"
 msgstr ""
 
 #: js/AdminPanel.js:75
@@ -823,6 +827,74 @@ msgstr ""
 msgid "{0} minutes before"
 msgstr ""
 
+#: js/widgets/dialog/SimpleImportDialog.js:129
+#: js/widgets/dialog/ImportDialog.js:223
+msgid "Choose File and Format"
+msgstr ""
+
+#: js/widgets/dialog/SimpleImportDialog.js:138
+#: js/widgets/dialog/ImportDialog.js:232
+msgid "Choose Import File"
+msgstr ""
+
+#: js/widgets/dialog/SimpleImportDialog.js:142
+#: js/widgets/dialog/ImportDialog.js:236
+msgid ""
+"Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr ""
+
+#: js/widgets/dialog/SimpleImportDialog.js:146
+#: js/widgets/dialog/ImportDialog.js:240
+#, python-brace-format
+msgid "Select file containing your {0}"
+msgstr ""
+
+#: js/widgets/dialog/SimpleImportDialog.js:154
+#: js/widgets/dialog/ImportDialog.js:336
+msgid "Set Import Options"
+msgstr ""
+
+#: js/widgets/dialog/SimpleImportDialog.js:158
+#: js/widgets/dialog/ImportDialog.js:344
+#, python-brace-format
+msgid "Select {0} to add you {1} to:"
+msgstr ""
+
+#: js/widgets/dialog/SimpleImportDialog.js:174
+#: js/widgets/dialog/ImportDialog.js:248 js/widgets/dialog/ImportDialog.js:253
+msgid "What should the file you upload look like?"
+msgstr ""
+
+#: js/widgets/dialog/SimpleImportDialog.js:179
+#: js/widgets/dialog/ImportDialog.js:256
+msgid ""
+"Tine 2.0 does not understand all kind of files you might want to upload. You "
+"will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr ""
+
+#: js/widgets/dialog/SimpleImportDialog.js:182
+#: js/widgets/dialog/ImportDialog.js:259
+msgid ""
+"Following you find a list of all supported import formats and a sample file, "
+"how Tine 2.0 expects your file to look like."
+msgstr ""
+
+#: js/widgets/dialog/SimpleImportDialog.js:185
+#: js/widgets/dialog/ImportDialog.js:262
+msgid "Please select the import format of the file you want to upload"
+msgstr ""
+
+#: js/widgets/dialog/SimpleImportDialog.js:206
+#: js/widgets/dialog/ImportDialog.js:283 js/widgets/dialog/ImportDialog.js:315
+msgid "Download example file"
+msgstr ""
+
+#: js/widgets/dialog/SimpleImportDialog.js:222
+#: js/widgets/dialog/ImportDialog.js:669
+#, python-brace-format
+msgid "Importing {0}"
+msgstr ""
+
 #: js/widgets/dialog/CredentialsDialog.js:84
 msgid "Please enter your credentials"
 msgstr ""
@@ -862,59 +934,8 @@ msgstr ""
 msgid "Saving of preferences failed."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:223
-msgid "Choose File and Format"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:232
-msgid "Choose Import File"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:236
-msgid ""
-"Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:240
-#, python-brace-format
-msgid "Select file containing your {0}"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:248 js/widgets/dialog/ImportDialog.js:253
-msgid "What should the file you upload look like?"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:256
-msgid ""
-"Tine 2.0 does not understand all kind of files you might want to upload. You "
-"will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:259
-msgid ""
-"Following you find a list of all supported import formats and a sample file, "
-"how Tine 2.0 expects your file to look like."
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:262
-msgid "Please select the import format of the file you want to upload"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:283 js/widgets/dialog/ImportDialog.js:315
-msgid "Download example file"
-msgstr ""
-
 #: js/widgets/dialog/ImportDialog.js:286
 msgid "Import description"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:336
-msgid "Set Import Options"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:344
-#, python-brace-format
-msgid "Select {0} to add you {1} to:"
 msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:396
@@ -992,11 +1013,6 @@ msgstr ""
 #: js/widgets/relation/GenericPickerGridPanel.js:929
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
 msgid "Failure"
-msgstr ""
-
-#: js/widgets/dialog/ImportDialog.js:669
-#, python-brace-format
-msgid "Importing {0}"
 msgstr ""
 
 #: js/widgets/dialog/ImportDialog.js:700

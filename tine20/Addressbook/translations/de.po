@@ -707,3 +707,6 @@ msgstr "Standard Excel Export"
 msgid "Default OpenDocument Export"
 msgstr "Standard OpenDocument Export"
 
+msgid "Export as DOC"
+msgstr "Als DOC exportieren"
+

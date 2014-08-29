@@ -3041,3 +3041,15 @@ msgstr "Benutzerkonto wechseln ..."
 # 0009908: anonymous download links for files and folders
 msgid "Publish"
 msgstr "Veröffentlichen"
+
+msgid "Without company assigned"
+msgstr "One Firma"
+
+msgid "Dear"
+msgstr "Guten Tag"
+
+msgid "Dear Mister"
+msgstr "Sehr geehrter Herr"
+
+msgid "Dear Miss"
+msgstr "Sehr geehrte Frau"
