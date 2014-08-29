@@ -232,8 +232,8 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         while ($tries > 0)
         {
             try {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' Sending ' . $method . ' request ...');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Sending ' . $method . ' request for uri ' . $uri . ' ...');
                 $response = $this->request($method, $uri, $body, array(
                     'Depth' => $depth,
                     'Content-Type' => 'text/xml',

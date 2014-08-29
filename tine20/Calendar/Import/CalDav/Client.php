@@ -369,6 +369,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         $defaultCalendarsName = $this->_getDefaultCalendarsName();
         $container = $this->findContainerForCalendar($calUri, $this->calendars[$calUri]['displayname'], $defaultCalendarsName);
         $containerEtags = $recordBackend->getEtagsForContainerId($container->getId());
+        $otherComponentIds = $this->_getOtherComponentIds($container);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
                 . ' Got ' . count($serverEtags) . ' server etags for container ' . $container->name);
@@ -376,10 +377,18 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 . ' server etags: ' . print_r($serverEtags, true));
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
                 . ' tine20 etags: ' . print_r($containerEtags, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                . ' other comp ids: ' . print_r($otherComponentIds, true));
         
         // handle add/updates
         $existingIds = array();
         foreach ($serverEtags as $ics => $data) {
+            if (in_array($data['id'], $otherComponentIds)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                        . ' record already added to other app (VEVENT/VTODO): ' . $data['id']);
+                continue;
+            }
+            
             if (isset($containerEtags[$data['id']])) {
                 $tine20Etag = $containerEtags[$data['id']]['etag'];
                 
@@ -441,6 +450,30 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
         
         return $updateResult;
+    }
+    
+    protected function _getOtherComponentIds($container)
+    {
+        // get matching container from "other" application
+        // TODO get prefix from tasks client
+        $tasksPrefix = 'aa-';
+        $otherUuid = ($this->appName === 'Calendar') ? $tasksPrefix . $container->uuid : str_replace($tasksPrefix, '', $container->uuid);
+        try {
+            $otherContainer = Tinebase_Container::getInstance()->getByProperty($otherUuid, 'uuid');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return array();
+        }
+        
+        $otherBackend = ($this->appName === 'Calendar') 
+            ? Tinebase_Core::getApplicationInstance('Tasks', 'Tasks_Model_Task')->getBackend()
+            : Tinebase_Core::getApplicationInstance('Calendar', 'Calendar_Model_Event')->getBackend();
+        
+        $containerFilterArray = array('field' => 'container_id', 'operator' => 'equals', 'value' => $otherContainer->getId());
+        $filter = ($this->appName === 'Calendar') 
+            ? new Tasks_Model_TaskFilter(array($containerFilterArray))
+            : new Calendar_Model_EventFilter(array($containerFilterArray));
+        $ids = $otherBackend->search($filter, null, true);
+        return $ids;
     }
     
     protected function _fetchServerEtags($calUri, $calICSs)
