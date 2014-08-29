@@ -515,6 +515,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
      */
     public function testGetAllPersistentFilters()
     {
+        $this->markTestSkipped('@see 0010192: fix persistent filter tests');
+        
         $registryData = $this->_instance->getAllRegistryData();
         
         $filterData = $registryData['Tinebase']['persistentFilters'];
