@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>cal_import_ical</name>
+    <model>Calendar_Model_Event</model>
+    <plugin>Calendar_Import_Ical</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <description>Ical import</description>
+    <label>Import iCal-files</label>
+    <!-- _("Import iCal-files") -->
+    <example></example>
+    <extension>ics</extension>
+    <mapping>
+        <field>
+            <source>SUMMARY</source>
+            <destination>summary</destination>
+        </field>
+        <field>
+            <source>DESCRIPTION</source>
+            <destination>description</destination>
+        </field>
+        <field>
+            <source>CLASS</source>
+            <destination>class</destination>
+        </field>
+        <field>
+            <source>TRANSP</source>
+            <destination>transp</destination>
+        </field>
+        <field>
+            <source>SEQUENCE</source>
+            <destination>seq</destination>
+        </field>
+        <field>
+            <source>UID</source>
+            <destination>uid</destination>
+        </field>
+        <field>
+            <source>DTSTART</source>
+            <destination>dtstart</destination>
+        </field>
+        <field>
+            <source>DTEND</source>
+            <destination>dtend</destination>
+        </field>
+        <field>
+            <source>RRULE</source>
+            <destination>rrule</destination>
+        </field>
+        <field>
+            <source>CREATED</source>
+            <destination>creation_time</destination>
+        </field>
+        <field>
+            <source>LAST-MODIFIED</source>
+            <destination>last_modified_time</destination>
+        </field>
+    </mapping>
+</config>

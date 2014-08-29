@@ -1906,6 +1906,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->_increaseDisplayContainerContentSequence($attender, $event, Tinebase_Model_ContainerContent::ACTION_CREATE);
     }
     
+        
+    /**
+     * returns the default calendar
+     * 
+     * @return Tinebase_Model_Container
+     */
+    public function getDefaultCalendar()
+    {
+        return Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Calendar_Preference::DEFAULTCALENDAR);
+    }
+    
     /**
      * returns default displayContainer id of given attendee
      *
