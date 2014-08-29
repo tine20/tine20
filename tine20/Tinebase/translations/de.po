@@ -2954,3 +2954,24 @@ msgstr "Fehlerhafte Verknüpfung"
 
 msgid "Records"
 msgstr "Datensätze"
+
+### 0009984: allow to change user role
+#: js/widgets/account/ChangeAccountAction.js:18
+msgid "Change user account"
+msgstr "Benutzerkonto wechseln"
+
+#: js/widgets/account/ChangeAccountAction.js:20
+msgid "Switch to another user's account"
+msgstr "Auf ein anderes Benutzerkonto umschalten"
+
+#: js/widgets/account/ChangeAccountAction.js:64
+msgid "Switch to this user account:"
+msgstr "Auf das Konto dieses Benutzers umschalten:"
+
+#: js/widgets/account/ChangeAccountAction.js:86
+msgid "Select Account"
+msgstr "Benutzerkonto auswählen"
+
+#: js/widgets/account/ChangeAccountAction.js:108
+msgid "Changing user account ..."
+msgstr "Benutzerkonto wechseln ..."

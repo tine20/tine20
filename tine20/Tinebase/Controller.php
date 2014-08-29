@@ -98,7 +98,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                 __METHOD__ . '::' . __LINE__ . " Login with username $_loginname from $_ipAddress succeeded.");
 
-            $this->_initUser($user, $accessLog, $_password);
+            $this->_initUserAfterLogin($user, $accessLog, $_password);
             
             $result = true;
         } else {
@@ -190,44 +190,57 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     }
     
     /**
-     * init user session
+     * init user after login (credential cache, access log, session, ...)
      * 
      * @param Tinebase_Model_FullUser $_user
      * @param Tinebase_Model_AccessLog $_accessLog
      * @param string $_password
      */
-    protected function _initUser(Tinebase_Model_FullUser $_user, Tinebase_Model_AccessLog $_accessLog, $_password)
+    protected function _initUserAfterLogin(Tinebase_Model_FullUser $_user, Tinebase_Model_AccessLog $_accessLog, $_password)
     {
-        if ($_accessLog->result === Tinebase_Auth::SUCCESS && $_user->accountStatus === Tinebase_User::STATUS_ENABLED) {
-            $this->_initUserSession($_user);
-            
-            Tinebase_Core::set(Tinebase_Core::USER, $_user);
-            
-            $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_user->accountLoginName, $_password);
-            Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
-            
-            // need to set locale again and because locale might not be set correctly during loginFromPost
-            // use 'auto' setting because it is fetched from cookie or preference then
-            Tinebase_Core::setupUserLocale('auto');
-            
-            // need to set userTimeZone again
-            $userTimezone = Tinebase_Core::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
-            Tinebase_Core::setupUserTimezone($userTimezone);
-            
-            $_user->setLoginTime($_accessLog->ip);
-            
-            $_accessLog->sessionid = Tinebase_Core::get(Tinebase_Core::SESSIONID);
-            $_accessLog->login_name = $_user->accountLoginName;
-            $_accessLog->account_id = $_user->getId();
+        if ($_accessLog->result !== Tinebase_Auth::SUCCESS || $_user->accountStatus !== Tinebase_User::STATUS_ENABLED) {
+            return false;
         }
+        
+        $this->initUser($_user);
+        
+        $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_user->accountLoginName, $_password);
+        Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
+        
+        $_user->setLoginTime($_accessLog->ip);
+        $_accessLog->sessionid = Tinebase_Core::get(Tinebase_Core::SESSIONID);
+        $_accessLog->login_name = $_user->accountLoginName;
+        $_accessLog->account_id = $_user->getId();
+    }
+    
+    /**
+     * initialize user (session, locale, tz)
+     * 
+     * @param Tinebase_Model_FullUser $_user
+     * @param boolean $fixCookieHeader
+     */
+    public function initUser(Tinebase_Model_FullUser $_user, $fixCookieHeader = true)
+    {
+        $this->_initUserSession($_user, $fixCookieHeader);
+        
+        Tinebase_Core::set(Tinebase_Core::USER, $_user);
+        
+        // need to set locale again and because locale might not be set correctly during loginFromPost
+        // use 'auto' setting because it is fetched from cookie or preference then
+        Tinebase_Core::setupUserLocale('auto');
+        
+        // need to set userTimeZone again
+        $userTimezone = Tinebase_Core::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
+        Tinebase_Core::setupUserTimezone($userTimezone);
     }
     
     /**
      * init session after successful login
      * 
-     * @param Tinebase_Model_FullUser $_user
+     * @param Tinebase_Model_FullUser $user
+     * @param boolean $fixCookieHeader
      */
-    protected function _initUserSession(Tinebase_Model_FullUser $_user)
+    protected function _initUserSession(Tinebase_Model_FullUser $user, $fixCookieHeader = true)
     {
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONUSERAGENTVALIDATION, TRUE)) {
             Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
@@ -247,22 +260,23 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             Zend_Session::regenerateId();
             Tinebase_Core::set(Tinebase_Core::SESSIONID, session_id());
             
-            /** 
-             * fix php session header handling http://forge.tine20.org/mantisbt/view.php?id=4918 
-             * -> search all Set-Cookie: headers and replace them with the last one!
-             **/
-            $cookieHeaders = array();
-            foreach (headers_list() as $headerString) {
-                if (strpos($headerString, 'Set-Cookie: TINE20SESSID=') === 0) {
-                    array_push($cookieHeaders, $headerString);
+            if ($fixCookieHeader) {
+                /** 
+                 * fix php session header handling http://forge.tine20.org/mantisbt/view.php?id=4918 
+                 * -> search all Set-Cookie: headers and replace them with the last one!
+                 **/
+                $cookieHeaders = array();
+                foreach (headers_list() as $headerString) {
+                    if (strpos($headerString, 'Set-Cookie: TINE20SESSID=') === 0) {
+                        array_push($cookieHeaders, $headerString);
+                    }
                 }
+                header(array_pop($cookieHeaders), true);
+                /** end of fix **/
             }
-            header(array_pop($cookieHeaders), true);
-            /** end of fix **/
             
-            Tinebase_Core::getSession()->currentAccount = $_user;
+            Tinebase_Core::getSession()->currentAccount = $user;
         }
-    
     }
     
     /**
@@ -390,6 +404,52 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
         
         Tinebase_User::getInstance()->setPassword(Tinebase_Core::getUser(), $_newPassword, true, false);
+    }
+    
+    /**
+     * switch to another user's account
+     *
+     * @param string $loginName
+     * @return boolean
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function changeUserAccount($loginName)
+    {
+        $allowedRoleChanges = Tinebase_Config::getInstance()->get(Tinebase_Config::ROLE_CHANGE_ALLOWED);
+        $currentAccountName = Tinebase_Core::getUser()->accountLoginName;
+        if ($allowedRoleChanges) {
+            $allowedRoleChangesArray = $allowedRoleChanges->toArray();
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' ROLE_CHANGE_ALLOWED: ' . print_r($allowedRoleChangesArray, true));
+            
+            $user = null;
+            
+            if (isset($allowedRoleChangesArray[$currentAccountName])
+                && in_array($loginName, $allowedRoleChangesArray[$currentAccountName])
+            ) {
+                $user = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
+                Tinebase_Core::getSession()->userAccountChanged = true;
+                Tinebase_Core::getSession()->originalAccountName = $currentAccountName;
+                
+            } else if (Tinebase_Core::getSession()->userAccountChanged 
+                && isset($allowedRoleChangesArray[Tinebase_Core::getSession()->originalAccountName])
+            ) {
+                $user = Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_Core::getSession()->originalAccountName);
+                Tinebase_Core::getSession()->userAccountChanged = false;
+                Tinebase_Core::getSession()->originalAccountName = null;
+            }
+            
+            if ($user) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Switching to user account ' . $user->accountLoginName);
+                
+                $this->initUser($user, /* $fixCookieHeader = */ false);
+                return true;
+            }
+        } 
+        
+        throw new Tinebase_Exception_AccessDenied('It is not allowed to switch to this account');
     }
     
     /**
@@ -534,5 +594,17 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 }
                 break;
         }
+    }
+    
+    /**
+     * returns true if user account has been changed
+     * 
+     * @return boolean
+     */
+    public function userAccountChanged()
+    {
+        return (is_object(Tinebase_Core::getSession()) && isset(Tinebase_Core::getSession()->userAccountChanged)) 
+                ? Tinebase_Core::getSession()->userAccountChanged
+                : false;
     }
 }

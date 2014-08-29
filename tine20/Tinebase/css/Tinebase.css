@@ -519,6 +519,11 @@ html, body {
     background-position: 2px 2px;
 }
 
+.renderer_accountUserChangedIcon {
+    background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
+    background-color: red !important;
+}
+
 .renderer_accountGroupIcon {
     background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
     background-repeat: no-repeat;

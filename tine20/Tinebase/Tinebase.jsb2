@@ -659,6 +659,10 @@
           "path": "js/widgets/account/"
         },
         {
+          "text": "ChangeAccountAction.js",
+          "path": "js/widgets/account/"
+        },
+        {
           "text": "ContainerSelect.js",
           "path": "js/widgets/container/"
         },
