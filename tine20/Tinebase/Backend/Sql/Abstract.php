@@ -1447,4 +1447,75 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $select->group($group);
     }
+
+    /**
+     * sets etags, expects ids as keys and etags as value
+     *
+     * @param array $etags
+     * 
+     * @todo maybe we should find a better place for the etag functions as this is currently only used in Calendar + Tasks
+     */
+    public function setETags(array $etags)
+    {
+        foreach ($etags as $id => $etag) {
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id),
+            );
+            $this->_db->update($this->_tablePrefix . $this->_tableName, array('etag' => $etag), $where);
+        }
+    }
+    
+    /**
+     * checks if there is an event with this id and etag, or an event with the same id
+     *
+     * @param string $id
+     * @param string $etag
+     * @return boolean
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function checkETag($id, $etag)
+    {
+        $select = $this->_db->select();
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $this->_identifier);
+        $select->where($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id);
+        $select->orWhere($this->_db->quoteIdentifier('uid') . ' = ?', $id);
+    
+        $stmt = $select->query();
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+    
+        if ($queryResult === false) {
+            throw new Tinebase_Exception_NotFound('no record with id ' . $id .' found');
+        }
+    
+        $select->where($this->_db->quoteIdentifier('etag') . ' = ?', $etag);
+        $stmt = $select->query();
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+    
+        return ($queryResult !== false);
+    }
+    
+    /**
+     * return etag set for given container
+     * 
+     * @param string $containerId
+     * @return multitype:Ambigous <mixed, Ambigous <string, boolean, mixed>>
+     */
+    public function getEtagsForContainerId($containerId)
+    {
+        $select = $this->_db->select();
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array($this->_identifier, 'etag', 'uid'));
+        $select->where($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId);
+        $select->where($this->_db->quoteIdentifier('is_deleted') . ' = ?', 0);
+    
+        $stmt = $select->query();
+        $queryResult = $stmt->fetchAll();
+    
+        $result = array();
+        foreach ($queryResult as $row) {
+            $result[$row['id']] = $row;
+        }
+        return $result;
+    }
 }

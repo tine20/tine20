@@ -38,6 +38,7 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_filterModel = array(
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Tasks_Model_Task')),
         'uid'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'etag'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description'))),
         'organizer'            => array('filter' => 'Tinebase_Model_Filter_User'),
         'status'               => array('filter' => 'Tinebase_Model_Filter_Text'),
