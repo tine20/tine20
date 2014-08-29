@@ -87,7 +87,7 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
         
         $defaultContainerId = Tinebase_Container::getInstance()->getDefaultContainer('Crm')->getId();
         $this->assertContains('"lead_name","leadstate_id","Leadstate","leadtype_id","Leadtype","leadsource_id","Leadsource","container_id","start"'
-            . ',"description","end","turnover","probableTurnover","probability","end_scheduled","tags","attachments","notes","seq","tags",'
+            . ',"description","end","turnover","probableTurnover","probability","end_scheduled","resubmission_date","tags","attachments","notes","seq","tags",'
             . '"CUSTOMER-org_name","CUSTOMER-n_family","CUSTOMER-n_given","CUSTOMER-adr_one_street","CUSTOMER-adr_one_postalcode","CUSTOMER-adr_one_locality",'
             . '"CUSTOMER-adr_one_countryname","CUSTOMER-tel_work","CUSTOMER-tel_cell","CUSTOMER-email",'
             . '"PARTNER","RESPONSIBLE","TASK"', $export, 'headline wrong: ' . substr($export, 0, 360));

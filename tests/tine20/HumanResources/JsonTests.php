@@ -76,7 +76,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $savedEmployee['contracts'][]   = $newContract->toArray();
         $savedEmployee['costcenters'][] = $costCenter2->toArray();
-        
         $savedEmployee = $this->_json->saveEmployee($savedEmployee);
         
         $this->assertEquals(2, count($savedEmployee['contracts']),   'There should be 2 Contracts');
@@ -143,6 +142,18 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $this->assertEquals(5, $employee['vacation'][0]['days_count']);
         $this->assertEquals(3, count($employee['costcenters']));
+        
+        // @see: 0010050: Delete last dependent record fails
+        
+        // if the property is set to null, no dependent record handling will be done
+        $employee['costcenters'] = NULL;
+        $employee = $this->_json->saveEmployee($employee);
+        $this->assertEquals(3, count($employee['costcenters']));
+        
+        // if the property is set to an empty array, all dependent records will be removed
+        $employee['costcenters'] = array();
+        $employee = $this->_json->saveEmployee($employee);
+        $this->assertEquals(0, count($employee['costcenters']));
     }
     
     /**
@@ -1071,5 +1082,54 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals(11, $account['taken_vacation_days']);
         $this->assertEquals(14, $account['excused_sickness']);
         $this->assertEquals(1, $account['unexcused_sickness']);
+    }
+    
+    /**
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=10176
+     */
+    public function testSavingRelatedRecord()
+    {
+        $date = new Tinebase_DateTime();
+        $e = $this->_getEmployee();
+        $c = $this->_getContract($date);
+        // in fe the record gets an id, to allow stores crud and sort actions. this must be set to a 40 length ssha key
+        $c->id = '1234567890';
+        
+        $employeeJson = $e->toArray();
+        $employeeJson['contracts'] = array($c->toArray());
+        
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+        
+        $id = $employeeJson['contracts'][0]['id'];
+        // the id should be set to a 40 length ssha key
+        $this->assertEquals(40, strlen($id));
+        
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+        $this->assertEquals($id, $employeeJson['contracts'][0]['id']);
+    }
+    
+    /**
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=10176
+     */
+    public function testSavingRelatedRecordWithCorruptId()
+    {
+        $date = new Tinebase_DateTime();
+        $e = $this->_getEmployee();
+        $c = $this->_getContract($date);
+        $c->id = '1234567890';
+    
+        $employeeJson = $e->toArray();
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+    
+        $c->employee_id = $employeeJson['id'];
+        
+        $c = HumanResources_Controller_Contract::getInstance()->create($c);
+        $this->assertEquals('1234567890', $c->getId());
+
+        $employeeJson['contracts'] = array($c->toArray());
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+        
+        // if it has been corrupted before this change was committed, the corrupted id should stay
+        $this->assertEquals('1234567890', $employeeJson['contracts'][0]['id']);
     }
 }

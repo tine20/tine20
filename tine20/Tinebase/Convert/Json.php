@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -46,7 +46,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $records = new Tinebase_Record_RecordSet($recordClassName, array($_record));
         $modelConfiguration = $recordClassName::getConfiguration();
         
-        $this->_resolveBeforeToArray($records, $modelConfiguration);
+        $this->_resolveBeforeToArray($records, $modelConfiguration, FALSE);
         
         $_record = $records->getFirstRecord();
         $_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
@@ -54,7 +54,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         $result = $_record->toArray();
         
-        $result = $this->_resolveAfterToArray($result, $modelConfiguration);
+        $result = $this->_resolveAfterToArray($result, $modelConfiguration, FALSE);
         
         return $result;
     }
@@ -239,8 +239,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @param Tinebase_Record_RecordSet $_records
      * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
      */
-    protected function _resolveMultipleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL)
+    protected function _resolveMultipleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL, $multiple = false)
     {
         if (! $modelConfiguration || (! $_records->count())) {
             return;
@@ -255,6 +256,12 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         // iterate fields to resolve
         foreach ($resolveFields as $fieldKey => $c) {
             $config = $c['config'];
+            
+            // resolve records, if omitOnSearch is definitively set to FALSE (by default they won't be resolved on search)
+            if ($multiple && !(isset($config['omitOnSearch']) && $config['omitOnSearch'] === FALSE)) {
+                continue;
+            }
+            
             // fetch the fields by the refIfField
             $controller = isset($config['controllerClassName']) ? $config['controllerClassName']::getInstance() : Tinebase_Core::getApplicationInstance($foreignRecordClassName);
             $filterName = $config['filterClassName'];
@@ -326,7 +333,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param Tinebase_ModelConfiguration $modelConfiguration
      * @param boolean $multiple
      */
-    protected function _resolveVirtualFields($resultSet, $modelConfiguration = NULL, $multiple = FALSE)
+    protected function _resolveVirtualFields($resultSet, $modelConfiguration = NULL, $multiple = false)
     {
         if (! $modelConfiguration || ! ($virtualFields = $modelConfiguration->virtualFields)) {
             return $resultSet;
@@ -387,8 +394,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @param Tinebase_Record_RecordSet $records
      * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
      */
-    protected function _resolveBeforeToArray($records, $modelConfiguration)
+    protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
     {
         Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($records);
         
@@ -400,7 +408,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             $this->_resolveSingleRecordFields($records, $modelConfiguration);
         
             // resolve all multiple records fields
-            $this->_resolveMultipleRecordFields($records, $modelConfiguration);
+            $this->_resolveMultipleRecordFields($records, $modelConfiguration, $multiple);
         }
     }
     
@@ -409,11 +417,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @param array $result
      * @param Tinebase_ModelConfiguration $modelConfiguration
-     * @param boolean multiple
+     * @param boolean $multiple
      * 
      * @return array
      */
-    protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = FALSE)
+    protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = false)
     {
         $result = $this->_resolveVirtualFields($result, $modelConfiguration, $multiple);
         return $result;
@@ -438,7 +446,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $ownRecordClass = $_records->getRecordClassName();
         $config = $ownRecordClass::getConfiguration();
         
-        $this->_resolveBeforeToArray($_records, $config);
+        $this->_resolveBeforeToArray($_records, $config, TRUE);
         
         $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_records->convertDates = true;

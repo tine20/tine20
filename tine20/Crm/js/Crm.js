@@ -122,3 +122,18 @@ Tine.Crm.settingsBackend = new Tine.Tinebase.data.RecordProxy({
     modelName: 'Settings',
     recordClass: Tine.Crm.Model.Settings
 });
+
+/**
+ * returns ids of ended lead states
+ */
+Tine.Crm.getEndedLeadStateIds = function() {
+    var leadstates = Tine.Crm.registry.get('leadstates')['results'];
+    var ids = [];
+    for (var index = 0; index < leadstates.length; index++) {
+        if (leadstates[index].endslead == 1) {
+            ids.push(leadstates[index].id);
+        }
+    }
+    
+    return ids;
+}

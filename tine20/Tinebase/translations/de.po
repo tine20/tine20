@@ -2951,3 +2951,6 @@ msgstr "Sie haben versucht, eine Verknüpfung zu aktualisieren, wodurch Verknüp
 
 msgid "Invalid Relations"
 msgstr "Fehlerhafte Verknüpfung"
+
+msgid "Records"
+msgstr "Datensätze"

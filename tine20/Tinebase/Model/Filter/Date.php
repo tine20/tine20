@@ -31,20 +31,24 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         3 => 'after',
         4 => 'isnull',
         5 => 'notnull',
-        6 => 'inweek'
+        6 => 'inweek',
+        7 => 'before_or_equals',
+        8 => 'after_or_equals',
     );
     
     /**
      * @var array maps abstract operators to sql operators
      */
     protected $_opSqlMap = array(
-        'equals'     => array('sqlop' => ' = ?'),
-        'within'     => array('sqlop' => array(' >= ? ', ' <= ?')),
-        'before'     => array('sqlop' => ' < ?'),
-        'after'      => array('sqlop' => ' > ?'),
-        'isnull'     => array('sqlop' => ' IS NULL'),
-        'notnull'    => array('sqlop' => ' IS NOT NULL'),
-        'inweek'     => array('sqlop' => array(' >= ? ', ' <= ?')),
+        'equals'            => array('sqlop' => ' = ?'),
+        'within'            => array('sqlop' => array(' >= ? ', ' <= ?')),
+        'before'            => array('sqlop' => ' < ?'),
+        'after'             => array('sqlop' => ' > ?'),
+        'isnull'            => array('sqlop' => ' IS NULL'),
+        'notnull'           => array('sqlop' => ' IS NOT NULL'),
+        'inweek'            => array('sqlop' => array(' >= ? ', ' <= ?')),
+        'before_or_equals'  => array('sqlop' => ' <= ?'),
+        'after_or_equals'   => array('sqlop' => ' >= ?'),
     );
     
     /**

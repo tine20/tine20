@@ -18,6 +18,34 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  */
 class Timetracker_JsonTest extends Timetracker_AbstractTest
 {
+    protected $_testUser = NULL;
+    /**
+     * Sets up the fixture.
+     * This method is called before a test is executed.
+     *
+     * @access protected
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+    }
+    
+    /**
+     * Tears down the fixture
+     * This method is called after a test is executed.
+     *
+     * @access protected
+     */
+    protected function tearDown()
+    {
+        // switch back to admin user
+        if ($this->_testUser) {
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+        }
+        
+        parent::tearDown();
+    }
+    
     /**
      * try to add a Timeaccount
      *
@@ -867,5 +895,119 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         
         $jsonCo = $feCo->getContract($contract->getId());
         $this->assertEquals(0, count($jsonCo['relations']));
+    }
+    
+    /**
+     * this test assures that relations, the user doesn't have the right to manage, won't be resolved anyway
+     */
+    public function testResolvingRelations()
+    {
+        $ta = $this->_getTimeaccount()->toArray();
+        $ta['grants'] = $this->_getGrants(TRUE);
+        
+        $contractController = Sales_Controller_Contract::getInstance();
+        $contactController  = Addressbook_Controller_Contact::getInstance();
+        $taController       = Timetracker_Controller_Timeaccount::getInstance();
+        
+        // create timeaccount
+        $ta = $this->_json->saveTimeaccount($ta);
+        
+        $contact  = $contactController->create(new Addressbook_Model_Contact(array('n_given' => 'Test', 'n_family' => 'Unit')));
+        $contract = $contractController->create(new Sales_Model_Contract(array('number' => '123', 'title' => 'UnitTest')));
+        
+        Tinebase_Relations::getInstance()->setRelations('Timetracker_Model_Timeaccount', 'Sql', $ta['id'], array(
+            array('related_backend' => 'Sql', 'type' => 'RESPONSIBLE', 'related_model' => 'Addressbook_Model_Contact', 'related_id' => $contact->getId(), 'own_degree' => 'sibling'),
+            array('related_backend' => 'Sql', 'type' => 'TIME_ACCOUNT', 'related_model' => 'Sales_Model_Contract', 'related_id' => $contract->getId(), 'own_degree' => 'sibling'),
+        ));
+        
+        // add 2 relations
+        $ta = $this->_json->getTimeaccount($ta['id']);
+        $this->assertEquals(2, count($ta['relations']));
+        
+        // fetch user group
+        $group   = Tinebase_Group::getInstance()->getGroupByName('Users');
+        $groupId = $group->getId();
+        
+        // create new user
+        $user = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'testuser',
+            'accountPrimaryGroup'   => $groupId,
+            'accountDisplayName'    => 'Test User',
+            'accountLastName'       => 'User',
+            'accountFirstName'      => 'Test',
+            'accountFullName'       => 'Test User',
+            'accountEmailAddress'   => 'unittestx8@tine20.org',
+        ));
+        
+        $user = Admin_Controller_User::getInstance()->create($user, 'pw', 'pw');
+        
+        // add tt-ta admin right to user role to allow user to update (manage) timeaccounts
+        // user has no right to see sales contracts
+        $fe = new Admin_Frontend_Json();
+        $userRoles = $fe->getRoles('user', array(), array(), 0, 1);
+        $userRole = $fe->getRole($userRoles['results'][0]['id']);
+        
+        $roleRights = $fe->getRoleRights($userRole['id']);
+        $roleMembers = $fe->getRoleMembers($userRole['id']);
+        $roleMembers['results'][] = array('name' => 'testuser', 'type' => 'user', 'id' => $user->accountId);
+        
+        $app = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
+        
+        $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS);
+        $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Tinebase_Acl_Rights::ADMIN);
+        $fe->saveRole($userRole, $roleMembers['results'], $roleRights['results']);
+        
+        // switch to other user
+        $this->_testUser = Tinebase_Core::getUser();
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+        
+        // get sure the user doesn't get relations not having the right for
+        $ta = $this->_json->getTimeaccount($ta['id']);
+        $this->assertEquals(1, count($ta['relations']), 'user should only get the related contact');
+        
+        // save timeaccount with reduced relations
+        $ta = $this->_json->saveTimeaccount($ta);
+        
+        // switch user back
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+        
+        // get sure all relations will be returned
+        $ta = $this->_json->getTimeaccount($ta['id']);
+        $this->assertEquals(2, count($ta['relations']));
+    }
+    
+    /**
+     * on saving 
+     */
+    public function testUpdateTimeaccountWithRelatedContact()
+    {
+        $this->_getTimeaccount(array(), TRUE);
+        $ta = $this->_lastCreatedRecord;
+        
+        $contactController  = Addressbook_Controller_Contact::getInstance();
+        $taController       = Timetracker_Controller_Timeaccount::getInstance();
+        
+        $bday = new Tinebase_DateTime();
+        $bday->setDate(2013, 12, 24);
+        $bday->setTime(0,0,0);
+        
+        $contact  = $contactController->create(new Addressbook_Model_Contact(array('n_given' => 'Test', 'n_family' => 'Unit', 'bday' => $bday)));
+        $bday = $contact['bday'];
+        
+        Tinebase_Relations::getInstance()->setRelations('Timetracker_Model_Timeaccount', 'Sql', $ta['id'], array(
+            array('related_backend' => 'Sql', 'type' => 'RESPONSIBLE', 'related_model' => 'Addressbook_Model_Contact', 'related_id' => $contact->getId(), 'own_degree' => 'sibling'),
+        ));
+        
+        // update a few times, bday of contract should not change
+        $tajson = $this->_json->getTimeaccount($ta['id']);
+        $this->_json->saveTimeaccount($tajson);
+        $tajson = $this->_json->getTimeaccount($ta['id']);
+        $this->_json->saveTimeaccount($tajson);
+        $tajson = $this->_json->getTimeaccount($ta['id']);
+        
+        $ajson = new Addressbook_Frontend_Json();
+        $contactJson = $ajson->getContact($contact->getId());
+        
+        $this->assertEquals($bday->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->toString(), $contactJson['bday']);
     }
 }

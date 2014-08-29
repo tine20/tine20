@@ -54,7 +54,27 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         enableDragDrop: true,
         ddGroup: 'containerDDGroup'
     },
-     
+    
+    
+    /**
+     * returns view row class (scope is this.grid.view)
+     */
+    getViewRowClass: function(record, index, rowParams, store) {
+        
+        var className = Tine.Crm.LeadGridPanel.superclass.getViewRowClass(record, index, rowParams, store);
+        
+        var now = new Date();
+        if (this.endingLeadStateIds.indexOf(record.get('leadstate_id')) == -1) {
+            var rsd = record.get('resubmission_date');
+            var esd = record.get('end_scheduled');
+            if (((esd && (esd < now)) || (rsd && (rsd < now)))) {
+                className += ' crm-highlight-task';
+            }
+        }
+        
+        return className;
+    },
+    
     /**
      * inits this cmp
      * @private
@@ -71,6 +91,8 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
         
         Tine.Crm.LeadGridPanel.superclass.initComponent.call(this);
+        
+        this.grid.view.endingLeadStateIds = Tine.Crm.getEndedLeadStateIds();
     },
     
     /**
@@ -123,7 +145,11 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100, renderer: Tine.Crm.LeadState.Renderer},
                 {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage },
                 {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney },
-                {header: this.app.i18n._('Probable Turnover'), id: 'probableTurnover', dataIndex: 'probableTurnover', width: 100, renderer: Ext.util.Format.euMoney, sortable: false }
+
+                {header: this.app.i18n._('Estimated end'), id: 'end_scheduled', dataIndex: 'end_scheduled', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
+                {header: this.app.i18n._('Probable Turnover'), id: 'probableTurnover', dataIndex: 'probableTurnover', width: 100, renderer: Ext.util.Format.euMoney, sortable: false },
+                {header: this.app.i18n._('Resubmission Date'), id: 'resubmission_date', dataIndex: 'resubmission_date', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true }
+                
             ].concat(this.getModlogColumns().concat(this.getCustomfieldColumns()))
         });
     },
