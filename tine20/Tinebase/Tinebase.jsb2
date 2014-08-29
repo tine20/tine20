@@ -663,6 +663,10 @@
           "path": "js/widgets/container/"
         },
         {
+          "text": "CalDAVContainerPropertiesHookField.js",
+          "path": "js/widgets/container/"
+        },
+        {
           "text": "GrantsGrid.js",
           "path": "js/widgets/container/"
         },

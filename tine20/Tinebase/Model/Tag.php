@@ -114,6 +114,11 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to allocate tag ' . $tagName);
             
+            $tagName = trim($tagName);
+            if (empty($tagName)) {
+                continue;
+            }
+            
             $existingTags = Tinebase_Tags::getInstance()->searchTags(
                 new Tinebase_Model_TagFilter(array(
                     'name'        => $tagName,

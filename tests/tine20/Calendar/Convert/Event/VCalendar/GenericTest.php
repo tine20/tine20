@@ -638,16 +638,112 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function testConvertWithInvalidAlarmTime()
     {
-        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/invalid_alarm_time.ics', 'r');
+        $savedEvent = $this->_saveIcsEvent('invalid_alarm_time.ics');
+        $this->assertEquals(104, count($savedEvent->exdate), print_r($savedEvent->toArray(), true));
+        $this->assertEquals(2, count($savedEvent->alarms), print_r($savedEvent->toArray(), true));
+    }
+    
+    /**
+     * save ics test event
+     * 
+     * @param string $filename
+     * @param string $client
+     * @return Calendar_Model_Event
+     */
+    protected function _saveIcsEvent($filename, $client = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC)
+    {
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/' . $filename, 'r');
         
-        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($client);
         
         $event = $this->_converter->toTine20Model($vcalendarStream);
         
-        // try to save event
-        $savedEvent = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+        return Calendar_Controller_MSEventFacade::getInstance()->create($event);
+    }
+
+    /**
+     * testRruleWithBysetpos
+     * 
+     * @see 0010058: vevent with lots of exdates leads alarm saving failure
+     */
+    public function testRruleWithBysetpos()
+    {
+        $savedEvent = $this->_saveIcsEvent('outlook_bysetpos.ics');
         
-        $this->assertEquals(104, count($savedEvent->exdate), print_r($savedEvent->toArray(), true));
-        $this->assertEquals(2, count($savedEvent->alarms), print_r($savedEvent->toArray(), true));
+        $this->assertEquals(1, $savedEvent->rrule->bymonthday, print_r($savedEvent->toArray(), true));
+        $this->assertTrue(! isset($savedEvent->rrule->byday), print_r($savedEvent->toArray(), true));
+    }
+    
+    /**
+     * testLongSummary
+     * 
+     * @see 0010120: shorten long event summaries
+     */
+    public function testLongSummary()
+    {
+        $savedEvent = $this->_saveIcsEvent('iphone_longsummary.ics');
+        
+        $this->assertEquals('Finanz-IT anrufen, xxxxxxxxxxxh', $savedEvent->summary, print_r($savedEvent->toArray(), true));
+        $this->assertContains("Finanz-IT anrufen, xxxxxxxxxxxh\nFestgelegt für 25. Juli 2012", $savedEvent->description, print_r($savedEvent->toArray(), true));
+    }
+    
+    /**
+     * testRruleUntilAtDtstartForAllDayEvent
+     */
+    public function testRruleUntilAtDtstartForAllDayEvent()
+    {
+        $savedEvent = $this->_saveIcsEvent('rrule_until_at_dtstart_allday.ics');
+        
+        $this->assertTrue(true, 'no exception should be thrown ;-)');
+    }
+    
+    /**
+     * testInvalidUtf8
+     */
+    public function testInvalidUtf8()
+    {
+        $savedEvent = $this->_saveIcsEvent('invalid_utf8.ics');
+        $this->assertContains('Hoppegarten Day', $savedEvent->summary);
+    }
+    
+    /**
+     * testLongLocation
+     */
+    public function testLongLocation()
+    {
+        $savedEvent = $this->_saveIcsEvent('iphone_longlocation.ics');
+        
+        $this->assertContains('1. Rufen Sie folgende Seite auf: https://xxxxxxxxxxxxxx.webex.', $savedEvent->location, print_r($savedEvent->toArray(), true));
+        $this->assertContains("und Ihre E-Mail-Adresse ein.; geben Sie das Meeting-Passwort ein: xxxx", $savedEvent->description, print_r($savedEvent->toArray(), true));
+    }
+
+    /**
+     * test4ByteUTF8Summary
+     */
+    public function test4ByteUTF8Summary()
+    {
+        $savedEvent = $this->_saveIcsEvent('utf8mb4_summary.ics');
+        
+        $this->assertContains('Mail an Frau LaLiLoLu ging am 4.11 raus, dass du später zur Ralf Sitzung kommst (joda)', $savedEvent->summary);
+    }
+
+    /**
+     * testEmptyCategories
+     */
+    public function testEmptyCategories()
+    {
+        $savedEvent = $this->_saveIcsEvent('empty_categories.ics', Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX);
+        
+        $this->assertEquals('Flug nach Hamburg', $savedEvent->summary);
+    }
+    
+    /**
+     * testEmptyAttenderNameAndBrokenEmail
+     */
+    public function testEmptyAttenderNameAndBrokenEmail()
+    {
+        $savedEvent = $this->_saveIcsEvent('attender_empty_name.ics', Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX);
+        
+        $this->assertEquals('Telko axel', $savedEvent->summary);
     }
 }

@@ -70,7 +70,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
      * @param  Tinebase_Model_Container  $container
      * @param  stream|string             $vobjectData
      */
-    public static function create(Tinebase_Model_Container $container, $name, $vobjectData)
+    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = 'unused')
     {
         if (is_resource($vobjectData)) {
             $vobjectData = stream_get_contents($vobjectData);

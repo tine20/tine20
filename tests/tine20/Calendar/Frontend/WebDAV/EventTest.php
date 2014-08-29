@@ -241,6 +241,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $event->put($vcalendarStreamException);
         
         $this->_checkExdate($event);
+        
+        return $event;
     }
     
     /**
@@ -262,27 +264,42 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $this->assertEquals($this->_getPersonasDefaultCals('pwulf')->getId(), $pwulf->displaycontainer_id, 'event not in pwulfs personal calendar');
     }
     
-    public function testCreateEventMissingOwnAttendee()
+    /**
+     * _testEventMissingAttendee helper
+     * 
+     * @param Tinebase_Model_Container $container
+     * @param Calendar_Model_Attender $assertionAttendee
+     * @param boolean $assertMissing
+     */
+    public function _testEventMissingAttendee($container, $assertionAttendee, $assertMissing = false)
     {
+        $not = $assertMissing ? '' : 'not ';
+        $assertFn = $assertMissing ? 'assertFalse' : 'assertTrue';
+        
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
         
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/apple_caldendar_repeating.ics');
         
         
         $id = Tinebase_Record_Abstract::generateUID();
-        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
+
+        $event = Calendar_Frontend_WebDAV_Event::create($container, "$id.ics", $vcalendar);
         
-        $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->attendee), 'own attendee has not been added');
-        $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->exdate->getFirstRecord()->attendee), 'own attendee has not been added to exdate');
+        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $assertionAttendee),
+                "attendee has {$not}been added: " . print_r($event->getRecord()->attendee->toArray(), true));
+        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->exdate->getFirstRecord()->attendee, $assertionAttendee),
+                "attendee has {$not}been added to exdate");
         
         // Simulate OSX which updates w.o. fetching first
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/apple_caldendar_repeating.ics', 'r');
         
-        $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
+        $event = new Calendar_Frontend_WebDAV_Event($container, $event->getRecord()->getId());
         $event->put($vcalendarStream);
         
-        $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->attendee), 'own attendee has not been preserved');
-        $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->exdate->getFirstRecord()->attendee), 'own attendee has not been preserved in exdate');
+        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $assertionAttendee),
+                "attendee has {$not}been preserved: " . print_r($event->getRecord()->attendee->toArray(), true));
+        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->exdate->getFirstRecord()->attendee, $assertionAttendee),
+                "attendee has {$not}been preserved in exdate");
         
         // create new exception from client w.o. fetching first
         Calendar_Controller_Event::getInstance()->purgeRecords(TRUE);
@@ -291,12 +308,58 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/apple_caldendar_repeating.ics', 'r');
         
-        $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
+        $event = new Calendar_Frontend_WebDAV_Event($container, $event->getRecord()->getId());
         $event->put($vcalendarStream);
         
-        $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->attendee), 'own attendee has not been created in exdate');
-        $this->assertTrue(!! Calendar_Model_Attender::getOwnAttender($event->getRecord()->exdate->getFirstRecord()->attendee), 'own attendee has not been created in exdate');
+        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $assertionAttendee),
+                "attendee has {$not}been created in exdate");
+        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->exdate->getFirstRecord()->attendee, $assertionAttendee),
+                "attendee has {$not}been created in exdate");
+    }
+    
+    /**
+     * testEventMissingAttendeeOwnCalendar
+     *
+     * validate test user is added for event in own container
+     */
+    public function testEventMissingAttendeeOwnCalendar()
+    {
+        $this->_testEventMissingAttendee($this->objects['initialContainer'], new Calendar_Model_Attender(array(
+            'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'      => Tinebase_Core::getUser()->contact_id,
+        )));
+    }
+    /**
+     * testEventMissingAttendeeOtherCalendar
+     *
+     * validate calendar owner is added for event in other user container
+     */
+    public function testEventMissingAttendeeOtherCalendar()
+    {
+        $egt = new Calendar_Controller_EventGrantsTests();
+        $egt->setup();
         
+        $pwulfPersonalCal = $this->_personasDefaultCals['sclever'];
+        $pwulf = new Calendar_Model_Attender(array(
+            'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'      => $this->_personasContacts['sclever']->getId(),
+        ));
+        
+        $this->_testEventMissingAttendee($pwulfPersonalCal, $pwulf);
+    }
+    
+    /**
+     * testEventMissingAttendeeSharedCalendar
+     * 
+     * validate no attendee is implicitly added for shared calendars
+     */
+    public function testEventMissingAttendeeSharedCalendar()
+    {
+        $this->markTestSkipped('not yet active');
+        $this->_testEventMissingAttendee($this->objects['sharedContainer'], new Calendar_Model_Attender(array(
+                'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'      => Tinebase_Core::getUser()->contact_id,
+        )), true);
     }
     
     public function testFilterRepeatingException()
@@ -417,6 +480,27 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $record = $event->getRecord();
     
         $this->assertEquals('New Event', $record->summary);
+    }
+    
+    /**
+     * test deleting attachment from existing event
+     */
+    public function testDeleteAttachment()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+        
+        $event = $this->createEventWithAttachment(2);
+        
+        // remove agenda.html
+        $clone = clone $event;
+        $attachments = $clone->getRecord()->attachments;
+        $attachments->removeRecord($attachments->filter('name', 'agenda.html')->getFirstRecord());
+        $event->put($clone->get());
+        
+        // assert agenda2.html exists
+        $record = $event->getRecord();
+        $this->assertEquals(1, $record->attachments->count());
+        $this->assertEquals('agenda2.html', $record->attachments->getFirstRecord()->name);
     }
     
     /**
@@ -579,13 +663,12 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $vcalendar = file_get_contents(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
-        $currentCU = Calendar_Controller_MSEventFacade::getInstance()->setCalendarUser(new Calendar_Model_Attender(array(
-            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => 'someoneelse'
-        )));
+        $egt = new Calendar_Controller_EventGrantsTests();
+        $egt->setup();
+        
+        $pwulfPersonalCal = $this->_personasDefaultCals['sclever'];
         $id = Tinebase_Record_Abstract::generateUID();
-        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", $vcalendar);
-        Calendar_Controller_MSEventFacade::getInstance()->setCalendarUser($currentCU);
+        $event = Calendar_Frontend_WebDAV_Event::create($pwulfPersonalCal, "$id.ics", $vcalendar);
         
         $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], "$id.ics");
         $ics = stream_get_contents($loadedEvent->get());
@@ -830,5 +913,30 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         )));
         $this->assertNotNull($currentUser, 'currentUser not found in attendee');
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $currentUser->status, print_r($currentUser->toArray(), true));
+    }
+    
+    /**
+     * create event with attachment
+     *
+     * @return multitype:Ambigous <Calendar_Frontend_WebDAV_Event, Calendar_Frontend_WebDAV_Event> Ambigous <Tinebase_Model_Tree_Node, Tinebase_Record_Interface, Tinebase_Record_Abstract, NULL, unknown>
+     */
+    public function createEventWithAttachment($count=1)
+    {
+        $event = $this->testCreateRepeatingEvent();
+        
+        for ($i=1; $i<=$count; $i++) {
+            $suffix = $i>1 ? $i : '';
+            
+            $agenda = fopen("php://temp", 'r+');
+            fputs($agenda, "HELLO WORLD$suffix");
+            rewind($agenda);
+        
+            $attachmentController = Tinebase_FileSystem_RecordAttachments::getInstance();
+            $attachmentNode = $attachmentController->addRecordAttachment($event->getRecord(), "agenda{$suffix}.html", $agenda);
+        }
+    
+        $event = new Calendar_Frontend_WebDAV_Event($event->getContainer(), $event->getRecord()->getId());
+    
+        return $event;
     }
 }

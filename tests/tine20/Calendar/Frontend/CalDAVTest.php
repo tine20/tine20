@@ -4,86 +4,30 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Frontend_CalDAVTest::main');
-}
-
-/**
  * Test class for Calendar_Frontend_CalDAV
+ * 
+ * @package     Calendar
  */
-class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
+class Calendar_Frontend_CalDAVTest extends TestCase
 {
     /**
-     * @var array test objects
-     */
-    protected $objects = array();
-    
-    /**
-     * Runs the test methods of this class.
+     * Tree
      *
-     * @access public
-     * @static
+     * @var Sabre\DAV\ObjectTree
      */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar CalDAV Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
-        $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'              => Tinebase_Record_Abstract::generateUID(),
-            'model'             => 'Calendar_Model_Event',
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-        )));
-        
-        $this->objects['tasksContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'              => Tinebase_Record_Abstract::generateUID(),
-            'model'             => 'Tasks_Model_Task',
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
-        )));
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-        $_SERVER['HTTP_USER_AGENT'] = '';
-    }
+    protected $_webdavTree;
     
     /**
      * test getChildren
      */
     public function testGetChildren()
     {
-        $collection = new Calendar_Frontend_CalDAV();
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
         $children = $collection->getChildren();
         
@@ -95,17 +39,37 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
         
         return $children;
     }
-        
+    
     /**
      * test getChild
      */
     public function testGetChild()
     {
-        $collection = new Calendar_Frontend_CalDAV();
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
-        $child = $collection->getChild($this->objects['initialContainer']->getId());
+        $child = $collection->getChild($this->_getCalendarTestContainer()->getId());
         
         $this->assertTrue($child instanceof Calendar_Frontend_WebDAV_Container);
+    }
+    
+    /**
+     * test get calendar inbox
+     */
+    public function testGetCalendarInbox()
+    {
+        $node = $this->_getWebDAVTree()->getNodeForPath('/calendars/' . Tinebase_Core::getUser()->contact_id . '/inbox');
+        
+        $this->assertInstanceOf('Calendar_Frontend_CalDAV_ScheduleInbox', $node, 'wrong child class');
+    }
+    
+    /**
+     * test get calendar outbox
+     */
+    public function testGetCalendarOutbox()
+    {
+        $node = $this->_getWebDAVTree()->getNodeForPath('/calendars/' . Tinebase_Core::getUser()->contact_id . '/outbox');
+        
+        $this->assertInstanceOf('\Sabre\CalDAV\Schedule\Outbox', $node, 'wrong child class');
     }
     
     /**
@@ -113,7 +77,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTasksChild()
     {
-        $collection = new Calendar_Frontend_CalDAV();
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         $children = $this->testGetChildren();
         
         $taskContainer = array_reduce($children, function($result, $container){
@@ -126,12 +90,14 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
     
     /**
      * test testGetTasksChild (Mac_OS_X)
+     * 
+     * @backupGlobals enabled
      */
     public function testGetTasksChildMacOSX()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
         
-        $collection = new Calendar_Frontend_CalDAV();
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT, true);
         $children = $this->testGetChildren();
     }
     
@@ -140,7 +106,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateFile()
     {
-        $collection = new Calendar_Frontend_CalDAV();
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
         $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
         
@@ -154,13 +120,117 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
     {
         $randomName = Tinebase_Record_Abstract::generateUID();
         
-        $collection = new Calendar_Frontend_CalDAV();
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
         $collection->createDirectory($randomName);
         
         $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
         
         $this->assertTrue($container instanceof Tinebase_Model_Container);
-        
     }
+
+    /**
+     * test to create a new directory
+     */
+    public function testCreateExtendedCollectionVEvent()
+    {
+        $randomName = Tinebase_Record_Abstract::generateUID();
+        
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
+        
+        $collection->createExtendedCollection(
+            'B1B3BEA0-F1F9-409F-B1A0-43E41119F851', 
+            array('{DAV:}collection', '{urn:ietf:params:xml:ns:caldav}calendar'),
+            array(
+                '{DAV:}displayname' => $randomName,
+                '{http://apple.com/ns/ical/}calendar-color' => '#711A76FF',
+                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new \Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT'))
+            )
+        );
+        
+        $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+        $this->assertTrue($container instanceof Tinebase_Model_Container);
+        
+        $subCollection = $collection->getChild('B1B3BEA0-F1F9-409F-B1A0-43E41119F851');
+        $this->assertEquals('B1B3BEA0-F1F9-409F-B1A0-43E41119F851', $subCollection->getName());
+        
+        $properties = $subCollection->getProperties(array('{DAV:}displayname'));
+        $this->assertEquals($randomName, $properties['{DAV:}displayname']);
+    }
+
+    /**
+     * test to create a new directory
+     */
+    public function testCreateExtendedCollectionVTodo()
+    {
+        $randomName = Tinebase_Record_Abstract::generateUID();
+        
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
+        
+        $collection->createExtendedCollection(
+            'B1B3BEA0-F1F9-409F-B1A0-43E41119F851', 
+            array('{DAV:}collection', '{urn:ietf:params:xml:ns:caldav}calendar'),
+            array(
+                '{DAV:}displayname' => $randomName,
+                '{http://apple.com/ns/ical/}calendar-color' => '#711A76FF',
+                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new \Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VTODO'))
+            )
+        );
+        
+        $container = Tinebase_Container::getInstance()->getContainerByName('Tasks', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+        $this->assertTrue($container instanceof Tinebase_Model_Container);
+        
+        $subCollection = $collection->getChild('B1B3BEA0-F1F9-409F-B1A0-43E41119F851');
+        $this->assertEquals('B1B3BEA0-F1F9-409F-B1A0-43E41119F851', $subCollection->getName());
+        
+        $properties = $subCollection->getProperties(array('{DAV:}displayname'));
+        $this->assertEquals($randomName, $properties['{DAV:}displayname']);
+    }
+
+    /**
+     * 
+     * @return \Sabre\DAV\ObjectTree
+     */
+    protected function _getWebDAVTree()
+    {
+        if (! $this->_webdavTree instanceof \Sabre\DAV\ObjectTree) {
+            $this->_webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        }
+        
+        return $this->_webdavTree;
+    }
+    
+    /**
+     * 
+     * @return Tinebase_Model_Container
+     */
+    protected function _getCalendarTestContainer()
+    {
+        $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'model'             => 'Calendar_Model_Event',
+            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+        )));
+        
+        return $container;
+    }
+    
+    /**
+     * 
+     * @return Tinebase_Model_Container
+     */
+    protected function _getTasksTestContainer()
+    {
+        $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'              => Tinebase_Record_Abstract::generateUID(),
+            'model'             => 'Tasks_Model_Task',
+            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+        )));
+        
+        return $container;
+    }    
 }

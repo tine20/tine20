@@ -194,22 +194,20 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      */
     public static function handleOwnCloudChunkedFileUpload($name, $data)
     {
-        $matched = preg_match('/(?P<name>.*)-chunking-(?P<tempId>\d+)-(?P<totalCount>\d+)-(?P<chunkId>\d+)/', $name, $chunkInfo);
-        
-        if (!$matched) {
-            throw new \Sabre\DAV\Exception\BadRequest('bad filename provided: ' . $name);
+        if (!isset($_SERVER['CONTENT_LENGTH'])) {
+            throw new \Sabre\DAV\Exception\BadRequest('CONTENT_LENGTH header missing!');
         }
         
-        $stat = fstat($data);
-        
-        if (isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] != $stat['size']) {
-            throw new \Sabre\DAV\Exception\BadRequest('uploaded part incomplete! expected size of: ' . $_SERVER['CONTENT_LENGTH'] . ' got: ' . $stat['size']);
+        $matched = preg_match('/(?P<name>.*)-chunking-(?P<tempId>\d+)-(?P<totalCount>\d+)-(?P<chunkId>\d+)/', $name, $chunkInfo);
+        if (!$matched) {
+            throw new \Sabre\DAV\Exception\BadRequest('bad filename provided: ' . $name);
         }
         
         // copy chunk to temp file
         $path = Tinebase_TempFile::getTempPath();
         
         $tempfileHandle = fopen($path, "w");
+        
         if (! $tempfileHandle) {
             throw new \Sabre\DAV\Exception\BadRequest('Could not open tempfile while uploading! ');
         }
@@ -217,6 +215,12 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         do {
             stream_copy_to_stream($data, $tempfileHandle);
         } while (!feof($data));
+        
+        $stat = fstat($tempfileHandle);
+        
+        if ($_SERVER['CONTENT_LENGTH'] != $stat['size']) {
+            throw new \Sabre\DAV\Exception\BadRequest('uploaded part incomplete! expected size of: ' . $_SERVER['CONTENT_LENGTH'] . ' got: ' . $stat['size']);
+        }
         
         fclose($tempfileHandle);
         

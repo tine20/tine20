@@ -29,6 +29,7 @@ class Tinebase_WebDav_AllTests
         $suite->addTestSuite('Tinebase_WebDav_PrincipalBackendTest');
         $suite->addTestSuite('Tinebase_WebDav_Plugin_InverseTest');
         $suite->addTestSuite('Tinebase_WebDav_Plugin_OwnCloudTest');
+        $suite->addTestSuite('Tinebase_WebDav_Plugin_PrincipalSearchTest');
         $suite->addTestSuite('Tinebase_WebDav_RootTest');
         
         return $suite;

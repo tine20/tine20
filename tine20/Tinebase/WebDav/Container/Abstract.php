@@ -1,8 +1,4 @@
 <?php
-
-use Sabre\DAV;
-use Sabre\CalDAV;
-
 /**
  * Tine 2.0
  *
@@ -10,7 +6,7 @@ use Sabre\CalDAV;
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -20,7 +16,7 @@ use Sabre\CalDAV;
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection implements Sabre\DAV\IProperties, Sabre\DAVACL\IACL
+abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection implements \Sabre\DAV\IProperties, \Sabre\DAVACL\IACL
 {
     /**
      * the current application object
@@ -70,6 +66,19 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
         $object = $objectClass::create($this->_container, $name, $vobjectData);
         
         return $object->getETag();
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Sabre\DAV\Node::delete()
+     */
+    public function delete()
+    {
+        try {
+            Tinebase_Container::getInstance()->deleteContainer($this->_container);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            throw new Exception\Forbidden('Permission denied to delete node');
+        }
     }
     
     /**
@@ -293,7 +302,15 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
      */
     public function getName()
     {
-        return $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name;
+        if ($this->_useIdAsName == true) {
+            if ($this->_container->uuid) {
+                return $this->_container->uuid;
+            } else {
+                return $this->_container->getId();
+            }
+        } 
+        
+        return $this->_container->name;
     }
     
     /**
@@ -395,7 +412,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
     public function updateProperties($mutations) 
     {
         if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_ADMIN)) {
-            throw new DAV\Exception\Forbidden('permission to update container denied');
+            throw new \Sabre\DAV\Exception\Forbidden('permission to update container denied');
         }
         
         $result = array(
@@ -410,8 +427,8 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
                     $result['200'][$key] = null;
                     break;
                     
-                case '{' . CalDAV\Plugin::NS_CALDAV . '}calendar-description':
-                case '{' . CalDAV\Plugin::NS_CALDAV . '}calendar-timezone':
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description':
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone':
                     // fake success
                     $result['200'][$key] = null;
                     break;

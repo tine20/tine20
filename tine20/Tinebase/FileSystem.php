@@ -6,7 +6,7 @@
  * @subpackage  FileSystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo 0007376: Tinebase_FileSystem / Node model refactoring: move all container related functionality to Filemanager
  */
@@ -185,9 +185,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function getContainerPath(Tinebase_Model_Container $container)
     {
-        $path = $this->getApplicationBasePath($container->application_id, $container->type) . '/' . $container->getId();
+        $treeNodePath = new Tinebase_Model_Tree_Node_Path(array(
+            'application' => Tinebase_Application::getInstance()->getApplicationById($container->application_id)
+        ));
+        $treeNodePath->setContainer($container);
         
-        return $path;
+        return $treeNodePath->statpath;
     }
     
     /**
@@ -314,28 +317,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             case 'wb':
             case 'x':
             case 'xb':
-                rewind($handle);
-                
-                $ctx = hash_init('sha1');
-                hash_update_stream($ctx, $handle);
-                $hash = hash_final($ctx);
-                
-                $hashDirectory = $this->_basePath . '/' . substr($hash, 0, 3);
-                if (!file_exists($hashDirectory)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
-                    if(mkdir($hashDirectory, 0700) === false) {
-                        throw new Tinebase_Exception_UnexpectedValue('failed to create directory');
-                    } 
-                }
-                
-                $hashFile      = $hashDirectory . '/' . substr($hash, 3);
-                if (!file_exists($hashFile)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
-                    rewind($handle);
-                    $hashHandle = fopen($hashFile, 'x');
-                    stream_copy_to_stream($handle, $hashHandle);
-                    fclose($hashHandle);
-                }
+                list ($hash, $hashFile) = $this->createFileBlob($handle);
                 
                 $this->_updateFileObject($options['tine20']['node']->object_id, $hash, $hashFile);
                 
@@ -365,9 +347,11 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      * @param string $_hashFile
      * @return Tinebase_Model_Tree_FileObject
      */
-    protected function _updateFileObject($_id, $_hash, $_hashFile)
+    protected function _updateFileObject($_id, $_hash, $_hashFile = null)
     {
-        $currentFileObject = $this->_fileObjectBackend->get($_id);
+        $currentFileObject = $_id instanceof Tinebase_Record_Abstract ? $_id : $this->_fileObjectBackend->get($_id);
+        
+        $_hashFile = $_hashFile ?: ($this->_basePath . '/' . substr($_hash, 0, 3) . '/' . substr($_hash, 3));
         
         $updatedFileObject = clone($currentFileObject);
         $updatedFileObject->hash = $_hash;
@@ -876,6 +860,45 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     }
     
     /**
+     * places contents into a file blob
+     * 
+     * @param  stream|string|tempFile $contents
+     * @return string hash
+     */
+    public function createFileBlob($contents)
+    {
+        if (! is_resource($contents)) {
+            throw new Tinebase_Exception_NotImplemented('please implement me!');
+        }
+        
+        $handle = $contents;
+        rewind($handle);
+        
+        $ctx = hash_init('sha1');
+        hash_update_stream($ctx, $handle);
+        $hash = hash_final($ctx);
+        
+        $hashDirectory = $this->_basePath . '/' . substr($hash, 0, 3);
+        if (!file_exists($hashDirectory)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
+            if(mkdir($hashDirectory, 0700) === false) {
+                throw new Tinebase_Exception_UnexpectedValue('failed to create directory');
+            }
+        }
+        
+        $hashFile      = $hashDirectory . '/' . substr($hash, 3);
+        if (!file_exists($hashFile)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
+            rewind($handle);
+            $hashHandle = fopen($hashFile, 'x');
+            stream_copy_to_stream($handle, $hashHandle);
+            fclose($hashHandle);
+        }
+        
+        return array($hash, $hashFile);
+    }
+    
+    /**
      * get tree node children
      * 
      * @param string|Tinebase_Model_Tree_Node|Tinebase_Record_RecordSet  $nodeId
@@ -1016,7 +1039,8 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         // update file object
         $fileObject = $this->_fileObjectBackend->get($currentNodeObject->object_id);
         $fileObject->description = $_node->description;
-        $this->_fileObjectBackend->update($fileObject);
+        
+        $this->_updateFileObject($fileObject, $_node->hash);
         
         return $this->_treeNodeBackend->update($_node);
     }
@@ -1175,29 +1199,67 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     /**
      * copy tempfile data to file path
      * 
-     * @param  string|Tinebase_Model_TempFile  $tempFile
-     * @param  string                          $path
+     * @param  mixed   $tempFile
+         Tinebase_Model_Tree_Node     with property hash, tempfile or stream
+         Tinebase_Model_Tempfile      tempfile
+         string                       with tempFile id
+         array                        with [id] => tempFile id (this is odd IMHO)
+         stream                       stream ressource
+         NULL                         create empty file
+     * @param  string  $path
      * @throws Tinebase_Exception_AccessDenied
      */
     public function copyTempfile($tempFile, $path)
+    {
+        if ($tempFile === NULL) {
+            $tempStream = fopen('php://memory', 'r');
+        } else if (is_resource($tempFile)) {
+            $tempStream = $tempFile;
+        } else if (is_string($tempFile) || is_array($tempFile)) {
+            $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFile);
+            return $this->copyTempfile($tempFile, $path);
+        } else if ($tempFile instanceof Tinebase_Model_Tree_Node) {
+            if (isset($tempFile->hash)) {
+                $hashFile = $this->_basePath . '/' . substr($tempFile->hash, 0, 3) . '/' . substr($tempFile->hash, 3);
+                $tempStream = fopen($hashFile, 'r');
+            } else if (is_resource($tempFile->stream)) {
+                $tempStream = $tempFile->stream;
+            } else {
+                return $this->copyTempfile($tempFile->tempFile, $path);
+            }
+        } else if ($tempFile instanceof Tinebase_Model_TempFile) {
+            $tempStream = fopen($tempFile->path, 'r');
+        } else {
+            throw new Tinebase_Exception_UnexpectedValue('unexpected tempfile value');
+        }
+        
+        return $this->copyStream($tempStream, $path);
+    }
+    
+    /**
+     * copy stream data to file path
+     *
+     * @param  stream  $in
+     * @param  string  $path
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_UnexpectedValue
+     */
+    public function copyStream($in, $path)
     {
         if (! $handle = $this->fopen($path, 'w')) {
             throw new Tinebase_Exception_AccessDenied('Permission denied to create file (filename ' . $path . ')');
         }
         
-        if ($tempFile !== NULL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' Reading data from tempfile ...');
+        if (! is_resource($in)) {
+            throw new Tinebase_Exception_UnexpectedValue('source needs to be of type stream');
+        }
         
-            $tempFile = ($tempFile instanceof Tinebase_Model_TempFile) ? $tempFile : Tinebase_TempFile::getInstance()->getTempFile($tempFile);
-            $tempData = fopen($tempFile->path, 'r');
-            if (!$tempData) {
-                throw new Tinebase_Exception_AccessDenied('Could not read tempfile ' . $tempFile->path);
+        if (is_resource($in) !== NULL) {
+            $metaData = stream_get_meta_data($in);
+            if (true === $metaData['seekable']) {
+                rewind($in);
             }
-            
-            stream_copy_to_stream($tempData, $handle);
-            
-            fclose($tempData);
+            stream_copy_to_stream($in, $handle);
             
             $this->clearStatCache($path);
         }

@@ -126,22 +126,20 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
      */
     public function getChild($_name)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' name: ' . $_name);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' path: ' . $this->_path . ' name: ' . $_name . ' path parts: ' . count($this->_pathParts));
     
         switch (count($this->_pathParts)) {
             # path == ApplicationName
             # return personal and shared folder
             case 1:
-                if (!in_array($_name, array(Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Model_Container::TYPE_SHARED))) {
+                if (!in_array($_name, array(Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Model_Container::TYPE_SHARED, Tinebase_FileSystem::FOLDER_TYPE_RECORDS))) {
                     throw new Sabre\DAV\Exception\NotFound('Directory not found');
                 }
                 
                 $className = $this->_applicationName . '_Frontend_WebDAV';
                 return new $className($this->_path . '/' . $_name);
-        
-                break;
             
-            # path == ApplicationName/{personal|shared}
+            # path == ApplicationName/{personal|shared|records}
             # list container
             case 2:
                 if ($this->_pathParts[1] == Tinebase_Model_Container::TYPE_SHARED) {
@@ -157,12 +155,18 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
                     $objectClass = $this->_applicationName . '_Frontend_WebDAV_Container';
                     
                     return new $objectClass($container);
+                    
                 } elseif ($this->_pathParts[1] == Tinebase_Model_Container::TYPE_PERSONAL) {
                     if ($_name != Tinebase_Core::getUser()->accountLoginName && $_name != 'currentUser') {
                         throw new Sabre\DAV\Exception\NotFound('Child not found');
                     }
                     
                     $className = $this->_applicationName . '_Frontend_WebDAV';
+                    
+                    return new $className($this->_path . '/' . $_name);
+                    
+                } elseif ($this->_pathParts[1] == Tinebase_FileSystem::FOLDER_TYPE_RECORDS) {
+                    $className = 'Tinebase_Frontend_WebDAV_RecordCollection';
                     
                     return new $className($this->_path . '/' . $_name);
                 }
@@ -184,8 +188,6 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
                 $objectClass = $this->_applicationName . '_Frontend_WebDAV_Container';
                 
                 return new $objectClass($container);
-                
-                break;
                 
             default:
                 throw new Sabre\DAV\Exception\NotFound('Child not found');

@@ -59,8 +59,15 @@ class Tinebase_Frontend_Json_Container
             if ($container instanceof Tinebase_Model_Container) {
                 $containerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
                 $containerArray['path'] = $container->getPath();
+                $ownerId = $container->getOwner();
             } else {
                 $containerArray['path'] = "personal/{$container->getId()}";
+                $ownerId = $container->getId();
+            }
+            try {
+                $containerArray['ownerContact'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($ownerId, true)->toArray();
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " can't resolve ownerContact: " . $e);
             }
             
             $response[] = $containerArray;
@@ -196,7 +203,7 @@ class Tinebase_Frontend_Json_Container
             switch($value['account_type']) {
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     try {
-                        $account = Tinebase_User::getInstance()->getUserById($value['account_id']);
+                        $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $value['account_id']);
                     } catch (Tinebase_Exception_NotFound $e) {
                         $account = Tinebase_User::getInstance()->getNonExistentUser();
                     }

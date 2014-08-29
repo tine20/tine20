@@ -13,6 +13,8 @@
  * class to handle webdav requests for Tinebase
  * 
  * @package     Tinebase
+ * 
+ * @todo extend Tinebase_Frontend_WebDAV_Record? or maybe add a common ancestor
  */
 abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode
 {

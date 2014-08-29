@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -85,7 +85,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends TestCase
 
         $request = new Sabre\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
-            'REQUEST_URI'    => '/remote.php/webdav/personal/' . Tinebase_Core::getUser()->accountLoginName,
+            'REQUEST_URI'    => '/remote.php/webdav/' . Tinebase_Core::getUser()->accountDisplayName,
             'HTTP_DEPTH'     => '0',
         ));
         $request->setBody($body);

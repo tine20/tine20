@@ -20,7 +20,7 @@ use Sabre\CalDAV;
  * @package     Calendar
  * @subpackage  Frontend
  */
-class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements Sabre\CalDAV\ICalendar
+class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements Sabre\CalDAV\ICalendar, Sabre\CalDAV\IShareableCalendar
 {
     protected $_applicationName = 'Calendar';
     
@@ -107,20 +107,20 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                 )
             )
         ));
-    
+        
         /**
          * see http://forge.tine20.org/mantisbt/view.php?id=5122
          * we must use action 'sync' and not 'get' as
          * otherwise the calendar also return events the user only can see because of freebusy
          */
         $objects = $this->_getController()->search($filter, null, false, false, 'sync');
-    
+        
         $children = array();
-    
+        
         foreach ($objects as $object) {
             $children[] = $this->getChild($object);
         }
-    
+        
         return $children;
     }
     
@@ -132,8 +132,6 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     public function getProperties($requestedProperties) 
     {
-        $displayName = $this->_container->type == Tinebase_Model_Container::TYPE_SHARED ? $this->_container->name . ' (shared)' : $this->_container->name;
-        
         $ctags = Tinebase_Container::getInstance()->getContentSequence($this->_container);
         
         $properties = array(
@@ -142,12 +140,12 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
             '{DAV:}resource-id' => 'urn:uuid:' . $this->_container->getId(),
             '{DAV:}owner'       => new Sabre\DAVACL\Property\Principal(Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
-            '{DAV:}displayname' => $displayName,
+            '{DAV:}displayname' => $this->_container->name,
             '{http://apple.com/ns/ical/}calendar-color' => (empty($this->_container->color)) ? '#000000' : $this->_container->color,
             
             '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
             '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new Sabre\CalDAV\Property\SupportedCalendarData(),
-            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description'             => 'Calendar ' . $displayName,
+            '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description'             => 'Calendar ' . $this->_container->name,
             '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => Tinebase_WebDav_Container_Abstract::getCalendarVTimezone($this->_application)
         );
         
@@ -255,6 +253,72 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     }
     
     /**
+     * (non-PHPdoc)
+     * @see \Sabre\CalDAV\IShareableCalendar::getShares()
+     */
+    public function getShares()
+    {
+        $result = array();
+        
+        try {
+            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
+        } catch (Tinebase_Exception_AccessDenied $e) {
+            // user has no right/grant to see all grants of this container
+            $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+            $grants->addRecord(Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $this->_container));
+        }
+        
+        foreach ($grants as $grant) {
+            
+            switch ($grant->account_type) {
+                case 'anyone':
+                    $href       = '/principals/groups/anyone';
+                    $commonName = 'Anyone';
+                    break;
+                
+                case 'group':
+                    try {
+                        $list       = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        continue;
+                    }
+                     
+                    $href       = '/principals/groups/' . $list->list_id;
+                    $commonName = $list->name;
+                    
+                    break;
+                    
+                case 'user':
+                    try {
+                        $contact = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        continue;
+                    }
+                     
+                    $href       = '/principals/users/' . $contact->contact_id;
+                    $commonName = $contact->accountDisplayName;
+                    break;
+            }
+            
+            $writeAble = $grant[Tinebase_Model_Grants::GRANT_ADMIN] || 
+                         ( $grant[Tinebase_Model_Grants::GRANT_READ] && 
+                           $grant[Tinebase_Model_Grants::GRANT_ADD]  && 
+                           $grant[Tinebase_Model_Grants::GRANT_EDIT] &&
+                           $grant[Tinebase_Model_Grants::GRANT_DELETE] );
+            
+            $result[] = array(
+                'href'       => $href,
+                'commonName' => $commonName,
+                'status'     => Sabre\CalDAV\SharingPlugin::STATUS_ACCEPTED,
+                'readOnly'   => !$writeAble, 
+                'summary'    => null            //optional
+            ); 
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Returns the list of supported privileges for this node.
      *
      * The returned data structure is a list of nested privileges.
@@ -266,8 +330,8 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      *
      * @return array|null
      */
-    public function getSupportedPrivilegeSet() {
-
+    public function getSupportedPrivilegeSet() 
+    {
         $default = DAVACL\Plugin::getDefaultSupportedPrivilegeSet();
 
         // We need to inject 'read-free-busy' in the tree, aggregated under
@@ -283,5 +347,14 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         }
         
         return $default;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Sabre\CalDAV\IShareableCalendar::updateShares()
+     */
+    public function updateShares(array $add, array $remove)
+    {
+        
     }
 }
