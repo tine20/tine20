@@ -68,15 +68,82 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
      * @param {Object} attr
      */
     inspectCreateNode: Ext.EmptyFn,
-    
+
     processResponse: function(response, node, callback, scope) {
         // convert tine search response into usual treeLoader structure
         var o = response.responseData || Ext.decode(response.responseText);
-        if (o.totalcount) {
-            // take results part as response only
-            response.responseData = o.results;
-        }
+        response.responseData = o.totalcount ? o.results : o;
         
+        // processed nodes / structures
+        var newResponse = [];
+
+        // read every node
+        Ext.each(response.responseData, function (node) {
+            var parentNode = newResponse;
+            
+            if (! Ext.isString(node.name)) {
+                parentNode.push(node);
+                return;
+            }
+            
+            // Get folder name to final container
+            var parts = Ext.isString(node.name) ? node.name.split("/") : [''];
+            var containerName = parts[parts.length-1];
+
+            // Remove first "" and last item because they don't belong to the folder names
+            // This could be "" if the name starts with a /
+            if (parts[0] == "") {
+                parts.shift();
+            }
+            parts.pop();
+
+            Ext.each(parts, function (part, idx) {
+                var child = this.findNodeByName(part, parentNode);
+
+                if (! child) {
+                    var child = {
+                        'name': part,
+                        'id': part,
+                        'children': [],
+                        'leaf': false,
+                        'editable': false,
+                        'draggable': false,
+                        'allowDrag': false,
+                        'allowDrop': false,
+                        'singleClickExpand': true,
+                        'listeners': {'beforeclick' : function(n,e) {n.toggle(); return false}}
+                    };
+                    parentNode.push(child);
+                }
+
+                parentNode = child.children;
+            }, this);
+
+            node.longName = node.name;
+            node.text = node.name = Ext.util.Format.htmlEncode(containerName);
+
+            parentNode.push(node);
+        }, this);
+
+        response.responseData = newResponse;
+
         return Tine.widgets.tree.Loader.superclass.processResponse.apply(this, arguments);
+    },
+
+    /**
+     * Search for a node and return if exists
+     *
+     * @param {string} name
+     * @param {object} nodes
+     * @return {mixed} node
+     */
+    findNodeByName: function (name, nodes) {
+        var ret = false;
+        Ext.each(nodes, function (node, idx) {
+            if (node && node.name && node.name == name && Ext.isArray(node.children)) {
+                ret = node;
+            }
+        }, this);
+        return ret;
     }
  });

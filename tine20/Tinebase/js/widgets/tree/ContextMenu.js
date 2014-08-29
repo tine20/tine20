@@ -259,13 +259,13 @@ Tine.widgets.tree.ContextMenu = {
      */
     renameNode: function() {
         if (this.scope.ctxNode) {
-                       
+    
             var node = this.scope.ctxNode;
             Ext.MessageBox.show({
                 title: String.format(_('Rename {0}'), this.nodeName),
                 msg: String.format(_('Please enter the new name of the {0}:'), this.nodeName),
                 buttons: Ext.MessageBox.OKCANCEL,
-                value: node.text,
+                value: node.attributes.longName || node.text,
                 fn: function(_btn, _text){
                     if (_btn == 'ok') {
                         if (! _text) {
