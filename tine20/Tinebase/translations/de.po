@@ -2975,3 +2975,7 @@ msgstr "Benutzerkonto auswählen"
 #: js/widgets/account/ChangeAccountAction.js:108
 msgid "Changing user account ..."
 msgstr "Benutzerkonto wechseln ..."
+
+# 0009908: anonymous download links for files and folders
+msgid "Publish"
+msgstr "Veröffentlichen"

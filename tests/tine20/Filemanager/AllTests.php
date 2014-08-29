@@ -4,7 +4,7 @@
  * 
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -24,6 +24,7 @@ class Filemanager_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Filemanager All Tests');
         $suite->addTestSuite('Filemanager_Frontend_AllTests');
+        $suite->addTestSuite('Filemanager_Controller_DownloadLinkTests');
         
         return $suite;
     }

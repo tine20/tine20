@@ -348,7 +348,7 @@ msgid "Logging you in..."
 msgstr ""
 
 #: js/LoginPanel.js:460 js/widgets/dialog/MultipleEditDialogPlugin.js:693
-#: js/widgets/tree/ContextMenu.js:191 js/widgets/container/GrantsDialog.js:95
+#: js/widgets/tree/ContextMenu.js:202 js/widgets/container/GrantsDialog.js:95
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:365
 #: js/widgets/persistentfilter/PickerPanel.js:417
@@ -1067,7 +1067,7 @@ msgid ""
 msgstr ""
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:690
-#: js/widgets/dialog/EditDialog.js:851 js/widgets/tree/ContextMenu.js:346
+#: js/widgets/dialog/EditDialog.js:851 js/widgets/tree/ContextMenu.js:357
 #: js/widgets/persistentfilter/PickerPanel.js:325
 #: js/widgets/grid/GridPanel.js:1810 js/MainMenu.js:263
 msgid "Confirm"
@@ -1411,7 +1411,7 @@ msgstr ""
 msgid "Add {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:265
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:276
 #, python-brace-format
 msgid "Rename {0}"
 msgstr ""
@@ -1456,52 +1456,56 @@ msgstr ""
 msgid "Pause upload"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:185
+#: js/widgets/tree/ContextMenu.js:132
+msgid "Publish"
+msgstr ""
+
+#: js/widgets/tree/ContextMenu.js:196
 #, python-brace-format
 msgid "New {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:185
+#: js/widgets/tree/ContextMenu.js:196
 #, python-brace-format
 msgid "Please enter the name of the new {0}:"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:188
+#: js/widgets/tree/ContextMenu.js:199
 #, python-brace-format
 msgid "No {0} added"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:188 js/widgets/tree/ContextMenu.js:272
+#: js/widgets/tree/ContextMenu.js:199 js/widgets/tree/ContextMenu.js:283
 #, python-brace-format
 msgid "You have to supply a {0} name!"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:191
+#: js/widgets/tree/ContextMenu.js:202
 #, python-brace-format
 msgid "Creating {0}..."
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:266
+#: js/widgets/tree/ContextMenu.js:277
 #, python-brace-format
 msgid "Please enter the new name of the {0}:"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:272
+#: js/widgets/tree/ContextMenu.js:283
 #, python-brace-format
 msgid "Not renamed {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:346
+#: js/widgets/tree/ContextMenu.js:357
 #, python-brace-format
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:457
+#: js/widgets/tree/ContextMenu.js:468
 #, python-brace-format
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:481
+#: js/widgets/tree/ContextMenu.js:492
 #, python-brace-format
 msgid "Properties for {0} \"{1}\""
 msgstr ""
@@ -1573,17 +1577,17 @@ msgid_plural "containers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/container/TreePanel.js:546
+#: js/widgets/container/TreePanel.js:547
 #, python-brace-format
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr ""
 
-#: js/widgets/container/TreePanel.js:547
+#: js/widgets/container/TreePanel.js:548
 #, python-brace-format
 msgid "{0} grant is required for desired action"
 msgstr ""
 
-#: js/widgets/container/TreePanel.js:548
+#: js/widgets/container/TreePanel.js:549
 msgid "Insufficient Grants"
 msgstr ""
 

@@ -34,7 +34,9 @@ DirectoryIndex index.php
     RewriteRule ^principals                  index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
     RewriteRule ^remote.php                  index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
     
-    
+    # Anonymous downloads
+    RewriteRule ^download/get/(.*)           index.php?method=Download.downloadNode&path=$1 [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+    RewriteRule ^download/show/(.*)          index.php?method=Download.displayNode&path=$1  [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
 </IfModule>
 
 <IfModule mod_expires.c>

@@ -363,9 +363,28 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this
         });
         
+        this.action_publish = new Ext.Action({
+            allowMultiple: false,
+            singularText: this.app.i18n._('Publish'),
+            folderText: this.app.i18n._('Publish'),
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
+            text: this.app.i18n._('Publish'),
+            handler: this.onPublishFile,
+            disabled: true,
+            iconCls: 'action_publish',
+            scope: this,
+            actionUpdater: function(action, grants, records) {
+                if (records.length != 1) {
+                    action.disable();
+                } else {
+                    action.enable();
+                }
+            }
+        });
+        
         this.contextMenu = Tine.Filemanager.GridContextMenu.getMenu({
             nodeName: Tine.Filemanager.Model.Node.getRecordName(),
-            actions: ['delete', 'rename', 'download', 'resume', 'pause', 'edit'],
+            actions: ['delete', 'rename', 'download', 'resume', 'pause', 'edit', 'publish'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -373,7 +392,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.folderContextMenu = Tine.Filemanager.GridContextMenu.getMenu({
             nodeName: this.app.i18n._(this.app.getMainScreen().getWestPanel().getContainerTreePanel().containerName),
-            actions: ['delete', 'rename'],
+            actions: ['delete', 'rename', 'edit', 'publish'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -387,8 +406,33 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
            this.action_goUpFolder,
            this.action_download,
            this.action_deleteRecord,
-           this.action_editFile
+           this.action_editFile,
+           this.action_publish
        ]);
+    },
+    
+    onPublishFile: function() {
+        var selections = this.selectionModel.getSelections();
+        
+        if (selections.length != 1) {
+            return;
+        }
+        
+        var date = new Date();
+        date.setDate(date.getDate() + 30);
+        
+        var record = new Tine.Filemanager.Model.DownloadLink({node_id: selections[0].id, expiry_time: date});
+        Tine.Filemanager.downloadLinkRecordBackend.saveRecord(record, {success: function(record) {
+            
+            // TODO: add mail-button
+            Ext.MessageBox.show({
+                title: selections[0].data.type == 'folder' ? this.app.i18n._('Folder has been published successfully') : this.app.i18n._('File has been published successfully'), 
+                msg: String.format(this.app.i18n._("Url: {0}") + '<br />' + this.app.i18n._("Valid Until: {1}"), record.get('url'), record.get('expiry_time')), 
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO,
+                scope: this
+            });
+        }, failure: Tine.Tinebase.ExceptionHandler.handleRequestException, scope: this});
     },
     
     /**
@@ -456,6 +500,11 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             iconAlign: 'top'
                         }),
                         Ext.apply(new Ext.Button(this.action_download), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
+                        Ext.apply(new Ext.Button(this.action_publish), {
                             scale: 'medium',
                             rowspan: 2,
                             iconAlign: 'top'

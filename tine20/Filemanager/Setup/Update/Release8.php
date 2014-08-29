@@ -1,12 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<application>
-    <name>Filemanager</name>
-    <version>8.1</version>
-    <order>11</order>
-    <depends>
-        <application>Admin</application>
-    </depends>
-    <tables>
+<?php
+/**
+ * Tine 2.0
+ *
+ * @package     Filemanager
+ * @subpackage  Setup
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL3
+ * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ */
+
+class Filemanager_Setup_Update_Release8 extends Setup_Update_Abstract
+{
+    /**
+     * update to 8.1
+     * 
+     * - add downloadlink table
+     * 
+     * @see 0009908: anonymous download links for files and folders
+     * 
+     * @return void
+     */
+    public function update_0()
+    {
+        $declaration = new Setup_Backend_Schema_Table_Xml('
         <table>
             <name>filemanager_downloadlink</name>
             <version>1</version>
@@ -101,6 +117,9 @@
                     </reference>
                 </index>
             </declaration>
-        </table>
-    </tables>
-</application>
+        </table>');
+        $this->_backend->createTable($declaration, 'Tinebase', 'filemanager_downloadlink');
+        
+        $this->setApplicationVersion('Filemanager', '8.1');
+    }
+}

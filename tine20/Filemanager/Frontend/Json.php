@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -26,6 +26,7 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var string
      */
     protected $_applicationName = 'Filemanager';
+    
     /**
      * search file/directory nodes
      *
@@ -167,4 +168,48 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
     }
     
+    /**
+     * Search for records matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchDownloadLinks($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Filemanager_Controller_DownloadLink::getInstance(), 'Filemanager_Model_DownloadLinkFilter');
+    }
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getDownloadLink($id)
+    {
+        return $this->_get($id, Filemanager_Controller_DownloadLink::getInstance());
+    }
+    
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveDownloadLink($recordData)
+    {
+        return $this->_save($recordData, Filemanager_Controller_DownloadLink::getInstance(), 'DownloadLink');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array $ids
+     * @return array
+     */
+    public function deleteDownloadLinks($ids)
+    {
+        return $this->_delete($ids, Filemanager_Controller_DownloadLink::getInstance());
+    }
 }

@@ -35,6 +35,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
     {
         $server = new Tinebase_Http_Server();
         $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
+        $server->setClass('Filemanager_Frontend_Download', 'Download');
         
         try {
             try {
