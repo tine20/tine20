@@ -433,6 +433,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $first = TRUE;
         
         $allVacation = 0;
+        $remainingVacation = 0;
         $feastDays = array();
         
         $contracts->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));

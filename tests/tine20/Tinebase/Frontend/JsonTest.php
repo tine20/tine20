@@ -519,7 +519,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         $filterData = $registryData['Tinebase']['persistentFilters'];
         $this->assertTrue($filterData['totalcount'] > 10);
-        $this->assertTrue(isset($filterData['results'][0]['grants']));
+        $this->assertTrue(isset($filterData['results'][0]['grants']), 'grants are missing');
         $grants = $filterData['results'][0]['grants'];
         $this->assertTrue($grants[0]['readGrant']);
         

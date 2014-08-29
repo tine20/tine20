@@ -442,11 +442,13 @@ class Tinebase_Tags
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Deleting ' . count($tags) . ' tags.');
         
-        $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
-            'is_deleted'   => true,
-            'deleted_by'   => $currentAccountId,
-            'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-        ), $this->_db->quoteInto($this->_db->quoteIdentifier('id').' IN (?)', $tags->getArrayOfIds()));
+        if (count($tags) > 0) {
+            $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
+                'is_deleted'   => true,
+                'deleted_by'   => $currentAccountId,
+                'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+            ), $this->_db->quoteInto($this->_db->quoteIdentifier('id').' IN (?)', $tags->getArrayOfIds()));
+        }
     }
 
     /**

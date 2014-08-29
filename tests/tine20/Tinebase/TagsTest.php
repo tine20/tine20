@@ -317,6 +317,7 @@ class Tinebase_TagsTest extends TestCase
      */
     public function testSearchTagsForApplication()
     {
+        $this->_createSharedTag();
         $filter = new Tinebase_Model_TagFilter(array());
         $ids = $this->_instance->searchTags($filter)->getId();
         $this->_instance->deleteTags($ids);
