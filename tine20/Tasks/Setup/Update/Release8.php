@@ -32,7 +32,7 @@ class Tasks_Setup_Update_Release8 extends Setup_Update_Abstract
                     <name>etag</name>
                 </field>
             </index>');
-        $this->_backend->addIndex('cal_events', $declaration);
+        $this->_backend->addIndex('tasks', $declaration);
     
         $this->setTableVersion('tasks', 8);
         $this->setApplicationVersion('Tasks', '8.1');
