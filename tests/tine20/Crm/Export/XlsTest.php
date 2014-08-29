@@ -75,6 +75,7 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         
         $this->assertTrue(file_exists($csvFilename));
         $export = file_get_contents($csvFilename);
+        
         $this->assertEquals(1, preg_match("/PHPUnit/",                          $export), 'no name');
         $this->assertEquals(1, preg_match("/Description/",                      $export), 'no description');
         $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountDisplayName) . '/',          $export), 'no creator');

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>adb_tagmatrix_ods</name>
+    <type>export</type>
+    <plugin>Addressbook_Export_Ods</plugin>
+    <description>default ods contact export definition</description>
+    <header>1</header>
+    <headers>
+        <header>{date}</header>
+        <header>{user}</header>
+    </headers>
+    <columns>
+        <!--column>
+            <identifier>account_id</identifier>
+        </column-->
+        <column>
+            <identifier>id</identifier>
+        </column>
+        <column>
+            <identifier>tags</identifier>
+            <type>tags</type>
+            <separateColumns>1</separateColumns>
+        </column>
+    </columns>
+</config>

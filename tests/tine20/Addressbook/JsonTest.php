@@ -18,7 +18,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Addressbook_Frontend_Json
  */
-class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
+class Addressbook_JsonTest extends TestCase
 {
     /**
      * set geodata for contacts
@@ -150,7 +150,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         }
         
         if (! empty($this->objects['createdTagIds'])) {
-            Tinebase_Tags::getInstance()->deleteTags($this->objects['createdTagIds']);
+            try {
+                Tinebase_Tags::getInstance()->deleteTags($this->objects['createdTagIds'], TRUE);
+                $this->objects['createdTagIds'] = array();
+            } catch (Tinebase_Exception_AccessDenied $e) {
+                $this->objects['createdTagIds'] = array();
+            }
         }
     }
 
@@ -667,33 +672,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * get tag
-     * 
-     * @param string $tagType
-     * @param string $tagName
-     * @return Tinebase_Model_Tag
-     */
-    protected function _getTag($tagType = Tinebase_Model_Tag::TYPE_SHARED, $tagName = NULL)
-    {
-        if ($tagName) {
-            try {
-                $tag = Tinebase_Tags::getInstance()->getTagByName($tagName);
-                return $tag;
-            } catch (Tinebase_Exception_NotFound $tenf) {
-            }
-        } else {
-            $tagName = Tinebase_Record_Abstract::generateUID();
-        }
-        
-        return new Tinebase_Model_Tag(array(
-            'type'          => $tagType,
-            'name'          => $tagName,
-            'description'   => 'testTagDescription',
-            'color'         => '#009B31',
-        ));
-    }
-
-    /**
      * testExportXlsWithCustomfield
      * 
      * @see 0006634: custom fields missing in XLS export
@@ -723,6 +701,84 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertContains(Tinebase_Core::getUser()->accountDisplayName, $out, 'display name not found.');
         $this->assertContains('exportcf', $out, 'customfield not found in headline.');
         $this->assertContains('testcustomfieldvalue', $out, 'customfield value not found.');
+    }
+    
+    /**
+     * each tag should have an own column
+     */
+    public function testExportOdsWithTagMatrix()
+    {
+        $filter = new Tinebase_Model_TagFilter(array());
+        try {
+            $allTags = Tinebase_Tags::getInstance()->searchTags($filter);
+            if ($allTags->count()) {
+                Tinebase_Tags::getInstance()->deleteTags($allTags->getId(), TRUE);
+            }
+        } catch (Tinebase_Exception_AccessDenied $e) {
+            $this->markTestSkipped('This fails each 2nd time.');
+        }
+        
+        $controller = Addressbook_Controller_Contact::getInstance();
+        
+        $t1 = $this->_getTag(Tinebase_Model_Tag::TYPE_SHARED, 'tag1');
+        $this->objects['createdTagIds'][] = $t1->getId();
+        
+        $c1 = new Addressbook_Model_Contact(array(
+            'n_given'           => 'ali',
+            'n_family'          => 'PHPUNIT',
+            'org_name'          => 'test',
+            'container_id'      => $this->container->id,
+            'tags' => array($t1)
+        ));
+        
+        $c1 = $controller->create($c1);
+        $this->_contactIdsToDelete[] = $c1->getId();
+        
+        $t2 = $this->_getTag(Tinebase_Model_Tag::TYPE_SHARED, 'tag2');
+        $this->objects['createdTagIds'][] = $t2->getId();
+        
+        // this tag should not occur, this is the addressbook application
+        $crmAppId = Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId();
+        $t3 = $this->_getTag(Tinebase_Model_Tag::TYPE_SHARED, 'tag3', array($crmAppId));
+        $this->objects['createdTagIds'][] = $t3->getId();
+        
+        $c2 = new Addressbook_Model_Contact(array(
+            'n_given'           => 'alisabeth',
+            'n_family'          => 'PHPUNIT',
+            'org_name'          => 'test',
+            'container_id'      => $this->container->id,
+            'tags' => array($t2)
+        ));
+        
+        $c2 = $controller->create($c2);
+        $this->_contactIdsToDelete[] = $c2->getId();
+        
+        $this->assertNotEmpty($c1->tags);
+        $this->assertNotEmpty($c2->tags);
+        
+        $filter = new Addressbook_Model_ContactFilter(array(array(
+            'field'    => 'n_family',
+            'operator' => 'equals',
+            'value'    =>  'PHPUNIT'
+        )));
+        
+        $definition = dirname(__FILE__) . '/Export/definitions/adb_tagmatrix_ods.xml';
+        $exporter = new Addressbook_Export_Ods($filter, Addressbook_Controller_Contact::getInstance(), array('definitionFilename' => $definition));
+        $doc = $exporter->generate();
+        
+        $xml = $this->_getContentXML($doc);
+        
+        $ns = $xml->getNamespaces(true);
+        $spreadsheetXml = $xml->children($ns['office'])->{'body'}->{'spreadsheet'};
+        
+        $headerRowXml = $spreadsheetXml->children($ns['table'])->{'table'}->{'table-row'}->{1};
+        
+        // the tags should exist in the header row
+        $this->assertEquals('tag1', (string) $headerRowXml->children($ns['table'])->{'table-cell'}->{1}->children($ns['text'])->{0});
+        $this->assertEquals('tag2', (string) $headerRowXml->children($ns['table'])->{'table-cell'}->{2}->children($ns['text'])->{0});
+        
+        // if there is no more header column, tag3 is not shown
+        $this->assertEquals(3, (string) $headerRowXml->children($ns['table'])->{'table-cell'}->count());
     }
     
     /**
@@ -1542,6 +1598,7 @@ Steuernummer 33/111/32212";
             'description'   => 'hidden group',
             'visibility'    => Tinebase_Model_Group::VISIBILITY_HIDDEN
         ));
+        
         try {
             $hiddenGroup = Admin_Controller_Group::getInstance()->create($hiddenGroup);
         } catch (Exception $e) {
@@ -1556,6 +1613,7 @@ Steuernummer 33/111/32212";
             'operator' => 'equals',
             'value'    => 'hiddengroup'
         ));
+        
         $result = $this->_instance->searchLists($filter, array());
         $this->assertEquals(0, $result['totalcount'], 'should not find hidden list: ' . print_r($result, TRUE));
     }

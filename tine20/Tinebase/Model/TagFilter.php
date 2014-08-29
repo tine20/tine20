@@ -96,6 +96,7 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
         }
         
         $select->group('tags.id');
+        
         return $select;
     }
 }
