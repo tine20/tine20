@@ -56,6 +56,10 @@
           "path": "js/"
         },
         {
+          "text": "ExceptionHandler.js",
+          "path": "js/"
+        },
+        {
           "text": "PagingToolbar.js",
           "path": "js/"
         },
