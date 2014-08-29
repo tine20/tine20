@@ -19,6 +19,13 @@
  */
 class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
 {
+    /**
+     * used to overwrite default retry behavior (if != null)
+     * 
+     * @var integer
+     */
+    protected $_requestTries = null;
+    
     protected $currentUserPrincipal = '';
     protected $calendarHomeSet = '';
     protected $principals = array();
@@ -218,6 +225,10 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
     public function calDavRequest($method, $uri, $body, $depth = 0, $tries = 10, $sleep = 30)
     {
         $response = null;
+        if ($this->_requestTries !== null) {
+            // overwrite default retry behavior
+            $tries = $this->_requestTries;
+        }
         while ($tries > 0)
         {
             try {
@@ -248,8 +259,6 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         }
         
         $result = $this->parseMultiStatus($response['body']);
-        
-        //fputs($this->requestLogFH, $method.' '.$uri."\n".$body."\n".$depth."\n".$response['body']."\n\n\n\n\n\n\n", 10000000);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Uri: ' . $uri . ' | request: ' . $body . ' | response: ' . print_r($response, true));
