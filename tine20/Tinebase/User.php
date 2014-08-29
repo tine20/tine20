@@ -556,7 +556,7 @@ class Tinebase_User
     protected static function _syncUserHook(Tinebase_Model_FullUser $user, $userProperties)
     {
         $hookClass = Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_HOOK_CLASS);
-        if ($hookClass) {
+        if ($hookClass && class_exists($hookClass)) {
             $hook = new $hookClass();
             if (method_exists($hook, 'syncUser')) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
