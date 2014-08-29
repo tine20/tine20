@@ -393,14 +393,18 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                     // event has been added in tine -> don't overwrite/delete
                     continue;
                 }
-                // different -> update record
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                        . ' Record needs update: ' . $data['id']);
+                
             } else {
                 try {
-                    // might be a delegated event from another container/organizer
                     $recordBackend->checkETag($data['id'], $data['etag']);
-                    continue; // ignore update here
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                            . ' Ignoring delegated event from another container/organizer: ' . $data['id']);
+                    continue;
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    // new record
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                            . ' Found new record: ' . $data['id']);
                 }
             }
         
@@ -423,7 +427,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         // handle deletes/exdates
         foreach ($containerEtags as $id => $data) {
             if (in_array($data['uid'], $existingIds)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
                         . ' Record ' . $id . ' is exdate of ' . $data['uid']);
                 continue;
             }
