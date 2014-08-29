@@ -32,6 +32,12 @@ table td {
     display: none;
 }
 
+div.page
+{
+    page-break-after: always;
+    page-break-inside: avoid;
+}
+
 .cal-print-title {
     text-align: center;
     font-size: 20px;
@@ -96,6 +102,36 @@ table td {
     display: none;
 }
 
+/* ------------ daysview  ------------ */
+.cal-daysviewpanel-daycolumn-row-on,
+.cal-daysviewpanel-daycolumn-row-off,
+.cal-daysviewpanel-daycolumn-row {
+    color: #FFFFFF;
+    font-size: 0px;
+}
+
+.cal-daysviewpanel-body-daycolumn-hint-above,
+.cal-daysviewpanel-body-daycolumn-hint-below {
+    display: none;
+    background-image: none;
+}
+
+.cal-daysviewpanel-body-daycolumn-today {
+    background-color: #FFFFFF;
+}
+
+.cal-daysviewpanel-body-daycolumn-today .cal-daysviewpanel-daycolumn-row {
+    color: #FFFFFF;
+}
+
+.cal-daysviewpanel-dayheader-today, .cal-daysviewpanel-dayheader-day-wrap:hover {
+    background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
+}
+
+/* .cal-daysviewpanel-header-inner {
+    background: none;
+} */
+
 /* ------------ monthview ------------ */
 .cal-print-monthview-daycell {
     border: 0;
@@ -141,5 +177,10 @@ table td {
 
 .cal-print-monthview .cal-print-daysview-day-untilseperator,
 .cal-print-monthview .cal-print-daysview-day-endtime {
+<<<<<<< HEAD
     display: none;
 }
+=======
+	display: none;
+}
+>>>>>>> 2013.10

@@ -282,7 +282,7 @@ class Setup_Update_Abstract
     {
         $results = $this->_db->query(
             "SELECT " . $this->_db->quoteIdentifier($field) .
-            ", LEFT(" . $this->_db->quoteIdentifier($field) . "," . $length . ") AS `short`" .
+            ", LEFT(" . $this->_db->quoteIdentifier($field) . "," . $length . ") AS short" .
             " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $table) .
             " WHERE CHAR_LENGTH(" . $this->_db->quoteIdentifier($field) . ") > " . $length
             )->fetchAll();

@@ -256,7 +256,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        foreach($toRemove as $event) {
+        foreach ($toRemove as $event) {
             $result->removeRecord($event);
         }
         

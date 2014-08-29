@@ -20,7 +20,7 @@ sed -i 's/.*backports.*//g' /etc/apt/sources.list
 apt-get update
 
 # Install lamp stack
-apt-get install -y mysql-server apache2 php5 libapache2-mod-php5 php5-mysql php5-gd php5-curl php-pear php5-xsl phpmyadmin
+apt-get install -y mysql-server apache2 php5 libapache2-mod-php5 php5-mysql php5-gd php5-xdebug php5-curl php-pear php5-xsl phpmyadmin
 
 # run apache as vagrant to ease things
 service apache2 stop
@@ -78,7 +78,6 @@ phpmyadmin_vhost="
 
 echo -e $phpmyadmin_vhost > /etc/apache2/sites-available/pma-local
 
-
 # Enable pma-local for apache
 a2ensite pma-local
 
@@ -88,7 +87,21 @@ sed -i '/AllowOverride None/c AllowOverride All' /etc/apache2/sites-available/de
 # Remove phpmyadmin alias to enforce own vhost
 sed -i 's/^Alias.*$//' /etc/apache2/conf.d/phpmyadmin.conf
 
-###################### INSTALL TINE20 ######################
+###################### XDEBUG SETTINGS ######################
+
+if [ -e /etc/php5/conf.d/xdebug.ini ]; then
+    # don't forget to set export XDEBUG_CONFIG="idekey=eclipse" (TODO add to bashrc)
+    echo xdebug.default_enable=1 >> /etc/php5/conf.d/xdebug.ini
+    echo xdebug.remote_enable=1 >> /etc/php5/conf.d/xdebug.ini
+    echo xdebug.remote_handler=dbgp >> /etc/php5/conf.d/xdebug.ini
+    echo xdebug.remote_connect_back=1 >> /etc/php5/conf.d/xdebug.ini
+    echo xdebug.remote_port=9000 >> /etc/php5/conf.d/xdebug.ini
+    echo xdebug.remote_host=10.10.10.1 >> /etc/php5/conf.d/xdebug.ini
+    echo xdebug.remote_autostart=0 >> /etc/php5/conf.d/xdebug.ini
+    echo xdebug.remote_log=/vagrant/logs/php5-xdebug.log >> /etc/php5/conf.d/xdebug.ini
+fi
+
+###################### INSTALL TINE20  ######################
 if [ -d /vagrant/tine20.git/tine20 ]; then
     source /vagrant/setup-tine20.sh
 fi

@@ -49,6 +49,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      */
     splitAddButton: true,
     
+    /**
+     * default print mode
+     * 
+     * @type String {sheet|grid}
+     * @property defaultPrintMode
+     */
+    defaultPrintMode: 'sheet',
+    
     periodRe: /^(day|week|month)/i,
     presentationRe: /(sheet|grid)$/i,
     
@@ -156,9 +164,24 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.actions_print = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Print Page'),
-            handler: this.onPrint,
+            handler: this.onPrint.createDelegate(this, []),
             iconCls:'action_print',
-            scope: this
+            scope: this,
+            listeners: {
+                arrowclick: this.onPrintMenuClick.createDelegate(this)
+            },
+            menu:{
+                items:[{
+                    text: this.app.i18n._('Grid'),
+                    iconCls: 'cal-grid-view-type',
+                    handler: this.onPrint.createDelegate(this, ['grid'])
+                }, {
+                    text: this.app.i18n._('Sheet'),
+                    iconCls: 'cal-week-view',
+                    handler: this.onPrint.createDelegate(this, ['sheet']),
+                    disabled: Ext.isIE || Ext.isNewIE
+                }]
+            }
         });
         
         this.showSheetView = new Ext.Button({
@@ -1033,12 +1056,19 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
     },
     
-    onPrint: function() {
-        var panel = this.getCalendarPanel(this.activeView),
+    onPrintMenuClick: function(splitBtn, e) {
+        if (! String(this.activeView).match(/(day|week)sheet$/i)) {
+            splitBtn.menu.hide();
+        }
+    },
+    
+    onPrint: function(printMode) {
+        var printMode = printMode ? printMode : this.defaultPrintMode,
+            panel = this.getCalendarPanel(this.activeView),
             view = panel ? panel.getView() : null;
             
         if (view && Ext.isFunction(view.print)) {
-            view.print();
+            view.print(printMode);
         } else {
             Ext.Msg.alert(this.app.i18n._('Could not Print'), this.app.i18n._('Sorry, your current view does not support printing.'));
         }

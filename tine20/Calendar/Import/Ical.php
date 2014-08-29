@@ -119,10 +119,15 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
         
         // search uid's and remove already existing -> only in import cal?
-        $existingEvents = $cc->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_options['importContainerId']),
+        $existingEventsFilter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => array($this->_options['importContainerId'])),
             array('field' => 'uid', 'operator' => 'in', 'value' => array_unique($events->uid)),
-        )), NULL);
+        ));
+        $existingEvents = $cc->search($existingEventsFilter, NULL);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' 
+                . ' Found ' . count($existingEvents) . ' existing events');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' '
+                . ' Filter: ' . print_r($existingEventsFilter->toArray(), true));
         
         // insert one by one in a single transaction
         $existingEvents->addIndices(array('uid'));
@@ -141,13 +146,21 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
                     $this->_importResult['duplicatecount'] += 1;
                 }
             } catch (Exception $e) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__ . ' Import failed for Event ' . $event->summary);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' . print_r($event->toArray(), TRUE));
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' . $e);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
+                        . ' Import failed for Event ' . $event->summary);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+                        . ' ' . print_r($event->toArray(), TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+                        . ' ' . $e);
                 $this->_importResult['failcount'] += 1;
             }
         }
         Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' '
+                . ' totalcount: ' . $this->_importResult['totalcount']
+                . ' / duplicates: ' . $this->_importResult['duplicatecount']
+                . ' / fails: ' . $this->_importResult['failcount']);
         
         return $this->_importResult;
     }

@@ -112,6 +112,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $definition = new Tinebase_Model_ImportExportDefinition(array(
                 'application_id'              => $_applicationId,
                 'name'                        => $name,
+                'label'                       => $config->label,
                 'description'                 => $config->description,
                 'type'                        => $config->type,
                 'model'                       => $config->model,
@@ -196,7 +197,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         try {
             $existing = $this->getByName($definition->name);
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
-            $copyFields = array('filename', 'plugin_options', 'description');
+            $copyFields = array('filename', 'plugin_options', 'description', 'label');
             foreach ($copyFields as $field) {
                 $existing->{$field} = $definition->{$field};
             }

@@ -1621,4 +1621,17 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         return $newContainer;
     }
+
+    /**
+     * Updates existing container and clears the cache entry of the container
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return Tinebase_Record_Interface Record|NULL
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        $this->_clearCache($_record);
+        
+        return parent::update($_record);
+    }
 }

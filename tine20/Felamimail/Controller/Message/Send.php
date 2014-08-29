@@ -264,8 +264,6 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _addEmailNote($_recipients, $_subject, $_body)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recipients, TRUE));
-        
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'email', 'operator' => 'in', 'value' => $_recipients)
             // OR: array('field' => 'email_home', 'operator' => 'in', 'value' => $_recipients)
@@ -278,11 +276,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding email notes to ' . count($contacts) . ' contacts.');
             
-            $noteText = $translate->_('Subject') . ':' . $_subject . "\n\n" . $translate->_('Body') . ':' . substr($_body, 0, 4096);
-            // somehow it's still possible that we have bad chars here. make sure they are filtered.
-            // @see 0008644: error when sending mail with note (wrong charset)
-            // this did not help - we catch db exceptions now ... :(
-            //$noteText = Tinebase_Core::filterInputForDatabase($noteText);
+            $truncatedBody = (extension_loaded('mbstring')) ? mb_substr($_body, 0, 4096, 'UTF-8') : substr($_body, 0, 4096);
+            $noteText = $translate->_('Subject') . ':' . $_subject . "\n\n" . $translate->_('Body') . ': ' . $truncatedBody;
             
             try {
                 foreach ($contacts as $contact) {

@@ -18,7 +18,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Courses',
     recordClass: Tine.Courses.Model.Course,
     recordProxy: Tine.Courses.coursesBackend,
-    loadRecord: false,
     evalGrants: false,
     
     /**

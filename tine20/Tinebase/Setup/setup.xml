@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>8.3</version>
+    <version>8.5</version>
     <tables>
         <table>
             <name>applications</name>
@@ -2349,7 +2349,7 @@
         </table>
         <table>
             <name>importexport_definition</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2362,6 +2362,12 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>label</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>model</name>
@@ -2533,6 +2539,135 @@
                     <field>
                         <name>model</name>
                     </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>import</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>80</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>timestamp</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>user_id</name>
+                    <type>text</type>
+                    <length>80</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>model</name>
+                    <type>text</type>
+                    <length>80</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>application_id</name>
+                    <type>text</type>
+                    <length>80</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>synctoken</name>
+                    <type>text</type>
+                    <length>80</length>
+                </field>
+                <field>
+                    <name>container_id</name>
+                    <length>80</length>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>sourcetype</name>
+                    <type>text</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>interval</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>source</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>options</name>
+                    <type>text</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <index>
+                    <name>import::application_id--applications::id</name>
+                    <field>
+                        <name>application_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>applications</table>
+                        <field>id</field>
+                    </reference>
+                </index>
+                <index>
+                    <name>import::user_id--accounts::id</name>
+                    <field>
+                        <name>user_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                    </reference>
                 </index>
             </declaration>
         </table>

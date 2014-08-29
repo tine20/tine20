@@ -128,8 +128,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         $feastDays = $this->_contractController->getFeastDays($contracts, $yearBegins, $yearEnds);
         
         // find out vacation days by contract(s) and interval
-        $possibleVacationDays = $this->_contractController->calculateVacationDays($contracts, $yearBegins, $yearEnds);
-        
+        $possibleVacationDays = round($this->_contractController->calculateVacationDays($contracts, $yearBegins, $yearEnds), 0);
         // find out free days (vacation, sickness)
         $freetimeController = HumanResources_Controller_FreeTime::getInstance();
         $employeeId = is_object($account->employee_id) ? $account->employee_id->getId() : $account->employee_id;

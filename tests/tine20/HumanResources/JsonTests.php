@@ -826,4 +826,250 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $this->assertEquals('2014-04-01 00:00:00', $recordData['bday']);
     }
+    
+    /**
+     * test adding a contract with manually setting the end_date of the contract before
+     */
+    public function testAddContract()
+    {
+        $sdate = new Tinebase_DateTime('2013-01-01 00:00:00');
+        $sdate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $employee = $this->_getEmployee('rwright');
+    
+        $contractController = HumanResources_Controller_Contract::getInstance();
+        $employeeController = HumanResources_Controller_Employee::getInstance();
+        $employee = $employeeController->create($employee);
+        $contract = $this->_getContract($sdate);
+        $contract->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
+        $contract->employee_id = $employee->getId();
+        
+        $feastCalendar = $this->_getFeastCalendar();
+        $contract->feast_calendar_id = $feastCalendar->getId();
+        
+        $contract->start_date = $sdate;
+        $contractController->create($contract);
+    
+        $employeeJson = $this->_json->getEmployee($employee->getId());
+        
+        $accountController = HumanResources_Controller_Account::getInstance();
+        
+        // should not be created, exist already
+        $accountController->createMissingAccounts(2013, $employee);
+        $account = $accountController->getAll()->getFirstRecord();
+        
+        $employeeJson['vacation'] = array(array(
+            'account_id' => $account->getId(),
+            'type' => 'vacation',
+            'status' => 'ACCEPTED',
+            'freedays' => array(array('duration' => '1', 'date' => '2013-01-11 00:00:00')),
+        ));
+        
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+        
+        $this->assertEquals(1, count($employeeJson['vacation']));
+        
+        // manually set the end date and add a new contract
+        $employeeJson['contracts'][0]['end_date'] = '2013-05-31 00:00:00';
+        $employeeJson['contracts'][1] = array(
+            'start_date' => '2013-06-01 00:00:00', 
+            'workingtime_json' => '{"days": [8,8,8,8,8,0,0]}',
+            'vacation_days' => 27,
+            'feast_calendar_id' => $feastCalendar->getId()
+        );
+        
+        // no exception should be thrown
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+        $this->assertEquals(2, count($employeeJson['contracts']));
+        
+        // an exception should be thrown
+        $employeeJson['contracts'][0]['vacation_days'] = 31;
+        $this->setExpectedException('HumanResources_Exception_ContractNotEditable');
+        
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+    }
+    
+    /**
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=10122
+     */
+    public function testAlternatingContracts()
+    {
+        $date = Tinebase_DateTime::now()->setDate(2014, 1, 1)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $employee = $this->_getEmployee('unittest');
+        
+        $employee->employment_begin = clone $date;
+        
+        $contract1 = $this->_getContract();
+        $contract1->start_date = clone $date; // 1.1.2014
+        $date->addMonth(7)->subDay(1); 
+        $contract1->end_date = clone $date; // 31.7.2014 
+        $contract1->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
+        $contract1->vacation_days = 27;
+        $date->addDay(1); // 1.8.2014
+        $contract2 = $this->_getContract();
+        $contract2->start_date = clone $date;
+        $contract2->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
+        $contract2->vacation_days = 30;
+        
+        $recordData = $employee->toArray();
+        $recordData['contracts'] = array($contract1->toArray(), $contract2->toArray());
+        $recordData = $this->_json->saveEmployee($recordData);
+        
+        $recordData['vacation'] = array(
+            array()
+        );
+        
+        $res = $this->_json->searchAccounts(array(
+            array('field' => 'year', 'operator' => 'equals', 'value' => '2014')
+        ), array());
+        
+        $account = $res['results'][0];
+        $date->subDay(1); // 31.7.2014
+        
+        $extraFreeTime = HumanResources_Controller_ExtraFreeTime::getInstance()->create(new HumanResources_Model_ExtraFreeTime(array(
+            'account_id' => $account['id'],
+            'days' => 4,
+            'expires' => clone $date,
+            'type' => 'payed'
+        )));
+        
+        $res = $this->_json->getFeastAndFreeDays($recordData['id'], 2014);
+        
+        // at this point, vacation days are not created, so the extra freetime is expired
+        $this->assertEquals(28, $res['results']['remainingVacation']);
+        
+        // create vacation days
+        $day = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $newFreeTime = array(
+            'account_id' => $account['id'],
+            'employee_id' => $recordData['id'],
+            'type' => 'vacation',
+            'status' => 'ACCEPTED',
+            'firstday_date' => $day->toString()
+        );
+        
+        $newFreeTime['freedays'] = array(
+            array('duration' => '1', 'date' => $day->toString()),
+            array('duration' => '1', 'date' => $day->addDay(1)->toString()),
+        );
+        
+        $newFreeTime['days_count']   = 2;
+        $newFreeTime['lastday_date'] = $day->toString();
+        
+        $this->_json->saveFreeTime($newFreeTime);
+        
+        // create vacation days
+        $day = Tinebase_DateTime::now()->setDate(2014, 6, 10)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $newFreeTime = array(
+            'account_id' => $account['id'],
+            'employee_id' => $recordData['id'],
+            'type' => 'vacation',
+            'status' => 'ACCEPTED',
+            'firstday_date' => $day->toString()
+        );
+        
+        $newFreeTime['freedays'] = array(
+            array('duration' => '1', 'date' => $day->toString()),
+            array('duration' => '1', 'date' => $day->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $day->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $day->addDay(1)->toString()),
+        );
+        
+        $newFreeTime['days_count']   = 4;
+        $newFreeTime['lastday_date'] = $day->toString();
+        
+        $this->_json->saveFreeTime($newFreeTime);
+        
+        
+        // create vacation days
+        $day = Tinebase_DateTime::now()->setDate(2014, 7, 28)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $newFreeTime = array(
+            'account_id' => $account['id'],
+            'employee_id' => $recordData['id'],
+            'type' => 'vacation',
+            'status' => 'ACCEPTED',
+            'firstday_date' => $day->toString()
+        );
+        
+        $newFreeTime['freedays'] = array(
+            array('duration' => '1', 'date' => $day->toString()),
+            array('duration' => '1', 'date' => $day->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $day->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $day->addDay(1)->toString()),
+            array('duration' => '1', 'date' => $day->addDay(1)->toString()),
+        );
+        
+        $newFreeTime['days_count']   = 5;
+        $newFreeTime['lastday_date'] = $day->toString();
+        
+        $this->_json->saveFreeTime($newFreeTime);
+        
+        // create sickness days
+        $day = Tinebase_DateTime::now()->setDate(2014, 1, 21)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $newFreeTime = array(
+            'account_id' => $account['id'],
+            'employee_id' => $recordData['id'],
+            'type' => 'sickness',
+            'status' => "EXCUSED",
+            'firstday_date' => $day->toString()
+        );
+        
+        $newFreeTime['freedays'] = array(
+                array('duration' => '1', 'date' => $day->toString()),
+                array('duration' => '1', 'date' => $day->addDay(1)->toString()),
+                array('duration' => '1', 'date' => $day->addDay(1)->toString()),
+                array('duration' => '1', 'date' => $day->addDay(1)->toString()),
+        );
+        
+        $day->addDay(2);
+        
+        $newFreeTime['freedays'][] = array('duration' => '1', 'date' => $day->addDay(1)->toString());
+        $newFreeTime['freedays'][] = array('duration' => '1', 'date' => $day->addDay(1)->toString());
+        $newFreeTime['freedays'][] = array('duration' => '1', 'date' => $day->addDay(1)->toString());
+        $newFreeTime['freedays'][] = array('duration' => '1', 'date' => $day->addDay(1)->toString());
+        $newFreeTime['freedays'][] = array('duration' => '1', 'date' => $day->addDay(1)->toString());
+        
+        $day->addDay(2);
+        
+        $newFreeTime['freedays'][] = array('duration' => '1', 'date' => $day->addDay(1)->toString());
+        $newFreeTime['freedays'][] = array('duration' => '1', 'date' => $day->addDay(1)->toString());
+        $newFreeTime['freedays'][] = array('duration' => '1', 'date' => $day->addDay(1)->toString());
+        $newFreeTime['freedays'][] = array('duration' => '1', 'date' => $day->addDay(1)->toString());
+        $newFreeTime['freedays'][] = array('duration' => '1', 'date' => $day->addDay(1)->toString());
+        
+        $newFreeTime['days_count']   = 14;
+        $newFreeTime['lastday_date'] = $day->toString();
+        
+        $this->_json->saveFreeTime($newFreeTime);
+        
+        // create sickness days
+        $day = Tinebase_DateTime::now()->setDate(2014, 1, 6)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $newFreeTime = array(
+                'account_id' => $account['id'],
+                'employee_id' => $recordData['id'],
+                'type' => 'sickness',
+                'status' => "UNEXCUSED",
+                'firstday_date' => $day->toString()
+        );
+        
+        $newFreeTime['freedays'] = array(
+                array('duration' => '1', 'date' => $day->toString()),
+        );
+        
+        $this->_json->saveFreeTime($newFreeTime);
+        
+        $res = $this->_json->getFeastAndFreeDays($recordData['id'], 2014);
+        
+        // at this point the extra freetime has been taken and is not expired
+        // 28 + 4 - 11 = 21
+        $this->assertEquals(21, $res['results']['remainingVacation']);
+        
+        $account = $this->_json->getAccount($account['id']);
+        
+        $this->assertEquals(32, $account['possible_vacation_days']);
+        $this->assertEquals(0, $account['expired_vacation_days']);
+        $this->assertEquals(21, $account['remaining_vacation_days']);
+        $this->assertEquals(11, $account['taken_vacation_days']);
+        $this->assertEquals(14, $account['excused_sickness']);
+        $this->assertEquals(1, $account['unexcused_sickness']);
+    }
 }

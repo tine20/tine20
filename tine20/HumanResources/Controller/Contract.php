@@ -228,32 +228,32 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      * @param HumanResources_Model_Contract|Tinebase_Record_RecordSet $contracts
      * @param Tinebase_DateTime $firstDate
      * @param Tinebase_DateTime $lastDate
-     * @return integer
+     * @return float
      */
-    public function calculateVacationDays($contracts, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
+    public function calculateVacationDays($contracts, Tinebase_DateTime $gFirstDate, Tinebase_DateTime $gLastDate)
     {
         $contracts = $this->_convertToRecordSet($contracts);
         
         $sum = 0;
         
         foreach($contracts as $contract) {
-            
-            $firstDate = $this->_getFirstDate($contract, $firstDate);
-            $lastDate = $this->_getLastDate($contract, $lastDate);
+            $firstDate = $this->_getFirstDate($contract, $gFirstDate);
+            $lastDate = $this->_getLastDate($contract, $gLastDate);
             
             // find out how many days the year does have
-            $januaryFirst = new Tinebase_DateTime($firstDate->format('Y') . '-01-01 00:00:00');
-            $decemberLast = new Tinebase_DateTime($firstDate->format('Y') . '-12-31 23:59:59');
+            $januaryFirst = Tinebase_DateTime::createFromFormat('Y-m-d H:i:s e', $firstDate->format('Y') . '-01-01 00:00:00 ' . Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $decemberLast = Tinebase_DateTime::createFromFormat('Y-m-d H:i:s e', $firstDate->format('Y') . '-12-31 23:59:59 ' . Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
             
-            $daysOfTheYear = ceil(($decemberLast->getTimestamp() - $januaryFirst->getTimestamp()) / 24 / 60 / 60);
+            $daysOfTheYear = ($decemberLast->getTimestamp() - $januaryFirst->getTimestamp()) / 24 / 60 / 60;
             
             // find out how many days the contract does have
-            $daysOfTheContract = ceil(($lastDate->getTimestamp() - $firstDate->getTimestamp()) / 24 / 60 / 60);
+            $daysOfTheContract = ($lastDate->getTimestamp() - $firstDate->getTimestamp()) / 24 / 60 / 60;
             
-            $sum = ($daysOfTheContract / $daysOfTheYear) * $contract->vacation_days;
+            $correl = $daysOfTheContract / $daysOfTheYear;
+            $sum = $sum + (($correl) * $contract->vacation_days);
         }
         
-        return round($sum);
+        return $sum;
     }
     
     /**

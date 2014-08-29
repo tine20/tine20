@@ -448,7 +448,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $first = FALSE;
             }
             
-            $allVacation += $cController->calculateVacationDays($contract, $minDate, $maxDate);
+            $remainingVacation += $cController->calculateVacationDays($contract, $minDate, $maxDate);
+            
             // find out weekdays to disable
             if (is_object($json)) {
                 foreach($json->days as $index => $hours) {
@@ -469,7 +470,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $feastDays = array_merge($cController->getFeastDays($contract, $startDay, $stopDay), $feastDays);
         }
         
-        $remainingVacation = $allVacation;
+        $remainingVacation = round($remainingVacation, 0);
         
         // set time to 0
         foreach($feastDays as &$feastDay) {
@@ -569,7 +570,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // TODO: remove results property, just return results array itself
         return array(
             'results' => array(
-                'remainingVacation' => $remainingVacation,
+                'remainingVacation' => floor($remainingVacation),
                 'extraFreeTimes'    => $extraFreeTimes,
                 'vacationDays'      => $vacationDays->toArray(),
                 'sicknessDays'      => $sicknessDays->toArray(),

@@ -207,6 +207,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     attachmentsPanel: null,
     
+    /**
+     * holds the loadMask
+     * set this to false, if no loadMask should be shown
+     * 
+     * @type {Ext.LoadMask}
+     */
+    loadMask: null,
+    
     //private
     initComponent: function() {
         this.relationPanelRegistry = this.relationPanelRegistry ? this.relationPanelRegistry : [];
@@ -437,8 +445,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 
         if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
             this.fbar.push(this.action_saveAndClose, this.action_cancel);
-        }
-        else {
+        } else {
             this.fbar.push(this.action_cancel, this.action_saveAndClose);
         }
        
@@ -647,7 +654,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.record.set('id', (new Date()).getTime());
         }
         
-        if(this.loadMask) {
+        if (this.loadMask) {
             this.loadMask.hide();
         }
     },
@@ -688,8 +695,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         ]);
         
-        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.i18nRecordName)});
-        if (this.loadRecord !== false) {
+        if (this.loadMask !== false && this.i18nRecordName) {
+            this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.i18nRecordName)});
             this.loadMask.show();
         }
     },

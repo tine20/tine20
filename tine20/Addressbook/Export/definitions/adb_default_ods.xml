@@ -4,6 +4,7 @@
     <name>adb_default_ods</name>
     <type>export</type>
     <plugin>Addressbook_Export_Ods</plugin>
+    <label>Default OpenDocument Export</label>
     <description>default ods contact export definition</description>
     <header>1</header>
     <headers>

@@ -744,11 +744,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.record.get('note') && this.record.get('note') == '1') {
             this.button_saveEmailNote.toggle();
         }
-        var ticketFn = this.onAfterRecordLoad.deferByTickets(this),
-            wrapTicket = ticketFn();
         
-        this.fireEvent('load', this, this.record, ticketFn);
-        wrapTicket();
+        this.onAfterRecordLoad();
     },
 
     /**

@@ -103,7 +103,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
     protected $_ldapPlugins = array();
     
-    protected $_isReadOnlyBackend     = false;
+    protected $_isReadOnlyBackend = false;
+    
+    /**
+     * used to save the last user properties from ldap backend
+     */
+    protected $_lastLdapProperties = array();
     
     /**
      * the constructor
@@ -794,6 +799,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     {
         $errors = false;
         
+        $this->_lastLdapProperties = $_userData;
+        
         foreach ($_userData as $key => $value) {
             if (is_int($key)) {
                 continue;
@@ -848,6 +855,16 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
 
         return $accountObject;
+    }
+    
+    /**
+     * returns properties of last user fetched from sync backend
+     * 
+     * @return array
+     */
+    public function getLastUserProperties()
+    {
+        return $this->_lastLdapProperties;
     }
     
     /**

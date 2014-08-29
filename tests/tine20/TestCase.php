@@ -181,7 +181,23 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_EDIT
         )->getFirstRecord();
     }
-
+    
+    /**
+     * get test container
+     * 
+     * @param string $applicationName
+     */
+    protected function _getTestContainer($applicationName)
+    {
+        return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+        'name'           => 'PHPUnit test container',
+        'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
+        'owner_id'       => Tinebase_Core::getUser(),
+        'backend'        => 'Sql',
+        'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId()
+        ), true));
+    }
+    
     /**
      * get test mail domain
      * 

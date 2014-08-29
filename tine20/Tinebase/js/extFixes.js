@@ -5,11 +5,13 @@
         },
         docMode = document.documentMode,
         isIE10 = ((check(/msie 10/) && docMode != 7 && docMode != 8  && docMode != 9) || docMode == 10),
-        isNewIE = (Ext.isIE9 || isIE10);
+        isIE11 = ((check(/trident\/7\.0/) && docMode != 7 && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 11),
+        isNewIE = (Ext.isIE9 || isIE10 || isIE11);
 
     Ext.apply(Ext, {
         isIE10 : isIE10,
-
+        isIE11 : isIE11,
+        
         isNewIE : isNewIE
     })
 })();

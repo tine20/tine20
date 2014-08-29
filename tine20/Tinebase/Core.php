@@ -397,6 +397,8 @@ class Tinebase_Core
         }
         
         if (! $_ignoreACL && is_object(Tinebase_Core::getUser()) && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' User ' . Tinebase_Core::getUser()->accountDisplayName . '/' . Tinebase_Core::getUser()->getId() . ' has no right to access ' . $appName);
             throw new Tinebase_Exception_AccessDenied('No right to access application ' . $appName);
         }
         
@@ -1282,11 +1284,12 @@ class Tinebase_Core
         $oldMaxExcecutionTime = ini_get('max_execution_time');
         
         if ($oldMaxExcecutionTime > 0) {
-            if ((bool)ini_get('safe_mode') === true) {
+            $safeModeSetting = ini_get('safe_mode');
+            if ($safeModeSetting !== 'off' && (bool) $safeModeSetting === true) {
                 if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                         . ' max_execution_time(' . $oldMaxExcecutionTime . ') is too low. Can\'t set limit to ' 
-                        . $_seconds . ' because of safe mode restrictions.');
+                        . $_seconds . ' because of safe mode restrictions. safe_mode = ' . $safeModeSetting);
                 }
             } else {
                 if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -1376,10 +1379,16 @@ class Tinebase_Core
             if ($value === null) {
                 throw new Tinebase_Exception_InvalidArgument('Invalid user object!');
             }
-            if ($value instanceof Tinebase_Model_FullUser) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . $value->accountLoginName);
-            } else {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . var_export($value, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                if ($value instanceof Tinebase_Model_FullUser) {
+                    $userString =  $value->accountLoginName;
+                } else if ($value instanceof Tinebase_Model_User) {
+                    $userString = $value->accountDisplayName;
+                } else {
+                    $userString = var_export($value, true);
+                }
+                
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . $userString);
             }
         }
         

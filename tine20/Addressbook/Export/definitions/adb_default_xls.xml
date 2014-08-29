@@ -4,6 +4,7 @@
     <name>adb_default_xls</name>
     <type>export</type>
     <plugin>Addressbook_Export_Xls</plugin>
+    <label>Default Excel Export</label>
     <description>default xls contact export definition</description>
     <header>1</header>
     <columns>

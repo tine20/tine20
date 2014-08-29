@@ -424,14 +424,21 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 eventEl.setStyle({'border-style': 'dashed'});
                 eventEl.setOpacity(0.5);
             }
-        
+            
             if (currColNum == this.endColNum && this.event.get('editGrant')) {
+                var maxHeight = 10000;
+                
+                if (view.cropDayTime) { 
+                    maxHeight = view.dayEndPx - top;
+                }
+                
                 this.resizeable = new Ext.Resizable(eventEl, {
                     handles: 's',
                     disableTrackOver: true,
                     dynamic: true,
                     //dynamic: !!this.event.isRangeAdd,
                     heightIncrement: view.granularityUnitHeights/2,
+                    maxHeight: maxHeight,
                     listeners: {
                         scope: view,
                         resize: view.onEventResize,

@@ -1661,4 +1661,20 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
         $this->assertEquals('winmail.dat', $message->attachments[0]['filename']);
     }
+    
+    /**
+     * @see: 0010126: Text gets removed in invalid tags
+     *       https://forge.tine20.org/mantisbt/view.php?id=10126
+     *       
+     *       http://htmlpurifier.org/live/configdoc/plain.html#HTML.TidyLevel
+     */
+    public function testInvalidHtml()
+    {
+        $cachedMessage = $this->messageTestHelper('invalid_html.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertContains('hier seine Daten :)<br /><br /><span>
+        </span><pre><span style="font-family:tahoma;">John Smith
+Photographer', $message->body);
+    }
 }

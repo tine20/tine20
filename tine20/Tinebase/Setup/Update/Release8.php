@@ -90,4 +90,166 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('accounts', '10');
         $this->setApplicationVersion('Tinebase', '8.3');
     }
+    
+    /**
+     * adds a label property to hold a humanreadable text
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+            <name>label</name>
+            <type>text</type>
+            <length>128</length>
+            <notnull>false</notnull>
+        </field>');
+        
+        $this->_backend->addCol('importexport_definition', $declaration);
+        
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
+        
+        $this->setTableVersion('importexport_definition', '8');
+        $this->setApplicationVersion('Tinebase', '8.4');
+    }
+    
+    public function update_4() {
+        $tableDefinition = '
+            <table>
+                <name>import</name>
+                <version>1</version>
+                <declaration>
+                    <field>
+                        <name>id</name>
+                        <type>text</type>
+                        <length>80</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>timestamp</name>
+                        <type>datetime</type>
+                    </field>
+                    <field>
+                        <name>user_id</name>
+                        <type>text</type>
+                        <length>80</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>model</name>
+                        <type>text</type>
+                        <length>80</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>application_id</name>
+                        <type>text</type>
+                        <length>80</length>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>synctoken</name>
+                        <type>text</type>
+                        <length>80</length>
+                    </field>
+                    <field>
+                        <name>container_id</name>
+                        <length>80</length>
+                        <type>text</type>
+                    </field>
+                    <field>
+                        <name>sourcetype</name>
+                        <type>text</type>
+                        <notnull>true</notnull>
+                    </field>
+                    <field>
+                        <name>interval</name>
+                        <type>text</type>
+                    </field>
+                    <field>
+                        <name>source</name>
+                        <type>text</type>
+                    </field>
+                    <field>
+                        <name>options</name>
+                        <type>text</type>
+                    </field>
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <field>
+                        <name>created_by</name>
+                        <type>text</type>
+                        <length>40</length>
+                    </field>
+                    <field>
+                        <name>creation_time</name>
+                        <type>datetime</type>
+                    </field>
+                    <field>
+                        <name>last_modified_by</name>
+                        <type>text</type>
+                        <length>40</length>
+                    </field>
+                    <field>
+                        <name>last_modified_time</name>
+                        <type>datetime</type>
+                    </field>
+                    <field>
+                        <name>is_deleted</name>
+                        <type>boolean</type>
+                        <notnull>true</notnull>
+                        <default>false</default>
+                    </field>
+                    <field>
+                        <name>deleted_by</name>
+                        <type>text</type>
+                        <length>40</length>
+                    </field>
+                    <field>
+                        <name>deleted_time</name>
+                        <type>datetime</type>
+                    </field>
+                    <field>
+                        <name>seq</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                        <default>0</default>
+                    </field>
+                    <index>
+                        <name>import::application_id--applications::id</name>
+                        <field>
+                            <name>application_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>applications</table>
+                            <field>id</field>
+                        </reference>
+                    </index>
+                    <index>
+                        <name>import::user_id--accounts::id</name>
+                        <field>
+                            <name>user_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>accounts</table>
+                            <field>id</field>
+                        </reference>
+                    </index>
+                </declaration>
+            </table>';
+
+
+        $table = Setup_Backend_Schema_Table_Factory::factory('String', $tableDefinition);
+        $this->_backend->createTable($table);
+        
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addImportTask($scheduler);
+        
+        $this->setApplicationVersion('Tinebase', '8.5');
+    }
 }

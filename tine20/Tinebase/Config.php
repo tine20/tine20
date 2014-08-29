@@ -138,6 +138,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const LDAP_DISABLE_TLSREQCERT = 'ldapDisableTlsReqCert';
     
     /**
+     * configure hook class for user sync
+     *
+     * @var string
+     */
+    const SYNC_USER_HOOK_CLASS = 'syncUserHookClass';
+    
+    /**
      * Config key for session ip validation -> if this is set to FALSE no Zend_Session_Validator_IpAddress is registered
      * 
      * @var string
@@ -449,6 +456,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
             'default'               => false
+        ),
+        self::SYNC_USER_HOOK_CLASS => array(
+                                   //_('Configure hook class for user sync')
+            'label'                 => 'Configure hook class for user sync',
+                                   //_('Allows to change data after fetching user from sync backend')
+            'description'           => 'Allows to change data after fetching user from sync backend',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
         ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')

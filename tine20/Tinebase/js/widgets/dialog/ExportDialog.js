@@ -34,7 +34,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     windowNamePrefix: 'ExportWindow_',
-    loadRecord: false,
+    loadMask: false,
     tbarItems: [],
     evalGrants: false,
     sendRequest: true,
@@ -62,7 +62,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 var options = defData.plugin_options,
                     extension = options ? options.extension : null;
                 
-                defData.label = this.app.i18n._hidden(options && options.label ? options.label : defData.name);
+                defData.label = this.app.i18n._hidden(defData.label ? defData.label : defData.name);
                 this.definitionsStore.addSorted(new Tine.Tinebase.Model.ImportExportDefinition(defData, defData.id));
             }, this);
             this.definitionsStore.sort('label');
