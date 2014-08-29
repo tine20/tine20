@@ -607,7 +607,7 @@ class Courses_JsonTest extends TestCase
                     'name'              => 'course_user_import_csv',
                     'type'              => 'import',
                     'model'             => 'Tinebase_Model_FullUser',
-                    'plugin'            => 'Admin_Import_Csv',
+                    'plugin'            => 'Admin_Import_User_Csv',
                     'plugin_options'    => '<?xml version="1.0" encoding="UTF-8"?>
             <config>
                 <headline>1</headline>
@@ -647,7 +647,7 @@ class Courses_JsonTest extends TestCase
                     'name'              => 'course_user_import_csv2',
                     'type'              => 'import',
                     'model'             => 'Tinebase_Model_FullUser',
-                    'plugin'            => 'Admin_Import_Csv',
+                    'plugin'            => 'Admin_Import_User_Csv',
                     'plugin_options'    => '<?xml version="1.0" encoding="UTF-8"?>
             <config>
                 <headline>1</headline>
@@ -688,7 +688,7 @@ class Courses_JsonTest extends TestCase
                     'name'              => 'course_user_import_csv',
                     'type'              => 'import',
                     'model'             => 'Tinebase_Model_FullUser',
-                    'plugin'            => 'Admin_Import_Csv',
+                    'plugin'            => 'Admin_Import_User_Csv',
                     'plugin_options'    => '<?xml version="1.0" encoding="UTF-8"?>
             <config>
                 <headline>1</headline>

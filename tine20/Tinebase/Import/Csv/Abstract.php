@@ -87,7 +87,6 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     protected function _getRawData($_resource)
     {
         $delimiter = ((isset($this->_specialDelimiter[$this->_options['delimiter']]) || array_key_exists($this->_options['delimiter'], $this->_specialDelimiter))) ? $this->_specialDelimiter[$this->_options['delimiter']] : $this->_options['delimiter'];
-        
         $lineData = fgetcsv(
             $_resource,
             $this->_options['maxLineLength'],

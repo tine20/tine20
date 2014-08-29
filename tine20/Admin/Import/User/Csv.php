@@ -17,7 +17,7 @@
  * @subpackage  Import
  * 
  */
-class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
+class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
 {
     /**
      * additional config options
@@ -60,7 +60,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_options = array())
     {
-        return new Admin_Import_Csv(self::getOptionsArrayFromDefinition($_definition, $_options));
+        return new static(self::getOptionsArrayFromDefinition($_definition, $_options));
     }
     
     /**

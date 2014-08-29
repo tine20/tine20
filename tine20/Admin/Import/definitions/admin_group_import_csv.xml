@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Tinebase_Model_Group</model>
+    <plugin>Admin_Import_Group_Csv</plugin>
+    <name>admin_group_import_csv</name>
+    <type>import</type>
+    <headline>0</headline>
+    <delimiter>;</delimiter>
+    <dryrun>0</dryrun>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>name</source>
+            <destination>name</destination>
+        </field>
+        <field>
+            <source>description</source>
+            <destination>description</destination>
+        </field>
+        <field>
+            <source>members</source>
+            <destination>members</destination>
+        </field>
+    </mapping>
+</config>
