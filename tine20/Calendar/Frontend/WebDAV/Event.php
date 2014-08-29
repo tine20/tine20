@@ -497,7 +497,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             Addressbook_Controller_Contact::getInstance()->getContactByUserId($container->getOwner(), true)->getId() :
             Tinebase_Core::getUser()->contact_id;
         } catch (Exception $e) {
-            $calendarUserId = Tinebase_Core::getUser()->contact_id;
+            $calendarUserId = Calendar_Controller_MSEventFacade::getCurrentUserContactId();
         }
         
         $calendarUser = new Calendar_Model_Attender(array(

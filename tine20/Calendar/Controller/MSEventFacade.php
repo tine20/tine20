@@ -59,13 +59,14 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_eventController = Calendar_Controller_Event::getInstance();
         
         // set default CU
         $this->setCalendarUser(new Calendar_Model_Attender(array(
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => Tinebase_Core::getUser()->contact_id
+            'user_id'   => self::getCurrentUserContactId()
         )));
     }
 
@@ -88,6 +89,25 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             self::$_instance = new Calendar_Controller_MSEventFacade();
         }
         return self::$_instance;
+    }
+    
+    /**
+     * get user contact id
+     * - NOTE: creates a new user contact on the fly if it did not exist before
+     * 
+     * @return string
+     */
+    public static function getCurrentUserContactId()
+    {
+        if (empty(Tinebase_Core::getUser()->contact_id)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Creating user contact for ' . Tinebase_Core::getUser()->accountDisplayName . ' on the fly ...');
+            $contact = Admin_Controller_User::getInstance()->createOrUpdateContact(Tinebase_Core::getUser());
+            Tinebase_Core::getUser()->contact_id = $contact->getId();
+            Tinebase_User::getInstance()->updateUserInSqlBackend(Tinebase_Core::getUser());
+        }
+        
+        return Tinebase_Core::getUser()->contact_id;
     }
     
     /**
