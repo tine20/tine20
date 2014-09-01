@@ -341,7 +341,7 @@ class Tinebase_WebDav_Plugin_Inverse extends Sabre\DAV\ServerPlugin {
                 switch($value['account_type']) {
                     case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                         try {
-                            $account = Tinebase_User::getInstance()->getFullUserById($value['account_id']);
+                            $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $value['account_id'], 'Tinebase_Model_FullUser');
                         } catch (Tinebase_Exception_NotFound $e) {
                             $account = Tinebase_User::getInstance()->getNonExistentUser();
                         }

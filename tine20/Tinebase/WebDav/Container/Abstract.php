@@ -208,7 +208,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends Sabre\DAV\Collection i
                     
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     try {
-                        $fulluser = Tinebase_User::getInstance()->getFullUserById($grant->account_id);
+                        $fulluser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id, 'Tinebase_Model_FullUser');
                     } catch (Tinebase_Exception_Record_NotDefined $ternd) {
                         // skip group
                         continue 2;

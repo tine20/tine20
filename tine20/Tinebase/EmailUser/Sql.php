@@ -343,7 +343,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         
         $userId = $queryResult['userid'];
         try {
-            Tinebase_User::getInstance()->getFullUserById($userId);
+            Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $userId);
             throw new Tinebase_Exception_SystemGeneric('Could not overwrite existing email user.');
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Delete obsolete email user ' .$userId);

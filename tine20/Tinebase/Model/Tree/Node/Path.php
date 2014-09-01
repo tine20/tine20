@@ -365,10 +365,11 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             // replace account login name with id
             if ($this->containerOwner) {
                 try {
-                    $pathParts[3] = Tinebase_User::getInstance()->getFullUserByLoginName($this->containerOwner)->getId();
+                    $pathParts[3] = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $this->containerOwner, 'Tinebase_Model_FullUser')->getId();
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     // try again with id
-                    $user = Tinebase_User::getInstance()->getFullUserById($this->containerOwner);
+                    $accountId = is_object($this->containerOwner) ? $this->containerOwner->getId() : $this->containerOwner;
+                    $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId, 'Tinebase_Model_FullUser');
                     $pathParts[3] = $user->getId();
                     $this->containerOwner = $user->accountLoginName;
                 }
@@ -423,7 +424,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         $this->containerType        = $container->type;
         $ownerAccountId             = Tinebase_Container::getInstance()->getContainerOwner($container);
         if ($ownerAccountId) {
-            $this->containerOwner = Tinebase_User::getInstance()->getFullUserById($ownerAccountId)->accountLoginName;
+            $this->containerOwner = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $ownerAccountId, 'Tinebase_Model_FullUser')->accountLoginName;
         } else if ($this->containerType === Tinebase_Model_Container::TYPE_PERSONAL) {
             throw new Tinebase_Exception_InvalidArgument('Personal container needs an owner!');
         } else {
