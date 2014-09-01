@@ -785,6 +785,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             Tinebase_Model_Grants::GRANT_READ=> true,
             Tinebase_Model_Grants::GRANT_ADD=> true,
             Tinebase_Model_Grants::GRANT_EDIT=> true,
+            Tinebase_Model_Grants::GRANT_SYNC=> true,
             Tinebase_Model_Grants::GRANT_DELETE=> true,
         );
     }
