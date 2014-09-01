@@ -22,7 +22,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @var boolean
      */
-    protected $_hasCaptcha = FALSE;
+    protected $_hasCaptcha = NULL;
 
     /**
      * wait for changes
@@ -453,7 +453,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (is_array(($response = $this->_getCaptchaResponse($securitycode)))) {
             return $response;
         }
-        
+
         // try to login user
         $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineJson', $securitycode) === TRUE);
         
@@ -463,7 +463,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return $this->_getLoginFailedResponse();
         }
     }
-    
+
     /**
      * Returns TRUE if there is a captcha
      * @return boolean
@@ -475,7 +475,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         return $this->_hasCaptcha;
     }
-    
+
     /**
      *
      * @param string $securitycode
@@ -484,26 +484,24 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function _getCaptchaResponse($securitycode)
     {
         if ($this->_hasCaptcha()) {
-            if ($captcha) {
-                $config_count = Tinebase_Core::getConfig()->captcha->count;
-                $count = (isset($_SESSION['captcha']['count']) ? $_SESSION['captcha']['count'] : 1);
-                if ($count >= $config_count) {
-                    $aux = isset($_SESSION['captcha']['code']) ? $_SESSION['captcha']['code'] : NULL;
-                    if ($aux != $securitycode) {
-                        $rets = Tinebase_Controller::getInstance()->makeCaptcha();
-                        $response = array(
-                            'success'      => FALSE,
-                            'errorMessage' => "Wrong username or password!",
-                            'c1' => $rets['1']
-                        );
-                        return $response;
-                    }
+            $config_count = Tinebase_Core::getConfig()->captcha->count;
+            $count = (isset($_SESSION['captcha']['count']) ? $_SESSION['captcha']['count'] : 1);
+            if ($count >= $config_count) {
+                $aux = isset($_SESSION['captcha']['code']) ? $_SESSION['captcha']['code'] : NULL;
+                if ($aux != $securitycode) {
+                    $rets = Tinebase_Controller::getInstance()->makeCaptcha();
+                    $response = array(
+                        'success'      => FALSE,
+                        'errorMessage' => "Wrong username or password!",
+                        'c1' => $rets['1']
+                    );
+                    return $response;
                 }
             }
         }
         return NULL;
     }
-    
+
     /**
      *
      * @param string $username
@@ -517,19 +515,19 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'jsonKey'        => Tinebase_Core::get('jsonKey'),
                 'welcomeMessage' => "Welcome to Tine 2.0!"
         );
-         
+
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::REUSEUSERNAME_SAVEUSERNAME, 0)) {
             // save in cookie (expires in 2 weeks)
             setcookie('TINE20LASTUSERID', $username, time()+60*60*24*14);
         } else {
             setcookie('TINE20LASTUSERID', '', 0);
         }
-        
+
         $this->_setCredentialCacheCookie();
 
         return $response;
     }
-    
+
     /**
      *
      * @return array
@@ -541,7 +539,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'errorMessage' => "Wrong username or password!",
         );
         Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
-        if ($captcha) {
+        if ($this->_hasCaptcha()) {
             $config_count = Tinebase_Core::getConfig()->captcha->count;
             if (!isset($_SESSION['captcha']['count'])) {
                 $_SESSION['captcha']['count'] = 1;
