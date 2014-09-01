@@ -33,6 +33,16 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     protected $webdavFrontend = 'Calendar_Frontend_WebDAV_Event';
     protected $_uuidPrefix = '';
     
+    /**
+     * skip those ics
+     * 
+     * TODO move to config
+     * @var array
+     */
+    protected $_icsBlacklist = array(
+        '/calendars/__uids__/2BCFF349-136E-4AF8-BF7B-18761C7F7C6B/2A65B5DF-0B4E-48D1-BD87-897E534DC24F/DF8AA6F6-6814-4392-AEB0-BD870F53FD69.ics'
+    );
+    
     const calendarDataKey = '{urn:ietf:params:xml:ns:caldav}calendar-data';
     const findAllCalendarsRequest =
 '<?xml version="1.0"?>
@@ -550,13 +560,18 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             // use importAllCalendars to have the grants set
             //$grants = $this->getCalendarGrants($calUri);
             //Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, FALSE);
-            
+
             $start = 0;
             $max = count($calICSs);
             do {
                 $etags = array();
                 $requestEnd = '';
                 for ($i = $start; $i < $max && $i < ($this->maxBulkRequest+$start); ++$i) {
+                    if (in_array($calICSs[$i], $this->_icsBlacklist)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                               . ' Ignoring blacklisted ics: ' . $calICSs[$i]);
+                        continue;
+                    }
                     $requestEnd .= '  <a:href>' . $calICSs[$i] . "</a:href>\n";
                 }
                 $start = $i;
