@@ -50,6 +50,10 @@
           "path": "../library/CryptoJS/"
         },
         {
+          "text": "enc-base64.js",
+          "path": "../library/CryptoJS/"
+        },
+        {
           "text": "GeoExt.js",
           "path": "../library/GeoExt/script/"
         },
