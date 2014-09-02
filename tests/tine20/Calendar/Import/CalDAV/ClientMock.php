@@ -375,7 +375,7 @@ DTSTAMP:20140602T131725Z
 SEQUENCE:1
 END:VEVENT
 END:VCALENDAR',
-            '{DAV:}getetag' => '"3333914690ad7290fa9a2dc1da490489"',
+            '{DAV:}getetag' => '"-1030341843%40citrixonlinecom"',
         );
     }
     

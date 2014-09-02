@@ -479,10 +479,15 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             : Tinebase_Core::getApplicationInstance('Calendar', 'Calendar_Model_Event')->getBackend();
         
         $containerFilterArray = array('field' => 'container_id', 'operator' => 'equals', 'value' => $otherContainer->getId());
-        $filter = ($this->appName === 'Calendar') 
-            ? new Tasks_Model_TaskFilter(array($containerFilterArray))
-            : new Calendar_Model_EventFilter(array($containerFilterArray));
-        $ids = $otherBackend->search($filter, null, true);
+        try {
+            $filter = ($this->appName === 'Calendar') 
+                ? new Tasks_Model_TaskFilter(array($containerFilterArray))
+                : new Calendar_Model_EventFilter(array($containerFilterArray));
+            $ids = $otherBackend->search($filter, null, true);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            return array();
+        }
         return $ids;
     }
     
