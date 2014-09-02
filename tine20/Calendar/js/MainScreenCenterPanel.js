@@ -264,10 +264,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         ];
         
         this.recordActions = [
-            this.action_import,
             this.action_editInNewWindow,
             this.action_deleteRecord
-            
         ];
         
         this.actionUpdater = new  Tine.widgets.ActionUpdater({

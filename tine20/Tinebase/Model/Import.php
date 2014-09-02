@@ -74,13 +74,19 @@ class Tinebase_Model_Import extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                 => array('allowEmpty' => false),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'timestamp'          => array('allowEmpty' => false),
         'user_id'            => array('presence' => 'required'),
         'model'              => array('presence' => 'required'),
         'application_id'     => array('presence' => 'required'),
         'synctoken'          => array('allowEmpty' => true),
-        'interval'           => array('allowEmpty' => false),
+        'interval'           => array('allowEmpty' => false, array(
+            'InArray', array(Tinebase_Model_Import::INTERVAL_DAILY,
+                Tinebase_Model_Import::INTERVAL_HOURLY,
+                Tinebase_Model_Import::INTERVAL_ONCE,
+                Tinebase_Model_Import::INTERVAL_WEEKLY)
+            )
+        ),
         'container_id'       => array('presence' => 'required'),
         'sourcetype'         => array('presence' => 'required'),
         'options'            => array('allowEmpty' => true),

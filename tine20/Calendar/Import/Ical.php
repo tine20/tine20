@@ -120,7 +120,25 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
             throw $isce;
         }
         
-        $events->container_id = $this->_options['container_id'];
+        // find container or create a new one on the fly
+        $containerId = $this->_options['container_id'];
+        
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+        } catch (Tinebase_Exception_InvalidArgument $e) {
+            $container = new Tinebase_Model_Container(array(
+                'name'              => $containerId,
+                'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+                'backend'           => Tinebase_User::SQL,
+                'color'             => '#ffffff',
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+                'owner_id'          => Tinebase_Core::getUser()->getId(),
+                'model'             => 'Calendar_Model_Event',
+            ));
+            $container = Tinebase_Container::getInstance()->addContainer($container);
+        }
+        
+        $events->container_id = $container->getId();
         
         $cc = Calendar_Controller_MSEventFacade::getInstance();
         $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);

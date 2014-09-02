@@ -1106,3 +1106,111 @@ msgstr "Keine Antwort von %1$s für den Termin \"%2$s\" am  %3$s"
 #: Controller/EventNotifications.php:374
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Geänderte Teilnehmer beim Termin  \"%1$s\" am %2$s"
+
+
+#: js/ImportDialog.js:110
+msgid "Choose Import File"
+msgstr "Wählen Sie die Datei zum Importieren aus"
+
+#: js/ImportDialog.js:114
+msgid "Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr "Bitte wählen Sie die Datei aus, die Sie in Tine 2.0 einbinden möchten"
+
+#: js/ImportDialog.js:118
+msgid "Select file containing your {0}"
+msgstr "Wählen Sie die Datei, die Ihren {0} enthält"
+
+#: js/ImportDialog.js:133
+msgid "once"
+msgstr "einmalig"
+
+#: js/ImportDialog.js:134
+msgid "hourly"
+msgstr "stündlich"
+
+#: js/ImportDialog.js:135
+msgid "daily"
+msgstr "täglich"
+
+#: js/ImportDialog.js:136
+msgid "weekly"
+msgstr "wöchentlich"
+
+#: js/ImportDialog.js:149
+msgid "Set Remote Location"
+msgstr "Setzen Sie die Url des entfernten Kalenders"
+
+#: js/ImportDialog.js:153
+msgid "Please choose a remote location you want to add to Tine 2.0"
+msgstr "Bitte wählen Sie die URL aus, die Sie in Tine 2.0 einbinden möchten"
+
+#: js/ImportDialog.js:168
+msgid "Refresh time"
+msgstr "Aktualisierungsintervall"
+
+#: js/ImportDialog.js:199
+msgid "General Settings"
+msgstr "Generelle Einstellungen"
+
+#: js/ImportDialog.js:274
+msgid "Please select the import format of the file you want to upload"
+msgstr "Bitte wählen Sie das Import-Format der Datei, die sie hochladen möchten"
+
+#: js/ImportDialog.js:295
+msgid "Download example file"
+msgstr "Beispieldatei herunterladen"
+
+#: js/ImportDialog.js:317
+msgid "Remote / ICS"
+msgstr "Entfernt / ICS"
+
+#: js/ImportDialog.js:318
+msgid "Remote / CALDav"
+msgstr "Entfernt / CALDAV"
+
+#: js/ImportDialog.js:319
+msgid "Upload"
+msgstr "Datei hochladen / ICS"
+
+#: js/ImportDialog.js:341
+msgid "Select type of source"
+msgstr "Ressource Wählen"
+
+#: js/ImportDialog.js:223
+msgid "or"
+msgstr "oder"
+
+#: js/ImportDialog.js:263
+msgid "What should the file you upload look like?"
+msgstr "Wie soll die Datei aussehen, die sie hochladen möchten?"
+
+#: js/ImportDialog.js:268
+msgid ""
+"Tine 2.0 does not understand all kind of files you might want to upload. You "
+"will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr "Tine 2.0 kann nicht alle Formate verarbeiten. Unter Umständen müssen Sie die Datei anpassen, damit sie verarbeitet werden kann."
+
+#: js/ImportDialog.js:332
+msgid "Choose File and Format"
+msgstr ""
+
+#: js/ImportDialog.js:345
+msgid "Please select the type of source you want to add to Tine 2.0"
+msgstr "Bitte wählen Sie die Art der Ressource, die Sie zu Tine 2.0 hinzufügen möchten"
+
+#: js/ImportDialog.js:394
+#, python-brace-format
+msgid "Importing {0}"
+msgstr ""
+
+msgid "Import Events"
+msgstr "Termine Importieren"
+
+msgid "Choose Remote Location"
+msgstr "Entfernte Ressource Wählen"
+
+#: js/ImportDialog.js:203
+msgid ""
+"Container name / New or existing if it already exists you need permissions "
+"to add to."
+msgstr "Kalender - Name eines neuen Kalenders oder eines bestehenden"

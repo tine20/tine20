@@ -151,14 +151,23 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
             'importContainerId' => $record->container_id,
         );
         
-        $handle = fopen($record->source, 'r');
+        if (strpos($record->source, 'http') === 0) {
+            $client = new Zend_Http_Client($record->source);
+            $toImport = $client->request()->getBody();
+        } else {
+            $toImport = file_get_contents($record->source);
+        }
+
         
         $importer = new $importer($options);
         
-        if ($handle) {
+        if ($toImport) {
             // do import
-            $importer->import($handle);
-            fclose($handle);
+            $importer->import($toImport);
+            
+            if ($record->interval === Tinebase_Model_Import::INTERVAL_ONCE || ! $record->timestamp instanceof Tinebase_DateTime) {
+                $record->timestamp = Tinebase_DateTime::now();
+            }
             
             switch ($record->interval) {
                 case Tinebase_Model_Import::INTERVAL_DAILY:
@@ -170,8 +179,6 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
                 case Tinebase_Model_Import::INTERVAL_HOURLY:
                     $record->timestamp->addHour(1);
                     break;
-                default:
-                    $record->timestamp = $now;
             }
             
             // update record
@@ -184,5 +191,73 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         }
         
         return $record;
+    }
+    
+    /**
+     * Creates a remote import for events
+     * 
+     * @param string $remoteUrl
+     * @param string $interval
+     * @param array $importOptions
+     * @throws Calendar_Exception_InvalidUrl
+     * @return Tinebase_Record_Interface
+     */
+    public function createRemoteImportEvent($data)
+    {
+        $possibleIntervals = array(
+            Tinebase_Model_Import::INTERVAL_DAILY,
+            Tinebase_Model_Import::INTERVAL_HOURLY,
+            Tinebase_Model_Import::INTERVAL_ONCE,
+            Tinebase_Model_Import::INTERVAL_WEEKLY
+        );
+        
+        if (! in_array($data['interval'], $possibleIntervals)) {
+            $data['interval'] = Tinebase_Model_Import::INTERVAL_ONCE;
+        }
+        
+        $url = filter_var($data['source'], FILTER_VALIDATE_URL);
+        if ($url) {
+            if (strpos($data['source'], 'http') === 0) {
+                $client = new Zend_Http_Client($data['source']);
+                $toImport = $client->request()->getBody();
+            } else {
+                $toImport = file_get_contents($data['source']);
+            }
+        } else {
+            throw new Calendar_Exception_InvalidUrl();
+        }
+        
+        // find container or create a new one
+        $containerId = $data['options']['container_id'];
+        
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+        } catch (Tinebase_Exception_InvalidArgument $e) {
+            $container = new Tinebase_Model_Container(array(
+                'name'              => $data['options']['container_id'],
+                'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+                'backend'           => Tinebase_User::SQL,
+                'color'             => '#ffffff',
+                'application_id'    => $data['application_id'],
+                'owner_id'          => $data['user_id'],
+                'model'             => $data['model'],
+            ));
+
+            $container = Tinebase_Container::getInstance()->addContainer($container);
+        }
+        
+        $data['options'] = json_encode(array_replace(array(
+            'forceUpdateExisting' => TRUE,
+            'import_defintion' => NULL,
+        ), $data['options']));
+        
+        $record = new Tinebase_Model_Import(array_replace(array(
+            'id'                => Tinebase_Record_Abstract::generateUID(),
+            'user_id'           => Tinebase_Core::getUser()->getId(),
+            'sourcetype'        => Tinebase_Model_Import::SOURCETYPE_REMOTE,
+            'container_id'      => $container->getId(),
+        ), $data));
+        
+        return $this->create($record);
     }
 }

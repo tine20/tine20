@@ -120,16 +120,20 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             fields: ['index', 'code', 'message', 'exception', 'resolveStrategy', 'resolvedRecord', 'isResolved']
         });
 
-        this.items = [
+        this.items = this.getItems();
+
+        Tine.widgets.dialog.ImportDialog.superclass.initComponent.call(this);
+    },
+
+    getItems: function() {
+        return [
             this.getFilePanel(),
             this.getOptionsPanel(),
             this.getConflictsPanel(),
             this.getSummaryPanel()
         ];
-
-        Tine.widgets.dialog.ImportDialog.superclass.initComponent.call(this);
     },
-
+    
     /**
      * close window on cancel
      */

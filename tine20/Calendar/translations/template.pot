@@ -13,267 +13,107 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:103
-msgid "manage shared calendars"
+#: Preference.php:36
+msgid "All my events"
 msgstr ""
 
-#: Acl/Rights.php:104
-msgid "Create new shared calendars"
+#: Preference.php:97 js/EventDetailsPanel.js:260
+#: js/ContactEventsGridPanel.js:119 js/GridView.js:109
+#: js/EventEditDialog.js:138
+msgid "Start Time"
 msgstr ""
 
-#: Acl/Rights.php:107
-msgid "manage shared calendars favorites"
+#: Preference.php:98
+msgid "Position on the left time axis, day and week view should start with"
 msgstr ""
 
-#: Acl/Rights.php:108
-msgid "Create or update shared calendars favorites"
+#: Preference.php:101 js/EventDetailsPanel.js:265 js/GridView.js:115
+#: js/EventEditDialog.js:152
+msgid "End Time"
 msgstr ""
 
-#: Acl/Rights.php:111
-msgid "manage resources"
+#: Preference.php:102
+msgid "Position on the left time axis, day and week view should end with"
 msgstr ""
 
-#: Acl/Rights.php:112
-msgid "All Rights to administrate resources"
+#: Preference.php:105
+msgid "Default Calendar"
 msgstr ""
 
-#: Controller.php:109
-#, python-format
-msgid "%s's personal calendar"
+#: Preference.php:106
+msgid "The default calendar for invitations and new events"
 msgstr ""
 
-#: Model/Attender.php:156
-msgid "unknown"
+#: Preference.php:109
+msgid "Default Favorite"
 msgstr ""
 
-#: Model/Attender.php:438
+#: Preference.php:110
+msgid "The default favorite which is loaded on calendar startup"
+msgstr ""
+
+#: Preference.php:113
+msgid "Get Notification Emails"
+msgstr ""
+
+#: Preference.php:114
 msgid ""
-"This contact has been automatically added by the system as an event attender"
+"The level of actions you want to be notified about. Please note that "
+"organizers will get notifications for all updates including attendee answers "
+"unless this preference is set to \"Never\""
 msgstr ""
 
-#: Model/Attender.php:441
-msgid "The email address has been shortened: "
+#: Preference.php:117
+msgid "Send Notifications Emails of own Actions"
 msgstr ""
 
-#: Model/Event.php:343
-msgid "Start"
+#: Preference.php:118
+msgid "Get notifications emails for actions you did yourself"
 msgstr ""
 
-#: Model/Event.php:344 js/RrulePanel.js:321
-msgid "End"
+#: Preference.php:121
+msgid "Enable Standard Alarm"
 msgstr ""
 
-#: Model/Event.php:345 js/GridView.js:127 js/EventDetailsPanel.js:270
-msgid "Blocking"
+#: Preference.php:122
+msgid "New events get a standard alarm as defined below"
 msgstr ""
 
-#: Model/Event.php:346
-msgid "Classification"
+#: Preference.php:125
+msgid "Standard Alarm Time"
 msgstr ""
 
-#: Model/Event.php:347 js/GridView.js:161 js/ResourceEditDialog.js:84
-#: js/Model.js:207 js/EventEditDialog.js:264
-msgid "Description"
+#: Preference.php:126
+msgid "Minutes before the event starts"
 msgstr ""
 
-#: Model/Event.php:348 js/GridView.js:148 js/EventDetailsPanel.js:280
-#: js/Model.js:206 js/EventEditDialog.js:132 js/ResourcesGridPanel.js:54
-msgid "Location"
+#: Preference.php:199
+msgid "Never"
 msgstr ""
 
-#: Model/Event.php:349 js/GridView.js:154 js/PerspectiveCombo.js:127
-#: js/EventDetailsPanel.js:284 js/Model.js:226 js/EventEditDialog.js:308
-msgid "Organizer"
+#: Preference.php:199
+msgid "On invitation and cancellation only"
 msgstr ""
 
-#: Model/Event.php:350
-msgid "Priority"
+#: Preference.php:199
+msgid "On time changes"
 msgstr ""
 
-#: Model/Event.php:351 js/GridView.js:173 js/AddToEventPanel.js:88
-#: js/AttendeeGridPanel.js:213 js/ContactEventsGridPanel.js:126
-#: js/EventEditDialog.js:186
-msgid "Status"
+#: Preference.php:199
+msgid "On all updates but attendee responses"
 msgstr ""
 
-#: Model/Event.php:352 js/GridView.js:143 js/Model.js:205
-#: js/ContactEventsGridPanel.js:113 js/EventEditDialog.js:87
-msgid "Summary"
+#: Preference.php:199
+msgid "On attendee responses too"
 msgstr ""
 
-#: Model/Event.php:353
-msgid "Url"
+#: Import/definitions/cal_import_ical.xml:12
+msgid "Import iCal-files"
 msgstr ""
 
-#: Model/Event.php:354
-msgid "Recurrance rule"
+#: Setup/Update/Release3.php:164 Setup/Initialize.php:34
+msgid "All events I attend"
 msgstr ""
-
-#: Model/Event.php:355
-msgid "Is all day event"
-msgstr ""
-
-#: Model/Event.php:356
-msgid "Organizer timezone"
-msgstr ""
-
-#: Model/Event.php:381
-msgid "No"
-msgstr ""
-
-#: Model/Event.php:381
-msgid "Yes"
-msgstr ""
-
-#: Model/Rrule.php:324
-#, python-format
-msgid "Every %s day"
-msgstr ""
-
-#: Model/Rrule.php:325 js/RrulePanel.js:79
-msgid "Daily"
-msgstr ""
-
-#: Model/Rrule.php:330
-#, python-format
-msgid "Every %s week on "
-msgstr ""
-
-#: Model/Rrule.php:331
-msgid "Weekly on "
-msgstr ""
-
-#: Model/Rrule.php:338
-msgid " and "
-msgstr ""
-
-#: Model/Rrule.php:350
-msgid "Every %1$s month on the %2$s %3$s"
-msgstr ""
-
-#: Model/Rrule.php:351
-msgid "Monthly every %1$s %2$s"
-msgstr ""
-
-#: Model/Rrule.php:357
-msgid "Every %1$s month on the %2$s"
-msgstr ""
-
-#: Model/Rrule.php:358
-msgid "Monthly on the %1$s"
-msgstr ""
-
-#: Model/Rrule.php:367
-msgid "Yearly every %1$s %2$s of %3$s"
-msgstr ""
-
-#: Model/Rrule.php:369
-msgid "Yearly on the %1$s of %2$s"
-msgstr ""
-
-#: Model/Rrule.php:409
-msgid "second to last"
-msgstr ""
-
-#: Model/Rrule.php:412 js/RrulePanel.js:543 js/RrulePanel.js:724
-msgid "last"
-msgstr ""
-
-#: Model/Rrule.php:418 js/RrulePanel.js:539 js/RrulePanel.js:720
-msgid "first"
-msgstr ""
-
-#: Model/Rrule.php:421 js/RrulePanel.js:540 js/RrulePanel.js:721
-msgid "second"
-msgstr ""
-
-#: Model/Rrule.php:424 js/RrulePanel.js:541 js/RrulePanel.js:722
-msgid "third"
-msgstr ""
-
-#: Model/Rrule.php:427 js/RrulePanel.js:542 js/RrulePanel.js:723
-msgid "fourth"
-msgstr ""
-
-#: Model/Rrule.php:430
-msgid "fifth"
-msgstr ""
-
-#: Model/Rrule.php:435
-msgid "st"
-msgstr ""
-
-#: Model/Rrule.php:438
-msgid "nd"
-msgstr ""
-
-#: Model/Rrule.php:441
-msgid "rd"
-msgstr ""
-
-#: Model/Rrule.php:444
-msgid "th"
-msgstr ""
-
-#: Config.php:66
-msgid "Fixed Calendars"
-msgstr ""
-
-#: Config.php:68
-msgid ""
-"Calendars always selected regardless of all filter parameters. A valid use "
-"case might be to force the display of an certain holiday calendar."
-msgstr ""
-
-#: Config.php:76
-msgid "Attendee Status Available"
-msgstr ""
-
-#: Config.php:78
-msgid ""
-"Possible event attendee status. Please note that additional attendee status "
-"might impact other calendar systems on export or syncronisation."
-msgstr ""
-
-#: Config.php:86
-msgid "Attendee Roles Available"
-msgstr ""
-
-#: Config.php:88
-msgid ""
-"Possible event attendee roles. Please note that additional attendee roles "
-"might impact other calendar systems on export or syncronisation."
-msgstr ""
-
-#: Config.php:96
-msgid "Filter timeslot for CalDAV events"
-msgstr ""
-
-#: Config.php:98
-msgid "For how long in the past (in months) the events should be synchronized."
-msgstr ""
-
-#: Config.php:107
-msgid "Default filter period (from) for events fetched via JSON API"
-msgstr ""
-
-#: Config.php:109
-msgid "For how long in the past (in months) the events should be fetched."
-msgstr ""
-
-#: Config.php:118
-msgid "Default filter period (until) for events fetched via JSON API"
-msgstr ""
-
-#: Config.php:120
-msgid "For how long in the future (in months) the events should be fetched."
-msgstr ""
-
-#: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:70
-msgid "Calendar"
-msgid_plural "Calendars"
-msgstr[0] ""
-msgstr[1] ""
 
 #: Setup/Update/Release5.php:77 Setup/Initialize.php:98
 msgid "Required"
@@ -295,13 +135,9 @@ msgstr ""
 msgid "Declined"
 msgstr ""
 
-#: Setup/Update/Release5.php:94 Setup/Initialize.php:115 js/GridView.js:135
-#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:206
+#: Setup/Update/Release5.php:94 Setup/Initialize.php:115
+#: js/EventDetailsPanel.js:275 js/GridView.js:135 js/EventEditDialog.js:206
 msgid "Tentative"
-msgstr ""
-
-#: Setup/Update/Release3.php:164 Setup/Initialize.php:34
-msgid "All events I attend"
 msgstr ""
 
 #: Setup/Initialize.php:47
@@ -328,142 +164,227 @@ msgstr ""
 msgid "Events I'm the organizer of"
 msgstr ""
 
-#: Preference.php:31
-msgid "All my events"
+#: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:71
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Rrule.php:331
+#, python-format
+msgid "Every %s day"
 msgstr ""
 
-#: Preference.php:91 js/GridView.js:109 js/EventDetailsPanel.js:260
-#: js/ContactEventsGridPanel.js:119 js/EventEditDialog.js:138
-msgid "Start Time"
+#: Model/Rrule.php:332 js/RrulePanel.js:79
+msgid "Daily"
 msgstr ""
 
-#: Preference.php:92
-msgid "Position on the left time axis, day and week view should start with"
+#: Model/Rrule.php:337
+#, python-format
+msgid "Every %s week on "
 msgstr ""
 
-#: Preference.php:95
-msgid "Default Calendar"
+#: Model/Rrule.php:338
+msgid "Weekly on "
 msgstr ""
 
-#: Preference.php:96
-msgid "The default calendar for invitations and new events"
+#: Model/Rrule.php:345
+msgid " and "
 msgstr ""
 
-#: Preference.php:99
-msgid "Default Favorite"
+#: Model/Rrule.php:357
+msgid "Every %1$s month on the %2$s %3$s"
 msgstr ""
 
-#: Preference.php:100
-msgid "The default favorite which is loaded on calendar startup"
+#: Model/Rrule.php:358
+msgid "Monthly every %1$s %2$s"
 msgstr ""
 
-#: Preference.php:103
-msgid "Get Notification Emails"
+#: Model/Rrule.php:364
+msgid "Every %1$s month on the %2$s"
 msgstr ""
 
-#: Preference.php:104
+#: Model/Rrule.php:365
+msgid "Monthly on the %1$s"
+msgstr ""
+
+#: Model/Rrule.php:374
+msgid "Yearly every %1$s %2$s of %3$s"
+msgstr ""
+
+#: Model/Rrule.php:376
+msgid "Yearly on the %1$s of %2$s"
+msgstr ""
+
+#: Model/Rrule.php:416
+msgid "second to last"
+msgstr ""
+
+#: Model/Rrule.php:419 js/RrulePanel.js:543 js/RrulePanel.js:724
+msgid "last"
+msgstr ""
+
+#: Model/Rrule.php:425 js/RrulePanel.js:539 js/RrulePanel.js:720
+msgid "first"
+msgstr ""
+
+#: Model/Rrule.php:428 js/RrulePanel.js:540 js/RrulePanel.js:721
+msgid "second"
+msgstr ""
+
+#: Model/Rrule.php:431 js/RrulePanel.js:541 js/RrulePanel.js:722
+msgid "third"
+msgstr ""
+
+#: Model/Rrule.php:434 js/RrulePanel.js:542 js/RrulePanel.js:723
+msgid "fourth"
+msgstr ""
+
+#: Model/Rrule.php:437
+msgid "fifth"
+msgstr ""
+
+#: Model/Rrule.php:442
+msgid "st"
+msgstr ""
+
+#: Model/Rrule.php:445
+msgid "nd"
+msgstr ""
+
+#: Model/Rrule.php:448
+msgid "rd"
+msgstr ""
+
+#: Model/Rrule.php:451
+msgid "th"
+msgstr ""
+
+#: Model/Attender.php:156
+msgid "unknown"
+msgstr ""
+
+#: Model/Attender.php:450
 msgid ""
-"The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers "
-"unless this preference is set to \"Never\""
+"This contact has been automatically added by the system as an event attender"
 msgstr ""
 
-#: Preference.php:107
-msgid "Send Notifications Emails of own Actions"
+#: Model/Attender.php:453
+msgid "The email address has been shortened: "
 msgstr ""
 
-#: Preference.php:108
-msgid "Get notifications emails for actions you did yourself"
+#: Model/Event.php:344
+msgid "Start"
 msgstr ""
 
-#: Preference.php:111
-msgid "Enable Standard Alarm"
+#: Model/Event.php:345 js/RrulePanel.js:321
+msgid "End"
 msgstr ""
 
-#: Preference.php:112
-msgid "New events get a standard alarm as defined below"
+#: Model/Event.php:346 js/EventDetailsPanel.js:270 js/GridView.js:127
+msgid "Blocking"
 msgstr ""
 
-#: Preference.php:115
-msgid "Standard Alarm Time"
+#: Model/Event.php:347
+msgid "Classification"
 msgstr ""
 
-#: Preference.php:116
-msgid "Minutes before the event starts"
+#: Model/Event.php:348 js/ResourceEditDialog.js:84 js/GridView.js:161
+#: js/EventEditDialog.js:264 js/Model.js:208
+msgid "Description"
 msgstr ""
 
-#: Preference.php:172
-msgid "Never"
+#: Model/Event.php:349 js/EventDetailsPanel.js:280 js/ResourcesGridPanel.js:54
+#: js/GridView.js:148 js/EventEditDialog.js:132 js/Model.js:207
+msgid "Location"
 msgstr ""
 
-#: Preference.php:172
-msgid "On invitation and cancellation only"
+#: Model/Event.php:350 js/EventDetailsPanel.js:284 js/PerspectiveCombo.js:127
+#: js/GridView.js:154 js/EventEditDialog.js:308 js/Model.js:227
+msgid "Organizer"
 msgstr ""
 
-#: Preference.php:172
-msgid "On time changes"
+#: Model/Event.php:351
+msgid "Priority"
 msgstr ""
 
-#: Preference.php:172
-msgid "On all updates but attendee responses"
+#: Model/Event.php:352 js/AddToEventPanel.js:88 js/AttendeeGridPanel.js:212
+#: js/ContactEventsGridPanel.js:126 js/GridView.js:173
+#: js/EventEditDialog.js:186
+msgid "Status"
 msgstr ""
 
-#: Preference.php:172
-msgid "On attendee responses too"
+#: Model/Event.php:353 js/ContactEventsGridPanel.js:113 js/GridView.js:143
+#: js/EventEditDialog.js:87 js/Model.js:206
+msgid "Summary"
 msgstr ""
 
-#: js/Calendar.js:29 js/MonthView.js:83 js/DaysView.js:90
-msgid "New Event"
+#: Model/Event.php:354
+msgid "Url"
 msgstr ""
 
-#: js/AdminPanel.js:45
-msgid "Manage Resources"
+#: Model/Event.php:355
+msgid "Recurrance rule"
 msgstr ""
 
-#: js/GridView.js:94 js/EventEditDialog.js:220
-msgid "Private"
+#: Model/Event.php:356
+msgid "Is all day event"
 msgstr ""
 
-#: js/GridView.js:102
-msgid "Tags"
+#: Model/Event.php:357
+msgid "Organizer timezone"
 msgstr ""
 
-#: js/GridView.js:115 js/EventDetailsPanel.js:265 js/EventEditDialog.js:152
-msgid "End Time"
+#: Model/Event.php:382
+msgid "No"
 msgstr ""
 
-#: js/GridView.js:121 js/Printer/Base.js:73 js/EventEditDialog.js:146
-#: js/SearchCombo.js:201
-msgid "whole day"
+#: Model/Event.php:382
+msgid "Yes"
 msgstr ""
 
-#: js/ResourceEditDialog.js:68 js/AttendeeGridPanel.js:205
-#: js/ResourcesGridPanel.js:43
-msgid "Name"
+#: views/eventNotification.php:12
+msgid "Updates"
 msgstr ""
 
-#: js/ResourceEditDialog.js:73 js/ResourcesGridPanel.js:49
-msgid "Email"
+#: views/eventNotification.php:21
+msgid "This is an event series exception."
 msgstr ""
 
-#: js/ResourceEditDialog.js:79 js/ResourceEditDialog.js:80
-msgid "Is a location"
+#: views/eventNotification.php:25
+msgid "%1$s changed from \"%2$s\" to \"%3$s\""
 msgstr ""
 
-#: js/ResourceEditDialog.js:85
-msgid "Enter description..."
+#: views/eventNotification.php:32
+msgid "%1$s has been invited"
 msgstr ""
 
-#: js/ResourceEditDialog.js:117
-msgid "Grants"
+#: views/eventNotification.php:37
+msgid "%1$s has been removed"
 msgstr ""
 
-#: js/PerspectiveCombo.js:84 js/EventEditDialog.js:190
-msgid "non-blocking"
+#: views/eventNotification.php:44
+msgid "%1$s accepted invitation"
 msgstr ""
 
-#: js/PerspectiveCombo.js:110
-msgid "Displayed in"
+#: views/eventNotification.php:48
+msgid "%1$s declined invitation"
+msgstr ""
+
+#: views/eventNotification.php:52
+msgid "Tentative response from %1$s"
+msgstr ""
+
+#: views/eventNotification.php:56
+msgid "No response from %1$s"
+msgstr ""
+
+#: views/eventNotification.php:59
+msgid "\"%2$s\" response from %1$s"
+msgstr ""
+
+#: views/eventNotification.php:68
+msgid "Event details"
 msgstr ""
 
 #: js/AddToEventPanel.js:35
@@ -483,7 +404,494 @@ msgid "Select Status"
 msgstr ""
 
 #: js/AddToEventPanel.js:109
+#, python-brace-format
 msgid "Adding {0} Attendee to event"
+msgstr ""
+
+#: js/EventDetailsPanel.js:28 js/AttendeeGridPanel.js:579
+#: js/AttendeeGridPanel.js:597 js/AttendeeGridPanel.js:614
+#: js/AttendeeGridPanel.js:626 js/Model.js:391
+msgid "No Information"
+msgstr ""
+
+#: js/EventDetailsPanel.js:66
+msgid "Unknown date"
+msgstr ""
+
+#: js/EventDetailsPanel.js:69
+#, python-brace-format
+msgid "{0} {1} o'clock"
+msgstr ""
+
+#: js/EventDetailsPanel.js:98 js/EventUI.js:244
+msgid "recurring event"
+msgstr ""
+
+#: js/EventDetailsPanel.js:100 js/EventUI.js:249
+msgid "recurring event exception"
+msgstr ""
+
+#: js/EventDetailsPanel.js:302 js/AttendeeGridPanel.js:89 js/WestPanel.js:90
+#: js/AttendeeFilterModel.js:35 js/Model.js:375
+msgid "Attendee"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:26
+msgid "Click here to invite another attender..."
+msgstr ""
+
+#: js/AttendeeGridPanel.js:153
+msgid "This is the calendar where the attender has saved this event in"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:186
+msgid "Type"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:187
+msgid "Click icon to change"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:194
+msgid "User"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:195
+msgid "Group"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:196 js/Model.js:571
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/AttendeeGridPanel.js:197
+msgid "Member of group"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:204 js/ResourceEditDialog.js:68
+#: js/ResourcesGridPanel.js:43
+msgid "Name"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:404
+msgid "Remove Attender"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:417
+msgid "Compose email"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:584
+msgid "(as a group member)"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:675
+msgid "External Attendee"
+msgstr ""
+
+#: js/CalDAVContainerPropertiesHookField.js:35
+msgid "CalDAV URL"
+msgstr ""
+
+#: js/EventUI.js:237
+msgid "private classification"
+msgstr ""
+
+#: js/EventUI.js:258
+msgid "has alarm"
+msgstr ""
+
+#: js/EventUI.js:265
+msgid "has attachments"
+msgstr ""
+
+#: js/PagingToolbar.js:300 js/MainScreenCenterPanel.js:228
+msgid "Week"
+msgstr ""
+
+#: js/Printer/Base.js:73 js/SearchCombo.js:201 js/GridView.js:121
+#: js/EventEditDialog.js:146
+msgid "whole day"
+msgstr ""
+
+#: js/Printer/DaysView.js:81
+#, python-brace-format
+msgid "Week {0} :"
+msgstr ""
+
+#: js/Calendar.js:29 js/MonthView.js:83 js/DaysView.js:105
+msgid "New Event"
+msgstr ""
+
+#: js/SearchCombo.js:70
+msgid "no events found"
+msgstr ""
+
+#: js/SearchCombo.js:71
+msgid "Searching..."
+msgstr ""
+
+#: js/SearchCombo.js:79 js/Model.js:67 js/Model.js:379
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/SearchCombo.js:80
+msgid "Search Event"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:28
+msgid "Loading events, please wait..."
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:166
+msgid "Print Page"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:175 js/MainScreenCenterPanel.js:209
+msgid "Grid"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:179 js/MainScreenCenterPanel.js:194
+msgid "Sheet"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:219
+msgid "Day"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:237
+msgid "Month"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:247
+msgid "Import Events"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:574
+msgid "Set my response"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:603
+#, python-brace-format
+msgid "Copy {0}"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:619
+msgid "Updating event in the past"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:620
+msgid "Update this event"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:621
+msgid "Do not update this event"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:625
+msgid "Creating event in the past"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:626
+msgid "Create this event"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:627
+msgid "Do not create this event"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:750
+msgid "Update Event"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:754
+msgid "Update this event only"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:755
+msgid "Update this and all future events"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:756
+msgid "Update whole series"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:757
+msgid "Update nothing"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:893
+msgid "Please Change Selection"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:894
+msgid ""
+"Your selection contains recurring events. Recuring events must be deleted "
+"seperatly!"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:907
+msgid "Delete Event"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:911
+msgid "Delete this event only"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:912
+msgid "Delete this and all future events"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:913
+msgid "Delete whole series"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:914
+msgid "Delete nothing"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:965
+#, python-brace-format
+msgid "Do you really want to delete this event?"
+msgid_plural "Do you really want to delete the {0} selected events?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/MainScreenCenterPanel.js:1116
+msgid "Could not Print"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:1116
+msgid "Sorry, your current view does not support printing."
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:1269
+msgid "Scheduling Conflict"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:1271
+msgid "The following attendee are busy at the requested time:"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:1275
+msgid "Ignore Conflict"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:1276
+msgid "Edit Event"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:1277
+msgid "Cancel this action"
+msgstr ""
+
+#: js/WestPanel.js:32
+msgid "Mini Calendar"
+msgstr ""
+
+#: js/WestPanel.js:55 js/MonthView.js:88
+msgid "WK"
+msgstr ""
+
+#: js/ResourceEditDialog.js:73 js/ResourcesGridPanel.js:49
+msgid "Email"
+msgstr ""
+
+#: js/ResourceEditDialog.js:79 js/ResourceEditDialog.js:80
+msgid "Is a location"
+msgstr ""
+
+#: js/ResourceEditDialog.js:85
+msgid "Enter description..."
+msgstr ""
+
+#: js/ResourceEditDialog.js:117
+msgid "Grants"
+msgstr ""
+
+#: js/MonthView.js:93
+#, python-brace-format
+msgid "{0} more..."
+msgstr ""
+
+#: js/DaysView.js:110
+#, python-brace-format
+msgid "{0}, the {1}. of {2}"
+msgstr ""
+
+#: js/DaysView.js:706
+msgid "The summary must not be longer than 255 characters."
+msgstr ""
+
+#: js/DaysView.js:708
+msgid "The summary must have at least 1 character."
+msgstr ""
+
+#: js/DaysView.js:745
+msgid "Summary too Long"
+msgstr ""
+
+#: js/DaysView.js:755
+msgid "Summary too Short"
+msgstr ""
+
+#: js/CalendarSelectWidget.js:124
+msgid "Originally"
+msgstr ""
+
+#: js/ImportDialog.js:110
+msgid "Choose Import File"
+msgstr ""
+
+#: js/ImportDialog.js:114
+msgid ""
+"Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr ""
+
+#: js/ImportDialog.js:118
+#, python-brace-format
+msgid "Select file containing your {0}"
+msgstr ""
+
+#: js/ImportDialog.js:133
+msgid "once"
+msgstr ""
+
+#: js/ImportDialog.js:134
+msgid "hourly"
+msgstr ""
+
+#: js/ImportDialog.js:135
+msgid "daily"
+msgstr ""
+
+#: js/ImportDialog.js:136
+msgid "weekly"
+msgstr ""
+
+#: js/ImportDialog.js:149
+msgid "Set Remote Location"
+msgstr ""
+
+#: js/ImportDialog.js:153
+msgid "Please choose a remote location you want to add to Tine 2.0"
+msgstr ""
+
+#: js/ImportDialog.js:168
+msgid "Refresh time"
+msgstr ""
+
+#: js/ImportDialog.js:199
+msgid "General Settings"
+msgstr ""
+
+#: js/ImportDialog.js:203
+msgid ""
+"Container name / New or existing if it already exists you need permissions "
+"to add to."
+msgstr ""
+
+#: js/ImportDialog.js:223
+msgid "or"
+msgstr ""
+
+#: js/ImportDialog.js:263
+msgid "What should the file you upload look like?"
+msgstr ""
+
+#: js/ImportDialog.js:268
+msgid ""
+"Tine 2.0 does not understand all kind of files you might want to upload. You "
+"will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr ""
+
+#: js/ImportDialog.js:271
+msgid ""
+"Following you find a list of all supported import formats and a sample file, "
+"how Tine 2.0 expects your file to look like."
+msgstr ""
+
+#: js/ImportDialog.js:274
+msgid "Please select the import format of the file you want to upload"
+msgstr ""
+
+#: js/ImportDialog.js:295
+msgid "Download example file"
+msgstr ""
+
+#: js/ImportDialog.js:317
+msgid "Remote / ICS"
+msgstr ""
+
+#: js/ImportDialog.js:318
+msgid "Remote / CALDav"
+msgstr ""
+
+#: js/ImportDialog.js:319
+msgid "Upload"
+msgstr ""
+
+#: js/ImportDialog.js:332
+msgid "Choose File and Format"
+msgstr ""
+
+#: js/ImportDialog.js:341
+msgid "Select type of source"
+msgstr ""
+
+#: js/ImportDialog.js:345
+msgid "Please select the type of source you want to add to Tine 2.0"
+msgstr ""
+
+#: js/ImportDialog.js:394
+#, python-brace-format
+msgid "Importing {0}"
+msgstr ""
+
+#: js/AttendeeFilterModel.js:100
+msgid "Select Attendee"
+msgstr ""
+
+#: js/ContactEventsGridPanel.js:50 js/Model.js:67 js/Model.js:379
+msgid "Events"
+msgstr ""
+
+#: js/AdminPanel.js:45
+msgid "Manage Resources"
+msgstr ""
+
+#: js/PerspectiveCombo.js:84 js/EventEditDialog.js:190
+msgid "non-blocking"
+msgstr ""
+
+#: js/PerspectiveCombo.js:110
+msgid "Displayed in"
+msgstr ""
+
+#: js/calendarRenderer.js:30
+msgid "This event is originally stored in a calendar you don't have access to."
+msgstr ""
+
+#: js/calendarRenderer.js:31
+#, python-brace-format
+msgid "This event is originally stored in {0}"
+msgstr ""
+
+#: js/calendarRenderer.js:33
+#, python-brace-format
+msgid "This event is additionally displayed in your personal calendar {0}"
+msgstr ""
+
+#: js/GridView.js:94 js/EventEditDialog.js:220
+msgid "Private"
+msgstr ""
+
+#: js/GridView.js:102
+msgid "Tags"
 msgstr ""
 
 #: js/RrulePanel.js:28
@@ -523,6 +931,7 @@ msgid "never"
 msgstr ""
 
 #: js/RrulePanel.js:261
+#, python-brace-format
 msgid "after {0} occurrences"
 msgstr ""
 
@@ -531,14 +940,17 @@ msgid "Until has to be after event start"
 msgstr ""
 
 #: js/RrulePanel.js:411
+#, python-brace-format
 msgid "Every {0}. Day"
 msgstr ""
 
 #: js/RrulePanel.js:444
+#, python-brace-format
 msgid "Every {0}. Week at"
 msgstr ""
 
 #: js/RrulePanel.js:514
+#, python-brace-format
 msgid "Every {0}. Month"
 msgstr ""
 
@@ -548,11 +960,64 @@ msgid "at the"
 msgstr ""
 
 #: js/RrulePanel.js:694
+#, python-brace-format
 msgid "Every {0}. Year"
 msgstr ""
 
 #: js/RrulePanel.js:792 js/RrulePanel.js:800
 msgid "of"
+msgstr ""
+
+#: js/EventEditDialog.js:103
+msgid "View"
+msgstr ""
+
+#: js/EventEditDialog.js:119
+msgid "Details"
+msgstr ""
+
+#: js/EventEditDialog.js:168
+msgid "Saved in"
+msgstr ""
+
+#: js/EventEditDialog.js:278
+msgid "Enter description"
+msgstr ""
+
+#: js/EventEditDialog.js:527
+msgid "End date is not valid"
+msgstr ""
+
+#: js/EventEditDialog.js:530
+msgid "End date must be after start date"
+msgstr ""
+
+#: js/EventEditDialog.js:533
+msgid "End date is not allowed to be be higher than the configured time range."
+msgstr ""
+
+#: js/EventEditDialog.js:554
+msgid "Start date is not valid"
+msgstr ""
+
+#: js/EventEditDialog.js:557
+msgid "End date is not allowed to be be lower than the configured time range."
+msgstr ""
+
+#: js/EventEditDialog.js:577
+msgid "Errors"
+msgstr ""
+
+#: js/AttendeeFilterGrid.js:28
+msgid "Add attendee"
+msgstr ""
+
+#: js/AttendeeFilterGrid.js:47
+msgid "Sort Attendee"
+msgstr ""
+
+#: js/AttendeeFilterGrid.js:60
+msgid "Check to filter for this attendee"
 msgstr ""
 
 #: js/iMIPDetailsPanel.js:69
@@ -615,479 +1080,191 @@ msgstr ""
 msgid "Unsupported method"
 msgstr ""
 
-#: js/PagingToolbar.js:300 js/MainScreenCenterPanel.js:205
-msgid "Week"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:28
-msgid "Loading events, please wait..."
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:158
-msgid "Print Page"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:171
-msgid "Sheet"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:186
-msgid "Grid"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:196
-msgid "Day"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:214
-msgid "Month"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:508
-msgid "Set my response"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:537
-msgid "Copy {0}"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:553
-msgid "Updating event in the past"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:554
-msgid "Update this event"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:555
-msgid "Do not update this event"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:559
-msgid "Creating event in the past"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:560
-msgid "Create this event"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:561
-msgid "Do not create this event"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:682
-msgid "Update Event"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:686
-msgid "Update this event only"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:687
-msgid "Update this and all future events"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:688
-msgid "Update whole series"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:689
-msgid "Update nothing"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:825
-msgid "Please Change Selection"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:826
-msgid ""
-"Your selection contains recurring events. Recuring events must be deleted "
-"seperatly!"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:839
-msgid "Delete Event"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:843
-msgid "Delete this event only"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:844
-msgid "Delete this and all future events"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:845
-msgid "Delete whole series"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:846
-msgid "Delete nothing"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:897
-msgid "Do you really want to delete this event?"
-msgid_plural "Do you really want to delete the {0} selected events?"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/MainScreenCenterPanel.js:1041
-msgid "Could not Print"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:1041
-msgid "Sorry, your current view does not support printing."
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:1194
-msgid "Scheduling Conflict"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:1196
-msgid "The following attendee are busy at the requested time:"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:1200
-msgid "Ignore Conflict"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:1201
-msgid "Edit Event"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:1202
-msgid "Cancel this action"
-msgstr ""
-
-#: js/calendarRenderer.js:30
-msgid "This event is originally stored in a calendar you don't have access to."
-msgstr ""
-
-#: js/calendarRenderer.js:31
-msgid "This event is originally stored in {0}"
-msgstr ""
-
-#: js/calendarRenderer.js:33
-msgid "This event is additionally displayed in your personal calendar {0}"
-msgstr ""
-
-#: js/EventDetailsPanel.js:28 js/AttendeeGridPanel.js:580
-#: js/AttendeeGridPanel.js:598 js/AttendeeGridPanel.js:615
-#: js/AttendeeGridPanel.js:627 js/Model.js:390
-msgid "No Information"
-msgstr ""
-
-#: js/EventDetailsPanel.js:66
-msgid "Unknown date"
-msgstr ""
-
-#: js/EventDetailsPanel.js:69
-msgid "{0} {1} o'clock"
-msgstr ""
-
-#: js/EventDetailsPanel.js:98 js/EventUI.js:244
-msgid "recurring event"
-msgstr ""
-
-#: js/EventDetailsPanel.js:100 js/EventUI.js:249
-msgid "recurring event exception"
-msgstr ""
-
-#: js/EventDetailsPanel.js:302 js/AttendeeFilterModel.js:35
-#: js/AttendeeGridPanel.js:89 js/WestPanel.js:90 js/Model.js:374
-msgid "Attendee"
-msgstr ""
-
-#: js/CalDAVContainerPropertiesHookField.js:35
-msgid "CalDAV URL"
-msgstr ""
-
-#: js/MonthView.js:88 js/WestPanel.js:55
-msgid "WK"
-msgstr ""
-
-#: js/MonthView.js:93
-msgid "{0} more..."
-msgstr ""
-
-#: js/AttendeeFilterModel.js:100
-msgid "Select Attendee"
-msgstr ""
-
-#: js/Printer/DaysView.js:36
-msgid "Week {0} :"
-msgstr ""
-
-#: js/AttendeeFilterGrid.js:28
-msgid "Add attendee"
-msgstr ""
-
-#: js/AttendeeFilterGrid.js:47
-msgid "Sort Attendee"
-msgstr ""
-
-#: js/AttendeeFilterGrid.js:60
-msgid "Check to filter for this attendee"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:26
-msgid "Click here to invite another attender..."
-msgstr ""
-
-#: js/AttendeeGridPanel.js:153
-msgid "This is the calendar where the attender has saved this event in"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:188
-msgid "Type"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:195
-msgid "User"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:196
-msgid "Group"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:197 js/Model.js:570
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/AttendeeGridPanel.js:198
-msgid "Member of group"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:405
-msgid "Remove Attender"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:418
-msgid "Compose email"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:585
-msgid "(as a group member)"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:676
-msgid "External Attendee"
-msgstr ""
-
-#: js/WestPanel.js:32
-msgid "Mini Calendar"
-msgstr ""
-
-#: js/Model.js:66 js/Model.js:378 js/SearchCombo.js:79
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:66 js/Model.js:378 js/ContactEventsGridPanel.js:50
-msgid "Events"
-msgstr ""
-
-#: js/Model.js:70
+#: js/Model.js:71
 msgid "Calendars"
 msgstr ""
 
-#: js/Model.js:204
+#: js/Model.js:205
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:211
+#: js/Model.js:212
 msgid "Attendee Status"
 msgstr ""
 
-#: js/Model.js:220
+#: js/Model.js:221
 msgid "Attendee Role"
 msgstr ""
 
-#: js/Model.js:236
+#: js/Model.js:237
 msgid "Event (as attendee)"
 msgstr ""
 
-#: js/Model.js:243
+#: js/Model.js:244
 msgid "Event (as organizer)"
 msgstr ""
 
-#: js/Model.js:253
+#: js/Model.js:254
 msgid "Event attendee"
 msgstr ""
 
-#: js/Model.js:374
+#: js/Model.js:375
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:570
+#: js/Model.js:571
 msgid "Resources"
 msgstr ""
 
-#: js/EventEditDialog.js:103
-msgid "View"
-msgstr ""
-
-#: js/EventEditDialog.js:119
-msgid "Details"
-msgstr ""
-
-#: js/EventEditDialog.js:168
-msgid "Saved in"
-msgstr ""
-
-#: js/EventEditDialog.js:278
-msgid "Enter description"
-msgstr ""
-
-#: js/EventEditDialog.js:515
-msgid "End date is not valid"
-msgstr ""
-
-#: js/EventEditDialog.js:518
-msgid "End date must be after start date"
-msgstr ""
-
-#: js/EventEditDialog.js:531
-msgid "Start date is not valid"
-msgstr ""
-
-#: js/EventEditDialog.js:552
-msgid "Errors"
-msgstr ""
-
-#: js/DaysView.js:95
-msgid "{0}, the {1}. of {2}"
-msgstr ""
-
-#: js/DaysView.js:676
-msgid "The summary must not be longer than 255 characters."
-msgstr ""
-
-#: js/DaysView.js:678
-msgid "The summary must have at least 1 character."
-msgstr ""
-
-#: js/DaysView.js:715
-msgid "Summary too Long"
-msgstr ""
-
-#: js/DaysView.js:725
-msgid "Summary too Short"
-msgstr ""
-
-#: js/EventUI.js:237
-msgid "private classification"
-msgstr ""
-
-#: js/EventUI.js:258
-msgid "has alarm"
-msgstr ""
-
-#: js/EventUI.js:265
-msgid "has attachments"
-msgstr ""
-
-#: js/CalendarSelectWidget.js:124
-msgid "Originally"
-msgstr ""
-
-#: js/SearchCombo.js:70
-msgid "no events found"
-msgstr ""
-
-#: js/SearchCombo.js:71
-msgid "Searching..."
-msgstr ""
-
-#: js/SearchCombo.js:80
-msgid "Search Event"
-msgstr ""
-
-#: views/eventNotification.php:12
-msgid "Updates"
-msgstr ""
-
-#: views/eventNotification.php:21
-msgid "This is an event series exception."
-msgstr ""
-
-#: views/eventNotification.php:25
-msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr ""
-
-#: views/eventNotification.php:32
-msgid "%1$s has been invited"
-msgstr ""
-
-#: views/eventNotification.php:37
-msgid "%1$s has been removed"
-msgstr ""
-
-#: views/eventNotification.php:44
-msgid "%1$s accepted invitation"
-msgstr ""
-
-#: views/eventNotification.php:48
-msgid "%1$s declined invitation"
-msgstr ""
-
-#: views/eventNotification.php:52
-msgid "Tentative response from %1$s"
-msgstr ""
-
-#: views/eventNotification.php:56
-msgid "No response from %1$s"
-msgstr ""
-
-#: views/eventNotification.php:59
-msgid "\"%2$s\" response from %1$s"
-msgstr ""
-
-#: views/eventNotification.php:68
-msgid "Event details"
-msgstr ""
-
-#: Controller/EventNotifications.php:325
+#: Controller/EventNotifications.php:349
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:328
+#: Controller/EventNotifications.php:352
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:332
+#: Controller/EventNotifications.php:356
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr ""
 
-#: Controller/EventNotifications.php:340
+#: Controller/EventNotifications.php:364
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:347
+#: Controller/EventNotifications.php:371
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr ""
 
-#: Controller/EventNotifications.php:358
+#: Controller/EventNotifications.php:382
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:362
+#: Controller/EventNotifications.php:386
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:366
+#: Controller/EventNotifications.php:390
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:370
+#: Controller/EventNotifications.php:394
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:374
+#: Controller/EventNotifications.php:398
 msgid "Attendee changes for event \"%1$s\" at %2$s"
+msgstr ""
+
+#: Acl/Rights.php:103
+msgid "manage shared calendars"
+msgstr ""
+
+#: Acl/Rights.php:104
+msgid "Create new shared calendars"
+msgstr ""
+
+#: Acl/Rights.php:107
+msgid "manage shared calendars favorites"
+msgstr ""
+
+#: Acl/Rights.php:108
+msgid "Create or update shared calendars favorites"
+msgstr ""
+
+#: Acl/Rights.php:111
+msgid "manage resources"
+msgstr ""
+
+#: Acl/Rights.php:112
+msgid "All Rights to administrate resources"
+msgstr ""
+
+#: Config.php:94
+msgid "Fixed Calendars"
+msgstr ""
+
+#: Config.php:96
+msgid ""
+"Calendars always selected regardless of all filter parameters. A valid use "
+"case might be to force the display of an certain holiday calendar."
+msgstr ""
+
+#: Config.php:104
+msgid "Crop Days"
+msgstr ""
+
+#: Config.php:106
+msgid "Crop calendar view configured start and endtime."
+msgstr ""
+
+#: Config.php:114
+msgid "Crop Days Limit Override"
+msgstr ""
+
+#: Config.php:116
+msgid "Allow events outside start and endtime."
+msgstr ""
+
+#: Config.php:124
+msgid "Attendee Status Available"
+msgstr ""
+
+#: Config.php:126
+msgid ""
+"Possible event attendee status. Please note that additional attendee status "
+"might impact other calendar systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:134
+msgid "Attendee Roles Available"
+msgstr ""
+
+#: Config.php:136
+msgid ""
+"Possible event attendee roles. Please note that additional attendee roles "
+"might impact other calendar systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:144
+msgid "Filter timeslot for CalDAV events"
+msgstr ""
+
+#: Config.php:146
+msgid "For how long in the past (in months) the events should be synchronized."
+msgstr ""
+
+#: Config.php:155
+msgid "Timeslot for event notifications"
+msgstr ""
+
+#: Config.php:157
+msgid "For how long in the past (in weeks) event notifications should be sent."
+msgstr ""
+
+#: Config.php:166
+msgid "Default filter period (from) for events fetched via JSON API"
+msgstr ""
+
+#: Config.php:168
+msgid "For how long in the past (in months) the events should be fetched."
+msgstr ""
+
+#: Config.php:177
+msgid "Default filter period (until) for events fetched via JSON API"
+msgstr ""
+
+#: Config.php:179
+msgid "For how long in the future (in months) the events should be fetched."
+msgstr ""
+
+#: Config.php:188 Config.php:190
+msgid "Disable iMIP for external organizers"
+msgstr ""
+
+#: Controller.php:109
+#, python-format
+msgid "%s's personal calendar"
 msgstr ""
