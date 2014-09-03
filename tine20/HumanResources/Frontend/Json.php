@@ -551,6 +551,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $extraFreeTimes = $aController->calculateExtraFreeTimes($account, $acceptedVacationDays);
             $allVacation = $allVacation + $extraFreeTimes['remaining'];
             $remainingVacation = $remainingVacation + $extraFreeTimes['remaining'];
+        } else {
+            $extraFreeTimes = NULL;
         }
         
         // find all sickness days of the period
