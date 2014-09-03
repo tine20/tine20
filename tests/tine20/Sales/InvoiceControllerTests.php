@@ -971,21 +971,24 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $tsController = Timetracker_Controller_Timesheet::getInstance();
     
-        $allInvoices = $this->_invoiceController->getAll();
-        $myInvoice = array_unique($tsController->getAll()->invoice_id);
-        $myInvoice = $allInvoices->filter('id', isset($myInvoice[1]) ? $myInvoice[1] : $myInvoice[0]);
+        // get first valid invoice id from all timesheets
+        $tsInvoiceIds = array_unique($tsController->getAll()->invoice_id);
+        sort($tsInvoiceIds);
+        $tsInvoiceIds = array_reverse($tsInvoiceIds);
+        $this->assertTrue(! empty($tsInvoiceIds[0]));
+        $myInvoice = $this->_invoiceController->get($tsInvoiceIds[0]);
 
         $f = new Timetracker_Model_TimesheetFilter(array());
         $f->addFilter(new Tinebase_Model_Filter_Text(
                 array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $myInvoice->getId())
         ));
         $myTimesheets = $tsController->search($f);
-        $this->assertEquals(2, $myTimesheets->count());
+        $this->assertEquals(2, $myTimesheets->count(), 'timesheets not found for invoice ' . $myInvoice->getId());
         
         $this->_invoiceController->delete(array($myInvoice->getId()));
         $allTimesheets = $tsController->getAll();
         foreach($allTimesheets as $ts) {
-            $this->assertSame(NULL, $ts->invoice_id);
+            $this->assertSame(NULL, $ts->invoice_id, 'invoice id should be reset');
         }
         
         $this->_invoiceController->createAutoInvoices($date);
