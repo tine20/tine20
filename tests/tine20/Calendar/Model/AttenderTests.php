@@ -58,11 +58,11 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         $newAttendees = array(
             array(
                 'userType'    => Calendar_Model_Attender::USERTYPE_USER,
-                'firstName'   => $this->_getTestUser()->accountFirstName,
-                'lastName'    => $this->_getTestUser()->accountLastName,
+                'firstName'   => $this->_originalTestUser->accountFirstName,
+                'lastName'    => $this->_originalTestUser->accountLastName,
                 'partStat'    => Calendar_Model_Attender::STATUS_ACCEPTED,
                 'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
-                'email'       => $this->_getTestUser()->accountEmailAddress
+                'email'       => $this->_originalTestUser->accountEmailAddress
             ),
             array(
                 'userType'    => Calendar_Model_Attender::USERTYPE_USER,
@@ -103,11 +103,11 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         $newAttendees = array(
             array(
                 'userType'    => Calendar_Model_Attender::USERTYPE_USER,
-                'firstName'   => $this->_getTestUser()->accountFirstName,
-                'lastName'    => $this->_getTestUser()->accountLastName,
+                'firstName'   => $this->_originalTestUser->accountFirstName,
+                'lastName'    => $this->_originalTestUser->accountLastName,
                 'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
                 'role'        => Calendar_Model_Attender::ROLE_REQUIRED,
-                'email'       => $this->_getTestUser()->accountEmailAddress
+                'email'       => $this->_originalTestUser->accountEmailAddress
             ),
             array(
                 'userType'    => Calendar_Model_Attender::USERTYPE_GROUP,
@@ -150,7 +150,7 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         // current account must not be a groupmember
         $this->assertFalse(!! Calendar_Model_Attender::getAttendee($persistentEvent->attendee, new Calendar_Model_Attender(array(
             'user_type'    => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
-            'user_id'      => $this->_getTestUser()->contact_id
+            'user_id'      => $this->_originalTestUser->contact_id
         ))), 'found user as groupmember');
         
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, Calendar_Model_Attender::getOwnAttender($persistentEvent->attendee)->status);
@@ -192,8 +192,8 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
             }
         }
         $this->assertEquals(3, count($userIds));
-        $this->assertTrue(in_array($this->_getTestUserContact()->getId(), $userIds), 'testaccount missing');
-        $this->assertTrue(in_array($this->_getPersonasContacts('sclever')->getId(), $userIds), 'sclever missing');
+        $this->assertTrue(in_array($this->_testUserContact->getId(), $userIds), 'testaccount missing');
+        $this->assertTrue(in_array($this->_personasContacts['sclever']->getId(), $userIds), 'sclever missing');
         $this->assertTrue(in_array($persistentContact->getId(), $userIds), 'unittestorg missing');
     }
     

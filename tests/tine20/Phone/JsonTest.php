@@ -13,7 +13,7 @@
  */
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Phone_JsonTest
  */
 class Phone_JsonTest extends TestCase
 {

@@ -108,6 +108,20 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             )
         ));
         
+        if (Calendar_Config::getInstance()->get(Calendar_Config::SKIP_DOUBLE_EVENTS) == 'shared' && $this->_container->type == Tinebase_Model_Container::TYPE_SHARED) {
+            $skipSharedFilter = $filter->createFilter('attender', 'not', array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT
+            ));
+            
+            $filter->addFilter($skipSharedFilter);
+        }
+        
+        if (Calendar_Config::getInstance()->get(Calendar_Config::SKIP_DOUBLE_EVENTS) == 'personal' && $this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
+            $skipPersonalFilter = new Tinebase_Model_Filter_Container('container_id', 'equals', '/personal/' . Tinebase_Core::getUser()->getId(), array('applicationName' => 'Calendar'));
+            $filter->addFilter($skipPersonalFilter);
+        }
+        
         /**
          * see http://forge.tine20.org/mantisbt/view.php?id=5122
          * we must use action 'sync' and not 'get' as

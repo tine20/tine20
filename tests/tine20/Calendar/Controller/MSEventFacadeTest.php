@@ -312,6 +312,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $updatedEvent = $this->_uit->update($event);
         $updatedAlarm = $updatedEvent->exdate[0]->alarms->getFirstRecord();
         
+        $this->assertNotNull($persistentAlarm);
         $diff = $persistentAlarm->diff($updatedAlarm);
         $this->assertTrue($diff->isEmpty(), 'no diff');
         $this->assertTrue(Calendar_Controller_Alarm::getAcknowledgeTime($updatedEvent->alarms->getFirstRecord()) instanceof Tinebase_DateTime, 'ack time missing');

@@ -487,7 +487,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         // legacy handling
         $meta = $this->_resolveRecordClassArgument($recordClass);
         
-        if ($type !== Tinebase_Model_Container::TYPE_PERSONAL && $type !== Tinebase_Model_Container::TYPE_SHARED) {
+        if (! in_array($type, array(Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Model_Container::TYPE_SHARED))) {
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $type supplied.");
         }
         
@@ -577,7 +577,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        // if no containers where found,  maybe something went wrong when creating the initial folder
+        // if no containers where found, maybe something went wrong when creating the initial folder
         // let's check if the controller of the application has a function to create the needed folders
         if (empty($containersData) and $accountId === $ownerId) {
             $application = Tinebase_Core::getApplicationInstance($application->name);

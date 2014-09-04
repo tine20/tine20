@@ -111,7 +111,7 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         $this->assertEquals(4, count($events));
         $expectedEtags = array(
             '"bcc36c611f0b60bfee64b4d42e44aa1d"', // unchanged
-            '"3333914690ad7290fa9a2dc1da490489"', // added on server
+            '"-1030341843%40citrixonlinecom"',    // added on server
             '"aa3621a20e9045d8679075db57e881dd"', // updated
             null,                                 // added on client (tine20)
         );

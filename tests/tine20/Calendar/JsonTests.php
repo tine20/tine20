@@ -572,7 +572,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         // create persistent exception
         $createdException = $this->_uit->createRecurException($persistentException, FALSE, FALSE);
-        Tinebase_Core::set(Tinebase_Core::USER, $unittestUser);
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
         
         $sclever = $this->_findAttender($createdException['attendee'], 'sclever');
         $defaultCal = $this->_getPersonasDefaultCals('sclever');

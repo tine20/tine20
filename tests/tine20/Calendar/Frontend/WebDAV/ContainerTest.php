@@ -67,6 +67,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+        Calendar_Config::getInstance()->set(Calendar_Config::SKIP_DOUBLE_EVENTS, '');
     }
     
     /**
@@ -185,7 +186,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      * test getChildren
      * 
      */
-    public function testGetChildren()
+    public function testGetChildren($skipAssertions = true)
     {
         $event = $this->testCreateFile()->getRecord();
         
@@ -198,8 +199,23 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $children = $container->getChildren();
         
-        $this->assertEquals(1, count($children));
-        $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV_Event);
+        if (! $skipAssertions) {
+            $this->assertEquals(1, count($children));
+            $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV_Event);
+        }
+        
+        return $children;
+    }
+    
+    public function testGetChildrenSkipDoubleEvents()
+    {
+        Calendar_Config::getInstance()->set(Calendar_Config::SKIP_DOUBLE_EVENTS, 'personal');
+        $children = $this->testGetChildren(true);
+        $this->assertEquals(0, count($children));
+        
+        Calendar_Config::getInstance()->set(Calendar_Config::SKIP_DOUBLE_EVENTS, 'shared');
+        $children = $this->testGetChildren(true);
+        $this->assertEquals(2, count($children));
     }
     
     /**

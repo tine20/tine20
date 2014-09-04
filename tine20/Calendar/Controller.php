@@ -94,6 +94,46 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
     }
     
     /**
+     * Get/Create Calendar for external organizer
+     * 
+     * @param  Addressbook_Model_Contact $organizer organizer id
+     * @return Tinebase_Model_Container  container id
+     */
+    public function getInvitationContainer($organizer)
+    {
+        $containerName = $organizer->getPreferedEmailAddress();
+        
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', $containerName, Tinebase_Model_Container::TYPE_SHARED);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' No invitation container found. Creating a new one for organizer ' . $containerName);
+            
+            $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+                'name'              => $containerName,
+                'color'             => '#333399',
+                'type'              => Tinebase_Model_Container::TYPE_SHARED,
+                'backend'           => Tinebase_User::SQL,
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+                'model'             => 'Calendar_Model_Event'
+            )), NULL, TRUE);
+            
+            $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+                array(
+                    'account_id'      => '0',
+                    'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                    Tinebase_Model_Grants::GRANT_ADD         => true,
+                    Tinebase_Model_Grants::GRANT_EDIT        => true,
+                    Tinebase_Model_Grants::GRANT_DELETE      => true,
+                )
+            ));
+            Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, true, false);
+        }
+         
+        return $container;
+    }
+    
+    /**
      * creates the initial folder for new accounts
      *
      * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
@@ -109,7 +149,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
             'name'              => sprintf($translation->_("%s's personal calendar"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'          => $_account,
-            'backend'           => 'Sql',
+            'backend'           => Tinebase_User::SQL,
             'color'             => '#FF6600',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
             'model'             => static::$_defaultModel

@@ -238,7 +238,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
                     this.iMIPclause.setText(this.app.i18n._('An invited attendee responded to the invitation.'));
                     break;
                     
-                default:            
+                default:
                     this.iMIPclause.setText(this.app.i18n._("Unsupported method"));
                     break;
             }
@@ -249,7 +249,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         singleRecordPanel.setHeight(150);
         
         
-        this.record = event;
-        singleRecordPanel.loadRecord(event);
+        this.record = existingEvent && ! preconditions ? existingEvent : event;
+        singleRecordPanel.loadRecord(this.record);
     }
 });

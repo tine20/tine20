@@ -307,7 +307,34 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $eventsFound = $this->_controller->search($filter, new Tinebase_Model_Pagination());
         $this->assertEquals(1, count($eventsFound), 'sclever is groupmember');
     }
-        
+    
+    public function testAttendeeNotInFilter()
+    {
+        foreach(array(Tinebase_Core::getUser()->contact_id, $this->_personasContacts['sclever']->getId()) as $attId) {
+            $event = $this->_getEvent();
+            $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+                    array('user_id' => $attId),
+            ));
+            $persistentEvent = $this->_controller->create($event);
+        }
+    
+        $filter = new Calendar_Model_EventFilter(array(
+                array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+                array('field' => 'attender'    , 'operator' => 'notin',  'value' => array(
+                        array(
+                                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                                'user_id'   => $this->_personasContacts['sclever']->getId()
+                        )
+                )),
+        ));
+        $eventsFound = $this->_controller->search($filter, new Tinebase_Model_Pagination());
+        $this->assertEquals(1, count($eventsFound), 'should be one event only');
+        $this->assertEquals(
+                Tinebase_Core::getUser()->contact_id, 
+                $eventsFound->getFirstRecord()->attendee->getFirstRecord()->user_id,
+                'sclevers event should not be found');
+    }
+    
     public function testGetFreeBusyInfo()
     {
         $event = $this->_getEvent();

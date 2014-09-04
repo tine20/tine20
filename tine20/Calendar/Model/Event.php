@@ -84,6 +84,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'deleted_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'seq'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int'  ),
         // calendar only fields
+        'external_seq'         => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int'  ), // external seq for caldav / imip update handling
         'dtend'                => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'transp'               => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -266,10 +267,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     /**
      * add given attendee if not present under given conditions
      * 
-     * @param Calendar_Model_Attender $attendee
-     * @param bool                    $ifOrganizer        only add attendee if he's organizer
-     * @param bool                    $ifNoOtherAttendee  only add attendee if no other attendee are present
-     * @param bool                    $personalOnly       only for personal containers
+     * @param Calendar_Model_Attender  $attendee
+     * @param bool                     $ifOrganizer        only add attendee if he's organizer
+     * @param bool                     $ifNoOtherAttendee  only add attendee if no other attendee are present
+     * @param bool                     $personalOnly       only for personal containers
+     * @return Calendar_Model_Attender asserted attendee
      */
     public function assertAttendee($attendee, $ifOrganizer = true, $ifNoOtherAttendee = false, $personalOnly = false)
     {
@@ -305,7 +307,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . " adding attendee.");
                 
-                $newAttender = new Calendar_Model_Attender(array(
+                $assertionAttendee = new Calendar_Model_Attender(array(
                     'user_id'   => $attendee->user_id,
                     'user_type' => $attendee->user_type,
                     'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
@@ -315,9 +317,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 if (! $this->attendee instanceof Tinebase_Record_RecordSet) {
                     $this->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
                 }
-                $this->attendee->addRecord($newAttender);
+                $this->attendee->addRecord($assertionAttendee);
             }
         }
+        
+        return $assertionAttendee;
     }
     
     /**
@@ -667,5 +671,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         }
         
         return $organizerContactId == ($this->organizer instanceof Tinebase_Record_Abstract ? $this->organizer->getId() : $this->organizer);
+    }
+    
+    /**
+     * returns true if organizer is external
+     * 
+     * @return boolean
+     */
+    public function hasExternalOrganizer()
+    {
+        $organizer = $this->resolveOrganizer();
+        
+        return $organizer instanceof Addressbook_Model_Contact && ! $organizer->account_id;
     }
 }

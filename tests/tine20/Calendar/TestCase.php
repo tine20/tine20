@@ -31,11 +31,6 @@ abstract class Calendar_TestCase extends TestCase
     protected $_testCalendars = NULL;
     
     /**
-     * @var Tinebase_Model_FullUser
-     */
-    protected $_testUser = NULL;
-    
-    /**
      * @var Addressbook_Model_Contact
      */
     protected $_testUserContact = NULL;
@@ -68,7 +63,19 @@ abstract class Calendar_TestCase extends TestCase
         parent::setUp();
         
         $this->_backend = new Calendar_Backend_Sql();
-        $this->_testUser = Tinebase_Core::getUser();
+        
+        $this->_personas = Zend_Registry::get('personas');
+        foreach ($this->_personas as $loginName => $user) {
+            $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $user->getId());
+            $this->_personasContacts[$loginName] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId());
+            $this->_personasDefaultCals[$loginName] = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId);
+        }
+        
+        $this->_testUserContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_originalTestUser->getId());
+        $this->_testCalendar = $this->_getTestContainer('Calendar');
+        
+        $this->_testCalendars = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
+        $this->_testCalendars->addRecord($this->_testCalendar);
     }
     
     /**
@@ -98,12 +105,6 @@ abstract class Calendar_TestCase extends TestCase
             }
         }
         
-        if ($this->_testUser->getId() !== Tinebase_Core::getUser()->getId()) {
-            // reset test user
-            Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
-        }
-        
-        // do NOT unset _testUser,the tear down of Calendar_Frontend_WebDAV_EventTest still requires _testUser
         $this->_testUserContact = NULL;
         $this->_testCalendar = NULL;
         $this->_testCalendars = NULL;
@@ -188,7 +189,7 @@ abstract class Calendar_TestCase extends TestCase
      */
     protected function _getTestUser()
     {
-        return $this->_testUser;
+        return $this->_originalTestUser;
     }
     
     /**
