@@ -19,52 +19,24 @@ Ext.ns('Tine.Calendar');
  * TODO add app grid to show results when dry run is selected
  */
 Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
+    
+    appName: 'Calendar',
+    modelName: 'Event',
+    
     /**
      * init import wizard
      */
     initComponent: function() {
-        Tine.log.debug('Tine.widgets.dialog.SimpleImportDialog::initComponent this');
+        Tine.log.debug('Tine.Calendar.ImportDialog::initComponent');
         Tine.log.debug(this);
 
-        this.app = Tine.Tinebase.appMgr.get(this.appName);
-        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
-
-        this.allowedFileExtensions = [];
-
-        // init definitions
-        this.definitionsStore = new Ext.data.JsonStore({
-            fields: Tine.Tinebase.Model.ImportExportDefinition,
-            root: 'results',
-            totalProperty: 'totalcount',
-            remoteSort: false
-        });
-
-        if (Tine[this.appName].registry.get('importDefinitions')) {
-            Ext.each(Tine[this.appName].registry.get('importDefinitions').results, function(defData) {
-                var options = defData.plugin_options,
-                    extension = options ? options.extension : null;
-                
-                defData.label = this.app.i18n._hidden(options && options.label ? options.label : defData.name);
-                
-                if (this.allowedFileExtensions.indexOf(extension) == -1) {
-                    this.allowedFileExtensions = this.allowedFileExtensions.concat(extension);
-                }
-                
-                this.definitionsStore.addSorted(new Tine.Tinebase.Model.ImportExportDefinition(defData, defData.id));
-            }, this);
-            this.definitionsStore.sort('label');
-        }
-        if (! this.selectedDefinition && Tine[this.appName].registry.get('defaultImportDefinition')) {
-            this.selectedDefinition = this.definitionsStore.getById(Tine[this.appName].registry.get('defaultImportDefinition').id);
-        }
-
-        this.items = [
-            this.getPanel()
-        ];
-        
-        Tine.widgets.dialog.ImportDialog.superclass.initComponent.call(this);
+        Tine.Calendar.ImportDialog.superclass.initComponent.call(this);
     },
 
+    getItems: function() {
+        return [this.getPanel()];
+    },
+    
     /**
      * do import request
      * 
@@ -75,28 +47,32 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         var targetContainer = this.containerField.getValue() || this.containerCombo.getValue();
         var type = this.typeCombo.getValue();
         
-        var method = null;
+        var params = {
+            importOptions: Ext.apply({
+                container_id: targetContainer
+            }, importOptions || {})
+        };
+        
         if (type == 'upload') {
-            method = this.appName + '.import' + this.recordClass.getMeta('modelName')  + 's';
+            params = Ext.apply(params, {
+                clientRecordData: clientRecordData,
+                method: this.appName + '.import' + this.recordClass.getMeta('modelName')  + 's',
+                tempFileId: this.uploadButton.getTempFileId(),
+                definitionId: this.definitionCombo.getValue()
+            });
         } else {
-            this.appName + '.remoteImport' + this.recordClass.getMeta('modelName')  + 's'
+            params = Ext.apply(params, {
+                method: this.appName + '.importRemote' + this.recordClass.getMeta('modelName')  + 's',
+                remoteUrl: this.remoteLocation.getValue(),
+                interval: this.ttlCombo.getValue()
+            });
         }
        
         Ext.Ajax.request({
             scope: this,
             timeout: 1800000, // 30 minutes
             callback: this.onImportResponse.createDelegate(this, [callback], true),
-            params: {
-                method: method,
-                tempFileId: this.uploadButton.getTempFileId() || null,
-                type: type,
-                remoteUrl: this.remoteLocation.getValue() || null,
-                definitionId: this.definitionCombo.getValue() || null,
-                importOptions: Ext.apply({
-                    container_id: targetContainer
-                }, importOptions || {}),
-                clientRecordData: clientRecordData
-            }
+            params: params
         });
     },
     
@@ -109,16 +85,34 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
      * @param {Function} callback
      */
     onImportResponse: function(request, success, response, callback) {
-        response = Ext.util.JSON.decode(response.responseText);
+        var decoded = Ext.util.JSON.decode(response.responseText);
         
         Tine.log.debug('Tine.widgets.dialog.SimpleImportDialog::onImportResponse server response');
-        Tine.log.debug(response);
+        Tine.log.debug(decoded);
         
-        this.lastImportResponse = response;
+        this.lastImportResponse = decoded;
+
+        var that = this;
         
-        // finlay apply callback
-        if (Ext.isFunction(callback)) { 
-           callback.call(this, request, success, response);
+        if (success) {
+            Ext.MessageBox.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO,
+                fn: callback,
+                scope: that,
+                title: that.app.i18n._('Import Definition Success!'),
+                msg: that.app.i18n._('The Ical Import definition has been created successfully! Please wait some minutes to get the events synced.')
+            });
+            
+            var wp = this.app.mainScreen.getWestPanel(),
+                tp = wp.getContainerTreePanel(),
+                state = wp.getState();
+                
+            tp.getLoader().load(tp.getRootNode());
+            wp.applyState(state);
+            
+        } else {
+            Tine.Tinebase.ExceptionHandler.handleRequestException(response, callback, that);
         }
     },
     
@@ -156,10 +150,10 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
      */    
     getRemotePanel: function () {
         var ttl = [
-            [0, _('Once')],
-            [1, _('hourly')],
-            [2, _('daily')],
-            [3, _('weekly')]
+            ['once', this.app.i18n._('once')],
+            ['hourly', this.app.i18n._('hourly')],
+            ['daily', this.app.i18n._('daily')],
+            ['weekly', this.app.i18n._('weekly')]
         ];
 
         var ttlStore = new Ext.data.ArrayStore({
@@ -172,11 +166,11 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             baseCls: 'ux-subformpanel',
             id: 'remotePanel',
             hidden: false,
-            title: _('Choose Remote Location'),
+            title: this.app.i18n._('Choose Remote Location'),
             height: 150,
             items: [{
                 xtype: 'label',
-                html: '<p>' + _('Please choose a remote location you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                html: '<p>' + this.app.i18n._('Please choose a remote location you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
             }, {
                 ref: '../../remoteLocation',
                 xtype: 'textfield',
@@ -191,11 +185,12 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 }
             }, {
                 xtype: 'label',
-                html: '<p>' + _('Refresh time').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                html: '<p><br />' + this.app.i18n._('Refresh time').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
             }, {
                 xtype: 'combo',
                 mode: 'local',
                 ref: '../../ttlCombo',
+                value: 'once',
                 scope: this,
                 width: 400,
                 listeners: {
@@ -222,11 +217,12 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             xtype: 'panel',
             ref: '../../importOptionsPanel',
             baseCls: 'ux-subformpanel',
-            title: _('General Settings'),
+            title: this.app.i18n._('General Settings'),
             height: 100,
+            width: 400,
             items: [{
                 xtype: 'label',
-                html: '<p>' + _('Container name / New or existing if it already exists you need permissions to add to.') + '</p>'
+                html: '<p>' + this.app.i18n._('Container name / New or existing if it already exists you need permissions to add to.') + '<br /><br /></p>'
             }, {
                 xtype: 'panel',
                 heigth: 150,
@@ -234,8 +230,8 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 items: [{
                     id: this.app.appName + 'ContainerName',
                     xtype: 'textfield',
-                    width: 400,
                     ref: '../../../containerField',
+                    disabled: false,
                     enableKeyEvents: true,
                     listeners: {
                         scope: this,
@@ -246,7 +242,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                     flex: 1
                 }, {
                     xtype: 'label',
-                    html: ' - ' + _('or') + ' - ',
+                    html: ' - ' + this.app.i18n._('or') + ' - ',
                     style: {
                         'text-align': 'center'
                     },
@@ -255,6 +251,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                     xtype: 'panel',
                     flex: 1,
                     height: 20,
+                    width: 200,
                     items: [new Tine.widgets.container.selectionComboBox({
                         id: this.app.appName + 'EditDialogContainerSelector',
                         ref: '../../../../containerCombo',
@@ -286,18 +283,18 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             id: 'definitionPanel',
             hidden: true,
             baseCls: 'ux-subformpanel',
-            title: _('What should the file you upload look like?'),
+            title: this.app.i18n._('What should the file you upload look like?'),
             flex: 1,
             items: [
             {
                 xtype: 'label',
-                html: '<p>' + _('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                html: '<p>' + this.app.i18n._('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
             }, {
+//                xtype: 'label',
+//                html: '<p>' + this.app.i18n._('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+//            }, {
                 xtype: 'label',
-                html: '<p>' + _('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
-            }, {
-                xtype: 'label',
-                html: '<p>' + _('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '</p>'
+                html: '<p>' + this.app.i18n._('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '<br /><br /></p>'
             }, {
                 xtype: 'combo',
                 ref: '../../definitionCombo',
@@ -318,7 +315,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             }, {
                 xtype: 'label',
                 ref: '../../exampleLink',
-                html: example ? ('<p><a href="' + example + '">' + _('Download example file') + '</a></p>') : '<p>&nbsp;</p>'
+                html: example ? ('<p><a href="' + example + '">' + this.app.i18n._('Download example file') + '</a></p>') : '<p>&nbsp;</p>'
             }, {
                 xtype: 'displayfield',
                 ref: '../../definitionDescription',
@@ -340,9 +337,9 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             example = options && options.example ? options.example : '';
         
         var types = [
-            ['remote_ics', _('Remote / ICS')],
-            ['remote_caldav', _('Remote / CALDav')],
-            ['upload', _('Upload')]
+            ['remote_ics', this.app.i18n._('Remote / ICS')],
+//            ['remote_caldav', _('Remote / CALDav')],
+            ['upload', this.app.i18n._('Upload')]
         ]
         
         var typeStore = new Ext.data.ArrayStore({
@@ -350,11 +347,12 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 'type_id',
                 'type_value'
             ],
-            data: types
+            data: types,
+            disabled: false
         });
 
         return {
-            title: _('Choose File and Format'),
+            title: this.app.i18n._('Choose File and Format'),
             layout: 'vbox',
             border: false,
             xtype: 'ux.displaypanel',
@@ -363,11 +361,11 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             items: [{
                 xtype: 'panel',
                 baseCls: 'ux-subformpanel',
-                title: _('Select type of source'),
+                title: this.app.i18n._('Select type of source'),
                 height: 100,
                 items: [{
                         xtype: 'label',
-                        html: '<p>' + _('Please select the type of source you want to add to Tine 2.0') + '</p><br />'
+                        html: '<p>' + this.app.i18n._('Please select the type of source you want to add to Tine 2.0') + '</p><br />'
                 }, {
                     xtype: 'combo',
                     mode: 'local',
@@ -395,9 +393,6 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                             *  ~mspahn
                             */
                             combo.setValue('upload');
-                            combo.setDisabled(true);
-                            this.containerField.setDisabled(true);
-                           
                             Ext.getCmp('uploadPanel').show();
                             Ext.getCmp('definitionPanel').show();
                             Ext.getCmp('remotePanel').hide();

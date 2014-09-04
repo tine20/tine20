@@ -131,6 +131,24 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
     }
     
     /**
+     * test import from tine ical export
+     */
+    public function testTineCliImport()
+    {
+        $this->_testNeedsTransaction();
+        
+        $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.import ' .
+            'plugin=Calendar_Import_Ical container_id=' . $this->_getTestCalendar()->getId() .
+            ' ' . dirname(__FILE__) . '/files/tine.ics';
+        
+        $cmd = TestServer::assembleCliCommand($cmd, TRUE);
+        
+        exec($cmd, $output);
+        $failMessage = print_r($output, TRUE);
+        $this->_checkImport($failMessage, 2);
+    }
+    
+    /**
      * test ical cli import
      * 
      * @see 0007104: Calender Import Crashes

@@ -163,21 +163,24 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * @todo
+     * creates a scheduled import
+     * 
+     * @param string $remoteUrl
+     * @param string $interval
+     * @param string $importOptions
+     * @return array
      */
-    public function remoteImportEvents()
+    public function importRemoteEvents($remoteUrl, $interval, $importOptions)
     {
-        // @todo
-        /*
-         * credentials
-         * infos
-         * 
-         * create container
-         * 
-         * add scheduler job
-         * 
-         * 
-         */
+        $record = Tinebase_Controller_ScheduledImport::getInstance()->createRemoteImportEvent(array(
+            'source'            => $remoteUrl,
+            'interval'          => $interval,
+            'options'           => array_replace($importOptions, array('plugin' => 'Calendar_Import_Ical')),
+            'model'             => 'Calendar_Model_Event',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+        ));
+        
+        return $this->_recordToJson($record);
     }
     
     /**

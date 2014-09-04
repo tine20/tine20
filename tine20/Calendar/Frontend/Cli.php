@@ -82,6 +82,12 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function import($_opts)
     {
+        //If old param is used add the new one
+        foreach ( $_opts->getRemainingArgs() as $key => $opt) {
+            if (strpos($opt, 'importContainerId=') !== false) {
+                $_opts->addArguments(array('container_id='. substr($opt, 18, strlen($opt))));
+            }
+        }
         parent::_import($_opts);
     }
     

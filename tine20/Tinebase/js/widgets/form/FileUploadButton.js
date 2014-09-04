@@ -97,7 +97,7 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
     },
     
     getTempFileId: function() {
-        return this.fileRecord.get('tempFile').id;
+        return this.fileRecord ? this.fileRecord.get('tempFile').id : null;
     }
     
 });

@@ -369,4 +369,9 @@ abstract class Calendar_TestCase extends TestCase
         
         return Calendar_Model_Attender::getAttendee($attendee, $attender);
     }
+    
+    protected function _getTestCalendar()
+    {
+        return $this->_testCalendar;
+    }
 }

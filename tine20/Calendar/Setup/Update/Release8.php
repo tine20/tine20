@@ -201,13 +201,13 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('cal_events', 7);
         $this->setApplicationVersion('Calendar', '8.5');
     }
-
+    
     /**
      * adds external_seq col
      * 
      * @see 0009890: improve external event invitation support
      */
-    public function update_6()
+    public function update_5()
     {
         $seqCol = '<field>
             <name>external_seq</name>
