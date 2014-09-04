@@ -395,4 +395,18 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '8.6');
     }
+
+    /**
+     * - add filter acl (check if table already exists)
+     * 
+     * @see 0009610: shared favorites acl
+     */
+    public function update_6()
+    {
+        if (! $this->_backend->tableExists('filter_acl')) {
+            $this->_addFilterAclTable();
+            $this->_addGrantsToExistingFilters();
+        }
+        $this->setApplicationVersion('Tinebase', '8.7');
+    }
 }
