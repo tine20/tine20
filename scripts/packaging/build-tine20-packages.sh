@@ -11,11 +11,12 @@ BASEDIR=`readlink -f ./tine20build`
 TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
-CODENAME="Collin"
+CODENAME="Koriander"
 GITURL="http://git.tine20.org/git/tine20"
 
 RELEASE=""
-GITBRANCH=""
+GITBRANCH="master"
+#GITBRANCH="2014.09"
 PACKAGEDIR=""
 
 PATH=$MISCPACKAGESDIR:$TEMPDIR/tine20/vendor/bin:$PATH
@@ -250,7 +251,7 @@ function createArchives()
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase Zend images library vendor docs fonts themes" 
                     local FILES="$FILES config.inc.php.dist index.php langHelper.php setup.php tine20.php bootstrap.php worker.php status.php"
-                    local FILES="$FILES CREDITS LICENSE PRIVACY README RELEASENOTES chrome_web_app.json"
+                    local FILES="$FILES CREDITS LICENSE PRIVACY README RELEASENOTES init_plugins.php chrome_web_app.json"
                     
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILES)
                     (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILES)
