@@ -32,7 +32,7 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
     {
         $collection = new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
-        $child = $collection->getChild($this->_getTestContainer()->getId());
+        $child = $collection->getChild($this->_getTestContainer('Addressbook')->getId());
         
         $this->assertTrue($child instanceof Addressbook_Frontend_WebDAV_Container);
     }
@@ -86,22 +86,5 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
         $children = $collection->getChildren();
     
         $this->assertGreaterThanOrEqual(2, count($children), 'there should be more than one container');
-    }
-    
-    /**
-     * create test container
-     * 
-     * @return Tinebase_Model_Container
-     */
-    protected function _getTestContainer()
-    {
-        $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'              => Tinebase_Record_Abstract::generateUID(),
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-        )));
-        
-        return $container;
     }
 }
