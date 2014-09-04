@@ -485,7 +485,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 }
                 
             } catch (Exception $e) {
-               if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not compute recurSet of event: {$candidate->getId()} ");
+               if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                       . " Could not compute recurSet of event: {$candidate->getId()}");
+               Tinebase_Exception::log($e);
                continue;
             }
         }
@@ -838,10 +840,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             
             $recurEvent->dtstart->add($originatorsOriginalDtstart->get('I') - $originatorsDtstart->get('I'), Tinebase_DateTime::MODIFIER_HOUR);
 
-            //$recurEvent->dtstart->sub($originatorsDtstart->get('I') ? 1 : 0, Tinebase_DateTime::MODIFIER_HOUR);
             if ($computationEndDate->isEarlier($recurEvent->dtstart)) {
                 break;
-            }            
+            }
             
             // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
             $recurEvent->dtend = clone $recurEvent->dtstart;

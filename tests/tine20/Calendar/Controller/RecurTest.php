@@ -4,14 +4,9 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Calendar_Controller_Event
@@ -411,7 +406,9 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         
         // make sure the 17.6. is not in the set
-        $this->assertEquals(1, count($weekviewEvents), '17.6. is an exception date and must not be part of this weekview');
+        $this->assertEquals(0, count($weekviewEvents),
+                '17.6. is an exception date and must not be part of this weekview: '
+                . print_r($weekviewEvents->toArray(), true));
     }
     
     public function testCreateRecurExceptionPreserveAttendeeStatus()
