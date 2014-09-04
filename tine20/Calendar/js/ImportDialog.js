@@ -103,14 +103,6 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 title: that.app.i18n._('Import Definition Success!'),
                 msg: that.app.i18n._('The Ical Import definition has been created successfully! Please wait some minutes to get the events synced.')
             });
-            
-            var wp = this.app.mainScreen.getWestPanel(),
-                tp = wp.getContainerTreePanel(),
-                state = wp.getState();
-                
-            tp.getLoader().load(tp.getRootNode());
-            wp.applyState(state);
-            
         } else {
             Tine.Tinebase.ExceptionHandler.handleRequestException(response, callback, that);
         }
@@ -231,7 +223,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                     id: this.app.appName + 'ContainerName',
                     xtype: 'textfield',
                     ref: '../../../containerField',
-                    disabled: false,
+                    disabled: true,
                     enableKeyEvents: true,
                     listeners: {
                         scope: this,
