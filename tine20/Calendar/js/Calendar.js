@@ -114,5 +114,3 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.widgets.MainScreen, {
         Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
     }
 });
-
-Tine.Calendar.handleRequestException = Tine.Tinebase.ExceptionHandler.handleRequestException;

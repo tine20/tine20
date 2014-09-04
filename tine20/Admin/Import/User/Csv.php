@@ -86,7 +86,7 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
             if (isset($_recordData['imapUser'])) {
                 $record->imapUser = new Tinebase_Model_EmailUser($_recordData['imapUser']);
             }
-            if (isset($_recordData['samba'])) {
+            if (isset($_recordData['samba']) && (!isset($this->_options['samba']) || empty($this->_options['samba']))) {
                 $this->_options['samba'] = $_recordData['samba'];
             }
             if (isset($_recordData['accountHomeDirectoryPrefix'])) {

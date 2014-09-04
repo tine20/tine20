@@ -50,6 +50,10 @@
           "path": "../library/CryptoJS/"
         },
         {
+          "text": "enc-base64.js",
+          "path": "../library/CryptoJS/"
+        },
+        {
           "text": "GeoExt.js",
           "path": "../library/GeoExt/script/"
         },
@@ -199,6 +203,10 @@
         },
         {
           "text": "ColumnFormPanel.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "NumberField.js",
           "path": "js/ux/form/"
         },
         {

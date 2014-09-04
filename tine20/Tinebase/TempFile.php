@@ -127,10 +127,14 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload to path " . $path);
             
-            $name =       $_SERVER['HTTP_X_FILE_NAME'];
+            $name =       base64_decode($_SERVER['HTTP_X_FILE_NAME']);
             $size = (int) $_SERVER['HTTP_X_FILE_SIZE'];
             $type =       $_SERVER['HTTP_X_FILE_TYPE'];
             $error =      0;
+            
+            if ($name === false) {
+                throw new Tinebase_Exception('Can\'t decode base64 string, no base64 provided?');
+            }
             
             $success = copy("php://input", $path);
             if (! $success) {
