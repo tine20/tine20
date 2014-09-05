@@ -269,6 +269,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             },
             applyState: function(state) {
                 if (state.detailsButtonPressed) {
+                    this.setText( _('hide details'));
                     this.toggle(state.detailsButtonPressed);
                 }
             },
@@ -308,6 +309,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
      * @param {Ext.Button} btn
      */
     onDetailsToggle: function(btn) {
+        btn.setText(btn.pressed ? _('hide details') : _('show details'));
         this[btn.pressed ? 'show' : 'hide']();
         this.quickFilter.setDisabled(btn.pressed);
         this.manageCriteriaText();
