@@ -28,7 +28,6 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
      * grid config
      * @private
      */
-    autoExpandColumn: 'summary',
     quickaddMandatory: 'summary',
     clicksToEdit: 1,
     enableColumnHide:false,
@@ -41,7 +40,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
      * @property record
      */
     record: null,
-    
+
     /**
      * store to hold all contacts
      * 
@@ -103,9 +102,6 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         this.store.setDefaultSort('due', 'asc');
         
         this.view = new Ext.grid.GridView({
-            autoFill: true,
-            forceFit:true,
-            ignoreAdd: true,
             emptyText: this.app.i18n._('No Tasks to display'),
             onLoad: Ext.emptyFn,
             listeners: {
@@ -200,7 +196,8 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         this.organizerQuickAdd = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
             userOnly: true,
             useAccountRecord: true,
-            scope: this
+            scope: this,
+            allowBlank: true
         });
         
         this.organizerEditor = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
@@ -217,7 +214,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                  {
                     id: 'summary',
                     header: this.app.i18n._("Summary"),
-                    width: 100,
+                    width: 150,
                     dataIndex: 'summary',
                     quickaddField: new Ext.form.TextField({
                         emptyText: this.app.i18n._('Add a task...')
@@ -225,7 +222,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                 }, {
                     id: 'due',
                     header: this.app.i18n._("Due Date"),
-                    width: 55,
+                    width: 110,
                     dataIndex: 'due',
                     renderer: Tine.Tinebase.common.dateRenderer,
                     editor: new Ext.ux.form.ClearableDateField({
@@ -238,7 +235,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                 }, {
                     id: 'priority',
                     header: this.app.i18n._("Priority"),
-                    width: 45,
+                    width: 80,
                     dataIndex: 'priority',
                     renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskPriority'),
                     editor: {
@@ -254,7 +251,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                 }, {
                     id: 'percent',
                     header: this.app.i18n._("Percent"),
-                    width: 50,
+                    width: 80,
                     dataIndex: 'percent',
                     renderer: Ext.ux.PercentRenderer,
                     editor: new Ext.ux.PercentCombo({
@@ -267,7 +264,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                 }, {
                     id: 'status',
                     header: this.app.i18n._("Status"),
-                    width: 45,
+                    width: 92,
                     dataIndex: 'status',
                     renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskStatus'),
                     editor: {
@@ -283,9 +280,8 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                 }, {
                     id: 'organizer',
                     header: this.app.i18n._("Organizer"),
-                    width: 45,
+                    width: 180,
                     dataIndex: 'organizer',
-                    hidden: true,
                     renderer: Tine.Tinebase.common.usernameRenderer,
                     quickaddField: this.organizerQuickAdd,
                     editor: this.organizerEditor
