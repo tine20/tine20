@@ -1,0 +1,17 @@
+--- a/config.inc.php.dist
++++ b/config.inc.php.dist
+@@ -27,12 +27,10 @@
+         'lifetime' => 3600,
+     ),
+ 
+-    /* // optional logger
+     'logger' => array (
+         'active' => true,
+-        'filename' => 'LOG FILE (NEEDS TO BE WRITEABLE BY WEBSERVER)',
+-        'priority' => '7',
++        'filename' => '/var/log/tine20/tine20.log',
++        'priority' => '3',
+     ),
+-    */
+ );
+ 

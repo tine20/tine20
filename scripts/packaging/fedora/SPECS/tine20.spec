@@ -270,6 +270,7 @@ fi
 %{_datadir}/%{name}/setup.php
 %{_datadir}/%{name}/status.php
 %{_datadir}/%{name}/%{name}.php
+%{_datadir}/%{name}/init_plugins.php
 %{_datadir}/%{name}/themes
 
 %dir %{_sysconfdir}/%{name}/

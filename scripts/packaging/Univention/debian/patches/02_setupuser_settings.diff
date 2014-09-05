@@ -1,0 +1,13 @@
+--- a/config.inc.php.dist
++++ b/config.inc.php.dist
+@@ -17,8 +17,8 @@
+         'tableprefix'   => 'tine20_',
+     ),
+     'setupuser' => array(
+-        'username'      => 'SETUP USERNAME',
+-        'password'      => 'SETUP PASSWORD' 
++        'username'      => '_SETUPUSERNAME_',
++        'password'      => '_SETUPPASSWORD_' 
+     ),
+ 
+     /* // optional cache (recommended)

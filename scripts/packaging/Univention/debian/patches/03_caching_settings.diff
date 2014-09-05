@@ -1,0 +1,17 @@
+--- a/config.inc.php.dist
++++ b/config.inc.php.dist
+@@ -21,13 +21,11 @@
+         'password'      => '_SETUPPASSWORD_' 
+     ),
+ 
+-    /* // optional cache (recommended)
+     'caching' => array (
+         'active' => true,
+-        'path' => 'PATH TO CACHE (NEEDS TO BE WRITEABLE BY WEBSERVER)',
++        'path' => '/var/lib/tine20/cache',
+         'lifetime' => 3600,
+     ),
+-    */
+ 
+     /* // optional logger
+     'logger' => array (
