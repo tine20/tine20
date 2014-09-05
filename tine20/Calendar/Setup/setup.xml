@@ -2,14 +2,14 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>8.3</version>
+    <version>8.4</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -197,6 +197,12 @@
                     <name>rrule_until</name>
                     <field>
                         <name>rrule_until</name>
+                    </field>
+                </index>
+                <index>
+                    <name>rrule</name>
+                    <field>
+                        <name>rrule</name>
                     </field>
                 </index>
                 <index>

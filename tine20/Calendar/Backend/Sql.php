@@ -191,6 +191,14 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $select->group($this->_tableName . '.' . 'id');
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
+        $period = $_filter->getFilter('period');
+
+        // filter out unnecessary YEARLY candidates for web client requests
+        // periods < 40 days should be client web client requests.
+        if ($period && $period->getFrom()->getClone()->addDay(40) > $period->getUntil()) {
+            $this->_removeNonMatchingBaseEvents($select, $period);
+        }
+        
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
@@ -202,6 +210,44 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $this->_checkGrants($result, $grantsFilter);
         
         return $_onlyIds ? $result->{is_bool($_onlyIds) ? $this->_getRecordIdentifier() : $_onlyIds} : $result;
+    }
+    
+    /**
+     * removes non-matching rrule base events
+     * 
+     * @param Zend_Db_Select $select
+     * @param Calendar_Model_PeriodFilter $period
+     * 
+     * TODO improve this by moving the rrules to a separate table to simplify SQL statment
+     */
+    protected function _removeNonMatchingBaseEvents($select, $period)
+    {
+        $gs = new Tinebase_Backend_Sql_Filter_GroupSelect($select);
+        $from = $period->getFrom()->getClone()->subDay(1);
+        $fromMonth = $from->format('n');
+        $fromDay = $from->format('j');
+        $until = $period->getUntil()->getClone()->addDay(1);
+        $untilMonth = $until->format('n');
+        $untilDay = $until->format('j');
+        $quotedRrule = $this->_db->quoteIdentifier('rrule');
+        
+        $gs->where($quotedRrule . ' NOT LIKE ?', 'FREQ=YEARLY%')
+        ->orWhere($quotedRrule . ' IS NULL');
+        
+        if ($fromMonth == $untilMonth && $untilDay-$fromDay <= 10) {
+            // day|week view
+            for($day=$fromDay; $day<=$untilDay; $day++) {
+                $gs->orWhere($quotedRrule . ' LIKE ?', "FREQ=YEARLY;INTERVAL=1;BYMONTH={$fromMonth};BYMONTHDAY={$day}%");
+            }
+        } else {
+            // monthview
+            for ($month=$fromMonth; $month<=$untilMonth; $month++) {
+                $gs->orWhere($quotedRrule . ' LIKE ?', "FREQ=YEARLY;INTERVAL=1;BYMONTH={$month};%");
+            }
+        }
+        
+        $gs->appendWhere(Zend_Db_Select::SQL_AND);
+        //            Tinebase_Core::getLogger()->ERR($select);
     }
     
     /**
@@ -492,7 +538,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected function _getImplicitGrantCondition($_requiredGrant, $_user=NULL)
     {
         $accountId = $_user ? $_user->getId() : Tinebase_Core::getUser()->getId();
-        $contactId = $_user ? $user->contact_id : Tinebase_Core::getUser()->contact_id;
+        $contactId = $_user ? $_user->contact_id : Tinebase_Core::getUser()->contact_id;
         
         // delte grant couldn't be gained implicitly
         if ($_requiredGrant == Tinebase_Model_Grants::GRANT_DELETE) {
