@@ -442,7 +442,11 @@ class Tinebase_User
         $user->accountPrimaryGroup = Tinebase_Group::getInstance()->resolveGIdNumberToUUId($user->accountPrimaryGroup);
         
         $userProperties = method_exists($userBackend, 'getLastUserProperties') ? $userBackend->getLastUserProperties() : array();
-        self::_syncUserHook($user, $userProperties);
+        
+        $hookResult = self::_syncUserHook($user, $userProperties);
+        if (! $hookResult) {
+            return null;
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
             . print_r($user->toArray(), TRUE));
@@ -552,9 +556,11 @@ class Tinebase_User
      * 
      * @param Tinebase_Model_FullUser $user
      * @param array $userProperties
+     * @return boolean if false, user is skipped
      */
     protected static function _syncUserHook(Tinebase_Model_FullUser $user, $userProperties)
     {
+        $result = true;
         $hookClass = Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_HOOK_CLASS);
         if ($hookClass) {
             $hook = new $hookClass();
@@ -563,12 +569,15 @@ class Tinebase_User
                     . ' Calling ' . $hookClass . '::syncUser() ...');
                 
                 try {
-                    call_user_func_array(array($hook, 'syncUser'), array($user, $userProperties));
+                    $result = call_user_func_array(array($hook, 'syncUser'), array($user, $userProperties));
                 } catch (Tinebase_Exception $te) {
                     Tinebase_Exception::log($te);
+                    return false;
                 }
             }
         }
+        
+        return $result;
     }
     
     /**
@@ -623,7 +632,7 @@ class Tinebase_User
         
         foreach ($users as $user) {
             try {
-                $user = self::syncUser($user, $options);
+                self::syncUser($user, $options);
             } catch (Tinebase_Exception_NotFound $ten) {
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " User {$user->accountLoginName} not synced: "
                     . $ten->getMessage());
