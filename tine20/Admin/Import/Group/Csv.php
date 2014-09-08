@@ -110,7 +110,14 @@ class Admin_Import_Group_Csv extends Tinebase_Import_Csv_Abstract
                 $user = $this->_userRecords->filter('name', $userName)->getFirstRecord();
                 
                 if (! $user) {
-                    $user = Tinebase_User::getInstance()->getUserByLoginName($userName);
+                    try {
+                        $user = Tinebase_User::getInstance()->getUserByLoginName($userName);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' Skipping user ' . $userName);
+                        Tinebase_Exception::log($tenf);
+                        continue;
+                    }
                     $this->_userRecords->addRecord($user);
                 }
                 
