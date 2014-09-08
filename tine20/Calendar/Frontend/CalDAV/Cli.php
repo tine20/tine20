@@ -217,7 +217,7 @@ class Calendar_Frontend_CalDAV_Cli
             } else {
                 // we are the child
                 $config = ($this->_opts->config) ? '--config=' . $this->_opts->config . ' ' : '';
-                $command = './tine20.php ' . $config . $cliParams . ' run=' . $run . ' line=' . $line;
+                $command = dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20.php ' . $config . $cliParams . ' run=' . $run . ' line=' . $line;
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
                      . ' Spawning new child with command: ' . $command);
