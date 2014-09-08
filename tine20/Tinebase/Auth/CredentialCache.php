@@ -123,7 +123,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      * @param  boolean $_saveInSession
      * @return Tinebase_Model_CredentialCache
      */
-    public function cacheCredentials($username, $password, $key = NULL, $persist = FALSE)
+    public function cacheCredentials($username, $password, $key = NULL, $persist = FALSE, $validUntil = null)
     {
         $key = ($key !== NULL) ? $key : $this->_cacheAdapter->getDefaultKey();
         
@@ -133,7 +133,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
             'username'      => $username,
             'password'      => $password,
             'creation_time' => Tinebase_DateTime::now(),
-            'valid_until'   => Tinebase_DateTime::now()->addMonth(1)
+            'valid_until'   => $validUntil ?: Tinebase_DateTime::now()->addMonth(1)
         ), true, false);
         $cache->convertDates = true;
         

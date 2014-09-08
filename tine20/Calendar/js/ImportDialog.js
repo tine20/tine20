@@ -49,10 +49,19 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         
         var params = {
             importOptions: Ext.apply({
-                container_id: targetContainer
+                container_id: targetContainer,
+                sourceType: this.typeCombo.getValue(),
+                importFileByScheduler: (this.typeCombo.getValue() == 'remote_caldav') ? true : false
             }, importOptions || {})
         };
-        
+
+        if (this.typeCombo.getValue() == 'remote_caldav') {
+            params.importOptions = Ext.apply({
+                password: this.remotePassword.getValue(),
+                username: this.remoteUsername.getValue()
+            }, params.importOptions);
+        }
+
         if (type == 'upload') {
             params = Ext.apply(params, {
                 clientRecordData: clientRecordData,
@@ -167,7 +176,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             id: 'remotePanel',
             hidden: false,
             title: this.app.i18n._('Choose Remote Location'),
-            height: 150,
+            //height: 230,
             items: [{
                 xtype: 'label',
                 html: '<p>' + this.app.i18n._('Please choose a remote location you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
@@ -175,6 +184,39 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 ref: '../../remoteLocation',
                 xtype: 'textfield',
                 scope: this,
+                enableKeyEvents: true,
+                width: 400,
+                listeners: {
+                    scope: this,
+                    keyup: function() {
+                        this.manageButtons();
+                    }
+                }
+            }, {
+                xtype: 'label',
+                html: '<p><br />' + this.app.i18n._('Username (CalDAV only)') + '</p><br />'
+            }, {
+                ref: '../../remoteUsername',
+                xtype: 'textfield',
+                scope: this,
+                disabled: true,
+                enableKeyEvents: true,
+                width: 400,
+                listeners: {
+                    scope: this,
+                    keyup: function() {
+                        this.manageButtons();
+                    }
+                }
+            }, {
+                xtype: 'label',
+                html: '<p><br />' + this.app.i18n._('Password (CalDAV only)') + '</p><br />'
+            }, {
+                ref: '../../remotePassword',
+                xtype: 'textfield',
+                inputType: 'password',
+                scope: this,
+                disabled: true,
                 enableKeyEvents: true,
                 width: 400,
                 listeners: {
@@ -231,7 +273,6 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                     id: this.app.appName + 'ContainerName',
                     xtype: 'textfield',
                     ref: '../../../containerField',
-                    disabled: false,
                     enableKeyEvents: true,
                     listeners: {
                         scope: this,
@@ -338,7 +379,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         
         var types = [
             ['remote_ics', this.app.i18n._('Remote / ICS')],
-//            ['remote_caldav', _('Remote / CALDav')],
+            ['remote_caldav', _('Remote / CALDav')],
             ['upload', this.app.i18n._('Upload')]
         ]
         
@@ -382,16 +423,19 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                                 Ext.getCmp('uploadPanel').hide();
                                 Ext.getCmp('definitionPanel').hide();
                                 Ext.getCmp('remotePanel').show();
+                                if (combo.getValue() == 'remote_caldav') {
+                                    this.remoteUsername.enable();
+                                    this.remotePassword.enable();
+                                } else {
+                                    this.remoteUsername.disable();
+                                    this.remotePassword.disable();
+                                }
                             }
                             
                             this.doLayout();
                             this.manageButtons();
                         },
                         'render': function (combo) {
-                            /**
-                            * @todo enable and allow remotes
-                            *  ~mspahn
-                            */
                             combo.setValue('upload');
                             Ext.getCmp('uploadPanel').show();
                             Ext.getCmp('definitionPanel').show();
@@ -436,14 +480,22 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 }, importOptions, clientRecordData);
             }).createDelegate(this),
 
-            /**
-             * @todo fix later
-             */
             finishIsAllowed: (function() {
+                var credentialsCheck = false;
+
+                if (this.typeCombo.getValue() == 'remote_caldav') {
+                    if (this.remoteUsername.getValue() != '' && this.remotePassword.getValue() != '') {
+                        credentialsCheck = true;
+                    }
+                } else if (this.typeCombo.getValue() == 'remote_ics') {
+                    credentialsCheck = true;
+                }
+
                 return (
                     ((this.typeCombo && (this.typeCombo.getValue() == 'remote_ics' || this.typeCombo.getValue() == 'remote_caldav'))
                     && (this.remoteLocation && this.remoteLocation.getValue())
                     && (this.ttlCombo && (this.ttlCombo.getValue() || this.ttlCombo.getValue() === 0))))
+                    && credentialsCheck
                     || ((this.typeCombo && (this.typeCombo.getValue() == 'upload'))
                     && (this.definitionCombo && this.definitionCombo.getValue())
                     && (this.uploadButton && this.uploadButton.upload))

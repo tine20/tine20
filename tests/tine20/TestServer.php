@@ -259,12 +259,29 @@ class TestServer
     public function login()
     {
         $tinebaseController = Tinebase_Controller::getInstance();
+        $credentials = $this->getTestCredentials();
+        
+        $config = $this->getConfig();
+        $ip = $config->ip ? $config->ip : '127.0.0.1';
+        if (! $tinebaseController->login($credentials['username'], $credentials['password'], $ip, 'TineUnittest')){
+            throw new Exception("Couldn't login, user session required for tests! \n");
+        }
+    }
+    
+    /**
+     * fetch test user credentials
+     * 
+     * @return array
+     */
+    public function getTestCredentials()
+    {
         $config = $this->getConfig();
         $username = isset($config->login->username) ? $config->login->username : $config->username;
         $password = isset($config->login->password) ? $config->login->password : $config->password;
-        $ip = $config->ip ? $config->ip : '127.0.0.1';
-        if (! $tinebaseController->login($username, $password, $ip, 'TineUnittest')){
-            throw new Exception("Couldn't login, user session required for tests! \n");
-        }
+        
+        return array(
+            'username' => $username,
+            'password' => $password
+        );
     }
 }

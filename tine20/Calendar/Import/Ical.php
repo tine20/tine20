@@ -136,7 +136,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
                 'color'             => '#ffffff',
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
                 'owner_id'          => Tinebase_Core::getUser()->getId(),
-                'model'             => 'Calendar_Model_Event',
+                'model'             => 'Calendar_Model_Event'
             ));
             $container = Tinebase_Container::getInstance()->addContainer($container);
         }

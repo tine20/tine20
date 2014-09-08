@@ -58,7 +58,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             $this->_event = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);
         }
         
-        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+        } else {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
+            $version = null;
+        }
         
         $this->_assertEventFacadeParams($this->_container);
         
