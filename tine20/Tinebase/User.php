@@ -562,7 +562,11 @@ class Tinebase_User
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Calling ' . $hookClass . '::syncUser() ...');
                 
-                call_user_func_array(array($hook, 'syncUser'), array($user, $userProperties));
+                try {
+                    call_user_func_array(array($hook, 'syncUser'), array($user, $userProperties));
+                } catch (Tinebase_Exception $te) {
+                    Tinebase_Exception::log($te);
+                }
             }
         }
     }
