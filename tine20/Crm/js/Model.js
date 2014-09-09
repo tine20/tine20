@@ -26,7 +26,7 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.gener
         {name: 'start',         type: 'date', dateFormat: Date.patterns.ISO8601Long},
         {name: 'description',   type: 'string'},
         {name: 'end',           type: 'date', dateFormat: Date.patterns.ISO8601Long},
-        {name: 'turnover',      type: 'int'},
+        {name: 'turnover',      type: 'float'},
         {name: 'probability',   type: 'int'},
         {name: 'probableTurnover',   type: 'int'},
         {name: 'end_scheduled', type: 'date', dateFormat: Date.patterns.ISO8601Long},
