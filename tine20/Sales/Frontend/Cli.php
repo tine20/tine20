@@ -27,7 +27,8 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         'create_auto_invoices' => array(
             'description'   => 'Creates automatic invoices for contracts by their dates and intervals',
             'params' => array(
-                'day'         => ''
+                'day'         => 'Day to work on',
+                'contract'    => 'Contract ID or number to bill'
             )
         )
     );
@@ -86,7 +87,25 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating invoices for ' . $date->toString());
         }
         
-        $result = Sales_Controller_Invoice::getInstance()->createAutoInvoices($date);
+        $contract = NULL;
+        
+        if (array_key_exists('contract', $args)) {
+            try {
+                $contract = Sales_Controller_Contract::getInstance()->get($args['contract']);
+            } catch (Tinebase_Exception_NotFound $e) {
+                $filter = new Sales_Model_ContractFilter(array(array('field' => 'number', 'operator' => 'equals', 'value' => $args['contract'])));
+                $contract = Sales_Controller_Contract::getInstance()->search($filter, NULL, TRUE);
+                if ($contract->count() == 1) {
+                    $contract = $contract->getFirstRecord();
+                } elseif ($contract->count() > 1) {
+                    die('The number you have given is not unique! Please use the ID instead!');
+                } else {
+                    die('A contract could not be found!');
+                }
+            }
+        }
+        
+        $result = Sales_Controller_Invoice::getInstance()->createAutoInvoices($date, $contract);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             unset($result['created']);

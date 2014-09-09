@@ -465,14 +465,15 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * creates the auto invoices, gets called by cli
      * 
      * @param Tinebase_DateTime $currentDate
+     * @param Sales_Model_Contract $contract
      */
-    public function createAutoInvoices(Tinebase_DateTime $currentDate)
+    public function createAutoInvoices(Tinebase_DateTime $currentDate, Sales_Model_Contract $contract = NULL)
     {
         $this->_autoInvoiceIterationResults  = array();
         $this->_autoInvoiceIterationFailures = array();
         
         $contractBackend = new Sales_Backend_Contract();
-        $ids = $contractBackend->getBillableContractIds($currentDate);
+        $ids = $contract ? array($contract->getId()) : $contractBackend->getBillableContractIds($currentDate);
         
         $filter = new Sales_Model_ContractFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $ids)));
