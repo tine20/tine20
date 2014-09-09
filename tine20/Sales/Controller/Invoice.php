@@ -107,10 +107,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $interval = $cfg->get(Sales_Config::AUTO_INVOICE_CONTRACT_INTERVAL);
         
         foreach ($contracts as $contract) {
-            
             if ($contract->interval > $interval) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' The Interval is longer than the configured AUTO_INVOICE_CONTRACT_INTERVAL');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' The Interval is longer than the configured AUTO_INVOICE_CONTRACT_INTERVAL');
+                }
                 continue;
             }
             
@@ -169,18 +169,20 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         if ($products->count() == 0) {
             if ($contract->interval == 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' There aren\'t any products, and the interval of the contract is 0 -> don\'t handle contract');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' There aren\'t any products, and the interval of the contract is 0 -> don\'t handle contract');
+                }
                 return false;
             }
-            
+        
             // check max interval
             $cfg = Sales_Config::getInstance();
             $maxInterval = $cfg->get(Sales_Config::AUTO_INVOICE_CONTRACT_INTERVAL);
             
             if ($contract->interval > $maxInterval) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' There aren\'t any products, and the interval of the contract is bigger than the value defined as 0 "auto_invoice_contract_interval in config.inc.php" -> don\'t handle contract');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' There aren\'t any products, and the interval of the contract is bigger than the value defined as 0 "auto_invoice_contract_interval in config.inc.php" -> don\'t handle contract');
+                }
                 return false;
             }
         }
@@ -279,11 +281,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     continue /* foreach */;
             }
         
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Checking relation ' . $relation->related_model);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Checking relation ' . $relation->related_model);
+            }
         
             $contractLastAutobill = $contract->last_autobill ? clone $contract->last_autobill : clone $contract->start_date;
-            
+
             if ($contract->billing_point == 'end') {
                 $contractLastAutobill->addMonth($contract->interval);
             }
@@ -298,7 +301,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . ' Found volatile & billable accountable');
         
-                    if ($contractLastAutobill->isEarlierOrEquals($currentDate)) {
+                    $referenceDate = $contract->last_autobill ? clone $contract->last_autobill : clone $contract->start_date;
+        
+                    if ($contract->billing_point == 'end') {
+                        $referenceDate->addMonth($contract->interval);
+                    }
+        
+                    if ($referenceDate->isEarlierOrEquals($currentDate)) {
                         $billIt = TRUE;
                     }
         
@@ -354,6 +363,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
         }
         
+        // fire event to allow other applications do some work before billing
+        $event = new Sales_Event_BeforeBillContract();
+        $event->contract = $contract;
+        $event->date     = $currentDate;
+        
+        Tinebase_Event::fireEvent($event);
+        
         // put each position into
         $invoicePositions = new Tinebase_Record_RecordSet('Sales_Model_InvoicePosition');
         
@@ -386,7 +402,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
         }
         
-        // if there are no positions, no bill will be created, but the last_autobill info is set, if the current date is later
+        // if there are no positions, no bill will be created, but the last_autobill info is set, if the current date is later 
         if ($invoicePositions->count() == 0) {
         
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -397,6 +413,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             if ($contractLastAutobill < $currentDate->subMonth($contract->interval)) {
                 Sales_Controller_Contract::getInstance()->updateLastBilledDate($contract);
             }
+            
             return false;
         }
         
@@ -693,7 +710,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $contractController = Sales_Controller_Contract::getInstance();
         
         foreach ($records as $record) {
-            
             if (! $record->is_auto) {
                 continue;
             }
