@@ -58,6 +58,18 @@
           "path": "../library/GeoExt/script/"
         },
         {
+          "text": "store2.js",
+          "path": "../library/Store/"
+        },
+        {
+          "text": "store.bind.js",
+          "path": "../library/Store/"
+        },
+        {
+          "text": "store.compat.js",
+          "path": "../library/Store/"
+        },
+        {
           "text": "MapPanel.js",
           "path": "js/widgets/"
         },
