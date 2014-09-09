@@ -125,7 +125,6 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
                 responseText: Ext.util.JSON.encode(result.event)
             }));
-            
             this.showIMIP();
         }, this);
     },
@@ -248,8 +247,13 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         singleRecordPanel.setVisible(true);
         singleRecordPanel.setHeight(150);
         
-        
-        this.record = existingEvent && ! preconditions ? existingEvent : event;
+        if (existingEvent) {
+            this.record = Tine.Calendar.backend.recordReader({
+                responseText: Ext.util.JSON.encode(existingEvent)
+            });
+        } else {
+            this.record = event;
+        }
         singleRecordPanel.loadRecord(this.record);
     }
 });
