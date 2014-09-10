@@ -39,6 +39,8 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function create_auto_invoices($_opts)
     {
+        $this->removeUnbilledAutoInvoices();
+        
         $executionLifeTime = Tinebase_Core::setExecutionLifeTime(3600*8);
         
         $this->_addOutputLogWriter();
@@ -161,4 +163,26 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $cc->update($contract);
         }
     }
+    
+    /**
+     * removes unbilled auto invoices
+     */
+    public function removeUnbilledAutoInvoices()
+    {
+        $c = Sales_Controller_Invoice::getInstance();
+        
+        $f = new Sales_Model_InvoiceFilter(array(
+                array('field' => 'is_auto', 'operator' => 'equals', 'value' => TRUE),
+                array('field' => 'cleared', 'operator' => 'not', 'value' => 'CLEARED'),
+        ));
+        
+        $p = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC'));
+        
+        $invoices = $c->search($f, $p, FALSE);
+        
+        foreach($invoices as $invoice) {
+            $c->delete(array($invoice->getId()));
+        }
+    }
 }
+

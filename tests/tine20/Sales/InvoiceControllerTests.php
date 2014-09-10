@@ -1260,4 +1260,31 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->assertEquals($autobillDate, $contract->last_autobill);
         }
     }
+    
+    /**
+     * tests if uncleared invoices gets deleted
+     */
+    public function testUnclearedDeletion()
+    {
+        $this->_createFullFixtures();
+    
+        $date = clone $this->_referenceDate;
+        $date->addMonth(8);
+        $i = 0;
+    
+        $result = $this->_invoiceController->createAutoInvoices($date);
+    
+        $this->assertEquals(3, count($result['created']));
+        
+        $invoice = $this->_invoiceController->get($result['created'][0]);
+        $invoice->cleared = 'CLEARED';
+        $this->_invoiceController->update($invoice);
+        
+        $cli = new Sales_Frontend_Cli();
+        $cli->removeUnbilledAutoInvoices();
+        
+        $invoices = $this->_invoiceController->getAll();
+        
+        $this->assertEquals(1, $invoices->count());
+    }
 }
