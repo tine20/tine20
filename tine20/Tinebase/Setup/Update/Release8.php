@@ -233,7 +233,7 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
     /**
      * adds a label property to hold a humanreadable text
      */
-    public function update_4()
+    protected function _addImportExportDefinitionLabel()
     {
         $declaration = new Setup_Backend_Schema_Field_Xml('<field>
             <name>label</name>
@@ -244,9 +244,22 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->_backend->addCol('importexport_definition', $declaration);
         
+        $this->setTableVersion('importexport_definition', '8');
+    }
+    
+    /**
+     * updates import export definitions
+     * adds a label property to hold a humanreadable text if not exists
+     */
+    public function update_4()
+    {
+
+        if (! $this->_backend->columnExists('label', 'importexport_definition')) {
+            $this->_addImportExportDefinitionLabel();
+        }
+        
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
         
-        $this->setTableVersion('importexport_definition', '8');
         $this->setApplicationVersion('Tinebase', '8.5');
     }
     
