@@ -180,7 +180,12 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, Sales_Controller_Product::getInstance(), 'Sales_Model_ProductFilter');
     }
-
+    
+    public function searchProductAggregates($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Sales_Controller_ProductAggregate::getInstance(), 'Sales_Model_ProductAggregateFilter');
+    }
+    
     /**
      * Return a single record
      *

@@ -101,7 +101,7 @@ Tine.Timetracker.HumanHourRenderer = function(value) {
 Tine.Timetracker.registerRenderers = function() {
     
     if (! Tine.hasOwnProperty('Sales') || ! Tine.Sales.hasOwnProperty('InvoicePositionQuantityRendererRegistry')) {
-        Tine.Timetracker.registerRenderers.defer(500);
+        Tine.Timetracker.registerRenderers.defer(10);
         return false;
     }
     
@@ -109,3 +109,14 @@ Tine.Timetracker.registerRenderers = function() {
 };
 
 Tine.Timetracker.registerRenderers();
+
+Tine.Timetracker.registerAccountables = function() {
+    if (! Tine.hasOwnProperty('Sales') || ! Tine.Sales.hasOwnProperty('AccountableRegistry')) {
+        Tine.Timetracker.registerAccountables.defer(10);
+        return false;
+    }
+    
+    Tine.Sales.AccountableRegistry.register('Timetracker', 'Timeaccount');
+};
+
+Tine.Timetracker.registerAccountables();

@@ -94,6 +94,20 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
                 'type'       => 'datetime',
                 'default'    => NULL
             ),
+            'billing_point' => array(
+                'label' => 'Billing Point', // _('Billing Point')
+                'type'  => 'string',
+                'default' => 'begin',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE, Zend_Filter_Input::DEFAULT_VALUE => 'begin')
+            ),
+            'start_date' => array(
+                'type' => 'date',
+                'label'      => 'Start Date',    // _('Start Date')
+            ),
+            'end_date' => array(
+                'type' => 'date',
+                'label'      => 'End Date',    // _('End Date')
+            ),
         )
     );
 
@@ -115,13 +129,20 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      */
     public function getInterval(Tinebase_DateTime $date = NULL)
     {
-        $from = clone $this->last_autobill;
-        $from->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        
-        if (! $this->_firstBill) {
+        if (! $this->last_autobill) {
+            if (! $this->start_date) {
+                $from = clone $this->_referenceContract->start_date;
+            } else {
+                $from = clone $this->start_date;
+            }
+             
+        } else {
+            $from = clone $this->last_autobill;
             $from->addMonth($this->interval);
         }
         
+        $from->setDate($from->format('Y'), $from->format('m'), 1);
+        $from->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $from->setTime(0,0,0);
         
         $to = clone $from;
@@ -166,30 +187,31 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      * 
      * @param Tinebase_DateTime $date
      * @param Sales_Model_Contract $contract
+     * @param Sales_Model_ProductAggregate $productAggregate
      * @return boolean
      */
-     public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
+     public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL, Sales_Model_ProductAggregate $productAggregate = NULL)
      {
-         $this->_referenceDate = clone $date;
+         $this->_referenceContract = $contract;
          
          if (! $this->last_autobill) {
+             if (! $this->start_date) {
+                 $nextBill = clone $contract->start_date;
+             } else {
+                 $nextBill = clone $this->start_date;
+             }
+             if ($this->billing_point == 'end') {
+                $nextBill->addMonth($this->interval);
+             }
              
-             $this->_firstBill = TRUE;
-             
-             // products always get billed at the beginning of a period
-             $this->last_autobill = clone $contract->start_date;
-             $this->last_autobill->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-             
-             return TRUE;
+         } else {
+             $nextBill = clone $this->last_autobill;
+             $nextBill->addMonth($this->interval);
          }
+
+         $nextBill->setTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
          
-         $lastAutobill = clone $this->last_autobill;
-         
-         if ($lastAutobill->addMonth($this->interval) <= $date) {
-             return TRUE;
-         }
-         
-         return FALSE;
+         return $nextBill < $date;
      }
      
      /**
@@ -220,21 +242,6 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      public function clearBillables(Sales_Model_Invoice $invoice)
      {
          // nothing to do. ProductAggregates are always billed
-     }
-     
-     public function updateLastBilledDate()
-     {
-         $this->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-         
-         if (! $this->_firstBill) {
-             $this->last_autobill->addMonth($this->interval);
-         }
-         
-         $this->last_autobill->setTime(0,0,0);
-         
-         $this->setTimezone('UTC');
-         
-         Sales_Controller_ProductAggregate::getInstance()->update($this, FALSE);
      }
      
      /**

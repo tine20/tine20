@@ -1271,4 +1271,65 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('sales_invoices', 3);
         $this->setApplicationVersion('Sales', '8.15');
     }
+    
+    /**
+     * add accountable field to products
+     */
+    public function update_15()
+    {
+        // add accountable to product
+        $definition = new Setup_Backend_Schema_Field_Xml('<field>
+            <name>accountable</name>
+            <type>text</type>
+            <length>40</length>
+        </field>');
+        
+        $this->_backend->addCol('sales_products', $definition);
+        $this->setTableVersion('sales_products', 4);
+        
+        $fields = array('<field>
+            <name>start_date</name>
+            <type>datetime</type>
+        </field>',
+        '<field>
+            <name>end_date</name>
+            <type>datetime</type>
+        </field>',
+        '<field>
+            <name>billing_point</name>
+            <type>text</type>
+            <length>64</length>
+            <notnull>false</notnull>
+        </field>');
+        
+        // add billing_point to product aggregates
+        foreach($fields as $field) {
+            $definition = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->addCol('sales_product_agg', $definition);
+        }
+        
+        $this->setTableVersion('sales_product_agg', 2);
+        
+        // update existing products, set accountable
+        $db = $this->_backend->getDb();
+        $sql = 'UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_products') . ' SET ' . $db->quoteInto($db->quoteIdentifier('accountable') . ' = ?', 'Sales_Model_Product');
+        $db->query($sql);
+        
+        $this->_transferBillingInformation();
+        
+        // remove billing_point, last_autobill, interval from contracts
+        $this->_backend->dropCol('sales_contracts', 'billing_point');
+        $this->_backend->dropCol('sales_contracts', 'last_autobill');
+        $this->_backend->dropCol('sales_contracts', 'interval');
+        
+        $this->setTableVersion('sales_contracts', 8);
+        
+        $this->setApplicationVersion('Sales', '8.16');
+    }
+    
+    protected function _transferBillingInformation()
+    {
+        $this->promptForUsername();
+        Sales_Controller_Contract::getInstance()->transferBillingInformation();
+    }
 }

@@ -92,4 +92,13 @@ interface Sales_Model_Accountable_Interface
      * @return string
      */
     public static function getBillableModelName();
+    
+    /**
+     * returns a temporarily productaggregate which contains the
+     * default billing information of this accountable
+     * 
+     * @param Sales_Model_Contract $contract
+     * @return Sales_Model_ProductAggregate
+     */
+    public function getDefaultProductAggregate(Sales_Model_Contract $contract);
 }

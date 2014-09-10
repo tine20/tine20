@@ -55,7 +55,6 @@ Tine.Sales.InvoicePositionGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     renderedSumsPerMonth: null,
     
     initComponent: function() {
-        this.groupTextTpl = '{text} (' + this.i18nUnitName +  ': {[Tine.Sales.renderedSumsPerMonth["' + this.invoiceId + '"][(values.rs[0].data.model + values.rs[0].data.unit.replace(" ", ""))]["month-" + values.rs[0].data.month]]})';
         this.bbar = [];
         
         Tine.Sales.InvoicePositionGridPanel.superclass.initComponent.call(this);
@@ -70,6 +69,11 @@ Tine.Sales.InvoicePositionGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
     },
     
+    /**
+     * creates the view
+     * 
+     * @return {Object}
+     */
     createView: function() {
         var view = Tine.Sales.InvoicePositionGridPanel.superclass.createView.call(this);
         view.renderedSumsPerMonth = this.renderedSumsPerMonth;

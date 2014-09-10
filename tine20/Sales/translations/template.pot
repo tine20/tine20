@@ -832,3 +832,12 @@ msgid ""
 "Billing Address. Please assign another Billing Address to these contracts or "
 "change this one and do not delete."
 msgstr ""
+
+msgid "Accountable"
+msgstr ""
+
+msgid "Add New Product"
+msgstr ""
+
+msgid "SalesProduct"
+msgstr ""

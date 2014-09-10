@@ -314,9 +314,10 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
      *
      * @param Tinebase_DateTime $date
      * @param Sales_Model_Contract $contract
+     * @param Sales_Model_ProductAggregate $productAggregate
      * @return boolean
     */
-    public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
+    public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL, Sales_Model_ProductAggregate $productAggregate = NULL)
     {
         $this->_referenceDate = clone $date;
         $this->_referenceContract = $contract;

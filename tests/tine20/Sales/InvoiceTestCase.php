@@ -417,12 +417,20 @@ class Sales_InvoiceTestCase extends TestCase
                 'name' => 'billhalfyearly',
                 'description' => 'bill this 2 times a year',
                 'price' => '102',
+                'accountable' => 'Sales_Model_Product'
             ),
             array(
                 'name' => 'billeachquarter',
                 'description' => 'bill this each quarter',
                 'price' => '102',
+                'accountable' => 'Sales_Model_Product'
             ),
+            array(
+                'name' => 'Hours',
+                'description' => 'timesheets',
+                'price' => '100',
+                'accountable' => 'Timetracker_Model_Timeaccount'
+            )
         );
         
         $default = array(
@@ -482,15 +490,17 @@ class Sales_InvoiceTestCase extends TestCase
                     'title'        => Tinebase_Record_Abstract::generateUID(),
                     'description'  => '1 unittest begin',
                     'container_id' => $this->_sharedContractsContainerId,
-                    'billing_point' => 'begin',
                     'billing_address_id' => $this->_addressRecords->filter(
                         'customer_id', $this->_customerRecords->filter(
                             'name', 'Customer1')->getFirstRecord()->getId())->filter(
                                 'type', 'billing')->getFirstRecord()->getId(),
                     
-                    'interval' => 1,
-                    'start_date' => $startDate,
+                    'start_date' => clone $startDate,
                     'end_date' => NULL,
+                    'products' => array(
+                        array('start_date' => $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 1, 'billing_point' => 'begin', 
+                              'product_id' => $this->_productRecords->filter('name', 'Hours')->getFirstRecord()->getId()),
+                    )
                 ),
             
                 // 1 invoice should be created on 1.5 for interval 1.1. - 30.4
@@ -499,11 +509,12 @@ class Sales_InvoiceTestCase extends TestCase
                     'title'        => Tinebase_Record_Abstract::generateUID(),
                     'description'  => '2 unittest end',
                     'container_id' => $this->_sharedContractsContainerId,
-                    'billing_point' => 'end',
                     'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer2')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
-                    'interval' => 4,
-                    'start_date' => $startDate,
-                    'end_date' => $endDate,
+                    'start_date' => clone $startDate,
+                    'end_date' => clone $endDate,
+                    'products' => array(
+                        array('start_date' => clone $startDate, 'end_date' => clone $endDate, 'quantity' => 1, 'interval' => 4, 'billing_point' => 'end', 'product_id' => $this->_productRecords->filter('name', 'Hours')->getFirstRecord()->getId()),
+                    )
                 ),
                 // 2 invoices should be created on 1.5.2013 and 1.10.2013
                 array(
@@ -511,27 +522,27 @@ class Sales_InvoiceTestCase extends TestCase
                     'title'        => Tinebase_Record_Abstract::generateUID(),
                     'description'  => '3 unittest end',
                     'container_id' => $this->_sharedContractsContainerId,
-                    'billing_point' => 'end',
                     'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
-                    'interval' => 3,
-                    'start_date' => $startDate,
+                    'start_date' => clone $startDate,
                     'end_date' => NULL,
+                    'products' => array(
+                            array('start_date' => clone $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 3, 'billing_point' => 'end', 'product_id' => $this->_productRecords->filter('name', 'Hours')->getFirstRecord()->getId()),
+                    )
                 ),
-                // 4 invoices should be created on 1.4.2013, 1.7.2013, 1.10.2013 and 1.1.2014
+                // 4 invoices should be created on 1.1.2013, 1.4.2013, 1.7.2013 and 1.12.2014
                 array(
                     'number'       => 4,
                     'title'        => Tinebase_Record_Abstract::generateUID(),
                     'description'  => '4 unittest products',
                     'container_id' => $this->_sharedContractsContainerId,
-                    'billing_point' => 'begin',
                     'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer4')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
                     // this has an interval of 1 month, but there will be 2 products (6,3 months), so we need 5 invoices (4 in the first year, 1 for the beginning of the second year)
-                    'interval' => 1,
-                    'start_date' => $startDate,
+                    'start_date' => clone $startDate,
                     'end_date' => NULL,
                     'products' => array(
-                        array('quantity' => 1, 'interval' => 6, 'product_id' => $this->_productRecords->filter('name', 'billhalfyearly')->getFirstRecord()->getId()),
-                        array('quantity' => 1, 'interval' => 3, 'product_id' => $this->_productRecords->filter('name', 'billeachquarter')->getFirstRecord()->getId()),
+                        array('start_date' => clone $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 6, 'billing_point' => 'begin', 'product_id' => $this->_productRecords->filter('name', 'billhalfyearly')->getFirstRecord()->getId()),
+                        array('start_date' => clone $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 3, 'billing_point' => 'begin', 'product_id' => $this->_productRecords->filter('name', 'billeachquarter')->getFirstRecord()->getId()),
+//                         array('quantity' => 1, 'interval' => 1, 'billing_point' => 'begin', 'product_id' => $this->_productRecords->filter('name', 'Hours')->getFirstRecord()->getId()),
                     )
                 )
             );

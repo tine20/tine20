@@ -241,32 +241,17 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 disabled: true,
                 allowBlank: true
             })], [{
-                    xtype: 'datefield',
+                    xtype: 'extuxclearabledatefield',
                     name: 'start_date',
-                    columnWidth: 1/6,
+                    columnWidth: 1/2,
                     fieldLabel: this.app.i18n._('Start Date'),
                     allowBlank: false
                 }, {
-                    xtype: 'datefield',
+                    xtype: 'extuxclearabledatefield',
                     name: 'end_date',
                     fieldLabel: this.app.i18n._('End Date'),
-                    columnWidth: 1/6
-                }, {
-                    columnWidth: 2/6,
-                    name: 'interval',
-                    fieldLabel: this.app.i18n._('Billing Interval'),
-                    xtype: 'combo',
-                    store: [0,1,2,3,4,5,6,7,8,9,10,11,12]
-                }, {
-                    name: 'billing_point',
-                    fieldLabel: this.app.i18n._('Billing Point'),
-                    xtype: 'combo',
-                    store: [
-                        ['begin', this.app.i18n._('begin') ],
-                        [  'end', this.app.i18n._('end') ]
-                    ],
-                    columnWidth: 2/6
-            }], [{
+                    columnWidth: 1/2
+                }], [{
                 columnWidth: 1/3,
                 xtype: 'tinerelationpickercombo',
                 fieldLabel: this.app.i18n._('Contact Person (external)'),
@@ -300,16 +285,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 relationDegree: 'sibling',
                 modelUnique: true
             }]];
-            
-        if (Tine.Tinebase.common.hasRight('manage_invoices', 'Sales')) {
-            items.push([{
-                xtype: 'datefield',
-                name: 'last_autobill',
-                columnWidth: 1/3,
-                fieldLabel: this.app.i18n._('Last Billed'),
-                allowBlank: true
-            }]);
-        }
             
         items.push([{
             columnWidth: 1,

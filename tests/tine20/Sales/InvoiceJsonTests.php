@@ -89,48 +89,12 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $c4Invoice = $c1Invoice = NULL;
         
         foreach($invoices['results'] as $invoice) {
-            
-            // fetch invoice by get to have all relations set
-            $invoice = $json->getInvoice($invoice['id']);
-            
-            // first invoice for customer 4
-            if (count($invoice['relations']) == 4) {
-                
-                $this->assertEquals(9, count($invoice['positions']));
-                
-                foreach($invoice['relations'] as $relation) {
-                    switch ($relation['type']) {
-                        case 'INVOICE_ITEM':
-                            $this->assertEquals('Sales_Model_ProductAggregate', $relation['related_model']);
-                            break;
-                        case 'CUSTOMER':
-                            $this->assertEquals('Sales_Model_Customer', $relation['related_model']);
-                            $this->assertEquals('Customer4', $relation['related_record']['name']);
-                            $c4Invoice = $invoice;
-                            break;
-                        case 'CONTRACT':
-                            $this->assertEquals('Sales_Model_Contract', $relation['related_model']);
-                            break;
-                    }
-                }
-            } else {
-                // first invoice for customer 1
-                $this->assertEquals(3, count($invoice['relations']));
-                $this->assertEquals(1, count($invoice['positions']));
-                
-                foreach($invoice['relations'] as $relation) {
-                    switch ($relation['type']) {
-                        case 'INVOICE_ITEM':
-                            $this->assertEquals('Timetracker_Model_Timeaccount', $relation['related_model']);
-                            break;
-                        case 'CUSTOMER':
-                            $this->assertEquals('Sales_Model_Customer', $relation['related_model']);
-                            $this->assertEquals('Customer1', $relation['related_record']['name']);
-                            $c1Invoice = $invoice;
-                            break;
-                        case 'CONTRACT':
-                            $this->assertEquals('Sales_Model_Contract', $relation['related_model']);
-                            break;
+            foreach($invoice['relations'] as $relation) {
+                if ($relation['type'] == 'CUSTOMER') {
+                    if ($relation['related_record']['name'] == 'Customer4') {
+                        $c4Invoice = $invoice;
+                    } elseif ($relation['related_record']['name'] == 'Customer1') {
+                        $c1Invoice = $invoice;
                     }
                 }
             }
@@ -138,6 +102,42 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $this->assertTrue(is_array($c1Invoice));
         $this->assertTrue(is_array($c4Invoice));
+        
+        // first invoice for customer 4
+        $invoice = $json->getInvoice($c4Invoice['id']);
+        
+        $this->assertEquals(9, count($invoice['positions']));
+        
+        foreach($invoice['relations'] as $relation) {
+            switch ($relation['type']) {
+                case 'CUSTOMER':
+                    $this->assertEquals('Sales_Model_Customer', $relation['related_model']);
+                    $this->assertEquals('Customer4', $relation['related_record']['name']);
+                    break;
+                case 'CONTRACT':
+                    $this->assertEquals('Sales_Model_Contract', $relation['related_model']);
+                    break;
+            }
+        }
+        
+        $invoice = $json->getInvoice($c1Invoice['id']);
+        
+        // first invoice for customer 1
+        $this->assertEquals(3, count($invoice['relations']));
+
+        $this->assertEquals(1, count($invoice['positions']));
+        
+        foreach($invoice['relations'] as $relation) {
+            switch ($relation['type']) {
+                case 'CUSTOMER':
+                    $this->assertEquals('Sales_Model_Customer', $relation['related_model']);
+                    $this->assertEquals('Customer1', $relation['related_record']['name']);
+                    break;
+                case 'CONTRACT':
+                    $this->assertEquals('Sales_Model_Contract', $relation['related_model']);
+                    break;
+            }
+        }
     }
     
     /**

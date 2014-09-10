@@ -186,44 +186,6 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
     }
     
     /**
-     * sets the last billed date to the next date by interval and returns the updated contract
-     * 
-     * @param Sales_Model_Contract $contract
-     * @return Sales_Model_Contract 
-     */
-    public function updateLastBilledDate(Sales_Model_Contract $contract)
-    {
-        $contract->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        
-        // update last billed information -> set last_autobill to the date the invoice should have
-        // been created and not to the current date, so we can calculate the interval properly
-        $lastBilled = $contract->last_autobill ? clone $contract->last_autobill : NULL;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' 
-                . ' Updating last autobill to ' . $lastBilled);
-        }
-        
-        if ($lastBilled === NULL) {
-            // begin / end
-            if ($contract->billing_point == 'begin') {
-                // set billing date to start date
-                $contract->last_autobill = clone $contract->start_date;
-            } else {
-                $contract->last_autobill = clone $contract->start_date;
-                $contract->last_autobill->addMonth($contract->interval);
-            }
-        } else {
-            $contract->last_autobill->addMonth($contract->interval);
-        }
-        
-        $contract->last_autobill->setTime(0,0,0);
-        $contract->setTimezone('UTC');
-        
-        return $this->update($contract, FALSE);
-    }
-    
-    /**
      * get next date to bill the contract given.
      * 
      * @param Sales_Model_Contract $contract
@@ -325,5 +287,101 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
         }
         
         return true;
+    }
+
+    public function transferBillingInformation()
+    {
+        $filter = new Sales_Model_ContractFilter(array());
+        
+        $iterator = new Tinebase_Record_Iterator(array(
+                'iteratable' => $this,
+                'controller' => Sales_Controller_Contract::getInstance(),
+                'filter'     => $filter,
+                'options'    => array(
+                    'getRelations' => TRUE,
+                    'limit' => 20
+                ),
+                'function'   => 'processTransferBillingInformation',
+        ));
+        
+        $iterator->iterate();
+    }
+    
+    /**
+     * processAutoInvoiceIteration
+     *
+     * @param Tinebase_Record_RecordSet $contracts
+     * @param Tinebase_DateTime $currentDate
+     */
+    public function processTransferBillingInformation($contracts)
+    {
+        $billingPoints = array(
+            'Timetracker_Model_Timeaccount'         => 'end',
+            'WebAccounting_Model_BackupPath'        => 'end',
+            'WebAccounting_Model_StoragePath'       => 'end',
+            'WebAccounting_Model_MailAccount'       => 'end',
+            'WebAccounting_Model_DReg'              => 'begin',
+            'WebAccounting_Model_CertificateDomain' => 'begin',
+            'WebAccounting_Model_IPNet'             => 'end'
+        );
+        
+        foreach($contracts as $contract) {
+            // iterate relations, look for customer, cost center and accountables
+            foreach ($contract->relations as $relation) {
+                // find accountables
+                $models = array();
+                if (in_array('Sales_Model_Accountable_Interface', class_implements($relation->related_record))) {
+                    $models[] = $relation->related_model;
+                }
+                
+                $models = array_unique($models);
+            }
+            
+            foreach($models as $model) {
+                $filter = new Sales_Model_ProductFilter(array(array('field' => 'accountable', 'operator' => 'equals', 'value' => $model)));
+                $product = Sales_Controller_Product::getInstance()->search($filter)->getFirstRecord();
+                
+                if (! $product) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' '
+                                . ' Create Product for ' . $relation->related_model);
+                    }
+                    $product = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product(array(
+                            'name' => $model,
+                            'accountable' => $model,
+                            'description' => 'auto generated for invoicing',
+                    )));
+                }
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' '
+                            . ' Create ProductAggregate for ' . $model . ' contract: ' . $contract->getId());
+                }
+                
+                $productAggregate = Sales_Controller_ProductAggregate::getInstance()->create(new Sales_Model_ProductAggregate(array(
+                    'product_id' => $product->getId(),
+                    'contract_id' => $contract->getId(),
+                    'interval' => $contract->interval,
+                    'last_autobill' => clone $contract->last_autobill,
+                    'quantity' => 1,
+                    'billing_point' => $billingPoints[$model],
+                )));
+            }
+        }
+    }
+    
+    /**
+     * delete linked objects (notes, relations, ...) of record
+     *
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    {
+        // use textfilter for contract_id
+        $filter = new Sales_Model_ProductAggregateFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'equals', 'value' => $_record->getId())));
+        Sales_Controller_ProductAggregate::getInstance()->deleteByFilter($filter);
+    
+        parent::_deleteLinkedObjects($_record);
     }
 }

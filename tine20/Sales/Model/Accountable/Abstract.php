@@ -18,6 +18,20 @@
 abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract implements Sales_Model_Accountable_Interface
 {
     /**
+     * the default interval used on billing if no product aggregate has been defined for this accountable
+     * 
+     * @var integer
+     */
+    protected $_defaultInterval = 1;
+    
+    /**
+     * the default billing point used on billing if no product aggregate has been defined for this accountable
+     *
+     * @var integer
+     */
+    protected $_defaultBillingPoint = 'end';
+    
+    /**
      * if billables has been loaded or should have been loaded, but none has been found, this is set to true
      * 
      * @var boolean
@@ -154,6 +168,71 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
     public function sumBillables()
     {
         return TRUE;
+    }
+    
+    /**
+     * sets the contract
+     * 
+     * @param Sales_Model_Contract $contract
+     */
+    public function setContract(Sales_Model_Contract $contract)
+    {
+        $this->_referenceContract = $contract;
+    }
+    
+    /**
+     * returns a temporarily productaggregate which contains the
+     * default billing information of this accountable
+     * 
+     * @param Sales_Model_Contract $contract
+     * @return Sales_Model_ProductAggregate
+     */
+    public function getDefaultProductAggregate(Sales_Model_Contract $contract)
+    {
+        $startDate = clone $contract->start_date;
+        
+        if ($contract->start_date->format('d') !== 1) {
+            $startDate->setDate($startDate->format('Y'), $startDate->format('m'), 1);
+        }
+        
+        $accountable = get_class($this);
+        
+        $filter = new Sales_Model_ProductFilter(array(array('field' => 'accountable', 'operator' => 'equals', 'value' => $accountable)));
+        $product = Sales_Controller_Product::getInstance()->search($filter)->getFirstRecord();
+        
+        // create product, if no product is found
+        if (! $product) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' '
+                        . ' Create Product for ' . $accountable);
+            }
+            $product = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product(array(
+                    'name' => $accountable,
+                    'accountable' => $accountable,
+                    'description' => 'auto generated on invoicing',
+            )));
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' '
+                    . ' Create ProductAggregate for ' . $accountable . ' contract: ' . $contract->getId());
+        }
+        
+        $endDate = clone $startDate;
+        $endDate->addMonth($this->_defaultInterval);
+        
+        $pa = new Sales_Model_ProductAggregate(array(
+            'interval'      => $this->_defaultInterval,
+            'billing_point' => $this->_defaultBillingPoint,
+            'contract_id'   => $contract->getId(),
+            'start_date'    => $startDate,
+            'end_date'      => $endDate,
+            'last_autobill' => NULL,
+            'product_id'    => $product->getId(),#
+            'quantity' => 1,
+        ));
+        
+        return $pa;
     }
     
     /**

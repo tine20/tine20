@@ -137,6 +137,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'idProperty'  => 'id',
                 )
             ),
+            // TODO: remove this after update has been run
             'last_autobill' => array(
                 'label'      => NULL,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
@@ -152,12 +153,14 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'idProperty'  => 'id',
                 )
             ),
+            // TODO: remove this after update has been run
             'billing_point' => array(
                 'label' => 'Billing Point', // _('Billing Point')
                 'type'  => 'string',
                 'default' => 'end',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE)
             ),
+            // TODO: remove this after update has been run
             'interval' => array(
                 'label'      => 'Billing Interval', // _('Billing Interval')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
@@ -165,11 +168,11 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                 'default'    => 1
             ),
             'start_date' => array(
-                'type' => 'datetime',
+                'type' => 'date',
                 'label'      => 'Start Date',    // _('Start Date')
             ),
             'end_date' => array(
-                'type' => 'datetime',
+                'type' => 'date',
                 'label'      => 'End Date',    // _('End Date')
             ),
             'customer' => array(
@@ -286,4 +289,23 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             ), 'defaultType' => ''
         ),
     );
+    
+    /**
+     * returns the product aggregate for a given accountable
+     * 
+     * @param Sales_Model_Accountable_Interface $record
+     */
+    public function findProductAggregate(Sales_Model_Accountable_Interface $record) {
+        $filter = new Sales_Model_ProductFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'accountable', 'operator' => 'equals', 'value' => get_class($record))));
+        $products = Sales_Controller_Product::getInstance()->search($filter);
+        
+        $filter = new Sales_Model_ProductAggregateFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'product_id', 'operator' => 'in', 'value' => $products->getId())));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'equals', 'value' => $this->getId())));
+
+        $pas = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+        
+        return $pas->getFirstRecord();
+    }
 }

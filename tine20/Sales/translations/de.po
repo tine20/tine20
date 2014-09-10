@@ -567,7 +567,7 @@ msgid "Reversal Invoice"
 msgstr "Storno-Rechnung"
 
 msgid "Billing Point"
-msgstr "Zeitpunkt der Rechnungslegung"
+msgstr "Abrechnungszeitpunkt"
 
 msgid "begin"
 msgstr "Anfang des Intervalls"
@@ -698,3 +698,12 @@ msgstr "Bruttopreis"
 #: Model/Invoice.php:158 js/InvoiceEditDialog.js:453
 msgid "Sales Tax (percent)"
 msgstr "Mehrwertsteuer in Prozent"
+
+msgid "Accountable"
+msgstr "Rechnet ab"
+
+msgid "Add New Product"
+msgstr "Neues Produkt hinzufügen"
+
+msgid "SalesProduct"
+msgstr "Produkt"

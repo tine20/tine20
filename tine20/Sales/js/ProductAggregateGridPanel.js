@@ -31,7 +31,6 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
     autoScroll: true,
     layout: 'fit',
     defaultSortInfo: {field: 'product_id', direction: 'DESC'},
-    autoExpandColumn: 'product_id',
     quickaddMandatory: 'product_id',
     clicksToEdit: 1,
     enableColumnHide:false,
@@ -203,27 +202,32 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             })
         });
         
+        var cmp = {
+            name: 'billing_point',
+            fieldLabel: this.app.i18n._('Billing Point'),
+            xtype: 'combo',
+            value: 'begin',
+            store: [
+                ['begin', this.app.i18n._('begin') ],
+                [  'end', this.app.i18n._('end') ]
+            ]
+        };
+        
+        this.billingPointEditor = new Ext.form.ComboBox(cmp);
+        this.billingPointQuickadd = new Ext.form.ComboBox(cmp);
+        
         var columns = [
             {id: 'product_id', dataIndex: 'product_id', type: Tine.Sales.Model.ProductAggregate, header: this.app.i18n._('Product'),
                  quickaddField: this.productQuickadd, renderer: this.renderProductAggregate,
-                 editor: this.productEditor, scope: this
+                 editor: this.productEditor, scope: this, width: 140
             },
             {id: 'quantity', editor: this.quantityEditor, quickaddField: this.quantityQuickadd, dataIndex: 'quantity', header: this.app.i18n._('Quantity'),  scope: this, width: 90},
-            {id: 'interval', editor: this.intervalEditor, quickaddField: this.intervalQuickadd, dataIndex: 'interval', header: this.app.i18n._('Interval'),  scope: this, width: 90}
+            {id: 'interval', editor: this.intervalEditor, quickaddField: this.intervalQuickadd, dataIndex: 'interval', header: this.app.i18n._('Interval'),  scope: this, width: 90},
+            {id: 'billing_point', renderer: this.renderBillingPoint , editor: this.billingPointEditor, quickaddField: this.billingPointQuickadd, dataIndex: 'billing_point', header: this.app.i18n._('Billing Point'),  scope: this, width: 120},
+            {id: 'start_date', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.form.DateField(), quickaddField: new Ext.form.DateField(), dataIndex: 'start_date', header: this.app.i18n._('Start Date'),  scope: this, width: 110},
+            {id: 'end_date', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.form.DateField(), quickaddField: new Ext.form.DateField(), dataIndex: 'end_date', header: this.app.i18n._('End Date'),  scope: this, width: 110}
         ];
-        
-        if (Tine.Tinebase.common.hasRight('manage_invoices', 'Sales')) {
-            columns.push({
-                id: 'last_autobill',
-                editor: new Ext.ux.form.ClearableDateField(),
-                quickaddField: new Ext.ux.form.ClearableDateField(),
-                dataIndex: 'last_autobill',
-                header: this.app.i18n._('Last Billed'),
-                scope: this,
-                width: 180
-            });
-        }
-        
+
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true,
@@ -232,6 +236,20 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             }, 
             columns: columns
        });
+    },
+    
+    /**
+     * renders the billing point
+     * 
+     * @param {String} value
+     * @return {String}
+     */
+    renderBillingPoint: function(value) {
+        if (value == 'end') {
+            return this.app.i18n._('end');
+        } else {
+            return this.app.i18n._('begin');
+        }
     },
     
     /**
@@ -249,6 +267,14 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 break;
             case 'interval':
                 o.record.set('interval', this.intervalEditor.getValue());
+                break;
+            case 'billing_point':
+                var val = this.billingPointEditor.getValue();
+                if (Ext.isEmpty(val)) {
+                    val = 'begin';
+                }
+                o.record.set('billing_point', val);
+                break;
             default: // do nothing
         }
     },
