@@ -18,11 +18,13 @@ msgstr ""
 msgid "%s's personal example records"
 msgstr ""
 
-#: Model/ExampleRecord.php:35
+#: Model/ExampleRecord.php:34
 msgid "example record"
-msgstr ""
+msgid_plural "example records"
+msgstr[0] ""
+msgstr[1] ""
 
-#: Model/ExampleRecord.php:36
+#: Model/ExampleRecord.php:35
 msgid "example records"
 msgstr ""
 
@@ -34,14 +36,34 @@ msgstr ""
 msgid "example record lists"
 msgstr ""
 
-#: Model/ExampleRecord.php:60 js/ExampleRecordEditDialog.js:70
-#: js/ExampleRecordDetailsPanel.js:74
+#: Model/ExampleRecord.php:55 js/ExampleRecordEditDialog.js:67
+#: js/ExampleDetailsPanel.js:74
 msgid "Name"
 msgstr ""
 
-#: Model/ExampleRecord.php:64 js/ExampleRecordEditDialog.js:76
-#: js/ExampleRecordDetailsPanel.js:78
+#: Model/ExampleRecord.php:60 js/ExampleRecordEditDialog.js:73
+#: js/ExampleDetailsPanel.js:78
 msgid "Status"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:50
+msgid "ExampleRecord"
+msgstr ""
+
+#: js/ExampleDetailsPanel.js:56
+msgid "Total Example Records"
+msgstr ""
+
+#: js/Example.js:23
+msgid "New Example"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Example Record Container"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default container for new records"
 msgstr ""
 
 #: Config.php:31
@@ -68,20 +90,4 @@ msgstr ""
 
 #: Setup/Initialize.php:35
 msgid "In process"
-msgstr ""
-
-#: Preference.php:60
-msgid "Default Example Record Container"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default container for new records"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:53
-msgid "ExampleRecord"
-msgstr ""
-
-#: js/ExampleRecordDetailsPanel.js:56
-msgid "Total Example Records"
 msgstr ""

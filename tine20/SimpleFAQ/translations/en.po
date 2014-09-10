@@ -1,142 +1,149 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - SimpleFAQ\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-02-10 12:00+0000\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
-"X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:109
+#: Controller.php:114
 #, python-format
 msgid "%s's personal FAQs"
 msgstr "%s's personal FAQs"
 
-#: Controller.php:148
+#: Controller.php:164
 msgid "Draft"
 msgstr "Draft"
 
-#: Controller.php:149
+#: Controller.php:165
 msgid "released"
 msgstr "released"
 
-#: Controller.php:150
+#: Controller.php:166
 msgid "obsolete"
 msgstr "obsolete"
 
-#: Controller.php:153
+#: Controller.php:169
 msgid "Internal"
 msgstr "Internal"
 
-#: Controller.php:154
+#: Controller.php:170
 msgid "Public"
 msgstr "Public"
 
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:205
-#: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "FAQ Status"
-msgstr[1] "FAQ Status"
-
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:210
-#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "FAQ Type"
-msgstr[1] "FAQ Types"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Defaults"
-
-#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:157
-#: js/FaqGridPanel.js:120
-msgid "Question"
-msgstr "Question"
-
-#: js/FaqEditDialog.js:109
-msgid "Enter a question..."
-msgstr "Enter a question..."
-
-#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:163
-#: js/FaqGridPanel.js:127
-msgid "Answer"
-msgstr "Answer"
-
-#: js/FaqEditDialog.js:116
-msgid "Enter a answer..."
-msgstr "Enter a answer..."
-
-#: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
-msgid "Type"
-msgstr "Type"
-
-#: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
-msgid "Status"
-msgstr "Status"
-
-#: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
-msgid "FAQ Infos"
-msgstr "FAQ Infos"
-
-#: js/FaqGridDetailsPanel.js:169 js/FaqGridPanel.js:101
-msgid "Tags"
-msgstr "Tags"
-
-#: js/FaqGridDetailsPanel.js:195
-msgid "Creation Time"
-msgstr "Creation Time"
-
-#: js/FaqGridDetailsPanel.js:200
-msgid "Created By"
-msgstr "Created By"
-
-#: js/FaqGridDetailsPanel.js:232
-msgid "No answer yet"
-msgstr "No answer yet"
-
-#: js/FaqGridPanel.js:94
-msgid "FAQ id"
-msgstr "FAQ id"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Add a new FAQ Status..."
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Add a new FAQ Type..."
-
-#: js/Model.js:33 js/SimpleFAQ.js:19
+#: js/SimpleFAQ.js:19 js/Model.js:35
 msgid "FAQ"
 msgid_plural "FAQs"
 msgstr[0] "FAQ"
 msgstr[1] "FAQs"
 
-#: js/Model.js:37
+#: js/SimpleFAQ.js:26
+msgid "Find Question"
+msgstr "Find Question"
+
+#: js/SimpleFAQ.js:35
+msgid "Search question"
+msgstr "Search question"
+
+#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:117
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Answer"
+
+#: js/FaqType.js:26 js/AdminPanel.js:97 js/AdminPanel.js:132
+#: js/FaqGridDetailsPanel.js:204 js/FaqTypeFilterModel.js:27
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "FAQ Type"
+msgstr[1] "FAQ Types"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Add a new FAQ Type..."
+
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatus.js:26
+#: js/FaqStatusFilterModel.js:27 js/FaqGridDetailsPanel.js:199
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ Status"
+msgstr[1] "FAQ Status"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Defaults"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Add a new FAQ Status..."
+
+#: js/FaqGridPanel.js:72
+msgid "FAQ id"
+msgstr "FAQ id"
+
+#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Tags"
+
+#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:138
+msgid "Status"
+msgstr "Status"
+
+#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:126
+msgid "Type"
+msgstr "Type"
+
+#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:110 js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Question"
+
+#: js/Model.js:39
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
 msgstr[0] "FAQ List"
 msgstr[1] "FAQ Lists"
 
-#: js/Model.js:37
+#: js/Model.js:39
 msgid "FAQ Lists"
 msgstr "FAQ Lists"
 
-#: js/Model.js:72
+#: js/Model.js:74
 msgid "Quick Search"
 msgstr "Quick Search"
+
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr "Search FAQ"
+
+#: js/FaqEditDialog.js:111
+msgid "Enter a question..."
+msgstr "Enter a question..."
+
+#: js/FaqEditDialog.js:118
+msgid "Enter a answer..."
+msgstr "Enter a answer..."
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "FAQ Infos"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Creation Time"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Created By"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "No answer yet"
 
 #: Preference.php:28
 msgid "All my FAQs"

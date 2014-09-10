@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Björn Balazs <transifex@lazs.de>, 2013
 # kaystrobach <info@kay-strobach.de>, 2012
@@ -11,112 +11,126 @@ msgstr ""
 "PO-Revision-Date: 2014-04-25 12:47+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:103
-msgid "manage products"
-msgstr "Produkte verwalten"
-
-#: Acl/Rights.php:104
-msgid "add, edit and delete products"
-msgstr "Hinzufügen, Editieren und Löschen von Produkten"
-
 #: Controller.php:83 Controller.php:103
 msgid "You do not have admin rights on Sales"
 msgstr "Sie haben kein Adminrecht in der Sales-Applikation"
 
-#: Model/Contract.php:109
-msgid "Responsible"
-msgstr "Verantwortlicher"
+#: Acl/Rights.php:110
+msgid "manage products"
+msgstr "Produkte verwalten"
 
-#: Model/Contract.php:110
-msgid "Customer"
-msgstr "Kunde"
+#: Acl/Rights.php:111
+msgid "add, edit and delete products"
+msgstr "Hinzufügen, Editieren und Löschen von Produkten"
 
-#: Model/Contract.php:111
-msgid "Partner"
-msgstr "Partner"
+#: Acl/Rights.php:114
+msgid "manage cost centers"
+msgstr "Kostenstellen verwalten"
 
-#: Model/Contract.php:123 js/ContractEditDialog.js:174
-msgid "Lead Cost Center"
-msgstr "Hauptkostenstelle"
+#: Acl/Rights.php:115
+msgid "add, edit and delete cost centers"
+msgstr "Kostenstellen hinzufügen, bearbeiten und löschen"
 
-#: Model/Contract.php:127
-msgid "Time Account"
-msgstr "Zeitkonto"
+#: Model/Division.php:34
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] "Abteilung"
+msgstr[1] "Abteilung"
 
-#: Config.php:51
-msgid "Contract Number Creation"
-msgstr "Vertragsnummer-Erstellung"
+#: Model/Division.php:50 Model/Contract.php:84 js/DivisionEditDialog.js:81
+#: js/ContractEditDialog.js:129
+msgid "Title"
+msgstr "Titel"
 
-#: Config.php:53
-msgid "Should the contract number be set manually or be auto-created?"
-msgstr "Soll die Vertragsnummer manuell gesetzt oder autmatisch erstellt werden?"
+#: Model/Contract.php:44
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Vertrag"
+msgstr[1] "Verträge"
 
-#: Config.php:56
-msgid "automatically"
-msgstr "automatisch"
+#: Model/Contract.php:65
+#, fuzzy
+msgid "Cost Center"
+msgstr "Kostenstelle"
 
-#: Config.php:57
-msgid "manually"
-msgstr "manuell"
-
-#: Config.php:64
-msgid "Contract Number Validation"
-msgstr "Vertragsnummer-Validierung"
-
-#: Config.php:66
-msgid "The Number can be validated as text or number."
-msgstr "Die Vertragsnummer kann als Text oder Nummer validiert werden."
-
-#: Config.php:69 js/Models.js:208 js/ContractEditDialog.js:138
+#: Model/Contract.php:79 Model/CostCenter.php:50 js/CostCenterEditDialog.js:82
+#: js/ContractEditDialog.js:122 Config.php:55
 msgid "Number"
 msgstr "Nummer"
 
-#: Config.php:70
-msgid "Text"
-msgstr "Text"
+#: Model/Contract.php:89 Model/Product.php:55 js/ProductEditDialog.js:106
+#: js/ContractEditDialog.js:180
+msgid "Description"
+msgstr "Beschreibung"
 
-#: Config.php:77
-msgid "Contract Status Available"
-msgstr "Verfügbare Vertragsstatus"
+#: Model/Contract.php:105 js/ContractEditDialog.js:136
+msgid "Start Date"
+msgstr ""
 
-#: Config.php:79
-msgid ""
-"Possible Contract status. Please note that additional contract status might "
-"impact other Sales systems on export or syncronisation."
-msgstr "Mögliche Vertragsstatuswerte. Bitte beachten Sie, dass Änderungen an dieser Stelle Auswirkungen auf Export und Synchronisation haben können."
+#: Model/Contract.php:109 js/ContractEditDialog.js:141
+msgid "End Date"
+msgstr ""
 
-#: Config.php:87
-msgid "Contract Cleared State Available"
-msgstr "Verfügbare Abgerechnetstatus für Verträge"
+#: Model/Contract.php:120
+msgid "Responsible"
+msgstr "Verantwortlicher"
 
-#: Config.php:89
-msgid "Possible Contract cleared states."
-msgstr "Mögliche Werte für Abgerechnetstatus"
+#: Model/Contract.php:121
+msgid "Customer"
+msgstr "Kunde"
 
-#: Setup/Update/Release5.php:63 Setup/Initialize.php:34
-msgid "My Products"
-msgstr "Meine Produkte"
+#: Model/Contract.php:122
+msgid "Partner"
+msgstr "Partner"
 
-#: Setup/Update/Release5.php:64 Setup/Initialize.php:35
-msgid "Products created by myself"
-msgstr "Von mir erstellte Produkte"
+#: Model/Contract.php:134 js/ContractEditDialog.js:169
+msgid "Lead Cost Center"
+msgstr "Hauptkostenstelle"
 
-#: Setup/Update/Release5.php:84 Setup/Initialize.php:51
-msgid "My Contracts"
-msgstr "Meine Aufträge"
+#: Model/Contract.php:138
+msgid "Time Account"
+msgstr "Zeitkonto"
 
-#: Setup/Update/Release5.php:85 Setup/Initialize.php:52
-msgid "Contracts created by myself"
-msgstr "Von mir erstellte Aufträge"
+#: Model/Product.php:34
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Produkt"
+msgstr[1] "Produkte"
+
+#: Model/Product.php:50 js/ProductEditDialog.js:85
+msgid "Name"
+msgstr "Name"
+
+#: Model/Product.php:61 js/ProductEditDialog.js:91
+msgid "Price"
+msgstr "Preis"
+
+#: Model/Product.php:65 js/ProductEditDialog.js:98
+msgid "Manufacturer"
+msgstr "Hersteller"
+
+#: Model/Product.php:70 js/ProductEditDialog.js:102
+msgid "Category"
+msgstr "Kategorie"
+
+#: Model/CostCenter.php:34
+msgid "Costcenter"
+msgid_plural "Costcenters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/CostCenter.php:57 js/CostCenterEditDialog.js:89
+msgid "Remark"
+msgstr "Anmerkung"
 
 #: js/AdminPanel.js:61
 msgid "Cancel"
@@ -130,164 +144,150 @@ msgstr "OK"
 msgid "Loading..."
 msgstr "Lade ..."
 
-#: js/ContractGridPanel.js:62 js/ProductGridPanel.js:97
-msgid "Tags"
-msgstr "Tags"
-
-#: js/ContractGridPanel.js:70
-msgid "Contract number"
-msgstr "Vertragsnummer"
-
-#: js/ContractGridPanel.js:76 js/Models.js:245 js/ContractEditDialog.js:145
-msgid "Title"
-msgstr "Titel"
-
-#: js/ContractGridPanel.js:82 js/Models.js:151 js/ContractEditDialog.js:189
-msgid "Status"
-msgstr "Status"
-
-#: js/ContractGridPanel.js:89 js/Models.js:158 js/ContractEditDialog.js:196
-msgid "Cleared"
-msgstr "Abgerechnet"
-
-#: js/ContractGridPanel.js:96 js/Models.js:164 js/ContractEditDialog.js:200
-msgid "Cleared in"
-msgstr "Abgerechnet in"
-
-#: js/ProductEditDialog.js:93 js/ProductGridPanel.js:98
-msgid "Name"
-msgstr "Name"
-
-#: js/ProductEditDialog.js:99 js/ProductGridPanel.js:102
-msgid "Price"
-msgstr "Preis"
-
-#: js/ProductEditDialog.js:106 js/ProductGridPanel.js:99
-msgid "Manufacturer"
-msgstr "Hersteller"
-
-#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:100
-msgid "Category"
-msgstr "Kategorie"
-
-#: js/ProductEditDialog.js:114 js/ProductGridPanel.js:101
-#: js/ContractEditDialog.js:206
-msgid "Description"
-msgstr "Beschreibung"
-
-#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:207
-msgid "Enter description..."
-msgstr "Bitte geben Sie eine Beschreibung ein..."
-
 #: js/ContractCostCenterFilterModel.js:32
 msgid "without CostCenter"
 msgstr "ohne Kostenstelle"
 
-#: js/Models.js:41
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Produkt"
-msgstr[1] "Produkte"
+#: js/ProductEditDialog.js:107 js/ContractEditDialog.js:181
+msgid "Enter description..."
+msgstr "Bitte geben Sie eine Beschreibung ein..."
 
-#: js/Models.js:44 js/Models.js:234
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Vertragsliste"
-msgstr[1] "Vertragslisten"
-
-#: js/Models.js:78 js/Models.js:147 js/Models.js:207 js/Models.js:244
-msgid "Quick Search"
-msgstr "Schnellsuche"
-
-#: js/Models.js:79
-msgid "Product name"
-msgstr "Produktname"
-
-#: js/Models.js:81 js/Models.js:149
-msgid "Creator"
-msgstr "Ersteller"
-
-#: js/Models.js:117
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Vertrag"
-msgstr[1] "Verträge"
-
-#: js/Models.js:121
-msgid "Contracts"
-msgid_plural "Contracts"
-msgstr[0] "Vertrag"
-msgstr[1] "Verträge"
-
-#: js/Models.js:148
-msgid "Contract name"
-msgstr "Auftragsname"
-
-#: js/Models.js:167
-msgid "Last Modified Time"
-msgstr "Letztes Modifikationsdatum"
-
-#: js/Models.js:168
-msgid "Last Modified By"
-msgstr "Zuletzt geändert von"
-
-#: js/Models.js:169
-msgid "Creation Time"
-msgstr "Angelegt am"
-
-#: js/Models.js:170
-msgid "Created By"
-msgstr "Angelegt von"
-
-#: js/Models.js:194
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] "Kostenstelle"
-msgstr[1] "Kostenstellen"
-
-#: js/Models.js:197
-msgid "All CostCenters"
-msgid_plural "All CostCenters"
-msgstr[0] "Alle Konstenstellen"
-msgstr[1] "Alle Konstenstellen"
-
-#: js/Models.js:209
-msgid "Remark"
-msgstr "Anmerkung"
-
-#: js/Models.js:231
-msgid "Division"
-msgid_plural "Divisions"
-msgstr[0] "Abteilung"
-msgstr[1] "Abteilung"
-
-#: js/ContractEditDialog.js:96
+#: js/ContractEditDialog.js:70
 msgid "Please use a decimal number here!"
 msgstr "Bitte benutzen Sie eine Dezimalzahl!"
 
-#: js/ContractEditDialog.js:151
+#: js/ContractEditDialog.js:146
 msgid "Contract Contact"
 msgstr "Kontakt für Vertrag"
 
-#: js/ContractEditDialog.js:163
+#: js/ContractEditDialog.js:158
 msgid "Account Manager"
 msgstr "Konto Manager"
 
-#: js/ContractEditDialog.js:183
-msgid "Company"
-msgstr "Firma"
-
-#: Controller/Contract.php:83
+#: Controller/NumberableAbstract.php:60
 msgid "The number you have tried to set is already in use!"
 msgstr "Diese Nummer ist bereits vergeben!"
 
-msgid "manage cost centers"
-msgstr "Kostenstellen verwalten"
+#: Config.php:37
+msgid "Contract Number Creation"
+msgstr "Vertragsnummer-Erstellung"
 
-msgid "add, edit and delete cost centers"
-msgstr "Kostenstellen hinzufügen, bearbeiten und löschen"
+#: Config.php:39
+msgid "Should the contract number be set manually or be auto-created?"
+msgstr "Soll die Vertragsnummer manuell gesetzt oder autmatisch erstellt werden?"
 
-msgid "Cost Center"
-msgid_plural "Cost Centers"
-msgstr[0] "Kostenstelle"
-msgstr[1] "Kostenstellen"
+#: Config.php:42
+msgid "automatically"
+msgstr "automatisch"
+
+#: Config.php:43
+msgid "manually"
+msgstr "manuell"
+
+#: Config.php:50
+msgid "Contract Number Validation"
+msgstr "Vertragsnummer-Validierung"
+
+#: Config.php:52
+msgid "The Number can be validated as text or number."
+msgstr "Die Vertragsnummer kann als Text oder Nummer validiert werden."
+
+#: Config.php:56
+msgid "Text"
+msgstr "Text"
+
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:63
+msgid "My Products"
+msgstr "Meine Produkte"
+
+#: Setup/Initialize.php:35 Setup/Update/Release5.php:64
+msgid "Products created by myself"
+msgstr "Von mir erstellte Produkte"
+
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:84
+msgid "My Contracts"
+msgstr "Meine Aufträge"
+
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:85
+msgid "Contracts created by myself"
+msgstr "Von mir erstellte Aufträge"
+
+#: Setup/Update/Release8.php:190 Setup/Update/Release8.php:527
+msgid "Status"
+msgstr "Status"
+
+#: Setup/Update/Release8.php:196 Setup/Update/Release8.php:533
+msgid "Cleared"
+msgstr "Abgerechnet"
+
+#: Setup/Update/Release8.php:202 Setup/Update/Release8.php:539
+msgid "Cleared In"
+msgstr ""
+
+#~ msgid "Contract Status Available"
+#~ msgstr "Verfügbare Vertragsstatus"
+
+#~ msgid "Possible Contract status. Please note that additional contract status might impact other Sales systems on export or syncronisation."
+#~ msgstr "Mögliche Vertragsstatuswerte. Bitte beachten Sie, dass Änderungen an dieser Stelle Auswirkungen auf Export und Synchronisation haben können."
+
+#~ msgid "Contract Cleared State Available"
+#~ msgstr "Verfügbare Abgerechnetstatus für Verträge"
+
+#~ msgid "Possible Contract cleared states."
+#~ msgstr "Mögliche Werte für Abgerechnetstatus"
+
+#~ msgid "Tags"
+#~ msgstr "Tags"
+
+#~ msgid "Contract number"
+#~ msgstr "Vertragsnummer"
+
+#~ msgid "Cleared in"
+#~ msgstr "Abgerechnet in"
+
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "Vertragsliste"
+#~ msgstr[1] "Vertragslisten"
+
+#~ msgid "Quick Search"
+#~ msgstr "Schnellsuche"
+
+#~ msgid "Product name"
+#~ msgstr "Produktname"
+
+#~ msgid "Creator"
+#~ msgstr "Ersteller"
+
+#~ msgid "Contracts"
+#~ msgid_plural "Contracts"
+#~ msgstr[0] "Vertrag"
+#~ msgstr[1] "Verträge"
+
+#~ msgid "Contract name"
+#~ msgstr "Auftragsname"
+
+#~ msgid "Last Modified Time"
+#~ msgstr "Letztes Modifikationsdatum"
+
+#~ msgid "Last Modified By"
+#~ msgstr "Zuletzt geändert von"
+
+#~ msgid "Creation Time"
+#~ msgstr "Angelegt am"
+
+#~ msgid "Created By"
+#~ msgstr "Angelegt von"
+
+#~ msgid "CostCenter"
+#~ msgid_plural "CostCenters"
+#~ msgstr[0] "Kostenstelle"
+#~ msgstr[1] "Kostenstellen"
+
+#~ msgid "All CostCenters"
+#~ msgid_plural "All CostCenters"
+#~ msgstr[0] "Alle Konstenstellen"
+#~ msgstr[1] "Alle Konstenstellen"
+
+#~ msgid "Company"
+#~ msgstr "Firma"

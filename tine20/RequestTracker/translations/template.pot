@@ -13,42 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/StatusCombo.js:25
-msgid "New"
-msgstr ""
-
-#: js/StatusCombo.js:26
-msgid "Open"
-msgstr ""
-
-#: js/StatusCombo.js:27
-msgid "Stalled"
-msgstr ""
-
-#: js/StatusCombo.js:28
-msgid "Waiting"
-msgstr ""
-
-#: js/StatusCombo.js:29
-msgid "Pending"
-msgstr ""
-
-#: js/StatusCombo.js:30
-msgid "Resolved"
-msgstr ""
-
-#: js/StatusCombo.js:31
-msgid "Rejected"
-msgstr ""
-
-#: js/StatusCombo.js:32
-msgid "Deleted"
-msgstr ""
-
-#: js/StatusCombo.js:50 js/TicketGridPanel.js:90
-msgid "Status"
-msgstr ""
-
 #: js/TreePanel.js:23
 msgid "All Queues"
 msgstr ""
@@ -83,10 +47,46 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+#: js/TicketGridPanel.js:90 js/StatusCombo.js:50
+msgid "Status"
+msgstr ""
+
 #: js/TicketGridPanel.js:96
 msgid "Final Priority"
 msgstr ""
 
 #: js/TicketGridPanel.js:102
 msgid "Due"
+msgstr ""
+
+#: js/StatusCombo.js:25
+msgid "New"
+msgstr ""
+
+#: js/StatusCombo.js:26
+msgid "Open"
+msgstr ""
+
+#: js/StatusCombo.js:27
+msgid "Stalled"
+msgstr ""
+
+#: js/StatusCombo.js:28
+msgid "Waiting"
+msgstr ""
+
+#: js/StatusCombo.js:29
+msgid "Pending"
+msgstr ""
+
+#: js/StatusCombo.js:30
+msgid "Resolved"
+msgstr ""
+
+#: js/StatusCombo.js:31
+msgid "Rejected"
+msgstr ""
+
+#: js/StatusCombo.js:32
+msgid "Deleted"
 msgstr ""

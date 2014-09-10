@@ -13,13 +13,86 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/DownloadLinkDialog.js:52
-msgid "Node Download Links"
+#: Controller.php:102
+#, python-format
+msgid "%s's personal files"
 msgstr ""
 
-#: js/DownloadLinkDialog.js:83
-#, python-brace-format
-msgid "Sieve Filter Rules for {0}"
+#: Acl/Rights.php:103
+msgid "manage shared folders"
+msgstr ""
+
+#: Acl/Rights.php:104
+msgid "Create new shared folders"
+msgstr ""
+
+#: Acl/Rights.php:107
+msgid "Manage anonymous download links"
+msgstr ""
+
+#: Acl/Rights.php:108
+msgid "Allow to see, add and delete download links of files and folders"
+msgstr ""
+
+#: js/NodeEditDialog.js:49 js/Filemanager.js:44 js/NodeGridPanel.js:346
+msgid "Save locally"
+msgstr ""
+
+#: js/NodeEditDialog.js:93
+msgid "Public Links"
+msgstr ""
+
+#: js/NodeEditDialog.js:107 js/NodeEditDialog.js:120
+msgid "Node"
+msgstr ""
+
+#: js/NodeEditDialog.js:126 js/NodeGridPanel.js:135
+msgid "Name"
+msgstr ""
+
+#: js/NodeEditDialog.js:133 js/Model.js:527
+msgid "Type"
+msgstr ""
+
+#: js/NodeEditDialog.js:141 js/DownloadLinkGridPanel.js:244
+#: js/NodeGridPanel.js:189
+msgid "Created By"
+msgstr ""
+
+#: js/NodeEditDialog.js:144 js/DownloadLinkGridPanel.js:252 js/Model.js:529
+#: js/NodeGridPanel.js:181
+msgid "Creation Time"
+msgstr ""
+
+#: js/NodeEditDialog.js:153
+msgid "Modified By"
+msgstr ""
+
+#: js/NodeEditDialog.js:156
+msgid "Last Modified"
+msgstr ""
+
+#: js/NodeEditDialog.js:179
+msgid "Description"
+msgstr ""
+
+#: js/NodeEditDialog.js:193
+msgid "Enter description"
+msgstr ""
+
+#: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:702
+#: js/NodeGridPanel.js:854
+msgid "Upload Failed"
+msgstr ""
+
+#: js/NodeTreePanel.js:661 js/NodeGridPanel.js:703
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size:"
+msgstr ""
+
+#: js/NodeTreePanel.js:771 js/NodeGridPanel.js:855
+msgid "Putting files in this folder is not allowed!"
 msgstr ""
 
 #: js/DownloadLinkGridPanel.js:63
@@ -46,16 +119,6 @@ msgstr ""
 msgid "Url"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:244 js/NodeEditDialog.js:141
-#: js/NodeGridPanel.js:189
-msgid "Created By"
-msgstr ""
-
-#: js/DownloadLinkGridPanel.js:252 js/Model.js:529 js/NodeEditDialog.js:144
-#: js/NodeGridPanel.js:181
-msgid "Creation Time"
-msgstr ""
-
 #: js/DownloadLinkGridPanel.js:260
 msgid "Expiration Time"
 msgstr ""
@@ -66,25 +129,6 @@ msgstr ""
 
 #: js/DownloadLinkGridPanel.js:277 js/NodeGridPanel.js:203
 msgid "Last Modified By"
-msgstr ""
-
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr ""
-
-#: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:702
-#: js/NodeGridPanel.js:854
-msgid "Upload Failed"
-msgstr ""
-
-#: js/NodeTreePanel.js:661 js/NodeGridPanel.js:703
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size: "
-msgstr ""
-
-#: js/NodeTreePanel.js:771 js/NodeGridPanel.js:855
-msgid "Putting files in this folder is not allowed!"
 msgstr ""
 
 #: js/GridContextMenu.js:34
@@ -108,10 +152,6 @@ msgstr ""
 
 #: js/Filemanager.js:36
 msgid "Filemanager"
-msgstr ""
-
-#: js/Filemanager.js:44 js/NodeEditDialog.js:49 js/NodeGridPanel.js:346
-msgid "Save locally"
 msgstr ""
 
 #: js/Filemanager.js:91
@@ -139,6 +179,10 @@ msgstr ""
 
 #: js/Filemanager.js:148
 msgid "Item with this name already exists!"
+msgstr ""
+
+#: js/PathFilterModel.js:50
+msgid "path"
 msgstr ""
 
 #: js/Model.js:40
@@ -171,10 +215,6 @@ msgstr ""
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:527 js/NodeEditDialog.js:133
-msgid "Type"
-msgstr ""
-
 #: js/Model.js:528 js/NodeGridPanel.js:149
 msgid "Contenttype"
 msgstr ""
@@ -185,32 +225,13 @@ msgid_plural "Download Links"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/NodeEditDialog.js:93
-msgid "Public Links"
+#: js/DownloadLinkDialog.js:52
+msgid "Node Download Links"
 msgstr ""
 
-#: js/NodeEditDialog.js:107 js/NodeEditDialog.js:120
-msgid "Node"
-msgstr ""
-
-#: js/NodeEditDialog.js:126 js/NodeGridPanel.js:135
-msgid "Name"
-msgstr ""
-
-#: js/NodeEditDialog.js:153
-msgid "Modified By"
-msgstr ""
-
-#: js/NodeEditDialog.js:156
-msgid "Last Modified"
-msgstr ""
-
-#: js/NodeEditDialog.js:179
-msgid "Description"
-msgstr ""
-
-#: js/NodeEditDialog.js:193
-msgid "Enter description"
+#: js/DownloadLinkDialog.js:83
+#, python-brace-format
+msgid "Sieve Filter Rules for {0}"
 msgstr ""
 
 #: js/NodeGridPanel.js:127
@@ -295,25 +316,4 @@ msgstr ""
 
 #: Controller/Node.php:332
 msgid "Other users folders"
-msgstr ""
-
-#: Acl/Rights.php:103
-msgid "manage shared folders"
-msgstr ""
-
-#: Acl/Rights.php:104
-msgid "Create new shared folders"
-msgstr ""
-
-#: Acl/Rights.php:107
-msgid "Manage anonymous download links"
-msgstr ""
-
-#: Acl/Rights.php:108
-msgid "Allow to see, add and delete download links of files and folders"
-msgstr ""
-
-#: Controller.php:102
-#, python-format
-msgid "%s's personal files"
 msgstr ""

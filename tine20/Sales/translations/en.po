@@ -13,135 +13,116 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:103
+#: Controller.php:83 Controller.php:103
+msgid "You do not have admin rights on Sales"
+msgstr "You do not have admin rights on Sales"
+
+#: Acl/Rights.php:110
 msgid "manage products"
 msgstr "manage products"
 
-#: Acl/Rights.php:104
+#: Acl/Rights.php:111
 msgid "add, edit and delete products"
 msgstr "add, edit and delete products"
 
-#: Controller/Contract.php:83
-msgid "The number you have tried to set is already in use!"
-msgstr "The number you have tried to set is already in use!"
+#: Acl/Rights.php:114
+msgid "manage cost centers"
+msgstr "manage cost centers"
 
-#: Setup/Initialize.php:34 Setup/Update/Release5.php:63
-msgid "My Products"
-msgstr "My Products"
+#: Acl/Rights.php:115
+msgid "add, edit and delete cost centers"
+msgstr "add, edit and delete cost centers"
 
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:64
-msgid "Products created by myself"
-msgstr "Products created by myself"
-
-#: Setup/Initialize.php:55 Setup/Update/Release5.php:84
-msgid "My Contracts"
-msgstr "My Contracts"
-
-#: Setup/Initialize.php:56 Setup/Update/Release5.php:85
-msgid "Contracts created by myself"
-msgstr "Contracts created by myself"
-
-#: Setup/Update/Release6.php:33
-msgid "Executive"
-msgstr "Executive"
-
-#: Setup/Update/Release6.php:34
-msgid "Sales"
-msgstr "Sales"
-
-#: Setup/Update/Release6.php:35
-msgid "Finance"
-msgstr "Finance"
-
-#: Setup/Update/Release6.php:36
-msgid "Manufacturing"
-msgstr "Manufacturing"
-
-#: Setup/Update/Release6.php:37
-msgid "Human Resources"
-msgstr "Human Resources"
-
-#: Config.php:56
-msgid "Contract Number Creation"
-msgstr "Contract Number Creation"
-
-#: Config.php:58
-msgid "Should the contract number be set manually or be auto-created?"
-msgstr "Should the contract number be set manually or be auto-created?"
-
-#: Config.php:61
-msgid "automatically"
-msgstr "automatically"
-
-#: Config.php:62
-msgid "manually"
-msgstr "manually"
-
-#: Config.php:69
-msgid "Contract Number Validation"
-msgstr "Contract Number Validation"
-
-#: Config.php:71
-msgid "The Number can be validated as text or number."
-msgstr "The Number can be validated as text or number."
-
-#: Config.php:74 js/ContractEditDialog.js:136
-msgid "Number"
-msgstr "Number"
-
-#: Config.php:75
-msgid "Text"
-msgstr "Text"
-
-#: Config.php:82
-msgid "Contract Status Available"
-msgstr "Contract Status Available"
-
-#: Config.php:84
-msgid ""
-"Possible Contract status. Please note that additional contract status might "
-"impact other Sales systems on export or syncronisation."
-msgstr ""
-"Possible Contract status. Please note that additional contract status might "
-"impact other Sales systems on export or syncronisation."
-
-#: Config.php:92
-msgid "Contract Cleared State Available"
-msgstr "Contract Cleared State Available"
-
-#: Config.php:94
-msgid "Possible Contract cleared states."
-msgstr "Possible Contract cleared states."
-
-#: Config.php:102 js/Models.js:211
+#: Model/Division.php:34
 msgid "Division"
 msgid_plural "Divisions"
 msgstr[0] "Division"
 msgstr[1] "Divisions"
 
-#: Config.php:104
-msgid "The Division."
-msgstr "The Division."
-
-#: js/ContractGridPanel.js:78
-msgid "Contract number"
-msgstr "Contract number"
-
-#: js/ContractGridPanel.js:84 js/ContractEditDialog.js:143
+#: Model/Division.php:50 Model/Contract.php:84 js/DivisionEditDialog.js:81
+#: js/ContractEditDialog.js:129
 msgid "Title"
 msgstr "Title"
 
-#: js/ContractGridPanel.js:90 js/Models.js:144 js/ContractEditDialog.js:176
-msgid "Status"
-msgstr "Status"
+#: Model/Contract.php:44
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Contract"
+msgstr[1] "Contracts"
 
-#: js/ContractGridPanel.js:97 js/Models.js:151 js/ContractEditDialog.js:183
-msgid "Cleared"
-msgstr "Cleared"
+#: Model/Contract.php:65
+msgid "Cost Center"
+msgstr "Cost Center"
 
-#: js/ContractGridPanel.js:104 js/Models.js:157 js/ContractEditDialog.js:187
-msgid "Cleared in"
-msgstr "Cleared in"
+#: Model/Contract.php:79 Model/CostCenter.php:50 js/CostCenterEditDialog.js:82
+#: js/ContractEditDialog.js:122 Config.php:55
+msgid "Number"
+msgstr "Number"
+
+#: Model/Contract.php:89 Model/Product.php:55 js/ProductEditDialog.js:106
+#: js/ContractEditDialog.js:180
+msgid "Description"
+msgstr "Description"
+
+#: Model/Contract.php:105 js/ContractEditDialog.js:136
+msgid "Start Date"
+msgstr "Start Date"
+
+#: Model/Contract.php:109 js/ContractEditDialog.js:141
+msgid "End Date"
+msgstr "End Date"
+
+#: Model/Contract.php:120
+msgid "Responsible"
+msgstr "Responsible"
+
+#: Model/Contract.php:121
+msgid "Customer"
+msgstr "Customer"
+
+#: Model/Contract.php:122
+msgid "Partner"
+msgstr "Partner"
+
+#: Model/Contract.php:134 js/ContractEditDialog.js:169
+msgid "Lead Cost Center"
+msgstr "Lead Cost Center"
+
+#: Model/Contract.php:138
+msgid "Time Account"
+msgstr "Time Account"
+
+#: Model/Product.php:34
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Product"
+msgstr[1] "Products"
+
+#: Model/Product.php:50 js/ProductEditDialog.js:85
+msgid "Name"
+msgstr "Name"
+
+#: Model/Product.php:61 js/ProductEditDialog.js:91
+msgid "Price"
+msgstr "Price"
+
+#: Model/Product.php:65 js/ProductEditDialog.js:98
+msgid "Manufacturer"
+msgstr "Manufacturer"
+
+#: Model/Product.php:70 js/ProductEditDialog.js:102
+msgid "Category"
+msgstr "Category"
+
+#: Model/CostCenter.php:34
+msgid "Costcenter"
+msgid_plural "Costcenters"
+msgstr[0] "Costcenter"
+msgstr[1] "Costcenters"
+
+#: Model/CostCenter.php:57 js/CostCenterEditDialog.js:89
+msgid "Remark"
+msgstr "Remark"
 
 #: js/AdminPanel.js:61
 msgid "Cancel"
@@ -155,115 +136,82 @@ msgstr "OK"
 msgid "Loading..."
 msgstr "Loading..."
 
-#: js/ProductEditDialog.js:93 js/ProductGridPanel.js:120
-msgid "Name"
-msgstr "Name"
+#: js/ContractCostCenterFilterModel.js:32
+msgid "without CostCenter"
+msgstr "without CostCenter"
 
-#: js/ProductEditDialog.js:99 js/ProductGridPanel.js:124
-msgid "Price"
-msgstr "Price"
-
-#: js/ProductEditDialog.js:106 js/ProductGridPanel.js:121
-msgid "Manufacturer"
-msgstr "Manufacturer"
-
-#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:122
-msgid "Category"
-msgstr "Category"
-
-#: js/ProductEditDialog.js:114 js/ContractEditDialog.js:193
-#: js/ProductGridPanel.js:123
-msgid "Description"
-msgstr "Description"
-
-#: js/ProductEditDialog.js:115 js/ContractEditDialog.js:194
+#: js/ProductEditDialog.js:107 js/ContractEditDialog.js:181
 msgid "Enter description..."
 msgstr "Enter description..."
 
-#: js/Models.js:39
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Product"
-msgstr[1] "Products"
-
-#: js/Models.js:43 js/Models.js:214
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "record list"
-msgstr[1] "record lists"
-
-#: js/Models.js:77 js/Models.js:140
-msgid "Quick Search"
-msgstr "Quick Search"
-
-#: js/Models.js:78
-msgid "Product name"
-msgstr "Product name"
-
-#: js/Models.js:80 js/Models.js:142
-msgid "Creator"
-msgstr "Creator"
-
-#: js/Models.js:113
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Contract"
-msgstr[1] "Contracts"
-
-#: js/Models.js:117
-msgid "All Contracts"
-msgid_plural "contracts lists"
-msgstr[0] "All Contracts"
-msgstr[1] "contracts lists"
-
-#: js/Models.js:141
-msgid "Contract name"
-msgstr "Contract name"
-
-#: js/Models.js:183
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] "CostCenter"
-msgstr[1] "CostCenters"
-
-#: js/Models.js:186
-msgid "All CostCenters"
-msgid_plural "All CostCenters"
-msgstr[0] "All CostCenters"
-msgstr[1] "All CostCenters"
-
-#: js/ContractEditDialog.js:96
+#: js/ContractEditDialog.js:70
 msgid "Please use a decimal number here!"
 msgstr "Please use a decimal number here!"
 
-#: js/ContractEditDialog.js:149
-msgid "Contact Customer"
-msgstr "Contact Customer"
+#: js/ContractEditDialog.js:146
+msgid "Contract Contact"
+msgstr "Contract Contact"
 
-#: js/ContractEditDialog.js:161
-msgid "Contact Responsible"
-msgstr "Contact Responsible"
+#: js/ContractEditDialog.js:158
+msgid "Account Manager"
+msgstr "Account Manager"
 
-#: js/ContractEditDialog.js:170
-msgid "Company"
-msgstr "Company"
+#: Controller/NumberableAbstract.php:60
+msgid "The number you have tried to set is already in use!"
+msgstr "The number you have tried to set is already in use!"
 
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr "Tags"
+#: Config.php:37
+msgid "Contract Number Creation"
+msgstr "Contract Number Creation"
 
-#: Controller.php:83 Controller.php:103
-msgid "You do not have admin rights on Sales"
-msgstr "You do not have admin rights on Sales"
+#: Config.php:39
+msgid "Should the contract number be set manually or be auto-created?"
+msgstr "Should the contract number be set manually or be auto-created?"
 
-#: Model/Contract.php:92
-msgid "Responsible"
-msgstr "Responsible"
+#: Config.php:42
+msgid "automatically"
+msgstr "automatically"
 
-#: Model/Contract.php:93
-msgid "Customer"
-msgstr "Customer"
+#: Config.php:43
+msgid "manually"
+msgstr "manually"
 
-#: Model/Contract.php:94
-msgid "Partner"
-msgstr "Partner"
+#: Config.php:50
+msgid "Contract Number Validation"
+msgstr "Contract Number Validation"
+
+#: Config.php:52
+msgid "The Number can be validated as text or number."
+msgstr "The Number can be validated as text or number."
+
+#: Config.php:56
+msgid "Text"
+msgstr "Text"
+
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:63
+msgid "My Products"
+msgstr "My Products"
+
+#: Setup/Initialize.php:35 Setup/Update/Release5.php:64
+msgid "Products created by myself"
+msgstr "Products created by myself"
+
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:84
+msgid "My Contracts"
+msgstr "My Contracts"
+
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:85
+msgid "Contracts created by myself"
+msgstr "Contracts created by myself"
+
+#: Setup/Update/Release8.php:190 Setup/Update/Release8.php:527
+msgid "Status"
+msgstr "Status"
+
+#: Setup/Update/Release8.php:196 Setup/Update/Release8.php:533
+msgid "Cleared"
+msgstr "Cleared"
+
+#: Setup/Update/Release8.php:202 Setup/Update/Release8.php:539
+msgid "Cleared In"
+msgstr "Cleared In"

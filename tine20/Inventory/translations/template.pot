@@ -88,70 +88,24 @@ msgstr ""
 msgid "Depreciate"
 msgstr ""
 
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
+#: js/InventoryItemGridPanel.js:36
+msgid "Export Inventory"
 msgstr ""
 
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
+#: js/InventoryItemGridPanel.js:45
+msgid "Export as ODS"
 msgstr ""
 
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid ""
-"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
+#: js/InventoryItemGridPanel.js:52
+msgid "Export as CSV"
 msgstr ""
 
-#: Config.php:31
-msgid "Inventory Status Available"
+#: js/InventoryItemGridPanel.js:59
+msgid "Export as ..."
 msgstr ""
 
-#: Config.php:33
-msgid "Possible status."
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr ""
-
-#: Setup/Update/Release7.php:127 Setup/Initialize.php:65
-msgid "All Inventory Items"
-msgstr ""
-
-#: Setup/Update/Release7.php:128 Setup/Initialize.php:66
-msgid "All existing Inventory Items"
-msgstr ""
-
-#: Setup/Initialize.php:33
-msgid "ordered"
-msgstr ""
-
-#: Setup/Initialize.php:34
-msgid "available"
-msgstr ""
-
-#: Setup/Initialize.php:35
-msgid "defect"
-msgstr ""
-
-#: Setup/Initialize.php:36
-msgid "missing"
-msgstr ""
-
-#: Setup/Initialize.php:37
-msgid "removed"
-msgstr ""
-
-#: Setup/Initialize.php:38
-msgid "unknown"
-msgstr ""
-
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default container for new items"
+#: js/InventoryItemGridPanel.js:71
+msgid "Import items"
 msgstr ""
 
 #: js/InventoryItemEditDialog.js:42
@@ -190,22 +144,68 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:36
-msgid "Export Inventory"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:45
-msgid "Export as ODS"
+#: Preference.php:61
+msgid "The default container for new items"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:52
-msgid "Export as CSV"
+#: Config.php:31
+msgid "Inventory Status Available"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:59
-msgid "Export as ..."
+#: Config.php:33
+msgid "Possible status."
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:71
-msgid "Import items"
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
+msgstr ""
+
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid ""
+"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr ""
+
+#: Setup/Initialize.php:33
+msgid "ordered"
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "available"
+msgstr ""
+
+#: Setup/Initialize.php:35
+msgid "defect"
+msgstr ""
+
+#: Setup/Initialize.php:36
+msgid "missing"
+msgstr ""
+
+#: Setup/Initialize.php:37
+msgid "removed"
+msgstr ""
+
+#: Setup/Initialize.php:38
+msgid "unknown"
+msgstr ""
+
+#: Setup/Initialize.php:65 Setup/Update/Release7.php:127
+msgid "All Inventory Items"
+msgstr ""
+
+#: Setup/Initialize.php:66 Setup/Update/Release7.php:128
+msgid "All existing Inventory Items"
 msgstr ""

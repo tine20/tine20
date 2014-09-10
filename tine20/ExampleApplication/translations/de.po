@@ -16,83 +16,71 @@ msgstr ""
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:31
-msgid "Status Available"
-msgstr "Verfügbare Status"
-
-#: Config.php:33
-msgid ""
-"Possible status. Please note that additional status might impact other "
-"ExampleApplication systems on export or syncronisation."
-msgstr ""
-"Mögliche Statuswerte. Bitte beachten Sie, dass Änderungen an dieser Stelle "
-"Auswirkungen auf Export und Synchronisation haben können."
-
-#: Controller.php:74
+#: Controller.php:79
 #, python-format
 msgid "%s's personal example records"
 msgstr "%s persönliche Beispieleinträge"
 
-#: js/ExampleApplication.js:24
-msgid "Example Application test"
-msgstr "Beispiel Anwendung Test"
-
-#: js/ExampleRecordEditDialog.js:87
-msgid "ExampleRecord"
-msgstr "BeispielEintrag"
-
-#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:83
-msgid "Name"
-msgstr "Name"
-
-#: js/ExampleRecordEditDialog.js:110 js/ExampleRecordGridPanel.js:89
-#: js/Model.js:71
-msgid "Status"
-msgstr "Status"
-
-#: js/ExampleRecordGridPanel.js:96
-msgid "Title"
-msgstr "Titel"
-
-#: js/ExampleRecordGridPanel.js:102
-msgid "Budget"
-msgstr "Budget"
-
-#: js/ExampleRecordGridPanel.js:126
-msgid "Show closed"
-msgstr "Zeige geschlossene"
-
-#: js/Model.js:31
+#: Model/ExampleRecord.php:34
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] "Beispieleintrag"
 msgstr[1] "Beispieleinträge"
 
-#: js/Model.js:35
+#: Model/ExampleRecord.php:35
+msgid "example records"
+msgstr ""
+
+#: Model/ExampleRecord.php:38
+#, fuzzy
 msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] "Liste von Beispieleinträgen"
-msgstr[1] "Listen von Beispieleinträgen"
+msgstr "Liste von Beispieleinträgen"
 
-#: js/Model.js:69
-msgid "Quick Search"
-msgstr "Schnellsuche"
+#: Model/ExampleRecord.php:39
+msgid "example record lists"
+msgstr ""
 
-#: js/Model.js:79
-msgid "Last modified"
-msgstr "Letzte Bearbeitung"
+#: Model/ExampleRecord.php:55 js/ExampleRecordEditDialog.js:67
+#: js/ExampleDetailsPanel.js:74
+msgid "Name"
+msgstr "Name"
 
-#: js/Model.js:80
-msgid "Last modifier"
-msgstr "Letzter Bearbeiter"
+#: Model/ExampleRecord.php:60 js/ExampleRecordEditDialog.js:73
+#: js/ExampleDetailsPanel.js:78
+msgid "Status"
+msgstr "Status"
 
-#: js/Model.js:81
-msgid "Creation Time"
-msgstr "Erstelldatum"
+#: js/ExampleRecordEditDialog.js:50
+msgid "ExampleRecord"
+msgstr "BeispielEintrag"
 
-#: js/Model.js:82
-msgid "Creator"
-msgstr "Ersteller"
+#: js/ExampleDetailsPanel.js:56
+msgid "Total Example Records"
+msgstr ""
+
+#: js/Example.js:23
+msgid "New Example"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Example Record Container"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default container for new records"
+msgstr ""
+
+#: Config.php:31
+msgid "Status Available"
+msgstr "Verfügbare Status"
+
+#: Config.php:33
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgstr "Mögliche Statuswerte. Bitte beachten Sie, dass Änderungen an dieser Stelle Auswirkungen auf Export und Synchronisation haben können."
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
+msgstr "BeispielAnwendung"
 
 #: Setup/Initialize.php:33
 msgid "Completed"
@@ -106,53 +94,76 @@ msgstr "Abgebrochen"
 msgid "In process"
 msgstr "In Bearbeitung"
 
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
-msgstr "BeispielAnwendung"
+#~ msgid "Example Application test"
+#~ msgstr "Beispiel Anwendung Test"
 
-msgid "Example Application"
-msgstr "Beispielanwendung"
+#~ msgid "Title"
+#~ msgstr "Titel"
 
-msgid "ExampleRecords"
-msgstr "BeispielEinträge"
+#~ msgid "Budget"
+#~ msgstr "Budget"
 
-msgid "All ExampleRecords"
-msgstr "Alle BeispielEinträge"
+#~ msgid "Show closed"
+#~ msgstr "Zeige geschlossene"
 
-msgid "Description"
-msgstr "Beschreibung"
+#~ msgid "Quick Search"
+#~ msgstr "Schnellsuche"
 
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Eintrags Liste"
-msgstr[1] "Eintrags Listen"
+#~ msgid "Last modified"
+#~ msgstr "Letzte Bearbeitung"
 
-msgid "Number"
-msgstr "Zahl"
+#~ msgid "Last modifier"
+#~ msgstr "Letzter Bearbeiter"
 
-msgid "Unit"
-msgstr "Einheit"
+#~ msgid "Creation Time"
+#~ msgstr "Erstelldatum"
 
-msgid "Unit Price"
-msgstr "Preis pro Einheit"
+#~ msgid "Creator"
+#~ msgstr "Ersteller"
 
-msgid "Timesheets are billable"
-msgstr "Stundenzettel sind abrechenbar"
+#~ msgid "Example Application"
+#~ msgstr "Beispielanwendung"
 
-msgid "closed"
-msgstr "geschlossen"
+#~ msgid "ExampleRecords"
+#~ msgstr "BeispielEinträge"
 
-msgid "open"
-msgstr "offen"
+#~ msgid "All ExampleRecords"
+#~ msgstr "Alle BeispielEinträge"
 
-msgid "Billed"
-msgstr "Berechnet"
+#~ msgid "Description"
+#~ msgstr "Beschreibung"
 
-msgid "not yet billed"
-msgstr "noch nicht berechnet"
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "Eintrags Liste"
+#~ msgstr[1] "Eintrags Listen"
 
-msgid "to bill"
-msgstr "zu berechnen"
+#~ msgid "Number"
+#~ msgstr "Zahl"
 
-msgid "billed"
-msgstr "berechnet"
+#~ msgid "Unit"
+#~ msgstr "Einheit"
+
+#~ msgid "Unit Price"
+#~ msgstr "Preis pro Einheit"
+
+#~ msgid "Timesheets are billable"
+#~ msgstr "Stundenzettel sind abrechenbar"
+
+#~ msgid "closed"
+#~ msgstr "geschlossen"
+
+#~ msgid "open"
+#~ msgstr "offen"
+
+#~ msgid "Billed"
+#~ msgstr "Berechnet"
+
+#~ msgid "not yet billed"
+#~ msgstr "noch nicht berechnet"
+
+#~ msgid "to bill"
+#~ msgstr "zu berechnen"
+
+#~ msgid "billed"
+#~ msgstr "berechnet"

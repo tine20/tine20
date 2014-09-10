@@ -13,17 +13,41 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Model/Attender.php:156
-msgid "unknown"
+#: Controller.php:149
+#, python-format
+msgid "%s's personal calendar"
 msgstr ""
 
-#: Model/Attender.php:450
-msgid ""
-"This contact has been automatically added by the system as an event attender"
+#: Exception/InvalidUrl.php:21
+msgid "Invalid URL given"
 msgstr ""
 
-#: Model/Attender.php:453
-msgid "The email address has been shortened:"
+#: Exception/InvalidUrl.php:26
+msgid "The URL you used is invalid. Please use a valid one!"
+msgstr ""
+
+#: Acl/Rights.php:103
+msgid "manage shared calendars"
+msgstr ""
+
+#: Acl/Rights.php:104
+msgid "Create new shared calendars"
+msgstr ""
+
+#: Acl/Rights.php:107
+msgid "manage shared calendars favorites"
+msgstr ""
+
+#: Acl/Rights.php:108
+msgid "Create or update shared calendars favorites"
+msgstr ""
+
+#: Acl/Rights.php:111
+msgid "manage resources"
+msgstr ""
+
+#: Acl/Rights.php:112
+msgid "All Rights to administrate resources"
 msgstr ""
 
 #: Model/Rrule.php:343
@@ -116,6 +140,19 @@ msgstr ""
 msgid "th"
 msgstr ""
 
+#: Model/Attender.php:156
+msgid "unknown"
+msgstr ""
+
+#: Model/Attender.php:450
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+
+#: Model/Attender.php:453
+msgid "The email address has been shortened:"
+msgstr ""
+
 #: Model/Event.php:367
 msgid "Start"
 msgstr ""
@@ -132,18 +169,18 @@ msgstr ""
 msgid "Classification"
 msgstr ""
 
-#: Model/Event.php:371 js/EventEditDialog.js:264 js/GridView.js:161
-#: js/Model.js:278 js/ResourceEditDialog.js:84
+#: Model/Event.php:371 js/ResourceEditDialog.js:84 js/EventEditDialog.js:264
+#: js/Model.js:278 js/GridView.js:161
 msgid "Description"
 msgstr ""
 
-#: Model/Event.php:372 js/EventDetailsPanel.js:280 js/EventEditDialog.js:132
-#: js/GridView.js:148 js/Model.js:277 js/ResourcesGridPanel.js:54
+#: Model/Event.php:372 js/ResourcesGridPanel.js:54 js/EventDetailsPanel.js:280
+#: js/EventEditDialog.js:132 js/Model.js:277 js/GridView.js:148
 msgid "Location"
 msgstr ""
 
 #: Model/Event.php:373 js/EventDetailsPanel.js:284 js/EventEditDialog.js:327
-#: js/GridView.js:154 js/Model.js:297 js/PerspectiveCombo.js:127
+#: js/Model.js:297 js/GridView.js:154 js/PerspectiveCombo.js:127
 msgid "Organizer"
 msgstr ""
 
@@ -151,14 +188,14 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-#: Model/Event.php:375 js/EventEditDialog.js:186 js/GridView.js:173
-#: js/AttendeeGridPanel.js:212 js/ContactEventsGridPanel.js:126
+#: Model/Event.php:375 js/ContactEventsGridPanel.js:126
+#: js/EventEditDialog.js:186 js/GridView.js:173 js/AttendeeGridPanel.js:212
 #: js/AddToEventPanel.js:88
 msgid "Status"
 msgstr ""
 
-#: Model/Event.php:376 js/EventEditDialog.js:87 js/GridView.js:143
-#: js/ContactEventsGridPanel.js:113 js/Model.js:276
+#: Model/Event.php:376 js/ContactEventsGridPanel.js:113
+#: js/EventEditDialog.js:87 js/Model.js:276 js/GridView.js:143
 msgid "Summary"
 msgstr ""
 
@@ -186,149 +223,342 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: Setup/setup.xml:4 js/Model.js:72 js/Calendar.js:39
-msgid "Calendar"
-msgid_plural "Calendars"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Setup/Initialize.php:34 Setup/Update/Release3.php:164
-msgid "All events I attend"
+#: js/calendarRenderer.js:30
+msgid "This event is originally stored in a calendar you don't have access to."
 msgstr ""
 
-#: Setup/Initialize.php:47
-msgid "Awaiting response"
+#: js/calendarRenderer.js:31
+#, python-brace-format
+msgid "This event is originally stored in {0}"
 msgstr ""
 
-#: Setup/Initialize.php:48
-msgid "Events I have not yet responded to"
+#: js/calendarRenderer.js:33
+#, python-brace-format
+msgid "This event is additionally displayed in your personal calendar {0}"
 msgstr ""
 
-#: Setup/Initialize.php:63
-msgid "Declined events"
+#: js/AttendeeFilterModel.js:35 js/EventDetailsPanel.js:302 js/Model.js:445
+#: js/AttendeeGridPanel.js:89 js/WestPanel.js:90
+msgid "Attendee"
 msgstr ""
 
-#: Setup/Initialize.php:64
-msgid "Events I have declined"
+#: js/AttendeeFilterModel.js:100
+msgid "Select Attendee"
 msgstr ""
 
-#: Setup/Initialize.php:77
-msgid "I'm organizer"
+#: js/RrulePanel.js:28
+msgid "Recurrances"
 msgstr ""
 
-#: Setup/Initialize.php:78
-msgid "Events I'm the organizer of"
+#: js/RrulePanel.js:36
+msgid "No recurring rule defined"
 msgstr ""
 
-#: Setup/Initialize.php:98 Setup/Update/Release5.php:77
-msgid "Required"
+#: js/RrulePanel.js:72
+msgid "None"
 msgstr ""
 
-#: Setup/Initialize.php:99 Setup/Update/Release5.php:78
-msgid "Optional"
+#: js/RrulePanel.js:86
+msgid "Weekly"
 msgstr ""
 
-#: Setup/Initialize.php:112 Setup/Update/Release5.php:91
-msgid "No response"
+#: js/RrulePanel.js:93
+msgid "Monthly"
 msgstr ""
 
-#: Setup/Initialize.php:113 Setup/Update/Release5.php:92
-msgid "Accepted"
+#: js/RrulePanel.js:100
+msgid "Yearly"
 msgstr ""
 
-#: Setup/Initialize.php:114 Setup/Update/Release5.php:93
-msgid "Declined"
+#: js/RrulePanel.js:178
+msgid "Exceptions of reccuring events can't have recurrences themselves."
 msgstr ""
 
-#: Setup/Initialize.php:115 Setup/Update/Release5.php:94
-#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:206 js/GridView.js:135
-msgid "Tentative"
+#: js/RrulePanel.js:240
+msgid "at"
 msgstr ""
 
-#: Acl/Rights.php:103
-msgid "manage shared calendars"
+#: js/RrulePanel.js:252
+msgid "never"
 msgstr ""
 
-#: Acl/Rights.php:104
-msgid "Create new shared calendars"
+#: js/RrulePanel.js:261
+#, python-brace-format
+msgid "after {0} occurrences"
 msgstr ""
 
-#: Acl/Rights.php:107
-msgid "manage shared calendars favorites"
+#: js/RrulePanel.js:380
+msgid "Until has to be after event start"
 msgstr ""
 
-#: Acl/Rights.php:108
-msgid "Create or update shared calendars favorites"
+#: js/RrulePanel.js:411
+#, python-brace-format
+msgid "Every {0}. Day"
 msgstr ""
 
-#: Acl/Rights.php:111
-msgid "manage resources"
+#: js/RrulePanel.js:444
+#, python-brace-format
+msgid "Every {0}. Week at"
 msgstr ""
 
-#: Acl/Rights.php:112
-msgid "All Rights to administrate resources"
+#: js/RrulePanel.js:514
+#, python-brace-format
+msgid "Every {0}. Month"
 msgstr ""
 
-#: Import/definitions/cal_import_ical.xml:12
-msgid "Import iCal-files"
+#: js/RrulePanel.js:520 js/RrulePanel.js:569 js/RrulePanel.js:701
+#: js/RrulePanel.js:751
+msgid "at the"
 msgstr ""
 
-#: views/eventNotification.php:12
-msgid "Updates"
+#: js/RrulePanel.js:694
+#, python-brace-format
+msgid "Every {0}. Year"
 msgstr ""
 
-#: views/eventNotification.php:21
-msgid "This is an event series exception."
-msgstr ""
-
-#: views/eventNotification.php:25
-msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr ""
-
-#: views/eventNotification.php:32
-msgid "%1$s has been invited"
-msgstr ""
-
-#: views/eventNotification.php:37
-msgid "%1$s has been removed"
-msgstr ""
-
-#: views/eventNotification.php:44
-msgid "%1$s accepted invitation"
-msgstr ""
-
-#: views/eventNotification.php:48
-msgid "%1$s declined invitation"
-msgstr ""
-
-#: views/eventNotification.php:52
-msgid "Tentative response from %1$s"
-msgstr ""
-
-#: views/eventNotification.php:56
-msgid "No response from %1$s"
-msgstr ""
-
-#: views/eventNotification.php:59
-msgid "\"%2$s\" response from %1$s"
-msgstr ""
-
-#: views/eventNotification.php:68
-msgid "Event details"
-msgstr ""
-
-#: Controller.php:149
-#, python-format
-msgid "%s's personal calendar"
+#: js/RrulePanel.js:792 js/RrulePanel.js:800
+msgid "of"
 msgstr ""
 
 #: js/AdminPanel.js:45
 msgid "Manage Resources"
 msgstr ""
 
-#: js/EventDetailsPanel.js:28 js/AttendeeGridPanel.js:579
+#: js/CalendarSelectWidget.js:124
+msgid "Originally"
+msgstr ""
+
+#: js/ImportDialog.js:103
+msgid "Import Definition Success!"
+msgstr ""
+
+#: js/ImportDialog.js:104
+msgid ""
+"The Ical Import definition has been created successfully! Please wait some "
+"minutes to get the events synced."
+msgstr ""
+
+#: js/ImportDialog.js:122
+msgid "Choose Import File"
+msgstr ""
+
+#: js/ImportDialog.js:126
+msgid ""
+"Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr ""
+
+#: js/ImportDialog.js:130
+#, python-brace-format
+msgid "Select file containing your {0}"
+msgstr ""
+
+#: js/ImportDialog.js:145
+msgid "once"
+msgstr ""
+
+#: js/ImportDialog.js:146
+msgid "hourly"
+msgstr ""
+
+#: js/ImportDialog.js:147
+msgid "daily"
+msgstr ""
+
+#: js/ImportDialog.js:148
+msgid "weekly"
+msgstr ""
+
+#: js/ImportDialog.js:161
+msgid "Choose Remote Location"
+msgstr ""
+
+#: js/ImportDialog.js:165
+msgid "Please choose a remote location you want to add to Tine 2.0"
+msgstr ""
+
+#: js/ImportDialog.js:180
+msgid "Refresh time"
+msgstr ""
+
+#: js/ImportDialog.js:212
+msgid "General Settings"
+msgstr ""
+
+#: js/ImportDialog.js:217
+msgid ""
+"Container name / New or existing if it already exists you need permissions "
+"to add to."
+msgstr ""
+
+#: js/ImportDialog.js:237
+msgid "or"
+msgstr ""
+
+#: js/ImportDialog.js:278
+msgid "What should the file you upload look like?"
+msgstr ""
+
+#: js/ImportDialog.js:283
+msgid ""
+"Tine 2.0 does not understand all kind of files you might want to upload. You "
+"will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr ""
+
+#: js/ImportDialog.js:286
+msgid ""
+"Following you find a list of all supported import formats and a sample file, "
+"how Tine 2.0 expects your file to look like."
+msgstr ""
+
+#: js/ImportDialog.js:289
+msgid "Please select the import format of the file you want to upload"
+msgstr ""
+
+#: js/ImportDialog.js:310
+msgid "Download example file"
+msgstr ""
+
+#: js/ImportDialog.js:332
+msgid "Remote / ICS"
+msgstr ""
+
+#: js/ImportDialog.js:333
+msgid "Remote / CALDav"
+msgstr ""
+
+#: js/ImportDialog.js:334
+msgid "Upload"
+msgstr ""
+
+#: js/ImportDialog.js:347
+msgid "Choose File and Format"
+msgstr ""
+
+#: js/ImportDialog.js:356
+msgid "Select type of source"
+msgstr ""
+
+#: js/ImportDialog.js:360
+msgid "Please select the type of source you want to add to Tine 2.0"
+msgstr ""
+
+#: js/ImportDialog.js:409
+#, python-brace-format
+msgid "Importing {0}"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:69
+msgid "Checking Calendar Data..."
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:95
+msgid "Reply to Recurring Event"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:96
+msgid "You are responding to an recurring event. What would you like to do?"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:100
+msgid "Respond to whole series"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:101
+msgid "Do not respond"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:197
+msgid "The event of this message does not exist"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:202
+msgid "The sender is not authorised to update the event"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:207
+msgid "This message is already processed"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:212
+msgid "You are not an attendee of this event"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:216
+msgid "Unsupported message"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:226
+msgid "This is an event invitation for someone else."
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:228
+msgid "You have already replied to this event invitation."
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:230
+msgid "You received an event invitation. Set your response to:"
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:238
+msgid "An invited attendee responded to the invitation."
+msgstr ""
+
+#: js/iMIPDetailsPanel.js:242
+msgid "Unsupported method"
+msgstr ""
+
+#: js/Calendar.js:29 js/MonthView.js:83 js/DaysView.js:105
+msgid "New Event"
+msgstr ""
+
+#: js/Calendar.js:39 js/Model.js:72 Setup/setup.xml:4
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ContactEventsGridPanel.js:50 js/Model.js:68 js/Model.js:449
+msgid "Events"
+msgstr ""
+
+#: js/ContactEventsGridPanel.js:119 js/EventDetailsPanel.js:260
+#: js/EventEditDialog.js:138 js/GridView.js:109 Preference.php:103
+msgid "Start Time"
+msgstr ""
+
+#: js/MonthView.js:88 js/WestPanel.js:55
+msgid "WK"
+msgstr ""
+
+#: js/MonthView.js:93
+#, python-brace-format
+msgid "{0} more..."
+msgstr ""
+
+#: js/ResourcesGridPanel.js:43 js/ResourceEditDialog.js:68
+#: js/AttendeeGridPanel.js:204
+msgid "Name"
+msgstr ""
+
+#: js/ResourcesGridPanel.js:49 js/ResourceEditDialog.js:73
+msgid "Email"
+msgstr ""
+
+#: js/ResourceEditDialog.js:79 js/ResourceEditDialog.js:80
+msgid "Is a location"
+msgstr ""
+
+#: js/ResourceEditDialog.js:85
+msgid "Enter description..."
+msgstr ""
+
+#: js/ResourceEditDialog.js:117
+msgid "Grants"
+msgstr ""
+
+#: js/EventDetailsPanel.js:28 js/Model.js:461 js/AttendeeGridPanel.js:579
 #: js/AttendeeGridPanel.js:597 js/AttendeeGridPanel.js:614
-#: js/AttendeeGridPanel.js:626 js/Model.js:461
+#: js/AttendeeGridPanel.js:626
 msgid "No Information"
 msgstr ""
 
@@ -349,23 +579,14 @@ msgstr ""
 msgid "recurring event exception"
 msgstr ""
 
-#: js/EventDetailsPanel.js:260 js/EventEditDialog.js:138 js/GridView.js:109
-#: js/ContactEventsGridPanel.js:119 Preference.php:103
-msgid "Start Time"
-msgstr ""
-
 #: js/EventDetailsPanel.js:265 js/EventEditDialog.js:152 js/GridView.js:115
 #: Preference.php:107
 msgid "End Time"
 msgstr ""
 
-#: js/EventDetailsPanel.js:302 js/AttendeeGridPanel.js:89
-#: js/AttendeeFilterModel.js:35 js/Model.js:445 js/WestPanel.js:90
-msgid "Attendee"
-msgstr ""
-
-#: js/PagingToolbar.js:300 js/MainScreenCenterPanel.js:242
-msgid "Week"
+#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:206 js/GridView.js:135
+#: Setup/Initialize.php:115 Setup/Update/Release5.php:94
+msgid "Tentative"
 msgstr ""
 
 #: js/EventEditDialog.js:103
@@ -425,6 +646,56 @@ msgstr ""
 msgid "Errors"
 msgstr ""
 
+#: js/Model.js:68 js/Model.js:449 js/SearchCombo.js:79
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:72
+msgid "Calendars"
+msgstr ""
+
+#: js/Model.js:275
+msgid "Quick Search"
+msgstr ""
+
+#: js/Model.js:282
+msgid "Attendee Status"
+msgstr ""
+
+#: js/Model.js:291
+msgid "Attendee Role"
+msgstr ""
+
+#: js/Model.js:307
+msgid "Event (as attendee)"
+msgstr ""
+
+#: js/Model.js:314
+msgid "Event (as organizer)"
+msgstr ""
+
+#: js/Model.js:324
+msgid "Event attendee"
+msgstr ""
+
+#: js/Model.js:445
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:641 js/AttendeeGridPanel.js:196
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:641
+msgid "Resources"
+msgstr ""
+
 #: js/GridView.js:102
 msgid "Tags"
 msgstr ""
@@ -457,19 +728,8 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:196 js/Model.js:641
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/AttendeeGridPanel.js:197
 msgid "Member of group"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:204 js/ResourcesGridPanel.js:43
-#: js/ResourceEditDialog.js:68
-msgid "Name"
 msgstr ""
 
 #: js/AttendeeGridPanel.js:404
@@ -488,143 +748,49 @@ msgstr ""
 msgid "External Attendee"
 msgstr ""
 
-#: js/AttendeeFilterGrid.js:28
-msgid "Add attendee"
+#: js/SearchCombo.js:70
+msgid "no events found"
 msgstr ""
 
-#: js/AttendeeFilterGrid.js:47
-msgid "Sort Attendee"
+#: js/SearchCombo.js:71
+msgid "Searching..."
 msgstr ""
 
-#: js/AttendeeFilterGrid.js:60
-msgid "Check to filter for this attendee"
+#: js/SearchCombo.js:80
+msgid "Search Event"
 msgstr ""
 
-#: js/ImportDialog.js:103
-msgid "Import Definition Success!"
+#: js/WestPanel.js:32
+msgid "Mini Calendar"
 msgstr ""
 
-#: js/ImportDialog.js:104
-msgid ""
-"The Ical Import definition has been created successfully! Please wait some "
-"minutes to get the events synced."
+#: js/AddToEventPanel.js:35
+msgid "Please choose the Event to add the contacts to"
 msgstr ""
 
-#: js/ImportDialog.js:130
-msgid "Choose Import File"
+#: js/AddToEventPanel.js:79
+msgid "Select Role"
 msgstr ""
 
-#: js/ImportDialog.js:134
-msgid ""
-"Please choose the file that contains the records you want to add to Tine 2.0"
+#: js/AddToEventPanel.js:89
+msgid "Select Status"
 msgstr ""
 
-#: js/ImportDialog.js:138
+#: js/AddToEventPanel.js:109
 #, python-brace-format
-msgid "Select file containing your {0}"
+msgid "Adding {0} Attendee to event"
 msgstr ""
 
-#: js/ImportDialog.js:153
-msgid "once"
+#: js/EventUI.js:237
+msgid "private classification"
 msgstr ""
 
-#: js/ImportDialog.js:154
-msgid "hourly"
+#: js/EventUI.js:258
+msgid "has alarm"
 msgstr ""
 
-#: js/ImportDialog.js:155
-msgid "daily"
-msgstr ""
-
-#: js/ImportDialog.js:156
-msgid "weekly"
-msgstr ""
-
-#: js/ImportDialog.js:169
-msgid "Choose Remote Location"
-msgstr ""
-
-#: js/ImportDialog.js:173
-msgid "Please choose a remote location you want to add to Tine 2.0"
-msgstr ""
-
-#: js/ImportDialog.js:188
-msgid "Refresh time"
-msgstr ""
-
-#: js/ImportDialog.js:220
-msgid "General Settings"
-msgstr ""
-
-#: js/ImportDialog.js:225
-msgid ""
-"Container name / New or existing if it already exists you need permissions "
-"to add to."
-msgstr ""
-
-#: js/ImportDialog.js:245
-msgid "or"
-msgstr ""
-
-#: js/ImportDialog.js:286
-msgid "What should the file you upload look like?"
-msgstr ""
-
-#: js/ImportDialog.js:291
-msgid ""
-"Tine 2.0 does not understand all kind of files you might want to upload. You "
-"will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr ""
-
-#: js/ImportDialog.js:294
-msgid ""
-"Following you find a list of all supported import formats and a sample file, "
-"how Tine 2.0 expects your file to look like."
-msgstr ""
-
-#: js/ImportDialog.js:297
-msgid "Please select the import format of the file you want to upload"
-msgstr ""
-
-#: js/ImportDialog.js:318
-msgid "Download example file"
-msgstr ""
-
-#: js/ImportDialog.js:340
-msgid "Remote / ICS"
-msgstr ""
-
-#: js/ImportDialog.js:341
-msgid "Remote / CALDav"
-msgstr ""
-
-#: js/ImportDialog.js:342
-msgid "Upload"
-msgstr ""
-
-#: js/ImportDialog.js:355
-msgid "Choose File and Format"
-msgstr ""
-
-#: js/ImportDialog.js:364
-msgid "Select type of source"
-msgstr ""
-
-#: js/ImportDialog.js:368
-msgid "Please select the type of source you want to add to Tine 2.0"
-msgstr ""
-
-#: js/ImportDialog.js:417
-#, python-brace-format
-msgid "Importing {0}"
-msgstr ""
-
-#: js/ContactEventsGridPanel.js:50 js/Model.js:68 js/Model.js:449
-msgid "Events"
-msgstr ""
-
-#: js/DaysView.js:105 js/MonthView.js:83 js/Calendar.js:29
-msgid "New Event"
+#: js/EventUI.js:265
+msgid "has attachments"
 msgstr ""
 
 #: js/DaysView.js:110
@@ -646,6 +812,15 @@ msgstr ""
 
 #: js/DaysView.js:755
 msgid "Summary too Short"
+msgstr ""
+
+#: js/PerspectiveCombo.js:110
+msgid "Displayed in"
+msgstr ""
+
+#: js/Printer/DaysView.js:81
+#, python-brace-format
+msgid "Week {0} :"
 msgstr ""
 
 #: js/MainScreenCenterPanel.js:28
@@ -674,6 +849,10 @@ msgstr ""
 
 #: js/MainScreenCenterPanel.js:233
 msgid "Day"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:242 js/PagingToolbar.js:300
+msgid "Week"
 msgstr ""
 
 #: js/MainScreenCenterPanel.js:251
@@ -807,291 +986,16 @@ msgstr ""
 msgid "Cancel this action"
 msgstr ""
 
-#: js/calendarRenderer.js:30
-msgid "This event is originally stored in a calendar you don't have access to."
+#: js/AttendeeFilterGrid.js:28
+msgid "Add attendee"
 msgstr ""
 
-#: js/calendarRenderer.js:31
-#, python-brace-format
-msgid "This event is originally stored in {0}"
+#: js/AttendeeFilterGrid.js:47
+msgid "Sort Attendee"
 msgstr ""
 
-#: js/calendarRenderer.js:33
-#, python-brace-format
-msgid "This event is additionally displayed in your personal calendar {0}"
-msgstr ""
-
-#: js/CalendarSelectWidget.js:124
-msgid "Originally"
-msgstr ""
-
-#: js/SearchCombo.js:70
-msgid "no events found"
-msgstr ""
-
-#: js/SearchCombo.js:71
-msgid "Searching..."
-msgstr ""
-
-#: js/SearchCombo.js:79 js/Model.js:68 js/Model.js:449
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/SearchCombo.js:80
-msgid "Search Event"
-msgstr ""
-
-#: js/Printer/DaysView.js:81
-#, python-brace-format
-msgid "Week {0} :"
-msgstr ""
-
-#: js/AttendeeFilterModel.js:100
-msgid "Select Attendee"
-msgstr ""
-
-#: js/Model.js:72
-msgid "Calendars"
-msgstr ""
-
-#: js/Model.js:275
-msgid "Quick Search"
-msgstr ""
-
-#: js/Model.js:282
-msgid "Attendee Status"
-msgstr ""
-
-#: js/Model.js:291
-msgid "Attendee Role"
-msgstr ""
-
-#: js/Model.js:307
-msgid "Event (as attendee)"
-msgstr ""
-
-#: js/Model.js:314
-msgid "Event (as organizer)"
-msgstr ""
-
-#: js/Model.js:324
-msgid "Event attendee"
-msgstr ""
-
-#: js/Model.js:445
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:641
-msgid "Resources"
-msgstr ""
-
-#: js/EventUI.js:237
-msgid "private classification"
-msgstr ""
-
-#: js/EventUI.js:258
-msgid "has alarm"
-msgstr ""
-
-#: js/EventUI.js:265
-msgid "has attachments"
-msgstr ""
-
-#: js/MonthView.js:88 js/WestPanel.js:55
-msgid "WK"
-msgstr ""
-
-#: js/MonthView.js:93
-#, python-brace-format
-msgid "{0} more..."
-msgstr ""
-
-#: js/AddToEventPanel.js:35
-msgid "Please choose the Event to add the contacts to"
-msgstr ""
-
-#: js/AddToEventPanel.js:79
-msgid "Select Role"
-msgstr ""
-
-#: js/AddToEventPanel.js:89
-msgid "Select Status"
-msgstr ""
-
-#: js/AddToEventPanel.js:109
-#, python-brace-format
-msgid "Adding {0} Attendee to event"
-msgstr ""
-
-#: js/PerspectiveCombo.js:110
-msgid "Displayed in"
-msgstr ""
-
-#: js/RrulePanel.js:28
-msgid "Recurrances"
-msgstr ""
-
-#: js/RrulePanel.js:36
-msgid "No recurring rule defined"
-msgstr ""
-
-#: js/RrulePanel.js:72
-msgid "None"
-msgstr ""
-
-#: js/RrulePanel.js:86
-msgid "Weekly"
-msgstr ""
-
-#: js/RrulePanel.js:93
-msgid "Monthly"
-msgstr ""
-
-#: js/RrulePanel.js:100
-msgid "Yearly"
-msgstr ""
-
-#: js/RrulePanel.js:178
-msgid "Exceptions of reccuring events can't have recurrences themselves."
-msgstr ""
-
-#: js/RrulePanel.js:240
-msgid "at"
-msgstr ""
-
-#: js/RrulePanel.js:252
-msgid "never"
-msgstr ""
-
-#: js/RrulePanel.js:261
-#, python-brace-format
-msgid "after {0} occurrences"
-msgstr ""
-
-#: js/RrulePanel.js:380
-msgid "Until has to be after event start"
-msgstr ""
-
-#: js/RrulePanel.js:411
-#, python-brace-format
-msgid "Every {0}. Day"
-msgstr ""
-
-#: js/RrulePanel.js:444
-#, python-brace-format
-msgid "Every {0}. Week at"
-msgstr ""
-
-#: js/RrulePanel.js:514
-#, python-brace-format
-msgid "Every {0}. Month"
-msgstr ""
-
-#: js/RrulePanel.js:520 js/RrulePanel.js:569 js/RrulePanel.js:701
-#: js/RrulePanel.js:751
-msgid "at the"
-msgstr ""
-
-#: js/RrulePanel.js:694
-#, python-brace-format
-msgid "Every {0}. Year"
-msgstr ""
-
-#: js/RrulePanel.js:792 js/RrulePanel.js:800
-msgid "of"
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:69
-msgid "Checking Calendar Data..."
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:95
-msgid "Reply to Recurring Event"
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:96
-msgid "You are responding to an recurring event. What would you like to do?"
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:100
-msgid "Respond to whole series"
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:101
-msgid "Do not respond"
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:197
-msgid "The event of this message does not exist"
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:202
-msgid "The sender is not authorised to update the event"
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:207
-msgid "This message is already processed"
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:212
-msgid "You are not an attendee of this event"
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:216
-msgid "Unsupported message"
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:226
-msgid "This is an event invitation for someone else."
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:228
-msgid "You have already replied to this event invitation."
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:230
-msgid "You received an event invitation. Set your response to:"
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:238
-msgid "An invited attendee responded to the invitation."
-msgstr ""
-
-#: js/iMIPDetailsPanel.js:242
-msgid "Unsupported method"
-msgstr ""
-
-#: js/ResourcesGridPanel.js:49 js/ResourceEditDialog.js:73
-msgid "Email"
-msgstr ""
-
-#: js/ResourceEditDialog.js:79 js/ResourceEditDialog.js:80
-msgid "Is a location"
-msgstr ""
-
-#: js/ResourceEditDialog.js:85
-msgid "Enter description..."
-msgstr ""
-
-#: js/ResourceEditDialog.js:117
-msgid "Grants"
-msgstr ""
-
-#: js/WestPanel.js:32
-msgid "Mini Calendar"
-msgstr ""
-
-#: Exception/InvalidUrl.php:21
-msgid "Invalid URL given"
-msgstr ""
-
-#: Exception/InvalidUrl.php:26
-msgid "The URL you used is invalid. Please use a valid one!"
+#: js/AttendeeFilterGrid.js:60
+msgid "Check to filter for this attendee"
 msgstr ""
 
 #: Controller/EventNotifications.php:354
@@ -1316,4 +1220,100 @@ msgid ""
 "(CalDAV) Skip double events from personal or shared calendar (\"personal\" > "
 "Skip events from personal calendar or \"shared\" > Skip events from shared "
 "calendar)"
+msgstr ""
+
+#: Import/definitions/cal_import_ical.xml:12
+msgid "Import iCal-files"
+msgstr ""
+
+#: Setup/Initialize.php:34 Setup/Update/Release3.php:164
+msgid "All events I attend"
+msgstr ""
+
+#: Setup/Initialize.php:47
+msgid "Awaiting response"
+msgstr ""
+
+#: Setup/Initialize.php:48
+msgid "Events I have not yet responded to"
+msgstr ""
+
+#: Setup/Initialize.php:63
+msgid "Declined events"
+msgstr ""
+
+#: Setup/Initialize.php:64
+msgid "Events I have declined"
+msgstr ""
+
+#: Setup/Initialize.php:77
+msgid "I'm organizer"
+msgstr ""
+
+#: Setup/Initialize.php:78
+msgid "Events I'm the organizer of"
+msgstr ""
+
+#: Setup/Initialize.php:98 Setup/Update/Release5.php:77
+msgid "Required"
+msgstr ""
+
+#: Setup/Initialize.php:99 Setup/Update/Release5.php:78
+msgid "Optional"
+msgstr ""
+
+#: Setup/Initialize.php:112 Setup/Update/Release5.php:91
+msgid "No response"
+msgstr ""
+
+#: Setup/Initialize.php:113 Setup/Update/Release5.php:92
+msgid "Accepted"
+msgstr ""
+
+#: Setup/Initialize.php:114 Setup/Update/Release5.php:93
+msgid "Declined"
+msgstr ""
+
+#: views/eventNotification.php:12
+msgid "Updates"
+msgstr ""
+
+#: views/eventNotification.php:21
+msgid "This is an event series exception."
+msgstr ""
+
+#: views/eventNotification.php:25
+msgid "%1$s changed from \"%2$s\" to \"%3$s\""
+msgstr ""
+
+#: views/eventNotification.php:32
+msgid "%1$s has been invited"
+msgstr ""
+
+#: views/eventNotification.php:37
+msgid "%1$s has been removed"
+msgstr ""
+
+#: views/eventNotification.php:44
+msgid "%1$s accepted invitation"
+msgstr ""
+
+#: views/eventNotification.php:48
+msgid "%1$s declined invitation"
+msgstr ""
+
+#: views/eventNotification.php:52
+msgid "Tentative response from %1$s"
+msgstr ""
+
+#: views/eventNotification.php:56
+msgid "No response from %1$s"
+msgstr ""
+
+#: views/eventNotification.php:59
+msgid "\"%2$s\" response from %1$s"
+msgstr ""
+
+#: views/eventNotification.php:68
+msgid "Event details"
 msgstr ""

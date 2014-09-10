@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # lkneschke <l.kneschke@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
@@ -9,14 +9,82 @@ msgstr ""
 "PO-Revision-Date: 2013-11-20 13:09+0000\n"
 "Last-Translator: lkneschke <l.kneschke@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Gerät"
+msgstr[1] "Geräte"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Geräte"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "ActiveSync"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Gerät auswählen"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Kein ActiveSync Gerät verfügbar"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Als {0} Filter setzen"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Sync Filter zurückgesetzt"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} Filter für das Gerät \"{1}\" ist jetzt \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "zurückgesetzt"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Setze Sync Filter"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Standard-Adressbuch"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Das Standard-Adressbuch, in dem neue Kontakte angelegt werden."
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Standard-Kalender"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Der Standard-Kalender, in dem neue Termine angelegt werden."
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Standard-Aufgabenliste"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
 
 #: Config.php:52
 msgid "Default policy for new devices"
@@ -57,69 +125,3 @@ msgstr "Standardrichtlinie"
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "Standardrichtlinie aus dem Setup Prozess"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Standard-Adressbuch"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Das Standard-Adressbuch, in dem neue Kontakte angelegt werden."
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Standard-Kalender"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Der Standard-Kalender, in dem neue Termine angelegt werden."
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Standard-Aufgabenliste"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Gerät"
-msgstr[1] "Geräte"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Geräte"
-
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "ActiveSync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Gerät auswählen"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Kein ActiveSync Gerät verfügbar"
-
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr "Als {0} Filter setzen"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Sync Filter zurückgesetzt"
-
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} Filter für das Gerät \"{1}\" ist jetzt \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "zurückgesetzt"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Setze Sync Filter"
