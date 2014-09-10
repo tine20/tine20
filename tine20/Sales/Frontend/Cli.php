@@ -35,13 +35,16 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     
     /**
      * creates missing accounts
+     * 
+     * * optional params:
+     *   - day=YYYY-MM-DD
+     *   - remove_unbilled=1
+     *   - contract=CONTRACT_ID or contract=NUMBER
      *
      * @param Zend_Console_Getopt $_opts
      */
     public function create_auto_invoices($_opts)
     {
-        $this->removeUnbilledAutoInvoices();
-        
         $executionLifeTime = Tinebase_Core::setExecutionLifeTime(3600*8);
         
         $this->_addOutputLogWriter();
@@ -81,6 +84,10 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (! $date) {
             $date = Tinebase_DateTime::now();
             $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        }
+        
+        if (array_key_exists('remove_unbilled', $args) && $args['remove_unbilled'] == 1) {
+            $this->removeUnbilledAutoInvoices();
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -197,10 +204,18 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $p = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC'));
         
-        $invoices = $c->search($f, $p, FALSE);
+        $invoiceIds = $c->search($f, $p, /* $_getRelations = */ false, /* only ids */ true);
         
-        foreach($invoices as $invoice) {
-            $c->delete(array($invoice->getId()));
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' About to delete ' . count($invoiceIds) .' uncleared invoices ...');
+        }
+        
+        foreach ($invoiceIds as $invoiceId) {
+            try {
+                $c->delete(array($invoiceId));
+            } catch (Sales_Exception_DeletePreviousInvoice $sedpi) {
+                Tinebase_Exception::log($sedpi);
+            }
         }
     }
 }
