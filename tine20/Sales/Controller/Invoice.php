@@ -195,9 +195,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
         if ($nextBill->isLaterOrEquals($currentDate)) {
             if ($products->count() == 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Don\'t handle - contract does not have to be billed and there aren\'t any products');
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Don\'t handle - contract does not have to be billed and there aren\'t any products');
+                }
+                
                 return;
+                
             } else {
                 $billIt = FALSE;
                 // otherwise iterate products

@@ -172,9 +172,11 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * loads the address to the plaintext field
      */
     onAddressLoad: function(combo, record) {
-        var ba = record ? record : ( this.record.get('address_id') ? new Tine.Sales.Model.Address(this.record.get('address_id')) : null);
-        if (ba) {
-            this.form.findField('fixed_address').setValue(Tine.Sales.renderAddress(ba));
+        if (Ext.isEmpty(this.record.get('number'))) {
+            var ba = record ? record : new Tine.Sales.Model.Address(this.record.get('address_id'));
+            if (ba) {
+                this.form.findField('fixed_address').setValue(Tine.Sales.renderAddress(ba));
+            }
         }
     },
     
