@@ -143,7 +143,7 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'relations', width: 175, sortable: false, renderer: this.partnerRenderer},
                 {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'relations', width: 175, sortable: false, renderer: this.customerRenderer},
                 {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100, renderer: Tine.Crm.LeadState.Renderer},
-                {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage },
+                {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.ux.PercentRenderer },
                 {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney },
 
                 {header: this.app.i18n._('Estimated end'), id: 'end_scheduled', dataIndex: 'end_scheduled', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
