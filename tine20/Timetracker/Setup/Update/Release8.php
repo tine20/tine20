@@ -51,94 +51,25 @@ class Timetracker_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_2()
     {
-        $field = '<field>
-            <name>invoice_id</name>
-            <type>text</type>
-            <length>40</length>
-            <notnull>false</notnull>
-        </field>';
-        
-        $declaration = new Setup_Backend_Schema_Field_Xml($field);
-        
-        $this->_backend->addCol('timetracker_timeaccount', $declaration);
-        $this->setTableVersion('timetracker_timeaccount', '10');
-        
-        $this->_backend->addCol('timetracker_timesheet', $declaration);
-        $this->setTableVersion('timetracker_timesheet', '5');
+        if (! $this->_backend->columnExists('invoice_id', 'timetracker_timeaccount')) {
+            $field = '<field>
+                <name>invoice_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>';
+            
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            
+            $this->_backend->addCol('timetracker_timeaccount', $declaration);
+            $this->setTableVersion('timetracker_timeaccount', '11');
+            
+            $this->_backend->addCol('timetracker_timesheet', $declaration);
+            $this->setTableVersion('timetracker_timesheet', '6');
+        } else {
+            $this->update_1();
+        }
         
         $this->setApplicationVersion('Timetracker', '8.3');
     }
-    
-//     /**
-//      * resize billed_in field to 40
-//      * OR: remove billed_in
-//      */
-//     public function update_2()
-//     {
-//         $field = '<field>
-//             <name>billed_in</name>
-//             <type>text</type>
-//             <length>40</length>
-//             <notnull>false</notnull>
-//         </field>';
-        
-//         $declaration = new Setup_Backend_Schema_Field_Xml($field);
-        
-//         $this->_backend->alterCol('timetracker_timeaccount', $declaration);
-//         $this->setTableVersion('timetracker_timeaccount', '10');
-        
-//         $this->_backend->alterCol('timetracker_timesheet', $declaration);
-//         $this->setTableVersion('timetracker_timesheet', '5');
-        
-//         $this->setApplicationVersion('Timetracker', '8.3');
-//     }
-
-//     /**
-//      * creates a note for each billed in field
-//      */
-//     protected function _transferBilledInToNotes()
-//     {
-//         $be = new Timetracker_Backend_Timeaccount();
-//         $notesInstance = Tinebase_Notes::getInstance();
-//         $ids = array();
-        
-//         foreach($be->getAll() as $record) {
-//             if ($record->billed_in) {
-//                 $note = new Tinebase_Model_Note(array(
-//                     'note_type_id' => 1,
-//                     'note' => 'Cleared in: ' . $record->billed_in,
-//                     'record_id' => $record->getId(),
-//                     'record_model' => 'Timetracker_Model_Timeaccount',
-//                     'record_backend' => 'Sql' 
-//                 ));
-                
-//                 $notesInstance->addNote($note);
-                
-//                 $ids[] = $record->getId();
-//             }
-//         }
-        
-//         $be->updateMultiple($ids, array('billed_in' => NULL));
-        
-//         $be = new Timetracker_Backend_Timesheet();
-//         $ids = array();
-        
-//         foreach($be->getAll() as $record) {
-//             if ($record->billed_in) {
-//                 $note = new Tinebase_Model_Note(array(
-//                     'note_type_id' => 1,
-//                     'note' => 'Cleared in: ' . $record->billed_in,
-//                     'record_id' => $record->getId(),
-//                     'record_model' => 'Timetracker_Model_Timesheet',
-//                     'record_backend' => 'Sql'
-//                 ));
-        
-//                 $notesInstance->addNote($note);
-                
-//                 $ids[] = $record->getId();
-//             }
-//         }
-        
-//         $be->updateMultiple($ids, array('billed_in' => NULL));
-//     }
 }
