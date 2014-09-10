@@ -1,6 +1,6 @@
 # 
 # Translators:
-# hanklu <hankbox@gmail.com>, 2013
+# Hank Lu <hankbox@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

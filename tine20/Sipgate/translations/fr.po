@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Sebastien <sebastien.janez@free.fr>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:48+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-08-27 16:29+0000\n"
+"Last-Translator: Sebastien <sebastien.janez@free.fr>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -94,7 +95,7 @@ msgstr ""
 
 #: Config.php:68 js/AccountGridPanel.js:98 js/AccountEditDialog.js:262
 msgid "Account Type"
-msgstr ""
+msgstr "Type de compte"
 
 #: Config.php:70
 msgid ""
@@ -112,7 +113,7 @@ msgstr ""
 
 #: Setup/Update/Release1.php:50 Setup/Initialize.php:34
 msgid "accepted"
-msgstr ""
+msgstr "accepté"
 
 #: Setup/Update/Release1.php:51 Setup/Initialize.php:35
 msgid "outgoing"
@@ -136,15 +137,15 @@ msgstr ""
 
 #: Setup/Update/Release1.php:92 Setup/Initialize.php:66
 msgid "team"
-msgstr ""
+msgstr "équipe"
 
 #: Setup/Update/Release1.php:106 Setup/Initialize.php:80
 msgid "private"
-msgstr ""
+msgstr "privé"
 
 #: Setup/Update/Release1.php:107 Setup/Initialize.php:81
 msgid "shared"
-msgstr ""
+msgstr "partagé"
 
 #: Setup/calling-codes.xml:6
 msgid "+93 (Afghanistan)"
@@ -938,7 +939,7 @@ msgstr ""
 
 #: Setup/calling-codes.xml:991
 msgid "+386 (Slovenia (Republic of))"
-msgstr ""
+msgstr "+386 (Slovénie (République de))"
 
 #: Setup/calling-codes.xml:996
 msgid "+677 (Solomon Islands)"
@@ -974,7 +975,7 @@ msgstr ""
 
 #: Setup/calling-codes.xml:1036
 msgid "+46 (Sweden)"
-msgstr ""
+msgstr "+46 (Suède)"
 
 #: Setup/calling-codes.xml:1041
 msgid "+41 (Switzerland (Confederation of))"
@@ -1196,28 +1197,28 @@ msgstr ""
 
 #: js/ConnectionGridPanel.js:196 js/LineGridPanel.js:203
 msgid "Add Account"
-msgstr ""
+msgstr "Ajouter un compte"
 
 #: js/SmsEditDialog.js:67
 msgid "Send"
-msgstr ""
+msgstr "Envoyer"
 
 #: js/SmsEditDialog.js:74 js/SearchAddressDialog.js:63
 #: js/DialNumberDialog.js:89 js/CallStateWindow.js:106
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: js/SmsEditDialog.js:81 js/SearchAddressDialog.js:71
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 #: js/SmsEditDialog.js:112
 msgid "Loading contact..."
-msgstr ""
+msgstr "Chargement du contact..."
 
 #: js/SmsEditDialog.js:113
 msgid "Sending message..."
-msgstr ""
+msgstr "Envoie du message ..."
 
 #: js/SmsEditDialog.js:250
 msgid "Recipient"
@@ -1241,7 +1242,7 @@ msgstr ""
 
 #: js/SmsEditDialog.js:276 js/SmsEditDialog.js:293
 msgid "The message"
-msgstr ""
+msgstr "Le message"
 
 #: js/SmsEditDialog.js:279
 msgid "enter the text..."
@@ -1249,11 +1250,11 @@ msgstr ""
 
 #: js/SmsEditDialog.js:293
 msgid "Character"
-msgstr ""
+msgstr "Caractère"
 
 #: js/SmsEditDialog.js:293
 msgid "Message"
-msgstr ""
+msgstr "Message"
 
 #: js/SmsEditDialog.js:316
 msgid "Send message to \"{0}\""
@@ -1269,16 +1270,16 @@ msgstr ""
 
 #: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
 msgid "Phone"
-msgstr ""
+msgstr "Téléphone"
 
 #: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
 msgid "Mobile"
-msgstr ""
+msgstr "Portable"
 
 #: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
 #: js/AccountGridPanel.js:55
 msgid "Fax"
-msgstr ""
+msgstr "Fax"
 
 #: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
 msgid "Car phone"
@@ -1319,15 +1320,15 @@ msgstr ""
 #: js/LineGridPanel.js:65 js/AssignLinesGrid.js:100 js/AccountGridPanel.js:89
 #: js/AccountEditDialog.js:279
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: js/LineGridPanel.js:73 js/AccountFilterModel.js:38
 msgid "Account"
-msgstr ""
+msgstr "Compte"
 
 #: js/LineGridPanel.js:81
 msgid "User"
-msgstr ""
+msgstr "Utilisateur"
 
 #: js/LineGridPanel.js:88 js/AssignLinesGrid.js:101 js/AccountGridPanel.js:115
 msgid "Uri Alias"
@@ -1339,19 +1340,19 @@ msgstr ""
 
 #: js/LineGridPanel.js:100 js/AssignLinesGrid.js:104
 msgid "Incoming"
-msgstr ""
+msgstr "Entrant"
 
 #: js/LineGridPanel.js:108 js/AssignLinesGrid.js:103
 msgid "Outgoing"
-msgstr ""
+msgstr "Sortant"
 
 #: js/LineGridPanel.js:114
 msgid "Created"
-msgstr ""
+msgstr "Créé"
 
 #: js/LineGridPanel.js:170 js/LineGridPanel.js:171
 msgid "Synchronize Line"
-msgstr ""
+msgstr "Synchroniser la ligne"
 
 #: js/LineGridPanel.js:172 js/AccountEditDialog.js:68
 msgid "Synchronize Lines"
@@ -1391,7 +1392,7 @@ msgstr ""
 
 #: js/DialNumberDialog.js:97
 msgid "Ok"
-msgstr ""
+msgstr "OK"
 
 #: js/DialNumberDialog.js:161
 msgid "Select Line"

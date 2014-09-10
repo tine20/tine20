@@ -1,6 +1,6 @@
 # 
 # Translators:
-# afshin <a.afzali2003@gmail.com>, 2012
+# Afshin Afzali <a.afzali2003@gmail.com>, 2012
 # hyalavi <hyalavi@yahoo.com>, 2012
 msgid ""
 msgstr ""

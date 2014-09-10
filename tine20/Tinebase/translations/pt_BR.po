@@ -1,6 +1,6 @@
 # 
 # Translators:
-# antacs <antonio-carlos.silva@serpro.gov.br>, 2013
+# Antonio Carlos da Silva <antonio-carlos.silva@serpro.gov.br>, 2013
 # DECIO FERREIRA LINDOSO <decio.lindoso@gmail.com>, 2013
 # Eduardo Fukunari <fuka2000@gmail.com>, 2012
 # gustavotonini <GUSTAVOTONINI@gmail.com>, 2012

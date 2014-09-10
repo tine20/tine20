@@ -1,12 +1,13 @@
 # 
 # Translators:
-# jevgu <jevgu@albnet.net>, 2013
+# Enri Mullai <enri_mullai@albnet.net>, 2013
+# Enri Mullai <enri_mullai@albnet.net>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-02-11 20:39+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-05-28 11:00+0000\n"
+"Last-Translator: Enri Mullai <enri_mullai@albnet.net>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,7 +38,7 @@ msgstr "Fundori"
 
 #: js/AuthenticationPanel.js:205
 msgid "TLS client certificate"
-msgstr ""
+msgstr "Certifikata TSL e klientit"
 
 #: js/AuthenticationPanel.js:233
 msgid "Initial Admin User"
@@ -168,15 +169,15 @@ msgstr "Bashkangjit domain me emrin e hyrjes"
 
 #: js/AuthenticationPanel.js:396
 msgid "Certificate validation"
-msgstr ""
+msgstr "Vertetimi i certifikates"
 
 #: js/AuthenticationPanel.js:409
 msgid "CA file"
-msgstr ""
+msgstr "Skedari CA"
 
 #: js/AuthenticationPanel.js:412
 msgid "CRL directory"
-msgstr ""
+msgstr "Dosja e CRL"
 
 #: js/AuthenticationPanel.js:422
 msgid "Accounts storage"

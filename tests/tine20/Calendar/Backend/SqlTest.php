@@ -4,14 +4,9 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Calendar_Backend_Sql
@@ -91,6 +86,9 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
         
     }
     
+    /**
+     * test search events
+     */
     public function testSearchEvents()
     {
         $from = '2009-04-03 00:00:00';
@@ -105,7 +103,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'container_id' => $this->_getTestCalendar()->getId(),
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
-                Tinebase_Model_Grants::GRANT_READ    => true
+                Tinebase_Model_Grants::GRANT_READ    => true,
             ),
             array(
                 'dtstart'      => '2009-04-02 23:30:00',
@@ -157,7 +155,8 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
                 'rrule_until'  => '2009-04-02 23:59:59',
-                Tinebase_Model_Grants::GRANT_READ    => true
+                Tinebase_Model_Grants::GRANT_READ    => true,
+                'originator_tz' => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
             ),
             array(
                 'dtstart'      => '2009-03-27 22:00:00',
@@ -169,7 +168,8 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
                 'rrule_until'  => '2009-04-05 23:59:59',
-                Tinebase_Model_Grants::GRANT_READ    => true
+                Tinebase_Model_Grants::GRANT_READ    => true,
+                'originator_tz' => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
             ),
             array(
                 'dtstart'      => '2009-04-03 22:00:00',
@@ -181,7 +181,8 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
                 'rrule_until'  => '2009-04-06 23:59:59',
-                Tinebase_Model_Grants::GRANT_READ    => true
+                Tinebase_Model_Grants::GRANT_READ    => true,
+                'originator_tz' => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
             ),
             array(
                 'dtstart'      => '2009-04-03 22:00:00',
@@ -193,7 +194,8 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
                 'rrule_until'  => '2009-04-12 23:59:59',
-                Tinebase_Model_Grants::GRANT_READ    => true
+                Tinebase_Model_Grants::GRANT_READ    => true,
+                'originator_tz' => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
             ),
             array(
                 'dtstart'      => '2009-04-11 00:00:00',
@@ -205,7 +207,8 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'organizer'    => Tinebase_Core::getUser()->getId(),
                 'uid'          => Calendar_Model_Event::generateUID(),
                 'rrule_until'  => '2009-04-15 02:00:00',
-                Tinebase_Model_Grants::GRANT_READ    => true
+                Tinebase_Model_Grants::GRANT_READ    => true,
+                'originator_tz' => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
             )
         ));
         

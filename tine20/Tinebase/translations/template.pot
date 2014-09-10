@@ -63,6 +63,10 @@ msgstr ""
 msgid "record changed"
 msgstr ""
 
+#: User/Sql.php:1041
+msgid "Your Tine 2.0 account has been deactivated"
+msgstr ""
+
 #: Container.php:690
 #, python-format
 msgid "%s's personal container"
@@ -167,6 +171,23 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
+#: views/deactivationNotification.php:11
+msgid "Your user account has been deactivated"
+msgstr ""
+
+#: views/deactivationNotification.php:12 js/LoginPanel.js:93
+#: js/widgets/dialog/CredentialsDialog.js:61
+msgid "Username"
+msgstr ""
+
+#: views/deactivationNotification.php:13
+msgid "Deactivation date"
+msgstr ""
+
+#: views/deactivationNotification.php:14
+msgid "Tine 2.0 URL"
+msgstr ""
+
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
 #: js/widgets/tags/TagsPanel.js:426
 msgid "Tags"
@@ -180,7 +201,7 @@ msgstr ""
 msgid "Activities"
 msgstr ""
 
-#: Export/Spreadsheet/Ods.php:365
+#: Export/Spreadsheet/Ods.php:353
 msgid "Data"
 msgstr ""
 
@@ -226,10 +247,6 @@ msgstr ""
 
 #: js/LoginPanel.js:83 js/LoginPanel.js:159
 msgid "Login"
-msgstr ""
-
-#: js/LoginPanel.js:93 js/widgets/dialog/CredentialsDialog.js:61
-msgid "Username"
 msgstr ""
 
 #: js/LoginPanel.js:111 js/widgets/dialog/CredentialsDialog.js:65
@@ -828,69 +845,69 @@ msgid "{0} minutes before"
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:129
-#: js/widgets/dialog/ImportDialog.js:223
+#: js/widgets/dialog/ImportDialog.js:227
 msgid "Choose File and Format"
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:138
-#: js/widgets/dialog/ImportDialog.js:232
+#: js/widgets/dialog/ImportDialog.js:236
 msgid "Choose Import File"
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:142
-#: js/widgets/dialog/ImportDialog.js:236
+#: js/widgets/dialog/ImportDialog.js:240
 msgid ""
 "Please choose the file that contains the records you want to add to Tine 2.0"
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:146
-#: js/widgets/dialog/ImportDialog.js:240
+#: js/widgets/dialog/ImportDialog.js:244
 #, python-brace-format
 msgid "Select file containing your {0}"
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:154
-#: js/widgets/dialog/ImportDialog.js:336
+#: js/widgets/dialog/ImportDialog.js:340
 msgid "Set Import Options"
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:158
-#: js/widgets/dialog/ImportDialog.js:344
+#: js/widgets/dialog/ImportDialog.js:348
 #, python-brace-format
 msgid "Select {0} to add you {1} to:"
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:174
-#: js/widgets/dialog/ImportDialog.js:248 js/widgets/dialog/ImportDialog.js:253
+#: js/widgets/dialog/ImportDialog.js:252 js/widgets/dialog/ImportDialog.js:257
 msgid "What should the file you upload look like?"
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:179
-#: js/widgets/dialog/ImportDialog.js:256
+#: js/widgets/dialog/ImportDialog.js:260
 msgid ""
 "Tine 2.0 does not understand all kind of files you might want to upload. You "
 "will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:182
-#: js/widgets/dialog/ImportDialog.js:259
+#: js/widgets/dialog/ImportDialog.js:263
 msgid ""
 "Following you find a list of all supported import formats and a sample file, "
 "how Tine 2.0 expects your file to look like."
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:185
-#: js/widgets/dialog/ImportDialog.js:262
+#: js/widgets/dialog/ImportDialog.js:266
 msgid "Please select the import format of the file you want to upload"
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:206
-#: js/widgets/dialog/ImportDialog.js:283 js/widgets/dialog/ImportDialog.js:315
+#: js/widgets/dialog/ImportDialog.js:287 js/widgets/dialog/ImportDialog.js:319
 msgid "Download example file"
 msgstr ""
 
 #: js/widgets/dialog/SimpleImportDialog.js:222
-#: js/widgets/dialog/ImportDialog.js:669
+#: js/widgets/dialog/ImportDialog.js:673
 #, python-brace-format
 msgid "Importing {0}"
 msgstr ""
@@ -934,79 +951,79 @@ msgstr ""
 msgid "Saving of preferences failed."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:286
+#: js/widgets/dialog/ImportDialog.js:290
 msgid "Import description"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:396
+#: js/widgets/dialog/ImportDialog.js:400
 msgid "Checking Import"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:425
+#: js/widgets/dialog/ImportDialog.js:429
 msgid "Resolve Conflicts"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:434
+#: js/widgets/dialog/ImportDialog.js:438
 #, python-brace-format
 msgid "There are {0} {1} that might already exist."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:441
+#: js/widgets/dialog/ImportDialog.js:445
 msgid "Conflict"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:442
+#: js/widgets/dialog/ImportDialog.js:446
 msgid "First Conflict"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:443
+#: js/widgets/dialog/ImportDialog.js:447
 msgid "Previous Conflict"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:444
+#: js/widgets/dialog/ImportDialog.js:448
 msgid "Next Conflict"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:445
+#: js/widgets/dialog/ImportDialog.js:449
 msgid "Last Conflict"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:451
+#: js/widgets/dialog/ImportDialog.js:455
 msgid "Conflict is resolved"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:456
+#: js/widgets/dialog/ImportDialog.js:460
 msgid "Resolve all conflicts"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:550
+#: js/widgets/dialog/ImportDialog.js:554
 msgid "Processing Conflict Data"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:575 js/widgets/dialog/ImportDialog.js:595
+#: js/widgets/dialog/ImportDialog.js:579 js/widgets/dialog/ImportDialog.js:599
 msgid "No conflict to resolve"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:594
+#: js/widgets/dialog/ImportDialog.js:598
 #, python-brace-format
 msgid "(This is record {0} in your import file)"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:619
+#: js/widgets/dialog/ImportDialog.js:623
 msgid "No Detail Informations"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:624
+#: js/widgets/dialog/ImportDialog.js:628
 #: js/widgets/dialog/MultipleEditResultSummary.js:213
 msgid "Summary"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:653
+#: js/widgets/dialog/ImportDialog.js:657
 #: js/widgets/dialog/MultipleEditResultSummary.js:192
 msgid "Index"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:654
+#: js/widgets/dialog/ImportDialog.js:658
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:294
 #: js/widgets/relation/GenericPickerGridPanel.js:916
@@ -1015,43 +1032,43 @@ msgstr ""
 msgid "Failure"
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:700
+#: js/widgets/dialog/ImportDialog.js:704
 #, python-brace-format
 msgid "{0} records had failures and where discarded."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:742
+#: js/widgets/dialog/ImportDialog.js:746
 #, python-brace-format
 msgid "In total we found {0} records in your import file."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:745
+#: js/widgets/dialog/ImportDialog.js:749
 #, python-brace-format
 msgid "{0} of them will be added as new records into: \"{1}\"."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:752
+#: js/widgets/dialog/ImportDialog.js:756
 #, python-brace-format
 msgid "{0} of them where identified as duplicates."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:755
+#: js/widgets/dialog/ImportDialog.js:759
 #, python-brace-format
 msgid ""
 "From the identified duplicates {0} will be merged into the existing records."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:759
+#: js/widgets/dialog/ImportDialog.js:763
 #, python-brace-format
 msgid "From the identified duplicates {0} will be discarded."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:775
+#: js/widgets/dialog/ImportDialog.js:779
 #, python-brace-format
 msgid "All records will be tagged with: \"{0}\" so you can find them easily."
 msgstr ""
 
-#: js/widgets/dialog/ImportDialog.js:786
+#: js/widgets/dialog/ImportDialog.js:790
 #, python-brace-format
 msgid "{0} records have failures and will be discarded."
 msgstr ""
@@ -2872,282 +2889,292 @@ msgstr ""
 msgid "Exception ({0})"
 msgstr ""
 
-#: Config.php:302
+#: Config.php:309
 msgid "System IMAP"
 msgstr ""
 
-#: Config.php:304
+#: Config.php:311
 msgid "System IMAP server configuration."
 msgstr ""
 
-#: Config.php:313
+#: Config.php:320
 msgid "System SMTP"
 msgstr ""
 
-#: Config.php:315
+#: Config.php:322
 msgid "System SMTP server configuration."
 msgstr ""
 
-#: Config.php:324
+#: Config.php:331
 msgid "System SIEVE"
 msgstr ""
 
-#: Config.php:326
+#: Config.php:333
 msgid "System SIEVE server configuration."
 msgstr ""
 
-#: Config.php:335
+#: Config.php:342
 msgid "Authentication Backend"
 msgstr ""
 
-#: Config.php:337
+#: Config.php:344
 msgid "Backend adapter for user authentication."
 msgstr ""
 
-#: Config.php:345
+#: Config.php:352
 msgid "Authentication Configuration"
 msgstr ""
 
-#: Config.php:347
+#: Config.php:354
 msgid "Authentication backend configuration."
 msgstr ""
 
-#: Config.php:356
+#: Config.php:363
 msgid "User Backend"
 msgstr ""
 
-#: Config.php:358
+#: Config.php:365
 msgid "Backend adapter for user data."
 msgstr ""
 
-#: Config.php:366
+#: Config.php:373
 msgid "User Configuration"
 msgstr ""
 
-#: Config.php:368
+#: Config.php:375
 msgid "User backend configuration."
 msgstr ""
 
-#: Config.php:377
+#: Config.php:384
 msgid "Cronuser ID"
 msgstr ""
 
-#: Config.php:379
+#: Config.php:386
 msgid "User ID of the cron user."
 msgstr ""
 
-#: Config.php:387
+#: Config.php:394
 msgid "Title Postfix"
 msgstr ""
 
-#: Config.php:389
+#: Config.php:396
 msgid "Postfix string appended to the title of this installation."
 msgstr ""
 
-#: Config.php:397
+#: Config.php:404
 msgid "Redirect URL"
 msgstr ""
 
-#: Config.php:399
+#: Config.php:406
 msgid "Redirect to this URL after logout."
 msgstr ""
 
-#: Config.php:407
+#: Config.php:414
 msgid "Redirect to Referrer"
 msgstr ""
 
-#: Config.php:409
+#: Config.php:416
 msgid "Redirect to referrer after logout."
 msgstr ""
 
-#: Config.php:417
+#: Config.php:424
 msgid "Redirect Always"
 msgstr ""
 
-#: Config.php:419
+#: Config.php:426
 msgid "Redirect to configured redirect URL also for login."
 msgstr ""
 
-#: Config.php:427
+#: Config.php:434
 msgid "Allowed Origins"
 msgstr ""
 
-#: Config.php:429
+#: Config.php:436
 msgid "Allowed Origins for the JSON API."
 msgstr ""
 
-#: Config.php:437
+#: Config.php:444
 msgid "Accepted Terms Version"
 msgstr ""
 
-#: Config.php:439
+#: Config.php:446
 msgid "Accepted version number of the terms and conditions document."
 msgstr ""
 
-#: Config.php:447
+#: Config.php:454
 msgid "Use Geolocation Services"
 msgstr ""
 
-#: Config.php:449
+#: Config.php:456
 msgid "Use of external Geolocation services is allowed."
 msgstr ""
 
-#: Config.php:457
+#: Config.php:464
 msgid "Disable LDAP TLS Certificate Check"
 msgstr ""
 
-#: Config.php:459
+#: Config.php:466
 msgid "LDAP TLS Certificate should not be checked"
 msgstr ""
 
-#: Config.php:468
+#: Config.php:475
 msgid "Configure hook class for user sync"
 msgstr ""
 
-#: Config.php:470
+#: Config.php:477
 msgid "Allows to change data after fetching user from sync backend"
 msgstr ""
 
-#: Config.php:478
+#: Config.php:485
 msgid "IP Session Validator"
 msgstr ""
 
-#: Config.php:480
+#: Config.php:487
 msgid "Destroy session if the users IP changes."
 msgstr ""
 
-#: Config.php:488
+#: Config.php:495
 msgid "UA Session Validator"
 msgstr ""
 
-#: Config.php:490
+#: Config.php:497
 msgid "Destroy session if the users user agent string changes."
 msgstr ""
 
-#: Config.php:498
+#: Config.php:505
 msgid "Files Directory"
 msgstr ""
 
-#: Config.php:500
+#: Config.php:507
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Config.php:508 Config.php:510
+#: Config.php:515 Config.php:517
 msgid "Reuse last username logged"
 msgstr ""
 
-#: Config.php:518 Config.php:520
+#: Config.php:525 Config.php:527
 msgid "User may change password"
 msgstr ""
 
-#: Config.php:529 Config.php:531
+#: Config.php:536 Config.php:538
 msgid "Enable password policy"
 msgstr ""
 
-#: Config.php:539
+#: Config.php:546
 msgid "Only ASCII"
 msgstr ""
 
-#: Config.php:541
+#: Config.php:548
 msgid "Only ASCII characters are allowed in passwords."
 msgstr ""
 
-#: Config.php:549
+#: Config.php:556
 msgid "Minimum length"
 msgstr ""
 
-#: Config.php:551
+#: Config.php:558
 msgid "Minimum password length"
 msgstr ""
 
-#: Config.php:559
+#: Config.php:566
 msgid "Minimum word chars"
 msgstr ""
 
-#: Config.php:561
+#: Config.php:568
 msgid "Minimum word chars in password"
 msgstr ""
 
-#: Config.php:569
+#: Config.php:576
 msgid "Minimum uppercase chars"
 msgstr ""
 
-#: Config.php:571
+#: Config.php:578
 msgid "Minimum uppercase chars in password"
 msgstr ""
 
-#: Config.php:579
+#: Config.php:586
 msgid "Minimum special chars"
 msgstr ""
 
-#: Config.php:581
+#: Config.php:588
 msgid "Minimum special chars in password"
 msgstr ""
 
-#: Config.php:589
+#: Config.php:596
 msgid "Minimum numbers"
 msgstr ""
 
-#: Config.php:591
+#: Config.php:598
 msgid "Minimum numbers in password"
 msgstr ""
 
-#: Config.php:599
+#: Config.php:606
 msgid "Forbid part of username"
 msgstr ""
 
-#: Config.php:601
+#: Config.php:608
 msgid "Forbid part of username in password"
 msgstr ""
 
-#: Config.php:609
+#: Config.php:616
 msgid "Automatic bugreports"
 msgstr ""
 
-#: Config.php:611
+#: Config.php:618
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr ""
 
-#: Config.php:619
+#: Config.php:626
 msgid "Last sessions cleanup run"
 msgstr ""
 
-#: Config.php:621
+#: Config.php:628
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr ""
 
-#: Config.php:629
+#: Config.php:636
 msgid "Maximum login failures"
 msgstr ""
 
-#: Config.php:631
+#: Config.php:638
 msgid "Maximum allowed login failures before blocking account"
 msgstr ""
 
-#: Config.php:639
+#: Config.php:646
 msgid "Disable Anyone Account"
 msgstr ""
 
-#: Config.php:641
+#: Config.php:648
 msgid "Disallow anyone account in grant configurations"
 msgstr ""
 
-#: Config.php:649
+#: Config.php:656
 msgid "Alarms sent each job"
 msgstr ""
 
-#: Config.php:651
+#: Config.php:658
 msgid ""
 "Allows to configure the maximum number of alarm notifications in each run of "
 "sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Config.php:659
+#: Config.php:666
+msgid "Account deactivation notfication"
+msgstr ""
+
+#: Config.php:668
+msgid ""
+"Send E-Mail to user if the account is deactivated or the user tries to login "
+"with deactivated account"
+msgstr ""
+
+#: Config.php:676
 msgid "Role change allowed"
 msgstr ""
 
-#: Config.php:661
+#: Config.php:678
 msgid ""
 "Allows to configure which user is allowed to switch to another users account"
 msgstr ""

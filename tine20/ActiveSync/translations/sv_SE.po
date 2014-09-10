@@ -1,6 +1,6 @@
 # 
 # Translators:
-# niklasye <niklas@idontgetlaid.com>, 2013
+# Niklas Ye <niklas@idontgetlaid.com>, 2013
 # BrianLuckBad <tulken_hultan@hotmail.com>, 2012
 msgid ""
 msgstr ""

@@ -1,6 +1,6 @@
 # 
 # Translators:
-# niklasye <niklas@idontgetlaid.com>, 2013
+# Niklas Ye <niklas@idontgetlaid.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

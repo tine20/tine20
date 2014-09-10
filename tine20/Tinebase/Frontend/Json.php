@@ -1169,7 +1169,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $modelName
      * @param string $property
      * @param string $startswith
-     *
+     * 
      * @return array
      */
     public function autoComplete($appName, $modelName, $property, $startswith)

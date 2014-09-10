@@ -1,6 +1,6 @@
 # 
 # Translators:
-# cboxdk <sn@cbox.dk>, 2013
+# Sylvester Nielsen <sn@cbox.dk>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

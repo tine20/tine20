@@ -1,6 +1,6 @@
 # 
 # Translators:
-# munta <munta@muntane.es>, 2013
+# Jose Maria Muntane <munta@muntane.es>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

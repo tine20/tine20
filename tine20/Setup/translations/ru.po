@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Алексей Убоженко <aleksdem@aleksdem.com>, 2013
+# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013
 # артур Мудрых <arturmon82@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012

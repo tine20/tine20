@@ -1,7 +1,7 @@
 # 
 # Translators:
-# munta <munta@muntane.es>, 2013
-# jfortuna <jfortuna@antel.com.uy>, 2014
+# Jose Maria Muntane <munta@muntane.es>, 2013
+# Juan Fortuna <jfortuna@antel.com.uy>, 2014
 # juanmi513 <juanmi513@gmail.com>, 2014
 msgid ""
 msgstr ""

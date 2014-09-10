@@ -1,6 +1,6 @@
 # 
 # Translators:
-# sambar <samuel.barbera@email.it>, 2013
+# Samuel Barbera <samuel.barbera@email.it>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

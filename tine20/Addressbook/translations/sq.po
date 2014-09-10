@@ -1,7 +1,7 @@
 # 
 # Translators:
-# jevgu <jevgu@albnet.net>, 2013
-# jevgu <jevgu@albnet.net>, 2013
+# Enri Mullai <enri_mullai@albnet.net>, 2013
+# Enri Mullai <enri_mullai@albnet.net>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

@@ -1,6 +1,6 @@
 # 
 # Translators:
-# gurusys <v.anzisi@gurusys.it>, 2012
+# Vincenzo Anzisi <v.anzisi@gurusys.it>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

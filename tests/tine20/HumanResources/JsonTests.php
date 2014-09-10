@@ -900,6 +900,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     }
     
     /**
+<<<<<<< HEAD
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10122
      */
     public function testAlternatingContracts()

@@ -1,12 +1,12 @@
 # 
 # Translators:
-# tyoh, 2014
+# 오태양, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-05-12 00:50+0000\n"
+"Last-Translator: 오태양\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/projects/p/tine20/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -184,12 +184,12 @@ msgstr ""
 #: Export/Pdf.php:87 js/Model.js:109 js/LeadGridPanel.js:125
 #: Controller/Lead.php:193
 msgid "Turnover"
-msgstr ""
+msgstr "거래금액"
 
 #: Export/Pdf.php:90 js/Model.js:108 js/LeadEditDialog.js:222
 #: js/LeadGridPanel.js:124 Controller/Lead.php:194
 msgid "Probability"
-msgstr ""
+msgstr "성사율"
 
 #: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:444 js/LeadEditDialog.js:401
 #: Controller/Lead.php:190
@@ -522,7 +522,7 @@ msgstr ""
 
 #: js/LeadGridPanel.js:126
 msgid "Probable Turnover"
-msgstr ""
+msgstr "예상 매출액"
 
 #: js/LeadGridPanel.js:168
 msgid "Export Lead"

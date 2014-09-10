@@ -1,7 +1,7 @@
 # 
 # Translators:
 # vehery <spacen_zj@hotmail.com>, 2012
-# yinxiaodong <xindev@gmail.com>, 2013
+# 尹晓东 <xindev@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

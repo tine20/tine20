@@ -1,6 +1,6 @@
 # 
 # Translators:
-# jfortuna <jfortuna@antel.com.uy>, 2014
+# Juan Fortuna <jfortuna@antel.com.uy>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
