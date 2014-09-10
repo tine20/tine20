@@ -1,6 +1,6 @@
 # 
 # Translators:
-# mrhypefm <p_zittema@hotmail.com>, 2013
+# Pascal Zittema <p_zittema@hotmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

@@ -1,13 +1,13 @@
 # 
 # Translators:
-# jevgu <jevgu@albnet.net>, 2013
-# jevgu <jevgu@albnet.net>, 2013
+# Enri Mullai <enri_mullai@albnet.net>, 2013
+# Enri Mullai <enri_mullai@albnet.net>, 2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 11:59+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-05-28 11:06+0000\n"
+"Last-Translator: Enri Mullai <enri_mullai@albnet.net>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -170,7 +170,7 @@ msgstr "Përmuajshëm në %1$s"
 
 #: Model/Rrule.php:367
 msgid "Yearly every %1$s %2$s of %3$s"
-msgstr ""
+msgstr "Pervitshem cdo %1$s %2$s te %3$s"
 
 #: Model/Rrule.php:369
 msgid "Yearly on the %1$s of %2$s"
@@ -252,12 +252,12 @@ msgstr "Një rol vijuesi i mundshëm. Lutemi kujdes pasi një rol vijuesi shtes�
 
 #: Config.php:96
 msgid "Filter timeslot for CalDAV events"
-msgstr ""
+msgstr "Filtroni intervalet kohore per ngjarjet e CalDAV"
 
 #: Config.php:98
 msgid ""
 "For how long in the past (in months) the events should be synchronized."
-msgstr ""
+msgstr "Per sa kohe ne te shkuaren (muaj) duhet te sinkronizohen ngjarjet"
 
 #: Config.php:107
 msgid "Default filter period (from) for events fetched via JSON API"
@@ -786,7 +786,7 @@ msgstr "Nuk ka informacion"
 
 #: js/EventDetailsPanel.js:66
 msgid "Unknown date"
-msgstr ""
+msgstr "Date e panjohur"
 
 #: js/EventDetailsPanel.js:69
 msgid "{0} {1} o'clock"
@@ -873,7 +873,7 @@ msgstr "Hiqni Vijuesin"
 
 #: js/AttendeeGridPanel.js:418
 msgid "Compose email"
-msgstr ""
+msgstr "Krijo E-Poste"
 
 #: js/AttendeeGridPanel.js:585
 msgid "(as a group member)"

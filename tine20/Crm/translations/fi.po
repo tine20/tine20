@@ -1,6 +1,6 @@
 # 
 # Translators:
-# sahkari <sahkari@saunalahti.fi>, 2012
+# Tommi Turkia <sahkari@saunalahti.fi>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

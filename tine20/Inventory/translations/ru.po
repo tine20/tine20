@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Алексей Убоженко <aleksdem@aleksdem.com>, 2013-2014
+# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2014
 # Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
 msgid ""
 msgstr ""

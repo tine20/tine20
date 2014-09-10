@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Theodosios Filippou <tf1974@gmail.com>, 2013
+# Theodosis Filippou <tf1974@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

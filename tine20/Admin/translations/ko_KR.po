@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-04 09:18+0000\n"
+"PO-Revision-Date: 2014-08-19 23:17+0000\n"
 "Last-Translator: dduckk <dduckk79@gmail.com>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/projects/p/tine20/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
@@ -36,7 +36,7 @@ msgstr "사용자, 그룹 추가 및 수정, 그룹 멤버 추가, 사용자 비
 
 #: Acl/Rights.php:216
 msgid "manage applications"
-msgstr ""
+msgstr "어플리케이션 관리"
 
 #: Acl/Rights.php:217
 msgid "enable and disable applications, edit application settings"

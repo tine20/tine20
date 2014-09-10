@@ -1,6 +1,6 @@
 # 
 # Translators:
-# yinxiaodong <xindev@gmail.com>, 2013
+# 尹晓东 <xindev@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

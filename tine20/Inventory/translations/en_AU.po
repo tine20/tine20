@@ -1,6 +1,6 @@
 # 
 # Translators:
-# ingoratsdorf <ingo@envirology.co.nz>, 2013
+# Ingo Ratsdorf <ingo@envirology.co.nz>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

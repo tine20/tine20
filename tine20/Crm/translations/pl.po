@@ -1,6 +1,6 @@
 # 
 # Translators:
-# sardyna12 <sardyna12@gmail.com>, 2013
+# Michal Wojcik <sardyna12@gmail.com>, 2013
 # Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012
 msgid ""
 msgstr ""

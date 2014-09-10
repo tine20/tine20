@@ -1,12 +1,12 @@
 # 
 # Translators:
-# jfortuna <jfortuna@antel.com.uy>, 2014
+# Juan Fortuna <jfortuna@antel.com.uy>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: 2014-02-12 13:19+0000\n"
-"Last-Translator: jfortuna <jfortuna@antel.com.uy>\n"
+"Last-Translator: Juan Fortuna <jfortuna@antel.com.uy>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/tine20/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

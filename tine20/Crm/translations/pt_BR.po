@@ -1,6 +1,6 @@
 # 
 # Translators:
-# basalces <frajuto@gmail.com>, 2012
+# Paulo Barbosa <frajuto@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Sebastien <sebastien.janez@free.fr>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:48+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-08-27 16:14+0000\n"
+"Last-Translator: Sebastien <sebastien.janez@free.fr>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -50,7 +51,7 @@ msgstr ""
 
 #: Exception/RemainingNotBookable.php:26
 msgid "Not allowed!"
-msgstr ""
+msgstr "Non autorisé!"
 
 #: Exception/RemainingNotBookable.php:31
 msgid ""
@@ -155,19 +156,19 @@ msgstr ""
 
 #: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:355
 msgid "Status"
-msgstr ""
+msgstr "État"
 
 #: Model/FreeTime.php:88
 msgid "First Day"
-msgstr ""
+msgstr "Premier jour"
 
 #: Model/FreeTime.php:92
 msgid "Last Day"
-msgstr ""
+msgstr "Dernier jour"
 
 #: Model/FreeTime.php:96
 msgid "Days Count"
-msgstr ""
+msgstr "Compteur de jours"
 
 #: Model/FreeTime.php:102
 msgid "Free Days"
@@ -182,11 +183,11 @@ msgstr[1] ""
 
 #: Model/ExtraFreeTime.php:70 js/ExtraFreeTimeEditDialog.js:124
 msgid "Days"
-msgstr ""
+msgstr "Jours"
 
 #: Model/ExtraFreeTime.php:74 js/ExtraFreeTimeEditDialog.js:132
 msgid "Expiration date"
-msgstr ""
+msgstr "Date d'expiration"
 
 #: Model/Account.php:34 js/FreeTimeEditDialog.js:270
 msgid "Personal account"
@@ -200,7 +201,7 @@ msgstr ""
 
 #: Model/Account.php:71 js/AccountGridPanel.js:46
 msgid "Year"
-msgstr ""
+msgstr "Année"
 
 #: Model/Account.php:78
 msgid "Extra free times"
@@ -220,51 +221,51 @@ msgstr ""
 
 #: Model/Employee.php:71 js/EmployeeEditDialog.js:204
 msgid "Number"
-msgstr ""
+msgstr "Numéro"
 
 #: Model/Employee.php:87 js/EmployeeEditDialog.js:314
 msgid "Country"
-msgstr ""
+msgstr "Pays"
 
 #: Model/Employee.php:89
 msgid "Germany"
-msgstr ""
+msgstr "Allemagne"
 
 #: Model/Employee.php:93 js/EmployeeEditDialog.js:317
 msgid "Locality"
-msgstr ""
+msgstr "Locatilé"
 
 #: Model/Employee.php:98 js/EmployeeEditDialog.js:320
 msgid "Postalcode"
-msgstr ""
+msgstr "Code postal"
 
 #: Model/Employee.php:103 js/EmployeeEditDialog.js:323
 msgid "Region"
-msgstr ""
+msgstr "Région"
 
 #: Model/Employee.php:108 js/EmployeeEditDialog.js:326
 msgid "Street"
-msgstr ""
+msgstr "Rue"
 
 #: Model/Employee.php:113
 msgid "Street 2"
-msgstr ""
+msgstr "Rue 2"
 
 #: Model/Employee.php:118 js/EmployeeEditDialog.js:332
 msgid "E-Mail"
-msgstr ""
+msgstr "E-mail"
 
 #: Model/Employee.php:123 js/EmployeeEditDialog.js:335
 msgid "Telephone Number"
-msgstr ""
+msgstr "Numéro de téléphone"
 
 #: Model/Employee.php:128 js/EmployeeEditDialog.js:338
 msgid "Cell Phone Number"
-msgstr ""
+msgstr "Numéro portable"
 
 #: Model/Employee.php:133 js/EmployeeEditDialog.js:277
 msgid "Title"
-msgstr ""
+msgstr "Titre"
 
 #: Model/Employee.php:136 js/EmployeeEditDialog.js:269
 msgid "Salutation"
@@ -284,7 +285,7 @@ msgstr ""
 
 #: Model/Employee.php:150 js/EmployeeEditDialog.js:342
 msgid "Birthday"
-msgstr ""
+msgstr "Date de naissance"
 
 #: Model/Employee.php:155 js/EmployeeEditDialog.js:392
 msgid "Account Holder"
@@ -312,7 +313,7 @@ msgstr ""
 
 #: Model/Employee.php:199 js/EmployeeEditDialog.js:131
 msgid "Supervisor"
-msgstr ""
+msgstr "Superviseur"
 
 #: Model/Employee.php:210 js/EmployeeEditDialog.js:139
 msgid "Division"
@@ -324,7 +325,7 @@ msgstr ""
 
 #: Model/Employee.php:224 js/EmployeeEditDialog.js:370
 msgid "Profession"
-msgstr ""
+msgstr "Profession"
 
 #: Model/Employee.php:227 js/EmployeeEditDialog.js:374
 msgid "Position"
@@ -423,19 +424,19 @@ msgstr ""
 
 #: Setup/Update/Release7.php:373 Setup/Initialize.php:88
 msgid "Payed"
-msgstr ""
+msgstr "Payé"
 
 #: Setup/Update/Release7.php:374 Setup/Initialize.php:89
 msgid "Not payed"
-msgstr ""
+msgstr "Non payé"
 
 #: Setup/Update/Release6.php:299 Setup/Initialize.php:121
 msgid "Excused"
-msgstr ""
+msgstr "Excusé"
 
 #: Setup/Update/Release6.php:300 Setup/Initialize.php:122
 msgid "Unexcused"
-msgstr ""
+msgstr "Non excusé"
 
 #: Setup/Update/Release6.php:330
 msgid "Currently employed"
@@ -451,7 +452,7 @@ msgstr ""
 
 #: Setup/Initialize.php:52
 msgid "All accounts"
-msgstr ""
+msgstr "Tous les comptes"
 
 #: Setup/Initialize.php:53
 msgid "All available accounts"
@@ -459,31 +460,31 @@ msgstr ""
 
 #: Setup/Initialize.php:103
 msgid "Requested"
-msgstr ""
+msgstr "Demandé"
 
 #: Setup/Initialize.php:104
 msgid "In process"
-msgstr ""
+msgstr "En cours"
 
 #: Setup/Initialize.php:105
 msgid "Accepted"
-msgstr ""
+msgstr "Accepté"
 
 #: Setup/Initialize.php:106
 msgid "Declined"
-msgstr ""
+msgstr "Refusé"
 
 #: Setup/Initialize.php:141
 msgid "Full-time 40 hours"
-msgstr ""
+msgstr "Plein temps 40 heures"
 
 #: Setup/Initialize.php:148
 msgid "Full-time 37.5 hours"
-msgstr ""
+msgstr "Plein temps 37,5 heures"
 
 #: Setup/Initialize.php:155
 msgid "Part-time 20 hours"
-msgstr ""
+msgstr "Mi-temps 20 heures"
 
 #: js/EmployeeGridPanel.js:40 js/EmployeeGridPanel.js:41
 #: js/EmployeeGridPanel.js:42
@@ -494,19 +495,19 @@ msgstr[1] ""
 
 #: js/EmployeeGridPanel.js:54
 msgid "Export as ODS"
-msgstr ""
+msgstr "Exporter au format ODS"
 
 #: js/EmployeeGridPanel.js:61
 msgid "Export as XLS"
-msgstr ""
+msgstr "Exporter au format XLS"
 
 #: js/AdminPanel.js:64
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: js/AdminPanel.js:72
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: js/AdminPanel.js:126
 msgid "Please use the following format: MM-DD"
@@ -514,7 +515,7 @@ msgstr ""
 
 #: js/AdminPanel.js:219 js/ContractEditDialog.js:233
 msgid "Calendar"
-msgstr ""
+msgstr "Calendrier"
 
 #: js/AdminPanel.js:220 js/ContractEditDialog.js:234
 msgid "Calendars"
@@ -599,7 +600,7 @@ msgstr ""
 
 #: js/AccountGridPanel.js:80
 msgid "Create new accounts"
-msgstr ""
+msgstr "Créer de nouveaux comptes"
 
 #: js/AccountGridPanel.js:134
 msgid "Booking has been successfull!"
@@ -686,7 +687,7 @@ msgstr ""
 
 #: js/AccountEditDialog.js:112
 msgid "Taken vaction days"
-msgstr ""
+msgstr "Jours de vacances pris"
 
 #: js/AccountEditDialog.js:113
 msgid "Expired vaction days"
@@ -698,11 +699,11 @@ msgstr ""
 
 #: js/AccountEditDialog.js:127
 msgid "Excused sickness days"
-msgstr ""
+msgstr "Jours de maladie excusés"
 
 #: js/AccountEditDialog.js:128
 msgid "Unexcused sickness days"
-msgstr ""
+msgstr "Jours de maladie non excusés"
 
 #: js/AccountEditDialog.js:135 js/Models.js:23 js/ContractEditDialog.js:248
 msgid "Working Time"
@@ -728,7 +729,7 @@ msgstr ""
 
 #: js/Models.js:58
 msgid "Quick Search"
-msgstr ""
+msgstr "Recherche rapide"
 
 #: js/CostCenterGridPanel.js:58
 msgid "CostCenter"
@@ -758,28 +759,28 @@ msgstr ""
 
 #: js/ContractEditDialog.js:278
 msgid "Mon."
-msgstr ""
+msgstr "Lun."
 
 #: js/ContractEditDialog.js:281
 msgid "Tue."
-msgstr ""
+msgstr "Mar."
 
 #: js/ContractEditDialog.js:284
 msgid "Wed."
-msgstr ""
+msgstr "Mer."
 
 #: js/ContractEditDialog.js:287
 msgid "Thu."
-msgstr ""
+msgstr "Jeu."
 
 #: js/ContractEditDialog.js:290
 msgid "Fri."
-msgstr ""
+msgstr "Ven."
 
 #: js/ContractEditDialog.js:293
 msgid "Sat."
-msgstr ""
+msgstr "Sam."
 
 #: js/ContractEditDialog.js:296
 msgid "Sun."
-msgstr ""
+msgstr "Dim."

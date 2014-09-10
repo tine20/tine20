@@ -1,6 +1,6 @@
 # 
 # Translators:
-# bzittema <b_zittema@hotmail.com>, 2014
+# Bastiën Zittema <b_zittema@hotmail.com>, 2014
 # BJ <bertjan.meinders@bjsoft.nl>, 2012
 msgid ""
 msgstr ""
