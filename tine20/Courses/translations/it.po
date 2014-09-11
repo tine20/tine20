@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-10 14:10+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,25 +18,152 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:99
+#: Acl/Rights.php:107
 msgid "Add new user"
 msgstr "Aggiungi nuovo utente"
 
-#: Acl/Rights.php:100
+#: Acl/Rights.php:108
 msgid "Add new user as member to a course"
 msgstr "Aggiungi nuovo utente come membro di un corso"
 
-#: Acl/Rights.php:103
+#: Acl/Rights.php:111
 msgid "Add existing user"
 msgstr "Aggiungi utente esistente"
 
-#: Acl/Rights.php:104
+#: Acl/Rights.php:112
 msgid "Add existing user as member to a course"
 msgstr "Aggiungi utente esistente come membro di un corso"
 
-#: Config.php:89 js/CourseEditDialog.js:229 js/Models.js:74
+#: Acl/Rights.php:115
+msgid "Manage shared courses favorites"
+msgstr ""
+
+#: Acl/Rights.php:116
+msgid "Create or update shared courses favorites"
+msgstr ""
+
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr "Nome"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "Tipo"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Fallito"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Si sono verificati alcuni errori durante il tentativo di aggiornare i corsi."
+
+#: js/CourseEditDialog.js:32
+msgid "Import course members"
+msgstr "Importa membri del corso"
+
+#: js/CourseEditDialog.js:41
+msgid "Add new member"
+msgstr "Aggiungi nuovo membro"
+
+#: js/CourseEditDialog.js:189 js/Models.js:43 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Corso"
+msgstr[1] "Corsi"
+
+#: js/CourseEditDialog.js:205
+msgid "Course Name"
+msgstr "Nome Corso"
+
+#: js/CourseEditDialog.js:212
+msgid "Course / School Type"
+msgstr "Corso / Tipo Corso"
+
+#: js/CourseEditDialog.js:222
+msgid "Description"
+msgstr "Descrizione"
+
+#: js/CourseEditDialog.js:228 js/Models.js:74 Config.php:89
 msgid "Internet Access"
 msgstr "Accesso Internet"
+
+#: js/CourseEditDialog.js:238
+msgid "Fileserver Access"
+msgstr "Accesso Fileserver"
+
+#: js/CourseEditDialog.js:270
+msgid "Members"
+msgstr "Membri"
+
+#: js/CourseEditDialog.js:297
+msgid "Login"
+msgstr "Login"
+
+#: js/CourseEditDialog.js:301
+msgid "unknown"
+msgstr "sconosciuto"
+
+#: js/CourseEditDialog.js:306
+msgid "Reset Password"
+msgstr "Ripristina Password"
+
+#: js/Models.js:47
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "lista dati"
+msgstr[1] "liste dati"
+
+#: js/Models.js:71
+msgid "Quick Search"
+msgstr "Ricerca veloce"
+
+#: js/Models.js:109
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Tipo di Corso"
+msgstr[1] "Tipi di Corsi"
+
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Nome"
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Cognome"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Aggiungi nuovo utente ad un corso"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Errori"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Si prega di correggere gli errori rilevati."
+
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Insegnante"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Account Insegnante"
+
+#: Controller/Course.php:317
+msgid "My course"
+msgstr "Mio corso"
+
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr "Tutti i corsi"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "Il preferito di default che viene caricato all'avvio delle Classi"
 
 #: Config.php:91
 msgid "Internet access options."
@@ -88,11 +215,6 @@ msgstr ""
 msgid "Courses"
 msgstr "Corsi"
 
-#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
-#: Preference.php:60
-msgid "All courses"
-msgstr "Tutti i corsi"
-
 #: Setup/Initialize.php:66
 msgid "On"
 msgstr "Attivo"
@@ -104,117 +226,3 @@ msgstr "Inattivo"
 #: Setup/Initialize.php:68
 msgid "Filtered"
 msgstr "Filtrato"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "Il preferito di default che viene caricato all'avvio delle Classi"
-
-#: js/CourseEditDialog.js:33
-msgid "Import course members"
-msgstr "Importa membri del corso"
-
-#: js/CourseEditDialog.js:42
-msgid "Add new member"
-msgstr "Aggiungi nuovo membro"
-
-#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Corso"
-msgstr[1] "Corsi"
-
-#: js/CourseEditDialog.js:206
-msgid "Course Name"
-msgstr "Nome Corso"
-
-#: js/CourseEditDialog.js:213
-msgid "Course / School Type"
-msgstr "Corso / Tipo Corso"
-
-#: js/CourseEditDialog.js:223
-msgid "Description"
-msgstr "Descrizione"
-
-#: js/CourseEditDialog.js:239
-msgid "Fileserver Access"
-msgstr "Accesso Fileserver"
-
-#: js/CourseEditDialog.js:271
-msgid "Members"
-msgstr "Membri"
-
-#: js/CourseEditDialog.js:298
-msgid "Login"
-msgstr "Login"
-
-#: js/CourseEditDialog.js:302
-msgid "unknown"
-msgstr "sconosciuto"
-
-#: js/CourseEditDialog.js:307
-msgid "Reset Password"
-msgstr "Ripristina Password"
-
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Nome"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Cognome"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Aggiungi nuovo utente ad un corso"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Errori"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Si prega di correggere gli errori rilevati."
-
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
-msgstr "Nome"
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "Tipo"
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Fallito"
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Si sono verificati alcuni errori durante il tentativo di aggiornare i corsi."
-
-#: js/Models.js:47
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "lista dati"
-msgstr[1] "liste dati"
-
-#: js/Models.js:71
-msgid "Quick Search"
-msgstr "Ricerca veloce"
-
-#: js/Models.js:109
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Tipo di Corso"
-msgstr[1] "Tipi di Corsi"
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Insegnante"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Account Insegnante"
-
-#: Controller/Course.php:317
-msgid "My course"
-msgstr "Mio corso"

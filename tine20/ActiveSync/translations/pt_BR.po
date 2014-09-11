@@ -16,6 +16,74 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Dispositivo"
+msgstr[1] "Dispositivos"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Dispositivos"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Syncronização Ativa"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Selecione o Dispositivo"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Nenhum dispositivos de sincronização ativo registrado"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Atribuir como {0} Filtro"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Filtro de Sincronização Restabelecido"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} filtro para o dispositivo \"{1}\" está agora \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "Restabelecido"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Atribuir Filtro Sincronizado"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Catálogo de Endereços Padrão"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "O Catálogo de endereços padrão para criar novos contatos em."
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Calendário Padrão"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "O calendário padrão para criaro novos eventos em."
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Lista de Tarefas Padrão"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "A lista de tarefa padrão para criar novas tarefas em."
+
 #: Config.php:52
 msgid "Default policy for new devices"
 msgstr "Política padrão para novos dispositivos"
@@ -55,69 +123,3 @@ msgstr "Política Padrão"
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "Política Padrão instalada durante a configuração"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Catálogo de Endereços Padrão"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "O Catálogo de endereços padrão para criar novos contatos em."
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Calendário Padrão"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "O calendário padrão para criaro novos eventos em."
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Lista de Tarefas Padrão"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "A lista de tarefa padrão para criar novas tarefas em."
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Dispositivo"
-msgstr[1] "Dispositivos"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Dispositivos"
-
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Syncronização Ativa"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Selecione o Dispositivo"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Nenhum dispositivos de sincronização ativo registrado"
-
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr "Atribuir como {0} Filtro"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Filtro de Sincronização Restabelecido"
-
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} filtro para o dispositivo \"{1}\" está agora \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "Restabelecido"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Atribuir Filtro Sincronizado"

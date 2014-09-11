@@ -1,14 +1,14 @@
 # 
 # Translators:
-# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013
+# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2014
 # артур Мудрых <arturmon82@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:48+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-10 18:47+0000\n"
+"Last-Translator: Aleksey Ubozhenko <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -171,7 +171,7 @@ msgstr "На прошлой неделе"
 #: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:114
 #: js/Models.js:179
 msgid "Cleared at"
-msgstr ""
+msgstr "Создано"
 
 #: js/TimeaccountEditDialog.js:140
 msgid "Responsible person"

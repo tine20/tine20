@@ -17,6 +17,75 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Urządzenie"
+msgstr[1] "urządzenia"
+msgstr[2] "urządzenia"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Urządzenia"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Zdalna synchronizacja"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Wybierz urządzenie"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Usługa ActiveSync niezarejestrowana"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Ustaw jako filtr: {0}"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Zresetowany filtr synchronizacji"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "Filtrem {0} dla urządzenia \"{1}\"  jest teraz \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "zresetowane"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Ustaw filtr synchronizacji"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Domyślna książka adresowa"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Domyślna książka adresowa z nowymi kontaktami"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Domyślny kalendarz"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Domyślny kalendarz z nowymi terminami"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Domyślna lista zadań"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Domyślna lista dla nowo tworzonych zadań"
+
 #: Config.php:52
 msgid "Default policy for new devices"
 msgstr "Domyślna polityka dla nowych urządzeń"
@@ -56,70 +125,3 @@ msgstr "Domyślna polityka"
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "Domyślna polityka określona podczas definiowania ustawień"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Domyślna książka adresowa"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Domyślna książka adresowa z nowymi kontaktami"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Domyślny kalendarz"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Domyślny kalendarz z nowymi terminami"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Domyślna lista zadań"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Domyślna lista dla nowo tworzonych zadań"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Urządzenie"
-msgstr[1] "urządzenia"
-msgstr[2] "urządzenia"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Urządzenia"
-
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Zdalna synchronizacja"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Wybierz urządzenie"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Usługa ActiveSync niezarejestrowana"
-
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr "Ustaw jako filtr: {0}"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Zresetowany filtr synchronizacji"
-
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "Filtrem {0} dla urządzenia \"{1}\"  jest teraz \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "zresetowane"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Ustaw filtr synchronizacji"

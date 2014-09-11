@@ -18,6 +18,73 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "设备"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "设备"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "选择一个设备"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "没有同步设备"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "设置为{0}过滤器"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "重置同步过滤器"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} 过滤设备 \"{1}\" 现在是 \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "重新设置"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "设置同步过滤器"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "缺省地址簿"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "使用默认通讯录创建新的联系人"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "缺省日历"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "使用缺省日历创建新的事件"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "任务列表"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "在默认的任务列表中创建新的任务。"
+
 #: Config.php:52
 msgid "Default policy for new devices"
 msgstr "新设备使用默认策略"
@@ -57,68 +124,3 @@ msgstr "默认策略"
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "安装过程中使用默认策略"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "缺省地址簿"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "使用默认通讯录创建新的联系人"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "缺省日历"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "使用缺省日历创建新的事件"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "任务列表"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "在默认的任务列表中创建新的任务。"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "设备"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "设备"
-
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "选择一个设备"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "没有同步设备"
-
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr "设置为{0}过滤器"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "重置同步过滤器"
-
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} 过滤设备 \"{1}\" 现在是 \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "重新设置"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "设置同步过滤器"

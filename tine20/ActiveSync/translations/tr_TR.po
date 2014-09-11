@@ -17,6 +17,73 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "one: Cihaz\n\nother: Cihazlar"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Cihazlar"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Bir Cihaz Seçiniz"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Active Sync Cihazı Bulunamamıstır"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr ""
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Senkronize Filtresini Sıfırla"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr ""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "Sıfırlandı"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Senkronize Filtresini Ayarla"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Standart Adres Defteri"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr ""
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Standart Takvim"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr ""
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Standart Görev Listesi"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr ""
+
 #: Config.php:52
 msgid "Default policy for new devices"
 msgstr "Yeni Cihazlara Standart Kurallar"
@@ -56,68 +123,3 @@ msgstr ""
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "Program Kuruluşu anından Standart Kurallar"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Standart Adres Defteri"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr ""
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Standart Takvim"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr ""
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Standart Görev Listesi"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr ""
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "one: Cihaz\n\nother: Cihazlar"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Cihazlar"
-
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Bir Cihaz Seçiniz"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Active Sync Cihazı Bulunamamıstır"
-
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr ""
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Senkronize Filtresini Sıfırla"
-
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr ""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "Sıfırlandı"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Senkronize Filtresini Ayarla"

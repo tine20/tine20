@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-10 14:10+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,25 +17,152 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:99
+#: Acl/Rights.php:107
 msgid "Add new user"
 msgstr "Voeg nieuwe gebruiker toe"
 
-#: Acl/Rights.php:100
+#: Acl/Rights.php:108
 msgid "Add new user as member to a course"
 msgstr "Voeg gebruiker al lid van de cursus toe"
 
-#: Acl/Rights.php:103
+#: Acl/Rights.php:111
 msgid "Add existing user"
 msgstr "Voeg bestaande gebruiker toe"
 
-#: Acl/Rights.php:104
+#: Acl/Rights.php:112
 msgid "Add existing user as member to a course"
 msgstr "Voeg bestaande gebruiker toe als lid van de cursus"
 
-#: Config.php:89 js/CourseEditDialog.js:229 js/Models.js:74
+#: Acl/Rights.php:115
+msgid "Manage shared courses favorites"
+msgstr ""
+
+#: Acl/Rights.php:116
+msgid "Create or update shared courses favorites"
+msgstr ""
+
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr "Naam"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "soort"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Mislukt"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Foutmelding tijdens poging van het updaten van de cursussen"
+
+#: js/CourseEditDialog.js:32
+msgid "Import course members"
+msgstr "Importeer cursus leden"
+
+#: js/CourseEditDialog.js:41
+msgid "Add new member"
+msgstr "Voeg nieuwe gebruiker toe"
+
+#: js/CourseEditDialog.js:189 js/Models.js:43 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Cursus"
+msgstr[1] "Cursussen"
+
+#: js/CourseEditDialog.js:205
+msgid "Course Name"
+msgstr "Cursus naam"
+
+#: js/CourseEditDialog.js:212
+msgid "Course / School Type"
+msgstr "Cursus / School soort"
+
+#: js/CourseEditDialog.js:222
+msgid "Description"
+msgstr "Omschrijving"
+
+#: js/CourseEditDialog.js:228 js/Models.js:74 Config.php:89
 msgid "Internet Access"
 msgstr "Internet toegang"
+
+#: js/CourseEditDialog.js:238
+msgid "Fileserver Access"
+msgstr "Bestandsbeheerder toegang"
+
+#: js/CourseEditDialog.js:270
+msgid "Members"
+msgstr "Leden"
+
+#: js/CourseEditDialog.js:297
+msgid "Login"
+msgstr "Login"
+
+#: js/CourseEditDialog.js:301
+msgid "unknown"
+msgstr "Onbekend"
+
+#: js/CourseEditDialog.js:306
+msgid "Reset Password"
+msgstr "Reset wachtwoord"
+
+#: js/Models.js:47
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "Taaklijst"
+msgstr[1] "Taaklijsten"
+
+#: js/Models.js:71
+msgid "Quick Search"
+msgstr "Snel zoeken"
+
+#: js/Models.js:109
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Cursus soort"
+msgstr[1] "Cursus soorten"
+
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr "Voornaam"
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr "Achternaam"
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr "Voeg nieuw lid toe aan cursus"
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr "Fouten"
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr "Verhelp de genoemde fouten."
+
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Docent"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Docent account"
+
+#: Controller/Course.php:317
+msgid "My course"
+msgstr "Mijn cursus"
+
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr "Alle cursussen"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "De standaard favoriet die bij het opstarten van Klassen wordt geladen"
 
 #: Config.php:91
 msgid "Internet access options."
@@ -87,11 +214,6 @@ msgstr ""
 msgid "Courses"
 msgstr "Cursussen"
 
-#: Setup/Update/Release5.php:30 Setup/Initialize.php:35 Preference.php:24
-#: Preference.php:60
-msgid "All courses"
-msgstr "Alle cursussen"
-
 #: Setup/Initialize.php:66
 msgid "On"
 msgstr "Aan"
@@ -103,117 +225,3 @@ msgstr "Uit"
 #: Setup/Initialize.php:68
 msgid "Filtered"
 msgstr "Gefilterd"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "De standaard favoriet die bij het opstarten van Klassen wordt geladen"
-
-#: js/CourseEditDialog.js:33
-msgid "Import course members"
-msgstr "Importeer cursus leden"
-
-#: js/CourseEditDialog.js:42
-msgid "Add new member"
-msgstr "Voeg nieuwe gebruiker toe"
-
-#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Cursus"
-msgstr[1] "Cursussen"
-
-#: js/CourseEditDialog.js:206
-msgid "Course Name"
-msgstr "Cursus naam"
-
-#: js/CourseEditDialog.js:213
-msgid "Course / School Type"
-msgstr "Cursus / School soort"
-
-#: js/CourseEditDialog.js:223
-msgid "Description"
-msgstr "Omschrijving"
-
-#: js/CourseEditDialog.js:239
-msgid "Fileserver Access"
-msgstr "Bestandsbeheerder toegang"
-
-#: js/CourseEditDialog.js:271
-msgid "Members"
-msgstr "Leden"
-
-#: js/CourseEditDialog.js:298
-msgid "Login"
-msgstr "Login"
-
-#: js/CourseEditDialog.js:302
-msgid "unknown"
-msgstr "Onbekend"
-
-#: js/CourseEditDialog.js:307
-msgid "Reset Password"
-msgstr "Reset wachtwoord"
-
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Voornaam"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Achternaam"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Voeg nieuw lid toe aan cursus"
-
-#: js/AddMemberDialog.js:118
-msgid "Errors"
-msgstr "Fouten"
-
-#: js/AddMemberDialog.js:118
-msgid "Please fix the errors noted."
-msgstr "Verhelp de genoemde fouten."
-
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
-msgstr "Naam"
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "soort"
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Mislukt"
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Foutmelding tijdens poging van het updaten van de cursussen"
-
-#: js/Models.js:47
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Taaklijst"
-msgstr[1] "Taaklijsten"
-
-#: js/Models.js:71
-msgid "Quick Search"
-msgstr "Snel zoeken"
-
-#: js/Models.js:109
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Cursus soort"
-msgstr[1] "Cursus soorten"
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Docent"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Docent account"
-
-#: Controller/Course.php:317
-msgid "My course"
-msgstr "Mijn cursus"

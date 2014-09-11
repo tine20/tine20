@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-10 14:11+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/tine20/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,35 +18,109 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:106
-msgid "manage shared lead folders"
-msgstr "gestionar carpetas compartidas de iniciativas"
+#: Export/Pdf.php:75
+msgid "Lead Data"
+msgstr "Fecha Iniciativa"
 
-#: Acl/Rights.php:107
-msgid "Create new shared lead folders"
-msgstr "Crear nueva carpeta compartida de iniciativas"
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadGridPanel.js:145
+#: js/LeadStateFilterModel.js:32 js/LeadEditDialog.js:343
+msgid "Leadstate"
+msgstr "Estado Iniciativa"
 
-#: Acl/Rights.php:110
-msgid "manage shared leads favorites"
-msgstr "gestionar iniciativas favoritas compartidas"
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:362
+#: js/LeadGridDetailsPanel.js:454
+msgid "Leadtype"
+msgstr "Tipo de Iniciativa"
 
-#: Acl/Rights.php:111
-msgid "Create or update shared leads favorites"
-msgstr "Crear o actualizar iniciativas favoritas compartidas"
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:369
+#: js/LeadGridDetailsPanel.js:459
+msgid "Leadsource"
+msgstr "Fuente de la Iniciativa"
+
+#: Export/Pdf.php:87 js/LeadGridPanel.js:147 js/Model.js:111
+#: Controller/Lead.php:200
+msgid "Turnover"
+msgstr "Facturación"
+
+#: Export/Pdf.php:90 js/LeadGridPanel.js:146 js/Model.js:110
+#: js/LeadEditDialog.js:222 Controller/Lead.php:201
+msgid "Probability"
+msgstr "Probabilidad"
+
+#: Export/Pdf.php:93 js/LeadEditDialog.js:406 js/LeadGridDetailsPanel.js:444
+#: Controller/Lead.php:197
+msgid "Start"
+msgstr "Inicio"
+
+#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:199
+msgid "End"
+msgstr "Fin"
+
+#: Export/Pdf.php:99
+msgid "End Scheduled"
+msgstr "Programación Finalizada"
+
+#: Export/Pdf.php:184
+msgid "Contacts"
+msgstr "Contactos"
+
+#: Export/Pdf.php:211 js/Contact.js:231
+msgid "Address"
+msgstr "Dirección"
+
+#: Export/Pdf.php:218 Controller.php:177
+msgid "Telephone"
+msgstr "Teléfono"
+
+#: Export/Pdf.php:219 Controller.php:176
+msgid "Email"
+msgstr "Email"
+
+#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:245
+msgid "Tasks"
+msgstr "Tareas"
+
+#: Export/Pdf.php:252 js/Task.js:227
+msgid "Due Date"
+msgstr "Fecha Apta"
+
+#: Export/Pdf.php:259 js/Task.js:240
+msgid "Priority"
+msgstr "Prioridad"
+
+#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:256
+msgid "Products"
+msgstr "Productos"
+
+#: Export/Pdf.php:315
+msgid "low"
+msgstr "baja"
+
+#: Export/Pdf.php:316
+msgid "normal"
+msgstr "normal"
+
+#: Export/Pdf.php:317
+msgid "high"
+msgstr "alta"
+
+#: Export/Pdf.php:318
+msgid "urgent"
+msgstr "urgente"
 
 #: Controller.php:117
 #, python-format
 msgid "%s's personal leads"
 msgstr "Iniciativas personales de %s"
 
-#: Controller.php:162 Model/Lead.php:120 js/LeadGridDetailsPanel.js:45
-#: js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
-#: js/LeadGridPanel.js:122 Controller/Lead.php:186
+#: Controller.php:162 Model/Lead.php:123 js/LeadGridPanel.js:144
+#: js/LeadGridDetailsPanel.js:45 js/Contact.js:161 js/Contact.js:356
+#: js/Contact.js:396 Controller/Lead.php:193
 msgid "Customer"
 msgstr "Cliente"
 
-#: Controller.php:163 js/LeadGridDetailsPanel.js:45 js/Contact.js:181
-#: js/Contact.js:357 js/Contact.js:400 js/LeadGridPanel.js:121
+#: Controller.php:163 js/LeadGridPanel.js:143 js/LeadGridDetailsPanel.js:45
+#: js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
 msgid "Partner"
 msgstr "Socio"
 
@@ -82,50 +156,399 @@ msgstr "perdido"
 msgid "Market"
 msgstr "Mercado"
 
-#: Controller.php:176 Export/Pdf.php:219
-msgid "Email"
-msgstr "Email"
-
-#: Controller.php:177 Export/Pdf.php:218
-msgid "Telephone"
-msgstr "Teléfono"
-
 #: Controller.php:178
 msgid "Website"
 msgstr "Web"
 
-#: Model/Lead.php:119 js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
-#: js/LeadGridPanel.js:120
+#: Acl/Rights.php:106
+msgid "manage shared lead folders"
+msgstr "gestionar carpetas compartidas de iniciativas"
+
+#: Acl/Rights.php:107
+msgid "Create new shared lead folders"
+msgstr "Crear nueva carpeta compartida de iniciativas"
+
+#: Acl/Rights.php:110
+msgid "manage shared leads favorites"
+msgstr "gestionar iniciativas favoritas compartidas"
+
+#: Acl/Rights.php:111
+msgid "Create or update shared leads favorites"
+msgstr "Crear o actualizar iniciativas favoritas compartidas"
+
+#: Model/Lead.php:122 js/LeadGridPanel.js:142 js/Contact.js:171
+#: js/Contact.js:355 js/Contact.js:392
 msgid "Responsible"
 msgstr "Responsable"
 
-#: Model/Lead.php:125
+#: Model/Lead.php:129
 msgid "Task"
 msgstr "Tarea"
 
-#: Setup/Update/Release3.php:37 Setup/Initialize.php:36
-msgid "All leads I have read grants for"
-msgstr "Todas las iniciativas leídas aplican para"
+#: js/Task.js:109
+msgid "No Tasks to display"
+msgstr "No hay tareas que mostar"
 
-#: Setup/Initialize.php:43
-msgid "Last modified by me"
-msgstr "Últimas modificadas por mi"
+#: js/Task.js:219
+msgid "Summary"
+msgstr "Resumen"
 
-#: Setup/Initialize.php:44
-msgid "All leads that I have last modified"
-msgstr "Todas las iniciativas modificadas últimamente"
+#: js/Task.js:223
+msgid "Add a task..."
+msgstr "Agregar una tarea..."
 
-#: Setup/Initialize.php:53
-msgid "My leads"
-msgstr "Mis iniciativas"
+#: js/Task.js:256
+msgid "Percent"
+msgstr "Porcentaje"
 
-#: Setup/Initialize.php:54
-msgid "All leads that I am responsible for"
-msgstr "Todas las iniciativas de mi responsabilidad para"
+#: js/Task.js:269 js/LeadGridDetailsPanel.js:439
+msgid "Status"
+msgstr "Estado"
 
-#: Setup/Initialize.php:67
-msgid "Leads with overdue tasks"
-msgstr "Iniciativas con retraso"
+#: js/Task.js:285
+msgid "Organizer"
+msgstr ""
+
+#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
+#: js/LeadGridDetailsPanel.js:227
+msgid "Leadstates"
+msgstr "Estado Iniciativa"
+
+#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
+msgid "Leadtypes"
+msgstr "Tipos de iniciativas"
+
+#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
+msgid "Leadsources"
+msgstr "Fuentes de las iniciativas"
+
+#: js/AdminPanel.js:138
+msgid "Defaults"
+msgstr "Predeterminadas"
+
+#: js/LeadState.js:32
+msgid "Lead State"
+msgid_plural "Lead States"
+msgstr[0] "Estado de la iniciativa"
+msgstr[1] "Estados de las iniciativas"
+
+#: js/LeadState.js:166
+msgid "Add a Leadstate..."
+msgstr "Añadir un Estado para las iniciativas..."
+
+#: js/LeadGridContactFilter.js:47
+msgid "Contact"
+msgstr "Contacto"
+
+#: js/LeadGridContactFilter.js:54
+msgid "CRM Role"
+msgstr "Cargo CRM"
+
+#: js/LeadType.js:29
+msgid "Lead Type"
+msgid_plural "Lead Types"
+msgstr[0] "Tipo de Iniciativa"
+msgstr[1] "Tipos de Iniciativas"
+
+#: js/LeadType.js:134
+msgid "Add a Leadtype..."
+msgstr "Añadir un Tipo para las iniciativas"
+
+#: js/LinkGridPanel.js:34
+#, python-brace-format
+msgid "Add new {0}"
+msgstr "Agregar nueva {0}"
+
+#: js/LinkGridPanel.js:56 js/Product.js:185
+#, python-brace-format
+msgid "Unlink {0}"
+msgstr "Desconectar {0}"
+
+#: js/LinkGridPanel.js:57 js/Product.js:186
+#, python-brace-format
+msgid "Unlink selected {0}"
+msgstr "Desconectar selecccionados {0}"
+
+#: js/LinkGridPanel.js:72
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "Editar {0}"
+
+#: js/LinkGridPanel.js:73
+#, python-brace-format
+msgid "Edit selected {0}"
+msgstr "Editar seleccionados {0}"
+
+#: js/Product.js:134
+msgid "Product"
+msgstr "Producto"
+
+#: js/Product.js:139 js/LeadEditDialog.js:444
+msgid "Description"
+msgstr "Descripción"
+
+#: js/Product.js:146
+msgid "Price"
+msgstr "Precio"
+
+#: js/Product.js:158
+msgid "Quantity"
+msgstr "Cantidad"
+
+#: js/Product.js:216
+msgid "Search for Products to add ..."
+msgstr "Buscar Productos para añadir ..."
+
+#: js/LeadGridPanel.js:139
+msgid "Lead id"
+msgstr "Iniciativa id"
+
+#: js/LeadGridPanel.js:140
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: js/LeadGridPanel.js:141 js/Model.js:108
+msgid "Lead name"
+msgstr "Nombre de la Iniciativa"
+
+#: js/LeadGridPanel.js:149 js/Model.js:118 js/LeadEditDialog.js:412
+#: js/LeadGridDetailsPanel.js:449
+msgid "Estimated end"
+msgstr "Estimación finaliza"
+
+#: js/LeadGridPanel.js:150
+msgid "Probable Turnover"
+msgstr "Facturación Prevista"
+
+#: js/LeadGridPanel.js:151 js/Model.js:119 js/LeadEditDialog.js:393
+msgid "Resubmission Date"
+msgstr ""
+
+#: js/LeadGridPanel.js:194
+msgid "Export Lead"
+msgstr "Exportar Iniciativa"
+
+#: js/LeadGridPanel.js:203
+msgid "Export as PDF"
+msgstr "Exportar como PDF"
+
+#: js/LeadGridPanel.js:210
+msgid "Export as CSV"
+msgstr "Exportar como CVS"
+
+#: js/LeadGridPanel.js:217
+msgid "Export as ODS"
+msgstr "Exportar como ODS"
+
+#: js/LeadGridPanel.js:224
+msgid "Export as XLS"
+msgstr "Exportar como XLS"
+
+#: js/LeadStateFilterModel.js:37
+msgid "Show closed"
+msgstr "Mostar cerradas"
+
+#: js/Model.js:52 js/LeadEditDialog.js:274 js/AddToLeadPanel.js:73
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Iniciativa"
+msgstr[1] "Iniciativas"
+
+#: js/Model.js:56
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] "Lista de iniciativas"
+msgstr[1] "Listados de iniciativas"
+
+#: js/Model.js:56
+msgid "lead lists"
+msgstr "Listados de iniciativas"
+
+#: js/Model.js:106
+msgid "Quick Search"
+msgstr "Búsqueda Rápida"
+
+#: js/Model.js:113
+msgid "Last Modified Time"
+msgstr "Fecha última modificación"
+
+#: js/Model.js:114
+msgid "Last Modified By"
+msgstr "Última modificación por"
+
+#: js/Model.js:115
+msgid "Creation Time"
+msgstr "Fecha de Creación"
+
+#: js/Model.js:116
+msgid "Created By"
+msgstr "Creado por"
+
+#: js/Model.js:159
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] "Preferencia"
+msgstr[1] "Preferencias"
+
+#: js/Model.js:162
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "listado de registros"
+msgstr[1] "listados de registros"
+
+#: js/LeadEditDialog.js:246
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr "No tiene privilegios para ejecutar la aplicación Tareas o no esta activada."
+
+#: js/LeadEditDialog.js:257
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr "No tiene privilegios para ejecutar la aplicación Ventas o no esta activada."
+
+#: js/LeadEditDialog.js:301
+msgid "Enter short name"
+msgstr "Escribir nombre corto"
+
+#: js/LeadEditDialog.js:385
+msgid "Expected turnover"
+msgstr "Facturación anual"
+
+#: js/LeadEditDialog.js:458
+msgid "Enter description"
+msgstr "Escribir descripción"
+
+#: js/Crm.js:24
+msgid "New Lead"
+msgstr "Nueva Iniciativa"
+
+#: js/LeadGridDetailsPanel.js:48 js/Contact.js:245
+msgid "Phone"
+msgstr "Teléfono"
+
+#: js/LeadGridDetailsPanel.js:51
+msgid "Mobile"
+msgstr "Móvil"
+
+#: js/LeadGridDetailsPanel.js:54
+msgid "Fax"
+msgstr "Fax"
+
+#: js/LeadGridDetailsPanel.js:57
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: js/LeadGridDetailsPanel.js:60
+msgid "Web"
+msgstr "Web"
+
+#: js/LeadSource.js:29
+msgid "Lead Source"
+msgid_plural "Lead Sources"
+msgstr[0] "Fuente de la iniciativa"
+msgstr[1] "Fuentes de las iniciativas"
+
+#: js/LeadSource.js:136
+msgid "Add a Leadsource..."
+msgstr "Añadir fuente de iniciativas"
+
+#: js/AddToLeadPanel.js:31
+msgid "Please choose the Lead to add the contacts to"
+msgstr "Ingresar referencia para agregar los contactos"
+
+#: js/AddToLeadPanel.js:36
+msgid "Please select the attenders' role"
+msgstr "Seleccione rol de asistentes"
+
+#: js/AddToLeadPanel.js:74
+msgid "Select Lead"
+msgstr "Seleccionar iniciativa"
+
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:195
+msgid "Role"
+msgstr "Cargo"
+
+#: js/AddToLeadPanel.js:79
+msgid "Select Role"
+msgstr "Seleccionar Cargo"
+
+#: js/AddToLeadPanel.js:93
+#, python-brace-format
+msgid "Adding {0} contacts to lead"
+msgstr "Agregar {0} contactos a la iniciativa"
+
+#: js/Contact.js:162
+msgid "Change type to Customer"
+msgstr "Cambiar de cliente"
+
+#: js/Contact.js:172
+msgid "Change type to Responsible"
+msgstr "Cambiar de Responsable"
+
+#: js/Contact.js:182
+msgid "Change type to Partner"
+msgstr "Cambiar de Socio"
+
+#: js/Contact.js:193
+msgid "Change contact type"
+msgstr "Cambiar tipo de contacto"
+
+#: js/Contact.js:205
+msgid "Search for Contacts to add ..."
+msgstr "Buscar contactos para añadir... "
+
+#: js/Contact.js:222
+msgid "Name"
+msgstr "Nombre"
+
+#: js/Contact.js:242
+msgid "Data"
+msgstr "Fecha"
+
+#: js/Contact.js:246
+msgid "Cellphone"
+msgstr "Teléfono móvil"
+
+#: Controller/Lead.php:194
+msgid "State"
+msgstr "Estado"
+
+#: Controller/Lead.php:196
+msgid "Source"
+msgstr "Fuente"
+
+#: Controller/Lead.php:198
+msgid "Scheduled end"
+msgstr "Programación finalizada"
+
+#: Controller/Lead.php:202
+msgid "Folder"
+msgstr "Carpeta"
+
+#: Controller/Lead.php:203
+msgid "Updated by"
+msgstr "Actualizado por"
+
+#: Controller/Lead.php:204
+msgid "Updated Fields:"
+msgstr "Campos Actualizados:"
+
+#: Controller/Lead.php:205
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr "%s cambió de %s a %s."
+
+#: Controller/Lead.php:211
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "Iniciativa %s ha sido cambiada"
+
+#: Controller/Lead.php:213
+#, python-format
+msgid "Lead %s has been created"
+msgstr "Iniciativa %s ha sido creada"
 
 #: Preference.php:37
 msgid "All leads"
@@ -163,434 +586,26 @@ msgstr "Favorito por defecto"
 msgid "The default favorite which is loaded on crm startup"
 msgstr "El favorito por defecto que se carga al comienzo de CRM"
 
-#: Export/Pdf.php:75
-msgid "Lead Data"
-msgstr "Fecha Iniciativa"
-
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadStateFilterModel.js:32
-#: js/LeadEditDialog.js:343 js/LeadGridPanel.js:123
-msgid "Leadstate"
-msgstr "Estado Iniciativa"
-
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:454
-#: js/LeadEditDialog.js:362
-msgid "Leadtype"
-msgstr "Tipo de Iniciativa"
-
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:459
-#: js/LeadEditDialog.js:369
-msgid "Leadsource"
-msgstr "Fuente de la Iniciativa"
-
-#: Export/Pdf.php:87 js/Model.js:109 js/LeadGridPanel.js:125
-#: Controller/Lead.php:193
-msgid "Turnover"
-msgstr "Facturación"
-
-#: Export/Pdf.php:90 js/Model.js:108 js/LeadEditDialog.js:222
-#: js/LeadGridPanel.js:124 Controller/Lead.php:194
-msgid "Probability"
-msgstr "Probabilidad"
-
-#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:444 js/LeadEditDialog.js:401
-#: Controller/Lead.php:190
-msgid "Start"
-msgstr "Inicio"
-
-#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:192
-msgid "End"
-msgstr "Fin"
-
-#: Export/Pdf.php:99
-msgid "End Scheduled"
-msgstr "Programación Finalizada"
-
-#: Export/Pdf.php:184
-msgid "Contacts"
-msgstr "Contactos"
-
-#: Export/Pdf.php:211 js/Contact.js:231
-msgid "Address"
-msgstr "Dirección"
-
-#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:245
-msgid "Tasks"
-msgstr "Tareas"
-
-#: Export/Pdf.php:252 js/Task.js:176
-msgid "Due Date"
-msgstr "Fecha Apta"
-
-#: Export/Pdf.php:259 js/Task.js:189
-msgid "Priority"
-msgstr "Prioridad"
-
-#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:256
-msgid "Products"
-msgstr "Productos"
-
-#: Export/Pdf.php:315
-msgid "low"
-msgstr "baja"
-
-#: Export/Pdf.php:316
-msgid "normal"
-msgstr "normal"
-
-#: Export/Pdf.php:317
-msgid "high"
-msgstr "alta"
-
-#: Export/Pdf.php:318
-msgid "urgent"
-msgstr "urgente"
-
-#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
-#: js/LeadGridDetailsPanel.js:227
-msgid "Leadstates"
-msgstr "Estado Iniciativa"
-
-#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
-msgid "Leadtypes"
-msgstr "Tipos de iniciativas"
-
-#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
-msgid "Leadsources"
-msgstr "Fuentes de las iniciativas"
-
-#: js/AdminPanel.js:138
-msgid "Defaults"
-msgstr "Predeterminadas"
-
-#: js/LeadType.js:29
-msgid "Lead Type"
-msgid_plural "Lead Types"
-msgstr[0] "Tipo de Iniciativa"
-msgstr[1] "Tipos de Iniciativas"
-
-#: js/LeadType.js:134
-msgid "Add a Leadtype..."
-msgstr "Añadir un Tipo para las iniciativas"
-
-#: js/AddToLeadPanel.js:31
-msgid "Please choose the Lead to add the contacts to"
-msgstr "Ingresar referencia para agregar los contactos"
-
-#: js/AddToLeadPanel.js:36
-msgid "Please select the attenders' role"
-msgstr "Seleccione rol de asistentes"
-
-#: js/AddToLeadPanel.js:73 js/Model.js:50 js/LeadEditDialog.js:274
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Iniciativa"
-msgstr[1] "Iniciativas"
-
-#: js/AddToLeadPanel.js:74
-msgid "Select Lead"
-msgstr "Seleccionar iniciativa"
-
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:188
-msgid "Role"
-msgstr "Cargo"
-
-#: js/AddToLeadPanel.js:79
-msgid "Select Role"
-msgstr "Seleccionar Cargo"
-
-#: js/AddToLeadPanel.js:93
-msgid "Adding {0} contacts to lead"
-msgstr "Agregar {0} contactos a la iniciativa"
-
-#: js/Task.js:109
-msgid "No Tasks to display"
-msgstr "No hay tareas que mostar"
-
-#: js/Task.js:168
-msgid "Summary"
-msgstr "Resumen"
-
-#: js/Task.js:172
-msgid "Add a task..."
-msgstr "Agregar una tarea..."
-
-#: js/Task.js:205
-msgid "Percent"
-msgstr "Porcentaje"
-
-#: js/Task.js:218 js/LeadGridDetailsPanel.js:439
-msgid "Status"
-msgstr "Estado"
-
-#: js/LeadState.js:32
-msgid "Lead State"
-msgid_plural "Lead States"
-msgstr[0] "Estado de la iniciativa"
-msgstr[1] "Estados de las iniciativas"
-
-#: js/LeadState.js:166
-msgid "Add a Leadstate..."
-msgstr "Añadir un Estado para las iniciativas..."
-
-#: js/LeadGridContactFilter.js:47
-msgid "Contact"
-msgstr "Contacto"
-
-#: js/LeadGridContactFilter.js:54
-msgid "CRM Role"
-msgstr "Cargo CRM"
-
-#: js/LeadStateFilterModel.js:37
-msgid "Show closed"
-msgstr "Mostar cerradas"
-
-#: js/Product.js:134
-msgid "Product"
-msgstr "Producto"
-
-#: js/Product.js:139 js/LeadEditDialog.js:439
-msgid "Description"
-msgstr "Descripción"
-
-#: js/Product.js:146
-msgid "Price"
-msgstr "Precio"
-
-#: js/Product.js:158
-msgid "Quantity"
-msgstr "Cantidad"
-
-#: js/Product.js:185 js/LinkGridPanel.js:56
-msgid "Unlink {0}"
-msgstr "Desconectar {0}"
-
-#: js/Product.js:186 js/LinkGridPanel.js:57
-msgid "Unlink selected {0}"
-msgstr "Desconectar selecccionados {0}"
-
-#: js/Product.js:216
-msgid "Search for Products to add ..."
-msgstr "Buscar Productos para añadir ..."
-
-#: js/LeadGridDetailsPanel.js:48 js/Contact.js:245
-msgid "Phone"
-msgstr "Teléfono"
-
-#: js/LeadGridDetailsPanel.js:51
-msgid "Mobile"
-msgstr "Móvil"
-
-#: js/LeadGridDetailsPanel.js:54
-msgid "Fax"
-msgstr "Fax"
-
-#: js/LeadGridDetailsPanel.js:57
-msgid "E-Mail"
-msgstr "E-Mail"
-
-#: js/LeadGridDetailsPanel.js:60
-msgid "Web"
-msgstr "Web"
-
-#: js/LeadGridDetailsPanel.js:449 js/LeadEditDialog.js:407
-msgid "Estimated end"
-msgstr "Estimación finaliza"
-
-#: js/LeadSource.js:29
-msgid "Lead Source"
-msgid_plural "Lead Sources"
-msgstr[0] "Fuente de la iniciativa"
-msgstr[1] "Fuentes de las iniciativas"
-
-#: js/LeadSource.js:136
-msgid "Add a Leadsource..."
-msgstr "Añadir fuente de iniciativas"
-
-#: js/Model.js:54
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] "Lista de iniciativas"
-msgstr[1] "Listados de iniciativas"
-
-#: js/Model.js:54
-msgid "lead lists"
-msgstr "Listados de iniciativas"
-
-#: js/Model.js:104
-msgid "Quick Search"
-msgstr "Búsqueda Rápida"
-
-#: js/Model.js:106 js/LeadGridPanel.js:119
-msgid "Lead name"
-msgstr "Nombre de la Iniciativa"
-
-#: js/Model.js:111
-msgid "Last Modified Time"
-msgstr "Fecha última modificación"
-
-#: js/Model.js:112
-msgid "Last Modified By"
-msgstr "Última modificación por"
-
-#: js/Model.js:113
-msgid "Creation Time"
-msgstr "Fecha de Creación"
-
-#: js/Model.js:114
-msgid "Created By"
-msgstr "Creado por"
-
-#: js/Model.js:153
-msgid "Settings"
-msgid_plural "Settings"
-msgstr[0] "Preferencia"
-msgstr[1] "Preferencias"
-
-#: js/Model.js:156
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "listado de registros"
-msgstr[1] "listados de registros"
-
-#: js/LeadEditDialog.js:246
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
-msgstr "No tiene privilegios para ejecutar la aplicación Tareas o no esta activada."
-
-#: js/LeadEditDialog.js:257
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
-msgstr "No tiene privilegios para ejecutar la aplicación Ventas o no esta activada."
-
-#: js/LeadEditDialog.js:301
-msgid "Enter short name"
-msgstr "Escribir nombre corto"
-
-#: js/LeadEditDialog.js:385
-msgid "Expected turnover"
-msgstr "Facturación anual"
-
-#: js/LeadEditDialog.js:453
-msgid "Enter description"
-msgstr "Escribir descripción"
-
-#: js/Contact.js:162
-msgid "Change type to Customer"
-msgstr "Cambiar de cliente"
-
-#: js/Contact.js:172
-msgid "Change type to Responsible"
-msgstr "Cambiar de Responsable"
-
-#: js/Contact.js:182
-msgid "Change type to Partner"
-msgstr "Cambiar de Socio"
-
-#: js/Contact.js:193
-msgid "Change contact type"
-msgstr "Cambiar tipo de contacto"
-
-#: js/Contact.js:205
-msgid "Search for Contacts to add ..."
-msgstr "Buscar contactos para añadir... "
-
-#: js/Contact.js:222
-msgid "Name"
-msgstr "Nombre"
-
-#: js/Contact.js:242
-msgid "Data"
-msgstr "Fecha"
-
-#: js/Contact.js:246
-msgid "Cellphone"
-msgstr "Teléfono móvil"
-
-#: js/LinkGridPanel.js:34
-msgid "Add new {0}"
-msgstr "Agregar nueva {0}"
-
-#: js/LinkGridPanel.js:72
-msgid "Edit {0}"
-msgstr "Editar {0}"
-
-#: js/LinkGridPanel.js:73
-msgid "Edit selected {0}"
-msgstr "Editar seleccionados {0}"
-
-#: js/LeadGridPanel.js:117
-msgid "Lead id"
-msgstr "Iniciativa id"
-
-#: js/LeadGridPanel.js:118
-msgid "Tags"
-msgstr "Etiquetas"
-
-#: js/LeadGridPanel.js:126
-msgid "Probable Turnover"
-msgstr "Facturación Prevista"
-
-#: js/LeadGridPanel.js:168
-msgid "Export Lead"
-msgstr "Exportar Iniciativa"
-
-#: js/LeadGridPanel.js:177
-msgid "Export as PDF"
-msgstr "Exportar como PDF"
-
-#: js/LeadGridPanel.js:184
-msgid "Export as CSV"
-msgstr "Exportar como CVS"
-
-#: js/LeadGridPanel.js:191
-msgid "Export as ODS"
-msgstr "Exportar como ODS"
-
-#: js/LeadGridPanel.js:198
-msgid "Export as XLS"
-msgstr "Exportar como XLS"
-
-#: js/Crm.js:24
-msgid "New Lead"
-msgstr "Nueva Iniciativa"
-
-#: Controller/Lead.php:187
-msgid "State"
-msgstr "Estado"
-
-#: Controller/Lead.php:189
-msgid "Source"
-msgstr "Fuente"
-
-#: Controller/Lead.php:191
-msgid "Scheduled end"
-msgstr "Programación finalizada"
-
-#: Controller/Lead.php:195
-msgid "Folder"
-msgstr "Carpeta"
-
-#: Controller/Lead.php:196
-msgid "Updated by"
-msgstr "Actualizado por"
-
-#: Controller/Lead.php:197
-msgid "Updated Fields:"
-msgstr "Campos Actualizados:"
-
-#: Controller/Lead.php:198
-#, python-format
-msgid "%s changed from %s to %s."
-msgstr "%s cambió de %s a %s."
-
-#: Controller/Lead.php:204
-#, python-format
-msgid "Lead %s has been changed"
-msgstr "Iniciativa %s ha sido cambiada"
-
-#: Controller/Lead.php:206
-#, python-format
-msgid "Lead %s has been created"
-msgstr "Iniciativa %s ha sido creada"
+#: Setup/Initialize.php:36 Setup/Update/Release3.php:37
+msgid "All leads I have read grants for"
+msgstr "Todas las iniciativas leídas aplican para"
+
+#: Setup/Initialize.php:43
+msgid "Last modified by me"
+msgstr "Últimas modificadas por mi"
+
+#: Setup/Initialize.php:44
+msgid "All leads that I have last modified"
+msgstr "Todas las iniciativas modificadas últimamente"
+
+#: Setup/Initialize.php:53
+msgid "My leads"
+msgstr "Mis iniciativas"
+
+#: Setup/Initialize.php:54
+msgid "All leads that I am responsible for"
+msgstr "Todas las iniciativas de mi responsabilidad para"
+
+#: Setup/Initialize.php:67
+msgid "Leads with overdue tasks"
+msgstr "Iniciativas con retraso"

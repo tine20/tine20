@@ -1,8 +1,9 @@
-#
+# 
 # Translators:
-# kaystrobach <info@kay-strobach.de>, 2012
-# sysdef <transifex.com@sysdef.de>, 2013
+# Kay Strobach <info@kay-strobach.de>, 2012
+# Juergen Heine <transifex.com@sysdef.de>, 2013
 # corneliusweiss <mail@corneliusweiss.de>, 2012
+# Michael Spahn <michael@spahn.me>, 2014
 # pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
 # sstamer <s.stamer@metaways.de>, 2014
@@ -10,13 +11,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-21 12:53+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2014-09-10 18:53+0000\n"
+"Last-Translator: Michael Spahn <michael@spahn.me>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -35,7 +36,8 @@ msgid "manage accounts"
 msgstr "Benutzerkonten verwalten"
 
 #: Acl/Rights.php:213
-msgid "add and edit users and groups, add group members, change user passwords"
+msgid ""
+"add and edit users and groups, add group members, change user passwords"
 msgstr "Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, Passwörter zurücksetzen"
 
 #: Acl/Rights.php:216
@@ -51,7 +53,9 @@ msgid "manage roles"
 msgstr "Rollen verwalten"
 
 #: Acl/Rights.php:221
-msgid "add and edit roles, add new members to roles, add application rights to roles"
+msgid ""
+"add and edit roles, add new members to roles, add application rights to "
+"roles"
 msgstr "Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen Anwendungs-Rechte zuweisen"
 
 #: Acl/Rights.php:224
@@ -247,7 +251,7 @@ msgstr "Fehlgeschlagen"
 #: js/TagEditDialog.js:85
 #, python-brace-format
 msgid "Could not save tag ({0})"
-msgstr ""
+msgstr "Konnte Tag ({0}) nicht speichern"
 
 #: js/TagEditDialog.js:91 js/customfield/EditDialog.js:137
 #: js/customfield/EditDialog.js:432 js/RoleEditDialog.js:115
@@ -991,8 +995,12 @@ msgstr "Domäne nicht erlaubt"
 
 #: js/user/EditDialog.js:617
 #, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr ""
+msgid ""
+"The domain {0} of the alias {1} you tried to add is neither configured as "
+"primary domain nor set as a secondary domain in the setup. Please add this "
+"domain to the secondary domains in SMTP setup or use another domain which is"
+" configured already."
+msgstr "Die Domäne {0} des neuen Alias {1} ist nicht als primäre oder sekundäre Domäne im Setup eingetragen. Bitte fügen Sie diese Domain als sekundäre Domain im SMTP setup hinzu oder benutzen Sie eine Domäne welche bereits konfiguriert ist."
 
 #: js/user/EditDialog.js:626
 msgid "Email Alias"
@@ -1007,7 +1015,9 @@ msgid "Forwarding to self"
 msgstr "Weiterleitung zu sich selbst"
 
 #: js/user/EditDialog.js:651
-msgid "You are not allowed to set a forward email address that is identical to the users primary email or one of his aliases."
+msgid ""
+"You are not allowed to set a forward email address that is identical to the "
+"users primary email or one of his aliases."
 msgstr "Sie dürfen keine Weiterleitungsadresse angeben, die identisch mit der E-Mail-Adresse oder eines Alias des Benutzers ist."
 
 #: js/user/EditDialog.js:660
@@ -1055,7 +1065,9 @@ msgid "Invalid Status"
 msgstr "Ungültiger Status"
 
 #: js/user/EditDialog.js:896
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
 msgstr "Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu setzten."
 
 #: js/user/EditDialog.js:987 js/user/EditDialog.js:991
@@ -1097,9 +1109,3 @@ msgstr "Ihr Container wurde von %1$s geändert %2$sNotiz: %3$s"
 #: Config.php:33 Config.php:35
 msgid "Default IMAP user settings"
 msgstr "Standard IMAP-Benutzer-Einstellungen"
-
-#~ msgid "Could not save tag."
-#~ msgstr "Konnte Tag nicht speichern"
-
-#~ msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup."
-#~ msgstr "Die Domäne {0} des neuen Alias {1} ist nicht als primäre oder sekundäre Domäne im Setup eingetragen."

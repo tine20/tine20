@@ -1,4 +1,4 @@
-#
+# 
 # Translators:
 # pschuele <p.schuele@metaways.de>, 2013-2014
 msgid ""
@@ -8,10 +8,10 @@ msgstr ""
 "PO-Revision-Date: 2014-04-25 12:56+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -85,6 +85,78 @@ msgstr "Leitungen"
 msgid "Description"
 msgstr "Beschreibung"
 
+#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
+msgid "Calls this week"
+msgstr "Anrufe in dieser Woche"
+
+#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
+msgid "Calls last week"
+msgstr "Anrufe in der letzten Woche"
+
+#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
+msgid "Calls this month"
+msgstr "Anrufe in diesem Monat"
+
+#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
+msgid "Calls last month"
+msgstr "Anrufe im letzten Monat"
+
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "Eingehende und ausgehende Anrufe dieser Woche"
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "Eingehende und ausgehende Anrufe letzter Woche"
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "Eingehende und ausgehende Anrufe dieses Monats"
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "Eingehende und ausgehende Anrufe letzten Monats"
+
+#: js/DialerPanel.js:85
+msgid "Number"
+msgstr "Nummer"
+
+#: js/DialerPanel.js:94
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: js/DialerPanel.js:104
+msgid "Dial"
+msgstr "Wählen"
+
+#: js/DialerPanel.js:124
+msgid "Error"
+msgstr "Fehler"
+
+#: js/DialerPanel.js:125
+msgid "Not possible to dial."
+msgstr "Wählen nicht möglich."
+
+#: js/CallGridPanel.js:54
+msgid "Edit phone settings"
+msgstr "Telefoneinstellungen bearbeiten"
+
+#: js/CallGridPanel.js:68
+msgid "Dial number"
+msgstr "Nummer wählen"
+
+#: js/CallGridPanel.js:69
+msgid "Initiate a new outgoing call"
+msgstr "Neuer ausgehender Anruf"
+
+#: js/CallGridPanel.js:216
+msgid "No phone selected"
+msgstr "Kein Telefon ausgewählt"
+
+#: js/CallGridPanel.js:217
+msgid "Please select the desired phone in the tree!"
+msgstr "Bitte wählen Sie ein Telefon im Baum aus!"
+
 #: js/Phone.js:100
 msgid "Incoming call"
 msgstr "Eingehender Anruf"
@@ -116,75 +188,3 @@ msgstr "Handy"
 #: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr "Handy privat"
-
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr "Telefoneinstellungen bearbeiten"
-
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr "Nummer wählen"
-
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr "Neuer ausgehender Anruf"
-
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr "Kein Telefon ausgewählt"
-
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
-msgstr "Bitte wählen Sie ein Telefon im Baum aus!"
-
-#: js/DialerPanel.js:85
-msgid "Number"
-msgstr "Nummer"
-
-#: js/DialerPanel.js:94
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: js/DialerPanel.js:104
-msgid "Dial"
-msgstr "Wählen"
-
-#: js/DialerPanel.js:124
-msgid "Error"
-msgstr "Fehler"
-
-#: js/DialerPanel.js:125
-msgid "Not possible to dial."
-msgstr "Wählen nicht möglich."
-
-#: Setup/Initialize.php:33 Setup/Update/Release7.php:30
-msgid "Calls this week"
-msgstr "Anrufe in dieser Woche"
-
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "Eingehende und ausgehende Anrufe dieser Woche"
-
-#: Setup/Initialize.php:43 Setup/Update/Release7.php:40
-msgid "Calls last week"
-msgstr "Anrufe in der letzten Woche"
-
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "Eingehende und ausgehende Anrufe letzter Woche"
-
-#: Setup/Initialize.php:53 Setup/Update/Release7.php:50
-msgid "Calls this month"
-msgstr "Anrufe in diesem Monat"
-
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "Eingehende und ausgehende Anrufe dieses Monats"
-
-#: Setup/Initialize.php:63 Setup/Update/Release7.php:60
-msgid "Calls last month"
-msgstr "Anrufe im letzten Monat"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "Eingehende und ausgehende Anrufe letzten Monats"

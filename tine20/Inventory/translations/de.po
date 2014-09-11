@@ -1,7 +1,7 @@
-#
+# 
 # Translators:
-# mspahn <ms@ansta.lt>, 2013
-# mspahn <ms@ansta.lt>, 2012
+# Michael Spahn <michael@spahn.me>, 2013
+# Michael Spahn <michael@spahn.me>, 2012
 # pschuele <p.schuele@metaways.de>, 2013
 msgid ""
 msgstr ""
@@ -10,10 +10,10 @@ msgstr ""
 "PO-Revision-Date: 2014-04-25 12:48+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -94,25 +94,71 @@ msgstr "Entfernt"
 msgid "Depreciate"
 msgstr "Abschreibung"
 
-#: js/InventoryItemGridPanel.js:36
-msgid "Export Inventory"
-msgstr "Inventar exportieren"
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
+msgstr "Inventar CSV Import"
 
-#: js/InventoryItemGridPanel.js:45
-msgid "Export as ODS"
-msgstr "Exportieren als ODS"
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Importierte Liste (###CURRENTDATE###)"
 
-#: js/InventoryItemGridPanel.js:52
-msgid "Export as CSV"
-msgstr "Exportieren als CSV"
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid ""
+"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr "Gegenstände importiert am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME###"
 
-#: js/InventoryItemGridPanel.js:59
-msgid "Export as ..."
-msgstr "Exportieren als ..."
+#: Config.php:31
+msgid "Inventory Status Available"
+msgstr "Inventar Status verfügbar"
 
-#: js/InventoryItemGridPanel.js:71
-msgid "Import items"
-msgstr "Gegenstände importieren"
+#: Config.php:33
+msgid "Possible status."
+msgstr "Möglicher Status"
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Inventarisierung"
+
+#: Setup/Update/Release7.php:127 Setup/Initialize.php:65
+msgid "All Inventory Items"
+msgstr "Alle Inventargegenstände"
+
+#: Setup/Update/Release7.php:128 Setup/Initialize.php:66
+msgid "All existing Inventory Items"
+msgstr "Alle existierenden Inventargegenstände"
+
+#: Setup/Initialize.php:33
+msgid "ordered"
+msgstr "Bestellt"
+
+#: Setup/Initialize.php:34
+msgid "available"
+msgstr "Verfügbar"
+
+#: Setup/Initialize.php:35
+msgid "defect"
+msgstr "Defekt"
+
+#: Setup/Initialize.php:36
+msgid "missing"
+msgstr "Vermisst"
+
+#: Setup/Initialize.php:37
+msgid "removed"
+msgstr "Entfernt"
+
+#: Setup/Initialize.php:38
+msgid "unknown"
+msgstr "Unbekannt"
+
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr "Standardinventarliste"
+
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr "Der standard Container für neue Gegenstände"
 
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
@@ -150,66 +196,22 @@ msgstr "Verfügbare Anzahl"
 msgid "Accounting"
 msgstr "Buchhaltung"
 
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr "Standardinventarliste"
+#: js/InventoryItemGridPanel.js:36
+msgid "Export Inventory"
+msgstr "Inventar exportieren"
 
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr "Der standard Container für neue Gegenstände"
+#: js/InventoryItemGridPanel.js:45
+msgid "Export as ODS"
+msgstr "Exportieren als ODS"
 
-#: Config.php:31
-msgid "Inventory Status Available"
-msgstr "Inventar Status verfügbar"
+#: js/InventoryItemGridPanel.js:52
+msgid "Export as CSV"
+msgstr "Exportieren als CSV"
 
-#: Config.php:33
-msgid "Possible status."
-msgstr "Möglicher Status"
+#: js/InventoryItemGridPanel.js:59
+msgid "Export as ..."
+msgstr "Exportieren als ..."
 
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
-msgstr "Inventar CSV Import"
-
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Importierte Liste (###CURRENTDATE###)"
-
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Gegenstände importiert am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME###"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "Inventarisierung"
-
-#: Setup/Initialize.php:33
-msgid "ordered"
-msgstr "Bestellt"
-
-#: Setup/Initialize.php:34
-msgid "available"
-msgstr "Verfügbar"
-
-#: Setup/Initialize.php:35
-msgid "defect"
-msgstr "Defekt"
-
-#: Setup/Initialize.php:36
-msgid "missing"
-msgstr "Vermisst"
-
-#: Setup/Initialize.php:37
-msgid "removed"
-msgstr "Entfernt"
-
-#: Setup/Initialize.php:38
-msgid "unknown"
-msgstr "Unbekannt"
-
-#: Setup/Initialize.php:65 Setup/Update/Release7.php:127
-msgid "All Inventory Items"
-msgstr "Alle Inventargegenstände"
-
-#: Setup/Initialize.php:66 Setup/Update/Release7.php:128
-msgid "All existing Inventory Items"
-msgstr "Alle existierenden Inventargegenstände"
+#: js/InventoryItemGridPanel.js:71
+msgid "Import items"
+msgstr "Gegenstände importieren"

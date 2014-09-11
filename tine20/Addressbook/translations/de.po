@@ -1,7 +1,8 @@
-#
+# 
 # Translators:
 # Björn Balazs <transifex@lazs.de>, 2013
-# sysdef <transifex.com@sysdef.de>, 2013
+# Juergen Heine <transifex.com@sysdef.de>, 2013
+# Michael Spahn <michael@spahn.me>, 2014
 # pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
 # sstamer <s.stamer@metaways.de>, 2014
@@ -9,13 +10,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-10 18:57+0000\n"
+"Last-Translator: Michael Spahn <michael@spahn.me>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -124,23 +125,23 @@ msgstr "Berufs-Bezeichnung"
 
 #: Export/Doc.php:69
 msgid "Dear Mister"
-msgstr ""
+msgstr "Sehr geehrter Herr"
 
 #: Export/Doc.php:71
 msgid "Dear Miss"
-msgstr ""
+msgstr "Sehr geehrte Dame"
 
 #: Export/Doc.php:73
 msgid "Dear"
-msgstr ""
+msgstr "Sehr geehrte Damen und Herren"
 
 #: Export/Doc.php:89
 msgid "Mister"
-msgstr ""
+msgstr "Herr"
 
 #: Export/Doc.php:91
 msgid "Misses"
-msgstr ""
+msgstr "Frau"
 
 #: Controller.php:105
 #, python-format
@@ -585,7 +586,7 @@ msgstr "Als XLS exportieren"
 
 #: js/ContactGrid.js:196
 msgid "Export as DOC"
-msgstr "Als DOC exportieren"
+msgstr "Exportieren als DOC"
 
 #: js/ContactGrid.js:203
 msgid "Export as ..."
@@ -625,23 +626,23 @@ msgstr "Der Standard Favorit der beim öffnen des Adressbuches geladen wird"
 
 #: Preference.php:89
 msgid "Contacts ODS export configuration"
-msgstr ""
+msgstr "Kontakt ODS-Export Konfiguration"
 
 #: Preference.php:90
 msgid "Use this configuration for the contact ODS export."
-msgstr ""
+msgstr "Hiermit können Sie die zu verwendende Kontakt ODS-Export Konfiguration einstellen."
 
 #: Preference.php:93
 msgid "Contacts XLS export configuration"
-msgstr ""
+msgstr "Kontakt XLS-Export Konfiguration"
 
 #: Preference.php:94
 msgid "Use this configuration for the contact XLS export."
-msgstr ""
+msgstr "Hiermit können Sie die zu verwendende XLS-Export Konfiguration einstellen."
 
 #: Preference.php:165
 msgid "default"
-msgstr ""
+msgstr "Standard"
 
 #: Frontend/CardDAV/AllContacts.php:41
 msgid "All Contacts"
@@ -652,7 +653,9 @@ msgid "Contact duplicate check fields"
 msgstr "Kontaktfelder für den Dublettencheck"
 
 #: Config.php:47
-msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgid ""
+"These fields are checked when a new contact is created. If a record with the"
+" same data in the fields is found, a duplicate exception is thrown."
 msgstr "Diese Felder werden überprüft, wenn ein neuer Kontakt erstellt wird. Falls ein Eintrag mit den gleichen Daten in diesen Feldern angelegt wird, wird eine Fehlermeldung angezeit, auf die der Benutzer reagieren kann."
 
 #: Config.php:59
@@ -660,7 +663,9 @@ msgid "Contact salutations available"
 msgstr "Verfügbare Kontaktanreden"
 
 #: Config.php:61
-msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
+msgid ""
+"Possible contact salutations. Please note that additional values might "
+"impact other Addressbook systems on export or syncronisation."
 msgstr "Mögliche Kontaktanreden. Bitte beachten Sie, dass sich zusätzliche Werte beim Export oder der Synchronisation auf andere Systeme auswirken."
 
 #: Config.php:69
@@ -685,7 +690,9 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr "Importliste (###CURRENTDATE###)"
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
 msgstr "Kontakte importiert am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME###"
 
 #: Import/definitions/adb_outlook_import_csv.xml:13
@@ -743,9 +750,3 @@ msgstr "Zuletzt von mir bearbeitet"
 #: Setup/Initialize.php:173
 msgid "All contacts that I have last modified"
 msgstr "Alle Kontakte, die ich zuletzt bearbeitet habe"
-
-#~ msgid "Default Excel Export"
-#~ msgstr "Standard Excel Export"
-
-#~ msgid "Default OpenDocument Export"
-#~ msgstr "Standard OpenDocument Export"

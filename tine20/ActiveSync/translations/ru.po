@@ -19,6 +19,75 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Устройство"
+msgstr[1] "Устройства"
+msgstr[2] "Устройства"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Устройства"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Выберите устройство"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Устройство ActiveSync не зарегистрировано"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Установить как {0} фильтр"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Сброшенный фильтр синхронизации"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} фильтр для устройства \"{1}\" сейчас \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "сброшен"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Установить фильтр синхронизации"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Адресная книга по умолчанию"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Адресная книга для создания контактов по умолчанию"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Календарь по умолчанию"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Календарь для создания новых событий по умолчанию"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Список задач по умолчанию"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Список задач для создания новых задач по умолчанию"
+
 #: Config.php:52
 msgid "Default policy for new devices"
 msgstr "Политика по умолчанию для новых устройств"
@@ -58,70 +127,3 @@ msgstr "Политика по умолчанию"
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "Политика по умолчанию заданная при установке"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Адресная книга по умолчанию"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Адресная книга для создания контактов по умолчанию"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Календарь по умолчанию"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Календарь для создания новых событий по умолчанию"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Список задач по умолчанию"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Список задач для создания новых задач по умолчанию"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Устройство"
-msgstr[1] "Устройства"
-msgstr[2] "Устройства"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Устройства"
-
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Выберите устройство"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Устройство ActiveSync не зарегистрировано"
-
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr "Установить как {0} фильтр"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Сброшенный фильтр синхронизации"
-
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} фильтр для устройства \"{1}\" сейчас \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "сброшен"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Установить фильтр синхронизации"

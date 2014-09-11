@@ -1,4 +1,4 @@
-#
+# 
 # Translators:
 # lkneschke <l.kneschke@metaways.de>, 2013
 msgid ""
@@ -8,10 +8,10 @@ msgstr ""
 "PO-Revision-Date: 2014-04-25 12:47+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -42,112 +42,17 @@ msgstr "Intern"
 msgid "Public"
 msgstr "Öffentlich"
 
-#: js/SimpleFAQ.js:19 js/Model.js:35
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQ"
-msgstr[1] "FAQs"
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Alle FAQs meiner FAQ Listen"
 
-#: js/SimpleFAQ.js:26
-msgid "Find Question"
-msgstr "Finde Frage"
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Zuletzt bearbeitet"
 
-#: js/SimpleFAQ.js:35
-msgid "Search question"
-msgstr "Suche Frage"
-
-#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:117
-#: js/FaqGridDetailsPanel.js:157
-msgid "Answer"
-msgstr "Antwort"
-
-#: js/FaqType.js:26 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqGridDetailsPanel.js:204 js/FaqTypeFilterModel.js:27
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "FAQ Typ"
-msgstr[1] "FAQ Typen"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Neuen FAQ Typ hinzufügen"
-
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatus.js:26
-#: js/FaqStatusFilterModel.js:27 js/FaqGridDetailsPanel.js:199
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "FAQ Status"
-msgstr[1] "FAQ Status"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Standardeinstellungen"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Neuen FAQ Status hinzufügen"
-
-#: js/FaqGridPanel.js:72
-msgid "FAQ id"
-msgstr "FAQ Id"
-
-#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
-msgid "Tags"
-msgstr "Tags"
-
-#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:138
-msgid "Status"
-msgstr "Status"
-
-#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:126
-msgid "Type"
-msgstr "Typ"
-
-#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:110 js/FaqGridDetailsPanel.js:151
-msgid "Question"
-msgstr "Frage"
-
-#: js/Model.js:39
-msgid "FAQ List"
-msgid_plural "FAQ Lists"
-msgstr[0] "FAQ Liste"
-msgstr[1] "FAQ Listen"
-
-#: js/Model.js:39
-msgid "FAQ Lists"
-msgstr "FAQ Listen"
-
-#: js/Model.js:74
-msgid "Quick Search"
-msgstr "Schnellsuche"
-
-#: js/SearchCombo.js:8
-msgid "Search FAQ"
-msgstr "FAQ durchsuchen"
-
-#: js/FaqEditDialog.js:111
-msgid "Enter a question..."
-msgstr "Frage eingeben"
-
-#: js/FaqEditDialog.js:118
-msgid "Enter a answer..."
-msgstr "Antwort eingeben"
-
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr "FAQ  Infos"
-
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Angelegt am"
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Angelegt von"
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Noch keine Antwort vorhanden"
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Alle FAQs die ich zuletzt bearbeitet habe"
 
 #: Preference.php:28
 msgid "All my FAQs"
@@ -169,14 +74,109 @@ msgstr "Standard FAQ List"
 msgid "The default FAQ list to create new FAQ in."
 msgstr "Die Standard FAQ Liste, in der neue FAQs angelegt werden."
 
-#: Setup/Initialize.php:33
-msgid "All FAQs of my FAQ Lists"
-msgstr "Alle FAQs meiner FAQ Listen"
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
+#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ Status"
+msgstr[1] "FAQ Status"
 
-#: Setup/Initialize.php:40
-msgid "Last modified by me"
-msgstr "Zuletzt bearbeitet"
+#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
+#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "FAQ Typ"
+msgstr[1] "FAQ Typen"
 
-#: Setup/Initialize.php:41
-msgid "All FAQs that I have last modified"
-msgstr "Alle FAQs die ich zuletzt bearbeitet habe"
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Standardeinstellungen"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Neuen FAQ Typ hinzufügen"
+
+#: js/SimpleFAQ.js:19 js/Model.js:35
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQs"
+
+#: js/SimpleFAQ.js:26
+msgid "Find Question"
+msgstr "Finde Frage"
+
+#: js/SimpleFAQ.js:35
+msgid "Search question"
+msgstr "Suche Frage"
+
+#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:118
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Antwort"
+
+#: js/FaqGridPanel.js:72
+msgid "FAQ id"
+msgstr "FAQ Id"
+
+#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Tags"
+
+#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:139
+msgid "Status"
+msgstr "Status"
+
+#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:127
+msgid "Type"
+msgstr "Typ"
+
+#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:111 js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Frage"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Neuen FAQ Status hinzufügen"
+
+#: js/Model.js:39
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] "FAQ Liste"
+msgstr[1] "FAQ Listen"
+
+#: js/Model.js:39
+msgid "FAQ Lists"
+msgstr "FAQ Listen"
+
+#: js/Model.js:74
+msgid "Quick Search"
+msgstr "Schnellsuche"
+
+#: js/FaqEditDialog.js:112
+msgid "Enter a question..."
+msgstr "Frage eingeben"
+
+#: js/FaqEditDialog.js:119
+msgid "Enter a answer..."
+msgstr "Antwort eingeben"
+
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr "FAQ durchsuchen"
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "FAQ  Infos"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Angelegt am"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Angelegt von"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Noch keine Antwort vorhanden"

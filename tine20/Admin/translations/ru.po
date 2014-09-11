@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-03-28 12:42+0000\n"
+"PO-Revision-Date: 2014-09-11 10:53+0000\n"
 "Last-Translator: Aleksey Ubozhenko <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -151,13 +151,167 @@ msgstr "просмотр информации о сервере"
 msgid "view serverinfo list"
 msgstr "лист информации о сервере"
 
-#: Config.php:33 Config.php:35
-msgid "Default IMAP user settings"
-msgstr "Пользовательские настройки IMAP по-умолчанию."
+#: js/Applications.js:45
+#, python-brace-format
+msgid "{0} Settings"
+msgstr "{0} Настройки"
 
-#: js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Адресная книга по умолчанию для новых контактов и групп"
+#: js/Applications.js:85
+msgid "Enable Application"
+msgstr "Включить приложение"
+
+#: js/Applications.js:92
+msgid "Disable Application"
+msgstr "Отключить приложение"
+
+#: js/Applications.js:99
+msgid "Settings"
+msgstr "Настройки"
+
+#: js/Applications.js:148
+msgid "enable application"
+msgstr "Активировать приложение"
+
+#: js/Applications.js:149
+msgid "disable application"
+msgstr "Деактивировать приложение"
+
+#: js/Applications.js:150
+msgid "settings"
+msgstr "настройки"
+
+#: js/Applications.js:187 js/Tags.js:171 js/Roles.js:177 js/Groups.js:177
+msgid "Search:"
+msgstr "Поиск:"
+
+#: js/Applications.js:230 js/user/EditDialog.js:886
+msgid "disabled"
+msgstr "отключено"
+
+#: js/Applications.js:233 js/user/EditDialog.js:885
+msgid "enabled"
+msgstr "включено"
+
+#: js/Applications.js:237
+#, python-brace-format
+msgid "unknown status ({0})"
+msgstr "неизвестный статус ({0})"
+
+#: js/Applications.js:271
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Показаны приложения {0} - {1} из {2}"
+
+#: js/Applications.js:272
+msgid "No applications to display"
+msgstr "Нет приложений"
+
+#: js/Applications.js:281 js/customfield/EditDialog.js:630
+msgid "Order"
+msgstr "Порядок"
+
+#: js/Applications.js:282 js/customfield/GridPanel.js:67
+#: js/customfield/EditDialog.js:596 js/SambaMachineGrid.js:83
+#: js/container/EditDialog.js:124 js/AccessLog.js:128 js/Tags.js:227
+#: js/Roles.js:239 js/Groups.js:236 js/user/EditDialog.js:285
+#: js/user/EditDialog.js:321
+msgid "Name"
+msgstr "Имя"
+
+#: js/Applications.js:283 js/user/GridPanel.js:172 js/user/EditDialog.js:877
+msgid "Status"
+msgstr "Статус"
+
+#: js/Applications.js:284
+msgid "Version"
+msgstr "Версия"
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Компьютер"
+msgstr[1] "Компьютера"
+msgstr[2] "Компьютеров"
+
+#: js/TagEditDialog.js:38 js/RoleEditDialog.js:70 js/GroupEditDialog.js:38
+msgid "Please wait"
+msgstr "Пожалуйста, подождите"
+
+#: js/TagEditDialog.js:38
+msgid "Updating Tag"
+msgstr "Обновление тега"
+
+#: js/TagEditDialog.js:84 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
+#: js/GroupEditDialog.js:73 js/Roles.js:69 js/Groups.js:74
+msgid "Failed"
+msgstr "Неудача"
+
+#: js/TagEditDialog.js:85
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr "Тег ({0}) не сохранён"
+
+#: js/TagEditDialog.js:91 js/customfield/EditDialog.js:137
+#: js/customfield/EditDialog.js:432 js/RoleEditDialog.js:115
+#: js/GroupEditDialog.js:78
+msgid "Errors"
+msgstr "Ошибки"
+
+#: js/TagEditDialog.js:91 js/RoleEditDialog.js:115 js/GroupEditDialog.js:78
+msgid "Please fix the errors noted."
+msgstr "Пожалуйста, устраните отмеченные ошибки."
+
+#: js/TagEditDialog.js:172
+msgid "Allowed Contexts"
+msgstr "Разрешённый контекст"
+
+#: js/TagEditDialog.js:178
+msgid "Context"
+msgstr "Контекст"
+
+#: js/TagEditDialog.js:191
+msgid "Account Rights"
+msgstr "Права учётной записи"
+
+#: js/TagEditDialog.js:200
+msgid "View"
+msgstr "Представление"
+
+#: js/TagEditDialog.js:205
+msgid "Use"
+msgstr "Использовать"
+
+#: js/TagEditDialog.js:222
+msgid "Tag Name"
+msgstr "Название тэга"
+
+#: js/TagEditDialog.js:229 js/SambaMachineGrid.js:57 js/SambaMachineGrid.js:89
+#: js/RoleEditDialog.js:294 js/Tags.js:228 js/GroupEditDialog.js:129
+#: js/Roles.js:240 js/Groups.js:237 js/user/GridPanel.js:93
+msgid "Description"
+msgstr "Описание"
+
+#: js/TagEditDialog.js:235 js/container/EditDialog.js:171 js/Tags.js:224
+msgid "Color"
+msgstr "Цвет"
+
+#: js/TagEditDialog.js:293 js/RoleEditDialog.js:361 js/GroupEditDialog.js:222
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "Передано {0}..."
+
+#: js/TagEditDialog.js:293
+msgid "Tag"
+msgstr "Тег"
+
+#: js/TagEditDialog.js:303
+msgid "Add New Tag"
+msgstr "Добавить новый тэг"
+
+#: js/TagEditDialog.js:305
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr "Изменить тэг \"{0}\""
 
 #: js/Admin.js:23 js/AccessLog.js:102 js/user/Users.js:72
 msgid "User"
@@ -213,267 +367,197 @@ msgstr "Администратор"
 msgid "Refresh"
 msgstr "Обновить"
 
-#: js/SambaMachineGrid.js:56 js/SambaMachineEditDialog.js:42
-msgid "Computer Name"
-msgstr "Имя компьютера"
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Адресная книга по умолчанию для новых контактов и групп"
 
-#: js/SambaMachineGrid.js:57 js/SambaMachineGrid.js:89 js/Tags.js:228
-#: js/Roles.js:240 js/GroupEditDialog.js:129 js/Groups.js:237
-#: js/TagEditDialog.js:226 js/RoleEditDialog.js:294 js/user/GridPanel.js:93
-msgid "Description"
-msgstr "Описание"
-
-#: js/SambaMachineGrid.js:76 js/Roles.js:238 js/Groups.js:235
-#: js/container/GridPanel.js:65 js/user/GridPanel.js:171
-#: js/customfield/EditDialog.js:283 js/customfield/GridPanel.js:65
+#: js/customfield/GridPanel.js:65 js/customfield/EditDialog.js:283
+#: js/SambaMachineGrid.js:76 js/container/GridPanel.js:65 js/Roles.js:238
+#: js/Groups.js:235 js/user/GridPanel.js:171
 msgid "ID"
 msgstr "ID"
 
-#: js/SambaMachineGrid.js:83 js/Tags.js:227 js/Roles.js:239
-#: js/Applications.js:282 js/Groups.js:236 js/AccessLog.js:128
-#: js/container/EditDialog.js:124 js/user/EditDialog.js:285
-#: js/user/EditDialog.js:321 js/customfield/EditDialog.js:596
-#: js/customfield/GridPanel.js:67
-msgid "Name"
-msgstr "Имя"
+#: js/customfield/GridPanel.js:66 js/customfield/EditDialog.js:602
+msgid "Label"
+msgstr "Метка"
 
-#: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
-#: js/customfield/GridPanel.js:128
+#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:584
+#: js/container/GridPanel.js:68 js/container/GridPanel.js:99
+#: js/container/EditDialog.js:156
+msgid "Type"
+msgstr "Тип"
+
+#: js/customfield/GridPanel.js:69 js/customfield/EditDialog.js:387
+#: js/customfield/EditDialog.js:529 js/container/GridPanel.js:67
+#: js/container/EditDialog.js:136 js/ApplicationFilter.js:33 js/Models.js:127
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Приложение"
+msgstr[1] "Приложения"
+msgstr[2] "Приложения"
+
+#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:550
+#: js/container/EditDialog.js:149
+msgid "Model"
+msgstr "Модель"
+
+#: js/customfield/GridPanel.js:110 js/customfield/Customfield.js:44
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] "Настраиваемые поля"
+msgstr[1] "Настраиваемые поля"
+msgstr[2] "Настраиваемые поля"
+
+#: js/customfield/GridPanel.js:128 js/Tags.js:64 js/Roles.js:47
+#: js/Groups.js:52
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "Вы действительно хотите удалить выбранные тэги?"
+#: js/customfield/GridPanel.js:128
+msgid "Restart application to apply new customfields?"
+msgstr "Перезагрузить приложение, чтобы новые настройки вступили в действие?"
 
-#: js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "Удаление тэга(ов)..."
+#: js/customfield/EditDialog.js:137
+msgid "Please configure store for this field type"
+msgstr "Пожалуйста, настройте хранилище для этого типа поля"
 
-#: js/Tags.js:99
-msgid "Add Tag"
-msgstr "Добавить тег"
+#: js/customfield/EditDialog.js:244
+msgid "Default"
+msgstr "По умолчанию"
 
-#: js/Tags.js:107
-msgid "Edit Tag"
-msgstr "Изменить тег"
+#: js/customfield/EditDialog.js:288
+msgid "Add a New ID..."
+msgstr "Добавить новый ID..."
 
-#: js/Tags.js:115
-msgid "Delete Tag"
-msgstr "Удалить тег"
+#: js/customfield/EditDialog.js:292
+msgid "Value"
+msgstr "Значение"
 
-#: js/Tags.js:171 js/Roles.js:177 js/Applications.js:187 js/Groups.js:177
-msgid "Search:"
-msgstr "Поиск:"
+#: js/customfield/EditDialog.js:297
+msgid "Add a New Value..."
+msgstr "Добавить новое значение"
 
-#: js/Tags.js:213
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Показаны тэги {0} - {1} из {2}"
+#: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
+msgid "Error"
+msgstr "Ошибка"
 
-#: js/Tags.js:214 js/Tags.js:270
-msgid "No tags to display"
-msgstr "Нет тэгов"
+#: js/customfield/EditDialog.js:307
+msgid "ID already exists"
+msgstr "ID уже существует"
 
-#: js/Tags.js:224 js/TagEditDialog.js:232 js/container/EditDialog.js:171
-msgid "Color"
-msgstr "Цвет"
+#: js/customfield/EditDialog.js:313
+msgid "Value already exists"
+msgstr "Значение уже существует"
 
-#: js/Tags.js:225
-msgid "Usage:&#160;"
-msgstr "Использование:&#160;"
+#: js/customfield/EditDialog.js:407
+msgid "Record Class"
+msgstr "Класс записей"
 
-#: js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "Вы действительно хотите удалить выбранные роли?"
+#: js/customfield/EditDialog.js:432
+msgid "Given record class not found"
+msgstr "Данный класс записи не найден"
 
-#: js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "Удаление роли(ей)..."
+#: js/customfield/EditDialog.js:465
+msgid "OK"
+msgstr "OK"
 
-#: js/Roles.js:69 js/GroupEditDialog.js:73 js/Groups.js:74
-#: js/TagEditDialog.js:83 js/RoleEditDialog.js:108 js/RoleEditDialog.js:136
-msgid "Failed"
-msgstr "Неудача"
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:734
+msgid "Cancel"
+msgstr "Отмена"
 
-#: js/Roles.js:69 js/RoleEditDialog.js:136
-msgid "Some error occurred while trying to delete the role."
-msgstr "При удаление роли произошла ошибка."
+#: js/customfield/EditDialog.js:504
+msgid "Configure store"
+msgstr "Настроить хранилище"
 
-#: js/Roles.js:104
-msgid "Add Role"
-msgstr "Добавить роль"
+#: js/customfield/EditDialog.js:561
+msgid "Custom field definition"
+msgstr "Пользовательское поле определений"
 
-#: js/Roles.js:112
-msgid "Edit Role"
-msgstr "Изменить роль"
+#: js/customfield/EditDialog.js:572
+msgid "Text"
+msgstr "Текст"
 
-#: js/Roles.js:120
-msgid "Delete Role"
-msgstr "Удалить роль"
+#: js/customfield/EditDialog.js:573
+msgid "Number"
+msgstr "Номер"
 
-#: js/Roles.js:227
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Показаны роли {0} - {1} из {2}"
+#: js/customfield/EditDialog.js:574
+msgid "Date"
+msgstr "Дата"
 
-#: js/Roles.js:228 js/Roles.js:282
-msgid "No roles to display"
-msgstr "Нет ролей"
+#: js/customfield/EditDialog.js:575
+msgid "DateTime"
+msgstr "Время"
 
-#: js/GroupEditDialog.js:38 js/TagEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Please wait"
-msgstr "Пожалуйста, подождите"
+#: js/customfield/EditDialog.js:576
+msgid "Time"
+msgstr "Время"
 
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Updating Memberships"
-msgstr "Обновить членство"
+#: js/customfield/EditDialog.js:577
+msgid "Boolean"
+msgstr "Булево"
 
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "Не удалось сохранить группу."
+#: js/customfield/EditDialog.js:578
+msgid "Search Combo"
+msgstr "Составной поиск"
 
-#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
-#: js/customfield/EditDialog.js:137 js/customfield/EditDialog.js:432
-msgid "Errors"
-msgstr "Ошибки"
+#: js/customfield/EditDialog.js:579
+msgid "Key Field"
+msgstr "Ключевое поле"
 
-#: js/GroupEditDialog.js:78 js/TagEditDialog.js:88 js/RoleEditDialog.js:115
-msgid "Please fix the errors noted."
-msgstr "Пожалуйста, устраните отмеченные ошибки."
+#: js/customfield/EditDialog.js:580
+msgid "Record"
+msgstr "Запись"
 
-#: js/GroupEditDialog.js:121
-msgid "Group Name"
-msgstr "Название группы"
+#: js/customfield/EditDialog.js:608
+msgid "Length"
+msgstr "Длина"
 
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:923
-msgid "Visibility"
-msgstr "Видимость"
+#: js/customfield/EditDialog.js:613
+msgid "Required"
+msgstr "Требуется"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:930
-msgid "Display in addressbook"
-msgstr "Отображать в адресной книге"
+#: js/customfield/EditDialog.js:620
+msgid "Custom field additional properties"
+msgstr "Пользовательские поля дополнительных свойств"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:930
-msgid "Hide from addressbook"
-msgstr "Скрыть в адресной книги"
-
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:944
-msgid "Saved in Addressbook"
-msgstr "Сохранено в адресную книгу"
-
-#: js/GroupEditDialog.js:170
-msgid "Group Members"
-msgstr "Члены группы"
-
-#: js/GroupEditDialog.js:222 js/TagEditDialog.js:290 js/RoleEditDialog.js:361
-msgid "Transferring {0}..."
-msgstr "Передано {0}..."
-
-#: js/GroupEditDialog.js:222 js/customfield/EditDialog.js:625 js/Models.js:87
+#: js/customfield/EditDialog.js:625 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "Группа"
 msgstr[1] "Группы"
 msgstr[2] "Группы"
 
-#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
-msgid "Add new group"
-msgstr "Добавить новую группу"
+#: js/customfield/EditDialog.js:653
+msgid "Customfield already exists. Please choose another name."
+msgstr "Это настраиваемое поле уже существует. Пожалуйста, используйте другое имя."
 
-#: js/GroupEditDialog.js:240
-msgid "Edit Group \"{0}\""
-msgstr "Изменить группу \"{0}\""
+#: js/SambaMachineGrid.js:56 js/SambaMachineEditDialog.js:42
+msgid "Computer Name"
+msgstr "Имя компьютера"
 
-#: js/Applications.js:45
-msgid "{0} Settings"
-msgstr "{0} Настройки"
+#: js/container/Container.js:46 js/container/GridPanel.js:98
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "Контейнер"
+msgstr[1] "Контейнеры"
+msgstr[2] "Контейнеры"
 
-#: js/Applications.js:85
-msgid "Enable Application"
-msgstr "Включить приложение"
+#: js/container/GridPanel.js:66
+msgid "Container Name"
+msgstr "Имя контейнера"
 
-#: js/Applications.js:92
-msgid "Disable Application"
-msgstr "Отключить приложение"
+#: js/container/EditDialog.js:157
+msgid "personal"
+msgstr "личный"
 
-#: js/Applications.js:99
-msgid "Settings"
-msgstr "Настройки"
+#: js/container/EditDialog.js:157
+msgid "shared"
+msgstr "общий"
 
-#: js/Applications.js:148
-msgid "enable application"
-msgstr "Активировать приложение"
-
-#: js/Applications.js:149
-msgid "disable application"
-msgstr "Деактивировать приложение"
-
-#: js/Applications.js:150
-msgid "settings"
-msgstr "настройки"
-
-#: js/Applications.js:230 js/user/EditDialog.js:885
-msgid "disabled"
-msgstr "отключено"
-
-#: js/Applications.js:233 js/user/EditDialog.js:884
-msgid "enabled"
-msgstr "включено"
-
-#: js/Applications.js:237
-msgid "unknown status ({0})"
-msgstr "неизвестный статус ({0})"
-
-#: js/Applications.js:271
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Показаны приложения {0} - {1} из {2}"
-
-#: js/Applications.js:272
-msgid "No applications to display"
-msgstr "Нет приложений"
-
-#: js/Applications.js:281 js/customfield/EditDialog.js:630
-msgid "Order"
-msgstr "Порядок"
-
-#: js/Applications.js:283 js/user/EditDialog.js:876 js/user/GridPanel.js:172
-msgid "Status"
-msgstr "Статус"
-
-#: js/Applications.js:284
-msgid "Version"
-msgstr "Версия"
-
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "Вы уверены что хотите удалить выбранные группы?"
-
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "Удаление групп(ы)..."
-
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "При удаление группы произошла ошибка."
-
-#: js/Groups.js:106
-msgid "Add Group"
-msgstr "Добавить группу"
-
-#: js/Groups.js:114
-msgid "Edit Group"
-msgstr "Изменить группу"
-
-#: js/Groups.js:122
-msgid "Delete Group"
-msgstr "Удалить группу"
-
-#: js/Groups.js:224
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Показаны группы {0} - {1} из {2}"
-
-#: js/Groups.js:225 js/Groups.js:279
-msgid "No groups to display"
-msgstr "Нет групп"
+#: js/container/EditDialog.js:176
+msgid "Note for Owner"
+msgstr "Примечание владельца"
 
 #: js/AccessLog.js:101 js/AccessLog.js:129
 msgid "IP Address"
@@ -535,49 +619,9 @@ msgstr "неудачно"
 msgid "success"
 msgstr "успешно"
 
-#: js/TagEditDialog.js:38
-msgid "Updating Tag"
-msgstr "Обновление тега"
-
-#: js/TagEditDialog.js:83
-msgid "Could not save tag."
-msgstr "Не удалось сохранить тэг."
-
-#: js/TagEditDialog.js:169
-msgid "Allowed Contexts"
-msgstr "Разрешённый контекст"
-
-#: js/TagEditDialog.js:175
-msgid "Context"
-msgstr "Контекст"
-
-#: js/TagEditDialog.js:188
-msgid "Account Rights"
-msgstr "Права учётной записи"
-
-#: js/TagEditDialog.js:197
-msgid "View"
-msgstr "Представление"
-
-#: js/TagEditDialog.js:202
-msgid "Use"
-msgstr "Использовать"
-
-#: js/TagEditDialog.js:219
-msgid "Tag Name"
-msgstr "Название тэга"
-
-#: js/TagEditDialog.js:290
-msgid "Tag"
-msgstr "Тег"
-
-#: js/TagEditDialog.js:300
-msgid "Add New Tag"
-msgstr "Добавить новый тэг"
-
-#: js/TagEditDialog.js:302
-msgid "Edit Tag \"{0}\""
-msgstr "Изменить тэг \"{0}\""
+#: js/RoleEditDialog.js:70 js/GroupEditDialog.js:38
+msgid "Updating Memberships"
+msgstr "Обновить членство"
 
 #: js/RoleEditDialog.js:108
 msgid "Could not save role."
@@ -586,6 +630,10 @@ msgstr "Не удалось сохранить роль."
 #: js/RoleEditDialog.js:128
 msgid "Deleting role..."
 msgstr "Удаление роли..."
+
+#: js/RoleEditDialog.js:136 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "При удаление роли произошла ошибка."
 
 #: js/RoleEditDialog.js:160
 msgid "Rights"
@@ -608,66 +656,227 @@ msgid "Add New Role"
 msgstr "Добавьте новую роль"
 
 #: js/RoleEditDialog.js:373
+#, python-brace-format
 msgid "Edit Role \"{0}\""
 msgstr "Изменить роль \"{0}\""
 
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Компьютер"
-msgstr[1] "Компьютера"
-msgstr[2] "Компьютеров"
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Вы действительно хотите удалить выбранные тэги?"
 
-#: js/container/EditDialog.js:136 js/container/GridPanel.js:67
-#: js/ApplicationFilter.js:33 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:529 js/customfield/GridPanel.js:69
-#: js/Models.js:127
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Приложение"
-msgstr[1] "Приложения"
-msgstr[2] "Приложения"
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Удаление тэга(ов)..."
 
-#: js/container/EditDialog.js:149 js/customfield/EditDialog.js:550
-#: js/customfield/GridPanel.js:70
-msgid "Model"
-msgstr "Модель"
+#: js/Tags.js:99
+msgid "Add Tag"
+msgstr "Добавить тег"
 
-#: js/container/EditDialog.js:156 js/container/GridPanel.js:68
-#: js/container/GridPanel.js:99 js/customfield/EditDialog.js:584
-#: js/customfield/GridPanel.js:68
-msgid "Type"
-msgstr "Тип"
+#: js/Tags.js:107
+msgid "Edit Tag"
+msgstr "Изменить тег"
 
-#: js/container/EditDialog.js:157
-msgid "personal"
-msgstr "личный"
+#: js/Tags.js:115
+msgid "Delete Tag"
+msgstr "Удалить тег"
 
-#: js/container/EditDialog.js:157
-msgid "shared"
-msgstr "общий"
+#: js/Tags.js:213
+#, python-brace-format
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Показаны тэги {0} - {1} из {2}"
 
-#: js/container/EditDialog.js:176
-msgid "Note for Owner"
-msgstr "Примечание владельца"
+#: js/Tags.js:214 js/Tags.js:270
+msgid "No tags to display"
+msgstr "Нет тэгов"
 
-#: js/container/Container.js:46 js/container/GridPanel.js:98
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] "Контейнер"
-msgstr[1] "Контейнеры"
-msgstr[2] "Контейнеры"
+#: js/Tags.js:225
+msgid "Usage:&#160;"
+msgstr "Использование:&#160;"
 
-#: js/container/GridPanel.js:66
-msgid "Container Name"
-msgstr "Имя контейнера"
+#: js/GroupEditDialog.js:73
+msgid "Could not save group."
+msgstr "Не удалось сохранить группу."
+
+#: js/GroupEditDialog.js:121
+msgid "Group Name"
+msgstr "Название группы"
+
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:924
+msgid "Visibility"
+msgstr "Видимость"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:931
+msgid "Display in addressbook"
+msgstr "Отображать в адресной книге"
+
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:931
+msgid "Hide from addressbook"
+msgstr "Скрыть в адресной книги"
+
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:945
+msgid "Saved in Addressbook"
+msgstr "Сохранено в адресную книгу"
+
+#: js/GroupEditDialog.js:170
+msgid "Group Members"
+msgstr "Члены группы"
+
+#: js/GroupEditDialog.js:227 js/GroupEditDialog.js:238
+msgid "Add new group"
+msgstr "Добавить новую группу"
+
+#: js/GroupEditDialog.js:240
+#, python-brace-format
+msgid "Edit Group \"{0}\""
+msgstr "Изменить группу \"{0}\""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Вы действительно хотите удалить выбранные роли?"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Удаление роли(ей)..."
+
+#: js/Roles.js:104
+msgid "Add Role"
+msgstr "Добавить роль"
+
+#: js/Roles.js:112
+msgid "Edit Role"
+msgstr "Изменить роль"
+
+#: js/Roles.js:120
+msgid "Delete Role"
+msgstr "Удалить роль"
+
+#: js/Roles.js:227
+#, python-brace-format
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Показаны роли {0} - {1} из {2}"
+
+#: js/Roles.js:228 js/Roles.js:282
+msgid "No roles to display"
+msgstr "Нет ролей"
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Вы уверены что хотите удалить выбранные группы?"
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Удаление групп(ы)..."
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "При удаление группы произошла ошибка."
+
+#: js/Groups.js:106
+msgid "Add Group"
+msgstr "Добавить группу"
+
+#: js/Groups.js:114
+msgid "Edit Group"
+msgstr "Изменить группу"
+
+#: js/Groups.js:122
+msgid "Delete Group"
+msgstr "Удалить группу"
+
+#: js/Groups.js:224
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Показаны группы {0} - {1} из {2}"
+
+#: js/Groups.js:225 js/Groups.js:279
+msgid "No groups to display"
+msgstr "Нет групп"
+
+#: js/user/GridPanel.js:50
+msgid "Enable Account"
+msgstr "включить учётную запись"
+
+#: js/user/GridPanel.js:60
+msgid "Disable Account"
+msgstr "отключить учётную запись"
+
+#: js/user/GridPanel.js:70
+msgid "Reset Password"
+msgstr "Сбросить пароль"
+
+#: js/user/GridPanel.js:173
+msgid "Display name"
+msgstr "Отображать как"
+
+#: js/user/GridPanel.js:174 js/user/EditDialog.js:808
+#: js/user/EditDialog.js:853
+msgid "Login name"
+msgstr "Имя пользователя"
+
+#: js/user/GridPanel.js:175 js/user/EditDialog.js:802
+msgid "Last name"
+msgstr "Фамилия"
+
+#: js/user/GridPanel.js:176 js/user/EditDialog.js:791
+msgid "First name"
+msgstr "Имя"
+
+#: js/user/GridPanel.js:177 js/user/EditDialog.js:845
+msgid "Email"
+msgstr "Электронная почта"
+
+#: js/user/GridPanel.js:178 js/user/EditDialog.js:852
+msgid "OpenID"
+msgstr "OpenID"
+
+#: js/user/GridPanel.js:179 js/user/EditDialog.js:985
+msgid "Last login at"
+msgstr "Последний регистрировался в"
+
+#: js/user/GridPanel.js:180 js/user/EditDialog.js:989
+msgid "Last login from"
+msgstr "Последняя регистрация от"
+
+#: js/user/GridPanel.js:181
+msgid "Password changed"
+msgstr "Пароль изменен"
+
+#: js/user/GridPanel.js:182 js/user/EditDialog.js:918
+msgid "Expires"
+msgstr "Истекает"
+
+#: js/user/GridPanel.js:240
+msgid "Set new password"
+msgstr "Задать новый пароль"
+
+#: js/user/GridPanel.js:240
+msgid "Please enter the new password:"
+msgstr "Пожалуйста, введите новый пароль:"
+
+#: js/user/Users.js:72
+msgid "Users"
+msgstr "Пользователи"
+
+#: js/user/Users.js:120
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Пользователь Samba"
+msgstr[1] "Пользователя Samba"
+msgstr[2] "Пользователей Samba"
+
+#: js/user/Users.js:146
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Электронные адреса пользователей"
+msgstr[1] "Электронные адреса пользователей"
+msgstr[2] "Электронные адреса пользователей"
 
 #: js/user/EditDialog.js:187
 msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr "Домен недопустим. Пожалуйста, проверьте настройки домена в конфигурации SMTP"
 
 #: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:730
+#: js/user/EditDialog.js:731
 msgid "Passwords do not match!"
 msgstr "Пароли не совпадают!"
 
@@ -675,7 +884,7 @@ msgstr "Пароли не совпадают!"
 msgid "Passwords match!"
 msgstr "Пароли совпадают!"
 
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:858
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:859
 msgid "Primary group"
 msgstr "Основная группа"
 
@@ -703,8 +912,8 @@ msgstr "Домашний диск"
 msgid "Logon Time"
 msgstr "Время выхода"
 
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:986
-#: js/user/EditDialog.js:990
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:987
+#: js/user/EditDialog.js:991
 msgid "never logged in"
 msgstr "никогда не регистрировался"
 
@@ -728,8 +937,8 @@ msgstr "Путь профиля"
 msgid "Password Last Set"
 msgstr "Последняя установка пароля"
 
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:920
-#: js/user/EditDialog.js:994
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:921
+#: js/user/EditDialog.js:995
 msgid "never"
 msgstr "никогда"
 
@@ -778,7 +987,7 @@ msgstr "Квота Sieve (МБ)"
 msgid "Current Sieve size"
 msgstr "Размер Sieve"
 
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:969
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:970
 msgid "Information"
 msgstr "Информация"
 
@@ -786,313 +995,114 @@ msgstr "Информация"
 msgid "Last Login"
 msgstr "Последний вход"
 
-#: js/user/EditDialog.js:615
+#: js/user/EditDialog.js:616
 msgid "Domain not allowed"
 msgstr "Домен недопустим"
 
-#: js/user/EditDialog.js:616
+#: js/user/EditDialog.js:617
+#, python-brace-format
 msgid ""
 "The domain {0} of the alias {1} you tried to add is neither configured as "
-"primary domain nor set as a secondary domain in the setup."
-msgstr "Домен {0} псевдонима {1}, который вы добавляете, не указан в настройках ни как основной, ни как дополнительный."
+"primary domain nor set as a secondary domain in the setup. Please add this "
+"domain to the secondary domains in SMTP setup or use another domain which is"
+" configured already."
+msgstr ""
 
-#: js/user/EditDialog.js:625
+#: js/user/EditDialog.js:626
 msgid "Email Alias"
 msgstr "Псевдонимы почты"
 
-#: js/user/EditDialog.js:631
+#: js/user/EditDialog.js:632
 msgid "Add an alias address..."
 msgstr "Добавить псевдоним..."
 
-#: js/user/EditDialog.js:649
+#: js/user/EditDialog.js:650
 msgid "Forwarding to self"
 msgstr "Пересылка себе"
 
-#: js/user/EditDialog.js:650
+#: js/user/EditDialog.js:651
 msgid ""
 "You are not allowed to set a forward email address that is identical to the "
 "users primary email or one of his aliases."
 msgstr "Вы не можете перенаправить письмо на заданный адрес."
 
-#: js/user/EditDialog.js:659
+#: js/user/EditDialog.js:660
 msgid "Email Forward"
 msgstr "Пересылка почты"
 
-#: js/user/EditDialog.js:665
+#: js/user/EditDialog.js:666
 msgid "Add a forward address..."
 msgstr "Добавить адрес для пересылки..."
 
-#: js/user/EditDialog.js:678
+#: js/user/EditDialog.js:679
 msgid "Forward Only"
 msgstr "Только пересылка"
 
-#: js/user/EditDialog.js:697
+#: js/user/EditDialog.js:698
 msgid "Password confirmation"
 msgstr "Подтверждение пароля"
 
-#: js/user/EditDialog.js:714
+#: js/user/EditDialog.js:715
 msgid "Repeat password"
 msgstr "Повтор пароля"
 
-#: js/user/EditDialog.js:733 js/customfield/EditDialog.js:471
-msgid "Cancel"
-msgstr "Отмена"
-
-#: js/user/EditDialog.js:740
+#: js/user/EditDialog.js:741
 msgid "Ok"
 msgstr "Ok"
 
-#: js/user/EditDialog.js:775
+#: js/user/EditDialog.js:776
 msgid "Account"
 msgstr "Учётная запись"
 
-#: js/user/EditDialog.js:790 js/user/GridPanel.js:176
-msgid "First name"
-msgstr "Имя"
-
-#: js/user/EditDialog.js:801 js/user/GridPanel.js:175
-msgid "Last name"
-msgstr "Фамилия"
-
-#: js/user/EditDialog.js:807 js/user/EditDialog.js:852
-#: js/user/GridPanel.js:174
-msgid "Login name"
-msgstr "Имя пользователя"
-
-#: js/user/EditDialog.js:813
+#: js/user/EditDialog.js:814
 msgid "Password"
 msgstr "Пароль"
 
-#: js/user/EditDialog.js:844 js/user/GridPanel.js:177
-msgid "Email"
-msgstr "Электронная почта"
-
-#: js/user/EditDialog.js:851 js/user/GridPanel.js:178
-msgid "OpenID"
-msgstr "OpenID"
-
-#: js/user/EditDialog.js:886
+#: js/user/EditDialog.js:887
 msgid "expired"
 msgstr "завершённый"
 
-#: js/user/EditDialog.js:887
+#: js/user/EditDialog.js:888
 msgid "blocked"
 msgstr "заблокирован"
 
-#: js/user/EditDialog.js:894
+#: js/user/EditDialog.js:895
 msgid "Invalid Status"
 msgstr "Некорректный статус"
 
-#: js/user/EditDialog.js:895
+#: js/user/EditDialog.js:896
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
 msgstr "Статус \"заблокировано\" будет стоять только в том случае, если пользователь часто ошибался с вводом пароля. Выставить этот статус здесь невозможно."
 
-#: js/user/EditDialog.js:917 js/user/GridPanel.js:182
-msgid "Expires"
-msgstr "Истекает"
-
-#: js/user/EditDialog.js:984 js/user/GridPanel.js:179
-msgid "Last login at"
-msgstr "Последний регистрировался в"
-
-#: js/user/EditDialog.js:986 js/user/EditDialog.js:990
+#: js/user/EditDialog.js:987 js/user/EditDialog.js:991
 msgid "don't know"
 msgstr "неизвестно"
 
-#: js/user/EditDialog.js:988 js/user/GridPanel.js:180
-msgid "Last login from"
-msgstr "Последняя регистрация от"
-
-#: js/user/EditDialog.js:992
+#: js/user/EditDialog.js:993
 msgid "Password set"
 msgstr "Пароль установлен"
 
-#: js/user/EditDialog.js:999
+#: js/user/EditDialog.js:1000
 msgid "User groups"
 msgstr "Группы пользователей"
 
-#: js/user/EditDialog.js:1005
+#: js/user/EditDialog.js:1006
 msgid "User roles"
 msgstr "Роли пользователей"
 
-#: js/user/EditDialog.js:1011
+#: js/user/EditDialog.js:1012
 msgid "Fileserver"
 msgstr "Файловый сервер"
 
-#: js/user/EditDialog.js:1017
+#: js/user/EditDialog.js:1018
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:1026
+#: js/user/EditDialog.js:1027
 msgid "SMTP"
 msgstr "SMTP"
-
-#: js/user/GridPanel.js:50
-msgid "Enable Account"
-msgstr "включить учётную запись"
-
-#: js/user/GridPanel.js:60
-msgid "Disable Account"
-msgstr "отключить учётную запись"
-
-#: js/user/GridPanel.js:70
-msgid "Reset Password"
-msgstr "Сбросить пароль"
-
-#: js/user/GridPanel.js:173
-msgid "Display name"
-msgstr "Отображать как"
-
-#: js/user/GridPanel.js:181
-msgid "Password changed"
-msgstr "Пароль изменен"
-
-#: js/user/GridPanel.js:240
-msgid "Set new password"
-msgstr "Задать новый пароль"
-
-#: js/user/GridPanel.js:240
-msgid "Please enter the new password:"
-msgstr "Пожалуйста, введите новый пароль:"
-
-#: js/user/Users.js:72
-msgid "Users"
-msgstr "Пользователи"
-
-#: js/user/Users.js:120
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Пользователь Samba"
-msgstr[1] "Пользователя Samba"
-msgstr[2] "Пользователей Samba"
-
-#: js/user/Users.js:146
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "Электронные адреса пользователей"
-msgstr[1] "Электронные адреса пользователей"
-msgstr[2] "Электронные адреса пользователей"
-
-#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:110
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] "Настраиваемые поля"
-msgstr[1] "Настраиваемые поля"
-msgstr[2] "Настраиваемые поля"
-
-#: js/customfield/EditDialog.js:137
-msgid "Please configure store for this field type"
-msgstr "Пожалуйста, настройте хранилище для этого типа поля"
-
-#: js/customfield/EditDialog.js:244
-msgid "Default"
-msgstr "По умолчанию"
-
-#: js/customfield/EditDialog.js:288
-msgid "Add a New ID..."
-msgstr "Добавить новый ID..."
-
-#: js/customfield/EditDialog.js:292
-msgid "Value"
-msgstr "Значение"
-
-#: js/customfield/EditDialog.js:297
-msgid "Add a New Value..."
-msgstr "Добавить новое значение"
-
-#: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
-msgid "Error"
-msgstr "Ошибка"
-
-#: js/customfield/EditDialog.js:307
-msgid "ID already exists"
-msgstr "ID уже существует"
-
-#: js/customfield/EditDialog.js:313
-msgid "Value already exists"
-msgstr "Значение уже существует"
-
-#: js/customfield/EditDialog.js:407
-msgid "Record Class"
-msgstr "Класс записей"
-
-#: js/customfield/EditDialog.js:432
-msgid "Given record class not found"
-msgstr "Данный класс записи не найден"
-
-#: js/customfield/EditDialog.js:465
-msgid "OK"
-msgstr "OK"
-
-#: js/customfield/EditDialog.js:504
-msgid "Configure store"
-msgstr "Настроить хранилище"
-
-#: js/customfield/EditDialog.js:561
-msgid "Custom field definition"
-msgstr "Пользовательское поле определений"
-
-#: js/customfield/EditDialog.js:572
-msgid "Text"
-msgstr "Текст"
-
-#: js/customfield/EditDialog.js:573
-msgid "Number"
-msgstr "Номер"
-
-#: js/customfield/EditDialog.js:574
-msgid "Date"
-msgstr "Дата"
-
-#: js/customfield/EditDialog.js:575
-msgid "DateTime"
-msgstr "Время"
-
-#: js/customfield/EditDialog.js:576
-msgid "Time"
-msgstr "Время"
-
-#: js/customfield/EditDialog.js:577
-msgid "Boolean"
-msgstr "Булево"
-
-#: js/customfield/EditDialog.js:578
-msgid "Search Combo"
-msgstr "Составной поиск"
-
-#: js/customfield/EditDialog.js:579
-msgid "Key Field"
-msgstr "Ключевое поле"
-
-#: js/customfield/EditDialog.js:580
-msgid "Record"
-msgstr "Запись"
-
-#: js/customfield/EditDialog.js:602 js/customfield/GridPanel.js:66
-msgid "Label"
-msgstr "Метка"
-
-#: js/customfield/EditDialog.js:608
-msgid "Length"
-msgstr "Длина"
-
-#: js/customfield/EditDialog.js:613
-msgid "Required"
-msgstr "Требуется"
-
-#: js/customfield/EditDialog.js:620
-msgid "Custom field additional properties"
-msgstr "Пользовательские поля дополнительных свойств"
-
-#: js/customfield/EditDialog.js:653
-msgid "Customfield already exists. Please choose another name."
-msgstr "Это настраиваемое поле уже существует. Пожалуйста, используйте другое имя."
-
-#: js/customfield/GridPanel.js:128
-msgid "Restart application to apply new customfields?"
-msgstr "Перезагрузить приложение, чтобы новые настройки вступили в действие?"
 
 #: Controller/Container.php:198
 msgid "Your container has been changed"
@@ -1101,3 +1111,7 @@ msgstr "Ваш контейнер изменён"
 #: Controller/Container.php:199
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr "Ваш контейнер изменён %1$s %2$sПримечание: %3$s"
+
+#: Config.php:33 Config.php:35
+msgid "Default IMAP user settings"
+msgstr "Пользовательские настройки IMAP по-умолчанию."

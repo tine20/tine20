@@ -1,14 +1,14 @@
 # 
 # Translators:
-# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013
+# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2014
 # Nikolay Parukhin <parukhin@gmail.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:48+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-10 18:46+0000\n"
+"Last-Translator: Aleksey Ubozhenko <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -139,11 +139,11 @@ msgstr ""
 
 #: Setup/Update/Release1.php:92 Setup/Initialize.php:66
 msgid "team"
-msgstr ""
+msgstr "команда"
 
 #: Setup/Update/Release1.php:106 Setup/Initialize.php:80
 msgid "private"
-msgstr ""
+msgstr "личный"
 
 #: Setup/Update/Release1.php:107 Setup/Initialize.php:81
 msgid "shared"

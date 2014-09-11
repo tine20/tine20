@@ -1,5 +1,6 @@
-#
+# 
 # Translators:
+# Michael Spahn <michael@spahn.me>, 2014
 # pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
 # sstamer <s.stamer@metaways.de>, 2014
@@ -7,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-11 10:25+0000\n"
+"Last-Translator: Michael Spahn <michael@spahn.me>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -37,11 +38,11 @@ msgstr "Einen bestehenden Benutzer als Schüler zur Klasse hinzufügen"
 
 #: Acl/Rights.php:115
 msgid "Manage shared courses favorites"
-msgstr ""
+msgstr "Verwalte geteilte Kurs-Favoriten"
 
 #: Acl/Rights.php:116
 msgid "Create or update shared courses favorites"
-msgstr ""
+msgstr "Erstelle oder aktualisiere geteilte Kurs-Favoriten"
 
 #: js/CourseGridPanel.js:44 js/Models.js:72
 msgid "Name"
@@ -195,7 +196,9 @@ msgid "Student username schema"
 msgstr "Benutzernamensschema für Schüler"
 
 #: Config.php:139
-msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
+msgid ""
+"Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
+"chars of firstname"
 msgstr "Benutzernamensschema für Schüler (0 = nur Nachname (10 Zeichen), 1 = Nachname + 2 Zeichen des Vornamens)"
 
 #: Config.php:146 Config.php:148
@@ -204,11 +207,11 @@ msgstr "Samba-Benutzereinstellungen"
 
 #: Config.php:157
 msgid "Default department"
-msgstr ""
+msgstr "Standard Abteilung"
 
 #: Config.php:159
 msgid "The default department for new Courses"
-msgstr ""
+msgstr "Die standard Abteilung für neue Kurse"
 
 #: Setup/setup.xml:4
 msgid "Courses"

@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-10 14:11+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,35 +17,109 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:106
-msgid "manage shared lead folders"
-msgstr "Quản lý thư mục đầu mối chia sẻ"
+#: Export/Pdf.php:75
+msgid "Lead Data"
+msgstr "Dữ liệu đầu mối"
 
-#: Acl/Rights.php:107
-msgid "Create new shared lead folders"
-msgstr "Tạo thư mục đầu mối chia sẻ mới"
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadGridPanel.js:145
+#: js/LeadStateFilterModel.js:32 js/LeadEditDialog.js:343
+msgid "Leadstate"
+msgstr "Trạng thái đầu mối"
 
-#: Acl/Rights.php:110
-msgid "manage shared leads favorites"
-msgstr "quản lý đầu mối chia sẻ thường dùng"
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:362
+#: js/LeadGridDetailsPanel.js:454
+msgid "Leadtype"
+msgstr "Loại đầu mối"
 
-#: Acl/Rights.php:111
-msgid "Create or update shared leads favorites"
-msgstr "Tạo hoặc cập nhật đầu mối chia sẻ thường dùng"
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:369
+#: js/LeadGridDetailsPanel.js:459
+msgid "Leadsource"
+msgstr "Nguồn đầu mối"
+
+#: Export/Pdf.php:87 js/LeadGridPanel.js:147 js/Model.js:111
+#: Controller/Lead.php:200
+msgid "Turnover"
+msgstr "Doanh số"
+
+#: Export/Pdf.php:90 js/LeadGridPanel.js:146 js/Model.js:110
+#: js/LeadEditDialog.js:222 Controller/Lead.php:201
+msgid "Probability"
+msgstr "Có khả năng"
+
+#: Export/Pdf.php:93 js/LeadEditDialog.js:406 js/LeadGridDetailsPanel.js:444
+#: Controller/Lead.php:197
+msgid "Start"
+msgstr "Bắt đầu"
+
+#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:199
+msgid "End"
+msgstr "Kết thúc"
+
+#: Export/Pdf.php:99
+msgid "End Scheduled"
+msgstr "Lịch kết thúc"
+
+#: Export/Pdf.php:184
+msgid "Contacts"
+msgstr "Liên lạc"
+
+#: Export/Pdf.php:211 js/Contact.js:231
+msgid "Address"
+msgstr "Địa chỉ"
+
+#: Export/Pdf.php:218 Controller.php:177
+msgid "Telephone"
+msgstr "Điện thoại"
+
+#: Export/Pdf.php:219 Controller.php:176
+msgid "Email"
+msgstr "Email"
+
+#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:245
+msgid "Tasks"
+msgstr "Công việc"
+
+#: Export/Pdf.php:252 js/Task.js:227
+msgid "Due Date"
+msgstr "Ngày đến hạn"
+
+#: Export/Pdf.php:259 js/Task.js:240
+msgid "Priority"
+msgstr "Độ quan trọng"
+
+#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:256
+msgid "Products"
+msgstr "Sản phẩm"
+
+#: Export/Pdf.php:315
+msgid "low"
+msgstr "thấp"
+
+#: Export/Pdf.php:316
+msgid "normal"
+msgstr "thường"
+
+#: Export/Pdf.php:317
+msgid "high"
+msgstr "cao"
+
+#: Export/Pdf.php:318
+msgid "urgent"
+msgstr "khẩn cấp"
 
 #: Controller.php:117
 #, python-format
 msgid "%s's personal leads"
 msgstr "Đầu mối cá nhân của %s"
 
-#: Controller.php:162 Model/Lead.php:120 js/LeadGridDetailsPanel.js:45
-#: js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
-#: js/LeadGridPanel.js:122 Controller/Lead.php:186
+#: Controller.php:162 Model/Lead.php:123 js/LeadGridPanel.js:144
+#: js/LeadGridDetailsPanel.js:45 js/Contact.js:161 js/Contact.js:356
+#: js/Contact.js:396 Controller/Lead.php:193
 msgid "Customer"
 msgstr "Khách hàng"
 
-#: Controller.php:163 js/LeadGridDetailsPanel.js:45 js/Contact.js:181
-#: js/Contact.js:357 js/Contact.js:400 js/LeadGridPanel.js:121
+#: Controller.php:163 js/LeadGridPanel.js:143 js/LeadGridDetailsPanel.js:45
+#: js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
 msgid "Partner"
 msgstr "Đôi tác"
 
@@ -81,50 +155,392 @@ msgstr "mất"
 msgid "Market"
 msgstr "Thị trường"
 
-#: Controller.php:176 Export/Pdf.php:219
-msgid "Email"
-msgstr "Email"
-
-#: Controller.php:177 Export/Pdf.php:218
-msgid "Telephone"
-msgstr "Điện thoại"
-
 #: Controller.php:178
 msgid "Website"
 msgstr "Website"
 
-#: Model/Lead.php:119 js/Contact.js:171 js/Contact.js:355 js/Contact.js:392
-#: js/LeadGridPanel.js:120
+#: Acl/Rights.php:106
+msgid "manage shared lead folders"
+msgstr "Quản lý thư mục đầu mối chia sẻ"
+
+#: Acl/Rights.php:107
+msgid "Create new shared lead folders"
+msgstr "Tạo thư mục đầu mối chia sẻ mới"
+
+#: Acl/Rights.php:110
+msgid "manage shared leads favorites"
+msgstr "quản lý đầu mối chia sẻ thường dùng"
+
+#: Acl/Rights.php:111
+msgid "Create or update shared leads favorites"
+msgstr "Tạo hoặc cập nhật đầu mối chia sẻ thường dùng"
+
+#: Model/Lead.php:122 js/LeadGridPanel.js:142 js/Contact.js:171
+#: js/Contact.js:355 js/Contact.js:392
 msgid "Responsible"
 msgstr "Trách nhiệm"
 
-#: Model/Lead.php:125
+#: Model/Lead.php:129
 msgid "Task"
 msgstr "Công việc"
 
-#: Setup/Update/Release3.php:37 Setup/Initialize.php:36
-msgid "All leads I have read grants for"
-msgstr "Mọi đầu mối tôi đã đọc quyền"
+#: js/Task.js:109
+msgid "No Tasks to display"
+msgstr "Chưa có việc gì"
 
-#: Setup/Initialize.php:43
-msgid "Last modified by me"
-msgstr "Sửa lần cuối bởi tôi"
+#: js/Task.js:219
+msgid "Summary"
+msgstr "Tóm tắt"
 
-#: Setup/Initialize.php:44
-msgid "All leads that I have last modified"
-msgstr "Mọi đầu mối tôi đã sửa"
+#: js/Task.js:223
+msgid "Add a task..."
+msgstr "Thêm 1 việc..."
 
-#: Setup/Initialize.php:53
-msgid "My leads"
-msgstr "Đầu mối của tôi"
+#: js/Task.js:256
+msgid "Percent"
+msgstr "Phần trăm"
 
-#: Setup/Initialize.php:54
-msgid "All leads that I am responsible for"
-msgstr "Mọi đầu mối tôi chịu trách nhiệm"
+#: js/Task.js:269 js/LeadGridDetailsPanel.js:439
+msgid "Status"
+msgstr "Trạng thái"
 
-#: Setup/Initialize.php:67
-msgid "Leads with overdue tasks"
-msgstr "Đầu mối với việc quá hạn"
+#: js/Task.js:285
+msgid "Organizer"
+msgstr ""
+
+#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
+#: js/LeadGridDetailsPanel.js:227
+msgid "Leadstates"
+msgstr "Trạng thái đầu mối"
+
+#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
+msgid "Leadtypes"
+msgstr "Kiểu đầu mối"
+
+#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
+msgid "Leadsources"
+msgstr "Nguồn đầu mối"
+
+#: js/AdminPanel.js:138
+msgid "Defaults"
+msgstr "Mặc định"
+
+#: js/LeadState.js:32
+msgid "Lead State"
+msgid_plural "Lead States"
+msgstr[0] "one: Trạng thái đầu mối\nother: Trạng thái đầu mối"
+
+#: js/LeadState.js:166
+msgid "Add a Leadstate..."
+msgstr "Thêm 1 trạng thái đầu mối"
+
+#: js/LeadGridContactFilter.js:47
+msgid "Contact"
+msgstr "Liên hệ"
+
+#: js/LeadGridContactFilter.js:54
+msgid "CRM Role"
+msgstr "Vai trò quan hệ khách hàng"
+
+#: js/LeadType.js:29
+msgid "Lead Type"
+msgid_plural "Lead Types"
+msgstr[0] "one: Loại đầu mối\nother: Loại đầu mối"
+
+#: js/LeadType.js:134
+msgid "Add a Leadtype..."
+msgstr "Thêm loại đầu mối"
+
+#: js/LinkGridPanel.js:34
+#, python-brace-format
+msgid "Add new {0}"
+msgstr "Thêm mới {0}"
+
+#: js/LinkGridPanel.js:56 js/Product.js:185
+#, python-brace-format
+msgid "Unlink {0}"
+msgstr "Ngừng liên kết {0}"
+
+#: js/LinkGridPanel.js:57 js/Product.js:186
+#, python-brace-format
+msgid "Unlink selected {0}"
+msgstr "Ngừng liên kết phần chọn {0}"
+
+#: js/LinkGridPanel.js:72
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "Sửa {0}"
+
+#: js/LinkGridPanel.js:73
+#, python-brace-format
+msgid "Edit selected {0}"
+msgstr "Sửa phần chọn {0}"
+
+#: js/Product.js:134
+msgid "Product"
+msgstr "Sản phẩm"
+
+#: js/Product.js:139 js/LeadEditDialog.js:444
+msgid "Description"
+msgstr "Mô tả"
+
+#: js/Product.js:146
+msgid "Price"
+msgstr "Giá"
+
+#: js/Product.js:158
+msgid "Quantity"
+msgstr "Số lượng"
+
+#: js/Product.js:216
+msgid "Search for Products to add ..."
+msgstr "Tìm sản phẩm để thêm..."
+
+#: js/LeadGridPanel.js:139
+msgid "Lead id"
+msgstr "Mã đầu mối"
+
+#: js/LeadGridPanel.js:140
+msgid "Tags"
+msgstr "Thẻ"
+
+#: js/LeadGridPanel.js:141 js/Model.js:108
+msgid "Lead name"
+msgstr "Tên đầu mối"
+
+#: js/LeadGridPanel.js:149 js/Model.js:118 js/LeadEditDialog.js:412
+#: js/LeadGridDetailsPanel.js:449
+msgid "Estimated end"
+msgstr "Dự kiến thời gian kết thúc"
+
+#: js/LeadGridPanel.js:150
+msgid "Probable Turnover"
+msgstr "Có thể bỏ qua"
+
+#: js/LeadGridPanel.js:151 js/Model.js:119 js/LeadEditDialog.js:393
+msgid "Resubmission Date"
+msgstr ""
+
+#: js/LeadGridPanel.js:194
+msgid "Export Lead"
+msgstr "Xuất dữ liệu đầu mối"
+
+#: js/LeadGridPanel.js:203
+msgid "Export as PDF"
+msgstr "Xuất dạng PDF"
+
+#: js/LeadGridPanel.js:210
+msgid "Export as CSV"
+msgstr "Xuất dạng CSV"
+
+#: js/LeadGridPanel.js:217
+msgid "Export as ODS"
+msgstr "Xuất dạng ODS"
+
+#: js/LeadGridPanel.js:224
+msgid "Export as XLS"
+msgstr "Xuất dạng XLS"
+
+#: js/LeadStateFilterModel.js:37
+msgid "Show closed"
+msgstr "Hiển thị đã bị đóng"
+
+#: js/Model.js:52 js/LeadEditDialog.js:274 js/AddToLeadPanel.js:73
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "one: Đầu mối\nother: Đầu mối khác"
+
+#: js/Model.js:56
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] "one: danh sách lãnh đạo\nother: danh sách lãnh đạo"
+
+#: js/Model.js:56
+msgid "lead lists"
+msgstr "danh sách lãnh đạo"
+
+#: js/Model.js:106
+msgid "Quick Search"
+msgstr "Tìm nhanh"
+
+#: js/Model.js:113
+msgid "Last Modified Time"
+msgstr "Thời gian sửa lần cuối"
+
+#: js/Model.js:114
+msgid "Last Modified By"
+msgstr "Sửa lần cuối bởi"
+
+#: js/Model.js:115
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/Model.js:116
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/Model.js:159
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] "one: Thiết lập\nother: Thiết lập"
+
+#: js/Model.js:162
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "one: Danh sách biểu ghi\nother: Danh sách biểu ghi"
+
+#: js/LeadEditDialog.js:246
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr "Bạn không có quyền chạy ứng dụng Công việc hoặc nó chưa được kích hoạt"
+
+#: js/LeadEditDialog.js:257
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr "Bạn không có quyền chạy ứng dụng Bán hàng hoặc nó chưa được kích hoạt"
+
+#: js/LeadEditDialog.js:301
+msgid "Enter short name"
+msgstr "Nhâp tên ngắn"
+
+#: js/LeadEditDialog.js:385
+msgid "Expected turnover"
+msgstr "Doanh số mong đợi"
+
+#: js/LeadEditDialog.js:458
+msgid "Enter description"
+msgstr "Nhập mô tả"
+
+#: js/Crm.js:24
+msgid "New Lead"
+msgstr "Đầu mối mới"
+
+#: js/LeadGridDetailsPanel.js:48 js/Contact.js:245
+msgid "Phone"
+msgstr "Điện thoại"
+
+#: js/LeadGridDetailsPanel.js:51
+msgid "Mobile"
+msgstr "Điện thoại"
+
+#: js/LeadGridDetailsPanel.js:54
+msgid "Fax"
+msgstr "Fax"
+
+#: js/LeadGridDetailsPanel.js:57
+msgid "E-Mail"
+msgstr "Email"
+
+#: js/LeadGridDetailsPanel.js:60
+msgid "Web"
+msgstr "Web"
+
+#: js/LeadSource.js:29
+msgid "Lead Source"
+msgid_plural "Lead Sources"
+msgstr[0] "one: Nguồn đầu mối\nother: Nguồn đầu mối"
+
+#: js/LeadSource.js:136
+msgid "Add a Leadsource..."
+msgstr "Thêm 1 nguồn đầu mối"
+
+#: js/AddToLeadPanel.js:31
+msgid "Please choose the Lead to add the contacts to"
+msgstr "Xin chọn đầu mối để thêm liên lạc"
+
+#: js/AddToLeadPanel.js:36
+msgid "Please select the attenders' role"
+msgstr "Chọn vai trò người tham gia"
+
+#: js/AddToLeadPanel.js:74
+msgid "Select Lead"
+msgstr "Chọn đầu mối"
+
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:195
+msgid "Role"
+msgstr "Vai trò"
+
+#: js/AddToLeadPanel.js:79
+msgid "Select Role"
+msgstr "Chọn vai trò"
+
+#: js/AddToLeadPanel.js:93
+#, python-brace-format
+msgid "Adding {0} contacts to lead"
+msgstr "Thêm {0} liên lạc vào đầu mối"
+
+#: js/Contact.js:162
+msgid "Change type to Customer"
+msgstr "Đổi loại khách hàng"
+
+#: js/Contact.js:172
+msgid "Change type to Responsible"
+msgstr "Thay đổi loại trách nhiệm"
+
+#: js/Contact.js:182
+msgid "Change type to Partner"
+msgstr "Thay đổi loại đối tác"
+
+#: js/Contact.js:193
+msgid "Change contact type"
+msgstr "Thay đổi kiểu liên lạc"
+
+#: js/Contact.js:205
+msgid "Search for Contacts to add ..."
+msgstr "Tìm kiếm liên lạc để thêm..."
+
+#: js/Contact.js:222
+msgid "Name"
+msgstr "Tên"
+
+#: js/Contact.js:242
+msgid "Data"
+msgstr "Dữ liệu"
+
+#: js/Contact.js:246
+msgid "Cellphone"
+msgstr "Số cầm tay"
+
+#: Controller/Lead.php:194
+msgid "State"
+msgstr "Trạng thái"
+
+#: Controller/Lead.php:196
+msgid "Source"
+msgstr "Nguồn"
+
+#: Controller/Lead.php:198
+msgid "Scheduled end"
+msgstr "Kết thúc theo lịch"
+
+#: Controller/Lead.php:202
+msgid "Folder"
+msgstr "Thư mục"
+
+#: Controller/Lead.php:203
+msgid "Updated by"
+msgstr "Cập nhật bởi"
+
+#: Controller/Lead.php:204
+msgid "Updated Fields:"
+msgstr "Trường được cập nhật"
+
+#: Controller/Lead.php:205
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr "%s thay đổi từ %s tới %s"
+
+#: Controller/Lead.php:211
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "Đầu mối %s đã được thay đổi"
+
+#: Controller/Lead.php:213
+#, python-format
+msgid "Lead %s has been created"
+msgstr "Đầu mối %s đã được tạo"
 
 #: Preference.php:37
 msgid "All leads"
@@ -162,427 +578,26 @@ msgstr "Thường dùng mặc định"
 msgid "The default favorite which is loaded on crm startup"
 msgstr "Thường dùng mặc định được nạp khi quản lý quan hệ khách hàng được nạp"
 
-#: Export/Pdf.php:75
-msgid "Lead Data"
-msgstr "Dữ liệu đầu mối"
-
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadStateFilterModel.js:32
-#: js/LeadEditDialog.js:343 js/LeadGridPanel.js:123
-msgid "Leadstate"
-msgstr "Trạng thái đầu mối"
-
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:454
-#: js/LeadEditDialog.js:362
-msgid "Leadtype"
-msgstr "Loại đầu mối"
-
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:459
-#: js/LeadEditDialog.js:369
-msgid "Leadsource"
-msgstr "Nguồn đầu mối"
-
-#: Export/Pdf.php:87 js/Model.js:109 js/LeadGridPanel.js:125
-#: Controller/Lead.php:193
-msgid "Turnover"
-msgstr "Doanh số"
-
-#: Export/Pdf.php:90 js/Model.js:108 js/LeadEditDialog.js:222
-#: js/LeadGridPanel.js:124 Controller/Lead.php:194
-msgid "Probability"
-msgstr "Có khả năng"
-
-#: Export/Pdf.php:93 js/LeadGridDetailsPanel.js:444 js/LeadEditDialog.js:401
-#: Controller/Lead.php:190
-msgid "Start"
-msgstr "Bắt đầu"
-
-#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:192
-msgid "End"
-msgstr "Kết thúc"
-
-#: Export/Pdf.php:99
-msgid "End Scheduled"
-msgstr "Lịch kết thúc"
-
-#: Export/Pdf.php:184
-msgid "Contacts"
-msgstr "Liên lạc"
-
-#: Export/Pdf.php:211 js/Contact.js:231
-msgid "Address"
-msgstr "Địa chỉ"
-
-#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:245
-msgid "Tasks"
-msgstr "Công việc"
-
-#: Export/Pdf.php:252 js/Task.js:176
-msgid "Due Date"
-msgstr "Ngày đến hạn"
-
-#: Export/Pdf.php:259 js/Task.js:189
-msgid "Priority"
-msgstr "Độ quan trọng"
-
-#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:256
-msgid "Products"
-msgstr "Sản phẩm"
-
-#: Export/Pdf.php:315
-msgid "low"
-msgstr "thấp"
-
-#: Export/Pdf.php:316
-msgid "normal"
-msgstr "thường"
-
-#: Export/Pdf.php:317
-msgid "high"
-msgstr "cao"
-
-#: Export/Pdf.php:318
-msgid "urgent"
-msgstr "khẩn cấp"
-
-#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
-#: js/LeadGridDetailsPanel.js:227
-msgid "Leadstates"
-msgstr "Trạng thái đầu mối"
-
-#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
-msgid "Leadtypes"
-msgstr "Kiểu đầu mối"
-
-#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
-msgid "Leadsources"
-msgstr "Nguồn đầu mối"
-
-#: js/AdminPanel.js:138
-msgid "Defaults"
-msgstr "Mặc định"
-
-#: js/LeadType.js:29
-msgid "Lead Type"
-msgid_plural "Lead Types"
-msgstr[0] "one: Loại đầu mối\nother: Loại đầu mối"
-
-#: js/LeadType.js:134
-msgid "Add a Leadtype..."
-msgstr "Thêm loại đầu mối"
-
-#: js/AddToLeadPanel.js:31
-msgid "Please choose the Lead to add the contacts to"
-msgstr "Xin chọn đầu mối để thêm liên lạc"
-
-#: js/AddToLeadPanel.js:36
-msgid "Please select the attenders' role"
-msgstr "Chọn vai trò người tham gia"
-
-#: js/AddToLeadPanel.js:73 js/Model.js:50 js/LeadEditDialog.js:274
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "one: Đầu mối\nother: Đầu mối khác"
-
-#: js/AddToLeadPanel.js:74
-msgid "Select Lead"
-msgstr "Chọn đầu mối"
-
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:188
-msgid "Role"
-msgstr "Vai trò"
-
-#: js/AddToLeadPanel.js:79
-msgid "Select Role"
-msgstr "Chọn vai trò"
-
-#: js/AddToLeadPanel.js:93
-msgid "Adding {0} contacts to lead"
-msgstr "Thêm {0} liên lạc vào đầu mối"
-
-#: js/Task.js:109
-msgid "No Tasks to display"
-msgstr "Chưa có việc gì"
-
-#: js/Task.js:168
-msgid "Summary"
-msgstr "Tóm tắt"
-
-#: js/Task.js:172
-msgid "Add a task..."
-msgstr "Thêm 1 việc..."
-
-#: js/Task.js:205
-msgid "Percent"
-msgstr "Phần trăm"
-
-#: js/Task.js:218 js/LeadGridDetailsPanel.js:439
-msgid "Status"
-msgstr "Trạng thái"
-
-#: js/LeadState.js:32
-msgid "Lead State"
-msgid_plural "Lead States"
-msgstr[0] "one: Trạng thái đầu mối\nother: Trạng thái đầu mối"
-
-#: js/LeadState.js:166
-msgid "Add a Leadstate..."
-msgstr "Thêm 1 trạng thái đầu mối"
-
-#: js/LeadGridContactFilter.js:47
-msgid "Contact"
-msgstr "Liên hệ"
-
-#: js/LeadGridContactFilter.js:54
-msgid "CRM Role"
-msgstr "Vai trò quan hệ khách hàng"
-
-#: js/LeadStateFilterModel.js:37
-msgid "Show closed"
-msgstr "Hiển thị đã bị đóng"
-
-#: js/Product.js:134
-msgid "Product"
-msgstr "Sản phẩm"
-
-#: js/Product.js:139 js/LeadEditDialog.js:439
-msgid "Description"
-msgstr "Mô tả"
-
-#: js/Product.js:146
-msgid "Price"
-msgstr "Giá"
-
-#: js/Product.js:158
-msgid "Quantity"
-msgstr "Số lượng"
-
-#: js/Product.js:185 js/LinkGridPanel.js:56
-msgid "Unlink {0}"
-msgstr "Ngừng liên kết {0}"
-
-#: js/Product.js:186 js/LinkGridPanel.js:57
-msgid "Unlink selected {0}"
-msgstr "Ngừng liên kết phần chọn {0}"
-
-#: js/Product.js:216
-msgid "Search for Products to add ..."
-msgstr "Tìm sản phẩm để thêm..."
-
-#: js/LeadGridDetailsPanel.js:48 js/Contact.js:245
-msgid "Phone"
-msgstr "Điện thoại"
-
-#: js/LeadGridDetailsPanel.js:51
-msgid "Mobile"
-msgstr "Điện thoại"
-
-#: js/LeadGridDetailsPanel.js:54
-msgid "Fax"
-msgstr "Fax"
-
-#: js/LeadGridDetailsPanel.js:57
-msgid "E-Mail"
-msgstr "Email"
-
-#: js/LeadGridDetailsPanel.js:60
-msgid "Web"
-msgstr "Web"
-
-#: js/LeadGridDetailsPanel.js:449 js/LeadEditDialog.js:407
-msgid "Estimated end"
-msgstr "Dự kiến thời gian kết thúc"
-
-#: js/LeadSource.js:29
-msgid "Lead Source"
-msgid_plural "Lead Sources"
-msgstr[0] "one: Nguồn đầu mối\nother: Nguồn đầu mối"
-
-#: js/LeadSource.js:136
-msgid "Add a Leadsource..."
-msgstr "Thêm 1 nguồn đầu mối"
-
-#: js/Model.js:54
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] "one: danh sách lãnh đạo\nother: danh sách lãnh đạo"
-
-#: js/Model.js:54
-msgid "lead lists"
-msgstr "danh sách lãnh đạo"
-
-#: js/Model.js:104
-msgid "Quick Search"
-msgstr "Tìm nhanh"
-
-#: js/Model.js:106 js/LeadGridPanel.js:119
-msgid "Lead name"
-msgstr "Tên đầu mối"
-
-#: js/Model.js:111
-msgid "Last Modified Time"
-msgstr "Thời gian sửa lần cuối"
-
-#: js/Model.js:112
-msgid "Last Modified By"
-msgstr "Sửa lần cuối bởi"
-
-#: js/Model.js:113
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/Model.js:114
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/Model.js:153
-msgid "Settings"
-msgid_plural "Settings"
-msgstr[0] "one: Thiết lập\nother: Thiết lập"
-
-#: js/Model.js:156
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "one: Danh sách biểu ghi\nother: Danh sách biểu ghi"
-
-#: js/LeadEditDialog.js:246
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
-msgstr "Bạn không có quyền chạy ứng dụng Công việc hoặc nó chưa được kích hoạt"
-
-#: js/LeadEditDialog.js:257
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
-msgstr "Bạn không có quyền chạy ứng dụng Bán hàng hoặc nó chưa được kích hoạt"
-
-#: js/LeadEditDialog.js:301
-msgid "Enter short name"
-msgstr "Nhâp tên ngắn"
-
-#: js/LeadEditDialog.js:385
-msgid "Expected turnover"
-msgstr "Doanh số mong đợi"
-
-#: js/LeadEditDialog.js:453
-msgid "Enter description"
-msgstr "Nhập mô tả"
-
-#: js/Contact.js:162
-msgid "Change type to Customer"
-msgstr "Đổi loại khách hàng"
-
-#: js/Contact.js:172
-msgid "Change type to Responsible"
-msgstr "Thay đổi loại trách nhiệm"
-
-#: js/Contact.js:182
-msgid "Change type to Partner"
-msgstr "Thay đổi loại đối tác"
-
-#: js/Contact.js:193
-msgid "Change contact type"
-msgstr "Thay đổi kiểu liên lạc"
-
-#: js/Contact.js:205
-msgid "Search for Contacts to add ..."
-msgstr "Tìm kiếm liên lạc để thêm..."
-
-#: js/Contact.js:222
-msgid "Name"
-msgstr "Tên"
-
-#: js/Contact.js:242
-msgid "Data"
-msgstr "Dữ liệu"
-
-#: js/Contact.js:246
-msgid "Cellphone"
-msgstr "Số cầm tay"
-
-#: js/LinkGridPanel.js:34
-msgid "Add new {0}"
-msgstr "Thêm mới {0}"
-
-#: js/LinkGridPanel.js:72
-msgid "Edit {0}"
-msgstr "Sửa {0}"
-
-#: js/LinkGridPanel.js:73
-msgid "Edit selected {0}"
-msgstr "Sửa phần chọn {0}"
-
-#: js/LeadGridPanel.js:117
-msgid "Lead id"
-msgstr "Mã đầu mối"
-
-#: js/LeadGridPanel.js:118
-msgid "Tags"
-msgstr "Thẻ"
-
-#: js/LeadGridPanel.js:126
-msgid "Probable Turnover"
-msgstr "Có thể bỏ qua"
-
-#: js/LeadGridPanel.js:168
-msgid "Export Lead"
-msgstr "Xuất dữ liệu đầu mối"
-
-#: js/LeadGridPanel.js:177
-msgid "Export as PDF"
-msgstr "Xuất dạng PDF"
-
-#: js/LeadGridPanel.js:184
-msgid "Export as CSV"
-msgstr "Xuất dạng CSV"
-
-#: js/LeadGridPanel.js:191
-msgid "Export as ODS"
-msgstr "Xuất dạng ODS"
-
-#: js/LeadGridPanel.js:198
-msgid "Export as XLS"
-msgstr "Xuất dạng XLS"
-
-#: js/Crm.js:24
-msgid "New Lead"
-msgstr "Đầu mối mới"
-
-#: Controller/Lead.php:187
-msgid "State"
-msgstr "Trạng thái"
-
-#: Controller/Lead.php:189
-msgid "Source"
-msgstr "Nguồn"
-
-#: Controller/Lead.php:191
-msgid "Scheduled end"
-msgstr "Kết thúc theo lịch"
-
-#: Controller/Lead.php:195
-msgid "Folder"
-msgstr "Thư mục"
-
-#: Controller/Lead.php:196
-msgid "Updated by"
-msgstr "Cập nhật bởi"
-
-#: Controller/Lead.php:197
-msgid "Updated Fields:"
-msgstr "Trường được cập nhật"
-
-#: Controller/Lead.php:198
-#, python-format
-msgid "%s changed from %s to %s."
-msgstr "%s thay đổi từ %s tới %s"
-
-#: Controller/Lead.php:204
-#, python-format
-msgid "Lead %s has been changed"
-msgstr "Đầu mối %s đã được thay đổi"
-
-#: Controller/Lead.php:206
-#, python-format
-msgid "Lead %s has been created"
-msgstr "Đầu mối %s đã được tạo"
+#: Setup/Initialize.php:36 Setup/Update/Release3.php:37
+msgid "All leads I have read grants for"
+msgstr "Mọi đầu mối tôi đã đọc quyền"
+
+#: Setup/Initialize.php:43
+msgid "Last modified by me"
+msgstr "Sửa lần cuối bởi tôi"
+
+#: Setup/Initialize.php:44
+msgid "All leads that I have last modified"
+msgstr "Mọi đầu mối tôi đã sửa"
+
+#: Setup/Initialize.php:53
+msgid "My leads"
+msgstr "Đầu mối của tôi"
+
+#: Setup/Initialize.php:54
+msgid "All leads that I am responsible for"
+msgstr "Mọi đầu mối tôi chịu trách nhiệm"
+
+#: Setup/Initialize.php:67
+msgid "Leads with overdue tasks"
+msgstr "Đầu mối với việc quá hạn"

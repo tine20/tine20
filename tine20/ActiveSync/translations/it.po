@@ -19,6 +19,74 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Device"
+msgstr[1] "Device"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Device"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "Seleziona un Device"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr "Nessun Device registrato in ActiveSync"
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Imposta come filtro {0}"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr "Filtro Sync Resettato"
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} filtro per il dispositivo \"{1}\" è ora \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr "resettato"
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr "Imposta Filtro Sync"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Rubrica predefinita"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Rubrica predefinita per la creazione dei nuovi contatti"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Calendario predefinito"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Il calendario predefinito per la creazione di nuovi eventi"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Elenco Attività predefinito"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Lista predefinita di attività in cui crearne una nuova."
+
 #: Config.php:52
 msgid "Default policy for new devices"
 msgstr "Politica predefinita per i nuovi device"
@@ -58,69 +126,3 @@ msgstr "Politica predefinita"
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "Politica predefinita installata durante il setup"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Rubrica predefinita"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Rubrica predefinita per la creazione dei nuovi contatti"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Calendario predefinito"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Il calendario predefinito per la creazione di nuovi eventi"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Elenco Attività predefinito"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Lista predefinita di attività in cui crearne una nuova."
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Device"
-msgstr[1] "Device"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Device"
-
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Seleziona un Device"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Nessun Device registrato in ActiveSync"
-
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr "Imposta come filtro {0}"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Filtro Sync Resettato"
-
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} filtro per il dispositivo \"{1}\" è ora \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "resettato"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Imposta Filtro Sync"

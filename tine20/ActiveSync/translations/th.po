@@ -17,6 +17,73 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "อุปกรณ์"
+
+#: js/Model.js:42
+msgid "Devices"
+msgstr "อุปกรณ์"
+
+#: js/Application.js:27
+msgid "Active Sync"
+msgstr ""
+
+#: js/Application.js:43
+msgid "Select a Device"
+msgstr "เลือกอุปกรณ์"
+
+#: js/Application.js:57
+msgid "No ActiveSync Device registered"
+msgstr ""
+
+#: js/Application.js:65
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "ตั้งเป็นตัวกรอง {0}"
+
+#: js/Application.js:90
+msgid "Resetted Sync Filter"
+msgstr ""
+
+#: js/Application.js:91 js/Application.js:103
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "ตัวกรอง {0} สำหรับอุปกรณ์ \"{1}\" ตอนนี้เป็น \"{2}\""
+
+#: js/Application.js:94
+msgid "resetted"
+msgstr ""
+
+#: js/Application.js:102
+msgid "Set Sync Filter"
+msgstr ""
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "สมุดรายชื่อหลัก"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "สมุดรายชื่อหลักที่จะสร้างการติดต่อใหม่เข้าไป"
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "ปฏิทินหลัก"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "ปฏิทินหลักที่จะสร้างเหตุการณ์ใหม่เข้าไป"
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "รายชื่อหน้าที่หลัก"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "รายชื่อหน้าที่หลักเพื่อสร้างหน้าที่ใหม่เข้า"
+
 #: Config.php:52
 msgid "Default policy for new devices"
 msgstr "นโยบายหลักสำหรับอุปกรณ์ใหม่"
@@ -56,68 +123,3 @@ msgstr "นโยบายหลัก"
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
 msgstr "นโยบายหลักได้ถูกคัดลอกแล้วระหว่างการติดตั้ง"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "สมุดรายชื่อหลัก"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "สมุดรายชื่อหลักที่จะสร้างการติดต่อใหม่เข้าไป"
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "ปฏิทินหลัก"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "ปฏิทินหลักที่จะสร้างเหตุการณ์ใหม่เข้าไป"
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "รายชื่อหน้าที่หลัก"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "รายชื่อหน้าที่หลักเพื่อสร้างหน้าที่ใหม่เข้า"
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "อุปกรณ์"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "อุปกรณ์"
-
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr ""
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "เลือกอุปกรณ์"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr ""
-
-#: js/Application.js:65
-msgid "Set as {0} Filter"
-msgstr "ตั้งเป็นตัวกรอง {0}"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr ""
-
-#: js/Application.js:91 js/Application.js:103
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "ตัวกรอง {0} สำหรับอุปกรณ์ \"{1}\" ตอนนี้เป็น \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr ""
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr ""

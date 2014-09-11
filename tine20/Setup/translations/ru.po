@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013
+# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2014
 # артур Мудрых <arturmon82@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-02-11 20:39+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-10 18:51+0000\n"
+"Last-Translator: Aleksey Ubozhenko <aleksdem@aleksdem.com>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -195,7 +195,7 @@ msgstr "Группа администраторов по-умолчанию"
 
 #: js/AuthenticationPanel.js:459
 msgid "Login panel"
-msgstr ""
+msgstr "Авторизация"
 
 #: js/AuthenticationPanel.js:474
 msgid "Reuse last username logged"
@@ -223,7 +223,7 @@ msgstr "Минимальная длина"
 
 #: js/AuthenticationPanel.js:518
 msgid "Minimum word chars"
-msgstr ""
+msgstr "Минимум символов"
 
 #: js/AuthenticationPanel.js:521
 msgid "Minimum uppercase chars"
@@ -299,7 +299,7 @@ msgstr "ntpassword"
 
 #: js/AuthenticationPanel.js:618
 msgid "plain"
-msgstr ""
+msgstr "простой"
 
 #: js/AuthenticationPanel.js:624
 msgid "User DN"
@@ -540,7 +540,7 @@ msgstr "Имя пользователя"
 
 #: js/EmailPanel.js:309
 msgid "Plain"
-msgstr ""
+msgstr "Обычная"
 
 #: js/EmailPanel.js:313
 msgid "Primary Domain"
