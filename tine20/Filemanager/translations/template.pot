@@ -13,11 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:102
-#, python-format
-msgid "%s's personal files"
-msgstr ""
-
 #: Acl/Rights.php:103
 msgid "manage shared folders"
 msgstr ""
@@ -34,65 +29,9 @@ msgstr ""
 msgid "Allow to see, add and delete download links of files and folders"
 msgstr ""
 
-#: js/NodeEditDialog.js:49 js/Filemanager.js:44 js/NodeGridPanel.js:346
-msgid "Save locally"
-msgstr ""
-
-#: js/NodeEditDialog.js:93
-msgid "Public Links"
-msgstr ""
-
-#: js/NodeEditDialog.js:107 js/NodeEditDialog.js:120
-msgid "Node"
-msgstr ""
-
-#: js/NodeEditDialog.js:126 js/NodeGridPanel.js:135
-msgid "Name"
-msgstr ""
-
-#: js/NodeEditDialog.js:133 js/Model.js:527
-msgid "Type"
-msgstr ""
-
-#: js/NodeEditDialog.js:141 js/DownloadLinkGridPanel.js:244
-#: js/NodeGridPanel.js:189
-msgid "Created By"
-msgstr ""
-
-#: js/NodeEditDialog.js:144 js/DownloadLinkGridPanel.js:252 js/Model.js:529
-#: js/NodeGridPanel.js:181
-msgid "Creation Time"
-msgstr ""
-
-#: js/NodeEditDialog.js:153
-msgid "Modified By"
-msgstr ""
-
-#: js/NodeEditDialog.js:156
-msgid "Last Modified"
-msgstr ""
-
-#: js/NodeEditDialog.js:179
-msgid "Description"
-msgstr ""
-
-#: js/NodeEditDialog.js:193
-msgid "Enter description"
-msgstr ""
-
-#: js/NodeTreePanel.js:660 js/NodeTreePanel.js:770 js/NodeGridPanel.js:702
-#: js/NodeGridPanel.js:854
-msgid "Upload Failed"
-msgstr ""
-
-#: js/NodeTreePanel.js:661 js/NodeGridPanel.js:703
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size:"
-msgstr ""
-
-#: js/NodeTreePanel.js:771 js/NodeGridPanel.js:855
-msgid "Putting files in this folder is not allowed!"
+#: Controller.php:102
+#, python-format
+msgid "%s's personal files"
 msgstr ""
 
 #: js/DownloadLinkGridPanel.js:63
@@ -119,16 +58,30 @@ msgstr ""
 msgid "Url"
 msgstr ""
 
+#: js/DownloadLinkGridPanel.js:244 js/NodeEditDialog.js:141
+#: js/NodeGridPanel.js:182
+msgid "Created By"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:252 js/Model.js:529 js/NodeEditDialog.js:144
+#: js/NodeGridPanel.js:174
+msgid "Creation Time"
+msgstr ""
+
 #: js/DownloadLinkGridPanel.js:260
 msgid "Expiration Time"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:269 js/NodeGridPanel.js:196
+#: js/DownloadLinkGridPanel.js:269 js/NodeGridPanel.js:189
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:277 js/NodeGridPanel.js:203
+#: js/DownloadLinkGridPanel.js:277 js/NodeGridPanel.js:196
 msgid "Last Modified By"
+msgstr ""
+
+#: js/PathFilterModel.js:50
+msgid "path"
 msgstr ""
 
 #: js/GridContextMenu.js:34
@@ -141,48 +94,22 @@ msgstr ""
 msgid "Not renamed {0}"
 msgstr ""
 
-#: js/GridContextMenu.js:40 js/NodeGridPanel.js:554
+#: js/GridContextMenu.js:40 js/NodeGridPanel.js:547
 #, python-brace-format
 msgid "You have to supply a {0} name!"
 msgstr ""
 
-#: js/GridContextMenu.js:144 js/NodeGridPanel.js:595
+#: js/GridContextMenu.js:144 js/NodeGridPanel.js:588
 msgid "Do you really want to delete the following files?"
 msgstr ""
 
-#: js/Filemanager.js:36
-msgid "Filemanager"
+#: js/DownloadLinkDialog.js:52
+msgid "Node Download Links"
 msgstr ""
 
-#: js/Filemanager.js:91
-msgid "Service Unavailable"
-msgstr ""
-
-#: js/Filemanager.js:92
+#: js/DownloadLinkDialog.js:83
 #, python-brace-format
-msgid ""
-"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 "
-"Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr ""
-
-#: js/Filemanager.js:114
-msgid "Files already exists"
-msgstr ""
-
-#: js/Filemanager.js:114
-msgid "Do you want to replace the following file(s)?"
-msgstr ""
-
-#: js/Filemanager.js:147
-msgid "Failure on create folder"
-msgstr ""
-
-#: js/Filemanager.js:148
-msgid "Item with this name already exists!"
-msgstr ""
-
-#: js/PathFilterModel.js:50
-msgid "path"
+msgid "Sieve Filter Rules for {0}"
 msgstr ""
 
 #: js/Model.js:40
@@ -191,7 +118,7 @@ msgid_plural "Files"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:43 js/NodeGridPanel.js:157
+#: js/Model.js:43 js/NodeGridPanel.js:150
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] ""
@@ -215,7 +142,11 @@ msgstr ""
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:528 js/NodeGridPanel.js:149
+#: js/Model.js:527 js/NodeEditDialog.js:133
+msgid "Type"
+msgstr ""
+
+#: js/Model.js:528 js/NodeGridPanel.js:142
 msgid "Contenttype"
 msgstr ""
 
@@ -225,85 +156,174 @@ msgid_plural "Download Links"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/DownloadLinkDialog.js:52
-msgid "Node Download Links"
+#: js/ExceptionHandler.js:32
+msgid "Service Unavailable"
 msgstr ""
 
-#: js/DownloadLinkDialog.js:83
+#: js/ExceptionHandler.js:33
 #, python-brace-format
-msgid "Sieve Filter Rules for {0}"
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 "
+"Admin FAQ{1} for configuration advice or contact your administrator."
 msgstr ""
 
-#: js/NodeGridPanel.js:127
+#: js/ExceptionHandler.js:55
+msgid "Files already exists"
+msgstr ""
+
+#: js/ExceptionHandler.js:55
+msgid "Do you want to replace the following file(s)?"
+msgstr ""
+
+#: js/ExceptionHandler.js:99
+msgid "Failure on create folder"
+msgstr ""
+
+#: js/ExceptionHandler.js:100
+msgid "Item with this name already exists!"
+msgstr ""
+
+#: js/Filemanager.js:36
+msgid "Filemanager"
+msgstr ""
+
+#: js/Filemanager.js:44 js/NodeEditDialog.js:49 js/NodeGridPanel.js:339
+msgid "Save locally"
+msgstr ""
+
+#: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:695
+#: js/NodeGridPanel.js:847
+msgid "Upload Failed"
+msgstr ""
+
+#: js/NodeTreePanel.js:693 js/NodeGridPanel.js:696
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size:"
+msgstr ""
+
+#: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
+msgid "Putting files in this folder is not allowed!"
+msgstr ""
+
+#: js/NodeEditDialog.js:93
+msgid "Public Links"
+msgstr ""
+
+#: js/NodeEditDialog.js:107 js/NodeEditDialog.js:120
+msgid "Node"
+msgstr ""
+
+#: js/NodeEditDialog.js:126 js/NodeGridPanel.js:128
+msgid "Name"
+msgstr ""
+
+#: js/NodeEditDialog.js:153
+msgid "Modified By"
+msgstr ""
+
+#: js/NodeEditDialog.js:156
+msgid "Last Modified"
+msgstr ""
+
+#: js/NodeEditDialog.js:179
+msgid "Description"
+msgstr ""
+
+#: js/NodeEditDialog.js:193
+msgid "Enter description"
+msgstr ""
+
+#: js/NodeGridPanel.js:120
 msgid "Tags"
 msgstr ""
 
-#: js/NodeGridPanel.js:142
+#: js/NodeGridPanel.js:135
 msgid "Size"
 msgstr ""
 
-#: js/NodeGridPanel.js:166
+#: js/NodeGridPanel.js:159
 msgid "Revision"
 msgstr ""
 
-#: js/NodeGridPanel.js:251
+#: js/NodeGridPanel.js:244
 #, python-brace-format
 msgid "The max. Upload Filesize is {0} MB"
 msgstr ""
 
-#: js/NodeGridPanel.js:289
+#: js/NodeGridPanel.js:282
 msgid "Upload"
 msgstr ""
 
-#: js/NodeGridPanel.js:313
+#: js/NodeGridPanel.js:306
 msgid "Edit Properties"
 msgstr ""
 
-#: js/NodeGridPanel.js:324
+#: js/NodeGridPanel.js:317
 msgid "Create Folder"
 msgstr ""
 
-#: js/NodeGridPanel.js:335
+#: js/NodeGridPanel.js:328
 msgid "Folder Up"
 msgstr ""
 
-#: js/NodeGridPanel.js:356 js/NodeGridPanel.js:357 js/NodeGridPanel.js:359
+#: js/NodeGridPanel.js:349 js/NodeGridPanel.js:350 js/NodeGridPanel.js:352
 msgid "Delete"
 msgstr ""
 
-#: js/NodeGridPanel.js:368 js/NodeGridPanel.js:369 js/NodeGridPanel.js:371
+#: js/NodeGridPanel.js:361 js/NodeGridPanel.js:362 js/NodeGridPanel.js:364
 msgid "Publish"
 msgstr ""
 
-#: js/NodeGridPanel.js:429
+#: js/NodeGridPanel.js:422
 msgid "Folder has been published successfully"
 msgstr ""
 
-#: js/NodeGridPanel.js:429
+#: js/NodeGridPanel.js:422
 msgid "File has been published successfully"
 msgstr ""
 
-#: js/NodeGridPanel.js:430
+#: js/NodeGridPanel.js:423
 #, python-brace-format
 msgid "Url: {0}"
 msgstr ""
 
-#: js/NodeGridPanel.js:430
+#: js/NodeGridPanel.js:423
 #, python-brace-format
 msgid "Valid Until: {1}"
 msgstr ""
 
-#: js/NodeGridPanel.js:550
+#: js/NodeGridPanel.js:543
 msgid "New Folder"
 msgstr ""
 
-#: js/NodeGridPanel.js:550
+#: js/NodeGridPanel.js:543
 msgid "Please enter the name of the new folder:"
 msgstr ""
 
-#: js/NodeGridPanel.js:554
+#: js/NodeGridPanel.js:547
 #, python-brace-format
 msgid "No {0} added"
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:31
+msgid ""
+"The destination has the same path the source has. No action has been "
+"performed."
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
 msgstr ""
 
 #: Controller/Node.php:318

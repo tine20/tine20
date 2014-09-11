@@ -34,13 +34,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     filesProperty: 'files',
     
     /**
-     * @cfg showTopToolbar
-     * @type Boolean
-     * TODO     think about that -> when we deactivate the top toolbar, we lose the dropzone for files!
-     */
-    //showTopToolbar: null,
-    
-    /**
      * config values
      * @private
      */

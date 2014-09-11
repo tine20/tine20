@@ -614,6 +614,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             $target, 
             FALSE
         );
+        
         $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($target . '/testcontainer');
         $this->assertEquals(1, count($result));
         $this->_objects['containerids'][] = $result[0]['name']['id'];
@@ -652,9 +653,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
     {
         $filesToCopy = $this->testCreateFileNodes();
         $file1 = $filesToCopy[0];
+        $file2 = $filesToCopy[1];
         
         $this->setExpectedException('Filemanager_Exception_NodeExists');
-        $result = $this->_json->copyNodes(array($file1), array($file1), FALSE);
+        $result = $this->_json->copyNodes(array($file1), array($file2), FALSE);
     }
     
     /**
@@ -664,9 +666,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
     {
         $filesToCopy = $this->testCreateFileNodes();
         $file1 = $filesToCopy[0];
+        $file2 = $filesToCopy[1];
         
         try {
-            $result = $this->_json->copyNodes(array($file1), array($file1), FALSE);
+            $result = $this->_json->copyNodes(array($file1), array($file2), FALSE);
         } catch (Filemanager_Exception_NodeExists $fene) {
             $info = $fene->toArray();
             $this->assertEquals(1, count($info['existingnodesinfo']));
@@ -1074,6 +1077,24 @@ class Filemanager_Frontend_JsonTests extends TestCase
     }
     
     /**
+     * test renaming a folder in a folder containing a folder with the same name
+     *
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=10132
+     */
+     public function testRenameFolderInFolderContainingFolderAlready()
+     {
+        $path = '/personal/' .Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name;
+     
+        $this->_json->createNode($path . '/Test1', 'folder', NULL, FALSE);
+        $this->_json->createNode($path . '/Test1/Test2', 'folder', NULL, FALSE);
+        $this->_json->createNode($path . '/Test1/Test3', 'folder', NULL, FALSE);
+        
+        $this->setExpectedException('Filemanager_Exception_NodeExists');
+        
+        $this->_json->moveNodes(array($path . '/Test1/Test3'), array($path . '/Test1/Test2'), FALSE);
+     }
+    
+    /**
      * tests the recursive filter
      */
     public function testSearchRecursiveFilter()
@@ -1136,6 +1157,94 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->testDeleteFileNodes();
         $result = Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
         $this->assertEquals(1, $result, 'should cleanup one file');
+    }
+    
+    /**
+     * test preventing to copy a folder in its subfolder
+     * 
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=9990
+     */
+    public function testMoveFolderIntoChildFolder()
+    {
+        $this->_json->createNode('/shared/Parent', 'folder', NULL, FALSE);
+        $this->_json->createNode('/shared/Parent/Child', 'folder', NULL, FALSE);
+        
+        $this->setExpectedException('Filemanager_Exception_DestinationIsOwnChild');
+        
+        // this must not work
+        $this->_json->moveNodes(array('/shared/Parent'), array('/shared/Parent/Child/Parent'), FALSE);
+    }
+    
+    /**
+     * test exception on moving to the same position
+     * 
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=9990
+     */
+    public function testMoveFolderToSamePosition()
+    {
+        $this->_json->createNode('/shared/Parent', 'folder', NULL, FALSE);
+        $this->_json->createNode('/shared/Parent/Child', 'folder', NULL, FALSE);
+    
+        $this->setExpectedException('Filemanager_Exception_DestinationIsSameNode');
+    
+        // this must not work
+        $this->_json->moveNodes(array('/shared/Parent/Child'), array('/shared/Parent/Child'), FALSE);
+    }
+
+    /**
+     * test to move a folder containing another folder
+     *
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=9990
+     */
+    public function testMove2FoldersOnToplevel()
+    {
+        $path = '/personal/' .Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name;
+    
+        $this->_json->createNode($path . '/Parent', 'folder', NULL, FALSE);
+        $this->_json->createNode($path . '/Parent/Child', 'folder', NULL, FALSE);
+        $this->_json->createNode('/shared/Another', 'folder', NULL, FALSE);
+    
+        // move forth and back, no exception should occur
+        $this->_json->moveNodes(array($path . '/Parent'), array('/shared/Parent'), FALSE);
+        $this->_json->moveNodes(array('/shared/Parent'), array($path . '/Parent'), FALSE);
+    
+        try {
+            $c = Tinebase_Container::getInstance()->getContainerByName('Filemanager', 'Parent', Tinebase_Model_Container::TYPE_SHARED);
+            $this->fail('Container doesn\'t get deleted');
+        } catch (Tinebase_Exception_NotFound $e) {
+        }
+        
+        // may be any exception
+        $e = new Tinebase_Exception('Dog eats cat');
+    
+        try {
+            $this->_json->moveNodes(array($path . '/Parent'), array('/shared/Parent'), FALSE);
+        } catch (Filemanager_Exception_NodeExists $e) {
+        }
+    
+        // if $e gets overridden, an error occured (the exception Filemanager_Exception_NodeExists must not be thrown)
+        $this->assertEquals('Tinebase_Exception', get_class($e));
+    }
+    
+    /**
+     * test creating a folder in a folder with the same name (below personal folders)
+     *
+     * @see: https://forge.tine20.org/mantisbt/view.php?id=10132
+     */
+    public function testCreateFolderInFolderWithSameName()
+    {
+        $path = '/personal/' .Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name;
+        
+        $this->_json->createNode($path . '/Test1', 'folder', NULL, FALSE);
+        $this->_json->createNode($path . '/Test1/Test1', 'folder', NULL, FALSE);
+        $e = new Tinebase_Exception('nothing');
+        try {
+            $this->_json->createNode($path . '/Test1/Test1/Test2', 'folder', NULL, FALSE);
+        } catch(Exception $e) {
+            $this->fail('The folder couldn\'t be found, so it hasn\'t ben created');
+        }
+        
+        $this->assertEquals('nothing', $e->getMessage());
     }
     
     /**

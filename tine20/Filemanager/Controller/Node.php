@@ -498,7 +498,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
             try {
                 $node = $this->_createNode($filename, $_type, $tempFileId, $_forceOverwrite);
-                $result->addRecord($node);
+                if ($node) {
+                    $result->addRecord($node);
+                }
             } catch (Filemanager_Exception_NodeExists $fene) {
                 $nodeExistsException = $this->_handleNodeExistsException($fene, $nodeExistsException);
             }
@@ -598,6 +600,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         }
         
         $newNode = $this->_createNodeInBackend($newNodePath, $_type, $_tempFileId);
+        
         $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);
         return $newNode;
     }
@@ -615,16 +618,17 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Creating new path ' . $_statpath . ' of type ' . $_type);
         
+        $node = NULL;
         switch ($_type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
-                $this->_backend->copyTempfile($_tempFileId, $_statpath);
+                 $this->_backend->copyTempfile($_tempFileId, $_statpath);
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                $this->_backend->mkdir($_statpath);
+                $node = $this->_backend->mkdir($_statpath);
                 break;
         }
         
-        return $this->_backend->stat($_statpath);
+        return $node ? $node : $this->_backend->stat($_statpath);
     }
     
     /**
@@ -638,11 +642,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Check existance of ' . $_path->statpath);
-        
+
         if ($this->_backend->fileExists($_path->statpath)) {
-            $existsException = new Filemanager_Exception_NodeExists();
-            $existsException->addExistingNodeInfo(($_node !== NULL) ? $_node : $this->_backend->stat($_path->statpath));
-            throw $existsException;
+            
+            if (! $_node) {
+                $_node = $this->_backend->stat($_path->statpath);
+            }
+            
+            if ($_node) {
+                $existsException = new Filemanager_Exception_NodeExists();
+                $existsException->addExistingNodeInfo($_node);
+                throw $existsException;
+            }
         }
     }
         
@@ -743,34 +754,35 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
         $flatpathWithoutBasepath = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app);
-        
-        foreach ($records as $record) {
-            $record->path = $flatpathWithoutBasepath . '/' . $record->name;
-            
-            $aclContainer = NULL;
-            if (! $_path->container) {
-                // resolve container
-                if (! $record->name instanceof Tinebase_Model_Container) {
-                    $idx = $containers->getIndexById($record->name);
-                    if ($idx !== FALSE) {
-                        $aclContainer = $containers[$idx];
-                        $record->name = $aclContainer;
-                        $record->path = $flatpathWithoutBasepath . '/' . $record->name->name;
-                    }
-                }
-            } else {
-                $aclContainer = $_path->container;
-            }
-            
-            if ($aclContainer) {
-                $record->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(
-                    Tinebase_Core::getUser(), 
-                    $aclContainer
-                )->toArray();
-                $aclContainer->account_grants = $record->account_grants;
+        if ($records) {
+            foreach ($records as $record) {
+                $record->path = $flatpathWithoutBasepath . '/' . $record->name;
                 
-                // needed for sorting
-                $record->container_name = $aclContainer->name;
+                $aclContainer = NULL;
+                if (! $_path->container) {
+                    // resolve container
+                    if (! $record->name instanceof Tinebase_Model_Container) {
+                        $idx = $containers->getIndexById($record->name);
+                        if ($idx !== FALSE) {
+                            $aclContainer = $containers[$idx];
+                            $record->name = $aclContainer;
+                            $record->path = $flatpathWithoutBasepath . '/' . $record->name->name;
+                        }
+                    }
+                } else {
+                    $aclContainer = $_path->container;
+                }
+                
+                if ($aclContainer) {
+                    $record->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(
+                        Tinebase_Core::getUser(), 
+                        $aclContainer
+                    )->toArray();
+                    $aclContainer->account_grants = $record->account_grants;
+                    
+                    // needed for sorting
+                    $record->container_name = $aclContainer->name;
+                }
             }
         }
     }
@@ -805,7 +817,30 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         foreach ($_sourceFilenames as $idx => $source) {
             $sourcePathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($source));
             $destinationPathRecord = $this->_getDestinationPath($_destinationFilenames, $idx, $sourcePathRecord);
-
+            
+            if ($this->_backend->fileExists($destinationPathRecord->statpath) && $sourcePathRecord->flatpath == $destinationPathRecord->flatpath) {
+                throw new Filemanager_Exception_DestinationIsSameNode();
+            }
+            
+            // test if destination is subfolder of source
+            $dest = explode('/', $destinationPathRecord->statpath);
+            $source = explode('/', $sourcePathRecord->statpath);
+            $isSub = TRUE;
+            
+            for ($i = 0; $i < count($source); $i++) {
+                
+                if (! isset($dest[$i])) {
+                    break;
+                }
+                
+                if ($source[$i] != $dest[$i]) {
+                    $isSub = FALSE;
+                }
+            }
+            if ($isSub) {
+                throw new Filemanager_Exception_DestinationIsOwnChild();
+            }
+            
             try {
                 if ($_action === 'move') {
                     $node = $this->_moveNode($sourcePathRecord, $destinationPathRecord, $_forceOverwrite);
@@ -1019,7 +1054,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $destinationNodeName = $destination->container->getId();
         } else {
             $this->_checkPathACL($destinationParentPathRecord, 'update');
-            
             if ($source->getParent()->flatpath != $destinationParentPathRecord->flatpath) {
                 try {
                     $this->_checkIfExists($destination);
@@ -1032,7 +1066,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                         throw $fene;
                     }
                 }
+            } else {
+                if (! $_forceOverwrite) {
+                    $this->_checkIfExists($destination);
+                }
             }
+        }
+        
+        // remove source container if it doesn't have the same parent - otherwise a new one will be created
+        if ($source->isToplevelPath() && $source->getParent()->getId() !== $destination->getParent()->getId()) {
+            Tinebase_Container::getInstance()->deleteContainer($source->container->getId());
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -1063,7 +1106,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 . ' Moving container ' . $source->container->name . ' to ' . $destination->flatpath);
         
             $this->_checkACLContainer($source->container, 'update');
-        
+            
             $container = $source->container;
             if ($container->name !== $destination->name) {
                 try {

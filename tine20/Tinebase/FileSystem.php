@@ -700,7 +700,6 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     public function stat($path)
     {
         $pathParts = $this->_splitPath($path);
-        
         $cacheId = $this->_getCacheId($pathParts);
         
         // let's see if the path is cached in statCache
@@ -1100,7 +1099,10 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         foreach ($pathParts as $pathPart) {
             $subPath .= "/$pathPart"; 
             
-            $pathNodes->addRecord($this->stat($subPath));
+            $node = $this->stat($subPath);
+            if ($node) {
+                $pathNodes->addRecord($node);
+            }
         }
         
         return $pathNodes;

@@ -236,6 +236,14 @@ msgstr ""
 msgid "Sieve Filter Rules for {0}"
 msgstr ""
 
+#: js/Filemanager.js:147
+msgid "Failure on create folder"
+msgstr "Fehler beim Anlegen des Ordners"
+
+#: js/Filemanager.js:148
+msgid "Item with this name already exists!"
+msgstr "Ordner mit diesem Namen schon vorhanden!"
+
 #: js/NodeGridPanel.js:127
 msgid "Tags"
 msgstr "Tags"
@@ -320,5 +328,22 @@ msgstr "Gemeinsame Ordner"
 msgid "Other users folders"
 msgstr "Ordner anderer Benutzer"
 
-#~ msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
-#~ msgstr "Die Datei konnte nicht hochgeladen werden. Möglicherweise ist die Datei zu groß. Bitte benachrichtigen Sie Ihren Administrator. Maximale erlaubte Dateigröße: "
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr "Zielpfad ist der selbe Pfad"
+
+#: Exception/DestinationIsSameNode.php:31
+msgid ""
+"The destination has the same path the source has. No action has been "
+"performed."
+msgstr "Das Ziel hat den gleichen Pfad wie die Quelle. Es wurde keine Aktion ausgeführt."
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr "Zielpfad ist ein Unterordner"
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
+msgstr "Sie haben versucht, einen Ordner in einen Unterordner von sich selbst zu kopieren oder verschieben. Dieser Vorgang ist nicht erlaubt."
