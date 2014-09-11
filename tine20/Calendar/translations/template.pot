@@ -338,111 +338,111 @@ msgid ""
 "minutes to get the events synced."
 msgstr ""
 
-#: js/ImportDialog.js:122
+#: js/ImportDialog.js:130
 msgid "Choose Import File"
 msgstr ""
 
-#: js/ImportDialog.js:126
+#: js/ImportDialog.js:134
 msgid ""
 "Please choose the file that contains the records you want to add to Tine 2.0"
 msgstr ""
 
-#: js/ImportDialog.js:130
+#: js/ImportDialog.js:138
 #, python-brace-format
 msgid "Select file containing your {0}"
 msgstr ""
 
-#: js/ImportDialog.js:145
+#: js/ImportDialog.js:153
 msgid "once"
 msgstr ""
 
-#: js/ImportDialog.js:146
+#: js/ImportDialog.js:154
 msgid "hourly"
 msgstr ""
 
-#: js/ImportDialog.js:147
+#: js/ImportDialog.js:155
 msgid "daily"
 msgstr ""
 
-#: js/ImportDialog.js:148
+#: js/ImportDialog.js:156
 msgid "weekly"
 msgstr ""
 
-#: js/ImportDialog.js:161
+#: js/ImportDialog.js:169
 msgid "Choose Remote Location"
 msgstr ""
 
-#: js/ImportDialog.js:165
+#: js/ImportDialog.js:173
 msgid "Please choose a remote location you want to add to Tine 2.0"
 msgstr ""
 
-#: js/ImportDialog.js:180
+#: js/ImportDialog.js:188
 msgid "Refresh time"
 msgstr ""
 
-#: js/ImportDialog.js:212
+#: js/ImportDialog.js:220
 msgid "General Settings"
 msgstr ""
 
-#: js/ImportDialog.js:217
+#: js/ImportDialog.js:225
 msgid ""
 "Container name / New or existing if it already exists you need permissions "
 "to add to."
 msgstr ""
 
-#: js/ImportDialog.js:237
+#: js/ImportDialog.js:245
 msgid "or"
 msgstr ""
 
-#: js/ImportDialog.js:278
+#: js/ImportDialog.js:286
 msgid "What should the file you upload look like?"
 msgstr ""
 
-#: js/ImportDialog.js:283
+#: js/ImportDialog.js:291
 msgid ""
 "Tine 2.0 does not understand all kind of files you might want to upload. You "
 "will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr ""
 
-#: js/ImportDialog.js:286
+#: js/ImportDialog.js:294
 msgid ""
 "Following you find a list of all supported import formats and a sample file, "
 "how Tine 2.0 expects your file to look like."
 msgstr ""
 
-#: js/ImportDialog.js:289
+#: js/ImportDialog.js:297
 msgid "Please select the import format of the file you want to upload"
 msgstr ""
 
-#: js/ImportDialog.js:310
+#: js/ImportDialog.js:318
 msgid "Download example file"
 msgstr ""
 
-#: js/ImportDialog.js:332
+#: js/ImportDialog.js:340
 msgid "Remote / ICS"
 msgstr ""
 
-#: js/ImportDialog.js:333
+#: js/ImportDialog.js:341
 msgid "Remote / CALDav"
 msgstr ""
 
-#: js/ImportDialog.js:334
+#: js/ImportDialog.js:342
 msgid "Upload"
 msgstr ""
 
-#: js/ImportDialog.js:347
+#: js/ImportDialog.js:355
 msgid "Choose File and Format"
 msgstr ""
 
-#: js/ImportDialog.js:356
+#: js/ImportDialog.js:364
 msgid "Select type of source"
 msgstr ""
 
-#: js/ImportDialog.js:360
+#: js/ImportDialog.js:368
 msgid "Please select the type of source you want to add to Tine 2.0"
 msgstr ""
 
-#: js/ImportDialog.js:409
+#: js/ImportDialog.js:417
 #, python-brace-format
 msgid "Importing {0}"
 msgstr ""
@@ -467,43 +467,43 @@ msgstr ""
 msgid "Do not respond"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:197
+#: js/iMIPDetailsPanel.js:196
 msgid "The event of this message does not exist"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:202
+#: js/iMIPDetailsPanel.js:201
 msgid "The sender is not authorised to update the event"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:207
+#: js/iMIPDetailsPanel.js:206
 msgid "This message is already processed"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:212
+#: js/iMIPDetailsPanel.js:211
 msgid "You are not an attendee of this event"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:216
+#: js/iMIPDetailsPanel.js:215
 msgid "Unsupported message"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:226
+#: js/iMIPDetailsPanel.js:225
 msgid "This is an event invitation for someone else."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:228
+#: js/iMIPDetailsPanel.js:227
 msgid "You have already replied to this event invitation."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:230
+#: js/iMIPDetailsPanel.js:229
 msgid "You received an event invitation. Set your response to:"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:238
+#: js/iMIPDetailsPanel.js:237
 msgid "An invited attendee responded to the invitation."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:242
+#: js/iMIPDetailsPanel.js:241
 msgid "Unsupported method"
 msgstr ""
 

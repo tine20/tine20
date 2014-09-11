@@ -71,15 +71,15 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:245
+#: Export/Pdf.php:232 js/Task.js:82 js/LeadEditDialog.js:245
 msgid "Tasks"
 msgstr ""
 
-#: Export/Pdf.php:252 js/Task.js:227
+#: Export/Pdf.php:252 js/Task.js:224
 msgid "Due Date"
 msgstr ""
 
-#: Export/Pdf.php:259 js/Task.js:240
+#: Export/Pdf.php:259 js/Task.js:237
 msgid "Priority"
 msgstr ""
 
@@ -180,27 +180,27 @@ msgstr ""
 msgid "Task"
 msgstr ""
 
-#: js/Task.js:109
+#: js/Task.js:105
 msgid "No Tasks to display"
 msgstr ""
 
-#: js/Task.js:219
+#: js/Task.js:216
 msgid "Summary"
 msgstr ""
 
-#: js/Task.js:223
+#: js/Task.js:220
 msgid "Add a task..."
 msgstr ""
 
-#: js/Task.js:256
+#: js/Task.js:253
 msgid "Percent"
 msgstr ""
 
-#: js/Task.js:269 js/LeadGridDetailsPanel.js:439
+#: js/Task.js:266 js/LeadGridDetailsPanel.js:439
 msgid "Status"
 msgstr ""
 
-#: js/Task.js:285
+#: js/Task.js:282
 msgid "Organizer"
 msgstr ""
 
