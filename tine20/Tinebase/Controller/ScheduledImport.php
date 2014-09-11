@@ -58,11 +58,13 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
     
     /**
      * Search and executed the next scheduled import
+     * 
+     * @return null|array
      */
     public function runNextScheduledImport()
     {
         if ($record = $this->_getNextScheduledImport()) {
-            return $this->_doScheduledImport($record);
+            return $this->_doScheduledImport($record)->toArray();
         }
         
         return NULL;
@@ -94,7 +96,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         
         $filter0 = new Tinebase_Model_ImportFilter(array(
                 array('field' => 'interval', 'operator' => 'equals', 'value' => Tinebase_Model_Import::INTERVAL_ONCE),
-                array('field' => 'timestamp', 'operator' => 'before', 'value' => $now),
+                array('field' => 'timestamp', 'operator' => 'isnull', 'value' => null),
         ), 'AND');
         
         $filter1 = new Tinebase_Model_ImportFilter(array(
@@ -141,8 +143,13 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
      * @param Tinebase_Model_Import $record
      * @return Tinebase_Model_Import
      */
-    protected function _doScheduledImport(Tinebase_Model_Import $record = NULL)
+    protected function _doScheduledImport(Tinebase_Model_Import $record)
     {
+        $currentUser = Tinebase_Core::getUser();
+        // set user who created the import job
+        $importUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $record->user_id, 'Tinebase_Model_FullUser');
+        Tinebase_Core::set(Tinebase_Core::USER, $importUser);
+        
         $importer = $record->getOption('plugin');
         
         $options = array(
@@ -157,7 +164,6 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         } else {
             $toImport = file_get_contents($record->source);
         }
-
         
         $importer = new $importer($options);
         
@@ -189,6 +195,8 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
                 Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' The source could not be loaded: "' . $record->source . '"');
             }
         }
+        
+        Tinebase_Core::set(Tinebase_Core::USER, $currentUser);
         
         return $record;
     }

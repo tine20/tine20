@@ -75,7 +75,7 @@ class Tinebase_Model_Import extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'timestamp'          => array('allowEmpty' => false),
+        'timestamp'          => array('allowEmpty' => true),
         'user_id'            => array('presence' => 'required'),
         'model'              => array('presence' => 'required'),
         'application_id'     => array('presence' => 'required'),
@@ -147,30 +147,29 @@ class Tinebase_Model_Import extends Tinebase_Record_Abstract
      *
      * @param array $_data            the new data to set
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
-     *
-     * @todo remove custom fields handling (use Tinebase_Record_RecordSet for them)
      */
     public function setFromArray(array $_data)
     {
         parent::setFromArray($_data);
-        $now = Tinebase_DateTime::now();
+        $timestamp = Tinebase_DateTime::now();
         
         // set timestamp according to interval, if it is not set
         if (! isset($_data['timestamp'])) {
             switch ($_data['interval']) {
                 case Tinebase_Model_Import::INTERVAL_DAILY:
-                    $now->subDay(1)->subSecond(1);
+                    $timestamp->subDay(1)->subSecond(1);
                     break;
                 case Tinebase_Model_Import::INTERVAL_WEEKLY:
-                    $now->subWeek(1)->subSecond(1);
+                    $timestamp->subWeek(1)->subSecond(1);
                     break;
                 case Tinebase_Model_Import::INTERVAL_HOURLY:
-                    $now->subHour(1)->subSecond(1);
+                    $timestamp->subHour(1)->subSecond(1);
                     break;
                 default:
+                    $timestamp = null;
             }
             
-            $this->timestamp = $now;
+            $this->timestamp = $timestamp;
         }
     }
 }
