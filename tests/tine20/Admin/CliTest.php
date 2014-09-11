@@ -457,20 +457,31 @@ class Admin_CliTest extends TestCase
         ob_start();
         $this->_cli->importGroups($opts);
         $out = ob_get_clean();
+        $this->assertStringStartsWith('Imported 4 records.', $out);
         
-        $this->assertStringStartsWith('Imported 2 records.', $out);
+        $expected = array('men' => 3, 'women' => 2, 'highperformers' => 2, 'lowperformers' => 3);
+        $this->_testImportGroupsHelper($expected);
         
+        $opts->setArguments(array(dirname(__FILE__) . '/files/import_groups_update.csv', 'definition=admin_group_import_csv'));
+        ob_start();
+        $this->_cli->importGroups($opts);
+        $out = ob_get_clean();
+        $this->assertStringStartsWith('Imported 0 records.', $out);
+        
+        $expected = array('men' => 3, 'women' => 2,  'lowperformers' => 2, 'highperformers' => 3);
+        $this->_testImportGroupsHelper($expected);
+    }
+    
+    protected function _testImportGroupsHelper($expected)
+    {
         $be = new Tinebase_Group_Sql();
-        $menGroup = $be->getGroupByName('men');
-        $members = $be->getGroupMembers($menGroup);
         
-        $this->assertEquals(3, count($members));
-        $this->assertEquals('displayed', $menGroup->visibility);
+        foreach($expected as $name => $count) {
+            $group = $be->getGroupByName($name);
+            $members = $be->getGroupMembers($group);
         
-        $womenGroup = $be->getGroupByName('women');
-        $members = $be->getGroupMembers($womenGroup);
-        
-        $this->assertEquals(2, count($members));
-        $this->assertEquals('displayed', $womenGroup->visibility);
+            $this->assertEquals($count, count($members), 'Group ' . $name . ' should have ' . $count . ' members!');
+            $this->assertEquals('displayed', $group->visibility, 'Group ' . $name . ' should be visible!');
+        }
     }
 }

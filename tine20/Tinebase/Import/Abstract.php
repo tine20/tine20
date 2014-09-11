@@ -904,8 +904,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _handleImportException(Exception $e, $recordIndex, $record = null, $allowToResolveDuplicates = true)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+        Tinebase_Exception::log($e);
         
         if ($e instanceof Tinebase_Exception_Duplicate) {
             $exception = $this->_handleDuplicateExceptions($e, $recordIndex, $record, $allowToResolveDuplicates);
