@@ -332,6 +332,8 @@ class Calendar_Frontend_iMIP
             if (! $existingEvent) {
                 // organizer has an account but no event exists, it seems that event was created from a non-caldav client
                 // do not send notifications in this case + create event in context of organizer
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Organizer has an account but no event exists!');
                 return; // not clear how to create in the organizers context...
                 $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
                 $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->create($_iMIP->getEvent());
