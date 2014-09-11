@@ -375,43 +375,4 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('sales_contracts', 6);
         $this->setApplicationVersion('Sales', '8.5');
     }
-    
-    /**
-     * update to 8.4
-     */
-    public function update_5()
-    {
-        $this->_backend->dropIndex('sales_numbers', 'type');
-    
-        $field = '<field>
-            <name>model</name>
-            <type>text</type>
-            <length>128</length>
-            <notnull>true</notnull>
-        </field>';
-    
-        $declaration = new Setup_Backend_Schema_Field_Xml($field);
-        $this->_backend->alterCol('sales_numbers', $declaration, 'type');
-    
-        $index = '<index>
-            <name>model</name>
-            <unique>model</unique>
-            <field>
-                <name>model</name>
-            </field>
-        </index>';
-    
-        $declaration = new Setup_Backend_Schema_Index_Xml($index);
-        $this->_backend->addIndex('sales_numbers', $declaration);
-    
-        $db = $this->_backend->getDb();
-    
-        $sql = 'UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_numbers') . ' SET ' . $db->quoteInto($db->quoteIdentifier('model') . ' = ?', 'Sales_Model_Contract') . ' WHERE ' . $db->quoteInto($db->quoteIdentifier('model') . ' = ?', 'contract');
-        $db->query($sql);
-    
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'));
-    
-        $this->setTableVersion('sales_numbers', 2);
-        $this->setApplicationVersion('Sales', '8.6');
-    }
 }
