@@ -25,9 +25,9 @@
 # Wbxml/        - not found in Fedora
 # Zend/         - there is php-ZendFramework, strip it out
 
-%global vyear 2013
-%global vmonth 10
-%global vmin 6
+%global vyear 2014
+%global vmonth 09
+%global vmin 1
 # comment out release suffix when not an unstable release
 # %global rsuffix rc2
 
@@ -338,6 +338,9 @@ fi
 
 
 %changelog
+* Thu Sep 11 2014 Philipp Schüle <p.schuele@metaways.de> - 2014.09.1-0
+- New upstream release Koriander
+
 * Wed Feb 14 2014 Philipp Schüle <p.schuele@metaways.de> - 2013.10.6-0
 - New upstream release Collin Service Release 5
 
