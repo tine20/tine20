@@ -236,14 +236,6 @@ msgstr ""
 msgid "Sieve Filter Rules for {0}"
 msgstr ""
 
-#: js/Filemanager.js:147
-msgid "Failure on create folder"
-msgstr "Fehler beim Anlegen des Ordners"
-
-#: js/Filemanager.js:148
-msgid "Item with this name already exists!"
-msgstr "Ordner mit diesem Namen schon vorhanden!"
-
 #: js/NodeGridPanel.js:127
 msgid "Tags"
 msgstr "Tags"
