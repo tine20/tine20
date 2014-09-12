@@ -420,6 +420,7 @@ class Tinebase_User
      * 
      * @todo make use of dbmail plugin configurable (should be false by default)
      * @todo switch to new primary group if it could not be found
+     * @todo write a test and refactor this ... :(
      */
     public static function syncUser($username, $options = array())
     {
@@ -467,8 +468,17 @@ class Tinebase_User
             $currentUser->accountEmailAddress       = $user->accountEmailAddress;
             $currentUser->accountHomeDirectory      = $user->accountHomeDirectory;
             $currentUser->accountLoginShell         = $user->accountLoginShell;
+            if (! empty($user->visibility) && $currentUser->visibility !== $user->visibility) {
+                $currentUser->visibility            = $user->visibility;
+                if (empty($currentUser->contact_id) && $currentUser->visibility == Tinebase_Model_FullUser::VISIBILITY_DISPLAYED) {
+                    self::syncContact($currentUser);
+                }
+            }
         
             $syncedUser = $userBackend->updateUserInSqlBackend($currentUser);
+            if (! empty($user->container_id)) {
+                $syncedUser->container_id = $user->container_id;
+            }
             $userBackend->updatePluginUser($syncedUser, $user);
             
         } catch (Tinebase_Exception_NotFound $ten) {
@@ -500,6 +510,9 @@ class Tinebase_User
                 $contact = $addressbook->getByUserId($syncedUser->getId());
                 
                 $userBackend->updateContactFromSyncBackend($syncedUser, $contact);
+                if (! empty($syncedUser->container_id)) {
+                    $contact->container_id = $syncedUser->container_id;
+                }
                 $addressbook->update($contact);
             } catch (Addressbook_Exception_NotFound $aenf) {
                 self::syncContact($syncedUser);
