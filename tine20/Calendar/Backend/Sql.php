@@ -152,7 +152,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE, $_getDeleted = FALSE)    
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Searching events ...');Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Searching events ...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Searching events ...');Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Searching events ...');
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination();
         }
@@ -195,7 +195,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Event base rows fetched: ' . count($rows));
 
         // NOTE manual raw data to recordset conversion because we want to reduce number of records here
