@@ -323,7 +323,6 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         $this->_eventController->delete($migration['toDelete']->getId());
         
-        
         // NOTE: we need to exclude the toCreate exdates here to not confuse computations in createRecurException!
         $_event->exdate = array_diff($exceptions->getOriginalDtStart(), $migration['toCreate']->getOriginalDtStart());
         $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConflicts);
@@ -344,6 +343,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             $exception->assertAttendee($this->getCalendarUser());
             $this->_prepareException($updatedBaseEvent, $exception);
             $this->_addStatusAuthkeyForOwnAttender($exception);
+            
+            // skip concurrency check here by setting the seq of the current record
+            $currentException = $currentPersistentExceptions->getById($exception->getId());
+            $exception->seq = $currentException->seq;
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Updating exception: ' . print_r($exception->toArray(), TRUE));

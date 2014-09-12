@@ -465,7 +465,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $sendNotifications = $this->sendNotifications(FALSE);
             
             $event = $this->get($_record->getId());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Going to update the following event. rawdata: ' . print_r($event->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    .' Going to update the following event. rawdata: ' . print_r($event->toArray(), true));
+            
             //NOTE we check via get(full rights) here whereas _updateACLCheck later checks limited rights from search
             if ($this->_doContainerACLChecks === FALSE || $event->hasGrant(Tinebase_Model_Grants::GRANT_EDIT)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id} (range: {$range})");
