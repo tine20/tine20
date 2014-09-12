@@ -502,7 +502,8 @@ class Tinebase_User
                 $userBackend->updateContactFromSyncBackend($syncedUser, $contact);
                 $addressbook->update($contact);
             } catch (Addressbook_Exception_NotFound $aenf) {
-                // do nothing => user has no contact in addressbook
+                self::syncContact($syncedUser);
+                $syncedUser = $userBackend->updateUserInSqlBackend($syncedUser);
             }
         }
         
@@ -601,7 +602,7 @@ class Tinebase_User
             'n_fileas'      => $user->accountDisplayName,
             'email'         => $user->accountEmailAddress,
             'type'          => Addressbook_Model_Contact::CONTACTTYPE_USER,
-            'container_id'  => $internalAddressbook->getId()
+            'container_id'  => (! empty($user->container_id)) ? $user->container_id : $internalAddressbook->getId()
         ));
     
         // add modlog info
