@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Voipmanager</name>
-    <version>8.1</version>
+    <version>8.2</version>
     <order>50</order>
     <depends>
         <application>Admin</application>
@@ -442,7 +442,7 @@
             <name>asterisk_sip_peers</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -482,8 +482,10 @@
                 </field>
                 <field>
                     <name>canreinvite</name>
-                    <type>boolean</type>
-                    <default>NULL</default>
+                    <type>text</type>
+                    <default>yes</default>
+                    <length>10</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>context_id</name>

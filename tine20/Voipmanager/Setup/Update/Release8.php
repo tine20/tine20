@@ -59,4 +59,29 @@ class Voipmanager_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Voipmanager', '8.1');
     }
+    
+    /**
+     * allow setting of canreinvite / directmedia
+     */
+    public function update_1()
+    {
+        $field = '<field>
+            <name>canreinvite</name>
+            <type>text</type>
+            <default>yes</default>
+            <length>10</length>
+            <notnull>true</notnull>
+        </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('asterisk_sip_peers', $declaration);
+    
+        // default is canreinvite=yes, but the behavior is not wanted, if the client is behind nat
+        $quotedTableName = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "asterisk_sip_peers");
+        $sql = "UPDATE " . $quotedTableName . " SET " . $this->_db->quoteIdentifier('canreinvite') . " = 'no' WHERE " . $this->_db->quoteIdentifier('nat') . " = 'yes';";
+        $this->_db->query($sql);
+        
+        $this->setTableVersion('asterisk_sip_peers', '3');
+        $this->setApplicationVersion('Voipmanager', '8.2');
+    }
 }
