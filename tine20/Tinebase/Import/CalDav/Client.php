@@ -117,7 +117,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
             $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($this->userName, $this->password);
             Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
         } catch (Tinebase_Exception_NotFound $e) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can\'t find tine20 user: ' . $this->userName);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Can\'t find tine20 user: ' . $this->userName);
             return null;
         }
         
@@ -141,7 +141,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
                     unset($users[$username]);
                 }
             } catch (Tinebase_Exception $te) {
-                // TODO should use better exception (Not_Authenticatied, ...)
+                // TODO should use better exception (Not_Authenticated, ...)
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
                         . ' Skipping ' . $username);
                 unset($users[$username]);
@@ -159,6 +159,8 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
     public function findCalendarHomeSet()
     {
         if ('' == $this->currentUserPrincipal && ! $this->findCurrentUserPrincipal(/* tries = */ 3)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                    . ' No principal found for user ' . $this->userName);
             return false;
         }
         $cacheId = convertCacheId('findCalendarHomeSet' . $this->userName);

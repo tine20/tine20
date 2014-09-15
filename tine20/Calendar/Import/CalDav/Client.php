@@ -91,7 +91,12 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     public function findAllCalendars()
     {
         if ('' == $this->calendarHomeSet && ! $this->findCalendarHomeSet())
+        {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                    . ' No calendar home set for user ' . $this->userName);
+            
             return false;
+        }
         
         //issue with follow location in curl!?!?
         if ($this->calendarHomeSet[strlen($this->calendarHomeSet)-1] !== '/')
@@ -240,6 +245,8 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     public function importAllCalendars()
     {
         if (count($this->calendars) < 1 && ! $this->findAllCalendars()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ 
+                . 'No calendars for user ' . $this->userName);
             return false;
         }
         
@@ -265,7 +272,26 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             $this->decorator->setCalendarProperties($container, $this->calendars[$calUri]);
             
             $grants = $this->getCalendarGrants($calUri);
+            $this->_assureAdminGrantForOwner($container, $grants);
             Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, FALSE);
+        }
+    }
+    
+    /**
+     * container owner needs admin grant
+     * 
+     * @param Tinebase_Model_Container $container
+     * @param Tinebase_Record_RecordSet $grants
+     */
+    protected function _assureAdminGrantForOwner($container, $grants)
+    {
+        $currentAccountId = Tinebase_Core::getUser()->getId();
+        foreach ($grants as $grant) {
+            if ($grant->account_id === $currentAccountId && $container->created_by === $currentAccountId && ! $grant->{Tinebase_Model_Grants::GRANT_ADMIN}) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                        . ' Set ADMIN grant for container creator');
+                $grant->{Tinebase_Model_Grants::GRANT_ADMIN} = true;
+            }
         }
     }
     
