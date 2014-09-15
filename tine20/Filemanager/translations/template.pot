@@ -13,6 +13,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:102
+#, python-format
+msgid "%s's personal files"
+msgstr ""
+
 #: Acl/Rights.php:97
 msgid "manage shared folders"
 msgstr ""
@@ -21,52 +26,60 @@ msgstr ""
 msgid "Create new shared folders"
 msgstr ""
 
-#: Controller.php:102
-#, python-format
-msgid "%s's personal files"
-msgstr ""
-
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr ""
-
 #: js/NodeEditDialog.js:44 js/Filemanager.js:44 js/NodeGridPanel.js:346
 msgid "Save locally"
 msgstr ""
 
-#: js/NodeEditDialog.js:95 js/NodeEditDialog.js:108
-msgid "Node"
+#: js/NodeEditDialog.js:68
+msgid "Edit folder"
 msgstr ""
 
-#: js/NodeEditDialog.js:114 js/NodeGridPanel.js:135
+#: js/NodeEditDialog.js:68
+msgid "edit file"
+msgstr ""
+
+#: js/NodeEditDialog.js:110 js/NodeEditDialog.js:123 js/Model.js:43
+#: js/NodeGridPanel.js:157
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/NodeEditDialog.js:110 js/NodeEditDialog.js:123 js/Model.js:40
+msgid "File"
+msgid_plural "Files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:135
 msgid "Name"
 msgstr ""
 
-#: js/NodeEditDialog.js:121 js/Model.js:530
+#: js/NodeEditDialog.js:136 js/Model.js:530
 msgid "Type"
 msgstr ""
 
-#: js/NodeEditDialog.js:129 js/NodeGridPanel.js:189
+#: js/NodeEditDialog.js:144 js/NodeGridPanel.js:189
 msgid "Created By"
 msgstr ""
 
-#: js/NodeEditDialog.js:132 js/Model.js:532 js/NodeGridPanel.js:181
+#: js/NodeEditDialog.js:147 js/Model.js:532 js/NodeGridPanel.js:181
 msgid "Creation Time"
 msgstr ""
 
-#: js/NodeEditDialog.js:141
+#: js/NodeEditDialog.js:156
 msgid "Modified By"
 msgstr ""
 
-#: js/NodeEditDialog.js:144
+#: js/NodeEditDialog.js:159
 msgid "Last Modified"
 msgstr ""
 
-#: js/NodeEditDialog.js:167
+#: js/NodeEditDialog.js:182
 msgid "Description"
 msgstr ""
 
-#: js/NodeEditDialog.js:181
+#: js/NodeEditDialog.js:196
 msgid "Enter description"
 msgstr ""
 
@@ -86,51 +99,22 @@ msgid "Putting files in this folder is not allowed!"
 msgstr ""
 
 #: js/GridContextMenu.js:34
+#, python-brace-format
 msgid "Please enter the new name of the {0}:"
 msgstr ""
 
 #: js/GridContextMenu.js:40
+#, python-brace-format
 msgid "Not renamed {0}"
 msgstr ""
 
 #: js/GridContextMenu.js:40 js/NodeGridPanel.js:505
+#, python-brace-format
 msgid "You have to supply a {0} name!"
 msgstr ""
 
 #: js/GridContextMenu.js:144 js/NodeGridPanel.js:546
 msgid "Do you really want to delete the following files?"
-msgstr ""
-
-#: js/Model.js:40
-msgid "File"
-msgid_plural "Files"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:43 js/NodeGridPanel.js:157
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:281 js/Model.js:297
-msgid "Copying data .. {0}"
-msgstr ""
-
-#: js/Model.js:284 js/Model.js:299
-msgid "Moving data .. {0}"
-msgstr ""
-
-#: js/Model.js:303
-msgid "Please wait"
-msgstr ""
-
-#: js/Model.js:529
-msgid "Quick Search"
-msgstr ""
-
-#: js/Model.js:531 js/NodeGridPanel.js:149
-msgid "Contenttype"
 msgstr ""
 
 #: js/Filemanager.js:36
@@ -142,6 +126,7 @@ msgid "Service Unavailable"
 msgstr ""
 
 #: js/Filemanager.js:92
+#, python-brace-format
 msgid ""
 "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 "
 "Admin FAQ{1} for configuration advice or contact your administrator."
@@ -161,6 +146,32 @@ msgstr ""
 
 #: js/Filemanager.js:148
 msgid "Item with this name already exists!"
+msgstr ""
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr ""
+
+#: js/Model.js:281 js/Model.js:297
+#, python-brace-format
+msgid "Copying data .. {0}"
+msgstr ""
+
+#: js/Model.js:284 js/Model.js:299
+#, python-brace-format
+msgid "Moving data .. {0}"
+msgstr ""
+
+#: js/Model.js:303
+msgid "Please wait"
+msgstr ""
+
+#: js/Model.js:529
+msgid "Quick Search"
+msgstr ""
+
+#: js/Model.js:531 js/NodeGridPanel.js:149
+msgid "Contenttype"
 msgstr ""
 
 #: js/NodeGridPanel.js:127
@@ -184,6 +195,7 @@ msgid "Last Modified By"
 msgstr ""
 
 #: js/NodeGridPanel.js:251
+#, python-brace-format
 msgid "The max. Upload Filesize is {0} MB"
 msgstr ""
 
@@ -216,6 +228,7 @@ msgid "Please enter the name of the new folder:"
 msgstr ""
 
 #: js/NodeGridPanel.js:505
+#, python-brace-format
 msgid "No {0} added"
 msgstr ""
 
