@@ -56,7 +56,7 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
         ))));
 
         $myHighlightedPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => 'All Highlighted mail', // _("All highlighted mail")
+            'name'              => 'All highlighted mail', // _("All highlighted mail")
             'description'       => 'All highlighted mail of my email accounts', // _("All highlighted mail of my email accounts")
             'filters'           => array(
                 array('field' => 'flags'    , 'operator' => 'in', 'value' => Zend_Mail_Storage::FLAG_FLAGGED),
