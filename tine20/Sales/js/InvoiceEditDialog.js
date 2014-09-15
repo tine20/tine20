@@ -380,7 +380,6 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             name: 'date',
                             fieldLabel: this.app.i18n._('Date'),
                             columnWidth: 1/3,
-                            readOnly: (this.record.get('is_auto') == 1),
                             emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
                         }, new Tine.Tinebase.widgets.keyfield.ComboBox({
                             app: 'Sales',
