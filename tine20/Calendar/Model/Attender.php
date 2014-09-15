@@ -442,7 +442,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         )));
         
         if (count($contacts) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . " Found # of contacts " . count($contacts));
             $result = $contacts->getFirstRecord();
         
         } else if ($_implicitAddMissingContacts === TRUE) {
@@ -458,7 +459,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 'n_family'    => (isset($_attenderData['lastName']) && ! empty($_attenderData['lastName'])) ? $_attenderData['lastName'] : $email,
                 'n_given'     => (isset($_attenderData['firstName'])) ? $_attenderData['firstName'] : '',
             );
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . " Ádd new contact " . print_r($contactData, true));
             $contact = new Addressbook_Model_Contact($contactData);
             $result = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
         } else {
