@@ -34,6 +34,13 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     protected $_uuidPrefix = '';
     
     /**
+     * record backend
+     * 
+     * @var Tinebase_Backend_Sql_Abstract
+     */
+    protected $_recordBackend = null;
+    
+    /**
      * skip those ics
      * 
      * TODO move to config
@@ -86,6 +93,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
         $flavor = 'Calendar_Import_CalDav_Decorator_' . $flavor;
         $this->decorator = new $flavor($this);
+        $this->_recordBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
     }
     
     public function findAllCalendars()
@@ -242,6 +250,11 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         }
     }
     
+    /**
+     * import all calendars
+     * 
+     * @return boolean
+     */
     public function importAllCalendars()
     {
         if (count($this->calendars) < 1 && ! $this->findAllCalendars()) {
@@ -273,6 +286,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             
             $grants = $this->getCalendarGrants($calUri);
             $this->_assureAdminGrantForOwner($container, $grants);
+            $this->_removeSyncGrantIfContainerEmpty($container, $grants);
             Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, FALSE);
         }
     }
@@ -291,6 +305,35 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
                         . ' Set ADMIN grant for container creator');
                 $grant->{Tinebase_Model_Grants::GRANT_ADMIN} = true;
+            }
+        }
+    }
+    
+    /**
+     * remove container sync grant if empty
+     *
+     * @param Tinebase_Model_Container $container
+     * @param Tinebase_Record_RecordSet $grants
+     */
+    protected function _removeSyncGrantIfContainerEmpty($container, $grants)
+    {
+        if (/* creation_time is less than 1 hour ago */ $container->creation_time->addHour(1)->compare(Tinebase_DateTime::now()) === 1) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+                    . ' Do not remove sync grant on initial import - ignore new calendars');
+            return;
+        }
+        
+        $etags = $this->_recordBackend->getEtagsForContainerId($container->getId());
+        if (count($etags)) {
+            // we found records - container not empty
+            return; 
+        }
+        
+        foreach ($grants as $grant) {
+            if ($grant->{Tinebase_Model_Grants::GRANT_SYNC}) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                        . ' Removing SYNC grant for empty ' . $this->appName . ' container ' . $container->name . ' (account: ' . $grant->account_id . ')');
+                $grant->{Tinebase_Model_Grants::GRANT_SYNC} = false;
             }
         }
     }
@@ -348,10 +391,8 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Looking for updates in ' . count($this->calendarICSs). ' calendars ...');
         
-        $recordBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
-        
         foreach ($this->calendarICSs as $calUri => $calICSs) {
-            $updateResult = $this->updateCalendar($calUri, $calICSs, $recordBackend);
+            $updateResult = $this->updateCalendar($calUri, $calICSs);
             if (count($updateResult['ics']) > 0) {
                 $newICSs[$calUri] = $updateResult['ics'];
             }
@@ -388,9 +429,8 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
      * 
      * @param string $calUri
      * @param array $calICSs
-     * @param Tinebase_Backend_Sql $recordBackend
      */
-    protected function updateCalendar($calUri, $calICSs, $recordBackend)
+    protected function updateCalendar($calUri, $calICSs)
     {
         $updateResult = array(
             'ics'       => array(),
@@ -404,7 +444,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         // get current tine20 id/etags of records
         $defaultCalendarsName = $this->_getDefaultCalendarsName();
         $container = $this->findContainerForCalendar($calUri, $this->calendars[$calUri]['displayname'], $defaultCalendarsName);
-        $containerEtags = $recordBackend->getEtagsForContainerId($container->getId());
+        $containerEtags = $this->_recordBackend->getEtagsForContainerId($container->getId());
         $otherComponentIds = $this->_getOtherComponentIds($container);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
@@ -443,7 +483,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 
             } else {
                 try {
-                    $recordBackend->checkETag($data['id'], $data['etag']);
+                    $this->_recordBackend->checkETag($data['id'], $data['etag']);
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
                             . ' Ignoring delegated event from another container/organizer: ' . $data['id']);
                     continue;
@@ -662,16 +702,10 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                     }
                 }
                 
-                $this->_setEtags($etags);
+                $this->_recordBackend->setETags($etags);
             } while($start < $max);
         }
         return true;
-    }
-    
-    protected function _setEtags($etags)
-    {
-        $recordBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
-        $recordBackend->setETags($etags);
     }
     
     /**
