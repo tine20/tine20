@@ -152,14 +152,14 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE, $_getDeleted = FALSE)    
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Searching events ...');Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Searching events ...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Searching events ...');
+        
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination();
         }
         
         $select = parent::_getSelect('*', $_getDeleted);
         
-        // NOTE: we join here as attendee and role filters need it
         $select->joinLeft(
             /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'),
             /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
@@ -191,59 +191,17 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $select->group($this->_tableName . '.' . 'id');
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
-        $period = $_filter->getFilter('period');
-        
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Event base rows fetched: ' . count($rows));
-
-        // NOTE manual raw data to recordset conversion because we want to reduce number of records here
-        // $result = $this->_rawDataToRecordSet($rows);
-        $result = new Tinebase_Record_RecordSet($this->_modelName);
-        foreach ($rows as $rawEvent) {
-            $result->addRecord(new Calendar_Model_Event($rawEvent, true));
-        }
         
-        $this->_removeBaseEventsThatDontMatchPeriod($result, $period);
-        
-        $this->appendForeignRecordSetToRecordSet($result, 'attendee', 'id',
-                Calendar_Backend_Sql_Attendee::FOREIGNKEY_EVENT, $this->_attendeeBackend);
+        $result = $this->_rawDataToRecordSet($rows);
         
         $this->_checkGrants($result, $grantsFilter);
         
         return $_onlyIds ? $result->{is_bool($_onlyIds) ? $this->_getRecordIdentifier() : $_onlyIds} : $result;
-    }
-    
-    /**
-     * hack for improving calendar performance by removing base events before fetching all related data
-     * 
-     * @param Tinebase_Record_RecordSet $result
-     * @param Calendar_Model_PeriodFilter $period
-     */
-    protected function _removeBaseEventsThatDontMatchPeriod($result, $period)
-    {
-        if (! $period) {
-            return;
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Removing base events that are not in period ' . $period->getFrom()->toString() . ' - ' . $period->getUntil()->toString());
-        
-        $clonedResult = clone $result;
-        Calendar_Model_Rrule::mergeRecurrenceSet($clonedResult, $period->getFrom(), $period->getUntil());
-        $candidates = $result->filter('rrule', "/^FREQ.*/", TRUE);
-        
-        // remove base events that have no recur instance in period
-        foreach ($candidates as $baseEvent) {
-            $fakes = $clonedResult->filter('id', '/^fakeid' . $baseEvent->uid . '/', /* regex = */ true);
-            if (count($fakes) == 0 && 
-                    (/* dtend before from   */ $baseEvent->dtend->compare($period->getFrom())    === -1 || 
-                     /* dtstart after until */ $baseEvent->dtstart->compare($period->getUntil()) ===  1)
-            ) {
-                $result->removeRecord($baseEvent);
-            }
-        }
     }
     
     /**
@@ -279,21 +237,21 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 // grants to original container
                 if ($clone->container_id instanceof Tinebase_Model_Container && $clone->container_id->account_grants) {
                     foreach($this->_recordBasedGrants as $grant) {
-                        $event->{$grant} =     $clone->container_id->account_grants[$grant]
-                        || $clone->container_id->account_grants[Tinebase_Model_Grants::GRANT_ADMIN];
+                        $event->{$grant} =     $clone->container_id->account_grants[$grant] 
+                                            || $clone->container_id->account_grants[Tinebase_Model_Grants::GRANT_ADMIN];
                     }
                 }
                 
                 // check grant inheritance
                 foreach ($inheritableGrants as $grant) {
                     if (! $event->{$grant} && $clone->attendee instanceof Tinebase_Record_RecordSet) {
-                        foreach ($clone->attendee as $attendee) {
+                        foreach($clone->attendee as $attendee) {
                             if (   $attendee->displaycontainer_id instanceof Tinebase_Model_Container
-                                    && $attendee->displaycontainer_id->account_grants
-                                    && (    $attendee->displaycontainer_id->account_grants[$grant]
-                                            || $attendee->displaycontainer_id->account_grants[Tinebase_Model_Grants::GRANT_ADMIN]
-                                    )
-                            ) {
+                                && $attendee->displaycontainer_id->account_grants 
+                                && (    $attendee->displaycontainer_id->account_grants[$grant]
+                                     || $attendee->displaycontainer_id->account_grants[Tinebase_Model_Grants::GRANT_ADMIN]
+                                   )
+                            ){
                                 $event->{$grant} = TRUE;
                                 break;
                             }
@@ -305,7 +263,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     $requiredGrants = array_intersect($grantsFilter->getRequiredGrants(), $this->_recordBasedGrants);
                     
                     $hasGrant = FALSE;
-                    foreach ($requiredGrants as $requiredGrant) {
+                    foreach($requiredGrants as $requiredGrant) {
                         if ($event->{$requiredGrant}) {
                             $hasGrant |= $event->{$requiredGrant};
                         }
@@ -358,7 +316,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $result = $this->_db->fetchOne($select);
         
         return $result;
-    }    
+    }
     
     /**
      * Updates existing entry

@@ -406,7 +406,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         Calendar_Model_Rrule::mergeRecurrenceSet($weekviewEvents, $from, $until);
         
         // make sure the 17.6. is not in the set
-        $this->assertEquals(0, count($weekviewEvents),
+        $this->assertEquals(1, count($weekviewEvents),
                 '17.6. is an exception date and must not be part of this weekview: '
                 . print_r($weekviewEvents->toArray(), true));
     }
