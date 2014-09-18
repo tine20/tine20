@@ -156,6 +156,8 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $languages = isset($params['languages']) ? $params['languages'] : array('en', 'de');
         
+        $contactBackend = new Addressbook_Backend_Sql();
+        
         foreach ($languages as $language) {
             $locale = new Zend_Locale($language);
             
@@ -165,12 +167,11 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 array('field' => 'note', 'operator' => 'equals', 'value' => 
                     $translation->_('This contact has been automatically added by the system as an event attender')),
             ));
-            $contactIdsToDelete = Addressbook_Controller_Contact::getInstance()->search($noteFilter, null, false, /* $_onlyIds = */ true);
+            $contactIdsToDelete = $contactBackend->search($noteFilter, null, Tinebase_Backend_Sql_Abstract::IDCOL);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . " About to delete " . count($contactIdsToDelete) . ' contacts ...');
             
-            $contactBackend = new Addressbook_Backend_Sql();
             $number = $contactBackend->delete($contactIdsToDelete);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
