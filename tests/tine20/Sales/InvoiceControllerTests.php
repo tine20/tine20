@@ -120,7 +120,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $i++;
         }
         
-        $this->assertEquals(2, count($result['failures']));
+        $this->assertEquals(2, count($result['failures']), 'should have 2 failures in result: ' . print_r($result, true));
         if (strstr($result['failures'][0], 'no customer')) {
             $this->assertTrue(strstr($result['failures'][0], 'no customer') !== FALSE);
             $this->assertTrue(strstr($result['failures'][1], 'no billing') !== FALSE);

@@ -910,7 +910,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $contactController  = Addressbook_Controller_Contact::getInstance();
         $taController       = Timetracker_Controller_Timeaccount::getInstance();
         
-
         // fetch user group
         $group   = Tinebase_Group::getInstance()->getGroupByName('Users');
         $groupId = $group->getId();
@@ -998,7 +997,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         
         // get sure the user doesn't get relations not having the right for
         $ta = $this->_json->getTimeaccount($ta['id']);
-        $this->assertEquals(1, count($ta['relations']), 'user should exactly get one related contact');
+        $this->assertEquals(1, count($ta['relations']), 'user should exactly get one related contact: ' . print_r($ta['relations'], true));
         
         // save timeaccount with reduced relations
         $ta = $this->_json->saveTimeaccount($ta);
@@ -1226,7 +1225,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Tinebase_Core::set(Tinebase_Core::USER, $user);
         
         $ta = $this->_json->getTimeaccount($ta->id);
-        $this->assertTrue(empty($ta['relations']));
+        $this->assertTrue(empty($ta['relations']), 'relations are not empty: ' . print_r($ta['relations'], true));
         
         // this must be possible
         $ta = $this->_json->saveTimeaccount($ta);
