@@ -278,7 +278,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var net = parseFloat(this.priceNetField.getValue());
         var tax = parseFloat(this.salesTaxField.getValue());
         var gross = net + (net * (tax / 100));
-        this.priceGrossField.setValue(gross.toFixed(2));
+        
+        var grosscent = Math.ceil(gross * 100);
+        
+        this.priceGrossField.setValue(grosscent / 100);
     },
     
     /**

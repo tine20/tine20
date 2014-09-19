@@ -77,6 +77,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             'number' => array(
                 'label' => 'Invoice Number', //_('Invoice Number')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'queryFilter' => TRUE,
             ),
             'description' => array(
                 'label'   => 'Description', // _('Description')
