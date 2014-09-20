@@ -104,8 +104,6 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
      */
     public function testAutoInvoice()
     {
-        $this->markTestSkipped('FIXME!');
-        
         $this->_createFullFixtures();
         $this->_createFailingContracts();
         
