@@ -308,8 +308,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         
         // assert REPLY message to organizer only
         $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
-        $mailer = Calendar_Controller_EventNotificationsTests::getMailer();
-        if ($mailer instanceof Zend_Mail_Transport_Array || (isset($smtpConfig->from) && ! empty($smtpConfig->from))) {
+        if (isset($smtpConfig->from) && ! empty($smtpConfig->from)) {
             $messages = Calendar_Controller_EventNotificationsTests::getMessages();
             $this->assertEquals(1, count($messages), 'exactly one mail should be send');
             $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
