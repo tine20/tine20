@@ -319,6 +319,22 @@ class Calendar_Frontend_iMIPTest extends TestCase
     }
     
     /**
+     * external organizer container should not be visible
+     */
+    public function testExternalContactContainer()
+    {
+        $this->testExternalInvitationRequestProcess();
+        $containerFrontend = new Tinebase_Frontend_Json_Container();
+        $result = $containerFrontend->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, null, null);
+        
+        foreach ($result as $container) {
+            if ($container['name'] === 'l.kneschke@caldav.org') {
+                $this->fail('found external organizer container: ' . print_r($container, true));
+            }
+        }
+    }
+    
+    /**
      * adds new imip message to Felamimail cache
      * 
      * @return Felamimail_Model_Message
