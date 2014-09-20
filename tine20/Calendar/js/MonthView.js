@@ -973,11 +973,10 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
         var dayHeaders = Ext.DomQuery.select('div[class=cal-monthview-dayheader-date]', this.mainBody.dom);
         for(var i = 0; i < this.dateMesh.length; i++) {
             clsToAdd = ((this.dateMesh[i].getMonth() == this.startDate.getMonth()) ? ' cal-monthview-daycell-valid' : ' cal-monthview-daycell-invalid');
-            oldVal = this.dayCells[i].getAttribute('class');
             if (this.dateMesh[i].getTime() == this.toDay.getTime()) {
-                clsToAdd += ' cal-monthview-daycell-today';
+                clsToAdd = ' cal-monthview-daycell-today';
             }
-            this.dayCells[i].setAttribute('class', oldVal + clsToAdd);
+            this.dayCells[i].setAttribute('class', 'cal-monthview-daycell ' + clsToAdd);
             dayHeaders[i].innerHTML = this.dateMesh[i].format('j');
         }
         
