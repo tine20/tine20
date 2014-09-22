@@ -49,6 +49,23 @@ Tine.Crm.LeadSource.Model.getDefaultData = function() {
 };
 
 /**
+ * lead source renderer
+ *
+ * @param   {Number} _leadsourceId
+ * @return  {String} leadsource
+ */
+Tine.Crm.LeadSource.Renderer = function(_leadsourceId) {
+    var leadsourceStore = Tine.Crm.LeadSource.getStore();
+    var record = leadsourceStore.getById(_leadsourceId);
+
+    if (record) {
+        return record.data.leadsource;
+    } else {
+        return 'undefined';
+    }
+};
+
+/**
  * get lead source store
  * if available, load data from LeadSources
  * 
