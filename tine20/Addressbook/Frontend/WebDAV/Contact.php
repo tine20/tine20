@@ -80,7 +80,12 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         $id = strlen($id) > 40 ? sha1($id) : $id;
         $contact->setId($id);
         
-        $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
+        try {
+            $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            Tinebase_Exception::log($tead);
+            throw new DAV\Exception\Forbidden('Access denied');
+        }
         
         $card = new self($container, $contact);
         
@@ -101,11 +106,15 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         sleep(1);
         
         // (re) fetch contact as tree move does not refresh src node before delete
-        // check if we are still in the same container, if not -> it is a MOVE 
-        $contact = Addressbook_Controller_Contact::getInstance()->get($this->_contact);
-        
-        if ($contact->container_id == $this->_container->getId()) {
-            Addressbook_Controller_Contact::getInstance()->delete($contact);
+        // check if we are still in the same container, if not -> it is a MOVE
+        try {
+            $contact = Addressbook_Controller_Contact::getInstance()->get($this->_contact);
+            if ($contact->container_id == $this->_container->getId()) {
+                Addressbook_Controller_Contact::getInstance()->delete($contact);
+            }
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            Tinebase_Exception::log($tead);
+            throw new DAV\Exception\Forbidden('Access denied');
         }
     }
     
@@ -252,7 +261,12 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
             Addressbook_Convert_Contact_VCard_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
         
-        $this->_contact = Addressbook_Controller_Contact::getInstance()->update($contact, false);
+        try {
+            $this->_contact = Addressbook_Controller_Contact::getInstance()->update($contact, false);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            Tinebase_Exception::log($tead);
+            throw new DAV\Exception\Forbidden('Access denied');
+        }
         $this->_vcard   = null;
         
         return $this->getETag();
@@ -282,7 +296,12 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
             $id = ($pos = strpos($this->_contact, '.')) === false ? $this->_contact : substr($this->_contact, 0, $pos);
             $id = strlen($id) > 40 ? sha1($id) : $id;
             
-            $this->_contact = Addressbook_Controller_Contact::getInstance()->get($id);
+            try {
+                $this->_contact = Addressbook_Controller_Contact::getInstance()->get($id);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                Tinebase_Exception::log($tead);
+                throw new DAV\Exception\Forbidden('Access denied');
+            }
         }
         
         return $this->_contact;

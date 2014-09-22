@@ -48,13 +48,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 break;
                 
             case self::PREFIX_USERS:
-                $filter = new Addressbook_Model_ContactFilter(array(
-                    array(
-                        'field'     => 'type',
-                        'operator'  => 'equals',
-                        'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
-                    )
-                ));
+                $filter = $this->_getContactFilterForUserContact();
                 
                 $contacts = Addressbook_Controller_Contact::getInstance()->search($filter);
                 
@@ -143,18 +137,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     $principal = $this->_contactForSharedPrincipal();
                     
                 } else {
-                    $filter = new Addressbook_Model_ContactFilter(array(
-                        array(
-                            'field'     => 'type',
-                            'operator'  => 'equals',
-                            'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
-                        ),
-                        array(
-                            'field'     => 'id',
-                            'operator'  => 'equals',
-                            'value'     => $id
-                        ),
-                    ));
+                    $filter = $this->_getContactFilterForUserContact($id);
                     
                     $contact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
                     
@@ -169,6 +152,31 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         }
         
         return $principal;
+    }
+    
+    /**
+     * get contact filter
+     * 
+     * @param string $id
+     * @return Addressbook_Model_ContactFilter
+     */
+    protected function _getContactFilterForUserContact($id = null)
+    {
+        $filterData = array(array(
+            'field'     => 'type',
+            'operator'  => 'equals',
+            'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
+        ));
+        
+        if ($id !== null) {
+            $filterData[] = array(
+                'field'     => 'id',
+                'operator'  => 'equals',
+                'value'     => $id
+            );
+        }
+        
+        return new Addressbook_Model_ContactFilter($filterData);
     }
     
     /**
@@ -217,18 +225,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     }
                     
                 } else {
-                    $filter = new Addressbook_Model_ContactFilter(array(
-                        array(
-                            'field'     => 'type',
-                            'operator'  => 'equals',
-                            'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
-                        ),
-                        array(
-                            'field'     => 'id',
-                            'operator'  => 'equals',
-                            'value'     => $id
-                        ),
-                    ));
+                    $filter = $this->_getContactFilterForUserContact($id);
                     
                     $contact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
                     
@@ -429,13 +426,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 break;
                 
             case self::PREFIX_USERS:
-                $filter = new Addressbook_Model_ContactFilter(array(
-                    array(
-                        'field'     => 'type',
-                        'operator'  => 'equals',
-                        'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
-                    )
-                ));
+                $filter = $this->_getContactFilterForUserContact();
                 
                 if (!empty($searchProperties['{http://calendarserver.org/ns/}search-token'])) {
                     $filter->addFilter($filter->createFilter(array(

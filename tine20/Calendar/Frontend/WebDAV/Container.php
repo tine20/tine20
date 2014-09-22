@@ -102,7 +102,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                 'field'    => 'period', 
                 'operator'  => 'within', 
                 'value'     => array(
-                    'from'  => Tinebase_DateTime::now()->subWeek(4),
+                    'from'  => Tinebase_DateTime::now()->subMonth($this->_getMaxPeriodFrom()),
                     'until' => Tinebase_DateTime::now()->addYear(4)
                 )
             )
@@ -121,6 +121,9 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             $skipPersonalFilter = new Tinebase_Model_Filter_Container('container_id', 'equals', '/personal/' . Tinebase_Core::getUser()->getId(), array('applicationName' => 'Calendar'));
             $filter->addFilter($skipPersonalFilter);
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Event filter: ' . print_r($filter->toArray(), true));
         
         /**
          * see http://forge.tine20.org/mantisbt/view.php?id=5122
@@ -240,7 +243,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         // @see 0009162: CalDAV Performance issues for many events
         // create default time-range end in 4 years from now and 2 months back (configurable) if no filter was set by client
         if ($periodFrom === null) {
-            $periodFrom = Tinebase_DateTime::now()->subMonth(Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV, 2));
+            $periodFrom = Tinebase_DateTime::now()->subMonth($this->_getMaxPeriodFrom());
         }
         if ($periodUntil === null) {
             $periodUntil = Tinebase_DateTime::now()->addYear(4);
@@ -264,6 +267,16 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         $ids = $this->_getController()->search($filter, null, false, true, 'sync');
     
         return $ids;
+    }
+    
+    /**
+     * get max period (from) in months (default: 2)
+     * 
+     * @return integer
+     */
+    protected function _getMaxPeriodFrom()
+    {
+        return Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV, 2);
     }
     
     /**

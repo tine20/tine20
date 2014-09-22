@@ -178,8 +178,10 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             preconditions = this.iMIPrecord.get('preconditions'),
             method = this.iMIPrecord.get('method'),
             event = this.iMIPrecord.get('event'),
-            existingEvent = this.iMIPrecord.get('existing_event'),
-            myAttenderRecord = event.getMyAttenderRecord(),
+            existingEvent = this.iMIPrecord.get('existing_event') ? Tine.Calendar.backend.recordReader({
+                responseText: Ext.util.JSON.encode(this.iMIPrecord.get('existing_event'))
+            }) : null,
+            myAttenderRecord = existingEvent ? existingEvent.getMyAttenderRecord() : event.getMyAttenderRecord(),
             myAttenderstatus = myAttenderRecord ? myAttenderRecord.get('status') : null;
             
         // show container from existing event if exists
@@ -247,13 +249,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         singleRecordPanel.setVisible(true);
         singleRecordPanel.setHeight(150);
         
-        if (existingEvent) {
-            this.record = Tine.Calendar.backend.recordReader({
-                responseText: Ext.util.JSON.encode(existingEvent)
-            });
-        } else {
-            this.record = event;
-        }
+        this.record = existingEvent && ! preconditions ? existingEvent : event;
         singleRecordPanel.loadRecord(this.record);
     }
 });
