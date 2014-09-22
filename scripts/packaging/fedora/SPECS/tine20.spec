@@ -83,12 +83,7 @@ pleasure and include:
 Summary:        Tine 2.0 webserver integration package
 Requires:       httpd
 Requires:       php >= 5.3.0
-Requires:       php-gd php-mysqli php-mcrypt php-pecl-apc
-%if 0%{?fedora} >= 19
-Requires:       php-opcache
-%else
-Requires:       php-pecl-apc
-%endif
+Requires:       php-gd php-mysqlnd php-mcrypt php-opcache
 #Requires:       php-ZendFramework php-ZendFramework-Ldap
 Requires:       %{name}-tinebase %{name}-activesync %{name}-calendar %{name}-crm %{name}-felamimail %{name}-filemanager %{name}-projects %{name}-sales %{name}-tasks %{name}-timetracker
 

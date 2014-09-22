@@ -48,7 +48,11 @@ class Tasks_Setup_Update_Release7 extends Setup_Update_Abstract
                 <notnull>false</notnull>
             </field>
         ');
-        $this->_backend->addCol('tasks', $declaration);
+        try {
+            $this->_backend->addCol('tasks', $declaration);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
         
         $tasksBackend = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tasks_Model_Task', 

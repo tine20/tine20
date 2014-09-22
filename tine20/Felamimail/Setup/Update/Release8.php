@@ -135,4 +135,18 @@ class Felamimail_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_sieve_vacation', 3);
         $this->setApplicationVersion('Felamimail', '8.3');
     }
+    
+    /**
+     * update to 8.4
+     * - fix translation string
+     *
+     */
+    public function update_3()
+    {
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', 'All Highlighted mail');
+        $this->_db->update(SQL_TABLE_PREFIX . 'filter', array(
+                'name' => 'All highlighted mail',
+        ), $where);
+        $this->setApplicationVersion('Felamimail', '8.4');
+    }
 }

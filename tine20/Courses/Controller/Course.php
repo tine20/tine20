@@ -392,14 +392,15 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         foreach ($_members as $userId) {
             $userId = (is_array($userId)) ? $userId['id'] : $userId;
             $user = $tinebaseUser->getFullUserById($userId);
-            
-            $tinebaseGroup->removeGroupMember($user->accountPrimaryGroup, $user);
+            $oldPrimaryGroup = $user->accountPrimaryGroup;
             
             if ($this->_config->get(Courses_Config::STUDENT_LOGINNAME_PREFIX, FALSE) && ($position = strrpos($user->accountLoginName, '-')) !== false) {
                 $user->accountLoginName = $courseName . '-' . substr($user->accountLoginName, $position + 1);
             }
             
             $user->accountPrimaryGroup  = $course->group_id;
+            $tinebaseGroup->addGroupMember($user->accountPrimaryGroup, $user);
+            
             $user->accountHomeDirectory = (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $courseName . '/' . $user->accountLoginName : '';
             
             if (isset($user->sambaSAM)) {
@@ -413,7 +414,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             }
             
             $tinebaseUser->updateUser($user);
-            $tinebaseGroup->addGroupMember($user->accountPrimaryGroup, $user);
+            $tinebaseGroup->removeGroupMember($oldPrimaryGroup, $user);
             $this->_addToStudentGroup(array($user->getId()));
         }
     }

@@ -227,14 +227,16 @@ Tine.Tinebase.common = {
         var result = '';
         if (tags) {
             for (var i = 0; i < tags.length; i += 1) {
-                var qtipText = Tine.Tinebase.common.doubleEncode(tags[i].name);
-                if (tags[i].description) {
-                    qtipText += ' | ' + Tine.Tinebase.common.doubleEncode(tags[i].description);
+                if (tags[i] && tags[i].name) {
+                    var qtipText = Tine.Tinebase.common.doubleEncode(tags[i].name);
+                    if (tags[i].description) {
+                        qtipText += ' | ' + Tine.Tinebase.common.doubleEncode(tags[i].description);
+                    }
+                    if (tags[i].occurrence) {
+                        qtipText += ' (' + _('Usage:&#160;') + tags[i].occurrence + ')';
+                    }
+                    result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:' + (tags[i].color ? tags[i].color : '#fff') + ';">&#160;</div>';
                 }
-                if(tags[i].occurrence) {
-                    qtipText += ' (' + _('Usage:&#160;') + tags[i].occurrence + ')';
-                }
-                result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:' + (tags[i].color ? tags[i].color : '#fff') + ';">&#160;</div>';
             }
         }
         

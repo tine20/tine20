@@ -583,21 +583,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ),
         );
         
-        $defaults = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-        $defaults['smtp'] = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
-        
-        // remove sensitive data
-        if (is_array($defaults)) {
-            unset($defaults['user']);
-            unset($defaults['password']);
-            if (is_array($defaults['smtp'])) {
-                unset($defaults['smtp']['username']);
-                unset($defaults['smtp']['password']);
-            }
-        }
-        
-        $result['defaults'] = $defaults;
-        
         $result['vacationTemplates'] = $this->getVacationMessageTemplates();
         
         return $result;

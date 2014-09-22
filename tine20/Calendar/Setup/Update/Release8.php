@@ -222,4 +222,28 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('cal_events', 8);
         $this->setApplicationVersion('Calendar', '8.6');
     }
+    
+    /**
+     * add rrule index
+     * 
+     * @see 0010214: improve calendar performance / yearly base events
+     */
+    public function update_6()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>rrule</name>
+                <field>
+                    <name>rrule</name>
+                </field>
+            </index>');
+        try {
+            $this->_backend->addIndex('cal_events', $declaration);
+        } catch (Zend_Db_Statement_Exception $e) {
+            Tinebase_Exception::log($e);
+        }
+        
+        $this->setTableVersion('cal_events', '9');
+        $this->setApplicationVersion('Calendar', '8.7');
+    }
 }

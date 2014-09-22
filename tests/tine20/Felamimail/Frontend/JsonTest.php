@@ -1675,9 +1675,22 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     {
         // search prefs
         $result = $this->_frontend->searchPreferencesForApplication('Felamimail', '');
-
+        
         // check results
         $this->assertTrue(isset($result['results']));
         $this->assertGreaterThan(0, $result['totalcount']);
+    }
+    
+    /**
+     * testGetRegistryData
+     * 
+     * @see 0010251: do not send unused config data to client
+     */
+    public function testGetRegistryData()
+    {
+        $regData = $this->_json->getRegistryData();
+        
+        $this->assertFalse(isset($regData['defaults']));
+        $this->assertEquals(5, $regData['supportedFlags']['totalcount']);
     }
 }

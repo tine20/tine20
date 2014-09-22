@@ -1330,8 +1330,16 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     public function appendForeignRecordSetToRecordSet($_recordSet, $_appendTo, $_recordKey, $_foreignKey, $_foreignBackend)
     {
         $allForeignRecords = $_foreignBackend->getMultipleByProperty($_recordSet->$_recordKey, $_foreignKey);
+        $foreignRecordsClassName = $allForeignRecords->getRecordClassName();
+        $idxIdMap = $allForeignRecords->$_foreignKey;
+
         foreach ($_recordSet as $record) {
-            $record->$_appendTo = $allForeignRecords->filter($_foreignKey, $record->$_recordKey);
+            $matchingIds = array_keys($idxIdMap, $record->$_recordKey);
+            $foreignRecords = new Tinebase_Record_RecordSet($foreignRecordsClassName);
+            foreach($matchingIds as $idx => $matchingId) {
+                $foreignRecords->addRecord($allForeignRecords->getByIndex($matchingId));
+            }
+            $record->$_appendTo = $foreignRecords;
         }
     }
     

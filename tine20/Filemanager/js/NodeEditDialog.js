@@ -57,6 +57,26 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         Tine.Filemanager.NodeEditDialog.superclass.initComponent.call(this);
     },
+    /**
+     * folder or file?
+     */
+    getFittingTypeTranslation: function (isWindowTitle) {
+        if (isWindowTitle) {
+            return this.record.data.type == 'folder' ? this.app.i18n._('Edit folder') : this.app.i18n._('edit file');
+        } else {
+            return this.record.data.type == 'folder' ? this.app.i18n._('Folder') : this.app.i18n._('File');
+        }
+    },
+    
+    /**
+     * executed when record is loaded
+     * @private
+     */
+    onRecordLoad: function() {
+        Tine.Filemanager.NodeEditDialog.superclass.onRecordLoad.apply(this, arguments);
+        
+        this.window.setTitle(this.getFittingTypeTranslation(true));
+    },
     
     /**
      * download file
@@ -104,7 +124,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             activeTab: 0,
             border: false,
             items:[{
-                title: this.app.i18n._('Node'),
+                title: this.getFittingTypeTranslation(false),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -117,7 +137,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         xtype: 'fieldset',
                         layout: 'hfit',
                         autoHeight: true,
-                        title: this.app.i18n._('Node'),
+                        title: this.getFittingTypeTranslation(false),
                         items: [{
                             xtype: 'columnform',
                             labelAlign: 'top',
@@ -218,6 +238,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ]
         };
     }
+    
 });
 
 /**
