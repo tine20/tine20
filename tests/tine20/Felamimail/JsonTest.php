@@ -1656,13 +1656,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * testGetRegistryData
-     * 
+     *
      * @see 0010251: do not send unused config data to client
      */
     public function testGetRegistryData()
     {
         $regData = $this->_json->getRegistryData();
-        
+
         $this->assertFalse(isset($regData['defaults']));
         $this->assertEquals(5, $regData['supportedFlags']['totalcount']);
     }

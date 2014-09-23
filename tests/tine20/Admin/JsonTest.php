@@ -1084,4 +1084,27 @@ class Admin_JsonTest extends TestCase
         $this->assertContains("phpinfo()", $info['html']);
         $this->assertContains("PHP Version =>", $info['html']);
     }
+
+    /**
+     * Check for smtp domains in registry
+     *
+     * @see 0010305: Undefined value in user edit dialog
+     */
+    public function testRegistryForSMTP()
+    {
+        Tinebase_Config::getInstance()->set(
+            Tinebase_Config::SMTP,
+            new Tinebase_Config_Struct(
+                array(
+                    'primarydomain' => 'localhost',
+                    'secondarydomains' => 'example.com')
+            )
+        );
+
+        $afj = new Admin_Frontend_Json();
+        $registryData = $afj->getRegistryData();
+
+        $this->assertEquals($registryData['primarydomain'], 'localhost');
+        $this->assertEquals($registryData['secondarydomains'], 'example.com');
+    }
 }
