@@ -60,7 +60,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
-        $this->_assertEventFacadeParams($this->_container);
+        Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
         
         $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
     }
@@ -137,7 +137,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Event to create: " . print_r($event->toArray(), TRUE));
         
-        self::_assertEventFacadeParams($container);
+        Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($container);
         
         // check if there is already an existing event with this ID
         // this can happen when the invitation email is faster then the caldav update or
@@ -196,7 +196,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         sleep(1);
         
         // (re) fetch event as tree move does not refresh src node before delete
-        $this->_assertEventFacadeParams($this->_container);
+        Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
         $event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
         
         // disallow event cleanup in the past
@@ -373,7 +373,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      */
     public function put($cardData) 
     {
-        $this->_assertEventFacadeParams($this->_container);
+        Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
         if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendar_Convert_Event_VCalendar_Factory for supported clients.");
@@ -481,35 +481,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     }
     
     /**
-     * asserts correct event filter and calendar user in MSEventFacade
-     * 
-     * NOTE: this is nessesary as MSEventFacade is a singleton and in some operations (e.g. move) there are 
-     *       multiple instances of self
-     */
-    protected static function _assertEventFacadeParams($container)
-    {
-        $eventFilter = new Calendar_Model_EventFilter(array(
-                array('field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId())
-        ));
-        
-        try {
-            $calendarUserId = $container->type == Tinebase_Model_Container::TYPE_PERSONAL ?
-            Addressbook_Controller_Contact::getInstance()->getContactByUserId($container->getOwner(), true)->getId() :
-            Tinebase_Core::getUser()->contact_id;
-        } catch (Exception $e) {
-            $calendarUserId = Calendar_Controller_MSEventFacade::getCurrentUserContactId();
-        }
-        
-        $calendarUser = new Calendar_Model_Attender(array(
-            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $calendarUserId,
-        ));
-        
-        Calendar_Controller_MSEventFacade::getInstance()->setEventFilter($eventFilter);
-        Calendar_Controller_MSEventFacade::getInstance()->setCalendarUser($calendarUser);
-    }
-    
-    /**
      * Updates the ACL
      *
      * This method will receive a list of new ACE's. 
@@ -530,7 +501,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     public function getRecord()
     {
         if (! $this->_event instanceof Calendar_Model_Event) {
-            $this->_assertEventFacadeParams($this->_container);
+            Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($this->_event->toArray(), true));
