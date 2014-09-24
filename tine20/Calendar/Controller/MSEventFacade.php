@@ -54,6 +54,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     private static $_instance = NULL;
     
+    protected static $_attendeeEmailCache = array();
+    
     /**
      * the constructor
      *
@@ -638,13 +640,29 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     {
         $this->_fillResolvedAttendeeCache($event);
         
-        $filteredAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-        foreach ($event->attendee->getEmail() as $idx => $email) {
-            if ($email) {
-                $filteredAttendee->addRecord($event->attendee[$idx]);
+        foreach ($event->attendee as $attender) {
+            $cacheId = $attender['user_type'] . $attender['user_id'];
+            
+            // value is in array and true
+            if (isset(self::$_attendeeEmailCache[$cacheId])) {
+                continue;
+            }
+            
+            // add value to cache if not existing already
+            if (!array_key_exists($cacheId, self::$_attendeeEmailCache)) {
+                self::$_attendeeEmailCache[$cacheId] = !!$attender->getEmail();
+                
+                // limit class cache to 100 entries
+                if (count(self::$_attendeeEmailCache) > 100) {
+                    array_shift(self::$_attendeeEmailCache);
+                }
+            }
+            
+            // remove entry if value is not true => attender has no email address
+            if (!self::$_attendeeEmailCache[$cacheId]) {
+                $event->attendee->removeRecord($attender);
             }
         }
-        $event->attendee = $filteredAttendee;
     }
 
     /**
