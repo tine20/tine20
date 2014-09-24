@@ -189,7 +189,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 $vevent->add(strtoupper($property), $event->$property);
             }
         }
-        
+
+        $vevent->add('X-CALENDARSERVER-ACCESS',
+            $event->class == Calendar_Model_Event::CLASS_PUBLIC ? 'PUBLIC' : 'CONFIDENTIAL'
+        );
+
         // categories
         if (!isset($event->tags)) {
             $event->tags = Tinebase_Tags::getInstance()->getTagsOfRecord($event);
@@ -689,7 +693,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     }
                     
                     break;
-                    
+
                 case 'STATUS':
                     if (in_array($property->getValue(), array(Calendar_Model_Event::STATUS_CONFIRMED, Calendar_Model_Event::STATUS_TENTATIVE, Calendar_Model_Event::STATUS_CANCELED))) {
                         $event->status = $property->getValue();
@@ -966,7 +970,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                         } else {
                             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                                    . ' Attachment found with malformed url: ' . $attachmentInfo);
+                                    . ' Attachment found with malformed url: ' . $url);
                         }
                     }
                     break;
@@ -990,7 +994,14 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     break;
             }
         }
-        
+
+        // NOTE: X-CALENDARSERVER-ACCESS overwrites CLASS
+        if (isset($vevent->{'X-CALENDARSERVER-ACCESS'})) {
+            $event->class = $vevent->{'X-CALENDARSERVER-ACCESS'} == 'PUBLIC' ?
+                Calendar_Model_Event::CLASS_PUBLIC :
+                Calendar_Model_Event::CLASS_PRIVATE;
+        }
+
         foreach ($shortenedFields as $key => $value) {
             $event->description = "--------\n$key: $value";
         }

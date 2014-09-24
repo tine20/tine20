@@ -379,7 +379,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendar_Convert_Event_VCalendar_Factory for supported clients.");
             throw new Sabre\DAV\Exception\Forbidden('Update denied for unknown client');
         }
-        
+
+        $this->_vevent = null;
         if (is_resource($cardData)) {
             $cardData = stream_get_contents($cardData);
         }

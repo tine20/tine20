@@ -454,22 +454,32 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $this->assertEquals(2, $record->seq, 'tine20 seq should have increased');
         $this->assertEquals(0, $record->external_seq, 'external seq must not have increased');
     }
-    
+
     /**
      * test updating existing event
      */
     public function testPutEventFromMacOsX()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
-        
+
         $event = $this->testCreateEventWithInternalOrganizer();
-    
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
-    
-        $event->put($vcalendarStream);
-    
+
+        // assert get contains X-CALENDARSERVER-ACCESS
+        $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->getRecord()->class);
+        $this->assertContains('X-CALENDARSERVER-ACCESS:CONFIDENTIAL', stream_get_contents($event->get()));
+
+        // put PUBLIC
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        $vcalendar = str_replace("CLASS:PRIVATE", "X-CALENDARSERVER-ACCESS:PUBLIC", $vcalendar);
+
+        $event->put($vcalendar);
+
         $record = $event->getRecord();
-    
+
+        // assert put evaluates X-CALENDARSERVER-ACCESS
+        $this->assertEquals(Calendar_Model_Event::CLASS_PUBLIC, $record->class);
+        $this->assertContains('X-CALENDARSERVER-ACCESS:PUBLIC', stream_get_contents($event->get()));
+
         $this->assertEquals('New Event', $record->summary);
     }
     
