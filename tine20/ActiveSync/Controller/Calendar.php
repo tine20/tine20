@@ -204,6 +204,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
         parent::__construct($_device, $_syncTimeStamp);
         
         $this->_contentController->setEventFilter($this->_getContentFilter(0));
+        
+        $this->_defaultContainerId = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::DEFAULTCALENDAR};
     }
     
     /**
@@ -274,6 +276,12 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     break;
                     
                 case 'attendee':
+                    if ($this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
+                        $entry->container_id       !== $this->_defaultContainerId) {
+                        
+                        continue;
+                    }
+                    
                     // fill attendee cache
                     Calendar_Model_Attender::resolveAttendee($entry->$tine20Property, FALSE);
                     
@@ -549,6 +557,12 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     break;
                     
                 case 'attendee':
+                    if ($entry && 
+                        $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
+                        $entry->container_id       !== $this->_defaultContainerId) {
+                            // keep attendees as the are / they were not sent to the device before
+                            continue;
+                    }
                     
                     $newAttendees = array();
                     
@@ -660,8 +674,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                                  
                             case Syncroton_Model_EventRecurrence::TYPE_YEARLY:
                                 $rrule->freq       = Calendar_Model_Rrule::FREQ_YEARLY;
-                                $rrule->bymonth    = (int)$xmlData->Recurrence->monthOfYear;
-                                $rrule->bymonthday = (int)$xmlData->Recurrence->dayOfMonth;
+                                $rrule->bymonth    = $data->$syncrotonProperty->monthOfYear;
+                                $rrule->bymonthday = $data->$syncrotonProperty->dayOfMonth;
                                 
                                 break;
                                  

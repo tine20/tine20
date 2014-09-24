@@ -792,11 +792,11 @@ Zeile 3</AirSyncBase:Data>
         
         $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         
-        $event = Calendar_Controller_Event::getInstance()->get($serverId);
-        
-        // how to validate container / it's not present in syncroton event?
-        $this->assertEquals(1, $syncrotonEvent->exceptions[0]->busyStatus);
-        $this->assertNotEquals('do not update', $syncrotonEvent->exceptions[0]->subject);
+        $event = Calendar_Controller_MSEventFacade::getInstance()->get($serverId);
+        $attendee = $event->exdate->getFirstRecord()->attendee->getFirstRecord();
+
+        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $attendee->status);
+        $this->assertNotEquals('do not update', $event->summary);
     }
     
     public function testMeetingResponse()
@@ -1129,5 +1129,82 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         
         $this->assertEquals(1, count($updatedEvent->alarms));
         $this->assertEquals($event->description, $updatedEvent->description, 'description mismatch: ' . print_r($updatedEvent->toArray(), true));
+    }
+    
+    public function testGetEntriesIPhone()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        
+        // create another folder to make the default calendar change => HACK
+        $syncrotonFolder2 = $this->testCreateFolder();
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        
+        $now = Tinebase_DateTime::now();
+        $thisYear = $now->format('Y');
+        $xmlString = preg_replace('/2012/', $thisYear, $this->_testXMLInput);
+        $xml = new SimpleXMLElement($xmlString);
+        $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+        
+        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        
+        $this->assertEmpty($syncrotonEvent->attendees, 'Events attendees found in folder which is not the default calendar');
+        
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        
+        $now = Tinebase_DateTime::now();
+        $thisYear = $now->format('Y');
+        $xmlString = preg_replace('/2012/', $thisYear, $this->_testXMLInput);
+        $xml = new SimpleXMLElement($xmlString);
+        $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        
+        $serverId = $controller->createEntry($syncrotonFolder2->serverId, $syncrotonEvent);
+        
+        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder2->serverId)), $serverId);
+        
+        $this->assertNotEmpty($syncrotonEvent->attendees, 'Events attendees not found in default calendar');
+    }
+    
+    public function testUpdateEntriesIPhone()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        
+        // create another folder to make the default calendar change => HACK
+        $syncrotonFolder2 = $this->testCreateFolder();
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+    
+        list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
+    
+        unset($syncrotonEvent->recurrence);
+        unset($syncrotonEvent->exceptions);
+        $syncrotonEvent->attendees[0]->name = Tinebase_Record_Abstract::generateUID();
+        
+        // need to create new controller to set new sync timestamp for concurrency handling
+        $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
+        
+        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        
+        $this->assertEmpty($syncrotonEvent->attendees, 'Events attendees found in folder which is not the default calendar');
+        
+        list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder2);
+    
+        unset($syncrotonEvent->recurrence);
+        unset($syncrotonEvent->exceptions);
+        $syncrotonEvent->attendees[0]->name = Tinebase_Record_Abstract::generateUID();
+        
+        // need to create new controller to set new sync timestamp for concurrency handling
+        $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
+        $serverId = $controller->updateEntry($syncrotonFolder2->serverId, $serverId, $syncrotonEvent);
+        
+        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder2->serverId)), $serverId);
+        
+        $this->assertNotEmpty($syncrotonEvent->attendees, 'Events attendees not found in default calendar');
     }
 }
