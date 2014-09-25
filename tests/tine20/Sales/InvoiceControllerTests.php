@@ -1169,7 +1169,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->_testIntervalLastAutobill(TRUE);
     }
     
-    public function _testIntervalLastAutobill($autoContractIntervalSet = FALSE)
+    protected function _testIntervalLastAutobill($autoContractIntervalSet = FALSE)
     {
         $startDate = clone $this->_referenceDate;
         $startDate->subYear(1);
@@ -1286,5 +1286,64 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $invoices = $this->_invoiceController->getAll();
         
         $this->assertEquals(1, $invoices->count());
+    }
+    
+    public function testSetBilled()
+    {
+        $startDate = clone $this->_referenceDate;
+        $startDate->subYear(1);
+        
+        $this->_createCustomers(1);
+        $this->_createCostCenters();
+        
+        $tas = $this->_createTimeaccounts(array(array(
+            'title'         => 'tatest',
+            'description'   => 'blabla',
+            'is_open'       => 1,
+            'status'        => 'to bill',
+            'budget'        => null
+        )));
+        
+        $ta = $tas->getFirstRecord();
+        
+        // this contract begins 6 months before the first invoice will be created
+        $this->_createContracts(array(array(
+            'number'       => 100,
+            'title'        => 'MyContract',
+            'description'  => 'unittest',
+            'container_id' => $this->_sharedContractsContainerId,
+            'billing_point' => 'begin',
+            'billing_address_id' => $this->_addressRecords->filter(
+                'customer_id', $this->_customerRecords->filter(
+                    'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                        'type', 'billing')->getFirstRecord()->getId(),
+            'interval' => 1,
+            'start_date' => $startDate,
+            'last_autobill' => $startDate,
+            'end_date' => NULL,
+        )));
+        
+        $startDate = clone $this->_referenceDate;
+        $startDate->subMonth(1);
+        
+        $ts = $this->_createTimesheets(array(array(
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                'timeaccount_id' => $ta->getId(),
+                'start_date' => $startDate,
+                'duration' => 105,
+                'description' => 'ts from ' . (string) $startDate,
+        )))->getFirstRecord();
+        
+        $startDate = clone $this->_referenceDate;
+        $startDate->addDay(5);
+        $result = $this->_invoiceController->createAutoInvoices($startDate);
+        
+        $invoice = $this->_invoiceController->get($result['created'][0]);
+        $invoice->cleared = 'CLEARED';
+        $this->_invoiceController->update($invoice);
+        
+        $ts = $this->_timesheetController->get($ts->getId());
+        
+        $this->assertEquals(1, $ts->is_cleared);
     }
 }

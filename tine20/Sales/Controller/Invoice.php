@@ -606,8 +606,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * checks cleared state and sets the date to the current date, also sets all billables billed
      * 
      * @param Tinebase_Record_Interface $record
+     * @param Tinebase_Record_Interface $oldRecord
      */
-    protected function _checkCleared(Tinebase_Record_Interface &$record)
+    protected function _checkCleared(Tinebase_Record_Interface &$record, Tinebase_Record_Interface $oldRecord = NULL)
     {
         $foundCustomer = NULL;
         
@@ -644,8 +645,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
         }
         
-        // if the record hasn't been cleared before, no date is set
-        if ($record->cleared == 'CLEARED' && $record->date == NULL) {
+        // if the record hasn't been cleared before, clear billables
+        if ($record->cleared == 'CLEARED' && (! $oldRecord || $oldRecord->cleared != 'CLEARED')) {
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Clearing Invoice ' . print_r($record->toArray(), 1), Zend_Log::INFO);
@@ -678,16 +679,20 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $record->fixed_address = $string;
             
             // clear all billables
-            if (is_array($record->relations)) {
+            if (! empty($record->relations)) {
                 foreach($record->relations as $relation) {
-                    $relatedModel = $relation['related_model'];
-                    $relatedRecord = new $relatedModel($relation['related_record']);
-                    
-                    if (in_array('Sales_Model_Accountable_Interface', class_implements($relatedRecord))) {
-                        $relatedRecord->clearBillables($record);
+                    if (in_array('Sales_Model_Accountable_Interface', class_implements($relation['related_model']))) {
+                        
+                        if (is_array($relation['related_record'])) {
+                            $rr = new $relation['related_model']($relation['related_record']);
+                        } else {
+                            $rr = $relation['related_record'];
+                        }
+
+                        $rr->clearBillables($record);
                         
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                            Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Clearing billables ' . print_r($relation['related_record'], 1), Zend_Log::INFO);
+                            Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Clearing billables ' . print_r($rr->toArray(), 1), Zend_Log::INFO);
                         }
                     }
                 }
@@ -883,7 +888,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 throw new Sales_Exception_InvoiceAlreadyClearedEdit();
             }
         }
-        $this->_checkCleared($_record);
+        $this->_checkCleared($_record, $_oldRecord);
         
         $config = $_record::getConfiguration()->recordsFields;
         
