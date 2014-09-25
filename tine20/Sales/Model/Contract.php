@@ -208,6 +208,18 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     )
                 )
             ),
+            'costcenter' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'relation',
+                    'label' => 'Lead Cost Center',    // _('Lead Cost Center')
+                    'config' => array(
+                        'appName'   => 'Sales',
+                        'modelName' => 'CostCenter',
+                        'type' => 'LEAD_COST_CENTER'
+                    )
+                )
+            ),
             'products' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'label'      => 'Products', // _('Products')
