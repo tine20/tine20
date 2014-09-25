@@ -1184,33 +1184,38 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
     
         list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
     
         unset($syncrotonEvent->recurrence);
         unset($syncrotonEvent->exceptions);
-        $syncrotonEvent->attendees[0]->name = Tinebase_Record_Abstract::generateUID();
-        
+        unset($syncrotonEvent->attendees);
+
         // need to create new controller to set new sync timestamp for concurrency handling
         $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
         $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
         
         $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
-        
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($serverId);
+
         $this->assertEmpty($syncrotonEvent->attendees, 'Events attendees found in folder which is not the default calendar');
-        
+        $this->assertNotEmpty($updatedEvent->attendee, 'attendee must be preserved');
+        $this->assertEquals($event->attendee[0]->getId(), $updatedEvent->attendee[0]->getId(), 'attendee must be perserved');
+
+        return;
         list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder2);
-    
+
         unset($syncrotonEvent->recurrence);
         unset($syncrotonEvent->exceptions);
         $syncrotonEvent->attendees[0]->name = Tinebase_Record_Abstract::generateUID();
-        
+
         // need to create new controller to set new sync timestamp for concurrency handling
         $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
         $serverId = $controller->updateEntry($syncrotonFolder2->serverId, $serverId, $syncrotonEvent);
-        
+
         $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder2->serverId)), $serverId);
-        
+
         $this->assertNotEmpty($syncrotonEvent->attendees, 'Events attendees not found in default calendar');
     }
 }
