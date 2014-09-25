@@ -56,7 +56,6 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_AsyncJobTest');
         $suite->addTestSuite('Tinebase_HelperTests');
         $suite->addTestSuite('Tinebase_FileSystem_StreamWrapperTest');
-        $suite->addTestSuite('Tinebase_FileSystem_RecordAttachmentsTest');
         $suite->addTestSuite('Tinebase_FileSystemTest');
         $suite->addTestSuite('Tinebase_ControllerTest');
         $suite->addTestSuite('Tinebase_NotificationTest');

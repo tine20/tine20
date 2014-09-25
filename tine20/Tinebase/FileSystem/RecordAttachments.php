@@ -94,58 +94,30 @@ class Tinebase_FileSystem_RecordAttachments
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Fetching attachments for ' . count($records) . ' record(s)');
         
-        $parentNodes       = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        $parentNodes = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $recordNodeMapping = array();
-        $typeMap           = array();
-        
         foreach ($records as $record) {
-            $typeMap[get_class($record)][] = $record->getId();
-            
-            $record->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+            $parentPath = $this->getRecordAttachmentPath($record);
+            try {
+                $node = $this->_fsController->stat($parentPath);
+                $parentNodes->addRecord($node);
+                $recordNodeMapping[$node->getId()] = $record->getId();
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $record->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+            }
         }
         
-        foreach ($typeMap as $className => $recordIds) {
-            $classPathName = $this->_fsController->getApplicationBasePath($record->getApplication(), Tinebase_FileSystem::FOLDER_TYPE_RECORDS) 
-                          . '/' . $className;
-            
-            // top folder for record attachments
-            try {
-                $classPathNode = $this->_fsController->stat($classPathName);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                continue;
+        $children = $this->_fsController->getTreeNodeChildren($parentNodes);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Found ' . count($children) . ' attachment(s).');
+        
+        foreach ($children as $node) {
+            $record = $records->getById($recordNodeMapping[$node->parent_id]);
+            if (! isset($record->attachments)) {
+                $record->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
             }
-            
-            // subfolders for all records attachments
-            $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
-                array(
-                    'field'     => 'parent_id',
-                    'operator'  => 'equals',
-                    'value'     => $classPathNode->getId()
-                ),
-                array(
-                    'field'     => 'name',
-                    'operator'  => 'in',
-                    'value'     => $recordIds
-                )
-            ));
-            $recordNodes = $this->_fsController->searchNodes($searchFilter);
-            if ($recordNodes->count() === 0) {
-                // nothing to be done 
-                continue;
-            }
-            foreach ($recordNodes as $recordNode) {
-                $recordNodeMapping[$recordNode->getId()] = $recordNode->name;
-            }
-            
-            // get attachments
-            $attachmentNodes = $this->_fsController->getTreeNodeChildren($recordNodes);
-            
-            // add attachments to records
-            foreach ($attachmentNodes as $attachmentNode) {
-                $record = $records->getById($recordNodeMapping[$attachmentNode->parent_id]);
-                
-                $record->attachments->addRecord($attachmentNode);
-            }
+            $record->attachments->addRecord($node);
         }
     }
     
