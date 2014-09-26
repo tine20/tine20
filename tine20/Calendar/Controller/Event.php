@@ -1148,7 +1148,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
         )), NULL, TRUE);
         
-        if (count($possibleBaseEventIds) > 0) {
+        if (count($possibleBaseEventIds) > 1) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
                 ' Got multiple possible base events: ' . print_r($possibleBaseEventIds, true));
         }
