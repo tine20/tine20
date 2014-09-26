@@ -116,9 +116,12 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 if ($foreignRecords->count()) {
                     foreach ($_records as $record) {
                         foreach ($fields as $field) {
-                            $idx = $foreignRecords->getIndexById($record->{$field});
-                            if (isset($idx) && $idx !== FALSE) {
-                                $record->{$field} = $foreignRecords[$idx];
+                            // don't try to resolve already resolved or empty fields
+                            if (is_string($record->{$field}) && ! empty($record->{$field})) {
+                                $idx = $foreignRecords->getIndexById($record->{$field});
+                                if (isset($idx) && $idx !== FALSE) {
+                                    $record->{$field} = $foreignRecords[$idx];
+                                }
                             }
                         }
                     }
