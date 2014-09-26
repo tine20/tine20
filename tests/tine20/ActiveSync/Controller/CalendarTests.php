@@ -31,6 +31,12 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
     
     protected $_class = Syncroton_Data_Factory::CLASS_CALENDAR;
     
+    protected $_prefs;
+    
+    protected $_defaultCalendar;
+    
+    protected $_defaultHasChanged = false;
+    
     /**
      * @var array test objects
      */
@@ -516,6 +522,18 @@ Zeile 3</AirSyncBase:Data>
             'lars@kneschke.de',
             'unittest@tine20.org',
         ), $email, $this->_testXMLInput);
+        
+        $this->_prefs = $prefs = new Calendar_Preference();
+        $this->_defaultCalendar = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::DEFAULTCALENDAR};
+    }
+    
+    protected  function tearDown()
+    {
+        parent::tearDown();
+        
+        if ($this->_defaultHasChanged) {
+            $this->_prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $this->_defaultCalendar);
+        }
     }
     
     /**
@@ -1147,8 +1165,8 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $syncrotonFolder2 = $this->testCreateFolder();
         
         //make $syncrotonFolder2 the default
-        $prefs = new Calendar_Preference();
-        $prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
+        $this->_prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
+        $this->_defaultHasChanged = true;
         
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
         
@@ -1187,8 +1205,8 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $syncrotonFolder2 = $this->testCreateFolder();
         
         //make $syncrotonFolder2 the default
-        $prefs = new Calendar_Preference();
-        $prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
+        $this->_prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
+        $this->_defaultHasChanged = true;
         
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
     
