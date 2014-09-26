@@ -29,11 +29,31 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     protected $_suffix = '.ics';
     
     /**
+     * @var array
+     */
+    protected $_calendarQueryCache = null;
+    
+    /**
      * (non-PHPdoc)
      * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($_name)
     {
+        // check if child exists in calendarQuery cache
+        if ($this->_calendarQueryCache &&
+            $this->_calendarQueryCache[$_name]) {
+            
+            $child = $this->_calendarQueryCache[$_name];
+            
+            // remove entries from cache / they will not be used anymore
+            unset($this->_calendarQueryCache[$_name]);
+            if (empty($this->_calendarQueryCache)) {
+                $this->_calendarQueryCache = null;
+            }
+            
+            return $child;
+        }
+        
         $modelName = $this->_application->name . '_Model_' . $this->_model;
         
         if ($_name instanceof $modelName) {
@@ -89,41 +109,44 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      *
      * @return Sabre\DAV\INode[]
      */
-    function getChildren()
+    function getChildren($filter = null)
     {
-        $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
-        $filter = new $filterClass(array(
-            array(
-                'field'     => 'container_id',
-                'operator'  => 'equals',
-                'value'     => $this->_container->getId()
-            ),
-            array(
-                'field'    => 'period', 
-                'operator'  => 'within', 
-                'value'     => array(
-                    'from'  => Tinebase_DateTime::now()->subMonth($this->_getMaxPeriodFrom()),
-                    'until' => Tinebase_DateTime::now()->addYear(4)
+        if ($filter === null) {
+            $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
+            $filter = new $filterClass(array(
+                array(
+                    'field'     => 'container_id',
+                    'operator'  => 'equals',
+                    'value'     => $this->_container->getId()
+                ),
+                array(
+                    'field'    => 'period',
+                    'operator'  => 'within',
+                    'value'     => array(
+                        'from'  => Tinebase_DateTime::now()->subMonth($this->_getMaxPeriodFrom()),
+                        'until' => Tinebase_DateTime::now()->addYear(4)
+                    )
                 )
-            )
-        ));
-        
-        if (Calendar_Config::getInstance()->get(Calendar_Config::SKIP_DOUBLE_EVENTS) == 'shared' && $this->_container->type == Tinebase_Model_Container::TYPE_SHARED) {
-            $skipSharedFilter = $filter->createFilter('attender', 'not', array(
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT
             ));
-            
-            $filter->addFilter($skipSharedFilter);
+
+            if (Calendar_Config::getInstance()->get(Calendar_Config::SKIP_DOUBLE_EVENTS) == 'shared' && $this->_container->type == Tinebase_Model_Container::TYPE_SHARED) {
+                $skipSharedFilter = $filter->createFilter('attender', 'not', array(
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT
+                ));
+
+                $filter->addFilter($skipSharedFilter);
+            }
+
+            if (Calendar_Config::getInstance()->get(Calendar_Config::SKIP_DOUBLE_EVENTS) == 'personal' && $this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
+                $skipPersonalFilter = new Tinebase_Model_Filter_Container('container_id', 'equals', '/personal/' . Tinebase_Core::getUser()->getId(), array('applicationName' => 'Calendar'));
+                $filter->addFilter($skipPersonalFilter);
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Event filter: ' . print_r($filter->toArray(), true));
+
         }
-        
-        if (Calendar_Config::getInstance()->get(Calendar_Config::SKIP_DOUBLE_EVENTS) == 'personal' && $this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
-            $skipPersonalFilter = new Tinebase_Model_Filter_Container('container_id', 'equals', '/personal/' . Tinebase_Core::getUser()->getId(), array('applicationName' => 'Calendar'));
-            $filter->addFilter($skipPersonalFilter);
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Event filter: ' . print_r($filter->toArray(), true));
         
         /**
          * see http://forge.tine20.org/mantisbt/view.php?id=5122
@@ -135,7 +158,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         $children = array();
         
         foreach ($objects as $object) {
-            $children[] = $this->getChild($object);
+            $children[$object->getId()] = $this->getChild($object);
         }
         
         return $children;
@@ -261,12 +284,9 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
         $filter = new $filterClass($filterArray);
     
-        // @see http://forge.tine20.org/mantisbt/view.php?id=5122
-        // we must use action 'sync' and not 'get' as
-        // otherwise the calendar also return events the user only can see because of freebusy
-        $ids = $this->_getController()->search($filter, null, false, true, 'sync');
-    
-        return $ids;
+        $this->_calendarQueryCache = $this->getChildren($filter);
+        
+        return array_keys($this->_calendarQueryCache);
     }
     
     /**

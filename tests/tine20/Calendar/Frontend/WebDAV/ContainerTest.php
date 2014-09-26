@@ -201,7 +201,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         if (! $skipAssertions) {
             $this->assertEquals(1, count($children));
-            $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV_Event);
+            $this->assertTrue($children[$event->getId()] instanceof Calendar_Frontend_WebDAV_Event);
         }
         
         return $children;
