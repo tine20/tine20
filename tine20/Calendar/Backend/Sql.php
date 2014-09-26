@@ -184,14 +184,42 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $_filter->removeFilter('grants');
         }
         
-        $this->_addFilter($select, $_filter);
-        $_pagination->appendPaginationSql($select);
+        // clonde the filter, as the filter is also used in the json frontend
+        // and the calendarfilter is used in the UI to
+        $clonedFilters = clone $_filter;
+        
+        $calendarFilter = null;
+        foreach ($clonedFilters as $filter) {
+            if ($filter instanceof Calendar_Model_CalendarFilter) {
+                $calendarFilter = $filter;
+                $clonedFilters->removeFilter($filter);
+                break;
+            }
+        }
+        
+        $this->_addFilter($select, $clonedFilters);
         
         $select->group($this->_tableName . '.' . 'id');
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
+        if ($calendarFilter) {
+            $select1 = clone $select;
+            $select2 = clone $select;
+            
+            $calendarFilter->appendFilterSql1($select1, $this);
+            $calendarFilter->appendFilterSql2($select2, $this);
+            
+            $select = $this->getAdapter()->select()->union(array(
+                $select1,
+                $select2
+            ));
+        }
+        
+        $_pagination->appendPaginationSql($select);
+        
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
         $result = $this->_rawDataToRecordSet($rows);
         $clones = clone $result;
         
