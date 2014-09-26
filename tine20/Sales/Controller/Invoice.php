@@ -656,7 +656,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $record->date = new Tinebase_DateTime();
             }
             
-            $this->_setNextNumber($record);
+            $this->_setNextNumber($record, isset($oldRecord));
             
             $address = Sales_Controller_Address::getInstance()->get(is_string($record->address_id) ? $record->address_id : $record->address_id.id);
             

@@ -184,7 +184,7 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
         $config = $_record::getConfiguration()->recordsFields;
         
         if ($_record->number != $_oldRecord->number) {
-            $this->_setNextNumber($_record);
+            $this->_setNextNumber($_record, TRUE);
         }
         
         foreach (array_keys($config) as $p) {

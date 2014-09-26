@@ -1346,4 +1346,40 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $this->assertEquals(1, $ts->is_cleared);
     }
+    
+    /**
+     * tests clearing invoice after setting the number manually
+     */
+    public function testManualSettingInvoiceNumberBeforeClearing()
+    {
+        $customer = $this->_createCustomers(1)->getFirstRecord();
+        $this->_createCostCenters();
+    
+        $invoice = $this->_invoiceController->create(new Sales_Model_Invoice(array(
+                'number' => NULL,
+                'description' => 'test',
+                'address_id' => $this->_addressRecords->getFirstRecord()->getId(),
+                'costcenter_id' => $this->_costcenterRecords->getFirstRecord()->getId(),
+                'is_auto' => TRUE,
+                'price_net' => 200.20,
+                'price_gross' => 238.45,
+                'sales_tax' => 19.5
+        )));
+    
+        
+        $invoice->number = 'R-00123';
+        $invoice = $this->_invoiceController->update($invoice);
+        
+        $invoice->cleared = 'CLEARED';
+        
+        $e = new Tinebase_Exception('Hello');
+        
+        try {
+            $this->_invoiceController->update($invoice);
+        } catch (Sales_Exception_DuplicateNumber $e) {
+            // this exception must not be thrown, this is the same number on the same invoice
+        }
+        
+        $this->assertEquals($e->getMessage(), 'Hello');
+    }
 }
