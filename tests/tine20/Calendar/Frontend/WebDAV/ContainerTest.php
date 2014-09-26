@@ -289,6 +289,58 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test calendarQuery with start and end time set
+     * 
+     * @param boolean $timeRangeEndSet
+     * @param boolean $removeOwnAttender
+     */
+    public function testCalendarQueryPropertyFilter()
+    {
+        $event1 = $this->testCreateFile()->getRecord();
+        $event2 = $this->testCreateFile()->getRecord();
+        
+        // reschedule to match period filter
+        $event1->dtstart = Tinebase_DateTime::now();
+        $event1->dtend   = Tinebase_DateTime::now()->addMinute(30);
+        Calendar_Controller_MSEventFacade::getInstance()->update($event1);
+        
+        $event2->dtstart = Tinebase_DateTime::now();
+        $event2->dtend   = Tinebase_DateTime::now()->addMinute(30);
+        Calendar_Controller_MSEventFacade::getInstance()->update($event2);
+        
+        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        $urls = $container->calendarQuery(array(
+            'name'         => 'VCALENDAR',
+            'comp-filters' => array(
+                array(
+                    'name'           => 'VEVENT',
+                    'prop-filters'   => array(
+                        array(
+                            'name' => 'UID',
+                            'text-match' => array(
+                                'value' => $event1->getId()
+                            )
+                        ),
+                        array(
+                            'name' => 'UID',
+                            'text-match' => array(
+                                'value' => $event2->getId()
+                            )
+                        )
+                    )
+                ),
+            ),
+            'prop-filters'   => array(),
+            'is-not-defined' => false,
+            'time-range'     => null
+        ));
+        
+        $this->assertContains($event1->getId(), $urls);
+        $this->assertContains($event2->getId(), $urls);
+        $this->assertEquals(2, count($urls));
+    }
+    /**
      * test Tinebase_WebDav_Container_Abstract::getCalendarVTimezone
      */
     public function testGetCalendarVTimezone()

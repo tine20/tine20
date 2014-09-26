@@ -124,6 +124,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         self::$_server->addPlugin($aclPlugin);
         
         self::$_server->addPlugin(new \Sabre\CardDAV\Plugin());
+        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPlugin); // this plugin must be loaded before CalDAV plugin
         self::$_server->addPlugin(new \Sabre\CalDAV\Plugin());
         self::$_server->addPlugin(new \Sabre\CalDAV\SharingPlugin());
         self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginAutoSchedule());

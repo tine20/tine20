@@ -39,14 +39,16 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     public function getChild($_name)
     {
+        $eventId   = $_name instanceof Tinebase_Record_Interface ? $_name->getId() : $this->_getIdFromName($_name);
+        
         // check if child exists in calendarQuery cache
         if ($this->_calendarQueryCache &&
-            $this->_calendarQueryCache[$_name]) {
+            isset($this->_calendarQueryCache[$eventId])) {
             
-            $child = $this->_calendarQueryCache[$_name];
+            $child = $this->_calendarQueryCache[$eventId];
             
             // remove entries from cache / they will not be used anymore
-            unset($this->_calendarQueryCache[$_name]);
+            unset($this->_calendarQueryCache[$eventId]);
             if (empty($this->_calendarQueryCache)) {
                 $this->_calendarQueryCache = null;
             }
@@ -70,12 +72,12 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     array(
                         'field'     => 'id',
                         'operator'  => 'equals',
-                        'value'     => $this->_getIdFromName($_name)
+                        'value'     => $eventId
                     ),
                     array(
                         'field'     => 'uid',
                         'operator'  => 'equals',
-                        'value'     => $this->_getIdFromName($_name)
+                        'value'     => $eventId
                     )
                 ))
             ));
@@ -249,17 +251,50 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         $periodFrom = null;
         $periodUntil = null;
-        if (isset($filters['comp-filters']) && isset($filters['comp-filters'][0]['time-range'])) {
-            $timeRange = $filters['comp-filters'][0]['time-range'];
-            if (isset($timeRange['start'])) {
-                if (! isset($timeRange['end'])) {
-                    // create default time-range end in 4 years from now 
-                    $timeRange['end'] = new DateTime('NOW');
-                    $timeRange['end']->add(new DateInterval('P4Y'));
+        
+        if (isset($filters['comp-filters']) && is_array($filters['comp-filters'])) {
+            foreach ($filters['comp-filters'] as $filter) {
+                if (isset($filter['time-range']) && is_array($filter['time-range'])) {
+                    $timeRange = $filter['time-range'];
+                    if (isset($timeRange['start'])) {
+                        if (! isset($timeRange['end'])) {
+                            // create default time-range end in 4 years from now 
+                            $timeRange['end'] = new DateTime('NOW');
+                            $timeRange['end']->add(new DateInterval('P4Y'));
+                        }
+                        
+                        $periodFrom = new Tinebase_DateTime($timeRange['start']);
+                        $periodUntil = new Tinebase_DateTime($timeRange['end']);
+                    }
                 }
                 
-                $periodFrom = new Tinebase_DateTime($timeRange['start']);
-                $periodUntil = new Tinebase_DateTime($timeRange['end']);
+                if (isset($filter['prop-filters']) && is_array($filter['prop-filters'])) {
+                    $uids = array();
+
+                    foreach ($filter['prop-filters'] as $propertyFilter) {
+                        if ($propertyFilter['name'] === 'UID') {
+                            $uids[] = $this->_getIdFromName($propertyFilter['text-match']['value']);
+                        }
+                    }
+                    
+                    if (!empty($uids)) {
+                        $filterArray[] = array(
+                            'condition' => 'OR', 
+                            'filters' => array(
+                                array(
+                                    'field'     => 'id',
+                                    'operator'  => 'in',
+                                    'value'     => $uids
+                                ),
+                                array(
+                                    'field'     => 'uid',
+                                    'operator'  => 'in',
+                                    'value'     => $uids
+                                )
+                            )
+                        );
+                    }
+                }
             }
         }
 
