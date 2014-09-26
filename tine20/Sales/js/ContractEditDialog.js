@@ -31,7 +31,7 @@ Ext.namespace('Tine.Sales');
  */
 Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 800,
-    windowHeight: 490,
+    windowHeight: 600,
 
     /**
      * autoset

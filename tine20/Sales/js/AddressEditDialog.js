@@ -30,8 +30,8 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: null,
     evalGrants: false,
     
-    windowWidth: 600,
-    windowHeight: 280,
+    windowWidth: 700,
+    windowHeight: 400,
     
     /**
      * just update the contract grid panel, no persisten

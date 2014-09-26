@@ -57,7 +57,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     createReversal: false,
     
     windowWidth: 800,
-    windowHeight: 600,
+    windowHeight: 700,
     
     initComponent: function() {
         this.tbarItems = [{xtype: 'widget-activitiesaddbutton'}];

@@ -33,7 +33,7 @@ Ext.namespace('Tine.Sales');
 Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     windowWidth: 800,
-    windowHeight: 420,
+    windowHeight: 600,
     
     /**
      * @private

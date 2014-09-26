@@ -23,8 +23,8 @@ Ext.ns('Tine.Sales');
  * Create a new Tine.Sales.CustomerEditDialog
  */
 Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    windowWidth: 800,
-    windowHeight: 660,
+    windowWidth: 900,
+    windowHeight: 800,
     
     initComponent: function() {
         this.tbarItems = [{xtype: 'widget-activitiesaddbutton'}];
