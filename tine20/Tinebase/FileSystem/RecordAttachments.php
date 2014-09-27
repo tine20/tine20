@@ -91,6 +91,10 @@ class Tinebase_FileSystem_RecordAttachments
      */
     public function getMultipleAttachmentsOfRecords($records)
     {
+        if ($records instanceof Tinebase_Record_Abstract) {
+            $records = new Tinebase_Record_RecordSet(get_class($records), array($records));
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Fetching attachments for ' . count($records) . ' record(s)');
         
@@ -201,8 +205,12 @@ class Tinebase_FileSystem_RecordAttachments
     public function addRecordAttachment(Tinebase_Record_Abstract $record, $name, $attachment)
     {
         // only occurs via unittests
-        if (!$name && isset($attachment->tempFile)) {
+        if (!$name && isset($attachment->tempFile) && ! is_resource($attachment->tempFile)) {
             $attachment = Tinebase_TempFile::getInstance()->getTempFile($attachment->tempFile);
+            $name = $attachment->name;
+        }
+
+        if ($attachment instanceof Tinebase_Model_Tree_Node && empty($name)) {
             $name = $attachment->name;
         }
         

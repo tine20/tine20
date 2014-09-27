@@ -1210,22 +1210,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         if ($_fakeDeletedInstances) {
             $baseEvent = $this->getRecurBaseEvent($_event);
-            $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
-
-            // compute remaining exdates
-            $deletedInstanceDtStarts = array_diff(array_unique((array) $baseEvent->exdate), $exceptions->getOriginalDtStart());
-            foreach((array) $deletedInstanceDtStarts as $deletedInstanceDtStart) {
-                $fakeEvent = clone $baseEvent;
-                $fakeEvent->setId(NULL);
-                
-                $fakeEvent->dtstart = clone $deletedInstanceDtStart;
-                $fakeEvent->dtend = clone $deletedInstanceDtStart;
-                $fakeEvent->dtend->add($eventLength);
-                $fakeEvent->is_deleted = TRUE;
-                $fakeEvent->setRecurId();
-                
-                $exceptions->addRecord($fakeEvent);
-            }
+            $this->fakeDeletedExceptions($baseEvent, $exceptions);
         }
         
         $exceptions->exdate = NULL;
@@ -1234,7 +1219,34 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         return $exceptions;
     }
-    
+
+    /**
+     * add exceptions events for deleted instances
+     *
+     * @param Calendar_Model_Event $baseEvent
+     * @param Tinebase_Record_RecordSet $exceptions
+     */
+    public function fakeDeletedExceptions($baseEvent, $exceptions)
+    {
+        $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
+
+        // compute remaining exdates
+        $deletedInstanceDtStarts = array_diff(array_unique((array) $baseEvent->exdate), $exceptions->getOriginalDtStart());
+        foreach((array) $deletedInstanceDtStarts as $deletedInstanceDtStart) {
+            $fakeEvent = clone $baseEvent;
+            $fakeEvent->setId(NULL);
+
+            $fakeEvent->dtstart = clone $deletedInstanceDtStart;
+            $fakeEvent->dtend = clone $deletedInstanceDtStart;
+            $fakeEvent->dtend->add($eventLength);
+            $fakeEvent->is_deleted = TRUE;
+            $fakeEvent->setRecurId();
+            $fakeEvent->rrule = null;
+
+            $exceptions->addRecord($fakeEvent);
+        }
+    }
+
    /**
     * adopt alarm time to next occurrence for recurring events
     *
