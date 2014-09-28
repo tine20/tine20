@@ -162,7 +162,10 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             $this->_specialFolderName = strtolower($this->_applicationName) . '-root';
         }
         
+        // this is a Syncroton_Model_Device and not a ActiveSync_Model_Device
         $this->_device              = $_device;
+        $this->_device->devicetype  = strtolower($this->_device->devicetype);
+        
         $this->_syncTimeStamp       = $_syncTimeStamp;
         
         $this->_contentFilterClass  = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
