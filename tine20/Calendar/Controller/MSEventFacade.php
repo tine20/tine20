@@ -734,6 +734,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     protected function _filterAttendeeWithoutEmail($event)
     {
+        if (! $event->attendee instanceof Tinebase_Record_RecordSet) {
+            return;
+        }
+
         $this->_fillResolvedAttendeeCache($event);
         
         $filteredAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
@@ -755,7 +759,6 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         if (! $currentEvent->attendee instanceof Tinebase_Record_RecordSet) {
             return;
         }
-        
         $this->_fillResolvedAttendeeCache($currentEvent);
         
         if (! $event->attendee instanceof Tinebase_Record_RecordSet) {
@@ -775,6 +778,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     protected function _fillResolvedAttendeeCache($event)
     {
+        if (! $event->attendee instanceof Tinebase_Record_RecordSet) {
+            return;
+        }
+
         $attendeeClone = clone $event->attendee;
         Calendar_Model_Attender::resolveAttendee($attendeeClone, FALSE);
     }
