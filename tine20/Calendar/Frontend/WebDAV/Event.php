@@ -170,7 +170,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
         
         if ($existingEvent === null) {
-            $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+            try {
+                $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' creation failed');
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                throw new Sabre\DAV\Exception\PreconditionFailed('creation failed');
+            }
             
             $vevent = new self($container, $event);
         } else {
@@ -453,6 +459,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
             throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $tead);
+            throw new Sabre\DAV\Exception\Forbidden('forbidden update');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $tenf);
+            throw new Sabre\DAV\Exception\PreconditionFailed('event not found');
         }
     }
     
