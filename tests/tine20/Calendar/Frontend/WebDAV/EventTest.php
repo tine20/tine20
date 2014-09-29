@@ -273,23 +273,35 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $id = Tinebase_Record_Abstract::generateUID();
 
         $event = Calendar_Frontend_WebDAV_Event::create($container, "$id.ics", $vcalendar);
-        
-        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $assertionAttendee),
-                "attendee has {$not}been added: " . print_r($event->getRecord()->attendee->toArray(), true));
-        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->exdate->getFirstRecord()->attendee, $assertionAttendee),
-                "attendee has {$not}been added to exdate");
+
+        $baseAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $assertionAttendee);
+        $exceptionAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->exdate->getFirstRecord()->attendee, $assertionAttendee);
+        $this->$assertFn(!! $baseAttendee, "attendee has {$not}been added: " . print_r($event->getRecord()->attendee->toArray(), true));
+        $this->$assertFn(!! $exceptionAttendee, "attendee has {$not}been added to exdate");
+        if (! $assertMissing) {
+            $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED,
+                $baseAttendee->status, 'attendee status wrong');
+            $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED,
+                $exceptionAttendee->status, 'attendee status wrong for exdate ');
+        }
         
         // Simulate OSX which updates w.o. fetching first
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/apple_caldendar_repeating.ics', 'r');
         
         $event = new Calendar_Frontend_WebDAV_Event($container, $event->getRecord()->getId());
         $event->put($vcalendarStream);
-        
-        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $assertionAttendee),
-                "attendee has {$not}been preserved: " . print_r($event->getRecord()->attendee->toArray(), true));
-        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->exdate->getFirstRecord()->attendee, $assertionAttendee),
-                "attendee has {$not}been preserved in exdate");
-        
+
+        $baseAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $assertionAttendee);
+        $exceptionAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->exdate->getFirstRecord()->attendee, $assertionAttendee);
+        $this->$assertFn(!! $baseAttendee, "attendee has {$not}been preserved: " . print_r($event->getRecord()->attendee->toArray(), true));
+        $this->$assertFn(!! $exceptionAttendee, "attendee has {$not}been preserved in exdate");
+        if (! $assertMissing) {
+            $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED,
+                $baseAttendee->status, 'attendee status not preserved');
+            $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED,
+                $exceptionAttendee->status, 'attendee not preserved for exdate');
+        }
+
         // create new exception from client w.o. fetching first
         Calendar_Controller_Event::getInstance()->purgeRecords(TRUE);
         Calendar_Controller_Event::getInstance()->delete($event->getRecord()->exdate->getFirstRecord());

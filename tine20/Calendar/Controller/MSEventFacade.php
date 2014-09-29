@@ -411,7 +411,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
     }
     
-    protected $_currentEventFacadeContainerId;
+    protected $_currentEventFacadeContainer;
     
     /**
      * asserts correct event filter and calendar user in MSEventFacade
@@ -421,10 +421,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public function assertEventFacadeParams(Tinebase_Model_Container $container)
     {
-        if (!$this->_currentEventFacadeContainerId ||
-             $this->_currentEventFacadeContainerId !== $container->getId()
+        if (!$this->_currentEventFacadeContainer ||
+             $this->_currentEventFacadeContainer->getId() !== $container->getId()
         ) {
-            $this->_currentEventFacadeContainerId = $container->getId();
+            $this->_currentEventFacadeContainer = $container;
             
             $eventFilter = new Calendar_Model_EventFilter(array(
                     array('field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId())
@@ -598,6 +598,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         $oldUser = $this->_calendarUser;
         $this->_calendarUser = $_calUser;
+        $this->_eventController->setCalendarUser($_calUser);
         
         return $oldUser;
     }
@@ -833,7 +834,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         // assert organizer
         $_event->organizer = $_event->organizer ?: ($_currentEvent->organizer ?: $this->_calendarUser->user_id);
-        
+
         $this->_addAttendeeWithoutEmail($_event, $_currentEvent);
         
         $CUAttendee = Calendar_Model_Attender::getAttendee($_event->attendee, $this->_calendarUser);
@@ -877,7 +878,14 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             $_event->alarms->setOption('attendee', Calendar_Controller_Alarm::attendeeToOption($this->_calendarUser));
         }
         $_event->alarms->merge($_currentEvent->alarms);
-        
+
+        // assert organizer for personal calendars to be calendar owner
+        if ($this->_currentEventFacadeContainer && $this->_currentEventFacadeContainer->getId() == $_event->container_id
+            && $this->_currentEventFacadeContainer->type == Tinebase_Model_Container::TYPE_PERSONAL
+            && !$_event->hasExternalOrganizer() ) {
+
+            $_event->organizer = $this->_calendarUser->user_id;
+        }
         // in MS world only cal_user can do status updates
         if ($CUAttendee) {
             $CUAttendee->status_authkey = $currentCUAttendee ? $currentCUAttendee->status_authkey : NULL;

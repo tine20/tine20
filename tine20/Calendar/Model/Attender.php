@@ -212,7 +212,19 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         return $rolesRecord? $rolesRecord->value : $this->role;
     }
-    
+
+    /**
+     * returns if given attendee is the same as this attendee
+     *
+     * @param  Calendar_Model_Attender $compareTo
+     * @return bool
+     */
+    public function isSame($compareTo)
+    {
+        $compareToSet = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($compareTo));
+        return !!self::getAttendee($compareToSet, $this);
+    }
+
     /**
      * sets the record related properties from user generated input.
      * 
