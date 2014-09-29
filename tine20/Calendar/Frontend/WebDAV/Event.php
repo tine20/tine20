@@ -404,16 +404,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $event = $this->_converter->toTine20Model($vobject, $this->getRecord(), array(
             Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
-        
-        $currentContainer = Tinebase_Container::getInstance()->getContainerById($this->getRecord()->container_id);
-        
-        // event 'belongs' current user -> allow container move
-        if ($currentContainer->isPersonalOf(Tinebase_Core::getUser())) {
-            $event->container_id = $this->_container->getId();
-        }
-        
+
+        $currentEvent = $this->getRecord();
+        $currentContainer = Tinebase_Container::getInstance()->getContainerById($currentEvent->container_id);
+
         // client sends CalDAV event -> handle a container move
-        else if (isset($xTine20Container)) {
+        if (isset($xTine20Container)) {
             if ($xTine20Container->getValue() == $currentContainer->getId()) {
                 $event->container_id = $this->_container->getId();
             } else {
@@ -423,7 +419,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 }
             }
         }
-        
+
+        // event was created by current user -> allow container move
+        else if ($currentEvent->created_by == Tinebase_Core::getUser()->getId()) {
+            $event->container_id = $this->_container->getId();
+        }
+
         // client sends event from iMIP invitation -> only allow displaycontainer move
         else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
@@ -432,7 +433,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 Calendar_Controller_MSEventFacade::getInstance()->setDisplaycontainer($event, $this->_container->getId());
             }
         }
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
         
