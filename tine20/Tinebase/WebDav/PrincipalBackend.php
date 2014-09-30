@@ -71,6 +71,15 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
      */
     public function getPrincipalByPath($path) 
     {
+        // any user has to lookup the data at least once
+        $cacheId = convertCacheId('getPrincipalByPath' . Tinebase_Core::getUser()->getId() . $path);
+        
+        if (Tinebase_Core::getCache()->test($cacheId)) {
+            $principal = Tinebase_Core::getCache()->load($cacheId);
+            
+            return $principal;
+        }
+        
         $principal = null;
         
         list($prefix, $id) = \Sabre\DAV\URLUtil::splitPath($path);
@@ -150,6 +159,8 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 
                 break;
         }
+        
+        Tinebase_Core::getCache()->save($principal, $cacheId, array(), /* 1 minute */ 60);
         
         return $principal;
     }
@@ -561,30 +572,42 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         $result = array();
         
         foreach ($containers as $container) {
-            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($container);
+            $cacheId = convertCacheId('_containerGrantsToPrincipals' . $container->getId() . $container->seq);
             
-            foreach ($grants as $grant) {
-                switch ($grant->account_type) {
-                    case 'group':
-                        $group = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
-                        if ($group->list_id) {
-                            $result[] = self::PREFIX_GROUPS . '/' . $group->list_id;
-                        }
-                        break;
-                        
-                    case 'user':
-                        // skip if grant belongs to the owner of the calendar
-                        if ($contact->account_id == $grant->account_id) {
-                            continue;
-                        }
-                        $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
-                        if ($user->contact_id) {
-                            $result[] = self::PREFIX_USERS . '/' . $user->contact_id;
-                        }
-                        
-                        break;
+            if (Tinebase_Core::getCache()->test($cacheId)) {
+                $containerPrincipals = Tinebase_Core::getCache()->load($cacheId);
+            } else {
+                $containerPrincipals = array();
+                
+                $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($container);
+                
+                foreach ($grants as $grant) {
+                    switch ($grant->account_type) {
+                        case 'group':
+                            $group = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
+                            if ($group->list_id) {
+                                $containerPrincipals[] = self::PREFIX_GROUPS . '/' . $group->list_id;
+                            }
+                            break;
+                            
+                        case 'user':
+                            // skip if grant belongs to the owner of the calendar
+                            if ($contact->account_id == $grant->account_id) {
+                                continue;
+                            }
+                            $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
+                            if ($user->contact_id) {
+                                $containerPrincipals[] = self::PREFIX_USERS . '/' . $user->contact_id;
+                            }
+                            
+                            break;
+                    }
                 }
+                
+                Tinebase_Core::getCache()->save($containerPrincipals, $cacheId, array(), /* 1 day */ 24 * 60 * 60);
             }
+            
+            $result = array_merge($result, $containerPrincipals);
         }
         
         // users and groups can be duplicate
