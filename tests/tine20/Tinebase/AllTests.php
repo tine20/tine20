@@ -34,6 +34,7 @@ class Tinebase_AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
+        $suite->addTestSuite('Tinebase_AccountTest');
         $suite->addTestSuite('Tinebase_ModelConfigurationTest');
         $suite->addTestSuite('Tinebase_DateTimeTest');
         $suite->addTestSuite('Tinebase_ExceptionTest');
