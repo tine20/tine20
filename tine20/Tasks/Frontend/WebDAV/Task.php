@@ -88,35 +88,11 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         $task->setId($id);
         
         self::enforceEventParameters($task);
-        
-        #if ($task->exdate instanceof Tinebase_Record_RecordSet) {
-        #    foreach($task->exdate as $exdate) {
-        #        if ($exdate->is_deleted == false && $exdate->organizer != $task->organizer) {
-        #            throw new Sabre\DAV\Exception\PreconditionFailed('Organizer for exdate must be the same like base task');
-        #        }
-        #    }
-        #}
-        
+
         // check if there is already an existing task with this ID
         // this can happen when the invitation email is faster then the caldav update or
         // or when an task gets moved to another container
-        
         $filter = new Tasks_Model_TaskFilter(array(
-            #array(
-            #    'field' => 'containerType', 
-            #    'operator' => 'equals', 
-            #    'value' => 'all'
-            #),
-            #array(
-            #    'field' => 'completed', 
-            #    'operator' => 'equals', 
-            #    'value' => $task->completed
-            #),
-            array(
-                'field' => 'due', 
-                'operator' => 'equals', 
-                'value' => $task->due
-            ),
             array('condition' => 'OR', 'filters' => array(
                 array(
                     'field'     => 'id',
@@ -133,8 +109,14 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         $existingEvent = Tasks_Controller_Task::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
         
         if ($existingEvent === null) {
-            $task = Tasks_Controller_Task::getInstance()->create($task);
-            
+            try {
+                $task = Tasks_Controller_Task::getInstance()->create($task);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' creation failed');
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                throw new Sabre\DAV\Exception\PreconditionFailed('creation failed');
+            }
+
             $vevent = new self($container, $task);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
@@ -431,6 +413,13 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
             $this->_task = Tasks_Controller_Task::getInstance()->update($task);
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
             throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
+        }  catch (Tinebase_Exception_AccessDenied $tead) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($task->toArray(), true));
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $tead);
+            throw new Sabre\DAV\Exception\Forbidden('forbidden update');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $tenf);
+            throw new Sabre\DAV\Exception\PreconditionFailed('not found');
         }
         
         return $this->getETag();
