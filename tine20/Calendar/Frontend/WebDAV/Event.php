@@ -142,18 +142,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         // check if there is already an existing event with this ID
         // this can happen when the invitation email is faster then the caldav update or
         // or when an event gets moved to another container
-        
         $filter = new Calendar_Model_EventFilter(array(
-            array(
-                'field' => 'dtstart', 
-                'operator' => 'equals', 
-                'value' => $event->dtstart
-            ),
-            array(
-                'field' => 'dtend', 
-                'operator' => 'equals', 
-                'value' => $event->dtend
-            ),
             array('condition' => 'OR', 'filters' => array(
                 array(
                     'field'     => 'id',
