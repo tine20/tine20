@@ -419,17 +419,13 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * NOTE: this is nessesary as MSEventFacade is a singleton and in some operations (e.g. move) there are 
      *       multiple instances of self
      */
-    public function assertEventFacadeParams(Tinebase_Model_Container $container)
+    public function assertEventFacadeParams(Tinebase_Model_Container $container, $setEventFilter=true)
     {
         if (!$this->_currentEventFacadeContainer ||
              $this->_currentEventFacadeContainer->getId() !== $container->getId()
         ) {
             $this->_currentEventFacadeContainer = $container;
-            
-            $eventFilter = new Calendar_Model_EventFilter(array(
-                    array('field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId())
-            ));
-            
+
             try {
                 $calendarUserId = $container->type == Tinebase_Model_Container::TYPE_PERSONAL ?
                 Addressbook_Controller_Contact::getInstance()->getContactByUserId($container->getOwner(), true)->getId() :
@@ -443,8 +439,15 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 'user_id'   => $calendarUserId,
             ));
             
-            $this->setEventFilter($eventFilter);
+
             $this->setCalendarUser($calendarUser);
+
+            if ($setEventFilter) {
+                $eventFilter = new Calendar_Model_EventFilter(array(
+                    array('field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId())
+                ));
+                $this->setEventFilter($eventFilter);
+            }
         }
     }
     

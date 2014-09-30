@@ -228,10 +228,11 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      */
     public function moveItem($srcFolderId, $serverId, $dstFolderId)
     {
+        $this->_assertContentControllerParams($srcFolderId);
         $item = $this->_contentController->get($serverId);
         
         $item->container_id = $dstFolderId;
-        
+
         $item = $this->_contentController->update($item);
         
         return $item->getId();
@@ -262,6 +263,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         try {
             // create record (without duplicate check)
             // @see 0008486: Contacts deleted on Android device after new created contact via ActiveSync
+            $this->_assertContentControllerParams($entry->container_id);
             $entry = $this->_contentController->create($entry, FALSE);
         } catch (Tinebase_Exception_AccessDenied $tead) {
             throw new Syncroton_Exception_AccessDenied();
@@ -323,6 +325,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         }
         
         try {
+            $this->_assertContentControllerParams($collection->collectionId);
             $entry = $this->_contentController->get($serverId);
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Syncroton_Exception_NotFound();
@@ -493,7 +496,8 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . " Assembled {$this->_contentFilterClass}: " . print_r($filter->toArray(), TRUE));
-        
+
+        $this->_assertContentControllerParams($folderId);
         $result = $this->_contentController->search($filter, NULL, false, true, 'sync');
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -694,9 +698,17 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         
         return false;
     }
-    
-    
-    
+
+    /**
+     * template function to assert content controller params
+     * @param $folderId
+     */
+    protected function _assertContentControllerParams($folderId)
+    {
+
+    }
+
+
     /**
      * convert contact from xml to Tinebase_Record_Interface
      *
