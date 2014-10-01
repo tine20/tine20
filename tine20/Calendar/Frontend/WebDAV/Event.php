@@ -117,9 +117,15 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         #Sabre\CalDAV\ICalendarUtil::validateICalendarObject($vobjectData, array('VEVENT', 'VFREEBUSY'));
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
-        
-        $event = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
-        
+
+        try {
+            $event = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
+            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+        }
+
         if (true === $onlyCurrentUserOrganizer) {
             if ($event->organizer && $event->organizer != Tinebase_Core::getUser()->contact_id) {
                 return null;
@@ -163,9 +169,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             try {
                 $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
             } catch (Exception $e) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' creation failed');
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
-                throw new Sabre\DAV\Exception\PreconditionFailed('creation failed');
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
+                throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
             }
             
             $vevent = new self($container, $event);
@@ -451,7 +458,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
         
-        $this->update($event);
+        $this->update($event, $cardData);
         
         return $this->getETag();
     }
@@ -461,19 +468,21 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * 
      * @param Calendar_Model_Event $event
      */
-    public function update(Calendar_Model_Event $event)
+    public function update(Calendar_Model_Event $event, $cardData='')
     {
         try {
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
             throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $tead);
             throw new Sabre\DAV\Exception\Forbidden('forbidden update');
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $tenf);
             throw new Sabre\DAV\Exception\PreconditionFailed('event not found');
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $e);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $cardData);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
+            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
         }
     }
     

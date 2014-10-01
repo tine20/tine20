@@ -81,8 +81,14 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         #Sabre_CalDAV_ICalendarUtil::validateICalendarObject($vobjectData, array('VTODO', 'VFREEBUSY'));
         
         list($backend, $version) = Tasks_Convert_Task_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
-        
-        $task = Tasks_Convert_Task_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
+        try {
+            $task = Tasks_Convert_Task_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
+            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+        }
+
         $task->container_id = $container->getId();
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
         $task->setId($id);
@@ -112,9 +118,10 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
             try {
                 $task = Tasks_Controller_Task::getInstance()->create($task);
             } catch (Exception $e) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' creation failed');
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
-                throw new Sabre\DAV\Exception\PreconditionFailed('creation failed');
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($task->toArray(), true));
+                throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
             }
 
             $vevent = new self($container, $task);
@@ -414,12 +421,14 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
             throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
         }  catch (Tinebase_Exception_AccessDenied $tead) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($task->toArray(), true));
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $tead);
             throw new Sabre\DAV\Exception\Forbidden('forbidden update');
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $tenf);
             throw new Sabre\DAV\Exception\PreconditionFailed('not found');
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $e);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $cardData);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($task->toArray(), true));
+            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
         }
         
         return $this->getETag();
