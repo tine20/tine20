@@ -470,10 +470,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
     {
+        $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
+
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
         }
-        
+
         // legacy: $_cols param was $_onlyIds (boolean) ...
         if ($_cols === TRUE) {
             $_cols = self::IDCOL;
@@ -483,7 +485,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         // (1) get ids or id/value pair
         list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols, $_filter, $_pagination);
-        $select = $this->_getSelect($colsToFetch);
+        $select = $this->_getSelect($colsToFetch, $getDeleted);
         if ($_filter !== NULL) {
             $this->_addFilter($select, $_filter);
         }
@@ -506,7 +508,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             return new Tinebase_Record_RecordSet($this->_modelName);
         } else {
             // (2) get other columns and do joins
-            $select = $this->_getSelect($_cols);
+            $select = $this->_getSelect($_cols, $getDeleted);
             $this->_addWhereIdIn($select, $ids);
             $_pagination->appendSort($select);
             
@@ -536,6 +538,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
+        $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
+
         $defaultCountCol = $this->_defaultCountCol == '*' ?  '*' : $this->_db->quoteIdentifier($this->_defaultCountCol);
         
         $searchCountCols = array('count' => 'COUNT(' . $defaultCountCol . ')');
@@ -548,7 +552,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $subSelectColumns = array_merge($subSelectColumns, $this->_additionalSearchCountCols);
         }
         
-        $subSelect = $this->_getSelect($subSelectColumns);
+        $subSelect = $this->_getSelect($subSelectColumns, $getDeleted);
         $this->_addFilter($subSelect, $_filter);
         
         Tinebase_Backend_Sql_Abstract::traitGroup($subSelect);

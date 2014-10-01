@@ -54,6 +54,9 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'is_deleted'           => array('filter' => 'Tinebase_Model_Filter_Bool'),
+        'deleted_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
+        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Tasks')),
     );
 }

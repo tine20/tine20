@@ -99,6 +99,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         // this can happen when the invitation email is faster then the caldav update or
         // or when an task gets moved to another container
         $filter = new Tasks_Model_TaskFilter(array(
+            array('field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET),
             array('condition' => 'OR', 'filters' => array(
                 array(
                     'field'     => 'id',
@@ -126,6 +127,23 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
 
             $vevent = new self($container, $task);
         } else {
+            if ($existingEvent->is_deleted) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' recovering already deleted task');
+
+                // @TODO have a undelete/recover workflow beginning in controller
+                $existingEvent->is_deleted = 0;
+                $existingEvent->deleted_by = NULL;
+                $existingEvent->deleted_time = NULL;
+
+                $be = new Tasks_Backend_Sql();
+                $be->updateMultiple($existingEvent->getId(), array(
+                    'is_deleted'    => 0,
+                    'deleted_by'    => NULL,
+                    'deleted_time'  => NULL,
+                ));
+            }
+
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing task with id: ' . $existingEvent->getId());
             $vevent = new self($container, $existingEvent);
@@ -154,7 +172,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
     {
         // when a move occurs, thunderbird first sends to delete command and immediately a put command
         // we must delay the delete command, otherwise the put command fails
-        sleep(1);
+        sleep(5);
         
         // (re) fetch task as tree move does not refresh src node before delete
         $task = Tasks_Controller_Task::getInstance()->get($this->_task);
