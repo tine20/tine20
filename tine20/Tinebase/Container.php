@@ -750,17 +750,73 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getOtherUsers($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
     {
-        $containersData = $this->_getOtherUsersContainerData($_accountId, $_application, $_grant, $_ignoreACL);
+        $userIds = $this->_getOtherAccountIds($_accountId, $_application, $_grant, $_ignoreACL);
         
-        $userIds = array();
-        foreach($containersData as $containerData) {
-            $userIds[] = $containerData['account_id'];
-        }
-
         $users = Tinebase_User::getInstance()->getMultiple($userIds);
         $users->sort('accountDisplayName');
         
         return $users;
+    }
+    
+    /**
+     * return account ids of accounts which made personal container accessible to given account
+     *
+     * @param   string|Tinebase_Model_User          $_accountId
+     * @param   string|Tinebase_Model_Application   $_application
+     * @param   array|string                        $_grant
+     * @param   bool                                $_ignoreACL
+     * @return  array of array of containerData
+     */
+    protected function _getOtherAccountIds($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
+    {
+        $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
+        $grant       = $_ignoreACL ? '*' : $_grant;
+        
+        // first grab all container ids ...
+        $select = $this->_db->select()
+            ->from(array('container_acl' => SQL_TABLE_PREFIX . 'container_acl'), array())
+            ->join(array(
+                /* table  */ 'container' => SQL_TABLE_PREFIX . 'container'), 
+                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
+                /* select */ array('container_id' => new Zend_Db_Expr("DISTINCT({$this->_db->quoteIdentifier('container.id')})"))
+            )
+            ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
+            ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_PERSONAL)
+            ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE);
+            
+        $this->addGrantsSql($select, $accountId, $grant);
+        
+        $stmt = $this->_db->query($select);
+        $containerIds = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+        
+        // no container ids found / can stop here
+        if (empty($containerIds)) {
+            return $containerIds;
+        }
+        
+        // ... now get the owners of the containers 
+        $select = $this->_db->select()
+            ->from(array('container_acl' => SQL_TABLE_PREFIX . 'container_acl'), array('account_id' => new Zend_Db_Expr("DISTINCT({$this->_db->quoteIdentifier('container_acl.account_id')})")))
+            ->join(array(
+                /* table  */ 'container' => SQL_TABLE_PREFIX . 'container'), 
+                /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
+                /* select */ array()
+            )
+            ->join(array(
+                /* table  */ 'accounts' => SQL_TABLE_PREFIX . 'accounts'),
+                /* on     */ "{$this->_db->quoteIdentifier('container_acl.account_id')} = {$this->_db->quoteIdentifier('accounts.id')}",
+                /* select */ array()
+            )
+            ->where("{$this->_db->quoteIdentifier('container.id')} IN (?)", $containerIds)
+            ->where("{$this->_db->quoteIdentifier('container_acl.account_id')} != ?", $accountId)
+            ->where("{$this->_db->quoteIdentifier('container_acl.account_grant')} = ?", Tinebase_Model_Grants::GRANT_ADMIN)
+            ->where("{$this->_db->quoteIdentifier('accounts.status')} = ?", 'enabled');
+            
+        $stmt = $this->_db->query($select);
+        $accountIds = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+        
+        return $accountIds;
     }
     
     /**
