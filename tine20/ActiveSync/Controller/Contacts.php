@@ -122,6 +122,8 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
      * @var string
      */
     protected $_sortField = 'n_fileas';
+    
+    protected $_defaultContainerPreferenceName = Addressbook_Preference::DEFAULTADDRESSBOOK;
 
     /**
      * Search command handler

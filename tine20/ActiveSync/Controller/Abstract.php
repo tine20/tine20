@@ -118,6 +118,10 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
      */
     protected $_contentControllerName;
     
+    protected $_defaultContainerPreferenceName;
+    
+    protected $_defaultContainerId;
+    
     /**
      * devices that support multiple folders
      * 
@@ -192,12 +196,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
             $folders = $this->_getAllFolders();
             
             foreach ($folders as $container) {
-                $syncrotonFolders[$container->id] = new Syncroton_Model_Folder(array(
-                    'serverId'      => $container->id,
-                    'parentId'      => 0,
-                    'displayName'   => $container->name,
-                    'type'          => (count($syncrotonFolders) == 0) ? $this->_defaultFolderType : $this->_folderType
-                ));
+                $syncrotonFolders[$container->id] = $this->_convertContainerToSyncrotonFolder($container);
             }
             
         } else {
@@ -213,6 +212,19 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         }
         
         return $syncrotonFolders;
+    }
+    
+    /**
+     * return default container id for application
+     */
+    protected function _getDefaultContainerId()
+    {
+        if (!$this->_defaultContainerId && $this->_defaultContainerPreferenceName) {
+            $this->_defaultContainerId = Tinebase_Core::getPreference($this->_applicationName)
+                ->{$this->_defaultContainerPreferenceName};
+        }
+        
+        return $this->_defaultContainerId;
     }
     
     /**
@@ -455,6 +467,24 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
     }
     
     /**
+     * convert Tinebase_Model_Container to Syncroton_Model_Folder
+     * 
+     * @param Tinebase_Model_Container $container
+     * @return Syncroton_Model_Folder
+     */
+    protected function _convertContainerToSyncrotonFolder(Tinebase_Model_Container $container)
+    {
+        return new Syncroton_Model_Folder(array(
+            'serverId'      => $container->id,
+            'parentId'      => 0,
+            'displayName'   => $container->name,
+            'type'          => $container->id == $this->_getDefaultContainerId()
+                                   ? $this->_defaultFolderType 
+                                   : $this->_folderType
+        ));
+    }
+    
+    /**
      * get syncable folders
      * 
      * @return Tinebase_Record_RecordSet
@@ -530,12 +560,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         }
         
         foreach ($folders as $container) {
-            $syncrotonFolders[$container->id] = new Syncroton_Model_Folder(array(
-                'serverId'      => $container->id,
-                'parentId'      => 0,
-                'displayName'   => $container->name,
-                'type'          => (count($syncrotonFolders) == 0) ? $this->_defaultFolderType : $this->_folderType
-            ));
+            $syncrotonFolders[$container->id] = $this->_convertContainerToSyncrotonFolder($container);
         }
         
         return $syncrotonFolders;

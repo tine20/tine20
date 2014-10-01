@@ -184,6 +184,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
      */
     protected $_contentControllerName = 'Calendar_Controller_MSEventFacade';
     
+    protected $_defaultContainerPreferenceName = Calendar_Preference::DEFAULTCALENDAR;
+    
     /**
      * list of devicetypes with wrong busy status default (0 = FREE)
      * 
@@ -204,8 +206,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
         parent::__construct($_device, $_syncTimeStamp);
         
         $this->_contentController->setEventFilter($this->_getContentFilter(0));
-        
-        $this->_defaultContainerId = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::DEFAULTCALENDAR};
     }
     
     /**
@@ -277,7 +277,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     
                 case 'attendee':
                     if ($this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $entry->container_id       !== $this->_defaultContainerId) {
+                        $entry->container_id       !== $this->_getDefaultContainerId()) {
                         
                         continue;
                     }
@@ -545,7 +545,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                 } else {
                     if ($tine20Property === 'attendee' && $entry &&
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $entry->container_id       !== $this->_defaultContainerId) {
+                        $entry->container_id       !== $this->_getDefaultContainerId()) {
                             // keep attendees as the are / they were not sent to the device before
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
@@ -565,7 +565,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                 case 'attendee':
                     if ($entry && 
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $entry->container_id       !== $this->_defaultContainerId) {
+                        $entry->container_id       !== $this->_getDefaultContainerId()) {
                             // keep attendees as the are / they were not sent to the device before
                             continue;
                     }

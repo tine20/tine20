@@ -1008,6 +1008,15 @@ Zeile 3</AirSyncBase:Data>
 
         $allSyncrotonFolders = $controller->getAllFolders();
         
+        $defaultFolderId = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::DEFAULTCALENDAR};
+        
+        foreach ($allSyncrotonFolders as $syncrotonFolder) {
+            $this->assertTrue($syncrotonFolder->serverId == $defaultFolderId 
+                ? $syncrotonFolder->type === Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR
+                : $syncrotonFolder->type === Syncroton_Command_FolderSync::FOLDERTYPE_CALENDAR_USER_CREATED
+            );
+        }
+        
         $this->assertEquals(2, count($allSyncrotonFolders));
         $this->assertArrayHasKey($folderA->serverId, $allSyncrotonFolders);
         $this->assertArrayHasKey($folderB, $allSyncrotonFolders);
