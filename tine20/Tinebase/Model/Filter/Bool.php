@@ -20,6 +20,12 @@
 class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
 {
     /**
+     * use this as value to indicate that the boolfilter should not be applied at all
+     * this can be handy if you need to set a filterline e.g. in UI without effect
+     */
+    const VALUE_NOTSET = '#NOTSET#';
+
+    /**
      * @var array list of allowed operators
      */
     protected $_operators = array(
@@ -41,6 +47,10 @@ class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
      */
      public function appendFilterSql($_select, $_backend)
      {
+         if ($this->_value === self::VALUE_NOTSET) {
+             return;
+         }
+
          $action = $this->_opSqlMap[$this->_operator];
          
          $db = $_backend->getAdapter();

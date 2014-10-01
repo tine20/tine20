@@ -117,8 +117,13 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $filter = new Tinebase_Model_Filter_Text($_property, 'equals', $_value);
         $filters->addFilter($filter);
-        
-        $resultSet = $this->search($filters, NULL, FALSE, $_getDeleted);
+
+        if ($_getDeleted) {
+            $deletedFilter = new Tinebase_Model_Filter_Bool('is_deleted', 'equals', Tinebase_Model_Filter_Bool::VALUE_NOTSET);
+            $filters->addFilter($deletedFilter);
+        }
+
+        $resultSet = $this->search($filters, NULL, FALSE);
         
         switch (count($resultSet)) {
             case 0: 
@@ -147,16 +152,16 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter
      * @param  Tinebase_Model_Pagination            $_pagination
      * @param  boolean                              $_onlyIds
-     * @param  bool   $_getDeleted
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE, $_getDeleted = FALSE)    
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination();
         }
-        
-        $select = parent::_getSelect('*', $_getDeleted);
+
+        $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
+        $select = parent::_getSelect('*', $getDeleted);
         
         $select->joinLeft(
             /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'),
@@ -169,7 +174,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.id'),
             /* select */ array());
         
-        if (! $_getDeleted) {
+        if (! $getDeleted) {
             $select->joinLeft(
                 /* table  */ array('dispcontainer' => $this->_tablePrefix . 'container'), 
                 /* on     */ $this->_db->quoteIdentifier('dispcontainer.id') . ' = ' . $this->_db->quoteIdentifier('attendee.displaycontainer_id'),

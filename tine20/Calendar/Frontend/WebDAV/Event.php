@@ -143,6 +143,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         // this can happen when the invitation email is faster then the caldav update or
         // or when an event gets moved to another container
         $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET),
             array('condition' => 'OR', 'filters' => array(
                 array(
                     'field'     => 'id',
@@ -169,8 +170,26 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             
             $vevent = new self($container, $event);
         } else {
+            if ($existingEvent->is_deleted) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' recovering already deleted event');
+
+                // @TODO have a undelete/recover workflow beginning in controller
+                $existingEvent->is_deleted = 0;
+                $existingEvent->deleted_by = NULL;
+                $existingEvent->deleted_time = NULL;
+
+                $be = new Calendar_Backend_Sql();
+                $be->updateMultiple($existingEvent->getId(), array(
+                    'is_deleted'    => 0,
+                    'deleted_by'    => NULL,
+                    'deleted_time'  => NULL,
+                ));
+            }
+
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
+
             $vevent = new self($container, $existingEvent);
             $vevent->put($vobjectData);
         }
@@ -188,7 +207,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     {
         // when a move occurs, thunderbird first sends to delete command and immediately a put command
         // we must delay the delete command, otherwise the put command fails
-        sleep(1);
+        sleep(5);
         
         // (re) fetch event as tree move does not refresh src node before delete
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);

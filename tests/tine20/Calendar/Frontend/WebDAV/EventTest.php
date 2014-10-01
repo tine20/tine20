@@ -152,7 +152,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $existingRecord = $existingEvent->getRecord();
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
-        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], $existingEvent->getRecord()->uid . '.ics', $vcalendar);
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], $existingEvent->getRecord()->getId() . '.ics', $vcalendar);
         
         if (isset($oldUserAgent)) {
             $_SERVER['HTTP_USER_AGENT'] = $oldUserAgent;
@@ -162,7 +162,39 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $this->assertEquals($existingRecord->getId(), $record->getId(), 'event got duplicated');
     }
-    
+
+    /**
+     * folderChanges are implemented as DELETE/PUT actions in most CalDAV
+     * clients. Unfortunally clients send both requests in parallel. This
+     * creates raise conditions when DELETE is faster (e.g. due to trasport
+     * issues) than the PUT.
+     */
+    public function testCreateEventWhichExistsAlreadyDeleted()
+    {
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+            $oldUserAgent = $_SERVER['HTTP_USER_AGENT'];
+        }
+
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+
+        $existingEvent = $this->testCreateEventWithInternalOrganizer();
+
+        $existingRecord = $existingEvent->getRecord();
+        Calendar_Controller_Event::getInstance()->delete($existingRecord->getId());
+
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], $existingRecord->getId() . '.ics', $vcalendar);
+
+        if (isset($oldUserAgent)) {
+            $_SERVER['HTTP_USER_AGENT'] = $oldUserAgent;
+        }
+
+        $record = $event->getRecord();
+
+        $this->assertEquals($existingRecord->getId(), $record->getId(), 'event got duplicated');
+    }
+
     /**
      * test create repeating event
      *
@@ -253,7 +285,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $this->assertTrue($pwulf !== null, 'could not find pwulf in attendee: ' . print_r($event->attendee->toArray(), true));
         $this->assertEquals($this->_personasDefaultCals['pwulf']->getId(), $pwulf->displaycontainer_id, 'event not in pwulfs personal calendar');
     }
-    
+
     /**
      * _testEventMissingAttendee helper
      * 
