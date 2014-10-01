@@ -152,6 +152,72 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
     }
     
+    /**
+     * merge contracts into one contract and removes the old ones
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function mergeContracts(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array());
+        
+        if (! array_key_exists('target', $args)) {
+            echo '"target" argument missing. A contract number is required!' . PHP_EOL;
+            exit(1);
+        } else {
+            $target = trim($args['target']);
+        }
+        
+        if (! array_key_exists('source', $args)) {
+            echo '"source" argument missing. At least one contract number is required!' . PHP_EOL;
+            exit(1);
+        } else {
+            $source = $args['source'];
+        }
+        
+        $filter = new Sales_Model_ContractFilter(array(array('field' => 'number' , 'operator' => 'equals', 'value' => $target)));
+        $targetContract = Sales_Controller_Contract::getInstance()->search($filter);
+        if ($targetContract->count() == 1) {
+            $targetContract = $targetContract->getFirstRecord();
+        } else {
+            if ($targetContract->count() > 1) {
+                echo 'Target contract with the given number "' . $target . '" has ' . $targetContract->count() . ' results.' . PHP_EOL;
+            } else {
+                echo 'No target contract with the given number has been found.' . PHP_EOL;
+            }
+            exit(1);
+        }
+        
+        if (strpos($source, ',')) {
+            $sources = explode(',', $source);
+        } else {
+            $sources = array($source);
+        }
+        $sourceContracts = new Tinebase_Record_RecordSet('Sales_Model_Contract');
+        foreach($sources as $source) {
+            $filter = new Sales_Model_ContractFilter(array(array('field' => 'number' , 'operator' => 'equals', 'value' => $source)));
+            $sourceContract = Sales_Controller_Contract::getInstance()->search($filter);
+            
+            if ($sourceContract->count() == 1) {
+                $sourceContracts->addRecord($sourceContract->getFirstRecord());
+            } else {
+                if ($sourceContract->count() > 1) {
+                    echo 'Source contract with the given number "' . $source . '" has ' . $sourceContract->count() . ' results.' . PHP_EOL;
+                } else {
+                    echo 'No source contract with the given number "' . $source . '" has been found.' . PHP_EOL;
+                }
+                
+                exit(1);
+            }
+        }
+        
+        if (Sales_Controller_Contract::getInstance()->mergeContracts($targetContract, $sourceContracts)) {
+            echo 'Contracts has been merged successfully!' . PHP_EOL;
+        } else {
+            echo 'Contracts merge failed!' . PHP_EOL;
+        }
+    }
+    
     public function setLastAutobill()
     {
         $cc = Sales_Controller_Contract::getInstance();

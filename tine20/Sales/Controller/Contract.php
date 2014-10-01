@@ -300,4 +300,30 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
             }
         }
     }
+    
+    /**
+     * merges source contracts into the target contract (relations and products)
+     * 
+     * @param Sales_Model_Contract $targetContract
+     * @param Tinebase_Record_RecordSet $sourceContracts
+     */
+    public function mergeContracts(Sales_Model_Contract $targetContract, Tinebase_Record_RecordSet $sourceContracts)
+    {
+        // handle relations (duplicates get skipped)
+        foreach($sourceContracts as $sourceContract) {
+            Tinebase_Relations::getInstance()->transferRelations($sourceContract->getId(), $targetContract->getId(), 'Sales_Model_Contract');
+        }
+        
+        // handle products
+        $filter = new Sales_Model_ProductAggregateFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'in', 'value' => $sourceContracts->getId())));
+        $products = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+        
+        foreach($products as $product) {
+            $product->contract_id = $targetContract->getId();
+            Sales_Controller_ProductAggregate::getInstance()->update($product);
+        }
+        
+        return true;
+    }
 }
