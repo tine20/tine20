@@ -53,6 +53,9 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     {
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_instance = Tinebase_CustomField::getInstance();
+        
+        Sales_Controller_Contract::getInstance()->setNumberPrefix();
+        Sales_Controller_Contract::getInstance()->setNumberZerofill();
     }
 
     /**
