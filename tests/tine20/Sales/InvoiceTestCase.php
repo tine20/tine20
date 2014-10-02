@@ -163,6 +163,9 @@ class Sales_InvoiceTestCase extends TestCase
         
         parent::setUp();
         
+        Sales_Controller_Contract::getInstance()->setNumberPrefix();
+        Sales_Controller_Contract::getInstance()->setNumberZerofill();
+        
         $this->_setReferenceDate();
     }
     
