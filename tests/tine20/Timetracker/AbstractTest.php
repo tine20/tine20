@@ -46,6 +46,9 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_json = new Timetracker_Frontend_Json();
+        
+        Sales_Controller_Contract::getInstance()->setNumberPrefix();
+        Sales_Controller_Contract::getInstance()->setNumberZerofill();
     }
 
     /**

@@ -34,6 +34,45 @@ abstract class Sales_Controller_NumberableAbstract extends Tinebase_Controller_R
     protected $_numberProperty = 'number';
     
     /**
+     * Sets the number length (zeros will be prepended)
+     * 
+     * @param integer $number
+     * @return integer
+     */
+    public function setNumberZerofill(integer $number = NULL)
+    {
+        $this->_numberZerofill = $number;
+        
+        return $this->_numberZerofill;
+    }
+    
+    /**
+     * Sets the prefix of the number (will be persisted)
+     * 
+     * @param string $prefix
+     * @return string
+     */
+    public function setNumberPrefix(string $prefix = NULL)
+    {
+        $this->_numberPrefix = $prefix;
+        
+        return $this->_numberPrefix;
+    }
+    
+    /**
+     * Sets the property the number will be hold on
+     * 
+     * @param string $property
+     * @return string
+     */
+    public function setNumberProperty($property = 'number')
+    {
+        $this->_numberProperty = $property;
+        
+        return $this->_numberProperty;
+    }
+    
+    /**
      * Checks if number is unique if manual generated
      * 
      * @param Tinebase_Record_Interface $record

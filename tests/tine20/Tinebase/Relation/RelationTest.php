@@ -67,6 +67,9 @@ class Tinebase_Relation_RelationTest extends TestCase
     {
         parent::setUp();
         
+        Sales_Controller_Contract::getInstance()->setNumberPrefix();
+        Sales_Controller_Contract::getInstance()->setNumberZerofill();
+        
         $this->_object = Tinebase_Relations::getInstance();
         $this->_relations = array();
         

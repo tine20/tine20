@@ -39,7 +39,12 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Sales_Config::getInstance()->set(Sales_Config::CONTRACT_NUMBER_VALIDATION, 'text');
+        
         $this->_backend = Sales_Controller_Contract::getInstance();
+        
+        $this->_backend->setNumberPrefix();
+        $this->_backend->setNumberZerofill();
     }
 
     /**

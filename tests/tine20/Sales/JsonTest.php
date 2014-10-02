@@ -46,6 +46,9 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_instance = new Sales_Frontend_Json();
+        
+        Sales_Controller_Contract::getInstance()->setNumberPrefix();
+        Sales_Controller_Contract::getInstance()->setNumberZerofill();
     }
 
     /**
@@ -661,7 +664,6 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $contact4->relations = array($relation);
         
         $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
-
         $contact4 = Addressbook_Controller_Contact::getInstance()->update($contact4);
     }
 }
