@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */ 
 
@@ -64,7 +64,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
      * @param string $_ipAddress the ip address the user connects from
      * @return void|Tinebase_Model_AccessLog
      */
-    public function setLogout($_sessionId, $_ipAddress = NULL)
+    public function setLogout($_sessionId)
     {
         try {
             $loginRecord = $this->_backend->getByProperty($_sessionId, 'sessionid');
@@ -73,12 +73,10 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
             return;
         }
         
-        $loginRecord->lo = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
-        if ($_ipAddress !== NULL) {
-            $loginRecord->ip = $_ipAddress;
-        }
+        $loginRecord->lo = Tinebase_DateTime::now();
         
-        return $this->update($loginRecord);
+        // call update of backend direct to save overhead of $this->update()
+        return $this->_backend->update($loginRecord);
     }
 
     /**

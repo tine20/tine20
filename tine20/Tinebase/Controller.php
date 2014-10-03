@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -31,13 +31,16 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @var string
      */
     protected $_applicationName = 'Tinebase';
-        
+    
+    protected $_writeAccessLog;
     /**
      * the constructor
      *
      */
     private function __construct() 
     {
+        $this->_writeAccessLog = Tinebase_Core::get('serverclassname') !== 'ActiveSync_Server_Http' ||
+            !(ActiveSync_Config::getInstance()->get(ActiveSync_Config::DISABLE_ACCESS_LOG));
     }
 
     /**
@@ -63,60 +66,129 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * create new user session
      *
-     * @param   string $_loginname
-     * @param   string $_password
-     * @param   string $_ipAddress
-     * @param   string $_clientIdString
-     * @param   string $securitycode the security code(captcha)
+     * @param   string                           $loginName
+     * @param   string                           $password
+     * @param   Zend_Controller_Request_Abstract $request
+     * @param   string                           $clientIdString
+     * @param   string                           $securitycode   the security code(captcha)
      * @return  bool
      */
-    public function login($_loginname, $_password, $_ipAddress, $_clientIdString = NULL, $securitycode = NULL)
+    public function login($loginName, $password, Zend_Controller_Request_Abstract $request, $clientIdString = NULL, $securitycode = NULL)
     {
-        $authResult = Tinebase_Auth::getInstance()->authenticate($_loginname, $_password);
-        $authResultCode = $authResult->getCode();
+        $authResult         = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
+        $authResultCode     = $authResult->getCode();
         $authResultIdentity = $authResult->getIdentity();
         
-        Tinebase_Core::set(Tinebase_Core::SESSIONID, Zend_Session::isStarted() ? session_id() : Tinebase_Record_Abstract::generateUID());
+        $remoteAddr = $request->getClientIp();
+        $userAgent  = $request->getHeader('USER_AGENT');
         
         $accessLog = new Tinebase_Model_AccessLog(array(
-            'sessionid'     => Tinebase_Core::get(Tinebase_Core::SESSIONID),
-            'ip'            => $_ipAddress,
-            'li'            => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'ip'            => $remoteAddr,
+            'li'            => Tinebase_DateTime::now(),
             'result'        => $authResultCode,
-            'clienttype'    => $_clientIdString,
+            'clienttype'    => $clientIdString,
+            'login_name'    => $loginName ? $loginName : $authResultIdentity
         ), TRUE);
         
-        $user = NULL;
-        if ($accessLog->result == Tinebase_Auth::SUCCESS) {
-            $user = $this->_getLoginUser($authResultIdentity, $accessLog);
-            if ($user !== NULL) {
-                $this->_checkUserStatus($user, $accessLog);
-            }
+        // authentication failed
+        if ($accessLog->result !== Tinebase_Auth::SUCCESS) {
+            $this->_loginFailed($authResult, $accessLog);
+            
+            return false;
         }
         
-        if ($accessLog->result === Tinebase_Auth::SUCCESS && $user !== NULL && $user->accountStatus === Tinebase_User::STATUS_ENABLED) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                __METHOD__ . '::' . __LINE__ . " Login with username $_loginname from $_ipAddress succeeded.");
-
-            $this->_initUser($user, $accessLog, $_password);
+        // try to retrieve user from accounts backend
+        $user = $this->_getLoginUser($authResultIdentity, $accessLog);
+        
+        if ($accessLog->result !== Tinebase_Auth::SUCCESS || !$user) {
+            $this->_loginFailed($authResult, $accessLog);
             
-            $result = true;
+            return false;
+        }
+        
+        // check if user is expired or blocked
+        $this->_checkUserStatus($user, $accessLog);
+        
+        if ($accessLog->result !== Tinebase_Auth::SUCCESS) {
+            $this->_loginFailed($authResult, $accessLog);
+            
+            return false;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . " Login with username $loginName from $remoteAddr succeeded.");
+        
+        if (in_array($clientIdString, array(Tinebase_Server_WebDAV::REQUEST_TYPE, ActiveSync_Server_Http::REQUEST_TYPE))) {
+            $previousAccessLog = Tinebase_AccessLog::getInstance()->search(
+                new Tinebase_Model_AccessLogFilter(array(
+                    array(
+                        'field'    => 'ip',
+                        'operator' => 'equals',
+                        'value'    => $remoteAddr
+                    ),
+                    array(
+                        'field'    => 'account_id',
+                        'operator' => 'equals',
+                        'value'    => $user->getId()
+                    ),
+                    array(
+                        'field'    => 'result',
+                        'operator' => 'equals',
+                        'value'    => Tinebase_Auth::SUCCESS
+                    ),
+                    array(
+                        'field'    => 'clienttype',
+                        'operator' => 'equals',
+                        'value'    => $clientIdString
+                    ),
+                    array(
+                        'field'    => 'sessionid',
+                        'operator' => 'equals',
+                        'value'    => sha1(
+                            $accessLog->ip .
+                            $accessLog->clienttype .
+                            $user->getId() .
+                            $userAgent
+                        )
+                    ),
+                    array(
+                        'field'    => 'lo',
+                        'operator' => 'after',
+                        'value'    => Tinebase_DateTime::now()->subHour(2)
+                    ),
+                )),
+                new Tinebase_Model_Pagination(array(
+                    'sort'  => 'li',
+                    'dir'   => 'DESC',
+                    'limit' => 1
+                ))
+            )->getFirstRecord();
+            
+            if ($previousAccessLog) {
+                $accessLog = $previousAccessLog;
+                Tinebase_Core::set(Tinebase_Core::SESSIONID, $accessLog->sessionid);
+            } else {
+                Tinebase_Core::set(Tinebase_Core::SESSIONID, sha1(
+                    $accessLog->ip .
+                    $accessLog->clienttype .
+                    $user->getId() .
+                    $userAgent
+                ));
+            }
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                __METHOD__ . '::' . __LINE__ . " Login with username $_loginname from $_ipAddress failed ($authResultCode)!");
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Failure messages: ' . print_r($authResult->getMessages(), TRUE));
-
-            $this->_loginFailed($_loginname ? $_loginname : $authResultIdentity, $accessLog);
-            
-            $result = false;
-        } 
-
-        if (Tinebase_Core::get('serverclassname') !== 'ActiveSync_Server_Http' || !(ActiveSync_Config::getInstance()->get(ActiveSync_Config::DISABLE_ACCESS_LOG))) {
-            Tinebase_AccessLog::getInstance()->create($accessLog);
+            Tinebase_Core::set(Tinebase_Core::SESSIONID, Zend_Session::isStarted() ? session_id() : Tinebase_Record_Abstract::generateUID());
+        }
+        
+        $this->_initUser($user, $accessLog, $password);
+        
+        if (!$accessLog->getId()) {
+            $user->setLoginTime($accessLog->ip);
+                if ($this->_writeAccessLog) {
+                $accessLog = Tinebase_AccessLog::getInstance()->create($accessLog);
+            }
         }
 
-        return $result;
+        return true;
     }
     
     /**
@@ -174,18 +246,18 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $_user->accountLoginName . ' is disabled');
                 $_accessLog->result = Tinebase_Auth::FAILURE_DISABLED;
             }
-                
+            
             // is the account expired?
             else if ($_user->accountStatus == Tinebase_User::STATUS_EXPIRED) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $_user->accountLoginName . ' password is expired');
                 $_accessLog->result = Tinebase_Auth::FAILURE_PASSWORD_EXPIRED;
             }
-        
+            
             // too many login failures?
             else if ($_user->accountStatus == Tinebase_User::STATUS_BLOCKED) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $_user->accountLoginName . ' is blocked');
                 $_accessLog->result = Tinebase_Auth::FAILURE_BLOCKED;
-            } 
+            }
         }
     }
     
@@ -194,32 +266,28 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * 
      * @param Tinebase_Model_FullUser $_user
      * @param Tinebase_Model_AccessLog $_accessLog
-     * @param string $_password
+     * @param string $password
      */
-    protected function _initUser(Tinebase_Model_FullUser $_user, Tinebase_Model_AccessLog $_accessLog, $_password)
+    protected function _initUser(Tinebase_Model_FullUser $_user, Tinebase_Model_AccessLog $_accessLog, $password)
     {
-        if ($_accessLog->result === Tinebase_Auth::SUCCESS && $_user->accountStatus === Tinebase_User::STATUS_ENABLED) {
-            $this->_initUserSession($_user);
-            
-            Tinebase_Core::set(Tinebase_Core::USER, $_user);
-            
-            $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_user->accountLoginName, $_password);
-            Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
-            
-            // need to set locale again and because locale might not be set correctly during loginFromPost
-            // use 'auto' setting because it is fetched from cookie or preference then
-            Tinebase_Core::setupUserLocale('auto');
-            
-            // need to set userTimeZone again
-            $userTimezone = Tinebase_Core::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
-            Tinebase_Core::setupUserTimezone($userTimezone);
-            
-            $_user->setLoginTime($_accessLog->ip);
-            
-            $_accessLog->sessionid = Tinebase_Core::get(Tinebase_Core::SESSIONID);
-            $_accessLog->login_name = $_user->accountLoginName;
-            $_accessLog->account_id = $_user->getId();
-        }
+        $this->_initUserSession($_user);
+        
+        Tinebase_Core::set(Tinebase_Core::USER, $_user);
+        
+        $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_user->accountLoginName, $password);
+        Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
+        
+        // need to set locale again and because locale might not be set correctly during loginFromPost
+        // use 'auto' setting because it is fetched from cookie or preference then
+        Tinebase_Core::setupUserLocale('auto');
+        
+        // need to set userTimeZone again
+        $userTimezone = Tinebase_Core::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
+        Tinebase_Core::setupUserTimezone($userTimezone);
+        
+        $_accessLog->sessionid = Tinebase_Core::get(Tinebase_Core::SESSIONID);
+        $_accessLog->login_name = $_user->accountLoginName;
+        $_accessLog->account_id = $_user->getId();
     }
     
     /**
@@ -271,12 +339,19 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param  string                    $loginName
      * @param  Tinebase_Model_AccessLog  $accessLog
      */
-    protected function _loginFailed($loginName, Tinebase_Model_AccessLog $accessLog)
+    protected function _loginFailed($authResult, Tinebase_Model_AccessLog $accessLog)
     {
-        Tinebase_User::getInstance()->setLastLoginFailure($loginName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+            __METHOD__ . '::' . __LINE__ . " Login with username {$accessLog->login_name} from {$accessLog->ip} failed ({$accessLog->result})!");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Failure messages: ' . print_r($authResult->getMessages(), TRUE));
         
-        $accessLog->login_name = $loginName;
-        $accessLog->lo = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        // @todo update sql schema to allow empty sessionid column
+        $accessLog->sessionid = Tinebase_Record_Abstract::generateUID();
+        $accessLog->lo = $accessLog->li;
+        
+        Tinebase_User::getInstance()->setLastLoginFailure($accessLog->login_name);
+        Tinebase_AccessLog::getInstance()->create($accessLog);
         
         sleep(mt_rand(2,5));
     }
@@ -348,26 +423,27 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * authenticate user but don't log in
      *
-     * @param   string $_loginname
-     * @param   string $_password
-     * @param   string $_ipAddress
-     * @param   string $_clientIdString
+     * @param   string $loginName
+     * @param   string $password
+     * @param   array  $remoteInfo
+     * @param   string $clientIdString
      * @return  bool
      */
-    public function authenticate($_loginname, $_password, $_ipAddress, $_clientIdString = NULL)
+    public function authenticate($loginName, $password, $remoteInfo, $clientIdString = NULL)
     {
-        $result = $this->login($_loginname, $_password, $_ipAddress, $_clientIdString);
+        $result = $this->login($loginName, $password, $remoteInfo, $clientIdString);
         
         /**
          * we unset the Zend_Auth session variable. This way we keep the session,
          * but the user is not logged into Tine 2.0
          * we use this to validate passwords for OpenId for example
-         */ 
+         */
         unset(Tinebase_Core::getSession()->Zend_Auth);
         unset(Tinebase_Core::getSession()->currentAccount);
         
         return $result;
     }
+    
     /**
      * change user password
      *
@@ -397,11 +473,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @return void
      */
-    public function logout($_ipAddress)
+    public function logout()
     {
-        if (Tinebase_Core::get('serverclassname') !== 'ActiveSync_Server_Http' || !(ActiveSync_Config::getInstance()->get(ActiveSync_Config::DISABLE_ACCESS_LOG))) {
+        if ($this->_writeAccessLog) {
             if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
-                Tinebase_AccessLog::getInstance()->setLogout(Tinebase_Core::get(Tinebase_Core::SESSIONID), $_ipAddress);
+                Tinebase_AccessLog::getInstance()->setLogout(Tinebase_Core::get(Tinebase_Core::SESSIONID));
             }
         }
     }

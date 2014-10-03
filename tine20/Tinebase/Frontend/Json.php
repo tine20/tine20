@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -18,6 +18,8 @@
  */
 class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
+    const REQUEST_TYPE = 'JSON-RPC';
+    
     /**
      * wait for changes
      * 
@@ -462,7 +464,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         // try to login user
-        $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineJson', $securitycode) === TRUE);
+        $success = (Tinebase_Controller::getInstance()->login(
+            $username,
+            $password,
+            new Zend_Controller_Request_Http(),
+            self::REQUEST_TYPE,
+            $securitycode
+        ) === TRUE);
         
         if ($success == true) {
             $response = array(

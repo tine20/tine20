@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -17,6 +17,8 @@
  */
 class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
+    const REQUEST_TYPE = 'HttpPost';
+    
     /**
      * get json-api service map
      * 
@@ -44,7 +46,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * 
      * @return void
      */
-    public function getXRDS() 
+    public function getXRDS()
     {
         // selfUrl == http://servername/pathtotine20/users/loginname
         $url = dirname(dirname(Zend_OpenId::selfUrl())) . '/index.php?method=Tinebase.openId';
@@ -323,9 +325,13 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         Tinebase_Core::startSession();
         
         if (!empty($username)) {
-            
             // try to login user
-            $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineHttpPost') === TRUE);
+            $success = (Tinebase_Controller::getInstance()->login(
+                $username,
+                $password,
+                new Zend_Controller_Request_Http(),
+                self::REQUEST_TYPE
+            ) === TRUE);
         } else {
             $success = FALSE;
         }

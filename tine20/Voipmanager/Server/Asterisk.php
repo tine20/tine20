@@ -5,7 +5,7 @@
  * @package     Voipmanager
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -18,19 +18,38 @@
  */
 class Voipmanager_Server_Asterisk implements Tinebase_Server_Interface
 {
+    const REQUEST_TYPE = 'Asterisk';
+    
+    /**
+     * the request
+     *
+     * @var Zend_Controller_Request_Http
+     */
+    protected $_request = NULL;
+    
+    protected $_body;
+    
     /**
      * handler for command line scripts
      * 
      * @return boolean
      */
-    public function handle()
+    public function handle(Zend_Controller_Request_Http $request = null, $body = null)
     {
+        $this->_request = $request instanceof Zend_Controller_Request_Http ? $request : new Zend_Controller_Request_Http();
+        $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
+        
         Tinebase_Core::initFramework();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ .' is Asterisk curl request: ' . print_r($_REQUEST, true));
         
-        if (Tinebase_Controller::getInstance()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['REMOTE_ADDR'], 'TineAsterisk') === true) {
+        if (Tinebase_Controller::getInstance()->login(
+            $_SERVER['PHP_AUTH_USER'],
+            $_SERVER['PHP_AUTH_PW'],
+            $this->_request,
+            self::REQUEST_TYPE
+        ) === true) {
             $server = new Tinebase_Http_Server();
             $server->setClass('Voipmanager_Frontend_Asterisk_SipPeers',    'Voipmanager_SipPeers');
             $server->setClass('Voipmanager_Frontend_Asterisk_SipRegs',     'Voipmanager_SipRegs');

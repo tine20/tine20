@@ -5,7 +5,7 @@
  * @package     ActiveSync
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -17,6 +17,8 @@
  */
 class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebase_Server_Interface
 {
+    const REQUEST_TYPE = 'ActiveSync';
+    
     /**
      * the request
      * 
@@ -70,7 +72,11 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
         }
         
         try {
-            $authResult = $this->_authenticate($loginName, $password, $this->_request->getClientIp());
+            $authResult = $this->_authenticate(
+                $loginName,
+                $password,
+                $this->_request
+            );
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
             $authResult = false;
@@ -138,7 +144,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
      * @param string $_ipAddress
      * @return bool
      */
-    protected function _authenticate($_username, $_password, $_ipAddress)
+    protected function _authenticate($_username, $_password, Zend_Controller_Request_Abstract $request)
     {
         $pos = strrchr($_username, '\\');
         
@@ -148,7 +154,12 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             $username = $_username;
         }
         
-        return Tinebase_Controller::getInstance()->login($username, $_password, $_ipAddress, 'TineActiveSync');
+        return Tinebase_Controller::getInstance()->login(
+            $username,
+            $_password,
+            $request,
+            self::REQUEST_TYPE
+        );
     }
     
     /**
