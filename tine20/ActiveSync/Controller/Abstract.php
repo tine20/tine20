@@ -169,6 +169,10 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         // this is a Syncroton_Model_Device and not a ActiveSync_Model_Device
         $this->_device              = $_device;
         $this->_device->devicetype  = strtolower($this->_device->devicetype);
+        if ($this->_device->devicetype == 'ipad') {
+            // map to iphone till syncroton has ipad/ios support
+            $this->_device->devicetype = Syncroton_Model_Device::TYPE_IPHONE;
+        }
         
         $this->_syncTimeStamp       = $_syncTimeStamp;
         
