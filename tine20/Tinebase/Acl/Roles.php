@@ -105,10 +105,16 @@ class Tinebase_Acl_Roles
      * @param   int $_right the right to check for
      * @return  bool
      */
-    public function hasRight($_application, $_accountId, $_right) 
+    public function hasRight($_application, $_accountId, $_right)
     {
-        if (! Tinebase_Application::getInstance()->isInstalled($_application, TRUE)) {
-            return FALSE;
+        try {
+            $application = Tinebase_Application::getInstance()->getApplicationById($_application);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return false;
+        }
+        
+        if ($application->status !== Tinebase_Application::ENABLED) {
+            return false;
         }
         
         try {
@@ -123,25 +129,28 @@ class Tinebase_Acl_Roles
                 // @todo throw exception in this case?
                 Zend_Session::destroy();
             }
-            return FALSE;
-        }
-
-        $application = Tinebase_Application::getInstance()->getApplicationById($_application);
-        $select = $this->_roleRightsTable->select();
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
-               ->where('(' .    $this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', $_right) 
-                     . ' OR ' . $this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', Tinebase_Acl_Rights::ADMIN) . ')')
-               ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $application->getId()));
-               
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-
-        if (!$row = $this->_roleRightsTable->fetchRow($select)) {
-            $result = FALSE;
-        } else {
-            $result = TRUE;
+            
+            return false;
         }
         
-        return $result;
+        $select = $this->_db->select()
+            ->distinct()
+            ->from(array('role_rights' => SQL_TABLE_PREFIX . 'role_rights'), array('right'))->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
+            ->where('(' .    $this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', $_right) 
+                . ' OR ' . $this->_db->quoteInto($this->_db->quoteIdentifier('right') . ' = ?', Tinebase_Acl_Rights::ADMIN) . ')')
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $application->getId()));
+               
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        
+        $stmt = $this->_db->query($select);
+        
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+        
+        if (!$rows) {
+            return false;
+        }
+        
+        return true;
     }
     
     /**
@@ -166,6 +175,7 @@ class Tinebase_Acl_Roles
         $rightIdentifier = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.right');
         
         $select = $this->_db->select()
+            ->distinct()
             ->from(array('role_rights' => SQL_TABLE_PREFIX . 'role_rights'), array())
             ->join(
                 /* table  */ array('applications' => SQL_TABLE_PREFIX . 'applications'), 
@@ -173,7 +183,6 @@ class Tinebase_Acl_Roles
             )
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('applications.status') . ' = ?', Tinebase_Application::ENABLED))
-            ->group('role_rights.application_id')
             ->order('order ASC');
         
         if ($_anyRight) {
@@ -181,8 +190,6 @@ class Tinebase_Acl_Roles
         } else {
             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_rights.right') . ' = ?', Tinebase_Acl_Rights::RUN));
         }
-        
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . $select);
@@ -201,47 +208,26 @@ class Tinebase_Acl_Roles
      * @param   int $_accountId the numeric account id
      * @return  array list of rights
      * @throws  Tinebase_Exception_AccessDenied
-     * 
-     * @todo    add right group by to statement if possible or remove duplicates in result array
      */
     public function getApplicationRights($_application, $_accountId) 
     {
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
-        if ($application->status != 'enabled') {
+        if ($application->status !== Tinebase_Application::ENABLED) {
             throw new Tinebase_Exception_AccessDenied('User has no rights. the application is disabled.');
         }
         
         $roleMemberships = $this->getRoleMemberships($_accountId);
-                        
-        $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'role_rights', array('account_rights' => $this->_dbCommand->getAggregate(SQL_TABLE_PREFIX . 'role_rights.right')))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.application_id') . ' = ?', $application->getId()))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships))
-            ->group(SQL_TABLE_PREFIX . 'role_rights.application_id');
-            //->group(SQL_TABLE_PREFIX . 'role_rights.right');
         
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        $select = $this->_db->select()
+            ->distinct()
+            ->from(SQL_TABLE_PREFIX . 'role_rights', array('account_rights' => SQL_TABLE_PREFIX . 'role_rights.right'))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'role_rights.application_id') . ' = ?', $application->getId()))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' IN (?)', $roleMemberships));
         
         $stmt = $this->_db->query($select);
 
-        $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        
-        if ($row === false) {
-            return array();
-        }
-
-        $rights = explode(',', $row['account_rights']);
-        
-        // remove duplicates
-        $result = array();
-        foreach ( $rights as $right ) {
-            if ( !in_array($right, $result) ) {
-                $result[] = $right;
-            }
-        }    
-        
-        return $result;
+        return  $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
     }
         
     /**
@@ -477,22 +463,21 @@ class Tinebase_Acl_Roles
             throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $type);
         }
         
-        $memberships = array();
+        $select = $this->_db->select()
+            ->distinct()
+            ->from(array('role_accounts' => SQL_TABLE_PREFIX . 'role_accounts'), array('role_id'))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId) . ' AND ' 
+                . $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', $type));
         
-        $select = $this->_roleMembersTable->select();
-        $select ->where($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId) . ' AND '
-            . $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', $type));
         if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
             $select->orwhere($this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' IN (?)', $groupMemberships) . ' AND ' 
                 .  $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP));
         }
         
-        $rows = $this->_roleMembersTable->fetchAll($select)->toArray();
+        $stmt = $this->_db->query($select);
         
-        foreach ($rows as $membership) {
-            $memberships[] = $membership['role_id'];
-        }
-
+        $memberships = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+        
         return $memberships;
     }
 
@@ -629,7 +614,7 @@ class Tinebase_Acl_Roles
     }
     
     /**
-     * get list of role rights 
+     * get list of role rights
      *
      * @param   int $_roleId
      * @return  array of array with application ids & rights
@@ -642,19 +627,15 @@ class Tinebase_Acl_Roles
             throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
         
-        $rights = array();
+        $select = $this->_db->select()
+            ->distinct()
+            ->from(array('role_rights' => SQL_TABLE_PREFIX . 'role_rights'), array('application_id', 'right'))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' = ?', $_roleId));
         
-        $select = $this->_roleRightsTable->select();
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . ' = ?', $_roleId));
+        $stmt = $this->_db->query($select);
         
-        $rows = $this->_roleRightsTable->fetchAll($select)->toArray();
+        $rights = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        foreach ($rows as $right) {
-            $rights[] = array ( 
-                'application_id'    => $right['application_id'],
-                'right'             => $right['right']
-            );
-        }
         return $rights;
     }
 
