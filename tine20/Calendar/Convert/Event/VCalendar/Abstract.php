@@ -931,10 +931,15 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
  3A3B-F7B6-459A-AB3E-4726E53637D0/dropbox/4971F93F-8657-412B-841A-A0FD913
  9CD61.dropbox/Canada.png
                          */
-                        $readFromURL = true;
                         $url = $property->getValue();
-                        $name = parse_url($url, PHP_URL_PATH);
-                        $name = pathinfo($name, PATHINFO_BASENAME);
+                        $urlParts = parse_url($url);
+                        $host = $urlParts['host'];
+                        $name = pathinfo($urlParts['path'], PATHINFO_BASENAME);
+
+                        // iCal 10.7 places URI before uploading
+                        if (parse_url(Tinebase_Core::getHostname(), PHP_URL_HOST) != $host) {
+                            $readFromURL = true;
+                        }
                     }
                     // base64
                     else {

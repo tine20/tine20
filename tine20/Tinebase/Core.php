@@ -1628,7 +1628,10 @@ class Tinebase_Core
         $hostname = self::get('HOSTNAME');
         if (! $hostname) {
             $request = new Sabre\HTTP\Request();
-            $hostname = str_replace($request->getUri(), '', $request->getAbsoluteUri());
+            $hostname = strlen($request->getUri()) > 1 ?
+                str_replace($request->getUri(), '', $request->getAbsoluteUri()) :
+                $request->getAbsoluteUri();
+
             self::set('HOSTNAME', $hostname);
         }
         
