@@ -579,6 +579,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (record.hasFlag('Passed')) {
             icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: Ext.util.Format.htmlEncode(_('Forwarded'))});
         }   
+        if (record.hasFlag('Tine20')) {
+            icons.push({src: 'images/favicon.png', qtip: Ext.util.Format.htmlEncode(_('Tine20'))});
+        }
 //        if (record.hasFlag('\\Recent')) {
 //            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: _('Recent')});
 //        }   
