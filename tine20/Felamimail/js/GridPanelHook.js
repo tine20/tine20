@@ -30,20 +30,63 @@ Tine.Felamimail.GridPanelHook = function(config) {
     
     // NOTE: due to the action updater this action is bound the the adb grid only!
     this.composeMailAction = new Ext.Action({
-        actionType: 'add',
-        text: this.app.i18n._('Compose email'),
-        iconCls: this.app.getIconCls(),
-        disabled: true,
+      actionType: 'add',
+      text: this.app.i18n._('Compose email'),
+      iconCls: this.app.getIconCls(),
+      disabled: true,
+      scope: this,
+      actionUpdater: this.updateAction,
+      handler: this.onComposeEmailTO,
+      allowMultiple: true,
+      listeners: {
         scope: this,
-        actionUpdater: this.updateAction,
-        handler: this.onComposeEmail,
-        listeners: {
-            scope: this,
-            render: this.onRender
-        }
+        render: this.onRender
+      },
+      menu: {
+        items: [
+          this.composeMailActionTO = new Ext.Action({
+              actionType: 'add',
+              text: this.app.i18n._('To'),
+              iconCls: this.app.getIconCls(),
+              disabled: true,
+              scope: this,
+              actionUpdater: this.updateAction,
+              handler: this.onComposeEmailTO,
+              listeners: {
+                  scope: this,
+                  render: this.onRender
+              }
+          }),
+          this.composeMailActionCC = new Ext.Action({
+              actionType: 'add',
+              text: this.app.i18n._('CC'),
+              iconCls: this.app.getIconCls(),
+              disabled: true,
+              scope: this,
+              actionUpdater: this.updateAction,
+              handler: this.onComposeEmailCC,
+              listeners: {
+                  scope: this,
+                  render: this.onRender
+              }
+          }),
+          this.composeMailActionBCC = new Ext.Action({
+              actionType: 'add',
+              text: this.app.i18n._('BCC'),
+              iconCls: this.app.getIconCls(),
+              disabled: true,
+              scope: this,
+              actionUpdater: this.updateAction,
+              handler: this.onComposeEmailBCC,
+              listeners: {
+                  scope: this,
+                  render: this.onRender
+              }
+          })
+        ]
+      }
     });
-    
-    this.composeMailBtn = Ext.apply(new Ext.Button(this.composeMailAction), {
+    this.composeMailBtn = Ext.apply(new Ext.Button(this.composeMailActionTO), {
         scale: 'medium',
         rowspan: 2,
         iconAlign: 'top'
@@ -68,13 +111,27 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      * @type String
      */
     foreignAppName: null,
+     
+    /**
+     * @property composeMailAction
+     * @type Tine.widgets.ActionUpdater
+     * @private
+     */
+    composeMailActionTO: null,
     
     /**
      * @property composeMailAction
      * @type Tine.widgets.ActionUpdater
      * @private
      */
-    composeMailAction: null,
+    composeMailActionCC: null,
+    
+    /**
+     * @property composeMailAction
+     * @type Tine.widgets.ActionUpdater
+     * @private
+     */
+    composeMailActionBCC: null,
     
     /**
      * @property composeMailBtn
@@ -170,7 +227,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      * 
      * @param {Button} btn 
      */
-    onComposeEmail: function(btn) {
+    onComposeEmail: function(btn,to) {
         if (this.getGridPanel().grid) {
             var sm = this.getGridPanel().grid.getSelectionModel(),
                 mailAddresses = sm.isFilterSelect ? null : this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections());
@@ -179,16 +236,60 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
                 mailAddresses = this.mailAddresses;
         }
 
-        var record = new Tine.Felamimail.Model.Message({
-            subject: (this.subject) ? this.subject : '',
-            to: mailAddresses
-        }, 0);
+        if( to == "CC")
+        {
+            var record = new Tine.Felamimail.Model.Message({
+                subject: (this.subject) ? this.subject : '',
+                cc: mailAddresses
+            }, 0);
+        }
+        else if( to == "BCC")
+        {
+            var record = new Tine.Felamimail.Model.Message({
+                subject: (this.subject) ? this.subject : '',
+                bcc: mailAddresses
+            }, 0);
+        }
+        else
+        {
+            var record = new Tine.Felamimail.Model.Message({
+                subject: (this.subject) ? this.subject : '',
+                to: mailAddresses
+            }, 0);
+        }
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
             selectionFilter: sm && sm.isFilterSelect ? Ext.encode(sm.getSelectionFilter()) : null,
             record: record
         });
     },
     
+    /**
+     * compose an email to selected contacts
+     * 
+     * @param {Button} btn 
+     */
+    onComposeEmailTO: function(btn) {
+        this.onComposeEmail( btn, "TO" );
+    },
+
+    /**
+     * compose an email to selected contacts
+     * 
+     * @param {Button} btn 
+     */
+    onComposeEmailCC: function(btn) {
+        this.onComposeEmail( btn, "CC" );
+    },
+
+    /**
+     * compose an email to selected contacts
+     * 
+     * @param {Button} btn 
+     */
+    onComposeEmailBCC: function(btn) {
+        this.onComposeEmail( btn, "BCC" );
+    },
+
     /**
      * add to action updater the first time we render
      */
@@ -198,6 +299,15 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             
         if (registeredActions.indexOf(this.composeMailAction) < 0) {
             actionUpdater.addActions([this.composeMailAction]);
+        }
+        if (registeredActions.indexOf(this.composeMailActionTO) < 0) {
+            actionUpdater.addActions([this.composeMailActionTO]);
+        }
+        if (registeredActions.indexOf(this.composeMailActionCC) < 0) {
+            actionUpdater.addActions([this.composeMailActionCC]);
+        }
+        if (registeredActions.indexOf(this.composeMailActionBCC) < 0) {
+            actionUpdater.addActions([this.composeMailActionBCC]);
         }
     },
     
