@@ -564,7 +564,30 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
      */
     public function updateProperties($mutations) 
     {
-        throw new Sabre\DAV\Exception\MethodNotAllowed('Changing properties is not yet supported');
+        $result = array(
+            200 => array(),
+            403 => array()
+        );
+
+        foreach ($mutations as $key => $value) {
+            switch ($key) {
+                // once iCal tried to set default-alarm config with a negative feedback
+                // it doesn't send default-alarms to the server any longer. So we fake
+                // success here as workaround to let the client send its default alarms
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-datetime':
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-date':
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-datetime':
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-date':
+                    // fake success
+                    $result['200'][$key] = null;
+                    break;
+
+                default:
+                    $result['403'][$key] = null;
+            }
+        }
+
+        return $result;
     }
     
     /**
@@ -618,7 +641,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
         try {
             $container = Tinebase_Container::getInstance()->addContainer($newContainer);
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create directory ' . $name);
+            throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create directory ' . $properties['name']);
         }
         
         return $container;
