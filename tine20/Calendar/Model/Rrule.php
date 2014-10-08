@@ -592,7 +592,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         // we don't want to compute ourself
         $ownEvent = clone $_event;
-        $ownEvent->setRecurId();
+        $ownEvent->setRecurId($_event->getId());
         $exceptions = clone $_exceptions;
         $exceptions->addRecord($ownEvent);
         $recurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
@@ -725,7 +725,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     
                     // check if base event (recur instance) needs to be added to the set
                     if ($baseEvent->dtstart > $_event->dtstart && $baseEvent->dtstart >= $_from && $baseEvent->dtstart < $_until) {
-                        if (! in_array($baseEvent->setRecurId(), $exceptionRecurIds)) {
+                        if (! in_array($baseEvent->setRecurId($baseEvent->getId()), $exceptionRecurIds)) {
                             self::addRecurrence($baseEvent, $recurSet);
                         }
                     }
@@ -764,7 +764,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     
                     // check if base event (recur instance) needs to be added to the set
                     if ($baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
-                        if (! in_array($baseEvent->setRecurId(), $exceptionRecurIds)) {
+                        if (! in_array($baseEvent->setRecurId($baseEvent->getId()), $exceptionRecurIds)) {
                             self::addRecurrence($baseEvent, $recurSet);
                         }
                     }
@@ -866,7 +866,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $recurEvent->dtend = clone $recurEvent->dtstart;
             $recurEvent->dtend->add($eventLength);
             
-            $recurEvent->setRecurId();
+            $recurEvent->setRecurId($_event->getId());
             
             if ($_from->compare($recurEvent->dtend) >= 0) {
                 continue;
@@ -952,7 +952,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 continue;
             }
             
-            $recurEvent->setRecurId();
+            $recurEvent->setRecurId($_event->getId());
             
             
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
@@ -1052,7 +1052,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 continue;
             }
             
-            $recurEvent->setRecurId();
+            $recurEvent->setRecurId($_event->getId());
             
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
                 self::addRecurrence($recurEvent, $_recurSet);

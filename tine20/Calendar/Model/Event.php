@@ -123,6 +123,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         // ical scheduleable interface fields
         'dtstart'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'recurid'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'base_event_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // ical scheduleable interface fields with multiple appearance
         'exdate'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), //  array of Tinebase_DateTimeTinebase_DateTime's
         //'exrule'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
@@ -466,7 +467,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      * 
      * @return string recurid which was set
      */
-    public function setRecurId()
+    public function setRecurId($baseEventId)
     {
         if (! ($this->uid && $this->dtstart)) {
             throw new Exception ('uid _and_ dtstart must be set to generate recurid');
@@ -477,7 +478,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         $dtstart->setTimezone('UTC');
         
         $this->recurid = $this->uid . '-' . $dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
-        
+        $this->base_event_id = $baseEventId;
+
         return $this->recurid;
     }
     
