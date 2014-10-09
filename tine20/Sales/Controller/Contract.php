@@ -19,6 +19,20 @@
 class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
 {
     /**
+     * the number gets prefixed zeros until this amount of chars is reached
+     *
+     * @var integer
+     */
+    protected $_numberZerofill = 6;
+    
+    /**
+     * the prefix for the invoice
+     *
+     * @var string
+     */
+    protected $_numberPrefix = 'V-';
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 

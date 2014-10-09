@@ -42,6 +42,7 @@ Ext.ux.PercentCombo = Ext.extend(Ext.form.ComboBox, {
     emptyText: 'percent ...',
     lazyInit: false,
     forceSelection: true,
+    itemSelector: 'div.search-item',
     
     //private
     initComponent: function(){
@@ -50,7 +51,9 @@ Ext.ux.PercentCombo = Ext.extend(Ext.form.ComboBox, {
         if(!this.value) {
             this.value = 0;
         }
-            
+        
+        this.initTemplate();
+
         this.store = new Ext.data.SimpleStore({
             fields: ['key','value'],
             data: [
@@ -86,6 +89,39 @@ Ext.ux.PercentCombo = Ext.extend(Ext.form.ComboBox, {
     setValue: function(value) {
         value = value ? value : 0;
         Ext.ux.PercentCombo.superclass.setValue.call(this, value);
+    },
+    
+    /**
+     * init template
+     * @private
+     */
+    initTemplate: function() {
+        if (! this.tpl) {
+            this.tpl = new Ext.XTemplate(
+                '<tpl for=".">',
+                    '<div class="search-item">',
+                        '<div class="x-progress-wrap PercentRenderer">',
+                            '<div class="x-progress-inner PercentRenderer">',
+                                '<div class="x-progress-bar PercentRenderer {[this.getColorClass(values)]}" style="width:{[this.getValue(values)]}%">',
+                                    '<div class="PercentRendererText PercentRenderer">',
+                                        '<div>{[this.getValue(values)]}%</div>',
+                                    '</div>',
+                                '</div>',
+                            '</div>',
+                        '</div>',
+                    '</div>',
+                '</tpl>',
+                {
+                    getValue: function(values) {
+                        return values.key;
+                    },
+                    
+                    getColorClass: function(values) {
+                        return 'PercentRenderer-progress-bar' + values.key;
+                    }
+                }
+            );
+        }
     }
 });
 Ext.reg('extuxpercentcombo', Ext.ux.PercentCombo);

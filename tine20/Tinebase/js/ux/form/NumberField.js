@@ -19,6 +19,13 @@ Ext.ns('Ext.ux', 'Ext.ux.form');
 Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
     
     /**
+     * shall the thousand operator be shown?
+     * 
+     * @type {Boolean}
+     */
+    useThousandSeparator: true,
+    
+    /**
      * allows a prefix before the value
      * 
      * @type {String}
@@ -32,6 +39,14 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
      */
     prefix: null,
     
+    initComponent: function() {
+        if (this.useThousandSeparator) {
+            this.thousandSeparator = this.thousandSeparator ? this.thousandSeparator : (this.decimalSeparator == '.' ? ',' : '.');
+        }
+        
+        Ext.ux.form.NumberField.superclass.initComponent.call(this);
+    },
+    
     /**
      * @see Ext.form.NumberField
      * 
@@ -41,22 +56,69 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
      * @return {Ext.form.ComboBox}
      */
     setValue: function(v) {
-        var combo = Ext.ux.form.NumberField.superclass.setValue.call(this, v);
-        var sep = this.decimalSeparator;
+        Ext.ux.form.NumberField.superclass.setValue.call(this, v);
         
-        if (combo) {
-            var split = combo.value.split(sep);
-            
-            if (split.length == 1) {
-                this.value = split[0] + this.decimalSeparator + '00';
-            } else if (String(split[1]).length == 1) {
-                this.value = split[0] + this.decimalSeparator + split[1] + '0';
-            }
-            
-            this.setRawValue((this.prefix ? this.prefix : '') + this.value + (this.suffix ? this.suffix : ''));
+        var split = String(this.getValue()).split('.');
+        
+        var tenString = split[0];
+        
+        if (split.length == 1) {
+            var decimalString = '';
+        } else {
+            var decimalString = split[1];
         }
         
-        return combo;
+        while (decimalString.length < this.decimalPrecision) {
+            decimalString += '0';
+        }
+
+        var tenStringValue = tenString;
+
+        if (this.useThousandSeparator && tenString.length > 3) {
+            
+            var tenStringValue = '';
+
+            var stringIndex = 0;
+            var firstLength = tenString.length % 3;
+            if (firstLength) {
+                while (stringIndex < firstLength) {
+                    tenStringValue += tenString[stringIndex];
+                    stringIndex++;
+                }
+                
+                tenStringValue += this.thousandSeparator;
+            }
+            
+            var i = 0;
+            while(stringIndex < tenString.length) {
+                tenStringValue += tenString[stringIndex];
+                stringIndex++;
+                i++;
+                if (i == 3 && (stringIndex != (tenString.length))) {
+                    i = 0;
+                    tenStringValue += this.thousandSeparator;
+                }
+            }
+        }
+        
+        var showValue = (this.prefix ? this.prefix : '') + tenStringValue + this.decimalSeparator + decimalString + (this.suffix ? this.suffix : '');
+        this.setRawValue(showValue);
+        
+        return this;
+    },
+    
+    // private, overwrites Ext.form.NumberField.parseValue
+    parseValue : function(value){
+        if (this.useThousandSeparator) {
+            var regex = new RegExp(((this.thousandSeparator == ".") ? '\\.' : this.thousandSeparator), 'g');
+            value = value.replace(regex, '');
+        }
+        
+        value = String(value).replace(regex, '', 'g');
+        value = parseFloat(String(value).replace(this.decimalSeparator, "."));
+        value = isNaN(value) ? '' : value;
+
+        return value;
     },
     
     /**
@@ -68,6 +130,7 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
      * @return {String}
      */
     validateValue: function(value) {
+        
         if (this.prefix) {
             var regex = new RegExp(this.prefix, 'g');
             value = value.replace(regex, '');
@@ -75,6 +138,11 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
         
         if (this.suffix) {
             var regex = new RegExp(this.suffix, 'g');
+            value = value.replace(regex, '');
+        }
+        
+        if (this.useThousandSeparator) {
+            var regex = new RegExp(((this.thousandSeparator == ".") ? '\\.' : this.thousandSeparator), 'g');
             value = value.replace(regex, '');
         }
         
