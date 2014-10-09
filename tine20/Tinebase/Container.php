@@ -761,6 +761,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getOtherUsers($_accountId, $recordClass, $_grant, $_ignoreACL = FALSE)
     {
+        $meta = $this->_resolveRecordClassArgument($recordClass);
         $userIds = $this->_getOtherAccountIds($_accountId, $meta['appName'], $_grant, $_ignoreACL);
         
         $users = Tinebase_User::getInstance()->getMultiple($userIds);
