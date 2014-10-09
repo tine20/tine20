@@ -262,8 +262,10 @@ class TestServer
         $config = $this->getConfig();
         $username = isset($config->login->username) ? $config->login->username : $config->username;
         $password = isset($config->login->password) ? $config->login->password : $config->password;
-        $ip = $config->ip ? $config->ip : '127.0.0.1';
-        if (! $tinebaseController->login($username, $password, $ip, 'TineUnittest')){
+
+        $_SERVER['REMOTE_ADDR']     = $config->ip ? $config->ip : '127.0.0.1';
+        $_SERVER['HTTP_USER_AGENT'] = 'Unit Test Client';
+        if (! $tinebaseController->login($username, $password, new Zend_Controller_Request_Http(), 'TineUnittest')){
             throw new Exception("Couldn't login, user session required for tests! \n");
         }
     }

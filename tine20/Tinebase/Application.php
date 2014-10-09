@@ -291,13 +291,22 @@ class Tinebase_Application
      * @param   string $_state the new state
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setApplicationState(array $_applicationIds, $_state)
+    public function setApplicationState($_applicationIds, $_state)
     {
         if ($_state != Tinebase_Application::DISABLED && $_state != Tinebase_Application::ENABLED) {
             throw new Tinebase_Exception_InvalidArgument('$_state can be only Tinebase_Application::DISABLED  or Tinebase_Application::ENABLED');
         }
+        
+        if ($_applicationIds instanceof Tinebase_Model_Application ||
+            $_applicationIds instanceof Tinebase_Record_RecordSet
+        ) {
+            $applicationIds = (array)$_applicationIds->getId();
+        } else {
+            $applicationIds = (array)$_applicationIds;
+        }
+        
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_applicationIds)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $applicationIds)
         );
         
         $data = array(
@@ -306,7 +315,7 @@ class Tinebase_Application
         
         $affectedRows = $this->_applicationTable->update($data, $where);
         
-        if ($affectedRows === count($_applicationIds)) {
+        if ($affectedRows === count($applicationIds)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Disabled/Enabled ' . $affectedRows . ' applications.');
         } else {
@@ -314,7 +323,7 @@ class Tinebase_Application
                 . ' Could not disable all requested applications: ' . print_r($_applicationIds, TRUE));
         }
         
-        foreach ($_applicationIds as $applicationId) {
+        foreach ($applicationIds as $applicationId) {
             $this->_cleanCache($applicationId);
         }
     }

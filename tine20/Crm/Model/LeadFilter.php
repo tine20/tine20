@@ -47,6 +47,7 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
         'probability'           => array('filter' => 'Tinebase_Model_Filter_Int'),
         'turnover'              => array('filter' => 'Tinebase_Model_Filter_Int'),
         'leadstate_id'          => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'leadsource_id'          => array('filter' => 'Tinebase_Model_Filter_Int'),
         'container_id'          => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Crm')),
         'showClosed'            => array('filter' => 'Crm_Model_LeadClosedFilter'),
         'last_modified_by'      => array('filter' => 'Tinebase_Model_Filter_User'),

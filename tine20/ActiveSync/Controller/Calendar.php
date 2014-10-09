@@ -184,6 +184,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
      */
     protected $_contentControllerName = 'Calendar_Controller_MSEventFacade';
     
+    protected $_defaultContainerPreferenceName = Calendar_Preference::DEFAULTCALENDAR;
+    
     /**
      * list of devicetypes with wrong busy status default (0 = FREE)
      * 
@@ -274,6 +276,12 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     break;
                     
                 case 'attendee':
+                    if ($this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
+                        $entry->container_id       !== $this->_getDefaultContainerId()) {
+                        
+                        continue;
+                    }
+                    
                     // fill attendee cache
                     Calendar_Model_Attender::resolveAttendee($entry->$tine20Property, FALSE);
                     
@@ -515,7 +523,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
         } else {
             $event = new Calendar_Model_Event(array(), true);
         }
-        
+
         if ($data instanceof Syncroton_Model_Event) {
             $data->copyFieldsFromParent();
         }
@@ -535,9 +543,15 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                         __METHOD__ . '::' . __LINE__ . ' Unsetting description');
                     unset($event->$tine20Property);
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-                        __METHOD__ . '::' . __LINE__ . ' Removing ' . $tine20Property);
-                    $event->$tine20Property = null;
+                    if ($tine20Property === 'attendee' && $entry &&
+                        $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
+                        $entry->container_id       !== $this->_getDefaultContainerId()) {
+                            // keep attendees as the are / they were not sent to the device before
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                            __METHOD__ . '::' . __LINE__ . ' Removing ' . $tine20Property);
+                        $event->$tine20Property = null;
+                    }
                 }
                 continue;
             }
@@ -549,7 +563,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     break;
                     
                 case 'attendee':
-                    
+                    if ($entry && 
+                        $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
+                        $entry->container_id       !== $this->_getDefaultContainerId()) {
+                            // keep attendees as the are / they were not sent to the device before
+                            continue;
+                    }
+
                     $newAttendees = array();
                     
                     foreach($data->$syncrotonProperty as $attendee) {
@@ -660,8 +680,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                                  
                             case Syncroton_Model_EventRecurrence::TYPE_YEARLY:
                                 $rrule->freq       = Calendar_Model_Rrule::FREQ_YEARLY;
-                                $rrule->bymonth    = (int)$xmlData->Recurrence->monthOfYear;
-                                $rrule->bymonthday = (int)$xmlData->Recurrence->dayOfMonth;
+                                $rrule->bymonth    = $data->$syncrotonProperty->monthOfYear;
+                                $rrule->bymonthday = $data->$syncrotonProperty->dayOfMonth;
                                 
                                 break;
                                  
@@ -745,7 +765,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . " eventData " . print_r($event->toArray(), true));
-        
+
         return $event;
     }
     

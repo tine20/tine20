@@ -220,7 +220,7 @@ class Tinebase_Acl_RolesTest extends TestCase
     public function testHasRight()
     {
         $result = Tinebase_Acl_Roles::getInstance()->hasRight(
-            $this->objects['application']->name,
+            $this->objects['application'],
             $this->objects['user']->getId(),
             Tinebase_Acl_Rights::RUN
         );
@@ -228,7 +228,7 @@ class Tinebase_Acl_RolesTest extends TestCase
         $this->assertTrue($result, 'has no run right');
         
         $result = Tinebase_Acl_Roles::getInstance()->hasRight(
-            $this->objects['application']->name,
+            $this->objects['application'],
             $this->objects['user']->getId(),
             Tinebase_Acl_Rights::ADMIN
         );
@@ -243,6 +243,17 @@ class Tinebase_Acl_RolesTest extends TestCase
         );
 
         $this->assertFalse($result, 'user has admin right for not installed application');
+        
+        // test for disabled application
+        Tinebase_Application::getInstance()->setApplicationState($this->objects['application'], Tinebase_Application::DISABLED);
+        
+        $result = Tinebase_Acl_Roles::getInstance()->hasRight(
+            $this->objects['application'],
+            $this->objects['user']->getId(),
+            Tinebase_Acl_Rights::RUN
+        );
+
+        $this->assertFalse($result, 'user has run right for disabled application');
     }
 
     /**

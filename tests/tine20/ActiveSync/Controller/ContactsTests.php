@@ -234,4 +234,26 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
         $this->assertEquals(1, count($folders));
         $this->assertTrue(array_key_exists('addressbook-root', $folders));
     }
+    
+    /**
+     * test if only default addressbook is default AS folder 
+     */
+    public function testGetAllFoldersIPhone()
+    {
+        $controller = Syncroton_Data_Factory::factory(
+            $this->_class,
+            $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE),
+            Tinebase_DateTime::now()
+        );
+        $allSyncrotonFolders = $controller->getAllFolders();
+        
+        $defaultFolderId = Tinebase_Core::getPreference('Addressbook')->{Addressbook_Preference::DEFAULTADDRESSBOOK};
+        
+        foreach ($allSyncrotonFolders as $syncrotonFolder) {
+            $this->assertTrue($syncrotonFolder->serverId == $defaultFolderId 
+                ? $syncrotonFolder->type === Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT
+                : $syncrotonFolder->type === Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
+            );
+        }
+    }
 }

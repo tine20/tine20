@@ -45,16 +45,18 @@ class Felamimail_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_1()
     {
-        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
-            <name>conjunction</name>
-            <type>text</type>
-            <length>40</length>
-            <notnull>true</notnull>
-            <default>allof</default>
-        </field>');
-        
-        $this->_backend->addCol('felamimail_sieve_rule', $declaration);
-        
+        if(! $this->_backend->columnExists('conjunction', 'felamimail_sieve_rule')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                <name>conjunction</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+                <default>allof</default>
+            </field>');
+
+            $this->_backend->addCol('felamimail_sieve_rule', $declaration);
+        }
+
         $this->setTableVersion('felamimail_sieve_rule', 3);
         $this->setApplicationVersion('Felamimail', '8.2');
     }

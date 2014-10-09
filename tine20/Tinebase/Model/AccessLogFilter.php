@@ -6,7 +6,7 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -46,5 +46,6 @@ class Tinebase_Model_AccessLogFilter extends Tinebase_Model_Filter_FilterGroup
         'li'            => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'lo'            => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'account_id'    => array('filter' => 'Tinebase_Model_Filter_User'),
+        'result'        => array('filter' => 'Tinebase_Model_Filter_Int'),
     );
 }

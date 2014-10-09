@@ -801,12 +801,18 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $result = array();
         $appName = ($_appName !== NULL) ? $_appName : $this->_application;
         
-        $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $appName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
-        $containers->merge(Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $appName, Tinebase_Model_Grants::GRANT_ADD));
-        foreach ($containers as $container) {
+        $myContainers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $appName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
+        $sharedAddContainers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $appName, Tinebase_Model_Grants::GRANT_ADD);
+        $sharedReadContainers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $appName, Tinebase_Model_Grants::GRANT_READ);
+
+        foreach ($myContainers as $container) {
             $result[] = array($container->getId(), $container->name);
         }
-        
+        foreach($sharedAddContainers as $container) {
+            if ($sharedReadContainers->getById($container->getId())) {
+                $result[] = array($container->getId(), $container->name);
+            }
+        }
         return $result;
     }
     
@@ -825,7 +831,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $accountId = ($_accountId) ? $_accountId : Tinebase_Core::getUser()->getId();
         $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, $appName, $accountId, 0, true);
         
-        $_preference->value  = $containers->getFirstRecord()->getId();
+        $_preference->value  = $containers->sort('creation_time')->getFirstRecord()->getId();
         $_preference->options = '<?xml version="1.0" encoding="UTF-8"?>
             <options>
                 <special>' . $_optionName . '</special>

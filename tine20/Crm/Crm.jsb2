@@ -63,6 +63,10 @@
           "text": "LeadStateFilterModel.js",
           "path": "js/"
         },
+          {
+              "text": "LeadSourceFilterModel.js",
+              "path": "js/"
+          },
         {
           "text": "LeadSource.js",
           "path": "js/"

@@ -108,6 +108,7 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             {label: app.i18n._('Lead name'),   field: 'lead_name' },
             {filtertype: 'crm.leadstate', app: app},
             {label: app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
+            {filtertype: 'crm.leadsource', app: app},
             {label: app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
             {filtertype: 'tinebase.tag', app: app},
             {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},

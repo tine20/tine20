@@ -1326,7 +1326,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     }
     
     /**
-     * appends foreign recordSet (1:n/m:n relation) to given recordSet
+     * appends foreign recordSet (1:n relation) to given recordSet
      *
      * @param Tinebase_Record_RecordSet     $_recordSet         Records to append the foreign records to
      * @param string                        $_appendTo          Property in the records where to append the foreign records to
@@ -1336,17 +1336,20 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function appendForeignRecordSetToRecordSet($_recordSet, $_appendTo, $_recordKey, $_foreignKey, $_foreignBackend)
     {
-        $allForeignRecords = $_foreignBackend->getMultipleByProperty($_recordSet->$_recordKey, $_foreignKey);
+        $idxRecordKeyMap = $_recordSet->$_recordKey;
+        $recordKeyIdxMap = array_flip($idxRecordKeyMap);
+        $allForeignRecords = $_foreignBackend->getMultipleByProperty($idxRecordKeyMap, $_foreignKey);
         $foreignRecordsClassName = $allForeignRecords->getRecordClassName();
-        $idxIdMap = $allForeignRecords->$_foreignKey;
 
         foreach ($_recordSet as $record) {
-            $matchingIds = array_keys($idxIdMap, $record->$_recordKey);
-            $foreignRecords = new Tinebase_Record_RecordSet($foreignRecordsClassName);
-            foreach($matchingIds as $idx => $matchingId) {
-                $foreignRecords->addRecord($allForeignRecords->getByIndex($matchingId));
-            }
-            $record->$_appendTo = $foreignRecords;
+            $record->$_appendTo = new Tinebase_Record_RecordSet($foreignRecordsClassName);
+        }
+
+        foreach($allForeignRecords as $foreignRecord) {
+            $record = $_recordSet->getByIndex($recordKeyIdxMap[$foreignRecord->$_foreignKey]);
+            $foreignRecordSet = $record->$_appendTo;
+
+            $foreignRecordSet->addRecord($foreignRecord);
         }
     }
     

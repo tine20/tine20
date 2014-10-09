@@ -5,7 +5,7 @@
  * @subpackage  AccessLog
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philip Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -106,8 +106,8 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             ],
             defaultFilter: 'query',
             filters: [
-                {field: 'li',           operator: 'within', value: 'weekThis'},
-                {field: 'clienttype',   operator: 'equals', value: 'TineJson'}
+                {field: 'li',           operator: 'within', value: 'weekThis'}
+                //{field: 'clienttype',   operator: 'equals', value: 'JSON-RPC'}
             ],
             plugins: [
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()

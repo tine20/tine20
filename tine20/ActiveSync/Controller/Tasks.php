@@ -102,6 +102,8 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      */
     protected $_filterProperty = 'tasksfilterId';
     
+    protected $_defaultContainerPreferenceName = Tasks_Preference::DEFAULTTASKLIST;
+    
     /**
      * (non-PHPdoc)
      * @see ActiveSync_Controller_Abstract::toSyncrotonModel()

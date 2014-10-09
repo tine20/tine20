@@ -42,6 +42,8 @@ class Tinebase_Translation
      */
     public static function getAvailableTranslations($appName = 'Tinebase')
     {
+        $logger = Tinebase_Core::getLogger();
+        
         $availableTranslations = array();
 
         // look for po files in Tinebase 
@@ -70,15 +72,35 @@ class Tinebase_Translation
             }
         }
         
+        $filesToWatch = array();
+        
         // compute information
         foreach ($availableTranslations as $localestring => $info) {
             if (! Zend_Locale::isLocale($localestring, TRUE, FALSE)) {
-                $logger = Tinebase_Core::getLogger();
                 if ($logger) $logger->WARN(__METHOD__ . '::' . __LINE__ . " $localestring is not supported, removing translation form list");
                 unset($availableTranslations[$localestring]);
                 continue;
             }
             
+            $filesToWatch[] = $info['path'];
+        }
+        
+        $cacheId = convertCacheId(__FUNCTION__ . $appName . sha1(serialize($filesToWatch)));
+        $cache = new Zend_Cache_Frontend_File(array(
+            'master_files' => $filesToWatch
+        ));
+        $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
+        
+        if ($cachedTranslations = $cache->load($cacheId)) {
+            $cachedTranslations = unserialize($cachedTranslations);
+            
+            if ($cachedTranslations !== null) {
+                return $cachedTranslations;
+            }
+        }
+        
+        // compute information
+        foreach ($availableTranslations as $localestring => $info) {
             // fetch header grep for X-Poedit-Language, X-Poedit-Country
             $fh = fopen($info['path'], 'r');
             $header = fread($fh, 1024);
@@ -96,6 +118,9 @@ class Tinebase_Translation
         }
 
         ksort($availableTranslations);
+        
+        $cache->save(serialize($availableTranslations), $cacheId, array(), /* 1 day */ 86400);
+        
         return $availableTranslations;
     }
     

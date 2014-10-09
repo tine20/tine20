@@ -169,6 +169,23 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
                     forceSelection: true,
                     value: 'no',
                     store: [['no', this.app.i18n._('off')], ['yes', this.app.i18n._('on')]] 
+                }],[{
+                    xtype: 'combo',
+                    fieldLabel: this.app.i18n._('Direct Media (canreinvite)'), 
+                    // canreinvite is deprecated in asterisk 10,11 and will be replaced by directmedia, but we use the old asterisk here
+                    name: 'canreinvite',
+                    mode: 'local',
+                    anchor: '98%',
+                    triggerAction: 'all',
+                    editable: false,
+                    forceSelection: true,
+                    value: 'yes',
+                    store: [
+                        ['yes', this.app.i18n._('yes')], 
+                        ['no', this.app.i18n._('no')] 
+                        /* next asterisk versions (>1.8), when this is called directmedia we have an additional option:
+                        ['nonat', this.app.i18n._('nonat')],  */
+                    ] 
                 }]]
             }, this.callForwardPanel
             ]
