@@ -1,32 +1,26 @@
 <?php
 /**
  * Tine 2.0
- *
+ * 
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- *
+ * 
  */
 
 /**
  * Json interface to Tinebase
- *
+ * 
  * @package     Tinebase
  * @subpackage  Server
  */
 class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
-     *
-     * @var boolean
-     */
-    protected $_hasCaptcha = NULL;
-
-    /**
      * wait for changes
-     *
+     * 
      * @todo do we still need this?
      */
     public function ping()
@@ -38,9 +32,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * get list of translated country names
-     *
+     * 
      * Wrapper for {@see Tinebase_Core::getCountrylist}
-     *
+     * 
      * @return array list of countrys
      */
     public function getCountryList()
@@ -239,7 +233,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * Used for updating multiple records
-     *
+     * 
      * @param string $appName
      * @param string $modelName
      * @param array $changes
@@ -450,113 +444,70 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         Tinebase_Core::startSession('tinebase');
         
-        if (is_array(($response = $this->_getCaptchaResponse($securitycode)))) {
-            return $response;
-        }
-
-        // try to login user
-        $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineJson', $securitycode) === TRUE);
-        
-        if($success === TRUE) {
-            return $this->_getLoginSuccessResponse($username);
-        } else {
-            return $this->_getLoginFailedResponse();
-        }
-    }
-
-    /**
-     * Returns TRUE if there is a captcha
-     * @return boolean
-     */
-    protected function _hasCaptcha()
-    {
-        if ($this->_hasCaptcha == NULL){
-            $this->_hasCaptcha = (isset(Tinebase_Core::getConfig()->captcha->count) && Tinebase_Core::getConfig()->captcha->count != 0) ? TRUE : FALSE;
-        }
-        return $this->_hasCaptcha;
-    }
-
-    /**
-     *
-     * @param string $securitycode
-     * @return array | NULL
-     */
-    protected function _getCaptchaResponse($securitycode)
-    {
-        if ($this->_hasCaptcha()) {
+        $captcha = (isset(Tinebase_Core::getConfig()->captcha->count) && Tinebase_Core::getConfig()->captcha->count != 0) ? TRUE : FALSE; 
+        if ($captcha) {
             $config_count = Tinebase_Core::getConfig()->captcha->count;
             $count = (isset($_SESSION['captcha']['count']) ? $_SESSION['captcha']['count'] : 1);
             if ($count >= $config_count) {
                 $aux = isset($_SESSION['captcha']['code']) ? $_SESSION['captcha']['code'] : NULL;
                 if ($aux != $securitycode) {
-                    $rets = Tinebase_Controller::getInstance()->makeCaptcha();
+                    $rets = Tinebase_Controller::getInstance()->makeCaptcha(); 
                     $response = array(
                         'success'      => FALSE,
                         'errorMessage' => "Wrong username or password!",
                         'c1' => $rets['1']
                     );
                     return $response;
-                }
+                   }
             }
         }
-        return NULL;
-    }
-
-    /**
-     *
-     * @param string $username
-     * @return array
-     */
-    protected function _getLoginSuccessResponse($username)
-    {
-        $response = array(
+        // try to login user
+        $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineJson', $securitycode) === TRUE);
+        
+        if ($success == true) {
+            $response = array(
                 'success'        => TRUE,
                 'account'        => Tinebase_Core::getUser()->getPublicUser()->toArray(),
                 'jsonKey'        => Tinebase_Core::get('jsonKey'),
                 'welcomeMessage' => "Welcome to Tine 2.0!"
-        );
+            );
+             
+            if (Tinebase_Config::getInstance()->get(Tinebase_Config::REUSEUSERNAME_SAVEUSERNAME, 0)) {
+                // save in cookie (expires in 2 weeks)
+                setcookie('TINE20LASTUSERID', $username, time()+60*60*24*14);
+            } else {
+                setcookie('TINE20LASTUSERID', '', 0);
+            }
 
-        if (Tinebase_Config::getInstance()->get(Tinebase_Config::REUSEUSERNAME_SAVEUSERNAME, 0)) {
-            // save in cookie (expires in 2 weeks)
-            setcookie('TINE20LASTUSERID', $username, time()+60*60*24*14);
+            $this->_setCredentialCacheCookie();
+            
         } else {
-            setcookie('TINE20LASTUSERID', '', 0);
-        }
-
-        $this->_setCredentialCacheCookie();
-
-        return $response;
-    }
-
-    /**
-     *
-     * @return array
-     */
-    protected function _getLoginFailedResponse()
-    {
-        $response = array(
+            $response = array(
                 'success'      => FALSE,
                 'errorMessage' => "Wrong username or password!",
-        );
-        Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
-        if ($this->_hasCaptcha()) {
-            $config_count = Tinebase_Core::getConfig()->captcha->count;
-            if (!isset($_SESSION['captcha']['count'])) {
-                $_SESSION['captcha']['count'] = 1;
-            } else {
-                $_SESSION['captcha']['count'] = $_SESSION['captcha']['count'] + 1;
-            }
-            if ($_SESSION['captcha']['count'] >= $config_count) {
-                $rets = Tinebase_Controller::getInstance()->makeCaptcha();
-                $response = array(
+            );
+            Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
+            if ($captcha) {
+                $config_count = Tinebase_Core::getConfig()->captcha->count;
+                if (!isset($_SESSION['captcha']['count'])) {
+                    $_SESSION['captcha']['count'] = 1;
+                } else {
+                    $_SESSION['captcha']['count'] = $_SESSION['captcha']['count'] + 1;
+                }
+                if ($_SESSION['captcha']['count'] >= $config_count) {
+                    $rets = Tinebase_Controller::getInstance()->makeCaptcha(); 
+                    $response = array(
                         'success'      => FALSE,
                         'errorMessage' => "Wrong username or password!",
                         'c1' => $rets['1']
-                );
+                    );
+                }
+            } else {
+                Zend_Session::destroy(false,true);
             }
-        } else {
-            Zend_Session::destroy(false,true);
+            
         }
+
         return $response;
     }
 
@@ -649,7 +600,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * get anonymous registry
-     *
+     * 
      * @return array
      */
     protected function _getAnonymousRegistryData()
@@ -706,7 +657,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * get user registry
-     *
+     * 
      * @return array
      */
     protected function _getUserRegistryData()
@@ -784,7 +735,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     try {
                         $applicationJson = new $jsonAppName();
                         $registryData[$application->name] = ((isset($registryData[$application->name]) || array_key_exists($application->name, $registryData)))
-                            ? array_merge_recursive($registryData[$application->name], $applicationJson->getRegistryData())
+                            ? array_merge_recursive($registryData[$application->name], $applicationJson->getRegistryData()) 
                             : $applicationJson->getRegistryData();
                     
                     } catch (Exception $e) {
@@ -821,7 +772,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $appPrefs = Tinebase_Core::getPreference($application->name);
                     if ($appPrefs !== NULL) {
                         $allPrefs = $appPrefs->getAllApplicationPreferences();
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                             . ' ' . print_r($allPrefs, TRUE));
                         
                         foreach ($allPrefs as $pref) {
@@ -878,9 +829,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($backend) {
             $records = $backend->search($filter);
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Got ' . count($records) . ' preferences for app ' . $applicationName);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' ' . print_r($records->toArray(), TRUE));
             
             $result = $this->_multipleRecordsToJson($records, $filter);
