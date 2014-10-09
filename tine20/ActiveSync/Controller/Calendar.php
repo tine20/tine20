@@ -974,4 +974,20 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
     {
         return ActiveSync_Config::getInstance()->get(ActiveSync_Config::MAX_FILTER_TYPE_CALENDAR);
     }
+
+    /**
+     * NOTE: calendarFilter is based on contentFilter for ActiveSync
+     *
+     * @param $folderId
+     */
+    protected function _assertContentControllerParams($folderId)
+    {
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerById($folderId);
+        } catch (Exception $e) {
+            $containerId = Tinebase_Core::getPreference('ActiveSync')->{$this->_defaultFolder};
+            $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+        }
+        Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($container, false);
+    }
 }

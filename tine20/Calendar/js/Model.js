@@ -165,6 +165,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         centerPanel = mainScreen.getCenterPanel(),
         westPanel = mainScreen.getWestPanel(),
         container = westPanel.getContainerTreePanel().getDefaultContainer(),
+        organizer = container.ownerContact ? container.ownerContact : Tine.Tinebase.registry.get('userContact'),
         prefs = app.getRegistry().get('preferences'),
         dtstart = new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
         period = centerPanel.getCalendarPanel(centerPanel.activeView).getView().getPeriod();
@@ -181,8 +182,8 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         container_id: container,
         transp: 'OPAQUE',
         editGrant: true,
-        organizer: Tine.Tinebase.registry.get('userContact'),
-        attendee: Tine.Calendar.Model.Event.getDefaultAttendee() /*[
+        organizer: organizer,
+        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer) /*[
             Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                 user_type: 'user',
                 user_id: Tine.Tinebase.registry.get('userContact'),
@@ -198,7 +199,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     return data;
 };
 
-Tine.Calendar.Model.Event.getDefaultAttendee = function() {
+Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer) {
     var app = Tine.Tinebase.appMgr.get('Calendar'),
         mainScreen = app.getMainScreen(),
         centerPanel = mainScreen.getCenterPanel(),
@@ -247,6 +248,7 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function() {
             break;
             
         case 'calendarOwner':
+            var addedOwnerIds = [];
             Ext.each(filteredContainers, function(container){
                 if (container.ownerContact) {
                     var attendeeData = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
@@ -254,11 +256,14 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function() {
                         user_id: container.ownerContact
                     });
                     
-                    if (attendeeData.user_id.id == Tine.Tinebase.registry.get('userContact').id){
+                    if (attendeeData.user_id.id == organizer.id){
                         attendeeData.status = 'ACCEPTED';
                     }
-                    
-                    defaultAttendee.push(attendeeData);
+
+                    if (addedOwnerIds.indexOf(container.ownerContact.id) < 0) {
+                        defaultAttendee.push(attendeeData);
+                        addedOwnerIds.push(container.ownerContact.id);
+                    }
                 }
             }, this);
             

@@ -60,7 +60,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
-        $this->_assertEventFacadeParams($this->_container);
+        Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
         
         $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
     }
@@ -117,9 +117,15 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         #Sabre\CalDAV\ICalendarUtil::validateICalendarObject($vobjectData, array('VEVENT', 'VFREEBUSY'));
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
-        
-        $event = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
-        
+
+        try {
+            $event = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
+            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+        }
+
         if (true === $onlyCurrentUserOrganizer) {
             if ($event->organizer && $event->organizer != Tinebase_Core::getUser()->contact_id) {
                 return null;
@@ -137,23 +143,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Event to create: " . print_r($event->toArray(), TRUE));
         
-        self::_assertEventFacadeParams($container);
+        Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($container);
         
         // check if there is already an existing event with this ID
         // this can happen when the invitation email is faster then the caldav update or
         // or when an event gets moved to another container
-        
         $filter = new Calendar_Model_EventFilter(array(
-            array(
-                'field' => 'dtstart', 
-                'operator' => 'equals', 
-                'value' => $event->dtstart
-            ),
-            array(
-                'field' => 'dtend', 
-                'operator' => 'equals', 
-                'value' => $event->dtend
-            ),
+            array('field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET),
             array('condition' => 'OR', 'filters' => array(
                 array(
                     'field'     => 'id',
@@ -170,12 +166,37 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
         
         if ($existingEvent === null) {
-            $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+            try {
+                $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
+                throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+            }
             
             $vevent = new self($container, $event);
         } else {
+            if ($existingEvent->is_deleted) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' recovering already deleted event');
+
+                // @TODO have a undelete/recover workflow beginning in controller
+                $existingEvent->is_deleted = 0;
+                $existingEvent->deleted_by = NULL;
+                $existingEvent->deleted_time = NULL;
+
+                $be = new Calendar_Backend_Sql();
+                $be->updateMultiple($existingEvent->getId(), array(
+                    'is_deleted'    => 0,
+                    'deleted_by'    => NULL,
+                    'deleted_time'  => NULL,
+                ));
+            }
+
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
+
             $vevent = new self($container, $existingEvent);
             $vevent->put($vobjectData);
         }
@@ -193,10 +214,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     {
         // when a move occurs, thunderbird first sends to delete command and immediately a put command
         // we must delay the delete command, otherwise the put command fails
-        sleep(1);
+        sleep(5);
         
         // (re) fetch event as tree move does not refresh src node before delete
-        $this->_assertEventFacadeParams($this->_container);
+        Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
         $event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
         
         // disallow event cleanup in the past
@@ -373,13 +394,14 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      */
     public function put($cardData) 
     {
-        $this->_assertEventFacadeParams($this->_container);
+        Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
         if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendar_Convert_Event_VCalendar_Factory for supported clients.");
             throw new Sabre\DAV\Exception\Forbidden('Update denied for unknown client');
         }
-        
+
+        $this->_vevent = null;
         if (is_resource($cardData)) {
             $cardData = stream_get_contents($cardData);
         }
@@ -403,16 +425,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $event = $this->_converter->toTine20Model($vobject, $this->getRecord(), array(
             Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
-        
-        $currentContainer = Tinebase_Container::getInstance()->getContainerById($this->getRecord()->container_id);
-        
-        // event 'belongs' current user -> allow container move
-        if ($currentContainer->isPersonalOf(Tinebase_Core::getUser())) {
-            $event->container_id = $this->_container->getId();
-        }
-        
+
+        $currentEvent = $this->getRecord();
+        $currentContainer = Tinebase_Container::getInstance()->getContainerById($currentEvent->container_id);
+
         // client sends CalDAV event -> handle a container move
-        else if (isset($xTine20Container)) {
+        if (isset($xTine20Container)) {
             if ($xTine20Container->getValue() == $currentContainer->getId()) {
                 $event->container_id = $this->_container->getId();
             } else {
@@ -422,7 +440,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 }
             }
         }
-        
+
+        // event was created by current user -> allow container move
+        else if ($currentEvent->created_by == Tinebase_Core::getUser()->getId()) {
+            $event->container_id = $this->_container->getId();
+        }
+
         // client sends event from iMIP invitation -> only allow displaycontainer move
         else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
@@ -431,11 +454,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 Calendar_Controller_MSEventFacade::getInstance()->setDisplaycontainer($event, $this->_container->getId());
             }
         }
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
         
-        $this->update($event);
+        $this->update($event, $cardData);
         
         return $this->getETag();
     }
@@ -445,12 +468,21 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * 
      * @param Calendar_Model_Event $event
      */
-    public function update(Calendar_Model_Event $event)
+    public function update(Calendar_Model_Event $event, $cardData='')
     {
         try {
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
             throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            throw new Sabre\DAV\Exception\Forbidden('forbidden update');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new Sabre\DAV\Exception\PreconditionFailed('event not found');
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $e);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $cardData);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
+            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
         }
     }
     
@@ -481,35 +513,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     }
     
     /**
-     * asserts correct event filter and calendar user in MSEventFacade
-     * 
-     * NOTE: this is nessesary as MSEventFacade is a singleton and in some operations (e.g. move) there are 
-     *       multiple instances of self
-     */
-    protected static function _assertEventFacadeParams($container)
-    {
-        $eventFilter = new Calendar_Model_EventFilter(array(
-                array('field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId())
-        ));
-        
-        try {
-            $calendarUserId = $container->type == Tinebase_Model_Container::TYPE_PERSONAL ?
-            Addressbook_Controller_Contact::getInstance()->getContactByUserId($container->getOwner(), true)->getId() :
-            Tinebase_Core::getUser()->contact_id;
-        } catch (Exception $e) {
-            $calendarUserId = Calendar_Controller_MSEventFacade::getCurrentUserContactId();
-        }
-        
-        $calendarUser = new Calendar_Model_Attender(array(
-            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'   => $calendarUserId,
-        ));
-        
-        Calendar_Controller_MSEventFacade::getInstance()->setEventFilter($eventFilter);
-        Calendar_Controller_MSEventFacade::getInstance()->setCalendarUser($calendarUser);
-    }
-    
-    /**
      * Updates the ACL
      *
      * This method will receive a list of new ACE's. 
@@ -530,7 +533,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     public function getRecord()
     {
         if (! $this->_event instanceof Calendar_Model_Event) {
-            $this->_assertEventFacadeParams($this->_container);
+            Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
             
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($this->_event->toArray(), true));

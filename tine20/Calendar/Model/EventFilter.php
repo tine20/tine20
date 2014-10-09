@@ -66,5 +66,12 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'summary'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'location'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'last_modified_time'    => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'is_deleted'            => array('filter' => 'Tinebase_Model_Filter_Bool'),
+        'deleted_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
+        'deleted_time'          => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'creation_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'last_modified_by'      => array('filter' => 'Tinebase_Model_Filter_User'),
+        'created_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
     );
 }

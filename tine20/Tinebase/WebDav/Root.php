@@ -21,6 +21,8 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
 {
     public function __construct()
     {
+        $applications = Tinebase_Core::getUser()->getApplications();
+
         parent::__construct('root', array(
             new \Sabre\DAV\SimpleCollection('principals', array(
                 new Tinebase_WebDav_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), Tinebase_WebDav_PrincipalBackend::PREFIX_USERS),
@@ -28,26 +30,26 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
             ))
         ));
         
-        if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
+        if ($applications->find('name', 'Calendar')) {
             $this->addChild(
                 new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT, true)
             );
         }
        
-        if (Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN)) {
+        if ($applications->find('name', 'Tasks')) {
             $this->addChild(
                 new Tasks_Frontend_WebDAV('tasks', true)
             );
         }
 
-        if (Tinebase_Core::getUser()->hasRight('Addressbook', Tinebase_Acl_Rights::RUN)) {
+        if ($applications->find('name', 'Addressbook')) {
             $this->addChild(
                 new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT, true)
             );
         }
         
         // main entry point for ownCloud 
-        if (Tinebase_Core::getUser()->hasRight('Filemanager', Tinebase_Acl_Rights::RUN)) {
+        if ($applications->find('name', 'Filemanager')) {
             $this->addChild(
                 new \Sabre\DAV\SimpleCollection(
                     'remote.php', 
@@ -59,7 +61,7 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
         // webdav tree
         $webDAVCollection = new \Sabre\DAV\SimpleCollection('webdav');
         
-        foreach (Tinebase_Core::getUser()->getApplications() as $application) {
+        foreach ($applications as $application) {
             $applicationClass = $application->name . '_Frontend_WebDAV';
             if (@class_exists($applicationClass)) {
                 $webDAVCollection->addChild(new $applicationClass($application->name));

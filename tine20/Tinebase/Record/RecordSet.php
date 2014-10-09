@@ -554,7 +554,25 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         
         return $result;
     }
-    
+
+    /**
+     * returns new set with records of this set
+     *
+     * @param  bool $recordsByRef
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getClone($recordsByRef=false)
+    {
+        if ($recordsByRef) {
+            $result = new Tinebase_Record_RecordSet($this->_recordClass, $this->_listOfRecords);
+            $result->addIndices(array_keys($this->_indices));
+        } else {
+            $result = clone $this;
+        }
+
+        return $result;
+    }
+
     /**
      * Finds the first matching record in this store by a specific property/value.
      *

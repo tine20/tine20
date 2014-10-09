@@ -152,7 +152,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $existingRecord = $existingEvent->getRecord();
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
-        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], $existingEvent->getRecord()->uid . '.ics', $vcalendar);
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], $existingEvent->getRecord()->getId() . '.ics', $vcalendar);
         
         if (isset($oldUserAgent)) {
             $_SERVER['HTTP_USER_AGENT'] = $oldUserAgent;
@@ -162,7 +162,39 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $this->assertEquals($existingRecord->getId(), $record->getId(), 'event got duplicated');
     }
-    
+
+    /**
+     * folderChanges are implemented as DELETE/PUT actions in most CalDAV
+     * clients. Unfortunally clients send both requests in parallel. This
+     * creates raise conditions when DELETE is faster (e.g. due to trasport
+     * issues) than the PUT.
+     */
+    public function testCreateEventWhichExistsAlreadyDeleted()
+    {
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+            $oldUserAgent = $_SERVER['HTTP_USER_AGENT'];
+        }
+
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+
+        $existingEvent = $this->testCreateEventWithInternalOrganizer();
+
+        $existingRecord = $existingEvent->getRecord();
+        Calendar_Controller_Event::getInstance()->delete($existingRecord->getId());
+
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
+
+        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], $existingRecord->getId() . '.ics', $vcalendar);
+
+        if (isset($oldUserAgent)) {
+            $_SERVER['HTTP_USER_AGENT'] = $oldUserAgent;
+        }
+
+        $record = $event->getRecord();
+
+        $this->assertEquals($existingRecord->getId(), $record->getId(), 'event got duplicated');
+    }
+
     /**
      * test create repeating event
      *
@@ -253,7 +285,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $this->assertTrue($pwulf !== null, 'could not find pwulf in attendee: ' . print_r($event->attendee->toArray(), true));
         $this->assertEquals($this->_getPersonasDefaultCals('pwulf')->getId(), $pwulf->displaycontainer_id, 'event not in pwulfs personal calendar');
     }
-    
+
     /**
      * _testEventMissingAttendee helper
      * 
@@ -273,23 +305,35 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $id = Tinebase_Record_Abstract::generateUID();
 
         $event = Calendar_Frontend_WebDAV_Event::create($container, "$id.ics", $vcalendar);
-        
-        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $assertionAttendee),
-                "attendee has {$not}been added: " . print_r($event->getRecord()->attendee->toArray(), true));
-        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->exdate->getFirstRecord()->attendee, $assertionAttendee),
-                "attendee has {$not}been added to exdate");
+
+        $baseAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $assertionAttendee);
+        $exceptionAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->exdate->getFirstRecord()->attendee, $assertionAttendee);
+        $this->$assertFn(!! $baseAttendee, "attendee has {$not}been added: " . print_r($event->getRecord()->attendee->toArray(), true));
+        $this->$assertFn(!! $exceptionAttendee, "attendee has {$not}been added to exdate");
+        if (! $assertMissing) {
+            $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED,
+                $baseAttendee->status, 'attendee status wrong');
+            $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED,
+                $exceptionAttendee->status, 'attendee status wrong for exdate ');
+        }
         
         // Simulate OSX which updates w.o. fetching first
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/apple_caldendar_repeating.ics', 'r');
         
         $event = new Calendar_Frontend_WebDAV_Event($container, $event->getRecord()->getId());
         $event->put($vcalendarStream);
-        
-        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $assertionAttendee),
-                "attendee has {$not}been preserved: " . print_r($event->getRecord()->attendee->toArray(), true));
-        $this->$assertFn(!! Calendar_Model_Attender::getAttendee($event->getRecord()->exdate->getFirstRecord()->attendee, $assertionAttendee),
-                "attendee has {$not}been preserved in exdate");
-        
+
+        $baseAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $assertionAttendee);
+        $exceptionAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->exdate->getFirstRecord()->attendee, $assertionAttendee);
+        $this->$assertFn(!! $baseAttendee, "attendee has {$not}been preserved: " . print_r($event->getRecord()->attendee->toArray(), true));
+        $this->$assertFn(!! $exceptionAttendee, "attendee has {$not}been preserved in exdate");
+        if (! $assertMissing) {
+            $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED,
+                $baseAttendee->status, 'attendee status not preserved');
+            $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED,
+                $exceptionAttendee->status, 'attendee not preserved for exdate');
+        }
+
         // create new exception from client w.o. fetching first
         Calendar_Controller_Event::getInstance()->purgeRecords(TRUE);
         Calendar_Controller_Event::getInstance()->delete($event->getRecord()->exdate->getFirstRecord());
@@ -454,22 +498,32 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $this->assertEquals(2, $record->seq, 'tine20 seq should have increased');
         $this->assertEquals(0, $record->external_seq, 'external seq must not have increased');
     }
-    
+
     /**
      * test updating existing event
      */
     public function testPutEventFromMacOsX()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
-        
+
         $event = $this->testCreateEventWithInternalOrganizer();
-    
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
-    
-        $event->put($vcalendarStream);
-    
+
+        // assert get contains X-CALENDARSERVER-ACCESS
+        $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->getRecord()->class);
+        $this->assertContains('X-CALENDARSERVER-ACCESS:CONFIDENTIAL', stream_get_contents($event->get()));
+
+        // put PUBLIC
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        $vcalendar = str_replace("CLASS:PRIVATE", "X-CALENDARSERVER-ACCESS:PUBLIC", $vcalendar);
+
+        $event->put($vcalendar);
+
         $record = $event->getRecord();
-    
+
+        // assert put evaluates X-CALENDARSERVER-ACCESS
+        $this->assertEquals(Calendar_Model_Event::CLASS_PUBLIC, $record->class);
+        $this->assertContains('X-CALENDARSERVER-ACCESS:PUBLIC', stream_get_contents($event->get()));
+
         $this->assertEquals('New Event', $record->summary);
     }
     

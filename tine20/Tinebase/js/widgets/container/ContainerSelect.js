@@ -118,7 +118,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             this.requiredGrants = [this.requiredGrant];
         } else if (! this.requiredGrant && ! this.requiredGrants) {
             // set default required Grants
-            this.requiredGrants = ['readGrant', 'addGrant', 'editGrant'];
+            this.requiredGrants = ['readGrant'];
         }
 
         // no state saving for startPath != /

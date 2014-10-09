@@ -169,7 +169,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         
         $this->server->httpRequest = $request;
         $this->server->exec();
-        
+
         $vcalendar = stream_get_contents($this->response->body);
         //         echo $vcalendar;
         

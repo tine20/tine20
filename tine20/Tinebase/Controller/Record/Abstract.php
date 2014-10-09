@@ -1718,20 +1718,30 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record set.");
         
-        $alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($this->_modelName, $_record);
-        
         $records = $_record instanceof Tinebase_Record_RecordSet ? $_record : new Tinebase_Record_RecordSet($this->_modelName, array($_record));
 
-        foreach ($records as $record) {
-            if (count($alarms) === 0) {
-                $record->alarms = $alarms;
-                continue;
+        $alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord($this->_modelName, $records);
+        
+        foreach ($alarms as $alarm) {
+            $record = $records->getById($alarm->record_id);
+            
+            if (!isset($record->alarms)) {
+                $record->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
             }
-
-            $record->alarms = $alarms->filter('record_id', $record->getId());
-            // calc minutes_before
-            if ($record->has($this->_recordAlarmField) && $record->{$this->_recordAlarmField} instanceof DateTime) {
-                $this->_inspectAlarmGet($record);
+            
+            if (!$record->alarms->getById($alarm->getId())) {
+                $record->alarms->addRecord($alarm);
+            }
+        }
+        
+        foreach ($records as $record) {
+            if (!isset($record->alarms)) {
+                $record->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+            } else {
+                // calc minutes_before
+                if ($record->has($this->_recordAlarmField) && $record->{$this->_recordAlarmField} instanceof DateTime) {
+                    $this->_inspectAlarmGet($record);
+                }
             }
         }
     }

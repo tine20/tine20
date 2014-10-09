@@ -48,6 +48,38 @@ class Calendar_Model_CalendarFilter extends Tinebase_Model_Filter_Container
         $_select->orWhere($quotedDisplayContainerIdentifier  .  ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
     }
     
+    /**
+     * appends sql to given select statement
+     * 
+     * @param  Zend_Db_Select                    $_select
+     * @param  Tinebase_Backend_Sql_Abstract     $_backend
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function appendFilterSql1($_select, $_backend)
+    {
+        $this->_options['ignoreAcl'] = TRUE;
+        $this->_resolve();
+        
+        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
+    }
+    
+    /**
+     * appends sql to given select statement
+     * 
+     * @param  Zend_Db_Select                    $_select
+     * @param  Tinebase_Backend_Sql_Abstract     $_backend
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function appendFilterSql2($_select, $_backend)
+    {
+        $this->_options['ignoreAcl'] = TRUE;
+        $this->_resolve();
+        
+        $quotedDisplayContainerIdentifier = $_backend->getAdapter()->quoteIdentifier('attendee.displaycontainer_id');
+        
+        $_select->where($quotedDisplayContainerIdentifier  .  ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
+    }
+    
     public function setRequiredGrants(array $_grants)
     {
         $this->_requiredGrants = $_grants;

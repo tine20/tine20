@@ -284,7 +284,7 @@
             // NOTE prefUser is organzier for external notifications
             if (($attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions) 
                 || ($sendLevel < $_notificationLevel && (
-                        $attendee->getPreferedEmailAddress() != $organizer->getPreferedEmailAddress() 
+                        (is_object($organizer) && $attendee->getPreferedEmailAddress() != $organizer->getPreferedEmailAddress())
                         || $sendLevel == self::NOTIFICATION_LEVEL_NONE)
                    )
                 ) {

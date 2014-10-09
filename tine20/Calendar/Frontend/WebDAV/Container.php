@@ -29,11 +29,33 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     protected $_suffix = '.ics';
     
     /**
+     * @var array
+     */
+    protected $_calendarQueryCache = null;
+    
+    /**
      * (non-PHPdoc)
      * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($_name)
     {
+        $eventId   = $_name instanceof Tinebase_Record_Interface ? $_name->getId() : $this->_getIdFromName($_name);
+        
+        // check if child exists in calendarQuery cache
+        if ($this->_calendarQueryCache &&
+            isset($this->_calendarQueryCache[$eventId])) {
+            
+            $child = $this->_calendarQueryCache[$eventId];
+            
+            // remove entries from cache / they will not be used anymore
+            unset($this->_calendarQueryCache[$eventId]);
+            if (empty($this->_calendarQueryCache)) {
+                $this->_calendarQueryCache = null;
+            }
+            
+            return $child;
+        }
+        
         $modelName = $this->_application->name . '_Model_' . $this->_model;
         
         if ($_name instanceof $modelName) {
@@ -50,12 +72,12 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     array(
                         'field'     => 'id',
                         'operator'  => 'equals',
-                        'value'     => $this->_getIdFromName($_name)
+                        'value'     => $eventId
                     ),
                     array(
                         'field'     => 'uid',
                         'operator'  => 'equals',
-                        'value'     => $this->_getIdFromName($_name)
+                        'value'     => $eventId
                     )
                 ))
             ));
@@ -89,41 +111,44 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      *
      * @return Sabre\DAV\INode[]
      */
-    function getChildren()
+    function getChildren($filter = null)
     {
-        $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
-        $filter = new $filterClass(array(
-            array(
-                'field'     => 'container_id',
-                'operator'  => 'equals',
-                'value'     => $this->_container->getId()
-            ),
-            array(
-                'field'    => 'period', 
-                'operator'  => 'within', 
-                'value'     => array(
-                    'from'  => Tinebase_DateTime::now()->subMonth($this->_getMaxPeriodFrom()),
-                    'until' => Tinebase_DateTime::now()->addYear(4)
+        if ($filter === null) {
+            $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
+            $filter = new $filterClass(array(
+                array(
+                    'field'     => 'container_id',
+                    'operator'  => 'equals',
+                    'value'     => $this->_container->getId()
+                ),
+                array(
+                    'field'    => 'period',
+                    'operator'  => 'within',
+                    'value'     => array(
+                        'from'  => Tinebase_DateTime::now()->subMonth($this->_getMaxPeriodFrom()),
+                        'until' => Tinebase_DateTime::now()->addYear(4)
+                    )
                 )
-            )
-        ));
-        
-        if (Calendar_Config::getInstance()->get(Calendar_Config::SKIP_DOUBLE_EVENTS) == 'shared' && $this->_container->type == Tinebase_Model_Container::TYPE_SHARED) {
-            $skipSharedFilter = $filter->createFilter('attender', 'not', array(
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT
             ));
-            
-            $filter->addFilter($skipSharedFilter);
+
+            if (Calendar_Config::getInstance()->get(Calendar_Config::SKIP_DOUBLE_EVENTS) == 'shared' && $this->_container->type == Tinebase_Model_Container::TYPE_SHARED) {
+                $skipSharedFilter = $filter->createFilter('attender', 'not', array(
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT
+                ));
+
+                $filter->addFilter($skipSharedFilter);
+            }
+
+            if (Calendar_Config::getInstance()->get(Calendar_Config::SKIP_DOUBLE_EVENTS) == 'personal' && $this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
+                $skipPersonalFilter = new Tinebase_Model_Filter_Container('container_id', 'equals', '/personal/' . Tinebase_Core::getUser()->getId(), array('applicationName' => 'Calendar'));
+                $filter->addFilter($skipPersonalFilter);
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Event filter: ' . print_r($filter->toArray(), true));
+
         }
-        
-        if (Calendar_Config::getInstance()->get(Calendar_Config::SKIP_DOUBLE_EVENTS) == 'personal' && $this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
-            $skipPersonalFilter = new Tinebase_Model_Filter_Container('container_id', 'equals', '/personal/' . Tinebase_Core::getUser()->getId(), array('applicationName' => 'Calendar'));
-            $filter->addFilter($skipPersonalFilter);
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Event filter: ' . print_r($filter->toArray(), true));
         
         /**
          * see http://forge.tine20.org/mantisbt/view.php?id=5122
@@ -135,7 +160,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         $children = array();
         
         foreach ($objects as $object) {
-            $children[] = $this->getChild($object);
+            $children[$object->getId()] = $this->getChild($object);
         }
         
         return $children;
@@ -226,17 +251,50 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         $periodFrom = null;
         $periodUntil = null;
-        if (isset($filters['comp-filters']) && isset($filters['comp-filters'][0]['time-range'])) {
-            $timeRange = $filters['comp-filters'][0]['time-range'];
-            if (isset($timeRange['start'])) {
-                if (! isset($timeRange['end'])) {
-                    // create default time-range end in 4 years from now 
-                    $timeRange['end'] = new DateTime('NOW');
-                    $timeRange['end']->add(new DateInterval('P4Y'));
+        
+        if (isset($filters['comp-filters']) && is_array($filters['comp-filters'])) {
+            foreach ($filters['comp-filters'] as $filter) {
+                if (isset($filter['time-range']) && is_array($filter['time-range'])) {
+                    $timeRange = $filter['time-range'];
+                    if (isset($timeRange['start'])) {
+                        if (! isset($timeRange['end'])) {
+                            // create default time-range end in 4 years from now 
+                            $timeRange['end'] = new DateTime('NOW');
+                            $timeRange['end']->add(new DateInterval('P4Y'));
+                        }
+                        
+                        $periodFrom = new Tinebase_DateTime($timeRange['start']);
+                        $periodUntil = new Tinebase_DateTime($timeRange['end']);
+                    }
                 }
                 
-                $periodFrom = new Tinebase_DateTime($timeRange['start']);
-                $periodUntil = new Tinebase_DateTime($timeRange['end']);
+                if (isset($filter['prop-filters']) && is_array($filter['prop-filters'])) {
+                    $uids = array();
+
+                    foreach ($filter['prop-filters'] as $propertyFilter) {
+                        if ($propertyFilter['name'] === 'UID') {
+                            $uids[] = $this->_getIdFromName($propertyFilter['text-match']['value']);
+                        }
+                    }
+                    
+                    if (!empty($uids)) {
+                        $filterArray[] = array(
+                            'condition' => 'OR', 
+                            'filters' => array(
+                                array(
+                                    'field'     => 'id',
+                                    'operator'  => 'in',
+                                    'value'     => $uids
+                                ),
+                                array(
+                                    'field'     => 'uid',
+                                    'operator'  => 'in',
+                                    'value'     => $uids
+                                )
+                            )
+                        );
+                    }
+                }
             }
         }
 
@@ -261,12 +319,9 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
         $filter = new $filterClass($filterArray);
     
-        // @see http://forge.tine20.org/mantisbt/view.php?id=5122
-        // we must use action 'sync' and not 'get' as
-        // otherwise the calendar also return events the user only can see because of freebusy
-        $ids = $this->_getController()->search($filter, null, false, true, 'sync');
-    
-        return $ids;
+        $this->_calendarQueryCache = $this->getChildren($filter);
+        
+        return array_keys($this->_calendarQueryCache);
     }
     
     /**

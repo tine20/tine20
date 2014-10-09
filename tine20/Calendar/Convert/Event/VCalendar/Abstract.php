@@ -189,7 +189,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 $vevent->add(strtoupper($property), $event->$property);
             }
         }
-        
+
+        $vevent->add('X-CALENDARSERVER-ACCESS',
+            $event->class == Calendar_Model_Event::CLASS_PUBLIC ? 'PUBLIC' : 'CONFIDENTIAL'
+        );
+
         // categories
         if (!isset($event->tags)) {
             $event->tags = Tinebase_Tags::getInstance()->getTagsOfRecord($event);
@@ -689,7 +693,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     }
                     
                     break;
-                    
+
                 case 'STATUS':
                     if (in_array($property->getValue(), array(Calendar_Model_Event::STATUS_CONFIRMED, Calendar_Model_Event::STATUS_TENTATIVE, Calendar_Model_Event::STATUS_CANCELED))) {
                         $event->status = $property->getValue();
@@ -927,10 +931,15 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
  3A3B-F7B6-459A-AB3E-4726E53637D0/dropbox/4971F93F-8657-412B-841A-A0FD913
  9CD61.dropbox/Canada.png
                          */
-                        $readFromURL = true;
                         $url = $property->getValue();
-                        $name = parse_url($url, PHP_URL_PATH);
-                        $name = pathinfo($name, PATHINFO_BASENAME);
+                        $urlParts = parse_url($url);
+                        $host = $urlParts['host'];
+                        $name = pathinfo($urlParts['path'], PATHINFO_BASENAME);
+
+                        // iCal 10.7 places URI before uploading
+                        if (parse_url(Tinebase_Core::getHostname(), PHP_URL_HOST) != $host) {
+                            $readFromURL = true;
+                        }
                     }
                     // base64
                     else {
@@ -966,7 +975,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                         } else {
                             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                                    . ' Attachment found with malformed url: ' . $attachmentInfo);
+                                    . ' Attachment found with malformed url: ' . $url);
                         }
                     }
                     break;
@@ -990,7 +999,14 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     break;
             }
         }
-        
+
+        // NOTE: X-CALENDARSERVER-ACCESS overwrites CLASS
+        if (isset($vevent->{'X-CALENDARSERVER-ACCESS'})) {
+            $event->class = $vevent->{'X-CALENDARSERVER-ACCESS'} == 'PUBLIC' ?
+                Calendar_Model_Event::CLASS_PUBLIC :
+                Calendar_Model_Event::CLASS_PRIVATE;
+        }
+
         foreach ($shortenedFields as $key => $value) {
             $event->description = "--------\n$key: $value";
         }

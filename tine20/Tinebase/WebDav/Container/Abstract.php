@@ -62,7 +62,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     public function createFile($name, $vobjectData = null) 
     {
         $objectClass = $this->_application->name . '_Frontend_WebDAV_' . $this->_model;
-        
+
         $object = $objectClass::create($this->_container, $name, $vobjectData);
         
         return $object->getETag();
@@ -77,7 +77,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         try {
             Tinebase_Container::getInstance()->deleteContainer($this->_container);
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            throw new Exception\Forbidden('Permission denied to delete node');
+            throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete node');
         }
     }
     

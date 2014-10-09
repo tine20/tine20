@@ -60,26 +60,39 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends PHPUnit_Framework_Test
         
         $this->assertEquals($event->description, $convertedEvent->description);
     }
-    
+
     /**
-     * test converting vcard from apple iCal to Calendar_Model_Event 
+     * test converting vcard from apple iCal to Calendar_Model_Event
      */
     public function testConvertToTine20Model()
     {
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/apple_caldendar_mavericks_organizer_only.ics', 'r');
-        
+
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, '10.9');
-        
+
         $event = $converter->toTine20Model($vcalendarStream);
-        
+
         // assert testuser is not attendee
         $this->assertEquals(1, $event->attendee->count(), 'there sould only be one attendee');
         $this->assertNotEquals($event->organizer, $event->attendee[0]->user_id, 'organizer should not attend');
-        
+
         // assert alarm
         $this->assertEquals(1,$event->alarms->count(), 'there should be exactly one alarm');
         $this->assertFalse((bool)$event->alarms->getFirstRecord()->getOption('custom'), 'alarm should be duration alarm');
         $this->assertEquals(15, $event->alarms->getFirstRecord()->minutes_before, 'alarm shoud be 15 min. before');
         $this->assertEquals('2013-11-15 11:47:23', Calendar_Controller_Alarm::getAcknowledgeTime($event->alarms->getFirstRecord())->format(Tinebase_Record_Abstract::ISO8601LONG), 'ACKNOWLEDGED was not imported properly');
+    }
+
+    public function testConvertToTine20ModelXCalendarAccess()
+    {
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, '10.7.5');
+
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/apple_calendar_lion_access_private.ics', 'r');
+        $event = $converter->toTine20Model($vcalendarStream);
+        $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
+
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/apple_calendar_lion_access_attendee.ics', 'r');
+        $event = $converter->toTine20Model($vcalendarStream);
+        $this->assertEquals(Calendar_Model_Event::CLASS_PUBLIC, $event->class);
     }
 }
