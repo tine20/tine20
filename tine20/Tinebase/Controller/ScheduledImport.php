@@ -158,11 +158,15 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
             'importContainerId' => $record->container_id,
         );
         
-        if (strpos($record->source, 'http') === 0) {
-            $client = new Zend_Http_Client($record->source);
-            $toImport = $client->request()->getBody();
-        } else {
-            $toImport = file_get_contents($record->source);
+        try {
+            if (strpos($record->source, 'http') === 0) {
+                $client = new Zend_Http_Client($record->source);
+                $toImport = $client->request()->getBody();
+            } else {
+                $toImport = file_get_contents($record->source);
+            }
+        } catch (Exception $e) {
+            throw new Tinebase_Exception_NotFound('Could not load file to import: ' . $record->source);
         }
         
         $importer = new $importer($options);

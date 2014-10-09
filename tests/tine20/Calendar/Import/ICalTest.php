@@ -37,6 +37,34 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $this->assertEquals('2008-11-05 15:00:00', $startbucks->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
+    /**
+     * test simple import from file into a not existing container
+     * 
+     *  - the calendar should be created
+     */
+    public function testSimpleImportIntoNewContainer()
+    {
+        $importer = new Calendar_Import_Ical(array(
+            'container_id' => 'unittest_not_existing',
+        ));
+
+        $result = $importer->importFile(dirname(__FILE__) . '/files/simple.ics');
+
+        $importedContainerId = Tinebase_Container::getInstance()->getContainerByName(
+                    'Calendar',
+                    'unittest_not_existing',
+                    Tinebase_Model_Container::TYPE_PERSONAL,
+                    Tinebase_Core::getUser()->getId()
+                )->getId();
+
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $importedContainerId)
+        )), NULL);
+        
+        $this->assertEquals($importedContainerId, Tinebase_Container::getInstance()->getContainerById($importedContainerId)->getId());
+        $this->assertEquals(6, $events->count(), 'events was not imported');
+    }
+    
     public function testImportSimpleFromFile()
     {
         $importer = new Calendar_Import_Ical(array(
