@@ -265,8 +265,8 @@ abstract class Tinebase_Config_Abstract
         if (! self::$_configFileData) {
             $configData = include('config.inc.php');
             
-            if($configData === false) {
-                die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
+            if ($configData === false) {
+                die('central configuration file config.inc.php not found in includepath: ' . get_include_path());
             }
             
             self::$_configFileData = $configData;
