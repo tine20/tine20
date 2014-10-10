@@ -56,7 +56,63 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }
-
+    
+    /**
+     * get previous access log entry
+     * 
+     * @param Tinebase_Model_AccessLog $accessLog
+     * @throws Tinebase_Exception_NotFound
+     * @return Tinebase_Model_AccessLog
+     */
+    public function getPreviousAccessLog(Tinebase_Model_AccessLog $accessLog)
+    {
+        $previousAccessLog = $this->search(
+            new Tinebase_Model_AccessLogFilter(array(
+                array(
+                    'field'    => 'ip',
+                    'operator' => 'equals',
+                    'value'    => $accessLog->ip
+                ),
+                array(
+                    'field'    => 'account_id',
+                    'operator' => 'equals',
+                    'value'    => $accessLog->account_id
+                ),
+                array(
+                    'field'    => 'result',
+                    'operator' => 'equals',
+                    'value'    => Tinebase_Auth::SUCCESS
+                ),
+                array(
+                    'field'    => 'clienttype',
+                    'operator' => 'equals',
+                    'value'    => $accessLog->clienttype
+                ),
+                array(
+                    'field'    => 'user_agent',
+                    'operator' => 'equals',
+                    'value'    => $accessLog->user_agent
+                ),
+                array(
+                    'field'    => 'lo',
+                    'operator' => 'after',
+                    'value'    => Tinebase_DateTime::now()->subHour(2) // @todo use session timeout from config
+                ),
+            )),
+            new Tinebase_Model_Pagination(array(
+                'sort'  => 'li',
+                'dir'   => 'DESC',
+                'limit' => 1
+            ))
+        )->getFirstRecord();
+        
+        if ($previousAccessLog) {
+            throw new Tinebase_Exception_NotFound('previous access log entry not found');
+        }
+        
+        return $previousAccessLog;
+    }
+    
     /**
      * add logout entry to the access log
      *
