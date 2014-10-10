@@ -74,7 +74,8 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         
         // checks
         $this->assertGreaterThan(0, $contractData['number']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']['accountId']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $contractData['created_by']['accountId'],
+                'created_by not correct/resolved: ' . print_r($contractData, true));
         
         return $contractData;
     }
