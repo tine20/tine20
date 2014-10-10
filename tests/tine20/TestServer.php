@@ -213,8 +213,8 @@ class TestServer
         $cmd .= $command;
         
         if ($addCredentials) {
-            $config = TestServer::getInstance()->getConfig();
-            $cmd .= " --username {$config->username} --password {$config->password}";
+            $credentials = TestServer::getInstance()->getTestCredentials();
+            $cmd .= " --username {$credentials['username']} --password {$credentials['password']}";
         }
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Assembled commmand: ' . $cmd);
@@ -259,14 +259,30 @@ class TestServer
     public function login()
     {
         $tinebaseController = Tinebase_Controller::getInstance();
+        $credentials = $this->getTestCredentials();
+        
+        $config = $this->getConfig();
+        $_SERVER['REMOTE_ADDR']     = $config->ip ? $config->ip : '127.0.0.1';
+        $_SERVER['HTTP_USER_AGENT'] = 'Unit Test Client';
+        if (! $tinebaseController->login($credentials['username'], $credentials['password'], new Zend_Controller_Request_Http(), 'TineUnittest')){
+            throw new Exception("Couldn't login, user session required for tests! \n");
+        }
+    }
+    
+    /**
+     * fetch test user credentials
+     * 
+     * @return array
+     */
+    public function getTestCredentials()
+    {
         $config = $this->getConfig();
         $username = isset($config->login->username) ? $config->login->username : $config->username;
         $password = isset($config->login->password) ? $config->login->password : $config->password;
-
-        $_SERVER['REMOTE_ADDR']     = $config->ip ? $config->ip : '127.0.0.1';
-        $_SERVER['HTTP_USER_AGENT'] = 'Unit Test Client';
-        if (! $tinebaseController->login($username, $password, new Zend_Controller_Request_Http(), 'TineUnittest')){
-            throw new Exception("Couldn't login, user session required for tests! \n");
-        }
+        
+        return array(
+            'username' => $username,
+            'password' => $password
+        );
     }
 }
