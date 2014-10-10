@@ -93,14 +93,15 @@ class Tinebase_Exception extends Exception
      * 
      * @param Exception $exception
      * @param boolean $suppressTrace
+     * @param mixed $additionalData
      */
-    public static function log(Exception $exception, $suppressTrace = null)
+    public static function log(Exception $exception, $suppressTrace = null, $additionalData = null)
     {
         if (! is_object(Tinebase_Core::getLogger())) {
             // no logger -> exception happened very early
             error_log($exception);
         } else {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
             
             if ($suppressTrace === null) {
                 try {
@@ -112,12 +113,16 @@ class Tinebase_Exception extends Exception
                 }
             }
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE) && ! $suppressTrace) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR) && ! $suppressTrace) {
                 $traceString = $exception->getTraceAsString();
                 $traceString = self::_replaceBasePath($traceString);
                 $traceString = self::_removeCredentials($traceString);
                  
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $traceString);
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $traceString);
+            }
+            
+            if ($additionalData) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Data: ' . print_r($additionalData, true));
             }
         }
     }
