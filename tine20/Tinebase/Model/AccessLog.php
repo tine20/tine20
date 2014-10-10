@@ -14,6 +14,18 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ * 
+ * @property    string  id
+ * @property    string  sessionid
+ * @property    string  login_name
+ * @property    string  ip
+ * @property    Tinebase_DateTime  li
+ * @property    Tinebase_DateTime  lo
+ * @property    int     result
+ * @property    string  user_agent
+ * @property    string  account_id
+ * @property    string  clienttype
+ * 
  */
 class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
 {
@@ -58,6 +70,7 @@ class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
         'li'            => array('presence' => 'required', 'allowEmpty' => true),
         'lo'            => array('allowEmpty' => true),
         'result'        => array('allowEmpty' => true),
+        'user_agent'    => array('allowEmpty' => true),
         'account_id'    => array('allowEmpty' => true),
         'clienttype'    => array('allowEmpty' => true)
     );
@@ -69,6 +82,6 @@ class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
      */    
     protected $_datetimeFields = array(
         'li',
-        'lo',
+        'lo'
     );
 }

@@ -422,4 +422,47 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Tinebase', '8.7');
     }
+    
+    /**
+     * - add filter acl (check if table already exists)
+     * 
+     * @see 0009610: shared favorites acl
+     */
+    public function update_7()
+    {
+        $this->validateTableVersion('access_log', 4);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+            <name>id</name>
+            <type>text</type>
+            <length>40</length>
+            <notnull>true</notnull>
+        </field>');
+        
+        $this->_backend->alterCol('access_log', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+            <name>user_agent</name>
+            <type>text</type>
+            <length>255</length>
+        </field>');
+        
+        $this->_backend->addCol('access_log', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('<index>
+            <name>account_id-ip</name>
+            <field>
+                <name>account_id</name>
+            </field>
+            <field>
+                <name>ip</name>
+            </field>
+        </index>');
+        
+        $this->_backend->addIndex('access_log', $declaration);
+        
+        $this->setTableVersion('access_log', 5);
+        
+        $this->setApplicationVersion('Tinebase', '8.8');
+    }
 }

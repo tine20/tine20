@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>8.7</version>
+    <version>8.8</version>
     <tables>
         <table>
             <name>applications</name>
@@ -713,12 +713,13 @@
         </table>
         <table>
             <name>access_log</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>sessionid</name>
@@ -765,6 +766,11 @@
                     <length>128</length>
                     <notnull>false</notnull>
                 </field>
+                <field>
+                    <name>user_agent</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -782,6 +788,15 @@
                     <name>li</name>
                     <field>
                         <name>li</name>
+                    </field>
+                </index>
+                <index>
+                    <name>account_id-ip</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>ip</name>
                     </field>
                 </index>
             </declaration>

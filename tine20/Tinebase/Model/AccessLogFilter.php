@@ -47,5 +47,6 @@ class Tinebase_Model_AccessLogFilter extends Tinebase_Model_Filter_FilterGroup
         'lo'            => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'account_id'    => array('filter' => 'Tinebase_Model_Filter_User'),
         'result'        => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'user_agent'    => array('filter' => 'Tinebase_Model_Filter_Text')
     );
 }
