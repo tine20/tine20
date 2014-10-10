@@ -17,18 +17,6 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      * @var array test objects
      */
     protected $objects = array();
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Event Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -107,9 +95,11 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     /**
      * test create event with external organizer
      * 
+     * @param Tinebase_Model_Container  $targetContainer
+     * @param string $id
      * @return Calendar_Frontend_WebDAV_Event
      */
-    public function testCreateEventWithExternalOrganizer()
+    public function testCreateEventWithExternalOrganizer($targetContainer = null, $id = null)
     {
         if (!isset($_SERVER['HTTP_USER_AGENT'])) {
             $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
@@ -117,8 +107,13 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $vcalendar = file_get_contents(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
-        $id = Tinebase_Record_Abstract::generateUID();
-        $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
+        if ($id === null) {
+            $id = Tinebase_Record_Abstract::generateUID();
+        }
+        if ($targetContainer === null) {
+            $targetContainer = $this->objects['initialContainer'];
+        }
+        $event = Calendar_Frontend_WebDAV_Event::create($targetContainer, "$id.ics", $vcalendar);
         
         $record = $event->getRecord();
         $container = Tinebase_Container::getInstance()->getContainerById($record->container_id);
@@ -137,8 +132,6 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      * create an event which already exists on the server
      * - this happen when the client moves an event to another calendar -> see testMove*
      * - or when an client processes an iMIP which is not already loaded by CalDAV
-     *
-     * @return Calendar_Frontend_WebDAV_Event
      */
     public function testCreateEventWhichExistsAlready()
     {
@@ -163,6 +156,25 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $this->assertEquals($existingRecord->getId(), $record->getId(), 'event got duplicated');
     }
 
+    /**
+     * create an event which already exists on the server, but user can no longer access it
+     *
+     * @return Calendar_Frontend_WebDAV_Event
+     */
+    public function testCreateEventWhichExistsAlreadyInAnotherContainer()
+    {
+        $this->_testNeedsTransaction();
+        
+        $existingEvent = $this->testCreateEventWithExternalOrganizer()->getRecord();
+        
+        // save event as sclever
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        $existingEventForSclever = $this->testCreateEventWithExternalOrganizer($this->_getTestContainer('Calendar'), $existingEvent->getId())->getRecord();
+        $this->_testCalendars[] = Tinebase_Container::getInstance()->getContainerById($existingEventForSclever->container_id);
+        
+        $this->assertEquals($existingEvent->uid, $existingEventForSclever->uid);
+    }
+    
     /**
      * folderChanges are implemented as DELETE/PUT actions in most CalDAV
      * clients. Unfortunally clients send both requests in parallel. This
@@ -721,7 +733,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $this->assertNotContains('BEGIN:VALARM', $ics, $ics);
     }
     
-    public function testDeleteOrignEvent()
+    public function testDeleteOriginEvent()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         

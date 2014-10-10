@@ -168,6 +168,22 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         if ($existingEvent === null) {
             try {
                 $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+                
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Exception::log($zdse, true);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Might be a duplicate exception, try with new id');
+                
+                unset($event->id);
+                try {
+                    $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
+                    throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+                }
+                
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);

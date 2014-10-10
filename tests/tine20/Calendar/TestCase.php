@@ -87,7 +87,6 @@ abstract class Calendar_TestCase extends TestCase
         
         Calendar_Controller_Event::getInstance()->sendNotifications(false);
         
-        
         if (! $this->_transactionId) {
             if ($this->_backend != NULL) {
                 $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
