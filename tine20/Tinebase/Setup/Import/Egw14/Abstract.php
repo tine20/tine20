@@ -175,7 +175,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             
         $this->_appendRecordFilter($select);
         
-        $recordCount = array_value(0, $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC));
+        $recordCount = Tinebase_Helper::array_value(0, $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC));
         return $recordCount['count'];
     }
     

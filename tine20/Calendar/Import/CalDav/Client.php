@@ -717,7 +717,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
      */
     protected function _getGroupForPrincipal($principal)
     {
-        $cacheId = convertCacheId('_getGroupForPrincipal' . $principal);
+        $cacheId = Tinebase_Helper::convertCacheId('_getGroupForPrincipal' . $principal);
         if (Tinebase_Core::getCache()->test($cacheId)) {
             $group = Tinebase_Core::getCache()->load($cacheId);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__

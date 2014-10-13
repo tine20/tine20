@@ -177,7 +177,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         } 
         
         $cache = Tinebase_Core::getCache();
-        $cacheId = convertCacheId('getCustomFieldsForApplication' . $cfIndex);
+        $cacheId = Tinebase_Helper::convertCacheId('getCustomFieldsForApplication' . $cfIndex);
         $result = $cache->load($cacheId);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

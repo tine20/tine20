@@ -700,7 +700,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         // Test the same with update
         $group = Admin_Controller_Group::getInstance()->get($defaultAdminGroup->getId());
-        $group->members = array_merge(Admin_Controller_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId()), array(array_value('pwulf', Zend_Registry::get('personas'))->getId()));
+        $group->members = array_merge(Admin_Controller_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId()), array(Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->getId()));
         Admin_Controller_Group::getInstance()->update($group);
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
             Tinebase_ActionQueue::getInstance()->processQueue(10000);
@@ -713,7 +713,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ->filter('user_id', $this->_getPersonasContacts('pwulf')->getId());
         $this->assertEquals(1, count($pwulf), 'pwulf is not attender of event, but should be (via update)');
         
-        $group->members = array_diff(Admin_Controller_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId()), array(array_value('pwulf', Zend_Registry::get('personas'))->getId()));
+        $group->members = array_diff(Admin_Controller_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId()), array(Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->getId()));
         Admin_Controller_Group::getInstance()->update($group);
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
             Tinebase_ActionQueue::getInstance()->processQueue(10000);

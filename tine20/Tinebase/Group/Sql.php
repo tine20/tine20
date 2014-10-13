@@ -83,7 +83,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
-        $cacheId = convertCacheId('groupMemberships' . $accountId);
+        $cacheId = Tinebase_Helper::convertCacheId('groupMemberships' . $accountId);
         $memberships = Tinebase_Core::getCache()->load($cacheId);
 
         if (! $memberships) {
@@ -114,7 +114,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
-        $cacheId = convertCacheId('groupMembers' . $groupId);
+        $cacheId = Tinebase_Helper::convertCacheId('groupMembers' . $groupId);
         $members = Tinebase_Core::getCache()->load($cacheId);
 
         if (! $members) {
@@ -199,7 +199,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     protected function _clearCache($cacheIds = array())
     {
         foreach ($cacheIds as $type => $id) {
-            $cacheId = convertCacheId($type . $id);
+            $cacheId = Tinebase_Helper::convertCacheId($type . $id);
             Tinebase_Core::getCache()->remove($cacheId);
         }
     }

@@ -282,7 +282,7 @@
 //     {
 //         //        return array('success' => 1);
 //         //        $cache = Tinebase_Core::get('cache');
-//         //        $cacheId = convertCacheId('getSipgateSettings');
+//         //        $cacheId = Tinebase_Helper::convertCacheId('getSipgateSettings');
 //         //        $result = $cache->load($cacheId);
 //         //        if (! $result) {
 //         $settings = Tinebase_Config::getInstance()->getConfigAsArray('account_settings','Sipgate');

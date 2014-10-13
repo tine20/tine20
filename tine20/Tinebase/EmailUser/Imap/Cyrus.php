@@ -200,7 +200,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         $mailboxString = ($_mailboxString !== NULL) ? $_mailboxString : $this->_getUserMailbox($_user->accountLoginName);
         
         if (isset($_user->imapUser)) {
-            $limit = ($_user->imapUser->emailMailQuota) > 0 ? convertToBytes($_user->imapUser->emailMailQuota . 'M') / 1024 : null;
+            $limit = ($_user->imapUser->emailMailQuota) > 0 ? Tinebase_Helper::convertToBytes($_user->imapUser->emailMailQuota . 'M') / 1024 : null;
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . " Setting quota of user " . $_user->getId() . " to " . $limit);

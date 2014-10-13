@@ -129,7 +129,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
      */
     public function testExportOrganizer()
     {
-        $this->_testEvent->organizer = array_value('pwulf', Zend_Registry::get('personas'))->contact_id;
+        $this->_testEvent->organizer = Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->contact_id;
         
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($this->_testEvent);
@@ -147,7 +147,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
                 'role'          => Calendar_Model_Attender::ROLE_REQUIRED,
                 'status'        => Calendar_Model_Attender::STATUS_ACCEPTED,
                 'user_type'     => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'       => array_value('pwulf', Zend_Registry::get('personas'))->contact_id,
+                'user_id'       => Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->contact_id,
             )
         ));
         

@@ -538,7 +538,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         // try to get user profile of different user
         $this->setExpectedException('Tinebase_Exception_AccessDenied');
         
-        $sclever = array_value('sclever',Zend_Registry::get('personas'));
+        $sclever = Tinebase_Helper::array_value('sclever',Zend_Registry::get('personas'));
         $this->_instance->getUserProfile($sclever->getId());
     }
     

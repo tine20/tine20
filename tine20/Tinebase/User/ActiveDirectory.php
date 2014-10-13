@@ -567,7 +567,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             }
             $ldapData['gidnumber'] = Tinebase_Group::getInstance()->resolveGidNumber($_user->accountPrimaryGroup);
             
-            $ldapData['msSFU30NisDomain'] = array_value(0, explode('.', $this->_domainName));
+            $ldapData['msSFU30NisDomain'] = Tinebase_Helper::array_value(0, explode('.', $this->_domainName));
         }
         
         if (isset($_user->sambaSAM) && $_user->sambaSAM instanceof Tinebase_Model_SAMUser) {

@@ -26,8 +26,6 @@ require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
 
-require_once 'Tinebase/Helper.php';
-
 /**
  * path to tine 2.0 checkout
  */
@@ -583,7 +581,7 @@ function statistics($_verbose)
     `rm messages.mo`;
     
     $results = array(
-        'version'      => getDevelopmentRevision(),
+        'version'      => Tinebase_Helper::getDevelopmentRevision(),
         'langStats'    => array_values($langStats),
         'poFilesStats' => $poFilesStats
     );

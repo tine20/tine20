@@ -184,7 +184,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
                     . ' Address components ' . print_r($components, TRUE));
                 
                 $mapping = array(NULL, 'street2', 'street', 'locality', 'region', 'postalcode', 'countryname');
-                $adrType = ($types && in_array_case($types, 'home')) ? 'two' : 'one';
+                $adrType = ($types && Tinebase_Helper::in_array_case($types, 'home')) ? 'two' : 'one';
                 foreach ($components as $index => $value) {
                     if (! isset($mapping[$index]) || $mapping[$index] === NULL) {
                         continue;
@@ -204,25 +204,25 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
                 
                 $key = 'tel_work';
                 if($types){
-                    if(in_array_case($types, 'home') && !in_array_case($types, 'cell') && !in_array_case($types, 'fax')){
+                    if(Tinebase_Helper::in_array_case($types, 'home') && !Tinebase_Helper::in_array_case($types, 'cell') && !Tinebase_Helper::in_array_case($types, 'fax')){
                         $key = 'tel_home';    
-                    }else if(in_array_case($types, 'home') && in_array_case($types, 'cell')){
+                    }else if(Tinebase_Helper::in_array_case($types, 'home') && Tinebase_Helper::in_array_case($types, 'cell')){
                         $key = 'tel_cell_private';
-                    }else if(in_array_case($types, 'home') && in_array_case($types, 'fax')){
+                    }else if(Tinebase_Helper::in_array_case($types, 'home') && Tinebase_Helper::in_array_case($types, 'fax')){
                         $key = 'tel_fax_home';
-                    }else if(in_array_case($types, 'work') && !in_array_case($types, 'cell') && !in_array_case($types, 'fax')){
+                    }else if(Tinebase_Helper::in_array_case($types, 'work') && !Tinebase_Helper::in_array_case($types, 'cell') && !Tinebase_Helper::in_array_case($types, 'fax')){
                         $key = 'tel_work';
-                    }else if(in_array_case($types, 'work') && in_array_case($types, 'cell')){
+                    }else if(Tinebase_Helper::in_array_case($types, 'work') && Tinebase_Helper::in_array_case($types, 'cell')){
                         $key = 'tel_cell';
-                    }else if(in_array_case($types, 'work') && !in_array_case($types, 'fax')){
+                    }else if(Tinebase_Helper::in_array_case($types, 'work') && !Tinebase_Helper::in_array_case($types, 'fax')){
                         $key = 'tel_fax';
-                    }else if(in_array_case($types, 'car')){
+                    }else if(Tinebase_Helper::in_array_case($types, 'car')){
                         $key = 'tel_car';
-                    }else if(in_array_case($types, 'pager')){
+                    }else if(Tinebase_Helper::in_array_case($types, 'pager')){
                         $key = 'tel_pager';
-                    }else if(in_array_case($types, 'fax')){
+                    }else if(Tinebase_Helper::in_array_case($types, 'fax')){
                         $key = 'tel_fax';
-                    }else if(in_array_case($types, 'cell')){
+                    }else if(Tinebase_Helper::in_array_case($types, 'cell')){
                         $key = 'tel_cell';
                     }
                 }
@@ -241,7 +241,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
                 
                 $key = 'email';
                 if($types){
-                    if(in_array_case($types, 'home')){
+                    if(Tinebase_Helper::in_array_case($types, 'home')){
                         $key = 'email_home';    
                     }
                 }

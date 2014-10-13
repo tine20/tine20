@@ -463,7 +463,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     {
         // check if $modification->new_value is json string and record set diff
         // @see 0008546: When edit event, history show "code" ...
-        if (is_json($modification->new_value)) {
+        if (Tinebase_Helper::is_json($modification->new_value)) {
             $newValueArray = Zend_Json::decode($modification->new_value);
             if ((isset($newValueArray['model']) || array_key_exists('model', $newValueArray)) && (isset($newValueArray['added']) || array_key_exists('added', $newValueArray))) {
                 $diff = new Tinebase_Record_RecordSetDiff($newValueArray);

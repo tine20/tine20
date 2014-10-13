@@ -77,7 +77,7 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
         $right = strtoupper($_right);
         
         $cache = Tinebase_Core::getCache();
-        $cacheId = convertCacheId('checkRight' . Tinebase_Core::getUser()->getId() . $right . $this->_applicationName);
+        $cacheId = Tinebase_Helper::convertCacheId('checkRight' . Tinebase_Core::getUser()->getId() . $right . $this->_applicationName);
         $result = $cache->load($cacheId);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $cacheId);

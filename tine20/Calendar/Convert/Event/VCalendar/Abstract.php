@@ -955,7 +955,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                             $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
                             $url = $matches[1] . $userCredentialCache->username . ':' . $userCredentialCache->password . '@' . $matches[2];
                             $attachmentInfo = $matches[1] . $matches[2]. ' ' . $name . ' ' . $managedId;
-                            if (urlExists($url)) {
+                            if (Tinebase_Helper::urlExists($url)) {
                                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
                                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                                             . ' Downloading attachment: ' . $attachmentInfo);

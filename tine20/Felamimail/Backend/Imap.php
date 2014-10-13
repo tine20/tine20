@@ -1050,7 +1050,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                         . ' ' . print_r($matches, TRUE));
                     
                     $headerValue = str_replace("\n", '', $matches[1]);
-                    $headerValue = mbConvertTo($headerValue);
+                    $headerValue = Tinebase_Helper::mbConvertTo($headerValue);
                     $headerString = iconv_mime_encode(ucfirst($field), $headerValue);
                     
                     $result = str_replace($matches[0], $headerString . "\n", $result);

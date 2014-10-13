@@ -149,7 +149,7 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
     {
         
         $cache = Tinebase_Core::get('cache');
-        $cacheId = convertCacheId('getSimpleFAQSettings');
+        $cacheId = Tinebase_Helper::convertCacheId('getSimpleFAQSettings');
         $result = $cache->load($cacheId);
         
         if (! $result) {

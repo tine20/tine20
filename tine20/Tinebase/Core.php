@@ -11,11 +11,6 @@
  */
 
 /**
- * php helpers
- */
-require_once 'Helper.php';
-
-/**
  * dispatcher and initialisation class (functions are static)
  * - dispatchRequest() function
  * - initXYZ() functions
@@ -490,7 +485,7 @@ class Tinebase_Core
     {
         $config = self::getConfig();
         define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
-        define('TINE20_CODENAME',      getDevelopmentRevision());
+        define('TINE20_CODENAME',      Tinebase_Helper::getDevelopmentRevision());
         define('TINE20_PACKAGESTRING', 'none');
         define('TINE20_RELEASETIME',   'none');
     }
@@ -1516,7 +1511,7 @@ class Tinebase_Core
     {
         $db = self::getDb();
         if ($db && $db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            $string = mbConvertTo($string);
+            $string = Tinebase_Helper::mbConvertTo($string);
             
             // remove 4 byte utf8
             $result = preg_replace('/[\xF0-\xF7].../s', '?', $string);

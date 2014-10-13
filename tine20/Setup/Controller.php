@@ -715,8 +715,8 @@ class Setup_Controller
             $oldValue = ini_get($variable);
             
             if ($variable == 'memory_limit') {
-                $required = convertToBytes($newValue);
-                $set = convertToBytes($oldValue);
+                $required = Tinebase_Helper::convertToBytes($newValue);
+                $set = Tinebase_Helper::convertToBytes($oldValue);
                 
                 if ( $set < $required) {
                     $result[] = array(

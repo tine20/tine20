@@ -106,7 +106,7 @@ class VCard
     {
         $our_categories = $this->getCategories();
         foreach ($categories as $category) {
-            if (in_array_case($category, $our_categories)) {
+            if (Tinebase_Helper::in_array_case($category, $our_categories)) {
                 return true;
             }
         }

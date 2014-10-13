@@ -31,7 +31,7 @@
         "phpdocumentor/phpdocumentor": "2.1.*"
     },
     "autoload": {
-        "files": ["Tinebase/Helper.php"],
+        "files": [],
         "psr-0": {
             "": ["", "library", "../tests/tine20", "../tests/setup"],
             "TimeZoneConvert": "library/TimeZoneConvert/lib/",

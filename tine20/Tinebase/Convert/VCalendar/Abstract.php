@@ -83,7 +83,7 @@ abstract class Tinebase_Convert_VCalendar_Abstract
     public static function readVCalBlob($blob, $failcount = 0, $spacecount = 0, $lastBrokenLineNumber = 0, $lastLines = array())
     {
         // convert to utf-8
-        $blob = mbConvertTo($blob);
+        $blob = Tinebase_Helper::mbConvertTo($blob);
     
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
                 ' ' . $blob);

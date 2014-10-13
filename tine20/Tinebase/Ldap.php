@@ -199,7 +199,7 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function getFirstNamingContext()
     {
-        return array_value(0, $this->getRootDse()->getNamingContexts());
+        return Tinebase_Helper::array_value(0, $this->getRootDse()->getNamingContexts());
     }
     
     /**

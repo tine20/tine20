@@ -343,12 +343,12 @@ class Tinebase_Timemachine_ModificationLog
     protected function _resolveDiffs(Tinebase_Record_RecordSet $resolved, Tinebase_Record_RecordSet $diffs, Tinebase_Record_Interface $newRecord)
     {
         foreach ($diffs as $diff) {
-            $newUserValue = isset($newRecord[$diff->modified_attribute]) ? normalizeLineBreaks($newRecord[$diff->modified_attribute]) : NULL;
+            $newUserValue = isset($newRecord[$diff->modified_attribute]) ? Tinebase_Helper::normalizeLineBreaks($newRecord[$diff->modified_attribute]) : NULL;
             
-            if (isset($newRecord[$diff->modified_attribute]) && $newUserValue == normalizeLineBreaks($diff->new_value)) {
+            if (isset($newRecord[$diff->modified_attribute]) && $newUserValue == Tinebase_Helper::normalizeLineBreaks($diff->new_value)) {
                 $this->_resolveScalarSameValue($newRecord, $diff);
             
-            } else if (! isset($newRecord[$diff->modified_attribute]) || $newUserValue == normalizeLineBreaks($diff->old_value)) {
+            } else if (! isset($newRecord[$diff->modified_attribute]) || $newUserValue == Tinebase_Helper::normalizeLineBreaks($diff->old_value)) {
                 $this->_resolveScalarMergeUpdate($newRecord, $diff);
             
             } else if ($newRecord[$diff->modified_attribute] instanceof Tinebase_Record_RecordSet) {
@@ -519,13 +519,13 @@ class Tinebase_Timemachine_ModificationLog
             
             // we loop over the diffs! -> changes over fields which have no diff in storage are not in the loop!
             foreach ($diffs as $diff) {
-                $newUserValue = isset($_newRecord[$diff->modified_attribute]) ? normalizeLineBreaks($_newRecord[$diff->modified_attribute]) : NULL;
+                $newUserValue = isset($_newRecord[$diff->modified_attribute]) ? Tinebase_Helper::normalizeLineBreaks($_newRecord[$diff->modified_attribute]) : NULL;
                 
-                if (isset($_newRecord[$diff->modified_attribute]) && $newUserValue == normalizeLineBreaks($diff->new_value)) {
+                if (isset($_newRecord[$diff->modified_attribute]) && $newUserValue == Tinebase_Helper::normalizeLineBreaks($diff->new_value)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . " User updated to same value for field '" . $diff->modified_attribute . "', nothing to do.");
                     $resolved->addRecord($diff);
-                } elseif (! isset($_newRecord[$diff->modified_attribute]) || $newUserValue == normalizeLineBreaks($diff->old_value)) {
+                } elseif (! isset($_newRecord[$diff->modified_attribute]) || $newUserValue == Tinebase_Helper::normalizeLineBreaks($diff->old_value)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . " Merge current value into update data, as it was not changed in update request.");
                     $_newRecord[$diff->modified_attribute] = $diff->new_value;

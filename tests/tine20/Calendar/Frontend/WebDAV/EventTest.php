@@ -753,7 +753,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         $pwulf = new Calendar_Model_Attender(array(
             'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'    => array_value('pwulf', Zend_Registry::get('personas'))->contact_id
+            'user_id'    => Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->contact_id
         ));
         
         $pwulfAttendee = Calendar_Model_Attender::getAttendee($event->getRecord()->attendee, $pwulf);
@@ -862,8 +862,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
             array(
                 $unittestUserEmail,
                 $unittestUserEmail,
-                array_value('pwulf', Zend_Registry::get('personas'))->accountEmailAddress,
-                array_value('sclever', Zend_Registry::get('personas'))->accountEmailAddress,
+                Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->accountEmailAddress,
+                Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'))->accountEmailAddress,
             ), 
             $vcalendar
         );

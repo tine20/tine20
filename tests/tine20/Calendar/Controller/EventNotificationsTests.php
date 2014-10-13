@@ -1146,7 +1146,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 $this->_getPersona(trim($personaName))->accountEmailAddress;
             
             foreach ($messages as $message) {
-                if (array_value(0, $message->getRecipients()) == $personaEmail) {
+                if (Tinebase_Helper::array_value(0, $message->getRecipients()) == $personaEmail) {
                     array_push($mailsForPersona, $message);
                 } else {
                     array_push($otherRecipients, $message->getRecipients());

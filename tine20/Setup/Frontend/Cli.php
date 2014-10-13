@@ -393,7 +393,7 @@ class Setup_Frontend_Cli
             $errors[] = 'Missing argument: configvalue';
         }
         $configKey = (string)$options['configkey'];
-        $configValue = (is_json($options['configvalue'])) ? Zend_Json::decode($options['configvalue']) : self::parseConfigValue($options['configvalue']);
+        $configValue = (Tinebase_Helper::is_json($options['configvalue'])) ? Zend_Json::decode($options['configvalue']) : self::parseConfigValue($options['configvalue']);
         $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
         
         if (empty($errors)) {

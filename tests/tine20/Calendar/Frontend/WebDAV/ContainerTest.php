@@ -369,7 +369,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSharesWithoutRights()
     {
-        $jmcblack = array_value('jmcblack', Zend_Registry::get('personas'));
+        $jmcblack = Tinebase_Helper::array_value('jmcblack', Zend_Registry::get('personas'));
         $jmcblacksCalId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $jmcblack->getId());
         $jmcblacksCal = Tinebase_Container::getInstance()->get($jmcblacksCalId);
         

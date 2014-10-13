@@ -78,7 +78,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
      */
     public function findCurrentUserPrincipal($tries = 1)
     {
-        $cacheId = convertCacheId('findCurrentUserPrincipal' . $this->userName);
+        $cacheId = Tinebase_Helper::convertCacheId('findCurrentUserPrincipal' . $this->userName);
         if (Tinebase_Core::getCache()->test($cacheId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
                     . ' Loading user principal from cache');
@@ -163,7 +163,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
                     . ' No principal found for user ' . $this->userName);
             return false;
         }
-        $cacheId = convertCacheId('findCalendarHomeSet' . $this->userName);
+        $cacheId = Tinebase_Helper::convertCacheId('findCalendarHomeSet' . $this->userName);
         if (Tinebase_Core::getCache()->test($cacheId)) {
             $this->calendarHomeSet = Tinebase_Core::getCache()->load($cacheId);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__

@@ -185,7 +185,7 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
             $result = imap_utf7_encode(iconv('utf-8', 'ISO-8859-1', $_folderName));
         } else {
             // fallback
-            $result = replaceSpecialChars($_folderName);
+            $result = Tinebase_Helper::replaceSpecialChars($_folderName);
         }
                 
         return $result;
@@ -205,7 +205,7 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
             $result = iconv('ISO-8859-1', 'utf-8', imap_utf7_decode($_folderName));
         } else {
             // fallback
-            $result = replaceSpecialChars($_folderName);
+            $result = Tinebase_Helper::replaceSpecialChars($_folderName);
         }
         
         return $result;

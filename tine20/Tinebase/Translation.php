@@ -85,7 +85,7 @@ class Tinebase_Translation
             $filesToWatch[] = $info['path'];
         }
         
-        $cacheId = convertCacheId(__FUNCTION__ . $appName . sha1(serialize($filesToWatch)));
+        $cacheId = Tinebase_Helper::convertCacheId(__FUNCTION__ . $appName . sha1(serialize($filesToWatch)));
         $cache = new Zend_Cache_Frontend_File(array(
             'master_files' => $filesToWatch
         ));

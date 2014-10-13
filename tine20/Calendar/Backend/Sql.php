@@ -470,7 +470,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             
             $whereArray = $attendeeSelect->getPart(Zend_Db_Select::SQL_WHERE);
             if (! empty($whereArray)) {
-                $attendeeWhere = ' AND ' . array_value(0, $whereArray);
+                $attendeeWhere = ' AND ' . Tinebase_Helper::array_value(0, $whereArray);
             }
         }
         

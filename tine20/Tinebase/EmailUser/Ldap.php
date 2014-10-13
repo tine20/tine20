@@ -105,7 +105,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
                 switch($keyMapping) {
                     case 'emailMailQuota':
                         // convert to megabytes
-                        $accountArray[$keyMapping] = convertToMegabytes($value[0]);
+                        $accountArray[$keyMapping] = Tinebase_Helper::convertToMegabytes($value[0]);
                         break;
                         
                     case 'emailAliases':
@@ -162,7 +162,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
             switch($objectProperty) {
                 case 'emailMailQuota':
                     // convert to bytes
-                    $_ldapData[$ldapAttribute] = !empty($mailSettings->{$objectProperty}) ? convertToBytes($mailSettings->{$objectProperty} . 'M') : array();
+                    $_ldapData[$ldapAttribute] = !empty($mailSettings->{$objectProperty}) ? Tinebase_Helper::convertToBytes($mailSettings->{$objectProperty} . 'M') : array();
                     break;
                     
                 case 'emailUID':

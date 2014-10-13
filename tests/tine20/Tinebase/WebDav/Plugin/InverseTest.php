@@ -146,7 +146,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends TestCase
     {
         $body = '<?xml version="1.0" encoding="utf-8"?>
                  <acl-query xmlns="urn:inverse:params:xml:ns:inverse-dav">
-                     <add-user user="' . array_value('pwulf', Zend_Registry::get('personas'))->contact_id . '"/>
+                     <add-user user="' . Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->contact_id . '"/>
                  </acl-query>';
         
         $request = new Sabre\HTTP\Request(array(
@@ -162,7 +162,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends TestCase
         $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
         
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer']->id);
-        $this->assertContains(array_value('pwulf', Zend_Registry::get('personas'))->accountId, $grants->account_id);
+        $this->assertContains(Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->accountId, $grants->account_id);
     }
     
     /**
@@ -175,7 +175,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends TestCase
         
         $body = '<?xml version="1.0" encoding="utf-8"?>
                  <acl-query xmlns="urn:inverse:params:xml:ns:inverse-dav">
-                     <remove-user user="' . array_value('pwulf', Zend_Registry::get('personas'))->contact_id . '"/>
+                     <remove-user user="' . Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->contact_id . '"/>
                  </acl-query>';
         
         $request = new Sabre\HTTP\Request(array(
@@ -191,7 +191,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends TestCase
         $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
         
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer']->id);
-        $this->assertNotContains(array_value('pwulf', Zend_Registry::get('personas'))->accountId, $grants->account_id);
+        $this->assertNotContains(Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->accountId, $grants->account_id);
     }
     
     /**
@@ -204,7 +204,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends TestCase
         
         $body = '<?xml version="1.0" encoding="utf-8"?>
                  <acl-query xmlns="urn:inverse:params:xml:ns:inverse-dav">
-                     <set-roles user="' . array_value('pwulf', Zend_Registry::get('personas'))->contact_id . '">
+                     <set-roles user="' . Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->contact_id . '">
                          <ObjectEraser/>
                      </set-roles>
                  </acl-query>';
@@ -223,7 +223,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends TestCase
         
         $grantsOfPwulf = Tinebase_Container::getInstance()
             ->getGrantsOfContainer($this->objects['initialContainer']->id)
-            ->filter('account_id', array_value('pwulf', Zend_Registry::get('personas'))->accountId)
+            ->filter('account_id', Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->accountId)
             ->getFirstRecord();
         $this->assertTrue($grantsOfPwulf->deleteGrant);
         $this->assertFalse($grantsOfPwulf->addGrant);

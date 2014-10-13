@@ -155,7 +155,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             $ldapData['objectclass'][] = 'posixGroup';
             $ldapData['gidnumber']     = $this->_generateGidNumber();
             
-            $ldapData['msSFU30NisDomain'] = array_value(0, explode('.', $this->_domainName));
+            $ldapData['msSFU30NisDomain'] = Tinebase_Helper::array_value(0, explode('.', $this->_domainName));
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 

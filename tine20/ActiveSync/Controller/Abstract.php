@@ -724,7 +724,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
         }
         
         // calculate with an overhead of 1.2
-        if (convertToBytes(ini_get('memory_limit')) > memory_get_usage(TRUE) + ($needed * 1.2)) {
+        if (Tinebase_Helper::convertToBytes(ini_get('memory_limit')) > memory_get_usage(TRUE) + ($needed * 1.2)) {
             return true;
         }
         

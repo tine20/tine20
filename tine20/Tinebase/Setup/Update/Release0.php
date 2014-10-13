@@ -2246,7 +2246,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
         }
         
         /** convert db contenets for installations which had a clientcharset != utf8 **/
-        $originalCharset = array_value('Value', array_value(0, $orgDb->query("SHOW VARIABLES LIKE 'character_set_client'")->fetchAll()));
+        $originalCharset = Tinebase_Helper::array_value('Value', Tinebase_Helper::array_value(0, $orgDb->query("SHOW VARIABLES LIKE 'character_set_client'")->fetchAll()));
         if (strtolower($originalCharset) != 'utf8') {
             $this->_db->query("SET FOREIGN_KEY_CHECKS=0");
             $orgDb->query("SET FOREIGN_KEY_CHECKS=0");

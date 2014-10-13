@@ -750,7 +750,7 @@ class Tinebase_Acl_Roles
         
         foreach ($rightsInvalidateCache as $rightData) {
             foreach ($userIds as $userId) {
-                $cacheId = convertCacheId('checkRight' . $userId . $rightData);
+                $cacheId = Tinebase_Helper::convertCacheId('checkRight' . $userId . $rightData);
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
                     Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Removing cache id ' . $cacheId);

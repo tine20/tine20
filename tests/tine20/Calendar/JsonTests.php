@@ -486,7 +486,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testCreateRecurException()
     {
-        $recurSet = array_value('results', $this->testSearchRecuringIncludes());
+        $recurSet = Tinebase_Helper::array_value('results', $this->testSearchRecuringIncludes());
         
         $persistentException = $recurSet[1];
         $persistentException['summary'] = 'go sleeping';
@@ -536,7 +536,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testCreateRecurExceptionWithOtherUser()
     {
-        $recurSet = array_value('results', $this->testSearchRecuringIncludes());
+        $recurSet = Tinebase_Helper::array_value('results', $this->testSearchRecuringIncludes());
         
         // create persistent exception (just status update)
         $persistentException = $recurSet[1];
@@ -590,7 +590,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testUpdateRecurSeries()
     {
-        $recurSet = array_value('results', $this->testSearchRecuringIncludes());
+        $recurSet = Tinebase_Helper::array_value('results', $this->testSearchRecuringIncludes());
         
         $persistentException = $recurSet[1];
         $persistentException['summary'] = 'go sleeping';
@@ -668,7 +668,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testDeleteRecurSeries()
     {
-        $recurSet = array_value('results', $this->testSearchRecuringIncludes());
+        $recurSet = Tinebase_Helper::array_value('results', $this->testSearchRecuringIncludes());
         
         $persistentException = $recurSet[1];
         $persistentException['summary'] = 'go sleeping';
@@ -1447,7 +1447,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testAddAttachmentToRecurSeries()
     {
         $tempFile = $this->_getTempFile();
-        $recurSet = array_value('results', $this->testSearchRecuringIncludes());
+        $recurSet = Tinebase_Helper::array_value('results', $this->testSearchRecuringIncludes());
         // update recurseries 
         $someRecurInstance = $recurSet[2];
         $someRecurInstance['attachments'] = array(array('tempFile' => array('id' => $tempFile->getId())));

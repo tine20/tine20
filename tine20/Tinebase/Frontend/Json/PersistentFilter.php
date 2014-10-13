@@ -96,7 +96,7 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
     {
         $recordSet = new Tinebase_Record_RecordSet('Tinebase_Model_PersistentFilter', array($_record));
         
-        return array_value(0, $this->_multipleRecordsToJson($recordSet));
+        return Tinebase_Helper::array_value(0, $this->_multipleRecordsToJson($recordSet));
     }
     
     /**

@@ -1082,7 +1082,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $container = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
         
         $cache = Tinebase_Core::getCache();
-        $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . $container->seq . implode('', (array)$_grant));
+        $cacheId = Tinebase_Helper::convertCacheId('hasGrant' . $accountId . $containerId . $container->seq . implode('', (array)$_grant));
         $result = $cache->load($cacheId);
         
         if ($result === FALSE) {
@@ -1183,7 +1183,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         $container          = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
         
-        $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId . $container->seq);
+        $cacheKey = Tinebase_Helper::convertCacheId('getGrantsOfAccount' . $containerId . $accountId . $container->seq);
         $cache = Tinebase_Core::getCache();
         $grants = $cache->load($cacheKey);
         if ($grants === FALSE) {

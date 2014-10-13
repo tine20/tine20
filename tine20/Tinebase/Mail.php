@@ -623,7 +623,7 @@ class Tinebase_Mail extends Zend_Mail
         // TLDs list:  http://data.iana.org/TLD/tlds-alpha-by-domain.txt
        
         $cache = Tinebase_Core::get('cache');
-        $cacheId = convertCacheId('getDomainList');
+        $cacheId = Tinebase_Helper::convertCacheId('getDomainList');
         $validTlds = $cache->load($cacheId);
         
         if (! is_array($validTlds)) {

@@ -799,7 +799,7 @@ Zeile 3</AirSyncBase:Data>
         list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
         
         // transfer event to other user
-        $rwright = array_value('rwright', $this->_personas = Zend_Registry::get('personas'));
+        $rwright = Tinebase_Helper::array_value('rwright', $this->_personas = Zend_Registry::get('personas'));
         $eventBackend = new Calendar_Backend_Sql();
         $eventBackend->updateMultiple($eventBackend->getMultipleByProperty($syncrotonEvent->uID, 'uid')->id, array(
             'container_id'  => Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $rwright->getId()),
@@ -991,7 +991,7 @@ Zeile 3</AirSyncBase:Data>
     
         $folderA = $this->testCreateFolder(); // personal of test user
         
-        $sclever = array_value('sclever', Zend_Registry::get('personas'));
+        $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
         $folderB = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $sclever->getId());
 
         // have syncGerant for sclever

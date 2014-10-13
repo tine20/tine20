@@ -147,7 +147,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
             'no IMAP4(rev1) capability found in ' . print_r($capabilities['capabilities'], TRUE));
         $this->assertTrue(in_array('QUOTA', $capabilities['capabilities']), 'no QUOTA capability found in ' . print_r($capabilities['capabilities'], TRUE));
         
-        $this->assertEquals($capabilities, array_value($this->_account->getId(), Felamimail_Session::getSessionNamespace()->account));
+        $this->assertEquals($capabilities, Tinebase_Helper::array_value($this->_account->getId(), Felamimail_Session::getSessionNamespace()->account));
     }
 
     /**

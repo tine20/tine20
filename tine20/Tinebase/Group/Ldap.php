@@ -829,7 +829,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     protected function _getAccountMetaData($_accountId)
     {
-        return array_value(0, $this->_getAccountsMetaData(array($_accountId)));
+        return Tinebase_Helper::array_value(0, $this->_getAccountsMetaData(array($_accountId)));
     }
     
     /**

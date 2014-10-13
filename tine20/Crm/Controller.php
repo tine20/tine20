@@ -143,7 +143,7 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
     public function getConfigSettings($_resolve = FALSE)
     {
         $cache = Tinebase_Core::get('cache');
-        $cacheId = convertCacheId('getCrmSettings');
+        $cacheId = Tinebase_Helper::convertCacheId('getCrmSettings');
         $result = $cache->load($cacheId);
         
         if (! $result) {

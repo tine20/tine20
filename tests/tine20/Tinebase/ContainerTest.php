@@ -660,7 +660,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     public function testSetGrantsCacheInvalidation()
     {
         $container = $this->objects['initialContainer'];
-        $sclever = array_value('sclever', Zend_Registry::get('personas'));
+        $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
         
         $this->assertEquals(FALSE, $this->_instance->hasGrant($sclever->getId(), $container->getId(), Tinebase_Model_Grants::GRANT_READ), 'sclever should _not_ have a read grant');
         

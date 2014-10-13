@@ -1255,7 +1255,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     protected function _getOtherUserContainer()
     {
         if (!$this->_otherUserContainer) {
-            $sclever = array_value('sclever', Zend_Registry::get('personas'));
+            $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
             
             $this->_otherUserContainer = Tinebase_Container::getInstance()->getDefaultContainer('Filemanager', $sclever->getId());
             Tinebase_Container::getInstance()->addGrants(

@@ -132,10 +132,10 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         {
             $currenttime = microtime(true);
             if (self::$_logruntime) {
-                $timelog = formatMicrotimeDiff($currenttime - self::$_starttime) . ' ';
+                $timelog = Tinebase_Helper::formatMicrotimeDiff($currenttime - self::$_starttime) . ' ';
             }
             if (self::$_logdifftime) {
-                $timelog .= formatMicrotimeDiff($currenttime - (self::$_lastlogtime ? self::$_lastlogtime : $currenttime)) . ' ';
+                $timelog .= Tinebase_Helper::formatMicrotimeDiff($currenttime - (self::$_lastlogtime ? self::$_lastlogtime : $currenttime)) . ' ';
                 self::$_lastlogtime = $currenttime;
             }
         }

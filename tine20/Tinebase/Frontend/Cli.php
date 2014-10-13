@@ -598,7 +598,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 echo 'DemoData in application "' . $appName . '" found!' . PHP_EOL;
                 $required = $className::getRequiredApplications();
                 foreach($required as $requiredApplication) {
-                    if (! in_array_case($applications, $requiredApplication)) {
+                    if (! Tinebase_Helper::in_array_case($applications, $requiredApplication)) {
                         echo 'Creating DemoData for Application ' . $appName . ' is impossible, because application "' . $requiredApplication . '" is not installed.' . PHP_EOL;
                         continue 2;
                     }

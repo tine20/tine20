@@ -133,7 +133,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
         $timeaccount = ($_timeaccountId instanceof Timetracker_Model_Timeaccount) ? $_timeaccountId : Timetracker_Controller_Timeaccount::getInstance()->get($_timeaccountId);
         $container = Tinebase_Container::getInstance()->getContainerById($timeaccount->container_id);
         $cache = Tinebase_Core::getCache();
-        $cacheId = convertCacheId('getGrantsOfAccount' . Tinebase_Model_User::convertUserIdToInt($_accountId) . $timeaccount->getId() . $_ignoreAcl . $container->last_modified_time);
+        $cacheId = Tinebase_Helper::convertCacheId('getGrantsOfAccount' . Tinebase_Model_User::convertUserIdToInt($_accountId) . $timeaccount->getId() . $_ignoreAcl . $container->last_modified_time);
         $result = $cache->load($cacheId);
         
         if ($result === FALSE) {
@@ -203,7 +203,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
         
         $container = Tinebase_Container::getInstance()->getContainerById($_timeaccount->container_id);
         $cache = Tinebase_Core::getCache();
-        $cacheId = convertCacheId('getTimeaccountGrants' . Tinebase_Core::getUser()->getId() . $_timeaccount->getId() . $_ignoreACL . $container->last_modified_time);
+        $cacheId = Tinebase_Helper::convertCacheId('getTimeaccountGrants' . Tinebase_Core::getUser()->getId() . $_timeaccount->getId() . $_ignoreACL . $container->last_modified_time);
         $result = $cache->load($cacheId);
         
         if ($result === FALSE) {

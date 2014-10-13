@@ -72,7 +72,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
     {
         $this->_path            = $_path;
         $this->_pathParts       = $this->_parsePath($_path);
-        $this->_applicationName = array_value(0, explode('_', get_class($this)));
+        $this->_applicationName = Tinebase_Helper::array_value(0, explode('_', get_class($this)));
     }
     
     /**

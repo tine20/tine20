@@ -95,7 +95,7 @@ class Tinebase_ControllerTest extends PHPUnit_Framework_TestCase
         $cache = Tinebase_Core::getCache();
         $oldLifetime = $cache->getOption('lifetime');
         $cache->setLifetime(1);
-        $cacheId = convertCacheId('testCleanupCache');
+        $cacheId = Tinebase_Helper::convertCacheId('testCleanupCache');
         $cache->save('value', $cacheId);
         sleep(3);
         

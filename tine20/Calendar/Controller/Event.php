@@ -1190,7 +1190,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
                 ' Got multiple possible base events: ' . print_r($possibleBaseEventIds, true));
         }
-        $baseEventId = array_value(0, $possibleBaseEventIds);
+        $baseEventId = Tinebase_Helper::array_value(0, $possibleBaseEventIds);
         
         if (! $baseEventId) {
             throw new Tinebase_Exception_NotFound('base event of a recurring series not found');

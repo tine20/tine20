@@ -34,7 +34,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
             $basicAuthData = base64_decode(substr($_SERVER["HTTP_AUTHORIZATION"], 6));
         } else {
             // check if (REDIRECT_)*REMOTE_USER is found in SERVER vars
-            $remoteUserValues = searchArrayByRegexpKey('/REMOTE_USER$/', $_SERVER);
+            $remoteUserValues = Tinebase_Helper::searchArrayByRegexpKey('/REMOTE_USER$/', $_SERVER);
             if (! empty($remoteUserValues)) {
                 $firstServerValue = array_shift($remoteUserValues);
                 $basicAuthData = base64_decode(substr($firstServerValue, 6));

@@ -57,21 +57,21 @@ class Tinebase_HelperTests extends PHPUnit_Framework_TestCase
             'one' => 'bar'
         );
         
-        $this->assertEquals('foo', array_value(0, $array));
-        $this->assertEquals('bar', array_value('one', $array));
+        $this->assertEquals('foo', Tinebase_Helper::array_value(0, $array));
+        $this->assertEquals('bar', Tinebase_Helper::array_value('one', $array));
     }
     
     public function testGetDevelopmentRevision()
     {
-        $rev = getDevelopmentRevision();
+        $rev = Tinebase_Helper::getDevelopmentRevision();
         $this->assertFalse(empty($rev));
     }
     
     public function testConvertToBytes()
     {
-        $this->assertEquals(1024, convertToBytes('1024'));
-        $this->assertEquals(1024, convertToBytes('1K'));
-        $this->assertEquals(1024*1024, convertToBytes('1M'));
+        $this->assertEquals(1024, Tinebase_Helper::convertToBytes('1024'));
+        $this->assertEquals(1024, Tinebase_Helper::convertToBytes('1K'));
+        $this->assertEquals(1024*1024, Tinebase_Helper::convertToBytes('1M'));
         
     }
 
@@ -89,7 +89,7 @@ class Tinebase_HelperTests extends PHPUnit_Framework_TestCase
             'OTHER' => '4',
         );
         
-        $remoteUserValues = searchArrayByRegexpKey('/REMOTE_USER$/', $server);
+        $remoteUserValues = Tinebase_Helper::searchArrayByRegexpKey('/REMOTE_USER$/', $server);
         
         $this->assertTrue(! empty($remoteUserValues));
         $this->assertEquals(3, count($remoteUserValues));

@@ -202,7 +202,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     public function createTempFile($_path, $_name = 'tempfile.tmp', $_type = 'unknown', $_size = 0, $_error = 0)
     {
         // sanitize filename (convert to utf8)
-        $filename = mbConvertTo($_name);
+        $filename = Tinebase_Helper::mbConvertTo($_name);
         
         $id = Tinebase_Model_TempFile::generateUID();
         $tempFile = new Tinebase_Model_TempFile(array(

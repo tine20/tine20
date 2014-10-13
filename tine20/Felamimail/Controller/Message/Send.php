@@ -620,7 +620,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             
             if ($size > $maxAttachmentSize) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Current attachment size: ' . convertToMegabytes($size) . ' MB / allowed size: ' . convertToMegabytes($maxAttachmentSize) . ' MB');
+                    . ' Current attachment size: ' . Tinebase_Helper::convertToMegabytes($size) . ' MB / allowed size: ' . Tinebase_Helper::convertToMegabytes($maxAttachmentSize) . ' MB');
                 throw new Felamimail_Exception_IMAP('Maximum attachment size exceeded. Please remove one or more attachments.');
             }
             
@@ -651,6 +651,6 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $configuredMemoryLimit = '512M';
         }
         
-        return convertToBytes($configuredMemoryLimit) / 10;
+        return Tinebase_Helper::convertToBytes($configuredMemoryLimit) / 10;
     }
 }

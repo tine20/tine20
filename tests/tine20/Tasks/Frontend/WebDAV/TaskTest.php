@@ -310,7 +310,7 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
                 $unittestUserEmail,
                 $unittestUserEmail,
                 $unittestUserEmail,
-                array_value('pwulf', Zend_Registry::get('personas'))->accountEmailAddress,
+                Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->accountEmailAddress,
             ), 
             $vcalendar
         );
