@@ -129,4 +129,14 @@ class HumanResources_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_account', '4');
         $this->setApplicationVersion('HumanResources', '8.6');
     }
+    
+    /**
+     * update to 9.0
+     *
+     * @return void
+     */
+    public function update_6()
+    {
+        $this->setApplicationVersion('HumanResources', '9.0');
+    }
 }

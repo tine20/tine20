@@ -151,4 +151,14 @@ class Felamimail_Setup_Update_Release8 extends Setup_Update_Abstract
         ), $where);
         $this->setApplicationVersion('Felamimail', '8.4');
     }
+    
+    /**
+     * update to 9.0
+     *
+     * @return void
+     */
+    public function update_4()
+    {
+        $this->setApplicationVersion('Felamimail', '9.0');
+    }
 }

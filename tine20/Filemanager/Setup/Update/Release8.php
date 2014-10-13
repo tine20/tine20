@@ -122,4 +122,14 @@ class Filemanager_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Filemanager', '8.1');
     }
+    
+    /**
+     * update to 9.0
+     *
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Filemanager', '9.0');
+    }
 }

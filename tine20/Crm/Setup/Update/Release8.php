@@ -56,4 +56,14 @@ class Crm_Setup_Update_Release8 extends Setup_Update_Abstract
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Crm'));
         $this->setApplicationVersion('Crm', '8.3');
     }
+    
+    /**
+     * update to 9.0
+     *
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->setApplicationVersion('Crm', '9.0');
+    }
 }

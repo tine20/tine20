@@ -72,4 +72,14 @@ class Timetracker_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Timetracker', '8.3');
     }
+    
+    /**
+     * update to 9.0
+     *
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->setApplicationVersion('Timetracker', '9.0');
+    }
 }

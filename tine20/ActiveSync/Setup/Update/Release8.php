@@ -48,4 +48,14 @@ class ActiveSync_Setup_Update_Release8 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('ActiveSync', '8.2');
     }
+    
+    /**
+     * update to 9.0
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('ActiveSync', '9.0');
+    }
 }

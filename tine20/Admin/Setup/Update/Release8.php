@@ -31,4 +31,14 @@ class Admin_Setup_Update_Release8 extends Setup_Update_Abstract
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Admin'));
         $this->setApplicationVersion('Admin', '8.2');
     }
+    
+    /**
+     * update to 9.0
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Admin', '9.0');
+    }
 }

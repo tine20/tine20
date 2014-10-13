@@ -2070,4 +2070,14 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('sales_purchase_invoices', 2);
         $this->setApplicationVersion('Sales', '8.30');
     }
+    
+    /**
+     * update to 9.0
+     *
+     * @return void
+     */
+    public function update_30()
+    {
+        $this->setApplicationVersion('Sales', '9.0');
+    }
 }

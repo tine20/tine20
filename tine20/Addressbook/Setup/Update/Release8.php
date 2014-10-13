@@ -41,9 +41,17 @@ class Addressbook_Setup_Update_Release8 extends Setup_Update_Abstract
                 </field>');
             $this->_backend->alterCol('addressbook', $declaration);
         }
-
         $this->setTableVersion('addressbook', 18);
-
         $this->setApplicationVersion('Addressbook', '8.2');
+    }
+    
+    /**
+     * update to 9.0
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Addressbook', '9.0');
     }
 }

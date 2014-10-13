@@ -248,4 +248,14 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('cal_events', '9');
         $this->setApplicationVersion('Calendar', '8.7');
     }
+    
+    /**
+     * update to 9.0
+     *
+     * @return void
+     */
+    public function update_7()
+    {
+        $this->setApplicationVersion('Calendar', '9.0');
+    }
 }

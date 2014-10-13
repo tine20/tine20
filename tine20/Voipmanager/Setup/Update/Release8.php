@@ -83,4 +83,14 @@ class Voipmanager_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('asterisk_sip_peers', '3');
         $this->setApplicationVersion('Voipmanager', '8.2');
     }
+    
+    /**
+     * update to 9.0
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Voipmanager', '9.0');
+    }
 }
