@@ -27,6 +27,8 @@ class Calendar_Frontend_CalDAVTest extends TestCase
      */
     public function testGetChildren()
     {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
+        
         $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
         $children = $collection->getChildren();
@@ -77,6 +79,8 @@ class Calendar_Frontend_CalDAVTest extends TestCase
      */
     public function testGetTasksChild()
     {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
+        
         $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         $children = $this->testGetChildren();
         
