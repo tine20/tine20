@@ -296,8 +296,10 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
      * @param Sales_Model_Accountable_Interface $record
      */
     public function findProductAggregate(Sales_Model_Accountable_Interface $record) {
+        
+        $accountableClassName = get_class($record);
         $filter = new Sales_Model_ProductFilter(array());
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'accountable', 'operator' => 'equals', 'value' => get_class($record))));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'accountable', 'operator' => 'equals', 'value' => $accountableClassName)));
         $products = Sales_Controller_Product::getInstance()->search($filter);
         
         $filter = new Sales_Model_ProductAggregateFilter(array());
@@ -305,6 +307,12 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'equals', 'value' => $this->getId())));
 
         $pas = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+        
+        if ($pas->count() < 1) {
+            throw new Tinebase_Exception_Data('A contract aggregate could not be found!');
+        } elseif ($pas->count() > 1) {
+            throw new Tinebase_Exception_Data('At the moment a contract may have only one product aggregate for the same product, not more!');
+        }
         
         return $pas->getFirstRecord();
     }

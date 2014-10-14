@@ -284,7 +284,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $c1 = $contracts->getFirstRecord();
         
-        $this->assertEquals(6, $productAggregates->count());
+        $this->assertEquals(5, $productAggregates->count());
         
         $taController = Timetracker_Controller_Timeaccount::getInstance();
         $tsController = Timetracker_Controller_Timesheet::getInstance();
@@ -1190,11 +1190,9 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $products = Sales_Controller_Product::getInstance()->getAll();
         $this->assertEquals(1, $products->count());
         
-        $pas = Sales_Controller_ProductAggregate::getInstance()->getAll();
-        $this->assertEquals(1, $pas->count());
-        
         $this->assertEquals('Timetracker_Model_Timeaccount', $products->getFirstRecord()->accountable);
         
-        $this->assertEquals($pas->getFirstRecord()->product_id, $products->getFirstRecord()->getId());
+        $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->getAll();
+        $this->assertEquals(1, $invoicePositions->count());
     }
 }

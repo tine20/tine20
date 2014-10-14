@@ -68,9 +68,11 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
     {
         $ids = array();
         
-        foreach($this->_billables as $month => $billablesPerMonth) {
-            foreach($billablesPerMonth as $billable) {
-                $ids[] = $billable->getId();
+        if ($this->_billables) {
+            foreach($this->_billables as $month => $billablesPerMonth) {
+                foreach($billablesPerMonth as $billable) {
+                    $ids[] = $billable->getId();
+                }
             }
         }
         

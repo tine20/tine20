@@ -477,13 +477,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Processing contract "' . $this->_currentBillingContract->number . '"');
         }
-        // find product aggregates of the current contract
-        $productAggregates = $this->_findProductAggregates();
         
         // fire event to allow other applications do some work before billing
         $this->_firePrebillEvent();
         
-        // prepare relations and find all bilable accountables of the current contract
+        // find product aggregates of the current contract
+        $productAggregates = $this->_findProductAggregates();
+        
+        // prepare relations and find all billable accountables of the current contract
         list($relations, $billableAccountables) = $this->_prepareInvoiceRelationsAndFindBillableAccountables($productAggregates);
         
         // find invoice positions and the first start date and last end date of all billables
@@ -547,10 +548,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating last_autobill of "' . $ba['pa']->getId() . '": ' . $lab->__toString());
             }
             
-            if ($ba['pa']->getId() != NULL) {
+            if ($ba['pa']->getId()) {
                 Sales_Controller_ProductAggregate::getInstance()->update($ba['pa']);
-            } else {
-                Sales_Controller_ProductAggregate::getInstance()->create($ba['pa']);
             }
         }
     }
