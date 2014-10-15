@@ -165,6 +165,21 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
             ? $config->session->path
             : null;
         
+        #####################################
+        # LEGACY/COMPATIBILITY: 
+        # (1) had to rename session.save_path key to sessiondir because otherwise the
+        # generic save config method would interpret the "_" as array key/value seperator
+        # (2) moved session config to subgroup 'session'
+        if (empty($sessionDir)) {
+            foreach (array('session.save_path', 'sessiondir') as $deprecatedSessionDir) {
+                $sessionDir = $config->get($deprecatedSessionDir, null);
+                if ($sessionDir) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key '{$deprecatedSessionDir}' should be renamed to 'path' and moved to 'session' group.");
+                }
+            }
+        }
+        #####################################
+        
         if (empty($sessionDir) || !@is_writable($sessionDir)) {
             $sessionDir = session_save_path();
             if (empty($sessionDir) || !@is_writable($sessionDir)) {
