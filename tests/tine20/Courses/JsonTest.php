@@ -494,7 +494,7 @@ class Courses_JsonTest extends TestCase
                 'accountFirstName' => 'Ütmür',
                 'accountLastName'  => 'Höt',
         ), $courseData);
-        var_dump($result);
+        
         $this->assertEquals(2, count($result['results']));
         
         $id = NULL;
