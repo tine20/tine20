@@ -1332,4 +1332,16 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->promptForUsername();
         Sales_Controller_Contract::getInstance()->transferBillingInformation();
     }
+
+    /**
+     * add accountable field to products (again, if not already set)
+     */
+    public function update_16()
+    {
+        if (! $this->_backend->columnExists('billing_point', 'sales_product_agg')) {
+            $this->update_15();
+        }
+        
+        $this->setApplicationVersion('Sales', '8.17');
+    }
 }
