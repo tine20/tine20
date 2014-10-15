@@ -39,6 +39,16 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
             $order = $_order . ' ' . $_dir;
         }
         
+        // possibility to tracing queries
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $config = Tinebase_Core::getConfig()->logger) {
+            if ($config->traceQueryOrigins) {
+                $e = new Exception();
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "\n" .
+                    "BACKTRACE: \n" . $e->getTraceAsString() . "\n" .
+                    "SQL QUERY: \n" . $this->select()->assemble());
+            }
+        }
+
         $rowSet = parent::fetchAll($_where, $order, $_count, $_offset);
         
         return $rowSet;
