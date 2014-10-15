@@ -79,4 +79,29 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
     public function setKeyFieldRecordModel($_keyFieldRecordModel) {
         $this->_keyFieldRecordModel = $_keyFieldRecordModel;
     }
+    
+    /**
+     * get KeyfieldRecord by value
+     *
+     * @param string $_value
+     * @return array
+     */
+    public function getKeyfieldRecordByValue($_value) {
+        $record = $this->records->filter('value', $_value);
+        return $record->getFirstRecord();
+    }
+    
+    /**
+     * get default KeyfieldRecord
+     *
+     * @param string $_value
+     * @return array
+     */
+    public function getKeyfieldDefault() {
+        if (!empty($this->default)) {
+            $record = $this->records->filter('id', $this->default);
+            return $record->getFirstRecord();
+        }
+        return '';
+    }
 }
