@@ -200,9 +200,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         // check if setup/update required
         $setupController = Setup_Controller::getInstance();
-        $applications = Tinebase_Application::getInstance()->getApplications();
+        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         foreach ($applications as $application) {
-            if ($application->status == 'enabled' && $setupController->updateNeeded($application)) {
+            if ($setupController->updateNeeded($application)) {
                 $this->setupRequired();
             }
         }

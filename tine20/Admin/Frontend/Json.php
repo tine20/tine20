@@ -758,7 +758,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             //$tag->rights = $tag->rights->toArray();
             $tag['rights'] = self::resolveAccountName($tag['rights'] , true);
         }
-        $tag['appList'] = Tinebase_Application::getInstance()->getApplications('%')->toArray();
+        $tag['appList'] = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->toArray();
         
         return $tag;
     }

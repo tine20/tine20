@@ -5,21 +5,14 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * 
- * @todo        implement more tests!
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Group
  */
-class Tinebase_ApplicationTest extends PHPUnit_Framework_TestCase
+class Tinebase_ApplicationTest extends TestCase
 {
     /**
      * @var array test objects
@@ -38,28 +31,6 @@ class Tinebase_ApplicationTest extends PHPUnit_Framework_TestCase
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        return;
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-    
-    }
-    
     /**
      * try to get all application rights
      */
@@ -81,19 +52,172 @@ class Tinebase_ApplicationTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test create application
+     * 
+     * @return Tinebase_Model_Application
+     */
+    public function testAddApplication()
+    {
+        $application = Tinebase_Application::getInstance()->addApplication(new Tinebase_Model_Application(array(
+            'name'      => Tinebase_Record_Abstract::generateUID(25),
+            'status'    => Tinebase_Application::ENABLED,
+            'order'     => 99,
+            'version'   => 1
+        )));
+        
+        $this->assertTrue($application instanceof Tinebase_Model_Application);
+        
+        return $application;
+    }
+    
+    /**
+     * test update application
+     * 
+     * @return Tinebase_Model_Application
+     */
+    public function testUpdateApplication()
+    {
+        $application = $this->testAddApplication();
+        $application->name = Tinebase_Record_Abstract::generateUID(25);
+        
+        $testApplication = Tinebase_Application::getInstance()->updateApplication($application);
+        
+        $this->assertEquals($testApplication->name, $application->name);
+        
+        return $application;
+    }
+    
+    /**
+     * test update application
+     * 
+     * @return Tinebase_Model_Application
+     */
+    public function testDeleteApplication()
+    {
+        $application = $this->testAddApplication();
+        
+        Tinebase_Application::getInstance()->deleteApplication($application);
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        
+        Tinebase_Application::getInstance()->getApplicationById($application);
+    }
+    
+    /**
      * test get application by name and id
      * 
      * @return void
      */
     public function testGetApplicationById()
     {
-        $admin = Tinebase_Application::getInstance()->getApplicationByName('Admin');
-        $adminById = Tinebase_Application::getInstance()->getApplicationById($admin->getId());
+        $application = $this->testAddApplication();
         
-        $this->assertTrue($adminById instanceof Tinebase_Model_Application);
-        $this->assertEquals($admin, $adminById);
+        $applicationByName = Tinebase_Application::getInstance()->getApplicationByName($application->name);
+        $applicationById = Tinebase_Application::getInstance()->getApplicationById($application->getId());
+        
+        $this->assertTrue($applicationByName instanceof Tinebase_Model_Application);
+        $this->assertTrue($applicationById instanceof Tinebase_Model_Application);
+        $this->assertEquals($application, $applicationByName);
+        $this->assertEquals($application, $applicationById);
     }
-
+    
+    /**
+     * test get application by invalid id
+     * 
+     * @return void
+     */
+    public function testGetApplicationByInvalidId()
+    {
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        
+        Tinebase_Application::getInstance()->getApplicationById(Tinebase_Record_Abstract::generateUID());
+    }
+    
+    /**
+     * test get applications
+     * 
+     * @return void
+     */
+    public function testGetApplications()
+    {
+        $applications = Tinebase_Application::getInstance()->getApplications('Ad');
+        
+        $this->assertInstanceOf('Tinebase_Record_RecordSet', $applications);
+        $this->assertGreaterThanOrEqual(2, count($applications));
+    }
+    
+    /**
+     * test get applications by state
+     * 
+     * @return void
+     */
+    public function testGetApplicationByState()
+    {
+        $application = $this->testAddApplication();
+        
+        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+        
+        $this->assertInstanceOf('Tinebase_Record_RecordSet', $applications);
+        $this->assertGreaterThanOrEqual(2, count($applications));
+        $this->assertContains($application->id, $applications->id);
+        
+        
+        Tinebase_Application::getInstance()->setApplicationState($application, Tinebase_Application::DISABLED);
+        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+        $this->assertNotContains($application->id, $applications->id);
+        
+        
+        $application2 = $this->testAddApplication();
+        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+        $this->assertContains($application2->id, $applications->id);
+        
+        
+        Tinebase_Application::getInstance()->deleteApplication($application2);
+        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+        $this->assertNotContains($application2->id, $applications->id);
+        
+        
+        Tinebase_Application::getInstance()->setApplicationState($application, Tinebase_Application::ENABLED);
+        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+        $this->assertContains($application->id, $applications->id);
+    }
+    
+    /**
+     * test get applications by invalid state
+     * 
+     * @return void
+     */
+    public function testGetApplicationByInvalidState()
+    {
+        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        
+        $applications = Tinebase_Application::getInstance()->getApplicationsByState('foobar');
+    }
+    
+    /**
+     * test get application by invalid id
+     * 
+     * @return void
+     */
+    public function testGetApplicationByInvalidName()
+    {
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        
+        Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Record_Abstract::generateUID());
+    }
+    
+    /**
+     * test get application total count
+     * 
+     * @return void
+     */
+    public function testGetTotalApplicationCount()
+    {
+        $result = Tinebase_Application::getInstance()->getTotalApplicationCount();
+        
+        $this->assertGreaterThanOrEqual(3, $result);
+    }
+    
     /**
      * Test length name for table name and column name (Oracle Database limitation) 
      * 
