@@ -137,12 +137,6 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'idProperty'  => 'id',
                 )
             ),
-            // TODO: remove this after update has been run
-            'last_autobill' => array(
-                'label'      => NULL,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'type'       => 'datetime',
-            ),
             'billing_address_id' => array(
                 'label'      => 'Billing Address', // _('Billing Address')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
@@ -152,20 +146,6 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'modelName'   => 'Address',
                     'idProperty'  => 'id',
                 )
-            ),
-            // TODO: remove this after update has been run
-            'billing_point' => array(
-                'label' => 'Billing Point', // _('Billing Point')
-                'type'  => 'string',
-                'default' => 'end',
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE)
-            ),
-            // TODO: remove this after update has been run
-            'interval' => array(
-                'label'      => 'Billing Interval', // _('Billing Interval')
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'type'       => 'integer',
-                'default'    => 1
             ),
             'start_date' => array(
                 'type' => 'date',

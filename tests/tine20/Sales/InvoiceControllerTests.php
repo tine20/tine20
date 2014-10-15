@@ -492,6 +492,12 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $monthBack = clone $this->_referenceDate;
         $monthBack->subMonth(1);
+        $addressId = $this->_addressRecords->filter(
+                'customer_id', $this->_customerRecords->filter(
+                    'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                        'type', 'billing')->getFirstRecord()->getId();
+        
+        $this->assertTrue($addressId !== NULL);
         
         // this contract begins 6 months before the first invoice will be created
         $this->_createContracts(array(array(
@@ -500,10 +506,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             'description'  => 'unittest',
             'container_id' => $this->_sharedContractsContainerId,
             'billing_point' => 'begin',
-            'billing_address_id' => $this->_addressRecords->filter(
-                'customer_id', $this->_customerRecords->filter(
-                    'name', 'Customer1')->getFirstRecord()->getId())->filter(
-                        'type', 'billing')->getFirstRecord()->getId(),
+            'billing_address_id' => $addressId,
             
             'interval' => 1,
             'start_date' => $startDate->subMonth(6),
@@ -531,7 +534,13 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals('0101', $invoices->getFirstRecord()->start_date->format('md'));
         
         $this->assertEquals(24, $invoices->count());
-        $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->getAll('month');
+        
+        $filter = new Sales_Model_InvoicePositionFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'in', 'value' => $invoices->getArrayOfIds())));
+        
+        $pagination = new Tinebase_Model_Pagination(array('sort' => 'month', 'dir' => 'ASC'));
+        
+        $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->search($filter, $pagination);
         
         // get sure each invoice positions has the same month as the invoice and the start_date is the first
         foreach($invoices as $invoice) {
@@ -542,6 +551,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->assertEquals($this->_lastMonthDays[$index], $invoice->end_date->format('d'), print_r($invoice->toArray(), 1));
             
             $this->assertEquals(1, $invoice->start_date->format('d'));
+            
             $pos = $invoicePositions->filter('invoice_id', $invoice->getId())->getFirstRecord();
             $this->assertEquals($invoice->start_date->format('Y-m'), $pos->month);
             $this->assertEquals($invoice->end_date->format('Y-m'), $pos->month);
@@ -664,7 +674,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $productAggregate = $paController->get($productAggregate->getId());
         $productAggregate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         
-        $this->assertEquals($testDate, $productAggregate->last_autobill);
+        $this->assertEquals(NULL, $productAggregate->last_autobill);
         
         // create 6 invoices again - each month one invoice - last autobill must be increased each month
         for ($i = 1; $i < 7; $i++) {
@@ -711,6 +721,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->_createCustomers(1);
         $this->_createCostCenters();
         
+        $addressId = $this->_addressRecords->filter(
+                'customer_id', $this->_customerRecords->filter(
+                    'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                        'type', 'billing')->getFirstRecord()->getId();
+        
         // the contract has an interval of 0, but it has to be billed
         $this->_createContracts(array(array(
             'number'       => 100,
@@ -718,11 +733,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             'description'  => 'unittest',
             'container_id' => $this->_sharedContractsContainerId,
             'billing_point' => 'begin',
-            'billing_address_id' => $this->_addressRecords->filter(
-                'customer_id', $this->_customerRecords->filter(
-                    'name', 'Customer1')->getFirstRecord()->getId())->filter(
-                        'type', 'billing')->getFirstRecord()->getId(),
-        
+            'billing_address_id' => $addressId,
             'interval' => 0,
             'start_date' => $startDateContract,
             'last_autobill' => clone $this->_referenceDate,
@@ -743,7 +754,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $invoice = $this->_invoiceController->get($result['created'][0]);
         
-        $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->getAll('month');
+        $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->getAll('month')->filter('invoice_id', $result['created'][0]);
         $this->assertEquals(12, $invoicePositions->count());
         
         $i = 1;
@@ -1060,6 +1071,10 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         ));
         $this->_createCustomers(1);
         $this->_createCostCenters();
+        $addressId = $this->_addressRecords->filter(
+                        'customer_id', $this->_customerRecords->filter(
+                                'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                                        'type', 'billing')->getFirstRecord()->getId();
         
         // this contract begins 6 months before the first invoice will be created
         $this->_createContracts(array(array(
@@ -1068,11 +1083,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
                 'description'  => 'unittest',
                 'container_id' => $this->_sharedContractsContainerId,
                 'billing_point' => 'begin',
-                'billing_address_id' => $this->_addressRecords->filter(
-                        'customer_id', $this->_customerRecords->filter(
-                                'name', 'Customer1')->getFirstRecord()->getId())->filter(
-                                        'type', 'billing')->getFirstRecord()->getId(),
-        
+                'billing_address_id' => $addressId,
                 'interval' => 12,
                 'start_date' => $startDate,
                 'last_autobill' => $startDate,
@@ -1094,7 +1105,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $invoices = $this->_invoiceController->getAll();
         $firstInvoice = $invoices->getFirstRecord();
         $this->assertEquals(1, $invoices->count());
-        $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->getAll();
+        
+        $filter = new Sales_Model_InvoicePositionFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'in', 'value' => $invoices->getArrayOfIds())));
+        
+        $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->search($filter);
         
         $this->assertEquals(12, $invoicePositions->count());
         
@@ -1144,7 +1159,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
     /**
      * if no productaggregates are defined for a contract, but 
      * accountables are related, use default billing Info from accountable
-     * (product and aggregate will be created if it does not exist)
+     * (product will be created if it does not exist - is needed in the invoice position)
      */
     public function testDefaultAutobillInterval()
     {
@@ -1162,6 +1177,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
                 'budget'        => 100
         )));
         
+        $addressId = $this->_addressRecords->filter(
+                        'customer_id', $this->_customerRecords->filter(
+                                'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                                        'type', 'billing')->getFirstRecord()->getId();
+        
         // this contract begins 6 months before the first invoice will be created
         $this->_createContracts(array(array(
                 'number'       => 100,
@@ -1169,10 +1189,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
                 'description'  => 'unittest',
                 'container_id' => $this->_sharedContractsContainerId,
                 'billing_point' => 'begin',
-                'billing_address_id' => $this->_addressRecords->filter(
-                        'customer_id', $this->_customerRecords->filter(
-                                'name', 'Customer1')->getFirstRecord()->getId())->filter(
-                                        'type', 'billing')->getFirstRecord()->getId(),
+                'billing_address_id' => $addressId,
     
                 'start_date' => $startDate,
                 'end_date' => NULL,
@@ -1187,12 +1204,20 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
     
         $this->assertEquals(1, $result['created_count']);
         
-        $products = Sales_Controller_Product::getInstance()->getAll();
+        $filter = new Sales_Model_ProductFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'accountable', 'operator' => 'equals', 'value' => 'Timetracker_Model_Timeaccount')));
+        
+        $products = Sales_Controller_Product::getInstance()->search($filter);
         $this->assertEquals(1, $products->count());
+        
         
         $this->assertEquals('Timetracker_Model_Timeaccount', $products->getFirstRecord()->accountable);
         
-        $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->getAll();
+        $filter = new Sales_Model_InvoicePositionFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $result['created'][0])));
+        
+        $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->search($filter);
+        
         $this->assertEquals(1, $invoicePositions->count());
     }
 }

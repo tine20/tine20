@@ -199,7 +199,9 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
         
         $accountable = get_class($this);
         
-        $filter = new Sales_Model_ProductFilter(array(array('field' => 'accountable', 'operator' => 'equals', 'value' => $accountable)));
+        $filter = new Sales_Model_ProductFilter(array(
+                array('field' => 'accountable', 'operator' => 'equals', 'value' => $accountable)
+        ));
         $product = Sales_Controller_Product::getInstance()->search($filter)->getFirstRecord();
         
         // create product, if no product is found

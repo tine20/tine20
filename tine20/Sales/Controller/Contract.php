@@ -327,9 +327,15 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
         
         foreach($contracts as $contract) {
             // iterate relations, look for customer, cost center and accountables
+            // find accountables
+            $models = array();
+            
+            $filter = new Sales_Model_ProductAggregateFilter(array());
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'equals','value' => $contract->getId())));
+            $usedPAs = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+            
             foreach ($contract->relations as $relation) {
-                // find accountables
-                $models = array();
+                
                 if (in_array('Sales_Model_Accountable_Interface', class_implements($relation->related_record))) {
                     $models[] = $relation->related_model;
                 }
@@ -357,15 +363,16 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' '
                             . ' Create ProductAggregate for ' . $model . ' contract: ' . $contract->getId());
                 }
-                
-                $productAggregate = Sales_Controller_ProductAggregate::getInstance()->create(new Sales_Model_ProductAggregate(array(
-                    'product_id' => $product->getId(),
-                    'contract_id' => $contract->getId(),
-                    'interval' => $contract->interval,
-                    'last_autobill' => clone $contract->last_autobill,
-                    'quantity' => 1,
-                    'billing_point' => $billingPoints[$model],
-                )));
+                if ($usedPAs->filter('product_id', $product->getId())->count() < 1) {
+                    $productAggregate = Sales_Controller_ProductAggregate::getInstance()->create(new Sales_Model_ProductAggregate(array(
+                        'product_id' => $product->getId(),
+                        'contract_id' => $contract->getId(),
+                        'interval' => $contract->interval,
+                        'last_autobill' => $contract->last_autobill ? clone $contract->last_autobill : NULL,
+                        'quantity' => 1,
+                        'billing_point' => $billingPoints[$model],
+                    )));
+                }
             }
         }
     }

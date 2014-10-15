@@ -881,6 +881,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                             $add = 0 - (int) $productAggregate->interval;
                             $productAggregate->last_autobill = $lab->addMonth($add);
                             $productAggregate->last_autobill->setTime(0,0,0);
+                            
+                            // last_autobill may not be before aggregate starts (may run into this case if interval has been resized)
+                            if (! $productAggregate->start_date || $productAggregate->last_autobill < $productAggregate->start_date) {
+                                $productAggregate->last_autobill = NULL;
+                            }
                         }
                         
                         $productAggregate->setTimezone('UTC');

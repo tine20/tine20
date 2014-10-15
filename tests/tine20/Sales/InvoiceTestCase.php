@@ -297,11 +297,21 @@ class Sales_InvoiceTestCase extends TestCase
         
         $id = 1;
         
+        $allCC = $this->_costcenterController->getAll();
+        
         foreach($ccs as $title) {
             $cc = new Sales_Model_CostCenter(
                 array('remark' => $title, 'number' => $id)
             );
-            $this->_costcenterRecords->addRecord($this->_costcenterController->create($cc));
+            
+            try {
+                $this->_costcenterRecords->addRecord($this->_costcenterController->create($cc));
+            } catch (Tinebase_Exception_Duplicate $e) {
+                $this->_costcenterRecords->addRecord($e->getClientRecord());
+            } catch (Zend_Db_Statement_Exception $e) {
+                $this->_costcenterRecords->addRecord($allCC->filter('number', $id)->getFirstRecord());
+            }
+            
             $id++;
         }
     }
