@@ -854,9 +854,9 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             throw new Syncroton_Exception_Status_FolderSync(Syncroton_Exception_Status_FolderSync::FOLDER_SERVER_ERROR);
             
         } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                __METHOD__ . '::' . __LINE__ . " Could not update folder cache: " . $feiic);
-            throw new Syncroton_Exception_Status_FolderSync(Syncroton_Exception_Status_FolderSync::FOLDER_SERVER_ERROR);
+            Tinebase_Exception::log($feiic, null, array(
+                'accountname' => $account->name
+            ));
         }
     }
     
@@ -880,7 +880,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             array('field' => 'account_id', 'operator' => 'equals',      'value' => $account->getId()),
         ));
         
-        $folders = Felamimail_Controller_Folder::getInstance()->search($filter);
+        try {
+            $folders = Felamimail_Controller_Folder::getInstance()->search($filter);
+        } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
+            Tinebase_Exception::log($feiic, null, array(
+                'accountname' => $account->name
+            ));
+            return array();
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Found " . count($folders) . ' subfolders of folder "' . $globalname . '"');
