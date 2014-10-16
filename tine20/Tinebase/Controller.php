@@ -94,7 +94,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $this->_setSessionId($user, $accessLog, $clientIdString);
         
         $this->_initUserAfterLogin($user, $accessLog, $password);
-        
+
         $this->_updateAccessLog($user, $accessLog);
         
         return true;
@@ -618,16 +618,22 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         if (in_array($accessLog->clienttype, array(Tinebase_Server_WebDAV::REQUEST_TYPE, ActiveSync_Server_Http::REQUEST_TYPE))) {
             try {
-                $accessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
-                
-                Tinebase_Core::set(Tinebase_Core::SESSIONID, $accessLog->sessionid);
+                $previousAccessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                Tinebase_Core::set(Tinebase_Core::SESSIONID, Tinebase_Record_Abstract::generateUID());
+                $previousAccessLog = null;
             }
             
+            if ($previousAccessLog) {
+                $accessLog->setId($previousAccessLog->getId());
+                $sessionId = $previousAccessLog->sessionid;
+            } else {
+                $sessionId = Tinebase_Record_Abstract::generateUID();
+            }
         } else {
-            Tinebase_Core::set(Tinebase_Core::SESSIONID, Zend_Session::isStarted() ? session_id() : Tinebase_Record_Abstract::generateUID());
+            $sessionId = Zend_Session::isStarted() ? session_id() : Tinebase_Record_Abstract::generateUID();
         }
+        
+        Tinebase_Core::set(Tinebase_Core::SESSIONID, $sessionId);
         
         $accessLog->sessionid = Tinebase_Core::get(Tinebase_Core::SESSIONID);
     }
