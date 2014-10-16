@@ -110,7 +110,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 fn: callback,
                 scope: that,
                 title: that.app.i18n._('Import Definition Success!'),
-                msg: that.app.i18n._('The Ical Import definition has been created successfully! Please wait some minutes to get the events synced.')
+                msg: that.app.i18n._('The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob.')
             });
             
             var wp = this.app.mainScreen.getWestPanel(),
@@ -379,7 +379,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         
         var types = [
             ['remote_ics', this.app.i18n._('Remote / ICS')],
-            ['remote_caldav', _('Remote / CALDav')],
+            ['remote_caldav', _('Remote / CalDAV (BETA)')],
             ['upload', this.app.i18n._('Upload')]
         ]
         
