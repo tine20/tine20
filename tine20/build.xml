@@ -21,7 +21,7 @@
         <echo msg="$buildDate: ${project.basedir}" />
         <init />
 
-        <php expression="getDevelopmentRevision();" returnProperty="buildRevision" />
+        <php expression="Tinebase_Helper::getDevelopmentRevision();" returnProperty="buildRevision" />
         <echo msg="$buildRevision: ${buildRevision}" />
 
         <php expression="date_create('now')->format('Y-m-d H:i:s');" returnProperty="buildDate" />
