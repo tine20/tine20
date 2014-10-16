@@ -289,7 +289,12 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
         return true;
     }
 
-    public function transferBillingInformation()
+    /**
+     * allows to transfer or update billing information
+     * 
+     * @param boolen $update
+     */
+    public function transferBillingInformation($update = FALSE)
     {
         $filter = new Sales_Model_ContractFilter(array());
         
@@ -301,28 +306,55 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
                     'getRelations' => TRUE,
                     'limit' => 20
                 ),
-                'function'   => 'processTransferBillingInformation',
+                'function'   => ($update ? 'processUpdateBillingInformation' : 'processTransferBillingInformation'),
         ));
         
         $iterator->iterate();
     }
     
     /**
-     * processAutoInvoiceIteration
+     * processUpdateBillingInformation
+     * 
+     * @param Tinebase_Record_RecordSet $contracts
+     */
+    public function processUpdateBillingInformation($contracts)
+    {
+        $billingPoints = array(
+                'Timetracker_Model_Timeaccount'         => 'end',
+                'Sales_Model_Product'                   => 'end',
+        );
+        
+        $allProducts = Sales_Controller_Product::getInstance()->getAll();
+        
+        foreach($contracts as $contract) {
+            $filter = new Sales_Model_ProductAggregateFilter(array());
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'equals','value' => $contract->getId())));
+            $usedPAs = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+        
+            foreach($usedPAs as $pa) {
+                if (! $pa->billing_point) {
+                    
+                    $product = $allProducts->filter('id', $pa->product_id)->getFirstRecord();
+                    
+                    if(array_key_exists($product->accountable, $billingPoints)) {
+                        $pa->billing_point = $billingPoints[$product->accountable];
+                        Sales_Controller_ProductAggregate::getInstance()->update($pa);
+                    }   
+                }
+            }
+        }
+    }
+    
+    /**
+     * processTransferBillingInformation
      *
      * @param Tinebase_Record_RecordSet $contracts
-     * @param Tinebase_DateTime $currentDate
      */
     public function processTransferBillingInformation($contracts)
     {
         $billingPoints = array(
             'Timetracker_Model_Timeaccount'         => 'end',
-            'WebAccounting_Model_BackupPath'        => 'end',
-            'WebAccounting_Model_StoragePath'       => 'end',
-            'WebAccounting_Model_MailAccount'       => 'end',
-            'WebAccounting_Model_DReg'              => 'begin',
-            'WebAccounting_Model_CertificateDomain' => 'begin',
-            'WebAccounting_Model_IPNet'             => 'end'
+            'Sales_Model_Product'                   => 'end',
         );
         
         foreach($contracts as $contract) {

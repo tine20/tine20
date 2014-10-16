@@ -285,9 +285,20 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
     }
     
+    /**
+     * @see Sales_Controller_Contract.transferBillingInformation
+     */
     public function transferBillingInformation()
     {
         Sales_Controller_Contract::getInstance()->transferBillingInformation();
+    }
+    
+    /**
+     * @see Sales_Controller_Contract.transferBillingInformation
+     */
+    public function updateBillingInformation()
+    {
+        Sales_Controller_Contract::getInstance()->transferBillingInformation(TRUE);
     }
 }
 
