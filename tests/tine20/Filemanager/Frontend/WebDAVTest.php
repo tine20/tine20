@@ -71,8 +71,20 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->_getWebDAVTree()->delete('/webdav/Filemanager');
     }
     
-    public function ttestgetNodeForPath_webdav_filemanager_personal()
+    /**
+     * test currently fails:
+     * 
+     * 1) Filemanager_Frontend_WebDAVTest::testgetNodeForPath_webdav_filemanager_personal
+     * Sabre\DAV\Exception\NotFound: Directory Filemanager/personal not found
+     * 
+     * /var/lib/jenkins-tine20.com/jobs/tine20com-gerrit/workspace/tine20/Tinebase/WebDav/Collection/AbstractContainerTree.php:128
+     * /var/lib/jenkins-tine20.com/jobs/tine20com-gerrit/workspace/tine20/vendor/sabre/dav/lib/Sabre/DAV/ObjectTree.php:72
+     * /var/lib/jenkins-tine20.com/jobs/tine20com-gerrit/workspace/tests/tine20/Filemanager/Frontend/WebDAVTest.php:76
+     */
+    public function testgetNodeForPath_webdav_filemanager_personal()
     {
+        $this->markTestSkipped('FIXME');
+        
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/personal');
         
         $this->assertInstanceOf('Filemanager_Frontend_WebDAV', $node, 'wrong node class');

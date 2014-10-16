@@ -100,6 +100,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             $this->_deleteGroups();
         }
         if ($this->_transactionId) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Rolling back test transaction');
             Tinebase_TransactionManager::getInstance()->rollBack();
         }
         

@@ -135,7 +135,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                     throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
                 }
                 
-                $className = $this->_getAppliationName() . '_Frontend_WebDAV';
+                $className = $this->_getApplicationName() . '_Frontend_WebDAV';
                 
                 return new $className($path, $this->_useIdAsName);
                 
@@ -158,7 +158,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                             }
                         } else {
                             $container = Tinebase_Container::getInstance()->getContainerByName(
-                                $this->_getAppliationName(), 
+                                $this->_getApplicationName(), 
                                 $name, 
                                 Tinebase_Model_Container::TYPE_SHARED
                             );
@@ -202,7 +202,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                             
                         } else { 
                             $container = Tinebase_Container::getInstance()->getContainerByName(
-                                $this->_getAppliationName(), 
+                                $this->_getApplicationName(), 
                                 $name,
                                 Tinebase_Model_Container::TYPE_PERSONAL, 
                                 $accountId
@@ -261,7 +261,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                 if ($this->_hasPersonalFolders) {
                     $children[] = $this->getChild($this->_useIdAsName ? Tinebase_Core::getUser()->contact_id : Tinebase_Core::getUser()->accountDisplayName);
                     
-                    $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $this->_getAppliationName(), array(
+                    $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $this->_getApplicationName(), array(
                         Tinebase_Model_Grants::GRANT_READ,
                         Tinebase_Model_Grants::GRANT_SYNC
                     ));
@@ -285,7 +285,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                 if (Tinebase_Helper::array_value(1, $this->_getPathParts()) == Tinebase_Model_Container::TYPE_SHARED) {
                     $containers = Tinebase_Container::getInstance()->getSharedContainer(
                         Tinebase_Core::getUser(),
-                        $this->_getAppliationName(),
+                        $this->_getApplicationName(),
                         array(
                             Tinebase_Model_Grants::GRANT_READ,
                             Tinebase_Model_Grants::GRANT_SYNC
@@ -305,15 +305,22 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                     }
                     
                     try {
-                        $containers = Tinebase_Container::getInstance()->getPersonalContainer(
-                            Tinebase_Core::getUser(),
-                            $this->_getAppliationName(),
-                            $accountId,
-                            array(
+                        if ($this->_getApplicationName() !== 'Calendar' || $this->_clientSupportsDelegations()) {
+                            $containers = Tinebase_Container::getInstance()->getPersonalContainer(
+                                Tinebase_Core::getUser(),
+                                $this->_getApplicationName(),
+                                $accountId,
+                                array(
+                                    Tinebase_Model_Grants::GRANT_READ, 
+                                    Tinebase_Model_Grants::GRANT_SYNC
+                                )
+                            ); 
+                        } else {
+                            $containers = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_getApplicationName(),  array(
                                 Tinebase_Model_Grants::GRANT_READ, 
                                 Tinebase_Model_Grants::GRANT_SYNC
-                            )
-                        );
+                            ));
+                        }
                     } catch (Tinebase_Exception_AccessDenied $tead) {
                         throw new Sabre\DAV\Exception\NotFound("Could not find path (" . $tead->getMessage() . ")");
                     }
@@ -339,6 +346,26 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
         }
         
         return $children;
+    }
+    
+    /**
+     * checks if client supports delegations
+     * 
+     * @return boolean
+     * 
+     * @todo don't use $_SERVER to fetch user agent
+     * @todo move user agent parsing to Tinebase
+     */
+    protected function _clientSupportsDelegations()
+    {
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+            $clientSupportsDelegations = ($backend === Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX);
+        } else {
+            $clientSupportsDelegations = false;
+        }
+        
+        return $clientSupportsDelegations;
     }
     
     /**
@@ -606,7 +633,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
     protected function _getApplication()
     {
         if (!$this->_application) {
-            $this->_application = Tinebase_Application::getInstance()->getApplicationByName($this->_getAppliationName());
+            $this->_application = Tinebase_Application::getInstance()->getApplicationByName($this->_getApplicationName());
         }
         
         return $this->_application;
@@ -652,7 +679,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
      * 
      * @return string
      */
-    protected function _getAppliationName()
+    protected function _getApplicationName()
     {
         if (!$this->_applicationName) {
             $this->_applicationName = Tinebase_Helper::array_value(0, explode('_', get_class($this)));

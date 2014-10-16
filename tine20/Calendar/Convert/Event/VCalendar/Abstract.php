@@ -291,11 +291,12 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         
         if ($event->attachments instanceof Tinebase_Record_RecordSet) {
             foreach ($event->attachments as $attachment) {
-                $attach = $vcalendar->createProperty('ATTACH', "{$baseUrl}{$attachment->name}", array(
+                $filename = rawurlencode($attachment->name);
+                $attach = $vcalendar->createProperty('ATTACH', "{$baseUrl}{$filename}", array(
                     'MANAGED-ID' => $attachment->hash,
                     'FMTTYPE'    => $attachment->contenttype,
                     'SIZE'       => $attachment->size,
-                    'FILENAME'   => $attachment->name
+                    'FILENAME'   => $filename
                 ), 'TEXT');
                 
                 $vevent->add($attach);
