@@ -1,3 +1,9 @@
+tine20 (2014.09.2-0) natty; urgency=low
+
+  * New upstream release "Koriander" Service Release 1
+
+ -- Philipp Schüle <p.schuele@metaways.de>  Thu, 16 Oct 2014 12:12:32 +0200
+
 tine20 (2014.09.1-0) natty; urgency=low
 
   * New upstream release "Koriander"
