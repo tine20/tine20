@@ -172,15 +172,44 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function importRemoteEvents($remoteUrl, $interval, $importOptions)
     {
+        // Determine which plugin should be used to import
+        switch ($importOptions['sourceType']) {
+            case 'remote_caldav':
+                $plugin = 'Calendar_Import_CalDAV';
+                break;
+            default:
+                $plugin = 'Calendar_Import_Ical';
+        }
+
+        $credentialCache = Tinebase_Auth_CredentialCache::getInstance();
+        $credentials = $credentialCache->cacheCredentials(
+            $importOptions['username'],
+            $importOptions['password'],
+            null,
+            /* persist */       true,
+            /* valid until */   Tinebase_DateTime::now()->addYear(100)
+        );
+
         $record = Tinebase_Controller_ScheduledImport::getInstance()->createRemoteImportEvent(array(
             'source'            => $remoteUrl,
             'interval'          => $interval,
-            'options'           => array_replace($importOptions, array('plugin' => 'Calendar_Import_Ical')),
+            'options'           => array_replace($importOptions, array(
+                'plugin' => $plugin,
+                'importFileByScheduler' => $importOptions['sourceType'] != 'remote_caldav',
+                'cid' => $credentials->getId(),
+                'ckey' => $credentials->key
+            )),
             'model'             => 'Calendar_Model_Event',
+            'user_id'           => Tinebase_Core::getUser()->getId(),
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
         ));
-        
-        return $this->_recordToJson($record);
+
+        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . print_r($record->options, true));
+
+        $result = $this->_recordToJson($record);
+        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'container_id:'  .  print_r($result['container_id'], true));
+
+        return $result;
     }
     
     /**

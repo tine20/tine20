@@ -1502,4 +1502,49 @@ class Calendar_JsonTests extends Calendar_TestCase
         $event = $this->_uit->saveEvent($eventData);
         $this->assertEquals(1, $event['attendee'][1]['quantity'], 'The invalid quantity should be saved as 1');
     }
+
+    /**
+     * trigger caldav import by json frontend
+     * 
+     * @todo use mock as fallback (if server can not be reached by curl)
+     * @todo get servername from unittest config / skip or mock if no servername found
+     */
+    public function testCalDAVImport()
+    {
+        // Skip if tine20.com.local could not be resolved
+        if (gethostbyname('tine20.com.local') == 'tine20.com.local') {
+            $this->markTestSkipped('Can\'t perform test, because instance is not reachable.');
+        }
+
+        $this->_testNeedsTransaction();
+        
+        $event = $this->testCreateEvent(/* $now = */ true);
+        
+        $fe = new Calendar_Frontend_Json();
+        $testUserCredentials = TestServer::getInstance()->getTestCredentials();
+        $fe->importRemoteEvents(
+            'http://tine20.com.local/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $event['container_id']['id'],
+            Tinebase_Model_Import::INTERVAL_DAILY,
+            array(
+                'container_id'          => 'remote_caldav_calendar',
+                'sourceType'            => 'remote_caldav',
+                'importFileByScheduler' => false,
+                'allowDuplicateEvents'  => true,
+                'username'              => $testUserCredentials['username'],
+                'password'              => $testUserCredentials['password'],
+            ));
+
+        $importScheduler = Tinebase_Controller_ScheduledImport::getInstance();
+        $record = $importScheduler->runNextScheduledImport();
+
+        $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', 'remote_caldav_calendar', Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser()->getId());
+        $this->_testCalendars[] = $container;
+        $this->assertTrue($container instanceof Tinebase_Model_Container, 'Container was not created');
+
+        $this->assertNotEquals($record, null, 'The import could not start!');
+        
+        $filter = $this->_getEventFilterArray($container->getId());
+        $result = $this->_uit->searchEvents($filter, array());
+        $this->assertEquals(1, $result['totalcount']);
+    }
 }

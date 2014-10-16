@@ -33,6 +33,10 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     protected $webdavFrontend = 'Calendar_Frontend_WebDAV_Event';
     protected $_uuidPrefix = '';
     
+    protected $_enforceContainerName = null;
+    protected $_calToImport = null;
+    protected $_allowDuplicateEvents = false;
+    
     /**
      * record backend
      * 
@@ -87,10 +91,27 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
   </a:prop>
 ';
     
-    public function __construct(array $a, $flavor)
+    public function __construct(array $a, $flavor, $forceContainerByName = null)
     {
         parent::__construct($a);
         
+        $this->_enforceContainerName = $forceContainerByName;
+
+        if (isset($a['calenderUri'])) {
+            $this->calendarHomeSet = $a['calenderUri'];
+            //$this->calendarICSs = array($a['calenderUri']);
+            $this->calendars = array(
+                $a['calenderUri'] => array(
+                    'displayname' => $forceContainerByName
+                    // @todo add more properties?
+                )
+            );
+        }
+        
+        if (isset($a['allowDuplicateEvents'])) {
+            $this->_allowDuplicateEvents = $a['allowDuplicateEvents'];
+        }
+
         $flavor = 'Calendar_Import_CalDav_Decorator_' . $flavor;
         $this->decorator = new $flavor($this);
         $this->_recordBackend = Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->getBackend();
@@ -118,7 +139,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
             Tinebase_Exception::log($te);
             return false;
         }
-        
+
         foreach ($result as $uri => $response) {
             if (isset($response['{DAV:}resourcetype']) &&
                     isset($response['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set']) && 
@@ -126,7 +147,9 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                     in_array($this->component, $response['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set']->getValue())
             ) {
                 $this->calendars[$uri]['acl'] = $response['{DAV:}acl'];
-                $this->calendars[$uri]['displayname'] = $response['{DAV:}displayname'];
+                // The container is identified by this displayname, to define an own calendar we need to overwrite it here
+                //  otherwise use the dav displayname
+                $this->calendars[$uri]['displayname'] = $this->_enforceContainerName ?: $response['{DAV:}displayname'];
                 $this->decorator->processAdditionalCalendarProperties($this->calendars[$uri], $response);
                 $this->resolvePrincipals($this->calendars[$uri]['acl']->getPrivileges());
             }
@@ -346,7 +369,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
      */
     protected function _getDefaultCalendarsName() 
     {
-        $defaultCalendarsName = '';
+        $defaultCalendarsName = $this->_enforceContainerName ?: '';
         foreach ($this->calendarICSs as $calUri => $calICSs) {
             if ($this->mapToDefaultContainer == $this->calendars[$calUri]['displayname']) {
                 return $this->calendars[$calUri]['displayname'];
@@ -483,10 +506,12 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                 
             } else {
                 try {
-                    $this->_recordBackend->checkETag($data['id'], $data['etag']);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
-                            . ' Ignoring delegated event from another container/organizer: ' . $data['id']);
-                    continue;
+                    if (! $this->_allowDuplicateEvents) {
+                        $this->_recordBackend->checkETag($data['id'], $data['etag']);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+                                . ' Ignoring event from another container/organizer: ' . $data['id']);
+                        continue;
+                    }
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
                             . ' Found new record: ' . $data['id']);
@@ -941,5 +966,10 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         $this->clearCurrentUserData();
         $this->calendars = array();
         $this->calendarICSs = array();
+    }
+
+    public function getDecorator()
+    {
+        return $this->decorator;
     }
 }

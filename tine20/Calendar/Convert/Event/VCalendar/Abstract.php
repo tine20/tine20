@@ -952,7 +952,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     if($readFromURL) {
                         if (preg_match('#^(https?://)(.*)$#', str_replace(array("\n","\r"), '', $url), $matches)) {
                             // we are client and found an external hosted attachment that we need to import
-                            $user = Tinebase_Core::getUser();
                             $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
                             $url = $matches[1] . $userCredentialCache->username . ':' . $userCredentialCache->password . '@' . $matches[2];
                             $attachmentInfo = $matches[1] . $matches[2]. ' ' . $name . ' ' . $managedId;

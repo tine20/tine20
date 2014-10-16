@@ -139,6 +139,22 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
     }
     
     /**
+     * Downloads file to memory
+     * 
+     * @param String $source
+     * @return String
+     */
+    protected function _getFileToImport($source)
+    {
+        if (strpos($source, 'http') === 0) {
+            $client = new Zend_Http_Client($source);
+            return $client->request()->getBody();
+        } else {
+            return file_get_contents($source);
+        }
+    }
+    
+    /**
      * Execute scheduled import
      * @param Tinebase_Model_Import $record
      * @return Tinebase_Model_Import
@@ -158,15 +174,14 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
             'importContainerId' => $record->container_id,
         );
         
-        try {
-            if (strpos($record->source, 'http') === 0) {
-                $client = new Zend_Http_Client($record->source);
-                $toImport = $client->request()->getBody();
-            } else {
-                $toImport = file_get_contents($record->source);
-            }
-        } catch (Exception $e) {
-            throw new Tinebase_Exception_NotFound('Could not load file to import: ' . $record->source);
+        if ($record->getOption('importFileByScheduler') === true) {
+            $toImport = $this->_getFileToImport($record->source);
+        } else {
+            $toImport = array(
+                'remoteUrl'    => $record->source,
+                'container_id' => $record->container_id,
+                'options'      => $record->options
+            );
         }
         
         $importer = new $importer($options);
@@ -225,18 +240,6 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         
         if (! in_array($data['interval'], $possibleIntervals)) {
             $data['interval'] = Tinebase_Model_Import::INTERVAL_ONCE;
-        }
-        
-        $url = filter_var($data['source'], FILTER_VALIDATE_URL);
-        if ($url) {
-            if (strpos($data['source'], 'http') === 0) {
-                $client = new Zend_Http_Client($data['source']);
-                $toImport = $client->request()->getBody();
-            } else {
-                $toImport = file_get_contents($data['source']);
-            }
-        } else {
-            throw new Calendar_Exception_InvalidUrl();
         }
         
         // find container or create a new one

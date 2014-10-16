@@ -23,6 +23,7 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_MACOSX      = 'macosx';
     const CLIENT_THUNDERBIRD = 'thunderbird';
     const CLIENT_EMCLIENT    = 'emclient';
+    const CLIENT_TINE        = 'tine';
     
     /**
      * factory function to return a selected vcalendar backend class
@@ -36,34 +37,30 @@ class Calendar_Convert_Event_VCalendar_Factory
         switch ($_backend) {
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC:
                 return new Calendar_Convert_Event_VCalendar_Generic($_version);
-                
                 break;
                 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE:
                 return new Calendar_Convert_Event_VCalendar_Iphone($_version);
-                
                 break;
                 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_KDE:
                 return new Calendar_Convert_Event_VCalendar_KDE($_version);
-                
                 break;
                 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX:
                 return new Calendar_Convert_Event_VCalendar_MacOSX($_version);
-                
                 break;
                 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD:
                 return new Calendar_Convert_Event_VCalendar_Thunderbird($_version);
-                 
                 break;
  
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT:
                 return new Calendar_Convert_Event_VCalendar_EMClient($_version);
-                 
                 break;
- 
+
+            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_TINE:
+                return new Calendar_Convert_Event_VCalendar_Tine($_version);
         }
     }
     
@@ -98,7 +95,13 @@ class Calendar_Convert_Event_VCalendar_Factory
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT;
             $version = $matches['version'];
-        
+
+        // Tine 2.0
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_Tine::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_TINE;
+            $version = $matches['version'];
+
+
         } else {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
             $version = null;
