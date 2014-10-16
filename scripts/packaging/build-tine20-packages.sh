@@ -15,8 +15,7 @@ CODENAME="Koriander"
 GITURL="http://git.tine20.org/git/tine20"
 
 RELEASE=""
-GITBRANCH="master"
-#GITBRANCH="2014.09"
+GITBRANCH="2014.09"
 PACKAGEDIR=""
 
 PATH=$MISCPACKAGESDIR:$TEMPDIR/tine20/vendor/bin:$PATH
@@ -139,12 +138,13 @@ function activateReleaseMode()
     sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Setup/Core.php
     
-    sed -i -e "s#'TINE20_CODENAME',      getDevelopmentRevision()#'TINE20_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Tinebase/Core.php
-    sed -i -e "s#'TINE20SETUP_CODENAME',       getDevelopmentRevision()#'TINE20SETUP_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Setup/Core.php
+    sed -i -e "s#'TINE20_CODENAME',      Tinebase_Helper::getDevelopmentRevision()#'TINE20_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Tinebase/Core.php
+    sed -i -e "s#'TINE20SETUP_CODENAME',       Tinebase_Helper::getDevelopmentRevision()#'TINE20SETUP_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Setup/Core.php
     sed -i -e "s/'TINE20_PACKAGESTRING', 'none'/'TINE20_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i -e "s/'TINE20SETUP_PACKAGESTRING', 'none'/'TINE20SETUP_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Setup/Core.php
     sed -i -e "s/'TINE20_RELEASETIME',   'none'/'TINE20_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i -e "s/'TINE20SETUP_RELEASETIME',   'none'/'TINE20SETUP_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Setup/Core.php
+    sed -i -e "s/Tinebase_Helper::getDevelopmentRevision()/echo '$CODENAME'/" $TEMPDIR/tine20/build.xml
     
     sed -i -e "s/Tine.clientVersion.buildRevision[^;]*/Tine.clientVersion.buildRevision = '$REVISION'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
     sed -i -e "s/Tine.clientVersion.codeName[^;]*/Tine.clientVersion.codeName = '$CODENAME'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
