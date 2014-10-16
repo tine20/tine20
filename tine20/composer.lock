@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "f17fbbff083b2fd38fc41f53959397df",
+    "hash": "0981e5a13e70a232c22657ba4415ad6c",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -106,7 +107,7 @@
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/opendocument",
-                "reference": "e8bdfdc483453468b7264c8cb4cbf8c0913f407e"
+                "reference": "6ab49555d48f9a943ab2609084b3fe7317f6c858"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -130,15 +131,15 @@
                 "OpenDocument",
                 "Template"
             ],
-            "time": "2014-01-15 13:32:55"
+            "time": "2014-02-05 16:44:17"
         },
         {
             "name": "metaways/timezoneconvert",
-            "version": "0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/timezoneconvert",
-                "reference": "c5815ca927826d1cac32bbaaf2830f7188037145"
+                "reference": "c7030f34909e52786259dd6cd425f835d9e5ce9b"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -165,7 +166,7 @@
                 "Timezones",
                 "UTC"
             ],
-            "time": "2013-08-30 08:04:33"
+            "time": "2014-10-14 12:43:34"
         },
         {
             "name": "phpword/phpword",
@@ -3206,8 +3207,10 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "phpword/phpword": 20,
-        "metaways/opendocument": 20
+        "metaways/opendocument": 20,
+        "metaways/timezoneconvert": 20
     },
+    "prefer-stable": false,
     "platform": [
 
     ],
