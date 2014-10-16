@@ -71,11 +71,10 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
     }
     
     /**
-     * handler for command line scripts
-     * 
-     * @return boolean
+     * (non-PHPdoc)
+     * @see Tinebase_Server_Interface::handle()
      */
-    public function handle()
+    public function handle(\Zend\Http\Request $request = null, $body = null)
     {
         $method = $this->getRequestMethod();
         

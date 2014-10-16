@@ -46,10 +46,6 @@ class Setup_Core extends Tinebase_Core
         
         Setup_Core::setupBuildConstants();
         
-        Setup_Core::setupSession();
-        
-        Setup_Core::startSetupSession();
-        
         // setup a temporary user locale/timezone. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as seesion timeout
         Setup_Core::set('locale', new Zend_Locale('en_US'));
@@ -66,11 +62,11 @@ class Setup_Core extends Tinebase_Core
      */
     public static function startSetupSession ()
     {
-        try {
-            $setupSession = Setup_Session::getSessionNamespace();
-        } catch (Exception $e) {
-            throw $e;
-        }
+        Tinebase_Session::setSessionBackend();
+        
+        Zend_Session::start();
+        
+        $setupSession = Setup_Session::getSessionNamespace();
         
         if (isset($setupSession->setupuser)) {
             self::set(self::USER, $setupSession->setupuser);
@@ -268,16 +264,6 @@ class Setup_Core extends Tinebase_Core
     {
         $writer = new Zend_Log_Writer_Stream('php://stderr');
         parent::setupLogger($writer);
-    }
-    
-    /**
-     * initializes the session
-     */
-    public static function setupSession()
-    {
-        Tinebase_Session::setSessionOptions(array(
-            'name' => 'TINE20SETUPSESSID'
-        ));
     }
     
     /**

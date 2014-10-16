@@ -67,6 +67,8 @@ class Tinebase_Core
      * constant for application start time in ms registry index
      */
     const STARTTIME = 'starttime';
+    
+    const REQUEST = 'request';
 
     /**
      * constant for current account/user
@@ -178,38 +180,62 @@ class Tinebase_Core
      */
     public static function dispatchRequest()
     {
+        $request = new \Zend\Http\PhpEnvironment\Request();
+        self::set(self::REQUEST, $request);
+        
         // check transaction header
-        if (isset($_SERVER['HTTP_X_TINE20_TRANSACTIONID'])) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Client transaction {$_SERVER['HTTP_X_TINE20_TRANSACTIONID']}");
-            Tinebase_Log_Formatter::setPrefix(substr($_SERVER['HTTP_X_TINE20_TRANSACTIONID'], 0, 5));
+        if ($request->getHeaders()->has('X-TINE20-TRANSACTIONID')) {
+            $transactionId = $request->getHeaders()->get('X-TINE20-TRANSACTIONID')->getFieldValue();
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Client transaction $transactionId");
+            Tinebase_Log_Formatter::setPrefix(substr($transactionId, 0, 5));
         }
         
-        $server = NULL;
+        $server = self::getDispatchServer($request);
+        
+        $server->handle($request);
+        $method = get_class($server) . '::' . $server->getRequestMethod();
+        self::set(self::METHOD, $method);
+        
+        self::finishProfiling();
+        self::getDbProfiling();
+    }
+    
+    /**
+     * dispatch request
+     */
+    public static function getDispatchServer(\Zend\Http\Request $request)
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " " . $request->toString());
         
         /**************************** JSON API *****************************/
-        if ((isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  ||
-            (isset($_SERVER['CONTENT_TYPE']) && substr($_SERVER['CONTENT_TYPE'],0,16) == 'application/json')  ||
-            (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON') ||
-            (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+        if (($request->getHeaders('X-TINE20-REQUEST-TYPE') && $request->getHeaders('X-TINE20-REQUEST-TYPE')->getFieldValue() === 'JSON')  ||
+            ($request->getHeaders('CONTENT-TYPE') && substr($request->getHeaders('CONTENT-TYPE')->getFieldValue(),0,16) === 'application/json') ||
+            ($request->getPost('requestType') === 'JSON') ||
+            ($request->getHeaders('ACCESS-CONTROL-REQUEST-METHOD'))
         ) {
             $server = new Tinebase_Server_Json();
             
         /**************************** SNOM API *****************************/
-        } elseif(
-            isset($_SERVER['HTTP_USER_AGENT']) &&
-            preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])
+        } else if (
+            $request->getHeaders('USER-AGENT') &&
+            preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $request->getHeaders('USER-AGENT')->getFieldValue())
         ) {
             $server = new Voipmanager_Server_Snom();
             
         /**************************** ASTERISK API *****************************/
-        } elseif(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] == 'asterisk-libcurl-agent/1.0') {
+        } else if (
+            $request->getHeaders('USER-AGENT') &&
+            $request->getHeaders('USER-AGENT')->getFieldValue() === 'asterisk-libcurl-agent/1.0'
+        ) {
             $server = new Voipmanager_Server_Asterisk();
             
         /**************************** ActiveSync API ****************************
          * RewriteRule ^Microsoft-Server-ActiveSync index.php?frontend=activesync [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
          */
-        } elseif((isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') ||
-                 (isset($_GET['frontend']) && $_GET['frontend'] == 'activesync')) {
+        } else if (
+            (isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') || // legacy
+            ($request->getQuery('frontend') === 'activesync')
+        ) {
             $server = new ActiveSync_Server_Http();
             self::set('serverclassname', get_class($server));
 
@@ -222,11 +248,11 @@ class Tinebase_Core
          * RewriteRule ^/principals   /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
          * RewriteRule ^/webdav       /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
          */
-        } elseif(isset($_GET['frontend']) && $_GET['frontend'] == 'webdav') {
+        } else if ($request->getQuery('frontend') === 'webdav') {
             $server = new Tinebase_Server_WebDAV();
             
         /**************************** CLI API *****************************/
-        } elseif (php_sapi_name() == 'cli') {
+        } else if (php_sapi_name() == 'cli') {
             $server = new Tinebase_Server_Cli();
             
         /**************************** HTTP API ****************************/
@@ -237,7 +263,7 @@ class Tinebase_Core
              */
             if (isset($_SERVER['HTTP_ACCEPT']) && stripos($_SERVER['HTTP_ACCEPT'], 'application/xrds+xml') !== FALSE) {
                 $_REQUEST['method'] = 'Tinebase.getXRDS';
-            } elseif ((isset($_SERVER['REDIRECT_USERINFOPAGE']) && $_SERVER['REDIRECT_USERINFOPAGE'] == 'true') ||
+            } else if ((isset($_SERVER['REDIRECT_USERINFOPAGE']) && $_SERVER['REDIRECT_USERINFOPAGE'] == 'true') ||
                       (isset($_REQUEST['frontend']) && $_REQUEST['frontend'] == 'openid')) {
                 $_REQUEST['method'] = 'Tinebase.userInfoPage';
             }
@@ -249,12 +275,7 @@ class Tinebase_Core
             $server = new Tinebase_Server_Http();
         }
         
-        $server->handle();
-        $method = get_class($server) . '::' . $server->getRequestMethod();
-        self::set(self::METHOD, $method);
-        
-        self::finishProfiling();
-        self::getDbProfiling();
+        return $server;
     }
     
     /**
@@ -413,6 +434,11 @@ class Tinebase_Core
      */
     public static function initFramework()
     {
+        // avoid autostart of sessions
+        Zend_Session::setOptions(array(
+            'strict' => true
+        ));
+        
         Tinebase_Core::setupTempDir();
         
         Tinebase_Core::setupStreamWrapper();
@@ -422,12 +448,6 @@ class Tinebase_Core
         Tinebase_Core::setupCache();
         
         Tinebase_Core::setupBuildConstants();
-        
-        Tinebase_Session::setupSession();
-        
-        if (Tinebase_Session::sessionExists()) {
-            Tinebase_Core::startCoreSession();
-        }
         
         // setup a temporary user locale. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as session timeout
@@ -447,30 +467,28 @@ class Tinebase_Core
     }
     
     /**
-     * start session helper function
+     * start core session
      *
-     * @param array $_options
      * @throws Exception
      */
-    public static function startCoreSession ($namespace = null)
+    public static function startCoreSession()
     {
-        try {
-            $coreSession = Tinebase_Session::getSessionNamespace();
-            $userSession = Tinebase_User_Session::getSessionNamespace();
-        } catch (Exception $e) {
-            throw $e;
+        Tinebase_Session::setSessionBackend();
+        
+        Zend_Session::start();
+        
+        $coreSession = Tinebase_Session::getSessionNamespace();
+        
+        if (isset($coreSession->currentAccount)) {
+            self::set(self::USER, $coreSession->currentAccount);
         }
         
-        if (isset($userSession->currentAccount)) {
-            self::set(self::USER, $userSession->currentAccount);
-        }
-        
-        if (! isset($coreSession->jsonKey)) {
+        if (!isset($coreSession->jsonKey)) {
             $coreSession->jsonKey = Tinebase_Record_Abstract::generateUID();
         }
+        self::set('jsonKey', $coreSession->jsonKey);
         
-        Tinebase_Core::set('jsonKey', $coreSession->jsonKey);
-        Tinebase_Core::setDbCapabilitiesInSession($coreSession);
+        self::setDbCapabilitiesInSession($coreSession);
     }
     
     /**
@@ -1023,7 +1041,11 @@ class Tinebase_Core
      */
     public static function setupUserLocale($localeString = 'auto', $saveaspreference = FALSE)
     {
-        $session = Tinebase_User_Session::getSessionNamespace();
+        try {
+            $session = Tinebase_Session::getSessionNamespace();
+        } catch (Zend_Session_Exception $zse) {
+            $session = null;
+        }
         
         if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$localeString'");
         
@@ -1096,7 +1118,11 @@ class Tinebase_Core
      */
     public static function setupUserTimezone($_timezone = NULL, $_saveaspreference = FALSE)
     {
-        $session = Tinebase_User_Session::getSessionNamespace();
+        try {
+            $session = Tinebase_Session::getSessionNamespace();
+        } catch (Zend_Session_Exception $zse) {
+            $session = null;
+        }
 
         if ($_timezone === NULL) {
             

@@ -18,11 +18,10 @@
 class Setup_Server_Json extends Tinebase_Server_Json
 {
     /**
-     * handler for JSON api requests
-     * 
-     * @return JSON
+     * (non-PHPdoc)
+     * @see Tinebase_Server_Interface::handle()
      */
-    public function handle()
+    public function handle(\Zend\Http\Request $request = null, $body = null)
     {
         try {
             // init server and request first
@@ -32,6 +31,12 @@ class Setup_Server_Json extends Tinebase_Server_Json
             $server->setAutoHandleExceptions(false);
             $server->setAutoEmitResponse(false);
             $request = new Zend_Json_Server_Request_Http();
+            
+            Tinebase_Session_Abstract::setSessionEnabled('TINE20SETUPSESSID');
+            
+            if (Tinebase_Session::sessionExists()) {
+                Setup_Core::startSetupSession();
+            }
             
             Setup_Core::initFramework();
             

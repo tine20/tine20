@@ -19,11 +19,24 @@
 class Voipmanager_Server_Snom implements Tinebase_Server_Interface
 {
     /**
-     * handler for command line scripts
-     * 
-     * @return boolean
+     * the request
+     *
+     * @var \Zend\Http\Request
      */
-    public function handle()
+    protected $_request = NULL;
+    
+    /**
+     * the request body
+     * 
+     * @var stream|string
+     */
+    protected $_body;
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Server_Interface::handle()
+     */
+    public function handle(\Zend\Http\Request $request = null, $body = null)
     {
         Tinebase_Session::setSessionOptions(array(
             'use_cookies'      => 0,

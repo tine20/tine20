@@ -636,7 +636,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         // make sure, we are sclever
         $this->assertEquals('sclever', Tinebase_Core::getUser()->accountLoginName);
-        $this->assertEquals('sclever', Tinebase_User_Session::getSessionNamespace()->currentAccount->accountLoginName);
+        $this->assertEquals('sclever', Tinebase_Session::getSessionNamespace()->currentAccount->accountLoginName);
         
         Tinebase_Controller::getInstance()->initUser($this->_originalTestUser, /* $fixCookieHeader = */ false);
     }

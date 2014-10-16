@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -26,29 +26,40 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
     protected $_method = NULL;
     
     /**
-     * handler for HTTP api requests
-     * @todo session expire handling
      * 
-     * @return HTTP
+     * @var boolean
      */
-    public function handle()
+    protected $_supportsSessions = true;
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Server_Interface::handle()
+     */
+    public function handle(\Zend\Http\Request $request = null, $body = null)
     {
+        $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
+        $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
+        
         $server = new Tinebase_Http_Server();
         $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
         $server->setClass('Filemanager_Frontend_Download', 'Download');
         
         try {
-            try {
-                Tinebase_Core::initFramework();
-            } catch (Tinebase_Session_Exception $zse) {
-                // expire session cookie on client
-                Tinebase_Session::expireSessionCookie();
+            if (Tinebase_Session::sessionExists()) {
+                try {
+                    Tinebase_Core::startCoreSession();
+                } catch (Zend_Session_Exception $zse) {
+                    // expire session cookie for client
+                    Tinebase_Session::expireSessionCookie();
+                }
             }
+            
+            Tinebase_Core::initFramework();
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Is HTTP request. method: ' . $this->getRequestMethod());
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' REQUEST: ' . print_r($_REQUEST, TRUE));
             
-            // register addidional HTTP apis only available for authorised users
+            // register additional HTTP apis only available for authorised users
             if (Tinebase_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.mainScreen';

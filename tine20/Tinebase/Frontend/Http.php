@@ -149,10 +149,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " display openId trust screen");
             $view = new Zend_View();
             $view->setScriptPath('Tinebase/views');
-
+            
             $view->openIdConsumer = $server->getSiteRoot($_GET);
             $view->openIdIdentity = $server->getLoggedInUser();
-    
+            
             header('Content-Type: text/html; charset=utf-8');
             echo $view->render('openidTrust.php');
 
@@ -166,8 +166,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 header('HTTP/1.0 403 Forbidden');
                 return;
             }
-        }        
-        
+        }
     }
     
     /**
@@ -334,7 +333,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $success = (Tinebase_Controller::getInstance()->login(
                 $username,
                 $password,
-                new Zend_Controller_Request_Http(),
+                Tinebase_Core::get(Tinebase_Core::REQUEST),
                 self::REQUEST_TYPE
             ) === TRUE);
         } else {

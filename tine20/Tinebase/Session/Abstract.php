@@ -28,6 +28,8 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
      */
     const SESSION = 'session';
     
+    protected static $_sessionEnabled = false;
+    
     /**
      * get a value from the registry
      *
@@ -257,7 +259,16 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Session of backend type '{$backendType}' configured.");
     }
-
+    
+    public static function setSessionEnabled($sessionName)
+    {
+        self::setSessionOptions(array(
+            'name'   => $sessionName
+        ));
+        
+        self::$_sessionEnabled = true;
+    }
+    
     /**
      * set session options
      *
@@ -304,14 +315,27 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
         }
     }
     
+    public static function getSessionEnabled()
+    {
+        return self::$_sessionEnabled;
+    }
+    
     /**
      * Gets Tinebase User session namespace
      *
-     * @throws Exception
-     * @return Ambigous <Zend_Session_Namespace, NULL, mixed>
+     * @throws Zend_Session_Exception
+     * @return Zend_Session_Namespace
      */
     public static function getSessionNamespace()
     {
+        if (! Tinebase_Session::isStarted()) {
+            throw new Zend_Session_Exception('Session not started');
+        }
+        
+        if (!self::getSessionEnabled()) {
+            throw new Zend_Session_Exception('Session not enabled for request');
+        }
+        
         try {
            return self::_getSessionNamespace(static::NAMESPACE_NAME);
            

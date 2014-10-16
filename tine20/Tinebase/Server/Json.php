@@ -26,33 +26,44 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     protected $_methods = array();
     
     /**
-     * handle request
      * 
-     * @return void
+     * @var boolean
      */
-    public function handle()
+    protected $_supportsSessions = true;
+    
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Server_Interface::handle()
+     */
+    public function handle(\Zend\Http\Request $request = null, $body = null)
     {
+        $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
+        $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
+        
+        $request = $request instanceof \Zend\Http\Request ? $request : new \Zend\Http\PhpEnvironment\Request();
+        
         // handle CORS requests
-        if (isset($_SERVER['HTTP_ORIGIN'])) {
-            $parsedUrl = parse_url($_SERVER['HTTP_ORIGIN']);
+        if ($request->getHeaders()->has('ORIGIN')) {
+            $origin = $request->getHeaders()->get('ORIGIN')->getFieldValue();
+            $parsedUrl = parse_url($origin);
             
             if ($parsedUrl['scheme'] == 'http' || $parsedUrl['scheme'] == 'https') {
                 $allowedOrigins = array_merge(
                     (array) Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()),
-                    array($_SERVER['SERVER_NAME'])
+                    array($request->getServer('SERVER_NAME'))
                 );
                 
                 if (in_array($parsedUrl['host'], $allowedOrigins)) {
-                    header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+                    header('Access-Control-Allow-Origin: ' . $origin);
                     header('Access-Control-Allow-Credentials: true');
                     
-                    if ($_SERVER['REQUEST_METHOD'] == "OPTIONS" && isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+                    if ($request->getMethod() == \Zend\Http\Request::METHOD_OPTIONS && $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD')) {
                         header('Access-Control-Allow-Methods: POST, OPTIONS');
                         header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type, x-tine20-jsonkey');
                         exit;
                     }
                 } else {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " forbidden CORS request from {$_SERVER['HTTP_ORIGIN']}");
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " forbidden CORS request from $origin");
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " you may want to set \"'allowedJsonOrigins' => array('{$parsedUrl['host']}'),\" to config.inc.php");
                     Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " allowed origins: " . print_r($allowedOrigins, TRUE));
                     header("HTTP/1.1 403 Access Forbidden");
@@ -61,18 +72,25 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
         }
         
-        try {
-            Tinebase_Core::initFramework();
-            $exception = FALSE;
-        } catch (Exception $exception) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
-            
-            // handle all kind of session exceptions as 'Not Authorised'
-            if ($exception instanceof Tinebase_Session_Exception) {
+        $exception = false;
+        
+        if (Tinebase_Session::sessionExists()) {
+            try {
+                Tinebase_Core::startCoreSession();
+            } catch (Zend_Session_Exception $zse) {
                 $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
                 
                 // expire session cookie for client
                 Tinebase_Session::expireSessionCookie();
+            }
+        }
+        
+        if ($exception === false) {
+            try {
+                Tinebase_Core::initFramework();
+            } catch (Exception $exception) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
             }
         }
         
@@ -104,7 +122,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 $request = new Zend_Json_Server_Request();
                 $request->setOptions($requestOptions);
                 
-                $response[] = $exception ? 
+                $response[] = $exception ?
                    $this->_handleException($request, $exception) :
                    $this->_handle($request);
             } else {

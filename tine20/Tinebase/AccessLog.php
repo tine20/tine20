@@ -106,7 +106,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
             ))
         )->getFirstRecord();
         
-        if ($previousAccessLog) {
+        if (!$previousAccessLog) {
             throw new Tinebase_Exception_NotFound('previous access log entry not found');
         }
         

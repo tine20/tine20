@@ -19,11 +19,10 @@
 class Setup_Server_Cli implements Tinebase_Server_Interface
 {
     /**
-     * handler for command line scripts
-     * 
-     * @return boolean
+     * (non-PHPdoc)
+     * @see Tinebase_Server_Interface::handle()
      */
-    public function handle()
+    public function handle(\Zend\Http\Request $request = null, $body = null)
     {
         try {
             $opts = new Zend_Console_Getopt(

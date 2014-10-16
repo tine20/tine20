@@ -64,10 +64,12 @@ class Tinebase_Frontend_Json_Container
                 $containerArray['path'] = "personal/{$container->getId()}";
                 $ownerId = $container->getId();
             }
-            try {
-                $containerArray['ownerContact'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($ownerId, true)->toArray();
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " can't resolve ownerContact: " . $e);
+            if (! empty($ownerId)) {
+                try {
+                    $containerArray['ownerContact'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($ownerId, true)->toArray();
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " can't resolve ownerContact: " . $e);
+                }
             }
             
             $response[] = $containerArray;

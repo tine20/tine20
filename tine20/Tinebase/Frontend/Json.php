@@ -463,7 +463,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $success = Tinebase_Controller::getInstance()->login(
             $username,
             $password,
-            new Zend_Controller_Request_Http(),
+            Tinebase_Core::get(Tinebase_Core::REQUEST),
             self::REQUEST_TYPE,
             $securitycode
         );

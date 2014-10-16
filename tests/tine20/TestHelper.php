@@ -39,8 +39,7 @@ Zend_Session::setOptions(array(
     'use_only_cookies' => 0
 ));
 
-// fake session_id to trigger creation of session
-$_REQUEST['TINE20SESSID'] = Tinebase_Record_Abstract::generateUID();
+Tinebase_Session_Abstract::setSessionEnabled('TINE20SESSID');
 
 TestServer::getInstance()->initFramework();
 

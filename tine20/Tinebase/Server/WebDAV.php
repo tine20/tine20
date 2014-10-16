@@ -19,15 +19,6 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 {
     const REQUEST_TYPE = 'WebDAV';
     
-    /**
-     * the request
-     *
-     * @var Zend_Controller_Request_Http
-     */
-    protected $_request = NULL;
-    
-    protected $_body;
-    
    /**
     * @var \Sabre\DAV\Server
     */
@@ -37,33 +28,25 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(Zend_Controller_Request_Http $request = null, $body = null)
+    public function handle(\Zend\Http\Request $request = null, $body = null)
     {
-        $this->_request = $request instanceof Zend_Controller_Request_Http ? $request : new Zend_Controller_Request_Http();
+        $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
         $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
         
-        Tinebase_Core::initFramework();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is CalDav, CardDAV or WebDAV request.');
-        
-        // when used with (f)cgi no PHP_AUTH* variables are available without defining a special rewrite rule
-        $loginName = $this->_request->getServer('PHP_AUTH_USER');
-        $password  = $this->_request->getServer('PHP_AUTH_PW');
-        
-        if (empty($loginName)) {
-            $basicAuthData = $this->_getBasicAuthData();
-            if ($basicAuthData) {
-                list($loginName, $password) = explode(":", $basicAuthData, 2);
-            }
-        }
-        
-        if (empty($loginName)) {
+        try {
+            list($loginName, $password) = $this->_getAuthData($this->_request);
+            
+        } catch (Tinebase_Exception_NotFound $tenf) {
             header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             
             return;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is CalDav, CardDAV or WebDAV request.');
+        
+        Tinebase_Core::initFramework();
         
         if (Tinebase_Controller::getInstance()->login(
             $loginName,
@@ -71,7 +54,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             $this->_request,
             self::REQUEST_TYPE
         ) !== true) {
-            header('WWW-Authenticate: Basic realm="CardDav for Tine 2.0"');
+            header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             
             return;
@@ -157,7 +140,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             ob_end_flush();
         }
         
-        Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
+        Tinebase_Controller::getInstance()->logout($this->_request->getServer('REMOTE_ADDR'));
     }
     
    /**

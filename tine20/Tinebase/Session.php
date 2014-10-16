@@ -24,14 +24,11 @@ class Tinebase_Session extends Tinebase_Session_Abstract
     const NAMESPACE_NAME = 'Tinebase_Core_Session_Namespace';
     
     /**
-     * initializes the session
+     * Register Validator for account status
      */
-    public static function setupSession()
+    public static function registerValidatorAccountStatus()
     {
-        self::setSessionOptions(array(
-            'name' => 'TINE20SESSID'
-        ));
-        self::setSessionBackend();
+        Zend_Session::registerValidator(new Tinebase_Session_Validator_AccountStatus());
     }
     
     /**

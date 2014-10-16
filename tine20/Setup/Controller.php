@@ -1820,18 +1820,28 @@ class Setup_Controller
     public function isFilesystemAvailable()
     {
         if ($this->_isFileSystemAvailable === null) {
-            $session = Tinebase_Session::getSessionNamespace();
-            if (! isset($session->filesystemAvailable)) {
-                $this->_isFileSystemAvailable = (! empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
-                if (is_object($session) && Tinebase_Session::isWritable()) {
+            try {
+                $session = Tinebase_Session::getSessionNamespace();
+                
+                if (isset($session->filesystemAvailable)) {
+                    $this->_isFileSystemAvailable = $session->filesystemAvailable;
+                    
+                    return $this->_isFileSystemAvailable;
+                }
+            } catch (Zend_Session_Exception $zse) {
+                $session = null;
+            }
+            
+            $this->_isFileSystemAvailable = (!empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
+            
+            if ($session instanceof Zend_Session_Namespace) {
+                if (Tinebase_Session::isWritable()) {
                     $session->filesystemAvailable = $this->_isFileSystemAvailable;
                 }
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                    . ' Filesystem available: ' . ($this->_isFileSystemAvailable ? 'yes' : 'no'));
-                
-            } else {
-                $this->_isFileSystemAvailable = $session->filesystemAvailable;
             }
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Filesystem available: ' . ($this->_isFileSystemAvailable ? 'yes' : 'no'));
         }
         
         return $this->_isFileSystemAvailable;

@@ -2,70 +2,44 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     ActiveSync
+ * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'ServerTestHelper.php';
-
-/**
- * Test class for ActiveSync_Server_Http
+ * Test class for Tinebase_Server_WebDAV
  * 
- * @package     ActiveSync
+ * @package     Tinebase
  */
-class Tinebase_Server_WebDAVTests extends PHPUnit_Framework_TestCase
+class Tinebase_Server_WebDAVTests extends ServerTestCase
 {
     #protected $_logPriority = Zend_Log::DEBUG;
     
     /**
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
-    protected function setUp()
-    {
-        // get config
-        $configData = @include('phpunitconfig.inc.php');
-        if ($configData === false) {
-            $configData = include('config.inc.php');
-        }
-        if ($configData === false) {
-            die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
-        }
-        $this->_config = new Zend_Config($configData);
-        
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::tearDown()
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-    
-    /**
      * test general functionality of Tinebase_Server_WebDAV
+     * @group ServerTests
      */
     public function testServer()
     {
-        $_SERVER['REQUEST_METHOD']            = 'PROPFIND';
-        $_SERVER['HTTP_DEPTH']                = '0';
-        $_SERVER['HTTP_USER_AGENT']           = 'Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7';
-        $_SERVER['REQUEST_URI']               = '/calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/';
-        $_SERVER['PHP_AUTH_USER']             = $this->_config->username;
-        $_SERVER['PHP_AUTH_PW']               = $this->_config->password;
-        $_SERVER['REMOTE_ADDR']               = $this->_config->ip;
-        
-        $request = new Zend_Controller_Request_Http(
-            Zend_Uri::factory('http://localhost/calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/')
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1\r
+Host: localhost\r
+Depth: 0\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+EOS
         );
+        
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+        
+        $credentials = $this->getTestCredentials();
+        
+        $request->getServer()->set('PHP_AUTH_USER', $credentials['username']);
+        $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
+        $request->getServer()->set('REMOTE_ADDR',   'localhost');
         
         $body = fopen('php://temp', 'r+');
         fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/"><D:prop><CS:getctag/></D:prop></D:propfind>');
@@ -85,25 +59,217 @@ class Tinebase_Server_WebDAVTests extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test propfind for principal url
+     * test general functionality of Tinebase_Server_WebDAV
+     * @group ServerTests
+     */
+    public function testServerWithAuthorizationHeader()
+    {
+        $credentials = $this->getTestCredentials();
+        
+        $hash = base64_encode($credentials['username'] . ':' . $credentials['password']);
+        
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1\r
+Host: localhost\r
+Depth: 0\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+Authorization: Basic $hash\r
+EOS
+        );
+        
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+        
+        $request->getServer()->set('REMOTE_ADDR', 'localhost');
+        
+        $body = fopen('php://temp', 'r+');
+        fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/"><D:prop><CS:getctag/></D:prop></D:propfind>');
+        rewind($body);
+        
+        ob_start();
+        
+        $server = new Tinebase_Server_WebDAV();
+        
+        $server->handle($request, $body);
+        
+        $result = ob_get_contents();
+        
+        ob_end_clean();
+        
+        $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30));
+    }
+    
+    /**
+     * test general functionality of Tinebase_Server_WebDAV
+     * @group ServerTests
+     */
+    public function testServerWithAuthorizationEnv()
+    {
+        $credentials = $this->getTestCredentials();
+        
+        $hash = base64_encode($credentials['username'] . ':' . $credentials['password']);
+        
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1\r
+Host: localhost\r
+Depth: 0\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+EOS
+        );
+        
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+        
+        $request->getServer()->set('HTTP_AUTHORIZATION', 'Basic ' . $hash);
+        $request->getServer()->set('REMOTE_ADDR',          'localhost');
+        
+        $body = fopen('php://temp', 'r+');
+        fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/"><D:prop><CS:getctag/></D:prop></D:propfind>');
+        rewind($body);
+        
+        ob_start();
+        
+        $server = new Tinebase_Server_WebDAV();
+        
+        $server->handle($request, $body);
+        
+        $result = ob_get_contents();
+        
+        ob_end_clean();
+        
+        $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30));
+    }
+    
+    /**
+     * test general functionality of Tinebase_Server_WebDAV
+     * @group ServerTests
+     */
+    public function testServerWithAuthorizationRemoteUser()
+    {
+        $credentials = $this->getTestCredentials();
+        
+        $hash = base64_encode($credentials['username'] . ':' . $credentials['password']);
+        
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1\r
+Host: localhost\r
+Depth: 0\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+EOS
+        );
+        
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+        
+        $request->getServer()->set('REDIRECT_REMOTE_USER', 'Basic ' . $hash);
+        $request->getServer()->set('REMOTE_ADDR',          'localhost');
+        
+        $body = fopen('php://temp', 'r+');
+        fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/"><D:prop><CS:getctag/></D:prop></D:propfind>');
+        rewind($body);
+        
+        ob_start();
+        
+        $server = new Tinebase_Server_WebDAV();
+        
+        $server->handle($request, $body);
+        
+        $result = ob_get_contents();
+        
+        ob_end_clean();
+        
+        $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30));
+    }
+    
+    /**
+     * test propfind for current-user-principal
      * 
      * you have to provide a valid contactid
+     * @group ServerTests
+     */
+    public function testPropfindCurrentUserPrincipal()
+    {
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+PROPFIND /principals/users/ HTTP/1.1\r
+Host: localhost\r
+Depth: 0\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+EOS
+        );
+        
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+        
+        $credentials = $this->getTestCredentials();
+        
+        $request->getServer()->set('PHP_AUTH_USER', $credentials['username']);
+        $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
+        $request->getServer()->set('REMOTE_ADDR',   'localhost');
+        
+        $body = fopen('php://temp', 'r+');
+        fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:caldav"><D:prop><D:current-user-principal/><D:principal-URL/><D:resourcetype/></D:prop></D:propfind>');
+        rewind($body);
+
+        $bbody = fopen('php://temp', 'r+');
+        fwrite($bbody, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:caldav"><D:prop><C:calendar-home-set/><C:calendar-user-address-set/><C:schedule-inbox-URL/><C:schedule-outbox-URL/></D:prop></D:propfind>');
+        rewind($bbody);
+        
+        ob_start();
+        
+        $server = new Tinebase_Server_WebDAV();
+        
+        $server->handle($request, $body);
+        
+        $result = ob_get_contents();
+        
+        ob_end_clean();
+        
+        #error_log($result);
+        
+        $responseDoc = new DOMDocument();
+        $responseDoc->loadXML($result);
+        #$responseDoc->formatOutput = true; error_log($responseDoc->saveXML());
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('d', 'DAV:');
+        
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/d:current-user-principal/d:href');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+    }
+    
+    /**
+     * test propfind for current-user-principal
+     * 
+     * you have to provide a valid contactid
+     * @group ServerTests
      */
     public function testPropfindPrincipal()
     {
-        $contactId = '692b5f099593918a4bc87c411578891e47e79790';
+        $credentials = $this->getTestCredentials();
         
-        $_SERVER['REQUEST_METHOD']            = 'PROPFIND';
-        $_SERVER['HTTP_DEPTH']                = '0';
-        $_SERVER['HTTP_USER_AGENT']           = 'Mozilla/5.0 (X11; Linux i686; rv:24.0) Gecko/20100101 Thunderbird/24.1.0 Lightning/2.6.2';
-        $_SERVER['REQUEST_URI']               = '/principals/users/' . $contactId;
-        $_SERVER['PHP_AUTH_USER']             = $this->_config->username;
-        $_SERVER['PHP_AUTH_PW']               = $this->_config->password;
-        $_SERVER['REMOTE_ADDR']               = $this->_config->ip;
+        $account = Tinebase_User::getInstance()->getFullUserByLoginName($credentials['username']);
         
-        $request = new Zend_Controller_Request_Http(
-            Zend_Uri::factory('http://tine20pgsql/principals/users/' . $contactId . '/')
+        $this->assertInstanceOf('Tinebase_Model_FullUser', $account);
+        
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+PROPFIND /principals/users/{$account->contact_id}/ HTTP/1.1\r
+Host: localhost\r
+Depth: 0\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+EOS
         );
+        
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+        
+        $request->getServer()->set('PHP_AUTH_USER', $credentials['username']);
+        $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
+        $request->getServer()->set('REMOTE_ADDR',   'localhost');
         
         $body = fopen('php://temp', 'r+');
         fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:caldav"><D:prop><C:calendar-home-set/><C:calendar-user-address-set/><C:schedule-inbox-URL/><C:schedule-outbox-URL/></D:prop></D:propfind>');
@@ -119,8 +285,25 @@ class Tinebase_Server_WebDAVTests extends PHPUnit_Framework_TestCase
         
         ob_end_clean();
         
-        //var_dump($result);
+        #error_log($result);
         
-        $this->assertNotContains('<d:status>HTTP/1.1 404 Not Found</d:status>', $result);
+        $responseDoc = new DOMDocument();
+        $responseDoc->loadXML($result);
+        #$responseDoc->formatOutput = true; error_log($responseDoc->saveXML());
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('d', 'DAV:');
+        $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
+        
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:calendar-home-set');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:calendar-user-address-set');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:schedule-inbox-URL');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
     }
 }

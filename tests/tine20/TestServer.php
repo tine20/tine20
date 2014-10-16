@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
+ * @todo invent common bootstrap for ServerTests and normal Tests to avoid code duplication
  */
 
 /**
@@ -65,7 +66,9 @@ class TestServer
 
         $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
         $_SERVER['REQUEST_URI'] = '';
-
+        
+        Tinebase_Core::startCoreSession();
+        
         Tinebase_Core::initFramework();
 
         // set default test mailer
@@ -264,7 +267,7 @@ class TestServer
         $config = $this->getConfig();
         $_SERVER['REMOTE_ADDR']     = $config->ip ? $config->ip : '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'Unit Test Client';
-        if (! $tinebaseController->login($credentials['username'], $credentials['password'], new Zend_Controller_Request_Http(), 'TineUnittest')){
+        if (! $tinebaseController->login($credentials['username'], $credentials['password'], new \Zend\Http\PhpEnvironment\Request(), 'TineUnittest')){
             throw new Exception("Couldn't login, user session required for tests! \n");
         }
     }
@@ -273,6 +276,8 @@ class TestServer
      * fetch test user credentials
      * 
      * @return array
+     * 
+     * @todo DRY: should be moved to abstract TestCase and used in ServerTestCase
      */
     public function getTestCredentials()
     {

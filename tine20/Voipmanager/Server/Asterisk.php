@@ -23,20 +23,24 @@ class Voipmanager_Server_Asterisk implements Tinebase_Server_Interface
     /**
      * the request
      *
-     * @var Zend_Controller_Request_Http
+     * @var \Zend\Http\Request
      */
     protected $_request = NULL;
     
+    /**
+     * the request body
+     * 
+     * @var stream|string
+     */
     protected $_body;
     
     /**
-     * handler for command line scripts
-     * 
-     * @return boolean
+     * (non-PHPdoc)
+     * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(Zend_Controller_Request_Http $request = null, $body = null)
+    public function handle(\Zend\Http\Request $request = null, $body = null)
     {
-        $this->_request = $request instanceof Zend_Controller_Request_Http ? $request : new Zend_Controller_Request_Http();
+        $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
         $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
         
         Tinebase_Core::initFramework();

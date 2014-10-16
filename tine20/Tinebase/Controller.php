@@ -76,7 +76,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param   string                           $securitycode   the security code(captcha)
      * @return  bool
      */
-    public function login($loginName, $password, Zend_Controller_Request_Abstract $request, $clientIdString = NULL, $securitycode = NULL)
+    public function login($loginName, $password, \Zend\Http\Request $request, $clientIdString = NULL, $securitycode = NULL)
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
         
@@ -184,9 +184,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function initUser(Tinebase_Model_FullUser $_user, $fixCookieHeader = true)
     {
-        $this->_initUserSession($_user, $fixCookieHeader);
-        
         Tinebase_Core::set(Tinebase_Core::USER, $_user);
+        
+        if (Tinebase_Session_Abstract::getSessionEnabled()) {
+            $this->_initUserSession($fixCookieHeader);
+        }
         
         // need to set locale again and because locale might not be set correctly during loginFromPost
         // use 'auto' setting because it is fetched from cookie or preference then
@@ -203,8 +205,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param Tinebase_Model_FullUser $user
      * @param boolean $fixCookieHeader
      */
-    protected function _initUserSession(Tinebase_Model_FullUser $user, $fixCookieHeader = true)
+    protected function _initUserSession($fixCookieHeader = true)
     {
+        Tinebase_Session::registerValidatorAccountStatus();
+        
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONUSERAGENTVALIDATION, TRUE)) {
             Tinebase_Session::registerValidatorHttpUserAgent();
         } else {
@@ -219,27 +223,22 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
         }
         
-        if (Tinebase_Session::isStarted()) {
-            Tinebase_Session::regenerateId();
-            Tinebase_Core::set(Tinebase_Core::SESSIONID, session_id());
-            
-            if ($fixCookieHeader) {
-                /** 
-                 * fix php session header handling http://forge.tine20.org/mantisbt/view.php?id=4918 
-                 * -> search all Set-Cookie: headers and replace them with the last one!
-                 **/
-                $cookieHeaders = array();
-                foreach (headers_list() as $headerString) {
-                    if (strpos($headerString, 'Set-Cookie: TINE20SESSID=') === 0) {
-                        array_push($cookieHeaders, $headerString);
-                    }
+        if ($fixCookieHeader && Zend_Session::getOptions('use_cookies')) {
+            /** 
+             * fix php session header handling http://forge.tine20.org/mantisbt/view.php?id=4918 
+             * -> search all Set-Cookie: headers and replace them with the last one!
+             **/
+            $cookieHeaders = array();
+            foreach (headers_list() as $headerString) {
+                if (strpos($headerString, 'Set-Cookie: TINE20SESSID=') === 0) {
+                    array_push($cookieHeaders, $headerString);
                 }
-                header(array_pop($cookieHeaders), true);
-                /** end of fix **/
             }
-            
-            Tinebase_User_Session::getSessionNamespace()->currentAccount = $user;
+            header(array_pop($cookieHeaders), true);
+            /** end of fix **/
         }
+        
+        Tinebase_Session::getSessionNamespace()->currentAccount = Tinebase_Core::getUser();
     }
     
     /**
@@ -349,9 +348,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
          */
         $coreSession = Tinebase_Session::getSessionNamespace();
         unset($coreSession->Zend_Auth);
-        
-        $userSession = Tinebase_User_Session::getSessionNamespace();
-        unset($userSession->currentAccount);        
+        unset($coreSession->currentAccount);
         
         return $result;
     }
@@ -556,15 +553,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param string $clientIdString
      * @return Tinebase_Model_AccessLog
      */
-    protected function _getAccessLogEntry($loginName, Zend_Auth_Result $authResult, Zend_Controller_Request_Abstract $request, $clientIdString)
+    protected function _getAccessLogEntry($loginName, Zend_Auth_Result $authResult, \Zend\Http\Request $request, $clientIdString)
     {
         $accessLog = new Tinebase_Model_AccessLog(array(
-            'ip'         => $request->getClientIp(),
+            'ip'         => $request->getServer('REMOTE_ADDR'),
             'li'         => Tinebase_DateTime::now(),
             'result'     => $authResult->getCode(),
             'clienttype' => $clientIdString,
             'login_name' => $loginName ? $loginName : $authResult->getIdentity(),
-            'user_agent' => substr($request->getHeader('USER_AGENT'), 0, 255)
+            'user_agent' => substr($request->getHeaders('USER-AGENT')->getFieldValue(), 0, 255)
         ), true);
         
         return $accessLog;
@@ -601,28 +598,22 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param Tinebase_Model_FullUser $user
      * @param Tinebase_Model_AccessLog $accessLog
      */
-    protected function _setSessionId(Tinebase_Model_FullUser $user, Tinebase_Model_AccessLog $accessLog)
+    protected function _setSessionId(Tinebase_Model_FullUser $user, Tinebase_Model_AccessLog &$accessLog)
     {
         if (in_array($accessLog->clienttype, array(Tinebase_Server_WebDAV::REQUEST_TYPE, ActiveSync_Server_Http::REQUEST_TYPE))) {
             try {
-                $previousAccessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
+                $accessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
+                // $accessLog->sessionid is set now
             } catch (Tinebase_Exception_NotFound $tenf) {
-                $previousAccessLog = null;
+                // ignore
             }
-            
-            if ($previousAccessLog) {
-                $accessLog->setId($previousAccessLog->getId());
-                $sessionId = $previousAccessLog->sessionid;
-            } else {
-                $sessionId = Tinebase_Record_Abstract::generateUID();
-            }
-        } else {
-            $sessionId = Zend_Session::isStarted() ? session_id() : Tinebase_Record_Abstract::generateUID();
         }
         
-        Tinebase_Core::set(Tinebase_Core::SESSIONID, $sessionId);
+        if (!$accessLog->sessionid) {
+            $accessLog->sessionid = Tinebase_Record_Abstract::generateUID();
+        }
         
-        $accessLog->sessionid = Tinebase_Core::get(Tinebase_Core::SESSIONID);
+        Tinebase_Core::set(Tinebase_Core::SESSIONID, $accessLog->sessionid);
     }
     
     /**
@@ -697,8 +688,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function userAccountChanged()
     {
-        return (is_object(Tinebase_Session::getSessionNamespace()) && isset(Tinebase_Session::getSessionNamespace()->userAccountChanged)) 
-                ? Tinebase_Session::getSessionNamespace()->userAccountChanged
+        try {
+            $session = Tinebase_Session::getSessionNamespace();
+        } catch (Zend_Session_Exception $zse) {
+            $session = null;
+        }
+        
+        return ($session instanceof Zend_Session_Namespace && isset($session->userAccountChanged)) 
+                ? $session->userAccountChanged
                 : false;
     }
 }

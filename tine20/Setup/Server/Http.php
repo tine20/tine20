@@ -19,14 +19,19 @@
 class Setup_Server_Http implements Tinebase_Server_Interface
 {
     /**
-     * handler for HTTP api requests
-     * @todo session expire handling
-     * 
-     * @return HTTP
+     * (non-PHPdoc)
+     * @see Tinebase_Server_Interface::handle()
      */
-    public function handle()
+    public function handle(\Zend\Http\Request $request = null, $body = null)
     {
+        Tinebase_Session_Abstract::setSessionEnabled('TINE20SETUPSESSID');
+            
+        if (Tinebase_Session::sessionExists()) {
+            Setup_Core::startSetupSession();
+        }
+        
         Setup_Core::initFramework();
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is http request. method: ' . $this->getRequestMethod());
 
         $server = new Tinebase_Http_Server();

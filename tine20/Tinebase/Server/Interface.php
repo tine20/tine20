@@ -21,9 +21,11 @@ interface Tinebase_Server_Interface
     /**
      * handler for tine requests
      * 
+     * @param  \Zend\Http\Request  $request
+     * @param  stream|string       $body
      * @return boolean
      */
-    public function handle();
+    public function handle(\Zend\Http\Request $request = null, $body = null);
     
     /**
      * returns request method
