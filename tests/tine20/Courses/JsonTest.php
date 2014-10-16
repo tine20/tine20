@@ -479,6 +479,37 @@ class Courses_JsonTest extends TestCase
     }
     
     /**
+     * Test students loginname with schema 3 with SpecialChars
+     */
+    public function testStudentNameSchemaSpecialChars()
+    {
+        $this->_schemaConfigChanged = true;
+        Courses_Config::getInstance()->set(Courses_Config::STUDENTS_USERNAME_SCHEMA, 3);
+        
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
+        
+        $result = $this->_json->addNewMember(array(
+                'accountFirstName' => 'Ütmür',
+                'accountLastName'  => 'Höt',
+        ), $courseData);
+        
+        $this->assertEquals(2, count($result['results']));
+        
+        $id = NULL;
+        foreach ($result['results'] as $result) {
+            if ($result['name'] === 'Höt, Ütmür') {
+                $id = $result['id'];
+            }
+        }
+        $this->assertTrue($id !== NULL);
+    
+        $newUser = Tinebase_User::getInstance()->getFullUserById($id);
+        $this->assertEquals('u.hoet', $newUser->accountLoginName);
+    }
+    
+    /**
      * Test if the default department is returned
      */
     public function testDefaultDepartment()

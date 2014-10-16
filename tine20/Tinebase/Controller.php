@@ -33,14 +33,17 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     protected $_applicationName = 'Tinebase';
     
     protected $_writeAccessLog;
+    
     /**
      * the constructor
      *
      */
     private function __construct()
     {
-        $this->_writeAccessLog = Tinebase_Core::get('serverclassname') !== 'ActiveSync_Server_Http' ||
-            !(ActiveSync_Config::getInstance()->get(ActiveSync_Config::DISABLE_ACCESS_LOG));
+        $this->_writeAccessLog = Setup_Controller::getInstance()->isInstalled('Tinebase')
+            && (Tinebase_Core::get('serverclassname') !== 'ActiveSync_Server_Http' 
+                || (Setup_Controller::getInstance()->isInstalled('ActiveSync')
+                        && !(ActiveSync_Config::getInstance()->get(ActiveSync_Config::DISABLE_ACCESS_LOG))));
     }
 
     /**

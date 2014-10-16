@@ -35,7 +35,7 @@ class Inventory_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Inventory_Model_Status'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'UNKNOWN'
+            'default'               => 'AVAILABLE'
         ),
     );
     

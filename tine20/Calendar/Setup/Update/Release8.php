@@ -154,9 +154,9 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
                 try {
                     $eventBE->update($event);
                 } catch (Tinebase_Exception_Record_Validation $terv) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Could not normalize rrule for invalid event record: ' . print_r($event->toArray(), true));
-                    Tinebase_Exception::log($terv);
+                    Tinebase_Exception::log($terv, null, $event->toArray());
+                } catch (Tinebase_Exception_UnexpectedValue $teuv) {
+                    Tinebase_Exception::log($teuv, null, $event->toArray());
                 }
             }
         }

@@ -191,17 +191,33 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     . ' Invalid image blob data, preserving old image');
                 Tinebase_Exception::log($e);
                 
-                // return current image
                 return $this->getImage($contactId);
             }
         }
         
-        $this->_db->delete($this->_tablePrefix . 'addressbook_image', $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $contactId));
         if (! empty($imageData)) {
-            $this->_db->insert($this->_tablePrefix . 'addressbook_image', array(
-                'contact_id'    => $contactId,
-                'image'         => base64_encode($imageData)
-            ));
+            $currentImg = $this->getImage($contactId);
+            if (empty($currentImg)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Creating contact image.');
+                
+                $this->_db->insert($this->_tablePrefix . 'addressbook_image', array(
+                    'contact_id'    => $contactId,
+                    'image'         => base64_encode($imageData)
+                ));
+            } else if ($currentImg !== $imageData) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Updating contact image.');
+                
+                $where  = array(
+                    $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $contactId),
+                );
+                $this->_db->update($this->_tablePrefix . 'addressbook_image', array(
+                    'image'         => base64_encode($imageData)
+                ), $where);
+            }
+        } else {
+            $this->_db->delete($this->_tablePrefix . 'addressbook_image', $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $contactId));
         }
         
         return $imageData;

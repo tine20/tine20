@@ -42,8 +42,6 @@ class Tinebase_Translation
      */
     public static function getAvailableTranslations($appName = 'Tinebase')
     {
-        $logger = Tinebase_Core::getLogger();
-        
         $availableTranslations = array();
 
         // look for po files in Tinebase 
@@ -59,6 +57,7 @@ class Tinebase_Translation
         
         // lookup/merge custom translations
         if (Tinebase_Config::isReady() === TRUE) {
+            $logger = Tinebase_Core::getLogger();
             $customTranslationsDir = Tinebase_Config::getInstance()->translations;
             if ($customTranslationsDir) {
                 foreach((array) @scandir($customTranslationsDir) as $dir) {
@@ -70,6 +69,8 @@ class Tinebase_Translation
                     }
                 }
             }
+        } else {
+            $logger = null;
         }
         
         $filesToWatch = array();
@@ -77,7 +78,9 @@ class Tinebase_Translation
         // compute information
         foreach ($availableTranslations as $localestring => $info) {
             if (! Zend_Locale::isLocale($localestring, TRUE, FALSE)) {
-                if ($logger) $logger->WARN(__METHOD__ . '::' . __LINE__ . " $localestring is not supported, removing translation form list");
+                if ($logger) {
+                    $logger->WARN(__METHOD__ . '::' . __LINE__ . " $localestring is not supported, removing translation form list");
+                }
                 unset($availableTranslations[$localestring]);
                 continue;
             }
@@ -85,17 +88,28 @@ class Tinebase_Translation
             $filesToWatch[] = $info['path'];
         }
         
-        $cacheId = Tinebase_Helper::convertCacheId(__FUNCTION__ . $appName . sha1(serialize($filesToWatch)));
-        $cache = new Zend_Cache_Frontend_File(array(
-            'master_files' => $filesToWatch
-        ));
-        $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
+        if (Tinebase_Config::isReady()) {
+            $cache = new Zend_Cache_Frontend_File(array(
+                'master_files' => $filesToWatch
+            ));
+            $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
+        } else {
+            $cache = null;
+        }
         
-        if ($cachedTranslations = $cache->load($cacheId)) {
-            $cachedTranslations = unserialize($cachedTranslations);
+        if ($cache) {
+            $cacheId = Tinebase_Helper::convertCacheId(__FUNCTION__ . $appName . sha1(serialize($filesToWatch)));
+            $cache = new Zend_Cache_Frontend_File(array(
+                'master_files' => $filesToWatch
+            ));
+            $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
             
-            if ($cachedTranslations !== null) {
-                return $cachedTranslations;
+            if ($cachedTranslations = $cache->load($cacheId)) {
+                $cachedTranslations = unserialize($cachedTranslations);
+                
+                if ($cachedTranslations !== null) {
+                    return $cachedTranslations;
+                }
             }
         }
         
@@ -119,7 +133,9 @@ class Tinebase_Translation
 
         ksort($availableTranslations);
         
-        $cache->save(serialize($availableTranslations), $cacheId, array(), /* 1 day */ 86400);
+        if ($cache) {
+            $cache->save(serialize($availableTranslations), $cacheId, array(), /* 1 day */ 86400);
+        }
         
         return $availableTranslations;
     }

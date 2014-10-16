@@ -347,7 +347,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             if (method_exists($this, '_generateUserWithSchema' . $_schema)) {
                 $userName = call_user_func_array(array($this, '_generateUserWithSchema' . $_schema), array($_account));
             } else {
-                $userName = strtolower(Tinebase_Helper::replaceSpecialChars(substr($_account->accountLastName, 0, 10)));
+                $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountLastName), 0, 10));
             }
         }
         $userName = $this->_addSuffixToNameIfExists('accountLoginName', $userName);
@@ -377,7 +377,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     protected function _generateUserWithSchema1($_account)
     {
-        $result = strtolower(Tinebase_Helper::replaceSpecialChars(substr($_account->accountLastName, 0, 10) . substr($_account->accountFirstName, 0, 2)));
+        $result = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountLastName), 0, 10) . substr(Tinebase_Helper::replaceSpecialChars($_account->accountFirstName), 0, 2));
         return $result;
     }
     
@@ -392,7 +392,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         $result = $_account->accountLastName;
         for ($i=0; $i < strlen($_account->accountFirstName); $i++) {
         
-            $userName = strtolower(Tinebase_Helper::replaceSpecialChars(substr($_account->accountFirstName, 0, $i+1) . $_account->accountLastName));
+            $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountFirstName), 0, $i+1) . Tinebase_Helper::replaceSpecialChars($_account->accountLastName));
             if (! $this->nameExists('accountLoginName', $userName)) {
                 $result = $userName;
                 break;
@@ -413,7 +413,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         $result = $_account->accountLastName;
         for ($i=0; $i < strlen($_account->accountFirstName); $i++) {
         
-            $userName = strtolower(Tinebase_Helper::replaceSpecialChars(substr($_account->accountFirstName, 0, $i+1) . '.' . $_account->accountLastName));
+            $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountFirstName), 0, $i+1) . '.' . Tinebase_Helper::replaceSpecialChars($_account->accountLastName));
             if (! $this->nameExists('accountLoginName', $userName)) {
                 $result = $userName;
                 break;
