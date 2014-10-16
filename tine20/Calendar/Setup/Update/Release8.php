@@ -209,15 +209,17 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_5()
     {
-        $seqCol = '<field>
-            <name>external_seq</name>
-            <type>integer</type>
-            <notnull>true</notnull>
-            <default>0</default>
-        </field>';
-        
-        $declaration = new Setup_Backend_Schema_Field_Xml($seqCol);
-        $this->_backend->addCol('cal_events', $declaration);
+        if (! $this->_backend->columnExists('external_seq', 'cal_events')) {
+            $seqCol = '<field>
+                <name>external_seq</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+                <default>0</default>
+            </field>';
+            
+            $declaration = new Setup_Backend_Schema_Field_Xml($seqCol);
+            $this->_backend->addCol('cal_events', $declaration);
+        }
         
         $this->setTableVersion('cal_events', 8);
         $this->setApplicationVersion('Calendar', '8.6');
