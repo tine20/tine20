@@ -282,7 +282,11 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         
         this.store.resumeEvents();
         
-        this.getView().refresh();
+        try {
+            this.getView().refresh();
+        } catch (e) {
+            // grid could not be refreshed at the moment, maybe a row has been deleted
+        }
         
         if (activeEditor) {
             this.startEditing(activeEditor.row, activeEditor.col);
