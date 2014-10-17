@@ -302,7 +302,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         }
         
         $mappedData = $mappedData instanceof ArrayObject ? $mappedData : new ArrayObject(array($mappedData), ArrayObject::STD_PROP_LIST);
-        
+
         if (! empty($mappedData)) {
             foreach ($mappedData as $idx => $recordArray) {
                 $convertedData = $this->_doConversions($recordArray);
@@ -353,15 +353,24 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $script = $this->_options['postMappingHook']['path'];
         //The path given in the xml is not dynamic. Therefore it must be absolute or relative to the tine20 directory.
         if ($script[0] !== DIRECTORY_SEPARATOR) {
-            $script = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $script;
+            $basedir = dirname(dirname(dirname(__FILE__)));
+            $script = $basedir . DIRECTORY_SEPARATOR . $script;
         }
+
         if (! is_executable($script)) {
             throw new Tinebase_Exception_UnexpectedValue("Script does not exists or isn't executable. Path: " . $script);
         }
         
         $jDataToSend =  escapeshellarg($jsonEncodedData);
-        $jsonReceivedData = shell_exec(escapeshellcmd($script) . " $jDataToSend");
-        
+
+        try {
+            $jsonReceivedData = shell_exec(escapeshellcmd($script) . " $jDataToSend");
+        } catch (Exception $e) {
+            $jsonReceivedData = null;
+
+            throw new Tinebase_Exception('Could not execture script: ' . $script);
+        }
+
         $returnJDecodedData = Zend_Json_Decoder::decode($jsonReceivedData);
         if (! $returnJDecodedData) {
             throw new Tinebase_Exception_UnexpectedValue("Something went wrong by decoding the received json data!");
