@@ -767,6 +767,10 @@
           "path": "js/widgets/"
         },
         {
+          "text": "ActivitiesGridPanel.js",
+          "path": "js/widgets/"
+        },
+        {
           "text": "RecordPickerComboBox.js",
           "path": "js/widgets/form/"
         },

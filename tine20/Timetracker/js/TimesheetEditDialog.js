@@ -82,10 +82,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
     /**
      * this gets called when initializing and if cleared checkbox is changed
-     * 
+     *
      * @param {} field
      * @param {} newValue
-     * 
+     *
      * @todo    add prompt later?
      */
     onClearedUpdate: function(field, checked) {
@@ -93,15 +93,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             this.getForm().findField('billed_in').setDisabled(! checked);
         }
     },
-    
+
     initComponent: function() {
-        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
-        this.tbarItems = [addNoteButton];
         this.useInvoice = Tine.Tinebase.appMgr.get('Sales') && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices');
-        
         Tine.Timetracker.TimesheetEditDialog.superclass.initComponent.apply(this, arguments);
     },
-    
+
     /**
      * overwrites the isValid method on multipleEdit
      */
@@ -117,7 +114,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         }, this);
         return valid;
     },
-    
+
     /**
      * returns dialog
      * 
@@ -248,11 +245,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     margins: '0 5 0 5',
                     border: true,
                     items: [
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
                         new Tine.widgets.tags.TagPanel({
                             app: 'Timetracker',
                             border: false,

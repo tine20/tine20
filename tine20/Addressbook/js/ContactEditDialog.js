@@ -339,6 +339,11 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     margins: '0 5 0 5',
                     border: true,
                     items: [
+                        new Tine.widgets.tags.TagPanel({
+                            app: 'Addressbook',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        }),
                         new Ext.Panel({
                             // @todo generalise!
                             title: this.app.i18n._('Description'),
@@ -358,17 +363,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 emptyText: this.app.i18n._('Enter description'),
                                 requiredGrant: 'editGrant'
                             }]
-                        }),
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Addressbook',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
-                        new Tine.widgets.tags.TagPanel({
-                            app: 'Addressbook',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
                         })
                     ]
                 }]
@@ -405,7 +399,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             disabled: false,
             scope: this
         });
-        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
         this.parseAddressButton = new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Addressbook').i18n._('Parse address'),
             handler: this.onParseAddress,
@@ -415,7 +408,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             enableToggle: true
         });
 
-        this.tbarItems = [exportContactButton, addNoteButton, this.parseAddressButton];
+        this.tbarItems = [exportContactButton, this.parseAddressButton];
     },
 
     /**

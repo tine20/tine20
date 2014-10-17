@@ -30,7 +30,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Calendar.Model.Event,
     recordProxy: Tine.Calendar.backend,
     showContainerSelector: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    tbarItems: [],
     
     mode: 'local',
     
@@ -251,6 +251,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     margins: '0 5 0 5',
                     border: true,
                     items: [
+                        new Tine.widgets.tags.TagPanel({
+                            app: 'Calendar',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        }),
                         new Ext.Panel({
                             // @todo generalise!
                             title: this.app.i18n._('Description'),
@@ -268,19 +273,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 preventScrollbars:false,
                                 anchor:'100% 100%',
                                 emptyText: this.app.i18n._('Enter description'),
-                                requiredGrant: 'editGrant'                           
+                                requiredGrant: 'editGrant'
                             }]
-                        }),
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Calendar',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
-                        new Tine.widgets.tags.TagPanel({
-                            app: 'Calendar',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
                         })
                     ]
                 }]

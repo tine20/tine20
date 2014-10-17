@@ -24,7 +24,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowNamePrefix: 'ResourceEditWindow_',
     evalGrants: false,
     showContainerSelector: false,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    tbarItems: [],
     //mode: 'local',
     
     getFormItems: function() {
@@ -99,14 +99,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     header: false,
                     margins: '0 5 0 5',
                     border: true,
-                    items: [
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Calendar',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
-                        new Tine.widgets.tags.TagPanel({
+                    items: [new Tine.widgets.tags.TagPanel({
                             app: 'Calendar',
                             border: false,
                             bodyStyle: 'border:1px solid #B5B8C8;'
