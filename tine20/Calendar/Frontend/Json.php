@@ -204,8 +204,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
         ));
 
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . print_r($record->options, true));
-
         $result = $this->_recordToJson($record);
         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'container_id:'  .  print_r($result['container_id'], true));
 
