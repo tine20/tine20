@@ -19,6 +19,36 @@
 class Tinebase_Log extends Zend_Log
 {
     /**
+     * 
+     * @var Tinebase_Log_Formatter
+     */
+    protected $_formatter;
+    
+    /**
+     * add strings to replace in log output (passwords for example)
+     * 
+     * @param string $search
+     * @param string $replace
+     */
+    public function addReplacement($search, $replace = '********')
+    {
+        $this->getFormatter()->addReplacement($search, $replace);
+    }
+    
+    /**
+     * 
+     * @return Tinebase_Log_Formatter
+     */
+    public function getFormatter()
+    {
+        if (!$this->_formatter instanceof Tinebase_Log_Formatter) {
+            $this->_formatter = new Tinebase_Log_Formatter();
+        }
+        
+        return $this->_formatter;
+    }
+    
+    /**
      * add new log writer defined by a config object/array
      * 
      * @param Tinebase_Config_Struct|Zend_Config|array $loggerConfig
@@ -37,9 +67,7 @@ class Tinebase_Log extends Zend_Log
         $filename = $loggerConfig->filename;
         $writer = new Zend_Log_Writer_Stream($filename);
         
-        $formatter = new Tinebase_Log_Formatter();
-        $formatter->setReplacements();
-        $writer->setFormatter($formatter);
+        $writer->setFormatter($this->getFormatter());
 
         $priority = ($loggerConfig->priority) ? (int)$loggerConfig->priority : Zend_Log::EMERG;
         $filter = new Zend_Log_Filter_Priority($priority);

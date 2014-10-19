@@ -361,6 +361,10 @@ class Tinebase_Auth
                 $rawBackendConfiguration = array();
             }
             self::$_backendConfiguration = is_array($rawBackendConfiguration) ? $rawBackendConfiguration : Zend_Json::decode($rawBackendConfiguration);
+            
+            if (!empty(self::$_backendConfiguration['password'])) {
+                Tinebase_Core::getLogger()->getFormatter()->addReplacement(self::$_backendConfiguration['password']);
+            }
         }
 
         if (isset($_key)) {

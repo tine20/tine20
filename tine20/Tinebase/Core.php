@@ -828,6 +828,10 @@ class Tinebase_Core
         if (isset($config->database)) {
             $dbConfig = $config->database;
             
+            if (!empty($dbConfig->password)) {
+                self::getLogger()->getFormatter()->addReplacement($dbConfig->password);
+            }
+            
             if (! defined('SQL_TABLE_PREFIX')) {
                 define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
             }
@@ -1041,9 +1045,9 @@ class Tinebase_Core
         if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$localeString'");
         
         // get locale object from session or ...
-        if (   $session !== NULL 
-            && isset($session->userLocale) 
-            && is_object($session->userLocale) 
+        if (   $session !== NULL
+            && isset($session->userLocale)
+            && is_object($session->userLocale)
             && ($session->userLocale->toString() === $localeString || $localeString === 'auto')
         ) {
             $locale = $session->userLocale;

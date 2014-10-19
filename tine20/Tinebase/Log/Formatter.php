@@ -117,6 +117,18 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     }
     
     /**
+     * add strings to replace in log output (passwords for example)
+     * 
+     * @param string $search
+     * @param string $replace
+     */
+    public function addReplacement($search, $replace = '********')
+    {
+        $this->_search[$search]   = $search;
+        $this->_replace[$replace] = $replace;
+    }
+    
+    /**
      * Add session id in front of log line
      *
      * @param  array    $event    event data
@@ -141,23 +153,6 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         }
         
         return self::getPrefix() . ' ' . self::getUsername() . ' ' . $timelog . '- ' . $output;
-    }
-    
-    /**
-     * set formatter replacements
-     * - Replace LDAP and SQL passwords with ********
-     */
-    public function setReplacements()
-    {
-        $config = Tinebase_Core::getConfig();
-        if (isset($config->database) && !empty($config->database->password)) {
-            $this->_search[] = $config->database->password;
-            $this->_replace[] = '********';
-        }
-        if (isset($config->{Tinebase_Config::AUTHENTICATIONBACKEND}) && !empty($config->{Tinebase_Config::AUTHENTICATIONBACKEND}->password)) {
-            $this->_search[] = $config->{Tinebase_Config::AUTHENTICATIONBACKEND}->password;
-            $this->_replace[] = '********';
-        }
     }
     
     /**
