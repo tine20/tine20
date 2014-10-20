@@ -103,7 +103,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_User::getInstance()->setPassword(Tinebase_Core::getUser(), $_password, true, false);
         
-        $oldCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+        $oldCredentialCache = Tinebase_Core::getUserCredentialCache();
         
         // update credential cache
         $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_username, $_password);

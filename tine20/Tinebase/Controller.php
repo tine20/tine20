@@ -93,8 +93,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         
         $this->_setSessionId($user, $accessLog, $clientIdString);
         
-        $this->_initUserAfterLogin($user, $accessLog, $password);
-
+        $this->initUser($user);
+        
+        $this->_updateCredentialCache($user->accountLoginName, $password);
+        
         $this->_updateAccessLog($user, $accessLog);
         
         return true;
@@ -172,21 +174,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 $_accessLog->result = Tinebase_Auth::FAILURE_BLOCKED;
             }
         }
-    }
-    
-    /**
-     * init user after login (credential cache, access log, session, ...)
-     * 
-     * @param Tinebase_Model_FullUser $_user
-     * @param Tinebase_Model_AccessLog $_accessLog
-     * @param string $password
-     */
-    protected function _initUserAfterLogin(Tinebase_Model_FullUser $_user, Tinebase_Model_AccessLog $_accessLog, $_password)
-    {
-        $this->initUser($_user);
-        
-        $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_user->accountLoginName, $_password);
-        Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
     }
     
     /**
@@ -652,6 +639,18 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 $accessLog = Tinebase_AccessLog::getInstance()->create($accessLog);
             }
         }
+    }
+    
+    /**
+     * update credential cache
+     * 
+     * @param string $loginName
+     * @param string $password
+     */
+    protected function _updateCredentialCache($loginName, $password)
+    {
+        $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($loginName, $password);
+        Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
     }
     
     /**

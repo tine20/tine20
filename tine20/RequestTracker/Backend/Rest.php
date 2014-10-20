@@ -421,7 +421,7 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
         if ($this->_config->useCustomCredendials) {
             $this->_httpClient->setAuth($this->_config->customCredentials->$loginName->username, $this->_config->customCredentials->$loginName->password);
         } else {
-            $credentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+            $credentialCache = Tinebase_Core::getUserCredentialCache();
             Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($credentialCache);
             
             $this->_httpClient->setAuth(Tinebase_Core::getUser()->accountLoginName, $credentialCache->password);

@@ -420,7 +420,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         if (! $this->{$userField} || ! ($this->{$passwordField} && ! $_onlyUsername)) {
             
             $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
-            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+            $userCredentialCache = Tinebase_Core::getUserCredentialCache();
             
             if ($userCredentialCache !== NULL) {
                 try {

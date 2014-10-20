@@ -363,7 +363,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         // get old credentials
         $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
-        $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+        $userCredentialCache = Tinebase_Core::getUserCredentialCache();
         
         if ($userCredentialCache !== NULL) {
             $credentialsBackend->getCachedCredentials($userCredentialCache);
@@ -885,7 +885,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
-            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+            $userCredentialCache = Tinebase_Core::getUserCredentialCache();
             Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($userCredentialCache);
         } else {
             Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 

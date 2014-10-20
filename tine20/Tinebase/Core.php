@@ -435,8 +435,6 @@ class Tinebase_Core
         Tinebase_Core::set('locale', new Zend_Locale('en_US'));
         Tinebase_Core::set('userTimeZone', 'UTC');
         
-        Tinebase_Core::setupUserCredentialCache();
-        
         Tinebase_Core::setupUserTimezone();
         
         Tinebase_Core::setupUserLocale();
@@ -768,22 +766,6 @@ class Tinebase_Core
         Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
         self::set(self::CACHE, $cache);
         self::$cacheStatus = $_enabled;
-    }
-    
-    /**
-     * places user credential cache id from cache adapter (if present) into registry
-     */
-    public static function setupUserCredentialCache()
-    {
-        try {
-            $cache = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->getCache();
-        } catch (Zend_Db_Statement_Exception $zdse) {
-            // could not get credential cache adapter, perhaps Tine 2.0 is not installed yet
-            $cache = NULL;
-        }
-        if ($cache !== NULL) {
-            self::set(self::USERCREDENTIALCACHE, $cache);
-        }
     }
     
     /**
@@ -1354,6 +1336,29 @@ class Tinebase_Core
     public static function getCache()
     {
         return self::get(self::CACHE);
+    }
+    
+    /**
+     * get credentials cache from the registry or initialize it
+     *
+     * @return  the cache
+     */
+    public static function getUserCredentialCache()
+    {
+        if (! self::get(self::USERCREDENTIALCACHE) instanceof Tinebase_Model_CredentialCache && self::getUser()) {
+            try {
+                $cache = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->getCache();
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // could not get credential cache adapter, perhaps Tine 2.0 is not installed yet
+                $cache = NULL;
+            }
+        
+            if ($cache !== NULL) {
+                self::set(self::USERCREDENTIALCACHE, $cache);
+            }
+        }
+        
+        return self::get(self::USERCREDENTIALCACHE);
     }
     
     /**

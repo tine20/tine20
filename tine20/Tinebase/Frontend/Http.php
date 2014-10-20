@@ -344,7 +344,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         if ($success === TRUE) {
             $ccAdapter = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter();
             if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
-                $ccAdapter->setCache(Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE));
+                $ccAdapter->setCache(Tinebase_Core::getUserCredentialCache());
             } else {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
                 $success = FALSE;

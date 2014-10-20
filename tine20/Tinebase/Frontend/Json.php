@@ -600,7 +600,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return false;
         }
         
-        Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->setCache(Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE));
+        Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->setCache(Tinebase_Core::getUserCredentialCache());
         
         return true;
     }
@@ -615,7 +615,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function updateCredentialCache($password)
     {
-        $oldCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+        $oldCredentialCache = Tinebase_Core::getUserCredentialCache();
         $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(Tinebase_Core::getUser()->accountLoginName, $password);
         Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
         
