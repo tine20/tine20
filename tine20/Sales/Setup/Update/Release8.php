@@ -1334,6 +1334,8 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     }
     
     /**
+     * update to 8.17
+     * 
      * add accountable field to products (again, if not already set)
      */
     public function update_16()
@@ -1346,7 +1348,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     }
     
     /**
-     * update to 8.9
+     * update to 8.18
      *
      *  - add order confirmation module
      */
@@ -1449,5 +1451,27 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         
         // TODO: favorite
         $this->setApplicationVersion('Sales', '8.18');
+    }
+    
+    /**
+     * update to 8.19
+     * 
+     *  - allow null product aggregate count
+     */
+    public function update_18()
+    {
+        $field = '<field>
+            <name>quantity</name>
+            <type>integer</type>
+            <notnull>false</notnull>
+            <default>null</default>
+        </field>';
+    
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('sales_product_agg', $declaration);
+    
+    
+        $this->setTableVersion('sales_product_agg', 2);
+        $this->setApplicationVersion('Sales', '8.19');
     }
 }

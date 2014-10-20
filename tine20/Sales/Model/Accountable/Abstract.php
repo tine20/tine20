@@ -233,7 +233,7 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
             'end_date'      => $endDate,
             'last_autobill' => NULL,
             'product_id'    => $product->getId(),#
-            'quantity' => 1,
+            'quantity'      => $product->accountable ? NULL : 1,
         ));
         
         return $pa;

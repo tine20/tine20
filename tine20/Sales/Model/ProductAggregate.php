@@ -80,7 +80,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
                 'label' => 'Quantity', // _('Quantity')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 'type'       => 'integer',
-                'default'    => 1
+                'default'    => NULL
             ),
             'interval' => array(
                 'label'      => 'Billing Interval', // _('Billing Interval')

@@ -733,3 +733,6 @@ msgstr "ohne Auftragsbestätigung"
 
 msgid "Add New Offer"
 msgstr "Neues Angebot hinzufügen"
+
+msgid "Last Autobill"
+msgstr "Zuletzt Abgerechnet"

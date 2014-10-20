@@ -82,6 +82,8 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
         
         this.store.sort();
         
+        this.on('beforeedit', this.onBeforeRowEdit, this);
+        
         // sync record on these events
         this.store.on('update', this.syncStoreToRecord.createDelegate(this));
         this.store.on('add', this.syncStoreToRecord.createDelegate(this));
@@ -141,7 +143,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
         recordData.contract_id = this.editDialog.record.get('id');
         var relatedRecord = this.productQuickadd.store.getById(this.productQuickadd.getValue());
         recordData.product_id = relatedRecord.data;
-        this.store.addSorted(new this.recordClass(recordData));
+        Tine.Sales.ProductAggregateGridPanel.superclass.onNewentry.call(this, recordData);  
     },
     
     /**
@@ -152,10 +154,11 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
      */
     getColumnModel: function() {
         this.productEditor = Tine.widgets.form.RecordPickerManager.get('Sales', 'Product', { allowBlank: true});
+        
         this.quantityEditor = new Ext.ux.form.Spinner({
             fieldLabel: this.app.i18n._('Quantity'),
             name: 'quantity',
-            allowBlank: false,
+            allowBlank: true,
             strategy: new Ext.ux.form.Spinner.NumberStrategy({
                 incrementValue : 1,
                 minValue: 1,
@@ -163,6 +166,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 allowDecimals: false
             })
         });
+
         
         this.intervalEditor = new Ext.ux.form.Spinner({
             fieldLabel: this.app.i18n._('Interval'),
@@ -180,8 +184,8 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
         this.quantityQuickadd = new Ext.ux.form.Spinner({
             fieldLabel: this.app.i18n._('Quantity'),
             name: 'quantity',
-            allowBlank: false,
-            value: 1,
+            allowBlank: true,
+            value: null,
             strategy: new Ext.ux.form.Spinner.NumberStrategy({
                 incrementValue : 1,
                 minValue: 1,
@@ -219,13 +223,14 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
         var columns = [
             {id: 'product_id', dataIndex: 'product_id', type: Tine.Sales.Model.ProductAggregate, header: this.app.i18n._('Product'),
                  quickaddField: this.productQuickadd, renderer: this.renderProductAggregate,
-                 editor: this.productEditor, scope: this, width: 140
+                 editor: this.productEditor, scope: this, width: 270
             },
-            {id: 'quantity', editor: this.quantityEditor, quickaddField: this.quantityQuickadd, dataIndex: 'quantity', header: this.app.i18n._('Quantity'),  scope: this, width: 90},
-            {id: 'interval', editor: this.intervalEditor, quickaddField: this.intervalQuickadd, dataIndex: 'interval', header: this.app.i18n._('Interval'),  scope: this, width: 90},
-            {id: 'billing_point', renderer: this.renderBillingPoint , editor: this.billingPointEditor, quickaddField: this.billingPointQuickadd, dataIndex: 'billing_point', header: this.app.i18n._('Billing Point'),  scope: this, width: 120},
-            {id: 'start_date', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.form.DateField(), quickaddField: new Ext.form.DateField(), dataIndex: 'start_date', header: this.app.i18n._('Start Date'),  scope: this, width: 110},
-            {id: 'end_date', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.form.DateField(), quickaddField: new Ext.form.DateField(), dataIndex: 'end_date', header: this.app.i18n._('End Date'),  scope: this, width: 110}
+            {id: 'quantity', editor: this.quantityEditor, renderer: this.renderQuantity, quickaddField: this.quantityQuickadd, dataIndex: 'quantity', header: this.app.i18n._('Quantity'),  scope: this, width: 54},
+            {id: 'interval', editor: this.intervalEditor, quickaddField: this.intervalQuickadd, dataIndex: 'interval', header: this.app.i18n._('Interval'),  scope: this, width: 60},
+            {id: 'billing_point', renderer: this.renderBillingPoint , editor: this.billingPointEditor, quickaddField: this.billingPointQuickadd, dataIndex: 'billing_point', header: this.app.i18n._('Billing Point'),  scope: this, width: 140},
+            {id: 'start_date', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.ux.form.ClearableDateField(), quickaddField: new Ext.ux.form.ClearableDateField(), dataIndex: 'start_date', header: this.app.i18n._('Start Date'),  scope: this, width: 110},
+            {id: 'end_date', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.ux.form.ClearableDateField(), quickaddField: new Ext.ux.form.ClearableDateField(), dataIndex: 'end_date', header: this.app.i18n._('End Date'),  scope: this, width: 110},
+            {id: 'last_autobill', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.ux.form.ClearableDateField(), hidden: true, dataIndex: 'last_autobill', header: this.app.i18n._('Last Autobill'),  scope: this, width: 110}
         ];
 
         return new Ext.grid.ColumnModel({
@@ -252,24 +257,34 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
         }
     },
     
+    renderQuantity: function(value, cell, record) {
+        // product does not bill an accountable -> return qty
+        var ac = record.get('product_id').accountable;
+        if (! ac || ac == 'Sales_Model_ProductAggregate' || ac == 'Sales_Model_Product') {
+            return value;
+        }
+        
+        return '';
+    },
+    
     /**
      * is called on after edit to set related records
      * @param {} o
      */
-    onAfterEdit: function(o) {
+    onAfterEdit: function(o) {console.warn(o);
         switch (o.field) {
             case 'quantity':
-                o.record.set('quantity', this.quantityEditor.getValue());
+                o.record.set('quantity', o.value);
                 break;
             case 'product_id':
-                var relatedRecord = this.productEditor.store.getById(this.productEditor.getValue());
+                var relatedRecord = this.productEditor.store.getById(o.value);
                 o.record.set('product_id', relatedRecord.data);
                 break;
             case 'interval':
-                o.record.set('interval', this.intervalEditor.getValue());
+                o.record.set('interval', o.value);
                 break;
             case 'billing_point':
-                var val = this.billingPointEditor.getValue();
+                var val = o.value;
                 if (Ext.isEmpty(val)) {
                     val = 'begin';
                 }
@@ -277,6 +292,26 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 break;
             default: // do nothing
         }
+    },
+    
+    /**
+     * creates the special editors
+     * @param {} o
+     */
+    onBeforeRowEdit: function(o) {
+        if (o.field == 'quantity') {
+            // product does not bill an accountable -> return qty
+            var ac = o.record.get('product_id').accountable;
+            var colModel = o.grid.getColumnModel();
+
+            if (!(! ac || ac == 'Sales_Model_ProductAggregate' || ac == 'Sales_Model_Product')) {
+                return false; 
+            } else {
+                return true;
+            }
+        }
+        
+        return;
     },
     
     /**
