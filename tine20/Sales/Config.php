@@ -112,7 +112,7 @@ class Sales_Config extends Tinebase_Config_Abstract
             'options'               => array(array('integer', 'Number'), array('string', 'Text')),
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
-            'default'               => 'integer'
+            'default'               => 'string'
         ),
         self::OWN_CURRENCY => array(
             // _('Own Currency')

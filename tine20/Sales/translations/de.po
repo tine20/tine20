@@ -707,3 +707,29 @@ msgstr "Neues Produkt hinzufügen"
 
 msgid "SalesProduct"
 msgstr "Produkt"
+
+msgid "SalesOffer"
+msgstr "Angebot"
+
+msgid "Offer"
+msgid_plural "Offers"
+msgstr[0] "Angebot"
+msgstr[1] "Angebote"
+
+msgid "All offer records"
+msgstr "Alle Angebote"
+
+msgid "All Offers"
+msgstr "Alle Angebote"
+
+msgid "manage offers"
+msgstr "Angebote verwalten"
+
+msgid "add, edit and delete offers"
+msgstr "Angebote hinzufügen, bearbeiten und löschen"
+
+msgid "without order confirmation"
+msgstr "ohne Auftragsbestätigung"
+
+msgid "Add New Offer"
+msgstr "Neues Angebot hinzufügen"

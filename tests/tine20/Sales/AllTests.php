@@ -36,6 +36,7 @@ class Sales_AllTests
         $suite->addTestSuite('Sales_InvoiceJsonTests');
         $suite->addTestSuite('Sales_InvoiceExportTests');
         $suite->addTestSuite('Sales_OrderConfirmationControllerTests');
+        $suite->addTestSuite('Sales_OfferControllerTests');
         
         return $suite;
     }

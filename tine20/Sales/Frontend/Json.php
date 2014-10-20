@@ -37,7 +37,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Sales_Model_Customer',
         'Sales_Model_Address',
         'Sales_Model_Invoice',
-        'Sales_Model_ProductAggregate'
+        'Sales_Model_ProductAggregate',
+        'Sales_Model_Offer',
     );
 
     /**
@@ -56,6 +57,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'OrderConfirmation',
         'ProductAggregate',
         'InvoicePosition',
+        'Offer'
     );
     
    /**
@@ -429,7 +431,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchOrderConfirmations($filter, $paging)
     {
-        return $this->_search($filter, $paging, Sales_Controller_OrderConfirmation::getInstance(), 'Sales_Model_OrderConfirmationFilter', array('Sales_model_Contract'));
+        return $this->_search($filter, $paging, Sales_Controller_OrderConfirmation::getInstance(), 'Sales_Model_OrderConfirmationFilter', array('Sales_Model_Contract'));
     }
     
     /**
@@ -617,5 +619,54 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deleteInvoices($ids)
     {
         return $this->_delete($ids, Sales_Controller_Invoice::getInstance());
+    }
+    
+    /*************************** offer functions *****************************/
+    
+    /**
+     * Search for records matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchOffers($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Sales_Controller_Offer::getInstance(), 'Sales_Model_OfferFilter', array('Sales_Model_OrderConfirmation', 'Sales_Model_Customer'));
+    }
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getOffer($id)
+    {
+        return $this->_get($id, Sales_Controller_Offer::getInstance());
+    }
+    
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @param  boolean $duplicateCheck
+     *
+     * @return array created/updated record
+     */
+    public function saveOffer($recordData, $duplicateCheck)
+    {
+        return $this->_save($recordData, Sales_Controller_Offer::getInstance(), 'Offer');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array $ids
+     * @return string
+     */
+    public function deleteOffers($ids)
+    {
+        return $this->_delete($ids, Sales_Controller_Offer::getInstance());
     }
 }

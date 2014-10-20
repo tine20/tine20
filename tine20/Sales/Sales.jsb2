@@ -148,6 +148,14 @@
           "path": "js/"
         },
         {
+          "text": "OrderConfirmationFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "OfferEditDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "ContractCustomerFilterModel.js",
           "path": "js/"
         },

@@ -54,6 +54,13 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_CUSTOMERS = 'manage_customers';
     
     /**
+     * the right to manage offers
+     *
+     * @staticvar string
+     */
+    const MANAGE_OFFERS = 'manage_offers';
+    
+    /**
      * the right to manage order confirmations
      *
      * @staticvar string
@@ -136,8 +143,9 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_INVOICES,
             self::MANAGE_DIVISIONS,
             self::MANAGE_ORDERCONFIRMATIONS,
+            self::MANAGE_OFFERS,
             self::CHANGE_OC_NUMBER,
-            self::SET_INVOICE_NUMBER
+            self::SET_INVOICE_NUMBER,
         );
         
         $allRights = array_merge($allRights, $addRights);
@@ -182,6 +190,10 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_ORDERCONFIRMATIONS => array(
                 'text'          => $translate->_('manage order confirmations'),
                 'description'   => $translate->_('add, edit and delete order confirmations'),
+            ),
+            self::MANAGE_OFFERS => array(
+                'text'          => $translate->_('manage offers'),
+                'description'   => $translate->_('add, edit and delete offers'),
             ),
             self::CHANGE_OC_NUMBER => array(
                 'text'          => $translate->_('change number of an order confirmations'),

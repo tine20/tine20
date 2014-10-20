@@ -68,11 +68,18 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 'name'        => "All Customers", // _('All Customers')
                 'description' => "All customer records", // _('All customer records')
                 'filters'     => array(
-                    array(
-                        'field'     => 'created_by',
-                        'operator'  => 'equals',
-                        'value'     => Tinebase_Model_User::CURRENTACCOUNT
-                    )
+                ),
+            ))
+        ));
+        
+        // Offers
+        $commonValues['model'] = 'Sales_Model_OfferFilter';
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Offers", // _('All Offers')
+                'description' => "All offer records", // _('All offer records')
+                'filters'     => array(
                 ),
             ))
         ));

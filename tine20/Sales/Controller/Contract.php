@@ -133,7 +133,7 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
     
         if (empty($number)) {
             throw new Tinebase_Exception_Record_Validation('Please use a contract number!');
-        } elseif ((Sales_Config::getInstance()->get('contractNumberValidation', 'integer') == 'integer') && (! is_numeric($number))) {
+        } elseif ((Sales_Config::getInstance()->get('contractNumberValidation', 'string') == 'integer') && (! is_numeric($number))) {
             throw new Tinebase_Exception_Record_Validation('Please use a decimal number as contract number!');
         }
     }

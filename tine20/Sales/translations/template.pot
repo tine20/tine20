@@ -841,3 +841,21 @@ msgstr ""
 
 msgid "SalesProduct"
 msgstr ""
+
+msgid "All offer records"
+msgstr ""
+
+msgid "All Offers"
+msgstr ""
+
+msgid "manage offers"
+msgstr ""
+
+msgid "add, edit and delete offers"
+msgstr ""
+
+msgid "without order confirmation"
+msgstr ""
+
+msgid "Add New Offer"
+msgstr ""

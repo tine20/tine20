@@ -84,7 +84,7 @@ class Sales_Controller extends Tinebase_Controller_Abstract
         }
         
         return array(
-            'contractNumberValidation' => Sales_Config::getInstance()->get('contractNumberValidation', 'integer'),
+            'contractNumberValidation' => Sales_Config::getInstance()->get('contractNumberValidation', 'string'),
             'contractNumberGeneration' => Sales_Config::getInstance()->get('contractNumberGeneration', 'auto'),
             'ownCurrency' => Sales_Config::getInstance()->get('ownCurrency', 'EUR')
         );

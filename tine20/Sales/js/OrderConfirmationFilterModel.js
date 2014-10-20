@@ -11,15 +11,15 @@ Ext.ns('Tine.Sales');
 
 /**
  * @namespace   Tine.Sales
- * @class       Tine.Sales.CustomerFilterModel
+ * @class       Tine.Sales.OrderConfirmationFilterModel
  * @extends     Tine.widgets.grid.ForeignRecordFilter
  * 
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
-Tine.Sales.CustomerFilterModel = Ext.extend(Tine.widgets.grid.ForeignRecordFilter, {
+Tine.Sales.OrderConfirmationFilterModel = Ext.extend(Tine.widgets.grid.ForeignRecordFilter, {
     
     // private
-    field: 'customer',
+    field: 'order_confirmation',
     valueType: 'relation',
     
     /**
@@ -27,12 +27,11 @@ Tine.Sales.CustomerFilterModel = Ext.extend(Tine.widgets.grid.ForeignRecordFilte
      */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Sales');
-        this.label = this.app.i18n._('Customer');
-        this.foreignRecordClass = Tine.Sales.Model.Customer;
-        this.pickerConfig = {emptyText: this.app.i18n._('without customer'), allowBlank: true};
+        this.label = this.app.i18n._('Order Confirmation');
+        this.foreignRecordClass = Tine.Sales.Model.OrderConfirmation;
+        this.pickerConfig = {emptyText: this.app.i18n._('without order confirmation'), allowBlank: true};
         Tine.Sales.CustomerFilterModel.superclass.initComponent.call(this);
     }
 });
 
-Tine.widgets.grid.FilterToolbar.FILTERS['sales.invoicecustomer']  = Tine.Sales.CustomerFilterModel;
-Tine.widgets.grid.FilterToolbar.FILTERS['sales.offer-customer']  = Tine.Sales.CustomerFilterModel;
+Tine.widgets.grid.FilterToolbar.FILTERS['sales.offer-order_confirmation']  = Tine.Sales.OrderConfirmationFilterModel;
