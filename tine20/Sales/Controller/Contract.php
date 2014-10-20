@@ -423,4 +423,136 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
     
         parent::_deleteLinkedObjects($_record);
     }
+    
+    /**
+     * updates last autobill of product aggregates
+     *
+     * @param boolen $update
+     */
+    public function updateLastAutobillOfProductAggregates()
+    {
+        $filter = new Sales_Model_ContractFilter(array());
+    
+        $iterator = new Tinebase_Record_Iterator(array(
+                'iteratable' => $this,
+                'controller' => Sales_Controller_Contract::getInstance(),
+                'filter'     => $filter,
+                'options'    => array(
+                        'getRelations' => TRUE,
+                        'limit' => 20
+                ),
+                'function'   => 'processUpdateLastAutobillOfProductAggregates',
+        ));
+    
+        $iterator->iterate();
+    }
+    
+    /**
+     * processUpdateBillingInformation
+     * 
+     * @param Tinebase_Record_RecordSet $contracts
+     */
+    
+    public function processUpdateLastAutobillOfProductAggregates(Tinebase_Record_RecordSet $contracts)
+    {
+        $now = Tinebase_DateTime::now();
+        
+        $billingPoints = array(
+            'Timetracker_Model_Timeaccount'         => 'end',
+            'Sales_Model_Product'                   => 'end',
+            'WebAccounting_Model_BackupPath'        => 'end',
+            'WebAccounting_Model_StoragePath'       => 'end',
+            'WebAccounting_Model_MailAccount'       => 'end',
+            'WebAccounting_Model_DReg'              => 'begin',
+            'WebAccounting_Model_CertificateDomain' => 'begin',
+            'WebAccounting_Model_IPNet'             => 'end',
+            // Fallback for Sales_Model_Product
+            ''                                      => 'end',
+            'Sales_Model_ProductAgregate'           => 'end',
+        );
+        
+        foreach($contracts as $contract) {
+            if ($contract->end_date && $contract->end_date < $now) {
+                continue;
+            }
+            
+            // find product aggregates for this contract
+            $filter = new Sales_Model_ProductAggregateFilter(array());
+            $filter->addFilter(new Tinebase_Model_Filter_Text(
+                    array('field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId())
+            ));
+            $productAggregates = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+            
+            foreach($productAggregates as $pa) {
+                // find all invoices for the contract
+                $filter = new Sales_Model_InvoiceFilter(array(
+                    array('field' => 'contract', 'operator' => 'AND', 'value' => array(array(
+                        'field' =>  ':id', 'operator' => 'equals', 'value' => $contract->getId()
+                    ))),
+                ));
+                
+                $invoices = Sales_Controller_Invoice::getInstance()->search($filter);
+                
+                // find last invoice position for this aggregate
+                $filter = new Sales_Model_InvoicePositionFilter();
+                $filter->addFilter(new Tinebase_Model_Filter_Text(
+                        array('field' => 'invoice_id', 'operator' => 'in', 'value' => $invoices->getArrayOfIds())
+                ));
+                $pagination = new Tinebase_Model_Pagination(array('limit' => 1, 'sort' => 'month', 'dir' => 'DESC'));
+                
+                $lastInvoicePosition = Sales_Controller_InvoicePosition::getInstance()->search($filter, $pagination)->getFirstRecord();
+                
+                // set billing_point, if none given
+                if (! $pa->billing_point) {
+                    $pa->billing_point = $billingPoints[$lastInvoicePosition->model];
+                }
+                
+                if (! $lastInvoicePosition) {
+                    // if no invoice position has been found, this is a new contract, so set start_date to the first day of the month of the contracts start_date
+                    $date = clone $contract->start_date;
+                    $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    $date->setTime(0,0,0);
+                    $date->setDate($date->format('Y'), $date->format('m'), 1);
+                    $date->setTimezone('UTC');
+                    
+                    $startDate = clone $date;
+                    $labDate   = NULL;
+                } else {
+                    $split = explode('-', $lastInvoicePosition->month);
+                    $date = Tinebase_DateTime::now();
+                    $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    $date->setTime(0,0,0);
+                    $date->setDate($split[0], $split[1], 1);
+                    
+                    // set to next billing date
+                    $date->addMonth(1);
+                    
+                    // if the billing point is at the begin of the interval, set date back one interval
+                    if ($pa->billing_point == 'begin') {
+                        $date->subMonth($pa->interval);
+                    }
+                    
+                    $date->setTimezone('UTC');
+                    
+                    $labDate   = clone $date;
+                    
+                    // find first invoice position to calculate start_date
+                    $pagination = new Tinebase_Model_Pagination(array('limit' => 1, 'sort' => 'month', 'dir' => 'ASC'));
+                    $firstInvoicePosition = Sales_Controller_InvoicePosition::getInstance()->search($filter, $pagination)->getFirstRecord();
+                    $split = explode('-', $firstInvoicePosition->month);
+                    
+                    $startDate = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    $startDate->setTime(0,0,0);
+                    $startDate->setDate($split[0], $split[1], 1);
+                    
+                    $startDate->setTimezone('UTC');
+                }
+                
+                $pa->start_date    = $startDate;
+                $pa->last_autobill = $labDate;
+                
+                Sales_Controller_ProductAggregate::getInstance()->update($pa);
+            }
+        }
+    }
 }

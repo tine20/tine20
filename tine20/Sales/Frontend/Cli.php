@@ -300,5 +300,14 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         Sales_Controller_Contract::getInstance()->transferBillingInformation(TRUE);
     }
+    
+    /**
+     * sets start date and last_auobill by existing invoice positions / normalizes last_autobill
+     */
+    public function updateLastAutobillOfProductAggregates()
+    {
+        Sales_Controller_Contract::getInstance()->updateLastAutobillOfProductAggregates();
+        
+    }
 }
 

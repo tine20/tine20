@@ -331,7 +331,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             
             // find out if this model has to be billed or skipped
             if ($this->_currentBillingDate->isLaterOrEquals($nextBill)) {
-                if ($product->accountable == 'Sales_Model_Product') {
+                if (($product->accountable == 'Sales_Model_Product') || ($product->accountable == '')) {
                     $simpleProductsToBill[] = array('pa' => $productAggregate, 'ac' => $productAggregate);
                 } else {
                     $modelsToBill[$product->accountable] = array();
@@ -816,7 +816,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     $invoiceRelations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Contract', 'Sql', $contract->getId(), NULL, array(), TRUE, array('Sales_Model_Invoice'));
                     foreach($invoiceRelations as $invoiceRelation) {
                         $invoiceRelation->related_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-                        if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->start_date < $invoiceRelation->related_record->start_date) {
+                        if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->creation_time < $invoiceRelation->related_record->creation_time) {
                             throw new Sales_Exception_DeletePreviousInvoice();
                         }
                     }

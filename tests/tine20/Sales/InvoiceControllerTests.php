@@ -840,21 +840,21 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $result = $this->_invoiceController->createAutoInvoices($date);
         $this->assertEquals(0, $result['created_count'], (string) $date);
-        
+        sleep(1);
         $date->addMonth(1);
         $result = $this->_invoiceController->createAutoInvoices($date);
         $this->assertEquals(1, $result['created_count'], (string) $date);
         $invoice1Id = $result['created'][0];
         $invoice = $json->getInvoice($invoice1Id);
         $this->assertEquals(1, count($invoice['positions']), print_r($invoice['positions'], 1));
-        
+        sleep(1);
         $date->addMonth(1);
         $result = $this->_invoiceController->createAutoInvoices($date);
         $this->assertEquals(1, $result['created_count'], (string) $date);
         $invoice2Id = $result['created'][0];
         $invoice = $json->getInvoice($invoice2Id);
         $this->assertEquals(1, count($invoice['positions']));
-
+        sleep(1);
         $date->addMonth(1);
         $result = $this->_invoiceController->createAutoInvoices($date);
         $this->assertEquals(0, $result['created_count'], (string) $date);
