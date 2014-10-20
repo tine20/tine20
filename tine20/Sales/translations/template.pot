@@ -862,3 +862,42 @@ msgstr ""
 
 msgid "Last Autobill"
 msgstr ""
+
+msgid "All Products"
+msgstr ""
+
+msgid "All product records"
+msgstr ""
+
+msgid "All Contracts"
+msgstr ""
+
+msgid "All contract records"
+msgstr ""
+
+msgid "All Invoices"
+msgstr ""
+
+msgid "All invoice records"
+msgstr ""
+
+msgid "All Cost Centers"
+msgstr ""
+
+msgid "All cost center records"
+msgstr ""
+
+msgid "All Divisions"
+msgstr ""
+
+msgid "All division records"
+msgstr ""
+
+msgid "All Order Confirmations"
+msgstr ""
+
+msgid "All order confirmation records"
+msgstr ""
+
+msgid "Products created by me"
+msgstr ""

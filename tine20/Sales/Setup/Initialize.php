@@ -32,7 +32,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
         $pfe->create(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'              => "My Products", // _('My Products')
-                'description'       => "Products created by me", // _('Products created by myself')
+                'description'       => "Products created by me", // _('Products created by me')
                 'filters'           => array(
                     array(
                         'field'     => 'created_by',
@@ -83,6 +83,8 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 ),
             ))
         ));
+        
+        Sales_Setup_Update_Release8::createDefaultFavoritesForSub20();
     }
     
     /**

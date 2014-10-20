@@ -1474,4 +1474,95 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('sales_product_agg', 2);
         $this->setApplicationVersion('Sales', '8.19');
     }
+    
+    /**
+     * update to 8.20
+     *
+     *  - create missing default persistent filters
+     */
+    public function update_19()
+    {
+        self::createDefaultFavoritesForSub20();
+        
+        $this->setApplicationVersion('Sales', '8.20');
+    }
+    
+    /**
+     * creates default favorited vor version 8.20 (gets called in initialization of this app)
+     */
+    public static function createDefaultFavoritesForSub20()
+    {
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
+        );
+        
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        // Products
+        $commonValues['model'] = 'Sales_Model_ProductFilter';
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Products", // _('All Products')
+                'description' => "All product records", // _('All product records')
+                'filters'     => array(),
+            ))
+        ));
+        
+        // Contracts
+        $commonValues['model'] = 'Sales_Model_ContractFilter';
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Contracts", // _('All Contracts')
+                'description' => "All contract records", // _('All contract records')
+                'filters'     => array(),
+            ))
+        ));
+        
+        // Invoices
+        $commonValues['model'] = 'Sales_Model_InvoiceFilter';
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Invoices", // _('All Invoices')
+                'description' => "All invoice records", // _('All invoice records')
+                'filters'     => array(),
+            ))
+        ));
+        
+        // CostCenters
+        $commonValues['model'] = 'Sales_Model_CostCenterFilter';
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Cost Centers", // _('All Cost Centers')
+                'description' => "All cost center records", // _('All costcenter records')
+                'filters'     => array(),
+            ))
+        ));
+        
+        // Divisions
+        $commonValues['model'] = 'Sales_Model_DivisionFilter';
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Divisions", // _('All Divisions')
+                'description' => "All division records", // _('All division records')
+                'filters'     => array(),
+            ))
+        ));
+        
+        // OrderConfirmations
+        $commonValues['model'] = 'Sales_Model_OrderConfirmationFilter';
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Order Confirmations", // _('All Order Confirmations')
+                'description' => "All order confirmation records", // _('All order confirmation records')
+                'filters'     => array(),
+            ))
+        ));
+    }
 }

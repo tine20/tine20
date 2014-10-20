@@ -108,7 +108,7 @@ msgstr "Von mir erstellte Produkte"
 
 #: Setup/Update/Release5.php:84 Setup/Initialize.php:51
 msgid "My Contracts"
-msgstr "Meine Aufträge"
+msgstr "Meine Verträge"
 
 #: Setup/Update/Release5.php:85 Setup/Initialize.php:52
 msgid "Contracts created by myself"
@@ -720,7 +720,7 @@ msgid "All offer records"
 msgstr "Alle Angebote"
 
 msgid "All Offers"
-msgstr "Alle Angebote"
+msgstr "Alle Angebotsdatensätze"
 
 msgid "manage offers"
 msgstr "Angebote verwalten"
@@ -736,3 +736,45 @@ msgstr "Neues Angebot hinzufügen"
 
 msgid "Last Autobill"
 msgstr "Zuletzt Abgerechnet"
+
+msgid "All Products"
+msgstr "Alle Produkte"
+
+msgid "All product records"
+msgstr "Alle Produktdatensätze"
+
+msgid "All Contracts"
+msgstr "Alle Verträge"
+
+msgid "All contract records"
+msgstr "Alle Vertragsdatensätze"
+
+msgid "All Invoices"
+msgstr "Alle Rechnungen"
+
+msgid "All invoice records"
+msgstr "Alle Rechnungsdatensätze"
+
+msgid "All Cost Centers"
+msgstr "Alle Kostenstellen"
+
+msgid "All cost center records"
+msgstr "Alle Kostenstellendatensätze"
+
+msgid "All Divisions"
+msgstr "Alle Abteilungen"
+
+msgid "All division records"
+msgstr "Alle Abteilungsdatensätze"
+
+msgid "All Order Confirmations"
+msgstr "Alle Auftragsbestätigungen"
+
+msgid "All order confirmation records"
+msgstr "Alle Auftragsbestätigungsdatensätze"
+
+msgid "Products created by me"
+msgstr "Produktdatensätze, die ich angelegt habe"
+
+msgid "Contracts created by me"
+msgstr "Vertragsdatensätze, die ich angelegt habe"
