@@ -175,7 +175,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             strategy: new Ext.ux.form.Spinner.NumberStrategy({
                 incrementValue : 1,
                 minValue: 1,
-                maxValue: 12,
+                maxValue: 36,
                 allowDecimals: false
             })
         });
@@ -201,7 +201,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             strategy: new Ext.ux.form.Spinner.NumberStrategy({
                 incrementValue : 1,
                 minValue: 1,
-                maxValue: 12,
+                maxValue: 36,
                 allowDecimals: false
             })
         });

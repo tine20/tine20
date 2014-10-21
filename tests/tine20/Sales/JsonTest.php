@@ -684,4 +684,23 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
         $contact4 = Addressbook_Controller_Contact::getInstance()->update($contact4);
     }
+    
+    /**
+     * tests if a product interval of 36 is possible and if an empty string gets converted to null
+     */
+    public function testContract()
+    {
+        $product = Sales_Controller_Product::getInstance()->create($this->_getProduct());
+        $contract = array('id' => NULL, 'number' => 1, 'title' => 'test123', 'products' => array(array(
+            'product_id' => $product->getId(),
+            'interval' => 36,
+            'billing_point' => 'begin',
+            'quantity' => ''
+        )));
+        
+        $contract = $this->_instance->saveContract($contract);
+        
+        $this->assertEquals(NULL, $contract['products'][0]['quantity']);
+        $this->assertEquals(36, $contract['products'][0]['interval']);
+    }
 }
