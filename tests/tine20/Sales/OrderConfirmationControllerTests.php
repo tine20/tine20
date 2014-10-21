@@ -35,22 +35,22 @@ class Sales_OrderConfirmationControllerTests extends TestCase
         
         $record = $controller->create(new Sales_Model_OrderConfirmation(array('title' => 'auto1')));
         
-        $this->assertEquals('AB-000001', $record->number);
+        $this->assertEquals('AB-00001', $record->number);
         
         $record = $controller->create(new Sales_Model_OrderConfirmation(array('title' => 'auto2')));
         
-        $this->assertEquals('AB-000002', $record->number);
+        $this->assertEquals('AB-00002', $record->number);
         
         // set number to 4, should return the formatted number
         $record = $controller->create(new Sales_Model_OrderConfirmation(array('title' => 'manu1', 'number' => 4)));
-        $this->assertEquals('AB-000004', $record->number);
+        $this->assertEquals('AB-00004', $record->number);
         
         // the next number should be a number after the manual number
         $record = $controller->create(new Sales_Model_OrderConfirmation(array('title' => 'auto3')));
-        $this->assertEquals('AB-000005', $record->number);
+        $this->assertEquals('AB-00005', $record->number);
         
         // the user manually set this numer, so this should be corrected
         $record = $controller->create(new Sales_Model_OrderConfirmation(array('title' => 'manu1', 'number' => 'AB-100')));
-        $this->assertEquals('AB-000100', $record->number);
+        $this->assertEquals('AB-00100', $record->number);
     }
 }

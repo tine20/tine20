@@ -23,7 +23,7 @@ class Sales_Controller_OrderConfirmation extends Sales_Controller_NumberableAbst
      *
      * @var integer
      */
-    protected $_numberZerofill = 6;
+    protected $_numberZerofill = 5;
     
     /**
      * the prefix for the invoice
