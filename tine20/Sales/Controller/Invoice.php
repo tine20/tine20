@@ -523,33 +523,39 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $invoice = $this->create($invoice);
         $this->_autoInvoiceIterationResults[] = $invoice->getId();
         
+        $paToUpdate = array();
+        
+        // conjunct billables with invoice, find out which productaggregates to update
         foreach($billableAccountables as $ba) {
             $ba['ac']->conjunctInvoiceWithBillables($invoice);
+            $paToUpdate[$ba['pa']->getId()] = $ba['pa'];
+        }
+        
+        foreach($paToUpdate as $paId => $productAggregate) {
+            $firstBill = (! $productAggregate->last_autobill);
             
-            $firstBill = (! $ba['pa']->last_autobill);
-            
-            $lab = $ba['pa']->last_autobill ? clone $ba['pa']->last_autobill : ($ba['pa']->start_date ? clone $ba['pa']->start_date : clone $this->_currentBillingContract->start_date);
+            $lab = $productAggregate->last_autobill ? clone $productAggregate->last_autobill : ($productAggregate->start_date ? clone $productAggregate->start_date : clone $this->_currentBillingContract->start_date);
             $lab->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
             $lab->setTime(0,0,0);
             
             if (! $firstBill) {
-                $lab->addMonth($ba['pa']->interval);
+                $lab->addMonth($productAggregate->interval);
             } else {
-                if ($ba['pa']->billing_point == 'end') {
+                if ($productAggregate->billing_point == 'end') {
                     // if first bill, add interval on billing_point end
-                    $lab->addMonth($ba['pa']->interval);
+                    $lab->addMonth($productAggregate->interval);
                 }
             }
 
-            $ba['pa']->last_autobill = $lab;
-            $ba['pa']->setTimezone('UTC');
+            $productAggregate->last_autobill = $lab;
+            $productAggregate->setTimezone('UTC');
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating last_autobill of "' . $ba['pa']->getId() . '": ' . $lab->__toString());
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating last_autobill of "' . $productAggregate->getId() . '": ' . $lab->__toString());
             }
             
-            if ($ba['pa']->getId()) {
-                Sales_Controller_ProductAggregate::getInstance()->update($ba['pa']);
+            if ($productAggregate->getId()) {
+                Sales_Controller_ProductAggregate::getInstance()->update($productAggregate);
             }
         }
     }

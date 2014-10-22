@@ -51,7 +51,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $date = NULL;
         $args = $this->_parseArgs($_opts, array());
-    
+        
         // if day argument is given, validate
         if (array_key_exists('day', $args)) {
             $split = explode('-', $args['day']);
@@ -86,10 +86,6 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         }
         
-        if (array_key_exists('remove_unbilled', $args) && $args['remove_unbilled'] == 1) {
-            $this->removeUnbilledAutoInvoices();
-        }
-        
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating invoices for ' . $date->toString());
         }
@@ -105,11 +101,15 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 if ($contract->count() == 1) {
                     $contract = $contract->getFirstRecord();
                 } elseif ($contract->count() > 1) {
-                    die('The number you have given is not unique! Please use the ID instead!');
+                    die('The number you have given is not unique! Please use the ID instead!' . PHP_EOL);
                 } else {
-                    die('A contract could not be found!');
+                    die('A contract could not be found!' . PHP_EOL);
                 }
             }
+        }
+        
+        if (array_key_exists('remove_unbilled', $args) && $args['remove_unbilled'] == 1) {
+            $this->removeUnbilledAutoInvoices($contract);
         }
         
         $result = Sales_Controller_Invoice::getInstance()->createAutoInvoices($date, $contract);
@@ -258,15 +258,30 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     
     /**
      * removes unbilled auto invoices
+     * 
+     * @param Sales_Model_Contract $contract
      */
-    public function removeUnbilledAutoInvoices()
+    public function removeUnbilledAutoInvoices(Sales_Model_Contract $contract = NULL)
     {
         $c = Sales_Controller_Invoice::getInstance();
         
         $f = new Sales_Model_InvoiceFilter(array(
                 array('field' => 'is_auto', 'operator' => 'equals', 'value' => TRUE),
                 array('field' => 'cleared', 'operator' => 'not', 'value' => 'CLEARED'),
-        ));
+        ), 'AND');
+        
+        if ($contract) {
+            $subf = new Tinebase_Model_Filter_ExplicitRelatedRecord(array('field' => 'contract', 'operator' => 'AND', 'value' => array(array(
+                    'field' =>  ':id', 'operator' => 'equals', 'value' => $contract->getId()
+            )), 'options' => array(
+                'controller'        => 'Sales_Controller_Contract',
+                'filtergroup'       => 'Sales_Model_ContractFilter',
+                'own_filtergroup'   => 'Sales_Model_InvoiceFilter',
+                'own_controller'    => 'Sales_Controller_Invoice',
+                'related_model'     => 'Sales_Model_Contract',
+            )));
+            $f->addFilter($subf);
+        }
         
         $p = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC'));
         
@@ -307,7 +322,5 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function updateLastAutobillOfProductAggregates()
     {
         Sales_Controller_Contract::getInstance()->updateLastAutobillOfProductAggregates();
-        
     }
 }
-
