@@ -4,7 +4,7 @@
  * 
  * @package     Tests
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -100,6 +100,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             $this->_deleteGroups();
         }
         if ($this->_transactionId) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Rolling back test transaction');
             Tinebase_TransactionManager::getInstance()->rollBack();
         }
         
@@ -190,11 +192,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected function _getTestContainer($applicationName)
     {
         return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-        'name'           => 'PHPUnit test container',
-        'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-        'owner_id'       => Tinebase_Core::getUser(),
-        'backend'        => 'Sql',
-        'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId()
+            'name'           => 'PHPUnit test container',
+            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
+            'owner_id'       => Tinebase_Core::getUser(),
+            'backend'        => 'Sql',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId()
         ), true));
     }
     
@@ -309,5 +311,17 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         zip_close($zipHandler);
         
         return $xml;
+    }
+    
+    /**
+     * get test temp file
+     * 
+     * @return Tinebase_TempFile
+     */
+    protected function _getTempFile()
+    {
+        $tempFileBackend = new Tinebase_TempFile();
+        $tempFile = $tempFileBackend->createTempFile(dirname(__FILE__) . '/Filemanager/files/test.txt');
+        return $tempFile;
     }
 }

@@ -1,10 +1,4 @@
 <?php
-
-use Sabre\DAV;
-use Sabre\DAVACL;
-use Sabre\CardDAV;
-use Sabre\CalDAV;
-
 /**
  * Tine 2.0
  *
@@ -12,7 +6,7 @@ use Sabre\CalDAV;
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -22,53 +16,58 @@ use Sabre\CalDAV;
  *
  * @package     Tinebase
  * @subpackage  WebDAV
- * 
- * @todo this should look for webdav frontend in installed apps
  */
-class Tinebase_WebDav_Root extends DAV\SimpleCollection
+class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
 {
     public function __construct()
     {
-        $caldavCalendarChildren = array();
-        $caldavTasksChildren    = array();
-        $carddavChildren        = array();
-        $webdavChildren         = array();
-        $ownCloudChildren       = array();
+        $applications = Tinebase_Core::getUser()->getApplications();
+
+        parent::__construct('root', array(
+            new \Sabre\DAV\SimpleCollection('principals', array(
+                new Tinebase_WebDav_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), Tinebase_WebDav_PrincipalBackend::PREFIX_USERS),
+                new Tinebase_WebDav_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS)
+            ))
+        ));
         
-        if(Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
-            $caldavCalendarChildren[] = new Calendar_Frontend_CalDAV();
+        if ($applications->find('name', 'Calendar')) {
+            $this->addChild(
+                new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT, true)
+            );
         }
        
-        if(Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN)) {
-            $caldavTasksChildren[]    = new Tasks_Frontend_CalDAV();
+        if ($applications->find('name', 'Tasks')) {
+            $this->addChild(
+                new Tasks_Frontend_WebDAV('tasks', true)
+            );
         }
 
-        if(Tinebase_Core::getUser()->hasRight('Addressbook', Tinebase_Acl_Rights::RUN)) {
-            $carddavChildren[] = new Addressbook_Frontend_CardDAV();
+        if ($applications->find('name', 'Addressbook')) {
+            $this->addChild(
+                new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT, true)
+            );
         }
         
-        if(Tinebase_Core::getUser()->hasRight('Filemanager', Tinebase_Acl_Rights::RUN)) {
-            $ownCloudChildren[] = new Filemanager_Frontend_WebDAV('webdav');
+        // main entry point for ownCloud 
+        if ($applications->find('name', 'Filemanager')) {
+            $this->addChild(
+                new \Sabre\DAV\SimpleCollection(
+                    'remote.php', 
+                    array(new Filemanager_Frontend_WebDAV('webdav'))
+                )
+            );
         }
         
-        foreach (array('Addressbook', 'Calendar', 'Felamimail', 'Filemanager', 'Tasks') as $application) {
-            $applicationClass = $application . '_Frontend_WebDAV';
-            if (Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN) && class_exists($applicationClass)) {
-                $webdavChildren[] = new $applicationClass($application);
+        // webdav tree
+        $webDAVCollection = new \Sabre\DAV\SimpleCollection('webdav');
+        
+        foreach ($applications as $application) {
+            $applicationClass = $application->name . '_Frontend_WebDAV';
+            if (@class_exists($applicationClass)) {
+                $webDAVCollection->addChild(new $applicationClass($application->name));
             }
         }
         
-        parent::__construct('root', array(
-            new DAV\SimpleCollection(CardDAV\Plugin::ADDRESSBOOK_ROOT, $carddavChildren),
-            new DAV\SimpleCollection(CalDAV\Plugin::CALENDAR_ROOT,     $caldavCalendarChildren),
-            new DAV\SimpleCollection('tasks',                          $caldavTasksChildren),
-            new DAV\SimpleCollection('webdav',                         $webdavChildren),
-            new DAV\SimpleCollection('principals', array(
-                new DAVACL\PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/users'),
-                new DAVACL\PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), 'principals/groups')
-            )),
-            // main entry point for ownCloud 
-            new DAV\SimpleCollection('remote.php',                     $ownCloudChildren)
-        ));
+        $this->addChild($webDAVCollection);
     }
 }

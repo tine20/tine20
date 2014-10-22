@@ -147,11 +147,23 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     {
         if ($_rrule) {
             $parts = explode(';', $_rrule);
+            $skipParts = array();
             foreach ($parts as $part) {
                 list($key, $value) = explode('=', $part);
                 $part = strtolower($key);
+                if (in_array($part, $skipParts)) {
+                    continue;
+                }
                 if (! in_array($part, $this->_rruleParts)) {
-                    throw new Tinebase_Exception_UnexpectedValue("$part is not a known rrule part");
+                    if ($part === 'bysetpos') {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . " Map bysetpos to a supported RRULE part: bymonthday");
+                        $part = 'bymonthday';
+                        $this->byday = null;
+                        $skipParts[] = 'byday';
+                    } else {
+                        throw new Tinebase_Exception_UnexpectedValue("$part is not a known rrule part");
+                    }
                 }
                 $this->$part = $value;
             }

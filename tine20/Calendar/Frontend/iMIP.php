@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -190,9 +190,23 @@ class Calendar_Frontend_iMIP
         $result &= $this->_assertOrganizer($_iMIP, TRUE, TRUE);
         
         $existingEvent = $_iMIP->getExistingEvent();
-        if ($existingEvent && $_iMIP->getEvent()->isObsoletedBy($existingEvent)) {
-            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
-            $result = FALSE;
+        if ($existingEvent) {
+            $iMIPEvent = $_iMIP->getEvent();
+            $isObsoleted = false;
+            
+            if (! $existingEvent->hasExternalOrganizer() && $iMIPEvent->isObsoletedBy($existingEvent)) {
+                $isObsoleted = true;
+            }
+            
+            else if ($iMIPEvent->external_seq < $existingEvent->external_seq) {
+                $isObsoleted = true;
+            }
+            
+            // allow if not rescheduled
+            if ($isObsoleted && $existingEvent->isRescheduled($iMIPEvent)) {
+                $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
+                $result = FALSE;
+            }
         }
         
         return $result;
@@ -252,17 +266,17 @@ class Calendar_Frontend_iMIP
     }
     
     /**
-    * returns and optionally asserts own attendee record
-    *
-    * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  bool                  $_assertExistence
-    * @param  bool                  $_assertOriginator
-    * @param  bool                  $_assertAccount
-    * @return Addressbook_Model_Contact
-    * @throws Calendar_Exception_iMIP
-    * 
-    * @todo this needs to be splitted into assertExternalOrganizer / assertInternalOrganizer
-    */
+     * 
+     *
+     * @param  Calendar_Model_iMIP   $_iMIP
+     * @param  bool                  $_assertExistence
+     * @param  bool                  $_assertOriginator
+     * @param  bool                  $_assertAccount
+     * @return Addressbook_Model_Contact
+     * @throws Calendar_Exception_iMIP
+     * 
+     * @todo this needs to be splitted into assertExternalOrganizer / assertInternalOrganizer
+     */
     protected function _assertOrganizer($_iMIP, $_assertExistence, $_assertOriginator, $_assertAccount = false)
     {
         $result = TRUE;
@@ -303,10 +317,6 @@ class Calendar_Frontend_iMIP
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  string                $_status
-     * @throws Tinebase_Exception_NotImplemented
-     * 
-     * @todo handle external organizers
-     * @todo create event in the organizers context
      */
     protected function _processRequest($_iMIP, $_status)
     {
@@ -322,6 +332,8 @@ class Calendar_Frontend_iMIP
             if (! $existingEvent) {
                 // organizer has an account but no event exists, it seems that event was created from a non-caldav client
                 // do not send notifications in this case + create event in context of organizer
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Organizer has an account but no event exists!');
                 return; // not clear how to create in the organizers context...
                 $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
                 $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->create($_iMIP->getEvent());
@@ -336,34 +348,39 @@ class Calendar_Frontend_iMIP
         
         // external organizer:
         else {
-            if ($ownAttender && $_status) {
-                $ownAttender->status = $_status;
-            }
-            
+            $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(false);
             if (! $existingEvent) {
                 $event = $_iMIP->getEvent();
                 if (! $event->container_id) {
                     $event->container_id = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::DEFAULTCALENDAR};
                 }
                 
-                $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+                $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
             } else {
-                $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
+                $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
             }
             
-            //  - send reply to organizer
+            Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
+            
+            $ownAttender = Calendar_Model_Attender::getOwnAttender($event->attendee);
+            
+            // NOTE: we do the status update in a separate call to trigger the right notifications
+            if ($ownAttender && $_status) {
+                $ownAttender->status = $_status;
+                $a = Calendar_Controller_Event::getInstance()->attenderStatusUpdate($event, $ownAttender, $ownAttender->status_authkey);
+            }
         }
     }
     
     /**
-    * reply precondition
-    *
-    * @TODO an internal reply should trigge a RECENT precondition
-    * @TODO distinguish RECENT and PROCESSED preconditions?
-    * 
-    * @param  Calendar_Model_iMIP   $_iMIP
-    * @return boolean
-    */
+     * reply precondition
+     *
+     * @TODO an internal reply should trigger a RECENT precondition
+     * @TODO distinguish RECENT and PROCESSED preconditions?
+     * 
+     * @param  Calendar_Model_iMIP   $_iMIP
+     * @return boolean
+     */
     protected function _checkReplyPreconditions($_iMIP)
     {
         $result = TRUE;

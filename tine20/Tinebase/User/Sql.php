@@ -601,7 +601,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Login of user ' . $_loginName . ' failed.');
         
         try {
-            $user = $this->getUserByLoginName($_loginName);
+            $user = $this->getUserByPropertyFromSqlBackend('accountLoginName', $_loginName);
         } catch (Tinebase_Exception_NotFound $tenf) {
             // nothing todo => is no existing user
             return;

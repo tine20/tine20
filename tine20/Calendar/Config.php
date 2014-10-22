@@ -86,6 +86,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const DISABLE_EXTERNAL_IMIP = 'disableExternalImip';
     
     /**
+     * SKIP_DOUBLE_EVENTS
+     *
+     * @var string
+     */
+    const SKIP_DOUBLE_EVENTS = 'skipdoubleevents';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -194,6 +201,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
             'default'               => false,
+        ),
+        self::SKIP_DOUBLE_EVENTS => array(
+                //_('(CalDAV) Skip double events from personal or shared calendar')
+                'label'                 => '(CalDAV) Skip double events from personal or shared calendar',
+                //_('(CalDAV) Skip double events from personal or shared calendar ("personal" > Skip events from personal calendar or "shared" > Skip events from shared calendar)')
+                'description'           => '(CalDAV) Skip double events from personal or shared calendar ("personal" > Skip events from personal calendar or "shared" > Skip events from shared calendar)',
+                'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+                'clientRegistryInclude' => FALSE,
+                'setByAdminModule'      => FALSE,
+                'setBySetupModule'      => FALSE,
+                'default'               => '',
         ),
     );
     

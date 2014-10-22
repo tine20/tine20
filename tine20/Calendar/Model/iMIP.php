@@ -196,6 +196,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     {
         if ($_refetch || ! $this->existing_event instanceof Calendar_Model_Event) {
             $this->existing_event = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($this->getEvent());
+            Calendar_Model_Attender::resolveAttendee($this->existing_event['attendee']);
         }
         
         return $this->existing_event;

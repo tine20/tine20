@@ -286,3 +286,22 @@ function formatMicrotimeDiff($timediff)
         return $ms.'ms';
     }
 }
+
+/**
+ * checks if an url exists by checking headers 
+ * -> inspired by http://php.net/manual/en/function.file-exists.php#75064
+ * 
+ * @param string $url
+ * @return boolean
+ */
+function urlExists($url)
+{
+    $file_headers = @get_headers($url);
+    if ($file_headers[0] == 'HTTP/1.1 404 Not Found') {
+        $exists = false;
+    } else {
+        $exists = true;
+    }
+    
+    return $exists;
+}

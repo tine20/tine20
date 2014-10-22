@@ -9,18 +9,17 @@ use Sabre\DAV;
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
  */
 
 /**
  * Test helper
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Group
  */
-class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
+class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Felamimail_Frontend_Json
@@ -944,7 +943,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     public function testForwardMessageWithAttachment()
     {
         $testFolder = $this->_getFolder($this->_testFolderName);
-        $message = fopen(dirname(__FILE__) . '/files/multipart_related.eml', 'r');
+        $message = fopen(dirname(__FILE__) . '/../files/multipart_related.eml', 'r');
         Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $message);
         
         $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag';
@@ -1118,7 +1117,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     public function testMessageWithInvalidICS()
     {
         $inbox = $this->_getFolder('INBOX');
-        $mailAsString = file_get_contents(dirname(__FILE__) . '/files/invalidimip.eml');
+        $mailAsString = file_get_contents(dirname(__FILE__) . '/../files/invalidimip.eml');
         Felamimail_Controller_Message::getInstance()->appendMessage($inbox, $mailAsString);
         
         $this->_foldersToClear = array('INBOX');
@@ -1341,7 +1340,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $path = '/webdav/Felamimail/shared/Vacation Templates';
         $node = $webdavRoot->getNodeForPath($path);
         $this->_pathsToDelete[] = $path . '/' . $this->_sieveVacationTemplateFile;
-        $node->createFile($this->_sieveVacationTemplateFile, fopen(dirname(__FILE__) . '/files/' . $this->_sieveVacationTemplateFile, 'r'));
+        $node->createFile($this->_sieveVacationTemplateFile, fopen(dirname(__FILE__) . '/../files/' . $this->_sieveVacationTemplateFile, 'r'));
     }
     
     /**

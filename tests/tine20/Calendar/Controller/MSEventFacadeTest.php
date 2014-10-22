@@ -96,7 +96,12 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $event = $this->getTestEvent();
         
         $persistentEvent = $this->_uit->create($event);
-        
+        Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($persistentEvent, 'agenda.txt', fopen('php://temp', 'rw'));
+        Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($persistentEvent->exdate[0], 'exception.txt', fopen('php://temp', 'rw'));
+
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($persistentEvent);
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($persistentEvent->exdate[0]);
+
         $this->_assertTestEvent($persistentEvent);
         
         return $persistentEvent;
@@ -104,12 +109,11 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
     
     public function testGet()
     {
-        $event = $this->getTestEvent();
+        $event = $this->testCreate();
+
+        $event = $this->_uit->get($event->getId());
         
-        $persistentEvent = $this->_uit->create($event);
-        $persistentEvent = $this->_uit->get($persistentEvent->getId());
-        
-        $this->_assertTestEvent($persistentEvent);
+        $this->_assertTestEvent($event);
     }
     
     public function testDelete()
@@ -127,7 +131,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
         )));
-        
+
         $this->assertEquals(1, $events->count());
         $this->_assertTestEvent($events->getFirstRecord());
     }
@@ -310,6 +314,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $updatedEvent = $this->_uit->update($event);
         $updatedAlarm = $updatedEvent->exdate[0]->alarms->getFirstRecord();
         
+        $this->assertNotNull($persistentAlarm);
         $diff = $persistentAlarm->diff($updatedAlarm);
         $this->assertTrue($diff->isEmpty(), 'no diff');
         $this->assertTrue(Calendar_Controller_Alarm::getAcknowledgeTime($updatedEvent->alarms->getFirstRecord()) instanceof Tinebase_DateTime, 'ack time missing');
@@ -480,7 +485,9 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertEquals(3, count($persistentEvent->alarms), 'base alarms not from perspective');
         $this->assertEquals(0, count($persistentEvent->alarms->filter('minutes_before', 15)), '15 min. before is not skipped');
         $this->assertEquals(0, count($persistentEvent->alarms->filter('minutes_before', 60)), '60 min. before is not for test CU');
-        
+        $this->assertEquals(1, count($persistentEvent->attachments), 'base attachment missing');
+        $this->assertEquals('agenda.txt', $persistentEvent->attachments[0]->name, 'base attachment wrong name');
+
         $persistException = $persistentEvent->exdate->filter('is_deleted', 0)->getFirstRecord();
         $this->assertEquals('2009-03-26 08:00:00', $persistException->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-03-26 06:00:00', $persistException->getOriginalDtStart()->format(Tinebase_Record_Abstract::ISO8601LONG));
@@ -489,7 +496,9 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertEquals(3, count($persistException->alarms), 'exception alarms not from perspective');
         $this->assertEquals(0, count($persistException->alarms->filter('minutes_before', 15)), '15 min. before is not skipped');
         $this->assertEquals(0, count($persistException->alarms->filter('minutes_before', 60)), '60 min. before is not for test CU');
-        
+        $this->assertEquals(1, count($persistException->attachments), 'exception attachment missing');
+        $this->assertEquals('exception.txt', $persistException->attachments[0]->name, 'exception attachment wrong name');
+
         $deletedInstance = $persistentEvent->exdate->filter('is_deleted', 1)->getFirstRecord();
         $this->assertEquals('2009-03-27 06:00:00', $deletedInstance->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
     }

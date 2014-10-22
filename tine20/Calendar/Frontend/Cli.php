@@ -29,18 +29,39 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @return void
      */
     protected $_help = array(
+        'updateCalDavData' => array(
+            'description'    => 'update calendar/events from a CalDav source using etags',
+            'params'         => array(
+                'url'        => 'CalDav source URL',
+                'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
+             )
+        ),
+        'importCalDavData' => array(
+            'description'    => 'import calendar/events from a CalDav source',
+            'params'         => array(
+                'url'        => 'CalDav source URL',
+                'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
+             )
+        ),
+        'importCalDavCalendars' => array(
+            'description'    => 'import calendars without events from a CalDav source',
+            'params'         => array(
+                'url'        => 'CalDav source URL',
+                'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
+             )
+        ),
         'importegw14' => array(
-            'description'   => 'imports calendars/events from egw 1.4',
-            'params'        => array(
-                'host'     => 'dbhost',
-                'username' => 'username',
-                'password' => 'password',
-                'dbname'   => 'dbname'
+            'description'    => 'imports calendars/events from egw 1.4',
+            'params'         => array(
+                'host'       => 'dbhost',
+                'username'   => 'username',
+                'password'   => 'password',
+                'dbname'     => 'dbname'
             )
         ),
         'exportICS' => array(  
-            'description' => "export calendar as ics", 
-            'params' => array('container_id') 
+            'description'    => "export calendar as ics", 
+            'params'         => array('container_id') 
         ),
     );
     
@@ -130,5 +151,110 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $be = new Calendar_Backend_Sql();
         $be->repairDanglingDisplaycontainerEvents();
+    }
+    
+    /**
+     * import calendars from a CalDav source
+     * 
+     * param Zend_Console_Getopt $_opts
+     */
+    public function importCalDavCalendars(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
+        
+        $this->_addOutputLogWriter(4);
+        
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->importAllCalendars();
+    }
+    
+    /**
+     * import calendar events from a CalDav source
+     * 
+     * param Zend_Console_Getopt $_opts
+     */
+    public function importCalDavData(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
+        
+        $this->_addOutputLogWriter(4);
+        
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->importAllCalendarDataForUsers();
+    }
+    
+    /**
+     * import calendars and calendar events from a CalDav source using multiple parallel processes
+     * 
+     * param Zend_Console_Getopt $_opts
+     */
+    public function importCalDavMultiProc(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'numProc'));
+        
+        $this->_addOutputLogWriter(4);
+        
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->runImportUpdateMultiproc('import');
+    }
+    
+    /**
+     * update calendar events from a CalDav source using multiple parallel processes
+     * 
+     * param Zend_Console_Getopt $_opts
+     */
+    public function updateCalDavMultiProc(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'numProc'));
+        
+        $this->_addOutputLogWriter(4);
+        
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->runImportUpdateMultiproc('update');
+    }
+    
+    /**
+     * import calendar events from a CalDav source for one user
+     * 
+     * param Zend_Console_Getopt $_opts
+     */
+    public function importCalDavDataForUser(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'line', 'run'));
+        
+        $this->_addOutputLogWriter(4);
+        
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->importAllCalendarData();
+    }
+    
+    /**
+     * update calendar/events from a CalDav source using etags for one user
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function updateCalDavDataForUser(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'line', 'run'));
+        
+        $this->_addOutputLogWriter(4);
+        
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->updateAllCalendarData();
+    }
+    
+    /**
+     * update calendar/events from a CalDav source using etags
+     * 
+     * param Zend_Console_Getopt $_opts
+     */
+    public function updateCalDavData(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
+        
+        $this->_addOutputLogWriter(4);
+        
+        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
+        $caldavCli->updateAllCalendarDataForUsers();
     }
 }

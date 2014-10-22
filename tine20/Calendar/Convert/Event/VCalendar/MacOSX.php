@@ -42,7 +42,7 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
         'recurid',
         'is_all_day_event',
         #'rrule_until',
-        'originator_tz'
+        'originator_tz',
     );
     
     /**
@@ -66,5 +66,61 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
         }
         
         return $newAttendee;
+    }
+
+    /**
+     * do version specific magic here
+     *
+     * @param \Sabre\VObject\Component\VCalendar $vcalendar
+     * @return \Sabre\VObject\Component\VCalendar | null
+     */
+    protected function _findMainEvent(\Sabre\VObject\Component\VCalendar $vcalendar)
+    {
+        $return = parent::_findMainEvent($vcalendar);
+
+        if (version_compare($this->_version, '10.8', '<')) {
+            // NOTE 10.7 sometimes writes access into calendar property
+            if (isset($vcalendar->{'X-CALENDARSERVER-ACCESS'})) {
+                foreach ($vcalendar->VEVENT as $vevent) {
+                    $vevent->{'X-CALENDARSERVER-ACCESS'} = $vcalendar->{'X-CALENDARSERVER-ACCESS'};
+                }
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * parse VEVENT part of VCALENDAR
+     *
+     * @param  \Sabre\VObject\Component\VEvent  $vevent  the VEVENT to parse
+     * @param  Calendar_Model_Event             $event   the Tine 2.0 event to update
+     * @param  array                            $options
+     */
+    protected function _convertVevent(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event, $options)
+    {
+        $return = parent::_convertVevent($vevent, $event, $options);
+
+        if (version_compare($this->_version, '10.8', '<')) {
+            // NOTE: 10.7 sometimes uses (internal?) int's
+            if (isset($vevent->{'X-CALENDARSERVER-ACCESS'}) && (int) (string) $vevent->{'X-CALENDARSERVER-ACCESS'} > 0) {
+                $event->class = (int) (string) $vevent->{'X-CALENDARSERVER-ACCESS'} == 1 ?
+                    Calendar_Model_Event::CLASS_PUBLIC :
+                    Calendar_Model_Event::CLASS_PRIVATE;
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * iCal supports manged attachments
+     *
+     * @param Calendar_Model_Event          $event
+     * @param Tinebase_Record_RecordSet     $attachments
+     */
+    protected function _manageAttachmentsFromClient($event, $attachments)
+    {
+        $event->attachments = $attachments;
     }
 }

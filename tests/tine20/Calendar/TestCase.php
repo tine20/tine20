@@ -31,11 +31,6 @@ abstract class Calendar_TestCase extends TestCase
     protected $_testCalendars;
     
     /**
-     * @var Tinebase_Model_FullUser
-     */
-    protected $_testUser;
-    
-    /**
      * @var Addressbook_Model_Contact
      */
     protected $_testUserContact;
@@ -76,8 +71,7 @@ abstract class Calendar_TestCase extends TestCase
             $this->_personasDefaultCals[$loginName] = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId);
         }
         
-        $this->_testUser = Tinebase_Core::getUser();
-        $this->_testUserContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_testUser->getId());
+        $this->_testUserContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_originalTestUser->getId());
         $this->_testCalendar = $this->_getTestContainer('Calendar');
         
         $this->_testCalendars = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
@@ -92,7 +86,6 @@ abstract class Calendar_TestCase extends TestCase
         parent::tearDown();
         
         Calendar_Controller_Event::getInstance()->sendNotifications(false);
-        
         
         if (! $this->_transactionId) {
             if ($this->_backend != NULL) {
@@ -111,12 +104,6 @@ abstract class Calendar_TestCase extends TestCase
                 Tinebase_Container::getInstance()->deleteContainer($cal, true);
             }
         }
-        
-        if ($this->_testUser->getId() !== Tinebase_Core::getUser()->getId()) {
-            // reset test user
-            Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
-        }
-        
     }
     
     /**

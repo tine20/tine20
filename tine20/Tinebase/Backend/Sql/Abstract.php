@@ -470,10 +470,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
     {
+        $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
+
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
         }
-        
+
         // legacy: $_cols param was $_onlyIds (boolean) ...
         if ($_cols === TRUE) {
             $_cols = self::IDCOL;
@@ -483,7 +485,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         // (1) get ids or id/value pair
         list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols, $_filter, $_pagination);
-        $select = $this->_getSelect($colsToFetch);
+        $select = $this->_getSelect($colsToFetch, $getDeleted);
         if ($_filter !== NULL) {
             $this->_addFilter($select, $_filter);
         }
@@ -506,7 +508,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             return new Tinebase_Record_RecordSet($this->_modelName);
         } else {
             // (2) get other columns and do joins
-            $select = $this->_getSelect($_cols);
+            $select = $this->_getSelect($_cols, $getDeleted);
             $this->_addWhereIdIn($select, $ids);
             $_pagination->appendSort($select);
             
@@ -536,6 +538,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
+        $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
+
         $defaultCountCol = $this->_defaultCountCol == '*' ?  '*' : $this->_db->quoteIdentifier($this->_defaultCountCol);
         
         $searchCountCols = array('count' => 'COUNT(' . $defaultCountCol . ')');
@@ -548,7 +552,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $subSelectColumns = array_merge($subSelectColumns, $this->_additionalSearchCountCols);
         }
         
-        $subSelect = $this->_getSelect($subSelectColumns);
+        $subSelect = $this->_getSelect($subSelectColumns, $getDeleted);
         $this->_addFilter($subSelect, $_filter);
         
         Tinebase_Backend_Sql_Abstract::traitGroup($subSelect);
@@ -865,7 +869,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . " Prepared data for INSERT: " . print_r($recordArray, true)
         );
-        
+
         $this->_db->insert($this->_tablePrefix . $this->_tableName, $recordArray);
         
         if (!$this->_hasHashId()) {
@@ -1457,5 +1461,76 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $select->reset(Zend_Db_Select::GROUP);
         
         $select->group($group);
+    }
+
+    /**
+     * sets etags, expects ids as keys and etags as value
+     *
+     * @param array $etags
+     * 
+     * @todo maybe we should find a better place for the etag functions as this is currently only used in Calendar + Tasks
+     */
+    public function setETags(array $etags)
+    {
+        foreach ($etags as $id => $etag) {
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id),
+            );
+            $this->_db->update($this->_tablePrefix . $this->_tableName, array('etag' => $etag), $where);
+        }
+    }
+    
+    /**
+     * checks if there is an event with this id and etag, or an event with the same id
+     *
+     * @param string $id
+     * @param string $etag
+     * @return boolean
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function checkETag($id, $etag)
+    {
+        $select = $this->_db->select();
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $this->_identifier);
+        $select->where($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id);
+        $select->orWhere($this->_db->quoteIdentifier('uid') . ' = ?', $id);
+    
+        $stmt = $select->query();
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+    
+        if ($queryResult === false) {
+            throw new Tinebase_Exception_NotFound('no record with id ' . $id .' found');
+        }
+    
+        $select->where($this->_db->quoteIdentifier('etag') . ' = ?', $etag);
+        $stmt = $select->query();
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+    
+        return ($queryResult !== false);
+    }
+    
+    /**
+     * return etag set for given container
+     * 
+     * @param string $containerId
+     * @return multitype:Ambigous <mixed, Ambigous <string, boolean, mixed>>
+     */
+    public function getEtagsForContainerId($containerId)
+    {
+        $select = $this->_db->select();
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array($this->_identifier, 'etag', 'uid'));
+        $select->where($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId);
+        $select->where($this->_db->quoteIdentifier('is_deleted') . ' = ?', 0);
+    
+        $stmt = $select->query();
+        $queryResult = $stmt->fetchAll();
+    
+        $result = array();
+        foreach ($queryResult as $row) {
+            $result[$row['id']] = $row;
+        }
+        return $result;
     }
 }

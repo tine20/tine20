@@ -496,7 +496,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getContainerByName($appName, $containerName, $type, $ownerId = NULL)
     {
-        if ($type !== Tinebase_Model_Container::TYPE_PERSONAL && $type !== Tinebase_Model_Container::TYPE_SHARED) {
+        if (! in_array($type, array(Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Model_Container::TYPE_SHARED))) {
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $type supplied.");
         }
         
@@ -586,7 +586,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        // if no containers where found,  maybe something went wrong when creating the initial folder
+        // if no containers where found, maybe something went wrong when creating the initial folder
         // let's check if the controller of the application has a function to create the needed folders
         if (empty($containersData) and $accountId === $ownerId) {
             $application = Tinebase_Core::getApplicationInstance($application->name);
@@ -686,7 +686,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        $account = ($accountId !== NULL) ? Tinebase_User::getInstance()->getUserById($accountId) : Tinebase_Core::getUser();
+        $account = ($accountId !== NULL) ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId) : Tinebase_Core::getUser();
         $result = $this->getPersonalContainer($account, $recordClass, $account, Tinebase_Model_Grants::GRANT_ADD)->getFirstRecord();
         
         if ($result === NULL) {
@@ -1361,7 +1361,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             return FALSE;
         }
         
-        $grants = (! $_container->account_grants) ? $this->getGrantsOfContainer($_container) : $_container->account_grants;
+        $grants = (! $_container->account_grants) ? $this->getGrantsOfContainer($_container, true) : $_container->account_grants;
         
         if (count($grants) === 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
@@ -1376,7 +1376,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Container ' . $_container->name . ' has no owner.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Container ' . $_container->name . ' has no owner.');
+        
         return FALSE;
     }
     

@@ -212,7 +212,19 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         return $rolesRecord? $rolesRecord->value : $this->role;
     }
-    
+
+    /**
+     * returns if given attendee is the same as this attendee
+     *
+     * @param  Calendar_Model_Attender $compareTo
+     * @return bool
+     */
+    public function isSame($compareTo)
+    {
+        $compareToSet = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($compareTo));
+        return !!self::getAttendee($compareToSet, $this);
+    }
+
     /**
      * sets the record related properties from user generated input.
      * 
@@ -424,7 +436,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     */
     public static function resolveEmailToContact($_attenderData, $_implicitAddMissingContacts = TRUE)
     {
-        if (! isset($_attenderData['email'])) {
+        if (! isset($_attenderData['email']) || empty($_attenderData['email'])) {
             throw new Tinebase_Exception_InvalidArgument('email address is needed to resolve contact');
         }
         
@@ -442,7 +454,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         )));
         
         if (count($contacts) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " found # of contacts " . count($contacts));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . " Found # of contacts " . count($contacts));
             $result = $contacts->getFirstRecord();
         
         } else if ($_implicitAddMissingContacts === TRUE) {
@@ -455,10 +468,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $contactData = array(
                 'note'        => $i18nNote,
                 'email'       => $email,
-                'n_family'    => (isset($_attenderData['lastName'])) ? $_attenderData['lastName'] : $email,
+                'n_family'    => (isset($_attenderData['lastName']) && ! empty($_attenderData['lastName'])) ? $_attenderData['lastName'] : $email,
                 'n_given'     => (isset($_attenderData['firstName'])) ? $_attenderData['firstName'] : '',
             );
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add new contact " . print_r($contactData, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . " Ádd new contact " . print_r($contactData, true));
             $contact = new Addressbook_Model_Contact($contactData);
             $result = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
         } else {
@@ -487,9 +501,16 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             }
             
             if (strlen($result) > 64) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                    . ' Email address could not be sanitized: ' . $email . '(length: ' . strlen($email) . ')');
-                throw new Tinebase_Exception_Record_Validation('email string too long');
+                // try to find first valid email
+                if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $result, $matches)) {
+                    $result = $matches[0];
+                }
+                
+                if (strlen($result) > 64) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                        . ' Email address could not be sanitized: ' . $email . '(length: ' . strlen($email) . ')');
+                    throw new Tinebase_Exception_Record_Validation('email string too long');
+                }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                     . ' Email address has been sanitized: ' . $email . ' -> ' . $result);

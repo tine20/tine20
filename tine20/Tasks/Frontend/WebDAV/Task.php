@@ -70,7 +70,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
      * @param  Tinebase_Model_Container  $container
      * @param  stream|string             $vobjectData
      */
-    public static function create(Tinebase_Model_Container $container, $name, $vobjectData)
+    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = 'unused')
     {
         if (is_resource($vobjectData)) {
             $vobjectData = stream_get_contents($vobjectData);
@@ -81,42 +81,25 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         #Sabre_CalDAV_ICalendarUtil::validateICalendarObject($vobjectData, array('VTODO', 'VFREEBUSY'));
         
         list($backend, $version) = Tasks_Convert_Task_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
-        
-        $task = Tasks_Convert_Task_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
+        try {
+            $task = Tasks_Convert_Task_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
+            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+        }
+
         $task->container_id = $container->getId();
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
         $task->setId($id);
         
         self::enforceEventParameters($task);
-        
-        #if ($task->exdate instanceof Tinebase_Record_RecordSet) {
-        #    foreach($task->exdate as $exdate) {
-        #        if ($exdate->is_deleted == false && $exdate->organizer != $task->organizer) {
-        #            throw new Sabre\DAV\Exception\PreconditionFailed('Organizer for exdate must be the same like base task');
-        #        }
-        #    }
-        #}
-        
+
         // check if there is already an existing task with this ID
         // this can happen when the invitation email is faster then the caldav update or
         // or when an task gets moved to another container
-        
         $filter = new Tasks_Model_TaskFilter(array(
-            #array(
-            #    'field' => 'containerType', 
-            #    'operator' => 'equals', 
-            #    'value' => 'all'
-            #),
-            #array(
-            #    'field' => 'completed', 
-            #    'operator' => 'equals', 
-            #    'value' => $task->completed
-            #),
-            array(
-                'field' => 'due', 
-                'operator' => 'equals', 
-                'value' => $task->due
-            ),
+            array('field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET),
             array('condition' => 'OR', 'filters' => array(
                 array(
                     'field'     => 'id',
@@ -133,10 +116,34 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         $existingEvent = Tasks_Controller_Task::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
         
         if ($existingEvent === null) {
-            $task = Tasks_Controller_Task::getInstance()->create($task);
-            
+            try {
+                $task = Tasks_Controller_Task::getInstance()->create($task);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($task->toArray(), true));
+                throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+            }
+
             $vevent = new self($container, $task);
         } else {
+            if ($existingEvent->is_deleted) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' recovering already deleted task');
+
+                // @TODO have a undelete/recover workflow beginning in controller
+                $existingEvent->is_deleted = 0;
+                $existingEvent->deleted_by = NULL;
+                $existingEvent->deleted_time = NULL;
+
+                $be = new Tasks_Backend_Sql();
+                $be->updateMultiple($existingEvent->getId(), array(
+                    'is_deleted'    => 0,
+                    'deleted_by'    => NULL,
+                    'deleted_time'  => NULL,
+                ));
+            }
+
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing task with id: ' . $existingEvent->getId());
             $vevent = new self($container, $existingEvent);
@@ -165,7 +172,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
     {
         // when a move occurs, thunderbird first sends to delete command and immediately a put command
         // we must delay the delete command, otherwise the put command fails
-        sleep(1);
+        sleep(5);
         
         // (re) fetch task as tree move does not refresh src node before delete
         $task = Tasks_Controller_Task::getInstance()->get($this->_task);
@@ -431,6 +438,15 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
             $this->_task = Tasks_Controller_Task::getInstance()->update($task);
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
             throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
+        }  catch (Tinebase_Exception_AccessDenied $tead) {
+            throw new Sabre\DAV\Exception\Forbidden('forbidden update');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new Sabre\DAV\Exception\PreconditionFailed('not found');
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $e);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $cardData);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($task->toArray(), true));
+            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
         }
         
         return $this->getETag();

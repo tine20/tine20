@@ -67,6 +67,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+        Calendar_Config::getInstance()->set(Calendar_Config::SKIP_DOUBLE_EVENTS, '');
     }
     
     /**
@@ -81,9 +82,6 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['initialContainer']->name, $result);
     }
     
-    /**
-     * assert that name of folder is container name
-     */
     public function testGetOwner()
     {
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
@@ -93,9 +91,6 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('principals/users/' . Tinebase_Core::getUser()->contact_id, $result);
     }
     
-    /**
-     * assert that name of folder is container name
-     */
     public function testGetACL()
     {
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
@@ -107,9 +102,6 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(6, count($result));
     }
     
-    /**
-     * assert that name of folder is container name
-     */
     public function testGetIdAsName()
     {
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer'], true);
@@ -194,7 +186,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      * test getChildren
      * 
      */
-    public function testGetChildren()
+    public function testGetChildren($skipAssertions = true)
     {
         $event = $this->testCreateFile()->getRecord();
         
@@ -207,8 +199,23 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $children = $container->getChildren();
         
-        $this->assertEquals(1, count($children));
-        $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV_Event);
+        if (! $skipAssertions) {
+            $this->assertEquals(1, count($children));
+            $this->assertTrue($children[$event->getId()] instanceof Calendar_Frontend_WebDAV_Event);
+        }
+        
+        return $children;
+    }
+    
+    public function testGetChildrenSkipDoubleEvents()
+    {
+        Calendar_Config::getInstance()->set(Calendar_Config::SKIP_DOUBLE_EVENTS, 'personal');
+        $children = $this->testGetChildren(true);
+        $this->assertEquals(0, count($children));
+        
+        Calendar_Config::getInstance()->set(Calendar_Config::SKIP_DOUBLE_EVENTS, 'shared');
+        $children = $this->testGetChildren(true);
+        $this->assertEquals(2, count($children));
     }
     
     /**
@@ -282,6 +289,58 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test calendarQuery with start and end time set
+     * 
+     * @param boolean $timeRangeEndSet
+     * @param boolean $removeOwnAttender
+     */
+    public function testCalendarQueryPropertyFilter()
+    {
+        $event1 = $this->testCreateFile()->getRecord();
+        $event2 = $this->testCreateFile()->getRecord();
+        
+        // reschedule to match period filter
+        $event1->dtstart = Tinebase_DateTime::now();
+        $event1->dtend   = Tinebase_DateTime::now()->addMinute(30);
+        Calendar_Controller_MSEventFacade::getInstance()->update($event1);
+        
+        $event2->dtstart = Tinebase_DateTime::now();
+        $event2->dtend   = Tinebase_DateTime::now()->addMinute(30);
+        Calendar_Controller_MSEventFacade::getInstance()->update($event2);
+        
+        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        $urls = $container->calendarQuery(array(
+            'name'         => 'VCALENDAR',
+            'comp-filters' => array(
+                array(
+                    'name'           => 'VEVENT',
+                    'prop-filters'   => array(
+                        array(
+                            'name' => 'UID',
+                            'text-match' => array(
+                                'value' => $event1->getId()
+                            )
+                        ),
+                        array(
+                            'name' => 'UID',
+                            'text-match' => array(
+                                'value' => $event2->getId()
+                            )
+                        )
+                    )
+                ),
+            ),
+            'prop-filters'   => array(),
+            'is-not-defined' => false,
+            'time-range'     => null
+        ));
+        
+        $this->assertContains($event1->getId(), $urls);
+        $this->assertContains($event2->getId(), $urls);
+        $this->assertEquals(2, count($urls));
+    }
+    /**
      * test Tinebase_WebDav_Container_Abstract::getCalendarVTimezone
      */
     public function testGetCalendarVTimezone()
@@ -291,6 +350,35 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $vTimezone = Tinebase_WebDav_Container_Abstract::getCalendarVTimezone(Tinebase_Application::getInstance()->getApplicationByName('Calendar'));
         $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar', $vTimezone);
+    }
+    
+    /**
+     * test Calendar_Frontend_WebDAV_Container::getShares
+     */
+    public function testGetShares()
+    {
+        $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
+        
+        $shares = $container->getShares();
+        
+        $this->assertEquals(3, count($shares));
+    }
+    
+    /**
+     * test Calendar_Frontend_WebDAV_Container::getShares for container user has no admin grant for
+     */
+    public function testGetSharesWithoutRights()
+    {
+        $jmcblack = array_value('jmcblack', Zend_Registry::get('personas'));
+        $jmcblacksCalId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $jmcblack->getId());
+        $jmcblacksCal = Tinebase_Container::getInstance()->get($jmcblacksCalId);
+        
+        $container = new Calendar_Frontend_WebDAV_Container($jmcblacksCal);
+    
+        $shares = $container->getShares();
+    
+        $this->assertEquals(1, count($shares));
+        $this->assertTrue((bool)$shares[0]['readOnly']);
     }
     
     /**

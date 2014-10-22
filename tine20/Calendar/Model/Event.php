@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -31,6 +31,7 @@
  * @property string originator_tz
  * @property string seq
  * @property string uid
+ * @property string etag
  * @property int container_id
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
@@ -83,6 +84,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'deleted_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'seq'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int'  ),
         // calendar only fields
+        'external_seq'         => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int'  ), // external seq for caldav / imip update handling
         'dtend'                => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'transp'               => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -105,6 +107,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'summary'              => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'url'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'uid'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'etag'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         // ical common fields with multiple appearance
         //'attach'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'attendee'              => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // RecordSet of Calendar_Model_Attender
@@ -261,34 +264,51 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         return $diff;
     }
     /**
-     * add current user to attendee if he's organizer
+     * add given attendee if not present under given conditions
      * 
-     * @param bool $ifOrganizer      only add current user if he's organizer
-     * @param bool $ifNoOtherAttendee  only add current user if no other attendee are present
+     * @param Calendar_Model_Attender  $attendee
+     * @param bool                     $ifOrganizer        only add attendee if he's organizer
+     * @param bool                     $ifNoOtherAttendee  only add attendee if no other attendee are present
+     * @param bool                     $personalOnly       only for personal containers
+     * @return Calendar_Model_Attender asserted attendee
      */
-    public function assertCurrentUserAsAttendee($ifOrganizer = TRUE, $ifNoOtherAttendee = FALSE)
+    public function assertAttendee($attendee, $ifOrganizer = true, $ifNoOtherAttendee = false, $personalOnly = false)
     {
+        if ($personalOnly) {
+            try {
+                $container = Tinebase_Container::getInstance()->getContainerById($this->container_id);
+                if ($container->type != Tinebase_Model_Container::TYPE_PERSONAL) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . " not adding attendee as container is not personal.");
+                    return;
+                }
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " cannot get container: $e");
+            }
+        }
+        
+        
         if ($ifNoOtherAttendee && $this->attendee instanceof Tinebase_Record_RecordSet && $this->attendee->count() > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . " not adding current user as attendee as other attendee are present.");
+                    __METHOD__ . '::' . __LINE__ . " not adding attendee as other attendee are present.");
             return;
         }
         
-        $ownAttender = Calendar_Model_Attender::getOwnAttender($this->attendee);
+        $assertionAttendee = Calendar_Model_Attender::getAttendee($this->attendee, $attendee);
         
-        if (! $ownAttender) {
-            if ($ifOrganizer && $this->organizer && $this->organizer != Tinebase_Core::getUser()->contact_id) {
+        if (! $assertionAttendee) {
+            if ($ifOrganizer && ! $this->isOrganizer($attendee)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . " not adding current user as attendee as current user is not organizer.");
+                    __METHOD__ . '::' . __LINE__ . " not adding attendee as he is not organizer.");
             }
             
             else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . " adding current user as attendee.");
+                    __METHOD__ . '::' . __LINE__ . " adding attendee.");
                 
-                $newAttender = new Calendar_Model_Attender(array(
-                    'user_id'   => Tinebase_Core::getUser()->contact_id,
-                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                $assertionAttendee = new Calendar_Model_Attender(array(
+                    'user_id'   => $attendee->user_id,
+                    'user_type' => $attendee->user_type,
                     'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
                     'role'      => Calendar_Model_Attender::ROLE_REQUIRED
                 ));
@@ -296,9 +316,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 if (! $this->attendee instanceof Tinebase_Record_RecordSet) {
                     $this->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
                 }
-                $this->attendee->addRecord($newAttender);
+                $this->attendee->addRecord($assertionAttendee);
             }
         }
+        
+        return $assertionAttendee;
     }
     
     /**
@@ -490,7 +512,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             }
         }
         
-        if ($this->rrule_until && $this->rrule_until < $this->dtstart) {
+        if ($this->rrule_until && $this->rrule_until->getTimeStamp() - $this->dtstart->getTimeStamp() < -1) {
             throw new Tinebase_Exception_Record_Validation('rrule until must not be before dtstart');
         }
     }
@@ -648,5 +670,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         }
         
         return $organizerContactId == ($this->organizer instanceof Tinebase_Record_Abstract ? $this->organizer->getId() : $this->organizer);
+    }
+    
+    /**
+     * returns true if organizer is external
+     * 
+     * @return boolean
+     */
+    public function hasExternalOrganizer()
+    {
+        $organizer = $this->resolveOrganizer();
+        
+        return $organizer instanceof Addressbook_Model_Contact && ! $organizer->account_id;
     }
 }

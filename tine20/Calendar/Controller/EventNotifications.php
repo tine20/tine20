@@ -282,13 +282,19 @@
             
             // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
             // NOTE prefUser is organzier for external notifications
-            if (($attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions) || ($sendLevel < $_notificationLevel && ($attendeeAccountId != $organizerAccountId || $sendLevel == self::NOTIFICATION_LEVEL_NONE))) {
+            if (($attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions) 
+                || ($sendLevel < $_notificationLevel && (
+                        ((is_object($organizer) && method_exists($attendee, 'getPreferedEmailAddress') && $attendee->getPreferedEmailAddress() != $organizer->getPreferedEmailAddress())
+                        || (is_object($organizer) && !method_exists($attendee, 'getPreferedEmailAddress') && $attendee->email != $organizer->getPreferedEmailAddress()))
+                        || $sendLevel == self::NOTIFICATION_LEVEL_NONE)
+                   )
+                ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " Preferred notification level not reached -> skipping notification for {$_attender->getEmail()}");
                 return;
             }
             
-            $method = NULL;
+            $method = NULL; // NOTE $method gets set in _getSubject as referenced param
             $messageSubject = $this->_getSubject($_event, $_notificationLevel, $_action, $_updates, $timezone, $locale, $translate, $method);
             
             // we don't send iMIP parts to external attendee if config is active
@@ -418,42 +424,19 @@
      * get notification attachments
      * 
      * @param string $method
-     * @param Calendar_Model_Event $_event
+     * @param Calendar_Model_Event $event
      * @param string $_action
-     * @param Tinebase_Model_FullAccount $_updater
+     * @param Tinebase_Model_FullAccount $updater
      * @param Zend_Mime_Part $calendarPart
      * @return array
      */
-    protected function _getAttachments($method, $_event, $_action, $_updater, &$calendarPart)
+    protected function _getAttachments($method, $event, $_action, $updater, &$calendarPart)
     {
         if ($method === NULL) {
             return array();
         }
         
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
-        $converter->setMethod($method);
-        $vcalendar = $converter->fromTine20Model($_event);
-
-        // in Tine 2.0 non organizers might be given the grant to update events
-        // @see rfc6047 section 2.2.1 & rfc5545 section 3.2.18
-        if ($method != Calendar_Model_iMIP::METHOD_REPLY && $_event->organizer !== $_updater->contact_id) {
-            foreach ($vcalendar->children() as $component) {
-                if ($component->name == 'VEVENT') {
-                    if (isset($component->{'ORGANIZER'})) {
-                        $component->{'ORGANIZER'}->add('SENT-BY', 'mailto:' . $_updater->accountEmailAddress);
-                    }
-                }
-            }
-        }
-        
-        // @TODO in Tine 2.0 status updater might not be updater
-        if ($method == Calendar_Model_iMIP::METHOD_REPLY) {
-            foreach ($vcalendar->children() as $component) {
-                if ($component->name == 'VEVENT') {
-                    $component->{'REQUEST-STATUS'} = '2.0;Success';
-                }
-            }
-        }
+        $vcalendar = $this->_createVCalendar($event, $method, $updater);
         
         $calendarPart           = new Zend_Mime_Part($vcalendar->serialize());
         $calendarPart->charset  = 'UTF-8';
@@ -470,11 +453,43 @@
         
         // add other attachments (only on invitation)
         if ($_action == 'created') {
-            $eventAttachments = $this->_getEventAttachments($_event);
+            $eventAttachments = $this->_getEventAttachments($event);
             $attachments = array_merge($attachments, $eventAttachments);
         }
         
         return $attachments;
+    }
+    
+    /**
+     * create iMIP VCALENDAR
+     * 
+     * @param Calendar_Model_Event $event
+     * @param string $method
+     * @param Tinebase_Model_FullAccount $updater
+     * @return Sabre\VObject\Component
+     */
+    protected function _createVCalendar($event, $method, $updater)
+    {
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $converter->setMethod($method);
+        $vcalendar = $converter->fromTine20Model($event);
+        
+        foreach ($vcalendar->children() as $component) {
+            if ($component->name == 'VEVENT') {
+                if ($method != Calendar_Model_iMIP::METHOD_REPLY && $event->organizer !== $updater->contact_id) {
+                    if (isset($component->{'ORGANIZER'})) {
+                        // in Tine 2.0 non organizers might be given the grant to update events
+                        // @see rfc6047 section 2.2.1 & rfc5545 section 3.2.18
+                        $component->{'ORGANIZER'}->add('SENT-BY', 'mailto:' . $updater->accountEmailAddress);
+                    }
+                } else if ($method == Calendar_Model_iMIP::METHOD_REPLY) {
+                    // TODO in Tine 2.0 status updater might not be updater
+                    $component->{'REQUEST-STATUS'} = '2.0;Success';
+                }
+            }
+        }
+        
+        return $vcalendar;
     }
     
     /**

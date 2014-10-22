@@ -117,8 +117,13 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $filter = new Tinebase_Model_Filter_Text($_property, 'equals', $_value);
         $filters->addFilter($filter);
-        
-        $resultSet = $this->search($filters, NULL, FALSE, $_getDeleted);
+
+        if ($_getDeleted) {
+            $deletedFilter = new Tinebase_Model_Filter_Bool('is_deleted', 'equals', Tinebase_Model_Filter_Bool::VALUE_NOTSET);
+            $filters->addFilter($deletedFilter);
+        }
+
+        $resultSet = $this->search($filters, NULL, FALSE);
         
         switch (count($resultSet)) {
             case 0: 
@@ -147,30 +152,31 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter
      * @param  Tinebase_Model_Pagination            $_pagination
      * @param  boolean                              $_onlyIds
-     * @param  bool   $_getDeleted
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE, $_getDeleted = FALSE)    
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Searching events ...');
         
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination();
         }
-        
-        $select = parent::_getSelect('*', $_getDeleted);
+
+        $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
+        $select = parent::_getSelect('*', $getDeleted);
         
         $select->joinLeft(
             /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'),
             /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
             /* select */ array('exdate' => $this->_dbCommand->getAggregate('exdate.exdate')));
         
+        // NOTE: we join here as attendee and role filters need it
         $select->joinLeft(
             /* table  */ array('attendee' => $this->_tablePrefix . 'cal_attendee'),
             /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.id'),
             /* select */ array());
         
-        if (! $_getDeleted) {
+        if (! $getDeleted) {
             $select->joinLeft(
                 /* table  */ array('dispcontainer' => $this->_tablePrefix . 'container'), 
                 /* on     */ $this->_db->quoteIdentifier('dispcontainer.id') . ' = ' . $this->_db->quoteIdentifier('attendee.displaycontainer_id'),
@@ -185,8 +191,20 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $_filter->removeFilter('grants');
         }
         
-        $this->_addFilter($select, $_filter);
-        $_pagination->appendPaginationSql($select);
+        // clonde the filter, as the filter is also used in the json frontend
+        // and the calendarfilter is used in the UI to
+        $clonedFilters = clone $_filter;
+        
+        $calendarFilter = null;
+        foreach ($clonedFilters as $filter) {
+            if ($filter instanceof Calendar_Model_CalendarFilter) {
+                $calendarFilter = $filter;
+                $clonedFilters->removeFilter($filter);
+                break;
+            }
+        }
+        
+        $this->_addFilter($select, $clonedFilters);
         
         $select->group($this->_tableName . '.' . 'id');
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
@@ -199,11 +217,23 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $this->_removeNonMatchingBaseEvents($select, $period);
         }
         
+        if ($calendarFilter) {
+            $select1 = clone $select;
+            $select2 = clone $select;
+            
+            $calendarFilter->appendFilterSql1($select1, $this);
+            $calendarFilter->appendFilterSql2($select2, $this);
+            
+            $select = $this->getAdapter()->select()->union(array(
+                $select1,
+                $select2
+            ));
+        }
+        
+        $_pagination->appendPaginationSql($select);
+        
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                . ' Event base rows fetched: ' . count($rows));
         
         $result = $this->_rawDataToRecordSet($rows);
         

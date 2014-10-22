@@ -71,7 +71,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @var boolean
      */
     protected $_resolveCustomFields = TRUE;
-    
+
+    /**
+     * @var Calendar_Model_Attender
+     */
+    protected $_calendarUser = NULL;
+
     /**
      * @var Calendar_Controller_Event
      */
@@ -87,6 +92,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->_applicationName = 'Calendar';
         $this->_modelName       = 'Calendar_Model_Event';
         $this->_backend         = new Calendar_Backend_Sql();
+
+        // set default CU
+        $this->setCalendarUser(new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => Calendar_Controller_MSEventFacade::getCurrentUserContactId()
+        )));
     }
 
     /**
@@ -109,7 +120,34 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         return self::$_instance;
     }
-    
+
+    /**
+     * sets current calendar user
+     *
+     * @param Calendar_Model_Attender $_calUser
+     * @return Calendar_Model_Attender oldUser
+     */
+    public function setCalendarUser(Calendar_Model_Attender $_calUser)
+    {
+        if (! in_array($_calUser->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+            throw new Tinebase_Exception_UnexpectedValue('Calendar user must be a contact');
+        }
+        $oldUser = $this->_calendarUser;
+        $this->_calendarUser = $_calUser;
+
+        return $oldUser;
+    }
+
+    /**
+     * get current calendar user
+     *
+     * @return Calendar_Model_Attender
+     */
+    public function getCalendarUser()
+    {
+        return $this->_calendarUser;
+    }
+
     /**
      * checks if all attendee of given event are not busy for given event
      * 
@@ -465,7 +503,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $sendNotifications = $this->sendNotifications(FALSE);
             
             $event = $this->get($_record->getId());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Going to update the following event. rawdata: ' . print_r($event->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    .' Going to update the following event. rawdata: ' . print_r($event->toArray(), true));
+            
             //NOTE we check via get(full rights) here whereas _updateACLCheck later checks limited rights from search
             if ($this->_doContainerACLChecks === FALSE || $event->hasGrant(Tinebase_Model_Grants::GRANT_EDIT)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id} (range: {$range})");
@@ -1146,7 +1186,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
         )), NULL, TRUE);
         
-        if (count($possibleBaseEventIds) > 0) {
+        if (count($possibleBaseEventIds) > 1) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
                 ' Got multiple possible base events: ' . print_r($possibleBaseEventIds, true));
         }
@@ -1208,22 +1248,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         if ($_fakeDeletedInstances) {
             $baseEvent = $this->getRecurBaseEvent($_event);
-            $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
-
-            // compute remaining exdates
-            $deletedInstanceDtStarts = array_diff(array_unique((array) $baseEvent->exdate), $exceptions->getOriginalDtStart());
-            foreach((array) $deletedInstanceDtStarts as $deletedInstanceDtStart) {
-                $fakeEvent = clone $baseEvent;
-                $fakeEvent->setId(NULL);
-                
-                $fakeEvent->dtstart = clone $deletedInstanceDtStart;
-                $fakeEvent->dtend = clone $deletedInstanceDtStart;
-                $fakeEvent->dtend->add($eventLength);
-                $fakeEvent->is_deleted = TRUE;
-                $fakeEvent->setRecurId();
-                
-                $exceptions->addRecord($fakeEvent);
-            }
+            $this->fakeDeletedExceptions($baseEvent, $exceptions);
         }
         
         $exceptions->exdate = NULL;
@@ -1232,7 +1257,34 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         return $exceptions;
     }
-    
+
+    /**
+     * add exceptions events for deleted instances
+     *
+     * @param Calendar_Model_Event $baseEvent
+     * @param Tinebase_Record_RecordSet $exceptions
+     */
+    public function fakeDeletedExceptions($baseEvent, $exceptions)
+    {
+        $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
+
+        // compute remaining exdates
+        $deletedInstanceDtStarts = array_diff(array_unique((array) $baseEvent->exdate), $exceptions->getOriginalDtStart());
+        foreach((array) $deletedInstanceDtStarts as $deletedInstanceDtStart) {
+            $fakeEvent = clone $baseEvent;
+            $fakeEvent->setId(NULL);
+
+            $fakeEvent->dtstart = clone $deletedInstanceDtStart;
+            $fakeEvent->dtend = clone $deletedInstanceDtStart;
+            $fakeEvent->dtend->add($eventLength);
+            $fakeEvent->is_deleted = TRUE;
+            $fakeEvent->setRecurId();
+            $fakeEvent->rrule = null;
+
+            $exceptions->addRecord($fakeEvent);
+        }
+    }
+
    /**
     * adopt alarm time to next occurrence for recurring events
     *
@@ -1408,10 +1460,34 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
         $_record->transp = $_record->transp ? $_record->transp : Calendar_Model_Event::TRANSP_OPAQUE;
         
-        // external organizer (iTIP)
-        if (! $_record->resolveOrganizer()->account_id && count($_record->attendee) > 1) {
-            $ownAttendee = Calendar_Model_Attender::getOwnAttender($_record->attendee);
-            $_record->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $ownAttendee ? array($ownAttendee) : array());
+        if ($_record->hasExternalOrganizer()) {
+            // assert calendarUser as attendee. This is important to keep the event in the loop via its displaycontianer(s)
+            try {
+                $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
+                $owner = $container->getOwner();
+                $calendarUserId = Addressbook_Controller_Contact::getInstance()->getContactByUserId($owner, true)->getId();
+            } catch (Exception $e) {
+                $container = NULL;
+                $calendarUserId = Tinebase_Core::getUser()->contact_id;
+            }
+            
+            $attendee = $_record->assertAttendee(new Calendar_Model_Attender(array(
+                'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'      => $calendarUserId
+            )), false, false, true);
+            
+            if ($attendee && $container instanceof Tinebase_Model_Container) {
+                $attendee->displaycontainer_id = $container->getId();
+            }
+            
+            if (! $container instanceof Tinebase_Model_Container || $container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
+                // move into spechial (external users) container
+                $container = Calendar_Controller::getInstance()->getInvitationContainer($_record->resolveOrganizer());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Setting container_id to ' . $container->getId() . ' for external organizer ' . $_record->organizer->email);
+                $_record->container_id = $container->getId();
+            }
+            
         }
         
         if ($_record->is_all_day_event) {
@@ -1517,10 +1593,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // admin grant includes all others (only if class is PUBLIC)
             ||  (! empty($this->class) && $this->class === Calendar_Model_Event::CLASS_PUBLIC 
                 && $_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))
+            // external invitations are in a spechial invitaion calendar. only attendee can see it via displaycal
+            ||  $_record->hasExternalOrganizer()
         ) {
-            return TRUE;
+            return true;
         }
-
+        
         switch ($_action) {
             case 'get':
                 // NOTE: free/busy is not a read grant!
@@ -1555,7 +1633,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if ($_throw) {
                 throw new Tinebase_Exception_AccessDenied($_errorMessage);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No permissions to ' . $_action . ' in container ' . $_record->container_id);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' No permissions to ' . $_action . ' in container ' . $_record->container_id);
             }
         }
         
@@ -1862,14 +1941,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $userAccountId = $attender->getUserAccountId();
         
-        // reset status if not a contact or my account
-        if (! $preserveStatus 
-            && ($attender->user_type == Calendar_Model_Attender::USERTYPE_GROUP 
-                || $userAccountId && $userAccountId != Tinebase_Core::getUser()->getId()
-            )) {
-            $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
-        }
-        
         // generate auth key
         if (! $attender->status_authkey) {
             $attender->status_authkey = Tinebase_Record_Abstract::generateUID();
@@ -1887,20 +1958,21 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $displayCalId = self::getDefaultDisplayContainerId($userAccountId);
                 $attender->displaycontainer_id = $displayCalId;
             }
-        }
-        
-        if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+
+        } else if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
             $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
             $attender->displaycontainer_id = $resource->container_id;
-            
+        }
+        
+        if ($attender->displaycontainer_id) {
             // check if user is allowed to set status
-            if (! Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
+            if (! $preserveStatus && ! Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
                 $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
             }
         }
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " New attender: " . print_r($attender->toArray(), TRUE));
-        
+
         Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($attender, 'create');
         $this->_backend->createAttendee($attender);
         $this->_increaseDisplayContainerContentSequence($attender, $event, Tinebase_Model_ContainerContent::ACTION_CREATE);
@@ -1965,28 +2037,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _updateAttender($attender, $currentAttender, $event, $isRescheduled, $calendar = NULL)
     {
         $userAccountId = $currentAttender->getUserAccountId();
-        
-        // reset status if attender != currentuser and wrong authkey
-        if ($userAccountId != Tinebase_Core::getUser()->getId()) {
-            
-            if ($isRescheduled) {
-                $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
-                $attender->transp = null;
-            }
-            
-            else if ($attender->status_authkey != $currentAttender->status_authkey) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Wrong authkey, resetting status (' . $attender->status . ' -> ' . $currentAttender->status . ')');
-                $attender->status = $currentAttender->status;
-            }
-        }
-        
-        // preserve old authkey
-        $attender->status_authkey = $currentAttender->status_authkey;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . " Updating attender: " . print_r($attender->toArray(), TRUE));
-        
+
         // update display calendar if attender has/is a useraccount
         if ($userAccountId) {
             if ($calendar->type == Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($userAccountId, $calendar, Tinebase_Model_Grants::GRANT_ADMIN)) {
@@ -1999,7 +2050,31 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $attender->displaycontainer_id = $currentAttender->displaycontainer_id;
             }
         }
-        
+
+        // reset status if user has no right and authkey is wrong
+        if ($attender->displaycontainer_id) {
+            if (! Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)
+                    && $attender->status_authkey != $currentAttender->status_authkey) {
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Wrong authkey, resetting status (' . $attender->status . ' -> ' . $currentAttender->status . ')');
+                $attender->status = $currentAttender->status;
+            }
+        }
+
+        // reset all status but calUser on reschedule
+        if ($isRescheduled && !$attender->isSame($this->getCalendarUser())) {
+            $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            $attender->transp = null;
+        }
+
+        // preserve old authkey
+        $attender->status_authkey = $currentAttender->status_authkey;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . " Updating attender: " . print_r($attender->toArray(), TRUE));
+
+
         Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($attender, 'update', $currentAttender);
         Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($attender, $currentAttender, get_class($attender), $this->_getBackendType(), $attender->getId());
         $this->_backend->updateAttendee($attender);

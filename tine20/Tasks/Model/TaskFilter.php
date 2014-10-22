@@ -38,6 +38,7 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_filterModel = array(
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Tasks_Model_Task')),
         'uid'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'etag'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description'))),
         'organizer'            => array('filter' => 'Tinebase_Model_Filter_User'),
         'status'               => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -53,6 +54,9 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'is_deleted'           => array('filter' => 'Tinebase_Model_Filter_Bool'),
+        'deleted_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
+        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Tasks')),
     );
 }

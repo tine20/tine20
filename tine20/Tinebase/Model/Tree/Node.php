@@ -112,6 +112,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'path'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'account_grants' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tempFile'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'stream'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**

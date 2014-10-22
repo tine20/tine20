@@ -165,11 +165,59 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
     }
     
     /**
+     * update to 8.4
+     * 
+     * - adds etag column
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>etag</name>
+                <type>text</type>
+                <length>60</length>
+            </field>');
+        $this->_backend->addCol('cal_events', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>etag</name>
+                <field>
+                    <name>etag</name>
+                </field>
+            </index>');
+        $this->_backend->addIndex('cal_events', $declaration);
+        $this->setTableVersion('cal_events', 7);
+        $this->setApplicationVersion('Calendar', '8.4');
+    }
+    
+    /**
+     * adds external_seq col
+     * 
+     * @see 0009890: improve external event invitation support
+     */
+    public function update_4()
+    {
+        $seqCol = '<field>
+            <name>external_seq</name>
+            <type>integer</type>
+            <notnull>true</notnull>
+            <default>0</default>
+        </field>';
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml($seqCol);
+        $this->_backend->addCol('cal_events', $declaration);
+        
+        $this->setTableVersion('cal_events', 8);
+        $this->setApplicationVersion('Calendar', '8.5');
+    }
+    
+    /**
      * add rrule index
      * 
      * @see 0010214: improve calendar performance / yearly base events
      */
-    public function update_3()
+    public function update_5()
     {
         $declaration = new Setup_Backend_Schema_Index_Xml('
             <index>
@@ -184,7 +232,7 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
             Tinebase_Exception::log($e);
         }
         
-        $this->setTableVersion('cal_events', '7');
-        $this->setApplicationVersion('Calendar', '8.4');
+        $this->setTableVersion('cal_events', '9');
+        $this->setApplicationVersion('Calendar', '8.6');
     }
 }

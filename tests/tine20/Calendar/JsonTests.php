@@ -65,11 +65,13 @@ class Calendar_JsonTests extends Calendar_TestCase
             'note_type_id' => Tinebase_Notes::getInstance()->getNoteTypes()->getFirstRecord()->getId(),
         ));
         $eventData['notes'] = array($note->toArray());
+        $eventData['etag'] = Tinebase_Record_Abstract::generateUID();
         
         $persistentEventData = $this->_uit->saveEvent($eventData);
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
         
         $this->_assertJsonEvent($eventData, $loadedEventData, 'failed to create/load event');
+        $this->assertEquals($eventData['etag'], $loadedEventData['etag']);
         
         $contentSeqAfter = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
         $this->assertEquals($contentSeqBefore + 1, $contentSeqAfter,
@@ -549,7 +551,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         // sclever has only READ grant
         Tinebase_Container::getInstance()->setGrants($this->_testCalendar, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
-            'account_id'    => $this->_testUser->getId(),
+            'account_id'    => $this->_originalTestUser->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
@@ -565,12 +567,11 @@ class Calendar_JsonTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ))), TRUE);
         
-        $unittestUser = Tinebase_Core::getUser();
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
         
         // create persistent exception
         $createdException = $this->_uit->createRecurException($persistentException, FALSE, FALSE);
-        Tinebase_Core::set(Tinebase_Core::USER, $unittestUser);
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
         
         $sclever = $this->_findAttender($createdException['attendee'], 'sclever');
         $this->assertEquals('Susan Clever', $sclever['user_id']['n_fn']);
@@ -729,7 +730,7 @@ class Calendar_JsonTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ), array(
-            'account_id'    => $this->_testUser->getId(),
+            'account_id'    => $this->_originalTestUser->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_FREEBUSY => true,
         ))), TRUE);
@@ -749,7 +750,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(! empty($searchResultData['results']), 'expected event in search result (search by sclever): ' 
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         
-        Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: ' 
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
@@ -1435,9 +1436,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testAddAttachmentToRecurSeries()
     {
-        $tempFileBackend = new Tinebase_TempFile();
-        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/Filemanager/files/test.txt');
-        
+        $tempFile = $this->_getTempFile();
         $recurSet = array_value('results', $this->testSearchRecuringIncludes());
         // update recurseries 
         $someRecurInstance = $recurSet[2];

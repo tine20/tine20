@@ -88,6 +88,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'summary'              => array(Zend_Filter_Input::PRESENCE => 'required'      ),
         'url'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'uid'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        'etag'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         // ical common fields with multiple appearance
         'attach'               => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),
         'attendee'             => array(Zend_Filter_Input::ALLOW_EMPTY => true        ),

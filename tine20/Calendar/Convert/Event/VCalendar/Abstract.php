@@ -16,15 +16,8 @@
  * @package     Calendar
  * @subpackage  Convert
  */
-class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Interface
+class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalendar_Abstract implements Tinebase_Convert_Interface
 {
-    /**
-     * use servers modlogProperties instead of given DTSTAMP & SEQUENCE
-     * use this if the concurrency checks are done differently like in CalDAV
-     * where the etag is checked
-     */
-    const OPTION_USE_SERVER_MODLOG = 'useServerModlog';
-    
     public static $cutypeMap = array(
         Calendar_Model_Attender::USERTYPE_USER          => 'INDIVIDUAL',
         Calendar_Model_Attender::USERTYPE_GROUPMEMBER   => 'INDIVIDUAL',
@@ -32,23 +25,13 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         Calendar_Model_Attender::USERTYPE_RESOURCE      => 'RESOURCE',
     );
     
-    protected $_supportedFields = array();
-    
-    protected $_version;
-    
+    protected $_modelName = 'Calendar_Model_Event';
+
     /**
      * value of METHOD property
      * @var string
      */
     protected $_method;
-    
-    /**
-     * @param  string  $version  the version of the client
-     */
-    public function __construct($version = null)
-    {
-        $this->_version = $version;
-    }
     
     /**
      * convert Tinebase_Record_RecordSet to Sabre\VObject\Component
@@ -139,9 +122,10 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             'LAST-MODIFIED' => $lastModifiedDateTime->getClone()->setTimezone('UTC'),
             'DTSTAMP'       => Tinebase_DateTime::now(),
             'UID'           => $event->uid,
-            'SEQUENCE'      => $event->seq
         ));
-
+        
+        $vevent->add('SEQUENCE', $event->hasExternalOrganizer() ? $event->external_seq : $event->seq);
+        
         if ($event->isRecurException()) {
             $originalDtStart = $_event->getOriginalDtStart()->setTimezone($_event->originator_tz);
             
@@ -205,7 +189,11 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 $vevent->add(strtoupper($property), $event->$property);
             }
         }
-        
+
+        $vevent->add('X-CALENDARSERVER-ACCESS',
+            $event->class == Calendar_Model_Event::CLASS_PUBLIC ? 'PUBLIC' : 'CONFIDENTIAL'
+        );
+
         // categories
         if (!isset($event->tags)) {
             $event->tags = Tinebase_Tags::getInstance()->getTagsOfRecord($event);
@@ -299,6 +287,23 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             }
         }
         
+        $baseUrl = Tinebase_Core::getHostname() . "/webdav/Calendar/records/Calendar_Model_Event/{$event->getId()}/";
+        
+        if ($event->attachments instanceof Tinebase_Record_RecordSet) {
+            foreach ($event->attachments as $attachment) {
+                $filename = rawurlencode($attachment->name);
+                $attach = $vcalendar->createProperty('ATTACH', "{$baseUrl}{$filename}", array(
+                    'MANAGED-ID' => $attachment->hash,
+                    'FMTTYPE'    => $attachment->contenttype,
+                    'SIZE'       => $attachment->size,
+                    'FILENAME'   => $filename
+                ), 'TEXT');
+                
+                $vevent->add($attach);
+            }
+            
+        }
+        
         $vcalendar->add($vevent);
     }
     
@@ -332,16 +337,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $vevent->add('ATTENDEE', (strpos($attendeeEmail, '@') !== false ? 'mailto:' : 'urn:uuid:') . $attendeeEmail, $parameters);
         }
     }
-    
-    /**
-     * can be overwriten in extended class to modify/cleanup $_vcalendar
-     * 
-     * @param \Sabre\VObject\Component\VCalendar $vcalendar
-     */
-    protected function _afterFromTine20Model(\Sabre\VObject\Component\VCalendar $vcalendar)
-    {
-    }
-    
+
     /**
      * set the METHOD for the generated VCALENDAR
      *
@@ -458,6 +454,21 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     }
                 }
                 
+                // initialize attachments from base event as clients may skip parameters like
+                // name and contentytpe and we can't backward relove them from managedId
+                if ($event->attachments instanceof Tinebase_Record_RecordSet && 
+                        ! $recurException->attachments instanceof Tinebase_Record_RecordSet) {
+                    $recurException->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+                    foreach ($event->attachments as $attachment) {
+                        $recurException->attachments->addRecord(new Tinebase_Model_Tree_Node(array(
+                            'name'         => $attachment->name,
+                            'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
+                            'contenttype'  => $attachment->contenttype,
+                            'hash'         => $attachment->hash,
+                        ), true));
+                    }
+                }
+                
                 if ($baseVevent) {
                     $this->_adaptBaseEventProperties($vevent, $baseVevent);
                 }
@@ -488,6 +499,16 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
     }
     
     /**
+     * template method
+     * 
+     * implement if client has support for sending attachments
+     * 
+     * @param Calendar_Model_Event          $event
+     * @param Tinebase_Record_RecordSet     $attachments
+     */
+    protected function _manageAttachmentsFromClient($event, $attachments) {}
+    
+    /**
      * convert VCALENDAR to Tinebase_Record_RecordSet of Calendar_Model_Event
      * 
      * @param  mixed  $blob  the vcalendar to parse
@@ -512,93 +533,6 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         }
         
         return $result;
-    }
-    
-    /**
-     * returns VObject of input data
-     * 
-     * @param   mixed  $blob
-     * @return  \Sabre\VObject\Component\VCalendar
-     */
-    public static function getVObject($blob)
-    {
-        if ($blob instanceof \Sabre\VObject\Component\VCalendar) {
-            return $blob;
-        }
-        
-        if (is_resource($blob)) {
-            $blob = stream_get_contents($blob);
-        }
-        
-        $vcalendar = self::readVCalBlob($blob);
-        
-        return $vcalendar;
-    }
-    
-    /**
-     * reads vcal blob and tries to repair some parsing problems that Sabre has
-     * 
-     * @param string $blob
-     * @param integer $failcount
-     * @param integer $spacecount
-     * @param integer $lastBrokenLineNumber
-     * @param array $lastLines
-     * @throws Sabre\VObject\ParseException
-     * @return Sabre\VObject\Component\VCalendar
-     * 
-     * @see 0006110: handle iMIP messages from outlook
-     * 
-     * @todo maybe we can remove this when #7438 is resolved
-     */
-    public static function readVCalBlob($blob, $failcount = 0, $spacecount = 0, $lastBrokenLineNumber = 0, $lastLines = array())
-    {
-        // convert to utf-8
-        $blob = mbConvertTo($blob);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-            ' ' . $blob);
-        
-        try {
-            $vcalendar = \Sabre\VObject\Reader::read($blob);
-        } catch (Sabre\VObject\ParseException $svpe) {
-            // NOTE: we try to repair\Sabre\VObject\Reader as it fails to detect followup lines that do not begin with a space or tab
-            if ($failcount < 10 && preg_match(
-                '/Invalid VObject, line ([0-9]+) did not follow the icalendar\/vcard format/', $svpe->getMessage(), $matches
-            )) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                    ' ' . $svpe->getMessage() .
-                    ' lastBrokenLineNumber: ' . $lastBrokenLineNumber);
-                
-                $brokenLineNumber = $matches[1] - 1 + $spacecount;
-                
-                if ($lastBrokenLineNumber === $brokenLineNumber) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                        ' Try again: concat this line to previous line.');
-                    $lines = $lastLines;
-                    $brokenLineNumber--;
-                    // increase spacecount because one line got removed
-                    $spacecount++;
-                } else {
-                    $lines = preg_split('/[\r\n]*\n/', $blob);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                        ' Concat next line to this one.');
-                    $lastLines = $lines; // for retry
-                }
-                $lines[$brokenLineNumber] .= $lines[$brokenLineNumber + 1];
-                unset($lines[$brokenLineNumber + 1]);
-                
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-                    ' failcount: ' . $failcount .
-                    ' brokenLineNumber: ' . $brokenLineNumber .
-                    ' spacecount: ' . $spacecount);
-                
-                $vcalendar = self::readVCalBlob(implode("\n", $lines), $failcount + 1, $spacecount, $brokenLineNumber, $lastLines);
-            } else {
-                throw $svpe;
-            }
-        }
-        
-        return $vcalendar;
     }
     
     /**
@@ -680,10 +614,17 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         if (!empty($calAddress['EMAIL'])) {
             $email = $calAddress['EMAIL']->getValue();
         } else {
-            if (!preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/i', $calAddress->getValue(), $matches)) {
-                throw new Tinebase_Exception_UnexpectedValue('invalid attendee provided: ' . $calAddress->getValue());
+            if (! preg_match('/(?P<protocol>mailto:|urn:uuid:)(?P<email>.*)/i', $calAddress->getValue(), $matches)) {
+                if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $calAddress->getValue())) {
+                    $email = $calAddress->getValue();
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid attendee provided: ' . $calAddress->getValue());
+                    return null;
+                }
+            } else {
+                $email = $matches['email'];
             }
-            $email = $matches['email'];
         }
         
         $fullName = isset($calAddress['CN']) ? $calAddress['CN']->getValue() : $email;
@@ -721,6 +662,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vevent ' . $vevent->serialize());
         
         $newAttendees = array();
+        $shortenedFields = array();
+        $attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         
         foreach ($vevent->children() as $property) {
@@ -751,7 +694,7 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     }
                     
                     break;
-                    
+
                 case 'STATUS':
                     if (in_array($property->getValue(), array(Calendar_Model_Event::STATUS_CONFIRMED, Calendar_Model_Event::STATUS_TENTATIVE, Calendar_Model_Event::STATUS_CANCELED))) {
                         $event->status = $property->getValue();
@@ -797,6 +740,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     if (! isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
                         $event->seq = $property->getValue();
                     }
+                    // iMIP only
+                    $event->external_seq = $property->getValue();
                     break;
                     
                 case 'DESCRIPTION':
@@ -804,7 +749,25 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                 case 'UID':
                 case 'SUMMARY':
                     $key = strtolower($property->name);
-                    $event->$key = $property->getValue();
+                    $value = $property->getValue();
+                    switch ($key) {
+                        case 'summary':
+                        case 'location':
+                            if (strlen($value) > 255) {
+                                $shortenedFields[$key] = $value;
+                                $endPos = strpos($value, "\n") !== false && strpos($value, "\n") < 255 
+                                    ? strpos($value, "\n") 
+                                    : 255;
+                                if (extension_loaded('mbstring')) {
+                                    $value = mb_substr($value, 0, $endPos, 'UTF-8');
+                                } else {
+                                    $value = Tinebase_Core::filterInputForDatabase(substr($value, 0, $endPos));
+                                }
+                            }
+                            break;
+                    }
+                    $event->$key = $value;
+                    
                     break;
                     
                 case 'ORGANIZER':
@@ -924,6 +887,100 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     }
                     break;
                     
+                case 'ATTACH':
+                    $name = (string) $property['FILENAME'];
+                    $managedId = (string) $property['MANAGED-ID'];
+                    $value = (string) $property['VALUE'];
+                    $attachment = NULL;
+                    $readFromURL = false;
+                    $url = '';
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' attachment found: ' . $name . ' ' . $managedId);
+                    
+                    if ($managedId) {
+                        $attachment = $event->attachments instanceof Tinebase_Record_RecordSet ?
+                            $event->attachments->filter('hash', $property['MANAGED-ID'])->getFirstRecord() :
+                            NULL;
+                        
+                        // NOTE: we might miss a attachment here for the following reasons
+                        //       1. client reuses a managed id (we are server):
+                        //          We havn't observerd this yet. iCal client reuse manged id's
+                        //          from base events in exceptions but this is covered as we 
+                        //          initialize new exceptions with base event attachments
+                        //          
+                        //          When a client reuses a managed id it's not clear yet if
+                        //          this managed id needs to be in the same series/calendar/server
+                        //
+                        //          As we use the object hash the managed id might be used in the 
+                        //          same files with different names. We need to evaluate the name
+                        //          (if attached) in this case as well.
+                        //       
+                        //       2. server send his managed id (we are client)
+                        //          * we need to download the attachment (here?)
+                        //          * we need to have a mapping externalid / internalid (where?)
+                        
+                        if (! $attachment) {
+                            $readFromURL = true;
+                            $url = $property->getValue();
+                        } else {
+                            $attachments->addRecord($attachment);
+                        }
+                    } elseif('URI' === $value) {
+                        /*
+                         * ATTACH;VALUE=URI:https://server.com/calendars/__uids__/0AA0
+ 3A3B-F7B6-459A-AB3E-4726E53637D0/dropbox/4971F93F-8657-412B-841A-A0FD913
+ 9CD61.dropbox/Canada.png
+                         */
+                        $url = $property->getValue();
+                        $urlParts = parse_url($url);
+                        $host = $urlParts['host'];
+                        $name = pathinfo($urlParts['path'], PATHINFO_BASENAME);
+
+                        // iCal 10.7 places URI before uploading
+                        if (parse_url(Tinebase_Core::getHostname(), PHP_URL_HOST) != $host) {
+                            $readFromURL = true;
+                        }
+                    }
+                    // base64
+                    else {
+                        // @TODO: implement (check if add / update / update is needed)
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' attachment found that could not be imported due to missing managed id');
+                    }
+                    
+                    if($readFromURL) {
+                        if (preg_match('#^(https?://)(.*)$#', str_replace(array("\n","\r"), '', $url), $matches)) {
+                            // we are client and found an external hosted attachment that we need to import
+                            $user = Tinebase_Core::getUser();
+                            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+                            $url = $matches[1] . $userCredentialCache->username . ':' . $userCredentialCache->password . '@' . $matches[2];
+                            $attachmentInfo = $matches[1] . $matches[2]. ' ' . $name . ' ' . $managedId;
+                            if (urlExists($url)) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                            . ' Downloading attachment: ' . $attachmentInfo);
+                                
+                                $stream = fopen($url, 'r');
+                                $attachment = new Tinebase_Model_Tree_Node(array(
+                                    'name'         => $name,
+                                    'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
+                                    'contenttype'  => (string) $property['FMTTYPE'],
+                                    'tempFile'     => $stream,
+                                    ), true);
+                                $attachments->addRecord($attachment);
+                            } else {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                    . ' Url not found (got 404): ' . $attachmentInfo . ' - Skipping attachment');
+                            }
+                        } else {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                    . ' Attachment found with malformed url: ' . $url);
+                        }
+                    }
+                    break;
+                    
                 case 'X-MOZ-LASTACK':
                     $lastAck = $this->_convertToTinebaseDateTime($property);
                     break;
@@ -942,6 +999,17 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
                     }
                     break;
             }
+        }
+
+        // NOTE: X-CALENDARSERVER-ACCESS overwrites CLASS
+        if (isset($vevent->{'X-CALENDARSERVER-ACCESS'})) {
+            $event->class = $vevent->{'X-CALENDARSERVER-ACCESS'} == 'PUBLIC' ?
+                Calendar_Model_Event::CLASS_PUBLIC :
+                Calendar_Model_Event::CLASS_PRIVATE;
+        }
+
+        foreach ($shortenedFields as $key => $value) {
+            $event->description = "--------\n$key: $value";
         }
         
         if (isset($lastAck)) {
@@ -962,6 +1030,8 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
             $event->class = Calendar_Model_Event::CLASS_PUBLIC;
         }
         
+        $this->_manageAttachmentsFromClient($event, $attachments);
+        
         if (empty($event->dtend)) {
             // TODO find out duration (see TRIGGER DURATION)
 //             if (isset($vevent->DURATION)) {
@@ -974,120 +1044,5 @@ class Calendar_Convert_Event_VCalendar_Abstract implements Tinebase_Convert_Inte
         
         // convert all datetime fields to UTC
         $event->setTimezone('UTC');
-    }
-    
-    /**
-     * parse valarm properties
-     * 
-     * @param Calendar_Model_Event $event
-     * @param unknown $valarms
-     * @param \Sabre\VObject\Component\VEvent $vevent
-     */
-    protected function _parseAlarm(Calendar_Model_Event $event, $valarms, \Sabre\VObject\Component\VEvent $vevent)
-    {
-        foreach ($valarms as $valarm) {
-            
-            if ($valarm->ACTION == 'NONE') {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' We can\'t cope with action NONE: iCal 6.0 sends default alarms in the year 1976 with action NONE. Skipping alarm.');
-                continue;
-            }
-            
-            if (! is_object($valarm->TRIGGER)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Alarm has no TRIGGER value. Skipping it.');
-                continue;
-            }
-            
-            # TRIGGER:-PT15M
-            if (is_string($valarm->TRIGGER->getValue()) && $valarm->TRIGGER instanceof Sabre\VObject\Property\ICalendar\Duration) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Adding DURATION trigger value for ' . $valarm->TRIGGER->getValue());
-                $valarm->TRIGGER->add('VALUE', 'DURATION');
-            }
-            
-            $trigger = is_object($valarm->TRIGGER['VALUE']) ? $valarm->TRIGGER['VALUE'] : (is_object($valarm->TRIGGER['RELATED']) ? $valarm->TRIGGER['RELATED'] : NULL);
-            
-            if ($trigger === NULL) {
-                // added Trigger/Related for eM Client alarms
-                // 2014-01-03 - Bullshit, why don't we have testdata for emclient alarms?
-                        //              this alarm handling should be refactored, the logic is scrambled
-                // @see 0006110: handle iMIP messages from outlook
-                // @todo fix 0007446: handle broken alarm in outlook invitation message
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Alarm has no TRIGGER value. Skipping it.');
-                continue;
-            }
-            
-            switch (strtoupper($trigger->getValue())) {
-                # TRIGGER;VALUE=DATE-TIME:20111031T130000Z
-                case 'DATE-TIME':
-                    $alarmTime = new Tinebase_DateTime($valarm->TRIGGER->getValue());
-                    $alarmTime->setTimezone('UTC');
-                    
-                    $alarm = new Tinebase_Model_Alarm(array(
-                        'alarm_time'        => $alarmTime,
-                        'minutes_before'    => 'custom',
-                        'model'             => 'Calendar_Model_Event'
-                    ));
-                    
-                    break;
-                
-                # TRIGGER;VALUE=DURATION:-PT1H15M
-                case 'DURATION':
-                default:
-                    $alarmTime = $this->_convertToTinebaseDateTime($vevent->DTSTART);
-                    $alarmTime->setTimezone('UTC');
-                    
-                    preg_match('/(?P<invert>[+-]?)(?P<spec>P.*)/', $valarm->TRIGGER->getValue(), $matches);
-                    $duration = new DateInterval($matches['spec']);
-                    $duration->invert = !!($matches['invert'] === '-');
-                    
-                    $alarm = new Tinebase_Model_Alarm(array(
-                        'alarm_time'        => $alarmTime->add($duration),
-                        'minutes_before'    => ($duration->format('%d') * 60 * 24) + ($duration->format('%h') * 60) + ($duration->format('%i')),
-                        'model'             => 'Calendar_Model_Event'
-                    ));
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' Adding DURATION alarm ' . print_r($alarm->toArray(), true));
-            }
-            
-            if ($valarm->ACKNOWLEDGED) {
-                $dtack = $valarm->ACKNOWLEDGED->getDateTime();
-                Calendar_Controller_Alarm::setAcknowledgeTime($alarm, $dtack);
-            }
-            
-            $event->alarms->addRecord($alarm);
-        }
-    }
-    
-    /**
-     * get datetime from sabredav datetime property (user TZ is fallback)
-     * 
-     * @param  Sabre\VObject\Property  $dateTimeProperty
-     * @param  boolean                 $_useUserTZ
-     * @return Tinebase_DateTime
-     * 
-     * @todo try to guess some common timezones
-     */
-    protected function _convertToTinebaseDateTime(\Sabre\VObject\Property $dateTimeProperty, $_useUserTZ = FALSE)
-    {
-        $defaultTimezone = date_default_timezone_get();
-        date_default_timezone_set((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        
-        if ($dateTimeProperty instanceof Sabre\VObject\Property\ICalendar\DateTime) {
-            $dateTime = $dateTimeProperty->getDateTime();
-            $tz = ($_useUserTZ || (isset($dateTimeProperty['VALUE']) && strtoupper($dateTimeProperty['VALUE']) == 'DATE')) ? 
-                (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : 
-                $dateTime->getTimezone();
-            
-            $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
-        } else {
-            $result = new Tinebase_DateTime($dateTimeProperty->getValue());
-        }
-        
-        date_default_timezone_set($defaultTimezone);
-        
-        return $result;
     }
 }

@@ -32,9 +32,12 @@ ATTENDEE;CN="Admin Account, Tine 2.0";CUTYPE=INDIVIDUAL;EMAIL=l.kneschke@ca
  ke@caldav.org
 ATTENDEE;CN="Löw, Jogi";CUTYPE=INDIVIDUAL;EMAIL=j.loew@caldav.org;PARTSTAT
  =NEEDS-ACTION;ROLE=REQ-PARTICIPANT;RSVP=FALSE:mailto:j.loew@caldav.org
-ATTENDEE;CN="External, Caldav";CUTYPE=INDIVIDUAL;EMAIL=tine20admin@caldav.n
- et;PARTSTAT=NEEDS-ACTION;ROLE=REQ-PARTICIPANT;RSVP=FALSE:mailto:tine20admi
- n@caldav.net
+ATTENDEE;CN="Admin Account, Tine 2.0";CUTYPE=INDIVIDUAL;EMAIL="unittest@
+ tine20.org";PARTSTAT=NEEDS-ACTION:mailto:unittest@tine20.org
+ATTENDEE;CN="Clever, Susan";CUTYPE=INDIVIDUAL;EMAIL="sclever@tine20.org"
+ ;PARTSTAT=NEEDS-ACTION;ROLE=REQ-PARTICIPANT:mailto:sclever@tine20.org
+ATTENDEE;CN="Paul, Wulf";CUTYPE=INDIVIDUAL;EMAIL="pwulf@tine20.org"
+ ;PARTSTAT=ACCEPTED;ROLE=REQ-PARTICIPANT:mailto:pwulf@tine20.org
 CLASS:PUBLIC
 SUMMARY:test mit extern
 TRANSP:OPAQUE

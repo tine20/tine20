@@ -4,18 +4,9 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Frontend_AllTests::main');
-}
 
 class Tinebase_Frontend_AllTests
 {
@@ -32,11 +23,8 @@ class Tinebase_Frontend_AllTests
         $suite->addTestSuite('Tinebase_Frontend_JsonTest');
         $suite->addTestSuite('Tinebase_Frontend_CliTest');
         $suite->addTestSuite('Tinebase_Frontend_HttpTest');
+        $suite->addTestSuite('Tinebase_Frontend_WebDAV_RecordTest');
         
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Frontend_AllTests::main') {
-    Tinebase_Frontend_AllTests::main();
 }

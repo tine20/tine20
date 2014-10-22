@@ -39,6 +39,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_filterModel = array(
         'id'                    => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Calendar_Model_Event')),
         'uid'                   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'etag'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
         'container_id'          => array('filter' => 'Calendar_Model_CalendarFilter', 'options' => array('applicationName' => 'Calendar')),
         'query'                 => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description', 'location'))),
         'period'                => array('filter' => 'Calendar_Model_PeriodFilter'),
@@ -65,5 +66,12 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'summary'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'location'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'last_modified_time'    => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'is_deleted'            => array('filter' => 'Tinebase_Model_Filter_Bool'),
+        'deleted_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
+        'deleted_time'          => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'creation_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'last_modified_by'      => array('filter' => 'Tinebase_Model_Filter_User'),
+        'created_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
     );
 }
