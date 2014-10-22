@@ -693,6 +693,73 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
+     * repairs container names
+     * 
+     * @param Zend_Console_Getopt $opts
+     */
+    public function repairContainerName($opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+        $dryrun = $opts->d;
+        
+        $this->_addOutputLogWriter();
+        $args = $this->_parseArgs($opts);
+        
+        $containersWithBadNames = Tinebase_Container::getInstance()->getContainersWithBadNames();
+        
+        $locale = Tinebase_Translation::getLocale((isset($args['locale']) ?$args['locale'] : 'auto'));
+
+        if ($dryrun) {
+            print_r($containersWithBadNames->toArray());
+            echo "Using Locale " . $locale . "\n";
+        }
+        
+        $appContainerNames = array(
+            'Calendar' => 'calendar',
+            'Tasks'    => 'tasks',
+            'Addressbook'    => 'addressbook',
+        );
+        
+        foreach ($containersWithBadNames as $container) {
+            if (empty($container->owner_id)) {
+                if ($dryrun) {
+                    echo "Don't rename shared container " . $container->id . "\n";
+                }
+                continue;
+            }
+            $app = Tinebase_Application::getInstance()->getApplicationById($container->application_id);
+            $appContainerName = isset($appContainerNames[$app->name]) ? $appContainerNames[$app->name] : "container";
+            $translation = Tinebase_Translation::getTranslation($app->name, $locale);
+            $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $container->owner_id);
+            $newName = $newBaseName = sprintf($translation->_("%s's personal " . $appContainerName), $account->accountFullName);
+            
+            $count = 1;
+            do {
+                try {
+                    Tinebase_Container::getInstance()->getContainerByName($app->name, $newName, Tinebase_Model_Container::TYPE_PERSONAL, $container->owner_id);
+                    $found = true;
+                    $newName = $newBaseName . ' ' . ++$count;
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $found = false;
+                }
+                
+            } while ($found);
+            if ($dryrun) {
+                echo "Rename container id " . $container->id . ' to ' . $newName . "\n";
+            } else {
+                
+                $container->name = $newName;
+                Tinebase_Container::getInstance()->update($container);
+            }
+        }
+        
+        $result = 0;
+        exit($result);
+    }
+    
+    /**
      * transfer relations
      * 
      * @param Zend_Console_Getopt $opts
