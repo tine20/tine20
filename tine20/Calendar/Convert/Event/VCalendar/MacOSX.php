@@ -21,7 +21,8 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     // CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)
     // Mac OS X/10.8 (12A269) CalendarAgent/47 
     // Mac_OS_X/10.9 (13A603) CalendarAgent/174
-    const HEADER_MATCH = '/(?J)((CalendarStore.*Mac OS X\/(?P<version>\S+) )|(^Mac[ _]OS[ _]X\/(?P<version>\S+).*CalendarAgent))/';
+    // Mac+OS+X/10.10 (14A389) CalendarAgent/315"
+    const HEADER_MATCH = '/(?J)((CalendarStore.*Mac OS X\/(?P<version>\S+) )|(^Mac[ _+]OS[ _+]X\/(?P<version>\S+).*CalendarAgent))/';
     
     protected $_supportedFields = array(
         'seq',
