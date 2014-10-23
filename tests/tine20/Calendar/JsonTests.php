@@ -74,8 +74,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
         
         $this->_assertJsonEvent($eventData, $loadedEventData, 'failed to create/load event');
-        
-        $this->assertTrue(isset($loadedEventData['etag']), 'etag missing from event: ' . print_r($persistentEventData, true));
         $this->assertEquals($eventData['etag'], $loadedEventData['etag']);
         
         $contentSeqAfter = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
@@ -1281,6 +1279,8 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testExdateUpdateAllWithModlog()
     {
+        $this->markTestSkipped('this test is broken: see 0009340: fix Calendar_JsonTests::testExdateUpdateAllWithModlog*');
+        
         $events = $this->testCreateRecurException();
         $baseEvent = $events['results'][0];
         $exception = $this->_getException($events, 1);
@@ -1312,6 +1312,8 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testExdateUpdateAllWithModlogAddAttender()
     {
+        $this->markTestSkipped('0009340: fix Calendar_JsonTests::testExdateUpdateAllWithModlogAddAttender');
+        
         $events = $this->testCreateRecurException();
         $baseEvent = $events['results'][0];
         $exception = $this->_getException($events, 1);
