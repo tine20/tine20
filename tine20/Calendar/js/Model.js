@@ -206,6 +206,7 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer) {
         westPanel = mainScreen.getWestPanel(),
         filteredAttendee = westPanel.getAttendeeFilter().getValue() || [],
         defaultAttendeeData = Tine.Calendar.Model.Attender.getDefaultData(),
+        defaultResourceData = Tine.Calendar.Model.Attender.getDefaultResourceData(),
         filteredContainers = westPanel.getContainerTreePanel().getFilterPlugin().getFilter().value || [],
         prefs = app.getRegistry().get('preferences'),
         defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me', // one of['me', 'intelligent', 'calendarOwner', 'filteredAttendee']
@@ -239,7 +240,7 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer) {
                 ownAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord(attendeeStore);
                 
             attendeeStore.each(function(attendee){
-                var attendeeData = Ext.apply(attendee.data, defaultAttendeeData);
+                var attendeeData = attendee.data.user_type == 'user' ? Ext.apply(attendee.data, defaultAttendeeData) : Ext.apply(attendee.data, defaultResourceData);
                 if (attendee == ownAttendee) {
                     attendeeData.status = 'ACCEPTED';
                 }
@@ -556,6 +557,23 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
 Tine.Calendar.Model.Attender.getDefaultData = function() {
     return {
         user_type: 'user',
+        role: 'REQ',
+        quantity: 1,
+        status: 'NEEDS-ACTION'
+    };
+};
+
+/**
+ * @namespace Tine.Calendar.Model
+ * 
+ * get default data for a new resource
+ *  
+ * @return {Object} default data
+ * @static
+ */ 
+Tine.Calendar.Model.Attender.getDefaultResourceData = function() {
+    return {
+        user_type: 'resource',
         role: 'REQ',
         quantity: 1,
         status: 'NEEDS-ACTION'
