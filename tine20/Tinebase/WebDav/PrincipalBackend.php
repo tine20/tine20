@@ -105,7 +105,9 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 // does the account exist
                 $contactPrincipal = $this->getPrincipalByPath(self::PREFIX_USERS . '/' . $id);
                 
-                if (!$contactPrincipal) {
+                if (! $contactPrincipal) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' Account principal does not exist: ' . $id);
                     return null;
                 }
                 
@@ -133,7 +135,9 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 
                 $list = Addressbook_Controller_List::getInstance()->search($filter)->getFirstRecord();
                 
-                if (!$list) {
+                if (! $list) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' Group/list principal does not exist: ' . $id);
                     return null;
                 }
                 
@@ -150,7 +154,9 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     
                     $contact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
                     
-                    if (!$contact) {
+                    if (! $contact) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' Contact principal does not exist: ' . $id);
                         return null;
                     }
                     
