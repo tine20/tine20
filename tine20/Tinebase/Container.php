@@ -1494,8 +1494,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param string $action
      * @param string $recordId
      * @return integer new content seq
-     * 
-     * @todo clear cache? perhaps not, we have getContentSequence() for that
      */
     public function increaseContentSequence($containerId, $action = NULL, $recordId = NULL)
     {
