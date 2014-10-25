@@ -193,7 +193,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         $translate = Tinebase_Translation::getTranslation($this->_application, $locale);
         
         // get date strings
-        $timezone = ($this->originator_tz) ? $this->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $timezone = ($this->originator_tz) ? $this->originator_tz : Tinebase_Core::getUserTimezone();
         $dueDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($this->due, $timezone, $locale);
         
         // resolve values

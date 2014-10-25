@@ -31,7 +31,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
         $translate = Tinebase_Translation::getTranslation('Addressbook');
 
         // set user timezone
-        $_contact->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $_contact->setTimezone(Tinebase_Core::getUserTimezone());
         
         $contactFields = array (
             array(  'label' => $translate->_('Business Contact Data'), 

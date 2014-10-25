@@ -1008,6 +1008,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $ajson = new Addressbook_Frontend_Json();
         $contactJson = $ajson->getContact($contact->getId());
         
-        $this->assertEquals($bday->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->toString(), $contactJson['bday']);
+        $this->assertEquals($bday->setTimezone(Tinebase_Core::getUserTimezone())->toString(), $contactJson['bday']);
     }
 }

@@ -423,7 +423,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         // change timezone of current php process to usertimezone to let new dates be in the users timezone
         // NOTE: this is neccessary as creating the dates in UTC and just adding/substracting the timeshift would
         //       lead to incorrect results on DST transistions 
-        date_default_timezone_set(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        date_default_timezone_set(Tinebase_Core::getUserTimezone());
 
         // NOTE: setFromArray creates new Tinebase_DateTimes of $this->datetimeFields
         $this->setFromJson($_data);

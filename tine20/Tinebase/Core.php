@@ -429,13 +429,10 @@ class Tinebase_Core
             Tinebase_Core::startCoreSession();
         }
         
-        // setup a temporary user locale/timezone. This will be overwritten later but we 
+        // setup a temporary user locale. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as session timeout
         // @todo add fallback locale to config file
         Tinebase_Core::set('locale', new Zend_Locale('en_US'));
-        Tinebase_Core::set('userTimeZone', 'UTC');
-        
-        Tinebase_Core::setupUserTimezone();
         
         Tinebase_Core::setupUserLocale();
         
@@ -1380,6 +1377,20 @@ class Tinebase_Core
     {
         $result = (self::isRegistered(self::USER)) ? self::get(self::USER) : NULL;
         return $result;
+    }
+
+    /**
+     * get current users timezone
+     *
+     * @return string the current users timezone string
+     */
+    public static function getUserTimezone()
+    {
+        if (!self::isRegistered(self::USERTIMEZONE)) {
+            Tinebase_Core::setupUserTimezone();
+        }
+        
+        return self::get(self::USERTIMEZONE);
     }
 
     /**

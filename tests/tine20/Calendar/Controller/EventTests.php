@@ -43,7 +43,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $this->assertEquals($event->description, $persistentEvent->description);
         $this->assertTrue($event->dtstart->equals($persistentEvent->dtstart));
-        $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $persistentEvent->originator_tz);
+        $this->assertEquals(Tinebase_Core::getUserTimezone(), $persistentEvent->originator_tz);
         
         return $persistentEvent;
     }
@@ -58,7 +58,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->dtend = null;
         
         $persistentEvent = $this->_controller->create($event);
-        $persistentEvent->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $persistentEvent->setTimezone(Tinebase_Core::getUserTimezone());
         $this->assertEquals('2009-04-06 23:59:59', $persistentEvent->dtend->toString());
     }
     
@@ -85,7 +85,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $persistentEvent = $this->testCreateEvent();
         
-        $currentTz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $currentTz = Tinebase_Core::getUserTimezone();
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, 'farfaraway');
         
         $persistentEvent->summary = 'Lunchtime';
@@ -96,7 +96,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedEvent->dtstart->addHour(1);
         $updatedEvent->dtend->addHour(1);
         $secondUpdatedEvent = $this->_controller->update($updatedEvent);
-        $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $secondUpdatedEvent->originator_tz, 'originator_tz must be adopted if dtsart is updatet!');
+        $this->assertEquals(Tinebase_Core::getUserTimezone(), $secondUpdatedEvent->originator_tz, 'originator_tz must be adopted if dtsart is updatet!');
     
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $currentTz);
     }

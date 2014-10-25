@@ -117,7 +117,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         
         Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records, array('container_id'));
 
-        $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $_records->setTimezone(Tinebase_Core::getUserTimezone());
         $_records->convertDates = true;
 
         $eventsData = $_records->toArray();

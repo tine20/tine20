@@ -431,7 +431,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $iMIPMessage->preconditionsChecked = FALSE;
         $iMIPFrontend->prepareComponent($iMIPMessage);
-        $iMIPMessage->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $iMIPMessage->setTimezone(Tinebase_Core::getUserTimezone());
         return $iMIPMessage->toArray();
     }
     

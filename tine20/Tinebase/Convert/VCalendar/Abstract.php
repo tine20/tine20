@@ -238,12 +238,12 @@ abstract class Tinebase_Convert_VCalendar_Abstract
     protected function _convertToTinebaseDateTime(\Sabre\VObject\Property $dateTimeProperty, $_useUserTZ = FALSE)
     {
         $defaultTimezone = date_default_timezone_get();
-        date_default_timezone_set((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        date_default_timezone_set((string) Tinebase_Core::getUserTimezone());
         
         if ($dateTimeProperty instanceof Sabre\VObject\Property\ICalendar\DateTime) {
             $dateTime = $dateTimeProperty->getDateTime();
             $tz = ($_useUserTZ || (isset($dateTimeProperty['VALUE']) && strtoupper($dateTimeProperty['VALUE']) == 'DATE')) ? 
-                (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE) : 
+                (string) Tinebase_Core::getUserTimezone() : 
                 $dateTime->getTimezone();
             
             $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);

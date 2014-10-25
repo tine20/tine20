@@ -88,7 +88,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
     public function create(Tinebase_Record_Interface $_task)
     {
         $this->_handleCompleted($_task);
-        $_task->originator_tz = $_task->originator_tz ? $_task->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $_task->originator_tz = $_task->originator_tz ? $_task->originator_tz : Tinebase_Core::getUserTimezone();
         
         $task = parent::create($_task);
         

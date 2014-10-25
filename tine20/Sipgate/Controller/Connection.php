@@ -112,8 +112,8 @@ class Sipgate_Controller_Connection extends Tinebase_Controller_Record_Abstract
         $_to = $_to ? $_to : new Tinebase_DateTime();
 
         // timezone corrections
-        $_from->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        $_to->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $_from->setTimezone(Tinebase_Core::getUserTimezone());
+        $_to->setTimezone(Tinebase_Core::getUserTimezone());
 
         if($verbose) {
             echo 'Syncing line ' . $_line->sip_uri . ' from ' . $_from->getIso() . ' to ' . $_to->getIso() . PHP_EOL;

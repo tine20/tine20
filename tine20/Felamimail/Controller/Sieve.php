@@ -591,7 +591,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     protected function _doMessageSubstitutions(Felamimail_Model_Sieve_Vacation $vacation, $message)
     {
-        $timezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $timezone = Tinebase_Core::getUserTimezone();
         $representatives = ($vacation->contact_ids) ? Addressbook_Controller_Contact::getInstance()->getMultiple($vacation->contact_ids) : array();
         if ($vacation->contact_ids && count($representatives) > 0) {
             // sort representatives

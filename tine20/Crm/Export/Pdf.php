@@ -33,7 +33,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
         $translate = Tinebase_Translation::getTranslation('Crm');
         
         // set user timezone
-        $_lead->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $_lead->setTimezone(Tinebase_Core::getUserTimezone());
 
         /*********************** build data array ***************************/
         

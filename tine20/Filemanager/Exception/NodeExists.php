@@ -66,7 +66,7 @@ class Filemanager_Exception_NodeExists extends Filemanager_Exception
      */
     public function toArray()
     {
-        $this->getExistingNodesInfo()->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $this->getExistingNodesInfo()->setTimezone(Tinebase_Core::getUserTimezone());
         return array(
             'existingnodesinfo' => $this->_existingNodes->toArray()
         );

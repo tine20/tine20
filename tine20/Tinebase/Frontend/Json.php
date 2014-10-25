@@ -698,7 +698,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
-            'timeZone'         => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE),
+            'timeZone'         => Tinebase_Core::getUserTimezone(),
             'locale'           => array(
                 'locale'   => $locale->toString(),
                 'language' => Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale),
@@ -1002,7 +1002,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // NOTE: This hurts! We don't have methods to call in our frontends yet which convert
         //       a record to the json representaion :( Thus image link will be broken!
-        $userProfile->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $userProfile->setTimezone(Tinebase_Core::getUserTimezone());
         
         return array(
             'userProfile'      => $userProfile->toArray(),
@@ -1027,7 +1027,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // NOTE: This hurts! We don't have methods to call in our frontends yet which convert
         //       a record to the json representaion :( Thus image link will be broken!
-        $userProfile->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $userProfile->setTimezone(Tinebase_Core::getUserTimezone());
         return $userProfile->toArray();
     }
     

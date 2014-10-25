@@ -143,7 +143,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-        $_records->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $_records->setTimezone(Tinebase_Core::getUserTimezone());
         $_records->convertDates = true;
         $result = $_records->toArray();
 

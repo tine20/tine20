@@ -447,7 +447,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
     {
         // set reference date to the 1st january of last year
         $this->_referenceDate = Tinebase_DateTime::now();
-        $this->_referenceDate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $this->_referenceDate->setTimezone(Tinebase_Core::getUserTimezone());
         $this->_referenceDate->subYear(1);
         $this->_referenceDate->setDate($this->_referenceDate->format('Y'), 1 ,1);
         $this->_referenceDate->setTime(0,0,0);

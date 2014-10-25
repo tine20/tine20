@@ -124,7 +124,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $freedayFilter = new HumanResources_Model_FreeDayFilter(array());
         $freedayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $fids)));
         $fds = HumanResources_Controller_FreeDay::getInstance()->search($freedayFilter);
-        $fds->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $fds->setTimezone(Tinebase_Core::getUserTimezone());
         
         foreach(array('vacation', 'sickness') as $type) {
             if (! empty($employee[$type]) && is_array($employee[$type])) {
@@ -387,7 +387,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $_freeTimeId = (strlen($_freeTimeId) == 40) ? $_freeTimeId : NULL;
         
         // set period to search for
-        $minDate = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $minDate = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         if ($_year && (! $_freeTimeId)) {
             $minDate->setDate($_year, 1, 1);
         } elseif ($_freeTimeId) {
@@ -436,7 +436,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $remainingVacation = 0;
         $feastDays = array();
         
-        $contracts->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $contracts->setTimezone(Tinebase_Core::getUserTimezone());
         
         // find out disabled days for the different contracts
         foreach ($contracts as $contract) {
@@ -460,7 +460,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         $day->setWeekDay(($index+1));
                         while ($day->compare($stopDay) == -1) {
                             $exdate = clone $day;
-                            $exdate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                            $exdate->setTimezone(Tinebase_Core::getUserTimezone());
                             $excludeDates[] = $exdate;
                             $day->addWeek(1);
                         }
@@ -475,7 +475,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // set time to 0
         foreach($feastDays as &$feastDay) {
-            $feastDay->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+            $feastDay->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         }
         
         // search free times for the account and the interval

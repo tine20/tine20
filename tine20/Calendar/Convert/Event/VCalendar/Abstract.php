@@ -207,7 +207,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             if ($event->is_all_day_event == true) {
                 $vevent->add('RRULE', preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', function($matches) {
                     $dtUntil = new Tinebase_DateTime($matches[1]);
-                    $dtUntil->setTimezone((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    $dtUntil->setTimezone((string) Tinebase_Core::getUserTimezone());
                     
                     return 'UNTIL=' . $dtUntil->format('Ymd');
                 }, $event->rrule));
@@ -814,7 +814,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     // convert date format
                     $rruleString = preg_replace_callback('/UNTIL=([\dTZ]+)(?=;?)/', function($matches) {
                         if (strlen($matches[1]) < 10) {
-                            $dtUntil = date_create($matches[1], new DateTimeZone ((string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)));
+                            $dtUntil = date_create($matches[1], new DateTimeZone ((string) Tinebase_Core::getUserTimezone()));
                             $dtUntil->setTimezone(new DateTimeZone('UTC'));
                         } else {
                             $dtUntil = date_create($matches[1]);
@@ -835,7 +835,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                         foreach ($vevent->EXDATE as $exdate) {
                             foreach ($exdate->getDateTimes() as $exception) {
                                 if (isset($exdate['VALUE']) && strtoupper($exdate['VALUE']) == 'DATE') {
-                                    $recurid = new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                                    $recurid = new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), (string) Tinebase_Core::getUserTimezone());
                                 } else {
                                     $recurid = new Tinebase_DateTime($exception->format(Tinebase_Record_Abstract::ISO8601LONG), $exception->getTimezone());
                                 }

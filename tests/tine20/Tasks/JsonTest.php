@@ -406,7 +406,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         return new Tasks_Model_Task(array(
             'summary'       => 'minimal task by PHPUnit::Tasks_ControllerTest',
-            'due'           => new Tinebase_DateTime("now", Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)),
+            'due'           => new Tinebase_DateTime("now", Tinebase_Core::getUserTimezone()),
             'organizer'     => Tinebase_Core::getUser()->getId(),
         ));
     }

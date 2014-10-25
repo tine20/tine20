@@ -291,7 +291,7 @@ abstract class Tinebase_Export_Abstract
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
         
-        $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $_records->setTimezone(Tinebase_Core::getUserTimezone());
     }
 
     /**

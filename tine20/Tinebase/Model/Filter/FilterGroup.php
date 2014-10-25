@@ -720,7 +720,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function setFromArrayInUsersTimezone($_data)
     {
-        $this->_options['timezone'] = Tinebase_Core::get('userTimeZone');
+        $this->_options['timezone'] = Tinebase_Core::getUserTimezone();
         $this->setFromArray($_data);
     }
     

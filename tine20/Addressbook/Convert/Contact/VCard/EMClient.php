@@ -200,7 +200,7 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
      */
     protected function _toTine20ModelParseBday(&$_data, \Sabre\VObject\Property $_property)
     {
-        $tzone = new DateTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $tzone = new DateTimeZone(Tinebase_Core::getUserTimezone());
         $_data['bday'] = new Tinebase_DateTime($_property->getValue(), $tzone);
         $_data['bday']->setTimezone(new DateTimeZone('UTC'));
     }    

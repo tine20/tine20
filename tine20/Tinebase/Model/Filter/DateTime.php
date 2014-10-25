@@ -33,7 +33,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
        
         if ($this->_operator != 'within' && $_valueToJson == true) {
             $date = new Tinebase_DateTime($result['value']);
-            $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $date->setTimezone(Tinebase_Core::getUserTimezone());
             $result['value'] = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
         }
         
@@ -66,7 +66,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
     {
         if ($_operator === 'within') {
             // get beginning / end date and add 00:00:00 / 23:59:59
-            date_default_timezone_set((isset($this->_options['timezone']) || array_key_exists('timezone', $this->_options)) && ! empty($this->_options['timezone']) ? $this->_options['timezone'] : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            date_default_timezone_set((isset($this->_options['timezone']) || array_key_exists('timezone', $this->_options)) && ! empty($this->_options['timezone']) ? $this->_options['timezone'] : Tinebase_Core::getUserTimezone());
             $value = parent::_getDateValues(
                 $_operator, 
                 $_value

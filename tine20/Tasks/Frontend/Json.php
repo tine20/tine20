@@ -39,7 +39,7 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function __construct()
     {
-        $this->_userTimezone = Tinebase_Core::get('userTimeZone');
+        $this->_userTimezone = Tinebase_Core::getUserTimezone();
         $this->_serverTimezone = date_default_timezone_get();
     }
 

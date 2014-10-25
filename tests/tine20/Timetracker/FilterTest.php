@@ -143,7 +143,7 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
         $tsController = Timetracker_Controller_Timesheet::getInstance();
         $dateString = '2014-07-14 00:15:00';
         
-        $date = new Tinebase_DateTime($dateString, Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $date = new Tinebase_DateTime($dateString, Tinebase_Core::getUserTimezone());
         
         $ta = $taController->create(new Timetracker_Model_Timeaccount(array('number' => '123', 'title' => 'test')));
         $r = new Timetracker_Model_Timesheet(array(

@@ -755,7 +755,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      */
     public function testGetFeastAndFreeDays()
     {
-            $employmentBegin = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+            $employmentBegin = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
             $employmentEnd   = clone $employmentBegin;
             $employmentEnd->setDate(2014, 1, 30);
         
@@ -792,7 +792,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $this->assertEquals(NULL, $res['ownFreeDays']);
             
             $this->assertEquals(1, count($res['feastDays']));
-            $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $res['feastDays'][0]->getTimezone()->getName());
+            $this->assertEquals(Tinebase_Core::getUserTimezone(), $res['feastDays'][0]->getTimezone()->getName());
             $this->assertEquals('2014-01-06 00:00:00', $res['feastDays'][0]->toString());
             
             $this->assertEquals(1, count($res['contracts']));
@@ -812,7 +812,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     
     public function testContractDates()
     {
-        $employmentBegin = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $employmentBegin = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         $employmentEnd   = clone $employmentBegin;
         $employmentEnd->setDate(2014, 1, 30);
         
@@ -844,7 +844,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     public function testAddContract()
     {
         $sdate = new Tinebase_DateTime('2013-01-01 00:00:00');
-        $sdate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $sdate->setTimezone(Tinebase_Core::getUserTimezone());
         $employee = $this->_getEmployee('rwright');
     
         $contractController = HumanResources_Controller_Contract::getInstance();
@@ -905,7 +905,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      */
     public function testAlternatingContracts()
     {
-        $date = Tinebase_DateTime::now()->setDate(2014, 1, 1)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $date = Tinebase_DateTime::now()->setDate(2014, 1, 1)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         $employee = $this->_getEmployee('unittest');
         
         $employee->employment_begin = clone $date;
@@ -950,7 +950,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals(28, $res['results']['remainingVacation']);
         
         // create vacation days
-        $day = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $day = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         $newFreeTime = array(
             'account_id' => $account['id'],
             'employee_id' => $recordData['id'],
@@ -970,7 +970,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->_json->saveFreeTime($newFreeTime);
         
         // create vacation days
-        $day = Tinebase_DateTime::now()->setDate(2014, 6, 10)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $day = Tinebase_DateTime::now()->setDate(2014, 6, 10)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         $newFreeTime = array(
             'account_id' => $account['id'],
             'employee_id' => $recordData['id'],
@@ -993,7 +993,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         
         // create vacation days
-        $day = Tinebase_DateTime::now()->setDate(2014, 7, 28)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $day = Tinebase_DateTime::now()->setDate(2014, 7, 28)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         $newFreeTime = array(
             'account_id' => $account['id'],
             'employee_id' => $recordData['id'],
@@ -1016,7 +1016,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->_json->saveFreeTime($newFreeTime);
         
         // create sickness days
-        $day = Tinebase_DateTime::now()->setDate(2014, 1, 21)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $day = Tinebase_DateTime::now()->setDate(2014, 1, 21)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         $newFreeTime = array(
             'account_id' => $account['id'],
             'employee_id' => $recordData['id'],
@@ -1054,7 +1054,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->_json->saveFreeTime($newFreeTime);
         
         // create sickness days
-        $day = Tinebase_DateTime::now()->setDate(2014, 1, 6)->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))->setTime(0,0,0);
+        $day = Tinebase_DateTime::now()->setDate(2014, 1, 6)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         $newFreeTime = array(
                 'account_id' => $account['id'],
                 'employee_id' => $recordData['id'],

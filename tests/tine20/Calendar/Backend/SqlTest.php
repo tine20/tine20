@@ -156,7 +156,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'uid'          => Calendar_Model_Event::generateUID(),
                 'rrule_until'  => '2009-04-02 23:59:59',
                 Tinebase_Model_Grants::GRANT_READ    => true,
-                'originator_tz' => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
+                'originator_tz' => Tinebase_Core::getUserTimezone()
             ),
             array(
                 'dtstart'      => '2009-03-27 22:00:00',
@@ -169,7 +169,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'uid'          => Calendar_Model_Event::generateUID(),
                 'rrule_until'  => '2009-04-05 23:59:59',
                 Tinebase_Model_Grants::GRANT_READ    => true,
-                'originator_tz' => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
+                'originator_tz' => Tinebase_Core::getUserTimezone()
             ),
             array(
                 'dtstart'      => '2009-04-03 22:00:00',
@@ -182,7 +182,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'uid'          => Calendar_Model_Event::generateUID(),
                 'rrule_until'  => '2009-04-06 23:59:59',
                 Tinebase_Model_Grants::GRANT_READ    => true,
-                'originator_tz' => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
+                'originator_tz' => Tinebase_Core::getUserTimezone()
             ),
             array(
                 'dtstart'      => '2009-04-03 22:00:00',
@@ -195,7 +195,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'uid'          => Calendar_Model_Event::generateUID(),
                 'rrule_until'  => '2009-04-12 23:59:59',
                 Tinebase_Model_Grants::GRANT_READ    => true,
-                'originator_tz' => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
+                'originator_tz' => Tinebase_Core::getUserTimezone()
             ),
             array(
                 'dtstart'      => '2009-04-11 00:00:00',
@@ -208,7 +208,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
                 'uid'          => Calendar_Model_Event::generateUID(),
                 'rrule_until'  => '2009-04-15 02:00:00',
                 Tinebase_Model_Grants::GRANT_READ    => true,
-                'originator_tz' => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
+                'originator_tz' => Tinebase_Core::getUserTimezone()
             )
         ));
         

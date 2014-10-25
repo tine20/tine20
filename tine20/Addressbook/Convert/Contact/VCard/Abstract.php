@@ -337,7 +337,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      */
     protected function _toTine20ModelParseBday(&$data, \Sabre\VObject\Property $property)
     {
-        $tzone = new DateTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $tzone = new DateTimeZone(Tinebase_Core::getUserTimezone());
         $data['bday'] = new Tinebase_DateTime($property->getValue(), $tzone);
         $data['bday']->setTimezone(new DateTimeZone('UTC'));
     }
@@ -368,7 +368,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     {
         if ($record->bday instanceof Tinebase_DateTime) {
             $date = clone $record->bday;
-            $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $date->setTimezone(Tinebase_Core::getUserTimezone());
             $date = $date->format('Y-m-d');
             $card->add('BDAY', $date);
         }

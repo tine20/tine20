@@ -460,7 +460,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
             Tinebase_Core::get(Tinebase_Core::CACHE)
         );
         
-        $syncrotonEvent->timezone = $timeZoneConverter->encodeTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $syncrotonEvent->timezone = $timeZoneConverter->encodeTimezone(Tinebase_Core::getUserTimezone());
         
         $syncrotonEvent->meetingStatus = 1;
         $syncrotonEvent->sensitivity = 0;
@@ -744,12 +744,12 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
             try {
                 $timezone = $timeZoneConverter->getTimezone(
                     $data->timezone,
-                    Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)
+                    Tinebase_Core::getUserTimezone()
                 );
                 $event->originator_tz = $timezone;
             } catch (ActiveSync_TimezoneNotFoundException $e) {
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " timezone data not found " . $data->timezone);
-                $event->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+                $event->originator_tz = Tinebase_Core::getUserTimezone();
             }
         
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(

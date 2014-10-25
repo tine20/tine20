@@ -84,7 +84,7 @@ class Calendar_Exception_AttendeeBusy extends Exception
      */
     public function toArray()
     {
-        $this->getFreeBusyInfo()->setTimezone(Tinebase_Core::get('userTimeZone'));
+        $this->getFreeBusyInfo()->setTimezone(Tinebase_Core::getUserTimezone());
         return array(
             'freebusyinfo' => $this->getFreeBusyInfo()->toArray(),
             'event'        => $this->getEvent()->toArray(),

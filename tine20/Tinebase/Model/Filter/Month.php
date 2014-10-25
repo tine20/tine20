@@ -89,7 +89,7 @@ class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
         } else {
             
             $date = new Tinebase_DateTime($this->_value);
-            $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $date->setTimezone(Tinebase_Core::getUserTimezone());
             
             $dateString = $date->format('Y-m');
             

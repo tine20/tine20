@@ -522,7 +522,7 @@ class Tinebase_Translation
     public static function dateToStringInTzAndLocaleFormat(DateTime $date = null, $timezone = null, Zend_Locale $locale = null, $part = 'datetime', $addWeekday = false)
     {
         $date = ($date !== null) ? clone($date) : Tinebase_DateTime::now();
-        $timezone = ($timezone !== null) ? $timezone : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $timezone = ($timezone !== null) ? $timezone : Tinebase_Core::getUserTimezone();
         $locale = ($locale !== null) ? $locale : Tinebase_Core::get(Tinebase_Core::LOCALE);
         
         $date = new Zend_Date($date->getTimestamp());

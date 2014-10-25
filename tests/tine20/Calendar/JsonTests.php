@@ -420,11 +420,11 @@ class Calendar_JsonTests extends Calendar_TestCase
         $stmt = $db->query($select);
         $queryResult = $stmt->fetch();
         
-//         echo Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+//         echo Tinebase_Core::getUserTimezone();
 //         echo date_default_timezone_get();
         
         $midnightInUTC = new Tinebase_DateTime($queryResult['rrule_until']);
-        $this->assertEquals(Tinebase_DateTime::now()->setTime(23,59,59)->toString(), $midnightInUTC->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), TRUE)->toString());
+        $this->assertEquals(Tinebase_DateTime::now()->setTime(23,59,59)->toString(), $midnightInUTC->setTimezone(Tinebase_Core::getUserTimezone(), TRUE)->toString());
     }
     
     /**
@@ -1474,7 +1474,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $event->is_all_day_event = TRUE;
         
         $event = Calendar_Controller_Event::getInstance()->create($event);
-        $event->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $event->setTimezone(Tinebase_Core::getUserTimezone());
         
         $this->assertEquals('00:00:00', $event->dtstart->format('H:i:s'));
         $this->assertEquals('23:59:59', $event->dtend->format('H:i:s'));
@@ -1483,7 +1483,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $event->dtend   = Tinebase_DateTime::now()->addHour(1);
         
         $event = Calendar_Controller_Event::getInstance()->update($event);
-        $event->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $event->setTimezone(Tinebase_Core::getUserTimezone());
         
         $this->assertEquals('00:00:00', $event->dtstart->format('H:i:s'));
         $this->assertEquals('23:59:59', $event->dtend->format('H:i:s'));

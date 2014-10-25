@@ -213,7 +213,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertEquals($timezone, $preference, "Didn't get right timezone preference.");
         
         // restore old settings
-        Tinebase_Core::set('userTimeZone', $oldPreference);
+        Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $oldPreference);
         Tinebase_Core::getPreference()->{Tinebase_Preference::TIMEZONE} = $oldPreference;
     }
     

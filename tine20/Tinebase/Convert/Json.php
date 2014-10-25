@@ -49,7 +49,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $this->_resolveBeforeToArray($records, $modelConfiguration, FALSE);
         
         $_record = $records->getFirstRecord();
-        $_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $_record->setTimezone(Tinebase_Core::getUserTimezone());
         $_record->bypassFilters = true;
         
         $result = $_record->toArray();
@@ -105,7 +105,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     $foreignRecords = $controller->getMultiple($foreignIds);
                 }
                 
-                $foreignRecords->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                $foreignRecords->setTimezone(Tinebase_Core::getUserTimezone());
                 $foreignRecords->convertDates = true;
                 Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($foreignRecords);
                 $fr = $foreignRecords->getFirstRecord();
@@ -283,7 +283,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             $foreignRecordClass = $foreignRecords->getRecordClassName();
             $foreignRecordModelConfiguration = $foreignRecordClass::getConfiguration();
             
-            $foreignRecords->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $foreignRecords->setTimezone(Tinebase_Core::getUserTimezone());
             $foreignRecords->convertDates = true;
             
             $fr = $foreignRecords->getFirstRecord();
@@ -445,7 +445,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         $this->_resolveBeforeToArray($_records, $config, TRUE);
         
-        $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $_records->setTimezone(Tinebase_Core::getUserTimezone());
         $_records->convertDates = true;
 
         $result = $_records->toArray();

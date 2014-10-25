@@ -241,8 +241,8 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             $lastDate = $this->_getLastDate($contract, $gLastDate);
             
             // find out how many days the year does have
-            $januaryFirst = Tinebase_DateTime::createFromFormat('Y-m-d H:i:s e', $firstDate->format('Y') . '-01-01 00:00:00 ' . Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-            $decemberLast = Tinebase_DateTime::createFromFormat('Y-m-d H:i:s e', $firstDate->format('Y') . '-12-31 23:59:59 ' . Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $januaryFirst = Tinebase_DateTime::createFromFormat('Y-m-d H:i:s e', $firstDate->format('Y') . '-01-01 00:00:00 ' . Tinebase_Core::getUserTimezone());
+            $decemberLast = Tinebase_DateTime::createFromFormat('Y-m-d H:i:s e', $firstDate->format('Y') . '-12-31 23:59:59 ' . Tinebase_Core::getUserTimezone());
             
             $daysOfTheYear = ($decemberLast->getTimestamp() - $januaryFirst->getTimestamp()) / 24 / 60 / 60;
             
@@ -289,7 +289,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             
             Calendar_Model_Rrule::mergeRecurrenceSet($events, $fd, $ld);
             
-            $events->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $events->setTimezone(Tinebase_Core::getUserTimezone());
             
             foreach($events as $event) {
                 if (! $event->isInPeriod($periodFilter)) {
@@ -530,13 +530,13 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         for ($i = 0; $i < count($resultSet); $i++) {
             
             $sDate = new Tinebase_DateTime($resultSet[$i]['start_date']);
-            $sDate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $sDate->setTimezone(Tinebase_Core::getUserTimezone());
             
             $eDate = NULL;
             
             if ($resultSet[$i]['end_date']) {
                 $eDate = new Tinebase_DateTime($resultSet[$i]['end_date']);
-                $eDate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                $eDate->setTimezone(Tinebase_Core::getUserTimezone());
             }
             
             $freeTimeFilter = new HumanResources_Model_FreeTimeFilter(array(

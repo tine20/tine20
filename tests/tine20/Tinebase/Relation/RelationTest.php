@@ -183,7 +183,7 @@ class Tinebase_Relation_RelationTest extends TestCase
         // NOTE: At the moment we need to set timezone to users timzone, as related records come as arrays and don't get
         // their dates converted in the JSON frontends
         foreach ($relations as $relation) {
-            $relation->setTimezone(Zend_Registry::get('userTimeZone'));
+            $relation->setTimezone(Tinebase_Core::getUserTimezone());
         }
         
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray());
@@ -207,7 +207,7 @@ class Tinebase_Relation_RelationTest extends TestCase
         // NOTE: At the moment we need to set timezone to users timzone, as related records come as arrays and don't get
         // their dates converted in the JSON frontends
         foreach ($relations as $relation) {
-            $relation->setTimezone(Zend_Registry::get('userTimeZone'));
+            $relation->setTimezone(Tinebase_Core::getUserTimezone());
             $relation->related_record = $relation->related_record->toArray();
         }        
         $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray(), FALSE, TRUE);

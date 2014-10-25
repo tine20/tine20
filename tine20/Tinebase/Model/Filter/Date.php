@@ -323,7 +323,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         }
         
         if ($usertimezone) {
-            $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $date->setTimezone(Tinebase_Core::getUserTimezone());
         }
         
         return $date;

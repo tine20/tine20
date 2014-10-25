@@ -1402,7 +1402,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // if dtstart of an event changes, we update the originator_tz, alarm times
         if (! $_oldRecord->dtstart->equals($_record->dtstart)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart changed -> adopting organizer_tz');
-            $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+            $_record->originator_tz = Tinebase_Core::getUserTimezone();
             if (! empty($_record->rrule)) {
                 $diff = $_oldRecord->dtstart->diff($_record->dtstart);
                 $this->_updateRecurIdOfExdates($_record, $diff);
@@ -1456,7 +1456,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _inspectEvent($_record)
     {
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
-        $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::getUserTimezone();
         $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
         $_record->transp = $_record->transp ? $_record->transp : Calendar_Model_Event::TRANSP_OPAQUE;
         

@@ -212,8 +212,8 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $updated = $this->_json->updatePropertiesAsteriskSipPeer($returned['id'], $data);
         
         //print_r($updated);
-        date_default_timezone_set(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        $now->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        date_default_timezone_set(Tinebase_Core::getUserTimezone());
+        $now->setTimezone(Tinebase_Core::getUserTimezone());
         $nowConverted = $now->get(Tinebase_Record_Abstract::ISO8601LONG);
         date_default_timezone_set('UTC');
         $this->assertEquals($nowConverted, $updated['regseconds']);

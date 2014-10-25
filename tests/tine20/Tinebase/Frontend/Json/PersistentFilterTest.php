@@ -95,7 +95,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         $exampleFilterData = self::getPersistentFilterData();
         $savedFilterData = $this->testSaveFilter($exampleFilterData);
         
-        $testUserTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $testUserTimezone = Tinebase_Core::getUserTimezone();
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $testUserTimezone !== 'US/Pacific' ? 'US/Pacific' : 'UTC');
         
         $originalDueDateFilter = $this->_getFilter('due', $exampleFilterData);

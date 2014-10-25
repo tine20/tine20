@@ -139,7 +139,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                         $syncrotonTask->$syncrotonProperty = $entry->$tine20Property;
                         
                         $dueDateTime = clone $entry->$tine20Property;
-                        $dueDateTime->setTimezone(Tinebase_Core::get('userTimeZone'));
+                        $dueDateTime->setTimezone(Tinebase_Core::getUserTimezone());
                         $syncrotonTask->dueDate = $dueDateTime;
                     }
                     
