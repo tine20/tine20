@@ -181,10 +181,10 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         // contract 1 gets billed at the begin of the period
         $c1IArray = $customer1Invoices->start_date;
         
-        $this->assertEquals($this->_referenceYear . '-02-01 00:00:00', $c1IArray[0]->toString());
+        $this->assertEquals($this->_referenceYear . '-01-01 00:00:00', $c1IArray[0]->toString());
         
         $c1IArray = $customer1Invoices->end_date;
-        $this->assertEquals($this->_referenceYear . '-02-' . ($this->_isLeapYear ? '29' : '28') . ' 23:59:59', $c1IArray[0]->toString());
+        $this->assertEquals($this->_referenceYear . '-01-31 23:59:59', $c1IArray[0]->toString());
         
         // contract 2 gets billed at the end of the period, and the second period ends at 1.8.20xx
         $c2IsArray = $customer2Invoices->start_date;

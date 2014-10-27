@@ -148,11 +148,11 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                 )
             ),
             'start_date' => array(
-                'type' => 'date',
+                'type' => 'datetime',
                 'label'      => 'Start Date',    // _('Start Date')
             ),
             'end_date' => array(
-                'type' => 'date',
+                'type' => 'datetime',
                 'label'      => 'End Date',    // _('End Date')
             ),
             'customer' => array(

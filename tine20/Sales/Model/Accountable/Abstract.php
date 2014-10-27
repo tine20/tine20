@@ -83,19 +83,16 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
      * returns billables for this record
      * 
      * @param Tinebase_DateTime $date
+     * @param Sales_Model_ProductAggregate $productAggregate
      * @return array
      */
-    public function getBillables(Tinebase_DateTime $date = NULL)
+    public function getBillables(Tinebase_DateTime $date = NULL, Sales_Model_ProductAggregate $productAggregate = NULL)
     {
         if (! $date) {
             if (! $this->_referenceDate) {
                 throw new Tinebase_Exception_InvalidArgument('date is needed if not set before');
             }
             $date = clone $this->_referenceDate;
-        }
-        
-        if (! $this->_billablesLoaded) {
-            $this->loadBillables($date);
         }
         
         return $this->_billables;
@@ -115,10 +112,6 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
             }
             
             $date = clone $this->_referenceDate;
-        }
-        
-        if (! $this->_billablesLoaded) {
-            $this->loadBillables($date);
         }
         
         if (empty($this->_billables)) {
@@ -230,7 +223,7 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
             'billing_point' => $this->_defaultBillingPoint,
             'contract_id'   => $contract->getId(),
             'start_date'    => $startDate,
-            'end_date'      => $endDate,
+            'end_date'      => NULL,
             'last_autobill' => NULL,
             'product_id'    => $product->getId(),#
             'quantity'      => $product->accountable ? NULL : 1,
@@ -257,9 +250,10 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
      * loads billables for this record
      *
      * @param Tinebase_DateTime $date
+     * @param Sales_Model_ProductAggregate $productAggregate
      * @return void
      */
-    abstract public function loadBillables(Tinebase_DateTime $date);
+    abstract public function loadBillables(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate);
     
     /**
      * returns true if this record should be billed for the specified date

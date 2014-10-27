@@ -279,9 +279,10 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract imp
      * loads billables for this record
      *
      * @param Tinebase_DateTime $date
+     * @param Sales_Model_ProductAggregate $productAggregate
      * @return void
     */
-    public function loadBillables(Tinebase_DateTime $date)
+    public function loadBillables(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate)
     {
         $this->_referenceDate = $date;
         $this->_billables = array();

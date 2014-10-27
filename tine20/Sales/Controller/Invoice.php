@@ -429,8 +429,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 continue;
             }
         
-            $ba['ac']->loadBillables($this->_currentBillingDate);
-            $billables = $ba['ac']->getBillables($this->_currentBillingDate);
+            $ba['ac']->loadBillables($this->_currentBillingDate, $ba['pa']);
+            $billables = $ba['ac']->getBillables($this->_currentBillingDate, $ba['pa']);
         
             if (empty($billables)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {

@@ -43,9 +43,10 @@ interface Sales_Model_Accountable_Interface
      * returns billables for this record
      * 
      * @param Tinebase_DateTime $date
+     * @param Sales_Model_ProductAggregate $productAggregate
      * @return array
      */
-    public function getBillables(Tinebase_DateTime $date = NULL);
+    public function getBillables(Tinebase_DateTime $date = NULL, Sales_Model_ProductAggregate $productAggregate = NULL);
     
     /**
      * returns the max interval of all billables
@@ -59,9 +60,10 @@ interface Sales_Model_Accountable_Interface
      * loads billables for this record
      *
      * @param Tinebase_DateTime $date
+     * @param Sales_Model_ProductAggregate $productAggregate
      * @return void
      */
-    public function loadBillables(Tinebase_DateTime $date);
+    public function loadBillables(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate);
     
     /**
      * returns true if this record should be billed for the specified date
