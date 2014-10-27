@@ -144,12 +144,12 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     manageHeight: function() {
         if (this.rendered) {
             var tbHeight = this.activeFilterPanel.getHeight(),
-                northHeight = this.layout.north ? this.layout.north.panel.getHeight() : 0,
-                eastHeight = this.layout.east && this.layout.east.panel.getEl().child('ul') ? (this.layout.east.panel.getEl().child('ul').getHeight() + 28) : 0,
+                northHeight = this.layout.north ? this.layout.north.panel.getHeight() + 1 : 0,
+                eastHeight = this.layout.east && this.layout.east.panel.getEl().child('ul') ? ((this.layout.east.panel.getEl().child('ul').getHeight()) + 29) : 0,
                 height = Math.min(Math.max(eastHeight, tbHeight + northHeight), 120);
             
             this.setHeight(height);
-            
+
             // manage scrolling
             if (this.layout.center && tbHeight > 120) {
                 this.layout.center.panel.el.child('div[class^="x-panel-body"]', true).scrollTop = 1000000;
