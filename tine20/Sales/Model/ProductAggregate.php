@@ -81,7 +81,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 'type'       => 'integer',
                 'default'    => NULL,
-                'inputFilters' => array('Zend_Filter_Null')
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'interval' => array(
                 'label'      => 'Billing Interval', // _('Billing Interval')
@@ -139,7 +139,9 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
              
         } else {
             $from = clone $this->last_autobill;
-            $from->addMonth($this->interval);
+            if ($this->billing_point == 'begin') {
+                $from->addMonth($this->interval);
+            }
         }
         
         $from->setDate($from->format('Y'), $from->format('m'), 1);

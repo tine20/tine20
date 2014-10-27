@@ -528,7 +528,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         // conjunct billables with invoice, find out which productaggregates to update
         foreach($billableAccountables as $ba) {
             $ba['ac']->conjunctInvoiceWithBillables($invoice);
-            $paToUpdate[$ba['pa']->getId()] = $ba['pa'];
+            if ($ba['pa']->getId()) {
+                $paToUpdate[$ba['pa']->getId()] = $ba['pa'];
+            }
         }
         
         foreach($paToUpdate as $paId => $productAggregate) {
@@ -554,9 +556,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating last_autobill of "' . $productAggregate->getId() . '": ' . $lab->__toString());
             }
             
-            if ($productAggregate->getId()) {
-                Sales_Controller_ProductAggregate::getInstance()->update($productAggregate);
-            }
+            Sales_Controller_ProductAggregate::getInstance()->update($productAggregate);
         }
     }
     
