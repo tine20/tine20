@@ -37,6 +37,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Admin.Model.Customfield,
     recordProxy: Tine.Admin.customfieldBackend,
     evalGrants: false,
+    modelStore: null,
     
     /**
      * definition properties for cusomfield
@@ -185,42 +186,6 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onStoreWindowClose: function () {
         this.storeWindow.purgeListeners();
         this.storeWindow.close();
-    },
-    
-    /**
-     * Get available model for given application
-     * 
-     *  @param {Mixed} application
-     *  @param {Boolean} customFieldModel
-     */
-    getApplicationModels: function (application, customFieldModel) {
-        var models      = [],
-            useModel,
-            appName     = Ext.isString(application) ? application : application.get('name'),
-            app         = Tine.Tinebase.appMgr.get(appName),
-            trans       = app && app.i18n ? app.i18n : Tine.Tinebase.translation,
-            appModels   = Tine[appName].Model;
-        
-        if (appModels) {
-            for (var model in appModels) {
-                if (appModels.hasOwnProperty(model) && typeof appModels[model].getMeta === 'function') {
-                    if (customFieldModel && appModels[model].getField('customfields')) {
-                        useModel = appModels[model].getMeta('appName') + '_Model_' + appModels[model].getMeta('modelName');
-                        
-                        Tine.log.info('Found model with customfields property: ' + useModel);
-                        models.push([useModel, trans.n_(appModels[model].getMeta('recordName'), appModels[model].getMeta('recordsName'), 1)]);
-                    }
-                    else if (! customFieldModel) {
-                        useModel = 'Tine.' + appModels[model].getMeta('appName') + '.Model.' + appModels[model].getMeta('modelName');
-                        
-                        Tine.log.info('Found model: ' + useModel);
-                        models.push([useModel, trans.n_(appModels[model].getMeta('recordName'), appModels[model].getMeta('recordsName'), 1)]);
-                    }
-                }
-            }
-        }
-        
-        return models;
     },
     
     /**
@@ -486,16 +451,17 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             totalProperty: 'totalcount',
             fields: Tine.Admin.Model.Application
         });
+
         this.appStore.loadData({
             results:    Tine.Tinebase.registry.get('userApplications'),
             totalcount: Tine.Tinebase.registry.get('userApplications').length
         });
-        
+
         this.modelStore = new Ext.data.ArrayStore({
             idIndex: 0,
             fields: [{name: 'value'}, {name: 'name'}]
         });
-        
+
         this.configureStoreBtn = new Ext.Button({
             columnWidth: 0.333,
             fieldLabel: '&#160;',
