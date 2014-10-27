@@ -4,14 +4,9 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Calendar_Controller_Event
@@ -1225,11 +1220,15 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ), TRUE)
         ));
         $persistentEvent = $this->_controller->create($event);
-        //print_r($persistentEvent->toArray());
         $alarm = $persistentEvent->alarms->getFirstRecord();
         $this->_controller->adoptAlarmTime($persistentEvent, $alarm);
         
-        $this->assertEquals('2014-10-24 23:00:00', $alarm->alarm_time->toString(), print_r($alarm->toArray(), true));
+        $now = Tinebase_DateTime::now();
+        $year = $now->get('Y');
+        if ($now->isLater(new Tinebase_DateTime($year . '-10-24'))) {
+            $year++;
+        }
+        $this->assertEquals($year . '-10-24 23:00:00', $alarm->alarm_time->toString(), print_r($alarm->toArray(), true));
         
         // mock send alarm and check next occurrence
         $alarm->sent_status = Tinebase_Model_Alarm::STATUS_PENDING;
@@ -1248,7 +1247,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedAlarm->minutes_before = 2880;
         
         $this->_controller->adoptAlarmTime($persistentEvent, $updatedAlarm, 'instance');
-        $this->assertEquals('2014-10-24 23:00:00', $updatedAlarm->alarm_time->toString(), print_r($updatedAlarm->toArray(), true));
+        $this->assertEquals($year . '-10-24 23:00:00', $updatedAlarm->alarm_time->toString(), print_r($updatedAlarm->toArray(), true));
     }
     
     public function testGetRecurExceptions()

@@ -21,8 +21,8 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
 {
     public function __construct()
     {
-        $applications = Tinebase_Core::getUser()->getApplications();
-
+        $applications = is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getApplications() : new Tinebase_Record_RecordSet('Tinebase_Model_Application');
+        
         parent::__construct('root', array(
             new \Sabre\DAV\SimpleCollection('principals', array(
                 new Tinebase_WebDav_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), Tinebase_WebDav_PrincipalBackend::PREFIX_USERS),
