@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 
@@ -251,7 +251,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 $preference->options    = '';
                 break;
             case self::DEFAULTATTENDEE_STRATEGY:
-                $preference->value      = 'intelligent';
+                $preference->value      = 'me';
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <option>

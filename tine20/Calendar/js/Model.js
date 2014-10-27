@@ -160,12 +160,13 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
  */ 
 Tine.Calendar.Model.Event.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar'),
+        prefs = app.getRegistry().get('preferences'),
+        defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me',
         mainScreen = app.getMainScreen(),
         centerPanel = mainScreen.getCenterPanel(),
         westPanel = mainScreen.getWestPanel(),
         container = westPanel.getContainerTreePanel().getDefaultContainer(),
-        organizer = container.ownerContact ? container.ownerContact : Tine.Tinebase.registry.get('userContact'),
-        prefs = app.getRegistry().get('preferences'),
+        organizer = (defaultAttendeeStrategy != 'me' && container.ownerContact) ? container.ownerContact : Tine.Tinebase.registry.get('userContact'),
         dtstart = new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
         period = centerPanel.getCalendarPanel(centerPanel.activeView).getView().getPeriod();
         
