@@ -954,6 +954,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
             
             if (! empty($diff)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Differences found: ' . print_r($diff, 1));
+                }
                 throw new Sales_Exception_InvoiceAlreadyClearedEdit();
             }
         }
