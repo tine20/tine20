@@ -147,7 +147,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'type'  => 'float',
                 'specialType' => 'euMoney',
                 'default' => 0,
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
             ),
             'price_gross' => array(
@@ -155,14 +155,14 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'type'  => 'float',
                 'specialType' => 'euMoney',
                 'default' => 0,
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
             ),
             'sales_tax' => array(
                 'label' => 'Sales Tax', // _('Sales Tax')
                 'type'  => 'float',
                 'default' => 19,
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
             ),
             'positions' => array(

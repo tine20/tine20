@@ -212,7 +212,17 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             // fetch invoice by get to have all relations set
             $invoice = $json->getInvoice($invoice['id']);
             $invoice['cleared'] = 'CLEARED';
-            $json->saveInvoice($invoice);
+            
+            // check set empty number fields to an empty string
+            $invoice['sales_tax'] = '';
+            $invoice['price_gross'] = '';
+            $invoice['price_net'] = '';
+            
+            $invoice = $json->saveInvoice($invoice);
+            
+            $this->assertEquals(0,$invoice['sales_tax']);
+            $this->assertEquals(0,$invoice['price_gross']);
+            $this->assertEquals(0,$invoice['price_net']);
         }
         
         $taController = Timetracker_Controller_Timeaccount::getInstance();
