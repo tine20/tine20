@@ -127,17 +127,6 @@ Tine.Sales.OfferEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             relationDegree: 'sibling',
                             modelUnique: true,
                             columnWidth: 1
-                        }], [{
-                            xtype: 'tinerelationpickercombo',
-                            fieldLabel: this.app.i18n._('Order Confirmation'),
-                            editDialog: this,
-                            allowBlank: false,
-                            app: 'Sales',
-                            recordClass: Tine.Sales.Model.OrderConfirmation,
-                            relationType: 'OFFER',
-                            relationDegree: 'sibling',
-                            modelUnique: true,
-                            columnWidth: 1
                         }]
                     ]
                 }, {
