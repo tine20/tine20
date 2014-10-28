@@ -778,3 +778,9 @@ msgstr "Produktdatensätze, die ich angelegt habe"
 
 msgid "Contracts created by me"
 msgstr "Vertragsdatensätze, die ich angelegt habe"
+
+msgid "Sales Tax"
+msgstr "Mehrwertsteuer"
+
+msgid "change number of an order confirmations"
+msgstr "Nummer einer Auftragsbestätigung ändern"

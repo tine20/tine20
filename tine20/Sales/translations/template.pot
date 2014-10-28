@@ -901,3 +901,9 @@ msgstr ""
 
 msgid "Products created by me"
 msgstr ""
+
+msgid "Sales Tax"
+msgstr ""
+
+msgid "change number of an order confirmations"
+msgstr ""
