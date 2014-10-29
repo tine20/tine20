@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -46,7 +46,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $records = new Tinebase_Record_RecordSet($recordClassName, array($_record));
         $modelConfiguration = $recordClassName::getConfiguration();
         
-        $this->_resolveBeforeToArray($records, $modelConfiguration);
+        $this->_resolveBeforeToArray($records, $modelConfiguration, FALSE);
         
         $_record = $records->getFirstRecord();
         $_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
@@ -54,7 +54,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         $result = $_record->toArray();
         
-        $result = $this->_resolveAfterToArray($result, $modelConfiguration);
+        $result = $this->_resolveAfterToArray($result, $modelConfiguration, FALSE);
         
         return $result;
     }
@@ -116,8 +116,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 if ($foreignRecords->count()) {
                     foreach ($_records as $record) {
                         foreach ($fields as $field) {
-                            // don't try to resolve already resolved or empty fields
-                            if (is_string($record->{$field}) && ! empty($record->{$field})) {
+                            if (is_scalar($record->{$field})) {
                                 $idx = $foreignRecords->getIndexById($record->{$field});
                                 if (isset($idx) && $idx !== FALSE) {
                                     $record->{$field} = $foreignRecords[$idx];
@@ -242,8 +241,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @param Tinebase_Record_RecordSet $_records
      * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
      */
-    protected function _resolveMultipleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL)
+    protected function _resolveMultipleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL, $multiple = false)
     {
         if (! $modelConfiguration || (! $_records->count())) {
             return;
@@ -258,14 +258,20 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         // iterate fields to resolve
         foreach ($resolveFields as $fieldKey => $c) {
             $config = $c['config'];
+            
+            // resolve records, if omitOnSearch is definitively set to FALSE (by default they won't be resolved on search)
+            if ($multiple && !(isset($config['omitOnSearch']) && $config['omitOnSearch'] === FALSE)) {
+                continue;
+            }
+            
             // fetch the fields by the refIfField
-            $controller = (isset($config['controllerClassName']) || array_key_exists('controllerClassName', $config)) ? $config['controllerClassName']::getInstance() : Tinebase_Core::getApplicationInstance($foreignRecordClassName);
+            $controller = isset($config['controllerClassName']) ? $config['controllerClassName']::getInstance() : Tinebase_Core::getApplicationInstance($foreignRecordClassName);
             $filterName = $config['filterClassName'];
             
             $filterArray = array();
             
             // addFilters can be added and must be added if the same model resides in more than one records fields
-            if ((isset($config['addFilters']) || array_key_exists('addFilters', $config)) && is_array($config['addFilters'])) {
+            if (isset($config['addFilters']) && is_array($config['addFilters'])) {
                 $useaddFilters = true;
                 $filterArray = $config['addFilters'];
             }
@@ -274,7 +280,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)));
             
             $paging = NULL;
-            if ((isset($config['paging']) || array_key_exists('paging', $config)) && is_array($config['paging'])) {
+            if (isset($config['paging']) && is_array($config['paging'])) {
                 $paging = new Tinebase_Model_Pagination($config['paging']);
             }
             
@@ -287,14 +293,31 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             
             $fr = $foreignRecords->getFirstRecord();
 
-            if ($fr && $fr->has('notes')) {
-                Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
+            // @todo: resolve alarms?
+            // @todo: use parts parameter?
+            if ($foreignRecordModelConfiguration->resolveRelated && $fr) {
+                if ($fr->has('notes')) {
+                    Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
+                }
+                if ($fr->has('tags')) {
+                    Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($foreignRecords);
+                }
+                if ($fr->has('relations')) {
+                    $relations = Tinebase_Relations::getInstance()->getMultipleRelations($foreignRecordClass, 'Sql', $foreignRecords->{$fr->getIdProperty()} );
+                    $foreignRecords->setByIndices('relations', $relations);
+                }
+                if ($fr->has('customfields')) {
+                    Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($foreignRecords);
+                }
+                if ($fr->has('attachments') && Setup_Controller::getInstance()->isFilesystemAvailable()) {
+                    Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($foreignRecords);
+                }
             }
             
             if ($foreignRecords->count() > 0) {
                 foreach ($_records as $record) {
                     $filtered = $foreignRecords->filter($config['refIdField'], $record->getId())->toArray();
-                    $filtered = $this->_resolveAfterToArray($filtered, $foreignRecordModelConfiguration);
+                    $filtered = $this->_resolveAfterToArray($filtered, $foreignRecordModelConfiguration, TRUE);
                     $record->{$fieldKey} = $filtered;
                 }
                 
@@ -310,15 +333,37 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @param array $resultSet
      * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
      */
-    protected function _resolveVirtualFields($resultSet, $modelConfiguration = NULL)
+    protected function _resolveVirtualFields($resultSet, $modelConfiguration = NULL, $multiple = false)
     {
         if (! $modelConfiguration || ! ($virtualFields = $modelConfiguration->virtualFields)) {
             return $resultSet;
         }
         
+        if ($modelConfiguration->resolveVFGlobally === TRUE) {
+            
+            $controller = $modelConfiguration->getControllerInstance();
+            
+            if ($multiple) {
+                return $controller->resolveMultipleVirtualFields($resultSet);
+            }
+            return $controller->resolveVirtualFields($resultSet);
+        }
+        
         foreach($virtualFields as $field) {
-            if ((isset($field['function']) || array_key_exists('function', $field))) {
+            // resolve virtual relation record from relations property
+            if (! $multiple && isset($field['type']) && $field['type'] == 'relation') {
+                $fc = $field['config'];
+                if (isset($resultSet['relations']) && (is_array($resultSet['relations']))) {
+                    foreach($resultSet['relations'] as $relation) {
+                        if (($relation['type'] == $fc['type']) && ($relation['related_model'] == ($fc['appName'] . '_Model_' . $fc['modelName']))) {
+                            $resultSet[$field['key']] = $relation['related_record'];
+                        }
+                    }
+                }
+            // resolve virtual field by function
+            } elseif ((isset($field['function']) || array_key_exists('function', $field))) {
                 if (is_array($field['function'])) {
                     if (count($field['function']) > 1) { // static method call
                         $class  = $field['function'][0];
@@ -351,8 +396,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @param Tinebase_Record_RecordSet $records
      * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
      */
-    protected function _resolveBeforeToArray($records, $modelConfiguration)
+    protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
     {
         Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($records);
         
@@ -364,7 +410,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             $this->_resolveSingleRecordFields($records, $modelConfiguration);
         
             // resolve all multiple records fields
-            $this->_resolveMultipleRecordFields($records, $modelConfiguration);
+            $this->_resolveMultipleRecordFields($records, $modelConfiguration, $multiple);
         }
     }
     
@@ -373,11 +419,13 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @param array $result
      * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
+     * 
      * @return array
      */
-    protected function _resolveAfterToArray($result, $modelConfiguration)
+    protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = false)
     {
-        $result = $this->_resolveVirtualFields($result, $modelConfiguration);
+        $result = $this->_resolveVirtualFields($result, $modelConfiguration, $multiple);
         return $result;
     }
     
@@ -390,9 +438,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * 
      * @return mixed
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
     {
-        if (count($_records) == 0) {
+        if (! $_records || count($_records) == 0) {
             return array();
         }
         
@@ -400,7 +448,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $ownRecordClass = $_records->getRecordClassName();
         $config = $ownRecordClass::getConfiguration();
         
-        $this->_resolveBeforeToArray($_records, $config);
+        $this->_resolveBeforeToArray($_records, $config, TRUE);
         
         $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_records->convertDates = true;
@@ -408,7 +456,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $result = $_records->toArray();
         
         // resolve all virtual fields after converting to array, so we can add these properties "virtually"
-        $result = $this->_resolveAfterToArray($result, $config);
+        $result = $this->_resolveAfterToArray($result, $config, TRUE);
 
         return $result;
     }

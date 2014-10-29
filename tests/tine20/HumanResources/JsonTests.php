@@ -152,7 +152,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $employee = $this->_json->saveEmployee($employee);
         
-        $this->assertEquals(18, count($employee['vacation'][0]));
+        $this->assertEquals(17, count($employee['vacation'][0]));
         $this->assertEquals(3, count($employee['costcenters']));
         
         // 0009666: setting contract end_date fails
