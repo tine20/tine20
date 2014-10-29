@@ -145,6 +145,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             'price_net' => array(
                 'label' => 'Price Net', // _('Price Net')
                 'type'  => 'float',
+                'specialType' => 'euMoney',
                 'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'shy' => TRUE,
@@ -152,6 +153,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             'price_gross' => array(
                 'label' => 'Price Gross', // _('Price Gross')
                 'type'  => 'float',
+                'specialType' => 'euMoney',
                 'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'shy' => TRUE,
