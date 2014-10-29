@@ -14,6 +14,9 @@
     }, {
         "type": "git",
         "url": "https://github.com/lkneschke/phing"
+    }, {
+        "type": "git",
+        "url": "https://github.com/lkneschke/Component_ZendHttp"
     }],
     "require": {
         "syncroton/syncroton": "1.*",
@@ -23,7 +26,8 @@
         "sabre/dav": "1.8.*",
         "sabre/vobject": "3.1.3 as 2.1.313",
         "metaways/opendocument": "dev-master",
-        "metaways/timezoneconvert": "dev-master"
+        "metaways/timezoneconvert": "dev-master",
+        "zendframework/zend-http": "2.2.8-p2 as 2.2.8"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
