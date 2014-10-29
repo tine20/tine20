@@ -153,7 +153,7 @@ Tine.Sales.InvoicePositionPanel = Ext.extend(Ext.Panel, {
             var renderedSum = Tine.Sales.renderInvoicePositionQuantity(this.sumsPerAccountable[this.accountables[index]], null, pseudoRecord2);
             var grid = new Tine.Sales.InvoicePositionGridPanel({
                 collapsible: true,
-                collapsed: this.accountables.length > 2 && index > 1,
+                collapsed: true,
                 editDialog: pseudoEditDialog,
                 height: (mymonths.length > 1) ? 350 : 250, // if grid will be grouped, make it bigger
                 title: accountableApplication.i18n._(model.getRecordsName()) +
