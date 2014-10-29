@@ -131,105 +131,99 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     protected function _updateContractsFields()
     {
-        if (php_sapi_name() == 'cli') {
-            echo 'The Users\' locale you use here will be used to translate the fields "status", "cleared", "cleared_in":';
-        }
+        $adminGroup   = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $groupMembers = Tinebase_Group::getInstance()->getGroupMembers($adminGroup->getId());
         
-        $controller = NULL;
+        Tinebase_Core::set(Tinebase_Core::USER, $groupMembers[0]);
         
         // cleared, cleared_in, status gets deleted, if the update is not called on cli
-        try {
-            $this->promptForUsername();
-            
-            $controller = Sales_Controller_Contract::getInstance();
-            
-            $table = new Zend_Db_Table(SQL_TABLE_PREFIX . 'sales_contracts', new Zend_Db_Table_Definition(array(
-                'id' => array('name' => 'id'),
-                'status' => array('name' => 'status'),
-                'cleared' => array('name' => 'cleared'),
-                'cleared_in' => array('name' => 'cleared_in'),
-                'description' => array('name' => 'description'),
-                'last_modified_time' => array('name' => 'last_modified_time')
-            )));
-            
-            $count = 50;
-            $offset = 0;
-            $more = true;
-            $updateDescription = $statusConfig = $clearedConfig = $setEndDate = array();
-            
-            $appId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
-            $pref = Tinebase_Core::getPreference('Tinebase');
-            Tinebase_Core::setupUserLocale($pref->locale);
-            $t = Tinebase_Translation::getTranslation('Sales', Tinebase_Core::getLocale());
-            
-            $config = Sales_Config::getInstance()->get('contractStatus');
-            foreach($config['records'] as $cfg) {
-                $statusConfig[$cfg['id']] = $cfg['value'];
-            }
-            
-            $config = Sales_Config::getInstance()->get('contractCleared');
-            
-            foreach($config['records'] as $cfg) {
-                $clearedConfig[$cfg['id']] = $cfg['value'];
-            }
-            
-            while($more) {
-                $results = $table->fetchAll(NULL, NULL, $count, $offset)->toArray();
-                foreach ($results as $row) {
-            
-                    if ($row['status'] == 'CLOSED') {
-                        $setEndDate[$row['id']] = $row['last_modified_time'];
-                    }
-            
-            
-                    $desc = $row['description'];
-                    $desc .= PHP_EOL . '---' . PHP_EOL . PHP_EOL;
-                    $contents = FALSE;
-            
-                    if (! empty($row['status'])) {
-                        $desc .= $t->_('Status') . ': ';
-                        $desc .= (isset($statusConfig[$row['status']]) ? $t->_($statusConfig[$row['status']]) : $row['status']);
-                        $desc .= PHP_EOL;
-                        $contents = TRUE;
-                    }
-                    if (! empty($row['cleared'])) {
-                        $desc .= $t->_('Cleared') . ': ';
-                        $desc .= (isset($clearedConfig[$row['cleared']]) ? $t->_($clearedConfig[$row['cleared']]) : $row['cleared']);
-                        $desc .= PHP_EOL;
-                        $contents = TRUE;
-                    }
-                    if (! empty($row['cleared_in'])) {
-                        $desc .= $t->_('Cleared In') . ': ';
-                        $desc .= $row['cleared_in'];
-                        $desc .= PHP_EOL;
-                        $contents = TRUE;
-                    }
-            
-                    if ($contents) {
-                        $updateDescription[$row['id']] = $desc . PHP_EOL;
-                    }
+        $controller = Sales_Controller_Contract::getInstance();
+        
+        $table = new Zend_Db_Table(SQL_TABLE_PREFIX . 'sales_contracts', new Zend_Db_Table_Definition(array(
+            'id' => array('name' => 'id'),
+            'status' => array('name' => 'status'),
+            'cleared' => array('name' => 'cleared'),
+            'cleared_in' => array('name' => 'cleared_in'),
+            'description' => array('name' => 'description'),
+            'last_modified_time' => array('name' => 'last_modified_time')
+        )));
+        
+        $count = 50;
+        $offset = 0;
+        $more = true;
+        $updateDescription = $statusConfig = $clearedConfig = $setEndDate = array();
+        
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+        $pref = Tinebase_Core::getPreference('Tinebase');
+        Tinebase_Core::setupUserLocale($pref->locale);
+        $t = Tinebase_Translation::getTranslation('Sales', Tinebase_Core::getLocale());
+        
+        $config = Sales_Config::getInstance()->get('contractStatus');
+        foreach($config['records'] as $cfg) {
+            $statusConfig[$cfg['id']] = $cfg['value'];
+        }
+        
+        $config = Sales_Config::getInstance()->get('contractCleared');
+        
+        foreach($config['records'] as $cfg) {
+            $clearedConfig[$cfg['id']] = $cfg['value'];
+        }
+        
+        while($more) {
+            $results = $table->fetchAll(NULL, NULL, $count, $offset)->toArray();
+            foreach ($results as $row) {
+        
+                if ($row['status'] == 'CLOSED') {
+                    $setEndDate[$row['id']] = $row['last_modified_time'];
                 }
-            
-                if (count($updateDescription) > 50) {
-                    foreach($controller->getMultiple(array_keys($updateDescription)) as $contr) {
-                        $contr->description = $updateDescription[$contr->getId()];
-                        $controller->update($contr, FALSE);
-                    }
-                    $updateDescription = array();
+        
+        
+                $desc = $row['description'];
+                $desc .= PHP_EOL . '---' . PHP_EOL . PHP_EOL;
+                $contents = FALSE;
+        
+                if (! empty($row['status'])) {
+                    $desc .= $t->_('Status') . ': ';
+                    $desc .= (isset($statusConfig[$row['status']]) ? $t->_($statusConfig[$row['status']]) : $row['status']);
+                    $desc .= PHP_EOL;
+                    $contents = TRUE;
                 }
-            
-                if (count($results) < $count) {
-                    $more = FALSE;
-                } else {
-                    $offset = $offset + $count;
+                if (! empty($row['cleared'])) {
+                    $desc .= $t->_('Cleared') . ': ';
+                    $desc .= (isset($clearedConfig[$row['cleared']]) ? $t->_($clearedConfig[$row['cleared']]) : $row['cleared']);
+                    $desc .= PHP_EOL;
+                    $contents = TRUE;
+                }
+                if (! empty($row['cleared_in'])) {
+                    $desc .= $t->_('Cleared In') . ': ';
+                    $desc .= $row['cleared_in'];
+                    $desc .= PHP_EOL;
+                    $contents = TRUE;
+                }
+        
+                if ($contents) {
+                    $updateDescription[$row['id']] = $desc . PHP_EOL;
                 }
             }
-            
-            foreach($controller->getMultiple(array_keys($updateDescription)) as $contr) {
-                $contr->description = $updateDescription[$contr->getId()];
-                $controller->update($contr, FALSE);
+        
+            if (count($updateDescription) > 50) {
+                foreach($controller->getMultiple(array_keys($updateDescription)) as $contr) {
+                    $contr->description = $updateDescription[$contr->getId()];
+                    $controller->update($contr, FALSE);
+                }
+                $updateDescription = array();
             }
-        } catch (Setup_Exception_PromptUser $e) {
+        
+            if (count($results) < $count) {
+                $more = FALSE;
+            } else {
+                $offset = $offset + $count;
+            }
+        }
+        
+        foreach($controller->getMultiple(array_keys($updateDescription)) as $contr) {
+            $contr->description = $updateDescription[$contr->getId()];
+            $controller->update($contr, FALSE);
         }
         
         // remove deprecated sales contract fields
