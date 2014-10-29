@@ -89,9 +89,8 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($options, TRUE));
         
-        // create valid login name
         if (! isset($this->accountLoginName)) {
-            $this->accountLoginName = Tinebase_User::getInstance()->generateUserName($this, (isset($options['userNameSchema'])) ? $options['userNameSchema'] : 1);
+            $this->accountLoginName = Tinebase_User::getInstance()->generateUserName($this, (isset($options['userNameSchema'])) ? $options['userNameSchema'] : 1, (Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_USERNAME_LENGTH)));
             $this->accountFullName = Tinebase_User::getInstance()->generateAccountFullName($this);
         }
         

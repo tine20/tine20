@@ -287,6 +287,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ALARMS_EACH_JOB = 'alarmsEachJob';
     
     /**
+     * max username length
+     *
+     * @var string
+     */
+    const MAX_USERNAME_LENGTH = 'max_username_length';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -647,6 +654,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::MAX_USERNAME_LENGTH => array(
+                //_('Max username length')
+                'label'                 => 'Max username length',
+                //_('Max username length')
+                'description'           => 'Max username length',
+                'type'                  => 'int',
+                'default'               => NULL,
+                'clientRegistryInclude' => FALSE,
         ),
     );
     

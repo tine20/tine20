@@ -163,7 +163,6 @@ class Courses_Config extends Tinebase_Config_Abstract
             'default'               => '',
             'clientRegistryInclude' => TRUE,
         ),
-        
     );
     
     /**
