@@ -698,7 +698,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
-            'timeZone'         => Tinebase_Core::getUserTimezone(),
             'locale'           => array(
                 'locale'   => $locale->toString(),
                 'language' => Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale),
@@ -757,6 +756,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $userRegistryData = array(
+            'timeZone'           => Tinebase_Core::getUserTimezone(),
             'currentAccount'     => $user->toArray(),
             'userContact'        => $userContactArray,
             'accountBackend'     => Tinebase_User::getConfiguredBackend(),
