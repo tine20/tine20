@@ -4,14 +4,9 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Calendar_Controller_Event
@@ -761,6 +756,28 @@ Zeile 3</AirSyncBase:Data>
         $this->assertFalse($syncrotonEvent->recurrence instanceof Syncroton_Model_EventRecurrence);
     
         return array($serverId, $syncrotonEvent);
+    }
+
+    /**
+     * testUpdateExdate
+     * 
+     * @see 0010417: Exdate update does not update seq of base event
+     */
+    public function testUpdateExdate()
+    {
+        list($serverId, $syncrotonEvent) = $this->testCreateEntry();
+        
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $container = Tinebase_Container::getInstance()->get($event->container_id);
+        
+        $exception = Calendar_Controller_Event::getInstance()->getRecurExceptions($event)->getFirstRecord();
+        $exception->dtstart->subHour(1);
+        Calendar_Controller_Event::getInstance()->update($exception);
+        
+        $baseEventAfterExdateUpdate = Calendar_Controller_Event::getInstance()->get($serverId);
+        $containerAfterExdateUpdate = Tinebase_Container::getInstance()->get($event->container_id);
+        $this->assertEquals($event->seq + 1, $baseEventAfterExdateUpdate->seq, 'base sequence should be updated');
+        $this->assertEquals($container->content_seq + 2, $containerAfterExdateUpdate->content_seq, 'container sequence should be updated');
     }
     
     public function testRecurEventExceptionFilters($syncrotonFolder = null)
