@@ -117,6 +117,7 @@ Tine.Tinebase.ApplicationStarter = {
                     }
                     break;
                 case 'integer':
+                case 'float':
                     if (config.hasOwnProperty('specialType')) {
                         switch (config.specialType) {
                             case 'bytes1000':

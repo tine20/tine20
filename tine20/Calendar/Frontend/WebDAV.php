@@ -77,7 +77,7 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
         $children = parent::getChildren();
         
         // do this only for caldav request 
-        if ($this->_useIdAsName && count($this->_getPathParts()) == 2) {
+        if ($this->_useIdAsName && count($this->_getPathParts()) == 2 && Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN)) {
             $tfwdavct = new Tasks_Frontend_WebDAV('tasks/' . Tinebase_Helper::array_value(1, $this->_getPathParts()), $this->_useIdAsName);
             
             $children = array_merge($children, $tfwdavct->getChildren());
