@@ -802,30 +802,36 @@ class Tinebase_Core
      */
     public static function setupDatabaseConnection()
     {
+        // check if database connection is setup already 
+        if (self::get(self::DB) instanceof Zend_Db_Adapter_Abstract) {
+            return self::get(self::DB);
+        }
+        
         $config = self::getConfig();
         
-        if (isset($config->database)) {
-            $dbConfig = $config->database;
-            
-            if (!empty($dbConfig->password)) {
-                self::getLogger()->getFormatter()->addReplacement($dbConfig->password);
-            }
-            
-            if (! defined('SQL_TABLE_PREFIX')) {
-                define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
-            }
-            
-            $db = self::createAndConfigureDbAdapter($dbConfig->toArray());
-            Zend_Db_Table_Abstract::setDefaultAdapter($db);
-            
-            // place table prefix into the concrete adapter
-            $db->table_prefix = SQL_TABLE_PREFIX;
-            
-            self::set(self::DB, $db);
-            
-        } else {
+        if (!isset($config->database)) {
             die ('database section not found in central configuration file');
         }
+        
+        $dbConfig = $config->database;
+        
+        if (!empty($dbConfig->password)) {
+            self::getLogger()->getFormatter()->addReplacement($dbConfig->password);
+        }
+        
+        if (! defined('SQL_TABLE_PREFIX')) {
+            define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
+        }
+        
+        $db = self::createAndConfigureDbAdapter($dbConfig->toArray());
+        Zend_Db_Table_Abstract::setDefaultAdapter($db);
+        
+        // place table prefix into the concrete adapter
+        $db->table_prefix = SQL_TABLE_PREFIX;
+        
+        self::set(self::DB, $db);
+        
+        return $db;
     }
     
     /**
@@ -852,6 +858,10 @@ class Tinebase_Core
         
         self::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating ' . $dbBackend . ' DB adapter');
         
+        // set utf8 charset
+        $dbConfigArray['charset'] = 'UTF8';
+        $dbConfigArray['adapterNamespace'] = 'Tinebase_Backend_Sql_Adapter';
+        
         switch ($dbBackend) {
             case self::PDO_MYSQL:
                 foreach (array('PDO::MYSQL_ATTR_USE_BUFFERED_QUERY', 'PDO::MYSQL_ATTR_INIT_COMMAND') as $pdoConstant) {
@@ -860,22 +870,19 @@ class Tinebase_Core
                     }
                 }
                 
+                // @todo set chartse to utf8mb4 / @see 0008708: switch to mysql utf8mb4
+                
                 // force some driver options
                 $dbConfigArray['driver_options'] = array(
                     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
-                    // set utf8 charset
-                    // @todo set to utf8mb4 / @see 0008708: switch to mysql utf8mb4
-                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8;",
+                );
+                $dbConfigArray['options']['init_commands'] = array(
+                    "SET time_zone = '+0:00'",
+                    "SET SQL_MODE = 'STRICT_ALL_TABLES'",
+                    "SET SESSION group_concat_max_len = 81920"
                 );
                 $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
-                try {
-                    // set mysql timezone to utc and activate strict mode
-                    $db->query("SET time_zone ='+0:00';");
-                    $db->query("SET SQL_MODE = 'STRICT_ALL_TABLES'");
-                    $db->query("SET SESSION group_concat_max_len = 81920");
-                } catch (Exception $e) {
-                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to set "SET SQL_MODE to STRICT_ALL_TABLES or timezone: ' . $e->getMessage());
-                }
+                
                 break;
                 
             case self::PDO_OCI:
@@ -894,14 +901,11 @@ class Tinebase_Core
                 if (empty($dbConfigArray['port'])) {
                     $dbConfigArray['port'] = 5432;
                 }
+                $dbConfigArray['options']['init_commands'] = array(
+                    "SET timezone = '+0:00'"
+                );
                 $db = Zend_Db::factory('Pdo_Pgsql', $dbConfigArray);
-                try {
-                    // set mysql timezone to utc and activate strict mode
-                    $db->query("SET timezone ='+0:00';");
-                    // PostgreSQL has always been strict about making sure data is valid before allowing it into the database
-                } catch (Exception $e) {
-                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to set "SET timezone: ' . $e->getMessage());
-                }
+                
                 break;
                 
             default:
@@ -1426,7 +1430,7 @@ class Tinebase_Core
 
         return $result;
     }
-
+    
     /**
      * get db adapter
      *
@@ -1529,8 +1533,7 @@ class Tinebase_Core
      */
     public static function filterInputForDatabase($string)
     {
-        $db = self::getDb();
-        if ($db && $db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+        if (self::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {
             $string = Tinebase_Helper::mbConvertTo($string);
             
             // remove 4 byte utf8
