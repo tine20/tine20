@@ -907,3 +907,21 @@ msgstr ""
 
 msgid "change number of an order confirmations"
 msgstr ""
+
+msgid "Bill Contract \"{0} - {1}\""
+msgstr ""
+
+msgid "Select the date to generate the bill for"
+msgstr ""
+
+msgid "Rebill Invoice"
+msgstr ""
+
+msgid "Rebilling Invoice..."
+msgstr ""
+
+msgid "Billing Contract..."
+msgstr ""
+
+msgid "Bill Contract"
+msgstr ""

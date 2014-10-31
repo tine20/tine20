@@ -152,6 +152,10 @@
           "path": "js/"
         },
         {
+          "text": "BillingDateDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "OfferEditDialog.js",
           "path": "js/"
         },

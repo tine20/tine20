@@ -784,3 +784,21 @@ msgstr "Mehrwertsteuer"
 
 msgid "change number of an order confirmations"
 msgstr "Nummer einer Auftragsbestätigung ändern"
+
+msgid "Rebill Invoice"
+msgstr "Rechnung neu erzeugen"
+
+msgid "Bill Contract \"{0} - {1}\""
+msgstr "Vertrag \"{0} - {1}\" abrechnen"
+
+msgid "Select the date to generate the bill for"
+msgstr "Bitte wählen Sie das Datum, zu dem Sie die Rechnung erzeugen möchten"
+
+msgid "Rebilling Invoice..."
+msgstr "Erzeuge Rechnung neu..."
+
+msgid "Billing Contract..."
+msgstr "Rechne Vertrag ab..."
+
+msgid "Bill Contract"
+msgstr "Vertrag abrechnen"

@@ -43,10 +43,29 @@
     background-image:url("../../images/oxygen/16x16/actions/view-process-users.png") !important;
 }
 
-.action_reversal {
+.x-btn-medium .action_reversal {
     background-image:url("../../images/oxygen/22x22/actions/document-revert.png") !important;
 }
 
+.x-btn-medium .action_rebill {
+    background-image:url("../../images/oxygen/22x22/actions/edit-redo.png") !important;
+}
+
+.x-btn-medium .action_bill {
+    background-image:url("../../images/oxygen/22x22/categories/applications-office.png") !important;
+}
+
+.action_reversal {
+    background-image:url("../../images/oxygen/16x16/actions/document-revert.png") !important;
+}
+
+.action_rebill {
+    background-image:url("../../images/oxygen/16x16/actions/edit-redo.png") !important;
+}
+
+.action_bill {
+    background-image:url("../../images/oxygen/16x16/categories/applications-office.png") !important;
+}
 
 .preview-panel-symbolcompare.wide {width: 160px}
 .preview-panel-customer { margin: 5px 2px 5px 5px; width: 32%; min-width: 200px}

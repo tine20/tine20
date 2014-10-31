@@ -103,6 +103,23 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /*************************** contracts functions *****************************/
 
+
+    /**
+     * rebills an invoice
+     *
+     * @param string $id
+     * @param string $date
+     */
+    public function billContract($id, $date)
+    {
+        $contract = Sales_Controller_Contract::getInstance()->get($id);
+        
+        $date = new Tinebase_DateTime($date);
+        $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+    
+        return Sales_Controller_Invoice::getInstance()->createAutoInvoices($date, $contract);
+    }
+    
     /**
      * Search for records matching given arguments
      *
@@ -484,6 +501,26 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     // invoice methods
+    
+    /**
+     * rebills an invoice
+     * 
+     * @param string $id
+     */
+    public function rebillInvoice($id)
+    {
+        $invoice = Sales_Controller_Invoice::getInstance()->get($id);
+        $relation = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $id, 'sibling', array('CONTRACT'), 'Sales_Model_Contract')->getFirstRecord();
+        $contract = Sales_Controller_Contract::getInstance()->get($relation->related_id);
+        
+        $date = clone $invoice->creation_time;
+        $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        
+        Sales_Controller_Invoice::getInstance()->delete(array($id));
+        
+        return Sales_Controller_Invoice::getInstance()->createAutoInvoices($date, $contract);
+    }
+    
     /**
      * Search for records matching given arguments
      *
