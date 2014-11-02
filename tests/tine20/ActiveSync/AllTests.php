@@ -9,10 +9,10 @@
  */
 
 /**
- * Test helper
+ * All ActiveSync tests
+ * 
+ * @package     ActiveSync
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 class ActiveSync_AllTests
 {
     public static function main ()
@@ -22,12 +22,13 @@ class ActiveSync_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync All Tests');
+        $suite = new PHPUnit_Framework_TestSuite('All ActiveSync tests');
+        
+        $suite->addTest(ActiveSync_Command_AllTests::suite());
+        $suite->addTest(ActiveSync_Controller_AllTests::suite());
+        $suite->addTest(ActiveSync_Backend_AllTests::suite());
         
         $suite->addTestSuite('ActiveSync_TimezoneConverterTest');
-        $suite->addTestSuite('ActiveSync_Command_AllTests');
-        $suite->addTestSuite('ActiveSync_Controller_AllTests');
-        $suite->addTestSuite('ActiveSync_Backend_AllTests');
         
         return $suite;
     }

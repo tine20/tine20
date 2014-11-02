@@ -2,23 +2,18 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     ActiveSync
+ * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * Test class for Calendar_Controller_Event
+ * Test class for Calendar_Frontend_ActiveSync
  * 
- * @package     ActiveSync
+ * @package     Calendar
  */
-class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
+class Calendar_Frontend_ActiveSyncTest extends ActiveSync_TestCase
 {
     /**
      * name of the application
@@ -27,15 +22,9 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
      */
     protected $_applicationName = 'Calendar';
     
-    protected $_controllerName = 'ActiveSync_Controller_Calendar';
+    protected $_controllerName = 'Calendar_Frontend_ActiveSync';
     
     protected $_class = Syncroton_Data_Factory::CLASS_CALENDAR;
-    
-    protected $_prefs;
-    
-    protected $_defaultCalendar;
-    
-    protected $_defaultHasChanged = false;
     
     /**
      * @var array test objects
@@ -524,18 +513,6 @@ Zeile 3</AirSyncBase:Data>
             'lars@kneschke.de',
             'unittest@tine20.org',
         ), $email, $this->_testXMLInput);
-        
-        $this->_prefs = $prefs = new Calendar_Preference();
-        $this->_defaultCalendar = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::DEFAULTCALENDAR};
-    }
-    
-    protected  function tearDown()
-    {
-        parent::tearDown();
-        
-        if ($this->_defaultHasChanged) {
-            $this->_prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $this->_defaultCalendar);
-        }
     }
     
     /**
@@ -1167,8 +1144,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $syncrotonFolder2 = $this->testCreateFolder();
         
         //make $syncrotonFolder2 the default
-        $this->_prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
-        $this->_defaultHasChanged = true;
+        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
         
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
         
@@ -1207,8 +1183,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $syncrotonFolder2 = $this->testCreateFolder();
         
         //make $syncrotonFolder2 the default
-        $this->_prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
-        $this->_defaultHasChanged = true;
+        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
         
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
     

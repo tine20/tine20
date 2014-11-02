@@ -4,21 +4,15 @@
  * 
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * 
- * @todo        add controller tests
  */
 
 /**
- * Test helper
+ * All Tasks tests
+ * 
+ * @package     Tasks
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tasks_AllTests::main');
-}
-
 class Tasks_AllTests
 {
     public static function main ()
@@ -28,18 +22,16 @@ class Tasks_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tasks All Tests');
+        $suite = new PHPUnit_Framework_TestSuite('All Tasks tests');
+        
         $suite->addTest(Tasks_Backend_AllTests::suite());
+        $suite->addTest(Tasks_Convert_Task_VCalendar_AllTests::suite());
+        $suite->addTest(Tasks_Frontend_AllTests::suite());
+        
         $suite->addTestSuite('Tasks_ControllerTest');
         $suite->addTestSuite('Tasks_Model_TaskFilterTest');
         $suite->addTestSuite('Tasks_JsonTest');
-        $suite->addTestSuite('Tasks_Frontend_WebDAV_AllTests');
-        $suite->addTestSuite('Tasks_Convert_Task_VCalendar_AllTests');
         
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Tasks_AllTests::main') {
-    Tasks_AllTests::main();
 }

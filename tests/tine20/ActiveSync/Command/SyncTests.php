@@ -58,10 +58,10 @@ class ActiveSync_Command_SyncTests extends TestCase
         Syncroton_Registry::set(Syncroton_Registry::POLICYBACKEND,       new Syncroton_Backend_Policy(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set('loggerBackend', Tinebase_Core::getLogger());
         
-        Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
-        Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
-        Syncroton_Registry::setEmailDataClass('ActiveSync_Controller_Email');
-        Syncroton_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
+        Syncroton_Registry::setContactsDataClass('Addressbook_Frontend_ActiveSync');
+        Syncroton_Registry::setCalendarDataClass('Calendar_Frontend_ActiveSync');
+        Syncroton_Registry::setEmailDataClass('Felamimail_Frontend_ActiveSync');
+        Syncroton_Registry::setTasksDataClass('Tasks_Frontend_ActiveSync');
         
         $this->_device = Syncroton_Registry::getDeviceBackend()->create(
             ActiveSync_TestCase::getTestDevice()
@@ -375,7 +375,7 @@ class ActiveSync_Command_SyncTests extends TestCase
         $inbox = $emailTest->getFolder('INBOX');
         $emailTest->messageTestHelper('multipart_mixed.eml', 'multipart/mixed', $inbox);
         
-        $emailController = new ActiveSync_Controller_Email($this->_device, new Tinebase_DateTime(null, null, 'de_DE'));
+        $emailController = new Felamimail_Frontend_ActiveSync($this->_device, new Tinebase_DateTime(null, null, 'de_DE'));
 
         $folders = $emailController->getAllFolders();
         

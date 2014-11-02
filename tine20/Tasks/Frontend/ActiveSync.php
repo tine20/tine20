@@ -2,20 +2,20 @@
 /**
  * Tine 2.0
  *
- * @package     ActiveSync
- * @subpackage  Controller
+ * @package     Tasks
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * controller tasks class
+ * ActiveSync frontend class
  *
- * @package     ActiveSync
- * @subpackage  Controller
+ * @package     Tasks
+ * @subpackage  Frontend
  */
-class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract 
+class Tasks_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract
 {
     /**
      * available filters
@@ -106,7 +106,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::toSyncrotonModel()
+     * @see ActiveSync_Frontend_Abstract::toSyncrotonModel()
      */
     public function toSyncrotonModel($entry, array $options = array())
     {
@@ -180,7 +180,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::toTineModel()
+     * @see ActiveSync_Frontend_Abstract::toTineModel()
      */
     public function toTineModel(Syncroton_Model_IEntry $data, $entry = null)
     {
@@ -247,41 +247,6 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         
         return $task;
     }
-    
-    /**
-     * convert contact from xml to Addressbook_Model_ContactFilter
-     *
-     * @param SimpleXMLElement $_data
-     * @return array
-     */
-    /*protected function _toTineFilterArray(SimpleXMLElement $_data)
-    {
-        $xmlData = $_data->children('uri:Tasks');
-        
-        foreach($this->_mapping as $fieldName => $field) {
-            if(isset($xmlData->$fieldName)) {
-                switch ($field) {
-                    case 'due':
-                        $value = new Tinebase_DateTime((string)$xmlData->$fieldName);
-                        break;
-                        
-                    default:
-                        $value = (string)$xmlData->$fieldName;
-                        break;
-                        
-                }
-                $filterArray[] = array(
-                    'field'     => $field,
-                    'operator'  => 'equals',
-                    'value'     => $value
-                );
-            }
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, TRUE));
-        
-        return $filterArray;
-    }*/
     
     /**
      * return contentfilter array

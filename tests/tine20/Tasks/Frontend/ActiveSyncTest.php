@@ -2,23 +2,18 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     ActiveSync
+ * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * Test class for Tasks_Controller_Task
+ * Test class for Tasks_Frontend_ActiveSync
  * 
- * @package     ActiveSync
+ * @package     Tasks
  */
-class ActiveSync_Controller_TasksTests extends ActiveSync_TestCase
+class Tasks_Frontend_ActiveSyncTest extends ActiveSync_TestCase
 {
     /**
      * name of the application
@@ -27,7 +22,7 @@ class ActiveSync_Controller_TasksTests extends ActiveSync_TestCase
      */
     protected $_applicationName = 'Tasks';
     
-    protected $_controllerName = 'ActiveSync_Controller_Tasks';
+    protected $_controllerName = 'Tasks_Frontend_ActiveSync';
     
     protected $_class = Syncroton_Data_Factory::CLASS_TASKS;
     

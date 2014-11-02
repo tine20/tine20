@@ -4,21 +4,16 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * abstract test class for activesync controller tests
+ * abstract test class for activesync frontend tests
  * 
  * @package     ActiveSync
  */
-abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
+abstract class ActiveSync_TestCase extends TestCase
 {
     /**
      * name of the application
@@ -35,7 +30,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
     protected $_controllerName;
     
     /**
-     * @var ActiveSync_Controller_Abstract controller
+     * @var ActiveSync_Frontend_Abstract controller
      */
     protected $_controller;
     
@@ -68,7 +63,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_testUser          = Tinebase_Core::getUser();
         $this->_specialFolderName = strtolower($this->_applicationName) . '-root';
@@ -85,21 +80,12 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         Syncroton_Registry::set(Syncroton_Registry::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set('loggerBackend',                         Tinebase_Core::getLogger());
         
-        Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
-        Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
-        Syncroton_Registry::setEmailDataClass('ActiveSync_Controller_Email');
-        Syncroton_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
+        Syncroton_Registry::setContactsDataClass('Addressbook_Frontend_ActiveSync');
+        Syncroton_Registry::setCalendarDataClass('Calendar_Frontend_ActiveSync');
+        Syncroton_Registry::setEmailDataClass('Felamimail_Frontend_ActiveSync');
+        Syncroton_Registry::setTasksDataClass('Tasks_Frontend_ActiveSync');
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::tearDown()
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-    
     /**
      *
      * @return Syncroton_Model_Folder
@@ -168,7 +154,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         
         //var_dump($changedFolders);
         
-        $this->assertEquals(1, count($changedFolders));
+        $this->assertGreaterThanOrEqual(1, count($changedFolders));
         $this->assertArrayHasKey($syncrotonFolder->serverId, $changedFolders);
     }
     

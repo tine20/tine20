@@ -4,21 +4,16 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Syncroton_Command_Ping
  * 
  * @package     ActiveSync
  */
-class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
+class ActiveSync_Command_PingTests extends TestCase
 {
     /**
      * @var ActiveSync_Model_Device
@@ -63,7 +58,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         // speed up tests
         Syncroton_Registry::set(Syncroton_Registry::PING_TIMEOUT, 1);
@@ -80,29 +75,16 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
         Syncroton_Registry::set(Syncroton_Registry::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set('loggerBackend', Tinebase_Core::getLogger());
         
-        Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
-        Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
-        Syncroton_Registry::setEmailDataClass('ActiveSync_Controller_Email');
-        Syncroton_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
+        Syncroton_Registry::setContactsDataClass('Addressbook_Frontend_ActiveSync');
+        Syncroton_Registry::setCalendarDataClass('Calendar_Frontend_ActiveSync');
+        Syncroton_Registry::setEmailDataClass('Felamimail_Frontend_ActiveSync');
+        Syncroton_Registry::setTasksDataClass('Tasks_Frontend_ActiveSync');
         
         $this->_device = Syncroton_Registry::getDeviceBackend()->create(
             ActiveSync_TestCase::getTestDevice()
         );
     }
 
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-        
-        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_setGeoData);
-    }
-    
     /**
      * test sync of existing contacts folder
      */
@@ -293,7 +275,7 @@ class ActiveSync_Command_PingTests extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('IMAP backend not configured');
         }
         
-        $emailController = new ActiveSync_Controller_Email($this->_device, new Tinebase_DateTime(null, null, 'de_DE'));
+        $emailController = new Felamimail_Frontend_ActiveSync($this->_device, new Tinebase_DateTime(null, null, 'de_DE'));
 
         $folders = $emailController->getAllFolders();
         $this->assertGreaterThan(0, count($folders));

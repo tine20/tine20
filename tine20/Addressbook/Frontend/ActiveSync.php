@@ -2,20 +2,20 @@
 /**
  * Tine 2.0
  *
- * @package     ActiveSync
- * @subpackage  Controller
+ * @package     Addressbook
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
  * class documentation
  *
- * @package     ActiveSync
- * @subpackage  Controller
+ * @package     Addressbook
+ * @subpackage  Frontend
  */
-class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract implements Syncroton_Data_IDataSearch
+class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implements Syncroton_Data_IDataSearch
 {
     protected $_mapping = array(
         #'Anniversary'           => 'anniversary',
@@ -144,7 +144,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract impl
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::toSyncrotonModel()
+     * @see ActiveSync_Frontend_Abstract::toSyncrotonModel()
      */
     public function toSyncrotonModel($entry, array $options = array())
     {

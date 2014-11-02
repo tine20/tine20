@@ -117,7 +117,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $defaultCalendarArray = array();
         }
         
-
         $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
         $importDefinitions = $this->_getImportDefinitions();
         $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);

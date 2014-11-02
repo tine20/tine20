@@ -2,23 +2,18 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     ActiveSync
+ * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * Test class for ActiveSync_Controller_Email
+ * Test class for Felamimail_Frontend_ActiveSync
  * 
- * @package     Calendar
+ * @package     Felamimail
  */
-class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
+class Felamimail_Frontend_ActiveSyncTest extends TestCase
 {
     /**
      * 
@@ -38,10 +33,10 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      * 
      * @var string
      */
-    protected $_controllerName = 'ActiveSync_Controller_Email';
+    protected $_controllerName = 'Felamimail_Frontend_ActiveSync';
     
     /**
-     * @var ActiveSync_Controller_Abstract controller
+     * @var ActiveSync_Frontend_Abstract controller
      */
     protected $_controller;
     
@@ -76,6 +71,8 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
+        
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         if (empty($imapConfig) || !(isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig)) || $imapConfig['useSystemAccount'] != true) {
             $this->markTestSkipped('IMAP backend not configured');
@@ -86,8 +83,6 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->_emailTestClass->setup();
         $this->_createdMessages = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
         
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
         $this->objects['devices'] = array();
         
         Syncroton_Registry::set(Syncroton_Registry::DEVICEBACKEND,       new Syncroton_Backend_Device(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
@@ -97,10 +92,10 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         Syncroton_Registry::set('loggerBackend',                         Tinebase_Core::getLogger());
         Syncroton_Registry::set(Syncroton_Registry::POLICYBACKEND,       new Syncroton_Backend_Policy(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         
-        Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
-        Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
-        Syncroton_Registry::setEmailDataClass('ActiveSync_Controller_Email');
-        Syncroton_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
+        Syncroton_Registry::setContactsDataClass('Addressbook_Frontend_ActiveSync');
+        Syncroton_Registry::setCalendarDataClass('Calendar_Frontend_ActiveSync');
+        Syncroton_Registry::setEmailDataClass('Felamimail_Frontend_ActiveSync');
+        Syncroton_Registry::setTasksDataClass('Tasks_Frontend_ActiveSync');
     }
 
     /**
@@ -117,7 +112,8 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
         Felamimail_Controller_Message::getInstance()->delete($this->_createdMessages->getArrayOfIds());
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        
+        parent::tearDown();
     }
     
     /**
@@ -147,7 +143,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         $message = $this->_createTestMessage();
         
-        $fileReference = $message->getId() . ActiveSync_Controller_Abstract::LONGID_DELIMITER . '2';
+        $fileReference = $message->getId() . ActiveSync_Frontend_Abstract::LONGID_DELIMITER . '2';
         
         $syncrotonFileReference = $controller->getFileReference($fileReference);
         

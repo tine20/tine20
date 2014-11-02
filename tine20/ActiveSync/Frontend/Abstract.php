@@ -3,19 +3,19 @@
  * Tine 2.0
  *
  * @package     ActiveSync
- * @subpackage  Controller
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * class documentation
+ * Abstract ActiveSync frontend class
  *
  * @package     ActiveSync
- * @subpackage  Controller
+ * @subpackage  Frontend
  */
-abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
+abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
 {
     const LONGID_DELIMITER = "\xe2\x87\x94"; # ⇔
     
@@ -339,8 +339,8 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
     public function getEntry(Syncroton_Model_SyncCollection $collection, $serverId)
     {
         // is $serverId a LongId?
-        if (strpos($serverId, ActiveSync_Controller_Abstract::LONGID_DELIMITER) !== false) {
-            list($collection->collectionId, $serverId) = explode(ActiveSync_Controller_Abstract::LONGID_DELIMITER, $serverId, 2);
+        if (strpos($serverId, ActiveSync_Frontend_Abstract::LONGID_DELIMITER) !== false) {
+            list($collection->collectionId, $serverId) = explode(ActiveSync_Frontend_Abstract::LONGID_DELIMITER, $serverId, 2);
         }
         
         try {

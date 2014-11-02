@@ -4,19 +4,15 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
+ * All Calendar frontend tests
+ * 
+ * @package     Calendar
  */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Frontend_AllTests::main');
-}
-
 class Calendar_Frontend_AllTests
 {
     public static function main ()
@@ -26,15 +22,15 @@ class Calendar_Frontend_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar All Frontend Tests');
+        $suite = new PHPUnit_Framework_TestSuite('All Calendar frontend tests');
+        
+        $suite->addTest(Calendar_Frontend_CalDAV_AllTests::suite());
         $suite->addTest(Calendar_Frontend_WebDAV_AllTests::suite());
+        
+        $suite->addTestSuite('Calendar_Frontend_ActiveSyncTest');
         $suite->addTestSuite('Calendar_Frontend_CalDAVTest');
         $suite->addTestSuite('Calendar_Frontend_iMIPTest');
-        $suite->addTestSuite('Calendar_Frontend_CalDAV_AllTests');
+        
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Frontend_AllTests::main') {
-    Calendar_Frontend_AllTests::main();
 }

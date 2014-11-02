@@ -9,10 +9,10 @@
  */
 
 /**
- * Test helper
+ * All Addressbook tests
+ * 
+ * @package     Addressbook
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
 class Addressbook_AllTests
 {
     public static function main ()
@@ -22,13 +22,15 @@ class Addressbook_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook All Tests');
+        $suite = new PHPUnit_Framework_TestSuite('All Addressbook tests');
+        
         $suite->addTest(Addressbook_Backend_AllTests::suite());
-        $suite->addTest(Addressbook_Import_AllTests::suite());
+        $suite->addTest(Addressbook_Convert_Contact_VCard_AllTests::suite());
         $suite->addTest(Addressbook_Frontend_AllTests::suite());
+        $suite->addTest(Addressbook_Import_AllTests::suite());
+        
         $suite->addTestSuite('Addressbook_ControllerTest');
         $suite->addTestSuite('Addressbook_Controller_ListTest');
-        $suite->addTestSuite('Addressbook_Convert_Contact_VCard_AllTests');
         $suite->addTestSuite('Addressbook_PdfTest');
         $suite->addTestSuite('Addressbook_JsonTest');
         $suite->addTestSuite('Addressbook_CliTest');

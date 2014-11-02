@@ -2,23 +2,18 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     ActiveSync
+ * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * Test class for Calendar_Controller_Event
+ * Test class for Addressbook_Frontend_ActiveSync
  * 
- * @package     Calendar
+ * @package     Addressbook
  */
-class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
+class Addressbook_Frontend_ActiveSyncTest extends ActiveSync_TestCase
 {
     /**
      * name of the application
@@ -27,7 +22,7 @@ class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
      */
     protected $_applicationName = 'Addressbook';
     
-    protected $_controllerName = 'ActiveSync_Controller_Contacts';
+    protected $_controllerName = 'Addressbook_Frontend_ActiveSync';
     
     protected $_class = Syncroton_Data_Factory::CLASS_CONTACTS;
     

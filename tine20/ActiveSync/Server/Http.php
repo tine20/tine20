@@ -184,18 +184,25 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
         Syncroton_Registry::set(Syncroton_Registry::POLICYBACKEND,       new Syncroton_Backend_Policy(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set('loggerBackend',       Tinebase_Core::getLogger());
         
-        if (Tinebase_Core::getUser()->hasRight('Addressbook', Tinebase_Acl_Rights::RUN) === true) {
-            Syncroton_Registry::setContactsDataClass('ActiveSync_Controller_Contacts');
-            Syncroton_Registry::setGALDataClass('ActiveSync_Controller_Contacts');
+        $applications = is_object(Tinebase_Core::getUser())
+            ? Tinebase_Core::getUser()->getApplications()
+            : new Tinebase_Record_RecordSet('Tinebase_Model_Application');
+        
+        if ($applications->find('name', 'Addressbook')) {
+            Syncroton_Registry::setContactsDataClass('Addressbook_Frontend_ActiveSync');
+            Syncroton_Registry::setGALDataClass('Addressbook_Frontend_ActiveSync');
         }
-        if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN) === true) {
-            Syncroton_Registry::setCalendarDataClass('ActiveSync_Controller_Calendar');
+        
+        if ($applications->find('name', 'Calendar')) {
+            Syncroton_Registry::setCalendarDataClass('Calendar_Frontend_ActiveSync');
         }
-        if (Tinebase_Core::getUser()->hasRight('Felamimail', Tinebase_Acl_Rights::RUN) === true) {
-            Syncroton_Registry::setEmailDataClass('ActiveSync_Controller_Email');
+        
+        if ($applications->find('name', 'Felamimail')) {
+            Syncroton_Registry::setEmailDataClass('Felamimail_Frontend_ActiveSync');
         }
-        if (Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN) === true) {
-            Syncroton_Registry::setTasksDataClass('ActiveSync_Controller_Tasks');
+        
+        if ($applications->find('name', 'Tasks')) {
+            Syncroton_Registry::setTasksDataClass('Tasks_Frontend_ActiveSync');
         }
         
         Syncroton_Registry::set(Syncroton_Registry::DEFAULT_POLICY, ActiveSync_Config::getInstance()->get(ActiveSync_Config::DEFAULT_POLICY));

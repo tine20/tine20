@@ -40,6 +40,9 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testGetRegistryData()
     {
+        // enforce fresh instance of calendar preferences
+        Tinebase_Core::set(Tinebase_Core::PREFERENCES, array());
+        
         $registryData = $this->_uit->getRegistryData();
         
         $this->assertTrue(is_array($registryData['defaultContainer']['account_grants']));

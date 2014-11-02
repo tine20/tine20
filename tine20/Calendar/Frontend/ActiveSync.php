@@ -2,20 +2,20 @@
 /**
  * Tine 2.0
  *
- * @package     ActiveSync
- * @subpackage  Controller
+ * @package     Calendar
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**
- * controller events class
+ * ActiveSync frontend class
  * 
- * @package     ActiveSync
- * @subpackage  Controller
+ * @package     Calendar
+ * @subpackage  Frontend
  */
-class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract implements Syncroton_Data_IDataCalendar
+class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implements Syncroton_Data_IDataCalendar
 {
     /**
      * available filters
@@ -199,7 +199,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::__construct()
+     * @see ActiveSync_Frontend_Abstract::__construct()
      */
     public function __construct(Syncroton_Model_IDevice $_device, DateTime $_syncTimeStamp)
     {
@@ -243,7 +243,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::toSyncrotonModel()
+     * @see ActiveSync_Frontend_Abstract::toSyncrotonModel()
      * @todo handle BusyStatus
      */
     public function toSyncrotonModel($entry, array $options = array())
@@ -514,7 +514,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::toTineModel()
+     * @see ActiveSync_Frontend_Abstract::toTineModel()
      */
     public function toTineModel(Syncroton_Model_IEntry $data, $entry = null)
     {

@@ -2,20 +2,20 @@
 /**
  * Tine 2.0
  *
- * @package     ActiveSync
- * @subpackage  Controller
+ * @package     Felamimail
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * controller email class
+ * ActiveSync frontend class
  *
- * @package     ActiveSync
- * @subpackage  Controller
+ * @package     Felamimail
+ * @subpackage  Frontend
  */
-class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract implements Syncroton_Data_IDataEmail, Syncroton_Data_IDataSearch
+class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implements Syncroton_Data_IDataEmail, Syncroton_Data_IDataSearch
 {
     protected $_mapping = array(
         'body'              => 'body',
@@ -237,14 +237,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::getFileReference()
+     * @see ActiveSync_Frontend_Abstract::getFileReference()
      */
     public function getFileReference($fileReference)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " fileReference " . $fileReference);
         
-        list($messageId, $partId) = explode(ActiveSync_Controller_Abstract::LONGID_DELIMITER, $fileReference, 2);
+        list($messageId, $partId) = explode(ActiveSync_Frontend_Abstract::LONGID_DELIMITER, $fileReference, 2);
         
         $part = $this->_contentController->getMessagePart($messageId, $partId);
         
@@ -386,7 +386,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::toSyncrotonModel()
+     * @see ActiveSync_Frontend_Abstract::toSyncrotonModel()
      */
     public function toSyncrotonModel($entry, array $options = array())
     {
@@ -470,7 +470,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
                 foreach ($attachments as $attachment) {
                     $syncrotonAttachment = new Syncroton_Model_EmailAttachment(array(
                         'displayName'       => trim($attachment['filename']),
-                        'fileReference'     => $entry->getId() . ActiveSync_Controller_Abstract::LONGID_DELIMITER . $attachment['partId'],
+                        'fileReference'     => $entry->getId() . ActiveSync_Frontend_Abstract::LONGID_DELIMITER . $attachment['partId'],
                         'method'            => 1,
                         'estimatedDataSize' => $attachment['size']
                     ));
@@ -543,7 +543,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     
             $storeResponse->result[] = new Syncroton_Model_StoreResponseResult(array(
                 'class'        => 'Email',
-                'longId'       => $folderId . ActiveSync_Controller_Abstract::LONGID_DELIMITER . $serverId,
+                'longId'       => $folderId . ActiveSync_Frontend_Abstract::LONGID_DELIMITER . $serverId,
                 'collectionId' => $folderId,
                 'properties'   => $email
             ));
@@ -676,7 +676,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::_inspectGetCountOfChanges()
+     * @see ActiveSync_Frontend_Abstract::_inspectGetCountOfChanges()
      */
     protected function _inspectGetCountOfChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
     {
@@ -711,7 +711,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::updateEntry()
+     * @see ActiveSync_Frontend_Abstract::updateEntry()
      */
     public function updateEntry($folderId, $serverId, Syncroton_Model_IEntry $entry)
     {
@@ -767,7 +767,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::toTineModel()
+     * @see ActiveSync_Frontend_Abstract::toTineModel()
      */
     public function toTineModel(Syncroton_Model_IEntry $data, $entry = null)
     {
@@ -914,7 +914,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::moveItem()
+     * @see ActiveSync_Frontend_Abstract::moveItem()
      */
     public function moveItem($srcFolderId, $serverId, $dstFolderId)
     {
@@ -987,7 +987,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::_getContentFilter()
+     * @see ActiveSync_Frontend_Abstract::_getContentFilter()
      */
     protected function _getContentFilter($_filterType)
     {
@@ -1023,7 +1023,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
     
     /**
      * (non-PHPdoc)
-     * @see ActiveSync_Controller_Abstract::_addContainerFilter()
+     * @see ActiveSync_Frontend_Abstract::_addContainerFilter()
      */
     protected function _addContainerFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_containerId)
     {
