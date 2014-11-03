@@ -235,6 +235,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Event base rows fetched: ' . count($rows) . ' select: ' . $select);
+        
         $result = $this->_rawDataToRecordSet($rows);
         
         $this->_checkGrants($result, $grantsFilter);
@@ -781,8 +784,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function deleteDuplicateEvents($filter, $dryrun = TRUE)
     {
         if ($dryrun && Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' - Running in dry run mode -');
-                
+            . ' - Running in dry run mode - using filter: ' . print_r($filter->toArray(), true));
+        
         $duplicateFields = array('summary', 'dtstart', 'dtend');
         
         $select = $this->_db->select();
@@ -806,7 +809,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         foreach ($rows as $row) {
             $index = $row['summary'] . ' / ' . $row['dtstart'] . ' - ' . $row['dtend'];
             
-            $events = $this->search(new Calendar_Model_EventFilter(array(array(
+            $filter = new Calendar_Model_EventFilter(array(array(
                 'field'    => 'summary',
                 'operator' => 'equals',
                 'value'    => $row['summary'],
@@ -818,7 +821,18 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 'field'    => 'dtend',
                 'operator' => 'equals',
                 'value'    => new Tinebase_DateTime($row['dtend']),
-            ))), new Tasks_Model_Pagination(array('sort' => $this->_tableName . '.creation_time')));
+            )));
+            $pagination = new Tinebase_Model_Pagination(array('sort' => $this->_tableName . '.creation_time')); 
+            
+            $select = $this->_db->select();
+            $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName));
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
+            
+            $this->_addFilter($select, $filter);
+            $pagination->appendPaginationSql($select);
+            
+            $rows = $this->_fetch($select, self::FETCH_ALL);
+            $events = $this->_rawDataToRecordSet($rows);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' ' . print_r($events->toArray(), TRUE));
