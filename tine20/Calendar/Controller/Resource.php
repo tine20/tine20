@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -158,7 +158,11 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      */
     protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
     {
-        Tinebase_Container::getInstance()->deleteContainer($_record->container_id, true);
+        try {
+            Tinebase_Container::getInstance()->deleteContainer($_record->container_id, true);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Exception::log($tenf, false, $_record->toArray());
+        }
         return parent::_deleteLinkedObjects($_record);
     }
 }
