@@ -236,7 +236,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                     'modelName'   => 'Contract',
                     'refIdField'  => 'employee_id',
                     'paging'      => array('sort' => 'start_date', 'dir' => 'ASC'),
-                    'dependentRecords' => TRUE
+                    'dependentRecords' => TRUE,
+                    'omitOnSearch' => FALSE
                 ),
                 'group' => 'private',
             ),

@@ -141,6 +141,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employee = $this->_json->saveEmployee($employee);
         
         $this->assertEquals(5, $employee['vacation'][0]['days_count']);
+        $this->assertEquals(17, count($employee['vacation'][0]));
         $this->assertEquals(3, count($employee['costcenters']));
         
         // @see: 0010050: Delete last dependent record fails
@@ -900,7 +901,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     }
     
     /**
-<<<<<<< HEAD
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10122
      */
     public function testAlternatingContracts()
