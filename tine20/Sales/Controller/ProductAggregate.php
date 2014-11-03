@@ -29,6 +29,7 @@ class Sales_Controller_ProductAggregate extends Tinebase_Controller_Record_Abstr
         $this->_backend                 = new Tinebase_Backend_Sql(array(
             'modelName' => $this->_modelName, 
             'tableName' => 'sales_product_agg',
+            'modlogActive' => TRUE
         ));
         $this->_doContainerACLChecks    = FALSE;
     }    

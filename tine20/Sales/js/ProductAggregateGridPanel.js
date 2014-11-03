@@ -230,7 +230,11 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             {id: 'billing_point', renderer: this.renderBillingPoint , editor: this.billingPointEditor, quickaddField: this.billingPointQuickadd, dataIndex: 'billing_point', header: this.app.i18n._('Billing Point'),  scope: this, width: 140},
             {id: 'start_date', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.ux.form.ClearableDateField(), quickaddField: new Ext.ux.form.ClearableDateField(), dataIndex: 'start_date', header: this.app.i18n._('Start Date'),  scope: this, width: 110},
             {id: 'end_date', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.ux.form.ClearableDateField(), quickaddField: new Ext.ux.form.ClearableDateField(), dataIndex: 'end_date', header: this.app.i18n._('End Date'),  scope: this, width: 110},
-            {id: 'last_autobill', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.ux.form.ClearableDateField(), hidden: true, dataIndex: 'last_autobill', header: this.app.i18n._('Last Autobill'),  scope: this, width: 110}
+            {id: 'last_autobill', renderer: Tine.Tinebase.common.dateRenderer, editor: new Ext.ux.form.ClearableDateField(), hidden: true, dataIndex: 'last_autobill', header: this.app.i18n._('Last Autobill'),  scope: this, width: 110},
+            {id: 'creation_time',      header: _('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
+            {id: 'created_by',         header: _('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true },
+            {id: 'last_modified_time', header: _('Last Modified Time'),    dataIndex: 'last_modified_time',    renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
+            {id: 'last_modified_by',   header: _('Last Modified By'),      dataIndex: 'last_modified_by',      renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true }
         ];
 
         return new Ext.grid.ColumnModel({
@@ -271,7 +275,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
      * is called on after edit to set related records
      * @param {} o
      */
-    onAfterEdit: function(o) {console.warn(o);
+    onAfterEdit: function(o) {  
         switch (o.field) {
             case 'quantity':
                 o.record.set('quantity', o.value);

@@ -1565,4 +1565,71 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
             ))
         ));
     }
+    
+    
+    /**
+     * update to 8.21
+     *
+     *  - add modlog if it does not exist
+     */
+    public function update_20()
+    {
+        if (! $this->_backend->columnExists('created_by', 'sales_product_agg')) {
+            $this->_addModlogToProductAggregates();
+        }
+        
+        $this->setApplicationVersion('Sales', '8.21');
+    }
+    
+    /**
+     * adds modlog to addresses to prevent data loss
+     */
+    protected function _addModlogToProductAggregates()
+    {
+        $fields = array('<field>
+                <name>created_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>','
+            <field>
+                <name>creation_time</name>
+                <type>datetime</type>
+            </field>','
+            <field>
+                <name>last_modified_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>','
+            <field>
+                <name>last_modified_time</name>
+                <type>datetime</type>
+            </field>','
+            <field>
+                <name>is_deleted</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>','
+            <field>
+                <name>deleted_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>','
+            <field>
+                <name>deleted_time</name>
+                <type>datetime</type>
+            </field>','
+            <field>
+                <name>seq</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+                <default>0</default>
+            </field>');
+    
+        foreach($fields as $field) {
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->addCol('sales_product_agg', $declaration);
+        }
+    
+        $this->setTableVersion('sales_product_agg', 3);
+    }
 }
