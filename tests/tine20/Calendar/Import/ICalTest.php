@@ -19,42 +19,28 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
      */
     public function testImportSimpleFromString()
     {
-        $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
-        ));
-
-        $icalData = file_get_contents(dirname(__FILE__) . '/files/simple.ics');
-        $importer->importData($icalData);
+        $importEvents = $this->_importHelper('simple.ics', 6, /* $fromString = */ true);
         
-        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
-        )), NULL);
-        
-        $this->assertEquals(6, $events->count(), 'events was not imported');
-        
-        $startbucks = $events->find('uid', '3632597');
+        $startbucks = $importEvents->find('uid', '3632597');
         $this->assertEquals('Calendar_Model_Event', get_class($startbucks));
         $this->assertEquals('2008-11-05 15:00:00', $startbucks->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
+    /**
+     * testImportSimpleFromFile
+     */
     public function testImportSimpleFromFile()
     {
-        $importer = new Calendar_Import_Ical(array(
-            'importContainerId' => $this->_testCalendar->getId(),
-        ));
+        $importEvents = $this->_importHelper('simple.ics', 6);
         
-        $importer->importFile(dirname(__FILE__) . '/files/simple.ics');
-        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
-        )), NULL);
-        
-        $this->assertEquals(6, $events->count(), 'events where not imported');
-        
-        $startbucks = $events->find('uid', '3632597');
+        $startbucks = $importEvents->find('uid', '3632597');
         $this->assertEquals('Calendar_Model_Event', get_class($startbucks));
         $this->assertEquals('2008-11-05 15:00:00', $startbucks->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
+    /**
+     * testImportRecur
+     */
     public function testImportRecur()
     {
         $importer = new Calendar_Import_Ical(array(
@@ -71,7 +57,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
             )),
         )), NULL);
         
-        $this->assertEquals(3, $events->count(), 'events where not imported');
+        $this->assertEquals(3, $events->count(), 'Events were not imported');
     }
     
     public function testImportHorde()
@@ -96,7 +82,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
         )), NULL);
         
-        $this->assertEquals($assertNumber, $events->count(), 'events where not imported ' . $failMessage);
+        $this->assertEquals($assertNumber, $events->count(), 'Events were not imported ' . $failMessage);
     }
     
     /**
@@ -116,18 +102,51 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         }
     }
     
+    /**
+     * testImportOutlook12
+     */
     public function testImportOutlook12()
+    {
+        $importEvents = $this->_importHelper('outlook12.ics');
+    }
+    
+    /**
+     * testImportExchange2007
+     */
+    public function testImportExchange2007()
+    {
+        $importEvents = $this->_importHelper('exchange2007_mail_anhang.ics');
+        $event = $importEvents->getFirstRecord();
+        $this->assertEquals('Blocker Wie bleibe ich gesund? Ernährung', $event->summary);
+    }
+    
+    /**
+     * import helper
+     * 
+     * @param string $filename
+     * @param integer $expectedNumber of imported events
+     * @param boolean $fromString
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _importHelper($filename, $expectedNumber = 1, $fromString = false)
     {
         $importer = new Calendar_Import_Ical(array(
             'importContainerId' => $this->_testCalendar->getId(),
         ));
         
-        $importer->importFile(dirname(__FILE__) . '/files/outlook12.ics');
+        if ($fromString) {
+            $icalData = file_get_contents(dirname(__FILE__) . '/files/' . $filename);
+            $importer->importData($icalData);
+        } else {
+            $importer->importFile(dirname(__FILE__) . '/files/' . $filename);
+        }
+        
         $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
         )), NULL);
         
-        $this->assertEquals(1, $events->count(), 'events where not imported');
+        $this->assertEquals($expectedNumber, $events->count(), 'Events were not imported');
+        return $events;
     }
     
     /**
