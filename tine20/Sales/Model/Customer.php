@@ -57,6 +57,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             'number' => array(
                 'label' => 'Customer Number', //_('Customer Number')
                 'group' => 'core',
+                'queryFilter' => TRUE,
                 'type'  => 'integer'
             ),
             'name' => array(
@@ -70,7 +71,6 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'label'   => 'Web', // _('Web')
                 'type'    => 'text',
                 'group' => 'misc',
-                'queryFilter' => TRUE,
             ),
             'description' => array(
                 'label'   => 'Description', // _('Description')
@@ -104,7 +104,6 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'label'   => 'VAT No.', // _('VAT No.')
                 'type'    => 'text',
                 'group' => 'accounting',
-                'queryFilter' => TRUE,
             ),
             'credit_term' => array(
                 'label'   => 'Credit Term (days)', // _('Credit Term (days)')
@@ -126,12 +125,10 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             'iban' => array(
                 'label' => 'IBAN',
                 'group' => 'accounting',
-                'queryFilter' => TRUE,
             ),
             'bic' => array(
                 'label' => 'BIC',
                 'group' => 'accounting',
-                'queryFilter' => TRUE,
             ),
             'discount' => array(
                 'label'   => 'Discount (%)', // _('Discount (%)')
