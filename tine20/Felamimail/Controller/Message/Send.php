@@ -104,8 +104,12 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
         
         $originalMessageId = $_message->original_id;
-        if (strpos($originalMessageId, '_') !== FALSE ) {
+        if (is_string($originalMessageId) && strpos($originalMessageId, '_') !== FALSE ) {
             list($originalMessageId, $partId) = explode('_', $originalMessageId);
+        } else if (is_array($originalMessageId)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Something strange happened. original_id is an array: ' . print_($originalMessageId, true));
+            return;
         } else {
             $partId = NULL;
         }
