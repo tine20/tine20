@@ -632,7 +632,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchOffers($filter, $paging)
     {
-        return $this->_search($filter, $paging, Sales_Controller_Offer::getInstance(), 'Sales_Model_OfferFilter', array('Sales_Model_OrderConfirmation', 'Sales_Model_Customer'));
+        return $this->_search($filter, $paging, Sales_Controller_Offer::getInstance(), 'Sales_Model_OfferFilter', array('Sales_Model_Customer'));
     }
     
     /**

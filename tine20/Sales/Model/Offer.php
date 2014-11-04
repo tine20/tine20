@@ -98,18 +98,6 @@ class Sales_Model_Offer extends Tinebase_Record_Abstract
                     )
                 )
             ),
-            'order_confirmation' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'type' => 'relation',
-                    'label' => 'Order Confirmation',    // _('Order Confirmation')
-                    'config' => array(
-                        'appName'   => 'Sales',
-                        'modelName' => 'OrderConfirmation',
-                        'type' => 'OFFER'
-                    )
-                )
-            )
         )
     );
     
