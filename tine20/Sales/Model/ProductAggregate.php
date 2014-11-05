@@ -41,7 +41,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
         'hasCustomFields'   => FALSE,
         'hasNotes'          => FALSE,
         'hasTags'           => FALSE,
-        'modlogActive'      => TRUE,
+        'modlogActive'      => FALSE,
         'hasAttachments'    => FALSE,
         'createModule'      => FALSE,
         'containerProperty' => NULL,
