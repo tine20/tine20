@@ -9,11 +9,6 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Calendar_Controller_MSEventFacade
  * 
  * @package     Calendar
@@ -405,6 +400,11 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertEquals(3, count($updatedEvent->alarms));
         $updatedAlarm = Calendar_Controller_Alarm::getMatchingAlarm($updatedEvent->exdate->getFirstRecord()->alarms, $scleverAlarm);
         $this->assertEquals($ackTime, Calendar_Controller_Alarm::getAcknowledgeTime($updatedAlarm));
+        
+        // check alarm ack client + ip
+        $accessLog = Tinebase_Core::get(Tinebase_Core::USERACCESSLOG);
+        $this->assertEquals($accessLog->ip, $updatedAlarm->getOption(Tinebase_Model_Alarm::OPTION_ACK_IP), 'ip not found in options: ' . print_r($updatedAlarm->toArray(), true));
+        $this->assertEquals($accessLog->clienttype, $updatedAlarm->getOption(Tinebase_Model_Alarm::OPTION_ACK_CLIENT), 'clienttype not found in options: ' . print_r($updatedAlarm->toArray(), true));
     }
     
     /**

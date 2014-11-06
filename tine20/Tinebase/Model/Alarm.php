@@ -42,6 +42,16 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
     const OPTION_CUSTOM = 'custom';
     
     /**
+     * ack client option
+     */
+    const OPTION_ACK_CLIENT = 'ack_client';
+    
+    /**
+     * ack ip option
+     */
+    const OPTION_ACK_IP = 'ack_ip';
+    
+    /**
      * default minutes_before value
      */
     const DEFAULT_MINUTES_BEFORE = 15;

@@ -190,7 +190,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 $accessLog = Tinebase_AccessLog::getInstance()->create($accessLog);
             }
         }
-
+        
+        Tinebase_Core::set(Tinebase_Core::USERACCESSLOG, $accessLog);
+        
         return true;
     }
     
