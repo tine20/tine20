@@ -106,6 +106,7 @@ class Calendar_Controller_Alarm
      *
      * @param Tinebase_Model_Alarm     $alarm
      * @param Tinebase_Model_User      $user
+     * @return Tinebase_DateTime|array
      */
     public static function getAcknowledgeTime($alarm, $user = null)
     {

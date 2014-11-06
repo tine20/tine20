@@ -286,4 +286,51 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
         $caldavCli->updateAllCalendarDataForUsers();
     }
+
+    /**
+     * print alarm acknowledgement report (when, ip, client, user, ...)
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function alarmAckReport(Zend_Console_Getopt $_opts)
+    {
+        // get all events for today for current user
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'attender', 'operator' => 'in', 'value' => array(array(
+                'user_type' => 'user',
+                'user_id'   => Tinebase_Core::getUser()->contact_id,
+            ))),
+            array('field' => 'attender_status', 'operator' => 'not',    'value' => Calendar_Model_Attender::STATUS_DECLINED),
+            array('field' => 'period', 'operator' => 'within', 'value' =>
+                array("from" => Tinebase_DateTime::now()->subDay(1), "until" => Tinebase_DateTime::now()->toString())
+            )
+        ));
+        $events = Calendar_Controller_Event::getInstance()->search($filter);
+        Calendar_Controller_Event::getInstance()->getAlarms($events);
+        
+        echo "Reporting alarms for events of user " . Tinebase_Core::getUser()->accountLoginName . " (All times in UTC) ...\n\n";
+        
+        // loop alarms and print alarm ack info
+        foreach ($events as $event) {
+            if (count($event->alarms) > 0) {
+                echo "Event '" . substr($event->summary, 0, 30) . "' (" . $event->dtstart->toString() . ' - ' . $event->dtend->toString() .")\n";
+                foreach ($event->alarms as $alarm) {
+                    echo "  Alarm " . $alarm->alarm_time . "\n";
+                    $ackTime = Calendar_Controller_Alarm::getAcknowledgeTime($alarm);
+                    if (empty($ackTime)) {
+                        echo "    not acknowledged!";
+                    } else {
+                        if (is_array($ackTime)) {
+                            $ackTime = array_pop($ackTime);
+                        }
+                        echo "    acknowledged " . $ackTime->toString()
+                            . "\n    IP -> ". $alarm->getOption(Tinebase_Model_Alarm::OPTION_ACK_IP)
+                            . "\n    Client ->". $alarm->getOption(Tinebase_Model_Alarm::OPTION_ACK_CLIENT) . "\n";
+                    }
+                    echo "\n";
+                }
+                echo "\n";
+            }
+        }
+    }
 }
