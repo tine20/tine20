@@ -403,9 +403,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
                 /* select */ array()
             )
-            ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId)
-            ->group('container.id')
-            ->order('container.name');
+            ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId);
+            
+        if ($onlyIds) {
+            $select->distinct();
+        } else {
+            // we only need to group by id and order by name if we fetch all container data
+            $select->group('container.id')
+                ->order('container.name');
+        }
         
         $this->addGrantsSql($select, $accountId, $grant);
         
