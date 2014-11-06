@@ -221,11 +221,15 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                if (isset($smtpConfig['password'])) {
-                    unset($smtpConfig['password']);
+                $debugConfig = $smtpConfig;
+                $whiteList = array('hostname', 'username', 'port', 'auth', 'ssl');
+                foreach ($debugConfig as $key => $value) {
+                    if (! in_array($key, $whiteList)) {
+                        unset($debugConfig[$key]);
+                    }
                 }
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' About to send message via SMTP with the following config: ' . print_r($smtpConfig, true));
+                    . ' About to send message via SMTP with the following config: ' . print_r($debugConfig, true));
             }
             
             Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
