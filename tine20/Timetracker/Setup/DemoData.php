@@ -181,7 +181,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         // set start date to start date of june 1st before last year
         $date = Tinebase_DateTime::now();
-        $this->_startDate = $date->setDate($date->format('Y') - 2, 6, 1)->setTime(8,0,0);
+        $this->_startDate = $date->subMonth(3)->setTime(8,0,0);
 
         // set clearedDate almost a month after
         $this->_clearedDate = clone $this->_startDate;
