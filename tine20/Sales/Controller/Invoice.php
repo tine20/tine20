@@ -512,7 +512,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'start_date'    => $earliestStartDate,
             'end_date'      => $latestEndDate,
             'positions'     => $invoicePositions->toArray(),
-            'date'          => NULL
+            'date'          => NULL,
+            'sales_tax'     => 19
         ));
         
         $invoice->relations = $relations;
