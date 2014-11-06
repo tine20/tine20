@@ -121,13 +121,13 @@ Tine.Tinebase.ApplicationStarter = {
                     if (config.hasOwnProperty('specialType')) {
                         switch (config.specialType) {
                             case 'bytes1000':
-                                gridRenderer = function(a,b,c) {
-                                    return Tine.Tinebase.common.byteRenderer(a, b, c, 2, true);
+                                gridRenderer = function(value, cell, record) {
+                                    return Tine.Tinebase.common.byteRenderer(value, cell, record, 2, true);
                                 };
                                 break;
                             case 'bytes':
-                                gridRenderer = function(a,b,c) {
-                                    return Tine.Tinebase.common.byteRenderer(a, b, c, 2, false);
+                                gridRenderer = function(value, cell, record) {
+                                    return Tine.Tinebase.common.byteRenderer(value, cell, record, 2, false);
                                 };
                                 break;
                             case 'minutes':
@@ -141,6 +141,11 @@ Tine.Tinebase.ApplicationStarter = {
                                 break;
                             case 'euMoney':
                                 gridRenderer = Ext.util.Format.euMoney;
+                                break;
+                            case 'percent':
+                                gridRenderer = function(value, cell, record) {
+                                    return Tine.Tinebase.common.percentRenderer(value, config.type);
+                                }
                                 break;
                             default:
                                 gridRenderer = Ext.util.Format.htmlEncode;

@@ -150,7 +150,12 @@ Date.prototype.toJSON = function(key) {
  */
 Ext.util.Format = Ext.apply(Ext.util.Format, {
     euMoney: function(v){
+        if (Ext.isEmpty(v) || v == null) {
+            v = 0;
+        }
         v.toString().replace(/,/, '.');
+        
+        var decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
         
         v = (Math.round(parseFloat(v)*100))/100;
         
@@ -158,7 +163,7 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         v = String(v);
         var ps = v.split('.');
         var whole = ps[0];
-        var sub = ps[1] ? '.'+ ps[1] : '.00';
+        var sub = ps[1] ? decimalSeparator+ ps[1] : decimalSeparator + '00';
         var r = /(\d+)(\d{3})/;
         while (r.test(whole)) {
             whole = whole.replace(r, '$1' + '.' + '$2');
@@ -166,7 +171,7 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         v = whole + sub;
         if(v.charAt(0) == '-'){
             return v.substr(1) + ' -€';
-        }  
+        }
         return v + " €";
     },
     percentage: function(v){

@@ -163,6 +163,31 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * Renders a float or integer as percent
+     * 
+     * @param {Number} v The number to format.
+     * @see Ext.util.Format.number
+     * 
+     * @return {String} The formatted number.
+     */
+    percentRenderer: function(v, type) {
+        if (! Ext.isNumber(v)) {
+            v = 0;
+        }
+        
+        v = Ext.util.Format.number(v, (type == 'float' ? '0.00' : '0'));
+        
+        if (type == 'float') {
+            var decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
+            if (decimalSeparator == ',') {
+                v = v.replace(/\./, ',');
+            }
+        }
+        
+        return v + ' %';
+    },
+    
+    /**
      * Returns localised time string
      * 
      * @param {mixed} date
