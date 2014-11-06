@@ -398,6 +398,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $grant         = $ignoreACL ? '*' : $grant;
         
         $select = $this->_getSelect($onlyIds ? 'id' : '*')
+            ->distinct()
             ->join(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
@@ -405,17 +406,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             )
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId);
             
-        if ($onlyIds) {
-            $select->distinct();
-        } else {
-            // we only need to group by id and order by name if we fetch all container data
-            $select->group('container.id')
-                ->order('container.name');
+        if (!$onlyIds) {
+            // we only need to order by name if we fetch all container data (legacy, maybe this can be removed)
+            $select->order('container.name');
         }
         
         $this->addGrantsSql($select, $accountId, $grant);
-        
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -560,6 +556,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $application = Tinebase_Application::getInstance()->getApplicationByName($meta['appName']);
 
         $select = $this->_db->select()
+            ->distinct()
             ->from(array('owner' => SQL_TABLE_PREFIX . 'container_acl'), array())
             ->join(array(
                 /* table  */ 'user' => SQL_TABLE_PREFIX . 'container_acl'), 
@@ -578,7 +575,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_PERSONAL)
             ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE)
             
-            ->group('container.id')
             ->order('container.name');
             
         $this->addGrantsSql($select, $accountId, $grant, 'user');
@@ -586,8 +582,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if ($meta['recordClass']) {
             $select->where("{$this->_db->quoteIdentifier('container.model')} = ?", $meta['recordClass']);
         }
-        
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         $stmt = $this->_db->query($select);
         $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -735,6 +729,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $grant       = $_ignoreACL ? '*' : $_grant;
         
         $select = $this->_getSelect()
+            ->distinct()
             ->join(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
@@ -744,12 +739,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
             ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_SHARED)
             
-            ->group('container.id')
             ->order('container.name');
         
         $this->addGrantsSql($select, $accountId, $grant);
-        
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         $stmt = $this->_db->query($select);
 
@@ -797,11 +789,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         // first grab all container ids ...
         $select = $this->_db->select()
+            ->distinct()
             ->from(array('container_acl' => SQL_TABLE_PREFIX . 'container_acl'), array())
             ->join(array(
                 /* table  */ 'container' => SQL_TABLE_PREFIX . 'container'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                /* select */ array('container_id' => new Zend_Db_Expr("DISTINCT({$this->_db->quoteIdentifier('container.id')})"))
+                /* select */ array('container_id' => 'container.id')
             )
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
             ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_PERSONAL)
@@ -819,7 +812,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         // ... now get the owners of the containers 
         $select = $this->_db->select()
-            ->from(array('container_acl' => SQL_TABLE_PREFIX . 'container_acl'), array('account_id' => new Zend_Db_Expr("DISTINCT({$this->_db->quoteIdentifier('container_acl.account_id')})")))
+            ->distinct()
+            ->from(array('container_acl' => SQL_TABLE_PREFIX . 'container_acl'), array('account_id'))
             ->join(array(
                 /* table  */ 'container' => SQL_TABLE_PREFIX . 'container'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
