@@ -294,6 +294,9 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function alarmAckReport(Zend_Console_Getopt $_opts)
     {
+        $until = Tinebase_DateTime::now();
+        $from = Tinebase_DateTime::now()->subDay(1);
+        
         // get all events for today for current user
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'in', 'value' => array(array(
@@ -302,13 +305,15 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             ))),
             array('field' => 'attender_status', 'operator' => 'not',    'value' => Calendar_Model_Attender::STATUS_DECLINED),
             array('field' => 'period', 'operator' => 'within', 'value' =>
-                array("from" => Tinebase_DateTime::now()->subDay(1), "until" => Tinebase_DateTime::now()->toString())
+                array("from" => $from, "until" => $until)
             )
         ));
         $events = Calendar_Controller_Event::getInstance()->search($filter);
+        Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($events, $filter);
         Calendar_Controller_Event::getInstance()->getAlarms($events);
         
-        echo "Reporting alarms for events of user " . Tinebase_Core::getUser()->accountLoginName . " (All times in UTC) ...\n\n";
+        echo "Reporting alarms for events of user " . Tinebase_Core::getUser()->accountLoginName
+            . " (All times in UTC) from " . $from->toString() . ' until ' . $until->toString() . "...\n\n";
         
         // loop alarms and print alarm ack info
         foreach ($events as $event) {
